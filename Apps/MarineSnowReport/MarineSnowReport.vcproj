@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\BaseLibrary;..\..\PicesLibrary;..\..\SipperInstruments;..\..\OutsidePackages\fftw"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\BaseLibrary&quot;;&quot;$(SolutionDir)\PicesLibraries\PicesLibrary&quot;;&quot;$(SolutionDir)\PicesLibraries\SipperInstruments&quot;;&quot;$(SolutionDir)\OutsidePackages\fftw-3.3.2&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -119,7 +119,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\..\BaseLibrary;..\..\PicesLibrary;..\..\SipperInstruments;..\..\OutsidePackages\fftw"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\BaseLibrary&quot;;&quot;$(SolutionDir)\PicesLibraries\PicesLibrary&quot;;&quot;$(SolutionDir)\PicesLibraries\SipperInstruments&quot;;&quot;$(SolutionDir)\OutsidePackages\fftw-3.3.2&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
