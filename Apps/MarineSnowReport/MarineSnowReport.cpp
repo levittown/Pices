@@ -68,7 +68,7 @@ public:
                      const KKStr&  _stationName,
                      const KKStr&  _deploymentNum,
                      double        _volumeSampled,
-                     VectorInt32   _sizeThresholds,
+                     VectorFloat   _sizeThresholds,
                      VectorDouble  _integratedAbundance,
                      VectorInt32   _integratedCounts
                     ):
@@ -88,7 +88,7 @@ public:
 
   double volumeSampled;
 
-  VectorInt32   sizeThresholds;
+  VectorFloat   sizeThresholds;
   VectorDouble  integratedAbundance;
   VectorInt32   integratedCounts;
 };
@@ -103,7 +103,7 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
 
 
   // 1)Determines Midpoint of deploymet from Instruments table.
-  KKStr  sqlStr = "Call ImagesSizeDataByDepthSipper9(" + deployment->CruiseName ().QuotedStr () + "," + deployment->StationName ().QuotedStr () + "," + deployment->DeploymentNum ().QuotedStr () +",1.0)";
+  KKStr  sqlStr = "Call ImagesSizeDataByDepthSipper10(" + deployment->CruiseName ().QuotedStr () + "," + deployment->StationName ().QuotedStr () + "," + deployment->DeploymentNum ().QuotedStr () +",1.0)";
 
   VectorKKStr  columnNames;
   KKStrMatrixPtr results = db.QueryStatementReturnAllColumns (sqlStr.Str (), sqlStr.Len (), columnNames);
@@ -115,7 +115,7 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
 
   int32  numRows = results->NumRows ();
   int32  numCols = results->NumCols ();
-  int32  numCountCols = numCols - 8;
+  int32  numCountCols = numCols - 5;
 
   if  (numRows == 0)
   {
@@ -124,18 +124,18 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
     return  NULL;
   }
 
-  VectorInt32  sizeThresholds;
+  VectorFloat  sizeThresholds;
 
   VectorKKStr  countHeader (numCountCols);
   for  (int32 x = 0;  x < numCountCols;  ++x)
   {
-    KKStr  columnName = columnNames[8 + x];
+    KKStr  columnName = columnNames[5 + x];
     countHeader[x] = columnName;
 
-    int32  sizeThreshold = 0;
+    float  sizeThreshold = 0;
     int32 idx = columnName.LocateCharacter ('_');
     if  (idx > 0)
-      sizeThreshold = columnName.SubStrPart (idx + 1).ToInt32 ();
+      sizeThreshold = columnName.SubStrPart (idx + 1).ToFloat ();
     sizeThresholds.push_back (sizeThreshold);
   }
 
@@ -204,15 +204,15 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
   {
     KKStrList&  row = (*results)[rowIdx];
 
-    bool  downCast     = row[3].ToBool  ();
-    int32  bucketIdx   = row[4].ToInt32 ();
-    float  bucketDepth = row[5].ToFloat ();
-    int32  imageCount  = row[6].ToInt32 ();
-    int32  pixelCount  = row[7].ToInt32 ();
+    bool  downCast     = row[0].ToBool  ();
+    int32  bucketIdx   = row[1].ToInt32 ();
+    float  bucketDepth = row[2].ToFloat ();
+    int32  imageCount  = row[3].ToInt32 ();
+    int32  pixelCount  = row[4].ToInt32 ();
 
     VectorInt32  counts (numCountCols, 0);
     for  (int32 x = 0;  x < numCountCols;  ++x)
-      counts[x] = row[8 + x].ToInt32 ();
+      counts[x] = row[5 + x].ToInt32 ();
 
     float  volumeSampled = 0.0f;
     InstrumentDataMeansPtr  idm = instData->LookUp (downCast, bucketDepth);
@@ -265,28 +265,10 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
   }
   r1 << endl;
 
-  r1 << "" << "\t" << "" << "\t" << "" << "\t" << "Integrated Abundance-Size" << "\t" << "";
-  for  (uint32 x = 0;  x < integratedAbundance.size ();  ++x)
-  {
-    r1 << "\t" << (integratedAbundance[x] * sizeThresholds[x]);
-  }
-  r1 << endl;
-
   r1 << "" << "\t" << "" << "\t" << "" << "\t" << "Integrated log10(Abundance)" << "\t" << "";
   for  (uint32 x = 0;  x < integratedAbundance.size ();  ++x)
   {
-    double  zed = integratedAbundance[x];
-    double  zed2 = 0.0;
-    if  (zed != 0.0)
-       zed2 = log10 (zed);
-    r1 << "\t" << zed2;
-  }
-  r1 << endl;
-
-  r1 << "" << "\t" << "" << "\t" << "" << "\t" << "Integrated log10(Abundance-Size)" << "\t" << "";
-  for  (uint32 x = 0;  x < integratedAbundance.size ();  ++x)
-  {
-    double  zed = integratedAbundance[x] * (double)(sizeThresholds[x]);
+    double  zed = integratedAbundance[x] + 1.0;
     double  zed2 = 0.0;
     if  (zed != 0.0)
        zed2 = log10 (zed);
@@ -306,15 +288,15 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
   {
     KKStrList&  row = (*results)[rowIdx];
 
-    bool  downCast     = row[3].ToBool  ();
-    int32  bucketIdx   = row[4].ToInt32 ();
-    float  bucketDepth = row[5].ToFloat ();
-    int32  imageCount  = row[6].ToInt32 ();
-    int32  pixelCount  = row[7].ToInt32 ();
+    bool  downCast     = row[0].ToBool  ();
+    int32  bucketIdx   = row[1].ToInt32 ();
+    float  bucketDepth = row[2].ToFloat ();
+    int32  imageCount  = row[3].ToInt32 ();
+    int32  pixelCount  = row[4].ToInt32 ();
 
     VectorInt32  counts (numCountCols, 0);
     for  (int32 x = 0;  x < numCountCols;  ++x)
-      counts[x] = row[8 + x].ToInt32 ();
+      counts[x] = row[5 + x].ToInt32 ();
 
     float  volumeSampled = 0.0f;
     InstrumentDataMeansPtr  idm = instData->LookUp (downCast, bucketDepth);
@@ -390,7 +372,7 @@ void  PrintSummaryReports (DataBasePtr                  db,
 
   idx = summaries.begin ();
 
-  VectorInt32  sizeThresholds = (*idx)->sizeThresholds;
+  VectorFloat  sizeThresholds = (*idx)->sizeThresholds;
 
   r << ""       << "\t" << ""        << "\t" << ""           << "\t" << "VolumeSampled" << endl;
   r << "Cruise" << "\t" << "Station" << "\t" << "Deployment" << "\t" << "m^3";
@@ -411,8 +393,6 @@ void  PrintSummaryReports (DataBasePtr                  db,
     r << endl;
   }
   r << endl << endl << endl << endl;
-
-
 
   r << "Summary  Integrated Abundance" << endl
     << endl;
@@ -436,8 +416,6 @@ void  PrintSummaryReports (DataBasePtr                  db,
     r << endl;
   }
   r << endl << endl << endl << endl;
-
-
 
 
   r << "Summary  Integrated log10(Abundance)" << endl
@@ -466,9 +444,6 @@ void  PrintSummaryReports (DataBasePtr                  db,
     r << endl;
   }
   r << endl << endl << endl << endl;
-
-
-
 
 
   r << "Summary  Integrated log10(Abundance-Size)" << endl

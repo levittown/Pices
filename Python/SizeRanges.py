@@ -68,7 +68,7 @@ def  ToFloat(s):
 
 try:
      db = mysql.connector.Connect(user='root',
-                                  password="dasani30",
+                                  password="nsaid303",
                                   host='sipper-db.marine.usf.edu',
                                   database='pices_new')
 except  mysql.connector.Error as err:
@@ -89,17 +89,30 @@ bucketSize   = 50
 
 v = startValue
 
+#while  v < 200000:
+#  br = v
+#  nextV = v + bucketSize
+#  bucketSize = round(bucketSize * growthFactor)
+#  sizeFile.write("    sum((i.PixelCount >= " + repr(v)     + ")  and  " +
+#                         "(i.pixelCount < "  + repr(nextV) + ")) " +
+#                         " as  Size_" + repr(v) + "," +
+#                         "\n"
+#                )
+#  v = nextV
 
-while  v < 200000:
+
+
+v = 0.130
+while  v < 100.0:
   br = v
-  nextV = v + bucketSize
-  bucketSize = round(bucketSize * growthFactor)
-  sizeFile.write("    sum((i.PixelCount >= " + repr(v)     + ")  and  " +
-                         "(i.pixelCount < "  + repr(nextV) + ")) " +
-                         " as  Size_" + repr(v) + "," +
+  nextV = round(v * growthFactor, 2)
+  sizeFile.write("    sum((T.Area >= " + ("%.2f" % v)     + ")  and  " +
+                         "(T.Area < "  + ("%.2f" % nextV) + ")) " +
+                         " as  \"Size_"  + ("%.2f" % v)     + "\"," +
                          "\n"
                 )
   v = nextV
+
 
 sizeFile.close ()
 

@@ -1863,7 +1863,7 @@ begin
   
   declare _midPoint     datetime;
   set _midPoint = InstrumentDataGetMidPoint(_cruiseName, _stationName, _deploymentNum);
-
+  
   select sf.CruiseName                                                as CruiseName,
          sf.StationName                                               as StationName,
          sf.deploymentNum                                             as DeploymentNum,
@@ -1949,6 +1949,195 @@ begin
         
 end$$
 delimiter ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**********************************************************************************************************************/
+
+drop procedure  if exists  ImagesSizeDataByDepthSipper10;
+
+DELIMITER $$
+
+create procedure ImagesSizeDataByDepthSipper10 (in  _cruiseName       varChar(10),
+                                                in  _stationName      varChar(10), 
+                                                in  _deploymentNum    varchar(4), 
+                                                in  _depthBinSize     int unsigned
+                                               )
+begin 
+  declare _midPoint           datetime;
+  declare _cropLeft           int  default 0;
+  declare _cropRight          int  default 4094;
+  declare _pixelsPerScanLine  int  default 4096;
+  declare _chamberWidth       float  default  96.0;
+  declare _pixelWidth         float  default  0.025263;  /* MiliMeters per Pixel */
+  
+  
+  select  d.CropLeft, d.CropRight, d.ChamberWidth  into  _cropLeft, _cropRight, _chamberWidth
+      from Deployments d
+      where  d.CruiseName    = _cruiseName  and
+             d.StationName   = _stationName  and 
+             d.DeploymentNum = _deploymentNum;
+      
+  if  _cropLeft < _cropRight  then
+    set _pixelsPerScanLine = _cropRight - _cropLeft;
+  else
+    set _pixelsPerScanLine = 3800;
+  end if;
+  
+  set  _pixelWidth = _chamberWidth / _pixelsPerScanLine;
+  
+  set _midPoint = InstrumentDataGetMidPoint(_cruiseName, _stationName, _deploymentNum);
+  
+  drop  temporary table if exists  TempSizeDistributionTable;
+
+  create temporary table TempSizeDistributionTable
+  (
+    DownCast          char(1),
+    ImageId           int    default 0,
+    PixelCount        int    default 0,
+    Depth             float  default 0.0,
+    area              float  default 0.0
+  );
+  
+  
+
+  insert into TempSizeDistributionTable
+      select (id.CTDDateTime <= _midPoint) as DownCast,
+             i.ImageId,
+             i.PixelCount,
+             i.Depth,
+             i.PixelCount * _pixelWidth * (id.FlowRate1 / sf.ScanRate) * 1000.0  as area
+         from  Images i 
+         join (SipperFiles sf)     on(sf.SipperFileId  = i.SipperFileId)
+         join (InstrumentData id)  on((id.SipperFileId = i.SipperFileId)  and  (id.ScanLine = Floor(TopLeftRow/4096) * 4096) )
+         where  (sf.CruiseName      = _cruiseName)     and  
+                (sf.StationName     = _stationName)    and
+                (sf.DeploymentNum   = _deploymentNum)  and
+                (id.CTDDateTime     <= _midPoint)      and
+                (i.Class1Id in (select  c.ClassId  from Classes c  where c.ClassName like "%snow%"));
+         /* group by DownCast, floor(i.Depth / _depthBinSize);         */
+
+
+  select T.DownCast                                        as DownCast,
+         floor(T.Depth / _depthBinSize)                    as BucketIdx,
+         (floor(T.Depth / _depthBinSize) * _depthBinSize)  as BucketDepth,
+         count(T.ImageId)                                  as ImageCount,
+         sum(T.PixelCount)                                 as TotalPixelCount,
+
+    sum((T.Area < 0.08))                         as  "<0.08",
+    sum((T.Area >= 0.08)  and  (T.Area < 0.09))  as  "Size_0.08",
+    sum((T.Area >= 0.09)  and  (T.Area < 0.10))  as  "Size_0.09",
+    sum((T.Area >= 0.10)  and  (T.Area < 0.11))  as  "Size_0.10",
+    sum((T.Area >= 0.11)  and  (T.Area < 0.12))  as  "Size_0.11",
+    sum((T.Area >= 0.12)  and  (T.Area < 0.13))  as  "Size_0.12",
+    sum((T.Area >= 0.13)  and  (T.Area < 0.14))  as  "Size_0.13",
+    sum((T.Area >= 0.14)  and  (T.Area < 0.15))  as  "Size_0.14",
+    sum((T.Area >= 0.15)  and  (T.Area < 0.17))  as  "Size_0.15",
+    sum((T.Area >= 0.17)  and  (T.Area < 0.19))  as  "Size_0.17",
+    sum((T.Area >= 0.19)  and  (T.Area < 0.21))  as  "Size_0.19",
+    sum((T.Area >= 0.21)  and  (T.Area < 0.23))  as  "Size_0.21",
+    sum((T.Area >= 0.23)  and  (T.Area < 0.25))  as  "Size_0.23",
+    sum((T.Area >= 0.25)  and  (T.Area < 0.28))  as  "Size_0.25",
+    sum((T.Area >= 0.28)  and  (T.Area < 0.31))  as  "Size_0.28",
+    sum((T.Area >= 0.31)  and  (T.Area < 0.34))  as  "Size_0.31",
+    sum((T.Area >= 0.34)  and  (T.Area < 0.37))  as  "Size_0.34",
+    sum((T.Area >= 0.37)  and  (T.Area < 0.41))  as  "Size_0.37",
+    sum((T.Area >= 0.41)  and  (T.Area < 0.45))  as  "Size_0.41",
+    sum((T.Area >= 0.45)  and  (T.Area < 0.50))  as  "Size_0.45",
+    sum((T.Area >= 0.50)  and  (T.Area < 0.55))  as  "Size_0.50",
+    sum((T.Area >= 0.55)  and  (T.Area < 0.61))  as  "Size_0.55",
+    sum((T.Area >= 0.61)  and  (T.Area < 0.67))  as  "Size_0.61",
+    sum((T.Area >= 0.67)  and  (T.Area < 0.74))  as  "Size_0.67",
+    sum((T.Area >= 0.74)  and  (T.Area < 0.81))  as  "Size_0.74",
+    sum((T.Area >= 0.81)  and  (T.Area < 0.89))  as  "Size_0.81",
+    sum((T.Area >= 0.89)  and  (T.Area < 0.98))  as  "Size_0.89",
+    sum((T.Area >= 0.98)  and  (T.Area < 1.08))  as  "Size_0.98",
+    sum((T.Area >= 1.08)  and  (T.Area < 1.19))  as  "Size_1.08",
+    sum((T.Area >= 1.19)  and  (T.Area < 1.31))  as  "Size_1.19",
+    sum((T.Area >= 1.31)  and  (T.Area < 1.44))  as  "Size_1.31",
+    sum((T.Area >= 1.44)  and  (T.Area < 1.58))  as  "Size_1.44",
+    sum((T.Area >= 1.58)  and  (T.Area < 1.74))  as  "Size_1.58",
+    sum((T.Area >= 1.74)  and  (T.Area < 1.91))  as  "Size_1.74",
+    sum((T.Area >= 1.91)  and  (T.Area < 2.10))  as  "Size_1.91",
+    sum((T.Area >= 2.10)  and  (T.Area < 2.31))  as  "Size_2.10",
+    sum((T.Area >= 2.31)  and  (T.Area < 2.54))  as  "Size_2.31",
+    sum((T.Area >= 2.54)  and  (T.Area < 2.79))  as  "Size_2.54",
+    sum((T.Area >= 2.79)  and  (T.Area < 3.07))  as  "Size_2.79",
+    sum((T.Area >= 3.07)  and  (T.Area < 3.38))  as  "Size_3.07",
+    sum((T.Area >= 3.38)  and  (T.Area < 3.72))  as  "Size_3.38",
+    sum((T.Area >= 3.72)  and  (T.Area < 4.09))  as  "Size_3.72",
+    sum((T.Area >= 4.09)  and  (T.Area < 4.50))  as  "Size_4.09",
+    sum((T.Area >= 4.50)  and  (T.Area < 4.95))  as  "Size_4.50",
+    sum((T.Area >= 4.95)  and  (T.Area < 5.45))  as  "Size_4.95",
+    sum((T.Area >= 5.45)  and  (T.Area < 6.00))  as  "Size_5.45",
+    sum((T.Area >= 6.00)  and  (T.Area < 6.60))  as  "Size_6.00",
+    sum((T.Area >= 6.60)  and  (T.Area < 7.26))  as  "Size_6.60",
+    sum((T.Area >= 7.26)  and  (T.Area < 7.99))  as  "Size_7.26",
+    sum((T.Area >= 7.99)  and  (T.Area < 8.79))  as  "Size_7.99",
+    sum((T.Area >= 8.79)  and  (T.Area < 9.67))  as  "Size_8.79",
+    sum((T.Area >= 9.67)  and  (T.Area < 10.64))  as  "Size_9.67",
+    sum((T.Area >= 10.64)  and  (T.Area < 11.70))  as  "Size_10.64",
+    sum((T.Area >= 11.70)  and  (T.Area < 12.87))  as  "Size_11.70",
+    sum((T.Area >= 12.87)  and  (T.Area < 14.16))  as  "Size_12.87",
+    sum((T.Area >= 14.16)  and  (T.Area < 15.58))  as  "Size_14.16",
+    sum((T.Area >= 15.58)  and  (T.Area < 17.14))  as  "Size_15.58",
+    sum((T.Area >= 17.14)  and  (T.Area < 18.85))  as  "Size_17.14",
+    sum((T.Area >= 18.85)  and  (T.Area < 20.74))  as  "Size_18.85",
+    sum((T.Area >= 20.74)  and  (T.Area < 22.81))  as  "Size_20.74",
+    sum((T.Area >= 22.81)  and  (T.Area < 25.09))  as  "Size_22.81",
+    sum((T.Area >= 25.09)  and  (T.Area < 27.60))  as  "Size_25.09",
+    sum((T.Area >= 27.60)  and  (T.Area < 30.36))  as  "Size_27.60",
+    sum((T.Area >= 30.36)  and  (T.Area < 33.40))  as  "Size_30.36",
+    sum((T.Area >= 33.40)  and  (T.Area < 36.74))  as  "Size_33.40",
+    sum((T.Area >= 36.74)  and  (T.Area < 40.41))  as  "Size_36.74",
+    sum((T.Area >= 40.41)  and  (T.Area < 44.45))  as  "Size_40.41",
+    sum((T.Area >= 44.45)  and  (T.Area < 48.90))  as  "Size_44.45",
+    sum((T.Area >= 48.90)  and  (T.Area < 53.79))  as  "Size_48.90",
+    sum((T.Area >= 53.79)  and  (T.Area < 59.17))  as  "Size_53.79",
+    sum((T.Area >= 59.17)  and  (T.Area < 65.09))  as  "Size_59.17",
+    sum((T.Area >= 65.09)  and  (T.Area < 71.60))  as  "Size_65.09",
+    sum((T.Area >= 71.60)  and  (T.Area < 78.76))  as  "Size_71.60",
+    sum((T.Area >= 78.76)  and  (T.Area < 86.64))  as  "Size_78.76",
+    sum((T.Area >= 86.64)  and  (T.Area < 95.30))  as  "Size_86.64",
+    sum((T.Area >= 95.30)  and  (T.Area < 104.83))  as  "Size_95.30",
+    sum((T.Area >= 104.83))                         as  ">=104.83"
+         from  TempSizeDistributionTable T 
+         group by floor(T.Depth / _depthBinSize);        
+        
+end$$
+delimiter ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

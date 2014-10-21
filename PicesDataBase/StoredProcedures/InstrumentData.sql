@@ -969,8 +969,8 @@ begin
   declare  _midPoint       DateTime default null;
 
   set _scanRate = (select max(sf.ScanRate)  from  SipperFiles sf  
-											where  (sf.CruiseName    = _cruiseName)   and
-								                   (sf.StationName   = _stationName) and 
+											where  (sf.CruiseName    = _cruiseName)  and
+								             (sf.StationName   = _stationName) and 
 												   ((sf.DeploymentNum = _deploymentNum)  or (_deploymentNum = "")));
   if  _scanRate < 100  then
     set _scanRate = 29990;
