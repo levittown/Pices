@@ -435,7 +435,7 @@ void  PrintSummaryReports (DataBasePtr                  db,
 
     for  (x = 0;  x < ds->sizeThresholds.size ();  ++x)
     {
-      double  zed = (double)(ds->integratedAbundance[x]);
+      double  zed = (double)(ds->integratedAbundance[x] + 1.0);
       double log10AbundanceSize = 0.0;
       if (zed != 0.0)
         log10AbundanceSize = log10 (zed);
@@ -446,32 +446,6 @@ void  PrintSummaryReports (DataBasePtr                  db,
   r << endl << endl << endl << endl;
 
 
-  r << "Summary  Integrated log10(Abundance-Size)" << endl
-    << endl;
-
-  r << ""       << "\t" << ""        << "\t" << ""           << "\t" << "VolumeSampled" << endl;
-  r << "Cruise" << "\t" << "Station" << "\t" << "Deployment" << "\t" << "m^3";
-  for  (x = 0;  x < sizeThresholds.size ();  ++x)
-    r << "\t" << sizeThresholds[x];
-  r << endl;
-
-  for  (idx = summaries.begin ();  idx != summaries.end ();  ++idx)
-  {
-    DeploymentSummary*  ds = *idx;
-
-    r << ds->cruiseName << "\t" << ds->stationName << "\t" << ds->deploymentNum << "\t" << ds->volumeSampled;
-
-    for  (x = 0;  x < ds->sizeThresholds.size ();  ++x)
-    {
-      double  zed = (double)(ds->sizeThresholds[x]) * ds->integratedAbundance[x];
-      double log10AbundanceSize = 0.0;
-      if (zed != 0.0)
-        log10AbundanceSize = log10 (zed);
-      r << "\t" << log10AbundanceSize;
-    }
-    r << endl;
-  }
-  r << endl << endl << endl;
 }  /* PrintSummaryReports */
 
 

@@ -2016,7 +2016,6 @@ begin
     area              float  default 0.0
   );
   
-  
 
   insert into TempSizeDistributionTable
       select (id.CTDDateTime <= _midPoint) as DownCast,
