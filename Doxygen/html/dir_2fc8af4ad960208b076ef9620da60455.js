@@ -13,7 +13,10 @@ var dir_2fc8af4ad960208b076ef9620da60455 =
     [ "BitString.cpp", "_bit_string_8cpp.html", null ],
     [ "BitString.h", "_bit_string_8h.html", "_bit_string_8h" ],
     [ "Blob.cpp", "_blob_8cpp.html", null ],
-    [ "Blob.h", "_blob_8h.html", "_blob_8h" ],
+    [ "Blob.h", "_blob_8h.html", [
+      [ "Blob", "class_k_k_u_1_1_blob.html", "class_k_k_u_1_1_blob" ],
+      [ "BlobList", "class_k_k_u_1_1_blob_list.html", "class_k_k_u_1_1_blob_list" ]
+    ] ],
     [ "BMPheader.h", "_b_m_pheader_8h.html", "_b_m_pheader_8h" ],
     [ "BMPImage.cpp", "_b_m_p_image_8cpp.html", "_b_m_p_image_8cpp" ],
     [ "BMPImage.h", "_b_m_p_image_8h.html", "_b_m_p_image_8h" ],
@@ -30,7 +33,9 @@ var dir_2fc8af4ad960208b076ef9620da60455 =
     [ "Configuration.cpp", "_configuration_8cpp.html", "_configuration_8cpp" ],
     [ "Configuration.h", "_configuration_8h.html", "_configuration_8h" ],
     [ "ContourFollower.cpp", "_contour_follower_8cpp.html", "_contour_follower_8cpp" ],
-    [ "ContourFollower.h", "_contour_follower_8h.html", "_contour_follower_8h" ],
+    [ "ContourFollower.h", "_contour_follower_8h.html", [
+      [ "ContourFollower", "class_k_k_u_1_1_contour_follower.html", "class_k_k_u_1_1_contour_follower" ]
+    ] ],
     [ "ConvexHull.cpp", "_convex_hull_8cpp.html", "_convex_hull_8cpp" ],
     [ "ConvexHull.h", "_convex_hull_8h.html", "_convex_hull_8h" ],
     [ "DateTime.cpp", "_date_time_8cpp.html", "_date_time_8cpp" ],
@@ -39,14 +44,16 @@ var dir_2fc8af4ad960208b076ef9620da60455 =
     [ "EigenVector.h", "_eigen_vector_8h.html", "_eigen_vector_8h" ],
     [ "FirstIncludes.h", "_first_includes_8h.html", "_first_includes_8h" ],
     [ "GlobalGoalKeeper.cpp", "_global_goal_keeper_8cpp.html", null ],
-    [ "GlobalGoalKeeper.h", "_global_goal_keeper_8h.html", "_global_goal_keeper_8h" ],
-    [ "GoalKeeper.cpp", "_goal_keeper_8cpp.html", null ],
-    [ "GoalKeeper.h", "_goal_keeper_8h.html", [
-      [ "GoalKeeper", "class_k_k_u_1_1_goal_keeper.html", "class_k_k_u_1_1_goal_keeper" ]
+    [ "GlobalGoalKeeper.h", "_global_goal_keeper_8h.html", [
+      [ "GlobalGoalKeeper", "class_k_k_u_1_1_global_goal_keeper.html", "class_k_k_u_1_1_global_goal_keeper" ]
     ] ],
+    [ "GoalKeeper.cpp", "_goal_keeper_8cpp.html", null ],
+    [ "GoalKeeper.h", "_goal_keeper_8h.html", "_goal_keeper_8h" ],
     [ "HashTable.h", "_hash_table_8h.html", "_hash_table_8h" ],
     [ "Histogram.cpp", "_histogram_8cpp.html", null ],
-    [ "Histogram.h", "_histogram_8h.html", "_histogram_8h" ],
+    [ "Histogram.h", "_histogram_8h.html", [
+      [ "Histogram", "class_k_k_u_1_1_histogram.html", "class_k_k_u_1_1_histogram" ]
+    ] ],
     [ "HTMLReport.cpp", "_h_t_m_l_report_8cpp.html", null ],
     [ "HTMLReport.h", "_h_t_m_l_report_8h.html", "_h_t_m_l_report_8h" ],
     [ "ImageDirTree.cpp", "_image_dir_tree_8cpp.html", null ],
@@ -73,7 +80,9 @@ var dir_2fc8af4ad960208b076ef9620da60455 =
     [ "Matrix.h", "_matrix_8h.html", "_matrix_8h" ],
     [ "MemoryDebug.h", "_memory_debug_8h.html", null ],
     [ "MsgQueue.cpp", "_msg_queue_8cpp.html", null ],
-    [ "MsgQueue.h", "_msg_queue_8h.html", "_msg_queue_8h" ],
+    [ "MsgQueue.h", "_msg_queue_8h.html", [
+      [ "MsgQueue", "class_k_k_u_1_1_msg_queue.html", "class_k_k_u_1_1_msg_queue" ]
+    ] ],
     [ "OSservices.cpp", "_base_library_2_o_sservices_8cpp.html", "_base_library_2_o_sservices_8cpp" ],
     [ "OSservices.h", "_base_library_2_o_sservices_8h.html", "_base_library_2_o_sservices_8h" ],
     [ "PixelValue.cpp", "_pixel_value_8cpp.html", null ],

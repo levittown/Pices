@@ -3,6 +3,11 @@ var _raster_8h =
     [ "MovDir", "struct_k_k_u_1_1_mov_dir.html", "struct_k_k_u_1_1_mov_dir" ],
     [ "Raster", "class_k_k_u_1_1_raster.html", "class_k_k_u_1_1_raster" ],
     [ "RasterList", "class_k_k_u_1_1_raster_list.html", "class_k_k_u_1_1_raster_list" ],
+    [ "BlobListPtr", "_raster_8h.html#afa0c0fe0e154fd049272ebd3ffe4c1c0", null ],
+    [ "BlobPtr", "_raster_8h.html#a53448499b61de0fa80d5e6f3723944a1", null ],
+    [ "BmpImagePtr", "_raster_8h.html#aec8002436bae6901866f27efc833378b", null ],
+    [ "HistogramPtr", "_raster_8h.html#a14c27c4a85221d5a784cd7b0ffeeac80", null ],
+    [ "MatrixPtr", "_raster_8h.html#a28dfeec19e13b693a4d97590434bb2a4", null ],
     [ "RasterListPtr", "_raster_8h.html#a72a1927a319f92d721c4b78265ebd23c", null ],
     [ "ColorChannels", "_raster_8h.html#a0583e13db4cb584186604d58ad89592d", [
       [ "RedChannel", "_raster_8h.html#a0583e13db4cb584186604d58ad89592dad337eeaf8b6c8aef64116161f195867a", null ],

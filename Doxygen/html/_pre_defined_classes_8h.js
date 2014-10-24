@@ -1,8 +1,26 @@
 var _pre_defined_classes_8h =
 [
+    [ "DataBaseUpdateThreadPtr", "_pre_defined_classes_8h.html#aa51c54a4f9707bc2f22b872458d37d8d", null ],
+    [ "ExtractedImageList", "_pre_defined_classes_8h.html#a149ee3ab4515256bfb71cf0ab70108ad", null ],
+    [ "ExtractedImageListPtr", "_pre_defined_classes_8h.html#a9675ee0c1fb8884c6688df5212367e6f", null ],
+    [ "ExtractedImagePtr", "_pre_defined_classes_8h.html#a23cc33b6b8221211e1096bb9444a40b2", null ],
+    [ "ExtractedImageQueuePtr", "_pre_defined_classes_8h.html#a5865e3f2247d08c385121801d13a839b", null ],
+    [ "ExtractionManagerPtr", "_pre_defined_classes_8h.html#adab837668d8a3b39edcad7ea6e5a37bf", null ],
     [ "ExtractionManagerStatsPtr", "_pre_defined_classes_8h.html#a02aeaa7ef925286c6394e9d4bf7fb6dd", null ],
+    [ "FrameExtractorThreadPtr", "_pre_defined_classes_8h.html#a23440687e64a74dbd61aebff097cfafe", null ],
+    [ "FrameProcessorThreadList", "_pre_defined_classes_8h.html#ab74ad3dfca36e4d2d42945fe4bb03c8a", null ],
+    [ "FrameProcessorThreadListPtr", "_pre_defined_classes_8h.html#a979bde2c2ce40b71f4fa6a8dff6c8b46", null ],
+    [ "FrameProcessorThreadPtr", "_pre_defined_classes_8h.html#a1fe5ba605637c28750379db75f40267e", null ],
+    [ "ImageExtractionThreadList", "_pre_defined_classes_8h.html#a9cb271aff73af787c1635b16e9f5f739", null ],
+    [ "ImageExtractionThreadListPtr", "_pre_defined_classes_8h.html#af3a3b3af040ff82cf1cd4fe44391867b", null ],
+    [ "ImageExtractionThreadPtr", "_pre_defined_classes_8h.html#a0819edb2fc8122fc222f419271dd40ba", null ],
+    [ "LogicalFrameBlobPtr", "_pre_defined_classes_8h.html#a60384f7994516c86264be21d747c5cab", null ],
+    [ "LogicalFramePtr", "_pre_defined_classes_8h.html#ac916751eedbb8cdd8765e0444ab80bac", null ],
     [ "LogicalFrameQueuePtr", "_pre_defined_classes_8h.html#a8c84fc0d1593db9aefc5f4704cf72a79", null ],
     [ "SipperImagePtr", "_pre_defined_classes_8h.html#a1a3dcb358ad07b444e1e62bad5584d01", null ],
+    [ "VectorExtractedImage", "_pre_defined_classes_8h.html#ab0af5b87a9bfcef300900abc478767ea", null ],
+    [ "VectorExtractedImagePtr", "_pre_defined_classes_8h.html#adef37dac755e92d982675dc0add93f61", null ],
+    [ "VectorLogicalFrameBlob", "_pre_defined_classes_8h.html#a11a332e32366a35c8aa0fcb705418e13", null ],
     [ "VectorSipperImage", "_pre_defined_classes_8h.html#adc2d9bfaf132939a1c0a2fc9a65e374a", null ],
     [ "VectorSipperImagePtr", "_pre_defined_classes_8h.html#ada30c970a6975ca39ca8202a32ea7ffe", null ]
 ];

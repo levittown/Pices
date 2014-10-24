@@ -1,9 +1,6 @@
 var _image_extraction_thread_8h =
 [
     [ "ImageExtractionThread", "class_image_extraction_manager_1_1_image_extraction_thread.html", "class_image_extraction_manager_1_1_image_extraction_thread" ],
-    [ "ImageExtractionThreadList", "_image_extraction_thread_8h.html#a9cb271aff73af787c1635b16e9f5f739", null ],
-    [ "ImageExtractionThreadListPtr", "_image_extraction_thread_8h.html#af3a3b3af040ff82cf1cd4fe44391867b", null ],
-    [ "ImageExtractionThreadPtr", "_image_extraction_thread_8h.html#a0819edb2fc8122fc222f419271dd40ba", null ],
     [ "ThreadStatus", "_image_extraction_thread_8h.html#a417e7ca12dfc4d70ebdedc8fc21de72c", [
       [ "tsNotStarted", "_image_extraction_thread_8h.html#a417e7ca12dfc4d70ebdedc8fc21de72cad6eccd1207afa3a9f9bfd1e6c664fd60", null ],
       [ "tsStarting", "_image_extraction_thread_8h.html#a417e7ca12dfc4d70ebdedc8fc21de72ca898062ba60c30ef2ba9e4aaae62af3b6", null ],

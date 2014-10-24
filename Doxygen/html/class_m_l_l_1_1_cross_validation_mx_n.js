@@ -1,6 +1,6 @@
 var class_m_l_l_1_1_cross_validation_mx_n =
 [
-    [ "CrossValidationMxN", "class_m_l_l_1_1_cross_validation_mx_n.html#adeaf3f47cecd082d99b7a7edd33eedde", null ],
+    [ "CrossValidationMxN", "class_m_l_l_1_1_cross_validation_mx_n.html#aa4dabd79fec00609bd9d3836a3e889d4", null ],
     [ "CrossValidationMxN", "class_m_l_l_1_1_cross_validation_mx_n.html#ab757885cdde8272f4c747cf700e9eab9", null ],
     [ "~CrossValidationMxN", "class_m_l_l_1_1_cross_validation_mx_n.html#ab6413b29a226cd72859739d409d2376a", null ],
     [ "Accuracies", "class_m_l_l_1_1_cross_validation_mx_n.html#a86f137f282a4a00a8ae13380cf2f7cbf", null ],

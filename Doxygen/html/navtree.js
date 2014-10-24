@@ -38,7 +38,7 @@ var NAVTREE =
         [ "Typedefs", "globals_type.html", null ],
         [ "Enumerations", "globals_enum.html", null ],
         [ "Enumerator", "globals_eval.html", null ],
-        [ "Macros", "globals_defs.html", "globals_defs" ]
+        [ "Macros", "globals_defs.html", null ]
       ] ]
     ] ]
   ] ]
@@ -47,48 +47,47 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_about_box_8_designer_8cs.html",
-"_basic_types_8h.html#a17f27f030c72c210599e6d938647f7c3",
-"_cross_validation_app_8h.html#a253382d238225cd5362fc97de3d3764c",
-"_feature_file_i_o_u_c_i_8h.html",
-"_instrument_data_g_p_s_8h.html",
-"_pices_abundance_correction_matrix_8h.html",
-"_raster_8h.html#af10b7b7cc4d61b7e51afa3d9fa388b25ad053c7bc31369e560e0be623ba3d19a7",
-"_sipper_frame_8cs_source.html",
-"_usf_cas_cor_8h.html#a00367b974e5e3d24c826c173aa7b179c",
-"class_class_prob_list_1_1_probability_comparer.html",
-"class_image_extraction_manager_1_1_extraction_parms.html#a9b697c0b158174d4d3e69b8ae073b00b",
-"class_k_k_u_1_1_atom.html#a7bf2e1709d39664649afa2723ec2f9d9",
-"class_k_k_u_1_1_date_type.html#a021b6ee1d757dd2d27abd2f4f53f0fba",
-"class_k_k_u_1_1_k_k_str.html#a8d93ecb03df486569f4432eed4b46ddd",
-"class_k_k_u_1_1_msg_queue.html#a6876741a2b07e3e7d66460dae5a459f2",
-"class_k_k_u_1_1_raster.html#ab2a2f8d11f4d51cbc5418069a7b58299",
-"class_k_k_u_1_1_tokenizer.html#a52e7d190cd733fde13096535c67e93ea",
-"class_m_l_l_1_1_class_statistic_list.html#ace9ca6944e7cfc5c50bf6cc26bd66c6c",
-"class_m_l_l_1_1_data_base.html#a5cdb6e62920bdf3dd9aee0b422e4789f",
-"class_m_l_l_1_1_data_base_log_entry.html#a398798a422db02c4feb84000fd6dffe8",
-"class_m_l_l_1_1_feature_num_list.html#a13682d1fba9cebda0c8a131ec57fdf54",
-"class_m_l_l_1_1_image_features.html#a939a814f3b6df1d46e5d3f37ffb64614",
-"class_m_l_l_1_1_model.html#a471295169128164949643cfa88d3f8c1",
-"class_m_l_l_1_1_model_param_knn.html#a96e954f8fee173eec3987f3b1837d393",
-"class_m_l_l_1_1_s_v_mparam.html#a739ad7d916a97e08d6f3da940b40141f",
-"class_m_l_l_1_1_training_process2.html#a5cba5ffc2ad34d9b56ae116e21912959",
-"class_m_l_l_1_1_usf_cas_cor.html#ac47359d5419459e91438b1c80cf83c46",
-"class_pices_commander_1_1_plankton_depth_statistics_loader.html#a93ffc07bead8afa42fc7ae757aea2075",
-"class_pices_interface_1_1_pices_data_base.html#a2484a934b94c92527235c31a0d76be58",
-"class_pices_interface_1_1_pices_feature_vector.html#a38879d5f3664799dd104292ce7944641",
-"class_pices_interface_1_1_pices_raster.html#a20f110d4f3484fffe406905fe111ccce",
-"class_pices_interface_1_1_training_model2.html#a31b76c2d0396ed829a521a2d5f5e317d",
-"class_sipper_cruise_list_1_1_cruise_name_comparator.html",
-"class_sipper_file_1_1_depth_plot2_parameters.html#af86bf32d0981f48bf3d870e938ffedea",
-"class_sipper_file_1_1_sipper3_decode_rec.html#a3db74af254662dca06a39f45cbe6bd3c",
-"class_sipper_hardware_1_1_c_t_d___plus___data.html#a48ef929c87259c96820e16005f00a825",
-"class_sipper_hardware_1_1_instrument_data_manager.html#a7ea22f634ae7c8f7f7a0c920f5f2e06a",
-"class_sipper_hardware_1_1_sipper_deployment.html#aa09547d87521f39bf97ecb99b6dc9518",
-"dir_79d8144547b5fa076f1a0175f4d16f81.html",
-"namespacemembers_0x6f.html",
-"struct_s_v_m289___b_f_s_1_1svm__model.html#a5626ef4775f7837e09dec0e2b163085b",
-"struct_sipper_hardware_1_1_sipper3_rec.html#ae48a804e0ec1b956f21418750aed1294",
-"union_bmp_image_1_1_d_word_parts.html#a2480d1ba037bfb09329cb77d03e64940"
+"_basic_types_8h.html#a26cc99f5263a8e4ba326df2e0e288ca4",
+"_cruise_list_8cpp.html",
+"_frame_processor_thread_8cpp_source.html",
+"_instrument_data_report_illumination_8cs.html",
+"_pices_data_base_server_prompter_8cpp_source.html",
+"_run_log_8cpp.html",
+"_sipper_instrument_data_extraction_8_designer_8cs_source.html",
+"_usf_cas_cor_8h.html#a48c3357bad9305a46df39c5c42d9efcd",
+"class_cross_validation_sort_by_train_time.html#a91e70922dc021cf8734e194905e81d98",
+"class_image_extraction_manager_1_1_logical_frame_queue.html",
+"class_k_k_u_1_1_bmp_image.html#ae26fb37aebe1bd85a576330479a05742",
+"class_k_k_u_1_1_histogram.html#a2d0048710671eb45ca7b554919a9c5f8",
+"class_k_k_u_1_1_k_k_str_list.html",
+"class_k_k_u_1_1_raster.html#a17561934de810c42f1055774e0f67fd3",
+"class_k_k_u_1_1_raster_sipper_list.html#a63d76d24c116f1c21f19a8d4ec528bc5",
+"class_m_l_l_1_1_binary_class_parms.html#acf1a7d8559500409c87d44738d26283a",
+"class_m_l_l_1_1_cross_validation.html#ad37278bc7c25ec72fdd33e2fd34aa396",
+"class_m_l_l_1_1_data_base_image.html#a5d18cdd14c0e994eff824fda8f24f8c2",
+"class_m_l_l_1_1_feature_encoder2.html#a33af04e62051a5eb38c2b9be33e2c04b",
+"class_m_l_l_1_1_feature_vector_list.html#a6c7d5bc1fc807d9b2af1151b6161544faed44cbc9abc198fe5434326a7117f05f",
+"class_m_l_l_1_1_m_l_class.html#a7e2cfcd8b8ad56e2822668f96c7f8d1e",
+"class_m_l_l_1_1_model_old_s_v_m.html#a39155fccf05f2a48f34ca350f6f0fa0c",
+"class_m_l_l_1_1_model_usf_cas_cor.html#a5b940c67e5534473ca985b8163dfd381",
+"class_m_l_l_1_1_training_class_list.html#a593c21ef39e25d2b1a8cd338cc312678",
+"class_m_l_l_1_1_usf_cas_cor.html#a850a3e25d530563cbb69a031213c3542",
+"class_pices_commander_1_1_plankton_depth_statistics_loader.html#aeae3d10a40715614c39b9d952afe5952",
+"class_pices_interface_1_1_pices_data_base.html#a30caee27db9262d85f47de138a7a2dee",
+"class_pices_interface_1_1_pices_feature_vector.html#a7ceebf94bda56c058350330619561b8d",
+"class_pices_interface_1_1_pices_raster.html#a4bc6e9bee39190563180aecd22ba1f92",
+"class_pices_interface_1_1_training_model2.html#a457a5554d457b42626bb0e2f1510da2eab602e23c0ec2466f3aa6cade0cd5ce05",
+"class_sipper_disk_utilities_1_1_constants.html#a476985b7097aa5848c96de4355585c21",
+"class_sipper_file_1_1_display_pices_images.html#aa2d8c2b5e6785674c66f7821f706ceb1",
+"class_sipper_file_1_1_sipper3_decode_rec.html#ad863990c3d9e9db70d7d86c758486af7",
+"class_sipper_hardware_1_1_c_t_d___plus___data.html#a73da8cddc7372441b2f1cd7c15ba33a5",
+"class_sipper_hardware_1_1_instrument_data_manager.html#a97525658f15dba3a2d6f90f5f86e4902",
+"class_sipper_hardware_1_1_sipper_deployment.html#aecd76a407851318a0fb040d27d950fc9",
+"dir_eb14e4ece2930b395cb8c406823e1316.html",
+"namespacemembers_type.html",
+"struct_s_v_m289___b_f_s_1_1svm__model.html#a5390deb38d4188de96d9b66f5c6b5db2",
+"struct_sipper_hardware_1_1_sipper3_rec.html#ad3731ee79b30d9187528ab7be9260fba",
+"todo.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
@@ -115,6 +114,21 @@ function stripPath2(uri)
   return m ? uri.substring(i-6) : s;
 }
 
+function hashValue()
+{
+  return $(location).attr('hash').substring(1).replace(/[^\w\-]/g,'');
+}
+
+function hashUrl()
+{
+  return '#'+hashValue();
+}
+
+function pathName()
+{
+  return $(location).attr('pathname').replace(/[^-A-Za-z0-9+&@#/%?=~_|!:,.;\(\)]/g, '');
+}
+
 function localStorageSupported()
 {
   try {
@@ -137,7 +151,7 @@ function deleteLink()
 {
   if (localStorageSupported()) {
     window.localStorage.setItem('navpath','');
-  } 
+  }
 }
 
 function cachedLink()
@@ -173,12 +187,12 @@ function createIndent(o,domNode,node,level)
   var level=-1;
   var n = node;
   while (n.parentNode) { level++; n=n.parentNode; }
-  var imgNode = document.createElement("img");
-  imgNode.style.paddingLeft=(16*level).toString()+'px';
-  imgNode.width  = 16;
-  imgNode.height = 22;
-  imgNode.border = 0;
   if (node.childrenData) {
+    var imgNode = document.createElement("img");
+    imgNode.style.paddingLeft=(16*level).toString()+'px';
+    imgNode.width  = 16;
+    imgNode.height = 22;
+    imgNode.border = 0;
     node.plus_img = imgNode;
     node.expandToggle = document.createElement("a");
     node.expandToggle.href = "javascript:void(0)";
@@ -195,8 +209,12 @@ function createIndent(o,domNode,node,level)
     domNode.appendChild(node.expandToggle);
     imgNode.src = node.relpath+"ftv2pnode.png";
   } else {
-    imgNode.src = node.relpath+"ftv2node.png";
-    domNode.appendChild(imgNode);
+    var span = document.createElement("span");
+    span.style.display = 'inline-block';
+    span.style.width   = 16*(level+1)+'px';
+    span.style.height  = '22px';
+    span.innerHTML = '&#160;';
+    domNode.appendChild(span);
   } 
 }
 
@@ -205,11 +223,13 @@ var animationInProgress = false;
 function gotoAnchor(anchor,aname,updateLocation)
 {
   var pos, docContent = $('#doc-content');
-  if (anchor.parent().attr('class')=='memItemLeft' ||
-      anchor.parent().attr('class')=='fieldtype' ||
-      anchor.parent().is(':header')) 
+  var ancParent = $(anchor.parent());
+  if (ancParent.hasClass('memItemLeft') ||
+      ancParent.hasClass('fieldname') ||
+      ancParent.hasClass('fieldtype') ||
+      ancParent.is(':header'))
   {
-    pos = anchor.parent().position().top;
+    pos = ancParent.position().top;
   } else if (anchor.position()) {
     pos = anchor.position().top;
   }
@@ -267,7 +287,7 @@ function newNode(o, po, text, link, childrenData, lastNode)
     a.className = stripPath(link.replace('#',':'));
     if (link.indexOf('#')!=-1) {
       var aname = '#'+link.split('#')[1];
-      var srcPage = stripPath($(location).attr('pathname'));
+      var srcPage = stripPath(pathName());
       var targetPage = stripPath(link.split('#')[0]);
       a.href = srcPage!=targetPage ? url : "javascript:void(0)"; 
       a.onclick = function(){
@@ -361,14 +381,13 @@ function glowEffect(n,duration)
 
 function highlightAnchor()
 {
-  var aname = $(location).attr('hash');
+  var aname = hashUrl();
   var anchor = $(aname);
   if (anchor.parent().attr('class')=='memItemLeft'){
-    var rows = $('.memberdecls tr[class$="'+
-               window.location.hash.substring(1)+'"]');
+    var rows = $('.memberdecls tr[class$="'+hashValue()+'"]');
     glowEffect(rows.children(),300); // member without details
-  } else if (anchor.parents().slice(2).prop('tagName')=='TR') {
-    glowEffect(anchor.parents('div.memitem'),1000); // enum value
+  } else if (anchor.parent().attr('class')=='fieldname'){
+    glowEffect(anchor.parent().parent(),1000); // enum value
   } else if (anchor.parent().attr('class')=='fieldtype'){
     glowEffect(anchor.parent().parent(),1000); // struct field
   } else if (anchor.parent().is(":header")) {
@@ -383,7 +402,7 @@ function selectAndHighlight(hash,n)
 {
   var a;
   if (hash) {
-    var link=stripPath($(location).attr('pathname'))+':'+hash.substring(1);
+    var link=stripPath(pathName())+':'+hash.substring(1);
     a=$('.item a[class$="'+link+'"]');
   }
   if (a && a.length) {
@@ -415,7 +434,7 @@ function showNode(o, node, index, hash)
       if (!node.childrenVisited) {
         getNode(o, node);
       }
-      $(node.getChildrenUL()).show();
+      $(node.getChildrenUL()).css({'display':'block'});
       if (node.isLast) {
         node.plus_img.src = node.relpath+"ftv2mlastnode.png";
       } else {
@@ -447,8 +466,22 @@ function showNode(o, node, index, hash)
   }
 }
 
+function removeToInsertLater(element) {
+  var parentNode = element.parentNode;
+  var nextSibling = element.nextSibling;
+  parentNode.removeChild(element);
+  return function() {
+    if (nextSibling) {
+      parentNode.insertBefore(element, nextSibling);
+    } else {
+      parentNode.appendChild(element);
+    }
+  };
+}
+
 function getNode(o, po)
 {
+  var insertFunction = removeToInsertLater(po.li);
   po.childrenVisited = true;
   var l = po.childrenData.length-1;
   for (var i in po.childrenData) {
@@ -456,6 +489,7 @@ function getNode(o, po)
     po.children[i] = newNode(o, po, nodeData[0], nodeData[1], nodeData[2],
       i==l);
   }
+  insertFunction();
 }
 
 function gotoNode(o,subIndex,root,hash,relpath)
@@ -479,14 +513,13 @@ function navTo(o,root,hash,relpath)
   if (link) {
     var parts = link.split('#');
     root = parts[0];
-    if (parts.length>1) hash = '#'+parts[1];
+    if (parts.length>1) hash = '#'+parts[1].replace(/[^\w\-]/g,'');
     else hash='';
   }
   if (hash.match(/^#l\d+$/)) {
     var anchor=$('a[name='+hash.substring(1)+']');
     glowEffect(anchor.parent(),1000); // line number
     hash=''; // strip line number anchors
-    //root=root.replace(/_source\./,'.'); // source link to doc link
   }
   var url=root+hash;
   var i=-1;
@@ -520,7 +553,7 @@ function toggleSyncButton(relpath)
   if (navSync.hasClass('sync')) {
     navSync.removeClass('sync');
     showSyncOff(navSync,relpath);
-    storeLink(stripPath2($(location).attr('pathname'))+$(location).attr('hash'));
+    storeLink(stripPath2(pathName())+hashUrl());
   } else {
     navSync.addClass('sync');
     showSyncOn(navSync,relpath);
@@ -559,30 +592,30 @@ function initNavTree(toroot,relpath)
     navSync.click(function(){ toggleSyncButton(relpath); });
   }
 
-  navTo(o,toroot,window.location.hash,relpath);
+  $(window).load(function(){
+    navTo(o,toroot,hashUrl(),relpath);
+    showRoot();
+  });
 
   $(window).bind('hashchange', function(){
      if (window.location.hash && window.location.hash.length>1){
        var a;
        if ($(location).attr('hash')){
-         var clslink=stripPath($(location).attr('pathname'))+':'+
-                               $(location).attr('hash').substring(1);
-         a=$('.item a[class$="'+clslink+'"]');
+         var clslink=stripPath(pathName())+':'+hashValue();
+         a=$('.item a[class$="'+clslink.replace(/</g,'\\3c ')+'"]');
        }
        if (a==null || !$(a).parent().parent().hasClass('selected')){
          $('.item').removeClass('selected');
          $('.item').removeAttr('id');
        }
-       var link=stripPath2($(location).attr('pathname'));
-       navTo(o,link,$(location).attr('hash'),relpath);
+       var link=stripPath2(pathName());
+       navTo(o,link,hashUrl(),relpath);
      } else if (!animationInProgress) {
        $('#doc-content').scrollTop(0);
        $('.item').removeClass('selected');
        $('.item').removeAttr('id');
-       navTo(o,toroot,window.location.hash,relpath);
+       navTo(o,toroot,hashUrl(),relpath);
      }
   })
-
-  $(window).load(showRoot);
 }
 

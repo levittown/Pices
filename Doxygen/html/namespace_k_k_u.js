@@ -47,7 +47,7 @@ var namespace_k_k_u =
     [ "RasterSipper", "class_k_k_u_1_1_raster_sipper.html", "class_k_k_u_1_1_raster_sipper" ],
     [ "RasterSipperList", "class_k_k_u_1_1_raster_sipper_list.html", "class_k_k_u_1_1_raster_sipper_list" ],
     [ "RBnode", "class_k_k_u_1_1_r_bnode.html", "class_k_k_u_1_1_r_bnode" ],
-    [ "RBTree", "class_k_k_u_1_1_r_b_tree.html", "class_k_k_u_1_1_r_b_tree" ],
+    [ "RBTree", "singleton_k_k_u_1_1_r_b_tree.html", "singleton_k_k_u_1_1_r_b_tree" ],
     [ "RGBQUAD", "struct_k_k_u_1_1_r_g_b_q_u_a_d.html", "struct_k_k_u_1_1_r_g_b_q_u_a_d" ],
     [ "Row", "class_k_k_u_1_1_row.html", "class_k_k_u_1_1_row" ],
     [ "RunLog", "class_k_k_u_1_1_run_log.html", "class_k_k_u_1_1_run_log" ],

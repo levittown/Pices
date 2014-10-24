@@ -17,6 +17,6 @@ var class_sipper_file_1_1_active_training_libraries =
     [ "SaveConfiguration", "class_sipper_file_1_1_active_training_libraries.html#a2fa087c9efdc9569c952c8a9e2e43e6a", null ],
     [ "SetModel1", "class_sipper_file_1_1_active_training_libraries.html#ab70f550c7e02867184af6bb16c970329", null ],
     [ "SetModel2", "class_sipper_file_1_1_active_training_libraries.html#a513288386095482f6ec506fd039ad924", null ],
-    [ "Model1Name", "class_sipper_file_1_1_active_training_libraries.html#ad0b209bf4750097c93c86c2904748731", null ],
+    [ "get", "class_sipper_file_1_1_active_training_libraries.html#acd02810346df0e2c0eecf74f696f9266", null ],
     [ "Model2Name", "class_sipper_file_1_1_active_training_libraries.html#a2daef58f7f91bbbd02d9cc1500f9eda6", null ]
 ];

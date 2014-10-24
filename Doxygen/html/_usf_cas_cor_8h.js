@@ -41,10 +41,8 @@ var _usf_cas_cor_8h =
     [ "VARSIGMOID", "_usf_cas_cor_8h.html#a48c3357bad9305a46df39c5c42d9efcd", null ],
     [ "WARN", "_usf_cas_cor_8h.html#a271d8f7f52be750e5c744a394ec71344", null ],
     [ "WIN", "_usf_cas_cor_8h.html#a43105771f16e2da3078149f0de528e9b", null ],
-    [ "UsfCasCorPtr", "_usf_cas_cor_8h.html#a1e33ce7fdc926427ab4f5cbf0195ed42", null ],
+    [ "UsfCasCorPtr", "_usf_cas_cor_8h.html#abadc604912cbb9d28e1bcab133d23b54", null ],
     [ "Boolean", "_usf_cas_cor_8h.html#ae7d38601dfbd73adbe5c1b3ec34e0e13", [
-      [ "False", "_usf_cas_cor_8h.html#ae7d38601dfbd73adbe5c1b3ec34e0e13af9d46b7804d93a4fcde88489a1b68c24", null ],
-      [ "True", "_usf_cas_cor_8h.html#ae7d38601dfbd73adbe5c1b3ec34e0e13a6d32c34708a0a3507c4bdb89219d650b", null ],
       [ "False", "_usf_cas_cor_8h.html#ae7d38601dfbd73adbe5c1b3ec34e0e13af9d46b7804d93a4fcde88489a1b68c24", null ],
       [ "True", "_usf_cas_cor_8h.html#ae7d38601dfbd73adbe5c1b3ec34e0e13a6d32c34708a0a3507c4bdb89219d650b", null ]
     ] ]
