@@ -73,7 +73,9 @@ var dir_4e514f0583642780accb7ac5c83e9d37 =
       [ "FeatureVar2List", "class_m_l_l_1_1_feature_encoder2_1_1_feature_var2_list.html", "class_m_l_l_1_1_feature_encoder2_1_1_feature_var2_list" ],
       [ "FeatureVarComparrison2", "class_m_l_l_1_1_feature_encoder2_1_1_feature_var_comparrison2.html", "class_m_l_l_1_1_feature_encoder2_1_1_feature_var_comparrison2" ]
     ] ],
-    [ "FeatureEncoder2.h", "_feature_encoder2_8h.html", "_feature_encoder2_8h" ],
+    [ "FeatureEncoder2.h", "_feature_encoder2_8h.html", [
+      [ "FeatureEncoder2", "class_m_l_l_1_1_feature_encoder2.html", "class_m_l_l_1_1_feature_encoder2" ]
+    ] ],
     [ "FeatureFileIO.cpp", "_feature_file_i_o_8cpp.html", "_feature_file_i_o_8cpp" ],
     [ "FeatureFileIO.h", "_feature_file_i_o_8h.html", "_feature_file_i_o_8h" ],
     [ "FeatureFileIOArff.cpp", "_feature_file_i_o_arff_8cpp.html", null ],
@@ -201,7 +203,5 @@ var dir_4e514f0583642780accb7ac5c83e9d37 =
       [ "TrainingProcess2", "class_m_l_l_1_1_training_process2.html", "class_m_l_l_1_1_training_process2" ]
     ] ],
     [ "UsfCasCor.cpp", "_usf_cas_cor_8cpp.html", "_usf_cas_cor_8cpp" ],
-    [ "UsfCasCor.h", "_usf_cas_cor_8h.html", "_usf_cas_cor_8h" ],
-    [ "UsfCasCor_UsingDouble.cpp", "_usf_cas_cor___using_double_8cpp.html", "_usf_cas_cor___using_double_8cpp" ],
-    [ "UsfCasCor_UsingDouble.h", "_usf_cas_cor___using_double_8h.html", "_usf_cas_cor___using_double_8h" ]
+    [ "UsfCasCor.h", "_usf_cas_cor_8h.html", "_usf_cas_cor_8h" ]
 ];

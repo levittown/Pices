@@ -9,7 +9,9 @@ var dir_79d8144547b5fa076f1a0175f4d16f81 =
     [ "Instrument.cpp", "_instrument_8cpp.html", null ],
     [ "Instrument.h", "_instrument_8h.html", "_instrument_8h" ],
     [ "InstrumentData.cpp", "_instrument_data_8cpp.html", null ],
-    [ "InstrumentData.h", "_instrument_data_8h.html", "_instrument_data_8h" ],
+    [ "InstrumentData.h", "_instrument_data_8h.html", [
+      [ "InstrumentData", "class_sipper_hardware_1_1_instrument_data.html", "class_sipper_hardware_1_1_instrument_data" ]
+    ] ],
     [ "InstrumentDataBatteryMeter.cpp", "_instrument_data_battery_meter_8cpp.html", null ],
     [ "InstrumentDataBatteryMeter.h", "_instrument_data_battery_meter_8h.html", "_instrument_data_battery_meter_8h" ],
     [ "InstrumentDataCTDplus.cpp", "_instrument_data_c_t_dplus_8cpp.html", null ],
@@ -76,11 +78,7 @@ var dir_79d8144547b5fa076f1a0175f4d16f81 =
     [ "SipperDeployment.cpp", "_sipper_deployment_8cpp.html", null ],
     [ "SipperDeployment.h", "_sipper_deployment_8h.html", "_sipper_deployment_8h" ],
     [ "SipperFile.cpp", "_sipper_file_8cpp.html", "_sipper_file_8cpp" ],
-    [ "SipperFile.h", "_sipper_file_8h.html", [
-      [ "SipperFile", "class_sipper_hardware_1_1_sipper_file.html", "class_sipper_hardware_1_1_sipper_file" ],
-      [ "SipperFileList", "class_sipper_hardware_1_1_sipper_file_list.html", "class_sipper_hardware_1_1_sipper_file_list" ],
-      [ "SipperFileOracle", "class_sipper_hardware_1_1_sipper_file_oracle.html", "class_sipper_hardware_1_1_sipper_file_oracle" ]
-    ] ],
+    [ "SipperFile.h", "_sipper_file_8h.html", "_sipper_file_8h" ],
     [ "SipperHeaderRec.cpp", "_sipper_header_rec_8cpp.html", null ],
     [ "SipperHeaderRec.h", "_sipper_header_rec_8h.html", "_sipper_header_rec_8h" ],
     [ "SipperStation.cpp", "_sipper_station_8cpp.html", null ],

@@ -1,5 +1,6 @@
 var _image_i_o_8h =
 [
+    [ "RasterPtr", "_image_i_o_8h.html#aec5eec37c8fd40d7139e256734306b91", null ],
     [ "DisplayImage", "_image_i_o_8h.html#a99c10b766a08b0b55abeb4fcbf4885d2", null ],
     [ "DisplayImage", "_image_i_o_8h.html#a372d1273b8bb81e3b9c4673d6365a87a", null ],
     [ "ReadImage", "_image_i_o_8h.html#a7dd9b53392db2f4c1b2a789464f7b83f", null ],

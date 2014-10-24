@@ -215,7 +215,7 @@ var hierarchy =
     ] ],
     [ "KKU::RasterBuffer", "class_k_k_u_1_1_raster_buffer.html", null ],
     [ "KKU::RBnode< Entry >", "class_k_k_u_1_1_r_bnode.html", null ],
-    [ "KKU::RBTree< Entry, CompareNodes, KeyType >", "class_k_k_u_1_1_r_b_tree.html", null ],
+    [ "KKU::RBTree< Entry, CompareNodes, KeyType >", "singleton_k_k_u_1_1_r_b_tree.html", null ],
     [ "KKU::RGBQUAD", "struct_k_k_u_1_1_r_g_b_q_u_a_d.html", null ],
     [ "KKU::Row", "class_k_k_u_1_1_row.html", null ],
     [ "KKU::RunLog", "class_k_k_u_1_1_run_log.html", null ],
@@ -237,6 +237,7 @@ var hierarchy =
       [ "KKU::XmlElement", "class_k_k_u_1_1_xml_element.html", null ]
     ] ],
     [ "List", null, [
+      [ "PicesCommander.ClassTotalsList", "class_pices_commander_1_1_class_totals_list.html", null ],
       [ "PicesInterface::CruiseList", "class_pices_interface_1_1_cruise_list.html", null ],
       [ "PicesInterface::PicesClassList", "class_pices_interface_1_1_pices_class_list.html", null ],
       [ "PicesInterface::PicesClassStatisticList", "class_pices_interface_1_1_pices_class_statistic_list.html", null ],
@@ -256,16 +257,9 @@ var hierarchy =
       [ "PicesInterface::PicesSipperFileList", "class_pices_interface_1_1_pices_sipper_file_list.html", null ],
       [ "PicesInterface::PicesSipperStationList", "class_pices_interface_1_1_pices_sipper_station_list.html", null ],
       [ "PicesInterface::PicesTrainingClassList", "class_pices_interface_1_1_pices_training_class_list.html", null ],
-      [ "PicesInterface::PicesVolumeSampledStatList", "class_pices_interface_1_1_pices_volume_sampled_stat_list.html", null ]
-    ] ],
-    [ "List< Blob >", null, [
+      [ "PicesInterface::PicesVolumeSampledStatList", "class_pices_interface_1_1_pices_volume_sampled_stat_list.html", null ],
+      [ "SipperDiskUtilities.SipperFileControlBlockList", "class_sipper_disk_utilities_1_1_sipper_file_control_block_list.html", null ],
       [ "SipperFile.BlobList", "class_sipper_file_1_1_blob_list.html", null ]
-    ] ],
-    [ "List< ClassTotals >", null, [
-      [ "PicesCommander.ClassTotalsList", "class_pices_commander_1_1_class_totals_list.html", null ]
-    ] ],
-    [ "List< SipperFileControlBlock >", null, [
-      [ "SipperDiskUtilities.SipperFileControlBlockList", "class_sipper_disk_utilities_1_1_sipper_file_control_block_list.html", null ]
     ] ],
     [ "map", null, [
       [ "MLL::ClassIndexList", "class_m_l_l_1_1_class_index_list.html", null ]
@@ -523,7 +517,7 @@ var hierarchy =
     [ "SipperHardware::SipperVariables", "class_sipper_hardware_1_1_sipper_variables.html", null ],
     [ "SipperHardware::VolumeSampledStat", "class_sipper_hardware_1_1_volume_sampled_stat.html", null ],
     [ "MLL::SizeDistribution::ClassTotals", "class_size_distribution_1_1_class_totals.html", null ],
-    [ "SortedList< String, ClassStat >", null, [
+    [ "SortedList", null, [
       [ "PicesCommander.ClassStatSortedList", "class_pices_commander_1_1_class_stat_sorted_list.html", null ]
     ] ],
     [ "SplitRec", "struct_split_rec.html", null ],

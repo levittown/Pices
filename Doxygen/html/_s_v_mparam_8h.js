@@ -1,6 +1,7 @@
 var _s_v_mparam_8h =
 [
     [ "SVMparam", "class_m_l_l_1_1_s_v_mparam.html", "class_m_l_l_1_1_s_v_mparam" ],
+    [ "FeatureVectorListPtr", "_s_v_mparam_8h.html#afa8a65ae21cfd692e9a25dc4b98eb4c7", null ],
     [ "SVMparamPtr", "_s_v_mparam_8h.html#a3a936f555dd88237d5cf006fb5674b34", null ],
     [ "SVM_CompressionMethod", "_s_v_mparam_8h.html#a1c811174d70531443e112ee5be35f09d", [
       [ "BRNull", "_s_v_mparam_8h.html#a1c811174d70531443e112ee5be35f09da1a94023ca297cc78c94f53069529b360", null ],

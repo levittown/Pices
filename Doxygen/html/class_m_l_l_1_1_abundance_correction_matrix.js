@@ -6,6 +6,7 @@ var class_m_l_l_1_1_abundance_correction_matrix =
     [ "AddIn", "class_m_l_l_1_1_abundance_correction_matrix.html#a34497beb5dab047af2ef8aa09ccb840f", null ],
     [ "AdjustClassificationCounts", "class_m_l_l_1_1_abundance_correction_matrix.html#a4c4531546896e23e6da210c580b01574", null ],
     [ "AllocateVector", "class_m_l_l_1_1_abundance_correction_matrix.html#a47cf71731c458c3f7fd602cc50b92dca", null ],
+    [ "ArrayToStr", "class_m_l_l_1_1_abundance_correction_matrix.html#ad1c38f2dc4ddbcd0df88edb15f64d0c4", null ],
     [ "ComputeStatistics", "class_m_l_l_1_1_abundance_correction_matrix.html#a2f4c3808effc43fa6d85da4114d05a57", null ],
     [ "DateTimeComputed", "class_m_l_l_1_1_abundance_correction_matrix.html#a17ea27a59b848c00db029ab9a17e22b9", null ],
     [ "LumpCounts", "class_m_l_l_1_1_abundance_correction_matrix.html#a34e9e9cccf4e1a730b3eea6446ce5344", null ],

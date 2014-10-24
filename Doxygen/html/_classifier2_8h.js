@@ -6,5 +6,5 @@ var _classifier2_8h =
     [ "ClassProbListPtr", "_classifier2_8h.html#aa94441f5061f7d507dec78cd6da11c2a", null ],
     [ "ClassProbPtr", "_classifier2_8h.html#abcd284bf34a2c155210939ba7d43949a", null ],
     [ "TrainingConfiguration2Ptr", "_classifier2_8h.html#a16f6c887e9155c26d7bc5e97b775c969", null ],
-    [ "TrainingProcess2Ptr", "_classifier2_8h.html#aff0202f71a1a9732293ab776292fa49c", null ]
+    [ "TrainingProcess2Ptr", "_classifier2_8h.html#a8037d5ed4a9331b3c0a59adee6c55588", null ]
 ];
