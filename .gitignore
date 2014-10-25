@@ -7,3 +7,4 @@ Release
 *.bak
 *.zip
 
+/images/Thumbs.db
