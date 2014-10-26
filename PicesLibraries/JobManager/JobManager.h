@@ -95,32 +95,39 @@ namespace  JobManagment
       JobListPtr  JobsCreateInitialSet () = 0;   // Derived classes use this method to sed the initial set of jobs.
 
 
-    // JobsExpandNextSetOfJobs
-    // Derived classes need to implement this method.  It will be called when all jobs have been completed.  The 
-    // variable 'jobs' will contain a list of all jobs.
-    // jobsJustCompletd -  Contains a list of jobs that have been completed since the last time this 
-    //                     method was called or 'JobsCreateInitialSet' was called.
-    // Return - List of new jobs that are to be processed.  A NULL signifies that no more jobs to process.
+    /**
+     *@brief  Job manager calls this method when ever it is rady to start processing another group of jobs.
+     *@details Derived classes need to implement this method; it will be called when all jobs have been completed.  The 
+     * variable 'jobs' will contain a list of all jobs.
+     *@params[in,out]  jobsJustCompletd -  Contains a list of jobs that have been completed since the last time this 
+     *                  method was called or 'JobsCreateInitialSet' was called.
+     *@Returns  List of new jobs that are to be processed.  A NULL signifies that no more jobs to process.
+     */
     virtual  JobListPtr  JobsExpandNextSetOfJobs (const JobListPtr  jobsJustCompletd) = 0;
 
     
     virtual  void  GenerateFinalResultsReport () = 0;
 
 
-    virtual  void  LoadRunTimeData () = 0;  // Load any run time data that will be needed.  'JobManager' will 
-                                            // call this method just before it calls 'StatusFileInitialize' if
-                                            // no existing StausFile otherwise it will call it just after it
-                                            // loads the StatusFile.
+    
+   /**
+    *@brief  Load any run time data that will be needed.
+    *@details  'JobManager' will call this method just before it calls 'StatusFileInitialize' if
+    * no existing StausFile otherwise it will call it just after it loads the StatusFile.
+    */
+    virtual  void  LoadRunTimeData () = 0;
 
 
-    // In one (Block - EndBlock)  sequesnce will update completd jobs and select next set of jobs to
-    // process.
+    /** 
+     *@brief In one (Block - EndBlock)  sequesnce will update completd jobs and select next set of jobs to process.
+     */
     JobListPtr  GetNextSetOfJobs (JobListPtr  completedJobs);
 
 
 
     //****************************************************************************************
     //*   Status File Routines.
+
     void    ReportCpuTimeUsed (ofstream* statusFile);
 
     void    StatusFileInitialize ();
@@ -141,18 +148,19 @@ namespace  JobManagment
   protected:
     // The next 3 methods need to be implemented by any Derived classes.  Those derived class need to also
     // call the Base class version of this method.
+
     virtual void    StatusFileProcessLine (const KKStr&  ln,
                                            istream&      statusFile
                                           );
 
     virtual void    StatusFileProcessLineJobStatusChange (KKStr&  statusLineStr);
 
-    virtual KKStr   ToStatusStr ();  // derived classes should implement this method.  They need to return a tab
-                                     // delimietd string with all there parameters
-                                     // <FieldName1> <\t> <FieldValue1> <\t> <fieldName2> <\t> <FieldValue2>  etc etc etc ...
-                                     // They should call the base Class version of this method and return that string first.
-                                     // ex:  return JobManager::ToStatusStr () + "\t" + "FieldName1" + "\t" + "Value1" + "\t" + "FieldName2" + "\t" + "Value2";
-
+    virtual KKStr   ToStatusStr ();  /**<derived classes should implement this method.  They need to return a tab
+                                      * delimietd string with all there parameters
+                                      * <FieldName1> <\t> <FieldValue1> <\t> <fieldName2> <\t> <FieldValue2>  etc etc etc ...
+                                      * They should call the base Class version of this method and return that string first.
+                                      * ex:  return JobManager::ToStatusStr () + "\t" + "FieldName1" + "\t" + "Value1" + "\t" + "FieldName2" + "\t" + "Value2";
+                                      */
 
   private:
     //****************************************************************************************
@@ -169,18 +177,20 @@ namespace  JobManagment
     double          cpuTimeTotalUsed;
     KKU::DateTime   dateTimeStarted;
     KKU::DateTime   dateTimeEnded;
-    bool            dateTimeFirstOneFound;  // Flag that indicates weather we have read the first 
-                                            // instance of a 'CurrentDateTime' in the Status file.
+    bool            dateTimeFirstOneFound;  /**< Flag that indicates weather we have read the first 
+                                             * instance of a 'CurrentDateTime' in the Status file.
+                                             */
 
 
-    JobListPtr      jobs;                   // List of jobs that we are working with.  We
-                                            // will be maintaining consistance with other
-                                            // parallel running processes through the 
-                                            // 'status' file.  As we make changes to each 
-                                            // individule 'BinaryJob' we write them out to
-                                            // the status file.  We periodically read from 
-                                            // the status file to see if there have been
-                                            // changes made by other processors.
+    JobListPtr      jobs;                   /**<List of jobs that we are working with.  We
+                                             * will be maintaining consistance with other
+                                             * parallel running processes through the 
+                                             * 'status' file.  As we make changes to each 
+                                             * individule 'BinaryJob' we write them out to
+                                             * the status file.  We periodically read from 
+                                             * the status file to see if there have been
+                                             * changes made by other processors.
+                                             */
   
     int             blockLevel;             // Starts at 0;  Will increments with each Call to 'Block'  and  decrementes with 'EndBlock'
     int             lockFile;
@@ -188,19 +198,19 @@ namespace  JobManagment
     bool            lockFileOpened;
 
     KKStr           managerName;
-    bool            supportCompletedJobData;  // If set to 'true' will call 'WriteCompletedJobData' after each job is completed.
+    bool            supportCompletedJobData;  /**< If set to 'true' will call 'WriteCompletedJobData' after each job is completed. */
 
     int             expansionCount;
-    int             expansionFirstJobId;    // jobId of first job in the current expansion.
+    int             expansionFirstJobId;      /**< jobId of first job in the current expansion. */
     int             nextJobId;
     int             numJobsAtATime;
-    int             procId;                 // Processor Id  that O/S assigns to this thread.
-    bool            quitRunning;            // If this flag is set true we are to terminate processing as soon as possible.
+    int             procId;                   /**< Processor Id  that O/S assigns to this thread.  */
+    bool            quitRunning;              /**< If this flag is set true we are to terminate processing as soon as possible. */
   
     bool            restart;
   
     KKStr           statusFileName;
-    long            statusFileNextByte;     // Byte offset of next bye to read from status file.
+    long            statusFileNextByte;       /**< Byte offset of next bye to read from status file.  */
   
   };  /* JobManager */
   

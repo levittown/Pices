@@ -1,44 +1,44 @@
-#include  "FirstIncludes.h"
+#include "FirstIncludes.h"
 
-#include  <stdlib.h>
-#include  <memory>
-#include  <math.h>
+#include <stdlib.h>
+#include <memory>
+#include <math.h>
 
-#include  <map>
-#include  <string>
-#include  <iostream>
-#include  <fstream>
-#include  <vector>
+#include <map>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <vector>
 
-#include  "MemoryDebug.h"
-#include  "BasicTypes.h"
+#include "MemoryDebug.h"
+#include "BasicTypes.h"
 
 using namespace std;
 
-#include  "Compressor.h"
-#include  "OSservices.h"
-#include  "Str.h"
+#include "Compressor.h"
+#include "OSservices.h"
+#include "Str.h"
 using namespace KKU;
 
-#include  "InstrumentDataFileManager.h"
+#include "InstrumentDataFileManager.h"
 using namespace  SipperHardware;
 
-#include  "ClassificationBiasMatrix.h"
-#include  "CrossValidation.h"
-#include  "DataBase.h"
-#include  "FeatureFileIO.h"
-#include  "FeatureFileIOPices.h"
-#include  "FileDesc.h"
-#include  "MLClass.h"
-#include  "ImageFeatures.h"
+#include "ClassificationBiasMatrix.h"
+#include "CrossValidation.h"
+#include "DataBase.h"
+#include "FeatureFileIO.h"
+#include "FeatureFileIOPices.h"
+#include "FileDesc.h"
+#include "MLClass.h"
+#include "ImageFeatures.h"
 using namespace MLL;
 
-#include  "JobManager.h"
+#include "JobManager.h"
 using namespace  JobManagment;
 
 
-#include  "RandomSplitJobManager.h"
-#include  "RandomSplitJob.h"
+#include "RandomSplitJobManager.h"
+#include "RandomSplitJob.h"
 
 
 
