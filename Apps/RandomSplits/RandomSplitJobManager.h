@@ -2,11 +2,11 @@
 #define  _RANDOMSPLITJOBMANAGER_
 
 
-#include  "Application.h"
-#include  "FeatureVector.h"
-#include  "JobManager.h"
-#include  "Orderings.h"
-#include  "TrainingConfiguration2.h"
+#include "Application.h"
+#include "FeatureVector.h"
+#include "JobManager.h"
+#include "Orderings.h"
+#include "TrainingConfiguration2.h"
 
 using namespace  KKU;
 
@@ -32,9 +32,9 @@ public:
   ~RandomSplitJobManager ();
 
 
-  TrainingConfiguration2Ptr  Config       ()  const {return  config;}
-  MLClassConstListPtr     MLClasses ()  const {return  mlClasses;}
-  int                        NumFolds     ()  const {return  numFolds;}
+  TrainingConfiguration2Ptr  Config    ()  const {return  config;}
+  MLClassConstListPtr        MLClasses ()  const {return  mlClasses;}
+  int                        NumFolds  ()  const {return  numFolds;}
 
 
 
@@ -110,7 +110,7 @@ private:
   KKStr                     dataIndexFileName;
   FileDescPtr               fileDesc;
   FeatureFileIOPtr          format;
-  MLClassConstListPtr    mlClasses;
+  MLClassConstListPtr       mlClasses;
   int                       numFolds;
   int                       numSplits;
   float                     splitFraction;
