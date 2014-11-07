@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\SipperLibraries\ImageExtractionManager&quot;;..\GrayImageExtraction;&quot;$(SolutionDir)\PicesLibrary&quot;;&quot;$(SolutionDir)\SipperInstruments&quot;;&quot;$(SolutionDir)\BaseLibrary&quot;;&quot;$(SolutionDir)\OutsidePackages\fftw&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\BaseLibrary&quot;;&quot;$(SolutionDir)\PicesLibraries\SipperInstruments&quot;;&quot;$(SolutionDir)\PicesLibraries\PicesLibrary&quot;;&quot;$(SolutionDir)\PicesLibraries\ImageExtractionManager&quot;;&quot;$(SolutionDir)\Apps\GrayImageExtraction&quot;;&quot;$(SolutionDir)\OutsidePackages\fftw-3.3.2&quot;;&quot;$(SolutionDir)\OutsidePackages\MySQL\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -63,9 +63,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="BaseLibrary.lib SipperInstruments.lib PicesLibrary.lib ImageExtractionManager.lib libfftw3-3.lib libfftw3f-3.lib libmysql.lib"
+				AdditionalDependencies="BaseLibrary.lib PicesLibrary.lib libfftw3-3.lib libfftw3f-3.lib libmysql.lib USER32.LIB"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(SolutionDir)\Libraries\$(ConfigurationName)"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)\Libraries\$(ConfigurationName)&quot;;&quot;$(SolutionDir)\OutsidePackages\fftw-3.3.2&quot;;&quot;$(SolutionDir)\OutsidePackages\MySqlWin32\lib&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -122,7 +122,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\SipperLibraries\ImageExtractionManager&quot;;..\GrayImageExtraction;&quot;$(SolutionDir)\PicesLibrary&quot;;&quot;$(SolutionDir)\SipperInstruments&quot;;&quot;$(SolutionDir)\BaseLibrary&quot;;&quot;$(SolutionDir)\OutsidePackages\fftw&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\BaseLibrary&quot;;&quot;$(SolutionDir)\PicesLibraries\SipperInstruments&quot;;&quot;$(SolutionDir)\PicesLibraries\PicesLibrary&quot;;&quot;$(SolutionDir)\PicesLibraries\ImageExtractionManager&quot;;&quot;$(SolutionDir)\Apps\GrayImageExtraction&quot;;&quot;$(SolutionDir)\OutsidePackages\fftw-3.3.2&quot;;&quot;$(SolutionDir)\OutsidePackages\MySQL\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -141,9 +141,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="BaseLibrary.lib SipperInstruments.lib PicesLibrary.lib ImageExtractionManager.lib libfftw3-3.lib libfftw3f-3.lib libmysql.lib"
+				AdditionalDependencies="BaseLibrary.lib PicesLibrary.lib libfftw3-3.lib libfftw3f-3.lib libmysql.lib USER32.LIB"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(SolutionDir)\Libraries\$(ConfigurationName)"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)\Libraries\$(ConfigurationName)&quot;;&quot;$(SolutionDir)\OutsidePackages\fftw-3.3.2&quot;;&quot;$(SolutionDir)\OutsidePackages\MySqlWin32\lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -200,7 +200,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\SipperLibraries\ImageExtractionManager&quot;;..\GrayImageExtraction;&quot;$(SolutionDir)\PicesLibrary&quot;;&quot;$(SolutionDir)\SipperInstruments&quot;;&quot;$(SolutionDir)\BaseLibrary&quot;;&quot;$(SolutionDir)\OutsidePackages\fftw&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\BaseLibrary&quot;;&quot;$(SolutionDir)\PicesLibraries\SipperInstruments&quot;;&quot;$(SolutionDir)\PicesLibraries\PicesLibrary&quot;;&quot;$(SolutionDir)\PicesLibraries\ImageExtractionManager&quot;;&quot;$(SolutionDir)\Apps\GrayImageExtraction&quot;;&quot;$(SolutionDir)\OutsidePackages\fftw-3.3.2&quot;;&quot;$(SolutionDir)\OutsidePackages\MySQL\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -221,9 +221,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="BaseLibrary.lib SipperInstruments.lib PicesLibrary.lib ImageExtractionManager.lib libfftw3-3.lib libfftw3f-3.lib libmysql.lib"
+				AdditionalDependencies="BaseLibrary.lib PicesLibrary.lib libfftw3-3.lib libfftw3f-3.lib libmysql.lib USER32.LIB"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(SolutionDir)\Libraries\$(ConfigurationName)"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)\Libraries\$(ConfigurationName)&quot;;&quot;$(SolutionDir)\OutsidePackages\fftw-3.3.2&quot;;&quot;$(SolutionDir)\OutsidePackages\MySqlWin32\lib&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -280,7 +280,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\SipperLibraries\ImageExtractionManager&quot;;..\GrayImageExtraction;&quot;$(SolutionDir)\PicesLibrary&quot;;&quot;$(SolutionDir)\SipperInstruments&quot;;&quot;$(SolutionDir)\BaseLibrary&quot;;&quot;$(SolutionDir)\OutsidePackages\fftw&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\BaseLibrary&quot;;&quot;$(SolutionDir)\PicesLibraries\SipperInstruments&quot;;&quot;$(SolutionDir)\PicesLibraries\PicesLibrary&quot;;&quot;$(SolutionDir)\PicesLibraries\ImageExtractionManager&quot;;&quot;$(SolutionDir)\Apps\GrayImageExtraction&quot;;&quot;$(SolutionDir)\OutsidePackages\fftw-3.3.2&quot;;&quot;$(SolutionDir)\OutsidePackages\MySQL\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -299,9 +299,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="BaseLibrary.lib SipperInstruments.lib PicesLibrary.lib ImageExtractionManager.lib libfftw3-3.lib libfftw3f-3.lib libmysql.lib"
+				AdditionalDependencies="BaseLibrary.lib PicesLibrary.lib libfftw3-3.lib libfftw3f-3.lib libmysql.lib USER32.LIB"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\Libraries\$(ConfigurationName)&quot;;&quot;$(SolutionDir)\OutsidePackages\mysql-5.5.24-win32\lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)\Libraries\$(ConfigurationName)&quot;;&quot;$(SolutionDir)\OutsidePackages\fftw-3.3.2&quot;;&quot;$(SolutionDir)\OutsidePackages\MySqlWin32\lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -334,6 +334,10 @@
 		</Configuration>
 	</Configurations>
 	<References>
+		<ProjectReference
+			ReferencedProjectIdentifier="{BA2F3029-DF12-42C1-87A3-F13F218F8E10}"
+			RelativePathToProject=".\Apps\GrayImageExtraction\GrayImageExtraction.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
