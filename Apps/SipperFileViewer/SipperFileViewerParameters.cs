@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using SipperFile;
 using System.Drawing.Imaging;
+using System.Windows.Forms.DataVisualization;
 
 using  PicesInterface;
 
@@ -29,8 +30,9 @@ namespace SipperFileViewer
                       
     private  int         numPixelsOnEachRow = 0;  // will be width or smaller that allows a proper mutiple of ratio
     
-    private  byte[]      displayRow = null;
-    private  byte[][]    raster     = null;
+    private  byte[]      displayRow   = null;
+    private  byte[][]    raster       = null;
+    private  uint[]      colHistogram = null;
     
     private  int         cropColumnLeft  = 0;
     private  int         cropColumnRight = 4095;
@@ -79,6 +81,8 @@ namespace SipperFileViewer
     }
 
 
+    public  uint[]  ColHistogram ()  {return colHistogram;}
+    
 
     public  SipperFileViewerParameters (Panel  _panel)
     {
@@ -101,9 +105,10 @@ namespace SipperFileViewer
         bufferDC = null;
       }
       
-      raster      = null;
-      displayRow  = null;
-      colorValues = null;
+      raster       = null;
+      colHistogram = null;
+      displayRow   = null;
+      colorValues  = null;
     }  /* Dispose */
 
 
@@ -252,6 +257,8 @@ namespace SipperFileViewer
       for  (x = 0;  x < height;  x++)
         raster[x] = new byte[width];
 
+      colHistogram = new uint[width];
+
       SetUpSipperStreamPanelContectMenu ();
 
       long  newDisplayRowTop = (long)((double)actualRowTop / (double)ratio);
@@ -331,7 +338,7 @@ namespace SipperFileViewer
       byte[][]  displayRows = new byte[1][];
       displayRows[0] = new byte[numPixelsOnEachRow];
       
-      sipperFile.GetDisplayRows (displayRowNum, displayRowNum, displayRows);
+      sipperFile.GetDisplayRows (displayRowNum, displayRowNum, displayRows, null);
       byte[]    firstDisplayRow = displayRows[0];
       
       int  lineLen = Math.Min (displayRow.Length, firstDisplayRow.Length);
@@ -421,7 +428,6 @@ namespace SipperFileViewer
 
 
 
-
     public void  PaintWholePanel ()
     {
       //panelDC.Clear (backGroundColor);
@@ -431,7 +437,7 @@ namespace SipperFileViewer
       {
         try
         {
-          sipperFile.GetDisplayRows (displayRowTop, displayRowBot, raster);
+          sipperFile.GetDisplayRows (displayRowTop, displayRowBot, raster, colHistogram);
         }
         catch  (Exception  e)
         {

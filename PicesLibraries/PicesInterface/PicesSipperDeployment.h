@@ -42,10 +42,11 @@ namespace PicesInterface
     property  System::DateTime  DateTimeEnd   {System::DateTime  get ();  void  set (System::DateTime  _dateTimeEnd);}
 
 
-    property  double  Latitude    {double  get ()  {return  deployment->Latitude  ();}    void  set (double _latitude)    {deployment->Latitude  (_latitude);}}
-    property  double  Longitude   {double  get ()  {return  deployment->Longitude ();}    void  set (double _longitude)   {deployment->Longitude (_longitude);}}
-    property  uint32  CropLeft    {uint32  get ()  {return  deployment->CropLeft  ();}    void  set (uint32 _cropLeft)    {deployment->CropLeft  (_cropLeft);}}      
-    property  uint32  CropRight   {uint32  get ()  {return  deployment->CropRight ();}    void  set (uint32 _cropRight)   {deployment->CropRight (_cropRight);}}      
+    property  double  Latitude     {double  get ()  {return  deployment->Latitude     ();}    void  set (double _latitude)     {deployment->Latitude     (_latitude);}}
+    property  double  Longitude    {double  get ()  {return  deployment->Longitude    ();}    void  set (double _longitude)    {deployment->Longitude    (_longitude);}}
+    property  uint32  CropLeft     {uint32  get ()  {return  deployment->CropLeft     ();}    void  set (uint32 _cropLeft)     {deployment->CropLeft     (_cropLeft);}}      
+    property  uint32  CropRight    {uint32  get ()  {return  deployment->CropRight    ();}    void  set (uint32 _cropRight)    {deployment->CropRight    (_cropRight);}}      
+    property  float   ChamberWidth {float   get ()  {return  deployment->ChamberWidth ();}    void  set (float  _chamberWidth) {deployment->ChamberWidth (_chamberWidth);}}
 
     property  System::DateTime   SyncTimeStampActual {System::DateTime   get ();   void  set (System::DateTime _syncTimeStampActual);}
     property  System::DateTime   SyncTimeStampCTD    {System::DateTime   get ();   void  set (System::DateTime _syncTimeStampCTD);}

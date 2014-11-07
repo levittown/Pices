@@ -591,7 +591,8 @@ namespace SipperFile
 
     public   void  GetDisplayRows  (long      displayRowStart,
                                     long      displayRowEnd,
-                                    byte[][]  raster
+                                    byte[][]  raster,
+                                    uint[]    colHistogram
                                    )
     {
       int x = 0;
@@ -610,7 +611,6 @@ namespace SipperFile
       //kak   When weOwnSipperFile resize from Max Screen when displaying from PicesInterface Comander weOwnSipperFile sometimes Get no Data WHY?
       if  (scanRows == null)
         return;
-
 
       ushort[][]  displayRows = new ushort[numDisplayRows][];
       for  (x = 0;  x < numDisplayRows;  x++)
@@ -631,9 +631,15 @@ namespace SipperFile
         nextDisplayRow = curDisplayRow + dispRowsPerScanRow;
         curDisplayRowInt  = (int)Math.Floor (curDisplayRow);
         nextDisplayRowInt = (int)Math.Floor (nextDisplayRow);
-     
         try
         {
+          if  (colHistogram != null)
+          {
+            byte[]  oneScanRow = scanRows[scanRowZeroed];
+            for  (x = 0;  x < oneScanRow.Length;  ++x)
+              colHistogram[x] += oneScanRow[x];
+          }
+
           if  (curDisplayRowInt == nextDisplayRowInt)
           {
             if  (curDisplayRowInt <= displayRowEnd)
@@ -668,14 +674,13 @@ namespace SipperFile
       
       float ratioSquared = ratio * ratio;
       
-      for  (x = 0;  x < numDisplayRows;  x++)
+      for  (x = 0;  x < numDisplayRows;  ++x)
       {
         ushort[]  oneDisplayRow = displayRows[x];
         byte[]    oneRasterRow  = raster[x];  
         for  (y = 0;  y < pixelsPerDisLine;  y++)
           oneRasterRow[y] = (byte)(0.5f + (float)oneDisplayRow[y] / ratioSquared);
       }
-
 
       return;
     } /* GetDisplayRows */                               

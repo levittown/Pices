@@ -724,6 +724,9 @@ namespace SipperFileViewer
 
       UpdateStats ();
       UpdateVerticleScrollBar ();
+
+      PixelDensityChart.Width += changeInWidth;
+      PixelDensityChart.Top   += changeInHeight;
     }  /* UpdateScreenForNewSize */
 
 
@@ -966,6 +969,43 @@ namespace SipperFileViewer
 
 
 
+
+    private  void  UpdatePixelDensityChart ()
+    {
+      uint[]  colHistogram = parameters.ColHistogram ();
+      if  (colHistogram == null)
+        return;
+
+      PixelDensityChart.Series[0].Points.Clear ();
+
+
+
+
+
+
+      XXXX
+      NavigateChart.Series[0].Points.Clear ();
+      NavigateChart.Series[1].Points.Clear ();
+      List<double>  plotData  = GetNavigationPlotData (ref navigateDataFieldIdx,  NavigationDataToPlot);
+      List<double>  plotData2 = GetNavigationPlotData (ref navigateDataField2Idx, NavigationDataToPlot2);
+      if  (plotData != null)
+      {
+        double  offset = 0.0;
+        for  (int x = 0;  x < plotData.Count;  ++x)
+        {
+          DateTime d = navigateChartStartTime.AddSeconds (offset);
+          NavigateChart.Series[0].Points.AddXY (plotData[x], d);
+          NavigateChart.Series[1].Points.AddXY (plotData2[x], d);
+          offset += navigateChartInterval;
+        }
+
+        NavigateChart.ChartAreas[0].RecalculateAxesScale ();
+      }
+    }
+
+
+
+
     private  void  ScrollToPropperPlaceInSipperFile2 (int  displayRow)
     {
       if  (file == null)
@@ -987,6 +1027,8 @@ namespace SipperFileViewer
         parameters.SetNewDisplayRowTop (displayRow);
         parameters.PaintWholePanel ();
       }
+      
+      UpdatePixelDensityChart ();
 
       ChartAddCurrentPosition ();
     }  /* ScrollToPropperPlaceInSipperFile2 */

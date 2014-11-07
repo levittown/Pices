@@ -4750,7 +4750,7 @@ SipperDeploymentListPtr  DataBase::SipperDeploymentProcessResults ()
                          "Description",       "DateTimeStart",     "DateTimeEnd",
                          "Latitude",          "Longitude",         "SyncTimeStampActual",
                          "SyncTimeStampCTD",  "SyncTimeStampGPS",  "CropLeft",
-                         "CropRight",
+                         "CropRight",         "ChamberWidth",
                          NULL
                         };
   
@@ -4775,6 +4775,7 @@ SipperDeploymentListPtr  DataBase::SipperDeploymentProcessResults ()
     d->SyncTimeStampGPS    (ResultSetGetDateTimeField (10));
     d->CropLeft            (ResultSetGetUintField     (11));
     d->CropRight           (ResultSetGetUintField     (12));
+    d->ChamberWidth        (ResultSetGetFloatField    (13));
 
     if  ((d->SyncTimeStampActual ().Year () < 1)  &&
          (d->SyncTimeStampCTD    ().Year () < 1)  &&
@@ -4854,8 +4855,9 @@ void   DataBase::SipperDeploymentInsert (const SipperDeployment&  deployment)
                         DateTimeToQuotedStr (deployment.SyncTimeStampCTD    ()) + ", " +
                         DateTimeToQuotedStr (deployment.SyncTimeStampGPS    ()) + ", " +
                         StrFormatInt (deployment.CropLeft  (), "####0")         + ", " +
-                        StrFormatInt (deployment.CropRight (), "####0")         +
-                        ")";
+                        StrFormatInt (deployment.CropRight (), "####0")         + ", " +
+                        StrFormatDouble (deployment.ChamberWidth (), "##0.000") + 
+                       ")";
   int32  returnCd = QueryStatement (sqlStr);
   ResultSetsClear ();
 }  /* SipperDeploymentInsert */
@@ -4883,7 +4885,8 @@ void   DataBase::SipperDeploymentUpdate (const SipperDeployment&  deployment)
                         DateTimeToQuotedStr (deployment.SyncTimeStampCTD    ()) + ", " +
                         DateTimeToQuotedStr (deployment.SyncTimeStampGPS    ()) + ", " +
                         StrFormatInt (deployment.CropLeft  (), "####0")         + ", " +
-                        StrFormatInt (deployment.CropRight (), "####0")         +
+                        StrFormatInt (deployment.CropRight (), "####0")         + ", " + 
+                        StrFormatDouble (deployment.ChamberWidth (), "##0.000") + 
                        ")";
   int32  returnCd = QueryStatement (sqlStr);
   ResultSetsClear ();

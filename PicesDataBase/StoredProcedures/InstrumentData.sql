@@ -967,15 +967,24 @@ begin
   declare  _scanRate       float unsigned default 24950;
   declare  _secsPerRec     float default 0.0;
   declare  _midPoint       DateTime default null;
-
+  
+  declare  _chamberWidth   float  default 93.0;
+  declare  _cropLeft       int    default 0;
+  declare  _cropRight      int    default 4095;
+  
   set _scanRate = (select max(sf.ScanRate)  from  SipperFiles sf  
 											where  (sf.CruiseName    = _cruiseName)  and
 								             (sf.StationName   = _stationName) and 
 												   ((sf.DeploymentNum = _deploymentNum)  or (_deploymentNum = "")));
   if  _scanRate < 100  then
-    set _scanRate = 29990;
+    set _scanRate = 24950.3;
   end if;
   
+  select d.CropLeft, d.CropRight, d.ChamberWidth  into  _cropLeft, _cropRight, _chamberWidth
+     from Deployments d
+		 where  (d.CruiseName     = _cruiseName)  and
+	          (d.StationName    = _stationName) and 
+            ((d.DeploymentNum = _deploymentNum) or (_deploymentNum = "")));
   
   set _secsPerRec = 4096.0 / _scanRate;
   set _midPoint = InstrumentDataGetMidPoint(_cruiseName, _stationName,_deploymentNum);

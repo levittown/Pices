@@ -64,11 +64,12 @@ create procedure DeploymentInsert (_cruiseName           char(10),
                                    _syncTimeStampCTD     datetime,
                                    _syncTimeStampGPS     datetime,
                                    _cropLeft             int unsigned,
-                                   _cropRight            int unsigned
+                                   _cropRight            int unsigned,
+                                   _chamberWidth         float
                                   )
 begin
-  Insert into Deployments (CruiseName, StationName, DeploymentNum, Description, DateTimeStart, DateTimeEnd, Latitude, Longitude, SyncTimeStampActual, SyncTimeStampCTD, SyncTimeStampGPS, CropLeft, CropRight)
-         values (_cruiseName, _stationName, _deploymentNum, _description, _dateTimeStart, _dateTimeEnd, _latitude, _longitude, _syncTimeStampActual, _syncTimeStampCTD, _syncTimeStampGPS, _cropLeft, _cropRight);
+  Insert into Deployments (CruiseName, StationName, DeploymentNum, Description, DateTimeStart, DateTimeEnd, Latitude, Longitude, SyncTimeStampActual, SyncTimeStampCTD, SyncTimeStampGPS, CropLeft, CropRight, ChamberWidth)
+         values (_cruiseName, _stationName, _deploymentNum, _description, _dateTimeStart, _dateTimeEnd, _latitude, _longitude, _syncTimeStampActual, _syncTimeStampCTD, _syncTimeStampGPS, _cropLeft, _cropRight, _chamberWidth);
 end
 //
 delimiter ;
@@ -93,7 +94,8 @@ create procedure DeploymentUpdate (_cruiseName           char(10),
                                    _syncTimeStampCTD     datetime,
                                    _syncTimeStampGPS     datetime,
                                    _cropLeft             int unsigned,
-                                   _cropRight            int unsigned
+                                   _cropRight            int unsigned,
+                                   _chamberWidth         float
                                   )
 begin
   update Deployments
@@ -106,7 +108,8 @@ begin
          SyncTimeStampCTD    = _syncTimeStampCTD,
          SyncTimeStampGPS    = _syncTimeStampGPS,
          CropLeft            = _cropLeft,
-         CropRight           = _cropRight
+         CropRight           = _cropRight,
+         ChamberWidth        = _chamberWidth
          
     where  (CruiseName = _cruiseName)  and  (StationName  = _stationName)  and  (DeploymentNum = _deploymentNum);
 end

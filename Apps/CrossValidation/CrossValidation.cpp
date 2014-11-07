@@ -3508,6 +3508,7 @@ void  DetermineCropSettings ()
   for  (idx = cruises->begin ();  idx != cruises->end ();  ++idx)
   {
     SipperCruisePtr  cruise = *idx;
+
     KKStr  cruiseName = cruise->CruiseName ();
 
     runLog.Level (10) << endl

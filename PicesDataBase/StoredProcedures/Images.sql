@@ -1982,9 +1982,9 @@ create procedure ImagesSizeDataByDepthSipper10 (in  _cruiseName       varChar(10
                                                )
 begin 
   declare _midPoint           datetime;
-  declare _cropLeft           int  default 0;
-  declare _cropRight          int  default 4094;
-  declare _pixelsPerScanLine  int  default 4096;
+  declare _cropLeft           int    default 0;
+  declare _cropRight          int    default 4094;
+  declare _pixelsPerScanLine  int    default 4096;
   declare _chamberWidth       float  default  96.0;
   declare _pixelWidth         float  default  0.025263;  /* MiliMeters per Pixel */
   

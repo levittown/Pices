@@ -33,6 +33,9 @@ namespace SipperFileViewer
       System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend ();
       System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series ();
       System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series ();
+      System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea ();
+      System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend ();
+      System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series ();
       this.SipperStreamPanel = new System.Windows.Forms.Panel ();
       this.vScrollBar1 = new System.Windows.Forms.VScrollBar ();
       this.ScanLinesDisplayedFirst = new System.Windows.Forms.TextBox ();
@@ -43,6 +46,7 @@ namespace SipperFileViewer
       this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem ();
       this.openSipperFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem ();
       this.connectDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem ();
+      this.editSipperFileParametersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem ();
       this.configurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem ();
       this.saveInstrumentDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem ();
       this.autoDetectionToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem ();
@@ -89,10 +93,11 @@ namespace SipperFileViewer
       this.NavigateChart = new System.Windows.Forms.DataVisualization.Charting.Chart ();
       this.NavigationDataToPlot = new System.Windows.Forms.Button ();
       this.NavigationDataToPlot2 = new System.Windows.Forms.Button ();
-      this.editSipperFileParametersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem ();
+      this.PixelDensityChart = new System.Windows.Forms.DataVisualization.Charting.Chart ();
       this.menuStrip1.SuspendLayout ();
       this.AutoScrollingPanel.SuspendLayout ();
       ((System.ComponentModel.ISupportInitialize)(this.NavigateChart)).BeginInit ();
+      ((System.ComponentModel.ISupportInitialize)(this.PixelDensityChart)).BeginInit ();
       this.SuspendLayout ();
       // 
       // SipperStreamPanel
@@ -197,6 +202,13 @@ namespace SipperFileViewer
       this.connectDatabaseToolStripMenuItem.Size = new System.Drawing.Size (213, 22);
       this.connectDatabaseToolStripMenuItem.Text = "Connect Database";
       this.connectDatabaseToolStripMenuItem.Click += new System.EventHandler (this.connectDatabaseToolStripMenuItem_Click);
+      // 
+      // editSipperFileParametersToolStripMenuItem
+      // 
+      this.editSipperFileParametersToolStripMenuItem.Name = "editSipperFileParametersToolStripMenuItem";
+      this.editSipperFileParametersToolStripMenuItem.Size = new System.Drawing.Size (213, 22);
+      this.editSipperFileParametersToolStripMenuItem.Text = "Edit Sipper File Parameters";
+      this.editSipperFileParametersToolStripMenuItem.Click += new System.EventHandler (this.editSipperFileParametersToolStripMenuItem_Click);
       // 
       // configurationToolStripMenuItem
       // 
@@ -690,18 +702,30 @@ namespace SipperFileViewer
       this.NavigationDataToPlot2.UseVisualStyleBackColor = true;
       this.NavigationDataToPlot2.Click += new System.EventHandler (this.NavigationDataToPlot2_Click);
       // 
-      // editSipperFileParametersToolStripMenuItem
+      // PixelDensityChart
       // 
-      this.editSipperFileParametersToolStripMenuItem.Name = "editSipperFileParametersToolStripMenuItem";
-      this.editSipperFileParametersToolStripMenuItem.Size = new System.Drawing.Size (213, 22);
-      this.editSipperFileParametersToolStripMenuItem.Text = "Edit Sipper File Parameters";
-      this.editSipperFileParametersToolStripMenuItem.Click += new System.EventHandler (this.editSipperFileParametersToolStripMenuItem_Click);
+      chartArea2.AxisX.LabelStyle.Enabled = false;
+      chartArea2.Name = "ChartArea1";
+      this.PixelDensityChart.ChartAreas.Add (chartArea2);
+      legend2.Enabled = false;
+      legend2.Name = "Legend1";
+      this.PixelDensityChart.Legends.Add (legend2);
+      this.PixelDensityChart.Location = new System.Drawing.Point (32, 690);
+      this.PixelDensityChart.Name = "PixelDensityChart";
+      series3.ChartArea = "ChartArea1";
+      series3.Legend = "Legend1";
+      series3.Name = "Series1";
+      this.PixelDensityChart.Series.Add (series3);
+      this.PixelDensityChart.Size = new System.Drawing.Size (687, 124);
+      this.PixelDensityChart.TabIndex = 41;
+      this.PixelDensityChart.Text = "chart1";
       // 
       // SipperFileViewer
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF (6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size (976, 711);
+      this.ClientSize = new System.Drawing.Size (976, 833);
+      this.Controls.Add (this.PixelDensityChart);
       this.Controls.Add (this.NavigationDataToPlot2);
       this.Controls.Add (this.NavigationDataToPlot);
       this.Controls.Add (this.NavigateChart);
@@ -751,6 +775,7 @@ namespace SipperFileViewer
       this.AutoScrollingPanel.ResumeLayout (false);
       this.AutoScrollingPanel.PerformLayout ();
       ((System.ComponentModel.ISupportInitialize)(this.NavigateChart)).EndInit ();
+      ((System.ComponentModel.ISupportInitialize)(this.PixelDensityChart)).EndInit ();
       this.ResumeLayout (false);
       this.PerformLayout ();
 
@@ -815,6 +840,7 @@ namespace SipperFileViewer
     private System.Windows.Forms.Button NavigationDataToPlot;
     private System.Windows.Forms.Button NavigationDataToPlot2;
     private System.Windows.Forms.ToolStripMenuItem editSipperFileParametersToolStripMenuItem;
+    private System.Windows.Forms.DataVisualization.Charting.Chart PixelDensityChart;
   }
 }
 

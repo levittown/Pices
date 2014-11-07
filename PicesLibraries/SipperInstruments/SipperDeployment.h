@@ -29,6 +29,7 @@ namespace  SipperHardware
     const   KKU::DateTime&   SyncTimeStampGPS    () const  {return syncTimeStampGPS;}
     KKU::uint32              CropLeft            () const  {return cropLeft;}
     KKU::uint32              CropRight           () const  {return cropRight;}
+    float                    ChamberWidth        () const  {return chamberWidth;}           /**< Width of sampling caber in Mili-Meters.  */
   
     void   CruiseName          (const KKStr&          _cruiseName)          {cruiseName          = _cruiseName;}
     void   StationName         (const KKStr&          _stationName)         {stationName         = _stationName;}
@@ -43,6 +44,7 @@ namespace  SipperHardware
     void   SyncTimeStampGPS    (const KKU::DateTime&  _syncTimeStampGPS)    {syncTimeStampGPS    = _syncTimeStampGPS;}
     void   CropLeft            (KKU::uint32           _cropLeft)            {cropLeft            = _cropLeft;}
     void   CropRight           (KKU::uint32           _cropRight)           {cropRight           = _cropRight;}
+    void   ChamberWidth        (float                 _chamberWidth)        {chamberWidth        = _chamberWidth;}
 
   private:
     KKStr          cruiseName;
@@ -58,6 +60,7 @@ namespace  SipperHardware
     KKU::DateTime  syncTimeStampGPS;
     KKU::uint32    cropLeft;
     KKU::uint32    cropRight;
+    float          chamberWidth;   /**< Width of sampling caber in Mili-Meters.  */
   };  /* SipperDeployment */
 
 
