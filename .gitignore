@@ -29,9 +29,5 @@ Release
 .#*
 .*.swp
 .DS_Store
-/OutsidePackages/zlib123
-/OutsidePackages/MySqlWin64
-/OutsidePackages/MySqlWin32
 *.kkramer.user
-/OutsidePackages/fftw-3.3.2
 Thumbs.db
