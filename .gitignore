@@ -31,3 +31,4 @@ Release
 .DS_Store
 *.kkramer.user
 Thumbs.db
+/Apps/PicesCommander/obj/Debug/ResolveAssemblyReference.cache
