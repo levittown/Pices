@@ -6,7 +6,6 @@
 	ProjectGUID="{8F609A95-37BC-4E0F-8CD5-4196A86CD4B8}"
 	RootNamespace="PicesInterface"
 	Keyword="ManagedCProj"
-	AssemblyReferenceSearchPaths="&quot;..\OutsidePackages\MySQL\lib\opt&quot;"
 	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
@@ -62,9 +61,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="BaseLibrary.lib PicesLibrary.lib libfftw3-3.lib libfftw3f-3.lib libmysqld.lib USER32.LIB"
+				AdditionalDependencies="BaseLibrary.lib PicesLibrary.lib libfftw3-3.lib libfftw3f-3.lib libmysql.lib USER32.LIB"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\Libraries\$(ConfigurationName)&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)\Libraries\$(ConfigurationName)&quot;;&quot;$(SolutionDir)\OutsidePackages\fftw-3.3.2&quot;;&quot;$(SolutionDir)\OutsidePackages\MySqlWin32\lib&quot;"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				RandomizedBaseAddress="1"
@@ -141,9 +140,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="BaseLibrary.lib PicesLibrary.lib libfftw3-3.lib libfftw3f-3.lib libmysqld.lib USER32.LIB"
+				AdditionalDependencies="BaseLibrary.lib PicesLibrary.lib libfftw3-3.lib libfftw3f-3.lib libmysql.lib USER32.LIB"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\Libraries\$(ConfigurationName)&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)\Libraries\$(ConfigurationName)&quot;;&quot;$(SolutionDir)\OutsidePackages\fftw-3.3.2&quot;;&quot;$(SolutionDir)\OutsidePackages\MySqlWin32\lib&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"
@@ -218,9 +217,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="BaseLibrary.lib PicesLibrary.lib libfftw3-3.lib libfftw3f-3.lib libmysqld.lib USER32.LIB"
+				AdditionalDependencies="BaseLibrary.lib PicesLibrary.lib libfftw3-3.lib libfftw3f-3.lib libmysql.lib USER32.LIB"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\Libraries\$(ConfigurationName)&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)\Libraries\$(ConfigurationName)&quot;;&quot;$(SolutionDir)\OutsidePackages\fftw-3.3.2&quot;;&quot;$(SolutionDir)\OutsidePackages\MySqlWin32\lib&quot;"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				RandomizedBaseAddress="1"
@@ -297,9 +296,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="BaseLibrary.lib PicesLibrary.lib libfftw3-3.lib libfftw3f-3.lib libmysqld.lib USER32.LIB"
+				AdditionalDependencies="BaseLibrary.lib PicesLibrary.lib libfftw3-3.lib libfftw3f-3.lib libmysql.lib USER32.LIB"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\Libraries\$(ConfigurationName)&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)\Libraries\$(ConfigurationName)&quot;;&quot;$(SolutionDir)\OutsidePackages\fftw-3.3.2&quot;;&quot;$(SolutionDir)\OutsidePackages\MySqlWin32\lib&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"
