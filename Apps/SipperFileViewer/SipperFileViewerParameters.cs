@@ -338,7 +338,7 @@ namespace SipperFileViewer
       byte[][]  displayRows = new byte[1][];
       displayRows[0] = new byte[numPixelsOnEachRow];
       
-      sipperFile.GetDisplayRows (displayRowNum, displayRowNum, displayRows, null);
+      sipperFile.GetDisplayRows (displayRowNum, displayRowNum, displayRows);
       byte[]    firstDisplayRow = displayRows[0];
       
       int  lineLen = Math.Min (displayRow.Length, firstDisplayRow.Length);
@@ -430,6 +430,7 @@ namespace SipperFileViewer
 
     public void  PaintWholePanel ()
     {
+      int  x = 0;
       //panelDC.Clear (backGroundColor);
       bufferDC.Clear(backGroundColor);
       
@@ -437,14 +438,19 @@ namespace SipperFileViewer
       {
         try
         {
-          sipperFile.GetDisplayRows (displayRowTop, displayRowBot, raster, colHistogram);
+          sipperFile.GetDisplayRows (displayRowTop, displayRowBot, raster);
         }
         catch  (Exception  e)
         {
           MessageBox.Show (e.ToString (), "PaintWholePanel   Error calling 'GetDisplayRows'");
         }
       }
-      
+
+      if  ((raster != null)  &&  (raster.Length > 0))
+        colHistogram = new uint[raster[0].Length];
+      for  (x = 0;  x <colHistogram.Length;  ++x)
+        colHistogram[x] = 0;
+
       // GDI+ return format is BGR, NOT RGB. 
       BitmapData bmData = buffer.LockBits (new Rectangle(0, 0, width, height),
                                            ImageLockMode.ReadWrite,
@@ -482,6 +488,8 @@ namespace SipperFileViewer
             //ptr[0] = pixelValue; ptr++;
 
             pixelValue = (byte)rowData[col];
+            if  (pixelValue > 10)
+              colHistogram[col] += 1;
             if  (oldPixelValue != pixelValue)
             {
               oldPixelValue = pixelValue;

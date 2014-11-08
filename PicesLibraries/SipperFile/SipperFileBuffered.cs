@@ -591,12 +591,12 @@ namespace SipperFile
 
     public   void  GetDisplayRows  (long      displayRowStart,
                                     long      displayRowEnd,
-                                    byte[][]  raster,
-                                    uint[]    colHistogram
+                                    byte[][]  raster
                                    )
     {
       int x = 0;
       int y = 0;
+      int z = 0;
 
       double  startScanRow = displayRowStart     * (double)ratio;
       double  endScanRow   = (displayRowEnd + 1) * (double)ratio;
@@ -633,13 +633,6 @@ namespace SipperFile
         nextDisplayRowInt = (int)Math.Floor (nextDisplayRow);
         try
         {
-          if  (colHistogram != null)
-          {
-            byte[]  oneScanRow = scanRows[scanRowZeroed];
-            for  (x = 0;  x < oneScanRow.Length;  ++x)
-              colHistogram[x] += oneScanRow[x];
-          }
-
           if  (curDisplayRowInt == nextDisplayRowInt)
           {
             if  (curDisplayRowInt <= displayRowEnd)
@@ -673,13 +666,15 @@ namespace SipperFile
       }
       
       float ratioSquared = ratio * ratio;
-      
+
       for  (x = 0;  x < numDisplayRows;  ++x)
       {
         ushort[]  oneDisplayRow = displayRows[x];
         byte[]    oneRasterRow  = raster[x];  
         for  (y = 0;  y < pixelsPerDisLine;  y++)
+        {
           oneRasterRow[y] = (byte)(0.5f + (float)oneDisplayRow[y] / ratioSquared);
+        }
       }
 
       return;

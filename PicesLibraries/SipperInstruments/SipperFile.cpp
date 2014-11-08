@@ -527,6 +527,14 @@ void   SipperFile::AssignCtdExternalInstrumentsETP2008 (const KKStr&   rootName)
 
 
 
+void  SipperFile::CropSettingsAndDeadZoneDetection
+{
+
+}
+
+
+
+
 
 SipperFileList::SipperFileList (bool  _owner):
     KKQueue<SipperFile> (_owner)

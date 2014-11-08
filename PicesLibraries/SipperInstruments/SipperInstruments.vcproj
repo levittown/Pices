@@ -370,6 +370,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SipperFileFrameIndex.h"
+				>
+			</File>
+			<File
 				RelativePath=".\SipperHeaderRec.h"
 				>
 			</File>
@@ -495,6 +499,10 @@
 			</File>
 			<File
 				RelativePath=".\SipperFile.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SipperFileFrameIndex.cpp"
 				>
 			</File>
 			<File
