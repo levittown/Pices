@@ -4,6 +4,7 @@
 
 #include "Application.h"
 
+#include "DataBase.h"
 #include "FileDesc.h"
 #include "ImageFeatures.h"
 #include "MLClass.h"
@@ -53,10 +54,13 @@ private:
 
   void  ReportDuplicates ();
 
+  void  ReFreshInstrumentData (ImageFeaturesPtr  _featureVector);
+
 
   bool                      cancelFlag;
   Classifier2Ptr            classifier;
   KKStr                     configFileName;
+  DataBasePtr               dataBase;
   KKStr                     destDirectory;
   KKStr                     featureFileName;
   FileDescPtr               fileDesc;

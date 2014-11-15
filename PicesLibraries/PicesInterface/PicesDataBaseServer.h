@@ -1,14 +1,14 @@
 #pragma once
 
-#include  "DateTime.h"
-#include  "Str.h"
+#include "DateTime.h"
+#include "Str.h"
 using namespace  KKU;
 
-#include  "DataBaseServer.h"
+#include "DataBaseServer.h"
 using namespace  MLL;
 
 
-#include  "PicesRunLog.h"
+#include "PicesRunLog.h"
 
 //  Job in Life:   This module is the Managed version of "DataBaseServer".
 
@@ -36,6 +36,7 @@ namespace PicesInterface
 
     property  String^  Description  {String^   get ();   void set (String^ _description)  ;}
     property  String^  HostName     {String^   get ();   void set (String^ _hostName)     ;}
+    property  uint32   PortNum      {uint32    get ();   void set (uint32  _portNum)      ;}
     property  String^  UserName     {String^   get ();   void set (String^ _userName)     ;}
     property  String^  PassWord     {String^   get ();   void set (String^ _passWord)     ;}
     property  String^  DataBaseName {String^   get ();   void set (String^ _dataBaseName) ;}
@@ -46,7 +47,7 @@ namespace PicesInterface
 
   private:
     DataBaseServerPtr   server;
-  };
+  };  /* PicesDataBaseServer */
 
 
 
@@ -84,4 +85,4 @@ namespace PicesInterface
     String^        defaultServerDescription;
     PicesRunLog^   log;
   };
-}
+}  /* PicesInterface */

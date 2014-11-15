@@ -110,6 +110,24 @@ void  PicesDataBaseServer::HostName::set (String^ _hostName)
 
 
 
+uint32  PicesDataBaseServer::PortNum::get ()
+{
+  if  (server)
+    return server->PortNum ();
+  else
+    return 3306;
+}
+
+
+void  PicesDataBaseServer::PortNum::set (uint32 _portNum)
+{
+  if  (!server)
+    server = new DataBaseServer ();
+  server->PortNum (_portNum);
+}
+
+
+
 String^  PicesDataBaseServer::UserName::get () 
 {
   if  (!server)

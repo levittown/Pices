@@ -32,6 +32,8 @@ namespace PicesInterface {
 
 
   private: System::Windows::Forms::Button^  ConnectButton;
+  private: System::Windows::Forms::Label^  PortNumLabel;
+  private: System::Windows::Forms::TextBox^  PortNum;
            PicesDataBaseServer^             selectedServer;   // Will be initialized to current default server;
 
   public:
@@ -98,7 +100,6 @@ namespace PicesInterface {
       this->DescriptionLabel2 = (gcnew System::Windows::Forms::Label());
       this->HostNameLabel = (gcnew System::Windows::Forms::Label());
       this->UserNameLabel = (gcnew System::Windows::Forms::Label());
-
       this->PasswordLabel = (gcnew System::Windows::Forms::Label());
       this->UserName = (gcnew System::Windows::Forms::TextBox());
       this->PassWord = (gcnew System::Windows::Forms::TextBox());
@@ -108,6 +109,8 @@ namespace PicesInterface {
       this->Servers = (gcnew System::Windows::Forms::ListBox());
       this->CancelButton = (gcnew System::Windows::Forms::Button());
       this->ConnectButton = (gcnew System::Windows::Forms::Button());
+      this->PortNumLabel = (gcnew System::Windows::Forms::Label());
+      this->PortNum = (gcnew System::Windows::Forms::TextBox());
       this->SuspendLayout();
       // 
       // HostName
@@ -153,7 +156,7 @@ namespace PicesInterface {
       this->UserNameLabel->AutoSize = true;
       this->UserNameLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
         static_cast<System::Byte>(0)));
-      this->UserNameLabel->Location = System::Drawing::Point(26, 320);
+      this->UserNameLabel->Location = System::Drawing::Point(26, 350);
       this->UserNameLabel->Name = L"UserNameLabel";
       this->UserNameLabel->Size = System::Drawing::Size(77, 16);
       this->UserNameLabel->TabIndex = 4;
@@ -164,7 +167,7 @@ namespace PicesInterface {
       this->PasswordLabel->AutoSize = true;
       this->PasswordLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
         static_cast<System::Byte>(0)));
-      this->PasswordLabel->Location = System::Drawing::Point(26, 350);
+      this->PasswordLabel->Location = System::Drawing::Point(26, 380);
       this->PasswordLabel->Name = L"PasswordLabel";
       this->PasswordLabel->Size = System::Drawing::Size(68, 16);
       this->PasswordLabel->TabIndex = 5;
@@ -174,26 +177,26 @@ namespace PicesInterface {
       // 
       this->UserName->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
         static_cast<System::Byte>(0)));
-      this->UserName->Location = System::Drawing::Point(114, 316);
+      this->UserName->Location = System::Drawing::Point(114, 346);
       this->UserName->Name = L"UserName";
       this->UserName->Size = System::Drawing::Size(262, 22);
-      this->UserName->TabIndex = 23;
+      this->UserName->TabIndex = 24;
       // 
       // PassWord
       // 
       this->PassWord->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
         static_cast<System::Byte>(0)));
-      this->PassWord->Location = System::Drawing::Point(114, 346);
+      this->PassWord->Location = System::Drawing::Point(114, 376);
       this->PassWord->Name = L"PassWord";
       this->PassWord->Size = System::Drawing::Size(262, 22);
-      this->PassWord->TabIndex = 24;
+      this->PassWord->TabIndex = 25;
       // 
       // DababaseLabel
       // 
       this->DababaseLabel->AutoSize = true;
       this->DababaseLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
         static_cast<System::Byte>(0)));
-      this->DababaseLabel->Location = System::Drawing::Point(26, 380);
+      this->DababaseLabel->Location = System::Drawing::Point(26, 410);
       this->DababaseLabel->Name = L"DababaseLabel";
       this->DababaseLabel->Size = System::Drawing::Size(69, 16);
       this->DababaseLabel->TabIndex = 8;
@@ -204,10 +207,10 @@ namespace PicesInterface {
       this->DataBase->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
         static_cast<System::Byte>(0)));
       this->DataBase->ForeColor = System::Drawing::SystemColors::WindowText;
-      this->DataBase->Location = System::Drawing::Point(114, 376);
+      this->DataBase->Location = System::Drawing::Point(114, 406);
       this->DataBase->Name = L"DataBase";
       this->DataBase->Size = System::Drawing::Size(262, 22);
-      this->DataBase->TabIndex = 25;
+      this->DataBase->TabIndex = 26;
       // 
       // ServersLabel
       // 
@@ -236,7 +239,7 @@ namespace PicesInterface {
       // 
       // CancelButton
       // 
-      this->CancelButton->Location = System::Drawing::Point(301, 419);
+      this->CancelButton->Location = System::Drawing::Point(301, 449);
       this->CancelButton->Name = L"CancelButton";
       this->CancelButton->Size = System::Drawing::Size(75, 23);
       this->CancelButton->TabIndex = 27;
@@ -246,7 +249,7 @@ namespace PicesInterface {
       // 
       // ConnectButton
       // 
-      this->ConnectButton->Location = System::Drawing::Point(29, 419);
+      this->ConnectButton->Location = System::Drawing::Point(29, 449);
       this->ConnectButton->Name = L"ConnectButton";
       this->ConnectButton->Size = System::Drawing::Size(75, 23);
       this->ConnectButton->TabIndex = 26;
@@ -254,11 +257,31 @@ namespace PicesInterface {
       this->ConnectButton->UseVisualStyleBackColor = true;
       this->ConnectButton->Click += gcnew System::EventHandler(this, &PicesDataBaseServerPrompter::ConnectButton_Click);
       // 
+      // PortNumLabel
+      // 
+      this->PortNumLabel->AutoSize = true;
+      this->PortNumLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+        static_cast<System::Byte>(0)));
+      this->PortNumLabel->Location = System::Drawing::Point(26, 320);
+      this->PortNumLabel->Name = L"PortNumLabel";
+      this->PortNumLabel->Size = System::Drawing::Size(63, 16);
+      this->PortNumLabel->TabIndex = 28;
+      this->PortNumLabel->Text = L"Port Num";
+      // 
+      // PortNum
+      // 
+      this->PortNum->Location = System::Drawing::Point(114, 316);
+      this->PortNum->Name = L"PortNum";
+      this->PortNum->Size = System::Drawing::Size(262, 20);
+      this->PortNum->TabIndex = 23;
+      // 
       // PicesDataBaseServerPrompter
       // 
       this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
       this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-      this->ClientSize = System::Drawing::Size(410, 464);
+      this->ClientSize = System::Drawing::Size(410, 484);
+      this->Controls->Add(this->PortNum);
+      this->Controls->Add(this->PortNumLabel);
       this->Controls->Add(this->ConnectButton);
       this->Controls->Add(this->CancelButton);
       this->Controls->Add(this->Servers);
@@ -297,6 +320,7 @@ private: void  UpdateSceenFieldsFromSelectedEntry ()
 
            Description->Text = selectedServer->Description;
            HostName->Text    = selectedServer->HostName;
+           PortNum->Text     = selectedServer->PortNum.ToString ();
            UserName->Text    = selectedServer->UserName;
            PassWord->Text    = selectedServer->PassWord;
            DataBase->Text    = selectedServer->DataBaseName;
@@ -400,6 +424,7 @@ private: System::Void ConnectButton_Click(System::Object^  sender, System::Event
 
            existingServer->Description  = Description->Text;
            existingServer->HostName     = HostName->Text;
+           existingServer->PortNum      = PicesKKStr::StrToUint (PortNum->Text);
            existingServer->UserName     = UserName->Text;
            existingServer->PassWord     = PassWord->Text;
            existingServer->DataBaseName = DataBase->Text;

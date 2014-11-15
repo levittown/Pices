@@ -10,9 +10,9 @@
  */
 
 
-#include  "KKQueue.h"
-#include  "RunLog.h"
-#include  "Str.h"
+#include "KKQueue.h"
+#include "RunLog.h"
+#include "Str.h"
 using namespace KKU;
 
 namespace MLL 
@@ -34,6 +34,7 @@ namespace MLL
     const KKStr&  HostName     ()  const  {return hostName;}
     const KKStr&  MySqlDataDir ()  const  {return mySqlDataDir;}
     const KKStr&  PassWord     ()  const  {return passWord;}
+    kkuint32      PortNum      ()  const  {return portNum;}
     const KKStr&  UserName     ()  const  {return userName;}
 
     void  DataBaseName (const KKStr&  _dataBaseName)  { dataBaseName = _dataBaseName;}
@@ -42,6 +43,7 @@ namespace MLL
     void  HostName     (const KKStr&  _hostName)      { hostName     = _hostName;}
     void  MySqlDataDir (const KKStr&  _mySqlDataDir)  { mySqlDataDir = _mySqlDataDir;}
     void  PassWord     (const KKStr&  _passWord)      { passWord     = _passWord;}
+    void  PortNum      (kkuint32      _portNum)       { portNum      = _portNum;}
     void  UserName     (const KKStr&  _userName)      { userName     = _userName;}
 
 
@@ -59,6 +61,7 @@ namespace MLL
     KKStr     mySqlDataDir;   /**< Used with Embedded server. */
     KKStr     userName;
     KKStr     passWord;
+    kkuint32  portNum;
   };  /* DataBaseServer */
 
 

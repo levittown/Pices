@@ -33,6 +33,7 @@ using namespace  KKU;
 
 #include "TrainingProcess2.h"
 #include "ClassAssignments.h"
+#include "DataBase.h"
 #include "DuplicateImages.h"
 #include "FeatureFileIO.h"
 #include "FeatureFileIOPices.h"
@@ -149,7 +150,7 @@ TrainingProcess2::TrainingProcess2 (const KKStr&         _configFileName,
   cout  << "*PHASE_MSG* Extracting Training Class Data" << endl;
 
   try
-  {ExtractTrainingClassFeatures (latestTrainingImageTimeStamp, changesMadeToTrainingLibrary);}
+  {ExtractTrainingClassFeatures (NULL, latestTrainingImageTimeStamp, changesMadeToTrainingLibrary);}
   catch (std::exception& e1)
   {
     log.Level (-1) << "TrainingProcess2    *** EXCEPTION *** occured calling 'ExtractTrainingClassFeatures'." << endl
@@ -240,7 +241,7 @@ TrainingProcess2::TrainingProcess2 (const KKStr&         _configFileName,
           mlClasses = config->ExtractClassList ();
           mlClasses->SortByName ();
 
-          ExtractTrainingClassFeatures (latestTrainingImageTimeStamp, changesMadeToTrainingLibrary);
+          ExtractTrainingClassFeatures (NULL, latestTrainingImageTimeStamp, changesMadeToTrainingLibrary);
           if  (cancelFlag)
             Abort (true);
         }
@@ -354,7 +355,7 @@ TrainingProcess2::TrainingProcess2 (const KKStr&          _configFileName,
     DateTime  latestTrainingImageTimeStamp;
     bool      changesMadeToTrainingLibrary;
   
-    ExtractTrainingClassFeatures (latestTrainingImageTimeStamp, changesMadeToTrainingLibrary);
+    ExtractTrainingClassFeatures (NULL, latestTrainingImageTimeStamp, changesMadeToTrainingLibrary);
     if  (cancelFlag)
       Abort (true);
 
@@ -961,6 +962,7 @@ void  TrainingProcess2::CheckForDuplicates ()
 
 
 void  TrainingProcess2::ExtractFeatures (const TrainingClassPtr  trainingClass,
+                                         DataBasePtr             dataBase,        /**<  If not NULL will retrieve missing Instrumentdat afrom database. */
                                          DateTime&               latestTimeStamp,
                                          bool&                   changesMade
                                         )
@@ -981,6 +983,7 @@ void  TrainingProcess2::ExtractFeatures (const TrainingClassPtr  trainingClass,
                                  trainingClass->FeatureFileName (),
                                  trainingClass->MLClass (),
                                  true,   //  Make all entries in this directory 'trainingClass->MLClass ()'
+                                 dataBase,
                                  *mlClasses,
                                  cancelFlag,
                                  changesMade,
@@ -1011,8 +1014,9 @@ void  TrainingProcess2::ExtractFeatures (const TrainingClassPtr  trainingClass,
 
 
 
-void  TrainingProcess2::ExtractTrainingClassFeatures (DateTime&  latestImageTimeStamp,
-                                                      bool&      changesMadeToTrainingLibraries
+void  TrainingProcess2::ExtractTrainingClassFeatures (DataBasePtr  dataBase,    
+                                                      DateTime&    latestImageTimeStamp,
+                                                      bool&        changesMadeToTrainingLibraries
                                                      )
 {
   log.Level (20) << "TrainingProcess2::ExtractTraingClassFeatures - Starting." << endl;
@@ -1042,7 +1046,7 @@ void  TrainingProcess2::ExtractTrainingClassFeatures (DateTime&  latestImageTime
                    << trainingClass->Name () << "]."
                    << endl;
 
-    ExtractFeatures (trainingClass, latestTimeStamp, changesMadeToThisTrainingClass);
+    ExtractFeatures (trainingClass, dataBase, latestTimeStamp, changesMadeToThisTrainingClass);
     if  (latestTimeStamp > latestImageTimeStamp)
       latestImageTimeStamp = latestTimeStamp;
 
@@ -1056,7 +1060,7 @@ void  TrainingProcess2::ExtractTrainingClassFeatures (DateTime&  latestImageTime
     if  (config->NoiseTrainingClass ())
     {
       cout  << "*PHASE_MSG2* Training Class[" << config->NoiseTrainingClass ()->Directory () << "]" << endl;
-      ExtractFeatures (config->NoiseTrainingClass (), latestTimeStamp, changesMadeToThisTrainingClass);
+      ExtractFeatures (config->NoiseTrainingClass (), dataBase, latestTimeStamp, changesMadeToThisTrainingClass);
       if  (latestTimeStamp > latestImageTimeStamp)
         latestImageTimeStamp = latestTimeStamp;
 

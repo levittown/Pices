@@ -167,7 +167,9 @@ using namespace MLL;
 // E:\Pices\DataFiles\FeatureSelection\KK01
 // -Config PGA_PL30-38_MostlyClear.cfg  -TrainingData ./PGA_PL30-38_MostlyClear.data  -Format pices -NumJobsAtATime 1  -ParamSelCriteria MostAccurate   -ProcPerCombo 64  -MinTrainExamples 3 -FeatureCriteria Merge3Best  -GradingMethod AccuracyNorm 
 
-
+// 2014-11-14   Starting Feature Selection for latest USF training library.
+//E:\Pices\DataFiles\FeatureSelection\USF
+// -config  USF.cfg  -TrainingData USF_Train.data  -ValidationData  USF_Test.data  -Format Pices  -NumJobsAtATime 1    -ParamSelCriteria MostAccurate  -ProcPerCombo 64  -MinTrainExamples 3 -FeatureCriteria Merge3Best  -GradingMethod AccuracyNorm 
 
 FeatureSelection::FeatureSelection (int     argc,
                                     char**  argv
@@ -186,7 +188,7 @@ FeatureSelection::FeatureSelection (int     argc,
   fileDesc               (NULL),
   gradingMethod          (gmAccuracy),
   hostName               (""),
-  mlClasses           (NULL),
+  mlClasses              (NULL),
   initialFeatures        (NULL),
   initialFeaturesStr     (),
   justGettingStats       (false),

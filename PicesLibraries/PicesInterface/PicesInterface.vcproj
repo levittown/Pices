@@ -45,7 +45,7 @@
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\BaseLibrary&quot;;&quot;$(SolutionDir)\PicesLibraries\SipperInstruments&quot;;&quot;$(SolutionDir)\PicesLibraries\PicesLibrary&quot;;&quot;$(SolutionDir)\OutsidePackages\fftw-3.3.2&quot;;&quot;$(SolutionDir)\OutsidePackages\MySQL\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG"
 				RuntimeLibrary="3"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>

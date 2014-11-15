@@ -33,6 +33,7 @@ DataBaseServer::DataBaseServer ():
   mySqlDataDir  (""),
   userName      ("root"),
   passWord      ("dasani20"),
+  portNum       (3306),
   dataBaseName  ("pices")
 {
 }
@@ -46,6 +47,7 @@ DataBaseServer::DataBaseServer (const DataBaseServer&  dataBaseServer):
   mySqlDataDir  (dataBaseServer.mySqlDataDir),
   userName      (dataBaseServer.userName),
   passWord      (dataBaseServer.passWord),
+  portNum       (dataBaseServer.portNum),
   dataBaseName  (dataBaseServer.dataBaseName)
 {
 }
@@ -59,6 +61,7 @@ DataBaseServer::DataBaseServer (const KKStr&  parameterStr):
   mySqlDataDir  (""),
   userName      ("root"),
   passWord      ("dasani20"),
+  portNum       (3306),
   dataBaseName  ("pices")
 {
   ParseParameterStr (parameterStr);
@@ -78,7 +81,7 @@ KKStr  DataBaseServer::ServerDescription ()  const  // Get description of server
   if  (embedded)
     return  "Embedded " + description + "  MySqlDataDir[" + mySqlDataDir + "]  Database[" + dataBaseName + "]";
   else
-    return  description + "  Host[" + hostName + "]  User[" + userName + "]  Database[" + dataBaseName + "]";
+    return  description + "  Host[" + hostName + "(" + StrFormatInt (portNum, "###0") + ")" + "]  User[" + userName + "]  Database[" + dataBaseName + "]";
 }
 
 
@@ -105,6 +108,7 @@ void  DataBaseServer::ParseParameterStr (const  KKStr&  parameterStr)
     else if ((parameterName == "HOSTNAME")      ||  (parameterName == "HOST")      ||  (parameterName == "H"))   hostName     = fields[1];
     else if ((parameterName == "USERNAME")      ||  (parameterName == "USER")      ||  (parameterName == "U"))   userName     = fields[1];
     else if ((parameterName == "PASSWORD")      ||  (parameterName == "PW")        ||  (parameterName == "P"))   passWord     = fields[1];
+    else if ((parameterName == "PORTNUM")       ||  (parameterName == "PN"))                                     portNum      = fields[1].ToUint32 ();
     else if ((parameterName == "DATABASENAME")  ||  (parameterName == "DATABASE")  ||  (parameterName == "DB"))  dataBaseName = fields[1];
   }
 
@@ -120,12 +124,13 @@ KKStr  DataBaseServer::ToParameterStr ()  const
 {
   KKStr   parameterStr (1024);
 
-  parameterStr = "Description:"   + description                + "\t"  +
-                 "Embedded:"      + (embedded ? "Yes" : "No")  + "\t"  +
-                 "HostName:"      + hostName                   + "\t"  +
-                 "UserName:"      + userName                   + "\t"  +
-                 "PassWord:"      + passWord                   + "\t"  +
-                 "MySqlDataDir:"  + mySqlDataDir               + "\t"  +
+  parameterStr = "Description:"   + description                     + "\t"  +
+                 "Embedded:"      + (embedded ? "Yes" : "No")       + "\t"  +
+                 "HostName:"      + hostName                        + "\t"  +
+                 "UserName:"      + userName                        + "\t"  +
+                 "PassWord:"      + passWord                        + "\t"  +
+                 "PortNum:"       + StrFormatInt (portNum, "####0") + "\t"  +
+                 "MySqlDataDir:"  + mySqlDataDir                    + "\t"  +
                  "DataBaseName:"  + dataBaseName;
 
   return  parameterStr;
@@ -264,6 +269,7 @@ void  DataBaseServerList::ReadConfigFile ()
       defaultServer->Description   ("localhost");
       defaultServer->Embedded      (false);
       defaultServer->HostName      ("localhost");
+      defaultServer->PortNum       (3306),
       defaultServer->MySqlDataDir  ("");
       defaultServer->UserName      ("root");
       defaultServer->PassWord      ("dasani30");

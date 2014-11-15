@@ -3520,7 +3520,7 @@ DataBaseImagePtr  DataBase::ImagesLocateClosestImage (const KKStr&  imageFileNam
   KKStr   sipperFileName (32);
   uint32  scanLineNum = 0;
   uint32  scanCol     = 0;
-  ImageFeatures::ParseImageFileName (imageFileName, sipperFileName, scanLineNum, scanCol);
+  SipperVariables::ParseImageFileName (imageFileName, sipperFileName, scanLineNum, scanCol);
   return  ImagesLocateClosestImage (sipperFileName, scanLineNum, scanCol);
 }  /* ImagesLocateClosestImage */
 

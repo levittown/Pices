@@ -1010,10 +1010,11 @@ namespace MLL
     uint32           ResultSetGetUintField     (uint32 fieldIdx);
     KKU::ulong       ResultSetGetUlongField    (uint32 fieldIdx);
     KKU::uint64      ResultSetGetUint64Field   (uint32 fieldIdx);
-  };
-
+  };  /* DataBase */
 
   typedef  DataBase::DataBasePtr  DataBasePtr;
+
+#define  _DataBase_Defined_
 
 }  /* namespace MLL */
 

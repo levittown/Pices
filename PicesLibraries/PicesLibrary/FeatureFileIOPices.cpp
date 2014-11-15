@@ -25,8 +25,10 @@ using namespace std;
 using namespace KKU;
 
 #include "InstrumentDataFileManager.h"
+#include "SipperVariables.h"
 using namespace  SipperHardware;
 
+#include "DataBase.h"
 #include "FeatureFileIOPices.h"
 #include "FileDesc.h"
 #include "MLClass.h"
@@ -876,29 +878,11 @@ int32   FeatureFileIOPices::PlanktonMaxNumOfFields ()
 
 
 
-
-
-
-
-/**                       LoadInSubDirectoryTree
- * @brief Loads in the contents of a sub-directory tree.
- *        Meant to work with SIPPER plankton images, it starts at a specified subdirectory and 
- *        transverses all subdirectories.  It makes use of FeatureDataReSink for each specific
- *        sub-directory.
- * @param[in] rootDir,   Strating directory.
- * @param[in,out] mlClasses, List of classes, any new classes in fileName will be added.
- * @param[in] useDirectoryNameForClassName, if true set class names to sub-directory name.
- *            This happens because the user may manually move images between dorectories using
- *            the sub-directory name as the class name.
- * @param[in] log, where to send diagnostic messages to.
- * @param[in] rewiteRootFeatureFile, If true rewite the feature file in the specified 'rootDir'.  This
- *            feature file will contain all entries from all sub-directories below it.
- * @return - A ImageFeaturesList container object.  This object will own all the examples loaded.
- */
 ImageFeaturesListPtr  FeatureFileIOPices::LoadInSubDirectoryTree 
                                              (KKStr                 _rootDir,
-                                              MLClassConstList&  _mlClasses,
+                                              MLClassConstList&     _mlClasses,
                                               bool                  _useDirectoryNameForClassName,
+                                              DataBasePtr           _dataBase,
                                               volatile const bool&  _cancelFlag, 
                                               bool                  _rewiteRootFeatureFile,
                                               RunLog&               _log
@@ -942,6 +926,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadInSubDirectoryTree
                                    featureFileName,
                                    unKnownClass,
                                    _useDirectoryNameForClassName,
+                                   _dataBase,
                                    _mlClasses,
                                    _cancelFlag,
                                    changesMade,
@@ -1006,7 +991,8 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadInSubDirectoryTree
 
       ImageFeaturesListPtr  subDirImages = LoadInSubDirectoryTree (newDirPath, 
                                                                    _mlClasses, 
-                                                                   _useDirectoryNameForClassName, 
+                                                                   _useDirectoryNameForClassName,
+                                                                   _dataBase,
                                                                    _cancelFlag,
                                                                    true,     // true = ReWriteRootFeatureFile
                                                                    _log
@@ -1041,13 +1027,80 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadInSubDirectoryTree
 
 
 
+void  FeatureFileIOPices::ReFreshInstrumentData 
+                       (const KKStr&          _imageFileName,
+                        ImageFeaturesPtr      _featureVector,
+                        DataBasePtr           _dataBase,
+                        volatile const bool&  _cancelFlag,
+                        bool&                 _changesMade,
+                        RunLog&               _log
+                       )
+{
+  bool  weOwnInstrumentData = false;
+  InstrumentDataPtr  id = NULL;
+
+  if  (_dataBase)
+  {
+    KKStr  sipperFileName;
+    kkuint32  scanLineNum = 0;
+    kkuint32  scanCol     = 0;
+
+    SipperVariables::ParseImageFileName (_imageFileName, sipperFileName, scanLineNum, scanCol);
+
+    id = _dataBase->InstrumentDataGetByScanLine (sipperFileName, scanLineNum);
+    if  (id)
+      weOwnInstrumentData = true;
+    else
+      weOwnInstrumentData = false;
+  }
+
+
+  if  (!id)
+  {
+    try
+    {
+      id = InstrumentDataFileManager::GetClosestInstrumentData (_imageFileName, _cancelFlag, _log);
+    }
+    catch  (...)
+    {
+      _log.Level (-1) << endl
+        << "FeatureFileIOPices::ReFreshInstrumentData   ***ERROR***   Exception occured calling  'InstrumentDataFileManager::GetClosestInstrumentData'." << endl
+        << "                 ImageFileName: " << _imageFileName << endl
+        << endl;
+      id = NULL;
+    }
+  }
+
+  if  (id)
+  {
+    _featureVector->FlowRate1    (id->FlowRate1    ());
+    _featureVector->FlowRate2    (id->FlowRate2    ());
+    _featureVector->Latitude     (id->Latitude     ());
+    _featureVector->Longitude    (id->Longitude    ());
+    _featureVector->Depth        (id->Depth        ());
+    _featureVector->Oxygen       (id->Oxygen       ());
+    _featureVector->Salinity     (id->Salinity     ());
+    _featureVector->Fluorescence (id->Fluorescence ());
+    _changesMade = true;
+   }
+
+  if  (weOwnInstrumentData)
+  {
+    delete  id;
+    id = NULL;
+  }
+}  /* ReFreshInstrumentData */
+
+
+
 
 ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink 
                                         (KKStr                 _dirName, 
                                          const KKStr&          _fileName, 
-                                         MLClassConstPtr    _unknownClass,
+                                         MLClassConstPtr       _unknownClass,
                                          bool                  _useDirectoryNameForClassName,
-                                         MLClassConstList&  _mlClasses,
+                                         DataBasePtr           _dataBase,
+                                         MLClassConstList&     _mlClasses,
                                          volatile const bool&  _cancelFlag,    // will be monitored,  if set to True  Load will terminate.
                                          bool&                 _changesMade,
                                          DateTime&             _timeStamp,
@@ -1152,7 +1205,6 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
 
   origFeatureData->SortByRootName (false);
 
-
   ImageFeaturesListPtr  extractedFeatures = new ImageFeaturesList (fileDesc, true, _log, fileNameList->QueueSize () + 2);
   extractedFeatures->Version (CurrentFeatureFileVersionNum);
 
@@ -1209,29 +1261,8 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
 
       if  (origImage->Depth () == 0.0)
       {
-        // It seems that the Instrumentaton data is missing;
-
-        InstrumentDataPtr  id = NULL;
-        try
-        {
-          id = InstrumentDataFileManager::GetClosestInstrumentData (imageFileName, _cancelFlag, _log);
-        }
-        catch  (...)
-        {
-          id = NULL;
-        }
-        if  (id)
-        {
-          origImage->FlowRate1    (id->FlowRate1    ());
-          origImage->FlowRate2    (id->FlowRate2    ());
-          origImage->Latitude     (id->Latitude     ());
-          origImage->Longitude    (id->Longitude    ());
-          origImage->Depth        (id->Depth        ());
-          origImage->Oxygen       (id->Oxygen       ());
-          origImage->Salinity     (id->Salinity     ());
-          origImage->Fluorescence (id->Fluorescence ());
-          _changesMade = true;
-        }
+        // The Instrumentaton data is missing;
+        ReFreshInstrumentData (imageFileName, origImage, _dataBase, _cancelFlag, _changesMade, _log);
       }
 
       extractedFeatures->PushOnBack (origImage);

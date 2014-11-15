@@ -30,6 +30,7 @@ using namespace  KKU;
 #include "InstrumentData.h"
 #include "InstrumentDataList.h"
 #include "InstrumentDataFileManager.h"
+#include "SipperVariables.h"
 using namespace SipperHardware;
 
 
@@ -488,42 +489,6 @@ void  ImageFeatures::Save (RasterSipper&        raster,
 
 
 
-
-void  ImageFeatures::ParseImageFileName (const KKStr&  fullFileName, 
-                                         KKStr&        sipperFileName,
-                                         uint32&       scanLineNum,
-                                         uint32&       scanCol
-                                        )
-{
-  sipperFileName = "";
-  scanLineNum    = 0;
-  scanCol        = 0;
-  
-  KKStr  rootName = osGetRootName (fullFileName);
-  if  (rootName.Empty ())
-    return;
-  
-  int32  x = rootName.LocateLastOccurrence ('_');
-  if  (x > 0)
-  {
-    KKStr  colStr = rootName.SubStrPart (x + 1);
-    KKStr  temp = rootName.SubStrPart (0, x - 1);
-    x = temp.LocateLastOccurrence ('_');
-    if  (x > 0)
-    {
-      sipperFileName = temp.SubStrPart (0, x - 1);
-      KKStr  rowStr = temp.SubStrPart (x + 1);
-      scanCol     = atoi (colStr.Str ());
-      scanLineNum = atoi (rowStr.Str ());
-    }
-  }
-}  /* ParseImageFileName */
-
-
-
-
-
-
 //#define  DEBUB_CalcFeatures
 
 void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
@@ -966,7 +931,7 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
       uint32 scanLineNum = 0;
       uint32 scanColNum  = 0;
 
-      ParseImageFileName (ImageFileName (), sipperFileName, scanLineNum, scanColNum);
+      SipperVariables::ParseImageFileName (ImageFileName (), sipperFileName, scanLineNum, scanColNum);
 
       if  (!sipperFileName.Empty ())
       {

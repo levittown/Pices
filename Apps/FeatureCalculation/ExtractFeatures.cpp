@@ -20,6 +20,7 @@ using namespace std;
 using namespace  KKU;
 
 #include "InstrumentDataFileManager.h"
+#include "SipperVariables.h"
 using namespace  SipperHardware;
 
 #include "Classifier2.h"
@@ -604,6 +605,81 @@ void  ExtractFeatures::ClassifyImages ()
 
 
 
+
+
+
+
+void  ExtractFeatures::ReFreshInstrumentData (ImageFeaturesPtr  _featureVector)
+{
+  bool  weOwnInstrumentData = false;
+  InstrumentDataPtr  id = NULL;
+
+  KKStr  imageFileRootName = osGetRootName (_featureVector->ImageFileName ());
+
+  if  (dataBase)
+  {
+    KKStr  sipperFileName;
+    kkuint32  scanLineNum = 0;
+    kkuint32  scanCol     = 0;
+
+    SipperVariables::ParseImageFileName (imageFileRootName, sipperFileName, scanLineNum, scanCol);
+
+    id = dataBase->InstrumentDataGetByScanLine (sipperFileName, scanLineNum);
+    if  (id)
+      weOwnInstrumentData = true;
+    else
+      weOwnInstrumentData = false;
+  }
+
+
+  if  (!id)
+  {
+    try
+    {
+      bool  cancelFlag = false;
+      id = InstrumentDataFileManager::GetClosestInstrumentData (imageFileRootName, cancelFlag, log);
+    }
+    catch  (...)
+    {
+      log.Level (-1) << endl
+        << "ExtractFeatures::ReFreshInstrumentData   ***ERROR***   Exception occured calling  'InstrumentDataFileManager::GetClosestInstrumentData'." << endl
+        << "                 ImageFileName: " << imageFileRootName << endl
+        << endl;
+      id = NULL;
+    }
+  }
+
+  if  (id)
+  {
+    if  (id->Depth () == 0.0)
+    {
+      log.Level (-1) << "ExtractFeatures::ReFreshInstrumentData  ImageFileRootName[" << imageFileRootName << "] Depth == 0.0" << endl;
+    }
+
+    _featureVector->FlowRate1    (id->FlowRate1    ());
+    _featureVector->FlowRate2    (id->FlowRate2    ());
+    _featureVector->Latitude     (id->Latitude     ());
+    _featureVector->Longitude    (id->Longitude    ());
+    _featureVector->Depth        (id->Depth        ());
+    _featureVector->Oxygen       (id->Oxygen       ());
+    _featureVector->Salinity     (id->Salinity     ());
+    _featureVector->Fluorescence (id->Fluorescence ());
+  }
+  else
+  {
+    int zed = 199l;
+  }
+
+  if  (weOwnInstrumentData)
+  {
+    delete  id;
+    id = NULL;
+  }
+}  /* ReFreshInstrumentData */
+
+
+
+
 void  ExtractFeatures::AddInstrumentData (ImageFeaturesListPtr  data)
 {
   ImageFeaturesList::iterator idx;
@@ -612,20 +688,8 @@ void  ExtractFeatures::AddInstrumentData (ImageFeaturesListPtr  data)
   for  (idx = data->begin ();  idx != data->end ();  idx++)
   {
     ImageFeaturesPtr fd = *idx;
-      
-    InstrumentDataPtr id = InstrumentDataFileManager::GetClosestInstrumentData (fd->ImageFileName (), cancelFlag, log);
-    if  (id)
-    {
-      fd->FeatureData (2, id->Temperature ());
-      fd->Oxygen       (id->Oxygen        ());
-      fd->Salinity     (id->Salinity      ());
-      fd->Fluorescence (id->Fluorescence  ());
-      fd->Depth        (id->Depth         ());
-    }
-    else
-    {
-      log.Level (-1) << endl << "AddInstrumentData   ***ERROR***    Could not locate instrument data for Image[" << fd->ImageFileName () << "]." << endl << endl;
-    }
+    if  (fd->Depth () == 0.0f)
+      ReFreshInstrumentData (fd);
   }
 }  /* AddInstrumentData */
 
@@ -638,12 +702,15 @@ void  ExtractFeatures::Extract ()
 
   InstrumentDataFileManager::Initialize ();
 
+  dataBase = new DataBase (log);
+
   KKStr  relativeDir;
 
   images = FeatureFileIOPices::Driver ()->LoadInSubDirectoryTree 
                                    (sourceRootDirPath, 
                                     *mlClasses,
                                     useDirectoryNameForClassName,
+                                    dataBase,
                                     cancelFlag,
                                     true,    // rewiteRootFeatureFile 
                                     log

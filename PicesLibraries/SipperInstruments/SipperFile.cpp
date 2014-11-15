@@ -527,12 +527,6 @@ void   SipperFile::AssignCtdExternalInstrumentsETP2008 (const KKStr&   rootName)
 
 
 
-void  SipperFile::CropSettingsAndDeadZoneDetection
-{
-
-}
-
-
 
 
 

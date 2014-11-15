@@ -204,20 +204,6 @@ namespace MLL
 
 
 
-    /**
-     *@brief  Will parse the name of a Image that was extracted from a SIPPER file into SipperFileName, ScanLineNum, amd ScanCol
-     *@param[in] fullFileName Name of file that was assigned by the SIPPER image extraction program. from this name the three fields 
-     *  SipperFileName, ScanLineNum, amd ScanCol can be extractd.
-     *@param[in] sipperFileName Name of SIPPERfile that the image was orignally extracted from.
-     *@param[in] scanLineNum The scan line with respect to the SIPPER file where the first row in the mage was extracted.
-     *@param[in] scanCol The left most column in the original SIPPER file that this image  was extracted.
-     */
-    static  void  ParseImageFileName (const KKStr&  fullFileName,     /**< File name of image extractd from a Sipper File. */
-                                      KKStr&        sipperFileName, 
-                                      KKU::uint32&  scanLineNum,
-                                      KKU::uint32&  scanCol
-                                     );
-
   private:
     static  bool  atExitDefined;
 

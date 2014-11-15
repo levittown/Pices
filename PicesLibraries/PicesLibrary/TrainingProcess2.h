@@ -10,6 +10,12 @@
 
 namespace MLL 
 {
+  #if  !defined(_DataBase_Defined_)
+  class  DataBase;
+  typedef  DataBase*  DataBasePtr;
+  #endif
+
+
   #if  !defined(_FEATUREVECTOR_)
   class  FeatureVector;
   typedef  FeatureVector*  FeatureVectorPtr;
@@ -252,7 +258,8 @@ namespace MLL
                                              bool  _checkForDuplicates
                                             );
 
-    void    ExtractTrainingClassFeatures (KKU::DateTime&  latestImageTimeStamp,
+    void    ExtractTrainingClassFeatures (DataBasePtr     dataBase,                         /**< If not NULL gete data from Database. */
+                                          KKU::DateTime&  latestImageTimeStamp,
                                           bool&           changesMadeToTrainingLibraries
                                          );
 
@@ -360,6 +367,7 @@ namespace MLL
     //             Routines for Extracting Features              *
     //************************************************************
     void  ExtractFeatures (const TrainingClassPtr  trainingClass,
+                           DataBasePtr             dataBase,      /**<  If not NULL will retrieve missing Instrumentdat afrom database. */
                            KKU::DateTime&          latestTimeStamp,
                            bool&                   changesMade
                           );

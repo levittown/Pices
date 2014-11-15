@@ -8,6 +8,13 @@
 
 namespace MLL 
 {
+
+#if  !defined(_DataBase_Defined_)
+  class  DataBase;
+  typedef  DataBase*  DataBasePtr;
+#endif
+
+
   /**
     @class  FeatureFileIOPices
     @brief  Supports the reading and writting of feature data from and to Pices feature data files.
@@ -41,18 +48,18 @@ namespace MLL
     FeatureFileIOPices ();
     virtual ~FeatureFileIOPices ();
 
-    virtual  FileDescPtr  GetFileDesc (const KKStr&            _fileName,
-                                       std::istream&           _in,
+    virtual  FileDescPtr  GetFileDesc (const KKStr&         _fileName,
+                                       std::istream&        _in,
                                        MLClassConstListPtr  _classes,
-                                       int32&                  _estSize,
-                                       KKStr&                  _errorMessage,
-                                       RunLog&                 _runLog
+                                       int32&               _estSize,
+                                       KKStr&               _errorMessage,
+                                       RunLog&              _runLog
                                       );
 
 
     virtual  ImageFeaturesListPtr  LoadFile (const KKStr&          _fileName,
                                              const FileDescPtr     _fileDesc,
-                                             MLClassConstList&  _classes, 
+                                             MLClassConstList&     _classes, 
                                              std::istream&         _in,
                                              long                  _maxCount,    // Maximum # images to load.
                                              volatile const bool&  _cancelFlag,
@@ -81,33 +88,38 @@ namespace MLL
 
 
     /**                       FeatureDataReSink
-     * @brief Syncronuzes the contents of a feature data file with a directory of images.
-     *        Used with plankton applications to verify that feature file is up-to-date.
-     *        Was specifically meant to work with training libraries, to account for
-     *        images being added and deleted from training library.  If there are no 
-     *        changes, then function will run very quickly.
-     * @param[in] dirName,      Directory where source images are loccated.
-     * @param[in] fileName,     Feature file that is being syncronized.
-     * @param[in] unknownClass, Class to be used when class is unknown
-     * @param[in] useDirectoryNameForClassName, if true then class name of each entry
-     *            will be set to directory name.
-     * @param[in] mlClasses,  list of classes
-     * @param[in] log, where to send diagnostic messages to.
-     * @param[out] changesMade, If returns as true then there were changes made to the 
-     *             feature file 'fileName'.  If set to false, then no changes were made.
-     * @param[out] Timestamp of feature file.
-     * @return - A ImageFeaturesList container object.  This object will own all the examples loaded
+     *@brief Syncronuzes the contents of a feature data file with a directory of images.
+     *@details Used with plankton applications to verify that feature file is up-to-date.
+     * Was specifically meant to work with training libraries, to account for
+     * images being added and deleted from training library.  If there are no 
+     * changes, then function will run very quickly.
      *
      * A change in featuer file version number would also cause all entries in the feature 
      * file to be recomputed.  The feature file version number gets incremented whenever we change
      * the feature file computation routine.
+     *
+     *@param[in] _dirName,      Directory where source images are loccated.
+     *@param[in] _fileName,     Feature file that is being syncronized.
+     *@param[in] _unknownClass, Class to be used when class is unknown
+     *@param[in] _useDirectoryNameForClassName, if true then class name of each entry
+     *           will be set to directory name.
+     *@param[in] _database If not NULL retriefe Instrument data from the PICES database table InstrumentData.
+     *@param[in] _mlClasses  List of classes
+     *@param[in] _cancelFlag  Boolean variable that will be monitored; if it goes True then will terminate 
+     * prorcessing right away and return to caller.
+     *@param[out] _changesMade, If returns as true then there were changes made to the 
+     *            feature file 'fileName'.  If set to false, then no changes were made.
+     *@param[out] _timeStamp Timestamp of feature file.
+     *@param[in] _log, where to send diagnostic messages to.
+     *@returns - A ImageFeaturesList container object.  This object will own all the examples loaded
      */
     static
     ImageFeaturesListPtr  FeatureDataReSink (KKStr                 _dirName, 
                                              const KKStr&          _fileName, 
-                                             MLClassConstPtr    _unknownClass,
+                                             MLClassConstPtr       _unknownClass,
                                              bool                  _useDirectoryNameForClassName,
-                                             MLClassConstList&  _mlClasses,
+                                             DataBasePtr           _dataBase,
+                                             MLClassConstList&     _mlClasses,
                                              volatile const bool&  _cancelFlag,    // will be monitored,  if set to True  Load will terminate.
                                              bool&                 _changesMade,
                                              KKU::DateTime&        _timeStamp,
@@ -120,25 +132,28 @@ namespace MLL
 
 
     /**                       LoadInSubDirectoryTree
-     * @brief Loads in the contents of a sub-directory tree.
-     *        Meant to work with SIPPER plankton images, it starts at a specified subdirectory and 
-     *        transverses all subdirectories.  It makes use of FeatureDataReSink for each specific
-     *        sub-directory.
-     * @param[in] rootDir,   Strating directory.
-     * @param[in,out] mlClasses, List of classes, any new classes in fileName will be added.
-     * @param[in] useDirectoryNameForClassName, if true set class names to sub-directory name.
-     *            This happens because the user may manually move images between dorectories using
-     *            the sub-directory name as the class name.
-     * @param[in] log, where to send diagnostic messages to.
-     * @param[in] rewiteRootFeatureFile, If true rewite the feature file in the specified 'rootDir'.  This
-     *            feature file will contain all entries from all sub-directories below it.
-     * @return - A ImageFeaturesList container object.  This object will own all the examples loaded.
+     *@brief Loads in the contents of a sub-directory tree.
+     *       Meant to work with SIPPER plankton images, it starts at a specified subdirectory and 
+     *       transverses all subdirectories.  It makes use of FeatureDataReSink for each specific
+     *       sub-directory.
+     *@param[in] _rootDir,   Strating directory.
+     *@param[in,out] _mlClasses, List of classes, any new classes in fileName will be added.
+     *@param[in] _useDirectoryNameForClassName, if true set class names to sub-directory name.
+     *           This happens because the user may manually move images between dorectories using
+     *           the sub-directory name as the class name.
+     *@param[in] _dataBase  If not null retrieve Instrument data from the Instruments database table.
+     *@param[in] _cancelFlag  Will be monitored; if set to True Load will terminate.
+     *@param[in] _rewiteRootFeatureFile, If true rewite the feature file in the specified 'rootDir'.  This
+     *           feature file will contain all entries from all sub-directories below it.
+     *@param[in,out] _log  Logger where messages are to be written to.
+     *@returns - A ImageFeaturesList container object.  This object will own all the examples loaded.
      */
     static
       ImageFeaturesListPtr  LoadInSubDirectoryTree (KKStr                 _rootDir,
-                                                    MLClassConstList&  _mlClasses,
+                                                    MLClassConstList&     _mlClasses,
                                                     bool                  _useDirectoryNameForClassName,
-                                                    volatile const bool&  _cancelFlag,    // will be monitored,  if set to True  Load will terminate.
+                                                    DataBasePtr           _dataBase,
+                                                    volatile const bool&  _cancelFlag,
                                                     bool                  _rewiteRootFeatureFile,
                                                     RunLog&               _log
                                                    );
@@ -175,6 +190,27 @@ namespace MLL
                     rfUnKnown
                    }  
                    PicesFieldTypes;
+
+
+    /**
+     *@brief Will refresh the Instruemnt Data fields of the FeatureVector instance.
+     *@details  If 'dataBase' if provided will first try to retrieve from there otherwise
+     * will retrieve from the InstrumentDataFileManager::GetClosestInstrumentData method.
+     *@param[in] _imageFileName  Name of Plankton image that featureVector represents.
+     *@param[in,out]  _featureVector  FeatureVector instance that is named by 'imageFileName'
+     *@param[in]  _dataBase  If not NULL will 1st try to retrieve instrument data from here.
+     *@param[in] _cancelFlag  Will be monitored; if set to True Load will terminate.
+     *@param[in] _changesMade If the '_featureVector' instance is updated will be set to true.
+     *@param[in] _log  Logger to send messages to.
+     */
+    static
+    void  ReFreshInstrumentData (const KKStr&          _imageFileName,
+                                 ImageFeaturesPtr      _featureVector,
+                                 DataBasePtr           _dataBase,
+                                 volatile const bool&  _cancelFlag,
+                                 bool&                 _changesMade,
+                                 RunLog&               _log
+                                );
 
 
 

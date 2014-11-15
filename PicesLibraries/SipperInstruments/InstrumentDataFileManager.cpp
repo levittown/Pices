@@ -261,30 +261,12 @@ void  InstrumentDataFileManager::GetClosestInstrumentData (const KKStr&         
                                                            RunLog&               log
                                                           )
 {
-  KKStr  rootName = osGetRootName (imageFileName);
-  int32  x = rootName.LocateLastOccurrence ('_');
-  if  (x < 1)
-  {
-    log.Level (-1) << "InstrumentDataFileManager::GetClosestInstrumentData   Can not identify SipperFileName from ImageFileName[" << imageFileName << "]" << std::endl;
-    instrumentData = NULL;
-    return;
-  }
+  KKStr  sipperFileName;
+  kkuint32  scanLine = 0;
+  kkuint32  scanCol  = 0;
 
-
-  KKStr  nameLessColumnNumber = rootName.SubStrPart (0, x - 1);
-  int32  y = nameLessColumnNumber.LocateLastOccurrence ('_');
-  if  (y < 1)
-  {
-    log.Level (-1) << "InstrumentDataFileManager::GetClosestInstrumentData   Can not identify SipperFileName from ImageFileName[" << imageFileName << "]" << std::endl;
-    instrumentData = NULL;
-    return;
-  }
-
-
-  KKStr  sipperFileName = nameLessColumnNumber.SubStrPart (0, y - 1);
-  KKStr  scanLineStr = nameLessColumnNumber.SubStrPart (y + 1);
-
-  uint32  scanLine = KKU::Max ((uint32)scanLineStr.ToLong (), (uint32)30000);
+  SipperVariables::ParseImageFileName (imageFileName, sipperFileName, scanLine, scanCol);
+  scanLine = Max ((kkuint32)30000, scanLine);
 
   {
     // Lets see if we can get what we want from the current data file.

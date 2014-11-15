@@ -20,6 +20,9 @@ using namespace  std;
 #include "Str.h"
 using namespace  KKU;
 
+#include "SipperVariables.h"
+using namespace  SipperHardware;
+
 #include "DataBase.h"
 #include "DataBaseServer.h"
 #include "FeatureFileIOC45.h"
@@ -86,6 +89,8 @@ using namespace  MLL;
 
 // -s D:\Pices\TrainingLibraries\ETP_08_SubSet  -n D:\Pices\TrainingLibraries\ETP_08_SubSet\ETP_08_SubSet.data.c45  -u
 
+// 2014-11-13   Extratuing Features for Featire Selection run
+// -s E:\Pices\TrainingLibraries\USF  -n E:\Pices\TrainingLibraries\USF\USF_All.dara  -u
 
 
 void  SetUpEmbeddedServer ()
@@ -109,6 +114,9 @@ void  RandomlySelectImagesByClass (const KKStr&  srcRootDir,
                                   )
 {
   RunLog  log;
+
+  DataBasePtr  dataBase = new DataBase (log);
+
   bool  cancelFlag = false;
   MLClassConstListPtr  mlClasses = new MLClassConstList ();
 
@@ -116,6 +124,7 @@ void  RandomlySelectImagesByClass (const KKStr&  srcRootDir,
                                    (srcRootDir, 
                                     *mlClasses,
                                     true,               // true = useDirectoryNameForClassName
+                                    dataBase,
                                     cancelFlag,
                                     true,               // rewiteRootFeatureFile 
                                     log
@@ -170,9 +179,11 @@ void  RandomlySelectImagesByClass (const KKStr&  srcRootDir,
     featureDataForThisClass = NULL;
   }
 
-  delete  classes;       classes      = NULL;
+  delete  dataBase;   dataBase  = NULL;
+  delete  classes;    classes   = NULL;
   delete  mlClasses;  mlClasses = NULL;
 }  /* RandomlySelectImagesByClass */
+
 
 
 
@@ -194,7 +205,7 @@ SipperFileListPtr  GetListOfSipperFiles (DataBasePtr           dbConn,
     uint32  scanLineNum = 0;
     uint32  scanCol     = 0;
 
-    i->ParseImageFileName (imageFileName, sipperFileName, scanLineNum, scanCol);
+    SipperVariables::ParseImageFileName (imageFileName, sipperFileName, scanLineNum, scanCol);
     sipperFilesIdx = sipperFiles.find (sipperFileName);
     if  (sipperFilesIdx == sipperFiles.end ())
     {
@@ -270,6 +281,7 @@ void  ImportImagesIntoDataBase (const KKStr&  rootDir)
     (rootDir,
      classes,
      true,               //useDirectoryNameForClassName,
+     dbConn,
      cancelFlag,
      true,               //_rewiteRootFeatureFile,
      runLog
@@ -306,7 +318,7 @@ void  ImportImagesIntoDataBase (const KKStr&  rootDir)
       uint32  scanLineNum = 0;
       uint32  scanCol     = 0;
 
-      i->ParseImageFileName (imageFileName, sipperFileName, scanLineNum, scanCol);
+      SipperVariables::ParseImageFileName (imageFileName, sipperFileName, scanLineNum, scanCol);
 
       //int32  size;
       //int32  weight;

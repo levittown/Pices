@@ -413,8 +413,40 @@ bool  SipperVariables::AllowUpdates ()
 
 
 
+void  SipperVariables::ParseImageFileName (const KKStr&  fullFileName, 
+                                           KKStr&        sipperFileName,
+                                           kkuint32&     scanLineNum,
+                                           kkuint32&     scanCol
+                                          )
+{
+  sipperFileName = "";
+  scanLineNum    = 0;
+  scanCol        = 0;
+  
+  KKStr  rootName = osGetRootName (fullFileName);
+  if  (rootName.Empty ())
+    return;
+  
+  int32  x = rootName.LocateLastOccurrence ('_');
+  if  (x > 0)
+  {
+    KKStr  colStr = rootName.SubStrPart (x + 1);
+    KKStr  temp = rootName.SubStrPart (0, x - 1);
+    x = temp.LocateLastOccurrence ('_');
+    if  (x > 0)
+    {
+      sipperFileName = temp.SubStrPart (0, x - 1);
+      KKStr  rowStr = temp.SubStrPart (x + 1);
+      scanCol     = atoi (colStr.Str ());
+      scanLineNum = atoi (rowStr.Str ());
+    }
+  }
+}  /* ParseImageFileName */
 
-void    SipperVariables::ReadPermissions ()
+
+
+
+void  SipperVariables::ReadPermissions ()
 {
   allowUpdates = false;
   KKStr  configFileName = osAddSlash (SipperVariables::PicesConfigurationDirectory ()) + "Permissions.cfg";

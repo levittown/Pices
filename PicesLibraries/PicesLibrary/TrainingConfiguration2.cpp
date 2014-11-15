@@ -1944,6 +1944,7 @@ FeatureVectorListPtr   TrainingConfiguration2::LoadOtherClasssExamples ()
                                  otherClass->Name () + ".data",
                                  otherClass,
                                  true,   //  Make all entries in this directory 'otherClass'
+                                 NULL,   // DataBase:  if not set to NULL will retrieve Instrument Data from DataBase.
                                  tempClasses,
                                  cancelFlag,
                                  changesMade,
@@ -2104,6 +2105,7 @@ FeatureVectorListPtr  TrainingConfiguration2::ExtractFeatures (const TrainingCla
                                  trainingClass->FeatureFileName (),
                                  trainingClass->MLClass (),
                                  true,   //  Make all entries in this directory 'trainingClass->MLClass ()'
+                                 NULL,   // DataBase:  if not set to NULL will retrieve Instrument Data from DataBase.
                                  *mlClasses,
                                  cancelFlag,
                                  changesMade,
