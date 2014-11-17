@@ -1,0 +1,460 @@
+// Date/Time [2014/Nov/14-11:35:09]
+//
+// Status File for Classes[, ]
+//
+// Config Parameters[-a 1  -c 12  -d 3  -e 0.001  -g 0.01507  -h 1  -i 0  -j 0  -k 0  -l 1  -m 40  -n 0.11  -p 0.10000000000000001  -q 0  -r 0  -s 0  -t 2  -u 100  -z 0    -MT OneVsOne  -SM Probability  -UseProbability]
+//
+ProcessorId	0
+Status	NotStarted
+SearchMethod	Grid
+SelectionMethod	
+BeamSize	1
+NextJobId	0
+NumOfExpansions	0
+ExpansionLimit	50
+HighGrade	-1
+ExpSinceHighGrade	-1
+FirstJobAvailableForExpansion	0
+CurrentDateTime	2014/Nov/14-11:35:09
+Best_C	-1
+Best_GAMMA	-1
+Best_A	-1
+Best_NumOfRounds	-1
+A_GrowthRate	1
+C_GrowthRate	1
+Gamma_GrowthRate	1
+A_GrowthRate	1
+C_GrowthRate	1.100000024
+Gamma_GrowthRate	2
+// CreateParameterJobs
+//  C      GrowthRate[1.1]	Min[1]	Max[1]
+//  Gamma  GrowthRate[2]	Min[1e-005]	Max[20]
+//  A      GrowthRate[1]	Min[100]	Max[100]
+//
+BinaryComboJob	JobId	0	ParentId	-1	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	41	NumOfRounds	1	CParm	1	GammaParm	1.0000000000000001e-005	AParm	100
+BinaryComboJob	JobId	1	ParentId	-1	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	8467	NumOfRounds	1	CParm	1	GammaParm	2.0000000000000002e-005	AParm	100
+BinaryComboJob	JobId	2	ParentId	-1	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	6334	NumOfRounds	1	CParm	1	GammaParm	4.0000000000000003e-005	AParm	100
+BinaryComboJob	JobId	3	ParentId	-1	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	6500	NumOfRounds	1	CParm	1	GammaParm	8.0000000000000007e-005	AParm	100
+BinaryComboJob	JobId	4	ParentId	-1	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	9169	NumOfRounds	1	CParm	1	GammaParm	0.00016000000000000001	AParm	100
+BinaryComboJob	JobId	5	ParentId	-1	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	5724	NumOfRounds	1	CParm	1	GammaParm	0.00032000000000000003	AParm	100
+BinaryComboJob	JobId	6	ParentId	-1	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	1478	NumOfRounds	1	CParm	1	GammaParm	0.00064000000000000005	AParm	100
+BinaryComboJob	JobId	7	ParentId	-1	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	9358	NumOfRounds	1	CParm	1	GammaParm	0.0012800000000000001	AParm	100
+BinaryComboJob	JobId	8	ParentId	-1	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	6962	NumOfRounds	1	CParm	1	GammaParm	0.0025600000000000002	AParm	100
+BinaryComboJob	JobId	9	ParentId	-1	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	4464	NumOfRounds	1	CParm	1	GammaParm	0.0051200000000000004	AParm	100
+BinaryComboJob	JobId	10	ParentId	-1	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	5705	NumOfRounds	1	CParm	1	GammaParm	0.010240000000000001	AParm	100
+BinaryComboJob	JobId	11	ParentId	-1	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	8145	NumOfRounds	1	CParm	1	GammaParm	0.020480000000000002	AParm	100
+BinaryComboJob	JobId	12	ParentId	-1	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	3281	NumOfRounds	1	CParm	1	GammaParm	0.040960000000000003	AParm	100
+BinaryComboJob	JobId	13	ParentId	-1	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	6827	NumOfRounds	1	CParm	1	GammaParm	0.081920000000000007	AParm	100
+BinaryComboJob	JobId	14	ParentId	-1	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	9961	NumOfRounds	1	CParm	1	GammaParm	0.16384000000000001	AParm	100
+BinaryComboJob	JobId	15	ParentId	-1	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	491	NumOfRounds	1	CParm	1	GammaParm	0.32768000000000003	AParm	100
+BinaryComboJob	JobId	16	ParentId	-1	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	2995	NumOfRounds	1	CParm	1	GammaParm	0.65536000000000005	AParm	100
+BinaryComboJob	JobId	17	ParentId	-1	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	1942	NumOfRounds	1	CParm	1	GammaParm	1.3107200000000001	AParm	100
+BinaryComboJob	JobId	18	ParentId	-1	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	4827	NumOfRounds	1	CParm	1	GammaParm	2.6214400000000002	AParm	100
+BinaryComboJob	JobId	19	ParentId	-1	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	5436	NumOfRounds	1	CParm	1	GammaParm	5.2428800000000004	AParm	100
+BinaryComboJob	JobId	20	ParentId	-1	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	2391	NumOfRounds	1	CParm	1	GammaParm	10.485760000000001	AParm	100
+NextJobId	21
+CpuTimeUsed	0	ProcessorId	3736	HostName	HARRY
+CurrentDateTime	2014/Nov/14-11:35:09
+//
+// New Processor Object.
+// Process Id[3736]
+// Date/Time [2014/Nov/14-11:35:09].
+//
+// Config Parameters[-a 1  -c 12  -d 3  -e 0.001  -g 0.01507  -h 1  -i 0  -j 0  -k 0  -l 1  -m 40  -n 0.11  -p 0.10000000000000001  -q 0  -r 0  -s 0  -t 2  -u 100  -z 0    -MT OneVsOne  -SM Probability  -UseProbability]
+//
+JobStatusChange	0	Started
+BinaryComboJob	JobId	0	ParentId	-1	Status	Done	ChgFeatureNum	-1	ProcTime	1667.620	Accuracy	5.80796	AccuracyNorm	4.13034	AvgPredProb	75.93803	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	4.13034	Features	0-85	RandomNum	41	NumOfRounds	1	CParm	1	GammaParm	1.0000000000000001e-005	AParm	100
+HighGrade	4.130337
+ExpSinceHighGrade	0
+JobStatusChange	1	Started
+//
+// New Processor Object.
+// Process Id[8076]
+// Date/Time [2014/Nov/14-12:06:09].
+//
+// Config Parameters[-a 1  -c 12  -d 3  -e 0.001  -g 0.01507  -h 1  -i 0  -j 0  -k 0  -l 1  -m 40  -n 0.11  -p 0.10000000000000001  -q 0  -r 0  -s 0  -t 2  -u 100  -z 0    -MT OneVsOne  -SM Probability  -UseProbability]
+//
+JobStatusChange	2	Started
+//
+// New Processor Object.
+// Process Id[5032]
+// Date/Time [2014/Nov/14-12:06:24].
+//
+// Config Parameters[-a 1  -c 12  -d 3  -e 0.001  -g 0.01507  -h 1  -i 0  -j 0  -k 0  -l 1  -m 40  -n 0.11  -p 0.10000000000000001  -q 0  -r 0  -s 0  -t 2  -u 100  -z 0    -MT OneVsOne  -SM Probability  -UseProbability]
+//
+JobStatusChange	3	Started
+//
+// New Processor Object.
+// Process Id[6364]
+// Date/Time [2014/Nov/14-12:06:43].
+//
+// Config Parameters[-a 1  -c 12  -d 3  -e 0.001  -g 0.01507  -h 1  -i 0  -j 0  -k 0  -l 1  -m 40  -n 0.11  -p 0.10000000000000001  -q 0  -r 0  -s 0  -t 2  -u 100  -z 0    -MT OneVsOne  -SM Probability  -UseProbability]
+//
+JobStatusChange	4	Started
+//
+// New Processor Object.
+// Process Id[2532]
+// Date/Time [2014/Nov/14-12:06:56].
+//
+// Config Parameters[-a 1  -c 12  -d 3  -e 0.001  -g 0.01507  -h 1  -i 0  -j 0  -k 0  -l 1  -m 40  -n 0.11  -p 0.10000000000000001  -q 0  -r 0  -s 0  -t 2  -u 100  -z 0    -MT OneVsOne  -SM Probability  -UseProbability]
+//
+JobStatusChange	5	Started
+BinaryComboJob	JobId	5	ParentId	-1	Status	Done	ChgFeatureNum	-1	ProcTime	3156.615	Accuracy	45.11710	AccuracyNorm	36.86178	AvgPredProb	80.73288	DecProbMean	0	DecProbStdDev	0	FMeasure	21.37097	Grade	36.86178	Features	0-85	RandomNum	5724	NumOfRounds	1	CParm	1	GammaParm	0.00032000000000000003	AParm	100
+HighGrade	36.861778
+ExpSinceHighGrade	0
+JobStatusChange	6	Started
+BinaryComboJob	JobId	4	ParentId	-1	Status	Done	ChgFeatureNum	-1	ProcTime	3963.453	Accuracy	37.96253	AccuracyNorm	29.37565	AvgPredProb	78.76586	DecProbMean	0	DecProbStdDev	0	FMeasure	2.32019	Grade	29.37565	Features	0-85	RandomNum	9169	NumOfRounds	1	CParm	1	GammaParm	0.00016000000000000001	AParm	100
+JobStatusChange	7	Started
+BinaryComboJob	JobId	3	ParentId	-1	Status	Done	ChgFeatureNum	-1	ProcTime	4890.207	Accuracy	30.75332	AccuracyNorm	22.57267	AvgPredProb	76.77707	DecProbMean	0	DecProbStdDev	0	FMeasure	0.47847	Grade	22.57267	Features	0-85	RandomNum	6500	NumOfRounds	1	CParm	1	GammaParm	8.0000000000000007e-005	AParm	100
+JobStatusChange	8	Started
+BinaryComboJob	JobId	6	ParentId	-1	Status	Done	ChgFeatureNum	-1	ProcTime	2091.379	Accuracy	50.39032	AccuracyNorm	42.57273	AvgPredProb	82.55132	DecProbMean	0	DecProbStdDev	0	FMeasure	43.16310	Grade	42.57273	Features	0-85	RandomNum	1478	NumOfRounds	1	CParm	1	GammaParm	0.00064000000000000005	AParm	100
+HighGrade	42.572727
+ExpSinceHighGrade	0
+JobStatusChange	9	Started
+BinaryComboJob	JobId	1	ParentId	-1	Status	Done	ChgFeatureNum	-1	ProcTime	5524.340	Accuracy	11.23731	AccuracyNorm	8.03381	AvgPredProb	77.85642	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	8.03381	Features	0-85	RandomNum	8467	NumOfRounds	1	CParm	1	GammaParm	2.0000000000000002e-005	AParm	100
+JobStatusChange	10	Started
+BinaryComboJob	JobId	2	ParentId	-1	Status	Done	ChgFeatureNum	-1	ProcTime	5402.548	Accuracy	22.09992	AccuracyNorm	15.85087	AvgPredProb	73.99517	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	15.85087	Features	0-85	RandomNum	6334	NumOfRounds	1	CParm	1	GammaParm	4.0000000000000003e-005	AParm	100
+JobStatusChange	11	Started
+BinaryComboJob	JobId	7	ParentId	-1	Status	Done	ChgFeatureNum	-1	ProcTime	1534.316	Accuracy	56.11241	AccuracyNorm	50.79561	AvgPredProb	84.92888	DecProbMean	0	DecProbStdDev	0	FMeasure	49.92296	Grade	50.79561	Features	0-85	RandomNum	9358	NumOfRounds	1	CParm	1	GammaParm	0.0012800000000000001	AParm	100
+HighGrade	50.795609
+ExpSinceHighGrade	0
+JobStatusChange	12	Started
+BinaryComboJob	JobId	8	ParentId	-1	Status	Done	ChgFeatureNum	-1	ProcTime	1187.323	Accuracy	60.55816	AccuracyNorm	56.45496	AvgPredProb	87.59853	DecProbMean	0	DecProbStdDev	0	FMeasure	55.31295	Grade	56.45496	Features	0-85	RandomNum	6962	NumOfRounds	1	CParm	1	GammaParm	0.0025600000000000002	AParm	100
+HighGrade	56.454964
+ExpSinceHighGrade	0
+JobStatusChange	13	Started
+BinaryComboJob	JobId	10	ParentId	-1	Status	Done	ChgFeatureNum	-1	ProcTime	942.899	Accuracy	67.42779	AccuracyNorm	65.25994	AvgPredProb	92.54467	DecProbMean	0	DecProbStdDev	0	FMeasure	64.75410	Grade	65.25994	Features	0-85	RandomNum	5705	NumOfRounds	1	CParm	1	GammaParm	0.010240000000000001	AParm	100
+HighGrade	65.259941
+ExpSinceHighGrade	0
+JobStatusChange	14	Started
+BinaryComboJob	JobId	9	ParentId	-1	Status	Done	ChgFeatureNum	-1	ProcTime	1018.125	Accuracy	64.55894	AccuracyNorm	61.53799	AvgPredProb	90.08222	DecProbMean	0	DecProbStdDev	0	FMeasure	60.55556	Grade	61.53799	Features	0-85	RandomNum	4464	NumOfRounds	1	CParm	1	GammaParm	0.0051200000000000004	AParm	100
+JobStatusChange	15	Started
+BinaryComboJob	JobId	11	ParentId	-1	Status	Done	ChgFeatureNum	-1	ProcTime	968.517	Accuracy	69.40281	AccuracyNorm	68.12458	AvgPredProb	94.89663	DecProbMean	0	DecProbStdDev	0	FMeasure	66.03001	Grade	68.12458	Features	0-85	RandomNum	8145	NumOfRounds	1	CParm	1	GammaParm	0.020480000000000002	AParm	100
+HighGrade	68.124580
+ExpSinceHighGrade	0
+JobStatusChange	16	Started
+BinaryComboJob	JobId	12	ParentId	-1	Status	Done	ChgFeatureNum	-1	ProcTime	1267.493	Accuracy	69.75410	AccuracyNorm	69.09978	AvgPredProb	96.79905	DecProbMean	0	DecProbStdDev	0	FMeasure	66.66666	Grade	69.09978	Features	0-85	RandomNum	3281	NumOfRounds	1	CParm	1	GammaParm	0.040960000000000003	AParm	100
+HighGrade	69.099785
+ExpSinceHighGrade	0
+JobStatusChange	17	Started
+BinaryComboJob	JobId	13	ParentId	-1	Status	Done	ChgFeatureNum	-1	ProcTime	1991.975	Accuracy	67.61905	AccuracyNorm	66.47850	AvgPredProb	97.83087	DecProbMean	0	DecProbStdDev	0	FMeasure	63.92046	Grade	66.47850	Features	0-85	RandomNum	6827	NumOfRounds	1	CParm	1	GammaParm	0.081920000000000007	AParm	100
+JobStatusChange	18	Started
+BinaryComboJob	JobId	14	ParentId	-1	Status	Done	ChgFeatureNum	-1	ProcTime	3435.330	Accuracy	61.48712	AccuracyNorm	58.94466	AvgPredProb	95.22145	DecProbMean	0	DecProbStdDev	0	FMeasure	55.24691	Grade	58.94466	Features	0-85	RandomNum	9961	NumOfRounds	1	CParm	1	GammaParm	0.16384000000000001	AParm	100
+JobStatusChange	19	Started
+BinaryComboJob	JobId	15	ParentId	-1	Status	Done	ChgFeatureNum	-1	ProcTime	5295.781	Accuracy	47.97424	AccuracyNorm	43.22186	AvgPredProb	92.11451	DecProbMean	0	DecProbStdDev	0	FMeasure	46.26087	Grade	43.22186	Features	0-85	RandomNum	491	NumOfRounds	1	CParm	1	GammaParm	0.32768000000000003	AParm	100
+JobStatusChange	20	Started
+BinaryComboJob	JobId	16	ParentId	-1	Status	Done	ChgFeatureNum	-1	ProcTime	6138.857	Accuracy	28.51678	AccuracyNorm	23.27501	AvgPredProb	90.67286	DecProbMean	0	DecProbStdDev	0	FMeasure	16.22807	Grade	23.27501	Features	0-85	RandomNum	2995	NumOfRounds	1	CParm	1	GammaParm	0.65536000000000005	AParm	100
+CpuTimeUsed	12511.7	ProcessorId	8076	HostName	HARRY
+CurrentDateTime	2014/Nov/14-15:35:37
+BinaryComboJob	JobId	17	ParentId	-1	Status	Done	ChgFeatureNum	-1	ProcTime	6449.097	Accuracy	15.38642	AccuracyNorm	11.09075	AvgPredProb	54.45087	DecProbMean	0	DecProbStdDev	0	FMeasure	0.95465	Grade	11.09075	Features	0-85	RandomNum	1942	NumOfRounds	1	CParm	1	GammaParm	1.3107200000000001	AParm	100
+CpuTimeUsed	13217	ProcessorId	6364	HostName	HARRY
+CurrentDateTime	2014/Nov/14-15:47:10
+BinaryComboJob	JobId	18	ParentId	-1	Status	Done	ChgFeatureNum	-1	ProcTime	6021.060	Accuracy	6.38564	AccuracyNorm	4.50451	AvgPredProb	31.84281	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	4.50451	Features	0-85	RandomNum	4827	NumOfRounds	1	CParm	1	GammaParm	2.6214400000000002	AParm	100
+CpuTimeUsed	14093.1	ProcessorId	5032	HostName	HARRY
+CurrentDateTime	2014/Nov/14-16:01:29
+BinaryComboJob	JobId	19	ParentId	-1	Status	Done	ChgFeatureNum	-1	ProcTime	5196.438	Accuracy	3.24746	AccuracyNorm	2.28571	AvgPredProb	27.15953	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	2.28571	Features	0-85	RandomNum	5436	NumOfRounds	1	CParm	1	GammaParm	5.2428800000000004	AParm	100
+CpuTimeUsed	16769.4	ProcessorId	3736	HostName	HARRY
+CurrentDateTime	2014/Nov/14-16:15:00
+BinaryComboJob	JobId	20	ParentId	-1	Status	Done	ChgFeatureNum	-1	ProcTime	3984.079	Accuracy	2.82592	AccuracyNorm	1.98901	AvgPredProb	26.63599	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	1.98901	Features	0-85	RandomNum	2391	NumOfRounds	1	CParm	1	GammaParm	10.485760000000001	AParm	100
+CpuTimeUsed	15549.3	ProcessorId	2532	HostName	HARRY
+CurrentDateTime	2014/Nov/14-16:26:20
+//
+//  Grid Expansion Most Accurate  [0]
+//  Current Date/Time             [2014/Nov/14-16:26:20]
+
+A_GrowthRate	1
+C_GrowthRate	10
+Gamma_GrowthRate	1.200000048
+// CreateParameterJobs
+//  C      GrowthRate[10]	Min[1]	Max[20]
+//  Gamma  GrowthRate[1.2]	Min[0.02048]	Max[0.08192]
+//  A      GrowthRate[1]	Min[100]	Max[100]
+//
+BinaryComboJob	JobId	21	ParentId	12	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	41	NumOfRounds	1	CParm	1	GammaParm	0.024576000976562502	AParm	100
+BinaryComboJob	JobId	22	ParentId	12	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	8467	NumOfRounds	1	CParm	1	GammaParm	0.029491202343750047	AParm	100
+BinaryComboJob	JobId	23	ParentId	12	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	6334	NumOfRounds	1	CParm	1	GammaParm	0.03538944421875017	AParm	100
+BinaryComboJob	JobId	24	ParentId	12	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	6500	NumOfRounds	1	CParm	1	GammaParm	0.042467334750000404	AParm	100
+BinaryComboJob	JobId	25	ParentId	12	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	9169	NumOfRounds	1	CParm	1	GammaParm	0.050960803725000808	AParm	100
+BinaryComboJob	JobId	26	ParentId	12	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	5724	NumOfRounds	1	CParm	1	GammaParm	0.061152966900001451	AParm	100
+BinaryComboJob	JobId	27	ParentId	12	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	1478	NumOfRounds	1	CParm	1	GammaParm	0.073383563196002435	AParm	100
+BinaryComboJob	JobId	28	ParentId	12	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	9358	NumOfRounds	1	CParm	10	GammaParm	0.020480000000000002	AParm	100
+BinaryComboJob	JobId	29	ParentId	12	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	6962	NumOfRounds	1	CParm	10	GammaParm	0.024576000976562502	AParm	100
+BinaryComboJob	JobId	30	ParentId	12	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	4464	NumOfRounds	1	CParm	10	GammaParm	0.029491202343750047	AParm	100
+BinaryComboJob	JobId	31	ParentId	12	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	5705	NumOfRounds	1	CParm	10	GammaParm	0.03538944421875017	AParm	100
+BinaryComboJob	JobId	32	ParentId	12	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	8145	NumOfRounds	1	CParm	10	GammaParm	0.042467334750000404	AParm	100
+BinaryComboJob	JobId	33	ParentId	12	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	3281	NumOfRounds	1	CParm	10	GammaParm	0.050960803725000808	AParm	100
+BinaryComboJob	JobId	34	ParentId	12	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	6827	NumOfRounds	1	CParm	10	GammaParm	0.061152966900001451	AParm	100
+BinaryComboJob	JobId	35	ParentId	12	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	9961	NumOfRounds	1	CParm	10	GammaParm	0.073383563196002435	AParm	100
+NextJobId	36
+NumOfExpansions	1
+ExpSinceHighGrade	1
+JobStatusChange	21	Started
+JobStatusChange	22	Started
+JobStatusChange	23	Started
+JobStatusChange	24	Started
+JobStatusChange	25	Started
+BinaryComboJob	JobId	21	ParentId	12	Status	Done	ChgFeatureNum	-1	ProcTime	1061.166	Accuracy	69.75800	AccuracyNorm	68.80853	AvgPredProb	95.45425	DecProbMean	0	DecProbStdDev	0	FMeasure	66.21067	Grade	68.80853	Features	0-85	RandomNum	41	NumOfRounds	1	CParm	1	GammaParm	0.024576000976562502	AParm	100
+JobStatusChange	26	Started
+BinaryComboJob	JobId	22	ParentId	12	Status	Done	ChgFeatureNum	-1	ProcTime	1106.717	Accuracy	69.92194	AccuracyNorm	69.03838	AvgPredProb	96.00761	DecProbMean	0	DecProbStdDev	0	FMeasure	66.21067	Grade	69.03838	Features	0-85	RandomNum	8467	NumOfRounds	1	CParm	1	GammaParm	0.029491202343750047	AParm	100
+JobStatusChange	27	Started
+BinaryComboJob	JobId	23	ParentId	12	Status	Done	ChgFeatureNum	-1	ProcTime	1228.431	Accuracy	69.90242	AccuracyNorm	69.03279	AvgPredProb	96.46891	DecProbMean	0	DecProbStdDev	0	FMeasure	66.66666	Grade	69.03279	Features	0-85	RandomNum	6334	NumOfRounds	1	CParm	1	GammaParm	0.03538944421875017	AParm	100
+JobStatusChange	28	Started
+BinaryComboJob	JobId	24	ParentId	12	Status	Done	ChgFeatureNum	-1	ProcTime	1354.214	Accuracy	69.73458	AccuracyNorm	69.12895	AvgPredProb	96.87216	DecProbMean	0	DecProbStdDev	0	FMeasure	67.12708	Grade	69.12895	Features	0-85	RandomNum	6500	NumOfRounds	1	CParm	1	GammaParm	0.042467334750000404	AParm	100
+HighGrade	69.128952
+ExpSinceHighGrade	0
+JobStatusChange	29	Started
+BinaryComboJob	JobId	25	ParentId	12	Status	Done	ChgFeatureNum	-1	ProcTime	1493.568	Accuracy	69.27791	AccuracyNorm	68.74272	AvgPredProb	97.26524	DecProbMean	0	DecProbStdDev	0	FMeasure	65.91866	Grade	68.74272	Features	0-85	RandomNum	9169	NumOfRounds	1	CParm	1	GammaParm	0.050960803725000808	AParm	100
+JobStatusChange	30	Started
+BinaryComboJob	JobId	28	ParentId	12	Status	Done	ChgFeatureNum	-1	ProcTime	877.677	Accuracy	73.47775	AccuracyNorm	73.79765	AvgPredProb	87.37911	DecProbMean	0	DecProbStdDev	0	FMeasure	74.90636	Grade	73.79765	Features	0-85	RandomNum	9358	NumOfRounds	1	CParm	10	GammaParm	0.020480000000000002	AParm	100
+HighGrade	73.797653
+ExpSinceHighGrade	0
+JobStatusChange	31	Started
+BinaryComboJob	JobId	29	ParentId	12	Status	Done	ChgFeatureNum	-1	ProcTime	952.244	Accuracy	73.57923	AccuracyNorm	73.95455	AvgPredProb	88.49368	DecProbMean	0	DecProbStdDev	0	FMeasure	74.37811	Grade	73.95455	Features	0-85	RandomNum	6962	NumOfRounds	1	CParm	10	GammaParm	0.024576000976562502	AParm	100
+HighGrade	73.954552
+ExpSinceHighGrade	0
+JobStatusChange	32	Started
+BinaryComboJob	JobId	30	ParentId	12	Status	Done	ChgFeatureNum	-1	ProcTime	1024.831	Accuracy	73.28649	AccuracyNorm	73.53746	AvgPredProb	89.70649	DecProbMean	0	DecProbStdDev	0	FMeasure	74.34293	Grade	73.53746	Features	0-85	RandomNum	4464	NumOfRounds	1	CParm	10	GammaParm	0.029491202343750047	AParm	100
+JobStatusChange	33	Started
+BinaryComboJob	JobId	26	ParentId	12	Status	Done	ChgFeatureNum	-1	ProcTime	1689.540	Accuracy	68.87588	AccuracyNorm	67.99564	AvgPredProb	97.55862	DecProbMean	0	DecProbStdDev	0	FMeasure	65.81921	Grade	67.99564	Features	0-85	RandomNum	5724	NumOfRounds	1	CParm	1	GammaParm	0.061152966900001451	AParm	100
+JobStatusChange	34	Started
+BinaryComboJob	JobId	27	ParentId	12	Status	Done	ChgFeatureNum	-1	ProcTime	1865.350	Accuracy	68.07572	AccuracyNorm	67.05981	AvgPredProb	97.77697	DecProbMean	0	DecProbStdDev	0	FMeasure	65.07042	Grade	67.05981	Features	0-85	RandomNum	1478	NumOfRounds	1	CParm	1	GammaParm	0.073383563196002435	AParm	100
+JobStatusChange	35	Started
+BinaryComboJob	JobId	31	ParentId	12	Status	Done	ChgFeatureNum	-1	ProcTime	1133.393	Accuracy	73.02888	AccuracyNorm	73.20861	AvgPredProb	90.91106	DecProbMean	0	DecProbStdDev	0	FMeasure	73.28244	Grade	73.20861	Features	0-85	RandomNum	5705	NumOfRounds	1	CParm	10	GammaParm	0.03538944421875017	AParm	100
+CpuTimeUsed	3241.51	ProcessorId	5032	HostName	HARRY
+CurrentDateTime	2014/Nov/14-17:20:29
+BinaryComboJob	JobId	32	ParentId	12	Status	Done	ChgFeatureNum	-1	ProcTime	1183.190	Accuracy	72.50195	AccuracyNorm	72.55742	AvgPredProb	92.13285	DecProbMean	0	DecProbStdDev	0	FMeasure	72.95918	Grade	72.55742	Features	0-85	RandomNum	8145	NumOfRounds	1	CParm	10	GammaParm	0.042467334750000404	AParm	100
+CpuTimeUsed	3491.51	ProcessorId	3736	HostName	HARRY
+CurrentDateTime	2014/Nov/14-17:24:45
+BinaryComboJob	JobId	33	ParentId	12	Status	Done	ChgFeatureNum	-1	ProcTime	1169.148	Accuracy	71.83060	AccuracyNorm	71.86881	AvgPredProb	93.30656	DecProbMean	0	DecProbStdDev	0	FMeasure	71.80157	Grade	71.86881	Features	0-85	RandomNum	3281	NumOfRounds	1	CParm	10	GammaParm	0.050960803725000808	AParm	100
+CpuTimeUsed	3689.38	ProcessorId	6364	HostName	HARRY
+CurrentDateTime	2014/Nov/14-17:28:06
+BinaryComboJob	JobId	34	ParentId	12	Status	Done	ChgFeatureNum	-1	ProcTime	1130.336	Accuracy	70.92116	AccuracyNorm	70.87249	AvgPredProb	94.43363	DecProbMean	0	DecProbStdDev	0	FMeasure	70.69645	Grade	70.87249	Features	0-85	RandomNum	6827	NumOfRounds	1	CParm	10	GammaParm	0.061152966900001451	AParm	100
+CpuTimeUsed	3882.9	ProcessorId	2532	HostName	HARRY
+CurrentDateTime	2014/Nov/14-17:31:06
+BinaryComboJob	JobId	35	ParentId	12	Status	Done	ChgFeatureNum	-1	ProcTime	1052.929	Accuracy	69.91022	AccuracyNorm	69.62756	AvgPredProb	95.37982	DecProbMean	0	DecProbStdDev	0	FMeasure	69.50732	Grade	69.62756	Features	0-85	RandomNum	9961	NumOfRounds	1	CParm	10	GammaParm	0.073383563196002435	AParm	100
+CpuTimeUsed	4026.71	ProcessorId	8076	HostName	HARRY
+CurrentDateTime	2014/Nov/14-17:33:43
+//
+//  Grid Expansion Most Accurate  [1]
+//  Current Date/Time             [2014/Nov/14-17:33:43]
+
+A_GrowthRate	1
+C_GrowthRate	1.584893227
+Gamma_GrowthRate	1.046635151
+// CreateParameterJobs
+//  C      GrowthRate[1.58489]	Min[1]	Max[100]
+//  Gamma  GrowthRate[1.04664]	Min[0.02048]	Max[0.0294912]
+//  A      GrowthRate[1]	Min[100]	Max[100]
+//
+BinaryComboJob	JobId	36	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	6224	NumOfRounds	1	CParm	1	GammaParm	0.021435087890625003	AParm	100
+BinaryComboJob	JobId	37	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	1008	NumOfRounds	1	CParm	1	GammaParm	0.022434716449161063	AParm	100
+BinaryComboJob	JobId	38	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	5844	NumOfRounds	1	CParm	1	GammaParm	0.023480962836377822	AParm	100
+BinaryComboJob	JobId	39	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	2609	NumOfRounds	1	CParm	1	GammaParm	0.024576001081750874	AParm	100
+BinaryComboJob	JobId	40	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	4989	NumOfRounds	1	CParm	1	GammaParm	0.02572210660094849	AParm	100
+BinaryComboJob	JobId	41	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	2702	NumOfRounds	1	CParm	1	GammaParm	0.026921660923992011	AParm	100
+BinaryComboJob	JobId	42	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	3195	NumOfRounds	1	CParm	1	GammaParm	0.028177156643914718	AParm	100
+BinaryComboJob	JobId	43	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	485	NumOfRounds	1	CParm	1.5848932266235352	GammaParm	0.020480000000000002	AParm	100
+BinaryComboJob	JobId	44	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	3093	NumOfRounds	1	CParm	1.5848932266235352	GammaParm	0.021435087890625003	AParm	100
+BinaryComboJob	JobId	45	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	4343	NumOfRounds	1	CParm	1.5848932266235352	GammaParm	0.022434716449161063	AParm	100
+BinaryComboJob	JobId	46	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	523	NumOfRounds	1	CParm	1.5848932266235352	GammaParm	0.023480962836377822	AParm	100
+BinaryComboJob	JobId	47	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	1587	NumOfRounds	1	CParm	1.5848932266235352	GammaParm	0.024576001081750874	AParm	100
+BinaryComboJob	JobId	48	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	9314	NumOfRounds	1	CParm	1.5848932266235352	GammaParm	0.02572210660094849	AParm	100
+BinaryComboJob	JobId	49	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	9503	NumOfRounds	1	CParm	1.5848932266235352	GammaParm	0.026921660923992011	AParm	100
+BinaryComboJob	JobId	50	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	7448	NumOfRounds	1	CParm	1.5848932266235352	GammaParm	0.028177156643914718	AParm	100
+BinaryComboJob	JobId	51	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	5200	NumOfRounds	1	CParm	2.5118865397971604	GammaParm	0.020480000000000002	AParm	100
+BinaryComboJob	JobId	52	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	3458	NumOfRounds	1	CParm	2.5118865397971604	GammaParm	0.021435087890625003	AParm	100
+BinaryComboJob	JobId	53	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	6618	NumOfRounds	1	CParm	2.5118865397971604	GammaParm	0.022434716449161063	AParm	100
+BinaryComboJob	JobId	54	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	580	NumOfRounds	1	CParm	2.5118865397971604	GammaParm	0.023480962836377822	AParm	100
+BinaryComboJob	JobId	55	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	9796	NumOfRounds	1	CParm	2.5118865397971604	GammaParm	0.024576001081750874	AParm	100
+BinaryComboJob	JobId	56	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	4798	NumOfRounds	1	CParm	2.5118865397971604	GammaParm	0.02572210660094849	AParm	100
+BinaryComboJob	JobId	57	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	5281	NumOfRounds	1	CParm	2.5118865397971604	GammaParm	0.026921660923992011	AParm	100
+BinaryComboJob	JobId	58	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	9589	NumOfRounds	1	CParm	2.5118865397971604	GammaParm	0.028177156643914718	AParm	100
+BinaryComboJob	JobId	59	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	798	NumOfRounds	1	CParm	3.9810719629713485	GammaParm	0.020480000000000002	AParm	100
+BinaryComboJob	JobId	60	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	8009	NumOfRounds	1	CParm	3.9810719629713485	GammaParm	0.021435087890625003	AParm	100
+BinaryComboJob	JobId	61	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	7157	NumOfRounds	1	CParm	3.9810719629713485	GammaParm	0.022434716449161063	AParm	100
+BinaryComboJob	JobId	62	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	472	NumOfRounds	1	CParm	3.9810719629713485	GammaParm	0.023480962836377822	AParm	100
+BinaryComboJob	JobId	63	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	3622	NumOfRounds	1	CParm	3.9810719629713485	GammaParm	0.024576001081750874	AParm	100
+BinaryComboJob	JobId	64	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	8538	NumOfRounds	1	CParm	3.9810719629713485	GammaParm	0.02572210660094849	AParm	100
+BinaryComboJob	JobId	65	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	2292	NumOfRounds	1	CParm	3.9810719629713485	GammaParm	0.026921660923992011	AParm	100
+BinaryComboJob	JobId	66	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	6038	NumOfRounds	1	CParm	3.9810719629713485	GammaParm	0.028177156643914718	AParm	100
+BinaryComboJob	JobId	67	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	4179	NumOfRounds	1	CParm	6.3095739888141518	GammaParm	0.020480000000000002	AParm	100
+BinaryComboJob	JobId	68	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	8190	NumOfRounds	1	CParm	6.3095739888141518	GammaParm	0.021435087890625003	AParm	100
+BinaryComboJob	JobId	69	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	9657	NumOfRounds	1	CParm	6.3095739888141518	GammaParm	0.022434716449161063	AParm	100
+BinaryComboJob	JobId	70	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	7958	NumOfRounds	1	CParm	6.3095739888141518	GammaParm	0.023480962836377822	AParm	100
+BinaryComboJob	JobId	71	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	6191	NumOfRounds	1	CParm	6.3095739888141518	GammaParm	0.024576001081750874	AParm	100
+BinaryComboJob	JobId	72	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	9815	NumOfRounds	1	CParm	6.3095739888141518	GammaParm	0.02572210660094849	AParm	100
+BinaryComboJob	JobId	73	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	2888	NumOfRounds	1	CParm	6.3095739888141518	GammaParm	0.026921660923992011	AParm	100
+BinaryComboJob	JobId	74	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	9156	NumOfRounds	1	CParm	6.3095739888141518	GammaParm	0.028177156643914718	AParm	100
+BinaryComboJob	JobId	75	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	1511	NumOfRounds	1	CParm	10.000001077751589	GammaParm	0.020480000000000002	AParm	100
+BinaryComboJob	JobId	76	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	6202	NumOfRounds	1	CParm	10.000001077751589	GammaParm	0.021435087890625003	AParm	100
+BinaryComboJob	JobId	77	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	2634	NumOfRounds	1	CParm	10.000001077751589	GammaParm	0.022434716449161063	AParm	100
+BinaryComboJob	JobId	78	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	4272	NumOfRounds	1	CParm	10.000001077751589	GammaParm	0.023480962836377822	AParm	100
+BinaryComboJob	JobId	79	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	55	NumOfRounds	1	CParm	10.000001077751589	GammaParm	0.024576001081750874	AParm	100
+BinaryComboJob	JobId	80	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	328	NumOfRounds	1	CParm	10.000001077751589	GammaParm	0.02572210660094849	AParm	100
+BinaryComboJob	JobId	81	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	2646	NumOfRounds	1	CParm	10.000001077751589	GammaParm	0.026921660923992011	AParm	100
+BinaryComboJob	JobId	82	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	6362	NumOfRounds	1	CParm	10.000001077751589	GammaParm	0.028177156643914718	AParm	100
+BinaryComboJob	JobId	83	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	4886	NumOfRounds	1	CParm	15.848933974356546	GammaParm	0.020480000000000002	AParm	100
+BinaryComboJob	JobId	84	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	8875	NumOfRounds	1	CParm	15.848933974356546	GammaParm	0.021435087890625003	AParm	100
+BinaryComboJob	JobId	85	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	8433	NumOfRounds	1	CParm	15.848933974356546	GammaParm	0.022434716449161063	AParm	100
+BinaryComboJob	JobId	86	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	9869	NumOfRounds	1	CParm	15.848933974356546	GammaParm	0.023480962836377822	AParm	100
+BinaryComboJob	JobId	87	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	142	NumOfRounds	1	CParm	15.848933974356546	GammaParm	0.024576001081750874	AParm	100
+BinaryComboJob	JobId	88	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	3844	NumOfRounds	1	CParm	15.848933974356546	GammaParm	0.02572210660094849	AParm	100
+BinaryComboJob	JobId	89	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	1416	NumOfRounds	1	CParm	15.848933974356546	GammaParm	0.026921660923992011	AParm	100
+BinaryComboJob	JobId	90	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	1881	NumOfRounds	1	CParm	15.848933974356546	GammaParm	0.028177156643914718	AParm	100
+BinaryComboJob	JobId	91	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	1998	NumOfRounds	1	CParm	25.118868105161315	GammaParm	0.020480000000000002	AParm	100
+BinaryComboJob	JobId	92	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	322	NumOfRounds	1	CParm	25.118868105161315	GammaParm	0.021435087890625003	AParm	100
+BinaryComboJob	JobId	93	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	8651	NumOfRounds	1	CParm	25.118868105161315	GammaParm	0.022434716449161063	AParm	100
+BinaryComboJob	JobId	94	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	21	NumOfRounds	1	CParm	25.118868105161315	GammaParm	0.023480962836377822	AParm	100
+BinaryComboJob	JobId	95	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	5699	NumOfRounds	1	CParm	25.118868105161315	GammaParm	0.024576001081750874	AParm	100
+BinaryComboJob	JobId	96	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	3557	NumOfRounds	1	CParm	25.118868105161315	GammaParm	0.02572210660094849	AParm	100
+BinaryComboJob	JobId	97	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	8476	NumOfRounds	1	CParm	25.118868105161315	GammaParm	0.026921660923992011	AParm	100
+BinaryComboJob	JobId	98	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	7892	NumOfRounds	1	CParm	25.118868105161315	GammaParm	0.028177156643914718	AParm	100
+BinaryComboJob	JobId	99	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	4389	NumOfRounds	1	CParm	39.810723920320122	GammaParm	0.020480000000000002	AParm	100
+BinaryComboJob	JobId	100	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	5075	NumOfRounds	1	CParm	39.810723920320122	GammaParm	0.021435087890625003	AParm	100
+BinaryComboJob	JobId	101	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	712	NumOfRounds	1	CParm	39.810723920320122	GammaParm	0.022434716449161063	AParm	100
+BinaryComboJob	JobId	102	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	2600	NumOfRounds	1	CParm	39.810723920320122	GammaParm	0.023480962836377822	AParm	100
+BinaryComboJob	JobId	103	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	2510	NumOfRounds	1	CParm	39.810723920320122	GammaParm	0.024576001081750874	AParm	100
+BinaryComboJob	JobId	104	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	1003	NumOfRounds	1	CParm	39.810723920320122	GammaParm	0.02572210660094849	AParm	100
+BinaryComboJob	JobId	105	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	6869	NumOfRounds	1	CParm	39.810723920320122	GammaParm	0.026921660923992011	AParm	100
+BinaryComboJob	JobId	106	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	7861	NumOfRounds	1	CParm	39.810723920320122	GammaParm	0.028177156643914718	AParm	100
+BinaryComboJob	JobId	107	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	4688	NumOfRounds	1	CParm	63.095746688294909	GammaParm	0.020480000000000002	AParm	100
+BinaryComboJob	JobId	108	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	3401	NumOfRounds	1	CParm	63.095746688294909	GammaParm	0.021435087890625003	AParm	100
+BinaryComboJob	JobId	109	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	9789	NumOfRounds	1	CParm	63.095746688294909	GammaParm	0.022434716449161063	AParm	100
+BinaryComboJob	JobId	110	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	5255	NumOfRounds	1	CParm	63.095746688294909	GammaParm	0.023480962836377822	AParm	100
+BinaryComboJob	JobId	111	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	6423	NumOfRounds	1	CParm	63.095746688294909	GammaParm	0.024576001081750874	AParm	100
+BinaryComboJob	JobId	112	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	5002	NumOfRounds	1	CParm	63.095746688294909	GammaParm	0.02572210660094849	AParm	100
+BinaryComboJob	JobId	113	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	585	NumOfRounds	1	CParm	63.095746688294909	GammaParm	0.026921660923992011	AParm	100
+BinaryComboJob	JobId	114	ParentId	29	Status	Open	ChgFeatureNum	-1	ProcTime	-1.000	Accuracy	-1.00000	AccuracyNorm	-1.00000	AvgPredProb	-1.00000	DecProbMean	0	DecProbStdDev	0	FMeasure	0.00000	Grade	0.00000	Features	0-85	RandomNum	4182	NumOfRounds	1	CParm	63.095746688294909	GammaParm	0.028177156643914718	AParm	100
+NextJobId	115
+NumOfExpansions	2
+ExpSinceHighGrade	1
+JobStatusChange	36	Started
+JobStatusChange	37	Started
+JobStatusChange	38	Started
+JobStatusChange	39	Started
+JobStatusChange	40	Started
+BinaryComboJob	JobId	36	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1001.214	Accuracy	69.48868	AccuracyNorm	68.32710	AvgPredProb	95.02530	DecProbMean	0	DecProbStdDev	0	FMeasure	66.20879	Grade	68.32710	Features	0-85	RandomNum	6224	NumOfRounds	1	CParm	1	GammaParm	0.021435087890625003	AParm	100
+JobStatusChange	41	Started
+BinaryComboJob	JobId	37	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1054.505	Accuracy	69.55894	AccuracyNorm	68.50645	AvgPredProb	95.17068	DecProbMean	0	DecProbStdDev	0	FMeasure	66.11797	Grade	68.50645	Features	0-85	RandomNum	1008	NumOfRounds	1	CParm	1	GammaParm	0.022434716449161063	AParm	100
+JobStatusChange	42	Started
+BinaryComboJob	JobId	38	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1059.138	Accuracy	69.65262	AccuracyNorm	68.67299	AvgPredProb	95.30984	DecProbMean	0	DecProbStdDev	0	FMeasure	65.75343	Grade	68.67299	Features	0-85	RandomNum	5844	NumOfRounds	1	CParm	1	GammaParm	0.023480962836377822	AParm	100
+JobStatusChange	43	Started
+BinaryComboJob	JobId	39	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1095.048	Accuracy	69.75800	AccuracyNorm	68.80853	AvgPredProb	95.45429	DecProbMean	0	DecProbStdDev	0	FMeasure	66.21067	Grade	68.80853	Features	0-85	RandomNum	2609	NumOfRounds	1	CParm	1	GammaParm	0.024576001081750874	AParm	100
+JobStatusChange	44	Started
+BinaryComboJob	JobId	40	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1113.551	Accuracy	69.76581	AccuracyNorm	68.83007	AvgPredProb	95.59325	DecProbMean	0	DecProbStdDev	0	FMeasure	65.93707	Grade	68.83007	Features	0-85	RandomNum	4989	NumOfRounds	1	CParm	1	GammaParm	0.02572210660094849	AParm	100
+JobStatusChange	45	Started
+BinaryComboJob	JobId	43	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	978.470	Accuracy	70.94067	AccuracyNorm	70.31683	AvgPredProb	93.56873	DecProbMean	0	DecProbStdDev	0	FMeasure	69.26174	Grade	70.31683	Features	0-85	RandomNum	485	NumOfRounds	1	CParm	1.5848932266235352	GammaParm	0.020480000000000002	AParm	100
+JobStatusChange	46	Started
+BinaryComboJob	JobId	41	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1099.434	Accuracy	69.78142	AccuracyNorm	68.86158	AvgPredProb	95.73159	DecProbMean	0	DecProbStdDev	0	FMeasure	65.84362	Grade	68.86158	Features	0-85	RandomNum	2702	NumOfRounds	1	CParm	1	GammaParm	0.026921660923992011	AParm	100
+JobStatusChange	47	Started
+BinaryComboJob	JobId	44	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1007.096	Accuracy	71.04996	AccuracyNorm	70.45241	AvgPredProb	93.74870	DecProbMean	0	DecProbStdDev	0	FMeasure	69.26174	Grade	70.45241	Features	0-85	RandomNum	3093	NumOfRounds	1	CParm	1.5848932266235352	GammaParm	0.021435087890625003	AParm	100
+JobStatusChange	48	Started
+BinaryComboJob	JobId	45	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1022.353	Accuracy	71.13193	AccuracyNorm	70.65453	AvgPredProb	93.91501	DecProbMean	0	DecProbStdDev	0	FMeasure	69.71736	Grade	70.65453	Features	0-85	RandomNum	4343	NumOfRounds	1	CParm	1.5848932266235352	GammaParm	0.022434716449161063	AParm	100
+JobStatusChange	49	Started
+BinaryComboJob	JobId	42	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1153.487	Accuracy	69.85948	AccuracyNorm	69.00086	AvgPredProb	95.86639	DecProbMean	0	DecProbStdDev	0	FMeasure	66.21067	Grade	69.00086	Features	0-85	RandomNum	3195	NumOfRounds	1	CParm	1	GammaParm	0.028177156643914718	AParm	100
+JobStatusChange	50	Started
+BinaryComboJob	JobId	46	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1019.732	Accuracy	71.17487	AccuracyNorm	70.68240	AvgPredProb	94.08628	DecProbMean	0	DecProbStdDev	0	FMeasure	69.63563	Grade	70.68240	Features	0-85	RandomNum	523	NumOfRounds	1	CParm	1.5848932266235352	GammaParm	0.023480962836377822	AParm	100
+JobStatusChange	51	Started
+BinaryComboJob	JobId	47	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1014.521	Accuracy	71.22951	AccuracyNorm	70.71236	AvgPredProb	94.26317	DecProbMean	0	DecProbStdDev	0	FMeasure	69.64770	Grade	70.71236	Features	0-85	RandomNum	1587	NumOfRounds	1	CParm	1.5848932266235352	GammaParm	0.024576001081750874	AParm	100
+JobStatusChange	52	Started
+BinaryComboJob	JobId	48	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1066.064	Accuracy	71.20219	AccuracyNorm	70.71314	AvgPredProb	94.45133	DecProbMean	0	DecProbStdDev	0	FMeasure	70.08086	Grade	70.71314	Features	0-85	RandomNum	9314	NumOfRounds	1	CParm	1.5848932266235352	GammaParm	0.02572210660094849	AParm	100
+JobStatusChange	53	Started
+BinaryComboJob	JobId	49	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1087.405	Accuracy	71.22951	AccuracyNorm	70.77991	AvgPredProb	94.62042	DecProbMean	0	DecProbStdDev	0	FMeasure	70.25572	Grade	70.77991	Features	0-85	RandomNum	9503	NumOfRounds	1	CParm	1.5848932266235352	GammaParm	0.026921660923992011	AParm	100
+JobStatusChange	54	Started
+BinaryComboJob	JobId	50	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1107.809	Accuracy	71.24512	AccuracyNorm	70.79678	AvgPredProb	94.78565	DecProbMean	0	DecProbStdDev	0	FMeasure	70.71525	Grade	70.79678	Features	0-85	RandomNum	7448	NumOfRounds	1	CParm	1.5848932266235352	GammaParm	0.028177156643914718	AParm	100
+JobStatusChange	55	Started
+BinaryComboJob	JobId	51	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	940.981	Accuracy	72.12334	AccuracyNorm	71.82645	AvgPredProb	92.05087	DecProbMean	0	DecProbStdDev	0	FMeasure	71.20000	Grade	71.82645	Features	0-85	RandomNum	5200	NumOfRounds	1	CParm	2.5118865397971604	GammaParm	0.020480000000000002	AParm	100
+JobStatusChange	56	Started
+BinaryComboJob	JobId	52	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	947.069	Accuracy	72.15847	AccuracyNorm	71.89808	AvgPredProb	92.25018	DecProbMean	0	DecProbStdDev	0	FMeasure	71.20000	Grade	71.89808	Features	0-85	RandomNum	3458	NumOfRounds	1	CParm	2.5118865397971604	GammaParm	0.021435087890625003	AParm	100
+JobStatusChange	57	Started
+BinaryComboJob	JobId	53	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	982.555	Accuracy	72.20921	AccuracyNorm	71.99690	AvgPredProb	92.44752	DecProbMean	0	DecProbStdDev	0	FMeasure	71.37151	Grade	71.99690	Features	0-85	RandomNum	6618	NumOfRounds	1	CParm	2.5118865397971604	GammaParm	0.022434716449161063	AParm	100
+JobStatusChange	58	Started
+BinaryComboJob	JobId	54	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1004.678	Accuracy	72.20531	AccuracyNorm	71.95406	AvgPredProb	92.65018	DecProbMean	0	DecProbStdDev	0	FMeasure	72.09613	Grade	71.95406	Features	0-85	RandomNum	580	NumOfRounds	1	CParm	2.5118865397971604	GammaParm	0.023480962836377822	AParm	100
+JobStatusChange	59	Started
+BinaryComboJob	JobId	55	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1016.594	Accuracy	72.24434	AccuracyNorm	71.96877	AvgPredProb	92.85948	DecProbMean	0	DecProbStdDev	0	FMeasure	71.92513	Grade	71.96877	Features	0-85	RandomNum	9796	NumOfRounds	1	CParm	2.5118865397971604	GammaParm	0.024576001081750874	AParm	100
+JobStatusChange	60	Started
+BinaryComboJob	JobId	56	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1024.786	Accuracy	72.30679	AccuracyNorm	72.09915	AvgPredProb	93.06569	DecProbMean	0	DecProbStdDev	0	FMeasure	71.92513	Grade	72.09915	Features	0-85	RandomNum	4798	NumOfRounds	1	CParm	2.5118865397971604	GammaParm	0.02572210660094849	AParm	100
+JobStatusChange	61	Started
+BinaryComboJob	JobId	57	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1022.324	Accuracy	72.33411	AccuracyNorm	72.02420	AvgPredProb	93.26263	DecProbMean	0	DecProbStdDev	0	FMeasure	71.75368	Grade	72.02420	Features	0-85	RandomNum	5281	NumOfRounds	1	CParm	2.5118865397971604	GammaParm	0.026921660923992011	AParm	100
+JobStatusChange	62	Started
+BinaryComboJob	JobId	59	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	927.410	Accuracy	72.94302	AccuracyNorm	72.88248	AvgPredProb	90.37949	DecProbMean	0	DecProbStdDev	0	FMeasure	72.84595	Grade	72.88248	Features	0-85	RandomNum	798	NumOfRounds	1	CParm	3.9810719629713485	GammaParm	0.020480000000000002	AParm	100
+JobStatusChange	63	Started
+BinaryComboJob	JobId	58	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1074.489	Accuracy	72.38095	AccuracyNorm	72.02914	AvgPredProb	93.46317	DecProbMean	0	DecProbStdDev	0	FMeasure	72.21477	Grade	72.02914	Features	0-85	RandomNum	9589	NumOfRounds	1	CParm	2.5118865397971604	GammaParm	0.028177156643914718	AParm	100
+JobStatusChange	64	Started
+BinaryComboJob	JobId	60	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	942.497	Accuracy	72.98595	AccuracyNorm	72.91460	AvgPredProb	90.62155	DecProbMean	0	DecProbStdDev	0	FMeasure	72.84595	Grade	72.91460	Features	0-85	RandomNum	8009	NumOfRounds	1	CParm	3.9810719629713485	GammaParm	0.021435087890625003	AParm	100
+JobStatusChange	65	Started
+BinaryComboJob	JobId	61	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	947.924	Accuracy	73.01327	AccuracyNorm	72.92081	AvgPredProb	90.86004	DecProbMean	0	DecProbStdDev	0	FMeasure	73.10705	Grade	72.92081	Features	0-85	RandomNum	7157	NumOfRounds	1	CParm	3.9810719629713485	GammaParm	0.022434716449161063	AParm	100
+JobStatusChange	66	Started
+BinaryComboJob	JobId	62	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	945.680	Accuracy	72.98985	AccuracyNorm	72.78424	AvgPredProb	91.09327	DecProbMean	0	DecProbStdDev	0	FMeasure	73.91874	Grade	72.78424	Features	0-85	RandomNum	472	NumOfRounds	1	CParm	3.9810719629713485	GammaParm	0.023480962836377822	AParm	100
+JobStatusChange	67	Started
+BinaryComboJob	JobId	63	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	992.821	Accuracy	72.95472	AccuracyNorm	72.76823	AvgPredProb	91.32246	DecProbMean	0	DecProbStdDev	0	FMeasure	73.46405	Grade	72.76823	Features	0-85	RandomNum	3622	NumOfRounds	1	CParm	3.9810719629713485	GammaParm	0.024576001081750874	AParm	100
+JobStatusChange	68	Started
+BinaryComboJob	JobId	64	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1008.920	Accuracy	72.98205	AccuracyNorm	72.82963	AvgPredProb	91.56274	DecProbMean	0	DecProbStdDev	0	FMeasure	73.76624	Grade	72.82963	Features	0-85	RandomNum	8538	NumOfRounds	1	CParm	3.9810719629713485	GammaParm	0.02572210660094849	AParm	100
+JobStatusChange	69	Started
+BinaryComboJob	JobId	65	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1026.439	Accuracy	72.92350	AccuracyNorm	72.74819	AvgPredProb	91.80566	DecProbMean	0	DecProbStdDev	0	FMeasure	73.41116	Grade	72.74819	Features	0-85	RandomNum	2292	NumOfRounds	1	CParm	3.9810719629713485	GammaParm	0.026921660923992011	AParm	100
+JobStatusChange	70	Started
+BinaryComboJob	JobId	67	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	878.397	Accuracy	73.39188	AccuracyNorm	73.52037	AvgPredProb	88.75158	DecProbMean	0	DecProbStdDev	0	FMeasure	74.45998	Grade	73.52037	Features	0-85	RandomNum	4179	NumOfRounds	1	CParm	6.3095739888141518	GammaParm	0.020480000000000002	AParm	100
+JobStatusChange	71	Started
+BinaryComboJob	JobId	66	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1046.330	Accuracy	72.91959	AccuracyNorm	72.70059	AvgPredProb	92.05598	DecProbMean	0	DecProbStdDev	0	FMeasure	73.50649	Grade	72.70059	Features	0-85	RandomNum	6038	NumOfRounds	1	CParm	3.9810719629713485	GammaParm	0.028177156643914718	AParm	100
+JobStatusChange	72	Started
+BinaryComboJob	JobId	68	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	930.266	Accuracy	73.33334	AccuracyNorm	73.38503	AvgPredProb	89.01298	DecProbMean	0	DecProbStdDev	0	FMeasure	74.55471	Grade	73.38503	Features	0-85	RandomNum	8190	NumOfRounds	1	CParm	6.3095739888141518	GammaParm	0.021435087890625003	AParm	100
+JobStatusChange	73	Started
+BinaryComboJob	JobId	69	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	941.403	Accuracy	73.36456	AccuracyNorm	73.41762	AvgPredProb	89.27921	DecProbMean	0	DecProbStdDev	0	FMeasure	74.71410	Grade	73.41762	Features	0-85	RandomNum	9657	NumOfRounds	1	CParm	6.3095739888141518	GammaParm	0.022434716449161063	AParm	100
+JobStatusChange	74	Started
+BinaryComboJob	JobId	70	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	962.211	Accuracy	73.45824	AccuracyNorm	73.51834	AvgPredProb	89.55083	DecProbMean	0	DecProbStdDev	0	FMeasure	75.03168	Grade	73.51834	Features	0-85	RandomNum	7958	NumOfRounds	1	CParm	6.3095739888141518	GammaParm	0.023480962836377822	AParm	100
+JobStatusChange	75	Started
+BinaryComboJob	JobId	71	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	945.100	Accuracy	73.42310	AccuracyNorm	73.44144	AvgPredProb	89.82504	DecProbMean	0	DecProbStdDev	0	FMeasure	74.87309	Grade	73.44144	Features	0-85	RandomNum	6191	NumOfRounds	1	CParm	6.3095739888141518	GammaParm	0.024576001081750874	AParm	100
+JobStatusChange	76	Started
+BinaryComboJob	JobId	72	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	984.976	Accuracy	73.45824	AccuracyNorm	73.46996	AvgPredProb	90.10365	DecProbMean	0	DecProbStdDev	0	FMeasure	74.77820	Grade	73.46996	Features	0-85	RandomNum	9815	NumOfRounds	1	CParm	6.3095739888141518	GammaParm	0.02572210660094849	AParm	100
+JobStatusChange	77	Started
+BinaryComboJob	JobId	73	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1018.421	Accuracy	73.46995	AccuracyNorm	73.49197	AvgPredProb	90.38802	DecProbMean	0	DecProbStdDev	0	FMeasure	74.96823	Grade	73.49197	Features	0-85	RandomNum	2888	NumOfRounds	1	CParm	6.3095739888141518	GammaParm	0.026921660923992011	AParm	100
+JobStatusChange	78	Started
+BinaryComboJob	JobId	75	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	898.126	Accuracy	73.47775	AccuracyNorm	73.79765	AvgPredProb	87.37914	DecProbMean	0	DecProbStdDev	0	FMeasure	74.90636	Grade	73.79765	Features	0-85	RandomNum	1511	NumOfRounds	1	CParm	10.000001077751589	GammaParm	0.020480000000000002	AParm	100
+JobStatusChange	79	Started
+BinaryComboJob	JobId	74	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1042.664	Accuracy	73.39969	AccuracyNorm	73.28626	AvgPredProb	90.67075	DecProbMean	0	DecProbStdDev	0	FMeasure	74.90446	Grade	73.28626	Features	0-85	RandomNum	9156	NumOfRounds	1	CParm	6.3095739888141518	GammaParm	0.028177156643914718	AParm	100
+JobStatusChange	80	Started
+BinaryComboJob	JobId	76	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	886.147	Accuracy	73.54411	AccuracyNorm	73.95724	AvgPredProb	87.64861	DecProbMean	0	DecProbStdDev	0	FMeasure	74.65668	Grade	73.95724	Features	0-85	RandomNum	6202	NumOfRounds	1	CParm	10.000001077751589	GammaParm	0.021435087890625003	AParm	100
+HighGrade	73.957237
+ExpSinceHighGrade	0
+JobStatusChange	81	Started
+BinaryComboJob	JobId	77	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	919.298	Accuracy	73.52459	AccuracyNorm	73.92259	AvgPredProb	87.92358	DecProbMean	0	DecProbStdDev	0	FMeasure	74.15730	Grade	73.92259	Features	0-85	RandomNum	2634	NumOfRounds	1	CParm	10.000001077751589	GammaParm	0.022434716449161063	AParm	100
+JobStatusChange	82	Started
+BinaryComboJob	JobId	78	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	950.856	Accuracy	73.55582	AccuracyNorm	73.95700	AvgPredProb	88.20543	DecProbMean	0	DecProbStdDev	0	FMeasure	74.22167	Grade	73.95700	Features	0-85	RandomNum	4272	NumOfRounds	1	CParm	10.000001077751589	GammaParm	0.023480962836377822	AParm	100
+JobStatusChange	83	Started
+BinaryComboJob	JobId	79	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	972.853	Accuracy	73.57923	AccuracyNorm	73.95455	AvgPredProb	88.49371	DecProbMean	0	DecProbStdDev	0	FMeasure	74.37811	Grade	73.95455	Features	0-85	RandomNum	55	NumOfRounds	1	CParm	10.000001077751589	GammaParm	0.024576001081750874	AParm	100
+JobStatusChange	84	Started
+BinaryComboJob	JobId	80	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	987.798	Accuracy	73.55582	AccuracyNorm	73.88095	AvgPredProb	88.79353	DecProbMean	0	DecProbStdDev	0	FMeasure	74.06483	Grade	73.88095	Features	0-85	RandomNum	328	NumOfRounds	1	CParm	10.000001077751589	GammaParm	0.02572210660094849	AParm	100
+JobStatusChange	85	Started
+BinaryComboJob	JobId	81	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	978.890	Accuracy	73.51678	AccuracyNorm	73.86801	AvgPredProb	89.09818	DecProbMean	0	DecProbStdDev	0	FMeasure	73.88060	Grade	73.86801	Features	0-85	RandomNum	2646	NumOfRounds	1	CParm	10.000001077751589	GammaParm	0.026921660923992011	AParm	100
+JobStatusChange	86	Started
+BinaryComboJob	JobId	82	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1027.314	Accuracy	73.38798	AccuracyNorm	73.64027	AvgPredProb	89.40053	DecProbMean	0	DecProbStdDev	0	FMeasure	74.09261	Grade	73.64027	Features	0-85	RandomNum	6362	NumOfRounds	1	CParm	10.000001077751589	GammaParm	0.028177156643914718	AParm	100
+JobStatusChange	87	Started
+BinaryComboJob	JobId	83	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	897.474	Accuracy	73.25137	AccuracyNorm	74.00027	AvgPredProb	86.27971	DecProbMean	0	DecProbStdDev	0	FMeasure	73.80074	Grade	74.00027	Features	0-85	RandomNum	4886	NumOfRounds	1	CParm	15.848933974356546	GammaParm	0.020480000000000002	AParm	100
+HighGrade	74.000275
+ExpSinceHighGrade	0
+JobStatusChange	88	Started
+BinaryComboJob	JobId	84	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	904.213	Accuracy	73.30601	AccuracyNorm	74.05782	AvgPredProb	86.53850	DecProbMean	0	DecProbStdDev	0	FMeasure	73.80074	Grade	74.05782	Features	0-85	RandomNum	8875	NumOfRounds	1	CParm	15.848933974356546	GammaParm	0.021435087890625003	AParm	100
+HighGrade	74.057816
+ExpSinceHighGrade	0
+JobStatusChange	89	Started
+BinaryComboJob	JobId	85	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	924.867	Accuracy	73.28259	AccuracyNorm	73.93388	AvgPredProb	86.80878	DecProbMean	0	DecProbStdDev	0	FMeasure	73.71008	Grade	73.93388	Features	0-85	RandomNum	8433	NumOfRounds	1	CParm	15.848933974356546	GammaParm	0.022434716449161063	AParm	100
+JobStatusChange	90	Started
+BinaryComboJob	JobId	86	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	970.888	Accuracy	73.27088	AccuracyNorm	73.91840	AvgPredProb	87.09497	DecProbMean	0	DecProbStdDev	0	FMeasure	73.39902	Grade	73.91840	Features	0-85	RandomNum	9869	NumOfRounds	1	CParm	15.848933974356546	GammaParm	0.023480962836377822	AParm	100
+JobStatusChange	91	Started
+BinaryComboJob	JobId	87	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1031.946	Accuracy	73.16159	AccuracyNorm	73.76959	AvgPredProb	87.38893	DecProbMean	0	DecProbStdDev	0	FMeasure	73.37423	Grade	73.76959	Features	0-85	RandomNum	142	NumOfRounds	1	CParm	15.848933974356546	GammaParm	0.024576001081750874	AParm	100
+JobStatusChange	92	Started
+BinaryComboJob	JobId	88	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1064.722	Accuracy	73.12646	AccuracyNorm	73.63918	AvgPredProb	87.70012	DecProbMean	0	DecProbStdDev	0	FMeasure	73.39902	Grade	73.63918	Features	0-85	RandomNum	3844	NumOfRounds	1	CParm	15.848933974356546	GammaParm	0.02572210660094849	AParm	100
+JobStatusChange	93	Started
+//
+// New Processor Object.
+// Process Id[6912]
+// Date/Time [2014/Nov/15-06:46:38].
+//
+// Config Parameters[-a 1  -c 12  -d 3  -e 0.001  -g 0.01507  -h 1  -i 0  -j 0  -k 0  -l 1  -m 40  -n 0.11  -p 0.10000000000000001  -q 0  -r 0  -s 0  -t 2  -u 100  -z 0    -MT OneVsOne  -SM Probability  -UseProbability]
+//
+QuitRunning
+BinaryComboJob	JobId	89	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1102.785	Accuracy	73.15769	AccuracyNorm	73.63139	AvgPredProb	88.02343	DecProbMean	0	DecProbStdDev	0	FMeasure	73.48952	Grade	73.63139	Features	0-85	RandomNum	1416	NumOfRounds	1	CParm	15.848933974356546	GammaParm	0.026921660923992011	AParm	100
+BinaryComboJob	JobId	90	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	1113.148	Accuracy	73.06792	AccuracyNorm	73.50876	AvgPredProb	88.35220	DecProbMean	0	DecProbStdDev	0	FMeasure	73.67120	Grade	73.50876	Features	0-85	RandomNum	1881	NumOfRounds	1	CParm	15.848933974356546	GammaParm	0.028177156643914718	AParm	100
+BinaryComboJob	JobId	91	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	794.559	Accuracy	72.50195	AccuracyNorm	73.57922	AvgPredProb	85.42759	DecProbMean	0	DecProbStdDev	0	FMeasure	72.83801	Grade	73.57922	Features	0-85	RandomNum	1998	NumOfRounds	1	CParm	25.118868105161315	GammaParm	0.020480000000000002	AParm	100
+BinaryComboJob	JobId	92	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	657.417	Accuracy	72.54879	AccuracyNorm	73.52984	AvgPredProb	85.70116	DecProbMean	0	DecProbStdDev	0	FMeasure	72.83801	Grade	73.52984	Features	0-85	RandomNum	322	NumOfRounds	1	CParm	25.118868105161315	GammaParm	0.021435087890625003	AParm	100
+BinaryComboJob	JobId	93	ParentId	29	Status	Done	ChgFeatureNum	-1	ProcTime	639.841	Accuracy	72.62295	AccuracyNorm	73.56931	AvgPredProb	85.98512	DecProbMean	0	DecProbStdDev	0	FMeasure	72.50608	Grade	73.56931	Features	0-85	RandomNum	8651	NumOfRounds	1	CParm	25.118868105161315	GammaParm	0.022434716449161063	AParm	100
