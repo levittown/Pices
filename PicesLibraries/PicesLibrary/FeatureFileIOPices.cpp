@@ -1039,6 +1039,8 @@ void  FeatureFileIOPices::ReFreshInstrumentData
   bool  weOwnInstrumentData = false;
   InstrumentDataPtr  id = NULL;
 
+#if  defined(WIN32)
+
   if  (_dataBase)
   {
     KKStr  sipperFileName;
@@ -1053,6 +1055,7 @@ void  FeatureFileIOPices::ReFreshInstrumentData
     else
       weOwnInstrumentData = false;
   }
+#endif
 
 
   if  (!id)
