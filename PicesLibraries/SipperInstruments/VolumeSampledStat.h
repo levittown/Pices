@@ -72,7 +72,7 @@ namespace  SipperHardware
      */
     void  Give (VolumeSampledStatPtr&  stat);
     
-    VolumeSampledStatPtr  VolumeSampledStatList::Locate (int binId);
+    VolumeSampledStatPtr  Locate (int binId);
 
     VolumeSampledStatList&  operator+= (const VolumeSampledStatList&  right);
 

@@ -31,17 +31,17 @@ namespace  SipperHardware
 
     GPSDataPoint ();
 
-    GPSDataPoint::GPSDataPoint (const GPSDataPoint&  _dataPoint);
+    GPSDataPoint (const GPSDataPoint&  _dataPoint);
 
 
-    GPSDataPoint::GPSDataPoint (DateTime _ctdDateTime,
-                                TimeType _gpsStartTime,
-                                int32    _sipperFileId,
-                                uint32   _avgScanLine,
-                                double   _avgLatitude,
-                                double   _avgLongitude,
-                                float    _avgFlowRate
-                               );
+    GPSDataPoint (DateTime _ctdDateTime,
+                  TimeType _gpsStartTime,
+                  int32    _sipperFileId,
+                  uint32   _avgScanLine,
+                  double   _avgLatitude,
+                  double   _avgLongitude,
+                  float    _avgFlowRate
+                 );
 
     ~GPSDataPoint ();
 

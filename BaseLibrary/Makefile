@@ -3,13 +3,14 @@ CFLAGS = -O3
 #CFLAGS = -g
 LIBS = -lfftw3 -lrt
 #FFTWAPI = ../OutsidePackages/fftw-3.1.2/
-#FFTWAPI = /usr/include
+FFTWAPI = /usr/include
 #FFTWAPI = ../OutsidePackages/fftw-3.3.2/
 ZLIBAPI = ../OutsidePackages/zlib123/
 VPATH = ../BaseLibrary
 LIBDIR = ../BaseLibrary
 
-CC = gcc -D FFTW_AVAILABLE
+#CC = gcc -D FFTW_AVAILABLE
+CC = gcc 
 
 FIRSTINCLUDES      = FirstIncludes.h
 

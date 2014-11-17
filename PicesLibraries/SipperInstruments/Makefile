@@ -1,14 +1,15 @@
 EXEC = libSipperInstruments
 LIBS = -lfftw3 -lrt
-VPATH = ../BaseLibrary
-LIBDIR = ../BaseLibrary
-#FFTWAPI = ../OutsidePackages/fftw-3.1.2/api
+VPATH = ../../BaseLibrary
+LIBDIR = ../../BaseLibrary
+#FFTWAPI = ../../OutsidePackages/fftw-3.1.2/api
 CFLAGS = -O3 -I$(LIBDIR)
 #CFLAGS = -g   -I$(LIBDIR)
 
 CC = g++
 
 CTD_PLUS_DATA              = CTD_Plus_Data.h
+GPSDATAPOINT               = GPSDataPoint.h
 INSTRUMENT                 = Instrument.h
 INSTRUMENTDATA             = InstrumentData.h              $(CTD_PLUS_DATA)
 
@@ -42,7 +43,11 @@ SIPPERCRUISE               = SipperCruise.h          $(INSTRUMENT)   $(INSTRUMEN
 SIPPERDEPLOYMENT           = SipperDeployment.h
 SIPPERSTATION              = SipperStation.h
 
-OBJECTS	= CTD_Plus_Data.o               Instrument.o                  InstrumentData.o              \
+VOLUMESAMPLEDSTAT          = VolumeSampledStat.h
+
+
+OBJECTS	= CTD_Plus_Data.o               GPSDataPoint.o                Instrument.o                  \
+          InstrumentData.o              \
           InstrumentDataBatteryMeter.o  InstrumentDataCTDplus.o       InstrumentDataFileManager.o   \
           InstrumentDataFlowMeter1.o    InstrumentDataGPS.o           InstrumentDataList.o          \
           InstrumentDataManager.o       InstrumentDataPitchAndRoll.o  InstrumentDataReport.o        \
@@ -50,7 +55,7 @@ OBJECTS	= CTD_Plus_Data.o               Instrument.o                  Instrument
           Sipper3RevBuff.o              SipperBuff.o                  SipperBuff3Bit.o              \
           SipperBuff4Bit.o              SipperBuffBinary.o            SipperCruise.o                \
           SipperDeployment.o            SipperFile.o                  SipperHeaderRec.o             \
-          SipperStation.o               SipperVariables.o 
+          SipperStation.o               SipperVariables.o             VolumeSampledStat.o
           
 
 all:	$(EXEC)
@@ -70,6 +75,9 @@ Instrument.o: Instrument.cpp    $(INSTRUMENT)            $(INSTRUMENTDATAMANAGER
               $(LIBDIR)/*.h
 	$(CC) $(CFLAGS) -c $*.cpp
 
+
+GPSDataPoint.o:  GPSDataPoint.cpp  $(GPSDATAPOINT) $(LIBDIR)/*.h
+	$(CC) $(CFLAGS) -c $*.cpp
 
 
 InstrumentData.o: InstrumentData.cpp  $(INSTRUMENTDATA)  $(LIBDIR)/*.h
@@ -179,6 +187,9 @@ SipperStation.o :  SipperStation.cpp  $(SIPPERSTATION)     $(LIBDIR)/*.h
 SipperVariables.o :  SipperVariables.cpp  $(SIPPERVARIABLES) $(LIBDIR)/*.h
 	$(CC) $(CFLAGS) -c $*.cpp
 
+
+VolumeSampledStat.o : VolumeSampledStat.cpp  $(VOLUMESAMPLEDSTAT)  $(LIBDIR)/*.h
+	$(CC) $(CFLAGS) -c $*.cpp
 
 
 

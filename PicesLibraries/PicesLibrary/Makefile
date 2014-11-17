@@ -1,11 +1,11 @@
 EXEC = libPICL
 LIBS = -lfftw3 -lrt
-VPATH = ../BaseLibrary
-LIBDIR = ../BaseLibrary  ../SipperInstruments
-#FFTWAPI = ../OutsidePackages/fftw-3.1.2/api
-#FFTWAPI = ../OutsidePackages/fftw-3.3.2/
+VPATH = ../../BaseLibrary
+LIBDIR = ../../BaseLibrary  ../SipperInstruments
+#FFTWAPI = ../../OutsidePackages/fftw-3.1.2/api
+#FFTWAPI = ../../OutsidePackages/fftw-3.3.2/
 
-CFLAGS = -O3 -I ../BaseLibrary  -I ../SipperInstruments  
+CFLAGS = -O3 -I ../../BaseLibrary  -I ../SipperInstruments  
 #CFLAGS = -g  -I $(LIBDIR)
 
 

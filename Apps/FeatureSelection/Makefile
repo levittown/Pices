@@ -2,7 +2,7 @@ EXEC = FeatureSelection
 
 
 #FFTWAPI = /usr/lib64
-CFLAGS = -O3  -I../../BaseLibrary  -I../../PicesLibrary   -I../../SipperInstruments  
+CFLAGS = -O3  -I../../BaseLibrary  -I../../PicesLibraries/PicesLibrary   -I../../PicesLibraries/SipperInstruments  
 #LIBS = -lPicesLibrary   -lSipperInstruments    -lBaseLibrary   -lfftw3f -lrt
 #LIBS = -lPicesLibrary   -lSipperInstruments    -lBaseLibrary   -lfftw3-3 -lrt
 LIBS = -lPicesLibrary   -lSipperInstruments    -lBaseLibrary   -lfftw3f -lrt  -lpthread 
@@ -10,8 +10,8 @@ LIBS = -lPicesLibrary   -lSipperInstruments    -lBaseLibrary   -lfftw3f -lrt  -l
 #FFTWAPI = ../../OutsidePackages/fftw-3.1.2/.libs
 #FFTWAPI = /usr/lib64
 #FFTWAPI = ../OutsidePackages/fftw-3.3.2/
-LIBDIR = -L../../BaseLibrary  -L../../SipperInstruments  -L../../PicesLibrary  
-#LIBDIR = -L../../BaseLibrary  -L../../SipperInstruments  -L../../PicesLibrary 
+LIBDIR = -L../../BaseLibrary  -L../../PicesLibraries/SipperInstruments  -L../../PicesLibraries/PicesLibrary  
+#LIBDIR = -L../../BaseLibrary  -L../../PicesLibraries/SipperInstruments  -L../../PicesLibraries/PicesLibrary 
 
 #MYSQL_include = ../OutsidePackages/MySQL_Linux/include
 #MYSQL_lib     = -L../../OutsidePackages/MySQL_Linux/lib -lmysql -lpthread -lz
