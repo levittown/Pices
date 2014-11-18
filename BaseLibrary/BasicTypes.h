@@ -32,10 +32,11 @@
 
 
 #ifdef WIN32
-#include  "FLOAT.H"
+#include "FLOAT.H"
 #else
-#include  <inttypes.h>
-#include  "float.h"
+#include <stdint.h>
+#include <inttypes.h>
+#include "float.h"
 #endif
 
 #include  <vector>
@@ -93,20 +94,6 @@ namespace KKU
     typedef  unsigned __int64  uint64;
   #else
   #if  defined(__GNUG__)
-    typedef  __INT8_TYPE__     int8;
-    typedef  __INT8_TYPE__     kkint8;
-    typedef  __UINT8_TYPE__    uint8;
-    typedef  __UINT8_TYPE__    kkuint8;
-    typedef  __INT16_TYPE__    int16;    /**<@brief  16 bit signed integer. */
-    typedef  __UINT16_TYPE__   uint16;   /**<@brief  16 bit unsigned integer. */
-    typedef  unsigned short    WCHAR;
-    typedef  __INT32_TYPE__    int32;
-    typedef  __INT32_TYPE__    kkint32;
-    typedef  __UINT32_TYPE__   uint32;
-    typedef  __UINT32_TYPE__   kkuint32;
-    typedef  __INT64_TYPE__    int64;
-    typedef  __UINT64_TYPE__   uint64;
-  #else
     typedef  int8_t            int8;     /**<@brief  8  bit signed integer.   */
     typedef  int8_t            kkint8;   /**<@brief  8  bit signed integer.   */
     typedef  uint8_t           uint8;    /**<@brief  8  bit unsigned integer. */
@@ -120,6 +107,20 @@ namespace KKU
     typedef  uint32_t          kkuint32;
     typedef  int64_t           int64;
     typedef  uint64_t          uint64;
+#else
+    typedef  __INT8_TYPE__     int8;
+    typedef  __INT8_TYPE__     kkint8;
+    typedef  __UINT8_TYPE__    uint8;
+    typedef  __UINT8_TYPE__    kkuint8;
+    typedef  __INT16_TYPE__    int16;    /**<@brief  16 bit signed integer. */
+    typedef  __UINT16_TYPE__   uint16;   /**<@brief  16 bit unsigned integer. */
+    typedef  unsigned short    WCHAR;
+    typedef  __INT32_TYPE__    int32;
+    typedef  __INT32_TYPE__    kkint32;
+    typedef  __UINT32_TYPE__   uint32;
+    typedef  __UINT32_TYPE__   kkuint32;
+    typedef  __INT64_TYPE__    int64;
+    typedef  __UINT64_TYPE__   uint64;
   #endif
   #endif
 
