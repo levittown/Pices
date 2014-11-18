@@ -175,6 +175,8 @@ public:
 private:
   void                CheckForNextStep ();
 
+  void                CleanUpMemory ();
+
   BinaryClassListPtr  CreateInitialBinaryClassList ();
 
   BinaryClassListPtr  CreateInitialBinaryClassListBruitSvmSearch ();

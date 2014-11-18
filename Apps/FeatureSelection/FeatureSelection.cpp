@@ -169,6 +169,7 @@ using namespace MLL;
 
 // 2014-11-14   Starting Feature Selection for latest USF training library.
 //E:\Pices\DataFiles\FeatureSelection\USF
+// D:\Users\kkramer\GitHub\Pices\FeatureSelection
 // -config  USF.cfg  -TrainingData USF_Train.data  -ValidationData  USF_Test.data  -Format Pices  -NumJobsAtATime 1    -ParamSelCriteria MostAccurate  -ProcPerCombo 64  -MinTrainExamples 3 -FeatureCriteria Merge3Best  -GradingMethod AccuracyNorm 
 
 FeatureSelection::FeatureSelection (int     argc,
@@ -240,15 +241,22 @@ FeatureSelection::FeatureSelection (int     argc,
 
 FeatureSelection::~FeatureSelection ()
 {
-  delete  config;
-  delete  initialFeatures;
-  delete  mlClasses;
-  delete  normalizationParms;
-  delete  randomSplits;
-  delete  trainingData;
-  delete  trainingTestData;
-  delete  testData;
-  delete  validationData;
+  CleanUpMemory ();
+}
+
+
+
+void  FeatureSelection::CleanUpMemory ()
+{
+  delete  config;               config             = NULL;
+  delete  initialFeatures;      initialFeatures    = NULL;
+  delete  mlClasses;            mlClasses          = NULL;
+  delete  normalizationParms;   normalizationParms = NULL;
+  delete  randomSplits;         randomSplits       = NULL;
+  delete  trainingData;         trainingData       = NULL;
+  delete  trainingTestData;     trainingTestData   = NULL;
+  delete  testData;             testData           = NULL;
+  delete  validationData;       validationData     = NULL;
 }
 
 
@@ -2376,6 +2384,8 @@ void  FeatureSelection::ProcessRestart ()
   log.Level (10) << endl << endl << endl
                  << "FeatureSelection::ProcessRestart      *** All Combos Set For Restart ***" << endl
                  << endl;
+
+  CleanUpMemory ();
   exit (0);
 }  /* ProcessRestart */
 
