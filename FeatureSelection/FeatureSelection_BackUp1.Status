@@ -20,7 +20,7 @@ ValidationDataFileName	USF_Test.data
 InitialFeatures	0-85
 RandomSplitsNum	30
 RandomSplitsFileName	
-NextProcessorId	5
+NextProcessorId	1
 LockFileName	FeatureSelection.Lock
 NumJobsAtATime	1
 NumOfFolds	5
@@ -32,5 +32,4 @@ ByAllClasses
 SearchType	Parameter
 ProcessingOrder	StandardOrder
 MajorStep	MfsParmTuningPre
-QuitRunning
-BinaryClass	AllClasses	Status	NotStarted	NumProcessors	1
+BinaryClass	AllClasses	Status	Started	NumProcessors	1
