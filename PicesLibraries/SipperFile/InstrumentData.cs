@@ -52,7 +52,10 @@ namespace SipperFile
          "Latitude",               // 32
          "Longitude",              // 33
          "BatteryStatus",          // 34
-         "Date"                    // 35
+         "Date",                   // 35
+         "CropLeft",               // 36
+         "CropRight",              // 37
+         "ActiveColumns"           // 38
         };
 
 
@@ -116,7 +119,11 @@ namespace SipperFile
     private const  int  BatteryStatusesIndex       = 34;
     private const  int  DateIndex                  = 35;
 
-    private const  int  UnKnownIndex               = 36;
+    private const  int  CropLeftIndex              = 36;
+    private const  int  CropRightIndex             = 37;
+    private const  int  ActiveColumnsIndex         = 38;
+    
+    private const  int  UnKnownIndex               = 39;
 
     static string[] fieldNamesLower = null;
 
@@ -219,8 +226,15 @@ namespace SipperFile
     int               scanLine        = 0;
     System.UInt64     byteOffset      = 0;
 
+    private  UInt16   cropLeft        = 100;
+    private  UInt16   cropRight       = 3900;
+    private  UInt16   activeColumns   = 3801;
+
     public int        ActiveBattery          () {return activeBattery;                  }
+    public UInt16     ActiveColumns          () {return ActiveColumns;                  }
     public string     BatteryStatuses        () {return batteryStatuses;                }
+    public UInt16     CropLeft               () {return CropLeft;                       }
+    public UInt16     CropRight              () {return CropRight;                      }
     public DateTime   CTDdate                () {return ctdDate;                        }
     public float[]    Data                   () {return data;                           }
     public float      Density                () {return data[DensityIndex            ]; }
@@ -329,6 +343,9 @@ namespace SipperFile
 
       batteryStatuses = "";
       ctdDate = new DateTime (1, 1, 1, 0, 0, 0);
+      cropLeft = 100;
+      cropRight = 3900;
+      activeColumns = 1 + cropRight - cropRight;
     }
 
 
@@ -349,6 +366,10 @@ namespace SipperFile
       updatedFlag     = r.updatedFlag;
       batteryStatuses = r.batteryStatuses;
       ctdDate         = r.ctdDate;
+
+      cropLeft        = r.cropLeft;
+      cropRight       = r.cropRight;
+      activeColumns   = 1 + cropLeft - cropRight;
     }
 
 
@@ -411,7 +432,10 @@ namespace SipperFile
       this.latitude       = picesData.Latitude;
       this.longitude      = picesData.Longitude;
       this.activeBattery  = picesData.ActiveBattery;
-    
+
+      cropLeft      = picesData.CropLeft;
+      cropRight     = picesData.CropRight;
+      activeColumns = picesData.activeColumns;
     }  /* InstrumentData */
 
 
@@ -465,6 +489,18 @@ namespace SipperFile
         case  ByteOffseIndex:
            field = byteOffset.ToString ();
            break;
+
+        case  CropLeftIndex:
+           field = cropLeft.ToString ();
+           break;
+
+        case  CropRightIndex:
+           field = cropRight.ToString ();
+           break;
+
+        case  ActiveColumnsIndex:
+           field = activeColumns.ToString ();
+           break;
       }
       
       return field;
@@ -494,6 +530,7 @@ namespace SipperFile
       
       w.WriteLine ();
     } /* WriteLine */
+
 
 
     private  void  ParseTabDelStr (string    s,
@@ -529,14 +566,17 @@ namespace SipperFile
         
         switch  (fieldIndex)
         {
-           case  LatitudeIndex:        latitude        = PicesKKStr.StrToDouble   (field); break;
-           case  LongitudeIndex:       longitude       = PicesKKStr.StrToDouble   (field); break;
-           case  DateIndex:            time            = PicesKKStr.StrToDateTime (field); break;
-           case  ActiveBatteryIndex:   activeBattery   = PicesKKStr.StrToInt      (field); break;
-           case  BatteryStatusesIndex: batteryStatuses = field.Trim ();                    break;
-           case  CTD_DateIndex:        ctdDate         = PicesKKStr.StrToDateTime (field); break;
-           case  ScanLineIndex:        scanLine        = PicesKKStr.StrToInt      (field); break;
-           case  ByteOffseIndex:       byteOffset      = PicesKKStr.StrToUInt64   (field); break;
+          case  LatitudeIndex:        latitude        = PicesKKStr.StrToDouble       (field); break;
+          case  LongitudeIndex:       longitude       = PicesKKStr.StrToDouble       (field); break;
+          case  DateIndex:            time            = PicesKKStr.StrToDateTime     (field); break;
+          case  ActiveBatteryIndex:   activeBattery   = PicesKKStr.StrToInt          (field); break;
+          case  BatteryStatusesIndex: batteryStatuses = field.Trim ();                        break;
+          case  CTD_DateIndex:        ctdDate         = PicesKKStr.StrToDateTime     (field); break;
+          case  ScanLineIndex:        scanLine        = PicesKKStr.StrToInt          (field); break;
+          case  ByteOffseIndex:       byteOffset      = PicesKKStr.StrToUInt64       (field); break;
+          case  CropLeftIndex:        cropLeft        = (UInt16)PicesKKStr.StrToUint (field); break;
+          case  CropRightIndex:       cropRight       = (UInt16)PicesKKStr.StrToUint (field); break;
+          case  ActiveColumnsIndex:   activeColumns   = (UInt16)PicesKKStr.StrToUint (field); break;
         }
       }
     }  /* ParseTabDelStr */
@@ -560,7 +600,10 @@ namespace SipperFile
            (time          == o.time)           &&
            (activeBattery == o.activeBattery)  &&
            (batteryStatuses.Equals (o.batteryStatuses))  &&
-           (ctdDate       == o.ctdDate)
+           (ctdDate       == o.ctdDate)        &&
+           (cropLeft      == o.cropLeft)       &&
+           (cropRight     == o.cropRight)      &&
+           (activeColumns == o.activeColumns)
           )
         return true;
       else
@@ -695,6 +738,18 @@ namespace SipperFile
       updatedFlag = true;
       
       batteryStatuses = _batteryStatuses.Trim ();
+    }
+
+
+
+    public  void  UpdateCropSettings (UInt16  _cropLeft,
+                                      UInt16  _cropRight,
+                                      UInt16  _activeColumns
+                                     )
+    {
+      cropLeft      = _cropLeft;
+      cropRight     = _cropRight;
+      activeColumns = _activeColumns;
     }
 
   }  /* InstrumentData */

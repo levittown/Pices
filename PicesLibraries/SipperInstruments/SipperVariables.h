@@ -1,8 +1,10 @@
 #ifndef  _SIPPERVARIABLES_
 #define  _SIPPERVARIABLES_
 
-#include  "GoalKeeper.h"
-#include  "Str.h"
+
+#include "GoalKeeper.h"
+#include "Str.h"
+
 
 /** @namespace  SipperHardware
  *  @brief Contains Classes that are specific to SIPPER's physical characteristics such as Instrument Data.
@@ -81,10 +83,10 @@ namespace  SipperHardware
      *@param[in] scanLineNum The scan line with respect to the SIPPER file where the first row in the mage was extracted.
      *@param[in] scanCol The left most column in the original SIPPER file that this image  was extracted.
      */
-    static  void  ParseImageFileName (const KKStr&  fullFileName,     /**< File name of image extractd from a Sipper File. */
-                                      KKStr&        sipperFileName, 
-                                      kkuint32&     scanLineNum,
-                                      kkuint32&     scanCol
+    static  void  ParseImageFileName (const KKU::KKStr&  fullFileName,     /**< File name of image extractd from a Sipper File. */
+                                      KKU::KKStr&        sipperFileName, 
+                                      KKU::kkuint32&     scanLineNum,
+                                      KKU::kkuint32&     scanCol
                                      );
 
 

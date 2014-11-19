@@ -14,19 +14,26 @@
 //*  KKStr class and string manipulation routines.                                  *
 //************************************************************************************
 
-#include  <map>
-#include  <string>
+#include <map>
+#include <string>
 
 #ifdef  WIN32
 #else
 #define  __cdecl  
 #endif
 
-#include  "BasicTypes.h"
-#include  "KKQueue.h"
+#include "BasicTypes.h"
+#include "KKQueue.h"
+
+
+
 
 #define  EnterChar   13
 #define  EscapeChar  27
+
+
+
+
 
 
 namespace KKU

@@ -88,6 +88,10 @@ namespace PicesInterface
     property  double    Latitude               {double    get ();}
     property  double    Longitude              {double    get ();}
 
+    property  UInt16    CropLeft               {UInt16    get ();}
+    property  UInt16    CropRight              {UInt16    get ();}
+    property  UInt16    ActiveColumns          {UInt16    get ();}
+
     InstrumentDataPtr  UnmanagedClass ()  {return  instrumentData;}
 
     property static String^  DensityUnit          {String^  get ()  {return  PicesKKStr::KKStrToSystenStr (InstrumentData::DensityUnit          ());}}

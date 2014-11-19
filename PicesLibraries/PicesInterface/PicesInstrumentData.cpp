@@ -168,8 +168,13 @@ namespace  PicesInterface
   float     PicesInstrumentData::Turbidity::get              () {return instrumentData->Turbidity           ();}
   float     PicesInstrumentData::TurbiditySensor::get        () {return instrumentData->TurbiditySensor     ();}
 
-  double  PicesInstrumentData::Latitude::get       () {return instrumentData->Latitude      ();}
-  double  PicesInstrumentData::Longitude::get      () {return instrumentData->Longitude     ();}
+  double  PicesInstrumentData::Latitude::get        ()  {return instrumentData->Latitude      ();}
+  double  PicesInstrumentData::Longitude::get       ()  {return instrumentData->Longitude     ();}
+
+  UInt16    PicesInstrumentData::CropLeft::get      ()  {return instrumentData->CropLeft      ();}
+  UInt16    PicesInstrumentData::CropRight::get     ()  {return instrumentData->CropRight     ();}
+  UInt16    PicesInstrumentData::ActiveColumns::get ()  {return instrumentData->ActiveColumns ();}
+
 
   void   PicesInstrumentData::ByteOffset::set   (uint64 _byteOffset)   {instrumentData->ByteOffset   (_byteOffset);}
   void   PicesInstrumentData::Conductivity::set (float  _conductivity) {instrumentData->Conductivity (_conductivity);}

@@ -226,6 +226,9 @@ void  InstrumentDataManager::InitializeLatitude ()
 
 
 
+/**
+ *@todo  Need to maintain the files  CropLeft, CropRight, ActiveColumns
+ */
 InstrumentDataPtr  InstrumentDataManager::CreateInstrumentData ()  const
 {
   InstrumentDataPtr  id = new   InstrumentData (lastScanLine,
@@ -261,7 +264,10 @@ InstrumentDataPtr  InstrumentDataManager::CreateInstrumentData ()  const
                                                 batteryLevels[0],
                                                 batteryLevels[1],
                                                 batteryLevels[2],
-                                                batteryLevels[3]
+                                                batteryLevels[3],
+                                                100,                          // CropLeft
+                                                3900,                         // CropRight
+                                                3801                          // Active Columns
                                                );
 
   return  id;

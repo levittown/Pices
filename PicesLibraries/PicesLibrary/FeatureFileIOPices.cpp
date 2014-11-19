@@ -47,9 +47,9 @@ FeatureFileIOPices  FeatureFileIOPices::driver;
 #else
 //#define  MAX_NUM_OF_FEATURES  125    // Version 37
 //#define  MAX_NUM_OF_FEATURES  60     // Version 40
-//#define  MAX_NUM_OF_FEATURES  62       // Version 41
-//#define  MAX_NUM_OF_FEATURES  70       // Version 43  Added 8 new Intensity Histogram Features
-//#define  MAX_NUM_OF_FEATURES  74       // Version 43  Added 8 new Intensity Histogram Features
+//#define  MAX_NUM_OF_FEATURES  62     // Version 41
+//#define  MAX_NUM_OF_FEATURES  70     // Version 43  Added 8 new Intensity Histogram Features
+//#define  MAX_NUM_OF_FEATURES  74     // Version 43  Added 8 new Intensity Histogram Features
 #define  MAX_NUM_OF_FEATURES  88       // Version 46  Added 8 new Intensity Histogram Features
 #endif
 

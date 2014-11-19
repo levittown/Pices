@@ -26,7 +26,10 @@ using namespace SipperHardware;
 
 InstrumentData::InstrumentData ():
   activeBattery (0),
+  activeColumns (3900),
   byteOffset    (0),
+  cropLeft      (0),
+  cropRight     (4095),
   ctdDate       (),
   data          (NULL),
   latitude      (0.0),
@@ -41,7 +44,10 @@ InstrumentData::InstrumentData ():
 
 InstrumentData::InstrumentData (const InstrumentData&   id):
   activeBattery (0),
+  activeColumns (3900),
   byteOffset    (0),
+  cropLeft      (0),
+  cropRight     (4095),
   ctdDate       (),
   data          (NULL),
   latitude      (0.0),
@@ -52,6 +58,10 @@ InstrumentData::InstrumentData (const InstrumentData&   id):
   InitializeDataVariables ();
 
   activeBattery  = id.activeBattery;
+  activeColumns  = id.activeColumns;
+  cropLeft       = id.cropLeft;
+  cropRight      = id.cropRight;
+
   ctdDate        = id.ctdDate;
 
   for  (int32 x = 0;  x < numDataFields;  x++)
@@ -71,7 +81,10 @@ InstrumentData::InstrumentData (      KKStrParser&  line,
                                 const VectorInt&    fieldIndirections
                                ):
   activeBattery (0),
+  activeColumns (3900),
   byteOffset    (0),
+  cropLeft      (0),
+  cropRight     (4095),
   ctdDate       (),
   data          (NULL),
   latitude      (0.0),
@@ -98,7 +111,7 @@ InstrumentData::InstrumentData (      KKStrParser&  line,
 
 
 InstrumentData::InstrumentData (uint32           _scanLine,
-                                uint32            _byteOffset,
+                                uint32           _byteOffset,
                                 const DateTime&  _ctdDate,
                                 char             _activeBattery,
                                 double           _latitude,
@@ -130,11 +143,17 @@ InstrumentData::InstrumentData (uint32           _scanLine,
                                 float            _bat1Level,
                                 float            _bat2Level,
                                 float            _bat3Level,
-                                float            _bat4Level
+                                float            _bat4Level,
+                                uint16           _cropLeft,
+                                uint16           _cropRight,
+                                uint16           _activeColumns
                                ):
 
   activeBattery (_activeBattery),
+  activeColumns (_activeColumns),
   byteOffset    (_byteOffset),
+  cropLeft      (_cropLeft),
+  cropRight     (_cropRight),
   ctdDate       (_ctdDate),
   data          (NULL),
   latitude      (_latitude),
@@ -172,9 +191,17 @@ InstrumentData::InstrumentData (uint32           _scanLine,
   data[bat2LevelIndex]              = _bat2Level;
   data[bat3LevelIndex]              = _bat3Level;
   data[bat4LevelIndex]              = _bat4Level;
+
+  activeBattery = _activeBattery;
+  activeColumns = _activeColumns;
+  byteOffset    = _byteOffset;
+  cropLeft      = _cropLeft;
+  cropRight     = _cropRight;
+  ctdDate       = _ctdDate;
+  latitude      = _latitude;
+  longitude     = _longitude;
+  scanLine      = _scanLine;
 }
-
-
 
 
 
@@ -182,6 +209,9 @@ InstrumentData::InstrumentData (uint32           _scanLine,
 void  InstrumentData::InitializeDataVariables ()
 {
   activeBattery = 0;
+  activeColumns = 3900;
+  cropLeft      = 0;
+  cropRight     = 4095;
   data = new float[numDataFields];
   for  (int32 x = 0;  x < numDataFields;  x++)
     data[x] = 0.0;
@@ -223,7 +253,7 @@ InstrumentData::FieldDesc  InstrumentData::fieldDescriptions[] =
    {"Depth",                  "DP",   "Meters",         0.0f, "#0.00"},   //  3
    {"FlowRate1",              "FR1",  "Meters/Sec",     0.0f, "#0.00"},   //  4
    {"FlowRate2",              "FR2",  "Meters/Sec",     0.0f, "#0.00"},   //  5
-   {"Fluorescence",           "FL",   "� chl/liter",    0.0f, "#0.00"},   //  6
+   {"Fluorescence",           "FL",   "� chl/liter",     0.0f, "#0.00"},   //  6
    {"FluorescenceSensor",     "FLS",  "Volts",          0.0f, "#0.00"},   //  7
    {"CdomFluorescence",       "CDM",  "ppb QSD",        0.0f, "#0.00"},   //  8
    {"CdomFluorescenceSensor", "CDMS", "Volts",          0.0f, "#0.00"},   //  9
@@ -239,21 +269,25 @@ InstrumentData::FieldDesc  InstrumentData::fieldDescriptions[] =
    {"TransmissivitySensor",   "TRMS", "Volts",          0.0f, "#0.00"},   // 19
    {"Turbidity",              "TRB",  "NTU",            0.0f, "#0.00"},   // 20
    {"TurbiditySensor",        "TRBS", "Volts",          0.0f, "#0.00"},   // 21
-   {"Pitch",                  "PTCH", "Degrees",      -35.0f, "##0"},    // 22
-   {"Roll",                   "ROL",  "Degrees",      -35.0f, "##0"},    // 23 
+   {"Pitch",                  "PTCH", "Degrees",      -35.0f, "##0"},     // 22
+   {"Roll",                   "ROL",  "Degrees",      -35.0f, "##0"},     // 23 
 
    {"Bat1Level",              "BT1",  "Volts",          0.0f, "#0.0"},    // 24
    {"Bat2Level",              "BT2",  "Volts",          0.0f, "#0.0"},    // 25
    {"Bat3Level",              "BT3",  "Volts",          0.0f, "#0.0"},    // 26
    {"Bat4Level",              "BT4",  "Volts",          0.0f, "#0.0"},    // 27
 
-   {"ScanLine",               "SL",   "",               0.0f, "##,###,##0"},   // 28
-   {"ByteOffset",             "BO",   "",               0.0f, "##,###,###,##0"},   // 29 
+   {"ScanLine",               "SL",   "",               0.0f, "##,###,##0"},     // 28
+   {"ByteOffset",             "BO",   "",               0.0f, "##,###,###,##0"}, // 29 
    {"CTD_Date",               "CD",   "",               0.0f, "#0.00"},   // 30
    {"ActiveBattery",          "AB",   "",               0.0f, "#0.00"},   // 31
    {"Latitude",               "LAT",  "",               0.0f, "#0.00"},   // 32
    {"Longitude",              "LOG",  "",               0.0f, "#0.00"},   // 33
 
+   {"CropLeft",               "CL",   "",               0.0f, "####0"},   // 34
+   {"CropRight",              "CR",   "",               0.0f, "####0"},   // 35
+   {"ActiveColumns",          "AC",   "",               0.0f, "####0"},   // 36
+   
    {"",                       "",     "",               0.0f, "#0.00"}
 };
 
@@ -311,6 +345,11 @@ int32  InstrumentData::ctdDateIndex             =  30;
 int32  InstrumentData::activeBatteryIndex       =  31;
 int32  InstrumentData::latitudeIndex            =  32;
 int32  InstrumentData::longitudeIndex           =  33;
+
+int32  InstrumentData::cropLeftIndex            =  34;
+int32  InstrumentData::cropRightIndex           =  35;
+int32  InstrumentData::activeColumnsIndex       =  36;
+
 
 
 
@@ -498,21 +537,37 @@ KKStr  InstrumentData::FieldToStr (int32  fieldIndex)  const
   if  (fieldIndex == activeBatteryIndex)
     return  StrFromInt32 (activeBattery);
 
-  if  (fieldIndex == latitudeIndex)
+  else if  (fieldIndex == latitudeIndex)
   {
     return  StrFormatDouble (latitude, "-#0.000000");
   }
 
-  if  (fieldIndex == longitudeIndex)
+  else if  (fieldIndex == longitudeIndex)
   {
     return StrFormatDouble (longitude, "-##0.000000");
   }
 
-  if  ((fieldIndex < ctdBatteryIndex)  ||  (fieldIndex >= numFields))
+  else if  (fieldIndex == cropLeftIndex)
+  {
+    return StrFormatInt (cropLeft, "####0");
+  }
+
+  else if  (fieldIndex == cropRightIndex)
+  {
+    return StrFormatInt (cropRight, "####0");
+  }
+
+  else if  (fieldIndex == activeColumnsIndex)
+  {
+    return StrFormatInt (activeColumns, "####0");
+  }
+
+  else if  ((fieldIndex < ctdBatteryIndex)  ||  (fieldIndex >= numFields))
   {
     cerr << std::endl << std::endl << "InstrumentData::FieldToStr     **** ERROR ****       Invalid FieldIndex[" << fieldIndex << "]" << std::endl << std::endl;
     return  "";
   }
+
 
   char buff[50];
   SPRINTF (buff, sizeof (buff), "%g", data[fieldIndex - ctdBatteryIndex]);
@@ -562,6 +617,24 @@ void  InstrumentData::UpdateFromStr (int32         fieldIndex,
     return;
   }
 
+  if  (fieldIndex == cropLeftIndex)
+  {
+    cropLeft = (uint16)s.ToUint32 ();
+    return;
+  }
+
+  if  (fieldIndex == cropRightIndex)
+  {
+    cropRight = (uint16)s.ToUint32 ();
+    return;
+  }
+
+  if  (fieldIndex == activeColumnsIndex)
+  {
+    activeColumns = (uint16)s.ToUint32 ();
+    return;
+  }
+
   float d = s.ToFloat ();
   data[fieldIndex - ctdBatteryIndex] = d;
 }  /* UpdateFromStr */
@@ -600,6 +673,9 @@ void   InstrumentData::RefreshDataFields (const InstrumentData&  id)
   ctdDate       = id.CtdDate       ();
   latitude      = id.Latitude      ();
   longitude     = id.Longitude     ();
+  cropLeft      = id.CropLeft      ();
+  cropRight     = id.CropRight     ();
+  activeColumns = id.ActiveColumns ();
 }  /* RefreshDataFields */
 
 

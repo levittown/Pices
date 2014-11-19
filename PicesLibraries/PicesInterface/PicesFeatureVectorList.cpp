@@ -192,6 +192,7 @@ namespace  PicesInterface
                                        (PicesKKStr::SystemStringToKKStr (rootDir),
                                         *classes,
                                         useDirectoryNameForClassName,
+                                        NULL,     // DataBasePtr
                                         *cancelFlag,
                                         rewiteRootFeatureFile,
                                         log->Log ()

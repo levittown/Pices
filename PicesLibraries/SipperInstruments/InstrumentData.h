@@ -64,7 +64,10 @@ namespace SipperHardware
                     float                 _bat1Level,
                     float                 _bat2Level,
                     float                 _bat3Level,
-                    float                 _bat4Level
+                    float                 _bat4Level,
+                    kkuint16              _cropLeft,
+                    kkuint16              _cropRight,
+                    kkuint16              _activeColumns
                    );
 
     ~InstrumentData ();
@@ -91,39 +94,42 @@ namespace SipperHardware
 
     const KKU::DateTime&  CtdDate ()  const  {return  ctdDate;}
  
-    int32   ActiveBattery         ()  const  {return  activeBattery;                 }
-    float   Bat1Level             ()  const  {return  data[bat1LevelIndex          ];}
-    float   Bat2Level             ()  const  {return  data[bat2LevelIndex          ];}
-    float   Bat3Level             ()  const  {return  data[bat3LevelIndex          ];}
-    float   Bat4Level             ()  const  {return  data[bat4LevelIndex          ];}
-    float   CTDBattery            ()  const  {return  data[ctdBatteryIndex         ];}
-    float   Conductivity          ()  const  {return  data[ConductivityIndex       ];}
-    float   Depth                 ()  const  {return  data[depthIndex              ];}
-    float   Density               ()  const  {return  data[densityIndex            ];}
-    float   FlowRate1             ()  const  {return  data[flowRate1Index          ];}
-    float   FlowRate2             ()  const  {return  data[flowRate2Index          ];}
-    float   Fluorescence          ()  const  {return  data[fluorescenceIndex       ];}
-    float   FluorescenceSensor    ()  const  {return  data[fluorescenceSensorIndex ];}
-    float   CdomFluorescence      ()  const  {return  data[cdomFluorescenceIndex   ];}
-    float   CdomFluorescenceSensor()  const  {return  data[cdomFluorescenceSensorIndex ];}
-    float   Illumination          ()  const  {return  data[illuminationIndex       ];}
-    float   Oxygen                ()  const  {return  data[oxygenIndex             ];}
-    float   OxygenSensor          ()  const  {return  data[oxygenSensorIndex       ];}
-    double  Latitude              ()  const  {return  latitude;                      }
-    double  Longitude             ()  const  {return  longitude;                     }
-    float   Pressure              ()  const  {return  data[pressureIndex           ];}
-    float   RecordRate            ()  const  {return  data[recordRateIndex         ];}
-    float   Salinity              ()  const  {return  data[salinityIndex           ];}
-    uint32  ScanLine              ()  const  {return  scanLine;                      }
-    float   SoundVelocity         ()  const  {return  data[soundVelocityIndex      ];}
-    float   Temperature           ()  const  {return  data[temperatureIndex        ];}
-    float   Transmisivity         ()  const  {return  data[transmisivityIndex      ];}
-    float   TransmisivitySensor   ()  const  {return  data[transmisivitySensorIndex];}
-    float   Turbidity             ()  const  {return  data[turbidityIndex          ];}
-    float   TurbiditySensor       ()  const  {return  data[turbiditySensorIndex    ];}
+    int32    ActiveBattery         ()  const  {return  activeBattery;                 }
+    kkuint16 ActiveColumns         ()  const  {return  activeColumns;                 }
+    float    Bat1Level             ()  const  {return  data[bat1LevelIndex          ];}
+    float    Bat2Level             ()  const  {return  data[bat2LevelIndex          ];}
+    float    Bat3Level             ()  const  {return  data[bat3LevelIndex          ];}
+    float    Bat4Level             ()  const  {return  data[bat4LevelIndex          ];}
+    float    CTDBattery            ()  const  {return  data[ctdBatteryIndex         ];}
+    float    Conductivity          ()  const  {return  data[ConductivityIndex       ];}
+    kkuint16 CropLeft              ()  const  {return  cropLeft;                      }
+    kkuint16 CropRight             ()  const  {return  cropRight;                     }
+    float    Depth                 ()  const  {return  data[depthIndex              ];}
+    float    Density               ()  const  {return  data[densityIndex            ];}
+    float    FlowRate1             ()  const  {return  data[flowRate1Index          ];}
+    float    FlowRate2             ()  const  {return  data[flowRate2Index          ];}
+    float    Fluorescence          ()  const  {return  data[fluorescenceIndex       ];}
+    float    FluorescenceSensor    ()  const  {return  data[fluorescenceSensorIndex ];}
+    float    CdomFluorescence      ()  const  {return  data[cdomFluorescenceIndex   ];}
+    float    CdomFluorescenceSensor()  const  {return  data[cdomFluorescenceSensorIndex ];}
+    float    Illumination          ()  const  {return  data[illuminationIndex       ];}
+    float    Oxygen                ()  const  {return  data[oxygenIndex             ];}
+    float    OxygenSensor          ()  const  {return  data[oxygenSensorIndex       ];}
+    double   Latitude              ()  const  {return  latitude;                      }
+    double   Longitude             ()  const  {return  longitude;                     }
+    float    Pressure              ()  const  {return  data[pressureIndex           ];}
+    float    RecordRate            ()  const  {return  data[recordRateIndex         ];}
+    float    Salinity              ()  const  {return  data[salinityIndex           ];}
+    uint32   ScanLine              ()  const  {return  scanLine;                      }
+    float    SoundVelocity         ()  const  {return  data[soundVelocityIndex      ];}
+    float    Temperature           ()  const  {return  data[temperatureIndex        ];}
+    float    Transmisivity         ()  const  {return  data[transmisivityIndex      ];}
+    float    TransmisivitySensor   ()  const  {return  data[transmisivitySensorIndex];}
+    float    Turbidity             ()  const  {return  data[turbidityIndex          ];}
+    float    TurbiditySensor       ()  const  {return  data[turbiditySensorIndex    ];}
 
-    float   Pitch                 ()  const  {return  data[pitchIndex              ];}
-    float   Roll                  ()  const  {return  data[rollIndex               ];}
+    float    Pitch                 ()  const  {return  data[pitchIndex              ];}
+    float    Roll                  ()  const  {return  data[rollIndex               ];}
 
     static  KKStr  DensityUnit          ()  {return  FieldUnitOfMeasure (densityIndex);}
     static  KKStr  FluorescenceUnit     ()  {return  FieldUnitOfMeasure (fluorescenceIndex);}
@@ -139,10 +145,14 @@ namespace SipperHardware
 
     void   CtdDate  (const KKU::DateTime&  _ctdDate)  {ctdDate = _ctdDate;}
 
-    void   ByteOffset    (uint64 _byteOffset)  {byteOffset = _byteOffset;}
-    void   Latitude      (double _latitude)    {latitude   = _latitude;}
-    void   Longitude     (double _longitude)   {longitude  = _longitude;}
-    void   ScanLine      (uint32 _scanLine)    {scanLine   = _scanLine;}
+    void   ByteOffset    (uint64   _byteOffset)    {byteOffset    = _byteOffset;}
+    void   Latitude      (double   _latitude)      {latitude      = _latitude;}
+    void   Longitude     (double   _longitude)     {longitude     = _longitude;}
+    void   ScanLine      (uint32   _scanLine)      {scanLine      = _scanLine;}
+
+    void   ActiveColumns (kkuint16 _activeColumns) {activeColumns = _activeColumns;}
+    void   CropLeft      (kkuint16 _cropLeft)      {cropLeft      = _cropLeft;}
+    void   CropRight     (kkuint16 _cropRight)     {cropRight     = _cropRight;}
 
 
     void   CTDBattery             (float _ctdBattery)             {data [ctdBatteryIndex            ] = _ctdBattery;}
@@ -167,12 +177,11 @@ namespace SipperHardware
     void   Turbidity              (float _turbidity)              {data [turbidityIndex             ] = _turbidity;}
     void   TurbiditySensor        (float _turbiditySensor)        {data [turbiditySensorIndex       ] = _turbiditySensor;}
 
-
     void   Pitch                  (float _pitch)                  {data [pitchIndex              ] = _pitch;}
     void   Roll                   (float _roll)                   {data [rollIndex               ] = _roll;}
 
-    /*!
-     /brief  refreshes data fields from another 'InstrumentData' instance.
+    /**
+     *@brief  refreshes data fields from another 'InstrumentData' instance.
      */
     void   RefreshDataFields (const  InstrumentData&  id);
 
@@ -224,6 +233,10 @@ namespace SipperHardware
     static int32  latitudeIndex;
     static int32  longitudeIndex;
 
+    static int32  cropLeftIndex;
+    static int32  cropRightIndex;
+    static int32  activeColumnsIndex;
+
     static int32  ctdBatteryIndex;    // This is the first field that will be stored in the array 'data'
     static int32  ConductivityIndex;
     static int32  densityIndex;
@@ -253,7 +266,6 @@ namespace SipperHardware
     static int32  bat3LevelIndex;
     static int32  bat4LevelIndex;
   
-  
     char             activeBattery;
     uint64           byteOffset;
     KKU::DateTime    ctdDate;
@@ -261,6 +273,10 @@ namespace SipperHardware
     double           latitude;
     double           longitude;
     uint32           scanLine;
+
+    kkuint16         cropLeft;       /**< Left  column that contains imaged data;  any columns to the left  are ocluded by imaging chamber or Frame. */
+    kkuint16         cropRight;      /**< Right column that contains imaged data;  any columns to the Right are ocluded by imaging chamber or Frame. */
+    kkuint16         activeColumns;  /**<  (1 + rightCrop - leftCrop - Inactive_Columns);  ex: Inactive_Columns Can be caued by poor light source.   */
   };  /* InstrumentData */
   
   

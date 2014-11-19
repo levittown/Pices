@@ -83,8 +83,9 @@ namespace KKU
     typedef  __int8            kkint8;
     typedef  unsigned __int8   uint8;
     typedef  unsigned __int8   kkuint8;
-    typedef  __int16           int16;    /**<@brief  16 bit signed integer. */
-    typedef  unsigned __int16  uint16;   /**<@brief  16 bit unsigned integer. */
+    typedef  __int16           int16;     /**<@brief  16 bit signed integer. */
+    typedef  unsigned __int16  uint16;    /**<@brief  16 bit unsigned integer. */
+    typedef  unsigned __int16  kkuint16;  /**<@brief  16 bit unsigned integer. */
     //typedef  wchar_t          WCHAR;
     typedef  __int32           int32;
     typedef  __int32           kkint32;
@@ -100,6 +101,7 @@ namespace KKU
     typedef  uint8_t           kkuint8;  /**<@brief  8  bit unsigned integer. */
     typedef  int16_t           int16;    /**<@brief  16 bit signed integer. */
     typedef  uint16_t          uint16;   /**<@brief  16 bit unsigned integer. */
+    typedef  uint16_t          kkuint16;
     typedef  unsigned short    WCHAR;
     typedef  int32_t           int32;
     typedef  int32_t           kkint32;
@@ -114,6 +116,7 @@ namespace KKU
     typedef  __UINT8_TYPE__    kkuint8;
     typedef  __INT16_TYPE__    int16;    /**<@brief  16 bit signed integer. */
     typedef  __UINT16_TYPE__   uint16;   /**<@brief  16 bit unsigned integer. */
+    typedef  __UINT16_TYPE__   kkuint16;
     typedef  unsigned short    WCHAR;
     typedef  __INT32_TYPE__    int32;
     typedef  __INT32_TYPE__    kkint32;

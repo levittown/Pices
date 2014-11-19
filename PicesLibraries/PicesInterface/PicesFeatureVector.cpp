@@ -28,10 +28,15 @@ using namespace System::Windows::Forms;
 using namespace KKU;
 
 
+#include "SipperVariables.h"
+using namespace  SipperHardware;
+
 #include "FileDesc.h"
 #include "MLClass.h"
 #include "FeatureFileIOPices.h"
 #include "Raster.h"
+using namespace  MLL;
+
 
 #include "PicesKKStr.h"
 #include "PicesRaster.h"
@@ -410,7 +415,7 @@ namespace  PicesInterface
     uint   scanLineNum;
     uint   scanColNum;
 
-    ImageFeatures::ParseImageFileName (fullFileName, sipperFileName, scanLineNum, scanColNum);
+    SipperVariables::ParseImageFileName (fullFileName, sipperFileName, scanLineNum, scanColNum);
 
 
     System::String^ _sipperFileName = PicesKKStr::KKStrToSystenStr (sipperFileName);
@@ -434,7 +439,7 @@ namespace  PicesInterface
     uint   scanLine;
     uint   scanCol;
 
-    ImageFeatures::ParseImageFileName (fullFileName, sipperFileName, scanLine, scanCol);
+    SipperVariables::ParseImageFileName (fullFileName, sipperFileName, scanLine, scanCol);
 
     _sipperFileName = PicesKKStr::KKStrToSystenStr (sipperFileName);
     _scanLine = scanLine;

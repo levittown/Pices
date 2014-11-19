@@ -600,6 +600,18 @@ namespace MLL
                                );
 
 
+
+    void  InstrumentDataUpdateCropSettings (const KKStr&  sipperFileName,
+                                            kkuint32      scanLineStart,
+                                            kkuint32      scanLineEnd,
+                                            kkuint16      cropLeft,
+                                            kkuint16      cropRight,
+                                            kkuint16      activeColumns
+                                           );
+
+
+
+
     void  InstrumentDataSaveListForOneSipperFile (const KKStr&               _sipperFileName,
                                                   const InstrumentDataList&  instrumentData,
                                                   const bool&                _cancelFlag
@@ -635,7 +647,6 @@ namespace MLL
                                                const KKStr&  deploymentNum,
                                                const bool&   cancelFlag
                                               );
-
 
 
     /**
@@ -1007,6 +1018,7 @@ namespace MLL
     int32            ResultSetGetIntField      (uint32 fieldIdx);
     KKU::int64       ResultSetGetInt64Field    (uint32 fieldIdx);
     RasterSipperPtr  ResultSetGetRasterField   (uint32 fieldIdx);
+    kkuint16         ResultSetGetUint16Field   (uint32 fieldIdx);
     uint32           ResultSetGetUintField     (uint32 fieldIdx);
     KKU::ulong       ResultSetGetUlongField    (uint32 fieldIdx);
     KKU::uint64      ResultSetGetUint64Field   (uint32 fieldIdx);

@@ -1,22 +1,30 @@
-#include  "StdAfx.h"
-#include  "FirstIncludes.h"
+#include "StdAfx.h"
+#include "FirstIncludes.h"
 
-#include  <stdio.h>
-#include  <math.h>
-#include  <ctype.h>
-#include  <time.h>
-#include  <fstream>
-#include  <iostream>
-#include  <ostream>
-#include  <string>
-#include  <vector>
+#include <assert.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <memory>
+#include <algorithm>
+#include <functional>
+#include <math.h>
+#include <ctype.h>
+#include <time.h>
+#include <fstream>
+#include <iostream>
+#include <ostream>
+#include <string>
+#include <vector>
 using namespace std;
 
-#include  "MemoryDebug.h"
-#include  "BasicTypes.h"
+#include "MemoryDebug.h"
+#include "BasicTypes.h"
+using namespace  KKU
 
 #include "SipperVariables.h"
-using namespace SipperHardware;
+using namespace  SipperHardware;
+
+
 
 #include "OSservices.h"
 #include "PicesKKStr.h"

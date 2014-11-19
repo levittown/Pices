@@ -59,6 +59,13 @@ KKU::int32   CharStarToInt32 (const char* s)
 }  /* CharStarToInt32 */
 
 
+KKU::uint32   CharStarToUint16 (const char* s)
+{
+  if  (s == NULL)  return 0;
+  return (KKU::uint16)atol (s);
+}  /* CharStarToUint32 */
+
+
 
 KKU::uint32   CharStarToUint32 (const char* s)
 {
@@ -1259,6 +1266,12 @@ KKU::int64  DataBase::ResultSetGetInt64Field    (uint32 fieldIdx)
 KKU::uint32   DataBase::ResultSetGetUintField (uint32 fieldIdx)
 {
   return  CharStarToUint32 (ResultSetGetField (fieldIdx));
+}
+
+
+KKU::uint16   DataBase::ResultSetGetUint16Field (uint32 fieldIdx)
+{
+  return  CharStarToUint16 (ResultSetGetField (fieldIdx));
 }
 
 
@@ -5501,6 +5514,9 @@ InstrumentDataListPtr  DataBase::InstrumentDataProcessResults (const bool&  canc
                                        "TurbiditySensor",     // 25
                                        "Pitch",               // 26
                                        "Roll",                // 27
+                                       "CropLeft",            // 28
+                                       "CropRight",           // 29
+                                       "ActiveColumns",       // 30
                                        NULL,
                                       };
 
@@ -5539,6 +5555,9 @@ InstrumentDataListPtr  DataBase::InstrumentDataProcessResults (const bool&  canc
     id->TurbiditySensor     (ResultSetGetFloatField    (25));
     id->Pitch               (ResultSetGetFloatField    (26));
     id->Roll                (ResultSetGetFloatField    (27));
+    id->CropLeft            (ResultSetGetUint16Field   (28));
+    id->CropRight           (ResultSetGetUint16Field   (29));
+    id->ActiveColumns       (ResultSetGetUint16Field   (30));
 
     results->PushOnBack (id);
   }
@@ -5622,13 +5641,47 @@ void  DataBase::InstrumentDataInsert (const KKStr&            _sipperFileName,
             << id.Turbidity              ()            << ", "
             << id.TurbiditySensor        ()            << ", "
             << id.Pitch                  ()            << ", "
-            << id.Roll                   ()
+            << id.Roll                   ()            << ", "
+            << id.CropLeft               ()            << ", "
+            << id.CropRight              ()            << ", "
+            << id.ActiveColumns          ()
             << ")";
 
   int32  returnCd = QueryStatement (insertStr);
 
   return;
 }  /* InstrumentDataInsert */
+
+
+
+
+
+void  DataBase::InstrumentDataUpdateCropSettings (const KKStr&  sipperFileName,
+                                                  kkuint32      scanLineStart,
+                                                  kkuint32      scanLineEnd,
+                                                  kkuint16      cropLeft,
+                                                  kkuint16      cropRight,
+                                                  kkuint16      activeColumns
+                                                 )
+{
+  if  (!allowUpdates)
+  {
+    UpdatesNotAllowed ("InstrumentDataUpdateCropSettings");
+    return;
+  }
+  KKStr  sqlStr = "call  InstrumentDataUpdateCropSettings(" + sipperFileName.QuotedStr ()               + ", "
+                                                            + StrFormatInt (scanLineStart, "########")  + ", "
+                                                            + StrFormatInt (scanLineEnd,   "########")  + ", "
+                                                            + StrFormatInt (cropLeft,      "####0")     + ", "
+                                                            + StrFormatInt (cropRight,     "####0")     + ", "
+                                                            + StrFormatInt (activeColumns, "####0")
+                                                      + ")";
+                                                            
+  int32  returnCd = QueryStatement (sqlStr);
+  ResultSetsClear ();
+}  /* InstrumentDataUpdateCropSettings */
+
+
 
 
 
@@ -5656,7 +5709,6 @@ void  DataBase::InstrumentDataSaveListForOneSipperFile (const KKStr&            
     sf->AssignCtdExternalInstruments (osGetRootName (sipperFileName));
     SipperFileInsert (*sf);
   }
-
 
   KKStr  deleteStr = "call  InstrumentDataDeleteOneSipperFile(" + sipperFileName.QuotedStr () + ")";
   int32  returnCd = QueryStatement (deleteStr);

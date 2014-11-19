@@ -31,7 +31,10 @@ create procedure  InstrumentDataInsert
        in _Turbidity            float,
        in _TurbiditySensor      float,
        in _Pitch                float,
-       in _Roll                 float
+       in _Roll                 float,
+       in _CropLeft             int unsigned,
+       in _CropRight            int unsigned,
+       in _ActiveColumns        int unsigned
       )
 
 begin
@@ -48,7 +51,8 @@ begin
                OxygenSensor,     Pressure,            RecordRate,       
                Salinity,         SoundVelocity,       Temperature,      
                Transmisivity,    TransmisivitySensor, Turbidity,        
-               TurbiditySensor,  Pitch,               Roll
+               TurbiditySensor,  Pitch,               Roll,
+               CropLeft,         CropRight,           ActiveColumns
               )
           values 
              (
@@ -78,7 +82,10 @@ begin
                _Turbidity,
                _TurbiditySensor,
                _Pitch,
-               _Roll
+               _Roll,
+               _CropLeft,
+               _CropRight,
+               _ActiveColumns
              );
 end
 //
@@ -118,7 +125,10 @@ create procedure  InstrumentDataInsert2
        in _Turbidity            float,
        in _TurbiditySensor      float,
        in _Pitch                float,
-       in _Roll                 float
+       in _Roll                 float,
+       in _CropLeft             int unsigned,
+       in _CropRight            int unsigned,
+       in _ActiveColumns        int unsigned
       )
 
 begin
@@ -169,11 +179,66 @@ begin
                _Turbidity,
                _TurbiditySensor,
                _Pitch,
-               _Roll
+               _Roll,
+               _CropLeft,
+               _CropRight,
+               _ActiveColumns
              );
 end
 //
 delimiter ;
+
+
+
+
+
+
+
+/**********************************************************************************************************************/
+drop procedure  if exists InstrumentDataUpdateCropSettings;
+
+delimiter //
+
+create procedure  InstrumentDataUpdateCropSettings 
+      (in _sipperFileName   varChar(48),
+       in _scanLineStart    int unsigned,
+       in _scanLineEnd      int unsigned,
+       in _cropLeft         int unsigned,
+       in _cropRight        int unsigned,
+       in _activeColumns    int unsigned
+      )
+
+begin
+  declare  _sipperFileId     int unsigned default 0;
+
+  set _sipperFileId = (select  sf.SipperFileId  from  SipperFiles sf  where  sf.SipperFileName = _sipperFileName);
+
+  
+
+  update  InstrumentData id
+    set  id.CropLeft      = _cropLeft,
+         id.CropRight     = _cropRight,
+         id.ActiveColumns = _activeColumns
+    where  (id.SipperFileId = _sipperFileId)  and  (id.ScanLine >= _scanLineStart)  and  (id.ScanLine <= _scanLineEnd);
+end
+//
+delimiter ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
