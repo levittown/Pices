@@ -3591,6 +3591,10 @@ void  DetermineCropSettingsForSipperFile (RunLog&        runLog,
         {
           uint32  scanLineNum = x * 4096;
           db->InstrumentDataUpdateCropSettings (sipperFileRootName, scanLineNum, scanLineNum + 4096, cropsLeft[x], cropsRight[x], activeColumns[x]);
+          if  (( x % 10) == 0)
+          {
+            cout << "UpdatingInstrumenDataCropSettings" << "\t" << sipperFileRootName << "\t" << scanLineNum << "\t" << cropsLeft[x] << "\t" << cropsRight[x] << endl;
+          }
         }
 
 
@@ -3659,6 +3663,8 @@ void  DetermineCropSettingsForDeployment (RunLog&              runLog,
     return;
   }
 
+  bool  sipperFilesFound = false;
+
   KKStr  reportDir = "C:\\Temp\\DetermineCtropSettings";
 
   KKU::osCreateDirectoryPath (reportDir);
@@ -3674,6 +3680,10 @@ void  DetermineCropSettingsForDeployment (RunLog&              runLog,
 
     SipperFilePtr  sipperFile = *idx;
 
+    if  (sipperFile->ExtractionStatus () != '4')
+      continue;
+
+    sipperFilesFound = false;
 
     uint16  cropLeftAvg      = 0;
     uint16  cropRightAvg     = 0;
@@ -3683,18 +3693,23 @@ void  DetermineCropSettingsForDeployment (RunLog&              runLog,
 
     cropLefts.push_back (cropLeft);
     cropRights.push_back (cropRight);
+
+    db->SipperFilesUpdateExtractionStatus (sipperFile->SipperFileName (), '3');
   }
 
-  if  (cropLefts.size () > 0)
+  if  (sipperFilesFound)
   {
-    int  midPoint = cropLefts.size () / 2;
-    sort (cropLefts.begin  (), cropLefts.end  ());
-    sort (cropRights.begin (), cropRights.end ());
+    if  (cropLefts.size () > 0)
+    {
+      int  midPoint = cropLefts.size () / 2;
+      sort (cropLefts.begin  (), cropLefts.end  ());
+      sort (cropRights.begin (), cropRights.end ());
 
-    deployment->CropLeft  (cropLefts[midPoint]);
-    deployment->CropRight (cropRights[midPoint]);
+      deployment->CropLeft  (cropLefts[midPoint]);
+      deployment->CropRight (cropRights[midPoint]);
 
-    db->SipperDeploymentUpdate (*deployment);
+      db->SipperDeploymentUpdate (*deployment);
+    }
   }
 
   delete  sipperFiles;
