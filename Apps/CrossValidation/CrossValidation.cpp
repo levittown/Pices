@@ -3446,7 +3446,7 @@ VectorUchar*    DetermineCropSettingsGetNextFrameColMaxes (SipperBuffPtr  sb)
     for  (y = 0;  y < 4096;  ++y)
     {
       zed = lineBuff[y];
-      if  (zed == 254)
+      if  ((zed == 254)  ||  (zed == 253))
         zed = 0;
       maxVals[y] = Max (maxVals[y], zed);
     }
