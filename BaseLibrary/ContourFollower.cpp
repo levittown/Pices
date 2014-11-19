@@ -14,7 +14,7 @@
 #include  "MemoryDebug.h"
 using namespace std;
 
-#include  <fftw3.h>
+//#include  <fftw3.h>
 
 
 
@@ -185,26 +185,27 @@ void  ContourFollower::GetNextPixel (int32&  nextRow,
 
 
 
+#if  defined(FFTW_AVAILABLE)
+  float  CalcMagnitude (fftwf_complex*  dest,
+                        int32           index
+                       )
+  {
+    float  mag = 0.0f;
+    mag = (float)sqrt (dest[index][0] * dest[index][0] + dest[index][1] * dest[index][1]);
+    return  mag;
+  }  /* CalcMagnitude */
+#else
+  float  CalcMagnitude (KK_DFT1D_Float::DftComplexType* dest,
+                        int32                           index
+                       )
+  {
+    double rp = (float)dest[index].real ();
+    double ip = (float)dest[index].imag ();
+    return (float)sqrt (rp * rp + ip * ip);
+  }  /* CalcMagnitude */
+  
+#endif
 
-float  CalcMagnitude (fftwf_complex*  dest,
-                       int32           index
-                      )
-{
-  float  mag = 0.0f;
-  mag = (float)sqrt (dest[index][0] * dest[index][0] + dest[index][1] * dest[index][1]);
-  return  mag;
-}  /* CalcMagnitude */
-
-
-
-//float  CalcMagnitude (KK_DFT1D_Float::DftComplexType* dest,
-//                      int32                           index
-//                     )
-//{
-//  double rp = (float)dest[index].real ();
-//  double ip = (float)dest[index].imag ();
-//  return (float)sqrt (rp * rp + ip * ip);
-//}  /* CalcMagnitude */
 
 
 
@@ -252,7 +253,13 @@ int32  ContourFollower::FollowContour (float*  countourFreq,
   int32  totalRow = 0;
   int32  totalCol = 0;
 
+
+  #if  defined(FFTW_AVAILABLE)
   fftwf_complex*  src = (fftwf_complex*)fftwf_malloc (sizeof (fftwf_complex) * maxNumOfBorderPoints);
+  #else
+  KK_DFT1D_Float::DftComplexType*  src = new KK_DFT1D_Float::DftComplexType[maxNumOfBorderPoints];
+  #endif
+
 
   GetFirstPixel (startRow, startCol);
   if  ((startRow < 0)  ||  (startCol < 0)  ||  (PixelCountIn9PixelNeighborhood (startRow, startCol) < 2))
@@ -309,7 +316,11 @@ int32  ContourFollower::FollowContour (float*  countourFreq,
     {
       int32  newMaxNumOfAngles = maxNumOfBorderPoints * 2;
 
-      fftwf_complex*  newSrc = (fftwf_complex*)fftwf_malloc (sizeof (fftwf_complex) * newMaxNumOfAngles);
+      #if  defined(FFTW_AVAILABLE)
+        fftwf_complex*  newSrc = (fftwf_complex*)fftwf_malloc (sizeof (fftwf_complex) * newMaxNumOfAngles);
+      #else
+        KK_DFT1D_Float::DftComplexType*  newSrc = new KK_DFT1D_Float::DftComplexType[newMaxNumOfAngles];
+      #endif
 
       if  (newSrc == NULL)
       {
@@ -325,13 +336,25 @@ int32  ContourFollower::FollowContour (float*  countourFreq,
       int32  x;
       for  (x = 0; x < maxNumOfBorderPoints; x++)
       {
-        newSrc[x][0] = src[x][0];
-        newSrc[x][1] = src[x][1];
+        #if  defined(FFTW_AVAILABLE)
+          newSrc[x][0] = src[x][0];
+          newSrc[x][1] = src[x][1];
+        #else
+          newSrc[x].real (src[x].real ());
+          newSrc[x].imag (src[x].imag ());
+        #endif
       }
 
-      fftwf_free (src);
-      src = newSrc;
-      newSrc = NULL;
+
+      #if  defined(FFTW_AVAILABLE)
+        fftwf_free (src);
+        src = newSrc;
+        newSrc = NULL;
+      #else
+        delete  src;
+        src = newSrc;
+        newSrc = NULL;
+      #endif
 
       maxNumOfBorderPoints = newMaxNumOfAngles;
     }
@@ -353,19 +376,30 @@ int32  ContourFollower::FollowContour (float*  countourFreq,
 
   for  (x = 0;  x < numOfBorderPixels;  x++)
   {
-    src[x][0] = (src[x][0] - centerRow);
-    src[x][1] = (src[x][1] - centerCol);
-
-    totalRe += src[x][0];
-    totalIm += src[x][1];
+    #if  defined(FFTW_AVAILABLE)
+      src[x][0] = (src[x][0] - centerRow);
+      src[x][1] = (src[x][1] - centerCol);
+      totalRe += src[x][0];
+      totalIm += src[x][1];
+    #else
+      src[x].real ((src[x].real () - centerRow));
+      src[x].imag ((src[x].imag () - centerCol));
+      totalRe += src[x].real ();
+      totalIm += src[x].imag ();
+    #endif
   }
 
-  fftwf_complex*  dest = (fftwf_complex*)fftwf_malloc (sizeof (fftwf_complex) * maxNumOfBorderPoints);
-
-  fftwf_plan plan = fftwCreateOneDPlan (numOfBorderPixels, src, dest, FFTW_FORWARD, FFTW_ESTIMATE);
-  fftwf_execute (plan);
-  fftwDestroyPlan (plan);
-  plan = NULL;
+  #if  defined(FFTW_AVAILABLE)
+    fftwf_complex*  dest = (fftwf_complex*)fftwf_malloc (sizeof (fftwf_complex) * maxNumOfBorderPoints);
+    fftwf_plan plan = fftwCreateOneDPlan (numOfBorderPixels, src, dest, FFTW_FORWARD, FFTW_ESTIMATE);
+    fftwf_execute (plan);
+    fftwDestroyPlan (plan);
+    plan = NULL;
+  #else
+    KK_DFT1D_Float  plan (numOfBorderPixels, true);
+    KK_DFT1D_Float::DftComplexType*  dest = new KK_DFT1D_Float::DftComplexType[numOfBorderPixels];
+    Transform (src, dest);
+  #endif
 
   int32  numOfedgePixels = numOfBorderPixels;
 
@@ -471,8 +505,13 @@ int32  ContourFollower::FollowContour (float*  countourFreq,
     }
   }
 
-  fftwf_free (src);   src   = NULL;
-  fftwf_free (dest);  dest  = NULL;
+  #if  defined(FFTW_AVAILABLE)
+    fftwf_free (src);   src   = NULL;
+    fftwf_free (dest);  dest  = NULL;
+  #else
+    delete  src;  src  = NULL;
+    delete  dest; dest = NULL;
+  #endif
   delete  count;      count = NULL;
 
   return  numOfedgePixels;

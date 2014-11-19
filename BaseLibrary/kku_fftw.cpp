@@ -20,8 +20,8 @@ using namespace std;
 #include "kku_fftw.h"
 using namespace KKU;
 
-/*
 
+/*
 fftw_plan_class::fftw_plan_class (int32           _n,
                                   fftw_direction  _dir,
                                   int32           _flags
@@ -69,7 +69,7 @@ void  KKU::fftw_destroy_plan (fftw_plan  plan)
 fftwnd_plan  KKU::fftw2d_create_plan (int32           nx, 
                                       int32           ny, 
                                       fftw_direction  dir,
-				                      int32           flags
+				                              int32           flags
                                      )
 {
   return new fftwnd_plan_class (nx, ny, dir, flags);
@@ -123,9 +123,6 @@ void  KKU::fftwnd_one (fftwnd_plan    p,
 
 */
 
-
-
-KK_DFT<float>  x (100, true);
 
 
 

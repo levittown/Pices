@@ -12,7 +12,9 @@
 #include <stdio.h>
 #include <complex>
 
+#if  defined(FFTW_AVAILABLE)
 #include <fftw3.h>
+#endif
 
 #include "BasicTypes.h"
 
