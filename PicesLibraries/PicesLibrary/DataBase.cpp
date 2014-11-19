@@ -5670,11 +5670,11 @@ void  DataBase::InstrumentDataUpdateCropSettings (const KKStr&  sipperFileName,
     return;
   }
   KKStr  sqlStr = "call  InstrumentDataUpdateCropSettings(" + sipperFileName.QuotedStr ()               + ", "
-                                                            + StrFormatInt (scanLineStart, "########")  + ", "
-                                                            + StrFormatInt (scanLineEnd,   "########")  + ", "
-                                                            + StrFormatInt (cropLeft,      "####0")     + ", "
-                                                            + StrFormatInt (cropRight,     "####0")     + ", "
-                                                            + StrFormatInt (activeColumns, "####0")
+                                                            + StrFormatInt (scanLineStart, "ZZZZZZZ0")  + ", "
+                                                            + StrFormatInt (scanLineEnd,   "ZZZZZZZ0")  + ", "
+                                                            + StrFormatInt (cropLeft,      "ZZZZ0")     + ", "
+                                                            + StrFormatInt (cropRight,     "ZZZZ0")     + ", "
+                                                            + StrFormatInt (activeColumns, "ZZZZ0")
                                                       + ")";
                                                             
   int32  returnCd = QueryStatement (sqlStr);

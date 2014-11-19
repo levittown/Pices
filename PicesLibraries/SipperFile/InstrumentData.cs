@@ -231,10 +231,10 @@ namespace SipperFile
     private  UInt16   activeColumns   = 3801;
 
     public int        ActiveBattery          () {return activeBattery;                  }
-    public UInt16     ActiveColumns          () {return ActiveColumns;                  }
+    public UInt16     ActiveColumns          () {return activeColumns;                  }
     public string     BatteryStatuses        () {return batteryStatuses;                }
-    public UInt16     CropLeft               () {return CropLeft;                       }
-    public UInt16     CropRight              () {return CropRight;                      }
+    public UInt16     CropLeft               () {return cropLeft;                       }
+    public UInt16     CropRight              () {return cropRight;                      }
     public DateTime   CTDdate                () {return ctdDate;                        }
     public float[]    Data                   () {return data;                           }
     public float      Density                () {return data[DensityIndex            ]; }
@@ -345,7 +345,7 @@ namespace SipperFile
       ctdDate = new DateTime (1, 1, 1, 0, 0, 0);
       cropLeft = 100;
       cropRight = 3900;
-      activeColumns = 1 + cropRight - cropRight;
+      activeColumns = (ushort)(1 + cropLeft - cropRight);
     }
 
 
@@ -369,7 +369,7 @@ namespace SipperFile
 
       cropLeft        = r.cropLeft;
       cropRight       = r.cropRight;
-      activeColumns   = 1 + cropLeft - cropRight;
+      activeColumns   = (UInt16)(1 + cropLeft - cropRight);
     }
 
 
@@ -435,7 +435,7 @@ namespace SipperFile
 
       cropLeft      = picesData.CropLeft;
       cropRight     = picesData.CropRight;
-      activeColumns = picesData.activeColumns;
+      activeColumns = picesData.ActiveColumns;
     }  /* InstrumentData */
 
 
@@ -452,7 +452,6 @@ namespace SipperFile
     {
       if  (idx < numDataFields)
         return data[idx].ToString ();
-        
         
       string  field = "";
         

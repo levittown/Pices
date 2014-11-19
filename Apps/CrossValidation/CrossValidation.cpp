@@ -1066,7 +1066,8 @@ void  CrossValidationApp::ProcessCmdLineParameters (int     argcXXX,
     examples = FeatureFileIOPices::LoadInSubDirectoryTree 
                                     (directory, 
                                      *mlClasses, 
-                                     true,           // use Directory name for className
+                                     true,            // use Directory name for className
+                                     NULL,            // DataBasePtr   If Specifired will retrieve missing iunstrumenttation data from database.
                                      cancelFlag,
                                      true,            // reWrite Featutre Files.
                                      runLog
@@ -3407,6 +3408,233 @@ void  MarineSnowReport ()
 
 
 
+
+
+
+
+VectorUchar*    DetermineCropSettingsGetNextFrameColMaxes (SipperBuffPtr  sb)
+{
+  if  (sb->Eof ())
+    return NULL;
+
+  const int   maxLineSize = 5000;
+  uchar   lineBuff         [maxLineSize];
+  uint32  lineSize;
+  uint32  colCount[5000];
+  uint32  pixelsInRow;
+  bool    flow;
+  
+  lineSize = 1;
+
+  int32  x = 0;
+  uchar  zed = 0;
+
+  uchar  maxVals[4096];
+
+  for  (x = 0;  x < 4096;  ++x)
+  {
+    maxVals[x] = 0;
+  }
+
+
+  int  count = 0;
+  pixelsInRow = 0;
+  sb->GetNextLine (lineBuff, maxLineSize, lineSize, colCount, pixelsInRow, flow);
+  for  (x = 1;  (x < 4098)  &&  (!sb->Eof ());  ++x)
+  {
+    uint32  y = 0;
+    for  (y = 0;  y < 4096;  ++y)
+    {
+      zed = lineBuff[y];
+      if  (zed == 254)
+        zed = 0;
+      maxVals[y] = Max (maxVals[y], zed);
+    }
+
+    sb->GetNextLine (lineBuff, maxLineSize, lineSize, colCount, pixelsInRow, flow);
+  }
+
+  VectorUchar*  result = new VectorUchar (4096, 0);
+  for  (x = 0;  x < 4096; ++x)
+    (*result)[x] = maxVals[x];
+
+  return  result;
+}  /* DetermineCropSettingsGetNextFrameColMaxes */
+
+
+
+void  DetermineCropSettingsFromHighWaterMarks (vector<VectorUchar*>&  frameHighWaterMarks,
+                                               VectorUint16&          cropsLeft,
+                                               VectorUint16&          cropsRight,
+                                               VectorUint16&          activeColumns
+                                              )
+{
+  uint32  numFrameToWindow = 20;
+
+  uint32  x = 0;
+  uint32  y = 0;
+  uint32  frameNum = 0;
+
+  cropsLeft.clear ();
+  cropsRight.clear ();
+  activeColumns.clear ();
+
+  for  (frameNum = 0;  frameNum < frameHighWaterMarks.size ();  ++frameNum)
+  {
+    uint32  startFrame = 1;
+    if  (frameNum > numFrameToWindow)
+      startFrame = frameNum - numFrameToWindow;
+
+    uchar  maxHighWaterMarks[4096];
+    for  (x = 0;  x < 4096;  ++x)
+      maxHighWaterMarks[x] = 0;
+
+    for  (y = startFrame;  y <= frameNum;  ++y)
+    {
+      VectorUchar*  highWaterMarks = frameHighWaterMarks[y];
+
+      for  (x = 0;  x < 4096;  ++x)
+      {
+        maxHighWaterMarks[x] = Max (maxHighWaterMarks[x], (*highWaterMarks)[x]);
+      }
+    }
+
+    uint16  cropLeft = 0;
+    while  ((cropLeft < 4096)  &&  (maxHighWaterMarks[cropLeft] < 10))
+      ++cropLeft;
+
+    uint16  cropRight = 4095;
+    while  ((cropRight > cropLeft)  &&  (maxHighWaterMarks[cropRight] < 10))
+      --cropRight;
+
+    uint16  numActiveCols = 0;
+    for  (x = cropLeft;  x < cropRight;  ++x)
+    {
+      if  (maxHighWaterMarks[x] >= 10)
+        ++numActiveCols;
+    }
+
+    cropsLeft.push_back (cropLeft);
+    cropsRight.push_back (cropRight);
+    activeColumns.push_back (numActiveCols);
+
+    cout << "cropLeft: " << cropLeft << "\t" << "cropRight: " << cropRight << "\t" << "activeColumns: " << numActiveCols << endl;
+  }
+
+  uint32  zed = Min (numFrameToWindow, cropsLeft.size ());
+  for  (y = 0;  (y < zed);  ++y)
+  {
+    cropsLeft     [y] = cropsLeft     [zed];
+    cropsRight    [y] = cropsRight    [zed];
+    activeColumns [y] = activeColumns [zed];
+  }
+}  /* DetermineCropSettingsFromHighWaterMarks */
+
+
+
+
+void  DetermineCropSettingsForSipperFile (RunLog&        runLog,
+                                          DataBasePtr    db, 
+                                          SipperFilePtr  sipperFile,
+                                          uint16&        cropLeftAvg,
+                                          uint16&        cropRightAvg,
+                                          uint16&        activeColumnsAvg
+                                         )
+{
+  cropLeftAvg      = 0;
+  cropRightAvg     = 0;
+  activeColumnsAvg = 0;
+
+  KKStr  sipperFileRootName = sipperFile->SipperFileName ();
+  KKStr  sipperFileName = InstrumentDataFileManager::GetFullSipperFileName (sipperFileRootName);
+
+  KKStr  cruiseName    = sipperFile->CruiseName    ();
+  KKStr  stationName   = sipperFile->StationName   ();
+  KKStr  deploymentNum = sipperFile->DeploymentNum ();
+  runLog.Level (10) << endl
+    << "SipperFile: " << sipperFileRootName << "   Cruise: " << cruiseName << "   Station: " << stationName << "    DeploymentNum: " << deploymentNum << endl;
+  
+  KKStr  reportDir = "C:\\Temp\\DetermineCtropSettings";
+  KKU::osCreateDirectoryPath (reportDir);
+
+  {
+    if  (!sipperFileName.Empty ())
+    {
+      InstrumentDataManagerPtr  instrumentDataManager = new InstrumentDataManager (sipperFileName, sipperFile, reportDir, runLog);
+
+      SipperBuffPtr  sb = SipperBuff::CreateSipperBuff (sipperFileName, 0, instrumentDataManager, runLog);
+
+      if  (sb)
+      {
+        vector<VectorUchar*>  frameHighWaterMarks;
+        VectorUchar*  highWaterMarks = NULL;
+
+        highWaterMarks = DetermineCropSettingsGetNextFrameColMaxes (sb);
+        while  (highWaterMarks)
+        {
+          frameHighWaterMarks.push_back (highWaterMarks);
+
+          if  ((frameHighWaterMarks.size () %  20) == 0)
+            cout << "SipperFile: " << sipperFileRootName << "\t" << " FrameNum: " << frameHighWaterMarks.size () << endl;
+
+          highWaterMarks = DetermineCropSettingsGetNextFrameColMaxes (sb);
+        }
+
+        VectorUint16  cropsLeft;
+        VectorUint16  cropsRight;
+        VectorUint16  activeColumns;
+                                             
+        DetermineCropSettingsFromHighWaterMarks (frameHighWaterMarks, cropsLeft, cropsRight, activeColumns);
+
+
+        for  (uint32 x = 0;  x < cropsLeft.size ();  ++x)
+        {
+          uint32  scanLineNum = x * 4096;
+          db->InstrumentDataUpdateCropSettings (sipperFileRootName, scanLineNum, scanLineNum + 4096, cropsLeft[x], cropsRight[x], activeColumns[x]);
+        }
+
+
+        // Clean up allocated memory.
+
+        while  (frameHighWaterMarks.size () > 0)
+        {
+          highWaterMarks = frameHighWaterMarks.back ();
+          frameHighWaterMarks.pop_back ();
+          delete  highWaterMarks;
+          highWaterMarks = NULL;
+        }
+
+        {
+          uint32  cropLeftTotal      = 0;
+          uint32  cropRightTotal     = 0;
+          uint32  activeColumnsTotal = 0;
+
+          for  (uint32 x = 0;  x < cropsLeft.size ();  ++x)
+          {
+            cropLeftTotal      += cropsLeft     [x];
+            cropRightTotal     += cropsRight    [x];
+            activeColumnsTotal += activeColumns [x];
+          }
+
+          float  count = (float)cropsLeft.size ();
+
+          cropLeftAvg      = (uint16)(0.5f + (float)cropLeftTotal      / count);
+          cropRightAvg     = (uint16)(0.5f + (float)cropRightTotal     / count);
+          activeColumnsAvg = (uint16)(0.5f + (float)activeColumnsTotal / count);
+        }
+      }
+
+      delete  sb;                     sb                    = NULL;
+      delete  instrumentDataManager;  instrumentDataManager = NULL;
+    }
+  }
+}  /* DetermineCropSettingsForSipperFile */
+
+
+
+
+
+
 void  DetermineCropSettingsForDeployment (RunLog&              runLog,
                                           DataBasePtr          db, 
                                           SipperDeploymentPtr  deployment
@@ -3446,26 +3674,15 @@ void  DetermineCropSettingsForDeployment (RunLog&              runLog,
 
     SipperFilePtr  sipperFile = *idx;
 
-    KKStr  sipperFileRootName = sipperFile->SipperFileName ();
-    KKStr  sipperFileName = InstrumentDataFileManager::GetFullSipperFileName (sipperFileRootName);
 
-    if  (sipperFileName.Empty ())
-      continue;
+    uint16  cropLeftAvg      = 0;
+    uint16  cropRightAvg     = 0;
+    uint16  activeColumnsAvg = 0;
 
-    InstrumentDataManagerPtr  instrumentDataManager = new InstrumentDataManager (sipperFileName, sipperFile, reportDir, runLog);
+    DetermineCropSettingsForSipperFile (runLog, db, sipperFile, cropLeftAvg, cropRightAvg, activeColumnsAvg);
 
-    SipperBuffPtr  sb = SipperBuff::CreateSipperBuff (sipperFileName, 0, instrumentDataManager, runLog);
-
-    if  (sb)
-    {
-      sb->DetermineCropSettings (cropLeft, cropRight);
-      runLog.Level (10) << sipperFile->SipperFileName () << "\t" << cropLeft << "\t" << cropRight << endl;
-      cropLefts.push_back (cropLeft);
-      cropRights.push_back (cropRight);
-    }
-
-    delete  sb;                     sb                    = NULL;
-    delete  instrumentDataManager;  instrumentDataManager = NULL;
+    cropLefts.push_back (cropLeft);
+    cropRights.push_back (cropRight);
   }
 
   if  (cropLefts.size () > 0)
@@ -3582,7 +3799,7 @@ int  main (int    argc,
   }
 
 
-  if  (false)
+  if  (true)
   {
     DetermineCropSettings ();
     exit (-1);

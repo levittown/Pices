@@ -6,6 +6,7 @@
 #include "Str.h"
 
 
+
 /** @namespace  SipperHardware
  *  @brief Contains Classes that are specific to SIPPER's physical characteristics such as Instrument Data.
  *  @details Classes that represent Instruments, SIPPER File Formats, Cruises, Stations, and Deployments are grouped here.

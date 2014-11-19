@@ -15,11 +15,14 @@
 #include <ostream>
 #include <string>
 #include <vector>
+#include "MemoryDebug.h"
 using namespace std;
 
-#include "MemoryDebug.h"
 #include "BasicTypes.h"
-using namespace  KKU
+#include "KKQueue.h"
+using namespace  KKU;
+
+
 
 #include "SipperVariables.h"
 using namespace  SipperHardware;

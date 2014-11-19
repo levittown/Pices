@@ -1,10 +1,9 @@
 #include "FirstIncludes.h"
+#include <algorithm>
 #include <iostream>
 #include <map>
 #include <vector>
 #include <fstream>
-
-
 #include "MemoryDebug.h"
 using namespace  std;
 

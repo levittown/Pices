@@ -1,39 +1,37 @@
-#include  "FirstIncludes.h"
-#include  <stdio.h>
-#include  <errno.h>
-#include  <string.h>
-#include  <ctype.h>
-
-#include  <iostream>
-#include  <fstream>
-#include  <vector>
-
-#include  "MemoryDebug.h"
-
+#include "FirstIncludes.h"
+#include <stdio.h>
+#include <errno.h>
+#include <string.h>
+#include <ctype.h>
+#include <algorithm>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include "MemoryDebug.h"
 using namespace std;
 
 
-#include  "BasicTypes.h"
-#include  "OSservices.h"
-#include  "RunLog.h"
-#include  "Str.h"
+#include "BasicTypes.h"
+#include "OSservices.h"
+#include "RunLog.h"
+#include "Str.h"
 using namespace KKU;
 
 
 
-#include  "SipperBuff.h"
+#include "SipperBuff.h"
 
-#include  "InstrumentDataManager.h"
-#include  "SipperBuff3Bit.h"
-#include  "SipperBuff4Bit.h"
-#include  "SipperBuffBinary.h"
-#include  "Sipper3Buff.h"        // Came out with SIPPER III
-#include  "Sipper3RevBuff.h"     // Same as Sipper III, but accounts for some wires 
-                                 // being swapped, as per Bill Flanery.
-#include  "SipperBuff4Bit.h"
-#include  "SipperHeaderRec.h"
-#include  "SipperVariables.h"
-using namespace SipperHardware;
+#include "InstrumentDataManager.h"
+#include "SipperBuff3Bit.h"
+#include "SipperBuff4Bit.h"
+#include "SipperBuffBinary.h"
+#include "Sipper3Buff.h"        // Came out with SIPPER III
+#include "Sipper3RevBuff.h"     // Same as Sipper III, but accounts for some wires 
+                                // being swapped, as per Bill Flanery.
+#include "SipperBuff4Bit.h"
+#include "SipperHeaderRec.h"
+#include "SipperVariables.h"
+using namespace  SipperHardware;
 
 
 SipperBuff::SipperBuff (InstrumentDataManagerPtr  _instrumentDataManager,
