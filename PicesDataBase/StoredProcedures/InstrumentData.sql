@@ -1020,6 +1020,8 @@ delimiter ;
 
 
 
+
+
 drop procedure  if exists InstrumentDataBinByMeterDepth;
 delimiter //
 
@@ -1039,7 +1041,7 @@ begin
   
   set _scanRate = (select max(sf.ScanRate)  from  SipperFiles sf  
 											where  (sf.CruiseName    = _cruiseName)  and
-								             (sf.StationName   = _stationName) and 
+								                   (sf.StationName   = _stationName) and 
 												   ((sf.DeploymentNum = _deploymentNum)  or (_deploymentNum = "")));
   if  _scanRate < 100  then
     set _scanRate = 24950.3;
@@ -1048,8 +1050,8 @@ begin
   select d.CropLeft, d.CropRight, d.ChamberWidth  into  _cropLeft, _cropRight, _chamberWidth
      from Deployments d
 		 where  (d.CruiseName     = _cruiseName)  and
-	          (d.StationName    = _stationName) and 
-            ((d.DeploymentNum = _deploymentNum) or (_deploymentNum = "")));
+	            (d.StationName    = _stationName) and 
+                ((d.DeploymentNum = _deploymentNum) or (_deploymentNum = ""));
   
   set _secsPerRec = 4096.0 / _scanRate;
   set _midPoint = InstrumentDataGetMidPoint(_cruiseName, _stationName,_deploymentNum);
@@ -1090,6 +1092,8 @@ begin
 end
 //
 delimiter ;
+
+
 
 
 

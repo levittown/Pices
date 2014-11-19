@@ -1,9 +1,11 @@
 #include "FirstIncludes.h"
+#include <algorithm>
+#include <iostream>
 #include <ostream>
 #include <stdio.h>
 #include "MemoryDebug.h"
-
 using namespace std;
+
 
 #include "BasicTypes.h"
 using namespace  KKU;

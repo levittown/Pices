@@ -3,6 +3,7 @@
  * For conditions of distribution and use, see copyright notice in KKU.h
  */
 #include "FirstIncludes.h"
+#include <algorithm>
 #include <ctype.h>
 #include <limits.h>
 #include <math.h>

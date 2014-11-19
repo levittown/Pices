@@ -52,35 +52,37 @@ private:
                                                    bool&               theyAreTheSame
                                                   );
 
-  bool                      cancelFlag;
+  bool                       cancelFlag;
 
 
   TrainingConfiguration2Ptr  config;
-  KKStr                     configFileName;
+  KKStr                      configFileName;
 
-  FileDescPtr               fileDesc;
+  DataBasePtr                db;
 
-  KKStr                     sourceRootDirPath;
-  KKStr                     groundTruthDirName;
-  ImageFeaturesListPtr      groundTruth;
+  FileDescPtr                fileDesc;
 
-  MLClassConstPtr        mlClass;
-  MLClassConstListPtr    mlClasses;
+  KKStr                      sourceRootDirPath;
+  KKStr                      groundTruthDirName;
+  ImageFeaturesListPtr       groundTruth;
 
-  ostream*                  report;
-  ofstream*                 reportFile;
-  HTMLReportPtr             html;
-  KKStr                     reportFileName;
-  KKStr                     htmlFileName;
+  MLClassConstPtr            mlClass;
+  MLClassConstListPtr        mlClasses;
+
+  ostream*                   report;
+  ofstream*                  reportFile;
+  HTMLReportPtr              html;
+  KKStr                      reportFileName;
+  KKStr                      htmlFileName;
 
 
 
   struct  SummaryRec
   {
     ConfusionMatrix2Ptr  confussionMatrix;
-    KKStr                 name;
-    uint                  predLevel;
-    uint                  tranLevel;
+    KKStr                name;
+    uint                 predLevel;
+    uint                 tranLevel;
 
     SummaryRec (uint                  _tranLevel,
                 uint                  _predLevel,

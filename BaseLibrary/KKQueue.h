@@ -38,17 +38,16 @@
  */
 
 
-#include <assert.h>
-#include <ctype.h>
-#include <stdlib.h>
-#include <memory>
-#include <vector>
-#include <algorithm>
-#include <functional>
-#include <iostream>
+//#include <assert.h>
+//#include <ctype.h>
+//#include <stdlib.h>
+//#include <memory>
+//#include <vector>
+//#include <algorithm>
+//#include <functional>
+//#include <iostream>
 
 #include "BasicTypes.h"
-
 
 namespace  KKU
 {

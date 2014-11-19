@@ -1,19 +1,19 @@
-#include  "FirstIncludes.h"
-#include  <stdlib.h>
-#include  <memory>
+#include "FirstIncludes.h"
+#include <stdlib.h>
+#include <algorithm>
+#include <memory>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <map>
 
-#include  <string>
-#include  <iostream>
-#include  <fstream>
-#include  <vector>
-#include  <map>
-
-#include  "MemoryDebug.h"
+#include "MemoryDebug.h"
 using namespace std;
 
-#include  "BasicTypes.h"
-#include  "OSservices.h"
-#include  "Str.h"
+#include "BasicTypes.h"
+#include "OSservices.h"
+#include "Str.h"
 using namespace KKU;
 
 

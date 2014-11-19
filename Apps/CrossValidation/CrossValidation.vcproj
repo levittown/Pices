@@ -62,6 +62,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="BaseLibrary.lib SipperInstruments.lib PicesLibrary.lib libfftw3-3.lib libfftw3f-3.lib libmysql.lib USER32.LIB"
+				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\Libraries\$(ConfigurationName)&quot;;&quot;$(SolutionDir)\OutsidePackages\fftw-3.3.2&quot;;&quot;$(SolutionDir)\OutsidePackages\MySqlWin32\lib&quot;"
 				GenerateDebugInformation="true"
@@ -135,6 +136,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="BaseLibrary.lib SipperInstruments.lib PicesLibrary.lib libfftw3-3.lib libfftw3f-3.lib libmysql.lib USER32.LIB"
+				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\Libraries\$(ConfigurationName)&quot;;&quot;$(SolutionDir)\OutsidePackages\fftw-3.3.2&quot;;&quot;$(SolutionDir)\OutsidePackages\MySqlWin32\lib&quot;"
 				GenerateDebugInformation="true"
@@ -213,6 +215,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="BaseLibrary.lib SipperInstruments.lib PicesLibrary.lib libfftw3-3.lib libfftw3f-3.lib libmysql.lib USER32.LIB"
+				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\Libraries\$(ConfigurationName)&quot;;&quot;$(SolutionDir)\OutsidePackages\fftw-3.3.2&quot;;&quot;$(SolutionDir)\OutsidePackages\MySqlWin32\lib&quot;"
 				GenerateDebugInformation="true"
@@ -286,6 +289,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="BaseLibrary.lib SipperInstruments.lib PicesLibrary.lib libfftw3-3.lib libfftw3f-3.lib libmysql.lib USER32.LIB"
+				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\Libraries\$(ConfigurationName)&quot;;&quot;$(SolutionDir)\OutsidePackages\fftw-3.3.2&quot;;&quot;$(SolutionDir)\OutsidePackages\MySqlWin32\lib&quot;"
 				GenerateDebugInformation="true"

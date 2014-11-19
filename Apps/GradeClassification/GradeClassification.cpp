@@ -23,6 +23,7 @@ using namespace  KKU;
 
 #include "Classifier2.h"
 #include "ConfusionMatrix2.h"
+#include "DataBase.h"
 #include "DuplicateImages.h"
 #include "FeatureFileIO.h"
 #include "FeatureFileIOPices.h"
@@ -66,21 +67,22 @@ using namespace  MLL;
 // -c GulfOilBroad2_Discreate_Dual.cfg  -gt E:\Pices\TrainingLibraries\GulfOilBroad2_Validation -r C:\Temp\GulfOilBroad2_Validation_Graded.txt
 
 GradeClassification::GradeClassification (int argc, char**  argv) :
-  Application              (argc, argv),
-  cancelFlag               (false),
-  config                   (NULL),
-  configFileName           (),
-  fileDesc                 (NULL),
-  groundTruthDirName       (),
-  groundTruth              (NULL),
-  html                     (NULL),
-  htmlFileName             (),
-  sourceRootDirPath        (),
-  mlClass               (NULL),
-  mlClasses             (new MLClassConstList ()),
-  report                   (NULL),
-  reportFile               (NULL),
-  reportFileName           ()
+  Application         (argc, argv),
+  cancelFlag          (false),
+  config              (NULL),
+  configFileName      (),
+  db                  (NULL),
+  fileDesc            (NULL),
+  groundTruthDirName  (),
+  groundTruth         (NULL),
+  html                (NULL),
+  htmlFileName        (),
+  sourceRootDirPath   (),
+  mlClass             (NULL),
+  mlClasses           (new MLClassConstList ()),
+  report              (NULL),
+  reportFile          (NULL),
+  reportFileName      ()
 
 {
   fileDesc = FeatureFileIOPices::NewPlanktonFile (log);
@@ -91,7 +93,6 @@ GradeClassification::GradeClassification (int argc, char**  argv) :
     DisplayCommandLineParameters ();
     return;
   }
-
 
   if  (argc < 2)
   {
@@ -244,6 +245,7 @@ GradeClassification::~GradeClassification ()
     idx->confussionMatrix = NULL;
   }
 
+  delete  db;           db          = NULL;
   delete  groundTruth;  groundTruth = NULL;
   delete  config;       config      = NULL;
   //delete  mlClass;
@@ -350,14 +352,16 @@ void   GradeClassification::DisplayCommandLineParameters ()
  ******************************************************************************/
 void  GradeClassification::Grade ()
 {
-
   log.Level (10) << "GradeClassification::Grade   Loading Ground Truth"  << endl;
+
+  db = new DataBase (log);
 
   
   groundTruth = FeatureFileIOPices::Driver ()->LoadInSubDirectoryTree 
                       (groundTruthDirName, 
                        *mlClasses, 
                        true,             // true = useDirectoryNameForClassName
+                       db,
                        cancelFlag, 
                        false,            // false = don't rewiteRootFeatureFile 
                        log
@@ -400,8 +404,9 @@ void  GradeClassification::GradeSourceImagesAgainstGroundTruth ()
 
   ImageFeaturesListPtr  sourceImages = FeatureFileIOPices::Driver ()->LoadInSubDirectoryTree 
                           (sourceRootDirPath, 
-                           *mlClasses, 
+                           *mlClasses,
                            true,              // true = useDirectoryNameForClassName
+                           db,
                            cancelFlag, 
                            false,             // rewiteRootFeatureFile (Don't update root feature file)
                            log

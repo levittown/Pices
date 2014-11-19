@@ -27,12 +27,8 @@
 
 
 
-
 #define  EnterChar   13
 #define  EscapeChar  27
-
-
-
 
 
 
