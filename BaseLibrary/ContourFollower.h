@@ -19,7 +19,6 @@ namespace KKU
   #endif
 
 
-
   #ifndef _RASTER_
   class  Raster;
   typedef  Raster*  RasterPtr;

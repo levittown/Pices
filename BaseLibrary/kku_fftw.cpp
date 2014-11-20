@@ -258,7 +258,7 @@ float  KKU::Log2 (float x)
 
 volatile KKU::GoalKeeperPtr   fftwGoalKeeper = NULL;
 
-
+#if  defined(FFTW_AVAILABLE)
 fftwf_plan  KKU::fftwCreateTwoDPlan (int32           height,
                                      int32           width,
                                      fftwf_complex*  src,
@@ -308,4 +308,8 @@ fftwf_plan  KKU::fftwCreateOneDPlan (int32           len,
   fftwGoalKeeper->EndBlock ();
   return  plan;
 }
+
+#endif
+
+
 

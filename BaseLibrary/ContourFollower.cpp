@@ -359,8 +359,13 @@ int32  ContourFollower::FollowContour (float*  countourFreq,
       maxNumOfBorderPoints = newMaxNumOfAngles;
     }
 
-    src[numOfBorderPixels][0] = (float)nextRow;
-    src[numOfBorderPixels][1] = (float)nextCol;
+    #if  defined(FFTW_AVAILABLE)
+      src[numOfBorderPixels][0] = (float)nextRow;
+      src[numOfBorderPixels][1] = (float)nextCol;
+    #else
+      src[numOfBorderPixels].real ((float)nextRow);
+      src[numOfBorderPixels].imag ((float)nextCol);
+    #endif
 
     totalRow += nextRow;
     totalCol += nextCol;
@@ -398,7 +403,7 @@ int32  ContourFollower::FollowContour (float*  countourFreq,
   #else
     KK_DFT1D_Float  plan (numOfBorderPixels, true);
     KK_DFT1D_Float::DftComplexType*  dest = new KK_DFT1D_Float::DftComplexType[numOfBorderPixels];
-    Transform (src, dest);
+    plan.Transform (src, dest);
   #endif
 
   int32  numOfedgePixels = numOfBorderPixels;
@@ -551,7 +556,12 @@ int32  ContourFollower::FollowContour2 (float*  countourFreq,
   int32  totalRow = 0;
   int32  totalCol = 0;
 
+
+  #if  defined(FFTW_AVAILABLE)
   fftwf_complex*  src = (fftwf_complex*)fftwf_malloc (sizeof (fftwf_complex) * maxNumOfBorderPoints);
+  #else
+  KK_DFT1D_Float::DftComplexType*  src = new KK_DFT1D_Float::DftComplexType[maxNumOfBorderPoints];
+  #endif
 
   GetFirstPixel (startRow, startCol);
   if  ((startRow < 0)  ||  (startCol < 0)  ||  (PixelCountIn9PixelNeighborhood (startRow, startCol) < 2))
@@ -585,23 +595,45 @@ int32  ContourFollower::FollowContour2 (float*  countourFreq,
     if  (numOfBorderPixels >= maxNumOfBorderPoints)
     {
       int32  newMaxNumOfAngles = maxNumOfBorderPoints * 2;
-      fftwf_complex*  newSrc = (fftwf_complex*)fftwf_malloc (sizeof (fftwf_complex) * newMaxNumOfAngles);
 
+      #if  defined(FFTW_AVAILABLE)
+        fftwf_complex*  newSrc = (fftwf_complex*)fftwf_malloc (sizeof (fftwf_complex) * newMaxNumOfAngles);
+      #else
+        KK_DFT1D_Float::DftComplexType*  newSrc = new KK_DFT1D_Float::DftComplexType[newMaxNumOfAngles];
+      #endif
 
       int32  x;
       for  (x = 0; x < maxNumOfBorderPoints; x++)
       {
-        newSrc[x][0] = src[x][0];
-        newSrc[x][1] = src[x][1];
+        #if  defined(FFTW_AVAILABLE)
+          newSrc[x][0] = src[x][0];
+          newSrc[x][1] = src[x][1];
+        #else
+          newSrc[x].real (src[x].real ());
+          newSrc[x].imag (src[x].imag ());
+        #endif
       }
 
-      fftwf_free (src);
-      src = newSrc;
+      #if  defined(FFTW_AVAILABLE)
+        fftwf_free (src);
+        src = newSrc;
+        newSrc = NULL;
+      #else
+        delete  src;
+        src = newSrc;
+        newSrc = NULL;
+      #endif
+
       maxNumOfBorderPoints = newMaxNumOfAngles;
     }
 
-    src[numOfBorderPixels][0] = (float)nextRow;
-    src[numOfBorderPixels][1] = (float)nextCol;
+    #if  defined(FFTW_AVAILABLE)
+      src[numOfBorderPixels][0] = (float)nextRow;
+      src[numOfBorderPixels][1] = (float)nextCol;
+    #else
+      src[numOfBorderPixels].real ((float)nextRow);
+      src[numOfBorderPixels].imag ((float)nextCol);
+    #endif
 
     totalRow += nextRow;
     totalCol += nextCol;
@@ -617,20 +649,32 @@ int32  ContourFollower::FollowContour2 (float*  countourFreq,
 
   for  (x = 0;  x < numOfBorderPixels;  x++)
   {
-    src[x][0] = src[x][0] - centerRow;
-    src[x][1] = src[x][1] - centerCol;
-    totalRe+= (float)src[x][0];
-    totalIm+= (float)src[x][1];
+    #if  defined(FFTW_AVAILABLE)
+      src[x][0] = src[x][0] - centerRow;
+      src[x][1] = src[x][1] - centerCol;
+      totalRe+= (float)src[x][0];
+      totalIm+= (float)src[x][1];
+    #else
+      src[x].real (src[x].real () - centerRow);
+      src[x].imag (src[x].imag () - centerCol);
+      totalRe+= (float)src[x].real ();
+      totalIm+= (float)src[x].imag ();
+    #endif
   }
 
   int32  numOfedgePixels = numOfBorderPixels;
 
-  fftwf_complex*   dest = (fftwf_complex*)fftwf_malloc (sizeof (fftwf_complex) * maxNumOfBorderPoints);
-  fftwf_plan  plan = fftwCreateOneDPlan (numOfBorderPixels, src, dest, FFTW_FORWARD, FFTW_ESTIMATE);
-  fftwf_execute (plan);
-  fftwDestroyPlan (plan);
-  plan = NULL;
-
+  #if  defined(FFTW_AVAILABLE)
+    fftwf_complex*  dest = (fftwf_complex*)fftwf_malloc (sizeof (fftwf_complex) * maxNumOfBorderPoints);
+    fftwf_plan plan = fftwCreateOneDPlan (numOfBorderPixels, src, dest, FFTW_FORWARD, FFTW_ESTIMATE);
+    fftwf_execute (plan);
+    fftwDestroyPlan (plan);
+    plan = NULL;
+  #else
+    KK_DFT1D_Float  plan (numOfBorderPixels, true);
+    KK_DFT1D_Float::DftComplexType*  dest = new KK_DFT1D_Float::DftComplexType[numOfBorderPixels];
+    plan.Transform (src, dest);
+  #endif
 
   int32*  count = new int32 [numOfBuckets];
 
@@ -639,7 +683,6 @@ int32  ContourFollower::FollowContour2 (float*  countourFreq,
     countourFreq[x] = 0.0;
     count[x] = 0;
   }
-
 
   float  middle = (float)numOfBorderPixels / (float)2.0;
 
@@ -659,7 +702,12 @@ int32  ContourFollower::FollowContour2 (float*  countourFreq,
     //mag = log (sqrt (dest[x].re * dest[x].re + dest[x].im * dest[x].im));
     //mag = log (sqrt (dest[x].re * dest[x].re + dest[x].im * dest[x].im) + 1.0);
 
-    mag = (float)sqrt (dest[x][0] * dest[x][0] + dest[x][1] * dest[x][1]);
+
+    #if  defined(FFTW_AVAILABLE)
+      mag = (float)sqrt (dest[x][0] * dest[x][0] + dest[x][1] * dest[x][1]);
+    #else
+      mag = (float)sqrt (dest[x].real () * dest[x].real () + dest[x].imag () * dest[x].imag ());
+    #endif
 
     deltaX = (float)x - middle;
 
@@ -709,10 +757,18 @@ int32  ContourFollower::FollowContour2 (float*  countourFreq,
     }
   }
 
-  fftwf_free (src);   src   = NULL;
-  fftwf_free (dest);  dest  = NULL;
-  delete  count;      count = NULL;
-
+  #if  defined(FFTW_AVAILABLE)
+    fftwf_free (src);   src   = NULL;
+    fftwf_free (dest);  dest  = NULL;
+  #else
+    delete[] src;   src  = NULL;
+    delete[] dest;  dest = NULL;
+  #endif
+  
+  delete  count;
+  count = NULL;
+  
+  
   return  numOfedgePixels;
 }  /* FollowContour2 */
 
@@ -836,7 +892,11 @@ int32  ContourFollower::CreateFourierDescriptorBySampling (int32    numOfBuckets
   }
 
 
-  fftwf_complex*  src = (fftwf_complex*)fftwf_malloc (sizeof (fftwf_complex) * numOfBuckets);
+  #if  defined(FFTW_AVAILABLE)
+    fftwf_complex*  src = (fftwf_complex*)fftwf_malloc (sizeof (fftwf_complex) * numOfBuckets);
+  #else
+    KK_DFT1D_Float::DftComplexType*  src = new KK_DFT1D_Float::DftComplexType[numOfBuckets];
+  #endif
 
   int32  totalRow = 0;
   int32  totalCol = 0;
@@ -847,14 +907,19 @@ int32  ContourFollower::CreateFourierDescriptorBySampling (int32    numOfBuckets
 
     Point&  point = (*points)[borderPixelIdx];
 
-    src[x][0] = (float)point.Row ();
-    src[x][1] = (float)point.Col ();
+    #if  defined(FFTW_AVAILABLE)
+      src[x][0] = (float)point.Row ();
+      src[x][1] = (float)point.Col ();
+    #else
+      src[x].real ((float)point.Row ());
+      src[x].imag ((float)point.Col ());
+    #endif
 
     totalRow += point.Row ();
     totalCol += point.Col ();
   }
 
-  delete  points;
+  delete[]  points;
   points = NULL;
 
   float  centerRow = (float)totalRow / (float)numOfBuckets;
@@ -862,24 +927,47 @@ int32  ContourFollower::CreateFourierDescriptorBySampling (int32    numOfBuckets
 
   for  (x = 0;  x < numOfBuckets;  x++)
   {
-    src[x][0] = src[x][0] - centerRow;
-    src[x][1] = src[x][1] - centerCol;
+    #if  defined(FFTW_AVAILABLE)
+      src[x][0] = src[x][0] - centerRow;
+      src[x][1] = src[x][1] - centerCol;
+    #else
+      src[x].real (src[x].real () - centerRow);
+      src[x].imag (src[x].imag () - centerCol);
+    #endif
   }
 
-  fftwf_complex*  dest = (fftwf_complex*)fftwf_malloc (sizeof (fftwf_complex) * numOfBuckets);
-
-  fftwf_plan  plan = fftwCreateOneDPlan (numOfBuckets, src, dest, FFTW_FORWARD, FFTW_ESTIMATE);
-  fftwf_execute (plan);
-  fftwDestroyPlan (plan);
-  plan = NULL;
+  #if  defined(FFTW_AVAILABLE)
+    fftwf_complex*  dest = (fftwf_complex*)fftwf_malloc (sizeof (fftwf_complex) * numOfBuckets);
+    fftwf_plan  plan = fftwCreateOneDPlan (numOfBuckets, src, dest, FFTW_FORWARD, FFTW_ESTIMATE);
+    fftwf_execute (plan);
+    fftwDestroyPlan (plan);
+    plan = NULL;
+  #else
+    KK_DFT1D_Float  plan (numOfBuckets, true);
+    KK_DFT1D_Float::DftComplexType*  dest = new KK_DFT1D_Float::DftComplexType[numOfBuckets];
+    plan.Transform (src, dest);
+  #endif
 
   for  (x = 0;  x < numOfBuckets;  x++)
   {
-    countourFreq[x] = (float)(sqrt (dest[x][0] * dest[x][0] + dest[x][1] * dest[x][1]));
+    #if  defined(FFTW_AVAILABLE)
+      float real = dest[x][0];
+      float imag = dest[x][1];
+    #else
+      float real = dest[x].real ();
+      float imag = dest[x].imag ();
+    #endif
+
+    countourFreq[x] = (float)(sqrt (real * real + imag * imag));
   }
 
-  fftwf_free (src);
-  fftwf_free (dest);
+  #if  defined(FFTW_AVAILABLE)
+    fftwf_free (src);
+    fftwf_free (dest);
+  #else
+    delete[]  src;   src  = NULL;
+    delete[]  dest;  dest = NULL;
+  #endif
 
   return  numOfBorderPixels;
 }  /* CreateFourierDescriptorBySampling */

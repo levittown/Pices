@@ -18,7 +18,9 @@
 
 using namespace std;
 
+#if  defined(FFTW_AVAILABLE)
 #include <fftw3.h>
+#endif
 
 #include "Raster.h"
 
@@ -3983,7 +3985,7 @@ RasterPtr  Raster::FastFourierKK ()  const
   KK_DFT2D_Float  plan (height, width, true);
   KK_DFT2D_Float::DftComplexType**  dest;
   KK_DFT2D_Float::DftComplexType*   destArea;
-  plan.AllocateAray (destArea, dest);
+  plan.AllocateArray (destArea, dest);
 
   if  (destArea == NULL)
   {
@@ -4059,9 +4061,20 @@ RasterPtr  Raster::FastFourier ()  const
   if  (!rasterInitialized)
     Initialize ();
 
-  fftwf_complex*   src  = NULL;
-  fftwf_complex*   dest = NULL;
-  fftwf_plan       plan = NULL;
+  #if  defined(FFTW_AVAILABLE)
+    fftwf_complex*   src  = NULL;
+    fftwf_complex*   dest = NULL;
+    fftwf_plan       plan = NULL;
+  #else
+    KK_DFT2D_Float  plan (height, width, true);
+
+    KK_DFT2D_Float::DftComplexType*   srcArea = NULL;
+    KK_DFT2D_Float::DftComplexType**  src     = NULL;
+
+    KK_DFT2D_Float::DftComplexType*   destArea = NULL;
+    KK_DFT2D_Float::DftComplexType**  dest     = NULL;
+  #endif
+
 
   if  (totPixels <= 0)
   {
@@ -4077,8 +4090,14 @@ RasterPtr  Raster::FastFourier ()  const
 
   int32  idx = 0;
 
-  src  = (fftwf_complex*)fftwf_malloc (sizeof (fftwf_complex) * totPixels);
-  dest = (fftwf_complex*)fftwf_malloc (sizeof (fftwf_complex) * totPixels);
+  #if  defined(FFTW_AVAILABLE)
+    src  = (fftwf_complex*)fftwf_malloc (sizeof (fftwf_complex) * totPixels);
+    dest = (fftwf_complex*)fftwf_malloc (sizeof (fftwf_complex) * totPixels);
+  #else
+    plan.AllocateArray (srcArea,  src);
+    plan.AllocateArray (destArea, dest);
+  #endif
+
   if  (src == NULL)
   {
     std::cerr 
@@ -4089,7 +4108,6 @@ RasterPtr  Raster::FastFourier ()  const
         << std::endl;
     return NULL;
   }
-
 
   if  (dest == NULL)
   {
@@ -4108,17 +4126,25 @@ RasterPtr  Raster::FastFourier ()  const
   {
     for (col = 0; col < width; col++ )
     {     
-      // src[idx].re = (float)green[row][col] * scalingFact;  // kk 2004-May-18
-      src[idx][0] = (float)green[row][col];                   // kk 2004-May-18
-      src[idx][1] = 0.0;
+      // src[idx].re = (float)green[row][col] * scalingFact;
+      #if  defined(FFTW_AVAILABLE)
+        src[idx][0] = (float)green[row][col];
+        src[idx][1] = 0.0;
+      #else
+        srcArea[idx].real ((float)greenArea[idx]);
+        srcArea[idx].imag (0.0);
+      #endif
       idx++;
-    }            
+    }
   }
-
   
-  plan = fftwCreateTwoDPlan (height, width, src, dest, FFTW_FORWARD, FFTW_ESTIMATE);
-  fftwf_execute (plan);
-  fftwDestroyPlan (plan);
+  #if  defined(FFTW_AVAILABLE)
+    plan = fftwCreateTwoDPlan (height, width, src, dest, FFTW_FORWARD, FFTW_ESTIMATE);
+    fftwf_execute (plan);
+    fftwDestroyPlan (plan);
+  #else
+    plan.Transform (src, dest);
+  #endif
 
   RasterPtr fourierImage = AllocateARasterInstance (height, width, false);
 
@@ -4133,8 +4159,16 @@ RasterPtr  Raster::FastFourier ()  const
 
   for  (idx = 0; idx < totPixels; idx++)
   {
-    // mag = (float)log10 (sqrt (dest[idx].re * dest[idx].re + dest[idx].im * dest[idx].im));
-    mag = (float)(sqrt (dest[idx][0] * dest[idx][0] + dest[idx][1] * dest[idx][1]));
+    #if  defined(FFTW_AVAILABLE)
+      float real = dest[idx][0];
+      float imag = dest[idx][1];
+    #else
+      float real = destArea[idx].real ();
+      float imag = destArea[idx].imag ();
+    #endif
+
+    // mag = (float)log10 (sqrt (real * real + imag * imag));
+    mag = (float)(sqrt (real * real + imag * imag));
 
     if  (mag > maxAmplitude)
       maxAmplitude = mag;
@@ -4160,8 +4194,13 @@ RasterPtr  Raster::FastFourier ()  const
     destData[idx] = (uchar)(log (fourierMagArray[idx]) * 255.0f / maxAmplitudeLog);
   }            
 
-  fftwf_free (src);   src  = NULL;
-  fftwf_free (dest);  dest = NULL;
+  #if  defined(FFTW_AVAILABLE)
+    fftwf_free (src);   src  = NULL;
+    fftwf_free (dest);  dest = NULL;
+  #else
+    plan.DestroyArray (srcArea,  src);
+    plan.DestroyArray (destArea, dest);
+  #endif
 
   return  fourierImage;
 }  /* FastFourier */
@@ -7162,17 +7201,30 @@ RasterPtr  Raster::BandPass (float  lowerFreqBound,    // Number's between 0.0 a
                              float  upperFreqBound     // Represent percentage.
                             )
 {
-  fftwf_complex*   src  = NULL;
-  fftwf_complex*   dest = NULL;
-  fftwf_plan       plan = NULL;
+  #if  defined(FFTW_AVAILABLE)
+    fftwf_complex*   src  = NULL;
+    fftwf_complex*   dest = NULL;
+    fftwf_plan       plan = NULL;
+    src  = (fftwf_complex*)fftwf_malloc (sizeof (fftwf_complex) * totPixels);
+    dest = (fftwf_complex*)fftwf_malloc (sizeof (fftwf_complex) * totPixels);
+  #else
+    KK_DFT2D_Float*  forwardPlan = new KK_DFT2D_Float (height, width, true);
+
+    KK_DFT2D_Float::DftComplexType*   srcArea = NULL;
+    KK_DFT2D_Float::DftComplexType**  src     = NULL;
+
+    KK_DFT2D_Float::DftComplexType*   destArea = NULL;
+    KK_DFT2D_Float::DftComplexType**  dest     = NULL;
+
+    forwardPlan->AllocateArray (srcArea,  src);
+    forwardPlan->AllocateArray (destArea, dest);
+  #endif
 
   int32  col;
   int32  row;
 
   int32  idx = 0;
 
-  src  = (fftwf_complex*)fftwf_malloc (sizeof (fftwf_complex) * totPixels);
-  dest = (fftwf_complex*)fftwf_malloc (sizeof (fftwf_complex) * totPixels);
 
   double  centerCol = (double)width  / 2.0;
   double  centerRow = (double)height / 2.0;
@@ -7195,15 +7247,19 @@ RasterPtr  Raster::BandPass (float  lowerFreqBound,    // Number's between 0.0 a
 
       // src[idx].re = (float)green[row][col] * scalingFact;  // kk 2004-May-18
 
-      #ifdef  FFTW3_H
+      #if  defined(FFTW_AVAILABLE)
         src[idx][0] = (float)green[row][col];                   // kk 2004-May-18
         src[idx][1] = 0.0;
       #else
         if  (color)
-          src[idx].re = ((float)(0.39f * red[row][col] + 0.59f * green[row][col] + 0.11f * blue[row][col])) / 3.0f;
+        {
+          srcArea[idx].real ((float)(0.39f * redArea[idx] + 0.59f * greenArea[idx] + 0.11f * blueArea[idx]) / 3.0f);
+        }
         else
-          src[idx].re = (float)green[row][col];                   // kk 2004-May-18
-        src[idx].im = 0.0;
+        {
+          srcArea[idx].real ((float)greenArea[idx]);
+        }
+        srcArea[idx].imag (0.0f);
       #endif
 
       idx++;
@@ -7212,9 +7268,16 @@ RasterPtr  Raster::BandPass (float  lowerFreqBound,    // Number's between 0.0 a
 
   double  pixelValRange = largestPixelVal - smallestPixelVal;
 
-  plan = fftwCreateTwoDPlan (height, width, src, dest, FFTW_FORWARD, FFTW_ESTIMATE);
-  fftwf_execute (plan);
-  fftwDestroyPlan (plan);
+
+  #if  defined(FFTW_AVAILABLE)
+    plan = fftwCreateTwoDPlan (height, width, src, dest, FFTW_FORWARD, FFTW_ESTIMATE);
+    fftwf_execute (plan);
+    fftwDestroyPlan (plan);
+  #else
+    forwardPlan->Transform (src, dest);
+    delete  forwardPlan;
+    forwardPlan = NULL;
+  #endif
     
   //  Will now perform the BandPass portion;  that is we will ZERO out all 
   // data that does not fall within the frequency range specified by
@@ -7256,46 +7319,45 @@ RasterPtr  Raster::BandPass (float  lowerFreqBound,    // Number's between 0.0 a
           )
       {
         // We are out of the band so this data does not get passed through.
-        #ifdef  FFTW3_H
-          dest[idx][0] = 0.0;
-          dest[idx][1] = 0.0;
+        #if  defined(FFTW_AVAILABLE)
+          dest[idx][0] = 0.0f;
+          dest[idx][1] = 0.0f;
         #else
-          dest[idx].re = 0.0;
-          dest[idx].im = 0.0;
+          destArea[idx].real (0.0f);
+          destArea[idx].imag (0.0f);
         #endif
       }
-      //#ifdef  FFTW3_H
-      //  dest[idx][1] = 0.0;
-      //#else
-      //  dest[idx].im = 0.0;
-      //#endif
-
       idx++;
     }
   }
 
-  plan = fftwCreateTwoDPlan (height, width, src, dest, FFTW_BACKWARD, FFTW_ESTIMATE);
-  fftwf_execute (plan);
-  fftwDestroyPlan (plan);
+  #if  defined(FFTW_AVAILABLE)
+    plan = fftwCreateTwoDPlan (height, width, src, dest, FFTW_BACKWARD, FFTW_ESTIMATE);
+    fftwf_execute (plan);
+    fftwDestroyPlan (plan);
+  #else
+    KK_DFT2D_Float*  reversePlan = new KK_DFT2D_Float (height, width, false);
+    reversePlan->Transform (dest, src);
+  #endif
 
   // We now need to transform the fourier results back to GreayScale.
   double  smallestNum;
   double  largestNum;
 
-  #ifdef  FFTW3_H
+  #if  defined(FFTW_AVAILABLE)
     smallestNum = largestNum = src[0][0];
   #else
-    smallestNum = largestNum = src[0].re;
+    smallestNum = largestNum = srcArea[0].real ();
   #endif
 
   {
     double  zed = 0;
     for (idx = 0;  idx < totPixels;  idx++)
     {
-      #ifdef  FFTW3_H
+      #if  defined(FFTW_AVAILABLE)
         zed = src[idx][0];
       #else
-        zed = src[idx].re;
+        zed = srcArea[idx].real ();
       #endif
 
       if  (zed < smallestNum)
@@ -7325,22 +7387,24 @@ RasterPtr  Raster::BandPass (float  lowerFreqBound,    // Number's between 0.0 a
       }
       else
       {
-        #ifdef  FFTW3_H
+        #if  defined(FFTW_AVAILABLE)
           zed = src[idx][0];
         #else
-          zed = src[idx].re;
+          zed = srcArea[idx].real ();
         #endif
         destData[idx] = smallestPixelVal + Min (largestPixelVal, (uchar)(0.5 + pixelValRange * (zed - smallestNum) / range));
       }
     }
   }
 
-  #ifdef  FFTW3_H
+  #if  defined(FFTW_AVAILABLE)
     fftwf_free (src);
     fftwf_free (dest);
   #else
-    delete  src;
-    delete  dest; 
+    reversePlan->DestroyArray (srcArea,  src);
+    reversePlan->DestroyArray (destArea, dest);
+    delete  reversePlan;
+    reversePlan = NULL;
   #endif
 
   return  result;

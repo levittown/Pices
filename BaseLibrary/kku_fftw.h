@@ -124,17 +124,18 @@ namespace  KKU
 
 
 
+
   template<typename DftType>
-  class  KK_DFT
+  class  KK_DFT1D
   {
   public:
     typedef  std::complex<DftType>  DftComplexType;
 
-    KK_DFT (int32 _size,
-            bool  _forwardTransform
-           );
+    KK_DFT1D (int32 _size,
+              bool  _forwardTransform
+             );
 
-    ~KK_DFT ();
+    ~KK_DFT1D ();
 
 
     void  Transform (DftComplexType*  src,
@@ -168,10 +169,10 @@ namespace  KKU
     DftComplexType**  fourierMask;
     DftComplexType*   fourierMaskArea;
     int32             size;
-  };  /* KK_DFT */
+  };  /* KK_DFT1D */
 
-  typedef  KK_DFT<float>   KK_DFT1D_Float;
-  typedef  KK_DFT<double>  KK_DFT1D_Double;
+  typedef  KK_DFT1D<float>   KK_DFT1D_Float;
+  typedef  KK_DFT1D<double>  KK_DFT1D_Double;
 
 
 
@@ -200,7 +201,11 @@ namespace  KKU
                       DftComplexType**  dest
                      );
 
-    void  AllocateAray (DftComplexType*   &arrayArea,
+    void  AllocateArray (DftComplexType*   &arrayArea,
+                         DftComplexType**  &array
+                        )  const;
+
+    void  DestroyArray (DftComplexType*   &arrayArea,
                         DftComplexType**  &array
                        )  const;
 
@@ -214,8 +219,8 @@ namespace  KKU
     DftComplexType*   workArrayArea;
     DftComplexType*   workCol;
 
-    KK_DFT<DftType>*  rowDFT;
-    KK_DFT<DftType>*  colDFT;
+    KK_DFT1D<DftType>*  rowDFT;
+    KK_DFT1D<DftType>*  colDFT;
   };  /* KK_DFT2D */
 
   typedef  KK_DFT2D<float>   KK_DFT2D_Float;
@@ -224,9 +229,9 @@ namespace  KKU
 
 
   template<typename DftType>
-  KK_DFT<DftType>::KK_DFT (int32 _size,
-                           bool  _forwardTransform
-                          ):
+  KK_DFT1D<DftType>::KK_DFT1D (int32 _size,
+                               bool  _forwardTransform
+                              ):
       MinusOne         ((DftType)-1.0,          (DftType)0.0),
       One              ((DftType)1.0,           (DftType)0.0),
       Pi               ((DftType)3.14159265359, (DftType)0.0),
@@ -242,7 +247,7 @@ namespace  KKU
 
 
   template<typename DftType>
-  KK_DFT<DftType>::~KK_DFT ()
+  KK_DFT1D<DftType>::~KK_DFT1D ()
   {
     delete  fourierMask;      fourierMask     = NULL;
     delete  fourierMaskArea;  fourierMaskArea = NULL;
@@ -250,7 +255,7 @@ namespace  KKU
 
 
   template<typename DftType>
-  void  KK_DFT<DftType>::BuildMask ()
+  void  KK_DFT1D<DftType>::BuildMask ()
   {
     DftComplexType  N((DftType)size, 0);
     DftComplexType  M((DftType)size, 0);
@@ -283,20 +288,6 @@ namespace  KKU
       {
         DftComplexType  kc ((DftType)k, (DftType)0);
         fourierMask[m][k] = exp (direction * j * Two * Pi * kc * mc / M);
-
-        //DftType  exponetPart = (DftType)2.0 * (DftType)3.14159265359 * (DftType)k * (DftType)m / (DftType)size;
-        //DftType  realPart = cos (exponetPart);
-        //DftType  imgPart  = -sin (exponetPart);
-
-        //if  (realPart != fourierMask[m][k].real ())
-        //{
-        //  continue;
-        //}
-
-        //if  (imgPart != fourierMask[m][k].imag ())
-        //{
-        //  continue;
-        //}
       }
     }
 
@@ -306,9 +297,9 @@ namespace  KKU
  
 
   template<typename DftType>
-  void  KK_DFT<DftType>::Transform (DftComplexType*  src,
-                                    DftComplexType*  dest
-                                   )
+  void  KK_DFT1D<DftType>::Transform (DftComplexType*  src,
+                                      DftComplexType*  dest
+                                     )
   {
     DftComplexType  M((DftType)size, 0);
 
@@ -390,9 +381,9 @@ namespace  KKU
 
 
   template<typename DftType>
-  void  KK_DFT<DftType>::Transform (KKU::uchar*      src,
-                                    DftComplexType*  dest
-                                   )
+  void  KK_DFT1D<DftType>::Transform (KKU::uchar*      src,
+                                      DftComplexType*  dest
+                                     )
   {
     if  (!fourierMask)
       BuildMask ();
@@ -436,7 +427,7 @@ namespace  KKU
 
 
   template<typename DftType>
-  void  KK_DFT<DftType>::TransformNR (DftComplexType*  src)
+  void  KK_DFT1D<DftType>::TransformNR (DftComplexType*  src)
   {
     int32  n = 0;
     int32  mmax = 0;
@@ -510,8 +501,8 @@ namespace  KKU
     workCol          (NULL),
     Zero             ((DftType)0.0, (DftType)0.0)
   {
-    rowDFT = new KK_DFT<DftType> (_width,  _forwardTransform);
-    colDFT = new KK_DFT<DftType> (_height, _forwardTransform);
+    rowDFT = new KK_DFT1D<DftType> (_width,  _forwardTransform);
+    colDFT = new KK_DFT1D<DftType> (_height, _forwardTransform);
 
     workArrayArea = new DftComplexType[height * width];
     workArray     = new DftComplexType*[height];
@@ -615,9 +606,9 @@ namespace  KKU
 
 
   template<typename DftType>
-  void  KK_DFT2D<DftType>::AllocateAray (DftComplexType*   &arrayArea,
-                                         DftComplexType**  &array
-                                        )  const
+  void  KK_DFT2D<DftType>::AllocateArray (DftComplexType*   &arrayArea,
+                                          DftComplexType**  &array
+                                         )  const
   {
     int32  total = height * width;
     array = NULL;
@@ -641,10 +632,32 @@ namespace  KKU
     }
 
     return;
-  }  /* AllocateAray */
+  }  /* AllocateArray */
 
 
 
+
+
+  template<typename DftType>
+  void  KK_DFT2D<DftType>::DestroyArray (DftComplexType*   &arrayArea,
+                                         DftComplexType**  &array
+                                        )  const
+  {
+    delete  arrayArea;  arrayArea = NULL;
+    delete  array;      array     = NULL;
+    return;
+  }  /* DestroyArray */
+
+
+
+
+
+#if  !defined(FFTW_AVAILABLE)
+#endif
+
+
+
+#if  defined(FFTW_AVAILABLE)
   fftwf_plan  fftwCreateTwoDPlan (int32           height,
                                   int32           width,
                                   fftwf_complex*  src,
@@ -661,7 +674,7 @@ namespace  KKU
                                  );
 
   void  fftwDestroyPlan (fftwf_plan&  plan);
-
+#endif
 
 }  /* KKU */
 

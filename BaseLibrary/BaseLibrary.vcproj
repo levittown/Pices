@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\OutsidePackages\zlib123&quot;;&quot;$(SolutionDir)\OutsidePackages\fftw-3.3.2&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;FFTW_AVAILABLE;ZLIB_AVAILABLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;ZLIB_AVAILABLE;FFTW_AVAILABLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
