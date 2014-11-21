@@ -6,4 +6,7 @@ Debug
 Release
 *.bak
 *.zip
+*.vcxproj
 
+/images/Thumbs.db
+/OutsidePackages
