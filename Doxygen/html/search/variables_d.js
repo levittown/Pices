@@ -1,0 +1,20 @@
+var searchData=
+[
+  ['magenta',['Magenta',['../d8/d5c/class_k_k_u_1_1_pixel_value.html#a39b5f23dae5d2065b943e5faa546879c',1,'KKU::PixelValue']]],
+  ['manager',['manager',['../d2/d05/class_job_managment_1_1_job.html#afc2af01ef60adef36af8483bcbfcb70b',1,'JobManagment::Job::manager()'],['../d5/dc4/class_sipper_hardware_1_1_instrument_data_report.html#a6d59d62aef11af5f7335aea3145565b3',1,'SipperHardware::InstrumentDataReport::manager()']]],
+  ['margin',['margin',['../d4/d7f/struct_s_v_m233_1_1svm__model.html#a779f1b70e87058b0ac9d14ad598d3b59',1,'SVM233::svm_model']]],
+  ['maskshapes',['maskShapes',['../dc/d14/_raster_8cpp.html#a5abed02eeed853df4e3cb5427c893d5d',1,'Raster.cpp']]],
+  ['master_5fboot_5frecord_5fsector',['MASTER_BOOT_RECORD_SECTOR',['../d7/dda/class_sipper_disk_utilities_1_1_constants.html#aca6db99f4a83931ab96cdb5ae5d7395d',1,'SipperDiskUtilities::Constants']]],
+  ['max_5fsipper_5ffiles',['MAX_SIPPER_FILES',['../d7/dda/class_sipper_disk_utilities_1_1_constants.html#ac1872f7a2e63f2787804918a548b471a',1,'SipperDiskUtilities::Constants']]],
+  ['maxcases',['MaxCases',['../d3/d23/class_m_l_l_1_1_usf_cas_cor.html#adb1d2f5397b2025a10b347967e128508',1,'MLL::UsfCasCor']]],
+  ['maxframeheight',['maxFrameHeight',['../d1/d36/class_image_extraction_manager_1_1_logical_frame_blob.html#ae4982993f561e7ab02b469483a4d080f',1,'ImageExtractionManager::LogicalFrameBlob::maxFrameHeight()'],['../d6/d0a/class_m_l_l_1_1_sipper_blob.html#aa2cb737fb71dacc5af1420145b638fc1',1,'MLL::SipperBlob::maxFrameHeight()']]],
+  ['maxframewidth',['maxFrameWidth',['../d1/d36/class_image_extraction_manager_1_1_logical_frame_blob.html#a5e082dd5a66b7f7bf12dd5249a2762be',1,'ImageExtractionManager::LogicalFrameBlob::maxFrameWidth()'],['../d6/d0a/class_m_l_l_1_1_sipper_blob.html#a6772d08353da1f05cf586880eb65f586',1,'MLL::SipperBlob::maxFrameWidth()']]],
+  ['maxheaderlen',['MaxHeaderLen',['../de/dc1/class_sipper_file_1_1_sipper_header_rec.html#a87a30b57711f76a77aefd5dac6cfea5c',1,'SipperFile.SipperHeaderRec.MaxHeaderLen()'],['../d1/df0/class_sipper_hardware_1_1_sipper_header_rec.html#a2169615df27e00a34f61230782f0d2bd',1,'SipperHardware::SipperHeaderRec::MaxHeaderLen()']]],
+  ['maxnumofports',['MaxNumOfPorts',['../df/ddc/class_sipper_file_1_1_port_assignment.html#abb3f3247eb0c82fcc09a356b7e1df451',1,'SipperFile::PortAssignment']]],
+  ['maxpixval',['maxPixVal',['../db/d74/class_k_k_u_1_1_raster.html#aea794d4aad69bbd7cb48bfcc9a24750e',1,'KKU::Raster']]],
+  ['maxsipperfilenamelen',['MaxSipperFileNameLen',['../de/dc1/class_sipper_file_1_1_sipper_header_rec.html#a82e73b82bed0fb5f5460b4b0b5133943',1,'SipperFile.SipperHeaderRec.MaxSipperFileNameLen()'],['../d1/df0/class_sipper_hardware_1_1_sipper_header_rec.html#a98f318340b021c48ae419f1d85a10c96',1,'SipperHardware::SipperHeaderRec::MaxSipperFileNameLen()']]],
+  ['maxunits',['MaxUnits',['../d3/d23/class_m_l_l_1_1_usf_cas_cor.html#a4ada17755010da97fb202fe2d834f8da',1,'MLL::UsfCasCor']]],
+  ['mlclass',['mlClass',['../dd/d23/class_pices_commander_1_1_class_stat.html#a4223ff5328496514cd5a32b6212eca06',1,'PicesCommander::ClassStat']]],
+  ['movements',['movements',['../d7/d0a/_contour_follower_8cpp.html#a4c248ea955a609e904037ab98cc73332',1,'ContourFollower.cpp']]],
+  ['my_5fmpi_5frank',['my_mpi_rank',['../d3/d23/class_m_l_l_1_1_usf_cas_cor.html#a850a3e25d530563cbb69a031213c3542',1,'MLL::UsfCasCor']]]
+];

@@ -1,0 +1,24 @@
+var searchData=
+[
+  ['feature_5ftype',['feature_type',['../d3/d23/class_m_l_l_1_1_usf_cas_cor.html#a40bc1b32b2163a9fe13ce850d64e9d83',1,'MLL::UsfCasCor']]],
+  ['featuredata',['featureData',['../d9/d00/class_m_l_l_1_1_feature_vector.html#a7b90e90bfce07ad81995e12474996002',1,'MLL::FeatureVector']]],
+  ['featuredecriptions',['FeatureDecriptions',['../d7/dcc/namespace_m_l_l.html#a1ad5e3f51cf3a662e07b7a69a2675dbe',1,'MLL']]],
+  ['featureweight',['featureWeight',['../d9/d0e/struct_s_v_m233_1_1svm__parameter.html#a1e602e5cf093a3e36d340957656b091b',1,'SVM233::svm_parameter::featureWeight()'],['../d4/d7f/struct_s_v_m233_1_1svm__model.html#a7a4a525bf1db62d493450f62d0ce114d',1,'SVM233::svm_model::featureWeight()']]],
+  ['fftwgoalkeeper',['fftwGoalKeeper',['../d4/d17/kku__fftw_8cpp.html#ac55163fa2c15af92f49c4ddb3cf9ef6a',1,'kku_fftw.cpp']]],
+  ['filedesc',['fileDesc',['../dd/d52/class_m_l_l_1_1_model.html#a7684f44efb313a430aa4c61ecff7d161',1,'MLL::Model::fileDesc()'],['../d6/d04/class_m_l_l_1_1_model_param.html#acbbb988fe1ff0bc0282adb5aa1e97138',1,'MLL::ModelParam::fileDesc()'],['../d3/d23/class_m_l_l_1_1_usf_cas_cor.html#afb5630148b12472a51bb57d76fbde962',1,'MLL::UsfCasCor::fileDesc()']]],
+  ['filename',['fileName',['../db/d74/class_k_k_u_1_1_raster.html#a04b8cc11d514f5de6a5ed4ae3c50d141',1,'KKU::Raster::fileName()'],['../df/dcc/class_sipper_hardware_1_1_sipper_buff.html#aa96120dc875428397411e74f5adcd519',1,'SipperHardware::SipperBuff::fileName()']]],
+  ['filestem',['filestem',['../d3/d23/class_m_l_l_1_1_usf_cas_cor.html#a1bc02788ae1378abff9a2bb9de82a2a3',1,'MLL::UsfCasCor']]],
+  ['firebrick',['FireBrick',['../d8/d5c/class_k_k_u_1_1_pixel_value.html#a81ee11998b9a53025dffa8ef409cc0ee',1,'KKU::PixelValue']]],
+  ['firstcase',['FirstCase',['../d3/d23/class_m_l_l_1_1_usf_cas_cor.html#ac787bc27563821fb89a1a4adc9be253e',1,'MLL::UsfCasCor']]],
+  ['firstinstrumentdatafield',['FirstInstrumentDataField',['../d3/dc7/class_m_l_l_1_1_image_features.html#abdfdf8ed0f93cd117893698d12901160',1,'MLL::ImageFeatures']]],
+  ['flow',['flow',['../da/d38/struct_sipper_hardware_1_1_sipper3_bit_rec.html#aaacfbe8c72e4ed382fef04b7a7944b9d',1,'SipperHardware::Sipper3BitRec::flow()'],['../df/d9e/struct_sipper_hardware_1_1_sipper_binary_rec.html#aa83020b0f115f57576d80aee1b5abe30',1,'SipperHardware::SipperBinaryRec::flow()']]],
+  ['fluorescencemean',['fluorescenceMean',['../d1/d76/class_sipper_hardware_1_1_instrument_data_means.html#a9740a3935bba326e6a8b7d81a50bbe8a',1,'SipperHardware::InstrumentDataMeans::fluorescenceMean()'],['../db/de0/class_pices_commander_1_1_instrument_stats_by_depth.html#a2ad9ba084e3c2efdc63d53a73ec27acc',1,'PicesCommander.InstrumentStatsByDepth.fluorescenceMean()']]],
+  ['fluorescencesensormean',['fluorescenceSensorMean',['../d1/d76/class_sipper_hardware_1_1_instrument_data_means.html#a1bf3a7b34f28e4343dfd4a28734ad5ac',1,'SipperHardware::InstrumentDataMeans::fluorescenceSensorMean()'],['../db/de0/class_pices_commander_1_1_instrument_stats_by_depth.html#aa3dbd04f2ab44f0977cea2086dac70c5',1,'PicesCommander.InstrumentStatsByDepth.fluorescenceSensorMean()']]],
+  ['foregroundpixelcount',['foregroundPixelCount',['../db/d74/class_k_k_u_1_1_raster.html#a2b3a306748cbc91779c2cc8893dc5ac8',1,'KKU::Raster']]],
+  ['foregroundpixelvalue',['foregroundPixelValue',['../db/d74/class_k_k_u_1_1_raster.html#a85e7a68d9c8f061dee3af68dccfccac6',1,'KKU::Raster']]],
+  ['fourbytes',['fourBytes',['../d7/d51/union_k_k_u_1_1_word_format32_bits.html#ab0ebc3586d6df6922fb972c3946bcd59',1,'KKU::WordFormat32Bits']]],
+  ['fouriermag',['fourierMag',['../db/d74/class_k_k_u_1_1_raster.html#a211d6dfdf2bb9404f9e57cee4514a37b',1,'KKU::Raster']]],
+  ['fouriermagarea',['fourierMagArea',['../db/d74/class_k_k_u_1_1_raster.html#a3726c342ccaf8515eeade4636facd11d',1,'KKU::Raster']]],
+  ['freqhistbucketidx',['freqHistBucketIdx',['../dc/d14/_raster_8cpp.html#a0f897d8bb16520a5c2c110eedcbd77dd',1,'Raster.cpp']]],
+  ['fv',['fv',['../d1/d85/class_grade_training_model_1_1_prediction.html#a7e81eaa7aa6162c92964fe178e4a0d7c',1,'GradeTrainingModel::Prediction']]]
+];
