@@ -3448,7 +3448,8 @@ VectorUchar*    DetermineCropSettingsGetNextFrameColMaxes (SipperBuffPtr  sb)
       zed = lineBuff[y];
       if  ((zed == 254)  ||  (zed == 253))
         zed = 0;
-      maxVals[y] = Max (maxVals[y], zed);
+      else if  (zed > maxVals[y])
+        maxVals[y] = zed;
     }
 
     sb->GetNextLine (lineBuff, maxLineSize, lineSize, colCount, pixelsInRow, flow);
@@ -3683,6 +3684,9 @@ void  DetermineCropSettingsForDeployment (RunLog&              runLog,
     if  (sipperFile->ExtractionStatus () != '4')
       continue;
 
+    // ExtractionStaus == '5' will indicate in the middle of processing.
+    db->SipperFilesUpdateExtractionStatus (sipperFile->SipperFileName (), '5');
+
     sipperFilesFound = false;
 
     uint16  cropLeftAvg      = 0;
@@ -3694,7 +3698,8 @@ void  DetermineCropSettingsForDeployment (RunLog&              runLog,
     cropLefts.push_back (cropLeft);
     cropRights.push_back (cropRight);
 
-    db->SipperFilesUpdateExtractionStatus (sipperFile->SipperFileName (), '3');
+    // ExtractionStatus  == '6' will indicate Computation of CropSettings has been completed.
+    db->SipperFilesUpdateExtractionStatus (sipperFile->SipperFileName (), '6');
   }
 
   if  (sipperFilesFound)
