@@ -94,6 +94,8 @@ FileDescPtr   BinaryJobList::FileDesc ()
 
 void  BinaryJobList::Load ()
 {
+  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+
   FILE*  in = osFOPEN (fileName.Str (), "r");
   if  (!in)
   {
@@ -115,7 +117,7 @@ void  BinaryJobList::Load ()
 
     KKStrParser statusStr (buff);
     BinaryJobPtr j = new BinaryJob (processor, statusStr);
-    PushOnBack (j);
+    PushOnBack (j, result);
   }
 
   lastFilePostion = ftell (in);
@@ -978,6 +980,8 @@ int   BinaryJobList::SmallestNumberOfFeaturesExpanded ()  const
 
 FeatureNumList  BinaryJobList::SelectFeaturesByMostFeaturesWithHighestGrade ()  const
 {
+  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+
   FeatureNumList  features (processor->FileDesc ());
 
   BinaryJobList  jobsWithHighestGrade (processor);
@@ -993,7 +997,7 @@ FeatureNumList  BinaryJobList::SelectFeaturesByMostFeaturesWithHighestGrade ()  
     {
       highestGradeFound = j->Grade ();
       jobsWithHighestGrade.DeleteContents ();
-      jobsWithHighestGrade.PushOnBack (j);
+      jobsWithHighestGrade.PushOnBack (j, result);
       maxNumOfFeatures = j->FeatureCount ();
     }
 
@@ -1002,13 +1006,13 @@ FeatureNumList  BinaryJobList::SelectFeaturesByMostFeaturesWithHighestGrade ()  
       if  (j->FeatureCount () > maxNumOfFeatures)
       {
         jobsWithHighestGrade.DeleteContents ();
-        jobsWithHighestGrade.PushOnBack (j);
+        jobsWithHighestGrade.PushOnBack (j, result);
         maxNumOfFeatures = j->FeatureCount ();
       }
 
       else if  (j->FeatureCount () == maxNumOfFeatures)
       {
-        jobsWithHighestGrade.PushOnBack (j);
+        jobsWithHighestGrade.PushOnBack (j, result);
       }
     }
   }
@@ -1023,10 +1027,22 @@ FeatureNumList  BinaryJobList::SelectFeaturesByMostFeaturesWithHighestGrade ()  
 void   BinaryJobList::PushOnBack (BinaryJobPtr  j)
 {
   log.Level (-1) << endl
-    << "BinaryJobList::PushOnBack    ***DO NOT USE THIS METHOD***" << endl
+    << "BinaryJobList::PushOnBack    ***ERROR***        ***DO NOT USE THIS METHOD***" << endl
+    << j->ToStatusStr () << endl
+    << endl
     << endl;
-  exit (-1);
-}
+
+  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+
+  PushOnBack (j, result);
+  if  (result != NoError)
+  {
+    log.Level (-1) << endl 
+      << "BinaryJobList::PushOnBack   ***ERROR***   Duplicate Job    JobId [" << j->JobId () << "]." << endl
+      << endl;
+  }
+}  /* PushOnBack */
+
 
 
 void   BinaryJobList::PushOnBack (BinaryJobPtr  j,
@@ -1038,11 +1054,15 @@ void   BinaryJobList::PushOnBack (BinaryJobPtr  j,
   jobIdLookUpTableIdx = jobIdLookUpTable.find (j->JobId ());
   if  (jobIdLookUpTableIdx != jobIdLookUpTable.end ())
   {
+    BinaryJobPtr  existingJob = jobIdLookUpTableIdx->second;
     log.Level (-1) << endl
                    << endl
-                   << "BinaryJobList::PushOnBack      ***ERROR***" << endl 
-                   << endl 
-                   << "BinaryJobList::PushOnBack        Duplicate JobId[" << j->JobId () << "]" << endl
+                   << "BinaryJobList::PushOnBack      ***ERROR***     JobId already in list." << endl 
+                   << endl
+                   << "    Existing Job    :" << existingJob->ToStatusStr () << endl
+                   << endl
+                   << "    Job Being Added :" << j->ToStatusStr () << endl
+                   << endl
                    << endl;
     result = DuplicateJobId;
     return;
@@ -1060,8 +1080,9 @@ void   BinaryJobList::PushOnBack (BinaryJobPtr  j,
       log.Level (-1) << endl << endl
                      << "BinaryJobList::PushOnBack        ***ERROR***     Duplicate Parameters"  << endl
                      << endl  
-                     << "        Existing JobId[" << j2->JobId () << "]  C[" << j2->CParm () << "]  Gamma[" << j2->GammaParm () << "]  A[" << j2->AParm () << "]  ValidateOnly[" << (j2->ValidateOnly () ? "Yes" : "No") << "]" << endl
-                     << "        New      JobId[" << j->JobId  () << "]  C[" << j->CParm  () << "]  Gamma[" << j->GammaParm  () << "]  A[" << j->AParm  () << "]  ValidateOnly[" << (j->ValidateOnly  () ? "Yes" : "No") << "]" << endl
+                     << "        Existing Job :" << j2->ToStatusStr () << endl
+                     << endl
+                     << "        New      Job :" << j->ToStatusStr  () << endl
                      << endl
                      << endl;
       result = DuplicateParameters;
@@ -1085,6 +1106,8 @@ void   BinaryJobList::PushOnBack (BinaryJobPtr  j,
 //  lastFilePostion to determine where to read from.
 void   BinaryJobList::ReFresh ()
 {
+  ErrorCodes  result = NoError;
+
   FILE*  in = osFOPEN (fileName.Str (), "r");
   if  (!in)
   {
@@ -1113,7 +1136,7 @@ void   BinaryJobList::ReFresh ()
 
     if  (!existingJob)
     {
-      PushOnBack (j);
+      PushOnBack (j, result);
     }
     else
     {
@@ -1149,6 +1172,7 @@ bool  BinaryJobList::JobsStillRunning ()
 
 BinaryJobListPtr  BinaryJobList::ExtractHighestGrade (int  numToExtract)
 {
+  ErrorCodes  result = NoError;
   BinaryJobListPtr  highestGradeJobs = new BinaryJobList (processor);
   highestGradeJobs->Owner (false);
 
@@ -1161,7 +1185,13 @@ BinaryJobListPtr  BinaryJobList::ExtractHighestGrade (int  numToExtract)
   for  (idx = begin ();  (idx != end ())  &&  (highestGradeJobs->QueueSize () < numToExtract);  idx++)
   {
     BinaryJobPtr  j = *idx;
-    highestGradeJobs->PushOnBack (j);
+    highestGradeJobs->PushOnBack (j, result);
+    if  (result != NoError)
+    {
+      log.Level (-1) << endl 
+        << "BinaryJobList::ExtractHighestGrade   ***ERROR***   Dupliacte Jobs adding to 'highestGradeJobs'." << endl
+        << endl;
+    }
   }
 
   return  highestGradeJobs;
@@ -1169,11 +1199,12 @@ BinaryJobListPtr  BinaryJobList::ExtractHighestGrade (int  numToExtract)
 
 
 
-
-BinaryJobListPtr  BinaryJobList::ExtractHighestGrade (float  percentageFromTop)  // Get all jobs who's grade is within 'percentageFromTop' 
-                                                                                 // of the highest grade.
-
+/**
+ *@brief Get all jobs who's grade is within 'percentageFromTop' of the highest grade.
+ */
+BinaryJobListPtr  BinaryJobList::ExtractHighestGrade (float  percentageFromTop)
 {
+  ErrorCodes  result = NoError;
   BinaryJobListPtr  highestGradeJobs = new BinaryJobList (processor);
   highestGradeJobs->Owner (false);
   if  (QueueSize () < 1)
@@ -1191,7 +1222,7 @@ BinaryJobListPtr  BinaryJobList::ExtractHighestGrade (float  percentageFromTop) 
     if  (j->Grade () <= lowGradeThreshold)
       break;
 
-    highestGradeJobs->PushOnBack (j);
+    highestGradeJobs->PushOnBack (j, result);
   }
 
   return  highestGradeJobs;
@@ -1204,6 +1235,8 @@ BinaryJobListPtr  BinaryJobList::ExtractHighestGrade (float  topPercentage,
                                                       int    minNumOfJobs
                                                      )
 {
+  ErrorCodes  result = NoError;
+
   BinaryJobListPtr  highestGradeJobs = new BinaryJobList (processor);
   highestGradeJobs->Owner (false);
 
@@ -1223,7 +1256,7 @@ BinaryJobListPtr  BinaryJobList::ExtractHighestGrade (float  topPercentage,
     if  ((j->Grade () <= lowGradeThreshold)  &&  (highestGradeJobs->QueueSize () >= minNumOfJobs))
       break;
 
-    highestGradeJobs->PushOnBack (j);
+    highestGradeJobs->PushOnBack (j, result);
   }
 
   return  highestGradeJobs;
@@ -1235,6 +1268,8 @@ BinaryJobListPtr  BinaryJobList::ExtractHighestGrade (float  topPercentage,
 
 BinaryJobListPtr  BinaryJobList::ExtractLowDeltaProbAccuarcy (float acceptableDelta)
 {
+  ErrorCodes  result = NoError;
+
   BinaryJobListPtr  lowDeltaProbAccuarcyJobs = new BinaryJobList (processor);
   lowDeltaProbAccuarcyJobs->Owner (false);
   if  (QueueSize () < 1)
@@ -1245,7 +1280,7 @@ BinaryJobListPtr  BinaryJobList::ExtractLowDeltaProbAccuarcy (float acceptableDe
   {
     BinaryJobPtr  j = *idx;
     if  (j->DeltaProbAccuracy () <= acceptableDelta)
-      lowDeltaProbAccuarcyJobs->PushOnBack (j);
+      lowDeltaProbAccuarcyJobs->PushOnBack (j, result);
   }
 
   return  lowDeltaProbAccuarcyJobs;
@@ -1255,6 +1290,8 @@ BinaryJobListPtr  BinaryJobList::ExtractLowDeltaProbAccuarcy (float acceptableDe
 
 BinaryJobListPtr  BinaryJobList::ExtractByMinimumProcessintTime (double  maxProcessingTime)
 {
+  ErrorCodes  result = NoError;
+
   BinaryJobListPtr  jobs = new BinaryJobList (processor);
   jobs->Owner (false);
   if  (QueueSize () < 1)
@@ -1265,7 +1302,7 @@ BinaryJobListPtr  BinaryJobList::ExtractByMinimumProcessintTime (double  maxProc
   {
     BinaryJobPtr  j = *idx;
     if  (j->ProcessingTime () <= maxProcessingTime)
-      jobs->PushOnBack (j);
+      jobs->PushOnBack (j, result);
   }
 
   return  jobs;
@@ -1277,6 +1314,8 @@ BinaryJobListPtr  BinaryJobList::ExtractHighestTestGrade (float  topPercentage,
                                                           bool   featureCountPrefSmall
                                                          )
 {
+  ErrorCodes  result = NoError;
+
   BinaryJobListPtr  highestTestGradeJobs = new BinaryJobList (processor);
   highestTestGradeJobs->Owner (false);
 
@@ -1295,7 +1334,7 @@ BinaryJobListPtr  BinaryJobList::ExtractHighestTestGrade (float  topPercentage,
     if  (j->TestGrade () < lowGradeThershold)
       break;
 
-    highestTestGradeJobs->PushOnBack (j);
+    highestTestGradeJobs->PushOnBack (j, result);
   }
 
   return  highestTestGradeJobs;
@@ -1311,6 +1350,8 @@ BinaryJobListPtr  BinaryJobList::LookUpByParameters (double  minC,
                                                      double  maxGamma
                                                     )
 {
+  ErrorCodes  result = NoError;
+
   BinaryJobListPtr  jobs = new BinaryJobList (processor);
   jobs->Owner (false);
 
@@ -1326,7 +1367,7 @@ BinaryJobListPtr  BinaryJobList::LookUpByParameters (double  minC,
          (j->GammaParm () >= minGamma)  &&
          (j->GammaParm () <= maxGamma)
         )
-    jobs->PushOnBack (j);
+    jobs->PushOnBack (j, result);
   }
   
   return  jobs;
@@ -1359,6 +1400,8 @@ BinaryJobListPtr  BinaryJobList::ExtractFastestJobs (double  minTime,
 
 BinaryJobListPtr  BinaryJobList::ExtractJobsWithSmallestDeltaAccProbForEachSvmParameterSet ()
 {
+  ErrorCodes  result = NoError;
+
   BinaryJobListPtr  jobs = new BinaryJobList (processor);
   jobs->Owner (false);
 
@@ -1393,7 +1436,7 @@ BinaryJobListPtr  BinaryJobList::ExtractJobsWithSmallestDeltaAccProbForEachSvmPa
         j = NULL;
     }
 
-    jobs->PushOnBack (jobWithSmallestDelta);
+    jobs->PushOnBack (jobWithSmallestDelta, result);
   }
   
   return  jobs;
@@ -1405,6 +1448,8 @@ BinaryJobListPtr  BinaryJobList::ExtractJobsWithSmallestDeltaAccProbForEachSvmPa
 
 BinaryJobListPtr  BinaryJobList::ExtractTestJobs ()
 {
+  ErrorCodes  result = NoError;
+
   BinaryJobListPtr  testJobs = new BinaryJobList (processor);
   testJobs->Owner (false);
 
@@ -1413,7 +1458,7 @@ BinaryJobListPtr  BinaryJobList::ExtractTestJobs ()
   {
     BinaryJobPtr  j = *idx;
     if  (j->TestGrade () > 0.0f)
-      testJobs->PushOnBack (j);
+      testJobs->PushOnBack (j, result);
   }
 
   return  testJobs;
@@ -1642,6 +1687,8 @@ void  BinaryJobList::GenrateSvmResponseSheet (ostream&  r)
 
 BinaryJobListPtr  BinaryJobList::ExtractJobsForAGivenFeatureCount (int featureCount)
 {
+  ErrorCodes  result = NoError;
+
   BinaryJobListPtr  jobsWithFeatureCount = new BinaryJobList (processor);
   jobsWithFeatureCount->Owner (false);
 
@@ -1650,7 +1697,7 @@ BinaryJobListPtr  BinaryJobList::ExtractJobsForAGivenFeatureCount (int featureCo
   {
     BinaryJobPtr  j = *idx;
     if  (j->Features ().NumOfFeatures () == featureCount)
-      jobsWithFeatureCount->PushOnBack (j);
+      jobsWithFeatureCount->PushOnBack (j, result);
   }
 
   return  jobsWithFeatureCount;
@@ -1661,6 +1708,8 @@ BinaryJobListPtr  BinaryJobList::ExtractJobsForAGivenFeatureCount (int featureCo
 
 BinaryJobListPtr  BinaryJobList::CreateTestJobsForHighetsGradePerFeatureCount ()
 {
+  ErrorCodes  result = NoError;
+
   BinaryJobListPtr  testJobs = new BinaryJobList (processor);
   testJobs->Owner (true);
 
@@ -1706,7 +1755,7 @@ BinaryJobListPtr  BinaryJobList::CreateTestJobsForHighetsGradePerFeatureCount ()
         if  (!existingJob)
         {
           BinaryJobPtr testJob = BinaryJob::CreateTestJob (j);
-          testJobs->PushOnBack (testJob);
+          testJobs->PushOnBack (testJob, result);
           numCreatedForThisFeatureCount++;
         }
 
