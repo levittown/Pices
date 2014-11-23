@@ -3684,14 +3684,18 @@ void  DetermineCropSettingsForDeployment (RunLog&              runLog,
     if  (sipperFile->ExtractionStatus () != '4')
       continue;
 
-    char  extractionStatusResult = 0;
+    char  extractionStatusBeforeUpdate = 0;
+    char  extractionStatusResult       = 0;
+    bool  extrtactionSatusUpdated      = false;
     db->SipperFilesUpdateExtractionStatusIfExpected (sipperFile->SipperFileName (),
-                                                     '4',                            //  extractionStatusExpected,
-                                                     '5',                            //  extractionStatusNew,
-                                                     extractionStatusResult
-                                                    );
-
-    if  (extractionStatusResult != '5')
+                                                    '4',                            //  extractionStatusExpected,
+                                                    '5',                            //  extractionStatusNew,
+                                                    extractionStatusBeforeUpdate,
+                                                    extractionStatusResult,
+                                                    extrtactionSatusUpdated
+                                                   );
+      
+    if  (!extrtactionSatusUpdated)
     {
       // Someone has already go to this SipperFile entry.
       runLog.Level (-1) << "DetermineCropSettingsForDeployment   SipperFile: " << sipperFile->SipperFileName ()

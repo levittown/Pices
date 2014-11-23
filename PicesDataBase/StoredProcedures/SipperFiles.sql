@@ -149,6 +149,7 @@ delimiter ;
 
 
 
+
 /****************************************************************************************************************************/
 /*                       Will only upate the ExtractedStatu if it is still the expected value.                              */
 /****************************************************************************************************************************/
@@ -160,23 +161,36 @@ create procedure  SipperFilesUpdateExtractionStatusIfExpected (in  _sipperFileNa
                                                                in  _extractionStatusNew        char(1)
                                                               )
 begin
-  declare  _extractionStatusExisting     char(1);
+  declare  extractionStatusBeforeUpdate     char(1);
+  
+  declare  extrtactionSatusUpdated      bool;
+  
+  start transaction;
   
   select  sf.ExtractionStatus  
          from  SipperFiles sf  
          where  sf.SipperFileName = _sipperFileName  
-         into  _extractionStatusExisting  
+         into  extractionStatusBeforeUpdate  
          for update;
          
-  if  _extractionStatusExisting = _extractionStatusExpected  then
+  if  extractionStatusBeforeUpdate = _extractionStatusExpected  then
     update  SipperFiles sf
        set extractionStatus  = _extractionStatusNew
        where  sf.SipperFileName = _sipperFileName;
+	set  extrtactionSatusUpdated = true;
+  else
+    set  extrtactionSatusUpdated = false;
   end if;
+  
+  commit;
 
-  select  sf.SipperFileName, sf.ExtractionStatus  
+  select  sf.SipperFileName             as  "SipperFileName", 
+          extractionStatusBeforeUpdate  as  "ExtractionStatusBeforeUpdate", 
+          sf.ExtractionStatus           as  "ExtractionStatusResult",
+          extrtactionSatusUpdated       as  "ExtrtactionSatusUpdated"
        from SipperFiles sf  
        where  sf.SipperFileName = _sipperFileName;
+
 end;
 //
 delimiter ;

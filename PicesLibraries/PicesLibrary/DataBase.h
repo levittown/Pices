@@ -834,18 +834,22 @@ namespace MLL
 
     /**
      *@brief  Updates the ExtractionStatus only if the existing extractioStatus is what was expected.
-     *param[in]  sipperFileName
+     *@param[in]  sipperFileName
      *@param[in]  extractionStatusExpected  Status of existing SipperFiles table entry;  if not existing extractionStatus
      *            this value then no update will take place.
      *@param[in]  extractionStatusNew  The new ExtractionStatus the specified SipperFile will take on if currect 
      *            value equal extractionStatusExpected.
-     *@param[out] The new value of ExtractedStatus.
+     *@param[out] ExtractionStatusBeforeUpdate  Status found in table entry before update.
+     *@param[out] extractionStatusResult  The new value of ExtractedStatus.
+     *@param[out] extrtactionSatusUpdated  Indicates if the extraction status was updated.
      */
-    void                  SipperFilesUpdateExtractionStatusIfExpected (const KKStr&  sipperFileName,
-                                                                       char          extractionStatusExpected,
-                                                                       char          extractionStatusNew,
-                                                                       char&         extractionStatusResult
-                                                                      );
+     void  SipperFilesUpdateExtractionStatusIfExpected (const KKStr&  sipperFileName,
+                                                        char          extractionStatusExpected,
+                                                        char          extractionStatusNew,
+                                                        char&         ExtractionStatusBeforeUpdate,
+                                                        char&         extractionStatusResult,
+                                                        bool&         extrtactionSatusUpdated
+                                                       );
 
     void                  SipperFileUpdateFileSizeStats (const KKStr&  _sipperFileName, 
                                                          int64         _sizeInBytes,

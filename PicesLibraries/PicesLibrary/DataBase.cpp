@@ -5045,10 +5045,26 @@ void  DataBase::SipperFilesUpdateExtractionStatus (const KKStr&  sipperFileName,
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void  DataBase::SipperFilesUpdateExtractionStatusIfExpected (const KKStr&  sipperFileName,
                                                              char          extractionStatusExpected,
                                                              char          extractionStatusNew,
-                                                             char&         extractionStatusResult
+                                                             char&         ExtractionStatusBeforeUpdate,
+                                                             char&         extractionStatusResult,
+                                                             bool&         extrtactionSatusUpdated
                                                             )
 {
   KKStr  sqlStr (128);
@@ -5065,15 +5081,18 @@ void  DataBase::SipperFilesUpdateExtractionStatusIfExpected (const KKStr&  sippe
   int32  returnCd = QueryStatement (sqlStr);
   if  (returnCd == 0)
   {
-    const char*   returnFields[] = {"SipperFileName", "ExtractionStatus", NULL};
+    const char*   returnFields[] = {"SipperFileName", "ExtractionStatusBeforeUpdate", "ExtractionStatusResult", "ExtrtactionSatusUpdated", NULL};
     ResultSetLoad (returnFields);
-    if  (resultSetMore)
+    while  (ResultSetFetchNextRow ())
     {
-      if  (ResultSetFetchNextRow ())
-        extractionStatusResult = ResultSetGetCharField (1);
+      ExtractionStatusBeforeUpdate = ResultSetGetCharField (1);
+      extractionStatusResult       = ResultSetGetCharField (2);
+      extrtactionSatusUpdated      = ResultSetGetBool      (3);
     }
     ResulSetFree ();
+    ResultSetsClear ();
   }
+
   return;
 }  /* SipperFilesUpdateExtractionStatusIfExpected*/
 
