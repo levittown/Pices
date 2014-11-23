@@ -596,6 +596,8 @@ BinaryJobListPtr  BinaryJob::ExpandBestCaseBackward (BinaryJobListPtr  exitingJo
   log.Level (20) << "BinaryJob::ExpandBestCaseBackward   JobId[" << jobId << "]" << endl;
   BinaryJobListPtr  expandedJobs = new BinaryJobList (processor);
 
+  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+
   if  (features.NumOfFeatures () < 2)
     return expandedJobs;
 
@@ -621,7 +623,16 @@ BinaryJobListPtr  BinaryJob::ExpandBestCaseBackward (BinaryJobListPtr  exitingJo
                                            aParm
                                           );
 
-      expandedJobs->PushOnBack (newJob);
+      expandedJobs->PushOnBack (newJob, result);
+      if  (result != BinaryJobList::NoError)
+      {
+        cerr << endl
+          << "BinaryJob::ExpandBestCaseBackward   ***ERROR***   Duplicate Job adding to 'expandedJobs'." << endl
+          << "    " << newJob->ToStatusStr () << endl
+          << endl;
+        delete  newJob;
+        newJob = NULL;
+      }
     }
   }
 
@@ -637,7 +648,9 @@ BinaryJobListPtr  BinaryJob::ExpandBestCaseForward (BinaryJobListPtr  exitingJob
                                                    )
 {
   log.Level (20) << "BinaryJob::ExpandBestCaseForward   JobId[" << jobId << "]" << endl;
-
+  
+  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+  
   BinaryJobListPtr  expandedJobs = new BinaryJobList (processor);
 
   if  (features.NumOfFeatures () > 55)
@@ -668,7 +681,16 @@ BinaryJobListPtr  BinaryJob::ExpandBestCaseForward (BinaryJobListPtr  exitingJob
                                            aParm
                                           );
 
-      expandedJobs->PushOnBack (newJob);
+      expandedJobs->PushOnBack (newJob, result);
+      if  (result != BinaryJobList::NoError)
+      {
+        cerr << endl
+          << "BinaryJob::ExpandBestCaseForward   ***ERROR***   Duplicate Job adding to 'expandedJobs'." << endl
+          << "    " << newJob->ToStatusStr () << endl
+          << endl;
+        delete  newJob;
+        newJob = NULL;
+      }
     }
   }
 

@@ -17,11 +17,8 @@
 #include <unistd.h>
 #endif
 
-
 #include "MemoryDebug.h"
-
 using namespace  std;
- 
 
 
 #include "BasicTypes.h"
@@ -1023,10 +1020,21 @@ FeatureNumList  BinaryJobList::SelectFeaturesByMostFeaturesWithHighestGrade ()  
 
 
 
-
-
 void   BinaryJobList::PushOnBack (BinaryJobPtr  j)
 {
+  log.Level (-1) << endl
+    << "BinaryJobList::PushOnBack    ***DO NOT USE THIS METHOD***" << endl
+    << endl;
+  exit (-1);
+}
+
+
+void   BinaryJobList::PushOnBack (BinaryJobPtr  j,
+                                  ErrorCodes&   result
+                                 )
+{
+  result = NoError;
+
   jobIdLookUpTableIdx = jobIdLookUpTable.find (j->JobId ());
   if  (jobIdLookUpTableIdx != jobIdLookUpTable.end ())
   {
@@ -1036,8 +1044,8 @@ void   BinaryJobList::PushOnBack (BinaryJobPtr  j)
                    << endl 
                    << "BinaryJobList::PushOnBack        Duplicate JobId[" << j->JobId () << "]" << endl
                    << endl;
-    osWaitForEnter ();
-    exit (-1);
+    result = DuplicateJobId;
+    return;
   }
 
   if  (j->JobType () != jtRandomSplit)
@@ -1056,8 +1064,8 @@ void   BinaryJobList::PushOnBack (BinaryJobPtr  j)
                      << "        New      JobId[" << j->JobId  () << "]  C[" << j->CParm  () << "]  Gamma[" << j->GammaParm  () << "]  A[" << j->AParm  () << "]  ValidateOnly[" << (j->ValidateOnly  () ? "Yes" : "No") << "]" << endl
                      << endl
                      << endl;
-      osWaitForEnter ();
-      exit (-1);
+      result = DuplicateParameters;
+      return;
     }
   }
 

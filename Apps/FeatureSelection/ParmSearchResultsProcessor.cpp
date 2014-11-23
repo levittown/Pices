@@ -52,6 +52,8 @@ ParmSearchResultsProcessor::ParmSearchResultsProcessor (ProcessorPtr _processor)
 
 BinaryJobListPtr  ParmSearchResultsProcessor::GetBestCandidates ()
 {
+  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+
   BinaryJobListPtr  jobs = processor->BinaryJobs ();
 
  
@@ -72,7 +74,14 @@ BinaryJobListPtr  ParmSearchResultsProcessor::GetBestCandidates ()
     if  ((highAccuracy - j->Accuracy ()) >= 1.0f)
       break;
 
-    accuracyCandidateJobs->PushOnBack (j);
+    accuracyCandidateJobs->PushOnBack (j, result);
+    if  (result != BinaryJobList::NoError)
+    {
+      cerr << endl
+        << "ParmSearchResultsProcessor::GetBestCandidates   ***ERROR***   Duplicate Job adding to 'accuracyCandidateJobs'." << endl
+        << "    " << j->ToStatusStr () << endl
+        << endl;
+    }
   }
 
 
@@ -93,7 +102,14 @@ BinaryJobListPtr  ParmSearchResultsProcessor::GetBestCandidates ()
     if  ((j->ProcessingTime () - shortestTime) > threshholdTime)
       break;
 
-    finalCandidateJobs->PushOnBack (j);
+    finalCandidateJobs->PushOnBack (j, result);
+    if  (result != BinaryJobList::NoError)
+    {
+      cerr << endl
+        << "ParmSearchResultsProcessor::GetBestCandidates   ***ERROR***   Duplicate Job adding to 'finalCandidateJobs'." << endl
+        << "    " << j->ToStatusStr () << endl
+        << endl;
+    }
   }
 
   delete  accuracyCandidateJobs;  accuracyCandidateJobs = NULL;

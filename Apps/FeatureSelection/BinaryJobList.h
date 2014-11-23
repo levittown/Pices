@@ -28,6 +28,8 @@ public:
 
   typedef  BinaryJobList*  BinaryJobListPtr;
 
+  typedef  enum  {NoError, DuplicateJobId, DuplicateParameters}  ErrorCodes;
+
 
   BinaryJobList (ProcessorPtr  _processor);
 
@@ -143,7 +145,14 @@ public:
 
   BinaryJobPtr      LowestDeltaAccuracyProbTestJob ();
 
-  void              PushOnBack (BinaryJobPtr  j);
+  void              PushOnBack (BinaryJobPtr  j,
+                                ErrorCodes&   result
+                               );
+
+private:
+    void            PushOnBack (BinaryJobPtr  j);
+
+public:
 
   void              ReFresh ();   //  Will open data file and load any new entries in data file that have been added.  Uses
                               //  lastFilePostion to determine where to read from.

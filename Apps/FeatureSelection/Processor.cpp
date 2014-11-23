@@ -700,14 +700,12 @@ void  Processor::ProcessStatusFileLineJobStatusChange (KKStrParser&  statusLineS
   BinaryJobPtr  j = binaryJobs->LookUpByJobId (expandedJobId);
   if  (!j)
   {
-    log.Level (-1) << endl << endl << endl 
+    log.Level (-1) << endl 
                    << "ProcessStatusLineJobStatusChange    ***Error***    Could not locate Expanded" << endl
                    << endl
                    << "                                    JobId[" << expandedJobId << "]"  << endl
                    << endl;
-    EndBlock ();
-    osWaitForEnter ();
-    exit (-1);
+    return;
   }
 
   KKStr statusStr = statusLineStr.GetNextToken ("\t");
@@ -716,25 +714,25 @@ void  Processor::ProcessStatusFileLineJobStatusChange (KKStrParser&  statusLineS
   bjBinaryJobStatus status = BinaryJob::BinaryJobStatusFromStr (statusStr);
   if  (status == bjNULL)
   {
-    log.Level (-1) << endl << endl << endl 
+    log.Level (-1) << endl << endl 
                    << "ProcessStatusLineJobStatusChange    ***Error***      Invalid Status Specified" << endl
                    << endl
                    << "                                    JobId["  << expandedJobId << "]"  << endl
                    << "                                    Status[" << statusStr     << "]"  << endl
                    << endl;
-    EndBlock ();
-    osWaitForEnter ();
-    exit (-1);
+    return;
   }
   
   j->Status (status);
   
-}  /* ProcessStatusLineJobStatusChange */
+}  /* ProcessStatusFileLineJobStatusChange */
 
 
 
 void  Processor::ProcessStatusFileLine (KKStrParser&  statusStr)
 {
+  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+
   if  (statusStr.SubStrPart (0, 1) == "//")
   {
     // A coment line;  we can ignore it.
@@ -793,7 +791,16 @@ void  Processor::ProcessStatusFileLine (KKStrParser&  statusStr)
       }
       else
       {
-        binaryJobs->PushOnBack (j);
+        binaryJobs->PushOnBack (j, result);
+        if  (result != BinaryJobList::NoError)
+        {
+          log.Level (-1) << endl << endl 
+                         <<"Processor::ProcessStatusFileLine     ***ERROR***     Duplicate Jobs  ***" << endl
+                         << endl
+                         << "     New Job[" << j->JobId () << "]" << endl
+                         << endl;
+          delete  j;  j = NULL;
+        }
       }
     }
   }
@@ -812,7 +819,16 @@ void  Processor::ProcessStatusFileLine (KKStrParser&  statusStr)
     }
     else
     {
-      binaryJobs->PushOnBack (j);
+      binaryJobs->PushOnBack (j, result);
+      if  (result != BinaryJobList::NoError)
+      {
+        log.Level (-1) << endl << endl 
+                       <<"Processor::ProcessStatusFileLine     ***ERROR***     Duplicate Jobs  ***" << endl
+                       << endl
+                       << "     New Job[" << j->JobId () << "]" << endl
+                       << endl;
+        delete  j;  j = NULL;
+      }
     }
   }
 
@@ -828,7 +844,16 @@ void  Processor::ProcessStatusFileLine (KKStrParser&  statusStr)
     }
     else
     {
-      binaryJobs->PushOnBack (j);
+      binaryJobs->PushOnBack (j, result);
+      if  (result != BinaryJobList::NoError)
+      {
+        log.Level (-1) << endl << endl 
+                       <<"Processor::ProcessStatusFileLine     ***ERROR***     Duplicate Jobs  ***" << endl
+                       << endl
+                       << "     New Job[" << j->JobId () << "]" << endl
+                       << endl;
+        delete  j;  j = NULL;
+      }
     }
   }
 
@@ -1253,6 +1278,8 @@ void  Processor::InitializeStatusFile ()
 {
   log.Level (10) << "Processor::InializeStatusFile" << endl;
 
+  BinaryJobList::ErrorCodes  result  = BinaryJobList::NoError;
+
   delete  binaryJobs;
   binaryJobs = new BinaryJobList (this);
 
@@ -1265,7 +1292,16 @@ void  Processor::InitializeStatusFile ()
                                           (float)config->Gamma (),
                                           config->A_Param      ()
                                          );
-  binaryJobs->PushOnBack (firstJob);
+  binaryJobs->PushOnBack (firstJob, result);
+  if  (result != BinaryJobList::NoError)
+  {
+    log.Level (-1) << endl << endl 
+                   <<"Processor::InitializeStatusFile     ***ERROR***     Duplicate Jobs  ***" << endl
+                   << "   New Job[" << firstJob->JobId () << "]" << endl
+                   << "   There is no way this should have been able t happen since the queue should have been empty!!!" << endl
+                   << endl;
+    delete  firstJob;  firstJob = NULL;
+  }
 
   WriteStatusFile ();
 
@@ -1281,6 +1317,9 @@ void  Processor::FlagJobsForTesting (ofstream*         statusFile,
                                     )
 {
   log.Level (10) << "Processor::FlagJobsForTesting"  << endl;
+
+  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+
   BinaryJobList::iterator  idx;
   for  (idx = candidats->begin ();  idx != candidats->end ();  idx++)
   {
@@ -1321,7 +1360,16 @@ void  Processor::FlagJobsForTesting (ofstream*         statusFile,
     newJob->Status (bjOpen);
 
     *statusFile << newJob->JobTypeStr () << "\t" << newJob->ToStatusStr () << endl;
-    binaryJobs->PushOnBack (newJob);
+    binaryJobs->PushOnBack (newJob, result);
+    if  (result != BinaryJobList::NoError)
+    {
+      log.Level (-1) << endl
+        << "Processor::FlagJobsForTesting   ***ERROR***   Duplicate Job." <<  endl
+        << "        " << j->ToStatusStr () << endl
+        << endl;
+      delete  newJob;
+      newJob = NULL;
+    }
   }
 
   *statusFile << "NextJobId" << "\t" << nextJobId << endl;
@@ -1338,6 +1386,8 @@ void  Processor::CreateParameterJobsUsfCasCor (ofstream*  statusFile,
                                               )
 {
   log.Level (10) << "Processor::CreateParameterJobsUsfCasCor" << endl;
+
+  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
   
   // It is assumed that we have a 'EndBlock
   *statusFile << "// CreateParameterJobsUsfCasCor" << endl
@@ -1376,7 +1426,15 @@ void  Processor::CreateParameterJobsUsfCasCor (ofstream*  statusFile,
                                          100.0  // aParam
                                         );
         *statusFile << j->JobTypeStr () << "\t" << j->ToStatusStr () << endl;
-        binaryJobs->PushOnBack (j);
+        binaryJobs->PushOnBack (j, result);
+        if  (result != BinaryJobList::NoError)
+        {
+          log.Level (-1) << endl << endl 
+                         <<"Processor::CreateParameterJobsUsfCasCor     ***ERROR***     Duplicate Jobs  ***" << endl
+                         << "   New Job[" << j->JobId () << "]" << endl
+                         << endl;
+          delete  j;  j = NULL;
+        }
       }
     }
 
@@ -1404,7 +1462,9 @@ void  Processor::CreateParameterJobs (ofstream*  statusFile,
                                      )
 {
   log.Level (10) << "Processor::CreateParameterJobs" << endl;
-  
+
+  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+
   // It is assumed that we have a 'EndBlock
   *statusFile << "// CreateParameterJobs" << endl
               << "//  C      GrowthRate[" << cParmGrowthRate     << "]" << "\t" << "Min[" << cParmMin     << "]" << "\t" << "Max[" << cParmMax     << "]" << endl
@@ -1442,7 +1502,15 @@ void  Processor::CreateParameterJobs (ofstream*  statusFile,
                                            aParameter
                                           );
           *statusFile << j->JobTypeStr () << "\t" << j->ToStatusStr () << endl;
-          binaryJobs->PushOnBack (j);
+          binaryJobs->PushOnBack (j, result);
+          if  (result != BinaryJobList::NoError)
+          {
+            log.Level (-1) << endl << endl 
+                           <<"Processor::CreateParameterJobs     ***ERROR***     Duplicate Jobs  ***" << endl
+                           << "   New Job[" << j->JobId () << "]" << endl
+                           << endl;
+            delete  j;  j = NULL;
+          }
         }
 
         if  (gammaParmGrowthRate <= 1.0f)
@@ -1476,6 +1544,8 @@ void  Processor::CreateRandomSplitsJobs (ostream*  statusFile)
 {
   log.Level (10) << "Processor::CreateRandomSplitsJobs" << endl;
 
+  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+
   int  splitNum = 0;
   for  (splitNum = 0; splitNum < featureSelection->RandomSplitsNum ();  splitNum++)
   {
@@ -1492,7 +1562,15 @@ void  Processor::CreateRandomSplitsJobs (ostream*  statusFile)
                          );
 
     *statusFile << j->JobTypeStr () << "\t" << j->ToStatusStr () << endl;
-    binaryJobs->PushOnBack (j);
+    binaryJobs->PushOnBack (j, result);
+    if  (result != BinaryJobList::NoError)
+    {
+      log.Level (-1) << endl << endl 
+                     <<"Processor::CreateParameterJobs     ***ERROR***     Duplicate Jobs  ***" << endl
+                     << "   New Job[" << j->JobId () << "]" << endl
+                     << endl;
+      delete  j;  j = NULL;
+    }
   }
 }  /* CreateRandomSplitsJobs */
 
@@ -1504,6 +1582,8 @@ void  Processor::CreateValidationJob (ostream*        statusFile,
                                      )
 {
   log.Level (10) << "Processor::CreateValidationJob" << endl;
+  
+  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
 
   double  cParm       = config->C_Param     ();
   double  gamma       = config->Gamma       ();
@@ -1531,7 +1611,15 @@ void  Processor::CreateValidationJob (ostream*        statusFile,
                          );
 
   *statusFile << j->JobTypeStr () << "\t" << j->ToStatusStr () << endl;
-  binaryJobs->PushOnBack (j);
+  binaryJobs->PushOnBack (j, result);
+  if  (result != BinaryJobList::NoError)
+  {
+    log.Level (-1) << endl << endl 
+                   <<"Processor::CreateValidationJob     ***ERROR***     Duplicate Jobs  ***" << endl
+                   << "   New Job[" << j->JobId () << "]" << endl
+                   << endl;
+    delete  j;  j = NULL;
+  }
 }  /* CreateValidationJob */
 
 
@@ -1590,7 +1678,10 @@ void  Processor::UpdateExpandedJobs (ofstream*         statusFile,
                                      BinaryJobListPtr  newJobs
                                     )
 {
+  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+
   expandedJob->Status (bjExpanded);
+
   *statusFile << "JobStatusChange" << "\t" << expandedJob->JobId () << "\t" << expandedJob->StatusStr () << endl;
 
   BinaryJobList::iterator  idx;
@@ -1598,7 +1689,14 @@ void  Processor::UpdateExpandedJobs (ofstream*         statusFile,
   {
     BinaryJobPtr  j = *idx;
     *statusFile << j->JobTypeStr () << "\t" << j->ToStatusStr () << endl;
-    binaryJobs->PushOnBack (j);
+    binaryJobs->PushOnBack (j, result);
+    if  (result != BinaryJobList::NoError)
+    {
+      log.Level (-1) << endl 
+        << "Processor::UpdateExpandedJobs   ***ERROR***    Duplicate Job   JobId[" << j->JobId () << "]" << endl
+        << "     " << j->ToStatusStr () << endl
+        << endl;
+    }
   }
 
   *statusFile << "NextJobId" << "\t" << nextJobId << endl;
@@ -1887,6 +1985,8 @@ void  Processor::ProcessGridSearchExpansionMostAccurate (ofstream*  statusFile,
                                                          int&       numJobsCreated
                                                         )
 {
+  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+
   *statusFile << "//" << endl
               << "//  Grid Expansion Most Accurate  [" << numOfExpansions       << "]"  << endl
               << "//  Current Date/Time             [" << osGetLocalDateTime () << "]"  << endl
@@ -2117,7 +2217,16 @@ void  Processor::ProcessGridSearchExpansionMostAccurate (ofstream*  statusFile,
                                            j->AParm (), 
                                            true
                                           ) == NULL)
-        jobsToTest->PushOnBack (j);
+      {
+        jobsToTest->PushOnBack (j, result);
+        if  (result != BinaryJobList::NoError)
+        {
+          log.Level (-1) << endl 
+            << "Processor::ProcessGridSearchExpansionMostAccurate   ***ERROR***    Duplicate Job   JobId[" << j->JobId () << "]" << endl
+            << "     " << j->ToStatusStr () << endl
+            << endl;
+        }
+      }
     }
 
     FlagJobsForTesting (statusFile, jobsToTest);
@@ -2156,6 +2265,8 @@ void  Processor::ProcessGridSearchExpansionFastestFromBest (ofstream*  statusFil
                                                             int&       numJobsCreated
                                                            )
 {
+  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+
   *statusFile << "//" << endl
               << "//  Grid Expansion    [" << numOfExpansions       << "]"  << endl
               << "//  Current Date/Time [" << osGetLocalDateTime () << "]"  << endl
@@ -2324,7 +2435,6 @@ void  Processor::ProcessGridSearchExpansionFastestFromBest (ofstream*  statusFil
       gammaGrowthRate = 1.03f;
       WriteStatusFileGrowthRates (*statusFile);
 
-
       CreateParameterJobs (statusFile, j->JobId (),
                            cGrowthRate,     cMin,      cMax,
                            gammaGrowthRate, gammaMin,  gammaMax,
@@ -2344,7 +2454,17 @@ void  Processor::ProcessGridSearchExpansionFastestFromBest (ofstream*  statusFil
       BinaryJobListPtr  jobsToTest = new BinaryJobList (this);
       jobsToTest->Owner (false);
       for  (int x = 0;  (x < 64)  &&  (x < highestGradedJobs->QueueSize ());  x++)
-        jobsToTest->PushOnBack (highestGradedJobs->IdxToPtr (x));
+      {
+        BinaryJobPtr  jobToTest = highestGradedJobs->IdxToPtr (x);
+        jobsToTest->PushOnBack (jobToTest, result);
+        if  (result != BinaryJobList::NoError)
+        {
+          log.Level (-1) << endl
+            << "Processor::UpdateExpandedJobs   ***ERROR***    Duplicate Job   JobId[" << jobToTest->JobId () << "]" << endl
+            << "     " << jobToTest->ToStatusStr () << endl
+            << endl;
+        }      
+      }
      
       FlagJobsForTesting (statusFile, jobsToTest);
 
@@ -2375,6 +2495,8 @@ void  Processor::ProcessTestResultsExpansion (ofstream*  statusFile,
   // We will locate the jobs that have the highest training accuracy by feature count.  Then for each one 
   // of them we will test against the test data set.
 
+  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+
   BinaryJobListPtr  jobsToTest = binaryJobs->CreateTestJobsForHighetsGradePerFeatureCount ();
   jobsToTest->Owner (false);
 
@@ -2382,8 +2504,18 @@ void  Processor::ProcessTestResultsExpansion (ofstream*  statusFile,
   for  (idx = jobsToTest->begin ();   idx != jobsToTest->end ();  idx++)
   {
     BinaryJobPtr  j = *idx;
-    binaryJobs->PushOnBack (j);
-    *statusFile << j->JobTypeStr () << "\t" << j->ToStatusStr () << endl;
+    binaryJobs->PushOnBack (j, result);
+    if  (result != BinaryJobList::NoError)
+    {
+      log.Level (-1) << endl 
+        << "Processor::ProcessTestResultsExpansion   ***ERROR***    Duplicate Job   JobId[" << j->JobId () << "]" << endl
+        << "     " << j->ToStatusStr () << endl
+        << endl;
+    }
+    else
+    {
+      *statusFile << j->JobTypeStr () << "\t" << j->ToStatusStr () << endl;
+    }
   }
 
   *statusFile << "NextJobId" << "\t" << nextJobId << endl;
@@ -2393,6 +2525,7 @@ void  Processor::ProcessTestResultsExpansion (ofstream*  statusFile,
   *statusFile << "SearchMethod"  << "\t" << SearchMethodToStr (searchMethod)  << endl;
  
   delete  jobsToTest;
+  jobsToTest = NULL;
 
   log.Level (20) << "Processor::ProcessTestResultsExpansion     exiting"  << endl;
 }  /* ProcessTestResultsExpansion */
@@ -2918,7 +3051,16 @@ BinaryJobListPtr  Processor::GetNextSetOfJobs (BinaryJobListPtr  completedJobs)
 
     while  (nextJob  &&  (jobsToExecute->QueueSize () < numJobsAtATime))
     {
-      jobsToExecute->PushOnBack (nextJob);
+      BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+      jobsToExecute->PushOnBack (nextJob, result);
+      if  (result != BinaryJobList::NoError)
+      {
+        // This should just not be able to happen;  but if it does there must be an interesting story.
+        log.Level (-1) << endl
+          << "Processor::GetNextSetOfJobs   ***ERROR***    Duplicate Job" << endl
+          << "    " << nextJob->ToStatusStr () << endl
+          << endl;
+      }
       nextJob->Status (bjStarted);
       *statusFile << "JobStatusChange" << "\t" << nextJob->JobId () << "\t" << nextJob->StatusStr () << endl;
       nextJob = binaryJobs->LocateOpenJob ();
@@ -2966,6 +3108,8 @@ void   Processor::Run ()
 
   bool  keepOnRunning = true;
 
+  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+
   BinaryJobListPtr  executedJobs  = NULL;
   BinaryJobListPtr  jobsToExecute = GetNextSetOfJobs (NULL);
 
@@ -2983,7 +3127,18 @@ void   Processor::Run ()
       {
         BinaryJobPtr  j = *idx;
         j->EvaluateNode ();
-        executedJobs->PushOnBack (BinaryJob::CreateDuplicateJob (*j));
+
+        BinaryJobPtr  dupJob = BinaryJob::CreateDuplicateJob (*j);
+
+        executedJobs->PushOnBack (dupJob, result);
+        if  (result != BinaryJobList::NoError)
+        {
+          // This should just not beable to happen; but since it did; must be an interesting story.
+          log.Level (-1) << endl
+            << "Processor::Run   ***ERROR***    DuplicateJob in 'executedJobs'." << endl
+            << dupJob->ToStatusStr () << endl
+            << endl;
+        }
       }
       delete  jobsToExecute;  jobsToExecute = NULL;
     }
