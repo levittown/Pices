@@ -5040,8 +5040,47 @@ void  DataBase::SipperFilesUpdateExtractionStatus (const KKStr&  sipperFileName,
 
   sqlStr << "call SipperFilesUpdateExtractionStatus(" << rootName.QuotedStr () << ", \"" << extractionStatus << "\")";
   int32  returnCd = QueryStatement (sqlStr);
-
 }  /* SipperFilesUpdateExtractionStatus */
+
+
+
+
+void  DataBase::SipperFilesUpdateExtractionStatusIfExpected (const KKStr&  sipperFileName,
+                                                             char          extractionStatusExpected,
+                                                             char          extractionStatusNew,
+                                                             char&         extractionStatusResult
+                                                            )
+{
+  KKStr  sqlStr (128);
+
+  extractionStatusResult = 0;
+  
+  sqlStr << "Call SipperFilesUpdateExtractionStatusIfExpected"
+         << "(" 
+               << osGetRootName (sipperFileName).QuotedStr ()  << ", "
+               << "\"" << extractionStatusExpected << "\""     << ", "
+               << "\"" << extractionStatusNew << "\""
+         << ")";
+
+  int32  returnCd = QueryStatement (sqlStr);
+  if  (returnCd == 0)
+  {
+    const char*   returnFields[] = {"SipperFileName", "ExtractionStatus", NULL};
+    ResultSetLoad (returnFields);
+    if  (resultSetMore)
+    {
+      if  (ResultSetFetchNextRow ())
+        extractionStatusResult = ResultSetGetCharField (1);
+    }
+    ResulSetFree ();
+  }
+  return;
+}  /* SipperFilesUpdateExtractionStatusIfExpected*/
+
+
+
+
+
 
 
 
@@ -5210,6 +5249,8 @@ void  DataBase::SipperFileInsert (SipperFile&  sipperFile)
 
   return;
 }  /* SiperFileInsert */
+
+
 
 
 

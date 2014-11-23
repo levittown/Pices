@@ -149,6 +149,45 @@ delimiter ;
 
 
 
+/****************************************************************************************************************************/
+/*                       Will only upate the ExtractedStatu if it is still the expected value.                              */
+/****************************************************************************************************************************/
+drop procedure  if exists SipperFilesUpdateExtractionStatusIfExpected;
+
+delimiter //
+create procedure  SipperFilesUpdateExtractionStatusIfExpected (in  _sipperFileName             varChar(48),
+                                                               in  _extractionStatusExpected   char(1),
+                                                               in  _extractionStatusNew        char(1)
+                                                              )
+begin
+  declare  _extractionStatusExisting     char(1);
+  
+  select  sf.ExtractionStatus  
+         from  SipperFiles sf  
+         where  sf.SipperFileName = _sipperFileName  
+         into  _extractionStatusExisting  
+         for update;
+         
+  if  _extractionStatusExisting = _extractionStatusExpected  then
+    update  SipperFiles sf
+       set extractionStatus  = _extractionStatusNew
+       where  sf.SipperFileName = _sipperFileName;
+  end if;
+
+  select  sf.SipperFileName, sf.ExtractionStatus  
+       from SipperFiles sf  
+       where  sf.SipperFileName = _sipperFileName;
+end;
+//
+delimiter ;
+
+
+
+
+
+
+
+
 
 
 

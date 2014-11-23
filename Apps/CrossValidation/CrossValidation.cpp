@@ -3684,8 +3684,21 @@ void  DetermineCropSettingsForDeployment (RunLog&              runLog,
     if  (sipperFile->ExtractionStatus () != '4')
       continue;
 
-    // ExtractionStaus == '5' will indicate in the middle of processing.
-    db->SipperFilesUpdateExtractionStatus (sipperFile->SipperFileName (), '5');
+    char  extractionStatusResult = 0;
+    db->SipperFilesUpdateExtractionStatusIfExpected (sipperFile->SipperFileName (),
+                                                     '4',                            //  extractionStatusExpected,
+                                                     '5',                            //  extractionStatusNew,
+                                                     extractionStatusResult
+                                                    );
+
+    if  (extractionStatusResult != '5')
+    {
+      // Someone has already go to this SipperFile entry.
+      runLog.Level (-1) << "DetermineCropSettingsForDeployment   SipperFile: " << sipperFile->SipperFileName ()
+                        << "extractionStatusResult: " << extractionStatusResult
+                        << endl;
+      continue;
+    }
 
     sipperFilesFound = false;
 

@@ -832,6 +832,21 @@ namespace MLL
                                                              char          extractionStatus
                                                             );
 
+    /**
+     *@brief  Updates the ExtractionStatus only if the existing extractioStatus is what was expected.
+     *param[in]  sipperFileName
+     *@param[in]  extractionStatusExpected  Status of existing SipperFiles table entry;  if not existing extractionStatus
+     *            this value then no update will take place.
+     *@param[in]  extractionStatusNew  The new ExtractionStatus the specified SipperFile will take on if currect 
+     *            value equal extractionStatusExpected.
+     *@param[out] The new value of ExtractedStatus.
+     */
+    void                  SipperFilesUpdateExtractionStatusIfExpected (const KKStr&  sipperFileName,
+                                                                       char          extractionStatusExpected,
+                                                                       char          extractionStatusNew,
+                                                                       char&         extractionStatusResult
+                                                                      );
+
     void                  SipperFileUpdateFileSizeStats (const KKStr&  _sipperFileName, 
                                                          int64         _sizeInBytes,
                                                          uint32        _numScanLines
