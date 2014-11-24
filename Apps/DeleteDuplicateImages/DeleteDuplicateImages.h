@@ -1,18 +1,24 @@
 #ifndef  _DELETEDUPLICATEIMAGES_
 #define  _DELETEDUPLICATEIMAGES_
 
-#include  "MLClass.h"
+#include "MLClass.h"
+#include "PicesApplication.h" 
 
 
-class  DeleteDuplicateImages: public  Application
+
+class  DeleteDuplicateImages: public  PicesApplication
 {
 public:
-  DeleteDuplicateImages (int     argc,
-                         char**  argv
-                        );
+  DeleteDuplicateImages ();
 
 
   ~DeleteDuplicateImages ();
+
+
+  virtual
+  void  InitalizeApplication (int32   argc,
+                              char**  argv
+                             );
 
   virtual const 
   char*    ApplicationName ()  {return  "DeleteDuplicateImages";}
@@ -25,18 +31,17 @@ private:
   void    DisplayCmdLine ();
 
   virtual 
-  bool     ProcessCmdLineParameter (char    parmSwitchCode, 
-                                    KKStr  parmSwitch, 
-                                    KKStr  parmValue
+  bool     ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                    const KKStr&  parmValue
                                    );
 
 
-  bool                 cancelFlag;
+  bool              cancelFlag;
   MLClassConstList  mlClasses;
-  ofstream*            r;
-  KKStr                reportFileName;
-  KKStr                rootDir;
-  KKStr                duplicateImagesDir;
+  ofstream*         r;
+  KKStr             reportFileName;
+  KKStr             rootDir;
+  KKStr             duplicateImagesDir;
 };
 
 

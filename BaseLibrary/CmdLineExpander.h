@@ -6,8 +6,8 @@
 #ifndef  _CMDLINEEXPANDER_
 #define  _CMDLINEEXPANDER_
 
-#include  "RunLog.h"
-#include  "Str.h"
+#include "RunLog.h"
+#include "Str.h"
 
 // Disable "assignment operator could not be generated" warning.
 #pragma warning(disable : 4512) 
@@ -51,24 +51,30 @@ namespace  KKU
                           char**  argv
                          );
 
-    const VectorKKStr&  ExpandedParameters ()  const  {return expandedParameters;}
-    const KKStr&        LogFileName        ()  const  {return logFileName;}
-    bool                ParmsGood          ()  const  {return parmsGood;}
+    const VectorKKStr&        ExpandedParameters     ()  const  {return expandedParameters;}
+    const vector<KKStrPair>&  ExpandedParameterPairs ()  const  {return expandedParameterPairs;}
+    const KKStr&              LogFileName            ()  const  {return logFileName;}
+    bool                      ParmsGood              ()  const  {return parmsGood;}
 
   private:
      void  BuildCmdLineParameters (const VectorKKStr&  argv);
+
+     void  BuildExpandedParameterPairs ();
 
      void  ExtractParametersFromFile (const KKStr&  cmdFileName, 
                                       VectorKKStr&  cmdFileParameters,
                                       bool&         validFile
                                      );
 
-      KKStr        applicationName;
-      VectorKKStr  cmdFileStack;
-      VectorKKStr  expandedParameters;
-      RunLog&      log;
-      KKStr        logFileName;
-      bool         parmsGood;
+     bool  ParameterIsASwitch (const KKStr&  parm);
+
+     KKStr              applicationName;
+     VectorKKStr        cmdFileStack;
+     vector<KKStrPair>  expandedParameterPairs;
+     VectorKKStr        expandedParameters;
+     RunLog&            log;
+     KKStr              logFileName;
+     bool               parmsGood;
   };  /* CmdLineExpander */
 
 

@@ -66,8 +66,8 @@ using namespace  MLL;
 
 // -c GulfOilBroad2_Discreate_Dual.cfg  -gt E:\Pices\TrainingLibraries\GulfOilBroad2_Validation -r C:\Temp\GulfOilBroad2_Validation_Graded.txt
 
-GradeClassification::GradeClassification (int argc, char**  argv) :
-  Application         (argc, argv),
+GradeClassification::GradeClassification () :
+  PicesApplication    (),
   cancelFlag          (false),
   config              (NULL),
   configFileName      (),
@@ -85,14 +85,52 @@ GradeClassification::GradeClassification (int argc, char**  argv) :
   reportFileName      ()
 
 {
-  fileDesc = FeatureFileIOPices::NewPlanktonFile (log);
+}
 
-  ProcessCmdLineParameters (argc, argv);
+
+
+
+/******************************************************************************
+ * Destructor
+ ******************************************************************************/
+GradeClassification::~GradeClassification ()
+{
+  if  (reportFile)
+  {
+    reportFile->close ();
+    delete  reportFile;
+  }
+
+  delete  html;
+
+  SummaryList::iterator  idx;
+  for  (idx = resultsSummary.begin ();  idx != resultsSummary.end ();  idx++)
+  {
+    delete  idx->confussionMatrix;
+    idx->confussionMatrix = NULL;
+  }
+
+  delete  db;           db          = NULL;
+  delete  groundTruth;  groundTruth = NULL;
+  delete  config;       config      = NULL;
+  //delete  mlClass;
+}
+
+
+
+
+void  GradeClassification::InitalizeApplication (int32   argc,
+                                                 char**  argv
+                                                )
+{
+  PicesApplication::InitalizeApplication (argc, argv);
   if  (Abort ())
   {
     DisplayCommandLineParameters ();
     return;
   }
+
+  fileDesc = FeatureFileIOPices::NewPlanktonFile (log);
 
   if  (argc < 2)
   {
@@ -104,9 +142,7 @@ GradeClassification::GradeClassification (int argc, char**  argv) :
     return;
   }
 
-
   mlClass = MLClass::CreateNewMLClass ("UnKnown");
-
 
   if  (groundTruthDirName.Empty ())
   {
@@ -137,7 +173,6 @@ GradeClassification::GradeClassification (int argc, char**  argv) :
     Abort (true);
     return;
   }
-
 
   if  (configFileName.Empty ()  &&  sourceRootDirPath.Empty ())
   {
@@ -177,8 +212,11 @@ GradeClassification::GradeClassification (int argc, char**  argv) :
   html = new HTMLReport (htmlFileName, "Grading Report", HTMLReport::Center);
 
   *report << endl;
+
+  PrintStandardHeaderInfo (*report);
+
+
   *report << "------------------------------------------------------------------------" << endl;
-  *report << "Run Date                [" << osGetLocalDateTime () << "]."  << endl;
   *report << "Report File Name        [" << reportFileName        << "]."  << endl;
   *report << "HTML File Name          [" << htmlFileName          << "]."  << endl;
   *report << "Source Root Directory   [" << sourceRootDirPath     << "]."  << endl;
@@ -220,36 +258,11 @@ GradeClassification::GradeClassification (int argc, char**  argv) :
         << "</table>" << endl
         << endl 
         << endl;
-}
+
+}  /* InitalizeApplication */
 
 
 
-
-/******************************************************************************
- * Destructor
- ******************************************************************************/
-GradeClassification::~GradeClassification ()
-{
-  if  (reportFile)
-  {
-    reportFile->close ();
-    delete  reportFile;
-  }
-
-  delete  html;
-
-  SummaryList::iterator  idx;
-  for  (idx = resultsSummary.begin ();  idx != resultsSummary.end ();  idx++)
-  {
-    delete  idx->confussionMatrix;
-    idx->confussionMatrix = NULL;
-  }
-
-  delete  db;           db          = NULL;
-  delete  groundTruth;  groundTruth = NULL;
-  delete  config;       config      = NULL;
-  //delete  mlClass;
-}
 
 
 
@@ -258,53 +271,49 @@ GradeClassification::~GradeClassification ()
  * ProcessCmdLineParamters
  * DESC: Extracts parameters from the command line
  ******************************************************************************/
-bool  GradeClassification::ProcessCmdLineParameter (char   parmSwitchCode, 
-                                                    KKStr  parmSwitch, 
-                                                    KKStr  parmValue
+bool  GradeClassification::ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                                    const KKStr&  parmValue
                                                    )
 {
-  parmSwitch.Upper ();
-
-  if  ((parmSwitch == "-R")  ||  (parmSwitch == "-REPORT"))
+  if  ((parmSwitch.EqualIgnoreCase ("-R"))  ||  (parmSwitch.EqualIgnoreCase ("-REPORT")))
   {
     reportFileName = parmValue;
   }
 
-  else if  ((parmSwitch == "-C")  ||  (parmSwitch == "-CONFIG")  ||  (parmSwitch == "-CONFIGFILE"))
+  else if  ((parmSwitch.EqualIgnoreCase ("-C"))       ||  
+            (parmSwitch.EqualIgnoreCase ("-CONFIG"))  ||
+            (parmSwitch.EqualIgnoreCase ("-CONFIGFILE")))
   {
     configFileName = parmValue;
   }
 
-  else if  ((parmSwitch == "-SOURCEDIR")        ||  
-            (parmSwitch == "-SOURCEDIRECTORY")  ||
-            (parmSwitch == "-SD")               ||
-            (parmSwitch == "-S")
+  else if  ((parmSwitch.EqualIgnoreCase ("-SOURCEDIR"))        ||  
+            (parmSwitch.EqualIgnoreCase ("-SOURCEDIRECTORY"))  ||
+            (parmSwitch.EqualIgnoreCase ("-SD"))               ||
+            (parmSwitch.EqualIgnoreCase ("-S"))
            )
   {  
     sourceRootDirPath = parmValue;
   }
 
-  else if  ((parmSwitch == "-HTML") || (parmSwitch == "-H"))
+  else if  ((parmSwitch.EqualIgnoreCase ("-HTML")) || (parmSwitch.EqualIgnoreCase ("-H")))
   {
     htmlFileName = parmValue;
   }
 
-  else if  ((parmSwitch == "-GROUNDTRUTH") || (parmSwitch == "-GT"))
+  else if  ((parmSwitch.EqualIgnoreCase ("-GROUNDTRUTH")) || (parmSwitch.EqualIgnoreCase ("-GT")))
   {
     groundTruthDirName = parmValue;
   }
 
   else
   {
-    log.Level (-1) << endl  << endl
-                   << "Unrecognized parameter[" << parmSwitch << "]" << endl
-                   << endl;
-    Abort (true);
+    PicesApplication::ProcessCmdLineParameter (parmSwitch, parmValue);
   }
   
-
   return  !Abort ();
 }  /* ProcessCmdLineParameter */
+
 
 
 

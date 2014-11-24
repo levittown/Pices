@@ -530,8 +530,8 @@ DataBase::DataBase (RunLog&  _log):
 
 
 
-DataBase::DataBase (const DataBaseServerPtr  _server,
-                    RunLog&                  _log
+DataBase::DataBase (DataBaseServerConstPtr  _server,
+                    RunLog&                 _log
                    ):
 
   allowUpdates      (false),
@@ -556,7 +556,7 @@ DataBase::DataBase (const DataBaseServerPtr  _server,
   }
   else
   {
-    log.Level (-1) << endl << endl << endl
+    log.Level (-1) << endl
                    << "DataBase::DataBase  ***ERROR***       No Server Parameters provided;  will use default ones." << endl
                    << endl;
     server = new DataBaseServer ();

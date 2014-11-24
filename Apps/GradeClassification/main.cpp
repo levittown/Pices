@@ -21,15 +21,19 @@ using namespace KKU;
 
 
 
-int main( int argc, char **argv )
+int  main (int  argc, 
+           char **argv
+          )
 {
-  GradeClassification gc (argc, argv);
-  if ( gc.Abort() )
+  GradeClassification  gc;
+  gc.InitalizeApplication (argc, argv);
+  if  (gc.Abort ())
   {
     return (-1);
   }
-
-  gc.Grade ();
-
-  return (0);
+  else
+  {
+    gc.Grade ();
+    return (0);
+  }
 }

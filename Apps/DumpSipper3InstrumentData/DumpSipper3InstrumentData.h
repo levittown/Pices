@@ -9,12 +9,15 @@
 class DumpSipper3InstrumentData:  public Application
 {
 public:
-  DumpSipper3InstrumentData (int     argc,
-                             char**  argv
-                            );
+  DumpSipper3InstrumentData ();
 
   ~DumpSipper3InstrumentData ();
 
+
+  virtual
+  void  InitalizeApplication (int32   argc,
+                              char**  argv
+                             );
 
   virtual const 
   char*   ApplicationName ()  {return  "DumpSipper3InstrumentData";}

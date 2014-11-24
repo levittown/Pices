@@ -20,7 +20,8 @@ namespace MLL
   class  DataBaseServer
   {
   public:
-    typedef  DataBaseServer*    DataBaseServerPtr;
+    typedef  DataBaseServer*        DataBaseServerPtr;
+    typedef  DataBaseServer const * DataBaseServerConstPtr;
 
     DataBaseServer ();
     DataBaseServer (const DataBaseServer&  dataBaseServer);
@@ -67,7 +68,9 @@ namespace MLL
 
   typedef  DataBaseServer::DataBaseServerPtr  DataBaseServerPtr;
 
+  typedef  DataBaseServer::DataBaseServerConstPtr  DataBaseServerConstPtr;
 
+#define  _DataBaseServer_Defined_
 
   class  DataBaseServerList: public  KKQueue<DataBaseServer>
   {

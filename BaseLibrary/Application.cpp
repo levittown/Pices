@@ -34,19 +34,13 @@ Application::Application (RunLog&  _log):
 
 
 
-Application::Application (int32   argc,
-                          char**  argv
-                         ):
+Application::Application ():
   abort       (false),
   log         (*(new RunLog ())),
   logFileName (),
   ourLog      (NULL)
-
 {
   ourLog = &log;
-  ProcessCmdLineParameters (argc, argv);
-  if  (!logFileName.Empty ())
-    log.AttachFile (logFileName);
 }
 
 
@@ -57,7 +51,6 @@ Application::Application (const Application&  _application):
   log          (_application.log),
   logFileName  (_application.logFileName),
   ourLog       (_application.ourLog)
-
 {
 }
 
@@ -70,10 +63,23 @@ Application::~Application ()
 }
 
 
+
+void  Application::InitalizeApplication (int32   argc,
+                                         char**  argv
+                                        )
+{
+  ProcessCmdLineParameters (argc, argv);
+  if  (!logFileName.Empty ())
+    log.AttachFile (logFileName);
+}
+
+
+
 const char*  Application::ApplicationName ()
 {
   return  "No-Application-Name-Provided";
 }  /* ApplicationName */
+
 
 
 
@@ -95,7 +101,7 @@ void  Application::ProcessCmdLineParameters (int32   argc,
                                              char**  argv
                                             )
 {
-  uint32  x;
+  uint32  x = 0;
 
   bool  allParmsGood = true;
 
@@ -107,48 +113,18 @@ void  Application::ProcessCmdLineParameters (int32   argc,
   if  (!cmdLineExpander.LogFileName ().Empty ())
     logFileName = cmdLineExpander.LogFileName ();
 
+  expandedParameterPairs = cmdLineExpander.ExpandedParameterPairs ();
 
-  const  VectorKKStr&  expandedParameters = cmdLineExpander.ExpandedParameters ();
+  vector<KKStrPair>::const_iterator  idx;
 
-  x = 0;
-  while  (x < expandedParameters.size ())
+  for  (idx = expandedParameterPairs.begin ();  idx != expandedParameterPairs.end ();  ++idx)
   {
-    KKStr  nextField = expandedParameters[x];
-    x++;
-
-    bool   parmGood       = true;
-    KKStr  parmValue      = "";
-    KKStr  parmSwitch     = "";
-    char   parmSwitchCode = 0;
-
-    if  (nextField[(int16)0] == '-')
-    {
-      parmSwitch = nextField;
-      KKStr  parmSwitchUpper = parmSwitch.ToUpper ();
-
-      parmSwitchCode = nextField[(int16)1];
-
-      if  (x < expandedParameters.size ())
-      {
-        if  (!ParameterIsASwitch (expandedParameters[x]))
-        {
-          parmValue = expandedParameters[x];
-          x++;
-        }
-      }
-
-      parmGood = ProcessCmdLineParameter (parmSwitchCode, parmSwitch, parmValue);
-    }
-
-    else
-    {
-      parmValue = nextField;
-      parmGood = ProcessCmdLineParameter (parmSwitchCode, parmSwitch, parmValue);
-    }
-
+    const KKStr&  parmSwitch = idx->first;
+    const KKStr&  parmValue  = idx->second;
+    bool  parmGood = ProcessCmdLineParameter (parmSwitch, parmValue);
     if  (!parmGood)
       allParmsGood = false;
-  }  /*  end of for loop  */
+  }
 
   if  (!allParmsGood)
     abort = true;
@@ -156,32 +132,15 @@ void  Application::ProcessCmdLineParameters (int32   argc,
 
 
 
-bool  Application::ParameterIsASwitch (const KKStr&  parm)
-{
-  if  (parm.Len () < 1)
-    return false;
 
-  if  (parm[(int16)0] != '-')
-    return false;
-
-  if  (parm.Len () == 1)
-    return true;
-
-  double  parmValue = 0.0;
-  if  (parm.ValidNum (parmValue))
-    return false;
-
-  return true;
-}
-
-
-
-bool  Application::ProcessCmdLineParameter (char    parmSwitchCode, 
-                                            KKStr  parmSwitch, 
-                                            KKStr  parmValue
+bool  Application::ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                            const KKStr&  parmValue
                                            )
 {
-  return  true;
+  log.Level (-1) << endl
+    << "Application::ProcessCmdLineParameter   ***ERROR***    Unrecognized Parameter [" << parmSwitch << "]  Value [" << parmValue << "]" << endl
+    << endl;
+  return  false;
 }
 
 

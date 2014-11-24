@@ -65,14 +65,35 @@ typedef struct
 
 
 
-DumpSipper3InstrumentData::DumpSipper3InstrumentData (int     argc,
-                                                      char**  argv
-                                                     ):
-  Application  (argc, argv),
+DumpSipper3InstrumentData::DumpSipper3InstrumentData ():
+  Application  (),
   report       (NULL),
   sipperFile   (NULL)
 {
-  ProcessCmdLineParameters (argc, argv);
+}
+
+
+
+DumpSipper3InstrumentData::~DumpSipper3InstrumentData ()
+{
+  if  (report)
+    if  (report->is_open ())
+      report->close ();
+  delete  report;
+
+  if  (sipperFile)
+  {
+    fclose (sipperFile);
+  }
+}
+
+
+
+void  DumpSipper3InstrumentData::InitalizeApplication (int32   argc,
+                                                       char**  argv
+                                                      )
+{
+  Application::InitalizeApplication (argc, argv);
 
   if  (sipperFileName.Empty ())
   {
@@ -103,22 +124,9 @@ DumpSipper3InstrumentData::DumpSipper3InstrumentData (int     argc,
   }
 
   OpenSipperFile ();
-}
+}  /* InitalizeApplication */
 
 
-
-DumpSipper3InstrumentData::~DumpSipper3InstrumentData ()
-{
-  if  (report)
-    if  (report->is_open ())
-      report->close ();
-  delete  report;
-
-  if  (sipperFile)
-  {
-    fclose (sipperFile);
-  }
-}
 
 
 
@@ -259,7 +267,8 @@ void  DumpSipper3InstrumentData::ProcessSipperFile ()
 
 int  main (int  argc,  char**  argv)
 {
-  DumpSipper3InstrumentData  app (argc, argv);
+  DumpSipper3InstrumentData  app;
+  app.InitalizeApplication (argc, argv);
   if  (app.Abort ())
     return -1;
 

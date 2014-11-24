@@ -3836,7 +3836,7 @@ int  main (int    argc,
   }
 
 
-  if  (true)
+  if  (false)
   {
     DetermineCropSettings ();
     exit (-1);

@@ -1,11 +1,12 @@
 #ifndef  __GRADE_CLASSIFICATION_H__
 #define  __GRADE_CLASSIFICATION_H__
 
-#include "Application.h"
 #include "HTMLReport.h"
 using namespace  KKU;
 
+#include "PicesApplication.h"
 #include "ConfusionMatrix2.h"
+#include "DataBase.h"
 #include "MLClass.h"
 #include "ImageFeatures.h"
 #include "TrainingConfiguration2.h"
@@ -14,23 +15,28 @@ using  namespace  MLL;
 
 
 
-class  GradeClassification: public Application
+class  GradeClassification: public PicesApplication
 {
 public:
   typedef  KKU::uint  uint;
 
-  GradeClassification (int argc, char**  argv);
+  GradeClassification ();
+
   ~GradeClassification ();
 
+  virtual
+  void  InitalizeApplication (int32   argc,
+                              char**  argv
+                             );  
+  
   void  Grade();
 
   virtual const char* ApplicationName ()  {return  "GradeClassification";}
 
   void  DisplayCommandLineParameters ();
 
-  virtual bool ProcessCmdLineParameter (char    parmSwitchCode, 
-                                        KKStr   parmSwitch, 
-                                        KKStr   parmValue
+  virtual bool ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                        const KKStr&  parmValue
                                        );
 
 private:

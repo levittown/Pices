@@ -56,7 +56,8 @@ namespace MLL
 
   #if  !defined(_DATABASESERVER_)
   class  DataBaseServer;
-  typedef  DataBaseServer*  DataBaseServerPtr;
+  typedef  DataBaseServer*         DataBaseServerPtr;
+  typedef  DataBaseServer const *  DataBaseServerConstPtr;
 
   class  DataBaseServerList;
   typedef  DataBaseServerList*  DataBaseServerListPtr;
@@ -73,6 +74,7 @@ namespace MLL
   {
   public:
     typedef  DataBase*  DataBasePtr;
+    typedef  DataBase const *  DataBaseConstPtr;
 
     typedef  KKU::uchar   uchar;
     typedef  KKU::ulong   ulong;
@@ -103,8 +105,9 @@ namespace MLL
 
     DataBase (RunLog&  _log);
 
-    DataBase (const DataBaseServerPtr  _server,   /**< Will make own local copy of "_server" */
-              RunLog&                  _log
+
+    DataBase (DataBaseServerConstPtr  _server,   /**< Will make own local copy of "_server" */
+              RunLog&                 _log
              );
 
     ~DataBase ();

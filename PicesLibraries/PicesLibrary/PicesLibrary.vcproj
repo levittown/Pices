@@ -517,6 +517,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\PicesApplication.h"
+				>
+			</File>
+			<File
 				RelativePath=".\SipperBlob.h"
 				>
 			</File>
@@ -814,6 +818,10 @@
 			</File>
 			<File
 				RelativePath=".\Orderings.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\PicesApplication.cpp"
 				>
 			</File>
 			<File

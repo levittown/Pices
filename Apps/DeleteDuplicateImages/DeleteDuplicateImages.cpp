@@ -22,9 +22,10 @@ using namespace KKU;
 #include "InstrumentDataFileManager.h"
 using namespace  SipperHardware;
 
-#include "Application.h"
+#include "PicesApplication.h"
 #include "Classifier2.h"
 #include "DuplicateImages.h"
+#include "DataBAse.h"
 #include "FeatureFileIO.h"
 #include "FeatureFileIOPices.h"
 #include "FeatureNumList.h"
@@ -42,55 +43,58 @@ using namespace MLL;
 
 
 
-DeleteDuplicateImages::DeleteDuplicateImages (int     argc,
-                                              char**  argv
-                                             ):
-  Application  (argc, argv),
+DeleteDuplicateImages::DeleteDuplicateImages ():
+  PicesApplication  (),
 
-  cancelFlag   (false),
-  mlClasses (),
-  r            (NULL)
+  cancelFlag  (false),
+  mlClasses   (),
+  r           (NULL)
 {
-  ProcessCmdLineParameters (argc, argv);
-  
-  if  (rootDir.Empty ())
-  {
-    rootDir = osGetCurrentDirectory ();
-  }
-
-  if  (reportFileName.Empty ())
-  {
-    reportFileName = osAddSlash (rootDir) + osGetRootName (rootDir) + "_DupImagesReport.txt";
-  }
-
-  r = new ofstream (reportFileName.Str ());
-
-  duplicateImagesDir = "C:\\Temp\\DuplicateImages\\";
-  duplicateImagesDir << osGetRootName (rootDir);
-  osCreateDirectoryPath (duplicateImagesDir);
 }  /* DeleteDuplicateImages */
 
 
 
 DeleteDuplicateImages::~DeleteDuplicateImages ()
 {
-  r->close ();
+  r->close ();  
   delete  r;
+  r = NULL;
 }
 
 
 
-bool  DeleteDuplicateImages::ProcessCmdLineParameter (char    parmSwitchCode, 
-                                                      KKStr  parmSwitch, 
-                                                      KKStr  parmValue
+void  DeleteDuplicateImages::InitalizeApplication (int32   argc,
+                                                   char**  argv
+                                                  )
+{
+  Application::InitalizeApplication (argc, argv);
+  if  (rootDir.Empty ())
+    rootDir = osGetCurrentDirectory ();
+
+  if  (reportFileName.Empty ())
+    reportFileName = osAddSlash (rootDir) + osGetRootName (rootDir) + "_DupImagesReport.txt";
+
+  r = new ofstream (reportFileName.Str ());
+
+  duplicateImagesDir = "C:\\Temp\\DuplicateImages\\";
+  duplicateImagesDir << osGetRootName (rootDir);
+  osCreateDirectoryPath (duplicateImagesDir);
+}  /* InitalizeApplication */
+
+
+
+
+
+bool  DeleteDuplicateImages::ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                                      const KKStr&  parmValue
                                                      )
 {
-  parmSwitch.Upper ();
+  bool  parmValid = true;
 
-  if  ((parmSwitch == "-ROOTDIR")    ||  
-       (parmSwitch == "-ROOT")       ||
-       (parmSwitch == "-SOURCEDIR")  ||
-       (parmSwitch == "-RD")
+  if  ((parmSwitch.EqualIgnoreCase ("-ROOTDIR"))    ||  
+       (parmSwitch.EqualIgnoreCase ("-ROOT"))       ||
+       (parmSwitch.EqualIgnoreCase ("-SOURCEDIR"))  ||
+       (parmSwitch.EqualIgnoreCase ("-RD"))
       )
   {
     rootDir = parmValue;
@@ -100,28 +104,36 @@ bool  DeleteDuplicateImages::ProcessCmdLineParameter (char    parmSwitchCode,
            << endl
            << "*** ERROR ***  Invalid Root Dir[" << rootDir << "]." << endl;
       DisplayCmdLine ();
-      Abort (true);
+      parmValid = false;
     }
 
   }
 
-  else if  ((parmSwitch == "-R")      ||  
-            (parmSwitch == "-REPORT") ||
-            (parmSwitch == "-ReportFile")
+  else if  ((parmSwitch.EqualIgnoreCase ("-R"))          ||  
+            (parmSwitch.EqualIgnoreCase ("-REPORT"))     ||
+            (parmSwitch.EqualIgnoreCase ("-ReportFile"))
            )
   {
     reportFileName = parmValue;
   }
 
-  return  !Abort ();
+  else
+  {
+    parmValid = PicesApplication::ProcessCmdLineParameter (parmSwitch, parmValue);
+  }
+
+  if  (!parmValid)
+    Abort (true);
+
+  return  parmValid;
 }  /* ProcessCmdLineParameter */
+
 
 
 
 void    DeleteDuplicateImages::DisplayCmdLine ()
 {
   cout << endl
-       << endl
        << "DeleteDuplicateImages"                                                         << endl
        << "           -RootDir  <Sub Directory Tree where images are located.>"           << endl
        << "           -ReportFile  <File to write report to/ defaults to root dir name.>" << endl
@@ -133,18 +145,20 @@ void    DeleteDuplicateImages::DisplayCmdLine ()
 
 void  DeleteDuplicateImages::DeleteImages ()
 {
-  *r << "Root Directory [" << rootDir               << "]" << endl;
-  *r << "Report File    [" << reportFileName        << "]" << endl;
-  *r << "Date           [" << osGetLocalDateTime () << "]" << endl;
+  PrintStandardHeaderInfo (*r);
+
+  *r << "Root Directory :" << rootDir               << "]" << endl;
+  *r << "Report File    :" << reportFileName        << "]" << endl;
   *r << endl;
 
   // We will first Load Images
   ImageFeaturesListPtr images = FeatureFileIOPices::LoadInSubDirectoryTree 
                                      (rootDir,
                                       mlClasses,
-                                      false,
+                                      false,       // false = DONT _useDirectoryNameForClassName
+                                      DB (),
                                       cancelFlag,
-                                      false,
+                                      false,       // false = DONT _rewiteRootFeatureFile
                                       log
                                      );
 
@@ -363,7 +377,8 @@ int  main (int  argc,  char**  argv)
   
 
   {
-    DeleteDuplicateImages*  app = new DeleteDuplicateImages (argc, argv);
+    DeleteDuplicateImages*  app = new DeleteDuplicateImages ();
+    app->InitalizeApplication (argc, argv);
     if  (!(app->Abort ()))
       app->DeleteImages ();
     delete  app;  app = NULL;

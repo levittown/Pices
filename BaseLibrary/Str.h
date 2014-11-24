@@ -646,6 +646,7 @@ namespace KKU
 
   typedef  KKStr::KKStrPtr       KKStrPtr;
   typedef  KKStr::KKStrConstPtr  KKStrConstPtr;
+  typedef  pair<KKStr,KKStr>     KKStrPair;
 
 
   typedef  KKStr::VectorKKStr  VectorKKStr;
