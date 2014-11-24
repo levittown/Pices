@@ -2,42 +2,41 @@
 #define  _EXTRACTFEATURES_
 
 
-#include "Application.h"
-
 #include "DataBase.h"
 #include "FileDesc.h"
 #include "ImageFeatures.h"
 #include "MLClass.h"
+#include "PicesApplication.h"
 
 
-class  ExtractFeatures: public  Application
+class  ExtractFeatures: public  PicesApplication
 {
 public:
   typedef  KKU::uint  uint;
 
-  ExtractFeatures (int     argc,
-                   char**  argv
-                  );
+  ExtractFeatures ();
   
   ~ExtractFeatures ();
 
+  virtual 
+  const char*  ApplicationName () const  {return  "ExtractFeatures";}
+
+  virtual
+  void  InitalizeApplication (int32   argc,
+                              char**  argv
+                             );
 
   void  ClassifyImage (ImageFeaturesPtr  image);
 
   void  Extract ();
 
-
-  virtual const 
-  char*          ApplicationName ()  {return  "TrainingProcess";}
-
-  void           DisplayCommandLineParameters ();
+  void  DisplayCommandLineParameters ();
 
 
   virtual 
-  bool           ProcessCmdLineParameter (char    parmSwitchCode, 
-                                          KKStr  parmSwitch, 
-                                          KKStr  parmValue
-                                         );
+  bool  ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                 const KKStr&  parmValue
+                                );
 
 
 private:
@@ -59,11 +58,8 @@ private:
 
   bool                      cancelFlag;
   Classifier2Ptr            classifier;
-  KKStr                     configFileName;
-  DataBasePtr               dataBase;
   KKStr                     destDirectory;
   KKStr                     featureFileName;
-  FileDescPtr               fileDesc;
   KKStrListPtr              fileNameList;
   MLClassConstPtr           mlClass;
   MLClassConstListPtr       mlClasses;
@@ -78,7 +74,6 @@ private:
   KKStr                     statusMessage;
   bool                      successful;
   TrainingProcess2Ptr       trainer;
-  TrainingConfiguration2Ptr trainingConfiguration;
   bool                      useDirectoryNameForClassName;
 };
 

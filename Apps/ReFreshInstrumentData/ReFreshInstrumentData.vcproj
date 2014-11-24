@@ -20,6 +20,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
+			InheritedPropertySheets="..\DefaultUnManagedApplication\DefaultUnManagedApplication.vsprops"
 			CharacterSet="0"
 			>
 			<Tool
@@ -40,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\BaseLibrary;..\..\PicesLibrary;..\..\SipperInstruments;..\..\OutsidePackages\fftw"
+				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -59,8 +60,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="BaseLibrary.lib SipperInstruments.lib PicesLibrary.lib libfftw3-3.lib libfftw3f-3.lib libmysql.lib"
-				AdditionalLibraryDirectories="..\..\Libraries\$(ConfigurationName)"
+				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
 				TargetMachine="1"
 			/>
@@ -91,6 +91,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
+			InheritedPropertySheets="..\DefaultUnManagedApplication\DefaultUnManagedApplication.vsprops"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
@@ -113,7 +114,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\..\BaseLibrary;..\..\PicesLibrary;..\..\SipperInstruments;..\..\OutsidePackages\fftw"
+				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -131,8 +132,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="BaseLibrary.lib SipperInstruments.lib PicesLibrary.lib libfftw3-3.lib libfftw3f-3.lib libmysql.lib"
-				AdditionalLibraryDirectories="..\..\Libraries\$(ConfigurationName)"
+				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -165,6 +165,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
+			InheritedPropertySheets="..\DefaultUnManagedApplication\DefaultUnManagedApplication.vsprops"
 			CharacterSet="0"
 			>
 			<Tool
@@ -185,7 +186,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\BaseLibrary;..\..\PicesLibrary;..\..\SipperInstruments;..\..\OutsidePackages\fftw"
+				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -204,7 +205,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="BaseLibrary.lib SipperInstruments.lib PicesLibrary.lib libfftw3-3.lib libfftw3f-3.lib libmysql.lib"
 				AdditionalLibraryDirectories="&quot;..\..\Libraries\$(ConfigurationName)&quot;;&quot;$(SolutionDir)\OutsidePackages\mysql-5.5.24-win32\lib&quot;"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
@@ -236,6 +236,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
+			InheritedPropertySheets="..\DefaultUnManagedApplication\DefaultUnManagedApplication.vsprops"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
@@ -258,7 +259,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\..\BaseLibrary;..\..\PicesLibrary;..\..\SipperInstruments;..\..\OutsidePackages\fftw"
+				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -276,7 +277,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="BaseLibrary.lib SipperInstruments.lib PicesLibrary.lib libfftw3-3.lib libfftw3f-3.lib libmysql.lib"
 				AdditionalLibraryDirectories="&quot;..\..\Libraries\$(ConfigurationName)&quot;;&quot;$(SolutionDir)\OutsidePackages\mysql-5.5.24-win32\lib&quot;"
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"

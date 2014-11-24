@@ -21,6 +21,7 @@
 			OutputDirectory="$(SolutionDir)\$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
+			InheritedPropertySheets="..\DefaultUnManagedApplication\DefaultUnManagedApplication.vsprops"
 			UseOfMFC="2"
 			UseOfATL="1"
 			>
@@ -100,6 +101,7 @@
 			OutputDirectory="$(SolutionDir)\$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
+			InheritedPropertySheets="..\DefaultUnManagedApplication\DefaultUnManagedApplication.vsprops"
 			UseOfMFC="2"
 			UseOfATL="1"
 			>
@@ -179,6 +181,7 @@
 			OutputDirectory="$(SolutionDir)\$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
+			InheritedPropertySheets="..\DefaultUnManagedApplication\DefaultUnManagedApplication.vsprops"
 			UseOfMFC="2"
 			UseOfATL="1"
 			>
@@ -258,6 +261,7 @@
 			OutputDirectory="$(SolutionDir)\$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
+			InheritedPropertySheets="..\DefaultUnManagedApplication\DefaultUnManagedApplication.vsprops"
 			UseOfMFC="2"
 			UseOfATL="1"
 			>

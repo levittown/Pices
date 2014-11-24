@@ -23,9 +23,9 @@ using namespace KKU;
 
 
 
-LLoydsEntry::LLoydsEntry (int32           _lloydsBinSize,
+LLoydsEntry::LLoydsEntry (int32         _lloydsBinSize,
                           VectorIntPtr  _lloydsBins,
-                          double         _lloydsIndex
+                          double        _lloydsIndex
                          )
 {
   lloydsBinSize = _lloydsBinSize;

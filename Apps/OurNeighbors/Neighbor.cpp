@@ -35,17 +35,17 @@ KKStr  NeighborTypeToStr (NeighborType  n)
 
 
 
-Neighbor::Neighbor (double              _row,
-                    double              _col,
-                    const KKStr&        _fileName,
+Neighbor::Neighbor (double           _row,
+                    double           _col,
+                    const KKStr&     _fileName,
                     MLClassConstPtr  _mlClass,
-                    double              _size
+                    double           _size
                    ):
 
   row             (_row),
   col             (_col),
   fileName        (_fileName),
-  mlClass      (_mlClass),
+  mlClass         (_mlClass),
   nearestNeighbor (NULL),
   size            (_size),
   squareDist      (0.0),
@@ -61,7 +61,7 @@ Neighbor::Neighbor (ImageFeaturesPtr  image):
    row             (image->SfCentroidRow ()),
    col             (image->SfCentroidCol ()),
    fileName        (image->ImageFileName ()),
-   mlClass      (image->MLClass    ()),
+   mlClass         (image->MLClass       ()),
    size            (image->OrigSize      ()),
    nearestNeighbor (NULL),
    squareDist      (0.0f),
@@ -163,7 +163,7 @@ KKStr&  Neighbor::ClassName ()
 
 
 void  Neighbor::CompareDist (NeighborPtr  n,
-                             double        _squareDist
+                             double       _squareDist
                             )
 {
   if  (!nearestNeighbor)
@@ -212,7 +212,7 @@ void  Neighbor::CompareDist (NeighborPtr  n)
 
 
 NeighborList::NeighborList (bool     _owner, 
-                            int32      _size,
+                            int32    _size,
                             RunLog&  _log
                            ):
   KKQueue<Neighbor>  (_owner, _size),
@@ -377,7 +377,7 @@ void  NeighborList::SortByClassRow ()
 
 
 
-void  NeighborList::FindNearestNeighbors (NeighborType        neighborType,
+void  NeighborList::FindNearestNeighbors (NeighborType     neighborType,
                                           MLClassConstPtr  restrictedClass
                                          )
 {
@@ -445,7 +445,7 @@ double  NeighborList::LargestDist ()  const
 
 
 void  NeighborList::ReportClassNeighbor (MLClassConstListPtr  mlClasses,
-                                         ostream&                r
+                                         ostream&             r
                                         )
 {
   SortByClass ();
@@ -453,8 +453,8 @@ void  NeighborList::ReportClassNeighbor (MLClassConstListPtr  mlClasses,
   mlClasses->SortByName ();
 
   int32     numOfClasses   = mlClasses->QueueSize ();
-  int32*    classCounts    = new int32     [numOfClasses];
-  int32**   neighborCounts = new int32*    [numOfClasses];
+  int32*    classCounts    = new int32   [numOfClasses];
+  int32**   neighborCounts = new int32*  [numOfClasses];
   double**  neighborDists  = new double* [numOfClasses];
   double**  neighborSizes  = new double* [numOfClasses];
 
@@ -726,8 +726,8 @@ void  NeighborList::ReportClassRow (MLClassConstListPtr  mlClasses,
   }
 
 
-  int32     numOfClasses   = mlClasses->QueueSize ();
-  int32*    classCounts    = new int32  [numOfClasses];
+  int32    numOfClasses   = mlClasses->QueueSize ();
+  int32*   classCounts    = new int32  [numOfClasses];
   double*  distsMean      = new double[numOfClasses];
   double*  distsStdDev    = new double[numOfClasses];
   double*  distsMin       = new double[numOfClasses];
@@ -870,11 +870,9 @@ void  NeighborList::ReportClassRow (MLClassConstListPtr  mlClasses,
     }
   }
 
-
   r << endl
     << endl
     << endl;
-
 
   r << "\t\t" << "----Distances----" << "\t\t\t\t" << "----ToSizes----" << endl;
 
@@ -913,7 +911,6 @@ void  NeighborList::ReportClassRow (MLClassConstListPtr  mlClasses,
       << endl;
   }
 
-
   delete  classCounts;
   delete  distsMean;
   delete  distsStdDev;
@@ -929,7 +926,7 @@ void  NeighborList::ReportClassRow (MLClassConstListPtr  mlClasses,
 
 
 void  NeighborList::ReportClassRowRestricted (MLClassConstListPtr  mlClasses,
-                                              ostream&                r,
+                                              ostream&             r,
                                               MLClassConstPtr      restrictedClass
                                              )
 {
@@ -946,8 +943,8 @@ void  NeighborList::ReportClassRowRestricted (MLClassConstListPtr  mlClasses,
     return;
   }
 
-  int32     numOfClasses   = mlClasses->QueueSize ();
-  int32    classCounts    = 0;
+  int32   numOfClasses   = mlClasses->QueueSize ();
+  int32   classCounts    = 0;
   double  distsMean      = 0.0;
   double  distsStdDev    = 0.0;
   double  distsMin       = 0.0;

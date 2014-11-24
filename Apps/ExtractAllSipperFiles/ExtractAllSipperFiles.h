@@ -1,33 +1,35 @@
 #pragma once
 
 
-#include "Application.h"
+#include "PicesApplication.h"
 
 #include "DataBase.h"
 
 
-class ExtractAllSipperFiles: public Application
+class ExtractAllSipperFiles: public PicesApplication
 {
 public:
   typedef  ExtractAllSipperFiles*  ExtractAllSipperFilesPtr;
 
-  ExtractAllSipperFiles (int      argc, 
-                         char**   argv,
-                         RunLog&  _log
-                        );
+  ExtractAllSipperFiles ();
 
 
   ~ExtractAllSipperFiles ();
 
+  virtual 
+  const char*  ApplicationName () const {return  "ExtractAllSipperFiles";}
 
+  virtual
+  void  InitalizeApplication (int32   argc,
+                              char**  argv
+                             );
   void  Run ();
 
 
 private:
   // Will be classed by base class  'Application'  
-  bool  ProcessCmdLineParameter (char    parmSwitchCode, 
-                                 KKStr   parmSwitch, 
-                                 KKStr   parmValue
+  bool  ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                 const KKStr&  parmValue
                                 );
 
   void  DisplayCommandLineParameters ();

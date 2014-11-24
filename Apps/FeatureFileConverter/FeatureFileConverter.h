@@ -1,37 +1,39 @@
 #ifndef  _FEATUREFILECONVERTER_
 #define  _FEATUREFILECONVERTER_
 
-#include  "Application.h"
-#include  "RunLog.h"
-#include  "Str.h"
+#include "RunLog.h"
+#include "Str.h"
 
 #include "FeatureNumList.h"
 #include "FileDesc.h"
 #include "MLClass.h"
 #include "ImageFeatures.h"
+#include  "PicesApplication.h"
 #include "SVMparam.h"
 
 
-class  FeatureFileConverter: public Application
+class  FeatureFileConverter: public PicesApplication
 {
 public:
   typedef  KKU::uint  uint;
 
-	FeatureFileConverter (int     argc, 
-                        char**  argv
-                       );
+	FeatureFileConverter ();
 
 	~FeatureFileConverter();
 
 	virtual const char* ApplicationName ()  {return  "FeatureFileConverter";}
 
+  virtual
+  void  InitalizeApplication (int32   argc,
+                              char**  argv
+                             );
+
   void  ConvertData ();
 
 	void	DisplayCommandLineParameters ();
 
-	virtual bool ProcessCmdLineParameter (char    parmSwitchCode, 
-                                        KKStr  parmSwitch, 
-                                        KKStr  parmValue
+	virtual bool ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                        const KKStr&  parmValue
                                        );
 private:
   void  EncodeFeatureData ();

@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{576C73FB-82E2-40D8-BA78-8395D232E273}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -153,6 +153,16 @@
       <ProductName>.NET Framework 3.5</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\PicesLibraries\PicesInterface\PicesInterface.vcproj">
+      <Project>{8F609A95-37BC-4E0F-8CD5-4196A86CD4B8}</Project>
+      <Name>PicesInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PicesLibraries\SipperFile\SipperFile.csproj">
+      <Project>{662D4BB9-C075-465C-9CA6-A8231E221B70}</Project>
+      <Name>SipperFile</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

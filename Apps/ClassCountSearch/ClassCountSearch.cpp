@@ -320,30 +320,60 @@ typedef  ClassCountSearch::ClassStatsList*  ClassStatsListPtr;
 
 
 
-ClassCountSearch::ClassCountSearch (int argc, 
-                                    char**  argv
-                                   ):
-  Application            (argc, argv),
-  cancelFlag             (false),
-  config                 (NULL),
-  configFileName         (),
-  fileDesc               (NULL),
-  groundTruthDirName     (),
-  groundTruth            (NULL),
-  groundTruthClasses     (NULL),
-  mlClasses           (new MLClassConstList ()),
-  report                 (NULL),
-  report1Type1Errors     (NULL),
-  reportFileName         (),
-  trainExamples          (NULL),
-  trainExamplesClasses   (NULL)
-
+ClassCountSearch::ClassCountSearch ():
+  PicesApplication     (),
+  cancelFlag           (false),
+  groundTruthDirName   (),
+  groundTruth          (NULL),
+  groundTruthClasses   (NULL),
+  mlClasses            (new MLClassConstList ()),
+  report               (NULL),
+  report1Type1Errors   (NULL),
+  reportFileName       (),
+  trainExamples        (NULL),
+  trainExamplesClasses (NULL)
 {
+}
+
+
+
+
+/******************************************************************************
+ * Destructor
+ ******************************************************************************/
+ClassCountSearch::~ClassCountSearch ()
+{
+  if  (report)
+  {
+    report->close ();
+    delete  report;
+    report = NULL;
+  }
+
+  if  (report1Type1Errors)
+  {
+    report1Type1Errors->close ();
+    delete  report1Type1Errors;
+    report1Type1Errors = NULL;
+  }
+
+  delete  groundTruth;           groundTruth          = NULL;
+  delete  groundTruthClasses;    groundTruthClasses   = NULL;
+  delete  trainExamples;         trainExamples        = NULL;
+  delete  trainExamplesClasses;  trainExamplesClasses = NULL;
+  //delete  mlClass;
+}
+
+
+void  ClassCountSearch::InitalizeApplication (int32   argc,
+                                              char**  argv
+                                             )
+{
+  PicesApplication::InitalizeApplication (argc, argv);
   fileDesc = FeatureFileIOPices::NewPlanktonFile (log);
 
   osRunAsABackGroundProcess ();
 
-  ProcessCmdLineParameters (argc, argv);
   if  (Abort ())
   {
     DisplayCommandLineParameters ();
@@ -368,20 +398,6 @@ ClassCountSearch::ClassCountSearch (int argc,
     DisplayCommandLineParameters ();
     Abort (true);
     return;
-  }
-
-  else 
-  {
-    config = new TrainingConfiguration2 (fileDesc, configFileName, log, true);
-    if  (!(config->FormatGood ()))
-    {
-      log.Level (-1) << endl << endl << endl
-                     << "Configuration file[" << configFileName << "] is not valid." << endl
-                     << endl;
-      DisplayCommandLineParameters ();
-      Abort (true);
-      return;
-    }
   }
 
   if  (!groundTruthDirName.Empty ()  &&  (!osValidDirectory (groundTruthDirName)))
@@ -410,68 +426,40 @@ ClassCountSearch::ClassCountSearch (int argc,
   report1Type1Errors = new ofstream (type1ErrorReportName.Str ());
   
   *report << endl;
+  PrintStandardHeaderInfo (*report);
   *report << "------------------------------------------------------------------------" << endl;
-  *report << "Run Date                [" << osGetLocalDateTime () << "]."  << endl;
-  *report << "Report File Name        [" << reportFileName        << "]."  << endl;
-  *report << "Config File Name        [" << configFileName        << "]."  << endl;
-  *report << "Ground Truch Directory  [" << groundTruthDirName    << "]."  << endl;
+  *report << "Report File Name"       << "\t" << reportFileName       << endl;
+  *report << "Config File Name"       << "\t" << configFileName       << endl;
+  *report << "Ground Truch Directory" << "\t" << groundTruthDirName   << endl;
   if  (config)
   {
-    *report << "Model Type              [" << config->ModelTypeStr ()           << "]." << endl;
-    *report << "SVM Parameters          [" << config->ModelParameterCmdLine ()  << "]." << endl;
+    *report << "Model Type"     << "\t" << config->ModelTypeStr          ()  << endl;
+    *report << "SVM Parameters" << "\t" << config->ModelParameterCmdLine ()  << endl;
     if  (config->OtherClass ())
-      *report << "Other Class             [" << config->OtherClass ()->Name ()    << "]." << endl;
+      *report << "Other Class"  << "\t" << config->OtherClass ()->Name   ()  << endl;
   }
 
   *report << "------------------------------------------------------------------------" << endl;
   *report << endl;
 
+
   *report1Type1Errors << endl;
+  PrintStandardHeaderInfo (*report1Type1Errors);
   *report1Type1Errors << "------------------------------------------------------------------------" << endl;
-  *report1Type1Errors << "Run Date                [" << osGetLocalDateTime () << "]."  << endl;
-  *report1Type1Errors << "Report File Name        [" << reportFileName        << "]."  << endl;
-  *report1Type1Errors << "Config File Name        [" << configFileName        << "]."  << endl;
-  *report1Type1Errors << "Ground Truch Directory  [" << groundTruthDirName    << "]."  << endl;
+  *report1Type1Errors << "Report File Name"       << "\t" << reportFileName      << endl;
+  *report1Type1Errors << "Config File Name"       << "\t" << configFileName      << endl;
+  *report1Type1Errors << "Ground Truch Directory" << "\t" << groundTruthDirName  << endl;
   if  (config)
   {
-    *report1Type1Errors << "Model Type              [" << config->ModelTypeStr ()           << "]." << endl;
-    *report1Type1Errors << "SVM Parameters          [" << config->ModelParameterCmdLine ()  << "]." << endl;
+    *report1Type1Errors << "Model Type"      << "\t" << config->ModelTypeStr          ()  << endl;
+    *report1Type1Errors << "SVM Parameters"  << "\t" << config->ModelParameterCmdLine ()  << endl;
     if  (config->OtherClass ())
-      *report1Type1Errors << "Other Class             [" << config->OtherClass ()->Name ()    << "]." << endl;
+      *report1Type1Errors << "Other Class"   << "\t" << config->OtherClass ()->Name   ()  << endl;
   }
   *report1Type1Errors << "------------------------------------------------------------------------" << endl;
   *report1Type1Errors << endl;
 }
 
-
-
-
-/******************************************************************************
- * Destructor
- ******************************************************************************/
-ClassCountSearch::~ClassCountSearch ()
-{
-  if  (report)
-  {
-    report->close ();
-    delete  report;
-    report = NULL;
-  }
-
-  if  (report1Type1Errors)
-  {
-    report1Type1Errors->close ();
-    delete  report1Type1Errors;
-    report1Type1Errors = NULL;
-  }
-
-  delete  groundTruth;           groundTruth          = NULL;
-  delete  groundTruthClasses;    groundTruthClasses   = NULL;
-  delete  config;                config               = NULL;
-  delete  trainExamples;         trainExamples        = NULL;
-  delete  trainExamplesClasses;  trainExamplesClasses = NULL;
-  //delete  mlClass;
-}
 
 
 
@@ -480,37 +468,27 @@ ClassCountSearch::~ClassCountSearch ()
  * ProcessCmdLineParamters
  * DESC: Extracts parameters from the command line
  ******************************************************************************/
-bool  ClassCountSearch::ProcessCmdLineParameter (char   parmSwitchCode, 
-                                                 KKStr  parmSwitch, 
-                                                 KKStr  parmValue
+bool  ClassCountSearch::ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                                 const KKStr&  parmValue
                                                 )
 {
-  parmSwitch.Upper ();
-
-  if  ((parmSwitch == "-R")  ||  (parmSwitch == "-REPORT"))
+  bool  parmValid = true;
+  if  (parmSwitch.EqualIgnoreCase ("-R")  ||  parmSwitch.EqualIgnoreCase ("-REPORT"))
   {
     reportFileName = parmValue;
   }
 
-  else if  ((parmSwitch == "-C")  ||  (parmSwitch == "-CONFIG")  ||  (parmSwitch == "-CONFIGFILE"))
-  {
-    configFileName = parmValue;
-  }
-
-  else if  ((parmSwitch == "-GROUNDTRUTH") || (parmSwitch == "-GT"))
+  else if  (parmSwitch.EqualIgnoreCase ("-GROUNDTRUTH") || parmSwitch.EqualIgnoreCase ("-GT"))
   {
     groundTruthDirName = parmValue;
   }
 
   else
   {
-    log.Level (-1) << endl  << endl
-                   << "Unrecognized parameter[" << parmSwitch << "]" << endl
-                   << endl;
-    Abort (true);
+    parmValid = PicesApplication::ProcessCmdLineParameter (parmSwitch, parmValue);
   }
 
-  return  !Abort ();
+  return  parmValid;
 }  /* ProcessCmdLineParameter */
 
 
@@ -555,11 +533,11 @@ void  ClassCountSearch::Main ()
                         (groundTruthDirName, 
                          *mlClasses, 
                          true,             // true = useDirectoryNameForClassName
+                         DB (),
                          cancelFlag, 
                          false,            // false = don't rewiteRootFeatureFile 
                          log
                         );
-
     {
       DuplicateImages  dupDetector (groundTruth, log);
       if  (dupDetector.DuplicatesFound ())
@@ -817,7 +795,7 @@ ConfusionMatrix2Ptr  ClassCountSearch::GradeClassList (MLClassConstListPtr  clas
   delete  specificConfig;               specificConfig              = NULL;
   
   return cm;
-}  /* GradeUsingTrainingConfiguration */
+}  /* GradeClassList */
 
 
 
@@ -826,7 +804,8 @@ void  main (int     argc,
             char**  argv
            )
 {
-  ClassCountSearch  app (argc, argv);
+  ClassCountSearch  app;
+  app.InitalizeApplication (argc, argv);
   if  (!app.Abort ())
     app.Main ();
 }

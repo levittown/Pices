@@ -1,29 +1,34 @@
 #ifndef  _IMPORTFULLSIZEFROMSQLBACKUP_
 #define  _IMPORTFULLSIZEFROMSQLBACKUP_
 
-#include "Application.h"
+#include "PicesApplication.h"
 #include "DataBase.h"
 #include "RunLog.h"
 
 
-class  ImportFullSizeFromSqlBackUp: public Application
+class  ImportFullSizeFromSqlBackUp: public PicesApplication
 {
 public:
 
-  ImportFullSizeFromSqlBackUp (int     argc, 
-                     char**  argv
-                    );
+  ImportFullSizeFromSqlBackUp ();
 
   ~ImportFullSizeFromSqlBackUp ();
 
+  const char*  ApplicationName () const  {return "ImportFullSizeFromSqlBackUp";}
+
+  virtual
+  void  InitalizeApplication (int32   argc,
+                              char**  argv
+                             );
+
   void  Main ();
+
 
 private:
   void   DisplayCommandLineParameters ();
 
-  bool   ProcessCmdLineParameter (char    parmSwitchCode, 
-                                  KKStr   parmSwitch, 
-                                  KKStr   parmValue
+  bool   ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                  const KKStr&  parmValue
                                  );
 
   KKStr  srcFileName;

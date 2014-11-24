@@ -4,63 +4,33 @@
 #include  <memory>
 #include  <math.h>
 
-#include  <map>
-#include  <string>
-#include  <iostream>
-#include  <fstream>
-#include  <vector>
+#include <map>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <vector>
 
-#include  "MemoryDebug.h"
-#include  "BasicTypes.h"
+#include "MemoryDebug.h"
+#include "BasicTypes.h"
 
 using namespace std;
 
-#include  "Compressor.h"
-#include  "OSservices.h"
-#include  "Str.h"
+#include "Compressor.h"
+#include "OSservices.h"
+#include "Str.h"
 using namespace KKU;
 
-#include  "DataBase.h"
+#include "PicesApplication.h"
 using namespace MLL;
 
 
 #include "ImportFullSizeFromSqlBackUp.h"
 
 
-ImportFullSizeFromSqlBackUp::ImportFullSizeFromSqlBackUp (int     argc, 
-                                                          char**  argv
-                                                         ):
-
-   Application (argc, argv),
+ImportFullSizeFromSqlBackUp::ImportFullSizeFromSqlBackUp ():
+   PicesApplication (),
    srcFileName ()
 {
-  if  (argc < 2)
-  {
-    log.Level (-1) << endl << endl 
-                   << "No Command Line Parameters were provided." << endl
-                   << endl;
-
-    DisplayCommandLineParameters ();
-    Abort (true);
-    return;
-  }
-
-  ProcessCmdLineParameters (argc, argv);
-  if  (Abort ())
-  {
-    DisplayCommandLineParameters ();
-    return;
-  }
-
-  if  (srcFileName.Len () < 1)
-  {
-    log.Level (-1) << endl << endl 
-                   << "ImportFullSizeFromSqlBackUp    ***ERROR***   you must provide at least the name of the SQL backup file." << endl
-                   << endl;
-    DisplayCommandLineParameters ();
-    Abort (true);
-    return;
-  }
 }
 
 
@@ -73,28 +43,46 @@ ImportFullSizeFromSqlBackUp::~ImportFullSizeFromSqlBackUp ()
 
 
 
+void  ImportFullSizeFromSqlBackUp::InitalizeApplication (int32   argc,
+                                                         char**  argv
+                                                        )
+{
+  DataBaseRequired (true);
+  PicesApplication::InitalizeApplication (argc, argv);
+  if  (Abort ())
+  {
+    DisplayCommandLineParameters ();
+    return;
+  }
 
-bool  ImportFullSizeFromSqlBackUp::ProcessCmdLineParameter (
-                                                            char    parmSwitchCode, 
-                                                            KKStr   parmSwitch, 
-                                                            KKStr   parmValue
+  if  (srcFileName.Empty ())
+  {
+    log.Level (-1) << endl 
+                   << "ImportFullSizeFromSqlBackUp::InitalizeApplication   ***ERROR***   you must provide at least the name of the SQL backup file." << endl
+                   << endl;
+    DisplayCommandLineParameters ();
+    Abort (true);
+    return;
+  }
+}  /* InitalizeApplication */
+
+
+
+
+bool  ImportFullSizeFromSqlBackUp::ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                                            const KKStr&  parmValue
                                                            )
 {
-  KKStr  parmValueUpper (parmValue);
-  parmValueUpper.Upper ();
-
-  parmSwitch.Upper ();
-
-  if  ((parmSwitch == "-S")    ||  
-       (parmSwitch == "-SRC")  ||  
-       (parmSwitch == "-SOURCE")  ||
-       (parmSwitch.EqualIgnoreCase ("-SrcFile"))
-       )
+  if  (parmSwitch.EqualIgnoreCase ("-S")        ||  
+       parmSwitch.EqualIgnoreCase ("-SRC")      ||  
+       parmSwitch.EqualIgnoreCase ("-SOURCE")   ||
+       parmSwitch.EqualIgnoreCase ("-SrcFile")
+      )
   {
     srcFileName = parmValue;
     if  (!osFileExists (srcFileName))
     {
-      log.Level (-1) << "ProcessCmdLineParameter   ***ERROR***    Invalid '-SrcFile' [" << srcFileName << "] file." << endl;
+      log.Level (-1) << "ImportFullSizeFromSqlBackUp::ProcessCmdLineParameter   ***ERROR***   Invalid '-SrcFile' [" << srcFileName << "] file." << endl;
       Abort (true);
     }
   }
@@ -105,27 +93,25 @@ bool  ImportFullSizeFromSqlBackUp::ProcessCmdLineParameter (
 
 
 
-/** ****************************************************************************
+/******************************************************************************
  * DisplayCommandLineParameters()
  * DESC: Displays a help message to the user
  ******************************************************************************/
 void   ImportFullSizeFromSqlBackUp::DisplayCommandLineParameters ()
 {
-  log.Level (0) << "ImportFullSizeFromSqlBackUp"                                                     << endl;
-  log.Level (0)                                                                                      << endl;
-  log.Level (0) << "    -SrcFile  <Source File>  Specify the name of the file where the Full Size "  << endl;
-  log.Level (0) << "              Images are to be restored from.  This is the SQL file that you "   << endl;
-  log.Level (0) << "              have backed up to."                                                << endl;
-  log.Level (0)                                                                                      << endl;
+  PicesApplication::DisplayCommandLineParameters ();
+  cout << endl
+       << "    -SrcFile  <Source File>  Specify the name of the file where the Full Size "  << endl
+       << "              Images are to be restored from.  This is the SQL file that you "   << endl
+       << "              have backed up to."                                                << endl
+       << endl;
 }  /* DisplayCommandLineParameters */
-
 
 
 
 
 void  ImportFullSizeFromSqlBackUp::Main ()
 {
-  DataBasePtr  dbConn = new DataBase (log);
   ifstream  i (srcFileName.Str ());
 
   int buffLen = 20 * 1024 * 1024;
@@ -150,7 +136,7 @@ void  ImportFullSizeFromSqlBackUp::Main ()
         )
     {
       int  buffStrLen = strlen (buff);
-      dbConn->QueryStatement2 (buff, buffStrLen);
+      DB ()->QueryStatement2 (buff, buffStrLen);
     }
   }
 
@@ -163,11 +149,11 @@ int  main (int     argc,
           )
 {
 
-  ImportFullSizeFromSqlBackUp  mergeFeatureFiles (argc, argv);
-  if  (mergeFeatureFiles.Abort ())
-    return 1;
+  ImportFullSizeFromSqlBackUp  mergeFeatureFiles;
+  mergeFeatureFiles.InitalizeApplication (argc, argv);
+  if  (!mergeFeatureFiles.Abort ())
+    mergeFeatureFiles.Main ();
 
-  mergeFeatureFiles.Main ();
   if  (mergeFeatureFiles.Abort ())
     return 1;
   else

@@ -33,7 +33,7 @@ ClassSummary::ClassSummary ():
 
 
 
-ClassSummary::ClassSummary (MLClassConstPtr  _mlClass,
+ClassSummary::ClassSummary (MLClassConstPtr     _mlClass,
                             LLoydsEntryListPtr  _lloydsEntries,
                             float               _realDataU2Stat,
                             float               _z_Score
@@ -83,7 +83,7 @@ uint32   ClassSummary::NumOfLLoydsEntries ()  const
 
 
 
-uint32  ClassSummary::NumOfLLoydsBins () const // Returns the largest number of lloydsBins in 'lloydsEntries'
+uint32  ClassSummary::NumOfLLoydsBins () const /**< Returns the largest number of lloydsBins in 'lloydsEntries' */
 {
   if  (!lloydsEntries)
     return 0;
@@ -232,17 +232,16 @@ void  ClassSummaryList::SaveLLoydsBinsData (const KKStr&  fileName,
 
 
 
-
-//  SpatialOverlapIndex
-//  ===================
-//
-//  The calculations come from the paper below.  
-//
-// "Small-scale spatial distribution of the euphausiid Euphausia pacifica and overlap with planktivorous fishes"
-// by Alex De Robertis, Scripps Institution Of Oceanography, La Jolla Ca 92093–0208,  alex.derobertis@noaa.gov
-// http://plankt.oxfordjournals.org/cgi/reprint/24/11/1207
-
-float  ClassSummaryList::SpatialOverlapIndex (int32              binSize,
+/**
+ *@brief  Computes spatial index as described in paper.
+ *@details
+ * The calculations come from the following paper.
+ *
+ * "Small-scale spatial distribution of the euphausiid Euphausia pacifica and overlap with planktivorous fishes"
+ * by Alex De Robertis, Scripps Institution Of Oceanography, La Jolla Ca 92093–0208,  alex.derobertis@noaa.gov
+ * http://plankt.oxfordjournals.org/cgi/reprint/24/11/1207
+ */
+float  ClassSummaryList::SpatialOverlapIndex (int32            binSize,
                                               ClassSummaryPtr  c1,
                                               ClassSummaryPtr  c2
                                              )  const

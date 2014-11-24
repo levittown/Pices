@@ -31,23 +31,22 @@ public:
 
   Neighbor (ImageFeaturesPtr  image);
 
-  const KKStr&        ClassName       ();
-  double              Col             () const  {return  col;}
-  double              Dist ();
-  const KKStr&        FileName        () const  {return  fileName;}
-  MLClassConstPtr  MLClass      () const  {return  mlClass;}
-  Neighbor*           NearestNeighbor () const  {return  nearestNeighbor;}
-  double              Row             () const  {return  row;}
-  KKStr               RowCol          ();
-  double              Size            () const  {return  size;}
-  double              SquareDist      () const  {return  squareDist;}
+  const KKStr&     ClassName       ();
+  double           Col             () const  {return  col;}
+  double           Dist            ();
+  const KKStr&     FileName        () const  {return  fileName;}
+  MLClassConstPtr  MLClass         () const  {return  mlClass;}
+  Neighbor*        NearestNeighbor () const  {return  nearestNeighbor;}
+  double           Row             () const  {return  row;}
+  KKStr            RowCol          ();
+  double           Size            () const  {return  size;}
+  double           SquareDist      () const  {return  squareDist;}
 
   MLClassConstPtr  NearestNeighborClass     ()  const;
-  const KKStr&        NearestNeighborClassName ()  const;
-  double              NearestNeighborSize      ()  const;
-  double              NearestNeighborRow       ()  const;
-  KKStr               NearestNeighborRowCol    ()  const;
-
+  const KKStr&     NearestNeighborClassName ()  const;
+  double           NearestNeighborSize      ()  const;
+  double           NearestNeighborRow       ()  const;
+  KKStr            NearestNeighborRowCol    ()  const;
 
 
   void  NearestNeighbor (Neighbor*  _nearestNeighbor)  {nearestNeighbor = _nearestNeighbor;}
@@ -61,19 +60,19 @@ public:
                     );
 
 private:
-  double              col;
-  double              dist;
-  bool                distCalculated;
-  KKStr               fileName;
+  double           col;
+  double           dist;
+  bool             distCalculated;
+  KKStr            fileName;
   MLClassConstPtr  mlClass;
-  int32               largestDist;
-  Neighbor*           nearestNeighbor;
-  double              row;
-  double              size;
-  double              squareDist;
+  int32            largestDist;
+  Neighbor*        nearestNeighbor;
+  double           row;
+  double           size;
+  double           squareDist;
 
   static
-  KKStr               noClassName;
+  KKStr            noClassName;
 };
 
 
@@ -104,7 +103,7 @@ public:
   //   restrictedClass   if specified then will only interested in looking  for *
   //                     that class                                             *
   //*****************************************************************************  
-  void  FindNearestNeighbors (NeighborType        neighborType,
+  void  FindNearestNeighbors (NeighborType     neighborType,
                               MLClassConstPtr  restrictedClass = NULL
                              );
 
@@ -123,15 +122,15 @@ public:
 
 
   void  ReportClassNeighbor (MLClassConstListPtr  mlClasses,
-                             ostream&                r
+                             ostream&             r
                             );
 
   void  ReportClassRow (MLClassConstListPtr  mlClasses,
-                        ostream&                r
+                        ostream&             r
                        );
 
   void  ReportClassRowRestricted (MLClassConstListPtr  mlClasses,
-                                  ostream&                r,
+                                  ostream&             r,
                                   MLClassConstPtr      restrictedClass
                                  );
 

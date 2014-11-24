@@ -1,35 +1,35 @@
 #include  "FirstIncludes.h"
 
-#include  <stdlib.h>
-#include  <memory>
-#include  <math.h>
+#include <stdlib.h>
+#include <memory>
+#include <math.h>
 
-#include  <map>
-#include  <string>
-#include  <iostream>
-#include  <fstream>
-#include  <vector>
+#include <map>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <vector>
 
-#include  "MemoryDebug.h"
-#include  "BasicTypes.h"
+#include "MemoryDebug.h"
+#include "BasicTypes.h"
 
 using namespace std;
 
-#include  "Compressor.h"
-#include  "OSservices.h"
-#include  "Str.h"
+#include "Compressor.h"
+#include "OSservices.h"
+#include "Str.h"
 using namespace KKU;
 
-#include  "InstrumentDataFileManager.h"
+#include "InstrumentDataFileManager.h"
 using namespace SipperHardware;
 
-#include  "DataBase.h"
-#include  "DataBaseImage.h"
-#include  "FeatureFileIO.h"
-#include  "FeatureFileIOPices.h"
-#include  "FileDesc.h"
-#include  "MLClass.h"
-#include  "ImageFeatures.h"
+#include "DataBase.h"
+#include "DataBaseImage.h"
+#include "FeatureFileIO.h"
+#include "FeatureFileIOPices.h"
+#include "FileDesc.h"
+#include "MLClass.h"
+#include "ImageFeatures.h"
 using namespace MLL;
 
 
@@ -53,38 +53,44 @@ using namespace MLL;
 // -format C45  -src NineClasses_TrainTest_c45.data  -src NineClasses_ValidationData_c45.data  -dest C:\Users\kkramer\Dissertation\BiasAdjustmentExperiment\NineClassPlankton\NineClassPlankton.data  -Stratify 20
 
 
-MergeFeatureFiles::MergeFeatureFiles (int     argc, 
-                                      char**  argv
-                                      ):
+MergeFeatureFiles::MergeFeatureFiles ():
 
-   Application          (argc, argv),
+   PicesApplication     (),
    currentDefaultFormat (FeatureFileIOPices::Driver ()),
    numOfFolds           (10),
    randomize            (false),
    srcData              (NULL),
    stratify             (false)
 {
-  if  (argc < 2)
-  {
-    log.Level (-1) << endl << endl 
-                   << "No Command Line Parameters were provided." << endl
-                   << endl;
+}
 
-    DisplayCommandLineParameters ();
-    Abort (true);
-    return;
-  }
 
-  InstrumentDataFileManager::InitializePush ();
-  ProcessCmdLineParameters (argc, argv);
+
+
+
+MergeFeatureFiles::~MergeFeatureFiles ()
+{
+  delete  srcData;
+  InstrumentDataFileManager::InitializePop ();
+}
+
+
+
+
+void  MergeFeatureFiles::InitalizeApplication (int32   argc,
+                                               char**  argv
+                                              )
+{
+  PicesApplication::InitalizeApplication (argc, argv);
   if  (Abort ())
   {
     DisplayCommandLineParameters ();
     return;
   }
 
+  InstrumentDataFileManager::InitializePush ();
 
-  if  (srcFileNames.size () < 1)
+  if  (srcFileNames.empty ())
   {
     log.Level (-1) << endl << endl 
                    << "MergeFeatureFiles    ***ERROR***   you must provide at least one '-src' parameter." << endl
@@ -103,39 +109,31 @@ MergeFeatureFiles::MergeFeatureFiles (int     argc,
     Abort (true);
     return;
   }
-}
+}  /* InitalizeApplication */
 
 
 
 
 
-MergeFeatureFiles::~MergeFeatureFiles ()
-{
-  delete  srcData;
-  InstrumentDataFileManager::InitializePop ();
-}
 
 
-
-
-bool  MergeFeatureFiles::ProcessCmdLineParameter (
-                                                  char    parmSwitchCode, 
-                                                  KKStr   parmSwitch, 
-                                                  KKStr   parmValue
+bool  MergeFeatureFiles::ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                                  const KKStr&  parmValue
                                                  )
 {
-  KKStr  parmValueUpper (parmValue);
-  parmValueUpper.Upper ();
+  bool  validParm = true;
 
-  parmSwitch.Upper ();
-
-  if  ((parmSwitch == "-S")  ||  (parmSwitch == "-SRC")||  (parmSwitch == "-SOURCE"))
+  if  (parmSwitch.EqualIgnoreCase ("-S")    ||  
+       parmSwitch.EqualIgnoreCase ("-SRC")  ||  
+       parmSwitch.EqualIgnoreCase ("-SOURCE")
+      )
   {
     KKStr  srcFileName = parmValue;
     if  (!osFileExists (srcFileName))
     {
       log.Level (-1) << "ProcessCmdLineParameter   ***ERROR***    Invalid '-src' [" << srcFileName << "] file." << endl;
       Abort (true);
+      validParm = false;
     }
 
     srcFileNames.push_back (srcFileName);
@@ -144,15 +142,21 @@ bool  MergeFeatureFiles::ProcessCmdLineParameter (
     {
       log.Level (-1) << "ProcessCmdLineParameter   ***ERROR***    Format[" << currentDefaultFormat->DriverName () << "] does not support read." << endl;
       Abort (true);
+      validParm = false;
     }
   }
 
-  else if  ((parmSwitch == "-DEST")  ||  (parmSwitch == "-D")  ||  (parmSwitch == "-DESTINATION"))
+  else if  
+    (parmSwitch.EqualIgnoreCase ("-DEST")        ||  
+     parmSwitch.EqualIgnoreCase ("-D")           ||  
+     parmSwitch.EqualIgnoreCase ("-DESTINATION")
+    )
   {
     if  (!destFileName.Empty ())
     {
       log.Level (-1) << "ProcessCmdLineParameter   ***ERROR***    More than one destination file was specified." << endl;
       Abort (true);
+      validParm= false;
     }
     
     destFileName = parmValue;
@@ -160,24 +164,30 @@ bool  MergeFeatureFiles::ProcessCmdLineParameter (
     {
       log.Level (-1) << "ProcessCmdLineParameter   ***ERROR***    Destination File[" << destFileName << "] already exists." << endl;
       Abort (true);
+      validParm = false;
     }
 
     if  (!currentDefaultFormat->CanWrite ())
     {
       log.Level (-1) << "ProcessCmdLineParameter   ***ERROR***    Format[" << currentDefaultFormat->DriverName () << "] does not support write." << endl;
       Abort (true);
+      validParm = false;
     }
 
     destFormat = currentDefaultFormat;
   }
 
-  else if  ((parmSwitch == "-F")  ||  (parmSwitch == "-FORMAT"))
+  else if  
+    (parmSwitch.EqualIgnoreCase ("-F")  ||  
+     parmSwitch.EqualIgnoreCase ("-FORMAT")
+    )
   {
     FeatureFileIOPtr  newFormat = FeatureFileIO::FileFormatFromStr (parmValue);
     if  (!newFormat)
     {
       log.Level (-1) << "ProcessCmdLineParameter   ***ERROR***    No such format as[" << parmValue<< "]." << endl;
       Abort (true);
+      validParm = false;
     }
     else
     {
@@ -185,7 +195,10 @@ bool  MergeFeatureFiles::ProcessCmdLineParameter (
     }
   }
 
-  else if  ((parmSwitch == "-STRAT")  ||  (parmSwitch == "-STRATIFY"))
+  else if 
+    (parmSwitch.EqualIgnoreCase ("-STRAT")  ||  
+     parmSwitch.EqualIgnoreCase ("-STRATIFY")
+    )
   {
     stratify = true;
     if  (!parmValue.Empty ())
@@ -195,28 +208,28 @@ bool  MergeFeatureFiles::ProcessCmdLineParameter (
       {
         log.Level (-1) << "ProcessCmdLineParameter   ***ERROR***    -Folds[" << numOfFolds << "]  must be 1 or greater and less than 10000." << endl;
         Abort (true);
+        validParm = false;
       }
     }
   }
 
 
-  else if  ((parmSwitch == "-RAND")  ||  (parmSwitch == "-RANDOM")  ||  (parmSwitch == "-RANDOMIZE"))
+  else if  
+    (parmSwitch.EqualIgnoreCase ("-RAND")    ||
+     parmSwitch.EqualIgnoreCase ("-RANDOM")  ||
+     parmSwitch.EqualIgnoreCase ("-RANDOMIZE")
+    )
   {
     randomize = true;
   }
 
   else
   {
-    log.Level (-1) << endl << endl
-                   << "MergeFeatureFiles::ProcessCmdLineParameter    ***ERROR***" << endl
-                   << endl
-                   << "             Invalid Parameter[" << parmSwitch << "]" << endl
-                   << endl;
-    Abort (true);
+    validParm = PicesApplication::ProcessCmdLineParameter (parmSwitch, parmValue);
   }
 
 
-	return  !Abort ();
+	return  validParm;
 }  /* ProcessCmdLineParameter */
 
 
@@ -228,40 +241,42 @@ bool  MergeFeatureFiles::ProcessCmdLineParameter (
  ******************************************************************************/
 void   MergeFeatureFiles::DisplayCommandLineParameters ()
 {
-  log.Level (0) << "MergeFeatureFiles"                                                               << endl;
-  log.Level (0)                                                                                      << endl;
-  log.Level (0) << "    -src   <Source File>  Can specify multiple -src parameters.  You specify"    << endl;
-  log.Level (0) << "           one of these parametrs for eachfeature file to include in"            << endl;
-  log.Level (0) << "           destination feature file."                                            << endl;
-  log.Level (0)                                                                                      << endl;
-  log.Level (0) << "    -dest  <destination File>  Mandatory parameter and can only specify one."    << endl;
-  log.Level (0)                                                                                      << endl;
-  log.Level (0) << "    -format  " << FeatureFileIO::FileFormatsReadAndWriteOptionsStr ()            << endl;
-  log.Level (0) << "           all feature Files that follow this parameter will use this format"    << endl;
-  log.Level (0) << "           until another '-format' parameter is specified."                      << endl;
-  log.Level (0)                                                                                      << endl;
-  log.Level (0) << "           Read  formats Supported: " << FeatureFileIO::FileFormatsReadOptionsStr    () << endl;
-  log.Level (0) << "           Write formats Supported: " << FeatureFileIO::FileFormatsWrittenOptionsStr () << endl;
-  log.Level (0) << "           if no '-format' paramter provided defaults to 'Pices'."               << endl;
-  log.Level (0)                                                                                      << endl;
-  log.Level (0) << "    -Stratify <NumOfFolds>     Will stratify the output by 'Class'."             << endl;
-  log.Level (0)                                                                                      << endl;
-  log.Level (0) << "    -Randomize   Will sort th edestination file into random order."              << endl;
-  log.Level (0)                                                                                      << endl;
-  log.Level (0)                                                                                      << endl;
-  log.Level (0) << "Examples:"                                                                       << endl;
-  log.Level (0) << "  MergeFeatureFiles  -format c45  -src Src1.data  -src Src2.data  -format arff   -dest combined.data"  << endl;
-  log.Level (0)                                                                                      << endl;
-  log.Level (0) << "           Will read in the files 'Src1.data' and 'Src2.data' which should be"   << endl;
-  log.Level (0) << "           in 'c45' format and write the output to Combined.data in 'arff'"      << endl;
-  log.Level (0) << "           format."                                                              << endl;
-  log.Level (0)                                                                                      << endl;
-  log.Level (0)                                                                                      << endl;
-  log.Level (0) << "  MergeFeatureFiles  -format c45  -src Src1.data  -src Src2.data  -dest combined.data  -Stratify 10"  << endl;
-  log.Level (0)                                                                                      << endl;
-  log.Level (0) << "           Will read in the files 'Src1.data' and 'Src2.data' which should be"   << endl;
-  log.Level (0) << "           in 'c45' format and write the output to Combined.data also in 'c45'"  << endl;
-  log.Level (0) << "           format with the data stratified by class for 10 folds."               << endl;
+  PicesApplication::DisplayCommandLineParameters ();
+
+  cout << endl
+       << "    -src   <Source File>  Can specify multiple -src parameters.  You specify"    << endl
+       << "           one of these parametrs for eachfeature file to include in"            << endl
+       << "           destination feature file."                                            << endl
+       << endl
+       << "    -dest  <destination File>  Mandatory parameter and can only specify one."    << endl
+       << endl
+       << "    -format  " << FeatureFileIO::FileFormatsReadAndWriteOptionsStr ()            << endl
+       << "           all feature Files that follow this parameter will use this format"    << endl
+       << "           until another '-format' parameter is specified."                      << endl
+       << endl
+       << "           Read  formats Supported: " << FeatureFileIO::FileFormatsReadOptionsStr    () << endl
+       << "           Write formats Supported: " << FeatureFileIO::FileFormatsWrittenOptionsStr () << endl
+       << "           if no '-format' paramter provided defaults to 'Pices'."               << endl
+       << endl
+       << "    -Stratify <NumOfFolds>     Will stratify the output by 'Class'."             << endl
+       << endl
+       << "    -Randomize   Will sort th edestination file into random order."              << endl
+       << endl
+       << endl
+       << "Examples:"                                                                       << endl
+       << "  MergeFeatureFiles  -format c45  -src Src1.data  -src Src2.data  -format arff   -dest combined.data"  << endl
+       << endl
+       << "           Will read in the files 'Src1.data' and 'Src2.data' which should be"   << endl
+       << "           in 'c45' format and write the output to Combined.data in 'arff'"      << endl
+       << "           format."                                                              << endl
+       << endl
+       << endl
+       << "  MergeFeatureFiles  -format c45  -src Src1.data  -src Src2.data  -dest combined.data  -Stratify 10"  << endl
+       << endl
+       << "           Will read in the files 'Src1.data' and 'Src2.data' which should be"   << endl
+       << "           in 'c45' format and write the output to Combined.data also in 'c45'"  << endl
+       << "           format with the data stratified by class for 10 folds."               << endl
+       << endl;
 }  /* DisplayCommandLineParameters */
 
 
@@ -1074,11 +1089,10 @@ int  main (int     argc,
   //ImportValidatedClassInfo ();
   //exit (-1);
 
-  MergeFeatureFiles  mergeFeatureFiles (argc, argv);
+  MergeFeatureFiles  mergeFeatureFiles;
+  mergeFeatureFiles.InitalizeApplication (argc, argv);
   if  (mergeFeatureFiles.Abort ())
     return 1;
-
-
 
   mergeFeatureFiles.Main ();
   if  (mergeFeatureFiles.Abort ())

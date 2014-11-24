@@ -8,10 +8,11 @@ using namespace  KKU;
 #include "ConfusionMatrix2.h"
 #include "MLClass.h"
 #include "ImageFeatures.h"
+#include "PicesApplication.h"
 #include "TrainingConfiguration2.h"
 using  namespace  MLL;
 
-class  ClassCountSearch: public Application
+class  ClassCountSearch: public PicesApplication
 {
 public:
   typedef  KKU::uint  uint;
@@ -23,26 +24,30 @@ public:
   typedef  ClassStatsList*  ClassStatsListPtr;
 
 
-  ClassCountSearch (int argc, char**  argv);
+  ClassCountSearch ();
   ~ClassCountSearch ();
+
+  virtual
+  void  InitalizeApplication (int32   argc,
+                              char**  argv
+                             );
 
   void  Main ();
 
-  virtual const char* ApplicationName ()  {return  "ClassCountSearch";}
+  virtual const char* ApplicationName () const  {return  "ClassCountSearch";}
 
-  void  DisplayCommandLineParameters ();
-
-  virtual bool ProcessCmdLineParameter (char    parmSwitchCode, 
-                                        KKStr   parmSwitch, 
-                                        KKStr   parmValue
-                                       );
+  virtual bool  ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                         const KKStr&  parmValue
+                                        );
 
 private:
+  void  DisplayCommandLineParameters ();
+
   MLClassConstPtr  SelectNextClassToRemove (ConfusionMatrix2Ptr  cm);
 
   ConfusionMatrix2Ptr  GradeClassList (MLClassConstListPtr  classes,
-                                       int32&             numExamples, 
-                                       int32&             numIgnored
+                                       int32&               numExamples, 
+                                       int32&               numIgnored
                                       );
 
   ClassStatsListPtr  ComputeClassStatsList (ConfusionMatrix2Ptr  cm);
@@ -55,25 +60,20 @@ private:
 
   bool                        cancelFlag;
 
-  TrainingConfiguration2Ptr   config;
-  KKStr                       configFileName;
-
-  FileDescPtr                 fileDesc;
-
   KKStr                       groundTruthDirName;
   FeatureVectorListPtr        groundTruth;
-  MLClassConstListPtr      groundTruthClasses;
+  MLClassConstListPtr         groundTruthClasses;
 
-  MLClassConstListPtr      mlClasses;
+  MLClassConstListPtr         mlClasses;
 
   ofstream*                   report;
   ofstream*                   report1Type1Errors;
   KKStr                       reportFileName;
 
   FeatureVectorListPtr        trainExamples;
-  MLClassConstListPtr           trainExamplesClasses;
+  MLClassConstListPtr         trainExamplesClasses;
 
-  queue<MLClassConstListPtr>    combinationsToTry;           
+  queue<MLClassConstListPtr>  combinationsToTry;           
 
 };
 

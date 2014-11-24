@@ -1,16 +1,16 @@
 #if  !defined(_TRAININGCONFIGURATION2_)
 #define  _TRAININGCONFIGURATION2_
 
-#include  "DateTime.h"
-#include  "Str.h"
+#include "DateTime.h"
+#include "Str.h"
 
 
-#include  "Configuration.h"
-#include  "Model.h"
-#include  "ModelParam.h"
-#include  "ModelParamOldSVM.h"
-#include  "SVMparam.h"
-#include  "TrainingClass.h"
+#include "Configuration.h"
+#include "Model.h"
+#include "ModelParam.h"
+#include "ModelParamOldSVM.h"
+#include "SVMparam.h"
+#include "TrainingClass.h"
 
 namespace MLL 
 {
@@ -50,16 +50,16 @@ namespace MLL
 
     TrainingConfiguration2 (const TrainingConfiguration2&  tc);
 
-    TrainingConfiguration2 (FileDescPtr             _fileDesc,       // Use this one if you want to
+    TrainingConfiguration2 (FileDescPtr          _fileDesc,       // Use this one if you want to
                             MLClassConstListPtr  _mlClasses,   // create a default Configuration 
-                            KKStr                   _parameterStr,   // object.
-                            RunLog&                 _log             
+                            KKStr                _parameterStr,   // object.
+                            RunLog&              _log             
                            );
 
-    TrainingConfiguration2 (FileDescPtr             _fileDesc,          // Use this one if you want to
+    TrainingConfiguration2 (FileDescPtr          _fileDesc,          // Use this one if you want to
                             MLClassConstListPtr  _mlClasses,      // create a default Configuration 
-                            ModelParamPtr           _modelParameters,   /**< Will take ownership of this instance. */
-                            RunLog&                 _log
+                            ModelParamPtr        _modelParameters,   /**< Will take ownership of this instance. */
+                            RunLog&              _log
                            );
 
 
@@ -68,12 +68,12 @@ namespace MLL
 
     static
     TrainingConfiguration2*  CreateFromDirectoryStructure 
-                                            (FileDescPtr        _fileDesc,
-                                             const KKStr&       _existingConfigFileName,
-                                             const KKStr&       _subDir,
-                                             RunLog&            _log,
-                                             bool&              _successful,
-                                             KKStr&             _errorMessage
+                                            (FileDescPtr   _fileDesc,
+                                             const KKStr&  _existingConfigFileName,
+                                             const KKStr&  _subDir,
+                                             RunLog&       _log,
+                                             bool&         _successful,
+                                             KKStr&        _errorMessage
                                             );
 
     static
@@ -272,7 +272,7 @@ namespace MLL
     void                   ValidateGlobalSection (int32  sectionNum);
 
     void                   ValidateOtherClass (MLClassConstPtr  otherClass,
-                                               int32               otherClassLineNum
+                                               int32            otherClassLineNum
                                               );
 
     void                   ValidateTrainingClassConfig (int32  sectionNum);
@@ -328,7 +328,7 @@ namespace MLL
     bool                   validateDirectories;
   };  /* TrainingConfiguration2 */
 
-  #define  _TrainingConfiguration2Defined_
+  #define  _TrainingConfiguration2_Defined_
 
   typedef  TrainingConfiguration2::TrainingConfiguration2Ptr  TrainingConfiguration2Ptr;
 

@@ -1,7 +1,6 @@
 #if  !defined(_ABUNDANCECORRECTIONSTATSBUILDER_)
 #define  _ABUNDANCECORRECTIONSTATSBUILDER_
 
-#include "Application.h"
 #include "MsgQueue.h"
 #include "RunLog.h"
 #include "Str.h"
@@ -13,6 +12,7 @@
 #include "ImageFeatures.h"
 #include "MLClass.h"
 #include "NormalizationParms.h"
+#include "PicesApplication.h"
 #include "TrainingConfiguration2.h"
 
 namespace  AbundanceCorrectionApplication
@@ -25,7 +25,7 @@ namespace  AbundanceCorrectionApplication
   typedef  TrainTestThreadList*      TrainTestThreadListPtr;
   #endif
 
-  class  AbundanceCorrectionStatsBuilder: public Application
+  class  AbundanceCorrectionStatsBuilder: public PicesApplication
   {
   public:
     typedef  KKU::uchar  uchar;
@@ -33,11 +33,16 @@ namespace  AbundanceCorrectionApplication
     typedef  KKU::ulong  ulong;
     typedef  KKU::ushort ushort;
 
-    AbundanceCorrectionStatsBuilder (int     argc, 
-                                     char**  argv
-                                    );
+    AbundanceCorrectionStatsBuilder ();
 
     ~AbundanceCorrectionStatsBuilder ();
+
+    const char*  ApplicationName () const  {return "AbundanceCorrectionStatsBuilder";}
+
+    virtual
+    void  InitalizeApplication (int32   argc,
+                                char**  argv
+                               );
 
     void  Main ();
 
@@ -56,9 +61,8 @@ namespace  AbundanceCorrectionApplication
 
     void   PrintStartStatistics ();
 
-    bool   ProcessCmdLineParameter (char    parmSwitchCode, 
-                                    KKStr   parmSwitch, 
-                                    KKStr   parmValue
+    bool   ProcessCmdLineParameter (const KKStr&   parmSwitch, 
+                                    const KKStr&   parmValue
                                    );
 
     void   RemoveDuplicateImages ();
@@ -66,17 +70,13 @@ namespace  AbundanceCorrectionApplication
     void   TerminateThreads ();
 
 
-    MLClassConstListPtr        allClasses;           /**< Contains  trainLibDataClasses + otherClass               */
+    MLClassConstListPtr           allClasses;           /**< Contains  trainLibDataClasses + otherClass               */
 
-    TrainingConfiguration2Ptr     config;
-
-    MLClassConstListPtr        configClasses;
+    MLClassConstListPtr           configClasses;
 
     KKStr                         configFileName;
 
     KKStr                         configFileFullPath;   /**< Will include the full path to config file that is used.  */
-
-    FileDescPtr                   fileDesc;
 
     int                           maxNumActiveThreads;
 
@@ -88,7 +88,7 @@ namespace  AbundanceCorrectionApplication
 
     bool                          oneOrMoreThreadsCrashed;
 
-    MLClassConstPtr            otherClass;
+    MLClassConstPtr               otherClass;
 
     FeatureVectorListPtr          otherClassData;
 
@@ -104,7 +104,7 @@ namespace  AbundanceCorrectionApplication
 
     FeatureVectorListPtr          trainLibData;         /**< All the examples that were retrived from the configuration file. */
 
-    MLClassConstListPtr        trainLibDataClasses;
+    MLClassConstListPtr           trainLibDataClasses;
   };  /* AbundanceCorrectionStatsBuilder */
 
   typedef  AbundanceCorrectionStatsBuilder*  AbundanceCorrectionStatsBuilderPtr;

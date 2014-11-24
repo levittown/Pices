@@ -1,9 +1,11 @@
 #ifndef  _RANDOMNND_
 #define  _RANDOMNND_
 
-#include  "Application.h"
-#include  "RunLog.h"
-#include  "Str.h"
+#include "RunLog.h"
+#include "Str.h"
+
+#include "PicesApplication.h"
+
 
 #include  "..\OurNeighbors\Neighbor.h"
 
@@ -27,15 +29,18 @@ typedef  ImageClassList*  ImageClassListPtr;
 
 
 
-class  RandomNND: public Application
+class  RandomNND: public PicesApplication
 {
 public:
 
-	RandomNND (int     argc, 
-             char**  argv
-            );
+	RandomNND ();
 
 	~RandomNND();
+
+  virtual
+  void  InitalizeApplication (int32   argc,
+                              char**  argv
+                             );
 
 	virtual const char* ApplicationName ()  {return  "RandomNND";}
 
@@ -43,10 +48,8 @@ public:
 
 	void	DisplayCommandLineParameters ();
 
-	virtual bool ProcessCmdLineParameter (
-                                        char   parmSwitchCode, 
-                                        KKStr  parmSwitch, 
-                                        KKStr  parmValue
+	virtual bool ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                        const KKStr&  parmValue
                                        );
 private:
 

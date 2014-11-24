@@ -81,12 +81,13 @@ namespace KKU
 
     /** Specify the name of the application */
     virtual 
-    const char*  ApplicationName () = 0;
+    const char*  ApplicationName ()  const = 0;
 
     void         AssignLog (RunLog&  _log);  /**< @brief Replaces the Log file to write to.  */
 
     virtual
     KKStr        BuildDate ()  const;
+
 
 
     /** 
@@ -108,6 +109,15 @@ namespace KKU
 
 
   protected:
+    /**
+     *@brief  Will display Command Lone parameters that the 'Appliication' class will manage.
+     *@details  Derived classes that implemen this method need to call their imediate base class vesion of this method
+     * to include these parameters.
+     */
+    virtual
+    void  DisplayCommandLineParameters ();
+
+
     /**
      *@brief This method will get called once for each parameter specified in the command line.
      *@details  Derived classes should define this method to intercept parameters that they are interested in.

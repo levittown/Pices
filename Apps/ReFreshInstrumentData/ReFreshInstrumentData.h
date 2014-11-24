@@ -1,7 +1,7 @@
 #ifndef  _REFRESHINSTRUMENTDATA_
 #define  _REFRESHINSTRUMENTDATA_
 
-#include "Application.h"
+#include "PicesApplication.h"
 #include "DataBase.h"
 #include "FeatureFileIO.h"
 #include "MLClass.h"
@@ -14,31 +14,33 @@
 
 
 
-class  ReFreshInstrumentData: public Application
+class  ReFreshInstrumentData: public PicesApplication
 {
 public:
-  ReFreshInstrumentData (int     argc, 
-                         char**  argv
-                        );
+  ReFreshInstrumentData ();
 
   ~ReFreshInstrumentData ();
 
+  virtual 
+  const char*  ApplicationName () const  {return  "ReFreshInstrumentData";}
+
+  virtual
+  void  InitalizeApplication (int32   argc,
+                              char**  argv
+                             );
   void  Main ();
 
 private:
   void   DisplayCommandLineParameters ();
 
-  bool   ProcessCmdLineParameter (char    parmSwitchCode, 
-                                  KKStr   parmSwitch, 
-                                  KKStr   parmValue
+  bool   ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                  const KKStr&  parmValue
                                  );
 
-  DataBasePtr  dbConn;
+  KKStr  cruiseName;
+  KKStr  deploymentNum;
+  KKStr  stationName;
 
-  KKStr    cruiseName;
-  KKStr    deploymentNum;
-  KKStr    stationName;
-
-  KKStr    reportFileName;
+  KKStr  reportFileName;
 };
 #endif

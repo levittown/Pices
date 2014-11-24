@@ -1,27 +1,26 @@
-#include  "FirstIncludes.h"
+#include "FirstIncludes.h"
 
-#include  <stdlib.h>
-#include  <memory>
-#include  <math.h>
+#include <stdlib.h>
+#include <memory>
+#include <math.h>
+#include <map>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <vector>
 
-#include  <map>
-#include  <string>
-#include  <iostream>
-#include  <fstream>
-#include  <vector>
-
-#include  "MemoryDebug.h"
-#include  "BasicTypes.h"
+#include "MemoryDebug.h"
+#include "BasicTypes.h"
 
 using namespace std;
 
-#include  "OSservices.h"
-#include  "Str.h"
+#include "OSservices.h"
+#include "Str.h"
 using namespace KKU;
 
-#include  "SipperCruise.h"
-#include  "SipperDeployment.h"
-#include  "SipperFile.h"
+#include "SipperCruise.h"
+#include "SipperDeployment.h"
+#include "SipperFile.h"
 using namespace  SipperHardware;
 
 #include  "DataBase.h"
@@ -203,14 +202,11 @@ typedef  ImportGPS_DataNameSpace::SipperFileEntryList*  SipperFileEntryListPtr;
 
 
 
-ImportGPS_Data::ImportGPS_Data (int     argc, 
-                                char**  argv
-                               ):
+ImportGPS_Data::ImportGPS_Data ():
 
-   Application  (argc, argv),
+   PicesApplication  (),
    cruise            (NULL),
    cruiseStr         (),
-   dbConn            (NULL),
    deltaHours        (0.0f),
    deployments       (NULL),
    fileFormat        (GDF_NULL),
@@ -218,22 +214,26 @@ ImportGPS_Data::ImportGPS_Data (int     argc,
    sipperFileEntries (NULL),
    srcDirectory      ()
 {
-  if  (argc < 2)
-  {
-    log.Level (-1) << endl << endl 
-                   << "No Command Line Parameters were provided." << endl
-                   << endl;
-    DisplayCommandLineParameters ();
-    Abort (true);
-    return;
-  }
+}
 
-  ProcessCmdLineParameters (argc, argv);
-  if  (Abort ())
-  {
-    DisplayCommandLineParameters ();
-    return;
-  }
+
+
+ImportGPS_Data::~ImportGPS_Data ()
+{
+  delete  cruise;             cruise            = NULL;
+  delete  deployments;        deployments       = NULL;
+  delete  sipperFileEntries;  sipperFileEntries = NULL;
+  delete  sipperFiles;        sipperFiles       = NULL;
+}
+
+
+
+void  ImportGPS_Data::InitalizeApplication (int32   argc,
+                                            char**  argv
+                                           )
+{
+  DataBaseRequired (true);
+  PicesApplication::InitalizeApplication (argc, argv);
 
   if  (srcDirectory.Empty ())
   {
@@ -260,18 +260,11 @@ ImportGPS_Data::ImportGPS_Data (int     argc,
     log.Level (-1) << endl << "ImportGPS_Data::ImportGPS_Data   ***ERROR***     Cruse must be stecified." << endl;
     Abort (true);
   }
-}
+}  /* InitalizeApplication */
 
 
 
-ImportGPS_Data::~ImportGPS_Data ()
-{
-  delete  cruise;             cruise            = NULL;
-  delete  dbConn;             dbConn            = NULL;
-  delete  deployments;        deployments       = NULL;
-  delete  sipperFileEntries;  sipperFileEntries = NULL;
-  delete  sipperFiles;        sipperFiles       = NULL;
-}
+
 
 
 
@@ -320,15 +313,11 @@ KKStr  ImportGPS_Data::GpsDataFormatToStr (GpsDataFormat  format)
 // -cruise  WB0911     -FF WeatherBird        -src "D:\Users\kkramer\DropBox\Dropbox\Sipper\GPS_Data\2011-01\WB1101\GpsData"  -DH 
 
 
-bool  ImportGPS_Data::ProcessCmdLineParameter (char    parmSwitchCode, 
-                                               KKStr   parmSwitch, 
-                                               KKStr   parmValue
+bool  ImportGPS_Data::ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                               const KKStr&  parmValue
                                               )
 {
-  KKStr  parmValueUpper (parmValue);
-  parmValueUpper.Upper ();
-
-
+  bool  validParm = true;
   if  (parmSwitch.EqualIgnoreCase ("-DH")         ||  
        parmSwitch.EqualIgnoreCase ("-Delta")      ||  
        parmSwitch.EqualIgnoreCase ("-DeltaHour")  ||
@@ -348,6 +337,7 @@ bool  ImportGPS_Data::ProcessCmdLineParameter (char    parmSwitchCode,
     {
       log.Level (-1) << endl << "Invalid File Format[" << parmValue << "] Specified." << endl;
       Abort (true);
+      validParm = false;
     }
   }
 
@@ -369,20 +359,16 @@ bool  ImportGPS_Data::ProcessCmdLineParameter (char    parmSwitchCode,
     {
       log.Level (-1) << "ProcessCmdLineParameter   ***ERROR***    Invalid '-SrcDir' [" << srcDirectory << "]." << endl;
       Abort (true);
+      validParm = false;
     }
   }
 
   else
   {
-    log.Level (-1) << endl << endl
-                   << "ImportGPS_Data::ProcessCmdLineParameter    ***ERROR***" << endl
-                   << endl
-                   << "             Invalid Parameter[" << parmSwitch << "]" << endl
-                   << endl;
-    Abort (true);
+    validParm = PicesApplication::ProcessCmdLineParameter (parmSwitch, parmValue);
   }
 
-	return  !Abort ();
+	return  validParm;
 }  /* ProcessCmdLineParameter */
 
 
@@ -390,18 +376,18 @@ bool  ImportGPS_Data::ProcessCmdLineParameter (char    parmSwitchCode,
 
 void   ImportGPS_Data::DisplayCommandLineParameters ()
 {
-  log.Level (0) << "ImportGPS_Data"                                                                   << endl;
-  log.Level (0)                                                                                       << endl;
-  log.Level (0) << "    -SrcDir <Source Directory>  The directorty where GPS data files are located." << endl;
-  log.Level (0)                                                                                       << endl;
-  log.Level (0)                                                                                       << endl;
-  log.Level (0) << "Examples:"                                                                        << endl;
-  log.Level (0) << "  ImportGPS_Data  -SrcDir C:\\Pices\\Cruises\\EB1101\\"                           << endl;
-  log.Level (0)                                                                                       << endl;
-  log.Level (0) << "           Will scan the specified directory for Weatherbird GPS data files."     << endl;
-  log.Level (0) << "           Each GPS data file in directory will be scanned and appropriate"       << endl;
-  log.Level (0) << "           tables in PICES database will be updated."                             << endl;
-  log.Level (0)                                                                                       << endl;
+  PicesApplication::DisplayCommandLineParameters ();
+  log << endl
+      << "    -SrcDir <Source Directory>  The directorty where GPS data files are located." << endl
+      << endl
+      << endl
+      << "Examples:"                                                                        << endl
+      << "  ImportGPS_Data  -SrcDir C:\\Pices\\Cruises\\EB1101\\"                           << endl
+      << endl
+      << "           Will scan the specified directory for Weatherbird GPS data files."     << endl
+      << "           Each GPS data file in directory will be scanned and appropriate"       << endl
+      << "           tables in PICES database will be updated."                             << endl
+      << endl;
 }  /* DisplayCommandLineParameters */
 
 
@@ -465,7 +451,7 @@ void  ImportGPS_Data::UpdateInstrumentData (const DateTime&  gpsTimeStamp,
     }
   }
 
-  dbConn->InstrumentDataUpdateLatitudeAndLongitude (startDT, endDT, lattitude, longitude);
+  DB ()->InstrumentDataUpdateLatitudeAndLongitude (startDT, endDT, lattitude, longitude);
   lastEndDate = endDT;
 }  /* UpdateInstrumentData */
 
@@ -766,17 +752,7 @@ void   ImportGPS_Data::Main ()
   if  (Abort ())
     return;
 
-  dbConn = new DataBase (log);
-  if  (!dbConn->Valid ())
-  {
-    log.Level (-1) << endl << endl 
-      << "ImportGPS_Data::Main    ***ERROR***    Failed to connect to database."  << endl
-      << endl;
-    Abort (true);
-    return;
-  }
-
-  cruise = dbConn->SipperCruiseLoad (cruiseStr);
+  cruise = DB ()->SipperCruiseLoad (cruiseStr);
   if  (!cruise)
   {
     log.Level (-1) << endl << endl 
@@ -786,7 +762,7 @@ void   ImportGPS_Data::Main ()
     return;
   }
 
-  sipperFiles = dbConn->SipperFileLoad (cruiseStr, "", "");
+  sipperFiles = DB ()->SipperFileLoad (cruiseStr, "", "");
   if  (!sipperFiles)
   {
     log.Level (-1) << endl << endl 
@@ -796,9 +772,9 @@ void   ImportGPS_Data::Main ()
     return;
   }
 
-  sipperFileEntries = new SipperFileEntryList (*sipperFiles, dbConn, log);
+  sipperFileEntries = new SipperFileEntryList (*sipperFiles, DB (), log);
 
-  deployments = dbConn->SipperDeploymentLoad (cruiseStr, "");
+  deployments = DB ()->SipperDeploymentLoad (cruiseStr, "");
   if  ((!deployments)  ||  (deployments->QueueSize () < 1))
   {
     log.Level (-1) << endl << endl 
@@ -867,7 +843,8 @@ int  main (int     argc,
            char**  argv
           )
 {
-  ImportGPS_Data  importGpsApp (argc, argv);
+  ImportGPS_Data  importGpsApp;
+  importGpsApp.InitalizeApplication (argc, argv);
   if  (importGpsApp.Abort ())
     return 1;
 

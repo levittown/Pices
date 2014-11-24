@@ -63,13 +63,8 @@ using namespace MLL;
 
 
 
-ExtractAllSipperFiles::ExtractAllSipperFiles (int      argc, 
-                                              char**   argv,
-                                              RunLog&  _log
-                                             ):
-   Application         (argc, argv),
-   configFileName      (),
-   dbConn              (NULL),
+ExtractAllSipperFiles::ExtractAllSipperFiles ():
+   PicesApplication    (),
    firstOneFound       (false),
    startSipperFileName (),
    maxSize             (0),
@@ -77,47 +72,49 @@ ExtractAllSipperFiles::ExtractAllSipperFiles (int      argc,
    rootDir             ()
 
 {
-  ProcessCmdLineParameters (argc, argv);
-  if  (Abort ())
-  {
-    DisplayCommandLineParameters ();
-    return;
-  }
 }
 
 
 
 ExtractAllSipperFiles::~ExtractAllSipperFiles ()
 {
-  if  (dbConn)
-  {
-    dbConn->Close ();
-    delete  dbConn;
-  }
-  dbConn = NULL;
 }
 
 
 
-
-
-bool  ExtractAllSipperFiles::ProcessCmdLineParameter (char    parmSwitchCode, 
-                                                      KKStr   parmSwitch, 
-                                                      KKStr   parmValue
-                                                     )
+void  ExtractAllSipperFiles::InitalizeApplication (int32   argc,
+                                                   char**  argv
+                                                  )
 {
-  KKStr  parmValueUpper (parmValue);
-  parmValueUpper.Upper ();
-
-  parmSwitch.Upper ();
-
-
-  if  ((parmSwitch.EqualIgnoreCase ("-C"))  ||  (parmSwitch.EqualIgnoreCase ("-Config"))  ||  (parmSwitch.EqualIgnoreCase ("-ConfigFile")))
+  DataBaseRequired (true);
+  PicesApplication::InitalizeApplication (argc, argv);
+  if  (Abort ())
   {
-    configFileName = parmValue;
+    DisplayCommandLineParameters ();
+    return;
   }
 
-  else if  (parmSwitch.EqualIgnoreCase ("-MinSize")  ||  parmSwitch.EqualIgnoreCase ("-min"))
+  if  (!Config ())
+  {
+    log.Level (-1) << endl
+      << "ExtractAllSipperFiles::InitalizeApplication   ***ERROR***   A valid Training Model Configuration is required  '-Config'." << endl
+      << endl;
+    Abort (true);
+  }
+}  /* InitalizeApplication */
+
+
+
+
+
+
+bool  ExtractAllSipperFiles::ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                                      const KKStr&  parmValue
+                                                     )
+{
+  bool  validParm = true;
+
+  if  (parmSwitch.EqualIgnoreCase ("-MinSize")  ||  parmSwitch.EqualIgnoreCase ("-min"))
   {
     minSize = parmValue.ToInt ();
   }
@@ -139,16 +136,12 @@ bool  ExtractAllSipperFiles::ProcessCmdLineParameter (char    parmSwitchCode,
 
   else
   {
-    log.Level (-1) << endl << endl
-                   << "ProcessCmdLineParameter    ***ERROR***" << endl
-                   << endl
-                   << "             Invalid Parameter[" << parmSwitch << "]" << endl
-                   << endl;
-    Abort (true);
+    validParm = PicesApplication::ProcessCmdLineParameter (parmSwitch, parmValue); 
   }
 
-	return  !Abort ();
+	return  validParm;
 }  /* ProcessCmdLineParameter */
+
 
 
 
@@ -157,11 +150,12 @@ void  ExtractAllSipperFiles::DisplayCommandLineParameters ()
   cout << endl << endl << endl;
 
   cout << "ExtractAllSipperFiles"  << endl
-       << "             -RootDir <SubDir where sipper files are>"         << endl
-       << "             -Config  <Configuration File To use.>"            << endl
-       << "             -MinSize <Min size defaults to 250.>"             << endl
-       << "             -MaxSize <Max size defaults to Infinity.>"        << endl
-       << "             -Start   <Fisrt SIPPER file to start processing>" << endl
+       << "             -RootDir   <SubDir where sipper files are>"                                 << endl
+       << "             -Config    <Configuration File To use.>"                                    << endl
+       << "             -DataBase  <Database Description | Defaults to lasst specified database.>"  << endl
+       << "             -MinSize   <Min size defaults to 250.>"                                     << endl
+       << "             -MaxSize   <Max size defaults to Infinity.>"                                << endl
+       << "             -Start     <Fisrt SIPPER file to start processing>"                         << endl
        << endl;
 }
 
@@ -331,9 +325,9 @@ int  main (int     argc,
           )
 {
   RunLog  log;
-
  
-  ExtractAllSipperFiles  application (argc, argv, log);
+  ExtractAllSipperFiles  application;
+  application.InitalizeApplication (argc, argv);
   if  (!application.Abort ())
   {
     application.Run ();

@@ -2,11 +2,11 @@
 #define  _DUMPSIPPER3INSTRUMENTDATA_
 
 
-#include "Application.h"
+#include "PicesApplication.h"
 
 
 
-class DumpSipper3InstrumentData:  public Application
+class DumpSipper3InstrumentData:  public PicesApplication
 {
 public:
   DumpSipper3InstrumentData ();
@@ -46,10 +46,10 @@ private:
 
 
   int        byteOffset;
-  KKStr     reportFileName;
+  KKStr      reportFileName;
   ofstream*  report;
   FILE*      sipperFile;
-  KKStr     sipperFileName;
+  KKStr      sipperFileName;
 };
 
 

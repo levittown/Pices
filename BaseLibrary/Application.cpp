@@ -75,14 +75,6 @@ void  Application::InitalizeApplication (int32   argc,
 
 
 
-const char*  Application::ApplicationName ()
-{
-  return  "No-Application-Name-Provided";
-}  /* ApplicationName */
-
-
-
-
 void  Application::AssignLog (RunLog&  _log)
 {
   log = _log;
@@ -129,6 +121,20 @@ void  Application::ProcessCmdLineParameters (int32   argc,
   if  (!allParmsGood)
     abort = true;
 }  /* ProcessCmdLineParameters */
+
+
+
+void  Application::DisplayCommandLineParameters ()
+{
+  cout << ApplicationName () << endl
+       << endl
+       << "    -LogFile   <FileName>        File that logging messages will be written to; if left will"  << endl
+       << "                                 be written to Standard-Out (cout)."                           << endl
+       << endl
+       << "    -CmdFile   <File-Name>       Filename where additional command line options are stored;"   << endl
+       << "                                 This file can also specify additional '-CmdFile parameters."  << endl
+       << endl;
+}
 
 
 

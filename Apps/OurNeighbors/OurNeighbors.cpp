@@ -67,28 +67,60 @@ using namespace  MLL;
 
 // C:\PICES\EXE>ourneighbors -s D:\TrainingApp\ExtractedImages\HRS0207_07_man -nnt same -r D:\TrainingApp\ExtractedImages\HRS0207_07_man\neighbor.txt -lloydsbinsize 31297 -bs 313 -bc 500 -random -i 500
 
-OurNeighbors::OurNeighbors (int32 argc, char**  argv) :
-  Application              (argc, argv),
-  baseLLoydsBinSize        (20000),
-  bucketSize               (0),
-  cancelFlag               (false),
-  excludedClasses          (NULL),
-  sourceRootDirPath        (),
-  mlClass               (MLClass::CreateNewMLClass ("UnKnown")),
-  mlClasses             (new MLClassConstList ()),
-  report                   (NULL),
-  fromPlanktonName         (),
-  fromPlankton             (NULL),
-  lastScanLine             (0),
-  lloydsBinsFileName       (),
-  neighborType             (AnyPlanktonClass),
-  numOfBuckets             (0),
-  numOfIterations          (20),
-  randomizeLocations       (false)
-
+OurNeighbors::OurNeighbors ():
+  PicesApplication    (),
+  baseLLoydsBinSize   (20000),
+  bucketSize          (0),
+  cancelFlag          (false),
+  excludedClasses     (NULL),
+  sourceRootDirPath   (),
+  mlClass             (MLClass::CreateNewMLClass ("UnKnown")),
+  mlClasses           (new MLClassConstList ()),
+  report              (NULL),
+  fromPlanktonName    (),
+  fromPlankton        (NULL),
+  lastScanLine        (0),
+  lloydsBinsFileName  (),
+  neighborType        (AnyPlanktonClass),
+  numOfBuckets        (0),
+  numOfIterations     (20),
+  randomizeLocations  (false)
 {
-	ProcessCmdLineParameters (argc, argv);
+}
 
+
+
+
+/******************************************************************************
+ * Destructor
+ ******************************************************************************/
+OurNeighbors::~OurNeighbors ()
+{
+	if  (reportFile)
+	{
+		reportFile->close ();
+		delete  reportFile;
+	}
+
+	if  (htmlFile)
+	{
+		htmlFile->close ();
+		delete  htmlFile;
+	}
+
+  delete  excludedClasses;  excludedClasses = NULL;
+
+	//delete  mlClass;
+}
+
+
+
+
+void  OurNeighbors::InitalizeApplication (int32   argc,
+                                          char**  argv
+                                         )
+{
+  PicesApplication::InitalizeApplication (argc, argv);
 	if  (Abort ())
 	{
 		DisplayCommandLineParameters ();
@@ -100,7 +132,6 @@ OurNeighbors::OurNeighbors (int32 argc, char**  argv) :
 
 	if  (sourceRootDirPath.Empty ())
 		sourceRootDirPath = osGetCurrentDirectory ();
-
 
   if  (featureFileName.Empty ())
 	{
@@ -131,9 +162,9 @@ OurNeighbors::OurNeighbors (int32 argc, char**  argv) :
 
   lloydsBinsFileName = osRemoveExtension (reportFileName) + "_LLoydsBins.data";
 
+  PicesApplication::PrintStandardHeaderInfo (*report);
 	*report << endl;
 	*report << "------------------------------------------------------------------------"  << endl;
-  *report << "Run Date                [" << osGetLocalDateTime ()               << "]."  << endl;
   *report << "Build Date              [" << __DATE__ << "  " << __TIME__        << "]."  << endl;
   *report << "Report File Name        [" << reportFileName                      << "]."  << endl;
 	*report << "HTML File Name          [" << htmlFileName                        << "]."  << endl;
@@ -152,32 +183,11 @@ OurNeighbors::OurNeighbors (int32 argc, char**  argv) :
   *report << "ExcludedClasses         [" << excludedClasses->ToCommaDelimitedStr ()  << "]."  << endl;
 	*report << "------------------------------------------------------------------------"  << endl;
 	*report << endl;
-}
+}  /* InitalizeApplication */
 
 
 
 
-/******************************************************************************
- * Destructor
- ******************************************************************************/
-OurNeighbors::~OurNeighbors ()
-{
-	if  (reportFile)
-	{
-		reportFile->close ();
-		delete  reportFile;
-	}
-
-	if  (htmlFile)
-	{
-		htmlFile->close ();
-		delete  htmlFile;
-	}
-
-  delete  excludedClasses;  excludedClasses = NULL;
-
-	//delete  mlClass;
-}
 
 
 
@@ -185,28 +195,22 @@ OurNeighbors::~OurNeighbors ()
  * ProcessCmdLineParamters
  * DESC: Extracts parameters from the command line
  ******************************************************************************/
-bool  OurNeighbors::ProcessCmdLineParameter (
-                                             char    parmSwitchCode, 
-                                             KKStr  parmSwitch, 
-                                             KKStr  parmValue
+bool  OurNeighbors::ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                             const KKStr&  parmValue
                                             )
 {
-  KKStr  parmValueUpper (parmValue);
-  parmValueUpper.Upper ();
-
-  parmSwitch.Upper ();
-
-  if  ((parmSwitch == "-BUCKETCOUNT")  ||  (parmSwitch == "-BC"))
+  bool  validParm = true;
+  if  (parmSwitch.EqualIgnoreCase ("-BUCKETCOUNT")  ||  parmSwitch.EqualIgnoreCase ("-BC"))
   {
     numOfBuckets = atoi (parmValue.Str ());
     if  (numOfBuckets < 2)
     {
       log.Level (-1) << "ProcessCmdLineParameter   *** Invalid Buckets[" << numOfBuckets << "] parameter" << endl;
-      Abort (true);
+      validParm = false;
     }
   }
 
-  else if  ((parmSwitch == "-BUCKETSIZE")  ||  (parmSwitch == "-BS"))
+  else if  (parmSwitch.EqualIgnoreCase ("-BUCKETSIZE")  ||  parmSwitch.EqualIgnoreCase ("-BS"))
   {
     bucketSize = atoi (parmValue.Str ());
     if  (bucketSize < 1)
@@ -216,7 +220,7 @@ bool  OurNeighbors::ProcessCmdLineParameter (
     }
   }
 
-  else if  ((parmSwitch == "-EXCLUDECLASS")  ||  (parmSwitch == "-EC"))
+  else if  (parmSwitch.EqualIgnoreCase ("-EXCLUDECLASS")  ||  parmSwitch.EqualIgnoreCase ("-EC"))
   {
     if  (parmValue.Empty ())
     {
@@ -243,15 +247,15 @@ bool  OurNeighbors::ProcessCmdLineParameter (
   }
 
 
-  else if  ((parmSwitch == "-FROMPLANKTON")  ||  (parmSwitch == "-FP"))
+  else if  (parmSwitch.EqualIgnoreCase ("-FROMPLANKTON")  ||  parmSwitch.EqualIgnoreCase ("-FP"))
   {
     fromPlanktonName = parmValue;
   }
 
-  else if  ((parmSwitch == "-H")  ||  (parmSwitch == "-HTML"))
+  else if  (parmSwitch.EqualIgnoreCase ("-H")  ||  parmSwitch.EqualIgnoreCase ("-HTML"))
 		htmlFileName = parmValue;
 
-  else if  ((parmSwitch == "-ITERATIONS")  ||  (parmSwitch == "-I"))
+  else if  (parmSwitch.EqualIgnoreCase ("-ITERATIONS")  ||  parmSwitch.EqualIgnoreCase ("-I"))
   {
     numOfIterations = atoi (parmValue.Str ());
     if  (numOfIterations < 1)
@@ -262,10 +266,10 @@ bool  OurNeighbors::ProcessCmdLineParameter (
   }
 
 
-  else if  ((parmSwitch == "-LLOYDSBINSIZE")      ||  
-            (parmSwitch == "-LBS")                ||  
-            (parmSwitch == "-BASELLOYDSBINSIZE")  ||  
-            (parmSwitch == "-BLBS")
+  else if  (parmSwitch.EqualIgnoreCase ("-LLOYDSBINSIZE")      ||  
+            parmSwitch.EqualIgnoreCase ("-LBS")                ||  
+            parmSwitch.EqualIgnoreCase ("-BASELLOYDSBINSIZE")  ||  
+            parmSwitch.EqualIgnoreCase ("-BLBS")
            )
   {
     baseLLoydsBinSize = atoi (parmValue.Str ());
@@ -279,26 +283,26 @@ bool  OurNeighbors::ProcessCmdLineParameter (
   }
 
 
-  else if  ((parmSwitch == "-NEARESTNEIGHBORTYPE")  ||  (parmSwitch == "-NNT"))
+  else if  (parmSwitch.EqualIgnoreCase ("-NEARESTNEIGHBORTYPE")  ||  parmSwitch.EqualIgnoreCase ("-NNT"))
   {
-    if  ((parmValue == '0')  ||  (parmValueUpper == "ANY"))
+    if  (parmValue.EqualIgnoreCase ("0")  ||  parmValue.EqualIgnoreCase ("ANY"))
       neighborType = AnyPlanktonClass;
 
-    else if  ((parmValue == "1")  ||  (parmValueUpper == "SAME"))
+    else if  (parmValue.EqualIgnoreCase ("1")  ||  parmValue.EqualIgnoreCase ("SAME"))
       neighborType = SamePlanktonClass;
   }
 
-
-  else if  ((parmSwitch == "-R")  ||  (parmSwitch == "-REPORT"))
+  else if  (parmSwitch.EqualIgnoreCase ("-R")  ||  parmSwitch.EqualIgnoreCase ("-REPORT"))
 		reportFileName = parmValue;
 
-
-  else if  ((parmSwitch == "-RAND")  ||  (parmSwitch == "-RANDOM"))
+  else if  (parmSwitch.EqualIgnoreCase ("-RAND")  ||  parmSwitch.EqualIgnoreCase ("-RANDOM"))
 		randomizeLocations = true;
 
-
-  else if  ((parmSwitch == "-S")  ||  (parmSwitch == "-SRC"))
+  else if  (parmSwitch.EqualIgnoreCase ("-S")  ||  parmSwitch.EqualIgnoreCase ("-SRC"))
 		sourceRootDirPath = parmValue;
+
+  else
+    validParm = PicesApplication::ProcessCmdLineParameter(parmSwitch, parmValue);
 
 
 	return  !Abort ();
@@ -313,33 +317,31 @@ bool  OurNeighbors::ProcessCmdLineParameter (
  ******************************************************************************/
 void   OurNeighbors::DisplayCommandLineParameters ()
 {
-	log.Level (0) << "OurNeighbors  -report <xxx>  -src <xxxx>  -html <xxxx>"       << endl;
-	log.Level (0)                                                                   << endl;
-	log.Level (0) << "    -report   Report File,  Defaults to Command Line."        << endl;
-	log.Level (0)                                                                   << endl;
-	log.Level (0) << "    -src      Source Directory Tree to Search for images."    << endl;
-	log.Level (0)                                                                   << endl;
-	log.Level (0) << "    -NearestNeighborType <0 | 1>."                            << endl;
-	log.Level (0) << "                      0 - Nearest Image (default)"            << endl;
-	log.Level (0) << "                      1 - Nearest Image of Same Class"        << endl;
-	log.Level (0)                                                                   << endl;
-	log.Level (0) << "    -FromPlankton(FP) <Plankton Class>"                       << endl;
-  log.Level (0)                                                                   << endl;
-	log.Level (0) << "    -Random           Randomize the Row and Col Info."        << endl;
-  log.Level (0)                                                                   << endl;
-	log.Level (0) << "    -Buckets(B)       Number Buckets if Random Histogram."    << endl;
-  log.Level (0)                                                                   << endl;
-	log.Level (0) << "    -BucketSize(BS)   Histogram Bucket Size."                 << endl;
-  log.Level (0)                                                                   << endl;
-	log.Level (0) << "    -Iterations(I)    Number of Random NND's to perform."     << endl;
-  log.Level (0)                                                                   << endl;
-	log.Level (0) << "    -ExcludeClass(EC) Name of class to exclude.  You may "    << endl;
-  log.Level (0) << "                      specify this parameter more than once." << endl;
-  log.Level (0)                                                                   << endl;
-	log.Level (0) << "    -CmdFile(CF)      Name of file that contains additional"  << endl;
-  log.Level (0) << "                      command line parameters."               << endl;
-  log.Level (0)                                                                   << endl;
-	log.Level (0) << "    -LLoydsBinSize(LBS)  Numbetr of scan lines per bin"       << endl;
+  PicesApplication::DisplayCommandLineParameters ();
+  cout << endl
+       << "    -report     <Filename>       Report File,  Defaults to Command Line."     << endl
+	     << endl
+			 << "    -src        <Dir-Path>       Source Directory Tree to Search for images." << endl
+			 << endl
+			 << "    -NearestNeighborType <0 | 1>."                                       << endl
+			 << "                                 0 - Nearest Image (default)"            << endl
+			 << "                                 1 - Nearest Image of Same Class"        << endl
+			 << endl
+			 << "    -FromPlankton  <Plankton Class>"                                     << endl
+       << endl
+			 << "    -Random                      Randomize the Row and Col Info."        << endl
+       << endl
+			 << "    -Buckets    <Number>         Number Buckets if Random Histogram."    << endl
+       << endl
+			 << "    -BucketSize <Number>         Histogram Bucket Size."                 << endl
+       << endl
+			 << "    -Iterations <Number>         Number of Random NND's to perform."     << endl
+       << endl
+			 << "    -ExcludeClass <ClassName>    Name of class to exclude.  You may "    << endl
+       << "                                 specify this parameter more than once." << endl
+       << endl
+			 << "    -LLoydsBinSize <Number>      Numbetr of scan lines per bin"          << endl
+       << endl;
 }  /* DisplayCommandLineParameters */
 
 
@@ -438,8 +440,6 @@ int32  OurNeighbors::LastScanLine (const ImageFeaturesList&  images)  const
 
 
 
-
-
 double  Z_Score (double  sampleMeanNND, 
                  double  randomMeanNND,
                  double  randomStdDevNND,
@@ -474,14 +474,13 @@ void	OurNeighbors::RandomReport (ImageFeaturesList&  images)
     if  (fromPlankton  &&  (fromPlankton != mlClass))
       continue;
 
-    double       randomMeanNND   = 0.0f;
-    double       randomStdDevNND = 0.0f;
-    double       realDataU2Stat  = 0.0f;
-    double       sampleMeanNND   = 0.0f;
-    double       sampleStdDevNND = 0.0f;
-    double       sampleMaxDist   = 0.0f;
-    double       sampleMinDist   = 0.0f;
-
+    double  randomMeanNND   = 0.0f;
+    double  randomStdDevNND = 0.0f;
+    double  realDataU2Stat  = 0.0f;
+    double  sampleMeanNND   = 0.0f;
+    double  sampleStdDevNND = 0.0f;
+    double  sampleMaxDist   = 0.0f;
+    double  sampleMinDist   = 0.0f;
 
     ImageFeaturesListPtr  imagesInClass = images.ExtractImagesForAGivenClass (mlClass);
     if  (imagesInClass->QueueSize () > 0)
@@ -549,7 +548,6 @@ void	OurNeighbors::RandomReport (ImageFeaturesList&  images)
                    << "RandomStdDevNND " << "\t" << randomStdDevNND  << endl
                    << "------- Z-Score " << "\t" << z_Score          << endl
                    << endl;
-                  
 
       KKStr  zScoreSummaryLine = mlClass->Name () + "\t" +
                                   StrFormatDouble (sampleMeanNND,   "###,##0.00")  + "\t" +
@@ -674,16 +672,6 @@ void	OurNeighbors::RandomReport (ImageFeaturesList&  images)
 
 
 
-
-
-
-/******************************************************************************
- * LookForNeighbors
- * DESC: Builds a new data file in the root directory that reflects the currect 
- * location of all the images. This new data file is then compared to old one
- * and a grading report that indicates the number of classes correctly predicted
- * by the classifier is generated
- ******************************************************************************/
 void	OurNeighbors::LookForNeighbors ()
 {
 	ImageFeaturesListPtr  currentImageFeatures = NULL;
@@ -705,6 +693,7 @@ void	OurNeighbors::LookForNeighbors ()
                                  (sourceRootDirPath,
                                   *mlClasses,
                                   false,           // useDirectoryNameForClassName,
+                                  DB (),
                                   cancelFlag,
                                   false,           // rewiteRootFeatureFile
                                   log
@@ -850,7 +839,7 @@ LLoydsEntryListPtr   OurNeighbors::DeriveAllLLoydsBins (const ImageFeaturesList&
 
 
 LLoydsEntryPtr  OurNeighbors::DeriveLLoydsBins (const ImageFeaturesList&  examples,
-                                                int32                       lloydsBinSize
+                                                int32                     lloydsBinSize
                                                )
 {
   double  lloydsIndex = 0.0;
@@ -888,10 +877,13 @@ LLoydsEntryPtr  OurNeighbors::DeriveLLoydsBins (const ImageFeaturesList&  exampl
 
 
 
+
 int32  main (int32     argc,
-           char**  argv
-          )
+             char**  argv
+            )
 {
-  OurNeighbors  nearestNeighborReport (argc, argv);
-  nearestNeighborReport.LookForNeighbors ();
+  OurNeighbors  nearestNeighborReport;
+  nearestNeighborReport.InitalizeApplication (argc, argv);
+  if  (!nearestNeighborReport.Abort ())
+    nearestNeighborReport.LookForNeighbors ();
 }

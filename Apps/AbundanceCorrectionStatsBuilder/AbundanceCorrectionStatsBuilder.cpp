@@ -40,15 +40,11 @@ using namespace MLL;
 using namespace  AbundanceCorrectionApplication;
 
 
-AbundanceCorrectionStatsBuilder::AbundanceCorrectionStatsBuilder (int     argc, 
-                                                                  char**  argv
-                                                                 ):
+AbundanceCorrectionStatsBuilder::AbundanceCorrectionStatsBuilder ():
 
-   Application (argc, argv),
+   PicesApplication (),
    allClasses              (NULL),
-   config                  (NULL),
    configClasses           (NULL),
-   fileDesc                (NULL),
    maxNumActiveThreads     (1),
    msgQueue                (NULL),
    normalizationParms      (NULL),
@@ -64,6 +60,38 @@ AbundanceCorrectionStatsBuilder::AbundanceCorrectionStatsBuilder (int     argc,
    trainLibData            (NULL),
    trainLibDataClasses     (NULL)
 {
+}
+
+
+
+AbundanceCorrectionStatsBuilder::~AbundanceCorrectionStatsBuilder ()
+{
+  if  (!reportFileName.Empty ())
+    delete  report;
+  report = NULL;
+
+  delete allClasses;           allClasses          = NULL;
+  delete trainLibData;         trainLibData        = NULL;
+  delete otherClassData;       otherClassData      = NULL;
+  delete trainLibDataClasses;  trainLibDataClasses = NULL;
+  delete configClasses;        configClasses       = NULL;
+  delete normalizationParms;   normalizationParms  = NULL;
+  delete msgQueue;             msgQueue            = NULL;
+  delete queueDone;            queueDone           = NULL;
+  delete queueReady;           queueReady          = NULL;
+  delete queueRunning;         queueRunning        = NULL;
+
+  InstrumentDataFileManager::InitializePop ();
+}
+
+
+
+
+void  AbundanceCorrectionStatsBuilder::InitalizeApplication (int32   argc,
+                                                             char**  argv
+                                                            )
+{
+  PicesApplication::InitalizeApplication (argc, argv);
   if  (argc < 2)
   {
     log.Level (-1) << endl << endl 
@@ -83,7 +111,6 @@ AbundanceCorrectionStatsBuilder::AbundanceCorrectionStatsBuilder (int     argc,
   fileDesc = FeatureFileIOPices::NewPlanktonFile (log);
 
   InstrumentDataFileManager::InitializePush ();
-  ProcessCmdLineParameters (argc, argv);
   if  (Abort ())
   {
     DisplayCommandLineParameters ();
@@ -93,68 +120,35 @@ AbundanceCorrectionStatsBuilder::AbundanceCorrectionStatsBuilder (int     argc,
   queueDone    = new TrainTestThreadList (true);
   queueReady   = new TrainTestThreadList (true);
   queueRunning = new TrainTestThreadList (true);
-
-}
-
-
-
-AbundanceCorrectionStatsBuilder::~AbundanceCorrectionStatsBuilder ()
-{
-  if  (!reportFileName.Empty ())
-    delete  report;
-  report = NULL;
-
-  delete allClasses;           allClasses          = NULL;
-  delete trainLibData;         trainLibData        = NULL;
-  delete otherClassData;       otherClassData      = NULL;
-  delete config;               config              = NULL;
-  delete trainLibDataClasses;  trainLibDataClasses = NULL;
-  delete configClasses;        configClasses       = NULL;
-  delete normalizationParms;   normalizationParms  = NULL;
-  delete msgQueue;             msgQueue            = NULL;
-  delete queueDone;            queueDone           = NULL;
-  delete queueReady;           queueReady          = NULL;
-  delete queueRunning;         queueRunning        = NULL;
-
-  InstrumentDataFileManager::InitializePop ();
-}
+}  /* InitalizeApplication */
 
 
 
-
-bool  AbundanceCorrectionStatsBuilder::ProcessCmdLineParameter (char   parmSwitchCode, 
-                                                                KKStr  parmSwitch, 
-                                                                KKStr  parmValue
+bool  AbundanceCorrectionStatsBuilder::ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                                                const KKStr&  parmValue
                                                                )
 {
-  KKStr  parmValueUpper (parmValue);
-  parmValueUpper.Upper ();
+  bool  parmValid = true;
 
-  if  (parmSwitch.EqualIgnoreCase ("-c")  ||  parmSwitch.EqualIgnoreCase ("-config"))
-  {
-    configFileName = parmValue;
-    configFileFullPath = TrainingConfiguration2::GetEffectiveConfigFileName (configFileName);
-    if  (!osFileExists (configFileFullPath))
-    {
-      log.Level (-1) << "ProcessCmdLineParameter   ***ERROR***    Invalid '-config' [" << configFileName << "] file." << endl;
-      Abort (true);
-    }
-  }
-
-  else if  (parmSwitch.EqualIgnoreCase ("-folds")  ||  parmSwitch.EqualIgnoreCase ("-numFolds")  ||  parmSwitch.EqualIgnoreCase ("-numOfFolds"))
+  if  (parmSwitch.EqualIgnoreCase ("-folds")  ||  parmSwitch.EqualIgnoreCase ("-numFolds")  ||  parmSwitch.EqualIgnoreCase ("-numOfFolds"))
   {
     numOfFolds = parmValue.ToInt ();
     if  ((numOfFolds < 2)  ||  (numOfFolds > 1000))
     {
       log.Level (-1) << "ProcessCmdLineParameter   ***ERROR***    Invalid '-NumFolds' [" << numOfFolds << "] Invlaid;  valid values (2 - 1000)." << endl;
       Abort (true);
+      parmValid = false;
     }
   }
 
   else if  (parmSwitch.EqualIgnoreCase ("-r")  ||  parmSwitch.EqualIgnoreCase ("-report")  ||  parmSwitch.EqualIgnoreCase ("-ReportFileName"))
     reportFileName = parmValue;
 
-	return  !Abort ();
+  else
+    parmValid = PicesApplication::ProcessCmdLineParameter (parmSwitch, parmValue);
+
+
+	return  parmValid;
 }  /* ProcessCmdLineParameter */
 
 
@@ -184,11 +178,10 @@ void   AbundanceCorrectionStatsBuilder::DisplayCommandLineParameters ()
 
 void   AbundanceCorrectionStatsBuilder::PrintComandLineParameters ()
 {
-  *report << "ConfigFileName"      << "\t" << configFileName        << endl
-          << "ConfigFileFullPath"  << "\t" << configFileFullPath    << endl
-          << "NumOfFolds"          << "\t" << numOfFolds            << endl
-          << "ReportFileName"      << "\t" << reportFileName        << endl
-          << "RunDateTime"         << "\t" << osGetLocalDateTime () << endl
+  PrintStandardHeaderInfo (*report);
+
+  *report << "NumOfFolds"      << "\t" << numOfFolds     << endl
+          << "ReportFileName"  << "\t" << reportFileName << endl
           << endl;
 }
 
@@ -626,7 +619,8 @@ void   AbundanceCorrectionStatsBuilder::Main ()
 
 void  main (int argc,  char** argv)
 {
-  AbundanceCorrectionStatsBuilder  app (argc, argv);
+  AbundanceCorrectionStatsBuilder  app;
+  app.InitalizeApplication (argc, argv);
   if  (!app.Abort ())
   {
     app.Main ();

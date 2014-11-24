@@ -577,7 +577,8 @@ void  main (int argc,  char** argv)
   //                            );
   //exit (-1);
                                
-  ExtractFeatures extractFeatures (argc, argv);
+  ExtractFeatures extractFeatures;
+  extractFeatures.InitalizeApplication (argc, argv);
   if  (!extractFeatures.Abort ())
     extractFeatures.Extract ();
 }

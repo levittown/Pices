@@ -133,10 +133,11 @@ bool  DeleteDuplicateImages::ProcessCmdLineParameter (const KKStr&  parmSwitch,
 
 void    DeleteDuplicateImages::DisplayCmdLine ()
 {
+
+  PicesApplication::DisplayCommandLineParameters ();
   cout << endl
-       << "DeleteDuplicateImages"                                                         << endl
-       << "           -RootDir  <Sub Directory Tree where images are located.>"           << endl
-       << "           -ReportFile  <File to write report to/ defaults to root dir name.>" << endl
+       << "    -RootDir    <Dir-Path>       Sub Directory Tree where images are located."          << endl
+       << "    -ReportFile <FileName>       File to write report to/ defaults to root dir name."   << endl
        << endl;
 }  /* DisplayCmdLine */
 

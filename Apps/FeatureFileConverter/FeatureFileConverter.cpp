@@ -100,8 +100,8 @@ using namespace  MLL;
 // D:\Users\kkramer\GradSchool\SipperProject\Papers\BinaryFeatureSelection\Experiments\MNIST
 // -src MNIST_TEST_10000.data -sff  Pices  -dest MNIST_TEST_10000_C45.data -dff C45
 
-FeatureFileConverter::FeatureFileConverter (int argc, char**  argv) :
-  Application    (argc, argv),
+FeatureFileConverter::FeatureFileConverter ():
+  PicesApplication  (),
 
   cancelFlag        (false),
   data              (NULL),
@@ -123,8 +123,35 @@ FeatureFileConverter::FeatureFileConverter (int argc, char**  argv) :
   statistics        (true)
 
 {
-	ProcessCmdLineParameters (argc, argv);
+}
 
+
+
+
+
+
+/******************************************************************************
+ * Destructor
+ ******************************************************************************/
+FeatureFileConverter::~FeatureFileConverter ()
+{
+  if  (reportFile)
+  {
+     reportFile->close ();
+	 delete  reportFile;
+  }
+
+  delete  data;
+}
+
+
+
+
+void  FeatureFileConverter::InitalizeApplication (int32   argc,
+                                                  char**  argv
+                                                 )
+{
+  PicesApplication::InitalizeApplication (argc, argv);
 	if  (Abort ())
 	{
 		DisplayCommandLineParameters ();
@@ -135,13 +162,10 @@ FeatureFileConverter::FeatureFileConverter (int argc, char**  argv) :
   {
     Abort (true);
     log.Level (-1) << endl
-                   << endl
-                   << "*** ERROR ***  There was not source file specified." << endl
-                   << endl;
+       << "FeatureFileConverter::InitalizeApplication   *** ERROR ***  There was not source file specified." << endl
+       << endl;
 
     DisplayCommandLineParameters ();
-
-    osWaitForEnter ();
     return;
   }
 
@@ -165,17 +189,16 @@ FeatureFileConverter::FeatureFileConverter (int argc, char**  argv) :
       nornParmsFileName = osRemoveExtension (srcFileName) + "." + "NormParms";
       if  (osFileExists (nornParmsFileName))
       {
-        log.Level (-1) << endl << endl << endl
-                       << "FeatureFileConverter    *** ERROR ***"
-                       << endl
-                       << "         Normalization Parameters File[" << nornParmsFileName << "]  Already exists." << endl
-                       << endl;
-        osWaitForEnter ();
-        exit (-1);
+        log.Level (-1) << endl
+          << "FeatureFileConverter::InitalizeApplication    *** ERROR ***"
+          << endl
+          << "         Normalization Parameters File[" << nornParmsFileName << "]  Already exists." << endl
+          << endl;
+        Abort (true);
+        return;
       }
     }
   }
-
 
   bool  successful;
   bool  changesMade = false;
@@ -230,9 +253,9 @@ FeatureFileConverter::FeatureFileConverter (int argc, char**  argv) :
   if  (encodeFeatureData)
     encodeMethodStr = ModelParam::EncodingMethodToStr (encodingMethod);
 
+  PicesApplication::PrintStandardHeaderInfo (*report);
   *report << endl;
   *report << "------------------------------------------------------------------------"  << endl;
-  *report << "Run Date            [" << osGetLocalDateTime ()                  << "]."    << endl;
   *report << "Source File Name    [" << srcFileName                            << "]."    << endl;
   *report << "Source File Format  [" << srcFileFormat->DriverName ()           << "]."    << endl;
   *report << "Dest File Name      [" << destFileName                           << "]."    << endl;
@@ -253,26 +276,8 @@ FeatureFileConverter::FeatureFileConverter (int argc, char**  argv) :
 
   *report << "------------------------------------------------------------------------"  << endl;
   *report << endl;
-}
+}  /* InitalizeApplication */
 
-
-
-
-
-
-/******************************************************************************
- * Destructor
- ******************************************************************************/
-FeatureFileConverter::~FeatureFileConverter ()
-{
-  if  (reportFile)
-  {
-     reportFile->close ();
-	 delete  reportFile;
-  }
-
-  delete  data;
-}
 
 
 
@@ -280,33 +285,32 @@ FeatureFileConverter::~FeatureFileConverter ()
  * ProcessCmdLineParamters
  * DESC: Extracts parameters from the command line
  ******************************************************************************/
-bool  FeatureFileConverter::ProcessCmdLineParameter (char    parmSwitchCode, 
-                                                     KKStr  parmSwitch, 
-                                                     KKStr  parmValue
+bool  FeatureFileConverter::ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                                     const KKStr&  parmValue
                                                     )
 {
   KKStr  parmValueUpper (parmValue);
   parmValueUpper.Upper ();
 
-  parmSwitch.Upper ();
+  bool  validParm = true;
 
-  if  ((parmSwitch == "-DEST")         ||  
-       (parmSwitch == "-D")            ||  
-       (parmSwitch == "-DESTFILE")     ||  
-       (parmSwitch == "-DF")           ||
-       (parmSwitch == "-DESTFILENAME") ||
-       (parmSwitch == "-DFN")    
+  if  ((parmValueUpper == "-DEST")         ||  
+       (parmValueUpper == "-D")            ||  
+       (parmValueUpper == "-DESTFILE")     ||  
+       (parmValueUpper == "-DF")           ||
+       (parmValueUpper == "-DESTFILENAME") ||
+       (parmValueUpper == "-DFN")    
       )
     destFileName = parmValue;
 
 
-  else if  ((parmSwitch == "-OUTFORMAT")      ||
-            (parmSwitch == "-OF")             ||
-            (parmSwitch == "-OUTFILEFORMAT")  ||
-            (parmSwitch == "-OFF")            ||
-            (parmSwitch == "-DESTFILEFORMAT") ||
-            (parmSwitch == "-DESTFORMAT")     ||
-            (parmSwitch == "-DFF")
+  else if  ((parmValueUpper == "-OUTFORMAT")      ||
+            (parmValueUpper == "-OF")             ||
+            (parmValueUpper == "-OUTFILEFORMAT")  ||
+            (parmValueUpper == "-OFF")            ||
+            (parmValueUpper == "-DESTFILEFORMAT") ||
+            (parmValueUpper == "-DESTFORMAT")     ||
+            (parmValueUpper == "-DFF")
            )
   {
     destFileFormat = FeatureFileIO::FileFormatFromStr (parmValue, 
@@ -322,13 +326,14 @@ bool  FeatureFileConverter::ProcessCmdLineParameter (char    parmSwitchCode,
                      << "Valid Formats are <" << FeatureFileIO::FileFormatsWrittenOptionsStr () << ">" << endl
                      << endl;
       Abort (true);
+      validParm = false;
     }
   }
 
   
-  else if  ((parmSwitch == "-ENCODEFEATUREDATA")  ||
-            (parmSwitch == "-ENCODEFEATURES")     ||
-            (parmSwitch == "-EF")
+  else if  ((parmValueUpper == "-ENCODEFEATUREDATA")  ||
+            (parmValueUpper == "-ENCODEFEATURES")     ||
+            (parmValueUpper == "-EF")
            )
   {
     encodingMethod = ModelParam::EncodingMethodFromStr (parmValue);
@@ -339,9 +344,9 @@ bool  FeatureFileConverter::ProcessCmdLineParameter (char    parmSwitchCode,
 
     else
     {
-      if  ((parmValue == "NO")   || 
-           (parmValue == "OFF")  ||
-           (parmValue == "N") 
+      if  ((parmValueUpper == "NO")   || 
+           (parmValueUpper == "OFF")  ||
+           (parmValueUpper == "N") 
           )
         encodeFeatureData = false;
       else
@@ -352,32 +357,32 @@ bool  FeatureFileConverter::ProcessCmdLineParameter (char    parmSwitchCode,
     }
   }
 
-  else if  ((parmSwitch == "-ENUMERATECLASSES")  ||
-            (parmSwitch == "-ENUMERATECLASS")    ||
-            (parmSwitch == "-EC")
+  else if  ((parmValueUpper == "-ENUMERATECLASSES")  ||
+            (parmValueUpper == "-ENUMERATECLASS")    ||
+            (parmValueUpper == "-EC")
            )
   {
-    if  ((parmValue == "NO")   || 
-         (parmValue == "OFF")  ||
-         (parmValue == "N") 
+    if  ((parmValueUpper == "NO")   || 
+         (parmValueUpper == "OFF")  ||
+         (parmValueUpper == "N") 
         )
       enumerateClasses = false;
     else
       enumerateClasses = true;
   }
 
-  else if  (parmSwitch == "-FEATURES")
+  else if  (parmValueUpper == "-FEATURES")
   {
     featureStr = parmValue;
   }
 
 
-  else if  ((parmSwitch == "-IF")           ||
-            (parmSwitch == "-INPUTFORMAT")  ||
-            (parmSwitch == "-IFF")          ||
-            (parmSwitch == "-INFILEFORMAT") ||
-            (parmSwitch == "-SFF")          ||
-            (parmSwitch == "-SrcFileFormat")
+  else if  ((parmValueUpper == "-IF")           ||
+            (parmValueUpper == "-INPUTFORMAT")  ||
+            (parmValueUpper == "-IFF")          ||
+            (parmValueUpper == "-INFILEFORMAT") ||
+            (parmValueUpper == "-SFF")          ||
+            (parmValueUpper == "-SrcFileFormat")
            )
   {
     srcFileFormat = FeatureFileIO::FileFormatFromStr (parmValue, 
@@ -393,50 +398,46 @@ bool  FeatureFileConverter::ProcessCmdLineParameter (char    parmSwitchCode,
                      << "Valid Formats are <" << FeatureFileIO::FileFormatsReadOptionsStr () << ">" << endl
                      << endl;
       Abort (true);
+      validParm = false;
     }
   }
 
 
-  else if  ((parmSwitch == "-NORM")  ||  (parmSwitch == "-NORMALIZE"))
+  else if  ((parmValueUpper == "-NORM")  ||  (parmValueUpper == "-NORMALIZE"))
   {
     normalizeData = true;
-    parmValue.TrimLeft ();
-    parmValue.TrimRight ();
     if  (!parmValue.Empty ())
       nornParmsFileName = parmValue;
   }
 
 
-  else if  ((parmSwitch == "-R")  ||  (parmSwitch == "-REPORT"))
+  else if  ((parmValueUpper == "-R")  ||  (parmValueUpper == "-REPORT"))
 		reportFileName = parmValue;
 
  
-  else if  ((parmSwitch == "-S")             ||
-            (parmSwitch == "-SRC")           ||
-            (parmSwitch == "-SF")            ||
-            (parmSwitch == "-SOURCFILE")     ||
-            (parmSwitch == "-SFN")           ||
-            (parmSwitch == "-SRCFILENAME")   ||
-            (parmSwitch == "-SOURCFILENAME")
+  else if  ((parmValueUpper == "-S")             ||
+            (parmValueUpper == "-SRC")           ||
+            (parmValueUpper == "-SF")            ||
+            (parmValueUpper == "-SOURCFILE")     ||
+            (parmValueUpper == "-SFN")           ||
+            (parmValueUpper == "-SRCFILENAME")   ||
+            (parmValueUpper == "-SOURCFILENAME")
            )
     srcFileName = parmValue;
 
 
-  else if  ((parmSwitch == "-STAT")          ||
-            (parmSwitch == "-STATS")         ||
-            (parmSwitch == "-STATISTICS")
+  else if  ((parmValueUpper == "-STAT")          ||
+            (parmValueUpper == "-STATS")         ||
+            (parmValueUpper == "-STATISTICS")
            )
     statistics = true;
 
   else
   {
-    log.Level (-1) << endl
-                   << "ProcessCmdLineParameter    Invalid Parameter[" << parmSwitch << "]" << endl
-                   << endl;
-    Abort (true);
+    validParm = PicesApplication::ProcessCmdLineParameter (parmSwitch, parmValue);
   }
 
-	return  !Abort ();
+	return  validParm;
 }  /* ProcessCmdLineParameter */
 
 
@@ -921,7 +922,8 @@ int  main (int     argc,
 
   time_t     long_time;
   SRand48 ((KKU::uint)time (&long_time));
-  FeatureFileConverter fileConverter (argc, argv);
+  FeatureFileConverter fileConverter;
+  fileConverter.InitalizeApplication (argc, argv);
   if  (!fileConverter.Abort ())
     fileConverter.ConvertData ();
 }

@@ -99,14 +99,11 @@ using namespace  MLL;
 
 // -s C:\Pices\TrainingLibraries\Gulf_2011 -n C:\Users\kkramer\SipperProject\Papers\BinaryFeatureSelection\Experiments\Gulf_2011\Gulf_2011.data  -u -r C:\Users\kkramer\SipperProject\Papers\BinaryFeatureSelection\Experiments\Gulf_2011\Gulf_2011_ExtractionReport.txt
 
-ExtractFeatures::ExtractFeatures (int     argc,
-                                  char**  argv
-                                 ):
-  Application (argc, argv),
+ExtractFeatures::ExtractFeatures ():
+  PicesApplication (),
 
   cancelFlag                   (false),
   classifier                   (NULL),
-  fileDesc                     (FeatureFileIOPices::NewPlanktonFile (log)),
   mlClass                      (MLClass::CreateNewMLClass ("UnKnown")),
   mlClasses                    (new MLClassConstList ()),
   images                       (NULL),
@@ -115,15 +112,49 @@ ExtractFeatures::ExtractFeatures (int     argc,
   statusMessage                (),
   successful                   (true),
   trainer                      (NULL),
-  trainingConfiguration        (NULL),
   useDirectoryNameForClassName (false)
 
 {
-  ProcessCmdLineParameters (argc, argv);
+}  /* ExtractFeatures */
 
+
+
+
+
+
+ExtractFeatures::~ExtractFeatures ()
+{
+  if  (reportFile)
+  {
+    reportFile->close ();
+    delete  reportFile;
+  }
+
+  delete  images;
+  //delete  mlClass;
+  delete  classifier;
+  delete  trainer;
+}
+
+
+
+void  ExtractFeatures::InitalizeApplication (int32   argc,
+                                             char**  argv
+                                            )
+{
+  PicesApplication::InitalizeApplication (argc, argv);
   if  (Abort ())
   {
     DisplayCommandLineParameters ();
+    return;
+  }
+
+  if  (!DB ())
+  {
+    log.Level (-1) << endl
+      << "ExtractFeatures::InitalizeApplication   ***ERROR***  Requires a valid DataBase connection." << endl
+      << endl;
+    Abort (true);
     return;
   }
 
@@ -165,22 +196,17 @@ ExtractFeatures::ExtractFeatures (int     argc,
     report = reportFile;
   }
 
-  *report << "Extract Traning Feature Data from Images." << endl;
-
-  *report << "Configuration File         [" << configFileName      << "]."  << endl;
-  *report << "Destination Directory      [" << destDirectory       << "]."  << endl;
-  *report << "Feature File Name          [" << featureFileName     << "]."  << endl;
-  *report << "Report File Name           [" << reportFileName      << "]."  << endl;
-  *report << "Source Root Directory      [" << sourceRootDirPath   << "]."  << endl;
-  *report << "Use Dir Name as Class Name [" <<   (useDirectoryNameForClassName ? "Yes" : "No") << "]." << endl;
+  PicesApplication::PrintStandardHeaderInfo (*report);
+  *report << "Destination Directory"      << "\t" << destDirectory       << endl;
+  *report << "Feature File Name"          << "\t" << featureFileName     << endl;
+  *report << "Report File Name"           << "\t" << reportFileName      << endl;
+  *report << "Source Root Directory"      << "\t" << sourceRootDirPath   << endl;
+  *report << "Use Dir Name as Class Name" << "\t" << (useDirectoryNameForClassName ? "Yes" : "No") << "]." << endl;
 
 
-  if  (!configFileName.Empty ())
+  if  (Config ())
   {
-    // Will need Training Configuration if doing Active Learning Testing.
-    trainingConfiguration = new TrainingConfiguration2 (fileDesc, configFileName, log);
-    delete  mlClasses;
-    mlClasses = trainingConfiguration->ExtractClassList ();
+    mlClasses = Config ()->ExtractClassList ();
 
     trainer = new TrainingProcess2 (configFileName, 
                                     NULL,
@@ -189,16 +215,16 @@ ExtractFeatures::ExtractFeatures (int     argc,
                                     report, 
                                     false,             // false = DONT force model rebuild.
                                     false,
-                                     cancelFlag,
+                                    cancelFlag,
                                     statusMessage
                                    );
-
     if  (trainer->Abort ())
     {
-      log.Level (-1) << "ExtractFeatures    *** ERROR ***" << endl;
+      log.Level (-1) << "ExtractFeatures::InitalizeApplication    *** ERROR ***" << endl;
       log.Level (-1) << "          Error Creating Training Models" << endl << endl;
       delete  trainer;
       trainer = NULL;
+      Abort (true);
       return;
     }
 
@@ -212,108 +238,86 @@ ExtractFeatures::ExtractFeatures (int     argc,
       log.Level (-1) << endl;
       log.Level (-1) << "ExtractFeatures    *** Error Creating Classifier ***" << endl << endl;
 
-      delete  classifier;
-      delete  trainer;
-      classifier = NULL;
-      trainer    = NULL;
+      delete  classifier;  classifier = NULL;
+      delete  trainer;     trainer    = NULL;
+      Abort (true);
       return;
     }
   }
-}  /* ExtractFeatures */
+}  /* InitalizeApplication */
 
-
-
-
-
-
-ExtractFeatures::~ExtractFeatures ()
-{
-  if  (reportFile)
-  {
-    reportFile->close ();
-    delete  reportFile;
-  }
-
-  delete  trainingConfiguration;
-  delete  images;
-  //delete  mlClass;
-  delete  classifier;
-  delete  trainer;
-}
 
 
 
 // -c "C:\TrainingApp\DataFiles\TrainingModels\working model.cfg"   -S K:\v1\Temp\ExtractedImages  -D K:\v1\Temp\ClassifiedImages  -n c:\Temp\ExtractedData.data
 
-bool  ExtractFeatures::ProcessCmdLineParameter (char   parmSwitchCode, 
-                                                KKStr  parmSwitch, 
-                                                KKStr  parmValue
+bool  ExtractFeatures::ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                                const KKStr&  parmValue
                                                )
 {
-  switch  (parmSwitchCode)
+  bool  validParm = true;
+
+  if  (parmSwitch.EqualIgnoreCase ("-D")            ||
+       parmSwitch.EqualIgnoreCase ("-Destination")  ||
+       parmSwitch.EqualIgnoreCase ("-DestDir")
+      )
   {
-    case  'C':
-    case  'c':  // Configuration File Specification.
-         if  (parmValue.Empty ())
-         {
-           log.Level (-1) << "ExtractFeatures::ProcessCmdLineParameter *** ERROR Missing Configuration Parameter ***" 
-                          << endl;
-           Abort (true);
-           return  false;
-         }
-
-         configFileName = parmValue;
-         break;
-
-
-    case  'D':  // Destination Directory
-    case  'd': 
-         destDirectory = parmValue;
-         if  (!osValidDirectory (&destDirectory))
-         {
-           if  (!osCreateDirectory (destDirectory))
-           {
-             log.Level (-1) << "ProcessCmdLineParameter **** Invalid Destination Directory["
-                            << destDirectory << "] ****" 
-                            << endl;
-             Abort (true);
-             return  false;
-           }
-
-           if  ((destDirectory.LastChar () != ':')  &&  (destDirectory.LastChar () != DSchar))
-           {  
-             destDirectory << DS;
-           }
-
-         }
-         break;
-
-
-    case  'N':
-    case  'n':
-         featureFileName = parmValue;
-         break;
-
-
-    case  'R':
-    case  'r':
-         reportFileName = parmValue;
-         break;
-
-
-    case  'S':
-    case  's':
-         sourceRootDirPath = parmValue;
-         break;
-
-    case  'U':
-    case  'u':
-         useDirectoryNameForClassName = true;
-         break;
+    destDirectory = parmValue;
+    if  (!osValidDirectory (&destDirectory))
+    {
+      if  (!osCreateDirectory (destDirectory))
+      {
+        log.Level (-1) << "ProcessCmdLineParameter **** Invalid Destination Directory["
+                       << destDirectory << "] ****" 
+                       << endl;
+        Abort (true);
+        validParm = false;
+      }
+      destDirectory = osAddSlash (destDirectory);
+    }
   }
 
-  return  !Abort ();
+  else if  
+    (parmSwitch.EqualIgnoreCase ("-R")  ||
+     parmSwitch.EqualIgnoreCase ("-Report")
+    )
+  {
+    reportFileName = parmValue;
+  }
+
+  else if  
+    (parmSwitch.EqualIgnoreCase ("-N")  ||
+     parmSwitch.EqualIgnoreCase ("-Name")
+    )
+  {
+    featureFileName = parmValue;
+  }
+
+  else if  
+    (parmSwitch.EqualIgnoreCase ("-S")          ||
+     parmSwitch.EqualIgnoreCase ("-Source")     ||
+     parmSwitch.EqualIgnoreCase ("-SourceDir")
+    )
+  {
+    sourceRootDirPath = parmValue;
+  }
+
+  else if  
+    (parmSwitch.EqualIgnoreCase ("-U")           ||
+     parmSwitch.EqualIgnoreCase ("-UseDirName")
+    )
+  {
+    useDirectoryNameForClassName = true;
+  }
+
+  else
+  {
+    validParm = PicesApplication::ProcessCmdLineParameter (parmSwitch, parmValue);
+  }
+
+  return  validParm;
 }  /* ProcessCmdLineParameter */
+
 
 
 // -s D:\Pices\TrainingLibraries\NRDA_test_200  -u
@@ -321,21 +325,19 @@ bool  ExtractFeatures::ProcessCmdLineParameter (char   parmSwitchCode,
 
 void   ExtractFeatures::DisplayCommandLineParameters ()
 {
-  log.Level (0) << "ExtractFeatures  -c <xxx> -d <xxx>  -f <xxxx>  -n <xxxx>  -s <xxxx>" << endl;
-  log.Level (0) << endl;
-  log.Level (0) << "    -c  Specify the Configuration file to use if you want"              << endl; 
-  log.Level (0) << "        to classify images."                                            << endl;
-  log.Level (0)                                                                             << endl;
-  log.Level (0) << "    -d  Destination Diretory Tree,  If specified a copy of Classified." << endl;
-  log.Level (0) << "        images will be placed here."                                    << endl;   
-  log.Level (0)                                                                             << endl;
-  log.Level (0) << "    -n  Name of File to store Calculated Features in."                  << endl;
-  log.Level (0)                                                                             << endl;
-  log.Level (0) << "    -r  Report File,  Defaults to Command Line."                        << endl;
-  log.Level (0)                                                                             << endl;
-  log.Level (0) << "    -s  Source Directory Tree to Search for images."                    << endl;
-  log.Level (0)                                                                             << endl;
-  log.Level (0) << "    -u  Use   Directory Name  as   Class Name"                          << endl;
+  PicesApplication::DisplayCommandLineParameters ();
+  cout << endl
+       << "    -d  Destination Diretory Tree; if specified a copy of Classified."  << endl
+       << "        images will be placed here."                                    << endl   
+       << endl
+       << "    -n  Name of File to store Calculated Features in."                  << endl
+       << endl
+       << "    -r  Report File,  Defaults to Command Line."                        << endl
+       << endl
+       << "    -s  Source Directory Tree to Search for images."                    << endl
+       << endl
+       << "    -u  Use   Directory Name  as   Class Name"                          << endl
+       << endl;
 }  /* DisplayCommandLineParameters */
 
 
@@ -353,17 +355,17 @@ void  ExtractFeatures::ClassifyImage (ImageFeaturesPtr  image)
     return;
 
   MLClassConstPtr  mlClass;
-  double         probability;
-  int            numOfWinners;
-  bool           knownClassOneOfTheWinners;
-  double         breakTie;
+  double           probability;
+  int              numOfWinners;
+  bool             knownClassOneOfTheWinners;
+  double           breakTie;
 
   mlClass = classifier->ClassifyAImage (*image, 
-                                           probability, 
-                                           numOfWinners,
-                                           knownClassOneOfTheWinners,
-                                           breakTie
-                                          );
+                                        probability, 
+                                        numOfWinners,
+                                        knownClassOneOfTheWinners,
+                                        breakTie
+                                       );
 
   MLClassConstPtr  ourClass = mlClasses->GetMLClassPtr (mlClass->Name ());
 
@@ -616,7 +618,7 @@ void  ExtractFeatures::ReFreshInstrumentData (ImageFeaturesPtr  _featureVector)
 
   KKStr  imageFileRootName = osGetRootName (_featureVector->ImageFileName ());
 
-  if  (dataBase)
+  if  (DB ())
   {
     KKStr  sipperFileName;
     kkuint32  scanLineNum = 0;
@@ -624,7 +626,7 @@ void  ExtractFeatures::ReFreshInstrumentData (ImageFeaturesPtr  _featureVector)
 
     SipperVariables::ParseImageFileName (imageFileRootName, sipperFileName, scanLineNum, scanCol);
 
-    id = dataBase->InstrumentDataGetByScanLine (sipperFileName, scanLineNum);
+    id = DB ()->InstrumentDataGetByScanLine (sipperFileName, scanLineNum);
     if  (id)
       weOwnInstrumentData = true;
     else
@@ -702,15 +704,13 @@ void  ExtractFeatures::Extract ()
 
   InstrumentDataFileManager::Initialize ();
 
-  dataBase = new DataBase (log);
-
   KKStr  relativeDir;
 
   images = FeatureFileIOPices::Driver ()->LoadInSubDirectoryTree 
                                    (sourceRootDirPath, 
                                     *mlClasses,
                                     useDirectoryNameForClassName,
-                                    dataBase,
+                                    DB (),
                                     cancelFlag,
                                     true,    // rewiteRootFeatureFile 
                                     log

@@ -48,8 +48,8 @@ using namespace KKU;
 
 // -Report TestReport.txt  -Buckets 50  -BS 10  -I 20  
 
-RandomNND::RandomNND (int argc, char**  argv) :
-  Application    (argc, argv),
+RandomNND::RandomNND () :
+  PicesApplication  (),
   data           (NULL),
   report         (NULL),
   reportFile     (NULL),
@@ -68,54 +68,11 @@ RandomNND::RandomNND (int argc, char**  argv) :
   bucketSize     (10)
 
 {
-	ProcessCmdLineParameters (argc, argv);
-
-	if  (Abort ())
-	{
-		DisplayCommandLineParameters ();
-		return;
-	}
-
-  if  (reportFileName.Empty ())
-	{
-		reportFile = NULL;
-		report = &cout;
-	}
-	else
-	{
-		reportFile = new ofstream (reportFileName.Str ());
-		report = reportFile;
-	}
-
-  
-  if  (numIterations < 1)
-  {
-    log.Level (-1) << "RandomNND::RandomNND   Invalid numIterations[" << numIterations << "]" << endl;
-    DisplayCommandLineParameters ();
-    osWaitForEnter ();
-    exit (-1);
-  }
-
-
-  minRadius = sqrt (minSize / 3.1415926f);
-  colLeft   = minRadius;
-  colRight  = (widthMax - 1) - minRadius;
-  width     = colRight - colLeft;
-
-
-	*report << endl;
-	*report << "------------------------------------------------------------------------" << endl;
-  *report << "Run Date          [" << osGetLocalDateTime ()                  << "]."    << endl;
-  *report << "Report File Name  [" << reportFileName                         << "]."    << endl;
-  *report << "Scan Lines        [" << scanLines                              << "]."    << endl;
-  *report << "Min Size          [" << minSize                                << "]."    << endl;
-  *report << "Num of Particles  [" << numOfParticles                         << "]."    << endl;
-  *report << "Num of Iterations [" << numIterations                          << "]."    << endl;
-  *report << "Number of Buckets [" << numOfBuckets                           << "]."    << endl;
-  *report << "Bucket Size       [" << bucketSize                             << "]."    << endl;
-  *report << "------------------------------------------------------------------------" << endl;
-	*report << endl;
 }
+
+
+
+
 
 
 
@@ -136,24 +93,72 @@ RandomNND::~RandomNND ()
 
 
 
+
+
+
+void  RandomNND::InitalizeApplication (int32   argc,
+                                       char**  argv
+                                      )
+{
+  Application::InitalizeApplication (argc, argv);
+	if  (Abort ())
+	{
+		DisplayCommandLineParameters ();
+		return;
+	}
+
+  if  (reportFileName.Empty ())
+	{
+		reportFile = NULL;
+		report = &cout;
+	}
+	else
+	{
+		reportFile = new ofstream (reportFileName.Str ());
+		report = reportFile;
+	}
+
+  if  (numIterations < 1)
+  {
+    log.Level (-1) << "RandomNND::RandomNND   Invalid numIterations[" << numIterations << "]" << endl;
+    DisplayCommandLineParameters ();
+    osWaitForEnter ();
+    exit (-1);
+  }
+
+  minRadius = sqrt (minSize / 3.1415926f);
+  colLeft   = minRadius;
+  colRight  = (widthMax - 1) - minRadius;
+  width     = colRight - colLeft;
+
+	*report << endl;
+	*report << "------------------------------------------------------------------------" << endl;
+  PrintStandardHeaderInfo (*report);
+  *report << "Report File Name  [" << reportFileName                         << "]."    << endl;
+  *report << "Scan Lines        [" << scanLines                              << "]."    << endl;
+  *report << "Min Size          [" << minSize                                << "]."    << endl;
+  *report << "Num of Particles  [" << numOfParticles                         << "]."    << endl;
+  *report << "Num of Iterations [" << numIterations                          << "]."    << endl;
+  *report << "Number of Buckets [" << numOfBuckets                           << "]."    << endl;
+  *report << "Bucket Size       [" << bucketSize                             << "]."    << endl;
+  *report << "------------------------------------------------------------------------" << endl;
+	*report << endl;
+}  /* InitalizeApplication*/
+
+
+
+
 /******************************************************************************
  * ProcessCmdLineParamters
  * DESC: Extracts parameters from the command line
  ******************************************************************************/
-bool  RandomNND::ProcessCmdLineParameter (
-                                             char    parmSwitchCode, 
-                                             KKStr  parmSwitch, 
-                                             KKStr  parmValue
-                                            )
+bool  RandomNND::ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                          const KKStr&  parmValue
+                                         )
 {
-  KKStr  parmValueUpper (parmValue);
-  parmValueUpper.Upper ();
-
-  parmSwitch.Upper ();
-
-  if  ((parmSwitch == "-BUCKETS")  ||  (parmSwitch == "-B"))
+  if  (parmSwitch.EqualIgnoreCase ("-BUCKETS")  ||  parmSwitch.EqualIgnoreCase ("-B"))
   {
-    numOfBuckets = atoi (parmValue.Str ());
+    numOfBuckets = parmValue.ToInt32 ();
     if  (numOfBuckets < 3)
     {
       log.Level (-1) << endl
@@ -164,9 +169,9 @@ bool  RandomNND::ProcessCmdLineParameter (
     }
   }
 
-  else if  ((parmSwitch == "-BUCKETSIZE")  ||  (parmSwitch == "-BS"))
+  else if  (parmSwitch.EqualIgnoreCase ("-BUCKETSIZE")  ||  parmSwitch.EqualIgnoreCase ("-BS"))
   {
-    bucketSize = atoi (parmValue.Str ());
+    bucketSize = parmValue.ToInt32 ();
     if  (bucketSize < 1)
     {
       log.Level (-1) << endl
@@ -177,9 +182,9 @@ bool  RandomNND::ProcessCmdLineParameter (
     }
   }
 
-  else if  ((parmSwitch == "-MINSIZE")  ||  (parmSwitch == "-MS"))
+  else if  (parmSwitch.EqualIgnoreCase ("-MINSIZE")  ||  parmSwitch.EqualIgnoreCase ("-MS"))
   {
-    minSize = (double)atof (parmValue.Str ());
+    minSize = parmValue.ToDouble ();
     if  (minSize < 1.0)
     {
       log.Level (-1) << endl
@@ -190,9 +195,9 @@ bool  RandomNND::ProcessCmdLineParameter (
     }
   }
 
-  else if  ((parmSwitch == "-PARTICLES")  ||  (parmSwitch == "-P"))
+  else if  (parmSwitch.EqualIgnoreCase ("-PARTICLES")  ||  parmSwitch.EqualIgnoreCase ("-P"))
   {
-	  numOfParticles = atoi (parmValue.Str ());
+    numOfParticles = parmValue.ToInt32 ();
     if  (numOfParticles < 2)
     {
       log.Level (-1) << endl
@@ -203,9 +208,9 @@ bool  RandomNND::ProcessCmdLineParameter (
     }
   }
 
-  else if  ((parmSwitch == "-ITERATIONS")  ||  (parmSwitch == "-I"))
+  else if  (parmSwitch.EqualIgnoreCase ("-ITERATIONS")  ||  parmSwitch.EqualIgnoreCase ("-I"))
   {
-    numIterations = atoi (parmValue.Str ());
+    numIterations = parmValue.ToInt32 ();
     if  (numIterations < 1)
     {
       log.Level (-1) << endl
@@ -216,12 +221,12 @@ bool  RandomNND::ProcessCmdLineParameter (
     }
   }
 
-  else if  ((parmSwitch == "-R")  ||  (parmSwitch == "-REPORT"))
+  else if  (parmSwitch.EqualIgnoreCase ("-R")  ||  parmSwitch.EqualIgnoreCase ("-REPORT"))
 		reportFileName = parmValue;
 
-  else if  ((parmSwitch == "-SCANLINES")  ||  (parmSwitch == "-SL"))
+  else if  (parmSwitch.EqualIgnoreCase ("-SCANLINES")  ||  parmSwitch.EqualIgnoreCase ("-SL"))
   {
-    scanLines = atoi (parmValue.Str ());
+    scanLines = parmValue.ToInt32 ();
     if  (scanLines < 100)
     {
       log.Level (-1) << endl
@@ -253,21 +258,22 @@ bool  RandomNND::ProcessCmdLineParameter (
  ******************************************************************************/
 void   RandomNND::DisplayCommandLineParameters ()
 {
-	log.Level (0) << "RandomNND  -Report <xxx>  -Iterations <xxxx>  -ScanLines <xxxx>  -Particles <xxxx>  -MinSize <xxxx>"     << endl;
-	log.Level (0)                                                                          << endl;
-	log.Level (0) << "    -Report(R)       Report File,  Defaults to Command Line."        << endl;
-	log.Level (0)                                                                          << endl;
-  log.Level (0) << "    -Buckets(B)      Number of Buckets in Histogram (50)."           << endl;
-	log.Level (0)                                                                          << endl;
-  log.Level (0) << "    -BucketSize(BS)  Size of each Bucket (10)."                      << endl;
-	log.Level (0)                                                                          << endl;
-  log.Level (0) << "    -Iterations(I)   Number of Nearest Neighbors to generate(20)."   << endl;
-	log.Level (0)                                                                          << endl;
-  log.Level (0) << "    -MinSize(MS)     Minimum Size of each plankton. (500)."          << endl;
-	log.Level (0)                                                                          << endl;
-	log.Level (0) << "    -Particles(P)    Number of particles (10,000)."                  << endl;
-  log.Level (0)                                                                          << endl;
-	log.Level (0) << "    -ScanLines(SL)   Number of scan lines (1,000,000)."              << endl;
+	cout << "RandomNND  -Report <xxx>  -Iterations <xxxx>  -ScanLines <xxxx>  -Particles <xxxx>  -MinSize <xxxx>"     << endl
+	                                                                              << endl
+	     << "    -Report(R)       Report File,  Defaults to Command Line."        << endl
+	                                                                              << endl
+       << "    -Buckets(B)      Number of Buckets in Histogram (50)."           << endl
+	                                                                              << endl
+       << "    -BucketSize(BS)  Size of each Bucket (10)."                      << endl
+	                                                                              << endl
+       << "    -Iterations(I)   Number of Nearest Neighbors to generate(20)."   << endl
+	                                                                              << endl
+       << "    -MinSize(MS)     Minimum Size of each plankton. (500)."          << endl
+	                                                                              << endl
+	     << "    -Particles(P)    Number of particles (10,000)."                  << endl
+                                                                                << endl
+	     << "    -ScanLines(SL)   Number of scan lines (1,000,000)."              << endl
+       << endl;
 }
 
 
@@ -476,13 +482,14 @@ void	RandomNND::GenerateReport ()
 
 
 
-int  main (int   argc,
+int  main (int32   argc,
            char**  argv
           )
 {
   time_t     long_time;
   SRand48 ((KKU::uint)time (&long_time));
-  RandomNND neraestNeighborReport (argc, argv);
+  RandomNND  neraestNeighborReport;
+  neraestNeighborReport.InitalizeApplication (argc, argv);
   if  (!neraestNeighborReport.Abort ())
     neraestNeighborReport.GenerateReport ();
 }

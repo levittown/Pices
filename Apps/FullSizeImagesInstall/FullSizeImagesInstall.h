@@ -1,7 +1,7 @@
 #if  !defined(_IMPORTGPS_DATA_)
 #define  _IMPORTGPS_DATA_
 
-#include "Application.h"
+#include "PicesApplication.h"
 #include "DataBase.h"
 #include "RunLog.h"
 #include "Str.h"
@@ -13,14 +13,20 @@ namespace  FullSizeImagesInstall_DataNameSpace
    *@brief  Application that wil scan through all images in the MySQL Images table and verify that a FullSize image 
    * exists for those that are larger than their thumbnail version.  The data will be proecssed by SipperFile entries.
    */
-  class  FullSizeImagesInstall: public Application
+  class  FullSizeImagesInstall:  public PicesApplication
   {
   public:
-    FullSizeImagesInstall (int     argc, 
-                           char**  argv
-                          );
+    FullSizeImagesInstall ();
 
     ~FullSizeImagesInstall ();
+
+    virtual 
+    const char*  ApplicationName () const  {return  "FullSizeImagesInstall";}
+
+    virtual
+    void  InitalizeApplication (int32   argc,
+                                char**  argv
+                               );
 
     void  Main ();
 
@@ -65,9 +71,8 @@ namespace  FullSizeImagesInstall_DataNameSpace
 
     void   DisplayCommandLineParameters ();
 
-    bool   ProcessCmdLineParameter (char    parmSwitchCode, 
-                                    KKStr   parmSwitch, 
-                                    KKStr   parmValue
+    bool   ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                    const KKStr&  parmValue
                                    );
 
     void   ProcessSipperFile (SipperFilePtr  sipperFile);
@@ -78,7 +83,6 @@ namespace  FullSizeImagesInstall_DataNameSpace
 
 
     bool                        cancelFlag;
-    DataBasePtr                 dbConn;
     vector<SipperFileResults>   results;
     KKStr                       reportFileName;
     ostream*                    report;

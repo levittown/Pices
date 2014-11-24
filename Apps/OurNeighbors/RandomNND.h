@@ -20,11 +20,11 @@ class  RandomNND
 {
 public:
 
-	RandomNND (int32                 _scanLines,
+	RandomNND (int32               _scanLines,
              ImageFeaturesList&  _images,
-             int32                 _numIterations,
-             int32                 _numOfBuckets,
-             int32                 _bucketSize,
+             int32               _numIterations,
+             int32               _numOfBuckets,
+             int32               _bucketSize,
              ostream&            _report,
              RunLog&             _log
             );
@@ -34,8 +34,8 @@ public:
   void	GenerateReport ();
 
 
-  double  NND_Mean       ()  const  {return  nnd_Mean;}       // Mean NND of all iterations combined.
-  double  NND_StdDev     ()  const  {return  nnd_StdDev;}     // StdDev of NND of all iterations combined.
+  double  NND_Mean       ()  const  {return  nnd_Mean;}       /**< Mean NND of all iterations combined.       */
+  double  NND_StdDev     ()  const  {return  nnd_StdDev;}     /**< StdDev of NND of all iterations combined.  */
   double  RealDataU2Stat ()  const  {return  realDataU2Stat;}
 
 
@@ -51,21 +51,19 @@ private:
                                                    );
 
 
-
-
-  int32                 bucketSize;
+  int32               bucketSize;
   ImageFeaturesList&  images;
   RunLog&             log;
-  double              nnd_Mean;    // mean 'nnd' of all iterations combined.
-  double              nnd_StdDev;  // std deviation of 'nnd' of all iterations combined.
-  int32                 numOfBuckets;
-  int32                 numOfParticles;
-  int32                 numIterations;
+  double              nnd_Mean;       /**< mean 'nnd' of all iterations combined.             */
+  double              nnd_StdDev;     /**< std deviation of 'nnd' of all iterations combined. */
+  int32               numOfBuckets;
+  int32               numOfParticles;
+  int32               numIterations;
   NeighborListPtr     realData;
-  double               realDataU2Stat;
+  double              realDataU2Stat;
 	ostream&            report;
-  int32                 scanLines;
-  double               widthMax;
+  int32               scanLines;
+  double              widthMax;
 };
 
 #endif

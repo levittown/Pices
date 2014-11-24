@@ -66,7 +66,7 @@ typedef struct
 
 
 DumpSipper3InstrumentData::DumpSipper3InstrumentData ():
-  Application  (),
+  PicesApplication  (),
   report       (NULL),
   sipperFile   (NULL)
 {
@@ -93,7 +93,7 @@ void  DumpSipper3InstrumentData::InitalizeApplication (int32   argc,
                                                        char**  argv
                                                       )
 {
-  Application::InitalizeApplication (argc, argv);
+  PicesApplication::InitalizeApplication (argc, argv);
 
   if  (sipperFileName.Empty ())
   {

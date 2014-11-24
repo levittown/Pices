@@ -25,6 +25,18 @@ namespace MLL
   typedef  DataBaseServer const * DataBaseServerConstPtr;
 #endif
 
+#if !defined(_FileDescDefined_)
+  class  FileDesc;
+  typedef  FileDesc*  FileDescPtr;
+#endif
+
+#ifndef  _TrainingConfiguration2_Defined_
+  class    TrainingConfiguration2;
+  typedef  TrainingConfiguration2*  TrainingConfiguration2Ptr;
+#endif
+
+
+
   /** 
    *@class PicesApplication
    *@brief The base class for all standalone application.
@@ -64,7 +76,7 @@ namespace MLL
 
     /** Specify the name of the application */
     virtual 
-    const char*  ApplicationName () = 0;
+    const char*  ApplicationName ()  const;
 
     /** 
      *@brief  Initialized PicesApplication Instance; 1st method to be called after instance construction.
@@ -81,13 +93,28 @@ namespace MLL
 
     DataBasePtr   DB ();
 
-    DataBaseServerPtr  DbServer ()  const  {return dbServer;}
+    TrainingConfiguration2Ptr  Config             ()  const  {return config;}
+    const KKStr&               ConfigFileName     ()  const  {return configFileName;}
+    const KKStr&               ConfigFileFullPath ()  const  {return configFileFullPath;}
+    DataBaseServerPtr          DbServer           ()  const  {return dbServer;}
+    FileDescPtr                FileDesc           ()  const  {return fileDesc;}
 
 
     void  PrintStandardHeaderInfo (ostream&  o);
 
 
   protected:
+
+    /**
+     *@brief A derived class would call this method in its version of 'InitalizeApplication' just before calling
+     * 'PicesApplication::InitalizeApplication'.
+     *@details If set to true will require that a database connection be established otherwise the application will
+     * abort.
+     */
+    void  DataBaseRequired (bool _dataBaseRequired)  {dataBaseRequired = _dataBaseRequired;}
+
+
+    void  DisplayCommandLineParameters ();
 
     /**
      *@brief This method will get called once for each parameter specified in the command line.
@@ -98,18 +125,29 @@ namespace MLL
      *@param[in] parmValue       Any value parameter that followed the switch parameter.
      */
     virtual 
-    bool     ProcessCmdLineParameter (const KKStr&   parmSwitch, 
-                                      const KKStr&   parmValue
-                                     );
+    bool  ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                   const KKStr&  parmValue
+                                  );
 
+  private:
     bool  ProcessDataBaseParameter (const KKStr&  parmSwitch, 
                                     const KKStr&  parmValue
                                    );
 
+    bool  ProcessConfigFileParameter (const KKStr&  parmSwitch, 
+                                      const KKStr&  parmValue
+                                     );
+
+  protected:
+    TrainingConfiguration2Ptr  config;
+    KKStr                      configFileName;
+    KKStr                      configFileFullPath;
+    FileDescPtr                fileDesc;
 
   private:
     DataBasePtr        db;
     DataBaseServerPtr  dbServer;
+    bool               dataBaseRequired;
 
   };  /* PicesApplication */
 }  /* NameSpace KKU */

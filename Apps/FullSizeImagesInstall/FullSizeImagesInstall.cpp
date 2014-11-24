@@ -75,59 +75,47 @@ FullSizeImagesInstall::SipperFileResults&  FullSizeImagesInstall::SipperFileResu
 
 
 
-FullSizeImagesInstall::FullSizeImagesInstall (int     argc, 
-                                              char**  argv
-                                             ):
+FullSizeImagesInstall::FullSizeImagesInstall ():
 
-   Application  (argc, argv),
+   PicesApplication  (),
    cancelFlag            (false),
-   dbConn                (NULL),
    report                (NULL),
    reportFileName        (),
    results               (),
    sipperFiles           (NULL),
    sipperFilesProcessed  (0)
 {                  
-  if  (argc < 1)   
-  {                
-    log.Level (-1) << endl << endl 
-                   << "No Command Line Parameters were provided." << endl
-                   << endl;
-    DisplayCommandLineParameters ();
-    Abort (true);
-    return;
-  }
-
-  ProcessCmdLineParameters (argc, argv);
-  if  (Abort ())
-  {
-    DisplayCommandLineParameters ();
-    return;
-  }
-
 }
 
 
 
 FullSizeImagesInstall::~FullSizeImagesInstall ()
 {
-  delete  dbConn;   dbConn = NULL;
-  delete  report;   report = NULL;
+  delete  report;
+  report = NULL;
 }
 
 
 
+void  FullSizeImagesInstall::InitalizeApplication (int32   argc,
+                                                   char**  argv
+                                                  )
+{
+  this->DataBaseRequired (true);
+  PicesApplication::InitalizeApplication (argc, argv);
+}  /* InitalizeApplication */
 
-bool  FullSizeImagesInstall::ProcessCmdLineParameter (char    parmSwitchCode, 
-                                                      KKStr   parmSwitch, 
-                                                      KKStr   parmValue
+
+
+
+bool  FullSizeImagesInstall::ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                                      const KKStr&  parmValue
                                                     )
 {
-  KKStr  parmValueUpper (parmValue);
-  parmValueUpper.Upper ();
-
-
-  if  (parmSwitch.EqualIgnoreCase ("-Report")  ||  parmSwitch.EqualIgnoreCase ("-R"))
+  bool  validParm = true;
+  if  (parmSwitch.EqualIgnoreCase ("-Report")  ||  
+       parmSwitch.EqualIgnoreCase ("-R")
+      )
   {
     reportFileName = parmValue;
     if  (osFileExists (reportFileName))
@@ -138,20 +126,16 @@ bool  FullSizeImagesInstall::ProcessCmdLineParameter (char    parmSwitchCode,
                      << "             Report File Already Exists[" << reportFileName << "]" << endl
                      << endl;
       Abort (true);
+      validParm = false;
     }
   }
 
   else
   {
-    log.Level (-1) << endl << endl
-                   << "FullSizeImagesInstall::ProcessCmdLineParameter    ***ERROR***" << endl
-                   << endl
-                   << "             Invalid Parameter[" << parmSwitch << "]" << endl
-                   << endl;
-    Abort (true);
+    validParm = PicesApplication::ProcessCmdLineParameter (parmSwitch, parmValue);
   }
 
-	return  !Abort ();
+	return  validParm;
 }  /* ProcessCmdLineParameter */
 
 
@@ -159,12 +143,12 @@ bool  FullSizeImagesInstall::ProcessCmdLineParameter (char    parmSwitchCode,
 
 void   FullSizeImagesInstall::DisplayCommandLineParameters ()
 {
-  log.Level (0) << "FullSizeImagesInstall"                                                           << endl;
-  log.Level (0)                                                                                      << endl;
-  log.Level (0) << "   Application that will scan through all images in the MySQL Images table"      << endl;
-  log.Level (0) << "   and verify that a FullSize image exists for those that are larger than"       << endl;
-  log.Level (0) << "   their thumbnail version.  The data will be proecssed by SipperFile entries."  << endl;
-  log.Level (0)                                                                                      << endl;
+  PicesApplication::DisplayCommandLineParameters ();
+  cout << endl
+       << "   Application that will scan through all images in the MySQL Images table"      << endl
+       << "   and verify that a FullSize image exists for those that are larger than"       << endl
+       << "   their thumbnail version.  The data will be proecssed by SipperFile entries."  << endl
+       << endl;
 }  /* DisplayCommandLineParameters */
 
 
@@ -176,7 +160,7 @@ void   FullSizeImagesInstall::DiagnoseImage (DataBaseImagePtr  image,
 {
   RasterSipperPtr  thumbNail = NULL;
 
-  DataBaseImagePtr  thumbNailEntry = dbConn->ImageLoad (image->ImageId ());
+  DataBaseImagePtr  thumbNailEntry = DB ()->ImageLoad (image->ImageId ());
   if  (thumbNailEntry)
     thumbNail = thumbNailEntry->ThumbNail (log);
 
@@ -228,21 +212,21 @@ void   FullSizeImagesInstall::ProcessSipperFile (SipperFilePtr  sipperFile)
     int zed = 9090;
 
     DataBaseImageListPtr  images 
-      = dbConn->ImagesQuery (NULL,                            // imageGroup,
-                             sipperFile->SipperFileName (),
-                             NULL,                            //mlClass,
-                             'P',                             // classKeyToUse, 'P' - Use Prediced Class Key,  'V' - Validated Class */
-                             0.0f,                            // probMin,
-                             1.0f,                            // probMax,
-                             0,                               // sizeMin,
-                             0,                               // sizeMax,  0 indicates that there is no upper bound.
-                             0,                               // depthMin,
-                             0,                               // depthMax,
-                             0,                               // restartImageId,  <= 0 indicates start from beginning.
-                             -1,                              // limit,    -1 indicates no limit.
-                             false,                           // includeThumbnail,
-                             cancelFlag
-                            );
+      = DB ()->ImagesQuery (NULL,                            // imageGroup,
+                            sipperFile->SipperFileName (),
+                            NULL,                            //mlClass,
+                            'P',                             // classKeyToUse, 'P' - Use Prediced Class Key,  'V' - Validated Class */
+                            0.0f,                            // probMin,
+                            1.0f,                            // probMax,
+                            0,                               // sizeMin,
+                            0,                               // sizeMax,  0 indicates that there is no upper bound.
+                            0,                               // depthMin,
+                            0,                               // depthMax,
+                            0,                               // restartImageId,  <= 0 indicates start from beginning.
+                            -1,                              // limit,    -1 indicates no limit.
+                            false,                           // includeThumbnail,
+                            cancelFlag
+                           );
 
     if  (images == NULL)
     {
@@ -274,7 +258,7 @@ void   FullSizeImagesInstall::ProcessSipperFile (SipperFilePtr  sipperFile)
 
           // The True image is larger than the ThumbNail image;  we will 1st check if is already exists in the ImagesFullSize table.
           // If it does not then we will go to the Sipper File and reconstruct a new one.
-          RasterSipperPtr i = dbConn->ImageFullSizeLoad (image->ImageFileName ());
+          RasterSipperPtr i = DB ()->ImageFullSizeLoad (image->ImageFileName ());
           if  (i == NULL)
           {
             sipperFileMissingFromFullSize++;
@@ -315,21 +299,21 @@ void   FullSizeImagesInstall::ProcessSipperFile (SipperFilePtr  sipperFile)
               // SIPPER file we should update the database so that next time we can retrieve without resorting to 
               // the SIPPER file.
               if  (deleteOldFulSizeImage)
-                dbConn->ImageFullSizeDelete (image->ImageFileName ());
+                DB ()->ImageFullSizeDelete (image->ImageFileName ());
 
               sipperFileImagesRecoverd++;
               *report << image->ImageFileName () << "\t" << "Recovered" << endl;
-              dbConn->ImageFullSizeSave (image->ImageFileName (), *i);
+              DB ()->ImageFullSizeSave (image->ImageFileName (), *i);
 
               ImageFeaturesPtr  fd = new ImageFeatures (*i, image->Class1 (), NULL);
 
               fd->ImageFileName (image->ImageFileName ());
-              ImageFeaturesPtr  existingFeatureData = dbConn->FeatureDataRecLoad (image->ImageFileName ());
+              ImageFeaturesPtr  existingFeatureData = DB ()->FeatureDataRecLoad (image->ImageFileName ());
 
               InstrumentDataPtr  id = NULL;
               uint32  frameNum = image->TopLeftRow () / 4096;
 
-              id = dbConn->InstrumentDataGetByScanLine (image->SipperFileName (), 4096 * frameNum);
+              id = DB ()->InstrumentDataGetByScanLine (image->SipperFileName (), 4096 * frameNum);
               if  (id != NULL)
               {
                 fd->Depth        (id->Depth        ());
@@ -347,13 +331,13 @@ void   FullSizeImagesInstall::ProcessSipperFile (SipperFilePtr  sipperFile)
                   fd->Salinity     (existingFeatureData->Salinity     ());
                   fd->Oxygen       (existingFeatureData->Oxygen       ());
                 }
-                dbConn->FeatureDataUpdate (image, fd);
+                DB ()->FeatureDataUpdate (image, fd);
                 delete  existingFeatureData;
                 existingFeatureData = NULL;
               }
               else
               {
-                dbConn->FeatureDataInsertRow (image->SipperFileName (), *fd);
+                DB ()->FeatureDataInsertRow (image->SipperFileName (), *fd);
               }
 
               delete  id;  id = NULL;
@@ -425,17 +409,7 @@ void   FullSizeImagesInstall::Main ()
 
   report = new ofstream (reportFileName.Str ());
 
-  dbConn = new DataBase (log);
-  if  (!dbConn->Valid ())
-  {
-    log.Level (-1) << endl << endl 
-      << "FullSizeImagesInstall::Main    ***ERROR***    Failed to connect to database."  << endl
-      << endl;
-    Abort (true);
-    return;
-  }
-
-  sipperFiles = dbConn->SipperFileLoad ("", "", "");
+  sipperFiles = DB ()->SipperFileLoad ("", "", "");
   if  (!sipperFiles)
   {
     log.Level (-1) << endl << endl 
@@ -484,7 +458,8 @@ int  main (int     argc,
            char**  argv
           )
 {
-  FullSizeImagesInstall  importGpsApp (argc, argv);
+  FullSizeImagesInstall  importGpsApp;
+  importGpsApp.InitalizeApplication (argc, argv);
   if  (importGpsApp.Abort ())
     return 1;
 

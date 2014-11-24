@@ -1,31 +1,28 @@
-#include  "FirstIncludes.h"
+#include "FirstIncludes.h"
 
-#include  <stdlib.h>
-#include  <memory>
-#include  <math.h>
-
-#include  <map>
-#include  <string>
-#include  <iostream>
-#include  <fstream>
-#include  <vector>
-
-#include  "MemoryDebug.h"
-#include  "BasicTypes.h"
-
+#include <stdlib.h>
+#include <memory>
+#include <math.h>
+#include <map>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include "MemoryDebug.h"
 using namespace std;
 
-#include  "Compressor.h"
-#include  "OSservices.h"
-#include  "Str.h"
+#include "BasicTypes.h"
+#include "Compressor.h"
+#include "OSservices.h"
+#include "Str.h"
 using namespace KKU;
 
-#include  "SipperFile.h"
-#include  "SipperVariables.h"
+#include "SipperFile.h"
+#include "SipperVariables.h"
 using namespace SipperHardware;
 
 
-#include  "DataBase.h"
+#include "DataBase.h"
 using namespace MLL;
 
 
@@ -34,34 +31,13 @@ using namespace MLL;
 
 
 
-ReFreshInstrumentData::ReFreshInstrumentData (int     argc, 
-                                              char**  argv
-                                             ):
+ReFreshInstrumentData::ReFreshInstrumentData ():
 
-   Application    (argc, argv),
+   PicesApplication  (),
    cruiseName     (),
-   dbConn         (NULL),
    deploymentNum  (),
    stationName    ()
 {
-  if  (argc < 2)
-  {
-    log.Level (-1) << endl << endl 
-                   << "No Command Line Parameters were provided." << endl
-                   << endl;
-
-    DisplayCommandLineParameters ();
-    Abort (true);
-    return;
-  }
-
-  InstrumentDataFileManager::InitializePush ();
-  ProcessCmdLineParameters (argc, argv);
-  if  (Abort ())
-  {
-    DisplayCommandLineParameters ();
-    return;
-  }
 }
 
 
@@ -70,23 +46,37 @@ ReFreshInstrumentData::ReFreshInstrumentData (int     argc,
 
 ReFreshInstrumentData::~ReFreshInstrumentData ()
 {
-  delete  dbConn;  dbConn = NULL;
 }
+
+
+
+void  ReFreshInstrumentData::InitalizeApplication (int32   argc,
+                                                   char**  argv
+                                                  )
+{
+  DataBaseRequired (true);
+  PicesApplication::InitalizeApplication (argc, argv);
+  if  (Abort ())
+  {
+    DisplayCommandLineParameters ();
+    return;
+  }
+
+  InstrumentDataFileManager::InitializePush ();
+}  /* InitalizeApplication */
+
+
+
+
 
 // -cn SMP751001 
 
 
-bool  ReFreshInstrumentData::ProcessCmdLineParameter (
-                                                      char    parmSwitchCode, 
-                                                      KKStr   parmSwitch, 
-                                                      KKStr   parmValue
+bool  ReFreshInstrumentData::ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                                      const KKStr&  parmValue
                                                      )
 {
-  KKStr  parmValueUpper (parmValue);
-  parmValueUpper.Upper ();
-
-  parmSwitch.Upper ();
-
+  bool  parmValid = true;
   if  (parmSwitch.EqualIgnoreCase ("-Cruise")      ||  
        parmSwitch.EqualIgnoreCase ("-CruiseName")  ||  
        parmSwitch.EqualIgnoreCase ("-CN")
@@ -113,10 +103,10 @@ bool  ReFreshInstrumentData::ProcessCmdLineParameter (
 
   else
   {
-    Abort (true);
+    parmValid = PicesApplication::ProcessCmdLineParameter (parmSwitch, parmValue);
   }
 
-  return  !Abort ();
+  return  parmValid;
 }  /* ProcessCmdLineParameter */
 
 
@@ -128,12 +118,12 @@ bool  ReFreshInstrumentData::ProcessCmdLineParameter (
  ******************************************************************************/
 void   ReFreshInstrumentData::DisplayCommandLineParameters ()
 {
-  log.Level (0) << "ReFreshInstrumentData"                << endl;
-  log.Level (0)                                           << endl;
-  log.Level (0) << "    -CruiseName  <Cruise Name>"       << endl;
-  log.Level (0) << "    -StationName <Statuion NAme>"     << endl;
-  log.Level (0) << "    -Deployment  <CDeploymentNum>"    << endl;
-  log.Level (0)                                           << endl;
+  PicesApplication::DisplayCommandLineParameters ();
+  cout << endl
+       << "    -CruiseName  <Cruise Name>"       << endl
+       << "    -StationName <Statuion NAme>"     << endl
+       << "    -Deployment  <CDeploymentNum>"    << endl
+       << endl;
 }  /* DisplayCommandLineParameters */
 
 
@@ -159,29 +149,20 @@ void   ReFreshInstrumentData::Main ()
     deploymentNum << "_" << stationName;
   reportFileName << "_" << runDate.YYYYMMDDHHMMSS () + ".txt";
 
-
-  dbConn = new DataBase (log);
-  if  (!dbConn->Valid ())
-  {
-    log.Level (-1) << endl << endl << "Could not connect to Database" << endl << endl;
-    exit (-1);
-  }
-
-  log.Level (10) << "ReFreshInstrumentData::Main   Connected to database[" << dbConn->ServerDescription () << "]." << endl;
-
   ofstream r (reportFileName.Str ());
 
-  r << "ReFreshInstrumentData"  << endl
-    << endl
-    << "RunDate"     << "\t" << runDate                      << endl
+  r << "ReFreshInstrumentData"  << endl << endl;
+
+  PicesApplication::PrintStandardHeaderInfo (r);
+
+  r << endl
     << "Cruise"      << "\t" << cruiseName                   << endl
     << "Station"     << "\t" << stationName                  << endl
     << "Deployment"  << "\t" << deploymentNum                << endl
-    << "DataBase"    << "\t" << dbConn->ServerDescription () << endl
     << endl;
     
   InstrumentDataFileManager::InitializePush ();
-  SipperFileListPtr  sipperFiles = dbConn->SipperFileLoad (cruiseName, stationName, deploymentNum);
+  SipperFileListPtr  sipperFiles = DB ()->SipperFileLoad (cruiseName, stationName, deploymentNum);
   if  ((!sipperFiles)  ||  (sipperFiles->QueueSize () < 1))
   {
     log.Level (-1) << endl << endl << "No SIPPER Files Found." << endl << endl;
@@ -217,7 +198,7 @@ void   ReFreshInstrumentData::Main ()
 
     log.Level (10) << " " << sipperFileNum << " of " << numSipperFiles << "  File [" << sf->SipperFileName () << "]" << endl;
     r << osGetLocalDateTime () << "\t" << sf->SipperFileName () << "\t" << fullSipperFileName << endl;
-    dbConn->InstrumentDataReFreshSipperFile (sf->SipperFileName (), cancelFlag, msgBuff, sizeof (msgBuff));
+    DB ()->InstrumentDataReFreshSipperFile (sf->SipperFileName (), cancelFlag, msgBuff, sizeof (msgBuff));
   }
 
   r << endl << "Done Processing" << endl;
@@ -235,13 +216,14 @@ int  main (int     argc,
            char**  argv
           )
 {
-  ReFreshInstrumentData  reFreshInstrumentData (argc, argv);
+  ReFreshInstrumentData  reFreshInstrumentData;
+  reFreshInstrumentData.InitalizeApplication (argc, argv);
   if  (reFreshInstrumentData.Abort ())
-    return -11;
+    return -1;
 
   reFreshInstrumentData.Main ();
   if  (reFreshInstrumentData.Abort ())
-    return -11;
+    return -1;
   else
     return 0;
 }

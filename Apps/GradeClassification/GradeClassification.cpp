@@ -69,10 +69,6 @@ using namespace  MLL;
 GradeClassification::GradeClassification () :
   PicesApplication    (),
   cancelFlag          (false),
-  config              (NULL),
-  configFileName      (),
-  db                  (NULL),
-  fileDesc            (NULL),
   groundTruthDirName  (),
   groundTruth         (NULL),
   html                (NULL),
@@ -83,7 +79,6 @@ GradeClassification::GradeClassification () :
   report              (NULL),
   reportFile          (NULL),
   reportFileName      ()
-
 {
 }
 
@@ -110,9 +105,8 @@ GradeClassification::~GradeClassification ()
     idx->confussionMatrix = NULL;
   }
 
-  delete  db;           db          = NULL;
-  delete  groundTruth;  groundTruth = NULL;
-  delete  config;       config      = NULL;
+  delete  groundTruth;
+  groundTruth = NULL;
   //delete  mlClass;
 }
 
@@ -126,18 +120,6 @@ void  GradeClassification::InitalizeApplication (int32   argc,
   PicesApplication::InitalizeApplication (argc, argv);
   if  (Abort ())
   {
-    DisplayCommandLineParameters ();
-    return;
-  }
-
-  fileDesc = FeatureFileIOPices::NewPlanktonFile (log);
-
-  if  (argc < 2)
-  {
-    log.Level (-1) << endl << endl << endl
-                   << "No parameters specified." << endl
-                   << endl;
-    Abort (true);
     DisplayCommandLineParameters ();
     return;
   }
@@ -164,6 +146,16 @@ void  GradeClassification::InitalizeApplication (int32   argc,
     return;
   }
 
+  if  (configFileName.Empty ()  &&  sourceRootDirPath.Empty ())
+  {
+    log.Level (-1) << endl << endl << endl
+                   << "You mst specify either a configuration (-Config)  or  Source-Directory(-s)"  << endl
+                   << endl;
+    DisplayCommandLineParameters ();
+    Abort (true);
+    return;
+  }
+
   if  ((!configFileName.Empty ())  &&  (!sourceRootDirPath.Empty ()))
   {
     log.Level (-1) << endl << endl << endl
@@ -173,33 +165,6 @@ void  GradeClassification::InitalizeApplication (int32   argc,
     Abort (true);
     return;
   }
-
-  if  (configFileName.Empty ()  &&  sourceRootDirPath.Empty ())
-  {
-    config = TrainingConfiguration2::PromptForConfigurationFile (log);
-    if  (config == NULL)
-    {
-      Abort (true);
-      return;
-    }
-
-    configFileName = config->FileName ();
-  }
-
-  else if  (!configFileName.Empty ())
-  {
-    config = new TrainingConfiguration2 (fileDesc, configFileName, log, true);
-    if  (!(config->FormatGood ()))
-    {
-      log.Level (-1) << endl << endl << endl
-                     << "Configuration file[" << configFileName << "] is not valid." << endl
-                     << endl;
-      DisplayCommandLineParameters ();
-      Abort (true);
-      return;
-    }
-  }
-
 
   if  (reportFileName.Empty ())
     reportFileName = osGetRootNameOfDirectory (groundTruthDirName) + "_GradingReport.txt";
@@ -214,23 +179,12 @@ void  GradeClassification::InitalizeApplication (int32   argc,
   *report << endl;
 
   PrintStandardHeaderInfo (*report);
-
-
+  *report << endl;
   *report << "------------------------------------------------------------------------" << endl;
   *report << "Report File Name        [" << reportFileName        << "]."  << endl;
   *report << "HTML File Name          [" << htmlFileName          << "]."  << endl;
   *report << "Source Root Directory   [" << sourceRootDirPath     << "]."  << endl;
   *report << "Ground Truch Directory  [" << groundTruthDirName    << "]."  << endl;
-  *report << "Config File Name        [" << configFileName        << "]."  << endl;
-  if  (config)
-  {
-    *report << "Model Type              [" << config->ModelTypeStr ()           << "]." << endl;
-    *report << "SVM Parameters          [" << config->ModelParameterCmdLine ()  << "]." << endl;
-    *report << "Num Hierarchial Levels  [" << config->NumHierarchialLevels  ()  << "]." << endl;
-    if  (config->OtherClass ())
-      *report << "Other Class             [" << config->OtherClass ()->Name ()    << "]." << endl;
-  }
-
   *report << "------------------------------------------------------------------------" << endl;
   *report << endl;
 
@@ -275,16 +229,11 @@ bool  GradeClassification::ProcessCmdLineParameter (const KKStr&  parmSwitch,
                                                     const KKStr&  parmValue
                                                    )
 {
+  bool  validParm = true;
+
   if  ((parmSwitch.EqualIgnoreCase ("-R"))  ||  (parmSwitch.EqualIgnoreCase ("-REPORT")))
   {
     reportFileName = parmValue;
-  }
-
-  else if  ((parmSwitch.EqualIgnoreCase ("-C"))       ||  
-            (parmSwitch.EqualIgnoreCase ("-CONFIG"))  ||
-            (parmSwitch.EqualIgnoreCase ("-CONFIGFILE")))
-  {
-    configFileName = parmValue;
   }
 
   else if  ((parmSwitch.EqualIgnoreCase ("-SOURCEDIR"))        ||  
@@ -308,10 +257,10 @@ bool  GradeClassification::ProcessCmdLineParameter (const KKStr&  parmSwitch,
 
   else
   {
-    PicesApplication::ProcessCmdLineParameter (parmSwitch, parmValue);
+    validParm = PicesApplication::ProcessCmdLineParameter (parmSwitch, parmValue);
   }
   
-  return  !Abort ();
+  return  validParm;
 }  /* ProcessCmdLineParameter */
 
 
@@ -324,27 +273,30 @@ bool  GradeClassification::ProcessCmdLineParameter (const KKStr&  parmSwitch,
  ******************************************************************************/
 void   GradeClassification::DisplayCommandLineParameters ()
 { 
-  log.Level (0) << "GradeClassification  -r <xxx>  -gt <xxxx>  -c <config file>"             << endl;
-  log.Level (0)                                                                              << endl;
-  log.Level (0) << "    -config  <Configuration File Name.>"                                 << endl;
-  log.Level (0) << "             Works in conjunction with '-GroundTruth'. It will build"    << endl;
-  log.Level (0) << "             a classifier using the training data specified in the"      << endl;
-  log.Level (0) << "             configuration file.   It will then classify all the images" << endl;
-  log.Level (0) << "             in the ground truth and grade.  It will build and grade"    << endl;
-  log.Level (0) << "             for each level of hierarchy."                               << endl;
-  log.Level (0)                                                                              << endl;
-  log.Level (0)                                                                              << endl;
-  log.Level (0) << "    -r       <Report File Name>,  Defaults to Command Line."             << endl;
-  log.Level (0)                                                                              << endl;
-  log.Level (0) << "    -s       <Sub-Directory of images to grade.>"                        << endl;
-  log.Level (0) << "             Specify this instead of a config file.  Images in this"     << endl;
-  log.Level (0) << "             directory will be graded against the GroundTruth"           << endl;
-  log.Level (0) << "             directory."                                                 << endl;
-  log.Level (0)                                                                              << endl;
-  log.Level (0) << "    -H       HTML report file."                                          << endl;
-  log.Level (0)                                                                              << endl;
-  log.Level (0) << "    -GroundTruth  <Sub-Directory where ground truth images are>"         << endl;
-}
+  DisplayCommandLineParameters ();
+  cout << endl
+       << "    -config     <FileName.>      Works in conjunction with '-GroundTruth'. It will"      << endl
+       << "                                 build a classifier using the training data specified"   << endl
+       << "                                 in the configuration file. It will then classify all"   << endl
+       << "                                 the images in the ground truth and grade.  It will"     << endl
+       << "                                 build and grade for each level of hierarchy."           << endl
+       << endl
+       << "    -r          <FileName>       Report Filename; defaults to StdOut (cout)."            << endl
+       << endl
+       << "    -s          <Dir-Path>       Sub-Directory of images to grade; Specify this instead" << endl
+       << "                                 of a config file.  Images in this directory will be"    << endl
+       << "                                 graded against the GroundTruth directory."              << endl
+       << endl
+       << "    -H          <File-Name>      File where a 'html' formated report will be written"    << endl
+       << "                                 to.  Will default to Report-Filename with '.html"       << endl
+       << "                                 extension."                                             << endl
+       << endl
+       << "    -GroundTruth <Dir-Path>      Sub-Directory where ground-truth images will be"        << endl
+       << "                                 stored.  Directory name will indicate class."           << endl
+       << endl;
+}  /* DisplayCommandLineParameters */
+
+
 
 // GradeClassification -gt D:\Pices\TrainingLibraries\oil  -s C:\temp\oil -r C:\temp\oil\OilGradingReport.txt
 
@@ -363,14 +315,11 @@ void  GradeClassification::Grade ()
 {
   log.Level (10) << "GradeClassification::Grade   Loading Ground Truth"  << endl;
 
-  db = new DataBase (log);
-
-  
   groundTruth = FeatureFileIOPices::Driver ()->LoadInSubDirectoryTree 
                       (groundTruthDirName, 
                        *mlClasses, 
                        true,             // true = useDirectoryNameForClassName
-                       db,
+                       DB (),
                        cancelFlag, 
                        false,            // false = don't rewiteRootFeatureFile 
                        log
@@ -415,7 +364,7 @@ void  GradeClassification::GradeSourceImagesAgainstGroundTruth ()
                           (sourceRootDirPath, 
                            *mlClasses,
                            true,              // true = useDirectoryNameForClassName
-                           db,
+                           DB (),
                            cancelFlag, 
                            false,             // rewiteRootFeatureFile (Don't update root feature file)
                            log

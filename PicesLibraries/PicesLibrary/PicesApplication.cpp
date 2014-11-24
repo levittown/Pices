@@ -18,20 +18,25 @@ using  namespace  std;
 using  namespace  KKU;
 
 
-
-
 #include "PicesApplication.h"
 #include "DataBase.h"
 #include "DataBaseServer.h"
+#include "FeatureFileIOPices.h"
+#include "FileDesc.h"
+#include "TrainingConfiguration2.h"
 using namespace MLL;
-
 
 
 
 PicesApplication::PicesApplication (RunLog&  _log):
   Application (_log),
-  db          (NULL),
-  dbServer    (NULL)
+  config             (NULL),
+  configFileName     (),
+  configFileFullPath (),
+  db                 (NULL),
+  dbServer           (NULL),
+  dataBaseRequired   (false),
+  fileDesc           (NULL)
 {
 }
 
@@ -39,9 +44,15 @@ PicesApplication::PicesApplication (RunLog&  _log):
 
 PicesApplication::PicesApplication ():
   Application (),
-  db          (NULL),
-  dbServer    (NULL)
+  config             (NULL),
+  configFileName     (),
+  configFileFullPath (),
+  db                 (NULL),
+  dbServer           (NULL),
+  dataBaseRequired   (false),
+  fileDesc           (NULL)
 {
+  fileDesc = FeatureFileIOPices::NewPlanktonFile (log);
 }
 
 
@@ -49,20 +60,29 @@ PicesApplication::PicesApplication ():
 
 PicesApplication::PicesApplication (const PicesApplication&  _application):
   Application (_application),
-  db          (NULL),
-  dbServer    (NULL)
+  config             (NULL),
+  configFileName     (_application.configFileName),
+  configFileFullPath (_application.configFileFullPath),
+  db                 (NULL),
+  dbServer           (NULL),
+  dataBaseRequired   (_application.dataBaseRequired),
+  fileDesc           (_application.fileDesc)
 {
   if  (_application.db)
     db = new DataBase (_application.db->Server (), log);
 
   if  (_application.dbServer)
     dbServer = new DataBaseServer (*_application.dbServer);
+
+  if  (_application.config)
+    config = new TrainingConfiguration2 (*config);
 }
 
 
 
 PicesApplication::~PicesApplication ()
 {
+  delete  config;    config   = NULL;
   delete  dbServer;  dbServer = NULL;
   delete  db;        db       = NULL;
 }
@@ -75,16 +95,47 @@ void  PicesApplication::InitalizeApplication (int32   argc,
                                              )
 {
   Application::InitalizeApplication (argc, argv);
+
+  if  (!configFileName.Empty ())
+  {
+    config = new TrainingConfiguration2 (fileDesc, configFileFullPath, log, true);
+    if  (!(config->FormatGood ()))
+    {
+      log.Level (-1) << endl
+                     << "PicesApplication::InitalizeApplication   ***ERROR***   Configuration file[" << configFileName << "] is not valid." << endl
+                     << endl;
+      Abort (true);
+    }
+  }
+
+  if  (dataBaseRequired)
+  {
+    if  (!db)
+    {
+      db = new DataBase (log);
+    }
+
+    if  (!db->Valid ())
+    {
+      log.Level (-1) << endl
+        << "PicesApplication::InitalizeApplication   ***ERROR***   A valid database connection is required for this application." << endl
+        << endl;
+      Abort (true);
+    }
+    else
+    {
+      if  (!dbServer)
+        dbServer = new DataBaseServer (*(db->Server ()));
+    }
+  }
 }
 
 
 
-const char*  PicesApplication::ApplicationName ()
+const char*  PicesApplication::ApplicationName ()  const
 {
   return  "PicesApplication";
 }  /* ApplicationName */
-
-
 
 
 
@@ -93,12 +144,21 @@ bool  PicesApplication::ProcessCmdLineParameter (const KKStr&  parmSwitch,
                                                  const KKStr&  parmValue
                                                 )
 {
-  if  (parmSwitch.EqualIgnoreCase ("-DataBase")  ||  parmSwitch.EqualIgnoreCase ("-DB"))
+  if  (parmSwitch.EqualIgnoreCase ("-DataBase")  ||  
+       parmSwitch.EqualIgnoreCase ("-DB")
+      )
     return ProcessDataBaseParameter (parmSwitch, parmValue);
+
+  else if  
+      (parmSwitch.EqualIgnoreCase ("-C")       ||  
+       parmSwitch.EqualIgnoreCase ("-CONFIG")  ||
+       parmSwitch.EqualIgnoreCase ("-CONFIGFILE")
+      )
+    return ProcessConfigFileParameter (parmSwitch, parmValue);
+
   else
     return Application::ProcessCmdLineParameter (parmSwitch, parmValue);
 }
-
 
 
 
@@ -149,6 +209,47 @@ bool  PicesApplication::ProcessDataBaseParameter (const KKStr&  parmSwitch,
 
 
 
+void  PicesApplication::DisplayCommandLineParameters ()
+{
+  Application::DisplayCommandLineParameters ();
+
+  cout << endl
+       << "    -DataBase  <DB-Description>  Specify the specific DB Server to connect to; 'DB-Description' will specify"  << endl
+       << "                                 which entry in the 'MySql.cfg' configuration file to get parameters from."    << endl
+       << "                                 This file is located in the ${PicesHomDir}\\Configurations directory."        << endl
+       << "                                 If parameter not specifoed will default to the last DataBase sertver"         << endl
+       << "                                 specified."                                                                   << endl
+       << endl
+       << "    -Config   <Config File>      Specify the name of teh Training Model Configuration file to use. These"      << endl
+       << "                                 files can be found in the   ${PicesHomeDir}\\DataFiles\\TrainingModels"       << endl
+       << "                                 subdirectory."                                                                << endl
+       << endl;
+}
+
+
+
+bool  PicesApplication::ProcessConfigFileParameter  (const KKStr&  parmSwitch, 
+                                                     const KKStr&  parmValue
+                                                    )
+{
+  configFileName = parmValue;
+  configFileFullPath = TrainingConfiguration2::GetEffectiveConfigFileName (configFileName);
+
+  bool  valid = TrainingConfiguration2::ConfigFileExists (configFileFullPath);
+
+  if  (!valid)
+  {
+    log.Level (-1) << endl
+      << "PicesApplication::ProcessConfigFileParameter   ***ERROR***  Configuration[" << configFileName << "]  Does not exist." << endl
+      << endl;
+  }
+
+  return  valid;
+}  /* ProcessConfigFileParameter*/
+
+
+
+
 DataBasePtr   PicesApplication::DB ()
 {
   if  (db == NULL)
@@ -160,14 +261,30 @@ DataBasePtr   PicesApplication::DB ()
 
 
 
-
 void  PicesApplication::PrintStandardHeaderInfo (ostream&  o)
 {
-  o << "Application     :" << ApplicationName    () << endl;
-  o << "Build Date/Time :" << BuildDate          () << endl;
-  o << "Run Date/Time   :" << osGetLocalDateTime () << endl; 
-  o << "Host Name       :" << osGetHostName      () << endl;
-  o << "User Name       :" << osGetUserName      () << endl;
+  o << "Application:"     << "\t" << ApplicationName    () << endl;
+  o << "Build Date/Time"  << "\t" << BuildDate          () << endl;
+  o << "Run Date/Time"    << "\t" << osGetLocalDateTime () << endl; 
+  o << "Host Name"        << "\t" << osGetHostName      () << endl;
+  o << "User Name"        << "\t" << osGetUserName      () << endl;
   if  (db)
-    o << "DataBase        :" << db->ServerDescription () << endl;
+    o << "DataBase"       << "\t" << db->ServerDescription () << endl;
+
+  if  (!configFileName.Empty ())
+    o << "ConfigFileName" << "\t" << configFileName << endl;
+
+  if  (!configFileFullPath.Empty ())
+  {
+    o << "ConfigFileFullPath"    << "\t" << configFileFullPath << endl;
+    o << "Config File TimeStamp" << "\t" << osGetFileDateTime (configFileFullPath) << endl;
+  }
+  if  (config)
+  {
+    o << "Model Type"              << "\t" << config->ModelTypeStr          ()  << endl;
+    o << "SVM Parameters"          << "\t" << config->ModelParameterCmdLine ()  << endl;
+    o << "Num Hierarchial Levels"  << "\t" << config->NumHierarchialLevels  ()  << endl;
+    if  (config->OtherClass ())
+      o << "Other Class"  << "\t" << config->OtherClass ()->Name () << endl;
+  }
 }  /* PrintStandardHeaderInfo */

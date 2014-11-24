@@ -1,7 +1,7 @@
 #ifndef  _MERGEFEATUREFILES_
 #define  _MERGEFEATUREFILES_
 
-#include "Application.h"
+#include "PicesApplication.h"
 #include "DataBase.h"
 #include "FeatureFileIO.h"
 #include "MLClass.h"
@@ -14,7 +14,7 @@
 
 
 
-class  MergeFeatureFiles: public Application
+class  MergeFeatureFiles:  public PicesApplication
 {
 public:
   typedef  KKU::uchar  uchar;
@@ -22,20 +22,25 @@ public:
   typedef  KKU::ulong  ulong;
   typedef  KKU::ushort ushort;
 
-  MergeFeatureFiles (int     argc, 
-                     char**  argv
-                    );
+  MergeFeatureFiles ();
 
   ~MergeFeatureFiles ();
+
+  virtual 
+  const char*  ApplicationName () const  {return  "MergeFeatureFiles";}
+
+  virtual
+  void  InitalizeApplication (int32   argc,
+                              char**  argv
+                             );
 
   void  Main ();
 
 private:
   void   DisplayCommandLineParameters ();
 
-  bool   ProcessCmdLineParameter (char    parmSwitchCode, 
-                                  KKStr   parmSwitch, 
-                                  KKStr   parmValue
+  bool   ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                  const KKStr&  parmValue
                                  );
 
   FeatureFileIOPtr           currentDefaultFormat;    // Will change as each '-format' option is processed.

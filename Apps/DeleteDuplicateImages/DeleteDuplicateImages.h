@@ -21,7 +21,7 @@ public:
                              );
 
   virtual const 
-  char*    ApplicationName ()  {return  "DeleteDuplicateImages";}
+  char*    ApplicationName () const   {return  "DeleteDuplicateImages";}
 
 
   void     DeleteImages ();
