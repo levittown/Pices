@@ -1,12 +1,12 @@
 #ifndef  _SPATIALANALYSIS_
 #define  _SPATIALANALYSIS_
 
-#include  "Application.h"
-#include  "DataBase.h"
-#include  "RandomNumGenerator.h"
-#include  "RunLog.h"
-#include  "SipperFile.h"
-#include  "Str.h"
+#include "PicesApplication.h"
+#include "DataBase.h"
+#include "RandomNumGenerator.h"
+#include "RunLog.h"
+#include "SipperFile.h"
+#include "Str.h"
 
 
 
@@ -26,19 +26,23 @@ typedef  MLClassConstList*  MLClassConstListPtr;
 
 
 
-class  SpatialAnalysis: public Application
+class  SpatialAnalysis:  public PicesApplication
 {
 public:
   typedef  KKU::uint  uint;
 
   typedef  enum  {NullStat, BQVStat, Davis92Stat, PQVStat, TTLQCStat}  StatType;
 
-  SpatialAnalysis(int     argc, 
-                  char**  argv
-                 );
+  SpatialAnalysis();
 
   ~SpatialAnalysis();
 
+	virtual const char* ApplicationName ()  const  {return  "SpatialAnalysis";}
+
+  virtual
+  void  InitalizeApplication (int32   argc,
+                              char**  argv
+                             );
 
   void   RunSpatialAnalysis ();
 
@@ -48,8 +52,6 @@ public:
 
 
 private:
-
-
   KKStr  StatTypeToStr (StatType  statType);
 
   StatType  StatTypeFromStr (KKStr  s);
@@ -121,9 +123,8 @@ private:
                                     );
 
  
- bool   ProcessCmdLineParameter (char    parmSwitchCode, 
-                                 KKStr   parmSwitch, 
-                                 KKStr   parmValue
+ bool   ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                 const KKStr&  parmValue
                                 );
 
   void   RandomizeLocations (ImageFeaturesList&  examples,
@@ -143,7 +144,6 @@ private:
   uint                  upperConfIntervalIdx;
 
   ImageFeaturesListPtr  data;
-  DataBasePtr           dbConn;
   float                 defaultFlowRate;
   float                 defaultScanRate;
   InstrumentDataListPtr instrumentData;

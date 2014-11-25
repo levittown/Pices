@@ -48,21 +48,46 @@ using namespace  MLL;
 
 // -FeatureFile C:\Users\kkramer\SipperProject\Papers\BinaryFeatureSelection\Experiments\ETP08\etp_08_Train.data  -Format Pices
 
-FeatureFileStats::FeatureFileStats (int argc, char**  argv) :
-  Application    (argc, argv),
+FeatureFileStats::FeatureFileStats () :
+  PicesApplication (),
 
   data           (NULL),
   cancelFlag     (false),
-  fileDesc       (NULL),
-  mlClasses   (),
+  mlClasses      (),
   report         (NULL),
   reportFile     (NULL),
   srcFileName    (),
   srcFileFormat  (FeatureFileIOPices::Driver ())
-
 {
-	ProcessCmdLineParameters (argc, argv);
+}  /* FeatureFileStats */
 
+
+
+
+
+
+/******************************************************************************
+ * Destructor
+ ******************************************************************************/
+FeatureFileStats::~FeatureFileStats ()
+{
+  if  (reportFile)
+  {
+     reportFile->close ();
+	 delete  reportFile;
+  }
+
+  delete  data;
+}
+
+
+
+
+void  FeatureFileStats::InitalizeApplication (int32   argc,
+                                              char**  argv
+                                             )
+{
+  PicesApplication::InitalizeApplication (argc, argv);
 	if  (Abort ())
 	{
 		DisplayCommandLineParameters ();
@@ -82,8 +107,6 @@ FeatureFileStats::FeatureFileStats (int argc, char**  argv) :
     osWaitForEnter ();
     return;
   }
-
-
 
   if  (reportFileName.Empty ())
 	{
@@ -121,35 +144,18 @@ FeatureFileStats::FeatureFileStats (int argc, char**  argv) :
 
   fileDesc = data->FileDesc ();
 
+  PrintStandardHeaderInfo (*report);
 
   *report << endl;
-  *report << "------------------------------------------------------------------------"  << endl;
-  *report << "Run Date           [" << osGetLocalDateTime ()                  << "]."    << endl;
-  *report << "Source File Name   [" << srcFileName                            << "]."    << endl;
-  *report << "Source File Format [" << srcFileFormat->DriverName ()           << "]."    << endl;
-  *report << "Report File Name   [" << reportFileName                         << "]."    << endl;
-  *report << "------------------------------------------------------------------------"  << endl;
+  *report << "-----------------------------------------------------------"  << endl;
+  *report << "Source File Name"   << "\t" << srcFileName                    << endl;
+  *report << "Source File Format" << "\t" << srcFileFormat->DriverName ()   << endl;
+  *report << "Report File Name"   << "\t" << reportFileName                 << endl;
+  *report << "-----------------------------------------------------------"  << endl;
   *report << endl;
-}  /* FeatureFileStats */
+}  /* InitalizeApplication */
 
 
-
-
-
-
-/******************************************************************************
- * Destructor
- ******************************************************************************/
-FeatureFileStats::~FeatureFileStats ()
-{
-  if  (reportFile)
-  {
-     reportFile->close ();
-	 delete  reportFile;
-  }
-
-  delete  data;
-}
 
 
 
@@ -157,24 +163,19 @@ FeatureFileStats::~FeatureFileStats ()
  * ProcessCmdLineParamters
  * DESC: Extracts parameters from the command line
  ******************************************************************************/
-bool  FeatureFileStats::ProcessCmdLineParameter (char    parmSwitchCode, 
-                                                     KKStr  parmSwitch, 
-                                                     KKStr  parmValue
-                                                    )
+bool  FeatureFileStats::ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                                 const KKStr&  parmValue
+                                                )
 {
-  KKStr  parmValueUpper (parmValue);
-  parmValueUpper.Upper ();
-
-  parmSwitch.Upper ();
-
-  if  ((parmSwitch == "-SrcFileFormat") ||
-       (parmSwitch == "-SFF")           ||
-       (parmSwitch == "-FORMAT")        ||
-       (parmSwitch == "-F")             ||
-       (parmSwitch == "-INPUTFORMAT")   ||
-       (parmSwitch == "-IF")            ||
-       (parmSwitch == "-INPUTFORMAT")   ||
-       (parmSwitch == "-IFF")         
+  bool  validParm = true;
+  if  (parmSwitch.EqualIgnoreCase ("-SrcFileFormat") ||
+       parmSwitch.EqualIgnoreCase ("-SFF")           ||
+       parmSwitch.EqualIgnoreCase ("-FORMAT")        ||
+       parmSwitch.EqualIgnoreCase ("-F")             ||
+       parmSwitch.EqualIgnoreCase ("-INPUTFORMAT")   ||
+       parmSwitch.EqualIgnoreCase ("-IF")            ||
+       parmSwitch.EqualIgnoreCase ("-INPUTFORMAT")   ||
+       parmSwitch.EqualIgnoreCase ("-IFF")         
       )
   {
     srcFileFormat = FeatureFileIO::FileFormatFromStr (parmValue, 
@@ -184,42 +185,38 @@ bool  FeatureFileStats::ProcessCmdLineParameter (char    parmSwitchCode,
     if  (srcFileFormat == NULL)
     {
       log.Level (-1) << endl
-                     << endl
                      << "Invalid Source File Format Specified[" << parmValue << endl
                      << endl
                      << "Valid Formats are <" << FeatureFileIO::FileFormatsReadOptionsStr () << ">" << endl
                      << endl;
       Abort (true);
+      validParm = false;
     }
   }  
 
 
-  else if  ((parmSwitch == "-R")  ||  (parmSwitch == "-REPORT"))
+  else if  (parmSwitch.EqualIgnoreCase ("-R")  ||  parmSwitch.EqualIgnoreCase ("-REPORT"))
 		reportFileName = parmValue;
 
  
-  else if  ((parmSwitch == "-FEATUREFILE")   ||
-            (parmSwitch == "-FF")            ||
-            (parmSwitch == "-SRC")           ||
-            (parmSwitch == "-S")             ||
-            (parmSwitch == "-SOURCFILE")     ||
-            (parmSwitch == "-SF")            ||
-            (parmSwitch == "-SOURCFILENAME") ||
-            (parmSwitch == "-SFN")
+  else if  (parmSwitch.EqualIgnoreCase ("-FEATUREFILE")   ||
+            parmSwitch.EqualIgnoreCase ("-FF")            ||
+            parmSwitch.EqualIgnoreCase ("-SRC")           ||
+            parmSwitch.EqualIgnoreCase ("-S")             ||
+            parmSwitch.EqualIgnoreCase ("-SOURCFILE")     ||
+            parmSwitch.EqualIgnoreCase ("-SF")            ||
+            parmSwitch.EqualIgnoreCase ("-SOURCFILENAME") ||
+            parmSwitch.EqualIgnoreCase ("-SFN")
            )
     srcFileName = parmValue;
 
-
   else
   {
-    log.Level (-1) << endl
-                   << "ProcessCmdLineParameter    Invalid Parameter[" << parmSwitch << "]" << endl
-                   << endl;
-    Abort (true);
+    validParm = PicesApplication::ProcessCmdLineParameter (parmSwitch, parmValue);
   }
 
 
-	return  !Abort ();
+	return  validParm;
 }  /* ProcessCmdLineParameter */
 
 
@@ -280,7 +277,8 @@ int  main (int     argc,
            char**  argv
           )
 {
-  FeatureFileStats fileConverter (argc, argv);
+  FeatureFileStats fileConverter;
+  fileConverter.InitalizeApplication (argc, argv);
   if  (!fileConverter.Abort ())
     fileConverter.ReportStats ();
 }

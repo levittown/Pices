@@ -1,7 +1,7 @@
 #ifndef  _FEATUREFILESTATS_
 #define  _FEATUREFILESTATS_
 
-#include  "Application.h"
+#include  "PicesApplication.h"
 #include  "RunLog.h"
 #include  "Str.h"
 
@@ -17,34 +17,33 @@ typedef  FeatureVectorList*  FeatureVectorListPtr;
 
 
 
-class  FeatureFileStats: public Application
+class  FeatureFileStats: public PicesApplication
 {
 public:
 
-	FeatureFileStats (int     argc, 
-                    char**  argv
-                   );
+	FeatureFileStats ();
 
 	~FeatureFileStats();
 
-	virtual const char* ApplicationName ()  {return  "FeatureFileStats";}
+	virtual const char* ApplicationName ()  const  {return  "FeatureFileStats";}
+
+  virtual
+  void  InitalizeApplication (int32   argc,
+                              char**  argv
+                             );
 
   void  ReportStats ();
 
 	void	DisplayCommandLineParameters ();
 
-	virtual bool ProcessCmdLineParameter (
-                                        char    parmSwitchCode, 
-                                        KKStr  parmSwitch, 
-                                        KKStr  parmValue
+	virtual bool ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                        const KKStr&  parmValue
                                        );
 private:
   bool                  cancelFlag;
   FeatureVectorListPtr  data;
 
-  FileDescPtr           fileDesc;
-
-  MLClassConstList   mlClasses;
+  MLClassConstList      mlClasses;
 
 	ostream*              report;
 	ofstream*             reportFile;

@@ -2,42 +2,44 @@
 #define  _RANDOMSPLITS_
 
 
-#include  "Application.h"
-#include  "FeatureVector.h"
-#include  "JobManager.h"
-#include  "Orderings.h"
+#include "FeatureVector.h"
+#include "Orderings.h"
+#include "PicesApplication.h"
+#include "JobManager.h"
 
 
 using namespace  KKU;
 
-class RandomSplits: public Application
+class RandomSplits:  public PicesApplication
 {
 public:
   typedef  RandomSplits*  RandomSplitsPtr;
 
-  RandomSplits (int      argc, 
-                char**   argv,
-                RunLog&  _log
-               );
+  RandomSplits ();
 
+  RandomSplits (RunLog&  log);
 
   ~RandomSplits ();
 
+  virtual
+  void  InitalizeApplication (int32   argc,
+                              char**  argv
+                             );
+
+	virtual const char* ApplicationName ()  const  {return  "RandomSplits";}
 
   void  Run ();
 
 
 private:
   // Will be classed by base class  'Application'  
-  bool  ProcessCmdLineParameter (char    parmSwitchCode, 
-                                 KKStr   parmSwitch, 
-                                 KKStr   parmValue
+  bool  ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                 const KKStr&  parmValue
                                 );
 
   void  DisplayCommandLineParameters ();
 
 
-  KKStr              configFileName;
   KKStr              dataFileName;
   FeatureFileIOPtr   format;
   int                numSplits;

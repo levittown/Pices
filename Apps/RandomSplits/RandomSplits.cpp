@@ -1,43 +1,41 @@
-#include  "FirstIncludes.h"
+#include "FirstIncludes.h"
 
-#include  <stdlib.h>
-#include  <memory>
-#include  <math.h>
+#include <stdlib.h>
+#include <memory>
+#include <math.h>
+#include <map>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <vector>
 
-#include  <map>
-#include  <string>
-#include  <iostream>
-#include  <fstream>
-#include  <vector>
-
-#include  "MemoryDebug.h"
-#include  "BasicTypes.h"
+#include "MemoryDebug.h"
+#include "BasicTypes.h"
 
 using namespace std;
 
-#include  "Compressor.h"
-#include  "OSservices.h"
-#include  "Str.h"
+#include "Compressor.h"
+#include "OSservices.h"
+#include "Str.h"
 using namespace KKU;
 
-#include  "InstrumentDataFileManager.h"
+#include "InstrumentDataFileManager.h"
 
-#include  "DataBase.h"
-#include  "FeatureFileIO.h"
-#include  "FeatureFileIOPices.h"
-#include  "FileDesc.h"
-#include  "MLClass.h"
-#include  "ImageFeatures.h"
+#include "DataBase.h"
+#include "FeatureFileIO.h"
+#include "FeatureFileIOPices.h"
+#include "FileDesc.h"
+#include "MLClass.h"
+#include "ImageFeatures.h"
 using namespace MLL;
 
-#include  "JobManager.h"
+#include "JobManager.h"
 using namespace  JobManagment;
 
 
-#include  "RandomSplitJob.h"
-#include  "RandomSplitJobManager.h"
-#include  "RandomSplits.h"
-
+#include "RandomSplits.h"
+#include "RandomSplitJob.h"
+#include "RandomSplitJobManager.h"
 
 
 // C:\Pices\DataFiles\FeatureSelection\Simple
@@ -48,27 +46,27 @@ using namespace  JobManagment;
 
 
 
-RandomSplits::RandomSplits (int      argc, 
-                            char**   argv,
-                            RunLog&  _log
-                           ):
-   Application    (argc, argv),
-
-   configFileName (),
+RandomSplits::RandomSplits ():
+   PicesApplication (),
    dataFileName   (),
    format         (FeatureFileIOPices::Driver ()),
    numFolds       (10),
    numSplits      (30),
    restart        (false),
    splitFraction  (0.7f)
-
 {
-  ProcessCmdLineParameters (argc, argv);
-  if  (Abort ())
-  {
-    DisplayCommandLineParameters ();
-    return;
-  }
+}
+
+
+   RandomSplits::RandomSplits (RunLog&  log):
+   PicesApplication (log),
+   dataFileName   (),
+   format         (FeatureFileIOPices::Driver ()),
+   numFolds       (10),
+   numSplits      (30),
+   restart        (false),
+   splitFraction  (0.7f)
+{
 }
 
 
@@ -79,12 +77,29 @@ RandomSplits::~RandomSplits ()
 
 
 
+void  RandomSplits::InitalizeApplication (int32   argc,
+                                          char**  argv
+                                         )
+{
+  ConfigRequired (true);
+  PicesApplication::InitalizeApplication (argc, argv);
+	if  (Abort ())
+	{
+		DisplayCommandLineParameters ();
+		return;
+  }
+}  /* InitalizeApplication */
+
+
+
+
 void  RandomSplits::DisplayCommandLineParameters ()
 {
-  cout << endl << endl << endl << endl
+
+  PicesApplication::DisplayCommandLineParameters ();
+  cout << endl << endl
        << "RandomSplits   -c <ConfigFileName>  -DataFile <FileName>  -format <Data File Format>  -NumSplits <Defaults to 30>  -SplitPercentage <Defaults to 70%>"  << endl
        << endl
-       << "   -Config          : Config File Name"                                << endl
        << "   -DataFile        : Name a file that contains all the feature data." << endl
        << "   -Format          : " << FeatureFileIO::FileFormatsReadOptionsStr () << endl
        << "   -NumFolds        : Number of folds used to make Bias Matrix"        << endl
@@ -95,28 +110,23 @@ void  RandomSplits::DisplayCommandLineParameters ()
 
 
 
-bool  RandomSplits::ProcessCmdLineParameter (char    parmSwitchCode, 
-                                             KKStr   parmSwitch, 
-                                             KKStr   parmValue
+bool  RandomSplits::ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                             const KKStr&  parmValue
                                             )
 {
-  KKStr  parmValueUpper (parmValue);
-  parmValueUpper.Upper ();
+  bool  validParm = true;
 
-  parmSwitch.Upper ();
-
-  if  ((parmSwitch == "-CONFIGFILENAME")  ||  (parmSwitch == "-C")  ||  (parmSwitch == "-CONFIG"))
-  {
-    configFileName = parmValue;
-  }
-
-
-  else if  ((parmSwitch == "-DATAFILE")  ||  (parmSwitch == "-DF"))
+  if  (parmSwitch.EqualIgnoreCase ("-DATAFILE")  ||
+       parmSwitch.EqualIgnoreCase ("-DF")
+      )
   {
     dataFileName = parmValue;
   }
 
-  else if  ((parmSwitch == "-F")  ||  (parmSwitch == "-FORMAT"))
+  else if  
+      (parmSwitch.EqualIgnoreCase ("-F")  ||
+       parmSwitch.EqualIgnoreCase ("-FORMAT")
+      )
   {
     format = FeatureFileIO::FileFormatFromStr (parmValue);
     if  (!format)
@@ -125,14 +135,16 @@ bool  RandomSplits::ProcessCmdLineParameter (char    parmSwitchCode,
                      << "ProcessCmdLineParameter   ***ERROR***    No such format as[" << parmValue<< "]." << endl
                      << endl;
       Abort (true);
+      validParm = false;
     }
   }
 
-  else if  (parmSwitch.EqualIgnoreCase ("-NumFolds")   ||  
-            parmSwitch.EqualIgnoreCase ("-NF")         ||  
-            parmSwitch.EqualIgnoreCase ("-NumOfFolds") ||
-            parmSwitch.EqualIgnoreCase ("-NOF")
-           )
+  else if
+      (parmSwitch.EqualIgnoreCase ("-NumFolds")   ||  
+       parmSwitch.EqualIgnoreCase ("-NF")         ||  
+       parmSwitch.EqualIgnoreCase ("-NumOfFolds") ||
+       parmSwitch.EqualIgnoreCase ("-NOF")
+      )
   {
     numFolds =  parmValue.ToInt ();
     if  ((numFolds != 0)  &&  (numFolds < 2))
@@ -142,36 +154,34 @@ bool  RandomSplits::ProcessCmdLineParameter (char    parmSwitchCode,
                      << "                                         Must be '0' or greter than '1'." << endl
                      << endl;
       Abort (true);
+      validParm = false;
     }
   }
 
-  else if  ((parmSwitch == "-NUMSPLITS")  ||  (parmSwitch == "-NS")  ||  (parmSwitch == "-SPLITS"))
+  else if  
+      (parmSwitch.EqualIgnoreCase ("-NUMSPLITS")  ||
+       parmSwitch.EqualIgnoreCase ("-NS")         ||
+       parmSwitch.EqualIgnoreCase ("-SPLITS")
+      )
   {
     numSplits =  parmValue.ToInt ();
   }
 
 
-  else if  ((parmSwitch == "-SPLITPERCENTAGE")  ||  (parmSwitch == "-SP"))
+  else if
+      (parmSwitch.EqualIgnoreCase ("-SPLITPERCENTAGE")  ||
+       parmSwitch.EqualIgnoreCase ("-SP")
+      )
   {
-    bool  percentage = false;
-    if  (parmValue.LastChar () == '%')
+    splitFraction = parmValue.ToPercentage () / 100.0f;
+    if  (splitFraction >= 1.0f)
     {
-      percentage = true;
-      parmValue.ChopLastChar ();
-    }
-    splitFraction = parmValue.ToFloat ();
-    if  (percentage)
-      splitFraction = splitFraction / 100.0f;
-    else
-    {
-      if  (splitFraction >= 1.0f)
-      {
-        log.Level (-1) << endl << endl
-                       << "ProcessCmdLineParameter    ***ERROR***     Invalid Split Percentage[" << splitFraction << "]"  << endl
-                       << endl
-                       << "     If you want to enter as percentage include a '%' sign otherwise it is assumed to be a fraction." << endl
-                       << endl;
-      }
+      log.Level (-1) << endl
+        << "ProcessCmdLineParameter    ***ERROR***     Invalid Split Percentage[" << splitFraction << "]"  << endl
+        << endl
+        << "     If you want to enter as percentage include a '%' sign otherwise it is assumed to be a fraction." << endl
+        << endl;
+      Abort (true);
     }
   }
 
@@ -183,18 +193,11 @@ bool  RandomSplits::ProcessCmdLineParameter (char    parmSwitchCode,
 
   else
   {
-    log.Level (-1) << endl << endl
-                   << "ProcessCmdLineParameter    ***ERROR***" << endl
-                   << endl
-                   << "             Invalid Parameter[" << parmSwitch << "]" << endl
-                   << endl;
-    Abort (true);
+    validParm = PicesApplication::ProcessCmdLineParameter (parmSwitch, parmValue);
   }
 
-
-	return  !Abort ();
+	return  validParm;
 }  /* ProcessCmdLineParameter */
-
 
 
 
@@ -234,7 +237,8 @@ int  main (int     argc,
   // Need to register the different types of Jobs.
   Job::RegisterConstructor ("RandomSplitJob",  RandomSplitJob::CreateEmptyInstance);
   
-  RandomSplits  application (argc, argv, log);
+  RandomSplits  application (log);
+  application.InitalizeApplication (argc, argv);
   if  (!application.Abort ())
   {
     application.Run ();

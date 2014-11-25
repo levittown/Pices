@@ -46,31 +46,46 @@ using namespace  MLL;
 
 
 
-RipOutClass::RipOutClass (int argc, char**  argv) :
-  Application (argc, argv),
-
-  cancelFlag        (false),
-  classesToRipOut   (),
-  destFileName      (),
-  destImages        (NULL),
-  fileDesc          (NULL),
-  mlClasses      (),
-  inFileFormat      (FeatureFileIOPices::Driver ()),
-  numOfFolds        (10),
-  outFileFormat     (FeatureFileIOPices::Driver ()),
-  srcFileName       (),
-  srcImages         (NULL),
-  stratify          (false),
-  successful        (true)
-
+RipOutClass::RipOutClass ():
+  PicesApplication (),
+  cancelFlag      (false),
+  classesToRipOut (),
+  destFileName    (),
+  destImages      (NULL),
+  mlClasses       (),
+  inFileFormat    (FeatureFileIOPices::Driver ()),
+  numOfFolds      (10),
+  outFileFormat   (FeatureFileIOPices::Driver ()),
+  srcFileName     (),
+  srcImages       (NULL),
+  stratify        (false),
+  successful      (true)
 {
-  ProcessCmdLineParameters (argc, argv);
+}
 
-  if  (Abort ())
-  {
-    DisplayCommandLineParameters ();
-    return;
-  }
+
+
+
+/******************************************************************************
+ * Destructor                                                                 *
+ ******************************************************************************/
+RipOutClass::~RipOutClass ()
+{
+  delete  srcImages;
+  delete  destImages;
+}
+
+
+void  RipOutClass::InitalizeApplication (int32   argc,
+                                         char**  argv
+                                        )
+{
+  PicesApplication::InitalizeApplication (argc, argv);
+	if  (Abort ())
+	{
+		DisplayCommandLineParameters ();
+		return;
+	}
 
   if  (classesToRipOut.QueueSize () < 1)
   {
@@ -89,7 +104,6 @@ RipOutClass::RipOutClass (int argc, char**  argv) :
                    << "You must specify a Source File" << endl
                    << endl;
     DisplayCommandLineParameters ();
-    osWaitForEnter ();
     Abort (true);
     return;
   }
@@ -113,7 +127,6 @@ RipOutClass::RipOutClass (int argc, char**  argv) :
                    << "Error Loading SrcFile[" << srcFileName << "]" << endl
                    << endl;
     DisplayCommandLineParameters ();
-    osWaitForEnter ();
     Abort (true);
     return;
   }
@@ -170,9 +183,9 @@ RipOutClass::RipOutClass (int argc, char**  argv) :
   }
 
 
+  PicesApplication::PrintStandardHeaderInfo (cout);
   cout  << endl;
   cout  << "------------------------------------------------------------------------" << endl;
-  cout  << "Run Date        [" << osGetLocalDateTime ()                     << "]."   << endl;
   cout  << "SrcFileName     [" << srcFileName                               << "]."   << endl;
   cout  << "DestFileName    [" << destFileName                              << "]."   << endl;
   cout  << "Classes         [" << classesToRipOut.ToCommaDelimitedStr ()    << "]."   << endl;
@@ -183,19 +196,12 @@ RipOutClass::RipOutClass (int argc, char**  argv) :
     cout <<  "NumOfFolds      [" << numOfFolds                              << "]."   << endl;
   cout  << "------------------------------------------------------------------------" << endl;
   cout  << endl;
-}
+
+
+}  /* InitalizeApplication */
 
 
 
-
-/******************************************************************************
- * Destructor                                                                 *
- ******************************************************************************/
-RipOutClass::~RipOutClass ()
-{
-  delete  srcImages;
-  delete  destImages;
-}
 
 
 
@@ -203,16 +209,16 @@ RipOutClass::~RipOutClass ()
  * ProcessCmdLineParamters
  * DESC: Extracts parameters from the command line
  ******************************************************************************/
-bool  RipOutClass::ProcessCmdLineParameter (
-                           char    parmSwitchCode, 
-                           KKStr   parmSwitch, 
-                           KKStr   parmValue
-                          )
+bool  RipOutClass::ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                            const KKStr&  parmValue
+                                           )
 {
-  parmSwitch.Upper ();
+  bool  parmValid = true;
 
-
-  if  ((parmSwitch == "-CN")  ||  (parmSwitch == "-CLASSNAME")  ||  (parmSwitch == "-CLASS"))
+  if  (parmSwitch.EqualIgnoreCase ("-CN")         ||
+       parmSwitch.EqualIgnoreCase ("-CLASSNAME")  ||
+       parmSwitch.EqualIgnoreCase ("-CLASS")
+      )
   {
     if  (parmValue.Empty ())
     {
@@ -222,6 +228,7 @@ bool  RipOutClass::ProcessCmdLineParameter (
                      << endl
                      << endl;
       Abort (true);
+      parmValid = false;
     }
     else
     {
@@ -229,17 +236,16 @@ bool  RipOutClass::ProcessCmdLineParameter (
     }
   }
 
-
-  else if  ((parmSwitch == "-DEST")         ||
-            (parmSwitch == "-D")            ||
-            (parmSwitch == "-DESTFILE")     ||  
-            (parmSwitch == "-DF")           ||  
-            (parmSwitch == "-D")            ||
-            (parmSwitch == "-DESTFILENAME") ||  
-            (parmSwitch == "-DFN")
-           )
+  else if  
+      (parmSwitch.EqualIgnoreCase ("-DEST")         ||
+       parmSwitch.EqualIgnoreCase ("-D")            ||
+       parmSwitch.EqualIgnoreCase ("-DESTFILE")     ||  
+       parmSwitch.EqualIgnoreCase ("-DF")           ||  
+       parmSwitch.EqualIgnoreCase ("-D")            ||
+       parmSwitch.EqualIgnoreCase ("-DESTFILENAME") ||  
+       parmSwitch.EqualIgnoreCase ("-DFN")
+      )
     destFileName = parmValue;
-
 
   else if  ((parmSwitch == "-F")  ||  (parmSwitch == "-FORMAT"))
   {
@@ -250,22 +256,23 @@ bool  RipOutClass::ProcessCmdLineParameter (
     if  (inFileFormat == NULL)
     {
       log.Level (-1) << endl
-                     << endl
-                     << "Invalid File Format Specified[" << parmValue << endl
-                     << endl
-                     << "Valid Formats are <" << FeatureFileIO::FileFormatsReadAndWriteOptionsStr () << ">" << endl
-                     << endl;
+        << "Invalid File Format Specified[" << parmValue << endl
+        << endl
+        << "Valid Formats are <" << FeatureFileIO::FileFormatsReadAndWriteOptionsStr () << ">" << endl
+        << endl;
       Abort (true);
+      parmValid = false;
     }
     outFileFormat = inFileFormat;
   }
 
 
-  else if  ((parmSwitch == "-DESTFORMAT")     ||  
-            (parmSwitch == "-DF")             ||  
-            (parmSwitch == "-DESTFILEFORMAT") ||
-            (parmSwitch == "-DFF") 
-           )
+  else if
+      (parmSwitch.EqualIgnoreCase ("-DESTFORMAT")     ||  
+       parmSwitch.EqualIgnoreCase ("-DF")             ||  
+       parmSwitch.EqualIgnoreCase ("-DESTFILEFORMAT") ||
+       parmSwitch.EqualIgnoreCase ("-DFF") 
+      )
   {
     outFileFormat = FeatureFileIO::FileFormatFromStr (parmValue, 
                                                       false,      // Don't care if valid read format
@@ -274,33 +281,35 @@ bool  RipOutClass::ProcessCmdLineParameter (
     if  (outFileFormat == NULL)
     {
       log.Level (-1) << endl
-                     << endl
-                     << "Invalid Write File Format Specified[" << parmValue << endl
-                     << endl
-                     << "Valid Formats are <" << FeatureFileIO::FileFormatsWrittenOptionsStr () << ">" << endl
-                     << endl;
+        << "Invalid Write File Format Specified[" << parmValue << endl
+        << endl
+        << "Valid Formats are <" << FeatureFileIO::FileFormatsWrittenOptionsStr () << ">" << endl
+        << endl;
       Abort (true);
+      parmValid = false;
     }
   }
 
 
-  else if  ((parmSwitch == "-SRC")            ||  
-            (parmSwitch == "-SOURCFILE")      ||  
-            (parmSwitch == "-SRCFILE")        ||  
-            (parmSwitch == "-SF")             ||  
-            (parmSwitch == "-SOURCFILENAME")  ||  
-            (parmSwitch == "-SRCFILENAME")    ||  
-            (parmSwitch == "-SFN")            ||  
-            (parmSwitch == "-S")
-           )
+  else if  
+      (parmSwitch.EqualIgnoreCase ("-SRC")            ||  
+       parmSwitch.EqualIgnoreCase ("-SOURCFILE")      ||  
+       parmSwitch.EqualIgnoreCase ("-SRCFILE")        ||  
+       parmSwitch.EqualIgnoreCase ("-SF")             ||  
+       parmSwitch.EqualIgnoreCase ("-SOURCFILENAME")  ||  
+       parmSwitch.EqualIgnoreCase ("-SRCFILENAME")    ||  
+       parmSwitch.EqualIgnoreCase ("-SFN")            ||  
+       parmSwitch.EqualIgnoreCase ("-S")
+      )
     srcFileName = parmValue;
 
 
-  else if  ((parmSwitch == "-SRCFORMAT")     ||  
-            (parmSwitch == "-SF")            ||  
-            (parmSwitch == "-SRCFILEFORMAT") ||  
-            (parmSwitch == "-SFF")          
-           )
+  else if
+      (parmSwitch.EqualIgnoreCase ("-SRCFORMAT")     ||  
+       parmSwitch.EqualIgnoreCase ("-SF")            ||  
+       parmSwitch.EqualIgnoreCase ("-SRCFILEFORMAT") ||  
+       parmSwitch.EqualIgnoreCase ("-SFF")          
+      )
   {
     inFileFormat = FeatureFileIO::FileFormatFromStr (parmValue, 
                                                      true,      // Valid Read Format
@@ -309,16 +318,16 @@ bool  RipOutClass::ProcessCmdLineParameter (
     if  (inFileFormat == NULL)
     {
       log.Level (-1) << endl
-                     << endl
-                     << "Invalid Input File Format Specified[" << parmValue << endl
-                     << endl
-                     << "Valid Formats are <" << FeatureFileIO::FileFormatsReadOptionsStr () << ">" << endl
-                     << endl;
+        << "Invalid Input File Format Specified[" << parmValue << endl
+        << endl
+        << "Valid Formats are <" << FeatureFileIO::FileFormatsReadOptionsStr () << ">" << endl
+        << endl;
       Abort (true);
+      parmValid = false;
     }
   }  
 
-  else if  (parmSwitch == "-STRATIFY")
+  else if  (parmSwitch.EqualIgnoreCase ("-STRATIFY"))
   {
     stratify = true;
     if  (!parmValue.Empty ())
@@ -331,14 +340,18 @@ bool  RipOutClass::ProcessCmdLineParameter (
                        << "Stratify[" << numOfFolds << "] is number of folds and must be greater than 0." << endl
                        << endl;
         Abort (true);
+        parmValid = false;
       }
     }
   }
-  
+
+  else
+  {
+    parmValid = PicesApplication::ProcessCmdLineParameter (parmSwitch, parmValue);
+  }
   
   return  !Abort ();
-}
-
+}  /* ProcessCmdLineParameter */
 
 
 
@@ -348,6 +361,7 @@ bool  RipOutClass::ProcessCmdLineParameter (
  ******************************************************************************/
 void   RipOutClass::DisplayCommandLineParameters ()
 {
+  PicesApplication::DisplayCommandLineParameters ();
   cout << "RipOutClass  "                                                                            << endl
        << "       -Src        <Source File Name>"                                                    << endl
        << "       -Dest       <Destination File Name>  Optional"                                     << endl
@@ -506,7 +520,8 @@ int  main (int     argc,
            char**  argv
           )
 {
-  RipOutClass  ripOutClass (argc, argv);
+  RipOutClass  ripOutClass;
+  ripOutClass.InitalizeApplication (argc, argv);
   if  (!ripOutClass.Abort ())
     ripOutClass.ExtractSpecifiedClass ();
 }  /* main */

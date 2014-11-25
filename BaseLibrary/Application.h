@@ -6,8 +6,8 @@
 #ifndef  _APPLICATION_
 #define  _APPLICATION_
 
-#include  "Str.h"
-#include  "RunLog.h"
+#include "Str.h"
+#include "RunLog.h"
 
 /** 
  *@namespace  KKU

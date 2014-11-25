@@ -67,7 +67,7 @@ void  DeleteDuplicateImages::InitalizeApplication (int32   argc,
                                                    char**  argv
                                                   )
 {
-  Application::InitalizeApplication (argc, argv);
+  PicesApplication::InitalizeApplication (argc, argv);
   if  (rootDir.Empty ())
     rootDir = osGetCurrentDirectory ();
 

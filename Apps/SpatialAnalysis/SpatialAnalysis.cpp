@@ -22,8 +22,9 @@ using namespace  std;
 using namespace  KKU;
 
 #include "InstrumentDataFileManager.h"
+#include "SipperVariables.h"
+using namespace  SipperHardware;
 
-// From PICL
 #include "FeatureFileIO.h"
 #include "FeatureFileIOPices.h"
 #include "MLClass.h"
@@ -45,9 +46,9 @@ using namespace  MLL;
 
 // -s C:\temp\HRS0207_01_man -i 10 -defaultscanrate 21000 -defaultflowrate 0.67 -ws 10 -bc 100 -ci 95
 
-SpatialAnalysis::SpatialAnalysis (int argc, char**  argv):
+SpatialAnalysis::SpatialAnalysis ():
 
-  Application          (argc, argv),
+  PicesApplication (),
   bucketCount          (10),
   quadratSize          (1.0f),
   cancelFlag           (false),
@@ -55,7 +56,6 @@ SpatialAnalysis::SpatialAnalysis (int argc, char**  argv):
   data                 (NULL),
   defaultFlowRate      (1.0f),
   defaultScanRate      (24950.0f),
-  dbConn               (NULL),
   instrumentData       (NULL),
   lowerConfIntervalIdx (0),
   numOfIterations      (20),
@@ -69,32 +69,46 @@ SpatialAnalysis::SpatialAnalysis (int argc, char**  argv):
   windowSize           (1.0f)
 
 {
-  if  (argc < 2)
-  {
-    DisplayCommandLineParameters ();
-    log.Level (-1) << endl << endl 
-                   << "No Command Line Parameters were provided." << endl
-                   << endl;
-    Abort (true);
-    return;
+}
+
+
+
+SpatialAnalysis::~SpatialAnalysis ()
+{
+  delete  r;
+  r = NULL;
+
+  delete  data;
+  data = NULL;
+
+  InstrumentDataFileManager::InitializePop ();
+}
+
+
+
+
+
+void  SpatialAnalysis::InitalizeApplication (int32   argc,
+                                             char**  argv
+                                            )
+{
+  log.Level (10) << "SpatialAnalysis::InitalizeApplication" << endl;
+
+  PicesApplication::InitalizeApplication (argc, argv);
+	if  (Abort ())
+	{
+		DisplayCommandLineParameters ();
+		return;
   }
 
   InstrumentDataFileManager::InitializePush ();
-  ProcessCmdLineParameters (argc, argv);
-  if  (Abort ())
-  {
-    DisplayCommandLineParameters ();
-    return;
-  }
-
-  log.Level (10) << "SpatialAnalysis::SpatialAnalysis" << endl;
-
 
   if  (sourceRootDirPath.Empty ())
   {
-    log.Level (-1) << endl << endl 
-                   << "No Source Directory Specified."
-                   << endl;
+    log.Level (-1) << endl 
+      << endl 
+      << "No Source Directory Specified."
+      << endl;
     Abort (true);
     return;
   }
@@ -144,7 +158,8 @@ SpatialAnalysis::SpatialAnalysis (int argc, char**  argv):
   data =  FeatureFileIOPices::LoadInSubDirectoryTree 
                                  (sourceRootDirPath,
                                   *classes,
-                                  true,           // useDirectoryNameForClassName,
+                                  true,            // useDirectoryNameForClassName,
+                                  DB (),
                                   cancelFlag,
                                   false,           // rewiteRootFeatureFile
                                   log
@@ -172,42 +187,28 @@ SpatialAnalysis::SpatialAnalysis (int argc, char**  argv):
   lowerConfIntervalIdx = (numOutsideInterval / 2);
   upperConfIntervalIdx = lowerConfIntervalIdx + numInsideConfInterval - 1;
 
-
-  *r << endl;
-  *r << "---------------------------------------------------------------------------------------"   << endl;
-  *r << "Run Date                [" << osGetLocalDateTime ()                               << "]."  << endl;
-  *r << "Build Date              [" << __DATE__ << "  " << __TIME__                        << "]."  << endl;
-  *r << "Report File Name        [" << reportFileName                                      << "]."  << endl;
-  *r << "Source Root Directory   [" << sourceRootDirPath                                   << "]."  << endl;
-  *r << "Statistic               [" << StatTypeToStr (statType)                            << "]."  << endl;
-  *r << "Iterations              [" << numOfIterations                                     << "]."  << endl;
-  *r << "ConfidenceInterval      [" << confidenceInterval                                  << "]."  << endl;
-  *r << "ConfidenceIntervalRange [" << lowerConfIntervalIdx << "-" << upperConfIntervalIdx << "]."  << endl;
-  *r << "QuadratSize             [" << quadratSize                                         << "]."  << endl;
-  *r << "WindowSize              [" << windowSize                                          << "]."  << endl;
-  *r << "BucketCount             [" << bucketCount                                         << "]."  << endl;
-  *r << "BucketSize              [" << bucketSize                                          << "]."  << endl;
-  *r << "DefaultFlowRate         [" << defaultFlowRate                                     << "]."  << endl;
-  *r << "DefaultScanRate         [" << defaultScanRate                                     << "]."  << endl;
-  *r << "---------------------------------------------------------------------------------------"   << endl;
+  PicesApplication::PrintStandardHeaderInfo (*r);
+  *r << "---------------------------------------------------------------------------------------" << endl;
+  *r << "Build Date"              << "\t" << __DATE__ << "  " << __TIME__                         << endl;
+  *r << "Report File Name"        << "\t" << reportFileName                                       << endl;
+  *r << "Source Root Directory"   << "\t" << sourceRootDirPath                                    << endl;
+  *r << "Statistic"               << "\t" << StatTypeToStr (statType)                             << endl;
+  *r << "Iterations"              << "\t" << numOfIterations                                      << endl;
+  *r << "ConfidenceInterval"      << "\t" << confidenceInterval                                   << endl;
+  *r << "ConfidenceIntervalRange" << "\t" << lowerConfIntervalIdx << "-" << upperConfIntervalIdx  << endl;
+  *r << "QuadratSize"             << "\t" << quadratSize                                          << endl;
+  *r << "WindowSize"              << "\t" << windowSize                                           << endl;
+  *r << "BucketCount"             << "\t" << bucketCount                                          << endl;
+  *r << "BucketSize"              << "\t" << bucketSize                                           << endl;
+  *r << "DefaultFlowRate"         << "\t" << defaultFlowRate                                      << endl;
+  *r << "DefaultScanRate"         << "\t" << defaultScanRate                                      << endl;
+  *r << "---------------------------------------------------------------------------------------" << endl;
   *r << endl;
 
   delete  classes;
   classes = NULL;
-}
+}  /* InitalizeApplication */
 
-
-
-SpatialAnalysis::~SpatialAnalysis ()
-{
-  delete  r;
-  r = NULL;
-
-  delete  data;
-  data = NULL;
-
-  InstrumentDataFileManager::InitializePop ();
-}
 
 
 
@@ -224,7 +225,7 @@ void  SpatialAnalysis::GetSipperFileNameAndInstrumentData ()
     uint  scanCol         = 0;
     KKStr  tempSipperFileName = "";
     
-    ImageFeatures::ParseImageFileName (i->ImageFileName (), tempSipperFileName, scanLineNum, scanCol);
+    SipperVariables::ParseImageFileName (i->ImageFileName (), tempSipperFileName, scanLineNum, scanCol);
     tempSipperFileName = osGetRootName (tempSipperFileName);
     if  (sipperFileName.Empty ())
     {
@@ -272,56 +273,71 @@ void  SpatialAnalysis::GetSipperFileNameAndInstrumentData ()
  * ProcessCmdLineParamters
  * DESC: Extracts parameters from the command line
  ******************************************************************************/
-bool  SpatialAnalysis::ProcessCmdLineParameter (
-                                                char    parmSwitchCode, 
-                                                KKStr   parmSwitch, 
-                                                KKStr   parmValue
+bool  SpatialAnalysis::ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                                                const KKStr&  parmValue
                                                )
 {
-  KKStr  parmValueUpper (parmValue);
-  parmValueUpper.Upper ();
+  bool validParm = true;
 
-  parmSwitch.Upper ();
-
-
-  if  ((parmSwitch == "-CONFIDENCEINTERVAL")  ||  (parmSwitch == "-CI"))
+  if  (parmSwitch.EqualIgnoreCase ("-CONFIDENCEINTERVAL")  ||
+       parmSwitch.EqualIgnoreCase ("-CI")
+      )
   {
     confidenceInterval = parmValue.ToFloat ();
     if  ((confidenceInterval < 1.0f)  ||  (confidenceInterval > 100.0))
     {
       log.Level (-1) << "ProcessCmdLineParameter   *** Invalid ConfidenceInterval[" << confidenceInterval << "]    Valid range (1 <-> 100)" << endl;
       Abort (true);
+      validParm = false;
     }
   }
 
-  else if  ((parmSwitch == "-QUADRATSIZE")  ||  (parmSwitch == "-QS"))
+  else if
+      (parmSwitch.EqualIgnoreCase ("-QUADRATSIZE")  ||
+       parmSwitch.EqualIgnoreCase ("-QS")
+      )
   {
     quadratSize = parmValue.ToFloat ();
     if  (quadratSize <= 0.0f)
     {
       log.Level (-1) << "ProcessCmdLineParameter   *** Invalid QuadratSize[" << quadratSize << "] parameter" << endl;
       Abort (true);
+      validParm = false;
     }
   }
 
-  else if  ((parmSwitch == "-ITERATIONS")  ||  (parmSwitch == "-I"))
+  else if  
+      (parmSwitch.EqualIgnoreCase ("-ITERATIONS")  ||
+       parmSwitch.EqualIgnoreCase ("-I")
+      )
   {
     numOfIterations = atoi (parmValue.Str ());
     if  (numOfIterations < 1)
     {
       log.Level (-1) << "ProcessCmdLineParameter   *** Invalid Iterations[" << numOfIterations << "] parameter" << endl;
       Abort (true);
+      validParm = false;
     }
   }
 
-  else if  ((parmSwitch == "-R")  ||  (parmSwitch == "-REPORT"))
+  else if
+      (parmSwitch.EqualIgnoreCase ("-R")  ||
+       parmSwitch.EqualIgnoreCase ("-REPORT")
+      )
     reportFileName = parmValue;
 
 
-  else if  ((parmSwitch == "-S")  ||  (parmSwitch == "-SRC")||  (parmSwitch == "-SOURCE"))
+  else if
+      (parmSwitch.EqualIgnoreCase ("-S")   ||  
+       parmSwitch.EqualIgnoreCase ("-SRC") ||
+       parmSwitch.EqualIgnoreCase ("-SOURCE")
+      )
     sourceRootDirPath = parmValue;
 
-  else if  ((parmSwitch == "-STAT")  ||  (parmSwitch == "-STATISTIC"))
+  else if
+      (parmSwitch.EqualIgnoreCase ("-STAT")  ||
+       parmSwitch.EqualIgnoreCase ("-STATISTIC")
+      )
   {
     statType = StatTypeFromStr (parmValue);
     if  (statType == NullStat)
@@ -333,10 +349,15 @@ bool  SpatialAnalysis::ProcessCmdLineParameter (
                      << endl
                      << "             Valid Statistivc Types ar <BQV | PQV | TTLQC>" << endl;
       Abort (true);
+      validParm = false;
     }
   }
 
-  else if  ((parmSwitch == "-WS")  ||  (parmSwitch == "-WINDOW")  ||  (parmSwitch == "-WINDOWSIZE"))
+  else if
+      (parmSwitch.EqualIgnoreCase ("-WS")     ||
+       parmSwitch.EqualIgnoreCase ("-WINDOW") ||
+       parmSwitch.EqualIgnoreCase ("-WINDOWSIZE")
+      )
   {
     windowSize = parmValue.ToFloat ();
     if  (windowSize <= 0.0f)
@@ -347,10 +368,14 @@ bool  SpatialAnalysis::ProcessCmdLineParameter (
                      << "             Window Size[" << windowSize << "]   must be greater than 0.0,  typical values are 1, 10, 100, etc" << endl
                      << endl;
       Abort (true);
+      validParm = false;
     }
   }
 
-  else if  ((parmSwitch == "-BC")  ||  (parmSwitch == "-BUCKETCOUNT"))
+  else if
+      (parmSwitch.EqualIgnoreCase ("-BC") ||
+       parmSwitch.EqualIgnoreCase ("-BUCKETCOUNT")
+      )
   {
     bucketCount = parmValue.ToInt ();
     if  (bucketCount <= 1)
@@ -361,10 +386,15 @@ bool  SpatialAnalysis::ProcessCmdLineParameter (
                      << "             Bucket Count[" << bucketCount << "]   must be greater than 1" << endl
                      << endl;
       Abort (true);
+      validParm = false;
     }
   }
 
-  else if  ((parmSwitch == "-DEFAULTFLOWRATE")  ||  (parmSwitch == "-FLOWRATE")  ||  (parmSwitch == "-DFR"))
+  else if
+      (parmSwitch.EqualIgnoreCase ("-DEFAULTFLOWRATE")  ||
+       parmSwitch.EqualIgnoreCase ("-FLOWRATE")         ||
+       parmSwitch.EqualIgnoreCase ("-DFR")
+      )
   {
     defaultFlowRate = parmValue.ToFloat ();
     if  (defaultFlowRate <= 0.01f)
@@ -375,11 +405,16 @@ bool  SpatialAnalysis::ProcessCmdLineParameter (
                      << "             DefaultFlowRate[" << defaultFlowRate << "]   must be greater than 0.0" << endl
                      << endl;
       Abort (true);
+      validParm = false;
     }
   }
 
 
-  else if  ((parmSwitch == "-DEFAULTSCANRATE")  ||  (parmSwitch == "-SCANRATE")  ||  (parmSwitch == "-DSR"))
+  else if
+      (parmSwitch.EqualIgnoreCase ("-DEFAULTSCANRATE")  ||
+       parmSwitch.EqualIgnoreCase ("-SCANRATE")         ||
+       parmSwitch.EqualIgnoreCase ("-DSR")
+      )
   {
     defaultScanRate = parmValue.ToFloat ();
     if  (defaultScanRate <= 0.01f)
@@ -390,23 +425,16 @@ bool  SpatialAnalysis::ProcessCmdLineParameter (
                      << "             DefaultScanRate[" << defaultScanRate << "]   must be greater than 0.0" << endl
                      << endl;
       Abort (true);
+      validParm = false;
     }
   }
 
-
-
   else
   {
-    log.Level (-1) << endl << endl
-                   << "SpatialAnalysis::ProcessCmdLineParameter    ***ERROR***" << endl
-                   << endl
-                   << "             Invalid Parameter[" << parmSwitch << "]" << endl
-                   << endl;
-    Abort (true);
+    validParm = PicesApplication::ProcessCmdLineParameter (parmSwitch, parmValue);
   }
 
-
-	return  !Abort ();
+	return  validParm;
 }  /* ProcessCmdLineParameter */
 
 
@@ -418,28 +446,30 @@ bool  SpatialAnalysis::ProcessCmdLineParameter (
  ******************************************************************************/
 void   SpatialAnalysis::DisplayCommandLineParameters ()
 {
-  log.Level (0) << "SpactialAnalysis  -SrcDir <xxx>  -report <xxxx>"                    << endl;
-  log.Level (0)                                                                         << endl;
-  log.Level (0) << "    -QuadratSize   Lengthj of each quadrat;  defalts to 1.0."       << endl;
-  log.Level (0)                                                                         << endl;
-  log.Level (0) << "    -report   Report File,  Defaults to Command Line."              << endl;
-  log.Level (0)                                                                         << endl;
-  log.Level (0) << "    -src      Source Directory Tree to Search for images."          << endl;
-  log.Level (0)                                                                         << endl;
-  log.Level (0) << "    -Stat     <BQV | PQV | TTLQC | DAVIS92>   Type of statistic"    << endl;
-  log.Level (0)                                                                         << endl;
-  log.Level (0) << "    -WindowSize  <Size in Meters>  used by Davis92."                << endl;
-  log.Level (0)                                                                         << endl;
-  log.Level (0) << "    -BucketCount <Number subdivisions of WindowSize>"               << endl;
-  log.Level (0)                                                                         << endl;
-  log.Level (0) << "    -DefaultFlowRate  <Flow Rate,  defaults to 1.0>"                << endl;
-  log.Level (0)                                                                         << endl;
-  log.Level (0) << "    -DefaultScanRate  <Scan Lines per Sec, defaults to 24950.0>"    << endl;
-  log.Level (0)                                                                         << endl;
-  log.Level (0) << "    -Iterations  <Number of random resorts to do>"                  << endl;
-  log.Level (0)                                                                         << endl;
-  log.Level (0) << "    -ConfidenceInterval  <Defaults to 95.0>"                        << endl;
-  log.Level (0)                                                                         << endl;
+  PicesApplication::DisplayCommandLineParameters ();
+  cout << endl
+       << "SpactialAnalysis  -SrcDir <xxx>  -report <xxxx>"                    << endl
+       << endl
+       << "    -QuadratSize   Lengthj of each quadrat;  defalts to 1.0."       << endl
+       << endl
+       << "    -report   Report File,  Defaults to Command Line."              << endl
+       << endl
+       << "    -src      Source Directory Tree to Search for images."          << endl
+       << endl
+       << "    -Stat     <BQV | PQV | TTLQC | DAVIS92>   Type of statistic"    << endl
+       << endl
+       << "    -WindowSize  <Size in Meters>  used by Davis92."                << endl
+       << endl
+       << "    -BucketCount <Number subdivisions of WindowSize>"               << endl
+       << endl
+       << "    -DefaultFlowRate  <Flow Rate,  defaults to 1.0>"                << endl
+       << endl
+       << "    -DefaultScanRate  <Scan Lines per Sec, defaults to 24950.0>"    << endl
+       << endl
+       << "    -Iterations  <Number of random resorts to do>"                  << endl
+       << endl
+       << "    -ConfidenceInterval  <Defaults to 95.0>"                        << endl
+       << endl;
 }  /* DisplayCommandLineParameters */
 
 
@@ -1244,7 +1274,8 @@ int  main (int     argc,
            char**  argv
           )
 {
-  SpatialAnalysis  spatialReport (argc, argv);
+  SpatialAnalysis  spatialReport;
+  spatialReport.InitalizeApplication (argc, argv);
   if  (!spatialReport.Abort ())
   {
     if  (spatialReport.TypeOfStat () == SpatialAnalysis::Davis92Stat)

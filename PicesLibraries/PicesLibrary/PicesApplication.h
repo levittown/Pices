@@ -8,6 +8,7 @@
 
 #include "Application.h"
 #include "BasicTypes.h"
+#include "RunLog.h"
 #include "Str.h"
 
 
@@ -66,7 +67,7 @@ namespace MLL
      *@details This constructor is not interested in any command line parameters.
      *@param[in]  _log  A reference to a RunLog object.
      */
-    PicesApplication (RunLog&  _log);
+    PicesApplication (KKU::RunLog&  _log);
 
 
 
@@ -104,6 +105,14 @@ namespace MLL
 
 
   protected:
+
+    /**
+     *@A derived class would call this method in its version of 'InitalizeApplication' just before calling
+     * 'PicesApplication::InitalizeApplication' to let it know that teh Training Model Configurartion parameter
+     * is required.
+     */
+    void  ConfigRequired (bool _configRequired)  {configRequired = _configRequired;}
+
 
     /**
      *@brief A derived class would call this method in its version of 'InitalizeApplication' just before calling
@@ -145,6 +154,7 @@ namespace MLL
     FileDescPtr                fileDesc;
 
   private:
+    bool               configRequired;
     DataBasePtr        db;
     DataBaseServerPtr  dbServer;
     bool               dataBaseRequired;

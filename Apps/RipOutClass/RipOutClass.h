@@ -1,37 +1,39 @@
 #ifndef  _RIPOUTCLASS_
 #define  _RIPOUTCLASS_
 
-#include "Application.h"
+#include "PicesApplication.h"
 #include "FeatureVector.h"
 #include "FileDesc.h"
 #include "MLClass.h"
 
 
-class  RipOutClass: public Application
+class  RipOutClass:  public PicesApplication
 {
 public:
-	RipOutClass (int argc, char**  argv);
+	RipOutClass ();
 	~RipOutClass ();
 
-	virtual const char* ApplicationName ()  {return  "RipOutClass";}
+  virtual
+  void  InitalizeApplication (int32   argc,
+                              char**  argv
+                             );
+  
+  virtual const char* ApplicationName () const {return  "RipOutClass";}
 
 	void	DisplayCommandLineParameters ();
 
   void  ExtractSpecifiedClass ();
   
-  virtual bool ProcessCmdLineParameter (
-											char    parmSwitchCode, 
-											KKStr   parmSwitch, 
-											KKStr   parmValue
-										  );
+  virtual bool ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+                  											const KKStr&  parmValue
+                                       );
 
 private:
   bool                  cancelFlag;
-  MLClassConstList   classesToRipOut;
+  MLClassConstList      classesToRipOut;
 	KKStr                 destFileName;
   FeatureVectorListPtr  destImages;
-  FileDescPtr           fileDesc;
-	MLClassConstList   mlClasses;
+	MLClassConstList      mlClasses;
   FeatureFileIOPtr      inFileFormat;
   int                   numOfFolds;
   FeatureFileIOPtr      outFileFormat;

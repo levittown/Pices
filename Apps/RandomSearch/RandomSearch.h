@@ -66,7 +66,7 @@ private:
                                        ResultLinePtr      result
                                       );
 
-  virtual const char*  ApplicationName () {return  "RandomSearch";}
+  virtual const char*  ApplicationName () const {return  "RandomSearch";}
 
   ResultLineListPtr  BuildComponentParts (ResultLinePtr  result);
 

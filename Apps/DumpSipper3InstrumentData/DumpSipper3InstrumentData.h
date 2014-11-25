@@ -20,7 +20,7 @@ public:
                              );
 
   virtual const 
-  char*   ApplicationName ()  {return  "DumpSipper3InstrumentData";}
+  char*   ApplicationName () const {return  "DumpSipper3InstrumentData";}
 
 
 

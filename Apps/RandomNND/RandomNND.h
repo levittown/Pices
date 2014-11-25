@@ -42,7 +42,7 @@ public:
                               char**  argv
                              );
 
-	virtual const char* ApplicationName ()  {return  "RandomNND";}
+	virtual const char* ApplicationName ()  const  {return  "RandomNND";}
 
   void	GenerateReport ();
 

@@ -100,7 +100,7 @@ void  RandomNND::InitalizeApplication (int32   argc,
                                        char**  argv
                                       )
 {
-  Application::InitalizeApplication (argc, argv);
+  PicesApplication::InitalizeApplication (argc, argv);
 	if  (Abort ())
 	{
 		DisplayCommandLineParameters ();

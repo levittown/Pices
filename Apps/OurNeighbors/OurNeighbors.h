@@ -27,7 +27,7 @@ public:
 
 	void	LookForNeighbors ();
 
-	virtual const char* ApplicationName ()  {return  "OurNeighbors";}
+	virtual const char* ApplicationName () const  {return  "OurNeighbors";}
 
 	void	DisplayCommandLineParameters ();
 

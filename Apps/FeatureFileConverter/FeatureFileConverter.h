@@ -21,7 +21,7 @@ public:
 
 	~FeatureFileConverter();
 
-	virtual const char* ApplicationName ()  {return  "FeatureFileConverter";}
+	virtual const char* ApplicationName () const {return  "FeatureFileConverter";}
 
   virtual
   void  InitalizeApplication (int32   argc,

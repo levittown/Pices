@@ -33,11 +33,13 @@ PicesApplication::PicesApplication (RunLog&  _log):
   config             (NULL),
   configFileName     (),
   configFileFullPath (),
+  configRequired     (false),
   db                 (NULL),
   dbServer           (NULL),
   dataBaseRequired   (false),
   fileDesc           (NULL)
 {
+  fileDesc = FeatureFileIOPices::NewPlanktonFile (log);
 }
 
 
@@ -47,6 +49,7 @@ PicesApplication::PicesApplication ():
   config             (NULL),
   configFileName     (),
   configFileFullPath (),
+  configRequired     (false),
   db                 (NULL),
   dbServer           (NULL),
   dataBaseRequired   (false),
@@ -63,6 +66,7 @@ PicesApplication::PicesApplication (const PicesApplication&  _application):
   config             (NULL),
   configFileName     (_application.configFileName),
   configFileFullPath (_application.configFileFullPath),
+  configRequired     (_application.configRequired),
   db                 (NULL),
   dbServer           (NULL),
   dataBaseRequired   (_application.dataBaseRequired),
@@ -96,6 +100,17 @@ void  PicesApplication::InitalizeApplication (int32   argc,
 {
   Application::InitalizeApplication (argc, argv);
 
+  if  (configRequired)
+  {
+    if  (configFileName.Empty ())
+    {
+      log.Level (-1) << endl
+                     << "PicesApplication::InitalizeApplication   ***ERROR***   Configuration parametr is required." << endl
+                     << endl;
+      Abort (true);
+    }
+  }
+
   if  (!configFileName.Empty ())
   {
     config = new TrainingConfiguration2 (fileDesc, configFileFullPath, log, true);
@@ -107,6 +122,7 @@ void  PicesApplication::InitalizeApplication (int32   argc,
       Abort (true);
     }
   }
+
 
   if  (dataBaseRequired)
   {

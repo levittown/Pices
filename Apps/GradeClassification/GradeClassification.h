@@ -31,7 +31,7 @@ public:
   
   void  Grade();
 
-  virtual const char* ApplicationName ()  {return  "GradeClassification";}
+  virtual const char* ApplicationName () const  {return  "GradeClassification";}
 
   void  DisplayCommandLineParameters ();
 
