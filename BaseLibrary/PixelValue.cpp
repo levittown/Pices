@@ -2,14 +2,14 @@
  * Copyright (C) 1994-2011 Kurt Kramer
  * For conditions of distribution and use, see copyright notice in KKU.h
  */
-#include  <memory>
-#include  <math.h>
-#include  <limits.h>
-#include  <fstream>
-#include  <string>
-#include  <iostream>
-#include  <vector>
-#include  "MemoryDebug.h"
+#include <memory>
+#include <math.h>
+#include <limits.h>
+#include <fstream>
+#include <string>
+#include <iostream>
+#include <vector>
+#include "MemoryDebug.h"
 using namespace std;
 
 

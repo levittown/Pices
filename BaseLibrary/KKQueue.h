@@ -718,17 +718,12 @@ namespace  KKU
          (idx2 < 0)  ||  (idx2 >= KKQueue<Entry>::size ())
         )
     {
-      std::cerr << std::endl;
-
-      std::cerr << "  ***  ERROR  ***  (KKQueue::SwapIndexes)  Indexes[" 
-                << (int32)idx1 << ", " << (int32)idx2 << "] Out of Range."
-                << std::endl;
-
-      std::cerr << "                   KKQueue Size[" << (int32)KKQueue<Entry>::size () << "]." 
-                << std::endl
-                << std::endl;
-
-      exit (1);
+      std::cerr << std::endl
+        << "KKQueue::SwapIndexes  ***ERROR***  (KKQueue::  Indexes[" 
+        << (int32)idx1 << ", " << (int32)idx2 << "] Out of Range;"
+        << "  Size[" << (int32)KKQueue<Entry>::size () << "]."
+        << std::endl << std::endl; 
+      throw "KKQueue::SwapIndexes  ***ERROR***  Indexes out or range.";
     }
 
     //vector<typename Entry*>&  us (*this);
@@ -753,10 +748,10 @@ namespace  KKU
 
     if  ((idx < 0)  ||  (idx >= KKQueue<Entry>::size ()))
     {
-      std::cerr << std::endl 
-                << "*** ERROR ***   KKQueue<Entry>::operator[], Index [" << idx << "] out of bounds." << std::endl
-                << std::endl;
-      exit (-1);
+      std::cerr << std::endl
+        << "KKQueue<Entry>::operator[]   ***ERROR***   KKQueue<Entry>::operator[], Index [" << idx << "] out of bounds." << std::endl 
+        << std::endl;
+      throw "KKQueue<Entry>::operator[]   ***ERROR***   Index out of range.";
     }
 
     return  (Entry&)*(std::vector<Entry*>::operator[] (idx));
