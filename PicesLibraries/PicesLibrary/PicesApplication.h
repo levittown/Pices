@@ -40,11 +40,33 @@ namespace MLL
 
   /** 
    *@class PicesApplication
-   *@brief The base class for all standalone application.
+   *@brief The base class for all standalone applications.
    *@details  This class is meant to be a general class that all standalone applications should be inherited 
-   *          from.  It supports command line processing, and logging facilities.
+   *from. If provides command line options thant are common tho all Pices Applications.
+   * Supported Command Options:
+   * -# -Config   <Model Name>    The trainig model configuration file; only the root part needs to be specified;  these files 
+   *                              can be found in the "$<PicesHomeDir>\DataFiles\TrainingModels"  directory.
+   * -# -DataBase <Description>   This  'Description' references the Description field in the MySQL.cfg file found in 
+   *                              "${PicesHomeDir}\Configurations\" directory.
+   * -# -LogFile  <File-Name>     File that logger messages (RunLog) are to be written to;  if not specified will default 
+   *                              to standard-out (cout).
+   * -# -CmdFile  <File-Name>     A text file that will contain additional command line options;  one of these options could
+   *                              be another "-CmdFile" option.
+   *
+   * A derived class must implement the following methods:
+   * - ApplicationName  Where you retunr the name of the derived apploication.
+   * - InitalizeApplication  Where you implement the initialization code for the derived application.  One of the tasks required
+   *                         by this method is to call the base class version of this method "PicesApplication::InitalizeApplication".  
+   *                         If you find ant reason that the application may not be started; display an appropriate error message and
+   *                         set the abort field to true by calling "Abort (true)".  If you wnt the base class to require the 
+   *                         "-Config" or "-DataBase" parameter then call "ConfigRequired (true)" and/or "DataBaseRequired (true)" 
+   *                         before calling "PicesApplication::InitalizeApplication" and check the "Abort()" flag to see if errors
+   *                         were detected.
+   * - ProcessCmdLineParameter This method will be called once for each command line parameter and its associated value. If it 
+   *                         is one of your parameters you get to process it in this method.  If you do not recognize the parameter
+   *                         call the base class version of this method "PicesApplication::ProcessCmdLineParameter".
+   * - 
    */
-
   class  PicesApplication: public  Application
   {
   public:

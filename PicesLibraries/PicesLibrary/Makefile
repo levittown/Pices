@@ -147,6 +147,8 @@ TRAININGCONFIGURATION2 = TrainingConfiguration2.h  \
                      $(FILEDESC)           $(FEATUREVECTOR)      $(MODEL)          $(MODELPARAM)        \
                      $(MODELPARAMOLDSVM)   $(SVMPARAM)           $(TRAININGCLASS)
 
+PICESAPPLICATION   = PicesApplication.h
+
 
 TRAININGPROCESS2   = TrainingProcess2.h    $(FEATUREVECTOR)      $(IMAGEFEATURESDATAINDEXED)   \
                      $(IMAGEFEATURESNAMEINDEXED)                 $(NORMALIZATIONPARMS)         \
@@ -155,7 +157,7 @@ TRAININGPROCESS2   = TrainingProcess2.h    $(FEATUREVECTOR)      $(IMAGEFEATURES
 
 
 CLASSIFIER2        = Classifier2.h         $(MODEL)          $(MODELPARAMOLDSVM)    $(MODELOLDSVM)  \
-                     $(MODELPARAMOLDSVM)   $(SVMMODEL)    
+                     $(MODELPARAMOLDSVM)   $(SVMMODEL) 
 
 
 CROSSVALIDATIONTHREEWAY = CrossValidationThreeWay.h
@@ -187,7 +189,7 @@ OBJECTS  = Attribute.o                  BinaryClassParms.o           BitReductio
            ModelParam.o                 ModelParam.o                 ModelParamDual.o             \
            ModelParamSvmBase.o          ModelParamKnn.o              ModelParamOldSVM.o           \
            ModelParamUsfCasCor.o        NormalizationParms.o         \
-           Orderings.o                  SipperExtractionImageManager.o                            \
+           Orderings.o                  PicesApplication.o           SipperExtractionImageManager.o  \
            SizeDistribution.o           svm.o                        svm2.o                       \
            SVMModel.o                   SVMparam.o                   SvmWrapper.o                 \
            TrainingClass.o              TrainingConfiguration2.o     \
@@ -422,6 +424,10 @@ Orderings.o :          Orderings.cpp            $(ORDERINGS)             $(FEATU
 SipperExtractionImageManager.o : SipperExtractionImageManager.cpp  $(SIPPEREXTRACTIONIMAGEMANAGER)  \
                                  $(FEATUREFILEIO)    $(MLCLASS)  $(IMAGEFEATURES)
 	$(CC) $(CFLAGS) -c SipperExtractionImageManager.cpp
+
+
+PicesApplication.o : PicesApplication.cpp $(DATABASE)  $(DATABASESERVER)  $(FEATUREFILEIOPICES)  $(FILEDESC)  $(TRAININGCONFIGURATION2)
+	$(CC) $(CFLAGS) -c PicesApplication.cpp
 
 
 SizeDistribution.o : SizeDistribution.cpp $(SIZEDISTRIBUTION)  $(MLCLASS) $(FEATUREVECTOR)
