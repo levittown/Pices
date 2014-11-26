@@ -426,7 +426,7 @@ SipperExtractionImageManager.o : SipperExtractionImageManager.cpp  $(SIPPEREXTRA
 	$(CC) $(CFLAGS) -c SipperExtractionImageManager.cpp
 
 
-PicesApplication.o : PicesApplication.cpp $(DATABASE)  $(DATABASESERVER)  $(FEATUREFILEIOPICES)  $(FILEDESC)  $(TRAININGCONFIGURATION2)
+PicesApplication.o : PicesApplication.cpp  $(PICESAPPLICATION)   $(DATABASE)  $(DATABASESERVER)  $(FEATUREFILEIOPICES)  $(FILEDESC)  $(TRAININGCONFIGURATION2)
 	$(CC) $(CFLAGS) -c PicesApplication.cpp
 
 
@@ -434,7 +434,7 @@ SizeDistribution.o : SizeDistribution.cpp $(SIZEDISTRIBUTION)  $(MLCLASS) $(FEAT
 	$(CC) $(CFLAGS) -c SizeDistribution.cpp
 
 
-svm.o :                svm.cpp              $(SVM)
+svm.o :  svm.cpp   $(SVM)
 	$(CC) $(CFLAGS) -c svm.cpp
   
 
@@ -442,7 +442,7 @@ svm2.o :               svm2.cpp             $(SVM2)              $(FEATUREENCODE
 	$(CC) $(CFLAGS) -c svm2.cpp
 
 
-SVMModel.o :           SVMModel.cpp         $(SVMMODEL)          $(BITREDUCTION)   \
+SVMModel.o :  SVMModel.cpp         $(SVMMODEL)          $(BITREDUCTION)   \
                        $(BINARYCLASSPARMS)  $(FEATUREENCODER)    $(FEATURENUMLIST) \
                        $(FEATUREVECTOR)     $(SVMWRAPPER)
 	$(CC) $(CFLAGS) -c SVMModel.cpp
