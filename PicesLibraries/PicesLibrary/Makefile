@@ -23,11 +23,24 @@ MLCLASS            = MLClass.h
 
 MLCLASSCONSTLIST   = MLClassConstList.h
 
-FILEDESC           = FileDesc.h            $(ATTRIBUTE)          $(MLCLASS)
+FILEDESC           = FileDesc.h            $(ATTRIBUTE)          $(MLCLASS)  $(MLCLASSCONSTLIST)
 
 ORDERINGS          = Orderings.h           $(FILEDESC)
 
 CLASSSTATISTIC     = ClassStatistic.h      $(MLCLASS)
+
+DATABASEGPSDATA             = DataBaseGpsData.h
+DATABASEIMAGE               = DataBaseImage.h
+DATABASEIMAGEGROUP          = DataBaseImageGroup.h
+DATABASEIMAGEGROUPENTRY     = DataBaseImageGroupEntry.h
+DATABASEIMAGEVALIDATEDENTRY = DataBaseImageValidatedEntry.h
+DATABASELOGENTRY            = DataBaseLogEntry.h
+DATABASESERVER              = DataBaseServer.h
+
+DATABASE = DataBase.h  $(CLASSSTATISTIC)  $(DATABASEGPSDATA)  $(DATABASEIMAGE) $(DATABASEIMAGEGROUP)  \
+                       $(DATABASEIMAGEGROUPENTRY)  $(DATABASEIMAGEVALIDATEDENTRY)  $(DATABASELOGENTRY) \
+                       $(FILEDESC)  $(MLCLASS)
+
 
 FEATUREVECTOR      = FeatureVector.h       $(ATTRIBUTE)          $(CLASSSTATISTIC)     FeatureFileIO.h   \
                      $(FEATURENUMLIST)     $(FILEDESC)           $(MLCLASS)
@@ -172,11 +185,14 @@ CLASSIFICATIONBIASMATRIX = ClassificationBiasMatrix.h  ConfusionMatrix2.h   MLCl
 CMDLINEEXPANDER = CmdLineExpander.h
 
 
-OBJECTS  = Attribute.o                  BinaryClassParms.o           BitReduction.o               \
-           ChainHash.o                  ClassAssignments.o           ClassProb.o                  \
-           Classifier2.o                ClassStatistic.o             ClassificationBiasMatrix.o   \
-           ConfusionMatrix2.o           CrossValidation2.o           CrossValidationMxN.o         \
-           CrossValidationThreeWay.o    CrossValidationVoting.o      DuplicateImages.o            \
+OBJECTS  = Attribute.o                   BinaryClassParms.o            BitReduction.o               \
+           ChainHash.o                   ClassAssignments.o            ClassProb.o                  \
+           Classifier2.o                 ClassStatistic.o              ClassificationBiasMatrix.o   \
+           ConfusionMatrix2.o            CrossValidation2.o            CrossValidationMxN.o         \
+           CrossValidationThreeWay.o     CrossValidationVoting.o       DataBaseGpsData.o            \
+           DataBaseImage.o               DataBaseImageGroup.o          DataBaseImageGroupEntry.o    \
+           DataBaseImageValidatedEntry.o DataBaseLogEntry.o            DataBase.o                   \
+           DuplicateImages.o            \
            FeatureEncoder.o             FeatureEncoder2.o            FeatureFileIO.o              \
            FeatureFileIOArff.o          FeatureFileIOC45.o           FeatureFileIOColumn.o        \
            FeatureFileIODstWeb.o        FeatureFileIOPices.o         FeatureFileIORoberts.o       \
@@ -271,17 +287,46 @@ CrossValidationVoting.o : CrossValidationVoting.cpp  $(CROSSVALIDATIONVOTING)   
 	$(CC) $(CFLAGS) -c CrossValidationVoting.cpp
 
 
+DataBase.o : DataBase.cpp  $(DATABASE)  $(DATABASESERVER)  $(FILEDESC)  $(FEATUREFILEIOPICES)  $(IMAGEFEATURES)   
+  $(CC) $(CFLAGS) -c DataBase.cpp
+  
+  
+DataBaseServer.o : DataBaseServer.cpp  $(DATABASESERVER)
+  $(CC) $(CFLAGS) -c DataBaseServer.cpp
+  
+    
+DataBaseGpsData.o : DataBaseGpsData.cpp  $(DATABASEGPSDATA)
+  $(CC) $(CFLAGS) -c DataBaseGpsData.cpp
+
+
+DataBaseImage.o : DataBaseImage.cpp  $(DATABASEIMAGE)
+  $(CC) $(CFLAGS)  -c DataBaseImage.cpp
+
+
+DataBaseImageGroup.o : DataBaseImageGroup.cpp  $(DATABASEIMAGEGROUP)  
+  $(CC) $(CFLAGS)  -c DataBaseImageGroup.cpp 
+
+
+DataBaseImageGroupEntry.o : DataBaseImageGroupEntry.cpp   $(DATABASEIMAGEGROUPENTRY)   $(DATABASEIMAGE)
+  $(CC) $(CFLAGS)  -c DataBaseImageGroupEntry.cpp  
+
+
+DataBaseImageValidatedEntry.o : DataBaseImageValidatedEntry.cpp   $(DATABASEIMAGEVALIDATEDENTRY)   $(DATABASEIMAGE)
+  $(CC) $(CFLAGS)  -c DataBaseImageValidatedEntry.cpp  
+
+
+DataBaseLogEntry.o : DataBaseLogEntry.cpp   $(DATABASELOGENTRY)
+  $(CC) $(CFLAGS)  -c DataBaseImageValidatedEntry.cpp
+
 
 DuplicateImages.o :  DuplicateImages.cpp         $(DUPLICATEIMAGES)           $(FEATUREVECTOR) \
                      $(IMAGEFEATURESNAMEINDEXED) $(IMAGEFEATURESDATAINDEXED)
 	$(CC) $(CFLAGS) -c DuplicateImages.cpp
 
 
-
 FeatureEncoder.o :   FeatureEncoder.cpp     $(FEATUREENCODER)   $(BITREDUCTION)  $(BINARYCLASSPARMS) \
                     $(FEATURENUMLIST)       $(FEATUREVECTOR)    $(SVMWRAPPER)
 	$(CC)  $(CFLAGS) -c FeatureEncoder.cpp
-
 
 
 FeatureEncoder2.o :  FeatureEncoder2.cpp    $(FEATUREENCODER2)  $(BINARYCLASSPARMS)    $(FEATURENUMLIST) \
@@ -334,7 +379,6 @@ FeatureVector.o :   FeatureVector.cpp  $(FEATUREVECTOR) $(FEATURENUMLIST)  $(FEA
 
 FileDesc.o :        FileDesc.cpp  $(FILEDESC)  $(FEATURENUMLIST)  $(MLCLASS)  $(IMAGEFEATURES)
 	$(CC) $(CFLAGS) -c FileDesc.cpp
-
 
 
 ImageFeatures.o :      ImageFeatures.cpp  $(IMAGEFEATURES)  $(FEATURENUMLIST)  $(FEATUREFILEIO)  $(MLCLASS)
