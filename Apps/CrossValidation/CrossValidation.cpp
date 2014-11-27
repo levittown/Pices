@@ -3522,7 +3522,7 @@ void  DetermineCropSettingsFromHighWaterMarks (vector<VectorUchar*>&  frameHighW
     cout << "cropLeft: " << cropLeft << "\t" << "cropRight: " << cropRight << "\t" << "activeColumns: " << numActiveCols << endl;
   }
 
-  uint32  zed = Min (numFrameToWindow, (cropsLeft.size () - 1));
+  uint32  zed = Min ((uint32)numFrameToWindow, (uint32)(cropsLeft.size () - 1));
   for  (y = 0;  (y < zed);  ++y)
   {
     cropsLeft     [y] = cropsLeft     [zed];

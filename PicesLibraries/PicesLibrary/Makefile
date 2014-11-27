@@ -195,27 +195,27 @@ OBJECTS  = Attribute.o                   BinaryClassParms.o            BitReduct
            ChainHash.o                   ClassAssignments.o            ClassProb.o                  \
            Classifier2.o                 ClassStatistic.o              ClassificationBiasMatrix.o   \
            ConfusionMatrix2.o            CrossValidation2.o            CrossValidationMxN.o         \
-           CrossValidationThreeWay.o     CrossValidationVoting.o       DataBaseGpsData.o            \
-           DataBaseImage.o               DataBaseImageGroup.o          DataBaseImageGroupEntry.o    \
-           DataBaseImageValidatedEntry.o DataBaseLogEntry.o            DataBase.o                   \
-           DuplicateImages.o            \
-           FeatureEncoder.o             FeatureEncoder2.o            FeatureFileIO.o              \
-           FeatureFileIOArff.o          FeatureFileIOC45.o           FeatureFileIOColumn.o        \
-           FeatureFileIODstWeb.o        FeatureFileIOPices.o         FeatureFileIORoberts.o       \
-           FeatureFileIOSparse.o        FeatureFileIOUCI.o           FeatureNumList.o             \
-           FeatureVector.o              FileDesc.o                   ImageFeatures.o              \
-           ImageFeaturesDataIndexed.o   ImageFeaturesNameIndexed.o   MLClass.o                    \
-           MLClassConstList.o           Model.o                      ModelDual.o                  \
-           ModelSvmBase.o               \
-           ModelKnn.o                   ModelOldSVM.o                ModelUsfCasCor.o             \
-           ModelParam.o                 ModelParam.o                 ModelParamDual.o             \
-           ModelParamSvmBase.o          ModelParamKnn.o              ModelParamOldSVM.o           \
-           ModelParamUsfCasCor.o        NormalizationParms.o         \
-           Orderings.o                  PicesApplication.o           SipperExtractionImageManager.o  \
-           SizeDistribution.o           svm.o                        svm2.o                       \
-           SVMModel.o                   SVMparam.o                   SvmWrapper.o                 \
-           TrainingClass.o              TrainingConfiguration2.o     \
-           TrainingProcess2.o           UsfCasCor.o
+           CrossValidationThreeWay.o     CrossValidationVoting.o       DataBase.o                   \
+           DataBaseGpsData.o             DataBaseImage.o               DataBaseImageGroup.o         \
+           DataBaseImageGroupEntry.o     DataBaseImageValidatedEntry.o DataBaseLogEntry.o           \
+           DataBaseServer.o              DuplicateImages.o             \
+           FeatureEncoder.o              FeatureEncoder2.o            FeatureFileIO.o              \
+           FeatureFileIOArff.o           FeatureFileIOC45.o           FeatureFileIOColumn.o        \
+           FeatureFileIODstWeb.o         FeatureFileIOPices.o         FeatureFileIORoberts.o       \
+           FeatureFileIOSparse.o         FeatureFileIOUCI.o           FeatureNumList.o             \
+           FeatureVector.o               FileDesc.o                   ImageFeatures.o              \
+           ImageFeaturesDataIndexed.o    ImageFeaturesNameIndexed.o   MLClass.o                    \
+           MLClassConstList.o            Model.o                      ModelDual.o                  \
+           ModelSvmBase.o                \
+           ModelKnn.o                    ModelOldSVM.o                ModelUsfCasCor.o             \
+           ModelParam.o                  ModelParam.o                 ModelParamDual.o             \
+           ModelParamSvmBase.o           ModelParamKnn.o              ModelParamOldSVM.o           \
+           ModelParamUsfCasCor.o         NormalizationParms.o         \
+           Orderings.o                   PicesApplication.o           SipperExtractionImageManager.o  \
+           SizeDistribution.o            svm.o                        svm2.o                       \
+           SVMModel.o                    SVMparam.o                   SvmWrapper.o                 \
+           TrainingClass.o               TrainingConfiguration2.o     \
+           TrainingProcess2.o            UsfCasCor.o
            
            
 all:	$(EXEC)

@@ -83,13 +83,13 @@ bool   KKU::IsNaN (const double&  d)
 }
 
 
-bool  IsFinite (const float&  f)
+bool  KKU::IsFinite (const float&  f)
 {
   return (std::isfinite(f) != 0);
 }
 
 
-bool  IsFinite (const double&  f)
+bool  KKU::IsFinite (const double&  f)
 {
   return (std::isfinite(f) != 0);
 }

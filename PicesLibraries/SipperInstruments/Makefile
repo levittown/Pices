@@ -23,6 +23,7 @@ INSTRUMENTDATABATTERYMETER = InstrumentDataBatteryMeter.h  $(INSTRUMENTDATAREPOR
 INSTRUMENTDATACTDPLUS      = InstrumentDataCTDplus.h       $(INSTRUMENTDATAREPORT)
 INSTRUMENTDATAFLOWMETER1   = InstrumentDataFlowMeter1.h    $(INSTRUMENTDATAREPORT)
 INSTRUMENTDATAGPS          = InstrumentDataGPS.h           $(INSTRUMENTDATAREPORT)
+INSTRUMENTDATAMEANS        = InstrumentDataMeans.h
 INSTRUMENTDATAPITCHANDROLL = InstrumentDataPitchAndRoll.h  $(INSTRUMENTDATAREPORT)
 INSTRUMENTDATAUSERMSGS     = InstrumentDataUserMsgs.h      $(INSTRUMENTDATAREPORT)
 
@@ -47,10 +48,10 @@ VOLUMESAMPLEDSTAT          = VolumeSampledStat.h
 
 
 OBJECTS	= CTD_Plus_Data.o               GPSDataPoint.o                Instrument.o                  \
-          InstrumentData.o              \
-          InstrumentDataBatteryMeter.o  InstrumentDataCTDplus.o       InstrumentDataFileManager.o   \
-          InstrumentDataFlowMeter1.o    InstrumentDataGPS.o           InstrumentDataList.o          \
-          InstrumentDataManager.o       InstrumentDataPitchAndRoll.o  InstrumentDataReport.o        \
+          InstrumentData.o              InstrumentDataBatteryMeter.o  InstrumentDataCTDplus.o       \
+          InstrumentDataFileManager.o   InstrumentDataFlowMeter1.o    InstrumentDataGPS.o           \
+          InstrumentDataList.o          InstrumentDataManager.o       InstrumentDataMeans.o         \
+          InstrumentDataPitchAndRoll.o  InstrumentDataReport.o        \
           InstrumentDataUserMsgs.o      RasterSipper.o                Sipper3Buff.o                 \
           Sipper3RevBuff.o              SipperBuff.o                  SipperBuff3Bit.o              \
           SipperBuff4Bit.o              SipperBuffBinary.o            SipperCruise.o                \
@@ -117,6 +118,10 @@ InstrumentDataList.o: InstrumentDataList.cpp  $(INSTRUMENTDATALIST)  $(INSTRUMEN
 InstrumentDataManager.o:  InstrumentDataManager.cpp   $(INSTRUMENTDATAMANAGER)  $(CTD_PLUS_DATA)    \
                           $(INSTRUMENTDATA)           $(INSTRUMENTDATAREPORT)   $(SIPPERHEADERREC)  \
                           $(LIBDIR)/*.h
+	$(CC) $(CFLAGS) -c $*.cpp
+
+
+InstrumentDataMeans.o:  InstrumentDataMeans.cpp  $(INSTRUMENTDATAMEANS)  $(SIPPERVARIABLES)    $(LIBDIR)/*.h
 	$(CC) $(CFLAGS) -c $*.cpp
 
 

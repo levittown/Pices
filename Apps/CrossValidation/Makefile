@@ -1,7 +1,10 @@
 EXEC = CrossValidation
-CFLAGS = -O3 -I../../BaseLibrary  -I../../PicesLibrary  -I../../SipperInstruments
-LIBS = -lPicesLibrary   -lSipperInstruments    -lBaseLibrary   -lfftw3 -lrt 
-LIBDIR = -L../../BaseLibrary  -L../../SipperInstruments  -L../../PicesLibrary  -L../../OutsidePackages/fftw-3.1.2/.libs
+CFLAGS = -O3 -I../../BaseLibrary  -I../../PicesLibraries/PicesLibrary  -I../../PicesLibraries/SipperInstruments
+# LIBS = -lPicesLibrary   -lSipperInstruments    -lBaseLibrary   -lfftw3 -lrt 
+
+LIBS = -lPicesLibrary   -lSipperInstruments    -lBaseLibrary    -lmysqlclient -lrt
+
+LIBDIR = -L../../BaseLibrary  -L../../PicesLibraries/SipperInstruments  -L../../PicesLibraries/PicesLibrary  -L/usr/lib64/mysql/
 
 CC = g++
 
