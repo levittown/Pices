@@ -4682,6 +4682,15 @@ KKStrException::KKStrException (const char*            _exceptionStr,
 }
 
 
+KKStrException::KKStrException (const char*  _exceptionStr,
+                                const char*  _innerException
+                               )
+{
+  exceptionStr << _exceptionStr << endl
+               << _innerException;
+}
+
+
 
 KKStrException::~KKStrException ()  throw ()
 {

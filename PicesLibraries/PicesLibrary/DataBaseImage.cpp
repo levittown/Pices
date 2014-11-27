@@ -1,5 +1,6 @@
 #include "FirstIncludes.h"
 #include <stdlib.h>
+#include <string.h>
 #include <algorithm>
 #include <memory>
 #include <string>

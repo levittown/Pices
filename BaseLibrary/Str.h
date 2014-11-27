@@ -1002,6 +1002,11 @@ namespace KKU
                     const std::exception&  _innerException
                    );
 
+    KKStrException (const char*  _exceptionStr,
+                    const char*  _innerException
+                   );
+
+
     virtual  ~KKStrException ()  throw ();
 
     virtual  const KKStr&  ToString ()  const;

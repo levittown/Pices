@@ -5,7 +5,7 @@ EXEC = FeatureSelection
 CFLAGS = -O3  -I../../BaseLibrary  -I../../PicesLibraries/PicesLibrary   -I../../PicesLibraries/SipperInstruments  
 #LIBS = -lPicesLibrary   -lSipperInstruments    -lBaseLibrary   -lfftw3f -lrt
 #LIBS = -lPicesLibrary   -lSipperInstruments    -lBaseLibrary   -lfftw3-3 -lrt
-LIBS = -lPicesLibrary   -lSipperInstruments    -lBaseLibrary   -lfftw3f -lrt  -lpthread 
+LIBS = -lPicesLibrary   -lSipperInstruments    -lBaseLibrary    -lrt  -lpthread 
 
 #FFTWAPI = ../../OutsidePackages/fftw-3.1.2/.libs
 #FFTWAPI = /usr/lib64

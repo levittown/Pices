@@ -12,14 +12,19 @@
 #include "FirstIncludes.h"
 
 #include <ctype.h>
+#include <math.h>
 #include <time.h>
 #include <fstream>
 #include <iostream>
 #include <map>
 #include <string>
 #include <vector>
+
+#if  defined(WIN32)
 #include <windows.h>
 #include <wingdi.h>
+#endif
+
 #include "MemoryDebug.h"
 using namespace std;
 
@@ -147,7 +152,7 @@ void  DataBase::WriteBuff (char*        dest,
 }
 
 
-
+#if defined(WIN32)
 KKStr  DataBase::FloatToStr (float f)
 {
   KKStr  s (12);
@@ -165,6 +170,29 @@ KKStr  DataBase::FloatToStr (float f)
   }
   return  s;  
 }  /* FloatToStr */
+#else
+
+KKStr  DataBase::FloatToStr (float f)
+{
+  KKStr s(20);
+  if  (isnan (f))
+  {
+    s =  "0.0";
+  }
+  else
+  { 
+    s << f;
+  }
+  return  s;
+}  /* FloatToStr */
+
+#endif
+
+
+
+
+
+
 
 
 
@@ -316,7 +344,7 @@ void  DataBase::InitializeMySqlLibraryEmbedded ()
   server_options[9] = NULL;
   int32  num_elements = 8;
 
-  char*  server_groups[] = {"libmysqld_server", "client", "mysqld",  NULL};
+  char const *  server_groups[] = {"libmysqld_server", "client", "mysqld",  NULL};
 
   int32  retval = 0;
 
@@ -2328,7 +2356,7 @@ vector<KKU::ulong>*  DataBase::FeatureDataGetScanLinesPerMeterProfile (const KKS
   KKStr  selectStr = "Call FeatureDataGetScanLinesPerMeterProfile (" + osGetRootName (sipperFileName).QuotedStr () + ")";
   int32  returnCd = QueryStatement (selectStr);
 
-  char*  fieldNames[] = {"StartDepth", "ScanLineCount", NULL};
+  char const *  fieldNames[] = {"StartDepth", "ScanLineCount", NULL};
   ResultSetLoad (fieldNames);
   if  (!resultSetMore)
     return NULL;
@@ -3865,7 +3893,7 @@ VectorKKStr*   DataBase::ImageListOfImageFileNamesByScanLineRange (const KKStr& 
   if  (returnCd != 0)
     return NULL;
 
-  char*  fieldNames[] = {"ImageId", "ImageFileName", NULL};
+  char const *  fieldNames[] = {"ImageId", "ImageFileName", NULL};
   ResultSetLoad (fieldNames);
   if  (!resultSetMore)
     return  NULL;
@@ -4030,7 +4058,7 @@ DataBaseImageValidatedEntryListPtr
   if  (returnCd != 0)  
     return NULL;
 
-  char*  fieldNames[] = {"ImageId",  "ImageFileName", "ClassValidatedId", "ClassNameValidated", "SizeCoordinates", NULL};
+  char  const *  fieldNames[] = {"ImageId",  "ImageFileName", "ClassValidatedId", "ClassNameValidated", "SizeCoordinates", NULL};
   ResultSetLoad (fieldNames);
   if  (!resultSetMore)
     return  NULL;
@@ -4255,7 +4283,7 @@ RasterSipperPtr  DataBase::ImageFullSizeLoad (const KKStr&  imageFileName)
 {
   RasterSipperPtr  fullSizeImage = NULL;
 
-  char*  fieldNames[] = {"ImageId", "ImageFileName", "FullSizeImage", NULL};
+  char const *  fieldNames[] = {"ImageId", "ImageFileName", "FullSizeImage", NULL};
 
   KKStr  selectStr = "call ImagesFullSizeLoad(" + osGetRootName (imageFileName).QuotedStr () + ")";
   int32  returnCd = QueryStatement (selectStr);
@@ -4487,7 +4515,7 @@ DataBaseImageGroupPtr  DataBase::ImageGroupLoad (const KKStr&  imageGroupName)  
   if  (returnCd != 0)
     return  NULL;
 
-  char*  fieldNames[] = {"ImageGroupId", "ImageGroupName", "Description", "GroupCount", NULL};
+  char const *  fieldNames[] = {"ImageGroupId", "ImageGroupName", "Description", "GroupCount", NULL};
   ResultSetLoad (fieldNames);
   if  (!resultSetMore)
     return  NULL;
@@ -4665,7 +4693,7 @@ KKStrMatrixPtr  DataBase::ImageGroupEntriesInsert (int32               groupId,
   }
   
   // Process results of procedure call.
-  char*  fieldNames[] = {"ImageId", "ImageFileName", "Successful", "ErrorDesc", NULL};
+  char const *  fieldNames[] = {"ImageId", "ImageFileName", "Successful", "ErrorDesc", NULL};
   ResultSetLoad (fieldNames);
   while  (ResultSetFetchNextRow ())
   {
@@ -4759,7 +4787,8 @@ DataBaseImageGroupEntryListPtr  DataBase::ImageGroupEntriesLoad (int32 groupId)
 
 SipperDeploymentListPtr  DataBase::SipperDeploymentProcessResults ()
 {
-  char*  fieldNames[] = {"CruiseName",        "StationName",       "DeploymentNum",
+  char const *  fieldNames[] 
+                      = {"CruiseName",        "StationName",       "DeploymentNum",
                          "Description",       "DateTimeStart",     "DateTimeEnd",
                          "Latitude",          "Longitude",         "SyncTimeStampActual",
                          "SyncTimeStampCTD",  "SyncTimeStampGPS",  "CropLeft",
@@ -4939,7 +4968,7 @@ void   DataBase::SipperDeploymentDelete (const KKStr&  cruiseName,
 //*******************************************************************************************
 
 
-char*  DataBase::sipperFileFieldNames[] = 
+char const *  DataBase::sipperFileFieldNames[] = 
                        {"SipperFileId",
                         "SipperFileName", "CruiseName",     "StationName",    "DeploymentNum",
                         "Description",    "Latitude",       "Longitude",      "DateTimeStart",
@@ -5350,7 +5379,7 @@ void  DataBase::SipperFilesGetCTDDateTime (const KKStr&  _sipperFileName,
 {
   _sipperFileId = -1;
 
-  char*  fieldNames[] =
+  char const *  fieldNames[] =
   {"sipperFileId", "sipperFileName", "numScanLines", "CTDDateTimeStart", "CTDDateTimeEnd", NULL};
 
   KKStr  sqlStr (256);
@@ -5395,7 +5424,7 @@ void   DataBase::SipperFilesDelete (const KKStr&  _sipperFileName)
 //*******************************************************************************************
 SipperStationListPtr  DataBase::SipperStationProcessResults ()
 {
-  char*  fieldNames[] = {"CruiseName", "StationName", "Description", "Latitude", "Longitude", "DateTimeStart", NULL};
+  char const *  fieldNames[] = {"CruiseName", "StationName", "Description", "Latitude", "Longitude", "DateTimeStart", NULL};
   ResultSetLoad (fieldNames);
   if  (!resultSetMore)
     return NULL;
@@ -5546,7 +5575,8 @@ void  DataBase::SipperStationDelete (const KKStr&  cruiseName,
 InstrumentDataListPtr  DataBase::InstrumentDataProcessResults (const bool&  cancelFlag)
 
 {
-  char*  instrumentDataFieldNames[] = {"SipperFileId",        // 0
+  char const *  instrumentDataFieldNames[] 
+                                    = {"SipperFileId",        // 0
                                        "SipperFileName",      // 1
                                        "ScanLine",            // 2
                                        "ByteOffset",          // 3
@@ -6178,7 +6208,7 @@ VolumeSampledStatListPtr  DataBase::InstrumentDataGetVolumePerMeterDepth (const 
   if  (returnCd != 0)
     return  NULL;
 
-  char*  fieldNames[] = {"DownCast", "binId", "binDepth", "volumeSampled", NULL};
+  char const *  fieldNames[] = {"DownCast", "binId", "binDepth", "volumeSampled", NULL};
   ResultSetLoad (fieldNames);
   if  (!resultSetMore)
   {
@@ -6252,7 +6282,8 @@ InstrumentDataMeansListPtr  DataBase::InstrumentDataBinByMeterDepth (const KKStr
   if  (returnCd != 0)
     return  NULL;
 
-  char*  fieldNames[] = {"DownCast", "BinId", "BinDepth", "ScanLines", "VolumeSampled",  
+  char const *  fieldNames[] 
+                      = {"DownCast", "BinId", "BinDepth", "ScanLines", "VolumeSampled",  
                          "TemperatureMean", "SalinityMean", "DenisityMean",
                          "FluorescenceMean", "FluorescenceSensorMean", "OxygenMean", 
                          "DepthMean",  "TransmisivityMean", "TurbidityMean", "CdomFluorescenceMean",
@@ -6316,11 +6347,6 @@ InstrumentDataMeansListPtr  DataBase::InstrumentDataBinByMeterDepth (const KKStr
 
 
 
-
-
-
-
-
 GPSDataPointListPtr DataBase::InstrumentDataRetrieveGPSInfo (const KKStr&  cruiseName,
                                                              const KKStr&  stationName,
                                                              const KKStr&  deploymentNum,
@@ -6339,7 +6365,7 @@ GPSDataPointListPtr DataBase::InstrumentDataRetrieveGPSInfo (const KKStr&  cruis
   if  (returnCd != 0)
     return  NULL;
 
-  char*  fieldNames[] = {"CTDDateTime", "GpsStartTime", "SipperFileId", "AvgScanLine", "AvgLatitude", "AvgLongitude", "AvgFlowRate", NULL};
+  char const *  fieldNames[] = {"CTDDateTime", "GpsStartTime", "SipperFileId", "AvgScanLine", "AvgLatitude", "AvgLongitude", "AvgFlowRate", NULL};
   ResultSetLoad (fieldNames);
   if  (!resultSetMore)
   {
@@ -6405,7 +6431,7 @@ DataBaseLogEntryPtr  DataBase::LogEntriesProcessStart
   int32  returnCd = QueryStatement (sqlStr);
   if  (returnCd == 0)
   {
-    char*  fieldNames[] = {"LogEntryId", "DataBaseUserName", "DateTimeStart", "DateTimeStartUtc", NULL};
+    char const *  fieldNames[] = {"LogEntryId", "DataBaseUserName", "DateTimeStart", "DateTimeStartUtc", NULL};
     ResultSetLoad (fieldNames);
     if  (!resultSetMore)
       return  NULL;
@@ -6451,7 +6477,7 @@ void  DataBase::LogEntriesProcessEnd (DataBaseLogEntryPtr   logEntry,
   int32  returnCd = QueryStatement (sqlStr);
   if  (returnCd == 0)
   {
-    char*  fieldNames[] = {"DateTimeEnd", NULL};
+    char const *  fieldNames[] = {"DateTimeEnd", NULL};
     ResultSetLoad (fieldNames);
     if  (!resultSetMore)
       return;
@@ -6479,7 +6505,8 @@ DataBaseLogEntryPtr  DataBase::LogEntriesSelect (uint32 _logEntryId)
   int32  returnCd = QueryStatement (sqlCmd);
   if  (returnCd == 0)
   {
-    char*  fieldNames[] = {"LogEntryId",         //  0
+    char const *  fieldNames[] 
+                        = {"LogEntryId",         //  0
                            "ProgCode",           //  1
                            "ProgName",           //  2
                            "DateTimeCompiled",   //  3
@@ -6660,7 +6687,7 @@ void  DataBase::SipperCruiseUpdate (SipperCruisePtr  cruise,
 
 SipperCruiseListPtr  DataBase::SipperCruiseProcessResults ()
 {
-  char*  fieldNames[] = {"CruiseName", "ShipName", "Description", "DateStart", "DateEnd", "Location", "Objective", "Principal", "ResearchOrg", NULL};
+  char const *  fieldNames[] = {"CruiseName", "ShipName", "Description", "DateStart", "DateEnd", "Location", "Objective", "Principal", "ResearchOrg", NULL};
   ResultSetLoad (fieldNames);
   if  (!resultSetMore)
   {

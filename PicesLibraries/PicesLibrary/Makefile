@@ -8,6 +8,10 @@ LIBDIR = ../../BaseLibrary  ../SipperInstruments
 #FFTWAPI = ../../OutsidePackages/fftw-3.3.2/
 
 CFLAGS = -O3 -I ../../BaseLibrary  -I ../SipperInstruments  
+
+MYSQL = /usr/include/mysql
+
+
 #CFLAGS = -g  -I $(LIBDIR)
 
 
@@ -290,35 +294,35 @@ CrossValidationVoting.o : CrossValidationVoting.cpp  $(CROSSVALIDATIONVOTING)   
 
 
 DataBase.o : DataBase.cpp  $(DATABASE)  $(DATABASESERVER)  $(FILEDESC)  $(FEATUREFILEIOPICES)  $(IMAGEFEATURES)   
-  $(CC) $(CFLAGS) -c DataBase.cpp
+	$(CC) $(CFLAGS) -I $(MYSQL)  -c DataBase.cpp
   
   
 DataBaseServer.o : DataBaseServer.cpp  $(DATABASESERVER)
-  $(CC) $(CFLAGS) -c DataBaseServer.cpp
+	$(CC) $(CFLAGS) -I $(MYSQL)  -c DataBaseServer.cpp
   
     
 DataBaseGpsData.o : DataBaseGpsData.cpp  $(DATABASEGPSDATA)
-  $(CC) $(CFLAGS) -c DataBaseGpsData.cpp
+	$(CC) $(CFLAGS) -I $(MYSQL)  -c DataBaseGpsData.cpp
 
 
 DataBaseImage.o : DataBaseImage.cpp  $(DATABASEIMAGE)
-  $(CC) $(CFLAGS)  -c DataBaseImage.cpp
+	$(CC) $(CFLAGS) -I $(MYSQL)  -c DataBaseImage.cpp
 
 
 DataBaseImageGroup.o : DataBaseImageGroup.cpp  $(DATABASEIMAGEGROUP)  
-  $(CC) $(CFLAGS)  -c DataBaseImageGroup.cpp 
+	$(CC) $(CFLAGS)  -c DataBaseImageGroup.cpp 
 
 
 DataBaseImageGroupEntry.o : DataBaseImageGroupEntry.cpp   $(DATABASEIMAGEGROUPENTRY)   $(DATABASEIMAGE)
-  $(CC) $(CFLAGS)  -c DataBaseImageGroupEntry.cpp  
+	$(CC) $(CFLAGS)  -c DataBaseImageGroupEntry.cpp  
 
 
 DataBaseImageValidatedEntry.o : DataBaseImageValidatedEntry.cpp   $(DATABASEIMAGEVALIDATEDENTRY)   $(DATABASEIMAGE)
-  $(CC) $(CFLAGS)  -c DataBaseImageValidatedEntry.cpp  
+	$(CC) $(CFLAGS)  -c DataBaseImageValidatedEntry.cpp  
 
 
 DataBaseLogEntry.o : DataBaseLogEntry.cpp   $(DATABASELOGENTRY)
-  $(CC) $(CFLAGS)  -c DataBaseImageValidatedEntry.cpp
+	$(CC) $(CFLAGS)  -c DataBaseLogEntry.cpp
 
 
 DuplicateImages.o :  DuplicateImages.cpp         $(DUPLICATEIMAGES)           $(FEATUREVECTOR) \

@@ -2,7 +2,6 @@
 #define  _DATABASE_
 
 
-
 #include "DateTime.h"
 #include "GoalKeeper.h"
 #include "RasterSipper.h"
@@ -981,7 +980,7 @@ namespace MLL
     SipperCruiseListPtr  SipperCruiseProcessResults ();
 
     SipperFileListPtr  SipperFileProcessResults ();
-    static char*  sipperFileFieldNames[];
+    static char const *  sipperFileFieldNames[];
 
     SipperStationListPtr  SipperStationProcessResults ();
 
