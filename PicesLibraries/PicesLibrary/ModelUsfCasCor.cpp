@@ -163,7 +163,7 @@ void  ModelUsfCasCor::TrainModel (FeatureVectorListPtr  _trainExamples,
   // that needed to be done.  
   // Also the data structures 'classes', 'encoder', and 'fileDesc' will have been built.
   // 'classes' will already be sorted in name order.
-  // The Prediction varaiables 'probabilities', 'votes', and 'crossClassProbTable' will
+  // The Prediction variables 'probabilities', 'votes', and 'crossClassProbTable' will
   // have been built.
 
   TrainingTimeStart ();
@@ -345,7 +345,7 @@ void  ModelUsfCasCor::ProbabilitiesByClass (FeatureVectorPtr            example,
   if  (_mlClasses.size () != probabilities.size ())
   {
     log.Level (-1) << endl << "ModelUsfCasCor::ProbabilitiesByClass   ***ERROR***"  << endl
-      << "\"_mlClasses.size () != probabilities.size ()\"   This should noyt ever be ble to happen." << endl
+      << "\"_mlClasses.size () != probabilities.size ()\"   This should not ever be able to happen." << endl
       << endl;
     for  (int x = 0;  x < _mlClasses.QueueSize ();  ++x)
     {
@@ -379,9 +379,9 @@ void  ModelUsfCasCor::ProbabilitiesByClass (FeatureVectorPtr            example,
 
 
 
-void   ModelUsfCasCor::ProbabilitiesByClass (FeatureVectorPtr            _example,
+void   ModelUsfCasCor::ProbabilitiesByClass (FeatureVectorPtr         _example,
                                              const MLClassConstList&  _mlClasses,
-                                             double*                     _probabilities
+                                             double*                  _probabilities
                                             )
 {
   if  (!usfCasCorClassifier)
@@ -420,7 +420,7 @@ void   ModelUsfCasCor::ProbabilitiesByClass (FeatureVectorPtr            _exampl
   if  (_mlClasses.size () != probabilities.size ())
   {
     log.Level (-1) << endl << "ModelUsfCasCor::ProbabilitiesByClass   ***ERROR***"  << endl
-      << "\"_mlClasses.size () != probabilities.size ()\"   This should noyt ever be ble to happen." << endl
+      << "\"_mlClasses.size () != probabilities.size ()\"   This should not ever be able to happen." << endl
       << endl;
     for  (int x = 0;  x < _mlClasses.QueueSize ();  ++x)
     {

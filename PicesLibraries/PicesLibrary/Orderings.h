@@ -73,11 +73,11 @@ public:
   /**
    *@brief Constructs Orderings object from ImageFeatursList object.
    *@details Use this when an existing list does not exist.  Will create 'numOfOrderings' 
-   *         seperate lists of 'data' that are randomly ordered and stratified by 
+   *         separate lists of 'data' that are randomly ordered and stratified by
    *         'numOfFolds'.
    *
    *@param[in] _data  ImagFeaturesList object, 
-   *@param[in] _numOfOrderings  Number of seperate orderings of data neeed.
+   *@param[in] _numOfOrderings  Number of separate orderings of data need.
    *@param[in] _numOfFolds  Used to help stratify data in each fold.
    */
   Orderings (const FeatureVectorListPtr _data,
@@ -90,16 +90,16 @@ public:
    *@brief Constructs Orderings of a FeatureVectorList from a previous construction that was saved
    *       in a data file.
    *@details Will load object from the Feature File '_featureFileName'  and retrieve the 
-   *         different orderings from a separate index file whos name will be 
+   *         different orderings from a separate index file who's name will be
    *         osExtention (FeatureFileName) + ".idx".  The load routine will validate that all 
    *         imageFeatures objects are accounted for in each ordering.  If the index file does not 
    *         exist it then the  'successful' flag will bet to false.  
    *
    *@param[in] _featureFileName  File to load FeatureVector' objects from.  This will be used as 
    *                             master list for 'Orderings'.
-   *@param[in] _driver           Feature File driver toutilize.
+   *@param[in] _driver           Feature File driver to utilize.
    *@param[in] _log              Log file to write messages to.
-   *@param[in] v                 If flag tturns to 'TRUE' then will terminate the load process and return to caller.
+   *@param[in] v                 If flag turns to 'TRUE' then will terminate the load process and return to caller.
    */
   Orderings (const KKStr&      _featureFileName,
              FeatureFileIOPtr  _driver,
@@ -115,7 +115,7 @@ public:
    *          load routine will validate that all FeatureVector objects are accounted for in each 
    *          ordering.
    *
-   *@param[in] _data  Master List of Imagefeatures  objects.
+   *@param[in] _data  Master List of ImageFeatures  objects.
    *@param[in] _indexFileName  File where orderings of 'data' are to be loaded from.
    *@param[in] _numOfOrderings
    *@param[in] _numOfFolds
@@ -132,7 +132,7 @@ public:
    *         built Orderings data index file.
    *@details Will use FileName from "data" parameter to derive both 'featureFileName' and 
    *        'indexFileName' using the 'FileName' method from FeatureVectorList.  It is expected 
-   *        that a seperate index file by the name osDeletExtention (FeatureFileName) + ".idx" 
+   *        that a separate index file by the name osDeletExtention (FeatureFileName) + ".idx"
    *        will exist.  The orderings will be loaded from that file.
    *@param[in]  _data  FeatureVectorList that we want different orderings of.
    */
@@ -146,11 +146,11 @@ public:
    *@brief   Constructs a Orderings object for a specified FeatureVectorList.
    *@details Will use FileName from "_data" parameter to derive both 'featureFileName' and 
    *        'indexFileName' using the 'FileName' method from FeatureVectorList.  If a separate 
-   *        Index file does not exist it will randomly xcreate orderings and save the orderings 
+   *        Index file does not exist it will randomly create orderings and save the orderings
    *        in a new Index file.
    *@param[in]  _data  FeatureVectorList that we want different orderings of.
    *@param[in]  _numOfOrderings  Expected number of orderings.
-   *@param[in]  _numOfFolds  Number of folds each ordering should be straitified by.
+   *@param[in]  _numOfFolds  Number of folds each ordering should be stratified by.
    */
   static
   OrderingsPtr  CreateOrderingsObjFromFileIfAvaliable (const FeatureVectorListPtr  _data,
@@ -162,16 +162,16 @@ public:
   /***************************************************************************/
   /*                            Access Methods                               */
   /***************************************************************************/
-  FeatureVectorListPtr          Data            ()  const  {return data;}
-  const KKStr&                  FeatureFileName ()  const  {return featureFileName;}
-  const FileDescPtr             FileDesc        ()  const  {return fileDesc;}
-  const MLClassConstListPtr  MLClasses    ()  const  {return mlClasses;}
-  const KKStr&                  IndexFileName   ()  const  {return indexFileName;}
-  RunLog&                       Log             ()         {return log;}
-  uint32                        NumOfFolds      ()  const  {return numOfFolds;}
-  uint32                        NumOfOrderings  ()  const  {return numOfOrderings;}
-  uint32                        Size            ()  const  {return (uint32)orderings.size ();}
-  bool                          Valid           ()  const  {return valid;}
+  FeatureVectorListPtr       Data            ()  const  {return data;}
+  const KKStr&               FeatureFileName ()  const  {return featureFileName;}
+  const FileDescPtr          FileDesc        ()  const  {return fileDesc;}
+  const MLClassConstListPtr  MLClasses       ()  const  {return mlClasses;}
+  const KKStr&               IndexFileName   ()  const  {return indexFileName;}
+  RunLog&                    Log             ()         {return log;}
+  uint32                     NumOfFolds      ()  const  {return numOfFolds;}
+  uint32                     NumOfOrderings  ()  const  {return numOfOrderings;}
+  uint32                     Size            ()  const  {return (uint32)orderings.size ();}
+  bool                       Valid           ()  const  {return valid;}
 
 
 
@@ -200,7 +200,7 @@ private:
   FeatureVectorListPtr           data;
   KKStr                          featureFileName;
   FileDescPtr                    fileDesc;
-  MLClassConstListPtr         mlClasses;
+  MLClassConstListPtr            mlClasses;
   KKStr                          indexFileName;
   RunLog&                        log;
   uint32                         numOfFolds;

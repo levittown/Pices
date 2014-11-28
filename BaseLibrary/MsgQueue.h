@@ -1,4 +1,4 @@
-/* MsgQueue.h -- Implements Cammera Frame Buffering allowing a camera thread to unload frames quickly for a seprate thread to process.
+/* MsgQueue.h -- Implements Camera Frame Buffering allowing a camera thread to unload frames quickly for a separate thread to process.
  * Copyright (C) 2011-2011  Kurt Kramer
  * For conditions of distribution and use, see copyright notice in KKLineScanner.h
  */
@@ -35,7 +35,7 @@ namespace KKU
 
     /**
      *@brief  Take ownership of 'msg' and add to end of the queue.
-     *@param[in]  msg  Pointer to message that is to be added to end of queue.  The caller will 
+     *@param[in]  msg  Pointer to message that is to be added to end of queue. The caller will
      *            pass ownership of this string to this instance of MsgQueue.
      */
     void  AddMsg (KKStrPtr  msg);     /**<  Taking ownership of 'msg'        */
@@ -45,7 +45,7 @@ namespace KKU
 
     /** 
      *@brief Returns a duplicate of the last string added to the message queue.
-     *@details This will not effect the current copy of the message queue.  he returned string
+     *@details This will not effect the current copy of the message queue. The returned string
      * will be owned by the caller who will be responsible for deleting it.
      */
     KKStrPtr  GetCopyOfLastMsg ();
@@ -58,7 +58,7 @@ namespace KKU
 
 
   private:
-    GoalKeeperPtr          gateKeeper;       /**< Used to manage sycronization amongst different threads to this queue. */
+    GoalKeeperPtr          gateKeeper;       /**< Used to manage synchronization amongst different threads to this queue. */
     int32                  memoryConsumed;
     KKStr                  name;             /**< Name of msgQueue. */
     std::queue<KKStrPtr>   queue;

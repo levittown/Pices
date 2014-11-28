@@ -6,14 +6,14 @@
  @author  Kurt Kramer
  @details
  @code
- ****************************************************************************
- **                           LogicalFrameBlob                              *
- **                                                                         *
- **  Used by ImageExtractionManager to keep track of an individule conected *
- **  componets in a sipper frame.  We call these connected componets blobs. *
- **  The fields rowTop, rowBot, colLeft, colRight indicate a tight bounding *
- **  box arround the blob.                                                  *
- ****************************************************************************
+ *****************************************************************************
+ **                           LogicalFrameBlob                               *
+ **                                                                          *
+ **  Used by ImageExtractionManager to keep track of an individual connected *
+ **  components in a sipper frame. We call these connected components blobs. *
+ **  The fields rowTop, rowBot, colLeft, colRight indicate a tight bounding  *
+ **  box around the blob.                                                    *
+ *****************************************************************************
  @endcode
 */
 

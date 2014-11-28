@@ -5,16 +5,16 @@
 #ifndef  _CONFIGURATION_
 #define  _CONFIGURATION_
 
-#include  "Str.h"
-#include  "RunLog.h"
+#include "Str.h"
+#include "RunLog.h"
 
 
 namespace KKU 
 {
   /**
    *@brief  General purpose Configuration File manager class.
-   *@details  This class will read and write configuration files.  It understands the concept of Logical Sections and 
-   * Variables.  You will be able to programmatically define Sections and Settings in these sections.  Each Setting
+   *@details  This class will read and write configuration files. It understands the concept of Logical Sections and
+   * Variables. You will be able to programmatically define Sections and Settings in these sections. Each Setting
    * will have a related value stored with it.
    *
    *@code
@@ -22,7 +22,7 @@ namespace KKU
    *===========================================================
    * [Header]
    * ClassifierType = SVM
-   * Parametrs = -K RBF  -S SVC -G 1.76 -C 12
+   * Parameters = -K RBF  -S SVC -G 1.76 -C 12
    * RootDir = ${PicesHmeDir}\TraningLibraries\SimpleLibrary\
    *
    * [Class]
@@ -33,11 +33,11 @@ namespace KKU
    *===========================================================
    *@endcode
    *
-   * There are three sections defined in the example above; Header, Class, and Class.  Note
-   * that Section names do not have to be unique.  You can access sections by name or index.
-   * If the name is not unique the first instance will be returned.  Index values start at
+   * There are three sections defined in the example above; Header, Class, and Class. Note
+   * that Section names do not have to be unique. You can access sections by name or index.
+   * If the name is not unique the first instance will be returned. Index values start at
    * the top of the file, that is the first section to appear in the file is section index
-   * 0.  The Setting names are of the format "SettingName = Value".  Again you will be able 
+   * 0. The Setting names are of the format "SettingName = Value". Again you will be able
    * to access Setting by either name or index.
    */
 
@@ -66,7 +66,7 @@ namespace KKU
                            const KKStr&  error
                           );
 
-    void  FormatErrorsClear ();  /**< @brief Call this to vlear all format error messages. */
+    void  FormatErrorsClear ();  /**< @brief Call this to clear all format error messages. */
 
     void  LoadFile ();
 
@@ -139,7 +139,7 @@ namespace KKU
     KKU::KKStr          curSectionName;
     KKU::KKStr          fileName;
     bool                formatGood;
-    VectorKKStr         formatErrors;   /**< Configuration Format Errors will be recorder hear */
+    VectorKKStr         formatErrors;   /**< Configuration Format Errors will be recorder here. */
     VectorInt           formatErrorsLineNums;
     RunLog&             log;
     ConfSectionListPtr  sections; 

@@ -209,7 +209,7 @@ void  KKU::tqli (int32     n,
     {
       for  (m = l;  m < n - 1;  m++)
       {
-        // Looking for a singkle small sub-diagonel element
+        // Looking for a single small sub-diagonal element
         // to split the matrix
         dd = fabs (d[m]) + fabs (d[m + 1]);
         if  (fabs (e[m]) + dd == dd)

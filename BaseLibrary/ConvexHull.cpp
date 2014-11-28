@@ -174,9 +174,6 @@ double  ConvexHull::ConvexArea2 ()
  
 
 void  ConvexHull::CalcConvexArea (RasterPtr   raster)
-//effects: if upper.size()<3 throw IllegalStateException
-//        else calculate the area for the convex area
-
 {
   convexArea = 0;
 
@@ -211,9 +208,6 @@ void  ConvexHull::CalcConvexArea (RasterPtr   raster)
 
   return;
 }  /* CalcConvexArea */
-
-
- 
 
 
 
@@ -673,8 +667,6 @@ void   ConvexHull::BuildLowerLink ()
   lowerPoints = NULL;
 }  /* BuildLowerLink */
     
-
-
 
 
 

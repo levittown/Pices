@@ -311,7 +311,7 @@ LogicalFramePtr  FrameProcessorThread::GetNextFrameToProcess ()
     logicalFrame = framePool->GetNextFrameToProcess ();
     if  ((logicalFrame == NULL)  &&  TerminateFlag ())
     {
-      // There are no more frames needing processing and the Extractionmanager wants to stop when convienient.
+      // There are no more frames needing processing and the Extraction Manager wants to stop when convenient.
       break;
     }
   }

@@ -114,7 +114,7 @@ void  LogicalFrameBlob::DialateBlob (uchar**   frame,
       }
 
 
-      // Next lets determine if this pixzel will be the recipeint of dialation.
+      // Next lets determine if this pixel will be the recipient of dilation.
       bool  dialatePixel = false;
       for  (windowRow = Max ((int32 (workRow) - size), 0);  (windowRow < (workRow + size))  &&  (!dialatePixel);  windowRow++)
       {

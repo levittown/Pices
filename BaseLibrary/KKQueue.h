@@ -57,12 +57,12 @@ namespace  KKU
    *@class  KKQueue  Template based off the std::vector template.
    *@brief  A typed container class/template that keeps track of entries via pointers only while.
    *@details  Will act as an Array, Queue or Stack structures.  Items are added by the 'PushOnFront' and 
-   *          'PushOnBack' methods.  They are removed by the 'PopFromFront' and 'PopFromBack' methods.
+   *          'PushOnBack' methods. They are removed by the 'PopFromFront' and 'PopFromBack' methods.
    *          What is important to keep in mind is that it holds pointers to its contents, not the actual
    *          instances. It is important to keep track who owns the objects you put in an instance of 
-   *          KKQueue.  KKQueue has a 'Owner' flag that you can set.  If it is set to 'true' then it will 
+   *          KKQueue.  KKQueue has a 'Owner' flag that you can set. If it is set to 'true' then it will
    *          call the destructor on all its contents when you call KKQueue's destructor or the 
-   *          'DestroyContents' method.  When you add an element to a KKQueue container you can not delete
+   *          'DestroyContents' method. When you add an element to a KKQueue container you can not delete
    *          it separately until you either remove it from KKQueue or delete the KKQueue container.
    *          If the KKQueue derived container owned its contents and you call its destructor then there 
    *          is no need to delete the contents separately.
@@ -70,7 +70,7 @@ namespace  KKU
    *          KKQueue is sub-classed from vector<Entry*> so you can use any method that is available for
    *          the vector<> template.
    *
-   *@tparam[in]  Entry  The type of objects that are to be held in this container.  When you add new instances 
+   *@tparam[in]  Entry  The type of objects that are to be held in this container. When you add new instances
    *                    of 'Entry', you need to add a pointer to it not the actual entry.
    */
   template <class Entry>
@@ -105,8 +105,8 @@ namespace  KKU
       /**
        *@brief  Copy Constructor, will create a new instance.
        *@details If the parameter 'q' owns its contents then this constructor will also create new 
-       *         instances of its contents.  That is it will call the Copy  Constructor for each 
-       *         one of the elements it contains  If 'q' does not own its contents it will just
+       *         instances of its contents. That is it will call the Copy  Constructor for each
+       *         one of the elements it contains If 'q' does not own its contents it will just
        *         copy over the pointers from 'q', meaning that the new instance of KKQueue will 
        *         point to the same locations as 'q' does.
        */
@@ -139,15 +139,15 @@ namespace  KKU
       /**
        *@fn  void AddQueue (KKQueue& q);
        *@brief  Add the contents of a separate KKQueue container to this container.
-       *@details  Be careful how the Owner flags are set.  This method adds the pointers of 'q' to the end of its own container. It does not concern itself
-       *          with the state of the 'Owner' flags.  If you are not careful you can have both containers thinking they own the same entries.  I suggest
-       *          that after you add the contents of 'q' to this container that the caller set the 'owner' flag of 'q'  to false.
+       *@details  Be careful how the Owner flags are set. This method adds the pointers of 'q' to the end of its own container. It does not concern itself
+       *          with the state of the 'Owner' flags. If you are not careful you can have both containers thinking they own the same entries. I suggest
+       *          that after you add the contents of 'q' to this container that the caller set the 'owner' flag of 'q' to false.
        */
       void      AddQueue       (const KKQueue& q);                    
                                                                    
       EntryPtr  BackOfQueue    ()                       const;  /**< @brief  Returns pointer of last element in the container without removing it.  If the container is empty will return NULL.  */
       void      Compress       ();                              /**< @brief  No longer does anything. */
-      void      DeleteContents ();                              /**< @brief  Empties the container,  if 'owner' is set to true will call the destructor on each element.                     */
+      void      DeleteContents ();                              /**< @brief  Empties the container, if 'owner' is set to true will call the destructor on each element.                     */
       void      DeleteEntry    (EntryPtr _entry);               /**< @brief  Removes from KKQueue the entry who's pointer = '_entry'                                                           */
       void      DeleteEntry    (uint32   _idx);                 /**< @brief  Removes from KKQueue the entry who's index = '_idx'.                                                              */
       EntryPtr  FrontOfQueue   ()                       const;  /**< @brief  Returns a pointer to the element that is at from of the queue with out removing it from the queue.                */

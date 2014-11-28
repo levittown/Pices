@@ -133,8 +133,8 @@ uchar  DateType::DaysInTheMonth (int32 year,
 
 
 int32  DateType::DaysYTDforMonth (int32 year,
-                                uchar month
-                               )
+                                  uchar month
+                                 )
 {
   if  ((month < 1)  ||  (month > 12))
     return 0;

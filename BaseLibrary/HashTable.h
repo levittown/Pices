@@ -77,7 +77,7 @@ namespace  KKU
 
 
   /**
-   *@brief  Hash Table management template;  developed to support BitReduction algorithm.
+   *@brief  Hash Table management template; developed to support BitReduction algorithm.
    *@author  Tong Luo
    *@details  This template was originally written by Tong Luo to support his experiments in Bit reduction.
    *          It was later heavily modified by Kurt Kramer to conform to the PicesLibrary structure.
@@ -147,7 +147,7 @@ namespace  KKU
   {
     uint32  hashValue = HashValue (key);
 
-    // uint32  idx =  CalcIndex (hashValue);
+    // uint32  idx = CalcIndex (hashValue);
     uint32  idx =  hashValue;
 
     EntryPtr entry     = NULL;

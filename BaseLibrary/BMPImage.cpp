@@ -157,7 +157,7 @@ struct  BmpImage::CodePair
 
 /*!
  \class  BmpImage::CodedPixels
- \brief  This object is used to help encode the data storred in BMPImage::image into 8 or 4 bit compressed formats used by BMP files.                                            *
+ \brief  This object is used to help encode the data stored in BMPImage::image into 8 or 4 bit compressed formats used by BMP files.                                            *
  */
 class  BmpImage::CodedPixels 
 {

@@ -63,8 +63,8 @@ namespace KKU
     /**
      *@brief  Specify threads that must stop before this thread is started.
      *@details This method can be called multiple times;  the information is used by the 'KKTHreadManager' instance to control the
-     *  orderly shutdown of the controling 'KKTHreadManager' instance.
-     *@param[in]  _thread  A thread that needs to be in the the 'tsStopped' status before this thread can be stutdown;  we do NOT take ownership.
+     *  orderly shutdown of the controlling 'KKTHreadManager' instance.
+     *@param[in]  _thread  A thread that needs to be in the the 'tsStopped' status before this thread can be shutdown;  we do NOT take ownership.
      */
     void  AddShutdownPrerequistite (KKThreadPtr  _thread);
 
@@ -102,12 +102,12 @@ namespace KKU
                                                 */
 
     MsgQueuePtr            msgQueue;           /**< This MsgQueue instance will be owned by 'ExtractionManager' we will just use
-                                                * it to communicate messeges to the controlling process.
+                                                * it to communicate messages to the controlling process.
                                                 */
 
     volatile bool          shutdownFlag;       /**< Threads need to monitor this flag; if it goes thre they are to 
-                                                 * complete all processing that is queued up and then terminate.
-                                                 */
+                                                * complete all processing that is queued up and then terminate.
+                                                */
 
     KKThreadListPtr        startPrerequisites;
 
@@ -115,8 +115,8 @@ namespace KKU
 
     ThreadStatus           status;
 
-    volatile bool          terminateFlag;      /**< Threads need to monotir this flag;  if it goes 'true'  they need 
-                                                * to terminate as quick as possible relaseing all allocated resources.
+    volatile bool          terminateFlag;      /**< Threads need to monitor this flag;  if it goes 'true'  they need
+                                                * to terminate as quick as possible releasing all allocated resources.
                                                 */
 
     KKThreadManagerPtr     threadManager;

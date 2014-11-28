@@ -51,7 +51,7 @@ ModelKnn::ModelKnn (FileDescPtr           _fileDesc,
 
 
 ModelKnn::ModelKnn (const KKStr&          _name,
-                    const ModelParamKnn&  _param,         // Create new model from
+                    const ModelParamKnn&  _param,
                     FileDescPtr           _fileDesc,
                     volatile const bool&  _cancelFlag,
                     RunLog&               _log
@@ -99,19 +99,19 @@ MLClassConstPtr  ModelKnn::Predict (FeatureVectorPtr  image)
 
 
 
-void  ModelKnn::Predict (FeatureVectorPtr     example,
+void  ModelKnn::Predict (FeatureVectorPtr  example,
                          MLClassConstPtr   knownClass,
                          MLClassConstPtr&  predClass1,
                          MLClassConstPtr&  predClass2,
-                         int32&               predClass1Votes,
-                         int32&               predClass2Votes,
-                         double&              probOfKnownClass,
-                         double&              predClass1Prob,
-                         double&              predClass2Prob,
-                         double&              compact,
-                         int32&               numOfWinners,
-                         bool&                knownClassOneOfTheWinners,
-                         double&              breakTie
+                         int32&            predClass1Votes,
+                         int32&            predClass2Votes,
+                         double&           probOfKnownClass,
+                         double&           predClass1Prob,
+                         double&           predClass2Prob,
+                         double&           compact,
+                         int32&            numOfWinners,
+                         bool&             knownClassOneOfTheWinners,
+                         double&           breakTie
                         )
 {
 }  /* Predict */
@@ -153,18 +153,18 @@ ClassProbListPtr  ModelKnn::ProbabilitiesByClass (FeatureVectorPtr  example)
 
 
 
-void  ModelKnn::ProbabilitiesByClass (FeatureVectorPtr            example,
+void  ModelKnn::ProbabilitiesByClass (FeatureVectorPtr         example,
                                       const MLClassConstList&  _mlClasses,
-                                      int32*                      _votes,
-                                      double*                     _probabilities
+                                      int32*                   _votes,
+                                      double*                  _probabilities
                                      )
 {
 }
 
 
-void  ModelKnn::ProbabilitiesByClass (FeatureVectorPtr            _example,
+void  ModelKnn::ProbabilitiesByClass (FeatureVectorPtr         _example,
                                       const MLClassConstList&  _mlClasses,
-                                      double*                     _probabilities
+                                      double*                  _probabilities
                                      )
 {
 }  /* ProbabilitiesByClass */
@@ -201,7 +201,7 @@ void  ModelKnn::ReadSpecificImplementationXML (istream&  i,
 
     else
     {
-      // Add code tro deal with items that are specific to 'ModelSvmBase'
+      // Add code to deal with items that are specific to 'ModelSvmBase'
     }
   }
 

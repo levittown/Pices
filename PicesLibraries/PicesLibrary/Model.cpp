@@ -1,19 +1,16 @@
-#include  "FirstIncludes.h"
+#include "FirstIncludes.h"
 
-#include  <exception>
-#include  <fstream>
-#include  <iomanip>
-#include  <iostream>
-#include  <math.h>
-#include  <set>
-#include  <sstream>
-#include  <stdio.h>
-#include  <string>
-#include  <vector>
-
-
-#include  "MemoryDebug.h"
-
+#include <exception>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <math.h>
+#include <set>
+#include <sstream>
+#include <stdio.h>
+#include <string>
+#include <vector>
+#include "MemoryDebug.h"
 using namespace  std;
 
 
@@ -98,28 +95,28 @@ Model::Model (FileDescPtr           _fileDesc,
               volatile const bool&  _cancelFlag,
               RunLog&               _log
              ):
-    alreadyNormalized          (false),
-    cancelFlag                 (_cancelFlag),
-    classes                    (NULL),
-    classesIndex               (NULL),
-    compression_stats          (),
-    crossClassProbTable        (NULL),
-    encoder                    (NULL),
-    fileDesc                   (_fileDesc),
-    log                        (_log),
-    name                       (),
-    normParms                  (NULL),
-    numOfClasses               (0),
-    param                      (NULL),
-    classProbs                 (NULL),
-    rootFileName               (),
-    trainExamples              (NULL),
-    trianingPrepTime           (0.0),
-    trainingTime               (0.0),
-    trainingTimeStart          (0.0),
-    validModel                 (true),
-    votes                      (NULL),
-    weOwnTrainExamples         (false)
+    alreadyNormalized    (false),
+    cancelFlag           (_cancelFlag),
+    classes              (NULL),
+    classesIndex         (NULL),
+    compression_stats    (),
+    crossClassProbTable  (NULL),
+    encoder              (NULL),
+    fileDesc             (_fileDesc),
+    log                  (_log),
+    name                 (),
+    normParms            (NULL),
+    numOfClasses         (0),
+    param                (NULL),
+    classProbs           (NULL),
+    rootFileName         (),
+    trainExamples        (NULL),
+    trianingPrepTime     (0.0),
+    trainingTime         (0.0),
+    trainingTimeStart    (0.0),
+    validModel           (true),
+    votes                (NULL),
+    weOwnTrainExamples   (false)
 {
 }
 
@@ -131,7 +128,7 @@ Model::Model (FileDescPtr           _fileDesc,
  *@param[in] _param Will make own locale copy.
  *@param[in] _examples The image data we will be building the model from
  *@param[in] _fileDesc A description of the data file.
- *@param[in] _log A logfile stream. All important events will be ouput to this stream
+ *@param[in] _log A logfile stream. All important events will be output to this stream
  */
 Model::Model (const KKStr&          _name,
               const ModelParam&     _param,      // Create new model from
@@ -235,7 +232,7 @@ ModelPtr  Model::CreateFromStream (istream&              i,
   ModelTypes  modelType = mtNULL;
 
 
-  // Fisrt we need to determine which type of model this is.  We will
+  // First we need to determine which type of model this is.  We will
   // scan through the file until we locate a ModelParamType field.
   while  (i.getline (buff, sizeof (buff)))
   {
@@ -303,7 +300,7 @@ ModelPtr  Model::CreateFromStream (istream&              i,
   catch  (const KKStrException& e)
   {
     _log.Level (-1) << endl << endl
-      << "Model::CreateFromStream    ***ERROR***  Exception occured in executing 'ReadXML'" << endl
+      << "Model::CreateFromStream    ***ERROR***  Exception occurred in executing 'ReadXML'" << endl
       << "      " << e.ToString ()  << endl
       << endl;
     successful = false;
@@ -313,7 +310,7 @@ ModelPtr  Model::CreateFromStream (istream&              i,
   catch (...)
   {
     _log.Level (-1) << endl << endl
-      << "Model::CreateFromStream    ***ERROR***  Exception occured in executing 'ReadXML'" << endl
+      << "Model::CreateFromStream    ***ERROR***  Exception occurred in executing 'ReadXML'" << endl
       << endl;
     successful = false;
     delete  model;
@@ -733,7 +730,7 @@ void  Model::ReadXML (istream&  i,
         _successful = false;
         validModel = false;
         KKStr  errMsg;
-        errMsg << "Exception executing fuction 'ModelParam::CreateModelParam'.  Exception[" << e.what () << "]";
+        errMsg << "Exception executing function 'ModelParam::CreateModelParam'.  Exception[" << e.what () << "]";
         log.Level (-1) << endl << "Model::ReadXML    ***ERROR***    "  << errMsg << endl << endl;
         throw KKStrException (errMsg);
       }
@@ -796,7 +793,7 @@ void  Model::ReadXML (istream&  i,
   {
     _successful = false;
     log.Level (-1) << endl << endl 
-                   << "Model::ReadXML    Normalization Parmameters was not defined." << endl
+                   << "Model::ReadXML    Normalization Parameters was not defined." << endl
                    << endl;
   }
 
@@ -849,8 +846,8 @@ void  Model::ReadSkipToSection (istream& i,
 
 
 /**
- *@brief Performs operations such as BitReduction, FeatureEncoding, and  Normailization.  The actual training 
- *       of models occurs in the specific implementation of 'Model'.
+ *@brief Performs operations such as BitReduction, FeatureEncoding, and Normalization. The actual training
+ * of models occurs in the specific implementation of 'Model'.
  */
 void  Model::TrainModel (FeatureVectorListPtr  _trainExamples,
                          bool                  _alreadyNormalized,
@@ -967,11 +964,11 @@ void  Model::TrainModel (FeatureVectorListPtr  _trainExamples,
 
 /**
  *@brief  Every prediction  method in every class that is inherited from this class should call
- *        this method before performing there prediction.  Such things as Normalization and
+ *        this method before performing there prediction. Such things as Normalization and
  *        Feature Encoding.
  *@param[in]  fv  Feature vector of example that needs to be prepared.
  *@param[out]  newExampleCreated  Indicates if either Feature Encoding and/or Normalization needed
- *             to be done.  If neither then the original instance is returned.  If Yes then 
+ *             to be done. If neither then the original instance is returned. If Yes then
  *             a new instance which the caller will have to be delete will be returned.
  */
 FeatureVectorPtr  Model::PrepExampleForPrediction (FeatureVectorPtr  fv,
@@ -992,7 +989,7 @@ FeatureVectorPtr  Model::PrepExampleForPrediction (FeatureVectorPtr  fv,
     newExampleCreated = true;
   }
 
-  // I do not believe we need the encoder at this point. At least not for the Features Selected part.  Maybe the conversion from niminal fields will make sense.
+  // I do not believe we need the encoder at this point. At least not for the Features Selected part. Maybe the conversion from minimal fields will make sense.
   if  (encoder)
   {
     oldFV = fv;
@@ -1024,7 +1021,7 @@ void  Model::ReduceTrainExamples ()
   bool  reductionNeeded = false;
 
   {
-    // First lets see if reduction is even nessasary.
+    // First lets see if reduction is even necessary.
     ClassStatisticListPtr  stats = trainExamples->GetClassStatistics ();
     if  (!stats)
     {
@@ -1052,7 +1049,7 @@ void  Model::ReduceTrainExamples ()
   }
 
   FeatureVectorListPtr  reducedSet = new FeatureVectorList (fileDesc, false, log);
-  FeatureVectorListPtr  deleteSet  = new FeatureVectorList (fileDesc, false, log);  // Examples taht we do not use will need to be deleted.
+  FeatureVectorListPtr  deleteSet  = new FeatureVectorList (fileDesc, false, log);  // Examples that we do not use will need to be deleted.
   MLClassConstList::iterator  idx;
 
   for  (idx = classes->begin ();  idx != classes->end ();  idx++)
@@ -1119,8 +1116,8 @@ void  Model::ReduceTrainExamples ()
 
 
 
-void  Model::RetrieveCrossProbTable (MLClassConstList&   classes,
-                                     double**               crossClassProbTable  // two dimension matrix that needs to be classes.QueueSize ()  squared.
+void  Model::RetrieveCrossProbTable (MLClassConstList&  classes,
+                                     double**           crossClassProbTable  // two dimension matrix that needs to be classes.QueueSize ()  squared.
                                     )
 {
   if  (classes.QueueSize () != crossClassProbTableSize)

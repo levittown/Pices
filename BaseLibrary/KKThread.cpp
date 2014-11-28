@@ -34,10 +34,10 @@ using namespace KKU;
 #pragma pack(push,8)
 typedef struct tagTHREADNAME_INFO
 {
-   DWORD  dwType;   // Must be 0x1000.
-   LPCSTR szName; // Pointer to name (in user addr space).
-   DWORD  dwThreadID; // Thread ID (-1=caller thread).
-   DWORD  dwFlags; // Reserved for future use, must be zero.
+   DWORD  dwType;     /**< Must be 0x1000.                          */
+   LPCSTR szName;     /**< Pointer to name (in user address space). */
+   DWORD  dwThreadID; /**< Thread ID (-1=caller thread).            */
+   DWORD  dwFlags;    /**< Reserved for future use, must be zero.   */
 } THREADNAME_INFO;
 #pragma pack(pop)
 #endif
@@ -217,7 +217,7 @@ void  KKThread::Start (bool&  successful)
 void  KKThread::Start (bool&  successful)
 {
   int returnCd = pthread_create (&threadId,
-                                 NULL,                   // const pthread_attr_t * attr,
+                                 NULL,                  // const pthread_attr_t * address,
                                  ThreadStartCallBack,   // void * (*start_routine)(void *),
                                  (void*)this
                                 );

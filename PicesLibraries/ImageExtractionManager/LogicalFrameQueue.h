@@ -37,20 +37,20 @@ namespace  ImageExtractionManager
     void  AddBackToFramesAwaitingProcessing (LogicalFramePtr   frameAwaitingProcessing);
 
     /**
-     *@brief 'ImageProcessorThread; calls this methd when it is done processing a frame.
-     *@details  This lets the queue know that the frame is avaialble for use and can be 
+     *@brief 'ImageProcessorThread; calls this method when it is done processing a frame.
+     *@details  This lets the queue know that the frame is available for use and can be
      * used again by the 'FrameExtractorThread'.
      */
     void  FrameProcessed (LogicalFramePtr   processedFrame);
 
     /**
-     *@brief  Returns the a Frame that is not in use;  if none are avaialble will return NULL.
+     *@brief  Returns the a Frame that is not in use;  if none are available will return NULL.
      */
     LogicalFramePtr  GetNextAvailaleFrame ();
 
     /**
-     *@brief Returns the next logical frame that needs to be proecssed. 
-     *@details  If there are no frames that are readu to be proecssed will return NULL.
+     *@brief Returns the next logical frame that needs to be processed.
+     *@details  If there are no frames that are ready to be processed will return NULL.
      */
     LogicalFramePtr  GetNextFrameToProcess ();
 
@@ -76,7 +76,7 @@ namespace  ImageExtractionManager
 
     std::vector<LogicalFramePtr>   allFrames;                  /**<  Owns all 'LogicalFrame' instances.                                     */
     std::queue<LogicalFramePtr>    availableFrames;            /**<  Frames not in use.                                                     */
-    std::queue<LogicalFramePtr>    framesAwaitingProcessing;   /**<  Frames waiting to be proecssed.                                        */
+    std::queue<LogicalFramePtr>    framesAwaitingProcessing;   /**<  Frames waiting to be processed.                                        */
     std::vector<LogicalFramePtr>   framesBeingProcessed;       /**<  Frames that are currently being processed by a 'ImageProcessingThread. */
 
     GoalKeeperPtr   goalie;

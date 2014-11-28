@@ -86,11 +86,11 @@ namespace KKU
   /**
    *@class Raster 
    *@brief  A class that is used by to represent a single image in memory.  
-   *@details  It supports morphological operations and other tasks.  It can handle either 
+   *@details  It supports morphological operations and other tasks. It can handle either
    *          Grayscale or Color.  By default it will use Grayscale unless specified 
-   *          otherwise.  It will allocate one continuous block of memory for each 
-   *          channel (RGB).  If the image is only grayscale the Green Channel (G) will 
-   *          be used leaving the Red and Blue channels set to NULL.  You can access
+   *          otherwise. It will allocate one continuous block of memory for each
+   *          channel (RGB). If the image is only grayscale the Green Channel (G) will
+   *          be used leaving the Red and Blue channels set to NULL. You can access
    *          Individual pixels through access methods that will ensure memory integrity
    *          or you can also access the pixel data directly in memory.
    *@see Blob
@@ -126,8 +126,8 @@ namespace KKU
 
     /**
      *@brief  Constructs a blank image with given dimensions.  
-     *@details  The third parameter determines whether it will be a color or grayscale image,  If a Color
-     *          image then all three color channel will be set to = 255 which stands for white.  If
+     *@details  The third parameter determines whether it will be a color or grayscale image, If a Color
+     *          image then all three color channel will be set to = 255 which stands for white. If
      *          Grayscale the green channel will be set to 0.
      */
     Raster (int32 _height,
@@ -137,14 +137,14 @@ namespace KKU
 
     /**
      *@brief  Constructs a Raster from a BMP image loaded from disk.
-     *@details If BMP Image is a grayscale value pixel values will be reversed.  See description of
+     *@details If BMP Image is a grayscale value pixel values will be reversed. See description of
      *        grayscale constructor.
      */
     Raster (const BmpImage&  _bmpImage);
 
 
     /**
-     *@brief Constructs a new Raster using a subset of the specified Raster as its source.  The
+     *@brief Constructs a new Raster using a subset of the specified Raster as its source. The
      *      dimensions of the resultant raster will be '_height', and '_width'
      */
     Raster (const Raster& _raster,  /**<  Source Raster                             */
@@ -167,7 +167,7 @@ namespace KKU
 
     /**
      *@brief  Constructs a Raster image from by reading an existing image File such as a BMP file.
-     *@details  Will read from the specified file (fileName) the existing image.  If the load fails then 
+     *@details  Will read from the specified file (fileName) the existing image. If the load fails then
      *          the contents of this object will be undefined.
      *@param[in]  fileName  Name of Image file to read.
      *@param[out] validFile  If image successfully loaded will be set to 'True' otherwise 'False'.
@@ -179,7 +179,7 @@ namespace KKU
 
     /**
      *@brief  Construct a raster object that will utilize a image already in memory.
-     *@details  This instance will not own the raster data.  It will only point to it.
+     *@details  This instance will not own the raster data. It will only point to it.
      */
     Raster (int32    _height,
             int32    _width,
@@ -329,9 +329,9 @@ namespace KKU
 
     /**
      *@brief Returns a image that is the result of a BandPass using Fourier Transforms.
-     *@details A 2D Fourier transform is performed.  The range specified is from 0.0 to 1.0 where range is
+     *@details A 2D Fourier transform is performed. The range specified is from 0.0 to 1.0 where range is
      * determined from the center of the image to the farthest corner where the center is 0.0 and the farthest
-     * corner is 1.0.  Pixels in the resultant 2D Transform that are "NOT" in the specified range are set to
+     * corner is 1.0. Pixels in the resultant 2D Transform that are "NOT" in the specified range are set to
      * 0.0.  A reverse transform is then performed and the resultant image is returned.
      *@param[in] lowerFreqBound  Lower range of frequencies to retain; between 0.0 and 1.0.
      *@param[in] upperFreqBound  Upper range of frequencies to retain; between 0.0 and 1.0.
@@ -360,14 +360,14 @@ namespace KKU
 
     /**
      *@brief  Builds a 2d Gaussian kernel
-     *@details Determines the size of the gaussian kernel based off the specified sigma parameter. returns a
-     *         2D matrix representing the kernel which will have 'len' x 'len' dimensions.  The caller will be
+     *@details Determines the size of the gaussian kernel based off the specified sigma parameter. Returns a
+     *         2D matrix representing the kernel which will have 'len' x 'len' dimensions. The caller will be
      *         responsible for deleting the kernel.
      *@param[in]  sigma   parameter used to control the width of the gaussian kernel
      *@Returns A 2 dimension matrix representing the gaussian kernel.
      */
     static
-    MatrixPtr     BuildGaussian2dKernel (float  sigma);  // Used by the Gaussian Smoothing algorithm.
+    MatrixPtr     BuildGaussian2dKernel (float  sigma);
 
 
     int32         CalcArea ();
@@ -400,7 +400,7 @@ namespace KKU
      *@brief  Calculates both Intensity Histograms, one not including internal background pixels and one with
      *        plus size and weighted size.
      *@details
-     *        This method incorporates the functionality of several methods at once.  The idea being that while
+     *        This method incorporates the functionality of several methods at once. The idea being that while
      *        we are iterating through the raster image we might as well get all the data we can so as to save
      *        total overall processing time.
      *@code
@@ -412,7 +412,7 @@ namespace KKU
      *@endcode
      *
      *@param[out]  area          Number of foreground pixels.
-     *@param[out]  weightedSize  Area that takes intensity into account.  The largest pixel will have a value of 1.0.
+     *@param[out]  weightedSize  Area that takes intensity into account. The largest pixel will have a value of 1.0.
      *@param[out]  intensityHistBuckets A 8 element array containing a histogram by intensity range.
      *@param[out]  areaWithWhiteSpace  Area including any whitespace enclosed inside the image.
      *@param[out]  intensityHistBucketsWhiteSpace  A 8 element array containing a histogram by intensity range,
@@ -430,7 +430,7 @@ namespace KKU
      *@brief  Calculates both Intensity Histograms, one not including internal background pixels and one with
      *         plus size and weighted size.
      *@details 
-     *        This method incorporates the functionality of several methods at once.  The idea being that while
+     *        This method incorporates the functionality of several methods at once. The idea being that while
      *        we are iterating through the raster image we might as well get all the data we can so as to save
      *        total overall processing time.
      *@code
@@ -442,7 +442,7 @@ namespace KKU
      *@endcode
      *
      *@param[out]  area          Number of foreground pixels.
-     *@param[out]  weightedSize  Area that takes intensity into account.  The largest pixel will have a value of 1.0.
+     *@param[out]  weightedSize  Area that reflects intensity; the largest pixel will have a value of 1.0.
      *@param[out]  intensityHistBuckets A 8 element array containing a histogram by intensity range.
      */
     void          CalcAreaAndIntensityFeatures (int32&  area,
@@ -506,7 +506,7 @@ namespace KKU
     /**
      *@brief Creates a grayscale image using a KLT Transform with the goal of weighting in favor the color
      * channels with greatest amount of variance.
-     *@details The idea is to weight each color channel by the amount of variance.  This is accomplished by
+     *@details The idea is to weight each color channel by the amount of variance. This is accomplished by
      *  producing a covariance matrix of the three color channels and then taking the Eigen vector with the
      *  largest eigen value and using its components to derive weights for each channel for the conversion 
      *  from RGB to grayscale.
@@ -546,7 +546,7 @@ namespace KKU
      *@brief Returns image where each blob is labeled with a different color.
      *@details
      *        Only useful if 'ExtractBlobs' was performed on this instance. Eight different colors are used and
-     *        they are selected by the modules of the blobId(blobId % 8).  Assignments are 0:Red, 1:Green,
+     *        they are selected by the modules of the blobId(blobId % 8). Assignments are 0:Red, 1:Green,
      *        2:Blue, 3:Yellow, 4:Orange, 5:Magenta, 6:Purple, 7:Teal.
      */
     RasterPtr     CreateColorWithBlobsLabeldByColor (BlobListPtr  blobs);  /**< Only useful if 'ExtractBlobs' was performed on this instance, the returned image will be color with each blob labeled a different color. */
@@ -701,7 +701,7 @@ namespace KKU
     void          ErosionBoundary (MaskTypes  mask, int32 blobrowstart, int32 blobrowend, int32 blobcolstart, int32 blobcolend);
 
     /**
-     *@brief  Extracts a specified blob from this image;  useful to extract individual detected blobs.
+     *@brief  Extracts a specified blob from this image; useful to extract individual detected blobs.
      *@details  The 'ExtractBlobs' method needs to have been performed on this instance first.  You
      * would use this method after calling 'ExtractBlobs'. The extracted image will be of the same 
      * dimensions as the original image except it will extract the pixels that belong to the specified
@@ -741,13 +741,13 @@ namespace KKU
     /**
      *@brief Will extract a list of connected components from this instance.
      *@details
-     *        Will perform a connected component analysis and label each individual blob.  A list of blob
-     *        descriptors will be returned.  These blob descriptors can then be used to access individual
-     *        blobs.  See 'ExtractABlob' for an example on how to use this method.  The 'ForegroundPixel'
+     *        Will perform a connected component analysis and label each individual blob. A list of blob
+     *        descriptors will be returned. These blob descriptors can then be used to access individual
+     *        blobs. See 'ExtractABlob' for an example on how to use this method. The 'ForegroundPixel'
      *        method is used to determine if a given pixel is foreground or background.
      *
      *@param[in]  dist  The distance in pixels that two different pixel locations have to be for them to
-     *            be considered connected.  "dist = 1" would indicate that two pixels have to be directly
+     *            be considered connected. "dist = 1" would indicate that two pixels have to be directly
      *            connected.
      *@returns A list of Blob descriptor instances.
      *@see  ExtractABlob, ExtractABlobTightly, Blob
@@ -846,7 +846,7 @@ namespace KKU
     RasterPtr     ReduceByFactor (float factor)  const;  //  0 < factor <= 1.0  ex: 0.5 = Make raster half size
 
     /**
-     *@brief  Locates most complete blob;  that is the one with the largest (Height x Width); and removes all
+     *@brief  Locates most complete blob; that is the one with the largest (Height x Width); and removes all
      * other images from the blob.
      */
     void          ReduceToMostCompleteBlob (uchar connectedComponentDist);
@@ -1043,9 +1043,9 @@ namespace KKU
     uchar*   blueArea;             // red for redAreas, green for grenArea.  If GrayScale
                                    // image then only green channel is used.
 
-    // The next three variables provide row indexing into there respective color channels.  For performance
+    // The next three variables provide row indexing into there respective color channels. For performance
     // and simplicity purposes I allocate each channel in a continuous block of memory but to allow for
-    // simple accessing by 'row' and 'col' I create the following 3 variables.  Depending on what you
+    // simple accessing by 'row' and 'col' I create the following 3 variables. Depending on what you
     // are trying to do you could use the appropriate variable.
     uchar**  red;                  // Provides row indexes into 'redArea'.
     uchar**  green;                // Provides row indexes into 'greenArea'.

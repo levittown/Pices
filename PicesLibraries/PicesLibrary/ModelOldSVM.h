@@ -101,19 +101,19 @@ namespace MLL
     MLClassConstPtr       Predict (FeatureVectorPtr  image);
   
     virtual
-    void               Predict (FeatureVectorPtr     example,
+    void               Predict (FeatureVectorPtr  example,
                                 MLClassConstPtr   knownClass,
                                 MLClassConstPtr&  predClass1,
                                 MLClassConstPtr&  predClass2,
-                                int32&               predClass1Votes,
-                                int32&               predClass2Votes,
-                                double&              probOfKnownClass,
-                                double&              predClass1Prob,
-                                double&              predClass2Prob,
-                                double&              compact,
-                                int32&               numOfWinners,
-                                bool&                knownClassOneOfTheWinners,
-                                double&              breakTie
+                                int32&            predClass1Votes,
+                                int32&            predClass2Votes,
+                                double&           probOfKnownClass,
+                                double&           predClass1Prob,
+                                double&           predClass2Prob,
+                                double&           compact,
+                                int32&            numOfWinners,
+                                bool&             knownClassOneOfTheWinners,
+                                double&           breakTie
                                );
 
 
@@ -122,31 +122,31 @@ namespace MLL
     ClassProbListPtr  ProbabilitiesByClass (FeatureVectorPtr  example);
 
     virtual
-    void  ProbabilitiesByClass (FeatureVectorPtr            example,
+    void  ProbabilitiesByClass (FeatureVectorPtr         example,
                                 const MLClassConstList&  _mlClasses,
-                                int32*                      _votes,
-                                double*                    _probabilities
+                                int32*                   _votes,
+                                double*                  _probabilities
                                );
 
 
     virtual
-    void  ProbabilitiesByClass (FeatureVectorPtr            _example,
+    void  ProbabilitiesByClass (FeatureVectorPtr         _example,
                                 const MLClassConstList&  _mlClasses,
-                                double*                     _probabilities
+                                double*                  _probabilities
                                );
 
 
-    vector<ProbNamePair>  FindWorstSupportVectors (FeatureVectorPtr    example,
-                                                   int32               numToFind,
-                                                   MLClassConstPtr  c1,
-                                                   MLClassConstPtr  c2
+    vector<ProbNamePair>  FindWorstSupportVectors (FeatureVectorPtr  example,
+                                                   int32             numToFind,
+                                                   MLClassConstPtr   c1,
+                                                   MLClassConstPtr   c2
                                                   );
 
 
-    vector<ProbNamePair>  FindWorstSupportVectors2 (FeatureVectorPtr    example,
-                                                    int32               numToFind,
-                                                    MLClassConstPtr  c1,
-                                                    MLClassConstPtr  c2
+    vector<ProbNamePair>  FindWorstSupportVectors2 (FeatureVectorPtr  example,
+                                                    int32             numToFind,
+                                                    MLClassConstPtr   c1,
+                                                    MLClassConstPtr   c2
                                                    );
 
 
@@ -164,7 +164,7 @@ namespace MLL
 
 
     void  RetrieveCrossProbTable (MLClassConstList&  classes,
-                                  double**              crossProbTable  // two dimension matrix that needs to be classes.QueueSize ()  squared.
+                                  double**           crossProbTable  // two dimension matrix that needs to be classes.QueueSize ()  squared.
                                  );
 
 

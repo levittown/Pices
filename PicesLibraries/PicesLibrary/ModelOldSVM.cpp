@@ -10,11 +10,8 @@
 #include <iomanip>
 #include <set>
 #include <vector>
-
-
 #include "MemoryDebug.h"
 #include "BasicTypes.h"
-
 using namespace  std;
 
 
@@ -25,7 +22,6 @@ using namespace  KKU;
 
 
 #include "ModelOldSVM.h"
-
 #include "BinaryClassParms.h"
 #include "ClassAssignments.h"
 #include "ClassProb.h"
@@ -58,10 +54,10 @@ ModelOldSVM::ModelOldSVM (FileDescPtr           _fileDesc,
 
 /**
  @brief Creates a new svm model from the provided example (example) data
- @param[in] _param The paramaters for the svm, and for creating the model.
+ @param[in] _param The parameters for the svm, and for creating the model.
  @param[in] _fileDesc A description of the data file.
  @param[in] _cancelFlag  If you want this instance to stop processing set this field to true in another thread.
- @param[in] _log A logfile stream. All important events will be ouput to this stream
+ @param[in] _log A logfile stream. All important events will be output to this stream
  */
 ModelOldSVM::ModelOldSVM (const KKStr&            _name,
                           const ModelParamOldSVM& _param,         // Create new model from
@@ -95,7 +91,7 @@ ModelOldSVM::ModelOldSVM (const ModelOldSVM& _model)
  */
 ModelOldSVM::~ModelOldSVM ()
 {
-  log.Level (20) << "ModelOldSVM::~ModelOldSVM   Strating Destructor for Model[" << rootFileName << "]" << endl;
+  log.Level (20) << "ModelOldSVM::~ModelOldSVM   Starting Destructor for Model[" << rootFileName << "]" << endl;
 
   delete  svmModel;
   svmModel = NULL;
@@ -253,7 +249,7 @@ void  ModelOldSVM::ReadSpecificImplementationXML (istream&  i,
       }
       catch (...)
       {
-        log.Level (-1) << endl << endl << "ModelOldSVM::ReadSpecificImplementationXML   ***ERROR***  Exception occured calling 'new SVMModel'." << endl << endl;
+        log.Level (-1) << endl << endl << "ModelOldSVM::ReadSpecificImplementationXML   ***ERROR***  Exception occurred calling 'new SVMModel'." << endl << endl;
         validModel = false;
         _successful = false;
       }
@@ -261,7 +257,7 @@ void  ModelOldSVM::ReadSpecificImplementationXML (istream&  i,
       if  (!_successful)
       {
         validModel = false;
-        log.Level (-1) << endl << endl << "ModelOldSVM::ReadSpecificImplementationXML   ***ERROR***  Could not loadf model in SVMModel::SVMModel." << endl << endl;
+        log.Level (-1) << endl << endl << "ModelOldSVM::ReadSpecificImplementationXML   ***ERROR***  Could not load model in SVMModel::SVMModel." << endl << endl;
       }
     }
   }
@@ -284,27 +280,27 @@ void  ModelOldSVM::ReadSpecificImplementationXML (istream&  i,
 
 
 
-void   ModelOldSVM::Predict (FeatureVectorPtr     example,
+void   ModelOldSVM::Predict (FeatureVectorPtr  example,
                              MLClassConstPtr   knownClass,
                              MLClassConstPtr&  predClass,
                              MLClassConstPtr&  predClass2,
-                             int32&               predClass1Votes,
-                             int32&               predClass2Votes,
-                             double&              probOfKnownClass,
-                             double&              predClassProb,
-                             double&              predClass2Prob,
-                             double&              compact,
-                             int32&               numOfWinners,
-                             bool&                knownClassOneOfTheWinners,
-                             double&              breakTie
+                             int32&            predClass1Votes,
+                             int32&            predClass2Votes,
+                             double&           probOfKnownClass,
+                             double&           predClassProb,
+                             double&           predClass2Prob,
+                             double&           compact,
+                             int32&            numOfWinners,
+                             bool&             knownClassOneOfTheWinners,
+                             double&           breakTie
                             )
 {
   bool  newExampleCreated = false;
   FeatureVectorPtr  encodedExample = PrepExampleForPrediction (example, newExampleCreated);
-  svmModel->Predict (encodedExample, knownClass, predClass, predClass2,
+  svmModel->Predict (encodedExample,   knownClass, predClass, predClass2,
                      predClass1Votes,  predClass2Votes,
                      probOfKnownClass, 
-                     predClassProb,  predClass2Prob,
+                     predClassProb,    predClass2Prob,
                      compact,
                      numOfWinners,
                      knownClassOneOfTheWinners,
@@ -385,10 +381,9 @@ ClassProbListPtr  ModelOldSVM::ProbabilitiesByClass (FeatureVectorPtr  example)
   ******************************************************************************************************************
   *@brief  Will get the probabilities assigned to each class.
   *@param[in]  example unknown example that we want to get predicted probabilities for. 
-  *@param[in]  _mlClasses  List classes that caller is aware of.  This should be the same list that 
-  *                        was used when consttructing this ModelOldSVM object.  The list must be the 
-  *                        same but not nessasarily in the same order as when ModelOldSVM was 1st 
-  *                        constructed.
+  *@param[in]  _mlClasses  List classes that caller is aware of. This should be the same list that was used when
+  *                        constructing this ModelOldSVM object. The list must be the same but not necessarily in
+  *                        the same order as when ModelOldSVM was 1st constructed.
   *@param[out] _probabilities  An array that must be as big as the number of classes in _mlClasses.  
   *                            The probability of class in _mlClasses[x] will be returned in _probabilities[x].
   */
@@ -416,11 +411,10 @@ void  ModelOldSVM::ProbabilitiesByClass (FeatureVectorPtr         _example,
   ******************************************************************************************************************
   *@brief  Will get the probabilities assigned to each class.
   *@param[in]  example unknown example that we want to get predicted probabilities for. 
-  *@param[in]  _mlClasses  List classes that caller is aware of.  This should be the same list that 
-  *                        was used when consttructing this ModelOldSVM object.  The list must be the 
-  *                        same but not nessasarily in the same order as when ModelOldSVM was 1st 
-  *                        constructed.
-  *@param[out] _votes        Number of votes for eacgh class.
+  *@param[in]  _mlClasses  List classes that caller is aware of. This should be the same list that was used when
+  *                        constructing this ModelOldSVM object. The list must be the same but not necessarily in
+  *                        the same order as when ModelOldSVM was 1st constructed.
+  *@param[out] _votes      Number of votes for each class.
   *@param[out] _probabilities  An array that must be as big as the number of classes in _mlClasses.  
   *                            The probability of class in _mlClasses[x] will be returned in _probabilities[x].
   */
@@ -473,19 +467,17 @@ vector<KKStr>  ModelOldSVM::SupportVectorNames () const
 
 /**
  *@brief  For a given two class pair return the names of the 'numToFind' worst S/V's.
- *@details  This method will iterate through all the S/V's removing them one at a 
- *           time and recompute the decision boundary and probability.  It will then
- *           return the S/V's that when removed improve the probability in 'c1's 
- *           the most.
+ *@details  This method will iterate through all the S/V's removing them one at a time and recompute the
+ * decision boundary and probability. It will then return the S/V's that when removed improve the probability in 'c1's the most.
  *@param[in]  example  Example that was classified incorrectly.
- *@param[in]  numToFind  The number of teh worst examples you are looking for.
+ *@param[in]  numToFind  The number of the worst examples you are looking for.
  *@param[in]  c1  Class that the 'example; parameter should have been classed as.
  *@param[in]  c2  Class that it was classified as.
  */
-vector<ProbNamePair>  ModelOldSVM::FindWorstSupportVectors (FeatureVectorPtr    example,
-                                                            int32               numToFind,
-                                                            MLClassConstPtr  c1,
-                                                            MLClassConstPtr  c2
+vector<ProbNamePair>  ModelOldSVM::FindWorstSupportVectors (FeatureVectorPtr  example,
+                                                            int32             numToFind,
+                                                            MLClassConstPtr   c1,
+                                                            MLClassConstPtr   c2
                                                            )
 {
   return  svmModel->FindWorstSupportVectors (example, numToFind, c1, c2);
@@ -496,17 +488,16 @@ vector<ProbNamePair>  ModelOldSVM::FindWorstSupportVectors (FeatureVectorPtr    
 
 /**
  *@brief  For a given two class pair return the names of the 'numToFind' worst S/V's.
- *@details  This method will iterate through all the S/V's removing them one at a 
- *          time and retraining a new SVM and then comparing with the new prediction results.
+ *@details  This method will iterate through all the S/V's removing them one at a time and retraining a new SVM and then comparing with the new prediction results.
  *@param[in]  example  Example that was classified incorrectly.
- *@param[in]  numToFind  The number of teh worst examples you are looking for.
+ *@param[in]  numToFind  The number of the worst examples you are looking for.
  *@param[in]  c1  Class that the 'example; parameter should have been classed as.
  *@param[in]  c2  Class that it was classified as.
  */
-vector<ProbNamePair>  ModelOldSVM::FindWorstSupportVectors2 (FeatureVectorPtr    example,
-                                                             int32               numToFind,
-                                                             MLClassConstPtr  c1,
-                                                             MLClassConstPtr  c2
+vector<ProbNamePair>  ModelOldSVM::FindWorstSupportVectors2 (FeatureVectorPtr  example,
+                                                             int32             numToFind,
+                                                             MLClassConstPtr   c1,
+                                                             MLClassConstPtr   c2
                                                             )
 {
   return  svmModel->FindWorstSupportVectors2 (example, numToFind, c1, c2);
@@ -535,7 +526,7 @@ void  ModelOldSVM::RetrieveCrossProbTable (MLClassConstList&  classes,
 
 
 /**
- *@brief Use given traiing data to create a trained Model that can be used for classifying examples.
+ *@brief Use given training data to create a trained Model that can be used for classifying examples.
  *@param[in] _trainExamples      The example data we will be building the model from.
  *@param[in] _alreadyNormalized  Specifies weather the training data has already been normalized.
  *@param[in] _takeOwnership      If true this instance will take ownership of '_trainExamples' and delete it when done with it.

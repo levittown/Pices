@@ -26,7 +26,7 @@ namespace  ImageExtractionManager
   /**
    *@brief   The base class to be used by all Extraction Manager threads.
    *@details  This will be the base class for each one of the different types of processing that 
-   * Sipper Image processing will be done.  Soem of threads will Extract logical frames from Sipper 
+   * Sipper Image processing will be done. Some of threads will Extract logical frames from Sipper
    * files,  
    */
   class  ImageExtractionThread
@@ -66,13 +66,13 @@ namespace  ImageExtractionManager
 
     bool  CancelOrTerminateRequested ()  {return  (cancelFlag || terminateFlag);}
 
-    ExtractionManagerPtr   extractionManager;  /**< Pointer to instance that manges all the threads.  */
+    ExtractionManagerPtr   extractionManager;  /**< Pointer to instance that manages all the threads.  */
 
     ExtractionParms&       parms;
 
 
   private:
-    volatile bool          cancelFlag;         /**< Threads need to monotir this flag;  if it goes 'true'  they need 
+    volatile bool          cancelFlag;         /**< Threads need to monitor this flag;  if it goes 'true'  they need
                                                 * to terminate as quick as possible.
                                                 */
 
@@ -82,11 +82,11 @@ namespace  ImageExtractionManager
 
 
     MsgQueuePtr            msgQueue;           /**< This MsgQueue instance will be owned by 'ExtractionManager' we will just use
-                                                * it to communicate messeges to the controlling process.
+                                                * it to communicate messages to the controlling process.
                                                 */
     ThreadStatus           status;
 
-    volatile bool          terminateFlag;      /**< Threads need to monitor this flag; if it goes thre they are to 
+    volatile bool          terminateFlag;      /**< Threads need to monitor this flag; if it goes true they are to
                                                 * complete all processing that is queued up and then terminate.
                                                 */
     KKStr                  threadName;

@@ -71,7 +71,7 @@ inline  int  LogicalFrame::Max (int x1,  int x2,  int x3,
 
 
 
-/** @brief  Returns the number of different neighobors.  'x1' - 'x9' are the blob id's of the neighbors you want to check. */
+/** @brief  Returns the number of different neighbors.  'x1' - 'x9' are the blob id's of the neighbors you want to check. */
 int  LogicalFrame::CountPixs (int x1,  int x2,  int x3,  
                               int x4,  int x5,  int x6,  
                               int x7,  int x8,  int x9
@@ -1024,7 +1024,7 @@ ExtractedImageListPtr  LogicalFrame::ProcessFrame ()
 
   if  (parms.FileFormat () == sfSipper4Bit)
   {
-    // because of noise on left and right we are oing to blank out the 
+    // because of noise on left and right we are going to blank out the
     // offending columns.
 
     for  (uint32  row = 0;  row < frameHeight;  row++)
@@ -1143,7 +1143,7 @@ void  LogicalFrame::PopulateFrame (uint32   _frameNum,
 
   if  (frameHeight > frameHeightMax)
   {
-    // We need to increae the size of tis frame.
+    // We need to increase the size of this frame.
     DeAllocateFrame ();
     frameHeightMax = frameHeight + 3;
     AllocateFrame ();

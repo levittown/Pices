@@ -62,7 +62,7 @@ namespace MLL
 
     /**
      *@brief Creates a Command Line String that represents these parameters.
-     *@details  All derived classes should implement this method.  Thwy should first call this method and 
+     *@details  All derived classes should implement this method. They should first call this method and
      *          then append there own parameters that are specific to their implementation.
      */
     virtual  KKStr  ToCmdLineStr ()  const;

@@ -121,8 +121,8 @@ void  GoalKeeper::StartBlock ()
     {
       if  (curThreadId == blockerThreadId)
       {
-        // We are the thread that already holds the block;  so ok for us 
-        // to procees.
+        // We are the thread that already holds the block; so ok for us
+        // to process.
         blockerDepth++;
         weAreBlocked = false;
         numBlockedThreads--;
@@ -280,7 +280,7 @@ void  GoalKeeper::Create (const KKStr&             _name,
  *@brief Create a new instance of a GoalKeeper object if it has not already been done and locks it if we create it.
  *@param[in]     _name            Name to be assigned to GoalKeeper object.
  *@param[in,out] _newGoalKeeper   A pointer to the GoalKeeper that already exists or to new one that got created. 
- *@param[out]    _didNotExistYet  Idicates if the call to 'CreateAndStartBlock' had to create a new instance.
+ *@param[out]    _didNotExistYet  Indicates if the call to 'CreateAndStartBlock' had to create a new instance.
  */
 void  GoalKeeper::CreateAndStartBlock(const KKStr&             _name,
                                       volatile GoalKeeperPtr&  _newGoalKeeper,

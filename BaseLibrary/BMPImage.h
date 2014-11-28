@@ -34,14 +34,14 @@ namespace KKU
    *@brief Used to encode and decode BMP Images.
    *@details  Purpose of this class it to facilitate the loading and saving of BMP Image files. Not all
    * formats are supported, but the compressed version is, which most others don't support.  As a result 
-   * this class will write considerably smaller BMP files than other utilities that I have tried.  This
+   * this class will write considerably smaller BMP files than other utilities that I have tried. This
    * results in faster writing images due to less disk-io.
    *
    * This object was originally designed to work in conjunction with Image Extraction.  It requires no 
    * other libraries and can read and write BMP files.
    *
-   * When ImageExtraction creates a Bmp file it will provide pixel values  between 0 and 7,  where 0 is
-   * the background and 7 is the foreground.  This is a result of the SIPPER 2 and 3 Formats and may 
+   * When ImageExtraction creates a Bmp file it will provide pixel values  between 0 and 7, where 0 is
+   * the background and 7 is the foreground. This is a result of the SIPPER 2 and 3 Formats and may
    * change in the future. When saving the BMP file BMPImage will map these values through the palette
    * to 0=255, 1=219, 2=182, 3=146, 4=109, 5=73, 6=36, 7=0 resulting in a white background and a Black 
    * foreground.
@@ -115,7 +115,7 @@ namespace KKU
 
     ~BmpImage ();
 
-    bool     Color ()     const  {return color;}          /**< @brief Returns true if a Color image. */
+    bool     Color ()     const  {return color;}            /**< @brief Returns true if a Color image. */
 
     const
     KKStr&   FileName ()  const  {return fileName;}

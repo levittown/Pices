@@ -94,7 +94,7 @@ void  ModelParamOldSVM::C_Param (double  _CC)
 
 void  ModelParamOldSVM::C_Param (MLClassConstPtr  class1,
                                  MLClassConstPtr  class2,
-                                 double              cParam
+                                 double           cParam
                                 )
 {
   if  (!this->BinaryParmsList ())
@@ -386,7 +386,7 @@ void  ModelParamOldSVM::ParseCmdLine (KKStr   _cmdLineStr,
   }
 
 
-  // Since this class is a special case that handles the old SvmParam paradign we need
+  // Since this class is a special case that handles the old SvmParam paradigm we need
   // to update the local Model:: parameters with those that were updated in 'SvmParam'.
   ModelParam::BitsToReduceBy     (svmParameters->BitsToReduceBy     ());
   ModelParam::CompressionMethod  ((ModelParam::CompressionMethodType)svmParameters->CompressionMethod  ());

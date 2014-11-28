@@ -21,12 +21,11 @@ namespace KKU
   typedef  long long  osFilePos;
 
   /**
-   *@brief Will add the appropriate Directory separator character
-   * to the end of fileSpec if one is not there already.
+   *@brief Will add the appropriate Directory separator character to the end of fileSpec if one is not there already.
    */
   void           osAddLastSlash (KKStr&  fileSpec);
 
-  KKStr          osAddSlash (const KKStr&  fileSpec); // @brief Returns fileSpec with a directory separating character at end.
+  KKStr          osAddSlash (const KKStr&  fileSpec); /**< Returns fileSpec with a directory separating character at end. */
 
   void           osChangeDir (const KKStr&  dirName,
                               bool&         successful
@@ -273,7 +272,7 @@ namespace KKU
   /**
    *@brief    Substitute in the value of the environment variables into 'src'.
    *@details  Will scan the 'src' string for references to environment variables. The
-   * format would be $(env-var-name).  These sub-strings in 'src' will be replaced by 
+   * format would be $(env-var-name). These sub-strings in 'src' will be replaced by
    * the the actual value of the environment variable.  If no such environment variable
    * exists the substring will be left as is.  besides parentheses '{}' or '[]' can be
    * uses, ex the string  "${KinseyHomeDir}\\Reports" would be replaced by "c:\Kinsey\reports"
@@ -286,12 +285,12 @@ namespace KKU
   /**
    *@brief Read the next logical token from a file using characters in 'delimiters' to 
    *      separate tokens.
-   *@details  Use this function to read logical tokens from a file.  It recognizes the
+   *@details  Use this function to read logical tokens from a file. It recognizes the
    *          concept of a line that is terminated by the line feed ('\n') character.
    *          When end of line is reached it will return an empty string setting 'eol'
-   *          to true;  the very next call will return the first token on the next
-   *          line.  The leading whitespace characters ' ' and '\r' will be skipped
-   *          before reading the next token.  Tokens will be separated by any one of
+   *          to true; the very next call will return the first token on the next
+   *          line. The leading whitespace characters ' ' and '\r' will be skipped
+   *          before reading the next token. Tokens will be separated by any one of
    *          the characters specified in 'delimiters'. Two or more delimiters that
    *          occur consecutively will not be treated as one separator. You will need
    *          to call this method for each one.
@@ -301,13 +300,13 @@ namespace KKU
    *               "Apple",  "Peer", "", "Grape", "", ""(eol = True)
    *@param[in]  in          File handle to read from.
    *@param[in]  delimiters  c string listing delimiter characters.
-   *@param[out] eof         End of file flag.  When this goes true so will eol,  also 
+   *@param[out] eof         End of file flag. When this goes true so will eol,  also
    *                        no token will be returned.
    *@param[out] eol         Will be set to true when the end-of-line is reached ('\n').  
-   *                        No token will be returned.  The next call to this method 
+   *                        No token will be returned. The next call to this method
    *                        will start at the next line.
-   *@return  The next token read from the file.  You must also monitor the 'eol' and 
-   *         'eof' variables.  If either one is true the no token will be returned.
+   *@return  The next token read from the file. You must also monitor the 'eol' and
+   *         'eof' variables. If either one is true the no token will be returned.
    */
   KKStr         osReadNextToken (FILE*       in, 
                                  const char* delimiters,
@@ -316,13 +315,12 @@ namespace KKU
                                 );
   
   /**
-   *@brief Read the next logical token from a file using characters in 'delimiters' to 
-   *       separate tokens.
-   *@details  Use this function to read logical tokens from a input stream.  It 
+   *@brief Read the next logical token from a file using characters in 'delimiters' to separate tokens.
+   *@details  Use this function to read logical tokens from a input stream. It
    *          recognizes the concept of a line that is terminated by the line feed 
    *          ('\n') character. When end of line is reached it will return an empty 
-   *          string setting 'eol' to true;  the very next call will return the first 
-   *          token on the next line.  The leading whitespace characters ' ' and '\r' 
+   *          string setting 'eol' to true; the very next call will return the first
+   *          token on the next line. The leading whitespace characters ' ' and '\r'
    *          will be skipped before reading the next token.  Tokens will be separated 
    *          by any one of the characters specified in 'delimiters'. Two or more
    *          delimiters that occur consecutively will not be treated as one separator.
@@ -333,13 +331,13 @@ namespace KKU
    *               "Apple",  "Peer", "", "Grape", "", ""(eol = True)
    *@param[in]  in          Input Stream to read from.
    *@param[in]  delimiters  c string listing delimiter characters.
-   *@param[out] eof         End of file flag.  When this goes true so will eol,  also 
+   *@param[out] eof         End of file flag; when this goes true so will eol, also
    *                        no token will be returned.
    *@param[out] eol         Will be set to true when the end-of-line is reached ('\n').  
-   *                        No token will be returned.  The next call to this method 
+   *                        No token will be returned. The next call to this method
    *                        will start at the next line.
-   *@return  The next token read from the file.  You must also monitor the 'eol' and 
-   *         'eof' variables.  If either one is true the no token will be returned.
+   *@return  The next token read from the file. You must also monitor the 'eol' and
+   *         'eof' variables. If either one is true the no token will be returned.
    */
   KKStr         osReadNextToken (std::istream&    in, 
                                  const char*      delimiters,
@@ -359,11 +357,11 @@ namespace KKU
   /**
    *@brief Read the next line from the file and return a c-String(NULL terminated).
    *@details  Will read in characters from 'in' until a line feed character is
-   *          read.  The caller will own the string returned and be responsible
+   *          read. The caller will own the string returned and be responsible
    *          for deleting it.
-   *@param[in]  in  File to read from.
+   *@param[in]  in File to read from.
    *@return  A dynamically allocated c-string (NULL Terminated) containing the next
-   *         line in the file.  If end-of-file reached will return a NULL pointer.
+   *         line in the file. If end-of-file reached will return a NULL pointer.
    */
   char*        osReadNextLine (FILE*  in);
   

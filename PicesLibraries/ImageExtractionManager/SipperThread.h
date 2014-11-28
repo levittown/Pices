@@ -16,9 +16,9 @@ namespace  ImageExtractionManager
 namespace  ImageExtractionManager
 {
   /**
-   *@brief   The Image extracion procedure will contain several threads perform various functions.
+   *@brief   The Image extraction procedure will contain several threads perform various functions.
    *@details  This will be the base class for each one of the different types of processing that 
-   * Sipper Image processing will be done.  Soem of threads will Extract logical frames from Sipper 
+   * Sipper Image processing will be done.  Some of threads will Extract logical frames from Sipper
    * files,  
    */
 
@@ -54,18 +54,18 @@ namespace  ImageExtractionManager
     void  AddMsg (const KKStr&  msg);  /**<  A copy of the message 'msg' will be added to the end of msgQueue.  */
 
     volatile 
-    const bool&            cancelFlag;         /**< Threads need to monotir this flag;  if it goes 'true'  they need 
+    const bool&            cancelFlag;         /**< Threads need to monitor this flag;  if it goes 'true'  they need
                                                 * to terminate as quick as possible.
                                                 */
-    ExtractionManagerPtr   extractionManager;  /**< Pointer to instance that manges all the threads.  */
+    ExtractionManagerPtr   extractionManager;  /**< Pointer to instance that manages all the threads.  */
 
     MsgQueuePtr            msgQueue;           /**< This MsgQueue instance will be owned by 'ExtractionManager' we will just use
-                                                * it to communicate messeges to the controlling process.
+                                                * it to communicate messages to the controlling process.
                                                 */
     ThreadStatus           status;
 
     volatile
-    const bool&            terminateFlag;      /**< Threads need to monitor this flag; if it goes thre they are to 
+    const bool&            terminateFlag;      /**< Threads need to monitor this flag; if it goes there they are to
                                                 * complete all processing that is queued up and then terminate.
                                                 */
     KKStr                  threadName;

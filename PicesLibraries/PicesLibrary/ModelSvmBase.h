@@ -60,7 +60,7 @@ namespace  MLL
     ModelParamSvmBasePtr  Param ();
 
     virtual
-    MLClassConstPtr    Predict (FeatureVectorPtr  image);
+    MLClassConstPtr       Predict (FeatureVectorPtr  image);
   
     virtual
     void                  Predict (FeatureVectorPtr  example,
@@ -85,31 +85,31 @@ namespace  MLL
 
 
     virtual
-    void  ProbabilitiesByClass (FeatureVectorPtr            example,
+    void  ProbabilitiesByClass (FeatureVectorPtr         example,
                                 const MLClassConstList&  _mlClasses,
-                                int32*                      _votes,
-                                double*                     _probabilities
+                                int32*                   _votes,
+                                double*                  _probabilities
                                );
 
     /**
      *@brief Derives predicted probabilities by class.
      *@details Will get the probabilities assigned to each class by the classifier.  The 
      *         '_mlClasses' parameter dictates the order of the classes. That is the 
-     *         probabilities for any goven index in '_probabilities' will be for the class
-     *         specifid in the same index in '_mlClasses'.
-     *@param[in]  _example       FeatureVector object to calculate predivcted probabilities for.
+     *         probabilities for any given index in '_probabilities' will be for the class
+     *         Specified in the same index in '_mlClasses'.
+     *@param[in]  _example       FeatureVector object to calculate predicted probabilities for.
      *@param[in]  _mlClasses  List image classes that caller is aware of.  This should be the
-     *            same list that was used when consttructing this Model object.  The list must 
-     *            be the same but not nessasarily in the same order as when Model was 1st 
+     *            same list that was used when constructing this Model object.  The list must
+     *            be the same but not necessarily in the same order as when Model was 1st
      *            constructed.
      *@param[out] _probabilities An array that must be as big as the number of classes as in
      *            mlClasses.  The probability of class in mlClasses[x] will be returned 
      *            in probabilities[x].
     */
     virtual
-    void  ProbabilitiesByClass (FeatureVectorPtr            _example,
+    void  ProbabilitiesByClass (FeatureVectorPtr         _example,
                                 const MLClassConstList&  _mlClasses,
-                                double*                     _probabilities
+                                double*                  _probabilities
                                );
   
     virtual  void  ReadSpecificImplementationXML (istream&  i,
@@ -119,7 +119,7 @@ namespace  MLL
 
     virtual  
     void  RetrieveCrossProbTable (MLClassConstList&  classes,
-                                  double**              crossProbTable  // two dimension matrix that needs to be classes.QueueSize ()  squared.
+                                  double**           crossProbTable  // two dimension matrix that needs to be classes.QueueSize ()  squared.
                                  );
 
 

@@ -1,4 +1,4 @@
-/* Atom.cpp -- Experimental clas thta is not in use;  meant to be base class to all other classes.
+/* Atom.cpp -- Experimental class that is not in use;  meant to be base class to all other classes.
  * Copyright (C) 1994-2011 Kurt Kramer
  * For conditions of distribution and use, see copyright notice in KKU.h
  */

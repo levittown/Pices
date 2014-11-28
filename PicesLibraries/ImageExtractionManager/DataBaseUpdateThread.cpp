@@ -158,11 +158,11 @@ void  DataBaseUpdateThread::Run ()
       KKStr  imageFileName = raster->FileName ();
 
       // Before we go and save this Plankton Image, lets make sure that
-      // it is not a duplicate of a previous one extracted.  This was a problem
-      // with the earlier version of SIPPER.  The disk controller would write out 
+      // it is not a duplicate of a previous one extracted. This was a problem
+      // with the earlier version of SIPPER. The disk controller would write out
       // the last 10mb buffer to the disk twice. This issue was fixed but to allow us to 
-      // process the ealier SIPPER files we look for duplicates and excliude them 
-      // from the databse.
+      // process the earlier SIPPER files we look for duplicates and exclude them
+      // from the database.
       if  (dupImageDetector)
       {
         DuplicateImagePtr  dupImages = dupImageDetector->AddSingleImage (featureVector);
@@ -187,7 +187,7 @@ void  DataBaseUpdateThread::Run ()
           }
 
           // We need to give ownership of the 'featureVector' instance to 'duplicateImages' because this instance
-          // is not going to be given to the "imageManager";  as a result we need to keep it in memry somewhere 
+          // is not going to be given to the "imageManager"; as a result we need to keep it in memory somewhere
           // until we delete  the 'dupImageDetector' instance which is referring to it.
           duplicateImages->PushOnBack (featureVector);
           featureVector = NULL;
@@ -276,7 +276,7 @@ void  DataBaseUpdateThread::Run ()
                                   extractedImage->PredClass1 (),
                                   extractedImage->PixelCount (),
                                   extractedImage->Depth (),
-                                  featureVector,              // imageManager will take ownershop og image.
+                                  featureVector,              // imageManager will take ownership of image.
                                   raster,
                                   parms.Colorize ()
                                  );
@@ -373,8 +373,8 @@ void  DataBaseUpdateThread::ReFreshDataBaseImage (const KKStr&      imageFileNam
                          raster->Width  (),
                          (uint)(size),
                          parms.ConnectedPixelDist (),
-                         extractionManager->LogEntryId (),    // Image Extration Log ID
-                         extractionManager->LogEntryId (),    // Log ntry for classification.
+                         extractionManager->LogEntryId (),    // Image Extraction Log ID
+                         extractionManager->LogEntryId (),    // Log Entry for classification.
                          (uint)(centroidRow + 0.5f),
                          (uint)(centroidCol + 0.5f),
                          featureVector->PredictedClass (),

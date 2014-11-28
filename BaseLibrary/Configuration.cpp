@@ -718,7 +718,7 @@ void  Configuration::FormatErrorsAdd (int32         lineNum,
 
 
 
-void  Configuration::FormatErrorsClear ()  /**< Call this to vlear all format error messages. */
+void  Configuration::FormatErrorsClear ()  /**< Call this to clear all format error messages. */
 {
   formatErrors.clear ();
   formatErrorsLineNums.clear ();

@@ -52,15 +52,14 @@ SipperBlob::~SipperBlob ()
 
 
 
-ImageFeaturesPtr  SipperBlob::Save (uchar**        frame,
-                                    int32**          blobIds,     
-                                    KKStr         fileName,
-                                    bool           createImageFeaturesObject,
+ImageFeaturesPtr  SipperBlob::Save (uchar**     frame,
+                                    int32**     blobIds,
+                                    KKStr       fileName,
+                                    bool        createImageFeaturesObject,
                                     MLClassPtr  mlClass,
-                                    uint32           firstFrameRowScanLine,
-                                    bool           save,     // If set to false will not save, just calc features
-                                    bool           colorize  // Set to true if you wish to save the 7 grayscale
-                                                             // values as colors.
+                                    uint32      firstFrameRowScanLine,
+                                    bool        save,     /**< If set to false will not save, just calc features. */
+                                    bool        colorize  /**< Set to true if you wish to save the 7 grayscale values as colors.*/
                                    )
 
 {
@@ -274,7 +273,7 @@ void  SipperBlob::DialateBlob (uchar** frame,
       }
 
 
-      // Next lets determine if this pixzel will be the recipeint of dialation.
+      // Next lets determine if this pixel will be the recipient of dilation.
       bool  dialatePixel = false;
       for  (windowRow = Max ((int32 (workRow) - size), 0);  (windowRow < (workRow + size))  &&  (!dialatePixel);  windowRow++)
       {

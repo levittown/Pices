@@ -4,29 +4,6 @@
  */
 #ifndef  _IMAGEDIRTREE_
 #define  _IMAGEDIRTREE_
-//*******************************************************************************
-//*                                ImageDirTree                                 *
-//*                                                                             *
-//*                                                                             *
-//* Purpose:  Given a SubDirectory Starting Point.  Will create a list of all   *
-//*           image files in the sub directory tree.  This will allow us to     *
-//*           quickly locate a image file by name.  Originally developed it     *
-//*           to help in the recalculation of feature data.  Used in            *
-//*           ImageFeaturesList.                                                *
-//*                                                                             *
-//*-----------------------------------------------------------------------------*
-//*  Programmer     Date    Description                                         *
-//*  ===========  ========  ==================================================  *
-//*  Kurt Kramer  04-10-04  Created,  to help aid in Thesis data, feature cal-  *
-//*                         culations.                                          *
-//*                                                                             *
-//*******************************************************************************
-
-//class  DirEntry;
-//typedef  DirEntry*  DirEntryPtr;
-
-//typedef  vector<DirEntryPtr>  DirEntryList;
-
 
 #include  "Str.h"
 
@@ -34,16 +11,17 @@
 namespace  KKU
 {
   /**
-   *@brief  Creates a index of all images in a specified directory structure.
-   *@details  Given a SubDirectory Starting Point.  Will create a list of all image files in the sub directory 
-   * tree.  This will allow us to quickly locate a image file by name.  Originally developed it to help in the
-   * recalculation of feature data.  Used in ImageFeaturesList.
+   *@brief  Creates an index of all images in a specified sub-directory structure that can be quickly
+   *        searched for by root-name.
+   *@details  Given a Sub-Directory Starting Point; will create a list of all image files in the sub directory
+   * tree. This will allow us to quickly locate a image file by name. Originally developed it to help
+   * in the recalculation of feature data. Used in ImageFeaturesList.
    */
   class  ImageDirTree
   {
   public:
     /**
-     *@brief  Construct a Index of images for a specified SubDirectory structure.
+     *@brief Construct a Index of images for a specified SubDirectory structure.
      * details Given a specified directory '_subDir' will scan for all images in all sub-directories below it.
      *@param[in] _subDir  Sub Directory to search for image files.
      */
@@ -52,8 +30,8 @@ namespace  KKU
     ~ImageDirTree ();
 
     /**
-     *@brief  Locate image specified by 'fileName'  and return the directory where it is located.
-     *@param[in]  fileName  Image File you are searching for.
+     *@brief Locate image specified by 'fileName' and return the directory where it is located.
+     *@param[in]  fileName Image File you are searching for.
      *@return Pointer to directory where 'fileName' is found.
      */
     KKStrConstPtr  LocateImage (const KKStr&  fileName);
@@ -65,11 +43,11 @@ namespace  KKU
 
     /**
      *@brief  Returns list of directories that 'fileName' occurs in.
-     *@details The caller will own the list of directories and be responsible for deleting. if 'fileName' does not exist
-     * in the sub-directory structure then NULL will be returned.
+     *@details The caller will own the list of directories and be responsible for deleting. if 'fileName' does
+     * not exist in the sub-directory structure then NULL will be returned.
      *@param[in]  fileName  Name of image file that is being searched for.
-     *@return  List of directories that contain a image with the name specified by 'fileName'.  If the file does not exist 
-     * a NULL will be returned.  The caller will own the string list returned.
+     *@returns  List of directories that contain a image with the name specified by 'fileName'; if the file does
+     * not exist a NULL will be returned. The caller will own the string list returned.
      */
     KKStrListPtr  Directories (const KKStr& fileName)  const;
 

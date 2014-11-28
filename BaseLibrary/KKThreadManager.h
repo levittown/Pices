@@ -22,11 +22,11 @@ namespace  KKU
    *@details
    *
    *@code
-   *  There are three ways to stop Thread processing with the forst being the most gracefull and the last being the most abrut.
+   *  There are three ways to stop Thread processing with the first being the most graceful and the last being the most abrupt.
    *  1) 'ShutdownProcessing'  The preferred method;  each thread is flagged for 'Shutdown' after all its prerequisite shutdown threads 
    *     have shutdown.
-   *  2) 'TerminateProcessing' Similar to 'ShutdownProcessing' except the prerequisites are not checked; each thread is imediatly flagged 
-   *     to Terminate which indicates to the thread that it is to cease all processing and exit while relasing all resources.
+   *  2) 'TerminateProcessing' Similar to 'ShutdownProcessing' except the prerequisites are not checked; each thread is immediately flagged
+   *     to Terminate which indicates to the thread that it is to cease all processing and exit while releasing all resources.
    *  3) 'KillAllRunningThreads' A last resort;  you would call this if for some reason threads are not terminating on there own.
    *@endcode
    */
@@ -63,13 +63,13 @@ namespace  KKU
     /** @brief Shutdown all threads in a orderly way; observing prerequisite ordering. */
     void  ShutdownProcessing (int32 miliSecsToWait);
 
-    void  TerminateProcessing ();    /**< Flag all All running threads to Termninate ASAP and release all allocated resources. */
+    void  TerminateProcessing ();       /**< Flag all All running threads to Terminate ASAP and release all allocated resources. */
 
   private:
     void  StartThreads (bool&  successful);
 
-    bool            crashed;            /**< Indicates if any one of the threads crasehd.         */
-    bool            doneExecuting;      /**< The last thing this instance will do in 'ManageTheExtraction'is setthis falg to true. */
+    bool            crashed;            /**< Indicates if any one of the threads crashed.         */
+    bool            doneExecuting;      /**< The last thing this instance will do in 'ManageTheExtraction'is set this flag to true. */
     uint32          maxNumThreads;
     bool            shutdownFlag;
     bool            shutdownRequested;

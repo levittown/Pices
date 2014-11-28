@@ -42,9 +42,9 @@ namespace MLL
    *@class PicesApplication
    *@brief The base class for all standalone applications.
    *@details  This class is meant to be a general class that all standalone applications should be inherited 
-   *from. If provides command line options thant are common tho all Pices Applications.
+   *from. If provides command line options that are common to all Pices Applications.
    * Supported Command Options:
-   * -# -Config   <Model Name>    The trainig model configuration file; only the root part needs to be specified;  these files 
+   * -# -Config   <Model Name>    The training model configuration file; only the root part needs to be specified;  these files
    *                              can be found in the "$<PicesHomeDir>\DataFiles\TrainingModels"  directory.
    * -# -DataBase <Description>   This  'Description' references the Description field in the MySQL.cfg file found in 
    *                              "${PicesHomeDir}\Configurations\" directory.
@@ -54,11 +54,11 @@ namespace MLL
    *                              be another "-CmdFile" option.
    *
    * A derived class must implement the following methods:
-   * - ApplicationName  Where you retunr the name of the derived apploication.
+   * - ApplicationName  Where you return the name of the derived application.
    * - InitalizeApplication  Where you implement the initialization code for the derived application.  One of the tasks required
    *                         by this method is to call the base class version of this method "PicesApplication::InitalizeApplication".  
    *                         If you find ant reason that the application may not be started; display an appropriate error message and
-   *                         set the abort field to true by calling "Abort (true)".  If you wnt the base class to require the 
+   *                         set the abort field to true by calling "Abort (true)".  If you want the base class to require the
    *                         "-Config" or "-DataBase" parameter then call "ConfigRequired (true)" and/or "DataBaseRequired (true)" 
    *                         before calling "PicesApplication::InitalizeApplication" and check the "Abort()" flag to see if errors
    *                         were detected.
@@ -71,8 +71,8 @@ namespace MLL
   {
   public:
     /** 
-     *@brief  Constructor for Application class taht will start with a default logger(RunLog),
-     *@details After creating an instance of this class you intialize it by calling InitalizeApplication.
+     *@brief  Constructor for Application class that will start with a default logger(RunLog),
+     *@details After creating an instance of this class you initialize it by calling InitalizeApplication.
      */
     PicesApplication ();
 
@@ -130,7 +130,7 @@ namespace MLL
 
     /**
      *@A derived class would call this method in its version of 'InitalizeApplication' just before calling
-     * 'PicesApplication::InitalizeApplication' to let it know that teh Training Model Configurartion parameter
+     * 'PicesApplication::InitalizeApplication' to let it know that the Training Model Configuration parameter
      * is required.
      */
     void  ConfigRequired (bool _configRequired)  {configRequired = _configRequired;}

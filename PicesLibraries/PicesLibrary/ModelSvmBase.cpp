@@ -185,7 +185,7 @@ void  ModelSvmBase::TrainModel (FeatureVectorListPtr  _trainExamples,
   // that needed to be done.  
   // Also the data structures 'classes', 'encoder', and 'fileDesc' will have been built.
   // 'classes' will already be sorted in name order.
-  // The Prediction varaiables 'probabilities', 'votes', and 'crossClassProbTable' will
+  // The Prediction variables 'probabilities', 'votes', and 'crossClassProbTable' will
   // have been built.
 
 

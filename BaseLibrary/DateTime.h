@@ -12,7 +12,7 @@
 
 /**
  * @file  DateTime.h
- * @brief  Their are three classes in this file meant to represent  Date, Time, and DateTime called
+ * @brief  Their are three classes in this file meant to represent Date, Time, and DateTime called
  *         DateType, TimeType, and DateTimeType.
  */
 
@@ -111,7 +111,7 @@ namespace  KKU
     DateType   operator-  (const DateType&  right)  const;
     DateType&  operator++ ();
 
-    uchar  DaysThisMonth ()  const;  /**<  @brief returns the number of days in 'month' and if leapYear and february returns 29. */
+    uchar  DaysThisMonth ()  const;  /**<  @brief returns the number of days in 'month' and if leapYear and February returns 29. */
     
     static  uchar  MonthFromStr (const KKStr&  monthStr);
 

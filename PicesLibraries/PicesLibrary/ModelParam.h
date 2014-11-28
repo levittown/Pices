@@ -15,7 +15,7 @@ namespace MLL
   #endif
 
 
-  // All the classes subclassed from 'ModelParam'  will need this.
+  // All the classes sub-classed from 'ModelParam'  will need this.
   #if  !defined(_MLCLASS_)
   class  MLClass;
   typedef  MLClass*  MLClassPtr;
@@ -29,9 +29,9 @@ namespace MLL
   *@author Kurt Kramer
   *@details
   *For each Machine Learning algorithm implemented you would create a specialization of this class
-  *to manage the parameters required by the algorithm.  Specifically for each new class that you
+  *to manage the parameters required by the algorithm. Specifically for each new class that you
   *create that is derived from 'Model' you will new to create a class derived from 'ModelParam'.
-  *This class encapsulates general parameters that are common to all Machine Learning Models.   *
+  *This class encapsulates general parameters that are common to all Machine Learning Models.
   *@see  Model
   */
   class  ModelParam
@@ -101,10 +101,10 @@ namespace MLL
     void    ReadSpecificImplementationXML (istream&  i) = 0;
   
 
-    /*!
-     @brief Creates a a Command Line String that represents these parameters.
-     @details  All derived classes should implement this method. They should first call this method and
-               then append there own parameters that are specific to their implementation.
+    /**
+     *@brief Creates a a Command Line String that represents these parameters.
+     *@details  All derived classes should implement this method. They should first call this method and
+     *          then append there own parameters that are specific to their implementation.
      */
     virtual
     KKStr   ToCmdLineStr ()  const;

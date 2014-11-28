@@ -69,7 +69,7 @@ namespace  ImageExtractionManager
 
     /** 
      *@brief Returns a snapshot of the current class count statistics collected.
-     *@details  Caller will get ownewship of the instance of 'ClassStatisticList' so wil be responsable 
+     *@details  Caller will get ownership of the instance of 'ClassStatisticList' so will be responsible
      *         for deleting when done.
      */
     ClassStatisticListPtr  GetClassStatistics ()  const;
@@ -113,12 +113,12 @@ namespace  ImageExtractionManager
     DataBasePtr                         dbConn;
     bool                                cancelFlag;
     KKStr                               completionStatus;
-    bool                                crashed;                /**< Indicates if any one of the threads crasehd.         */
-    bool                                doneExecuting;          /**< The last thing this instance will do in 'ManageTheExtraction'is setthis falg to true. */
+    bool                                crashed;                /**< Indicates if any one of the threads crashed.         */
+    bool                                doneExecuting;          /**< The last thing this instance will do in 'ManageTheExtraction'is set this flag to true. */
     FileDescPtr                         fileDesc;
     LogicalFrameQueuePtr                framePool;              /**< Frames that will be used by 'FrameExtractorThread' and 'FrameProcessorThread'. */
     uint32                              frameWidth;
-    ExtractedImageQueuePtr              imagesAwaitingUpdate;   /**< These are images that are queued to tb inserted into database.                 */
+    ExtractedImageQueuePtr              imagesAwaitingUpdate;   /**< These are images that are queued to be inserted into database.                 */
     SipperExtractionImageManagerPtr     imageManager;
     DataBaseLogEntryPtr                 logEntry;
     uint32                              logEntryId;
@@ -129,10 +129,10 @@ namespace  ImageExtractionManager
     SipperFilePtr                       sipperFileRec;
     KKStr                               sipperRootName;
     bool                                terminateFlag;
-    DataBaseImageValidatedEntryListPtr  validationInfo;         /**< Holds Images Validation info to be reapplied to images after extraction.       */
+    DataBaseImageValidatedEntryListPtr  validationInfo;         /**< Holds Images Validation info to be re-applied to images after extraction.       */
     KKStr                               validationInfoFileName;
     KKStr                               validationInfoFileNameHistory;
-    uint32                              veryLargeImageSize;     /**< Threshhold for putting Images into Very Large Directory.                       */
+    uint32                              veryLargeImageSize;     /**< Threshold for putting Images into Very Large Directory.                       */
 
     // Variables used for Report
     DateTime                            endTime;
@@ -145,7 +145,7 @@ namespace  ImageExtractionManager
 
     FrameExtractorThreadPtr             frameExtractorThread;
 
-    ImageExtractionThreadListPtr        frameProcessors;   /**< List of threads that are specificacly instances of 'FrameProcessorThread'.     */
+    ImageExtractionThreadListPtr        frameProcessors;   /**< List of threads that are specifically instances of 'FrameProcessorThread'.     */
 
     DataBaseUpdateThreadPtr             dataBaseUpdaterThread;
 

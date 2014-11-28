@@ -1,4 +1,4 @@
-#include  "FirstIncludes.h"
+#include "FirstIncludes.h"
 
 #include <stdio.h>
 #include <string>
@@ -10,10 +10,7 @@
 #include <iomanip>
 #include <set>
 #include <vector>
-
-
 #include "MemoryDebug.h"
-
 using namespace std;
 
 
@@ -186,21 +183,21 @@ void  ModelDual::TrainModel (FeatureVectorListPtr  _trainExamples,
   catch (const KKStrException&  e)
   {
     validModel = false;
-    KKStr  errMsg = "ModelDual::TrainModel  ***ERROR*** Exception occured calling 'Model::TrainModel'.";
+    KKStr  errMsg = "ModelDual::TrainModel  ***ERROR*** Exception occurred calling 'Model::TrainModel'.";
     log.Level (-1) << endl << errMsg << endl << e.ToString () << endl << endl;
     throw  KKStrException (errMsg, e);
   }
   catch (const exception& e2)
   {
     validModel = false;
-    KKStr errMsg = "ModelDual::TrainModel  ***ERROR*** Exception occured calling 'Model::TrainModel'.";
+    KKStr errMsg = "ModelDual::TrainModel  ***ERROR*** Exception occurred calling 'Model::TrainModel'.";
     log.Level (-1) << endl << endl << errMsg << endl << e2.what () << endl << endl;
     throw KKStrException (errMsg, e2);
   }
   catch (...)
   {
     validModel = false;
-    KKStr errMsg = "ModelDual::TrainModel  ***ERROR*** Exception occured calling 'Model::TrainModel'.";
+    KKStr errMsg = "ModelDual::TrainModel  ***ERROR*** Exception occurred calling 'Model::TrainModel'.";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
     throw KKStrException (errMsg);
   }
@@ -209,7 +206,7 @@ void  ModelDual::TrainModel (FeatureVectorListPtr  _trainExamples,
   // that needed to be done.  
   // Also the data structures 'classes', 'encoder', and 'fileDesc' will have been built.
   // 'classes' will already be sorted in name order.
-  // The Prediction varaiables 'probabilities', 'votes', and 'crossClassProbTable' will
+  // The Prediction variables 'probabilities', 'votes', and 'crossClassProbTable' will
   // have been built.
 
   {
@@ -334,8 +331,8 @@ void  ModelDual::TrainModel (FeatureVectorListPtr  _trainExamples,
 
 
 MLClassConstPtr  ModelDual::ReconcilePredictions (MLClassConstPtr  pred1, 
-                                                     MLClassConstPtr  pred2
-                                                    )
+                                                  MLClassConstPtr  pred2
+                                                 )
 {
   if  (pred1 == pred2)
     return pred1;
@@ -408,11 +405,11 @@ MLClassConstPtr  ModelDual::ReconcilePredictions (MLClassConstPtr  pred1,
 
 
 
-void  ModelDual::ReconcileProbAndVotes (Classifier2Ptr      classifier,
-                                        MLClassConstPtr  predClass,
-                                        FeatureVectorPtr    encodedExample, 
-                                        double&             predClassProb,
-                                        int32&              predClassVotes
+void  ModelDual::ReconcileProbAndVotes (Classifier2Ptr    classifier,
+                                        MLClassConstPtr   predClass,
+                                        FeatureVectorPtr  encodedExample,
+                                        double&           predClassProb,
+                                        int32&            predClassVotes
                                        )
 {
   int32  numClasses = classes->QueueSize ();
@@ -477,19 +474,19 @@ MLClassConstPtr  ModelDual::Predict (FeatureVectorPtr  example)
 
 
 
-void  ModelDual::Predict (FeatureVectorPtr     example,
+void  ModelDual::Predict (FeatureVectorPtr  example,
                           MLClassConstPtr   knownClass,
                           MLClassConstPtr&  predClass1,
                           MLClassConstPtr&  predClass2,
-                          int32&               predClass1Votes,
-                          int32&               predClass2Votes,
-                          double&              probOfKnownClass,
-                          double&              predClass1Prob,
-                          double&              predClass2Prob,
-                          double&              compact,
-                          int32&               numOfWinners,
-                          bool&                knownClassOneOfTheWinners,
-                          double&              breakTie
+                          int32&            predClass1Votes,
+                          int32&            predClass2Votes,
+                          double&           probOfKnownClass,
+                          double&           predClass1Prob,
+                          double&           predClass2Prob,
+                          double&           compact,
+                          int32&            numOfWinners,
+                          bool&             knownClassOneOfTheWinners,
+                          double&           breakTie
                          )
 {
   if  ((!classifier1)  ||  (!classifier2))
@@ -501,27 +498,27 @@ void  ModelDual::Predict (FeatureVectorPtr     example,
 
   MLClassConstPtr  predClass1C1       = NULL;
   MLClassConstPtr  predClass2C1       = NULL;
-  int32               predClass1VotesC1  = 0;
-  int32               predClass2VotesC1  = 0;
-  double              probOfKnownClassC1 = 0.0;
-  double              predClass1ProbC1 = 0.0;
-  double              predClass2ProbC1 = 0.0;
-  double              compactC1          = 0;
-  int32               numOfWinnersC1     = 0;
-  bool                knownClassOneOfTheWinnersC1 = false;
-  double              breakTieC1         = 0.0;
+  int32            predClass1VotesC1  = 0;
+  int32            predClass2VotesC1  = 0;
+  double           probOfKnownClassC1 = 0.0;
+  double           predClass1ProbC1   = 0.0;
+  double           predClass2ProbC1   = 0.0;
+  double           compactC1          = 0;
+  int32            numOfWinnersC1     = 0;
+  bool             knownClassOneOfTheWinnersC1 = false;
+  double           breakTieC1         = 0.0;
 
   MLClassConstPtr  predClass1C2       = NULL;
   MLClassConstPtr  predClass2C2       = NULL;
-  int32               predClass1VotesC2  = 0;
-  int32               predClass2VotesC2  = 0;
-  double              probOfKnownClassC2 = 0.0;
-  double              predClass1ProbC2 = 0.0;
-  double              predClass2ProbC2 = 0.0;
-  double              compactC2          = 0;
-  int32               numOfWinnersC2     = 0;
-  bool                knownClassOneOfTheWinnersC2 = false;
-  double              breakTieC2         = 0.0;
+  int32            predClass1VotesC2  = 0;
+  int32            predClass2VotesC2  = 0;
+  double           probOfKnownClassC2 = 0.0;
+  double           predClass1ProbC2   = 0.0;
+  double           predClass2ProbC2   = 0.0;
+  double           compactC2          = 0;
+  int32            numOfWinnersC2     = 0;
+  bool             knownClassOneOfTheWinnersC2 = false;
+  double           breakTieC2         = 0.0;
 
   bool  newExampleCreated = false;
   FeatureVectorPtr  encodedExample = PrepExampleForPrediction (example, newExampleCreated);
@@ -711,10 +708,10 @@ void  ModelDual::ProbabilitiesByClassDual (FeatureVectorPtr   example,
 
 
 
-void  ModelDual::ProbabilitiesByClass (FeatureVectorPtr            example,
+void  ModelDual::ProbabilitiesByClass (FeatureVectorPtr         example,
                                        const MLClassConstList&  _mlClasses,
-                                       int32*                      _votes,
-                                       double*                     _probabilities
+                                       int32*                   _votes,
+                                       double*                  _probabilities
                                       )
 {
   if  ((!classifier1)  ||  (!classifier2))
@@ -760,14 +757,14 @@ void  ModelDual::ProbabilitiesByClass (FeatureVectorPtr            example,
 
 
 
-void   ModelDual::ProbabilitiesByClass (FeatureVectorPtr            _example,
+void   ModelDual::ProbabilitiesByClass (FeatureVectorPtr         _example,
                                         const MLClassConstList&  _mlClasses,
-                                        double*                     _probabilities
+                                        double*                  _probabilities
                                        )
 {
   if  ((!classifier1)  ||  (!classifier2))
   {
-    log.Level (-1) << endl << endl << "ModelDual::Predict   ***ERROR***      Both Classifiers are not defined." << endl << endl;
+    log.Level (-1) << endl << endl << "ModelDual::Predict  ***ERROR***      Both Classifiers are not defined." << endl << endl;
     return;
   }
 
@@ -807,7 +804,7 @@ void   ModelDual::ProbabilitiesByClass (FeatureVectorPtr            _example,
 
 
 void  ModelDual::RetrieveCrossProbTable (MLClassConstList&  _classes,
-                                         double**              _crossProbTable  // two dimension matrix that needs to be classes.QueueSize ()  squared.
+                                         double**           _crossProbTable  // two dimension matrix that needs to be classes.QueueSize ()  squared.
                                         )
 {
   if  ((!classifier1)  ||  (!classifier2))
@@ -1044,6 +1041,3 @@ int32  ModelDual::NumOfSupportVectors ()  const
     return 0;
 
 }  /* NumOfSupportVectors */
-
-
-

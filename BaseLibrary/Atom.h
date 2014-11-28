@@ -1,4 +1,4 @@
-/* Atom.h -- Experimental clas thta is not in use;  meant to be base class to all other classes.
+/* Atom.h -- Experimental class that is not in use;  meant to be base class to all other classes.
  * Copyright (C) 1994-2011 Kurt Kramer
  * For conditions of distribution and use, see copyright notice in KKU.h
  */
@@ -10,13 +10,13 @@ namespace  KKU
   /**
    *@class  Atom  Atom.h
    *@brief Base class of all other classes that is meant to be managed by 'BaseLibrary'
-   *@details  'Atom' will have a few important virtual methods that all derived classses will be 
-   *          required to implement.  This wil lallow for the smooth functioning of XML 
+   *@details  'Atom' will have a few important virtual methods that all derived classes will be
+   *          required to implement.  This will allow for the smooth functioning of XML
    *          file reading and writing.  Ex: 'WriteXML',  this method is to write a XML version
-   *          of the derived class to a output stream.  A regisered BuildFromXML function will 
+   *          of the derived class to a output stream.  A registered BuildFromXML function will
    *          be able to create a new instance of the derived class.
    *
-   *          Create on 2010-02-22;  primary purpose is ti help generate more ideas along these 
+   *          Create on 2010-02-22;  primary purpose is to help generate more ideas along these
    *          lines.
    */
   class Atom

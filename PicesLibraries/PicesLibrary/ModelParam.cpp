@@ -1,12 +1,9 @@
 #include "FirstIncludes.h"
-
 #include <stdio.h>
-
 #include <fstream>
 #include <string>
 #include <iostream>
 #include <vector>
-
 #include "MemoryDebug.h"
 using namespace std;
 
@@ -22,7 +19,6 @@ using namespace KKU;
 #include "ModelParamSvmBase.h"
 #include "ModelParamUsfCasCor.h"
 #include "ModelParamDual.h"
-
 #include "MLLTypes.h"
 #include "Model.h"
 #include "FileDesc.h"
@@ -121,7 +117,7 @@ ModelParamPtr  ModelParam::CreateModelParam (istream&     i,
   ModelParamTypes  modelParamType = mptNULL;
 
 
-  // Fisrt we need to determine which type of model this is.  We will
+  // First we need to determine which type of model this is.  We will
   // scan through the file until we locate a ModelParamType field.
   while  (i.getline (buff, sizeof (buff)))
   {
@@ -378,7 +374,7 @@ void  ModelParam::ParseCmdLine (KKStr   _cmdLineStr,
       {
         log.Level (-1) 
           << endl << endl
-          << "ModelParam::ParseCmdLine ***ERROR***  Invaqlid '-ExamplsPerClass' param,eter specified[" << value << "]" << endl
+          << "ModelParam::ParseCmdLine ***ERROR***  Invalid '-ExamplsPerClass' parameter specified[" << value << "]" << endl
           << endl;
         _validFormat = false;
         examplesPerClass = int32_max;
@@ -551,7 +547,7 @@ void  ModelParam::ReadXML (istream&  i)
   {
     KKStr  ln (buff);
     KKStr  field = ln.ExtractQuotedStr ("\n\r\t", 
-                                         true      // true = decode escape charaters
+                                         true      // true = decode escape characters
                                         );
     field.Upper ();
 
@@ -564,7 +560,7 @@ void  ModelParam::ReadXML (istream&  i)
     {
       bool  validFormat;
       KKStr  cmdLine = ln.ExtractQuotedStr ("\n\r\t", 
-                                             true      // true = decode escape charaters
+                                             true      // true = decode escape characters
                                             );
       ParseCmdLine (cmdLine, validFormat);
     }

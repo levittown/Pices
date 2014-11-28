@@ -40,8 +40,8 @@ namespace KKU
   {
   public:
     /** 
-     *@brief  Constructor for Application class taht will start with a default logger(RunLog),
-     *@details After creating an instance of this class you intialize it by calling InitalizeApplication.
+     *@brief  Constructor for Application class that will start with a default logger(RunLog),
+     *@details After creating an instance of this class you initialize it by calling InitalizeApplication.
      */
     Application ();
 
@@ -54,8 +54,8 @@ namespace KKU
 
 
     /**
-     *@brief  Constructor for Application class with where we already hav an existing logger 'RunLog'.
-     *@details After creating an instance of this class you intialize it by calling InitalizeApplication.
+     *@brief  Constructor for Application class with where we already have an existing logger 'RunLog'.
+     *@details After creating an instance of this class you initialize it by calling InitalizeApplication.
      *@param[in]  _log  A reference to a RunLog object.
      */
     Application (RunLog&  _log);
@@ -110,8 +110,8 @@ namespace KKU
 
   protected:
     /**
-     *@brief  Will display Command Lone parameters that the 'Appliication' class will manage.
-     *@details  Derived classes that implemen this method need to call their imediate base class vesion of this method
+     *@brief  Will display Command Lone parameters that the 'Application' class will manage.
+     *@details  Derived classes that implement this method need to call their immediate base class version of this method
      * to include these parameters.
      */
     virtual

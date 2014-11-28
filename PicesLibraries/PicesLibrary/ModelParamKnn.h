@@ -31,7 +31,7 @@ namespace MLL
     void    ReadSpecificImplementationXML (istream&  i);
 
     /*! 
-     @brief Createsa a Command Line String that represents these parameters.
+     @brief Creates a Command Line String that represents these parameters.
      */
     virtual
     KKStr   ToCmdLineStr ()  const;
@@ -54,7 +54,7 @@ namespace MLL
 
     KKStr                    fileName;
 
-    int32                      k;                 // The number of nearest neighbors to process.
+    int32                    k;                 // The number of nearest neighbors to process.
 
     bool                     validParam;
   };  /* ModelParamKnn */

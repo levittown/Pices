@@ -2,7 +2,7 @@
  * Copyright (C) 1994-2013 Kurt Kramer
  * For conditions of distribution and use, see copyright notice in KKB.h
  *
- *  This modulke originally developed as part of the KKU library;  brought into this library for convienence sake.
+ *  This module originally developed as part of the KKU library; brought into this library for convenience sake.
  */
 #include "FirstIncludes.h"
 

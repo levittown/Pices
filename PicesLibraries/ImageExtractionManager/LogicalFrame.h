@@ -12,9 +12,9 @@
 namespace  ImageExtractionManager
 {
   /**
-   *@brief   The Image extracion procedure will contain several threads perform various functions.
+   *@brief   The Image extraction procedure will contain several threads perform various functions.
    *@details  This will be the base class for each one of the different types of processing that 
-   * Sipper Image processing will be done.  Soem of threads will Extract logical frames from Sipper 
+   * Sipper Image processing will be done.  Some of threads will Extract logical frames from Sipper
    * files,  
    */
   class  LogicalFrame
@@ -100,32 +100,32 @@ namespace  ImageExtractionManager
 
     uint32          frameHeight;            /**< Number of rows in current frame.                         */
     uint32          frameHeightMax;         /**< Number of scan lines that have been actually allocated.  */
-    uint32          frameWidth;             /**< Number of pixedls per row in frame.                      */
+    uint32          frameWidth;             /**< Number of pixels per row in frame.                      */
     uchar*          frameArea;              /**< Pointer to block of memory that will contain frame       */
     uint32          frameSipperRow;         /**< Row within the Sipper File That Frame starts at.         */
     uint64*         frameRowByteOffset;
     uint32          frameTotalPixels;       /**< Total number of pixels that frame could contain.         */
-    uint32*         pixelsPerRow;           /**< Number of forground pixels in each row.                  */
+    uint32*         pixelsPerRow;           /**< Number of foreground pixels in each row.                  */
 
     uchar**         origFrame;              /**< 'origFrame' and 'origFrameArea' are only used when       */
-    uchar*          origFrameArea;          /**<  morphalogical operations are performed.                 */
+    uchar*          origFrameArea;          /**<  morphological operations are performed.                 */
    
     uchar**         workFrame;              /**< 'workFrame' & 'workFrameArea' are used to perform        */
-    uchar*          workFrameArea;          /**< morphalogical operations with.                           */
+    uchar*          workFrameArea;          /**< morphological operations with.                           */
 
     uint32          frameNum;               /**< Sequential number assigned to each frame.                */
-    uint32          imagesInFrame;          /**< Number of descrete images located by the connected component analysis. */
+    uint32          imagesInFrame;          /**< Number of discreet images located by the connected component analysis. */
 
     // Sgructures to support Blob Processing.
     LogicalFrameBlobPtr*  blobs;
-    int32*          blobIdsArea;            /**< Continuous chunck of memory that was allocated to hold 'blobIds' in.   */
+    int32*          blobIdsArea;            /**< Continuous chunk of memory that was allocated to hold 'blobIds' in.   */
     int32**         blobIds;                /**< Two dimensional array that will work with frame.  For each pixel that is 
                                              *   determined to belong to an image, the ID of that image that it is part of
                                              *   will be kept here.
                                              */
-    uint32          connectedPixelDist;     /**< Distance that two forground pixels have to be to be considered part of same connected image. */
-    uint32          maxBlobsPerFrame;       /**< Maximum number of blobs that can be tracked;  'blobs' wil be allocated to this size.         */
-    uint32          numOfBlobsInFrame;      /**< Number of blobs located in curent frame so far.                                              */
+    uint32          connectedPixelDist;     /**< Distance that two foreground pixels have to be to be considered part of same connected image. */
+    uint32          maxBlobsPerFrame;       /**< Maximum number of blobs that can be tracked; 'blobs' will be allocated to this size.          */
+    uint32          numOfBlobsInFrame;      /**< Number of blobs located in current frame so far.                                              */
 
     const
     ExtractionParms&  parms;

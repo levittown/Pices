@@ -1,4 +1,4 @@
-/* Compressor.cpp -- Compresses and decompresses data using zLib Library
+/* Compressor.cpp -- Compresses and de-compresses data using zLib Library
  * Copyright (C) 1994-2011 Kurt Kramer
  * For conditions of distribution and use, see copyright notice in KKU.h
  */
@@ -10,7 +10,7 @@
 using namespace std;
 
 #ifdef  WIN32
-#include  "zlib.h"
+#include "zlib.h"
 #endif
 
 #include "Compressor.h"
@@ -25,7 +25,7 @@ void*  Compressor::CreateCompressedBuffer (void*  source,
 {
 #ifdef ZLIB_H
 
-  // following code was lifted from example proided by zlib  "zpipe.c"
+  // following code was lifted from example provided by zlib  "zpipe.c"
   int32     ret;
   z_stream  strm;
 
@@ -38,12 +38,28 @@ void*  Compressor::CreateCompressedBuffer (void*  source,
   uchar*  compressedBuff = NULL;
   compressedBuffLen     = 0;
 
-  //  The first thing we do is to initialize the zlib state for compression using deflateInit(). This must be done before the first use of deflate(). The zalloc, zfree, and opaque fields in the strm structure must be initialized before calling deflateInit(). Here they are set to the zlib constant Z_NULL to request that zlib use the default memory allocation routines. An application may also choose to provide custom memory allocation routines here. deflateInit() will allocate on the order of 256K bytes for the internal state. (See zlib Technical Details.) 
-  // deflateInit() is called with a pointer to the structure to be initialized and the compression level, which is an integer in the range of -1 to 9. Lower compression levels result in faster execution, but less compression. Higher levels result in greater compression, but slower execution. The zlib constant Z_DEFAULT_COMPRESSION, equal to -1, provides a good compromise between compression and speed and is equivalent to level 6. Level 0 actually does no compression at all, and in fact expands the data slightly to produce the zlib format (it is not a byte-for-byte copy of the input). More advanced applications of zlib may use deflateInit2() here instead. Such an application may want to reduce how much memory will be used, at some price in compression. Or it may need to request a gzip header and trailer instead of a zlib header and trailer, or raw encoding with no header or trailer at all. 
+  // The first thing we do is to initialize the zlib state for compression using deflateInit(). This must be done before the first use
+  // of deflate(). The zalloc, zfree, and opaque fields in the strm structure must be initialized before calling deflateInit(). Here
+  // they are set to the zlib constant Z_NULL to request that zlib use the default memory allocation routines. An application may also
+  // choose to provide custom memory allocation routines here. deflateInit() will allocate on the order of 256K bytes for the internal
+  // state. (See zlib Technical Details.)
+  //
+  // deflateInit() is called with a pointer to the structure to be initialized and the compression level, which is an integer in the
+  // range of -1 to 9. Lower compression levels result in faster execution, but less compression. Higher levels result in greater
+  // compression, but slower execution. The zlib constant Z_DEFAULT_COMPRESSION, equal to -1, provides a good compromise between
+  // compression and speed and is equivalent to level 6. Level 0 actually does no compression at all, and in fact expands the data
+  // slightly to produce the zlib format (it is not a byte-for-byte copy of the input). More advanced applications of zlib may use
+  // deflateInit2() here instead. Such an application may want to reduce how much memory will be used, at some price in compression.
+  // Or it may need to request a gzip header and trailer instead of a zlib header and trailer, or raw encoding with no header or
+  // trailer at all.
 
-  // We must check the return value of deflateInit() against the zlib constant Z_OK to make sure that it was able to allocate memory for the internal state, and that the provided arguments were valid. deflateInit() will also check that the version of zlib that the zlib.h file came from matches the version of zlib actually linked with the program. This is especially important for environments in which zlib is a shared library. 
+  // We must check the return value of deflateInit() against the zlib constant Z_OK to make sure that it was able to allocate memory
+  // for the internal state, and that the provided arguments were valid. deflateInit() will also check that the version of zlib that
+  // the zlib.h file came from matches the version of zlib actually linked with the program. This is especially important for environments
+  // in which zlib is a shared library.
 
-  // Note that an application can initialize multiple, independent zlib streams, which can operate in parallel. The state information maintained in the structure allows the zlib routines to be reentrant. 
+  // Note that an application can initialize multiple, independent zlib streams, which can operate in parallel. The state information
+  // maintained in the structure allows the zlib routines to be reentrant.
 
 
   /* allocate deflate state */
@@ -58,7 +74,10 @@ void*  Compressor::CreateCompressedBuffer (void*  source,
     return NULL;
   }
 
-  //  With the pleasantries out of the way, now we can get down to business. The outer do-loop reads all of the input file and exits at the bottom of the loop once end-of-file is reached. This loop contains the only call of deflate(). So we must make sure that all of the input data has been processed and that all of the output data has been generated and consumed before we fall out of the loop at the bottom.
+  //  With the pleasantries out of the way, now we can get down to business. The outer do-loop reads all of the input file and exits
+  // at the bottom of the loop once end-of-file is reached. This loop contains the only call of deflate(). So we must make sure that
+  // all of the input data has been processed and that all of the output data has been generated and consumed before we fall out of
+  // the loop at the bottom.
 
   {
     // This was originally a a loop that read from a file;  but now we have a input buffer with a known amount of data.
@@ -73,8 +92,21 @@ void*  Compressor::CreateCompressedBuffer (void*  source,
       strm.avail_out = outputBufferSize;
       strm.next_out  = outputBuffer;
       
-      // Now we call the compression engine itself, deflate(). It takes as many of the avail_in bytes at next_in as it can process, and writes as many as avail_out bytes to next_out. Those counters and pointers are then updated past the input data consumed and the output data written. It is the amount of output space available that may limit how much input is consumed. Hence the inner loop to make sure that all of the input is consumed by providing more output space each time. Since avail_in and next_in are updated by deflate(), we don't have to mess with those between deflate() calls until it's all used up. 
-      // The parameters to deflate() are a pointer to the strm structure containing the input and output information and the internal compression engine state, and a parameter indicating whether and how to flush data to the output. Normally deflate will consume several K bytes of input data before producing any output (except for the header), in order to accumulate statistics on the data for optimum compression. It will then put out a burst of compressed data, and proceed to consume more input before the next burst. Eventually, deflate() must be told to terminate the stream, complete the compression with provided input data, and write out the trailer check value. deflate() will continue to compress normally as long as the flush parameter is Z_NO_FLUSH. Once the Z_FINISH parameter is provided, deflate() will begin to complete the compressed output stream. However depending on how much output space is provided, deflate() may have to be called several times until it has provided the complete compressed stream, even after it has consumed all of the input. The flush parameter must continue to be Z_FINISH for those subsequent calls. 
+      // Now we call the compression engine itself, deflate(). It takes as many of the avail_in bytes at next_in as it can process,
+      // and writes as many as avail_out bytes to next_out. Those counters and pointers are then updated past the input data consumed
+      // and the output data written. It is the amount of output space available that may limit how much input is consumed. Hence the
+      // inner loop to make sure that all of the input is consumed by providing more output space each time. Since avail_in and next_in
+      // are updated by deflate(), we don't have to mess with those between deflate() calls until it's all used up.
+      // The parameters to deflate() are a pointer to the strm structure containing the input and output information and the internal
+      // compression engine state, and a parameter indicating whether and how to flush data to the output. Normally deflate will consume
+      // several K bytes of input data before producing any output (except for the header), in order to accumulate statistics on the
+      // data for optimum compression. It will then put out a burst of compressed data, and proceed to consume more input before the
+      // next burst. Eventually, deflate() must be told to terminate the stream, complete the compression with provided input data, and
+      // write out the trailer check value. deflate() will continue to compress normally as long as the flush parameter is Z_NO_FLUSH.
+      // Once the Z_FINISH parameter is provided, deflate() will begin to complete the compressed output stream. However depending on
+      // how much output space is provided, deflate() may have to be called several times until it has provided the complete compressed
+      // stream, even after it has consumed all of the input. The flush parameter must continue to be Z_FINISH for those subsequent
+      // calls.
 
       ret = deflate (&strm, Z_FINISH);
       if  (ret == Z_STREAM_ERROR)
@@ -117,7 +149,8 @@ void*  Compressor::CreateCompressedBuffer (void*  source,
     }
   }
 
-  // The process is complete, but we still need to deallocate the state to avoid a memory leak (or rather more like a memory hemorrhage if you didn't do this). Then finally we can return with a happy return value. 
+  // The process is complete, but we still need to deallocate the state to avoid a memory leak (or rather more like a memory hemorrhage
+  // if you didn't do this). Then finally we can return with a happy return value.
   /* clean up and return */
  (void)deflateEnd (&strm);
 

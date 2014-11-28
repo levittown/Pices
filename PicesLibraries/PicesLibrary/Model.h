@@ -6,8 +6,8 @@
  @author  Kurt Kramer
  @details
    Base class to be used by all Learning Algorithm Models. The idea is that all learning algorithms 
-   all follow the same basic flow.  The two obvious functions that they all support are Training from 
-   supplied labeled examples(List of FeatureVector objects),  Prediction of an unlabeled example.
+   all follow the same basic flow. The two obvious functions that they all support are Training from
+   supplied labeled examples(List of FeatureVector objects), Prediction of an unlabeled example.
  */
 
 #include "BasicTypes.h"
@@ -231,10 +231,10 @@ namespace MLL
 
 
     /**
-     *@brief  Expects to read in the entire contents of a previously trainied model into
+     *@brief  Expects to read in the entire contents of a previously trained model into
      *        this instance. One of the first lines to be read will contain the specific
-     *        type of model to be read.  To update the fields taht are particular to
-     *        the specioalized class the method 'ReadSpecificImplementationXML' will be 
+     *        type of model to be read. To update the fields that are particular to
+     *        the specialized class the method 'ReadSpecificImplementationXML' will be
      *        called.
      */
     virtual  
@@ -310,13 +310,13 @@ namespace MLL
      *        probabilities for any given index in '_probabilities' will be for the class
      *        Specified in the same index in '_mlClasses'.
      *@param[in]  _example    FeatureVector object to calculate predicted probabilities for.
-     *@param[in]  _mlClasses  List of image classes that caller is aware of.  This should be the
-     *            same list that was used when constructing this Model object.  The list must
+     *@param[in]  _mlClasses  List of image classes that caller is aware of. This should be the
+     *            same list that was used when constructing this Model object. The list must
      *            be the same but not necessarily in the same order as when Model was 1st
-     *            constructed.  The ordering of this list will dictate the order that '_probabilities'
+     *            constructed. The ordering of this list will dictate the order that '_probabilities'
      *            will be populated.
      *@param[out] _probabilities An array that must be as big as the number of classes in
-     *            '_mlClasses'.  The probability of class in '_mlClasses[x]' will be 
+     *            '_mlClasses'. The probability of class in '_mlClasses[x]' will be
      *            returned in probabilities[x].
      */
     virtual
@@ -334,14 +334,14 @@ namespace MLL
 
     virtual  
     void  RetrieveCrossProbTable (MLClassConstList&  classes,
-                                  double**           crossProbTable  // two dimension matrix that needs to be classes.QueueSize ()  squared.
+                                  double**           crossProbTable  /**< two dimension matrix that needs to be classes.QueueSize ()  squared. */
                                  );
 
 
     virtual  
     void  TrainModel (FeatureVectorListPtr  _trainExamples,
                       bool                  _alreadyNormalized,
-                      bool                  _takeOwnership  /*!< Model will take ownership of these examples */
+                      bool                  _takeOwnership     /**< Model will take ownership of these examples */
                      );
 
 
@@ -389,12 +389,12 @@ namespace MLL
 
     NormalizationParmsPtr  normParms;
 
-    int32                  numOfClasses;          /*!< Number of Classes defined in crossClassProbTable. */
+    int32                  numOfClasses;   /**< Number of Classes defined in crossClassProbTable. */
 
-    ModelParamPtr          param;                 /*!< Will own this instance                            */
+    ModelParamPtr          param;          /**< Will own this instance,                           */
 
     KKStr                  rootFileName;   /**< This is the root name to be used by all component objects; such as svm_model,
-                                            * mlClasses, and svmParam(including selected features).  Each one will have the
+                                            * mlClasses, and svmParam(including selected features). Each one will have the
                                             * same rootName with a different suffix.
                                             *@code
                                             *      mlClasses  "<rootName>.image_classes"
@@ -409,8 +409,8 @@ namespace MLL
 
     bool                   validModel;
 
-    bool                   weOwnTrainExamples;  /**< Indicates if we own the 'trainExamples'.   This does not mean that we own its 
-                                                 * contents.  That is determined by 'trainExamples->Owner ()'.
+    bool                   weOwnTrainExamples;  /**< Indicates if we own the 'trainExamples'. This does not mean that we own its
+                                                 * contents. That is determined by 'trainExamples->Owner ()'.
                                                  */
    
 

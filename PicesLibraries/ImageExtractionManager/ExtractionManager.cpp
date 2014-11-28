@@ -383,7 +383,7 @@ void  ExtractionManager::Initialize (bool&  _successful)
 
     // Since we are re-extracting the SIPPER file we need to:
     // 1) Save existing Validation Info.
-    // 2) Load validation info from a prebvious run that might have crashed.
+    // 2) Load validation info from a previous run that might have crashed.
     // 3) Append to this list Validation from the Images table.
     // 4) remove all data from Images table for this sipper file.
 
@@ -424,13 +424,13 @@ void  ExtractionManager::Initialize (bool&  _successful)
 
   // kurt kramer  2014-04-25
   // The 4bit file format from KKLine Scanner utilities does not contain instrument data.
-  // For purposes of seeeding up debuging we will not update database from it.
+  // For purposes of seeding up debugging we will not update database from it.
   if  (parms.FileFormat () != sfSipper4Bit)
   {
     InstrumentDataListPtr   instrumentData = InstrumentDataFileManager::GetInstrumentDataForSipperFile 
                                              (parms.SipperFileName (), 
                                               sipperFileRec, 
-                                              true,   // true = Fource re-extraction of data from SipperFiles.
+                                              true,   // true = Force re-extraction of data from SipperFiles.
                                               cancelFlag, 
                                               log
                                              );
@@ -506,7 +506,7 @@ void  ExtractionManager::Initialize (bool&  _successful)
                                                    parms.OutputRootDir (),
                                                    parms.ExtractFeatureData (),
                                                    veryLargeImageSize,
-                                                   (!parms.ConfigFileName ().Empty ()),  // We are going to clasify images,
+                                                   (!parms.ConfigFileName ().Empty ()),  // We are going to classify images,
                                                    parms.CountOnly (),
                                                    parms.ImagesPerDirectory (),
                                                    log
@@ -671,8 +671,8 @@ void  ExtractionManager::StartThreads (bool&  threadsStartedSuccessfully)
 
   if  (!CancelFlag ())
   {
-    // Get the first frame processor running;  then start the frame extractor then 
-    // get therest of the frame proecssors running
+    // Get the first frame processor running; then start the frame extractor then
+    // get the rest of the frame processors running
     StartFrameProcessor (threadsStartedSuccessfully);
     if  ((!threadsStartedSuccessfully)  &&  (!CancelFlag ()))
     {
@@ -938,8 +938,8 @@ void  ExtractionManager::ManageTheExtraction (bool&  successful)
   if  (!CancelFlag ())
   {
     // Image Extraction can not be done until all frames have been extracted; so for this reason we only
-    // monitir the 'frameExtractorThread' thread. After the 'frameExtractorThread' has processed all avaialble
-    // sipper data we will then no longer need to monitorthis thread.
+    // monitor the 'frameExtractorThread' thread. After the 'frameExtractorThread' has processed all available
+    // sipper data we will then no longer need to monitor this thread.
     uint32  loopCount = 0;
     ImageExtractionThreadList  frameExtractionThreads (false);
     frameExtractionThreads.PushOnBack (frameExtractorThread);
@@ -953,7 +953,7 @@ void  ExtractionManager::ManageTheExtraction (bool&  successful)
     if  (!CancelFlag ())
     {
       // Even though there is no more frames being produced by 'frameExtractorThread' we still have to make
-      // sure that all 'frames' that are on queue to be proessed are processed.
+      // sure that all 'frames' that are on queue to be processed are processed.
       MonitorUntilDone (frameProcessors, loopCount, successful);
       if  (!successful)
       {
@@ -963,7 +963,7 @@ void  ExtractionManager::ManageTheExtraction (bool&  successful)
 
       if  (!CancelFlag ())
       {
-        // At this point all data has been extracted and all frames processed;  we only need to make sure that all 
+        // At this point all data has been extracted and all frames processed; we only need to make sure that all
         // the images that have been queued for insertion into the database have been processed.
         ImageExtractionThreadList  dataBaseUpdateThreads (false);
         dataBaseUpdateThreads.PushOnBack (dataBaseUpdaterThread);

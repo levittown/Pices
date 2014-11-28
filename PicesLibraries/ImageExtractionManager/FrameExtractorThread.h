@@ -81,7 +81,7 @@ namespace  ImageExtractionManager
                                
     uint32      lastRowUsed;        /**< Last row in frame that is being used.  If the prev had lastRowInFrame 
                                      * that was less than lastRowUsed then the extra rows will be moved to 
-                                     * beginning of frame when the next frame is retreived.
+                                     * beginning of frame when the next frame is retrieved.
                                      */
                                
     uint32      frameHeightMax;     /**< Max number of rows in a frame.  */
@@ -93,11 +93,11 @@ namespace  ImageExtractionManager
   
     uint32*     colCount;
 
-    uint32*     pixelsPerRow;       /**< Keeps a count of number of pixels in the coresponding rows in frame.  
+    uint32*     pixelsPerRow;       /**< Keeps a count of number of pixels in the corresponding rows in frame.
                                      * Assists in speeding up processing of frames.
                                      */
 
-    uint32      scanLineEnd;        /**< Last scanline in Sipper file that we will process; comes from command line. 
+    uint32      scanLineEnd;        /**< Last scan-line in Sipper file that we will process; comes from command line.
                                      * If = 0, will read all lines in sipper file bye setting to max-uint.
                                      */
  

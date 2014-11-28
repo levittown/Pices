@@ -82,8 +82,8 @@ namespace  MLL
 
     ImageFeaturesListPtr  allExamples;
     bool                  countOnly;
-    SizeDistribution      depthDistribution_1;     // using a SizeDistribution structure to implemet counts by depth
-    SizeDistribution      depthDistribution_10;    // using a SizeDistribution structure to implemet counts by depth
+    SizeDistribution      depthDistribution_1;     // using a SizeDistribution structure to implement counts by depth
+    SizeDistribution      depthDistribution_10;    // using a SizeDistribution structure to implement counts by depth
     FileDescPtr           fileDesc;
     bool                  imagesAreClassified;
     uint32                imagesPerDirectory;
@@ -97,7 +97,7 @@ namespace  MLL
     SizeDistribution      sizeDistributionMed;
     SizeDistribution      sizeDistributionSmall;
 
-    int32                   veryLargeImageSize;
+    int32                 veryLargeImageSize;
 
     class  ImageEntry;
     class  ManagedClasssesSortByClassName;

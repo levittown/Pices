@@ -21,9 +21,9 @@ ExtractedImage::ExtractedImage (RasterSipperPtr _image,
                                 uint32          _sipperFileScanCol,
                                 uint32          _pixelCount,
                                 float           _depth,
-                                MLClassPtr   _predClass1,
+                                MLClassPtr      _predClass1,
                                 float           _predClass1Prob,
-                                MLClassPtr   _predClass2,
+                                MLClassPtr      _predClass2,
                                 float           _predClass2Prob
                                ):
    image                  (_image),

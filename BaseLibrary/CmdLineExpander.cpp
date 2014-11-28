@@ -1,4 +1,4 @@
-/* CmdLineExpander.cpp -- Preprocess Command Line parameters.
+/* CmdLineExpander.cpp -- Pre-process Command Line parameters.
  * Copyright (C) 1994-2011 Kurt Kramer
  * For conditions of distribution and use, see copyright notice in KKU.h
  */
@@ -282,7 +282,7 @@ bool  CmdLineExpander::ParameterIsASwitch (const KKStr&  parm)
 
 void  CmdLineExpander::ExtractParametersFromFile (const KKStr&  cmdFileName, 
                                                   VectorKKStr&  cmdFileParameters,
-                                                  bool&          validFile
+                                                  bool&         validFile
                                                  )
 {
   FILE*  in = osFOPEN (cmdFileName.Str (), "r");

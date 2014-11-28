@@ -1,4 +1,4 @@
-/* Blob.cpp -- Works with Raster class to track individule connected component in Raster.
+/* Blob.cpp -- Works with Raster class to track individual connected component in Raster.
  * Copyright (C) 1994-2011 Kurt Kramer
  * For conditions of distribution and use, see copyright notice in KKU.h
  */

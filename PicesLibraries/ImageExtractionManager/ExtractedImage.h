@@ -30,9 +30,9 @@ namespace  ImageExtractionManager
                     uint32          _sipperFileScanCol,
                     uint32          _pixelCount,
                     float           _depth,
-                    MLClassPtr   _predClass1,
+                    MLClassPtr      _predClass1,
                     float           _predClass1Prob,
-                    MLClassPtr   _predClass2,
+                    MLClassPtr      _predClass2,
                     float           _predClass2Prob
                    );
 
@@ -45,9 +45,9 @@ namespace  ImageExtractionManager
     ImageFeaturesPtr    FeatureVector          () const  {return featureVector;}
     RasterSipperPtr     Image                  () const  {return image;}
     uint32              PixelCount             () const  {return pixelCount;}
-    MLClassConstPtr  PredClass1             () const  {return predClass1;}
+    MLClassConstPtr     PredClass1             () const  {return predClass1;}
     float               PredClass1Prob         () const  {return predClass1Prob;}
-    MLClassConstPtr  PredClass2             () const  {return predClass2;}
+    MLClassConstPtr     PredClass2             () const  {return predClass2;}
     float               PredClass2Prob         () const  {return predClass2Prob;}
     uint32              SipperFileScanRow      () const  {return sipperFileScanRow;}
     uint32              SipperFileScanCol      () const  {return sipperFileScanCol;}
@@ -56,9 +56,9 @@ namespace  ImageExtractionManager
     void  Depth         (float             _depth)           {depth     = _depth;}
 
     void  Prediction (MLClassConstPtr _predClass1,
-                      float              _predClass1Prob,
+                      float           _predClass1Prob,
                       MLClassConstPtr _predClass2,
-                      float              _predClass2Prob
+                      float           _predClass2Prob
                      );
     
 
@@ -73,9 +73,9 @@ namespace  ImageExtractionManager
     ImageFeaturesPtr    featureVector;
     RasterSipperPtr     image;
     uint32              pixelCount;
-    MLClassConstPtr  predClass1;
+    MLClassConstPtr     predClass1;
     float               predClass1Prob;
-    MLClassConstPtr  predClass2;
+    MLClassConstPtr     predClass2;
     float               predClass2Prob;
     uint32              sipperFileScanRow;
     uint32              sipperFileScanCol;

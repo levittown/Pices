@@ -8,10 +8,9 @@ namespace  KKU
 /**
  *@file  BMPheader.h
  *@brief  Definition of structures necessary to support BMP file format.
- *@details Because I could not find any data structures in UNIX based 
- *         systems  that would support the reading of BMP files I created
- *         this one file that includes data structures that would normally
- *         be found on a Windows based OS.
+ *@details Because I could not find any data structures in UNIX based systems that would support the
+ * reading of BMP files I created this one file that includes data structures that would normally be
+ * found on a Windows based OS.
  */
 
 #ifndef WIN32

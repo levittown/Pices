@@ -9,7 +9,7 @@
  *@class  KKU::Tokenizer
  *@brief  Class is meant to break down a stream into a set of logical tokens.
  *@author Kurt Kramer
- *@details  This class was originally created while taking Non Linear Systems.  It breaks up a source 
+ *@details  This class was originally created while taking Non Linear Systems. It breaks up a source
  *          KKStr or text file into logical tokens.  You can create your own source of characters by
  *          creating a Class derived from MLL::TokenBuffer.
  */
@@ -40,8 +40,8 @@ namespace  KKU
     KKStrPtr    GetNextToken ();
 
     /** 
-     *@brief  Returns a list of tokens up to and including the first occurence of 'delToken'.
-     *@details Caller will take ownership of the returned tokens, and be responsable for 
+     *@brief  Returns a list of tokens up to and including the first occurrence of 'delToken'.
+     *@details Caller will take ownership of the returned tokens, and be responsible for
      *         deleting them.
      */
     KKStrListPtr  GetNextTokens (const KKStr& delToken);  
@@ -68,11 +68,11 @@ namespace  KKU
 
     int32            tokenListLen;
     KKStrList        tokenList;      /**< @brief Will contain a fixed list of future tokens to read.
-                                      * As end of stream is approched will fill with end of file 
+                                      * As end of stream is approached will fill with end of file
                                       * Tokens as a flag.
                                       */
 
-    bool             weOwnTokenBuffer; /**< @brief Set to true indicates that we need to call the destructot on the TokenBuffer 'in' that we are processing. */
+    bool             weOwnTokenBuffer; /**< @brief Set to true indicates that we need to call the destructor on the TokenBuffer 'in' that we are processing. */
 
     char             firstChar;
     char             secondChar;

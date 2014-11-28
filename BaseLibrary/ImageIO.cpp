@@ -27,8 +27,8 @@ using namespace std;
 #endif
 
 #ifdef  USE_OPENCV
-  #include  "cv.h"
-  #include  "highgui.h"
+  #include "cv.h"
+  #include "highgui.h"
 #endif
 
 
@@ -37,25 +37,25 @@ using namespace std;
 #endif
 
 #ifdef   USE_GDIPLUS
-#include  <windows.h>
-#include  <gdiplus.h>
-#include  "BMPImage.h"
+#include <windows.h>
+#include <gdiplus.h>
+#include "BMPImage.h"
 #endif
 
 
-#include  "MemoryDebug.h"
-#include  "BasicTypes.h"
+#include "MemoryDebug.h"
+#include "BasicTypes.h"
 
 using namespace KKU;
 
 
 
 
-#include  "ImageIO.h"
+#include "ImageIO.h"
 
-#include  "Histogram.h"
-#include  "OSservices.h"
-#include  "Raster.h"
+#include "Histogram.h"
+#include "OSservices.h"
+#include "Raster.h"
 
 
 namespace KKU
@@ -1063,7 +1063,7 @@ void  SaveImageGrayscaleInverted8Bit (const Raster&  image,
   }
   catch (...)
   {
-    KKStr  errMsg = "SaveImage   Exception occured calling 'BmpImage::Save'  for file[" + _fileName + "]";
+    KKStr  errMsg = "SaveImage   Exception occurred calling 'BmpImage::Save'  for file[" + _fileName + "]";
     cerr << std::endl << errMsg << std::endl << std::endl;
     throw  KKStrException (errMsg);
   }

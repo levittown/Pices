@@ -15,14 +15,14 @@ namespace  KKU
   *@class  BitString
   *@brief Allows you to manage very long bit strings.
   *@author Kurt Kramer
-  *@details  Useful when you need to deal with very large yes/no decisions.  For example performing Feature Selection 
+  *@details  Useful when you need to deal with very large yes/no decisions. For example performing Feature Selection
   * on a DNA dataset where you can have 50,000+ features.  You need to keep a list of which feature combinations have 
   * been tried.  You can use a BitString to do this where a particular bit indicates a particular feature.  In the
   * feature selection case you may want to track several thousand feature combinations.  If you did this using arrays
-  * you would require very large amount of memory to accomplish this.  With BitString's the memory requirement is
+  * you would require very large amount of memory to accomplish this. With BitString's the memory requirement is
   * reduced to 1/8'th allowing for more efficient use of memory.
   *
-  * This class will manage Bit-Strings up to UINT_MAX in length.  Logical operations such as bitwise AND, OR, and NOT
+  * This class will manage Bit-Strings up to UINT_MAX in length. Logical operations such as bitwise AND, OR, and NOT
   * are supported plus others.  An example of where this class is used is in PicesLibrary MLL::FeatureNumList.
   */
 
