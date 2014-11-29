@@ -3868,8 +3868,8 @@ out2:
 double  SVM233::svm_predict (const svm_model*      model,
                              const svm_node*       x,
                              std::vector<double>&  dist,
-                             std::vector<int32>&     winners,
-                             int32                   excludeSupportVectorIDX  /*!<  Specify index of a S/V to remove from computation. */
+                             std::vector<int32>&   winners,
+                             int32                 excludeSupportVectorIDX  /*!<  Specify index of a S/V to remove from computation. */
                             )
 {
   int32 dimSelect = model->param.dimSelect;
@@ -4044,7 +4044,7 @@ double  SVM233::svm_predict (const svm_model*      model,
 double  SVM233::svm_predictTwoClasses (const svm_model*    model,
                                        const svm_node*     x,
                                        double&             dist,
-                                       int32                 excludeSupportVectorIDX  /*!<  Specify index of a S/V to remove from computation. */
+                                       int32               excludeSupportVectorIDX
                                       )
 {
   int32  winner = 0;
@@ -4180,7 +4180,7 @@ double  SVM233::svm_predictTwoClasses (const svm_model*    model,
 
 /****************************************************************************************/
 svm_problem*  SVM233::svm_BuildProbFromTwoClassModel  (const svm_model*    model,
-                                                       int32                 excludeSupportVectorIDX  /*!<  Specify index of a S/V to remove from computation. */
+                                                       int32               excludeSupportVectorIDX  /*!<  Specify index of a S/V to remove from computation. */
                                                       )
 {
   if  (model->param.svm_type == ONE_CLASS   ||

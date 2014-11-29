@@ -35,14 +35,14 @@ namespace SipperHardware
 
 
     /**
-     * @brief A virtual Constructor for InstrumentDataReport
-     * @param[in]  _reportDir    Directory where report file is to be placed.  
-     * @param[in]  text,         Set to true = text data,  false = binary data.
-     * @param[in]  InstrumentID, Sensor/Instrument ID
-     *
-     *    In the future as different types of instruments are introduced we can make
-     *    specialized versions of InstrumentDataReport.
-    */
+     *@brief A virtual Constructor for InstrumentDataReport instances.
+     *@details Based on the parameters will instantiate an instance of the correct derived.
+     * In the future as different types of instruments are introduced we can make specialized versions of InstrumentDataReport.
+     *@param[in] _manager  InstrumentDataManager instance that will this newly created instance will report to.
+     *@param[in] _reportDir    Directory where report file is to be placed.  
+     *@param[in] _text,        Set to true = text data,  false = binary data.
+     *@param[in] _instrumentId, Sensor/Instrument ID
+     */
     static  
       InstrumentDataReportPtr  CreateInstrumentDataReport (InstrumentDataManagerPtr _manager,
                                                            const KKStr&             _reportDir,

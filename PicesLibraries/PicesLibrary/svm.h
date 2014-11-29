@@ -75,36 +75,36 @@ namespace  SVM233
     double   coef0;        /* for poly/sigmoid */
     double   degree;       /* for poly */
     double   gamma;        /* for poly/rbf/sigmoid */
-    int32      kernel_type;
-    int32      svm_type;
+    int32    kernel_type;
+    int32    svm_type;
 
     /* these are for training only */
     double   C;            /* for C_SVC, EPSILON_SVR and NU_SVR */
     double   cache_size;   /* in MB */
     double   eps;          /* stopping criteria */
-    int32      nr_weight;    /* for C_SVC */
+    int32    nr_weight;    /* for C_SVC */
     double   nu;           /* for NU_SVC, ONE_CLASS, and NU_SVR */
     double   p;            /* for EPSILON_SVR */
-    int32      probability;  /* do probability estimates */
-    int32      shrinking;    /* use the shrinking heuristics */
+    int32    probability;  /* do probability estimates */
+    int32    shrinking;    /* use the shrinking heuristics */
     double*  weight;       /* for C_SVC */
-    int32*     weight_label; /* for C_SVC */
+    int32*   weight_label; /* for C_SVC */
 
 
     //luo add
     float    A;
-    int32      boosting;
+    int32    boosting;
     float    cBoost;
     double   confidence;
-    int32      dim;
-    int32      dimSelect;
+    int32    dim;
+    int32    dimSelect;
     double*  featureWeight;
-    int32      hist;
-    int32      nr_class;
-    int32      numSVM;
-    int32      retrain;     //number of iterations for bit reduction
+    int32    hist;
+    int32    nr_class;
+    int32    numSVM;
+    int32    retrain;     //number of iterations for bit reduction
     float    sample;      //random sample ratio
-    int32      sampleSV;
+    int32    sampleSV;
     float    threshold;   //threshold for merging two training images
 
 
@@ -114,7 +114,7 @@ namespace  SVM233
     void  KernalType (int32     _kernalType) {kernel_type = _kernalType;}
 
     double  Gamma      ()  const {return  gamma;}
-    int32     KernalType ()  const {return  kernel_type;}
+    int32   KernalType ()  const {return  kernel_type;}
 
     int32   MemoryConsumedEstimated ()  const;
 
@@ -133,13 +133,13 @@ namespace  SVM233
 //
 struct svm_model
 {
-  svm_parameter param;        // parameter
-  int32           nr_class;     // number of classes, = 2 in regression/one class svm
-  int32           l;            // total #SV
-  VectorKKStr   exampleNames; /*!< allows the user to provide names to the labels  */
-  svm_node**    SV;           /*!< SVs (SV[l])    Support vector feature numbers   */
-  double**      sv_coef;      // coefficients for SVs in decision functions (sv_coef[n-1][l])
-  double*       rho;          // constants in decision functions (rho[n*(n-1)/2])
+  svm_parameter  param;        // parameter
+  int32          nr_class;     // number of classes, = 2 in regression/one class svm
+  int32          l;            // total #SV
+  VectorKKStr    exampleNames; /*!< allows the user to provide names to the labels  */
+  svm_node**     SV;           /*!< SVs (SV[l])    Support vector feature numbers   */
+  double**       sv_coef;      // coefficients for SVs in decision functions (sv_coef[n-1][l])
+  double*        rho;          // constants in decision functions (rho[n*(n-1)/2])
 
   // for classification only
 
@@ -153,17 +153,17 @@ struct svm_model
   int32    numNonSV;
 
   std::set<int32>  BSVIndex;
-  double*        margin;
-  double         weight;
+  double*          margin;
+  double           weight;
 
   int32            dim;
-  double*        featureWeight;
+  double*          featureWeight;
   //luo
 
-  double*        kValueTable;
+  double*          kValueTable;
 
-  svm_node*      xSpace;    // Needed when we load from data file.
-  bool           weOwnXspace;
+  svm_node*        xSpace;    // Needed when we load from data file.
+  bool             weOwnXspace;
 
   svm_model ()
   {
@@ -276,7 +276,7 @@ struct svm_model*  Svm_Load_Model (istream&  f,
                                   );
 
 
-int32     svm_save_model    (const char*              model_file_name, 
+int32   svm_save_model    (const char*              model_file_name, 
                            const struct svm_model*  model
                           );
 
@@ -285,7 +285,7 @@ void    Svm_Save_Model (std::ostream&      o,
                        );
 
 
-int32     svm_get_nr_class  (const struct svm_model*  model);
+int32   svm_get_nr_class  (const struct svm_model*  model);
 
 
 void    svm_get_labels    (const struct svm_model*  model, 
@@ -303,22 +303,41 @@ double  svm_predict  (const struct svm_model*  model,
                      );
 
 
+
+/**
+ *@brief Predics a class for the specifoied training example.
+ *@param[in]  model   A previously trainied model.
+ *@param[in]  x       Exmaple that we want to make prediction on.
+ *@param[out] dist    Entry for each class-pair indicating the distance from the decision boundary.
+ *@param[out] winners A list of one or more classes that won the highest number of votes; that is for each pair of classes 
+ *                    there is a vote and it is possible for there t be a tie for winner.
+ *@excludeSupportVectorIDX[in]  Index of training example that should be excluded from computation; if less than zero will 
+ *                    be ignored; this would be the same index specified when trainig the model to ignore.
+ *@returns The predicted class; the won that won the most amount of votes; if there is a tie the 1st one will be returned.
+ */
 double  svm_predict  (const struct svm_model*  model, 
                       const svm_node*          x, 
                       std::vector<double>&     dist,
-                      std::vector<int32>&        winners,
-                      int32                      excludeSupportVectorIDX  /**< Specify index of a S/V to remove from computation. */
+                      std::vector<int32>&      winners,
+                      int32                    excludeSupportVectorIDX
                      );
 
 
+/**
+ *@param[in]  model   A previously trainied model.
+ *@param[in]  x       Exmaple that we want to make prediction on.
+ *@param[out] dist    Distance from decision boundary.
+ *@excludeSupportVectorIDX[in]  Index of support vector that should be excluded form computation; if less than zero will be ignored.
+ *@returns The predicted class; Zero(0) or One(1);  if (dist <= 0)  the class Zero otherwise class One.
+ */
 double  svm_predictTwoClasses (const svm_model*  model,
                                const svm_node*   x,
                                double&           dist,
-                               int32               excludeSupportVectorIDX  /*!<  Specify index of a S/V to remove from computation. */
+                               int32             excludeSupportVectorIDX
                               );
 
-svm_problem*  svm_BuildProbFromTwoClassModel  (const svm_model*    model,
-                                               int32                 excludeSupportVectorIDX  /*!<  Specify index of a S/V to remove from computation. */
+svm_problem*  svm_BuildProbFromTwoClassModel  (const svm_model*   model,
+                                               int32              excludeSupportVectorIDX
                                               );
 
 

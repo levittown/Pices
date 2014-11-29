@@ -36,7 +36,7 @@
  *
  * -
  *
- * - SipperFleViewer - A simple viewer application that allows the user to view the raw sipper data, both
+ * - SipperFleViewer A simple viewer application that allows the user to view the raw sipper data, both
  *                  imagery and instrumentation data.
  *
  * - GradeTraingModel GUI Tool to grade the different training libraries against user ground truthed data;
@@ -49,7 +49,7 @@
  *
  * - CrossValodation
  *
- * - FeatureSelection - Application that will tune SVM parameters and image extracted features to 
+ * - @link FeatureSelectionApp FeatureSelection @endlink  Application that will tune SVM parameters and image extracted features to 
  *                   maximize classification accuracy;  it was decide to run on a cluster; the more
  *                   CPU's the faster it processes. It can work in a mixed Windows/Linux environment
  *                   only requiring a common file share device.
@@ -64,8 +64,8 @@
  * There are several libraries that are utilized by the various applications.
  *
  *List of Libraries:
- * - BaseLibrary(c++)  Functionality that is common to other libraries and applications. Some examples 
- *                includes string management, Matrix operations, Image Processing, Token Parsing, 
+ * - BaseLibrary(c++)  Basic functionality that is common to other libraries and applications. Some examples 
+ *                include string management(KKStr), Matrix operations(Matrix), Image Processing(Raster), Token Parsing, 
  *                Statistics, Histogramming, and common operating system routines. Most O/S specific 
  *                code is implemented in the module "osServices.cpp". This is an earlier version of the 
  *                of the KKBase library found in "KSquareLibraries".
@@ -73,10 +73,19 @@
  * - SipperIstruments(c++) Classes and functions that are specific to the SIPPER platform are maintained in
  *                this library. Examples are a group of classes meant to process the different SIPPER
  *                file formats going back to the original SIPPER I platform.
+ *     -# SipperBuff  Base class to the different SIPPER FIle Formats; provides generalized support for processing SIPPER Files.
+ *     -# InstrumentData Maintains the various instrument data fields that are embedded or associated with a SIPPER file such
+ *                       as Depth, Pith, Roll, GPS Coordinates, Temperatue, etc ...
+ *     -# InstrumentDataReport Base class to the different devices that will embed data into thwe SIPPER File,such as the Pitch and
+ *                       Roll sensor, CTD, Battery.  Each specialization of this class will have the knowlede on how to interpret/pase
+ *                       the related data stream.
+ *     -# InstrumentDataManager Central reporting facility that all 'InstrumentDataReport' derived classes send there data thru to be
+ *                       fused together resulting in instances of 'InstrumentData'.
+ *                    
  * 
- * - PicesLibary(c++)  Classes and Code that support Machine-Learning and specific Pices imaging routines. Other
+ * - @link MLL PicesLibary(c++) @endlink  Classes and Code that support Machine-Learning and specific Pices imaging routines. Other
  *                functionality includes MySQL DataBase. 
- *     -# FeatureFileIO  several common feature data file formats are support. (sparse, arff, c45, etc...)
+ *     -# FeatureFileIO  Several common feature data file formats are supported. (sparse, arff, c45, etc...)
  *     -# Training-Model-Configuration  class and routines that maintain classifier parameters; such as classifier type.
  *     -# Machine Learning Classes (MLClass) and containers for tracking lists of classes.
  *     -# Hierarchical Class naming is supported.
@@ -86,7 +95,7 @@
  *     -# CrossValidation - Example 10 fold CV; also (N x X) cross Validation; typically used by grading a classifier.
  *     -# Implementations of Classifiers; Pair-Wise Feature selected SVM, Common Features SVM, UsfCasCor, and Dual.
  *
- * - PicesInterface(cli/c++) A mixed Managed/Unmanaged memory model library its purpose is to provide a interfacew
+ * - PicesInterface(cli/c++) A mixed Managed/Unmanaged memory model library its purpose is to provide a interface
  *                           from the ".net" world to the unmanaged world of the O/S neutral c++ code.
  *
  * - ImageExtractionManager(c++) A frame work for extracting and classifying SIPPER imagery data; it will process
@@ -94,9 +103,9 @@
  *
  * - SipperFile(c#) .net classes used by the different GUI applications.
  * 
- * - SipperDiskUtilities (c#) Code that interfaces with the Sipper III hard disk. Provides routines that make the
- *                            SipperFles contained on the disk to appear as normal binary data files that can be 
- *                            opened by any .net application.
+ * - SipperDiskUtilities(c#) Code that interfaces with the Sipper III hard disk. Provides routines that make the
+ *                           SipperFles contained on the disk to appear as normal binary data files that can be 
+ *                           opened by any .net application.
  * 
  *
  *@section  OutsideLibraries 

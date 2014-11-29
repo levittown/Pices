@@ -54,9 +54,9 @@ namespace SipperHardware
   #endif
 
 
-  /*!
-   \class  InstrumentDataManager  Manages instrumentation data supplied by SipperBuff classes
-    forwarding to appropriate 'InstrumentDataReport' derived objects.
+  /**
+   *@class  InstrumentDataManager  Manages instrumentation data supplied by SipperBuff classes
+   *forwarding to appropriate 'InstrumentDataReport' derived objects.
    */
   class InstrumentDataManager
   {
@@ -65,11 +65,11 @@ namespace SipperHardware
     typedef  KKU::uint32  uint32;
 
     /**
-     \brief Creates new instance,
-     \param[in]  _sipperFileName Name of Sipper file that is being processed.
-     \param[in]  _sipperFile An instance of a SipperFile object that contains SIPPER configuration data for specific SIPPER file.
-     \param[in]  _reportDir Directory where to place Instrument/Sensor data/text files.
-     \param[in]  _log       A logfile stream. All important events will be output to this stream
+     *@brief Creates new instance,
+     *@param[in]  _sipperFileName Name of Sipper file that is being processed.
+     *@param[in]  _sipperFile An instance of a SipperFile object that contains SIPPER configuration data for specific SIPPER file.
+     *@param[in]  _reportDir Directory where to place Instrument/Sensor data/text files.
+     *@param[in]  _log       A logfile stream. All important events will be output to this stream
      */
     InstrumentDataManager (const KKStr&   _sipperFileName,
                            SipperFilePtr  _sipperFile,
@@ -79,10 +79,10 @@ namespace SipperHardware
   
   
     /**
-     \brief Use this constructor if you only need to parse out the data.
-     \param[in]  _sipperFileName Name of Sipper file that is being processed.
-     \param[in]  _sipperFile An instance of a SipperFile object that contains SIPPER configuration data for specific SIPPER file.
-     \param[in]  _log       A log-file stream. All important events will be output to this stream
+     *@brief Use this constructor if you only need to parse out the data.
+     *@param[in]  _sipperFileName Name of Sipper file that is being processed.
+     *@param[in]  _sipperFile An instance of a SipperFile object that contains SIPPER configuration data for specific SIPPER file.
+     *@param[in]  _log       A log-file stream. All important events will be output to this stream
     */
     InstrumentDataManager (const KKStr&   _sipperFileName,
                            SipperFilePtr  _sipperFile,
@@ -99,11 +99,11 @@ namespace SipperHardware
   
   
     /**
-     \brief When ever SipperBuff gets instrument data,  reports thru this method.
-     \param[in]  curScanLine   Scan line that was last read when encountering this "Instrumentdata".
-     \param[in]  InstrumentID  Sensor/Instrument ID
-     \param[in]  text          Set to true = text data,  false = binary data.
-     \param[in]  data          data from SIPPER file.
+     *@brief When ever SipperBuff gets instrument data,  reports thru this method.
+     *@param[in]  curScanLine   Scan line that was last read when encountering this "Instrumentdata".
+     *@param[in]  InstrumentID  Sensor/Instrument ID
+     *@param[in]  text          Set to true = text data,  false = binary data.
+     *@param[in]  data          data from SIPPER file.
     */
     void  ReportInstrumentData (uint32 curScanLine,
                                 uchar  instrumentId,
