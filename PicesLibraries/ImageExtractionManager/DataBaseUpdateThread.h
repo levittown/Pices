@@ -60,19 +60,14 @@ namespace  ImageExtractionManager
     ImageFeaturesListPtr             duplicateImages;        /**< We keep track of these images, otherwise they will not get deleted 
                                                               * and hence cause memory leaks.
                                                               */
-
+    uint32                           duplicatesDetected;
     FileDescPtr                      fileDesc;
-
     SipperExtractionImageManagerPtr  imageManager;
     ExtractedImageQueuePtr           imagesAwaitingUpdate;
-    KKStr                            sipperRootName;
-
-    uint32                           duplicatesDetected;
     uint32                           imagesUpdated;
-    uint32                           updateFailures;  /**< The number of updates to the database that failed. */
-
     RunLog                           log;
-
+    KKStr                            sipperRootName;
+    uint32                           updateFailures;         /**< The number of updates to the database that failed. */
   };  /* DataBaseUpdateThread */
 
   typedef  DataBaseUpdateThread*  DataBaseUpdateThreadPtr;

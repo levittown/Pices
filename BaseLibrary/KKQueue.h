@@ -1,4 +1,4 @@
-/* KKQueue.h -- Souble sided queue structure  sub-classed from vector template.
+/* KKQueue.h -- Double sided queue structure  sub-classed from vector template.
  * Copyright (C) 1994-2011 Kurt Kramer & Sergiy Fefilatyev
  * For conditions of distribution and use, see copyright notice in KKU.h
  *

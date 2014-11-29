@@ -58,20 +58,18 @@ namespace  ImageExtractionManager
     KKStr             SipperFileFormatStr ();
     LogicalFramePtr   GetNextFrameToProcess ();
 
-    Classifier2Ptr            classifier;
-    FileDescPtr               fileDesc;
-    LogicalFrameQueuePtr      framePool;
-    ExtractedImageQueuePtr    imagesAwaitingUpdate;
-    KKStr                     sipperRootName;
-    TrainingProcess2Ptr       trainer;
-    MLClassPtr             unKnownMLClass;
-
-    uint32                    framesProcessed;
-    uint32                    scanLinesProcessed;
-    uint32                    imagesFound;
-    uint32                    imagesClassified;
-
-    RunLog                    log;
+    Classifier2Ptr          classifier;
+    FileDescPtr             fileDesc;
+    LogicalFrameQueuePtr    framePool;
+    uint32                  framesProcessed;
+    ExtractedImageQueuePtr  imagesAwaitingUpdate;
+    uint32                  imagesClassified;
+    uint32                  imagesFound;
+    RunLog                  log;
+    uint32                  scanLinesProcessed;
+    KKStr                   sipperRootName;
+    TrainingProcess2Ptr     trainer;
+    MLClassPtr              unKnownMLClass;
   };  /* FrameProcessorThread */
 
   typedef  FrameProcessorThread*  FrameProcessorThreadPtr;

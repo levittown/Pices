@@ -96,10 +96,9 @@ namespace  ImageExtractionManager
              );
 
 
-    uchar**         frame;                  /**< Row pointers into 'frameArea'.                           */
-
     uint32          frameHeight;            /**< Number of rows in current frame.                         */
     uint32          frameHeightMax;         /**< Number of scan lines that have been actually allocated.  */
+    uchar**         frame;                  /**< Row pointers into 'frameArea'.                           */
     uint32          frameWidth;             /**< Number of pixels per row in frame.                      */
     uchar*          frameArea;              /**< Pointer to block of memory that will contain frame       */
     uint32          frameSipperRow;         /**< Row within the Sipper File That Frame starts at.         */

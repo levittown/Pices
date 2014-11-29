@@ -41,11 +41,13 @@ namespace KKU
 
     virtual ~KKThread ();
 
-    volatile const bool&     CancelFlag    ()  const  {return terminateFlag;}
-    bool                     Crashed       ()  const  {return crashed;}
-    ThreadStatus             Status        ()  const  {return status;}
-    volatile const bool&     ShutdownFlag  ()  const  {return shutdownFlag;}
-    const KKStr&             ThreadName    ()  const  {return threadName;}
+    volatile const bool&   CancelFlag    ()  const  {return terminateFlag;}
+    bool                   Crashed       ()  const  {return crashed;}
+    ThreadStatus           Status        ()  const  {return status;}
+    volatile const bool&   ShutdownFlag  ()  const  {return shutdownFlag;}
+    bool                   TerminateFlag ()  const  {return terminateFlag;}
+    const KKStr&           ThreadName    ()  const  {return threadName;}
+
 
     void    Crashed (bool         _crashed)  {crashed = _crashed;}
     void    Status  (ThreadStatus _status)   {status  = _status;}
@@ -85,7 +87,7 @@ namespace KKU
     void  AddMsg (KKStrPtr  msg);      /**<  Taking ownership of 'msg' and will append to 'msgQueue'.           */
     void  AddMsg (const KKStr&  msg);  /**<  A copy of the message 'msg' will be added to the end of msgQueue.  */
 
-    bool  CancelOrTerminateRequested ()  {return  (terminateFlag || shutdownFlag);}
+    bool  ShutdownOrTerminateRequested ()  {return  (terminateFlag || shutdownFlag);}
 
     bool  ThereIsACircularReferenceStart (KKThreadPtr  _thread)  const;
 
@@ -105,7 +107,7 @@ namespace KKU
                                                 * it to communicate messages to the controlling process.
                                                 */
 
-    volatile bool          shutdownFlag;       /**< Threads need to monitor this flag; if it goes thre they are to 
+    volatile bool          shutdownFlag;       /**< Threads need to monitor this flag; if it goes true they are to
                                                 * complete all processing that is queued up and then terminate.
                                                 */
 

@@ -50,7 +50,7 @@ namespace  ImageExtractionManager
 
     bool  AnyProcessorsCrashed ();
 
-    void  CancelProcessing (int32 miliSecsToWait);
+    void  TerminateProcessing (int32 miliSecsToWait);
 
     void  GetRunTimeStats (ExtractionManagerStats&  stats);
 
@@ -76,7 +76,7 @@ namespace  ImageExtractionManager
 
     void  ManageTheExtraction (bool&  successful);
 
-    void  TerminateProcessing (ImageExtractionThreadListPtr  threads);
+    void  ShutdownProcessing (ImageExtractionThreadListPtr  threads);
 
   private:
     void  DisplayRunTimeStats (uint32  loopCount);
@@ -109,17 +109,26 @@ namespace  ImageExtractionManager
     void  ReUpdateValidationData ();
 
 
+    ImageExtractionThreadListPtr        allThreads;        /**<  List of all threads created under this instance of 'ExtractionManager'.  It
+                                                            * will own them.
+                                                            */
     KKStr                               applicationName;
-    DataBasePtr                         dbConn;
     bool                                cancelFlag;
     KKStr                               completionStatus;
     bool                                crashed;                /**< Indicates if any one of the threads crashed.         */
+    DataBaseUpdateThreadPtr             dataBaseUpdaterThread;
+    DataBasePtr                         dbConn;
     bool                                doneExecuting;          /**< The last thing this instance will do in 'ManageTheExtraction'is set this flag to true. */
+    double                              endCPUsecs;
+    DateTime                            endTime;
     FileDescPtr                         fileDesc;
+    FrameExtractorThreadPtr             frameExtractorThread;
     LogicalFrameQueuePtr                framePool;              /**< Frames that will be used by 'FrameExtractorThread' and 'FrameProcessorThread'. */
+    ImageExtractionThreadListPtr        frameProcessors;   /**< List of threads that are specifically instances of 'FrameProcessorThread'.     */
     uint32                              frameWidth;
-    ExtractedImageQueuePtr              imagesAwaitingUpdate;   /**< These are images that are queued to be inserted into database.                 */
     SipperExtractionImageManagerPtr     imageManager;
+    ExtractedImageQueuePtr              imagesAwaitingUpdate;   /**< These are images that are queued to be inserted into database.                 */
+    RunLog&                             log;
     DataBaseLogEntryPtr                 logEntry;
     uint32                              logEntryId;
     uint32                              maxNumThreads;
@@ -128,33 +137,13 @@ namespace  ImageExtractionManager
     std::ofstream                       reportFile;
     SipperFilePtr                       sipperFileRec;
     KKStr                               sipperRootName;
+    double                              startCPUsecs;
+    DateTime                            startTime;
     bool                                terminateFlag;
     DataBaseImageValidatedEntryListPtr  validationInfo;         /**< Holds Images Validation info to be re-applied to images after extraction.       */
     KKStr                               validationInfoFileName;
     KKStr                               validationInfoFileNameHistory;
     uint32                              veryLargeImageSize;     /**< Threshold for putting Images into Very Large Directory.                       */
-
-    // Variables used for Report
-    DateTime                            endTime;
-    double                              endCPUsecs;
-    DateTime                            startTime;
-    double                              startCPUsecs;
-
-
-    //  Variables used to manage underlying threads.
-
-    FrameExtractorThreadPtr             frameExtractorThread;
-
-    ImageExtractionThreadListPtr        frameProcessors;   /**< List of threads that are specifically instances of 'FrameProcessorThread'.     */
-
-    DataBaseUpdateThreadPtr             dataBaseUpdaterThread;
-
-    ImageExtractionThreadListPtr        allThreads;        /**<  List of all threads created under this instance of 'ExtractionManager'.  It
-                                                            * will own them.
-                                                            */
-
-    RunLog&                       log;
-
   };  /* ExtractionManager */
 
   typedef  ExtractionManager*  ExtractionManagerPtr;

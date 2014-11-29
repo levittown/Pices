@@ -120,41 +120,44 @@ int  LogicalFrame::CountPixs (int x1,  int x2,  int x3,
 
 
 
+
 LogicalFrame::LogicalFrame (const ExtractionParms&  _parms,
                             uint32                  _frameHeightMax,
                             uint32                  _frameWidth,
                             const bool&             _cancelFlag
                            ):
 
-  connectedPixelDist         (_parms.ConnectedPixelDist ()),
-  parms                      (_parms),
-  imagesInFrame              (0),
+
+  frameHeight                (0),
+  frameHeightMax             (_frameHeightMax),
+  frameWidth                 (_frameWidth),
   frame                      (NULL),
   frameArea                  (NULL),
+  frameSipperRow             (0),
   frameRowByteOffset         (NULL),
   frameTotalPixels           (0),
+  pixelsPerRow               (NULL),
+
   origFrame                  (NULL),
   origFrameArea              (NULL),
   workFrame                  (NULL),
   workFrameArea              (NULL),
   frameNum                   (0),
-  frameSipperRow             (0),
+  imagesInFrame              (0),
   blobs                      (NULL),
-  numOfBlobsInFrame          (0),
-  maxBlobsPerFrame           (50000), 
-
-  blobIds                    (NULL),
   blobIdsArea                (NULL),
-  frameHeight                (0),
-  frameHeightMax             (_frameHeightMax),
-  frameWidth                 (_frameWidth),
-  pixelsPerRow               (NULL),
+  blobIds                    (NULL),
+  connectedPixelDist         (_parms.ConnectedPixelDist ()),
+  maxBlobsPerFrame           (50000),
+  numOfBlobsInFrame          (0),
+
+  parms                      (_parms),
 
   backgroundPixelTH          (16),
 
-  cancelFlag                 (_cancelFlag),
   cropLeft                   (0),
-  cropRight                  (4097)
+  cropRight                  (4097),
+  cancelFlag                 (_cancelFlag)
 
 {
   cropRight = frameWidth - 1;

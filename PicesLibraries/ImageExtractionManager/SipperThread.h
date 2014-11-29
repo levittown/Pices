@@ -18,7 +18,7 @@ namespace  ImageExtractionManager
   /**
    *@brief   The Image extraction procedure will contain several threads perform various functions.
    *@details  This will be the base class for each one of the different types of processing that 
-   * Sipper Image processing will be done.  Some of threads will Extract logical frames from Sipper
+   * Sipper Image processing will be done. Some of threads will Extract logical frames from Sipper
    * files,  
    */
 
@@ -41,9 +41,9 @@ namespace  ImageExtractionManager
 
     virtual ~SipperThread ();
 
-    const bool&     CancelFlag    ()  const  {return cancelFlag;}
-    ThreadStatus    Status        ()  const  {return status};
-    const bool&     TerminateFlag ()  const  {return terminateFlag;}
+    volatile  const bool&   CancelFlag    ()  const  {return terminateFlag;}
+    ThreadStatus            Status        ()  const  {return status;}
+    volatile  const bool&   TerminateFlag ()  const  {return terminateFlag;}
 
 
     virtual  void  Run () = 0;
@@ -54,7 +54,7 @@ namespace  ImageExtractionManager
     void  AddMsg (const KKStr&  msg);  /**<  A copy of the message 'msg' will be added to the end of msgQueue.  */
 
     volatile 
-    const bool&            cancelFlag;         /**< Threads need to monitor this flag;  if it goes 'true'  they need
+    const bool&            cancelFlag;         /**< Threads need to monitor this flag; if it goes 'true' they need
                                                 * to terminate as quick as possible.
                                                 */
     ExtractionManagerPtr   extractionManager;  /**< Pointer to instance that manages all the threads.  */

@@ -9,6 +9,7 @@
 #include "MemoryDebug.h"
 using namespace std;
 
+#include "KKThread.h"
 #include "MsgQueue.h"
 using namespace KKU;
 
@@ -58,17 +59,24 @@ ExtractionManager::ExtractionManager (const KKStr&      _applicationName,
                                       uint32            _maxNumThreads,
                                       RunLog&           _log
                                      ):
+  allThreads             (NULL),
   applicationName        (_applicationName),
   cancelFlag             (false),
   completionStatus       (),
   crashed                (false),
+  dataBaseUpdaterThread  (NULL),
   dbConn                 (NULL),
   doneExecuting          (false),
+  endCPUsecs             (0.0),
+  endTime                (),
   fileDesc               (NULL),
+  frameExtractorThread   (NULL),
   framePool              (NULL),
+  frameProcessors        (NULL),
   frameWidth             (0),
-  imagesAwaitingUpdate   (NULL),
   imageManager           (NULL),
+  imagesAwaitingUpdate   (NULL),
+  log                    (_log),
   logEntry               (NULL),
   logEntryId             (0),
   maxNumThreads          (_maxNumThreads),
@@ -76,24 +84,13 @@ ExtractionManager::ExtractionManager (const KKStr&      _applicationName,
   parms                  (_parms),
   reportFile             (),
   sipperFileRec          (NULL),
+  startCPUsecs           (0.0),
+  startTime              (),
   terminateFlag          (false),
   validationInfo         (NULL),
   validationInfoFileName (),
   validationInfoFileNameHistory (),
-  veryLargeImageSize     (10000),
-
-  endTime                (),
-  endCPUsecs             (0.0),
-  startTime              (),
-  startCPUsecs           (0.0),
-
-  frameExtractorThread   (NULL),
-  frameProcessors        (NULL),
-  dataBaseUpdaterThread  (NULL),
-  allThreads             (NULL), 
-
-  log                     (_log)
-
+  veryLargeImageSize     (10000)
 {
   InstrumentDataFileManager::InitializePush ();
 
@@ -124,7 +121,7 @@ ExtractionManager::~ExtractionManager ()
 
 
 
-void  ExtractionManager::TerminateProcessing (ImageExtractionThreadListPtr  threads)
+void  ExtractionManager::ShutdownProcessing (ImageExtractionThreadListPtr  threads)
 {
   if  (threads)
   {
@@ -132,7 +129,7 @@ void  ExtractionManager::TerminateProcessing (ImageExtractionThreadListPtr  thre
     for  (idx = threads->begin ();  idx != threads->end ();  ++idx)
     {
       ImageExtractionThreadPtr  thread = *idx;
-      thread->TerminateThread ();
+      thread->ShutdownThread ();
     }
   }
 }  /* TerminateProcessing */
@@ -140,16 +137,17 @@ void  ExtractionManager::TerminateProcessing (ImageExtractionThreadListPtr  thre
 
 
 
-void  ExtractionManager::CancelProcessing (int32 miliSecsToWait)
+void  ExtractionManager::TerminateProcessing (int32 miliSecsToWait)
 {
   cancelFlag = true;
   if  (allThreads)
   {
+    // First we ask all the threads to Shutdown when they are done processing there current work load.
     ImageExtractionThreadList::iterator  idx;
     for  (idx = allThreads->begin ();  idx != allThreads->end ();  ++idx)
     {
       ImageExtractionThreadPtr  thread = *idx;
-      thread->CancelThread ();
+      thread->ShutdownThread ();
     }
   }
 
@@ -171,8 +169,8 @@ void  ExtractionManager::CancelProcessing (int32 miliSecsToWait)
     for  (idx = allThreads->begin ();  idx != allThreads->end ();  ++idx)
     {
       ImageExtractionThreadPtr  thread = *idx;
-      if  ((thread->Status () == tsStopped)     ||
-           (thread->Status () == tsNotStarted)  ||
+      if  ((thread->Status () == KKThread::tsStopped)     ||
+           (thread->Status () == KKThread::tsNotStarted)  ||
            (thread->Crashed ())
           )
       {
@@ -205,10 +203,20 @@ void  ExtractionManager::CancelProcessing (int32 miliSecsToWait)
     for  (idx = allThreads->begin ();  idx != allThreads->end ();  ++idx)
     {
       ImageExtractionThreadPtr  thread = *idx;
-      thread->Stop ();
+      thread->TerminateThread ();
     }
   }
 }  /* CancelProcessing */
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -246,7 +254,6 @@ void   ExtractionManager::MakeSureSipperStationExists ()
     ss->Latitude       (0.0);
     ss->Longitude      (0.0);
     ss->DateTimeStart  (DateTime (2001,  1,  1, 0, 0, 0));
-    bool  successful = false;
     dbConn->SipperStationInsert (*ss);
   }
   delete ss;  ss = NULL;
@@ -701,7 +708,8 @@ void  ExtractionManager::StartThreads (bool&  threadsStartedSuccessfully)
 
 void  ExtractionManager::StartThread (ImageExtractionThreadPtr  threadInstance)
 {
-  threadInstance->Start ();
+  bool  successful = false;
+  threadInstance->Start (successful);
 }  /* StartThread */
 
 
@@ -851,7 +859,7 @@ bool  ExtractionManager::AllProcessorsTerminated (ImageExtractionThreadListPtr  
     for  (idx = threads->begin ();  idx != threads->end ();  ++idx)
     {
       ImageExtractionThreadPtr  t = *idx;
-      if  (t->Status () != tsStopped)
+      if  (t->Status () != KKThread::tsStopped)
       {
         allProcessorsTerminated = false;
         break;
@@ -870,7 +878,11 @@ void  ExtractionManager::MonitorUntilDone (ImageExtractionThreadListPtr  threads
                                            bool&                         successful
                                           )
 {
-  TerminateProcessing (threadsToMonitor);  // Tells the threads that we are monitoring to run until their tasks are completed. 
+
+
+  ShutdownProcessing (threadsToMonitor);  // Tells the threads that we are monitoring to run until their tasks are completed.
+
+
   while  (!cancelFlag)
   {
     KKStrPtr  msg = msgQueue->GetNextMsg ();
@@ -895,7 +907,7 @@ void  ExtractionManager::MonitorUntilDone (ImageExtractionThreadListPtr  threads
 
         log.Level (10) << endl  << "ExtractionManager::MonitorUntilDone  " << msg << endl << endl;
 
-        CancelProcessing (2000);
+        TerminateProcessing (2000);
         successful = false;
         crashed = true;
         break;
@@ -930,7 +942,7 @@ void  ExtractionManager::ManageTheExtraction (bool&  successful)
   StartThreads (successful);
   if  (!successful)
   {
-    CancelProcessing (5000);
+    TerminateProcessing (5000);
     doneExecuting = true;
     return;
   }
@@ -987,7 +999,7 @@ void  ExtractionManager::ManageTheExtraction (bool&  successful)
     log.Level (10) << endl
       << "ExtractionManager::ManageTheExtraction   One or more threads crashed extraction is not complete." << endl
       << endl;
-    CancelProcessing (10000);
+    TerminateProcessing (10000);
     doneExecuting = true;
     crashed = true;
     return;
@@ -1195,8 +1207,6 @@ void  ExtractionManager::GenerateReport ()
                   );
 
   reportFile << "Totals" << endl << endl;
-
-  uint  imagesNotWritten = imagesFound - imagesClassified;
 
   reportFile << "Total Bytes         [" << StrFormatInt64 (bytesRead,           "zzz,zzz,zzz,zz0")  << "]" << endl
              << "Total Lines         [" << StrFormatInt   (scanLinesProcessed,  "zzz,zzz,zz0")      << "]" << endl

@@ -30,7 +30,7 @@ SipperThread::SipperThread (ExtractionManagerPtr  _extractionManager,
    msgQueue          (_msgQueue),
    status            (tsNotStarted),
    terminateFlag     (_terminateFlag),
-   threadName        (threadName)
+   threadName        (_threadName)
 {
 }
 

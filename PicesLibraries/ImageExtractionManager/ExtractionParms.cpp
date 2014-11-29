@@ -3,8 +3,6 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <windows.h>
-
 #include "MemoryDebug.h"
 
 #if  defined(_WINDOWS)
@@ -61,8 +59,8 @@ ExtractionParms::ExtractionParms (KKStr    progName,
         multiThreaded         (true),
         outputRootDir         (),
         preProcess            (true),
-        reportFileName        (),
         refreshDataBaseImages (false),
+        reportFileName        (),
         runningAsAWindowsApp  (_runningAsAWindowsApp),
         saveFrames            (false),
         saveFramesAfter       (false),
@@ -403,8 +401,6 @@ void  ExtractionParms::ParseCmdLine (const CmdLineExpander&  cmdLineExpander,
                                      RunLog&                 log
                                     )
 {
-  RunLog  runLog;
-
   formatGood = true;
 
   scanLineStart = 0;
@@ -711,7 +707,7 @@ void  ExtractionParms::ParseCmdLine (const CmdLineExpander&  cmdLineExpander,
       return;
     }
 
-    fileFormat = SipperBuff::GuessFormatOfFile (sipperFileName, cameraNum, runLog);
+    fileFormat = SipperBuff::GuessFormatOfFile (sipperFileName, cameraNum, log);
     
     if  (fileFormat == sfUnKnown)
     {

@@ -10,7 +10,7 @@
 #include <math.h>
 #include <stdio.h>
 
-#include  "BasicTypes.h"
+#include "BasicTypes.h"
 
 using namespace KKU;
 

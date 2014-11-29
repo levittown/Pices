@@ -47,14 +47,14 @@ namespace  ImageExtractionManager
 
 
   private:
-    uint64   byteOffset;  // Sipper File ByteOffset of scanline that contains the 1st row in this image.
-    uint32   colLeft;
-    uint32   colRight;
-    uint32   pixelCount;
-    uint32   rowBot;
-    uint32   rowTop;
-
     vector<LogicalFrameBlobPtr>   blobList;
+    uint64                        byteOffset;  /**< Sipper File ByteOffset of scan-line that contains the 1st row in this image.  */
+    uint32                        colLeft;
+    uint32                        colRight;
+    uint32                        pixelCount;
+    uint32                        rowBot;
+    uint32                        rowTop;
+
   };
 
   typedef  SipperImage::SipperImagePtr  SipperImagePtr;

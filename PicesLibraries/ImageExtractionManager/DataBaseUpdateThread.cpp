@@ -1,13 +1,13 @@
-#include  "FirstIncludes.h"
+#include "FirstIncludes.h"
 #include <stdio.h>
 #include <ctype.h>
 
-#include  <time.h>
-#include  <string>
-#include  <iostream>
-#include  <fstream>
-#include  <map>
-#include  <vector>
+#include <time.h>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <map>
+#include <vector>
 
 #ifdef WIN32
 #include <windows.h>
@@ -50,18 +50,19 @@ DataBaseUpdateThread::DataBaseUpdateThread (ExtractionParms&                 _pa
                                            ):
 
     ImageExtractionThread (_parms, _extractionManager, _threadName, _msgQueue),
-    imagesAwaitingUpdate  (_imagesAwaitingUpdate),
+
     dbConn                (NULL),
     dupImageDetector      (NULL),
     duplicateImageDir     (),
     duplicateImages       (NULL),
+    duplicatesDetected    (0),
     fileDesc              (_fileDesc),
     imageManager          (_imageManager),
-    sipperRootName        (),
-    duplicatesDetected    (0),
+    imagesAwaitingUpdate  (_imagesAwaitingUpdate),
     imagesUpdated         (0),
-    updateFailures        (0),
-    log                   ()
+    log                   (),
+    sipperRootName        (),
+    updateFailures        (0)
 
 {
   sipperRootName = osGetRootName (parms.SipperFileName ());
@@ -102,13 +103,16 @@ void  DataBaseUpdateThread::GetRunTimeStats (uint32&  _imagesUpdated,
 ExtractedImagePtr  DataBaseUpdateThread::GetNextImageToUpdate ()
 {
   ExtractedImagePtr  nextImage = imagesAwaitingUpdate->GetNextExtractedImage ();
-  while  ((nextImage == NULL)  &&  (!CancelOrTerminateRequested ()))
+  while  ((nextImage == NULL)  &&  (!ShutdownOrTerminateRequested ()))
   {
     osSleep (0.01f);
     nextImage = imagesAwaitingUpdate->GetNextExtractedImage ();
   }
   return  nextImage;
 }  /* GetNextImageToUpdate */
+
+
+
 
 
 
@@ -138,13 +142,24 @@ void  DataBaseUpdateThread::Run ()
 
   Status (tsRunning);
 
+
   ExtractedImagePtr  extractedImage = GetNextImageToUpdate ();
-  while  (!CancelFlag ())
+  while  (true)
   {
+    if  (KKThread::TerminateFlag ())
+    {
+      // If the TerminateFlag has been set then we want to exit out of this thread as
+      // fast as we can evein if there is still data to be updated.
+      break;
+    }
+
     if  (extractedImage == NULL)
     {
-      if  (TerminateFlag ())
+      if  (this->ShutdownFlag ())
+      {
+        // Since Shutdown has been requested and there is nothing left to update the database with we can exit this thread.
         break;
+      }
       else
         osSleep (0.1f);
     }
@@ -203,7 +218,6 @@ void  DataBaseUpdateThread::Run ()
       {
         bool  successful = false;
 
-        MLClassPtr  validatedClass = NULL;
         if  (parms.RefreshDataBaseImages ()  &&  (dbConn != NULL)  &&  (extractedImage != NULL))
         {
           ReFreshDataBaseImage (imageFileName, 

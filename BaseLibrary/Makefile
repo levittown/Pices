@@ -95,6 +95,9 @@ all:	$(EXEC)
 clean:
 	rm *.o; rm *.a
 	
+Clean:
+	rm *.o; rm *.a
+	
 
 
 $(EXEC): $(OBJECTS) 

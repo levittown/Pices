@@ -1,25 +1,24 @@
-#include  "FirstIncludes.h"
-#include  <stdio.h>
-#include  <ctype.h>
-
-#include  <time.h>
-#include  <string>
-#include  <iostream>
-#include  <fstream>
-#include  <map>
-#include  <queue>
-#include  <stack>
-#include  <vector>
+#include "FirstIncludes.h"
+#include <stdio.h>
+#include <ctype.h>
+#include <time.h>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <map>
+#include <queue>
+#include <stack>
+#include <vector>
 
 #ifdef WIN32
 #include <windows.h>
 #endif
 
-#include  "MemoryDebug.h"
+#include "MemoryDebug.h"
 using namespace std;
 
 
-#include  "BasicTypes.h"
+#include "BasicTypes.h"
 using namespace KKU;
 
 
@@ -28,26 +27,26 @@ using namespace  ImageExtractionManager;
 
 
 SipperImage::SipperImage ():
-   byteOffset (0),
    blobList   (),
-   colLeft    (INT_MAX),
+   byteOffset (0),
+   colLeft    (int32_max),
    colRight   (0),
    pixelCount (0),
-   rowTop     (INT_MAX),
-   rowBot     (0)
+   rowBot     (0),
+   rowTop     (int32_max)
 
 {
 }
 
 
 SipperImage::SipperImage (LogicalFrameBlobPtr  blob):
-   byteOffset (0),
    blobList   (),
-   colLeft    (INT_MAX),
+   byteOffset (0),
+   colLeft    (int32_max),
    colRight   (0),
    pixelCount (0),
-   rowTop     (INT_MAX),
-   rowBot     (0)
+   rowBot     (0),
+   rowTop     (int32_max)
 
 {
   LogicalFrameBlob::NeighborsList*  neighbors = NULL;

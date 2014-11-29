@@ -62,19 +62,18 @@ FrameProcessorThread::FrameProcessorThread (ExtractionParms&        _parms,
                                            ):
 
   ImageExtractionThread (_parms, _extractionManager, _threadName, _msgQueue),
-  framePool                (_framePool),
-  imagesAwaitingUpdate     (_imagesAwaitingUpdate),
-
-  fileDesc                 (NULL),
-  trainer                  (NULL),
-  classifier               (NULL),
-  sipperRootName           (),
+  classifier            (NULL),
+  fileDesc              (NULL),
+  framePool             (_framePool),
+  framesProcessed       (0),
+  imagesAwaitingUpdate  (_imagesAwaitingUpdate),
+  imagesClassified      (0),
+  imagesFound           (0),
+  log                   (),
+  sipperRootName        (),
+  trainer               (NULL),
   unKnownMLClass        (NULL),
-  framesProcessed          (0),
-  scanLinesProcessed       (0),
-  imagesFound              (0),
-  imagesClassified         (0),
-  log                      ()
+  scanLinesProcessed    (0)
 
 {
   AddMsg ("FrameProcessorThread");
@@ -135,7 +134,7 @@ KKStr  FrameProcessorThread::SipperFileFormatStr ()
 
 void  FrameProcessorThread::ProcessFrame (LogicalFramePtr  frame)
 {
-  if  (CancelOrTerminateRequested ())
+  if  (TerminateFlag ())
     return;
 
   ExtractedImageListPtr  extractedImages = frame->ProcessFrame ();
@@ -144,7 +143,7 @@ void  FrameProcessorThread::ProcessFrame (LogicalFramePtr  frame)
 
   imagesFound += frame->ImagesInFrame ();
 
-  while  ((extractedImages->QueueSize () > 0)  &&  (!CancelFlag ()))
+  while  ((extractedImages->QueueSize () > 0)  &&  (!TerminateFlag ()))
   {
     ExtractedImagePtr  extractedImage = extractedImages->PopFromBack ();
 
@@ -163,19 +162,16 @@ void  FrameProcessorThread::ProcessFrame (LogicalFramePtr  frame)
     RasterSipperPtr raster = extractedImage->Image ();
     raster->FileName (imageFileName);
     
-    float  depth = 0.0f;
+    float            depth            = 0.0f;
     MLClassConstPtr  predClass1       = unKnownMLClass;
     MLClassConstPtr  predClass2       = NULL;
-    int32               predClass1Votes  = 0;
-    int32               predClass2Votes  = 0;
-    double              knownClassProb   = 0.0;
-    double              predClass1Prob   = 0.0;
-    double              predClass2Prob   = 0.0;
-    int32               numOfWinners     = 0;
-    double              breakTie         = 0.0;
-    double              compact          = 0.0;
+    int32            predClass1Votes  = 0;
+    int32            predClass2Votes  = 0;
+    double           knownClassProb   = 0.0;
+    double           predClass1Prob   = 0.0;
+    double           predClass2Prob   = 0.0;
+    double           compact          = 0.0;
     
-    bool  imageIsDuplicate = false;
     bool  cf = false;
 
 
@@ -217,7 +213,6 @@ void  FrameProcessorThread::ProcessFrame (LogicalFramePtr  frame)
       {
         int  numOfWinners;
         bool knownClassOneOfTheWinners  = false;
-        double  probability = 0.0f;
         double  breakTie    = 0.0f;
 
         ImageFeaturesPtr  dupFV = new ImageFeatures (*featureVector);
@@ -279,7 +274,7 @@ void  FrameProcessorThread::LoadClassifier (bool&  _successful)
                                    );
 
 
-    if  (CancelOrTerminateRequested ())
+    if  (ShutdownOrTerminateRequested ())
     {
       AddMsg ("LoadClassifier    Image Extraction Canceled.");
     }
@@ -332,8 +327,6 @@ void  FrameProcessorThread::Run ()
 {
   Status (tsStarting);
 
-  bool  successful = false;
-
   Status (tsRunning);
 
   LogicalFramePtr  logicalFrame = GetNextFrameToProcess ();
@@ -345,7 +338,7 @@ void  FrameProcessorThread::Run ()
       framePool->FrameProcessed (logicalFrame);
     }
     
-    else if (TerminateFlag ())
+    else if  (TerminateFlag ())
       break;
 
     logicalFrame = GetNextFrameToProcess ();

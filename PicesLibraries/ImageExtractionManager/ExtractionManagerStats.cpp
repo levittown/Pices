@@ -3,7 +3,6 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <windows.h>
 #include "MemoryDebug.h"
 using namespace std;
 
