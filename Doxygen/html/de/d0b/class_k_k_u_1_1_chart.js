@@ -1,5 +1,8 @@
 var class_k_k_u_1_1_chart =
 [
+    [ "PlotPoint", "d6/d94/class_k_k_u_1_1_chart_1_1_plot_point.html", "d6/d94/class_k_k_u_1_1_chart_1_1_plot_point" ],
+    [ "Series", "df/ddd/class_k_k_u_1_1_chart_1_1_series.html", "df/ddd/class_k_k_u_1_1_chart_1_1_series" ],
+    [ "XLabel", "d9/d41/class_k_k_u_1_1_chart_1_1_x_label.html", "d9/d41/class_k_k_u_1_1_chart_1_1_x_label" ],
     [ "PlotPointPtr", "de/d0b/class_k_k_u_1_1_chart.html#aa78d5571d99ad46b3108ea5f925ea1e5", null ],
     [ "SeriesList", "de/d0b/class_k_k_u_1_1_chart.html#a32b2f64cb41e7f4f698029fe53e4ba78", null ],
     [ "SeriesPtr", "de/d0b/class_k_k_u_1_1_chart.html#adf8e707926a283781eba508ad84bc0b1", null ],

@@ -5,7 +5,6 @@ var class_image_extraction_manager_1_1_extraction_manager =
     [ "AllProcessorsTerminated", "d3/d4a/class_image_extraction_manager_1_1_extraction_manager.html#a3def638e973b70d6c8006a3f0d9754ae", null ],
     [ "AnyProcessorsCrashed", "d3/d4a/class_image_extraction_manager_1_1_extraction_manager.html#a05399ecb925e69e33bddc3ddb4c466ac", null ],
     [ "CancelFlag", "d3/d4a/class_image_extraction_manager_1_1_extraction_manager.html#a830110ad541b3b03e6502e8a18d6d596", null ],
-    [ "CancelProcessing", "d3/d4a/class_image_extraction_manager_1_1_extraction_manager.html#ac4d30ed395ca13835c58a81f67e6bcb0", null ],
     [ "Crashed", "d3/d4a/class_image_extraction_manager_1_1_extraction_manager.html#af84d51d6842c2c7432d572bced74c99a", null ],
     [ "DoneExecuting", "d3/d4a/class_image_extraction_manager_1_1_extraction_manager.html#a9a00a4db8eec29af2aa0013f315676e2", null ],
     [ "GetClassStatistics", "d3/d4a/class_image_extraction_manager_1_1_extraction_manager.html#a5a7f32ce582d748b2862000986cd4288", null ],
@@ -14,5 +13,6 @@ var class_image_extraction_manager_1_1_extraction_manager =
     [ "Log", "d3/d4a/class_image_extraction_manager_1_1_extraction_manager.html#a815b8dfa15c3bc3d462fe614eb6b5c07", null ],
     [ "LogEntryId", "d3/d4a/class_image_extraction_manager_1_1_extraction_manager.html#a1ded17d6ebda2d06fd771589ed57a5fd", null ],
     [ "ManageTheExtraction", "d3/d4a/class_image_extraction_manager_1_1_extraction_manager.html#afded4f2e4cf5cbfb15a25585ac69f487", null ],
-    [ "TerminateProcessing", "d3/d4a/class_image_extraction_manager_1_1_extraction_manager.html#a80cda63d56c3f8713194242533656a89", null ]
+    [ "ShutdownProcessing", "d3/d4a/class_image_extraction_manager_1_1_extraction_manager.html#a4a4f10d56cb8bf089abe72afce29c378", null ],
+    [ "TerminateProcessing", "d3/d4a/class_image_extraction_manager_1_1_extraction_manager.html#a777d72470ee629906b3a990e142fd937", null ]
 ];

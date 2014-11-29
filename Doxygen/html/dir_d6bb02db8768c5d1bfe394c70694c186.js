@@ -16,12 +16,18 @@ var dir_d6bb02db8768c5d1bfe394c70694c186 =
     [ "ClassificationBiasMatrix.h", "d3/d65/_pices_library_2_classification_bias_matrix_8h.html", "d3/d65/_pices_library_2_classification_bias_matrix_8h" ],
     [ "Classifier2.cpp", "d5/d68/_classifier2_8cpp.html", null ],
     [ "Classifier2.h", "d9/d09/_classifier2_8h.html", "d9/d09/_classifier2_8h" ],
-    [ "ClassProb.cpp", "dd/d51/_class_prob_8cpp.html", null ],
+    [ "ClassProb.cpp", "dd/d51/_class_prob_8cpp.html", [
+      [ "ProbabilityComparer", "de/d4e/class_class_prob_list_1_1_probability_comparer.html", "de/d4e/class_class_prob_list_1_1_probability_comparer" ],
+      [ "VotesComparer", "da/d79/class_class_prob_list_1_1_votes_comparer.html", "da/d79/class_class_prob_list_1_1_votes_comparer" ]
+    ] ],
     [ "ClassProb.h", "d9/d38/_class_prob_8h.html", [
       [ "ClassProb", "da/d9e/class_m_l_l_1_1_class_prob.html", "da/d9e/class_m_l_l_1_1_class_prob" ],
       [ "ClassProbList", "d1/db5/class_m_l_l_1_1_class_prob_list.html", "d1/db5/class_m_l_l_1_1_class_prob_list" ]
     ] ],
-    [ "ClassStatistic.cpp", "dd/d97/_class_statistic_8cpp.html", null ],
+    [ "ClassStatistic.cpp", "dd/d97/_class_statistic_8cpp.html", [
+      [ "ClassStatisticSortComparrison", "d4/d5c/class_class_statistic_list_1_1_class_statistic_sort_comparrison.html", "d4/d5c/class_class_statistic_list_1_1_class_statistic_sort_comparrison" ],
+      [ "ClassStatSortByCount", "dc/de6/class_class_statistic_list_1_1_class_stat_sort_by_count.html", "dc/de6/class_class_statistic_list_1_1_class_stat_sort_by_count" ]
+    ] ],
     [ "ClassStatistic.h", "dc/d3b/_class_statistic_8h.html", "dc/d3b/_class_statistic_8h" ],
     [ "ConfusionMatrix2.cpp", "d8/da4/_confusion_matrix2_8cpp.html", "d8/da4/_confusion_matrix2_8cpp" ],
     [ "ConfusionMatrix2.h", "d5/ddf/_confusion_matrix2_8h.html", "d5/ddf/_confusion_matrix2_8h" ],
@@ -47,20 +53,23 @@ var dir_d6bb02db8768c5d1bfe394c70694c186 =
     [ "DataBaseImageGroupEntry.h", "d5/dea/_data_base_image_group_entry_8h.html", "d5/dea/_data_base_image_group_entry_8h" ],
     [ "DataBaseImageValidatedEntry.cpp", "d4/df6/_data_base_image_validated_entry_8cpp.html", null ],
     [ "DataBaseImageValidatedEntry.h", "dd/d2f/_data_base_image_validated_entry_8h.html", "dd/d2f/_data_base_image_validated_entry_8h" ],
-    [ "DataBaseLogEntry.cpp", "de/dd5/_data_base_log_entry_8cpp.html", null ],
+    [ "DataBaseLogEntry.cpp", "de/dd5/_data_base_log_entry_8cpp.html", [
+      [ "ProgCodeComparison", "d6/d33/class_data_base_log_entry_list_1_1_prog_code_comparison.html", "d6/d33/class_data_base_log_entry_list_1_1_prog_code_comparison" ]
+    ] ],
     [ "DataBaseLogEntry.h", "da/dba/_data_base_log_entry_8h.html", "da/dba/_data_base_log_entry_8h" ],
     [ "DataBaseServer.cpp", "da/d62/_data_base_server_8cpp.html", null ],
-    [ "DataBaseServer.h", "d1/d2e/_data_base_server_8h.html", [
-      [ "DataBaseServer", "d9/d3d/class_m_l_l_1_1_data_base_server.html", "d9/d3d/class_m_l_l_1_1_data_base_server" ],
-      [ "DataBaseServerList", "dd/d92/class_m_l_l_1_1_data_base_server_list.html", "dd/d92/class_m_l_l_1_1_data_base_server_list" ]
-    ] ],
+    [ "DataBaseServer.h", "d1/d2e/_data_base_server_8h.html", "d1/d2e/_data_base_server_8h" ],
     [ "DataBaseUpdate.cpp", "d5/da1/_data_base_update_8cpp.html", null ],
     [ "DataBaseUpdate.h", "d3/d0c/_data_base_update_8h.html", "d3/d0c/_data_base_update_8h" ],
     [ "DuplicateImages.cpp", "dc/d1a/_duplicate_images_8cpp.html", null ],
     [ "DuplicateImages.h", "dd/dbc/_duplicate_images_8h.html", "dd/dbc/_duplicate_images_8h" ],
     [ "FeatureEncoder.cpp", "d8/d2c/_feature_encoder_8cpp.html", null ],
     [ "FeatureEncoder.h", "d6/d2d/_feature_encoder_8h.html", "d6/d2d/_feature_encoder_8h" ],
-    [ "FeatureEncoder2.cpp", "d4/def/_feature_encoder2_8cpp.html", null ],
+    [ "FeatureEncoder2.cpp", "d4/def/_feature_encoder2_8cpp.html", [
+      [ "FeatureVar2", "dc/d5d/struct_m_l_l_1_1_feature_encoder2_1_1_feature_var2.html", "dc/d5d/struct_m_l_l_1_1_feature_encoder2_1_1_feature_var2" ],
+      [ "FeatureVar2List", "d4/d13/class_m_l_l_1_1_feature_encoder2_1_1_feature_var2_list.html", "d4/d13/class_m_l_l_1_1_feature_encoder2_1_1_feature_var2_list" ],
+      [ "FeatureVarComparrison2", "d4/d18/class_m_l_l_1_1_feature_encoder2_1_1_feature_var_comparrison2.html", "d4/d18/class_m_l_l_1_1_feature_encoder2_1_1_feature_var_comparrison2" ]
+    ] ],
     [ "FeatureEncoder2.h", "d7/da9/_feature_encoder2_8h.html", "d7/da9/_feature_encoder2_8h" ],
     [ "FeatureFileIO.cpp", "d9/d46/_feature_file_i_o_8cpp.html", "d9/d46/_feature_file_i_o_8cpp" ],
     [ "FeatureFileIO.h", "d1/d86/_feature_file_i_o_8h.html", "d1/d86/_feature_file_i_o_8h" ],
@@ -74,7 +83,10 @@ var dir_d6bb02db8768c5d1bfe394c70694c186 =
     [ "FeatureFileIOColumn.h", "d4/d0c/_feature_file_i_o_column_8h.html", [
       [ "FeatureFileIOColumn", "d0/d99/class_m_l_l_1_1_feature_file_i_o_column.html", "d0/d99/class_m_l_l_1_1_feature_file_i_o_column" ]
     ] ],
-    [ "FeatureFileIODstWeb.cpp", "d2/d62/_feature_file_i_o_dst_web_8cpp.html", null ],
+    [ "FeatureFileIODstWeb.cpp", "d2/d62/_feature_file_i_o_dst_web_8cpp.html", [
+      [ "AttrDescLine", "dd/da2/class_feature_file_i_o_dst_web_1_1_attr_desc_line.html", "dd/da2/class_feature_file_i_o_dst_web_1_1_attr_desc_line" ],
+      [ "AttrDescLineComparator", "d5/d12/class_feature_file_i_o_dst_web_1_1_attr_desc_line_comparator.html", "d5/d12/class_feature_file_i_o_dst_web_1_1_attr_desc_line_comparator" ]
+    ] ],
     [ "FeatureFileIODstWeb.h", "d9/d39/_feature_file_i_o_dst_web_8h.html", [
       [ "FeatureFileIODstWeb", "dd/df6/class_m_l_l_1_1_feature_file_i_o_dst_web.html", "dd/df6/class_m_l_l_1_1_feature_file_i_o_dst_web" ]
     ] ],
@@ -94,7 +106,9 @@ var dir_d6bb02db8768c5d1bfe394c70694c186 =
     [ "FeatureNumList.h", "dc/d9e/_feature_num_list_8h.html", "dc/d9e/_feature_num_list_8h" ],
     [ "FeatureVector.cpp", "d6/d6a/_feature_vector_8cpp.html", "d6/d6a/_feature_vector_8cpp" ],
     [ "FeatureVector.h", "d4/ddf/_feature_vector_8h.html", "d4/ddf/_feature_vector_8h" ],
-    [ "FileDesc.cpp", "d5/de7/_file_desc_8cpp.html", null ],
+    [ "FileDesc.cpp", "d5/de7/_file_desc_8cpp.html", [
+      [ "FileDescList", "dd/d37/class_m_l_l_1_1_file_desc_list.html", "dd/d37/class_m_l_l_1_1_file_desc_list" ]
+    ] ],
     [ "FileDesc.h", "d1/d75/_file_desc_8h.html", "d1/d75/_file_desc_8h" ],
     [ "ImageFeatures.cpp", "da/da6/_image_features_8cpp.html", null ],
     [ "ImageFeatures.h", "de/deb/_image_features_8h.html", "de/deb/_image_features_8h" ],
@@ -111,9 +125,13 @@ var dir_d6bb02db8768c5d1bfe394c70694c186 =
       [ "ImageFeaturesNameIndexed", "d2/d70/class_m_l_l_1_1_image_features_name_indexed.html", "d2/d70/class_m_l_l_1_1_image_features_name_indexed" ]
     ] ],
     [ "KArray.h", "d4/d10/_k_array_8h.html", "d4/d10/_k_array_8h" ],
-    [ "MLClass.cpp", "dd/d6c/_m_l_class_8cpp.html", null ],
+    [ "MLClass.cpp", "dd/d6c/_m_l_class_8cpp.html", [
+      [ "mlClassNameComparison", "d9/dc2/class_m_l_class_list_1_1ml_class_name_comparison.html", "d9/dc2/class_m_l_class_list_1_1ml_class_name_comparison" ]
+    ] ],
     [ "MLClass.h", "d3/dd8/_m_l_class_8h.html", "d3/dd8/_m_l_class_8h" ],
-    [ "MLClassConstList.cpp", "de/d50/_m_l_class_const_list_8cpp.html", null ],
+    [ "MLClassConstList.cpp", "de/d50/_m_l_class_const_list_8cpp.html", [
+      [ "mlClassNameComparison", "df/d0e/class_m_l_class_const_list_1_1ml_class_name_comparison.html", "df/d0e/class_m_l_class_const_list_1_1ml_class_name_comparison" ]
+    ] ],
     [ "MLClassConstList.h", "d7/d13/_m_l_class_const_list_8h.html", "d7/d13/_m_l_class_const_list_8h" ],
     [ "MLLTypes.h", "d3/d6d/_m_l_l_types_8h.html", null ],
     [ "Model.cpp", "d2/d31/_model_8cpp.html", null ],
@@ -150,11 +168,16 @@ var dir_d6bb02db8768c5d1bfe394c70694c186 =
     [ "Orderings.h", "d9/d1c/_orderings_8h.html", [
       [ "Orderings", "dc/d5e/class_m_l_l_1_1_orderings.html", "dc/d5e/class_m_l_l_1_1_orderings" ]
     ] ],
+    [ "PicesApplication.cpp", "da/d50/_pices_application_8cpp.html", null ],
+    [ "PicesApplication.h", "dc/d6a/_pices_application_8h.html", "dc/d6a/_pices_application_8h" ],
     [ "SipperBlob.cpp", "d1/df1/_sipper_blob_8cpp.html", null ],
     [ "SipperBlob.h", "df/dcb/_sipper_blob_8h.html", "df/dcb/_sipper_blob_8h" ],
     [ "SipperExtractionImageManager.cpp", "d9/dd9/_sipper_extraction_image_manager_8cpp.html", "d9/dd9/_sipper_extraction_image_manager_8cpp" ],
     [ "SipperExtractionImageManager.h", "dd/dad/_sipper_extraction_image_manager_8h.html", "dd/dad/_sipper_extraction_image_manager_8h" ],
-    [ "SizeDistribution.cpp", "de/dbe/_size_distribution_8cpp.html", null ],
+    [ "SizeDistribution.cpp", "de/dbe/_size_distribution_8cpp.html", [
+      [ "ClassTotals", "df/d71/class_size_distribution_1_1_class_totals.html", "df/d71/class_size_distribution_1_1_class_totals" ],
+      [ "ClassTotalsList", "d2/d1c/class_size_distribution_1_1_class_totals_list.html", "d2/d1c/class_size_distribution_1_1_class_totals_list" ]
+    ] ],
     [ "SizeDistribution.h", "d7/dd6/_size_distribution_8h.html", "d7/dd6/_size_distribution_8h" ],
     [ "svm.cpp", "d3/db9/svm_8cpp.html", "d3/db9/svm_8cpp" ],
     [ "svm.h", "d0/da4/svm_8h.html", "d0/da4/svm_8h" ],

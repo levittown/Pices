@@ -1,5 +1,15 @@
 var class_m_l_l_1_1_feature_vector_list =
 [
+    [ "BreakTieComparison", "d5/db3/class_feature_vector_list_1_1_break_tie_comparison.html", "d5/db3/class_feature_vector_list_1_1_break_tie_comparison" ],
+    [ "BreakTieComparisonReversed", "db/d4a/class_feature_vector_list_1_1_break_tie_comparison_reversed.html", "db/d4a/class_feature_vector_list_1_1_break_tie_comparison_reversed" ],
+    [ "ClassNameComparrison", "df/d29/class_feature_vector_list_1_1_class_name_comparrison.html", "df/d29/class_feature_vector_list_1_1_class_name_comparrison" ],
+    [ "ClassNameComparrisonReversed", "d8/d5d/class_feature_vector_list_1_1_class_name_comparrison_reversed.html", "d8/d5d/class_feature_vector_list_1_1_class_name_comparrison_reversed" ],
+    [ "ImageFileNameComparison", "d5/d7e/class_feature_vector_list_1_1_image_file_name_comparison.html", "d5/d7e/class_feature_vector_list_1_1_image_file_name_comparison" ],
+    [ "ImageFileNameComparisonReversed", "db/df3/class_feature_vector_list_1_1_image_file_name_comparison_reversed.html", "db/df3/class_feature_vector_list_1_1_image_file_name_comparison_reversed" ],
+    [ "ProbabilityComparison", "d6/dc0/class_feature_vector_list_1_1_probability_comparison.html", "d6/dc0/class_feature_vector_list_1_1_probability_comparison" ],
+    [ "ProbabilityComparisonReversed", "d1/d83/class_feature_vector_list_1_1_probability_comparison_reversed.html", "d1/d83/class_feature_vector_list_1_1_probability_comparison_reversed" ],
+    [ "RootNameComparrison", "da/d51/class_feature_vector_list_1_1_root_name_comparrison.html", "da/d51/class_feature_vector_list_1_1_root_name_comparrison" ],
+    [ "RootNameComparrisonReversed", "d4/dc4/class_feature_vector_list_1_1_root_name_comparrison_reversed.html", "d4/dc4/class_feature_vector_list_1_1_root_name_comparrison_reversed" ],
     [ "FeatureVectorListPtr", "d2/d85/class_m_l_l_1_1_feature_vector_list.html#a7c0a662b1d957333c4befe91d5e229ce", null ],
     [ "int32", "d2/d85/class_m_l_l_1_1_feature_vector_list.html#aee63bba92dfa2275ea069efa7db3de5b", null ],
     [ "uint32", "d2/d85/class_m_l_l_1_1_feature_vector_list.html#aca696c1bb33d8fad9083632ffe37b771", null ],

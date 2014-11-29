@@ -1,5 +1,8 @@
 var class_m_l_l_1_1_sipper_extraction_image_manager =
 [
+    [ "ImageEntry", "df/df4/class_m_l_l_1_1_sipper_extraction_image_manager_1_1_image_entry.html", "df/df4/class_m_l_l_1_1_sipper_extraction_image_manager_1_1_image_entry" ],
+    [ "ManagedClass", "da/de7/class_m_l_l_1_1_sipper_extraction_image_manager_1_1_managed_class.html", "da/de7/class_m_l_l_1_1_sipper_extraction_image_manager_1_1_managed_class" ],
+    [ "ManagedClasssesSortByClassName", "d5/daa/class_m_l_l_1_1_sipper_extraction_image_manager_1_1_managed_classses_sort_by_class_name.html", "d5/daa/class_m_l_l_1_1_sipper_extraction_image_manager_1_1_managed_classses_sort_by_class_name" ],
     [ "ManagedClassList", "d3/d58/class_m_l_l_1_1_sipper_extraction_image_manager.html#a9e7a2ebfcb6a8ada71cc982c131ebe4e", null ],
     [ "ManagedClassListPtr", "d3/d58/class_m_l_l_1_1_sipper_extraction_image_manager.html#a4234b43c720442ac5ad2ea032c2e210e", null ],
     [ "ManagedClassPtr", "d3/d58/class_m_l_l_1_1_sipper_extraction_image_manager.html#a564fc954e7f9bd5d516a858764e01e9a", null ],

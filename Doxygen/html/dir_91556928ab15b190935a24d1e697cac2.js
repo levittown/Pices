@@ -16,7 +16,7 @@ var dir_91556928ab15b190935a24d1e697cac2 =
     [ "FrameExtractorThread.h", "d7/d29/_frame_extractor_thread_8h.html", "d7/d29/_frame_extractor_thread_8h" ],
     [ "FrameProcessorThread.cpp", "d5/d2e/_frame_processor_thread_8cpp.html", null ],
     [ "FrameProcessorThread.h", "d7/da5/_frame_processor_thread_8h.html", "d7/da5/_frame_processor_thread_8h" ],
-    [ "ImageExtractionThread.cpp", "d0/d8e/_image_extraction_thread_8cpp.html", "d0/d8e/_image_extraction_thread_8cpp" ],
+    [ "ImageExtractionThread.cpp", "d0/d8e/_image_extraction_thread_8cpp.html", null ],
     [ "ImageExtractionThread.h", "d4/d4a/_image_extraction_thread_8h.html", "d4/d4a/_image_extraction_thread_8h" ],
     [ "LogicalFrame.cpp", "d0/d85/_logical_frame_8cpp.html", null ],
     [ "LogicalFrame.h", "db/ddd/_logical_frame_8h.html", "db/ddd/_logical_frame_8h" ],

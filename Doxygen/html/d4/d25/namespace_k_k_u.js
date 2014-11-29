@@ -47,7 +47,7 @@ var namespace_k_k_u =
     [ "RasterSipper", "d8/d8e/class_k_k_u_1_1_raster_sipper.html", "d8/d8e/class_k_k_u_1_1_raster_sipper" ],
     [ "RasterSipperList", "de/d41/class_k_k_u_1_1_raster_sipper_list.html", "de/d41/class_k_k_u_1_1_raster_sipper_list" ],
     [ "RBnode", "df/d14/class_k_k_u_1_1_r_bnode.html", "df/d14/class_k_k_u_1_1_r_bnode" ],
-    [ "RBTree", "df/db1/singleton_k_k_u_1_1_r_b_tree.html", "df/db1/singleton_k_k_u_1_1_r_b_tree" ],
+    [ "RBTree", "dd/dfd/class_k_k_u_1_1_r_b_tree.html", "dd/dfd/class_k_k_u_1_1_r_b_tree" ],
     [ "RGBQUAD", "d6/dd4/struct_k_k_u_1_1_r_g_b_q_u_a_d.html", "d6/dd4/struct_k_k_u_1_1_r_g_b_q_u_a_d" ],
     [ "Row", "d2/d1b/class_k_k_u_1_1_row.html", "d2/d1b/class_k_k_u_1_1_row" ],
     [ "RunLog", "dc/daf/class_k_k_u_1_1_run_log.html", "dc/daf/class_k_k_u_1_1_run_log" ],

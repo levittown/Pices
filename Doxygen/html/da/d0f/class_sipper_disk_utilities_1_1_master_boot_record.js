@@ -6,5 +6,5 @@ var class_sipper_disk_utilities_1_1_master_boot_record =
     [ "GetPartitionSectorByteOffset", "da/d0f/class_sipper_disk_utilities_1_1_master_boot_record.html#af4345e05287adcb42fcc5e77b6f45c38", null ],
     [ "GetSipperDirectoryByteOffset", "da/d0f/class_sipper_disk_utilities_1_1_master_boot_record.html#ae5b8b464fec5ce60a6e6a7c0f3e5a189", null ],
     [ "GetSipperPartitionTableEntry", "da/d0f/class_sipper_disk_utilities_1_1_master_boot_record.html#a924b7de9fa12a490ed71242af1a221a4", null ],
-    [ "get", "da/d0f/class_sipper_disk_utilities_1_1_master_boot_record.html#a9c0b8dcfbbf56a6fbc3e17dea6a2e309", null ]
+    [ "SipperPartitionBeginSector", "da/d0f/class_sipper_disk_utilities_1_1_master_boot_record.html#ac22a26283b5ef6d2d82f7997e2a2eca9", null ]
 ];

@@ -1,5 +1,6 @@
 var namespaces =
 [
+    [ "FeatureSelectionApp", "d2/d36/namespace_feature_selection_app.html", null ],
     [ "GradeTrainingModel", "dc/de5/namespace_grade_training_model.html", null ],
     [ "ImageExtractionManager", "d0/d9d/namespace_image_extraction_manager.html", null ],
     [ "JobManagment", "df/ded/namespace_job_managment.html", null ],

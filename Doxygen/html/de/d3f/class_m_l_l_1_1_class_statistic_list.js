@@ -1,5 +1,7 @@
 var class_m_l_l_1_1_class_statistic_list =
 [
+    [ "ClassStatisticSortComparrison", "d4/d5c/class_class_statistic_list_1_1_class_statistic_sort_comparrison.html", "d4/d5c/class_class_statistic_list_1_1_class_statistic_sort_comparrison" ],
+    [ "ClassStatSortByCount", "dc/de6/class_class_statistic_list_1_1_class_stat_sort_by_count.html", "dc/de6/class_class_statistic_list_1_1_class_stat_sort_by_count" ],
     [ "int32", "de/d3f/class_m_l_l_1_1_class_statistic_list.html#af893d3145dc94d945e93b6e57f194d84", null ],
     [ "uint32", "de/d3f/class_m_l_l_1_1_class_statistic_list.html#ad4455d91d8693ce1babd21680d0e7060", null ],
     [ "ClassStatisticList", "de/d3f/class_m_l_l_1_1_class_statistic_list.html#abdfc8dd3d19a828e10fed6287064a8ff", null ],

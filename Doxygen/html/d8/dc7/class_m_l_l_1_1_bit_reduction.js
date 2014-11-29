@@ -1,5 +1,8 @@
 var class_m_l_l_1_1_bit_reduction =
 [
+    [ "FeatureVar", "d0/d8e/struct_bit_reduction_1_1_feature_var.html", "d0/d8e/struct_bit_reduction_1_1_feature_var" ],
+    [ "FeatureVarComparrison", "dc/dbc/class_bit_reduction_1_1_feature_var_comparrison.html", "dc/dbc/class_bit_reduction_1_1_feature_var_comparrison" ],
+    [ "FeatureVarList", "db/d7d/class_bit_reduction_1_1_feature_var_list.html", "db/d7d/class_bit_reduction_1_1_feature_var_list" ],
     [ "uint32", "d8/dc7/class_m_l_l_1_1_bit_reduction.html#a68ec0bd5a0b3b5d3aeb647635e10e2b4", null ],
     [ "ulong", "d8/dc7/class_m_l_l_1_1_bit_reduction.html#a2a3bb79e508668a1621acc6f2ef3a546", null ],
     [ "BitReduction", "d8/dc7/class_m_l_l_1_1_bit_reduction.html#aede5f7c3bd7be423f0b5c549c12203bc", null ],

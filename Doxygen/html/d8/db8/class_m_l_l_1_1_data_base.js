@@ -1,5 +1,6 @@
 var class_m_l_l_1_1_data_base =
 [
+    [ "DataBaseConstPtr", "d8/db8/class_m_l_l_1_1_data_base.html#a39604e5787662d7239c7ddf6b05482f6", null ],
     [ "DataBasePtr", "d8/db8/class_m_l_l_1_1_data_base.html#aacedb3c49087c67346c90bc0139cbf0b", null ],
     [ "int32", "d8/db8/class_m_l_l_1_1_data_base.html#a041d091bf25d53b20c744e18496ddd76", null ],
     [ "int64", "d8/db8/class_m_l_l_1_1_data_base.html#ad6d2aa7dbbcb1e56cc8be9f3b24a3188", null ],
@@ -8,7 +9,7 @@ var class_m_l_l_1_1_data_base =
     [ "uint64", "d8/db8/class_m_l_l_1_1_data_base.html#a9d4d6bbb56c85bf0406df8ad730c2dfe", null ],
     [ "ulong", "d8/db8/class_m_l_l_1_1_data_base.html#a2dce3530ff048fd3306a6de6ab1eaa5a", null ],
     [ "DataBase", "d8/db8/class_m_l_l_1_1_data_base.html#ab87ecf3bcc82d6d50df2d675375dec55", null ],
-    [ "DataBase", "d8/db8/class_m_l_l_1_1_data_base.html#a4f3b1c2c1053abc8db05f86d5a7b453b", null ],
+    [ "DataBase", "d8/db8/class_m_l_l_1_1_data_base.html#a907d63c2894eded6270aa374af495274", null ],
     [ "~DataBase", "d8/db8/class_m_l_l_1_1_data_base.html#a9d4629e705ccaa4897e9650222a2a648", null ],
     [ "Close", "d8/db8/class_m_l_l_1_1_data_base.html#a5d5459f84aca1d58c105127a1eddb526", null ],
     [ "DuplicateKey", "d8/db8/class_m_l_l_1_1_data_base.html#a35c1107cf7bbe4132af7275ae8295b2a", null ],
@@ -124,6 +125,7 @@ var class_m_l_l_1_1_data_base =
     [ "SipperFilesDelete", "d8/db8/class_m_l_l_1_1_data_base.html#a8184837a4639919d95dd44fddde1e89f", null ],
     [ "SipperFilesGetCTDDateTime", "d8/db8/class_m_l_l_1_1_data_base.html#a9a4cd8da76d423b50a01ace87e965d02", null ],
     [ "SipperFilesUpdateExtractionStatus", "d8/db8/class_m_l_l_1_1_data_base.html#aaa8cb4f16834beb5dfefcfe272a616aa", null ],
+    [ "SipperFilesUpdateExtractionStatusIfExpected", "d8/db8/class_m_l_l_1_1_data_base.html#a98dfe0525800e9ebe16cffcad085ee88", null ],
     [ "SipperFileUpdate", "d8/db8/class_m_l_l_1_1_data_base.html#ae29a16acbf7823e4677a6ce100b2fb7e", null ],
     [ "SipperFileUpdateFileSizeStats", "d8/db8/class_m_l_l_1_1_data_base.html#a04d6f53ee0d83e0a3c9129467451c705", null ],
     [ "SipperStationDelete", "d8/db8/class_m_l_l_1_1_data_base.html#a3ddbbf655f311844bfb1736bba8d8e2a", null ],

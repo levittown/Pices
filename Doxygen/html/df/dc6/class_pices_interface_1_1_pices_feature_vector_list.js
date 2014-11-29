@@ -1,5 +1,6 @@
 var class_pices_interface_1_1_pices_feature_vector_list =
 [
+    [ "FeatureVectorComparitorByImageFileName", "d2/d31/class_pices_interface_1_1_pices_feature_vector_list_1_1_feature_vector_comparitor_by_image_file_name.html", "d2/d31/class_pices_interface_1_1_pices_feature_vector_list_1_1_feature_vector_comparitor_by_image_file_name" ],
     [ "PicesFeatureVectorList", "df/dc6/class_pices_interface_1_1_pices_feature_vector_list.html#a4228ba32a8055c2b2be199f8fddfd7b4", null ],
     [ "PicesFeatureVectorList", "df/dc6/class_pices_interface_1_1_pices_feature_vector_list.html#a77e375153555db30cb6e1f1c3e7b1caf", null ],
     [ "PicesFeatureVectorList", "df/dc6/class_pices_interface_1_1_pices_feature_vector_list.html#aebce8a73be4c29fbd1db241deb57f4ee", null ],

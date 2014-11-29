@@ -1,5 +1,6 @@
 var class_sipper_hardware_1_1_sipper_buff =
 [
+    [ "SipperRec", "db/d7f/struct_sipper_buff_1_1_sipper_rec.html", "db/d7f/struct_sipper_buff_1_1_sipper_rec" ],
     [ "int32", "df/dcc/class_sipper_hardware_1_1_sipper_buff.html#a5219b91b12bfcfc4bd2c212c7fcfd95d", null ],
     [ "SipperBuffPtr", "df/dcc/class_sipper_hardware_1_1_sipper_buff.html#a8dbcb023624f3d98e027f7450c6cf4b5", null ],
     [ "uint32", "df/dcc/class_sipper_hardware_1_1_sipper_buff.html#a983c91b59c9e0e146c8c53e396417c9b", null ],

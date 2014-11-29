@@ -1,5 +1,6 @@
 var class_m_l_l_1_1_data_base_image_list =
 [
+    [ "SpatialComparison", "df/da2/class_data_base_image_list_1_1_spatial_comparison.html", "df/da2/class_data_base_image_list_1_1_spatial_comparison" ],
     [ "DataBaseImageListPtr", "da/d94/class_m_l_l_1_1_data_base_image_list.html#a9ff6c12dc7eaa243be5740ca60c6306a", null ],
     [ "DataBaseImageList", "da/d94/class_m_l_l_1_1_data_base_image_list.html#ad39dadac10dbda913a2d64ca5869af8c", null ],
     [ "~DataBaseImageList", "da/d94/class_m_l_l_1_1_data_base_image_list.html#aa5be8174488dfde01dcee75146fe91e2", null ],

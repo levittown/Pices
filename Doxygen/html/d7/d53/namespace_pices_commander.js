@@ -1,5 +1,6 @@
 var namespace_pices_commander =
 [
+    [ "Properties", "d3/d59/namespace_pices_commander_1_1_properties.html", null ],
     [ "AboutBox", "d6/da9/class_pices_commander_1_1_about_box.html", "d6/da9/class_pices_commander_1_1_about_box" ],
     [ "AssignSelectedImagesToGroup", "db/d5b/class_pices_commander_1_1_assign_selected_images_to_group.html", "db/d5b/class_pices_commander_1_1_assign_selected_images_to_group" ],
     [ "ChartAbundanceByDeployment", "d5/de2/class_pices_commander_1_1_chart_abundance_by_deployment.html", "d5/de2/class_pices_commander_1_1_chart_abundance_by_deployment" ],

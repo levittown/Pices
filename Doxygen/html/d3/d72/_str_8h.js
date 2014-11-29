@@ -11,6 +11,7 @@ var _str_8h =
     [ "KKStrConstPtr", "d3/d72/_str_8h.html#a825d5ebf999bc0928edfc50128299711", null ],
     [ "KKStrListPtr", "d3/d72/_str_8h.html#a7bb6c5855dc96b9d6c50bc0991dfa99d", null ],
     [ "KKStrMatrixPtr", "d3/d72/_str_8h.html#add694f07f444e25d3c6af8b1073a44c8", null ],
+    [ "KKStrPair", "d3/d72/_str_8h.html#a2c10918b822aaf586f6a1b2a7b81bf3b", null ],
     [ "KKStrPtr", "d3/d72/_str_8h.html#ad01c1f93385da1b6b06cedcebc06a60a", null ],
     [ "StringListPtr", "d3/d72/_str_8h.html#a1efcb704ff93f69cb1cdb41cbe89bf04", null ],
     [ "VectorKKStr", "d3/d72/_str_8h.html#ac4b2dbc428c9ed41b4b9e67bec4dd1f7", null ],

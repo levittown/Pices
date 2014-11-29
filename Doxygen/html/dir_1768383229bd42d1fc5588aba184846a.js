@@ -29,7 +29,9 @@ var dir_1768383229bd42d1fc5588aba184846a =
     [ "PicesClass.h", "d6/dfc/_pices_class_8h.html", [
       [ "PicesClass", "df/d07/class_pices_interface_1_1_pices_class.html", "df/d07/class_pices_interface_1_1_pices_class" ]
     ] ],
-    [ "PicesClassList.cpp", "d1/db4/_pices_class_list_8cpp.html", null ],
+    [ "PicesClassList.cpp", "d1/db4/_pices_class_list_8cpp.html", [
+      [ "ClassNameComparitor", "d6/d11/class_pices_class_list_1_1_class_name_comparitor.html", "d6/d11/class_pices_class_list_1_1_class_name_comparitor" ]
+    ] ],
     [ "PicesClassList.h", "d5/d37/_pices_class_list_8h.html", [
       [ "PicesClassList", "d0/dba/class_pices_interface_1_1_pices_class_list.html", "d0/dba/class_pices_interface_1_1_pices_class_list" ]
     ] ],
@@ -80,7 +82,9 @@ var dir_1768383229bd42d1fc5588aba184846a =
       [ "ParsedImageFileName", "d4/da5/class_pices_interface_1_1_parsed_image_file_name.html", "d4/da5/class_pices_interface_1_1_parsed_image_file_name" ],
       [ "PicesFeatureVector", "d8/d8f/class_pices_interface_1_1_pices_feature_vector.html", "d8/d8f/class_pices_interface_1_1_pices_feature_vector" ]
     ] ],
-    [ "PicesFeatureVectorList.cpp", "db/d75/_pices_feature_vector_list_8cpp.html", null ],
+    [ "PicesFeatureVectorList.cpp", "db/d75/_pices_feature_vector_list_8cpp.html", [
+      [ "FeatureVectorComparitorByImageFileName", "d2/d31/class_pices_interface_1_1_pices_feature_vector_list_1_1_feature_vector_comparitor_by_image_file_name.html", "d2/d31/class_pices_interface_1_1_pices_feature_vector_list_1_1_feature_vector_comparitor_by_image_file_name" ]
+    ] ],
     [ "PicesFeatureVectorList.h", "df/dc6/_pices_feature_vector_list_8h.html", [
       [ "PicesFeatureVectorList", "df/dc6/class_pices_interface_1_1_pices_feature_vector_list.html", "df/dc6/class_pices_interface_1_1_pices_feature_vector_list" ]
     ] ],
@@ -125,7 +129,10 @@ var dir_1768383229bd42d1fc5588aba184846a =
     [ "PicesPrediction.h", "de/d15/_pices_prediction_8h.html", [
       [ "PicesPrediction", "d4/d19/class_pices_interface_1_1_pices_prediction.html", "d4/d19/class_pices_interface_1_1_pices_prediction" ]
     ] ],
-    [ "PicesPredictionList.cpp", "da/dcc/_pices_prediction_list_8cpp.html", null ],
+    [ "PicesPredictionList.cpp", "da/dcc/_pices_prediction_list_8cpp.html", [
+      [ "SortPredictionsByProbability", "df/daa/class_pices_prediction_list_1_1_sort_predictions_by_probability.html", "df/daa/class_pices_prediction_list_1_1_sort_predictions_by_probability" ],
+      [ "SortPredictionsByVotes", "d3/d51/class_pices_prediction_list_1_1_sort_predictions_by_votes.html", "d3/d51/class_pices_prediction_list_1_1_sort_predictions_by_votes" ]
+    ] ],
     [ "PicesPredictionList.h", "de/d99/_pices_prediction_list_8h.html", "de/d99/_pices_prediction_list_8h" ],
     [ "PicesRaster.cpp", "d6/d4a/_pices_raster_8cpp.html", "d6/d4a/_pices_raster_8cpp" ],
     [ "PicesRaster.h", "d7/d1a/_pices_raster_8h.html", [

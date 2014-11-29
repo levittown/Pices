@@ -1,5 +1,6 @@
 var class_pices_interface_1_1_pices_class_list =
 [
+    [ "ClassNameComparitor", "d6/d11/class_pices_class_list_1_1_class_name_comparitor.html", "d6/d11/class_pices_class_list_1_1_class_name_comparitor" ],
     [ "PicesClassList", "d0/dba/class_pices_interface_1_1_pices_class_list.html#a4998cd87dd2fa3f43a11dc7e8e989f67", null ],
     [ "PicesClassList", "d0/dba/class_pices_interface_1_1_pices_class_list.html#a74ed1e634497564a1b5e54bbda5fa269", null ],
     [ "PicesClassList", "d0/dba/class_pices_interface_1_1_pices_class_list.html#ad1732f57978fecf796438626f24255b8", null ],

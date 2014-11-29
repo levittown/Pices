@@ -1,5 +1,8 @@
 var class_m_l_l_1_1_feature_encoder2 =
 [
+    [ "FeatureVar2", "dc/d5d/struct_m_l_l_1_1_feature_encoder2_1_1_feature_var2.html", "dc/d5d/struct_m_l_l_1_1_feature_encoder2_1_1_feature_var2" ],
+    [ "FeatureVar2List", "d4/d13/class_m_l_l_1_1_feature_encoder2_1_1_feature_var2_list.html", "d4/d13/class_m_l_l_1_1_feature_encoder2_1_1_feature_var2_list" ],
+    [ "FeatureVarComparrison2", "d4/d18/class_m_l_l_1_1_feature_encoder2_1_1_feature_var_comparrison2.html", "d4/d18/class_m_l_l_1_1_feature_encoder2_1_1_feature_var_comparrison2" ],
     [ "FeatureEncoder2Ptr", "df/d6f/class_m_l_l_1_1_feature_encoder2.html#a61151bfb2f7e2d9d37bdbd00db950efd", null ],
     [ "FeWhatToDoPtr", "df/d6f/class_m_l_l_1_1_feature_encoder2.html#a92c2245776bc5bd2e0fd1dc694f16a88", null ],
     [ "FeWhatToDo", "df/d6f/class_m_l_l_1_1_feature_encoder2.html#a89645dcb5135094c1a5489e9a5cbd995", [

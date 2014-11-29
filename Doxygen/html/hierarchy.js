@@ -1,18 +1,70 @@
 var hierarchy =
 [
+    [ "AccuracyComparison", "de/dde/class_accuracy_comparison.html", null ],
+    [ "AccuracyNormComparison", "dc/d51/class_accuracy_norm_comparison.html", null ],
+    [ "Application", null, [
+      [ "MLL::PicesApplication", "da/d17/class_m_l_l_1_1_pices_application.html", null ]
+    ] ],
     [ "ArrayList", null, [
       [ "SipperFile.DataRowList", "d8/d4c/class_sipper_file_1_1_data_row_list.html", null ],
       [ "SipperFile.InstrumentDataList", "d1/ddc/class_sipper_file_1_1_instrument_data_list.html", null ]
     ] ],
+    [ "MLL::BitReduction::FeatureVar", "d0/d8e/struct_bit_reduction_1_1_feature_var.html", null ],
+    [ "MLL::BitReduction::FeatureVarComparrison", "dc/dbc/class_bit_reduction_1_1_feature_var_comparrison.html", null ],
+    [ "KKU::BmpImage::Bmp1BitRec", "db/d1b/struct_bmp_image_1_1_bmp1_bit_rec.html", null ],
+    [ "KKU::BmpImage::Bmp4BitRecs", "d2/d60/struct_bmp_image_1_1_bmp4_bit_recs.html", null ],
+    [ "KKU::BmpImage::BMP_24BitPixel", "dd/d9e/struct_bmp_image_1_1_b_m_p__24_bit_pixel.html", null ],
+    [ "KKU::BmpImage::CodedPixels", "dd/db3/class_bmp_image_1_1_coded_pixels.html", null ],
+    [ "KKU::BmpImage::CodePair", "d8/dd3/struct_bmp_image_1_1_code_pair.html", null ],
+    [ "KKU::BmpImage::DWordParts", "df/d40/union_bmp_image_1_1_d_word_parts.html", null ],
+    [ "KKU::BmpImage::LongParts", "df/d04/union_bmp_image_1_1_long_parts.html", null ],
+    [ "KKU::BmpImage::PalletBuilder", "dd/d56/class_bmp_image_1_1_pallet_builder.html", null ],
+    [ "KKU::BmpImage::PalletBuilder::RGBQUAD_Pred", "d1/dd1/class_bmp_image_1_1_pallet_builder_1_1_r_g_b_q_u_a_d___pred.html", null ],
+    [ "KKU::BmpImage::WordParts", "d9/da0/union_bmp_image_1_1_word_parts.html", null ],
+    [ "MLL::ClassProbList::ProbabilityComparer", "de/d4e/class_class_prob_list_1_1_probability_comparer.html", null ],
+    [ "MLL::ClassProbList::VotesComparer", "da/d79/class_class_prob_list_1_1_votes_comparer.html", null ],
+    [ "MLL::ClassStatisticList::ClassStatisticSortComparrison", "d4/d5c/class_class_statistic_list_1_1_class_statistic_sort_comparrison.html", null ],
+    [ "MLL::ClassStatisticList::ClassStatSortByCount", "dc/de6/class_class_statistic_list_1_1_class_stat_sort_by_count.html", null ],
     [ "Configuration", null, [
       [ "MLL::TrainingConfiguration2", "d9/df9/class_m_l_l_1_1_training_configuration2.html", null ]
     ] ],
+    [ "MLL::DataBaseImageList::SpatialComparison", "df/da2/class_data_base_image_list_1_1_spatial_comparison.html", null ],
+    [ "MLL::DataBaseLogEntryList::ProgCodeComparison", "d6/d33/class_data_base_log_entry_list_1_1_prog_code_comparison.html", null ],
     [ "DataGridViewCell", null, [
       [ "PicesCommander.ThumbNailImageCell", "d2/d5e/class_pices_commander_1_1_thumb_nail_image_cell.html", null ]
     ] ],
     [ "DataGridViewColumn", null, [
       [ "PicesCommander.ThumbNailImageColumn", "da/dc1/class_pices_commander_1_1_thumb_nail_image_column.html", null ]
     ] ],
+    [ "DeltaProbAccuarcyComparison", "d6/d7d/class_delta_prob_accuarcy_comparison.html", null ],
+    [ "DeltaTestProbAccuarcyComparison", "dc/ddf/class_delta_test_prob_accuarcy_comparison.html", null ],
+    [ "MLL::FeatureFileIODstWeb::AttrDescLine", "dd/da2/class_feature_file_i_o_dst_web_1_1_attr_desc_line.html", null ],
+    [ "MLL::FeatureFileIODstWeb::AttrDescLineComparator", "d5/d12/class_feature_file_i_o_dst_web_1_1_attr_desc_line_comparator.html", null ],
+    [ "FeatureSelectionApp::AccByFeatureSel", "d0/d5f/class_feature_selection_app_1_1_acc_by_feature_sel.html", null ],
+    [ "FeatureSelectionApp::BinaryClass", "d5/d20/class_feature_selection_app_1_1_binary_class.html", null ],
+    [ "FeatureSelectionApp::BinaryJob", "d5/d61/class_feature_selection_app_1_1_binary_job.html", [
+      [ "FeatureSelectionApp::JobRandomSplit", "d8/d00/class_feature_selection_app_1_1_job_random_split.html", null ],
+      [ "FeatureSelectionApp::JobValidation", "d1/d6c/class_feature_selection_app_1_1_job_validation.html", null ]
+    ] ],
+    [ "FeatureSelectionApp::FeatureImpact", "d9/df3/class_feature_selection_app_1_1_feature_impact.html", null ],
+    [ "FeatureSelectionApp::FeatureSelection", "db/da5/class_feature_selection_app_1_1_feature_selection.html", null ],
+    [ "FeatureSelectionApp::FinalResults", "d7/dd0/class_feature_selection_app_1_1_final_results.html", null ],
+    [ "FeatureSelectionApp::ParmSearchResultsProcessor", "d7/dc3/class_feature_selection_app_1_1_parm_search_results_processor.html", null ],
+    [ "FeatureSelectionApp::Processor", "d2/d45/class_feature_selection_app_1_1_processor.html", null ],
+    [ "FeatureSelectionApp::Results", "d0/d93/class_feature_selection_app_1_1_results.html", [
+      [ "FeatureSelectionApp::RandomSplitResults", "d1/dfa/class_feature_selection_app_1_1_random_split_results.html", null ],
+      [ "FeatureSelectionApp::ValidationResults", "dd/dd0/class_feature_selection_app_1_1_validation_results.html", null ]
+    ] ],
+    [ "MLL::FeatureVectorList::BreakTieComparison", "d5/db3/class_feature_vector_list_1_1_break_tie_comparison.html", null ],
+    [ "MLL::FeatureVectorList::BreakTieComparisonReversed", "db/d4a/class_feature_vector_list_1_1_break_tie_comparison_reversed.html", null ],
+    [ "MLL::FeatureVectorList::ClassNameComparrison", "df/d29/class_feature_vector_list_1_1_class_name_comparrison.html", null ],
+    [ "MLL::FeatureVectorList::ClassNameComparrisonReversed", "d8/d5d/class_feature_vector_list_1_1_class_name_comparrison_reversed.html", null ],
+    [ "MLL::FeatureVectorList::ImageFileNameComparison", "d5/d7e/class_feature_vector_list_1_1_image_file_name_comparison.html", null ],
+    [ "MLL::FeatureVectorList::ImageFileNameComparisonReversed", "db/df3/class_feature_vector_list_1_1_image_file_name_comparison_reversed.html", null ],
+    [ "MLL::FeatureVectorList::ProbabilityComparison", "d6/dc0/class_feature_vector_list_1_1_probability_comparison.html", null ],
+    [ "MLL::FeatureVectorList::ProbabilityComparisonReversed", "d1/d83/class_feature_vector_list_1_1_probability_comparison_reversed.html", null ],
+    [ "MLL::FeatureVectorList::RootNameComparrison", "da/d51/class_feature_vector_list_1_1_root_name_comparrison.html", null ],
+    [ "MLL::FeatureVectorList::RootNameComparrisonReversed", "d4/dc4/class_feature_vector_list_1_1_root_name_comparrison_reversed.html", null ],
     [ "Form", null, [
       [ "GradeTrainingModel.ConfusionMatrix", "d7/d5e/class_grade_training_model_1_1_confusion_matrix.html", null ],
       [ "GradeTrainingModel.GetRunTimeParameters", "d0/d6a/class_grade_training_model_1_1_get_run_time_parameters.html", null ],
@@ -69,17 +121,13 @@ var hierarchy =
       [ "SipperFileViewer.SipperFileViewer", "d8/d90/class_sipper_file_viewer_1_1_sipper_file_viewer.html", null ],
       [ "SipperFileViewer.TrainingModelStatus", "d5/d3b/class_sipper_file_viewer_1_1_training_model_status.html", null ]
     ] ],
+    [ "GradeComparison", "d0/d3c/class_grade_comparison.html", null ],
     [ "GradeTrainingModel.GradeTrainingModel", "d3/dfe/class_grade_training_model_1_1_grade_training_model.html", null ],
     [ "GradeTrainingModel.Prediction", "d1/d85/class_grade_training_model_1_1_prediction.html", null ],
     [ "ImageExtractionManager::ExtractedImage", "dc/dac/class_image_extraction_manager_1_1_extracted_image.html", null ],
     [ "ImageExtractionManager::ExtractionManager", "d3/d4a/class_image_extraction_manager_1_1_extraction_manager.html", null ],
     [ "ImageExtractionManager::ExtractionManagerStats", "dd/d19/class_image_extraction_manager_1_1_extraction_manager_stats.html", null ],
     [ "ImageExtractionManager::ExtractionParms", "d4/d1d/class_image_extraction_manager_1_1_extraction_parms.html", null ],
-    [ "ImageExtractionManager::ImageExtractionThread", "dc/d04/class_image_extraction_manager_1_1_image_extraction_thread.html", [
-      [ "ImageExtractionManager::DataBaseUpdateThread", "d0/dbf/class_image_extraction_manager_1_1_data_base_update_thread.html", null ],
-      [ "ImageExtractionManager::FrameExtractorThread", "d7/dd5/class_image_extraction_manager_1_1_frame_extractor_thread.html", null ],
-      [ "ImageExtractionManager::FrameProcessorThread", "d8/d5b/class_image_extraction_manager_1_1_frame_processor_thread.html", null ]
-    ] ],
     [ "ImageExtractionManager::LogicalFrame", "d8/d5e/class_image_extraction_manager_1_1_logical_frame.html", null ],
     [ "ImageExtractionManager::LogicalFrameBlob", "d1/d36/class_image_extraction_manager_1_1_logical_frame_blob.html", null ],
     [ "ImageExtractionManager::LogicalFrameQueue", "db/dbc/class_image_extraction_manager_1_1_logical_frame_queue.html", null ],
@@ -89,9 +137,17 @@ var hierarchy =
       [ "JobManagment::JobManager", "d4/dc2/class_job_managment_1_1_job_manager.html", null ]
     ] ],
     [ "KKQueue", null, [
+      [ "MLL::BitReduction::FeatureVarList", "db/d7d/class_bit_reduction_1_1_feature_var_list.html", null ],
+      [ "FeatureSelectionApp::AccByFeatureSelList", "d7/d4d/class_feature_selection_app_1_1_acc_by_feature_sel_list.html", null ],
+      [ "FeatureSelectionApp::BinaryClassList", "d2/ddf/class_feature_selection_app_1_1_binary_class_list.html", null ],
+      [ "FeatureSelectionApp::BinaryJobList", "d7/d0f/class_feature_selection_app_1_1_binary_job_list.html", null ],
+      [ "FeatureSelectionApp::ProcessorList", "d1/d09/class_feature_selection_app_1_1_processor_list.html", null ],
+      [ "FeatureSelectionApp::RandomSplitResultsList", "d8/d56/class_feature_selection_app_1_1_random_split_results_list.html", null ],
       [ "JobManagment::JobList", "d8/d4b/class_job_managment_1_1_job_list.html", null ],
       [ "JobManagment::JobManagerList", "d7/db9/class_job_managment_1_1_job_manager_list.html", null ],
       [ "KKU::BlobList", "d9/d83/class_k_k_u_1_1_blob_list.html", null ],
+      [ "KKU::Configuration::ConfSectionList", "d9/d61/class_k_k_u_1_1_configuration_1_1_conf_section_list.html", null ],
+      [ "KKU::Configuration::SettingList", "df/d86/class_k_k_u_1_1_configuration_1_1_setting_list.html", null ],
       [ "KKU::KKStrList", "d3/d84/class_k_k_u_1_1_k_k_str_list.html", null ],
       [ "KKU::KKThreadList", "d7/daa/class_k_k_u_1_1_k_k_thread_list.html", null ],
       [ "KKU::PointList", "df/dca/class_k_k_u_1_1_point_list.html", null ],
@@ -111,9 +167,11 @@ var hierarchy =
       [ "MLL::DataBaseLogEntryList", "de/d28/class_m_l_l_1_1_data_base_log_entry_list.html", null ],
       [ "MLL::DataBaseServerList", "dd/d92/class_m_l_l_1_1_data_base_server_list.html", null ],
       [ "MLL::DuplicateImageList", "d1/df1/class_m_l_l_1_1_duplicate_image_list.html", null ],
+      [ "MLL::FeatureEncoder2::FeatureVar2List", "d4/d13/class_m_l_l_1_1_feature_encoder2_1_1_feature_var2_list.html", null ],
       [ "MLL::FeatureVectorList", "d2/d85/class_m_l_l_1_1_feature_vector_list.html", [
         [ "MLL::ImageFeaturesList", "d9/dce/class_m_l_l_1_1_image_features_list.html", null ]
       ] ],
+      [ "MLL::FileDescList", "dd/d37/class_m_l_l_1_1_file_desc_list.html", null ],
       [ "MLL::MLClassList", "d8/d15/class_m_l_l_1_1_m_l_class_list.html", null ],
       [ "MLL::TrainingClassList", "de/d16/class_m_l_l_1_1_training_class_list.html", null ],
       [ "MLL::TrainingConfiguration2List", "d5/df3/class_m_l_l_1_1_training_configuration2_list.html", null ],
@@ -123,11 +181,13 @@ var hierarchy =
       [ "SipperHardware::SipperCruiseList", "d3/d7b/class_sipper_hardware_1_1_sipper_cruise_list.html", null ],
       [ "SipperHardware::SipperDeploymentList", "dd/d06/class_sipper_hardware_1_1_sipper_deployment_list.html", null ],
       [ "SipperHardware::SipperFileList", "d4/d98/class_sipper_hardware_1_1_sipper_file_list.html", null ],
-      [ "SipperHardware::SipperStationList", "db/de7/class_sipper_hardware_1_1_sipper_station_list.html", null ]
+      [ "SipperHardware::SipperStationList", "db/de7/class_sipper_hardware_1_1_sipper_station_list.html", null ],
+      [ "MLL::SizeDistribution::ClassTotalsList", "d2/d1c/class_size_distribution_1_1_class_totals_list.html", null ]
     ] ],
     [ "KKQueueConst", null, [
       [ "MLL::MLClassConstList", "d8/d58/class_m_l_l_1_1_m_l_class_const_list.html", null ]
     ] ],
+    [ "KKU::KKStrList::StringComparison", "d3/d7c/class_k_k_str_list_1_1_string_comparison.html", null ],
     [ "KKU::Application", "dd/da4/class_k_k_u_1_1_application.html", null ],
     [ "KKU::Atom", "dc/d98/class_k_k_u_1_1_atom.html", null ],
     [ "KKU::BITMAPFILEHEADER", "d5/d86/struct_k_k_u_1_1_b_i_t_m_a_p_f_i_l_e_h_e_a_d_e_r.html", null ],
@@ -136,9 +196,14 @@ var hierarchy =
     [ "KKU::Blob", "d7/d2e/class_k_k_u_1_1_blob.html", null ],
     [ "KKU::BmpImage", "d9/d9e/class_k_k_u_1_1_bmp_image.html", null ],
     [ "KKU::Chart", "de/d0b/class_k_k_u_1_1_chart.html", null ],
+    [ "KKU::Chart::PlotPoint", "d6/d94/class_k_k_u_1_1_chart_1_1_plot_point.html", null ],
+    [ "KKU::Chart::Series", "df/ddd/class_k_k_u_1_1_chart_1_1_series.html", null ],
+    [ "KKU::Chart::XLabel", "d9/d41/class_k_k_u_1_1_chart_1_1_x_label.html", null ],
     [ "KKU::CmdLineExpander", "d9/d27/class_k_k_u_1_1_cmd_line_expander.html", null ],
     [ "KKU::Compressor", "da/dd5/class_k_k_u_1_1_compressor.html", null ],
     [ "KKU::Configuration", "da/d2f/class_k_k_u_1_1_configuration.html", null ],
+    [ "KKU::Configuration::ConfSection", "d1/d27/class_k_k_u_1_1_configuration_1_1_conf_section.html", null ],
+    [ "KKU::Configuration::Setting", "db/d6b/class_k_k_u_1_1_configuration_1_1_setting.html", null ],
     [ "KKU::ContourFollower", "d5/d39/class_k_k_u_1_1_contour_follower.html", null ],
     [ "KKU::ConvexHull", "d8/dc7/class_k_k_u_1_1_convex_hull.html", null ],
     [ "KKU::DateTime", "d4/d5b/class_k_k_u_1_1_date_time.html", null ],
@@ -157,6 +222,11 @@ var hierarchy =
     [ "KKU::KKStrMatrix", "d1/d08/class_k_k_u_1_1_k_k_str_matrix.html", null ],
     [ "KKU::KKStrParser", "d6/d2f/class_k_k_u_1_1_k_k_str_parser.html", null ],
     [ "KKU::KKThread", "de/d11/class_k_k_u_1_1_k_k_thread.html", [
+      [ "ImageExtractionManager::ImageExtractionThread", "dc/d04/class_image_extraction_manager_1_1_image_extraction_thread.html", [
+        [ "ImageExtractionManager::DataBaseUpdateThread", "d0/dbf/class_image_extraction_manager_1_1_data_base_update_thread.html", null ],
+        [ "ImageExtractionManager::FrameExtractorThread", "d7/dd5/class_image_extraction_manager_1_1_frame_extractor_thread.html", null ],
+        [ "ImageExtractionManager::FrameProcessorThread", "d8/d5b/class_image_extraction_manager_1_1_frame_processor_thread.html", null ]
+      ] ],
       [ "KKU::KKThreadManager", "db/d35/class_k_k_u_1_1_k_k_thread_manager.html", null ]
     ] ],
     [ "KKU::Matrix", "de/d3e/class_k_k_u_1_1_matrix.html", null ],
@@ -170,7 +240,7 @@ var hierarchy =
     ] ],
     [ "KKU::RasterBuffer", "db/d50/class_k_k_u_1_1_raster_buffer.html", null ],
     [ "KKU::RBnode< Entry >", "df/d14/class_k_k_u_1_1_r_bnode.html", null ],
-    [ "KKU::RBTree< Entry, CompareNodes, KeyType >", "df/db1/singleton_k_k_u_1_1_r_b_tree.html", null ],
+    [ "KKU::RBTree< Entry, CompareNodes, KeyType >", "dd/dfd/class_k_k_u_1_1_r_b_tree.html", null ],
     [ "KKU::RGBQUAD", "d6/dd4/struct_k_k_u_1_1_r_g_b_q_u_a_d.html", null ],
     [ "KKU::Row", "d2/d1b/class_k_k_u_1_1_row.html", null ],
     [ "KKU::RunLog", "dc/daf/class_k_k_u_1_1_run_log.html", null ],
@@ -192,7 +262,6 @@ var hierarchy =
       [ "KKU::XmlElement", "d5/def/class_k_k_u_1_1_xml_element.html", null ]
     ] ],
     [ "List", null, [
-      [ "PicesCommander.ClassTotalsList", "d5/dd2/class_pices_commander_1_1_class_totals_list.html", null ],
       [ "PicesInterface::CruiseList", "d5/d2f/class_pices_interface_1_1_cruise_list.html", null ],
       [ "PicesInterface::PicesClassList", "d0/dba/class_pices_interface_1_1_pices_class_list.html", null ],
       [ "PicesInterface::PicesClassStatisticList", "d3/dec/class_pices_interface_1_1_pices_class_statistic_list.html", null ],
@@ -212,13 +281,23 @@ var hierarchy =
       [ "PicesInterface::PicesSipperFileList", "d5/d92/class_pices_interface_1_1_pices_sipper_file_list.html", null ],
       [ "PicesInterface::PicesSipperStationList", "de/dba/class_pices_interface_1_1_pices_sipper_station_list.html", null ],
       [ "PicesInterface::PicesTrainingClassList", "da/d13/class_pices_interface_1_1_pices_training_class_list.html", null ],
-      [ "PicesInterface::PicesVolumeSampledStatList", "d2/d77/class_pices_interface_1_1_pices_volume_sampled_stat_list.html", null ],
-      [ "SipperDiskUtilities.SipperFileControlBlockList", "de/d98/class_sipper_disk_utilities_1_1_sipper_file_control_block_list.html", null ],
+      [ "PicesInterface::PicesVolumeSampledStatList", "d2/d77/class_pices_interface_1_1_pices_volume_sampled_stat_list.html", null ]
+    ] ],
+    [ "List< Blob >", null, [
       [ "SipperFile.BlobList", "d3/d60/class_sipper_file_1_1_blob_list.html", null ]
     ] ],
+    [ "List< ClassTotals >", null, [
+      [ "PicesCommander.ClassTotalsList", "d5/dd2/class_pices_commander_1_1_class_totals_list.html", null ]
+    ] ],
+    [ "List< SipperFileControlBlock >", null, [
+      [ "SipperDiskUtilities.SipperFileControlBlockList", "de/d98/class_sipper_disk_utilities_1_1_sipper_file_control_block_list.html", null ]
+    ] ],
     [ "map", null, [
+      [ "FeatureSelectionApp::ProcessorCycles", "d8/d60/class_feature_selection_app_1_1_processor_cycles.html", null ],
       [ "MLL::ClassIndexList", "d9/dbb/class_m_l_l_1_1_class_index_list.html", null ]
     ] ],
+    [ "MLL::MLClassConstList::mlClassNameComparison", "df/d0e/class_m_l_class_const_list_1_1ml_class_name_comparison.html", null ],
+    [ "MLL::MLClassList::mlClassNameComparison", "d9/dc2/class_m_l_class_list_1_1ml_class_name_comparison.html", null ],
     [ "MLL::AbundanceCorrectionMatrix", "d4/dfe/class_m_l_l_1_1_abundance_correction_matrix.html", null ],
     [ "MLL::Attribute", "d9/de4/class_m_l_l_1_1_attribute.html", null ],
     [ "MLL::BinaryClassParms", "db/d65/class_m_l_l_1_1_binary_class_parms.html", null ],
@@ -251,6 +330,8 @@ var hierarchy =
     [ "MLL::ExtractImageFileName", "d3/d53/class_m_l_l_1_1_extract_image_file_name.html", null ],
     [ "MLL::FeatureEncoder", "d0/de2/class_m_l_l_1_1_feature_encoder.html", null ],
     [ "MLL::FeatureEncoder2", "df/d6f/class_m_l_l_1_1_feature_encoder2.html", null ],
+    [ "MLL::FeatureEncoder2::FeatureVar2", "dc/d5d/struct_m_l_l_1_1_feature_encoder2_1_1_feature_var2.html", null ],
+    [ "MLL::FeatureEncoder2::FeatureVarComparrison2", "d4/d18/class_m_l_l_1_1_feature_encoder2_1_1_feature_var_comparrison2.html", null ],
     [ "MLL::FeatureFileIO", "d4/d43/class_m_l_l_1_1_feature_file_i_o.html", [
       [ "MLL::FeatureFileIOArff", "d9/d00/class_m_l_l_1_1_feature_file_i_o_arff.html", null ],
       [ "MLL::FeatureFileIOC45", "d4/dd1/class_m_l_l_1_1_feature_file_i_o_c45.html", null ],
@@ -294,14 +375,15 @@ var hierarchy =
     [ "MLL::ProbNamePair", "d9/d99/class_m_l_l_1_1_prob_name_pair.html", null ],
     [ "MLL::SipperBlob", "d6/d0a/class_m_l_l_1_1_sipper_blob.html", null ],
     [ "MLL::SipperExtractionImageManager", "d3/d58/class_m_l_l_1_1_sipper_extraction_image_manager.html", null ],
+    [ "MLL::SipperExtractionImageManager::ImageEntry", "df/df4/class_m_l_l_1_1_sipper_extraction_image_manager_1_1_image_entry.html", null ],
+    [ "MLL::SipperExtractionImageManager::ManagedClass", "da/de7/class_m_l_l_1_1_sipper_extraction_image_manager_1_1_managed_class.html", null ],
+    [ "MLL::SipperExtractionImageManager::ManagedClasssesSortByClassName", "d5/daa/class_m_l_l_1_1_sipper_extraction_image_manager_1_1_managed_classses_sort_by_class_name.html", null ],
     [ "MLL::SizeDistribution", "dd/df6/class_m_l_l_1_1_size_distribution.html", null ],
     [ "MLL::svm_node_int", "d0/df1/struct_m_l_l_1_1svm__node__int.html", null ],
     [ "MLL::SVMModel", "da/d27/class_m_l_l_1_1_s_v_m_model.html", null ],
     [ "MLL::SVMparam", "da/d7f/class_m_l_l_1_1_s_v_mparam.html", null ],
     [ "MLL::TrainingClass", "d6/d9b/class_m_l_l_1_1_training_class.html", null ],
     [ "MLL::TrainingProcess2", "d4/d4d/class_m_l_l_1_1_training_process2.html", null ],
-    [ "MLL::UsfCasCor", "d3/d23/class_m_l_l_1_1_usf_cas_cor.html", null ],
-    [ "MLL::UsfCasCor::parmentry", "d2/dfa/struct_m_l_l_1_1_usf_cas_cor_1_1parmentry.html", null ],
     [ "MLL::VolumeSampledStat", "d3/d69/class_m_l_l_1_1_volume_sampled_stat.html", null ],
     [ "PicesCommander.ClassifierProcess", "d7/d00/class_pices_commander_1_1_classifier_process.html", null ],
     [ "PicesCommander.ClassStat", "dd/d23/class_pices_commander_1_1_class_stat.html", null ],
@@ -351,10 +433,28 @@ var hierarchy =
     [ "PicesInterface::PicesVolumeSampledStat", "dc/ddd/class_pices_interface_1_1_pices_volume_sampled_stat.html", null ],
     [ "PicesInterface::ProbNamePair", "d7/da1/class_pices_interface_1_1_prob_name_pair.html", null ],
     [ "PicesInterface::TrainingModel2", "dd/d4f/class_pices_interface_1_1_training_model2.html", null ],
+    [ "ProcessingTimeComparison", "d8/d1e/class_processing_time_comparison.html", null ],
     [ "RBTree", null, [
       [ "MLL::ImageFeaturesDataIndexed", "dd/d62/class_m_l_l_1_1_image_features_data_indexed.html", null ],
       [ "MLL::ImageFeaturesNameIndexed", "d2/d70/class_m_l_l_1_1_image_features_name_indexed.html", null ]
     ] ],
+    [ "SipperHardware::SipperBuff4Bit::OpRec", "dc/d6e/union_sipper_buff4_bit_1_1_op_rec.html", null ],
+    [ "SipperHardware::SipperBuff4Bit::OpRecEndOfScanLine", "d1/dc2/struct_sipper_buff4_bit_1_1_op_rec_end_of_scan_line.html", null ],
+    [ "SipperHardware::SipperBuff4Bit::OpRecInstrumentDataWord1", "d1/d8f/struct_sipper_buff4_bit_1_1_op_rec_instrument_data_word1.html", null ],
+    [ "SipperHardware::SipperBuff4Bit::OpRecInstrumentDataWord2", "d6/d7a/struct_sipper_buff4_bit_1_1_op_rec_instrument_data_word2.html", null ],
+    [ "SipperHardware::SipperBuff4Bit::OpRecInstrumentDataWord3", "d7/d52/struct_sipper_buff4_bit_1_1_op_rec_instrument_data_word3.html", null ],
+    [ "SipperHardware::SipperBuff4Bit::OpRecRaw1Pixel", "df/d16/struct_sipper_buff4_bit_1_1_op_rec_raw1_pixel.html", null ],
+    [ "SipperHardware::SipperBuff4Bit::OpRecRaw32Pixels", "dc/d22/struct_sipper_buff4_bit_1_1_op_rec_raw32_pixels.html", null ],
+    [ "SipperHardware::SipperBuff4Bit::OpRecRaw513Pixels1", "d7/daa/struct_sipper_buff4_bit_1_1_op_rec_raw513_pixels1.html", null ],
+    [ "SipperHardware::SipperBuff4Bit::OpRecRaw513Pixels2", "d6/da3/struct_sipper_buff4_bit_1_1_op_rec_raw513_pixels2.html", null ],
+    [ "SipperHardware::SipperBuff4Bit::OpRecRun256Len1", "d6/d23/struct_sipper_buff4_bit_1_1_op_rec_run256_len1.html", null ],
+    [ "SipperHardware::SipperBuff4Bit::OpRecRun256Len2", "d8/d6e/struct_sipper_buff4_bit_1_1_op_rec_run256_len2.html", null ],
+    [ "SipperHardware::SipperBuff4Bit::OpRecRunLen", "d9/d20/struct_sipper_buff4_bit_1_1_op_rec_run_len.html", null ],
+    [ "SipperHardware::SipperBuff4Bit::OpRecTextBlock1", "d0/dd3/struct_sipper_buff4_bit_1_1_op_rec_text_block1.html", null ],
+    [ "SipperHardware::SipperBuff4Bit::OpRecTextBlock2", "da/dd2/struct_sipper_buff4_bit_1_1_op_rec_text_block2.html", null ],
+    [ "SipperHardware::SipperBuff4Bit::RawPixelRec", "d8/d57/struct_sipper_buff4_bit_1_1_raw_pixel_rec.html", null ],
+    [ "SipperHardware::SipperBuff::SipperRec", "db/d7f/struct_sipper_buff_1_1_sipper_rec.html", null ],
+    [ "SipperHardware::SipperCruiseList::CruiseNameComparator", "d6/d17/class_sipper_cruise_list_1_1_cruise_name_comparator.html", null ],
     [ "SipperDiskUtilities.Constants", "d7/dda/class_sipper_disk_utilities_1_1_constants.html", null ],
     [ "SipperDiskUtilities.MasterBootRecord", "da/d0f/class_sipper_disk_utilities_1_1_master_boot_record.html", null ],
     [ "SipperDiskUtilities.ParseSipperLog", "d4/de7/class_sipper_disk_utilities_1_1_parse_sipper_log.html", null ],
@@ -449,9 +549,11 @@ var hierarchy =
     [ "SipperHardware::SipperStation", "d2/df2/class_sipper_hardware_1_1_sipper_station.html", null ],
     [ "SipperHardware::SipperVariables", "dd/da0/class_sipper_hardware_1_1_sipper_variables.html", null ],
     [ "SipperHardware::VolumeSampledStat", "da/dda/class_sipper_hardware_1_1_volume_sampled_stat.html", null ],
-    [ "SortedList", null, [
+    [ "MLL::SizeDistribution::ClassTotals", "df/d71/class_size_distribution_1_1_class_totals.html", null ],
+    [ "SortedList< String, ClassStat >", null, [
       [ "PicesCommander.ClassStatSortedList", "d1/df4/class_pices_commander_1_1_class_stat_sorted_list.html", null ]
     ] ],
+    [ "SplitRec", "db/d80/struct_split_rec.html", null ],
     [ "std::deque< T >", null, [
       [ "ImageExtractionManager::ExtractedImageQueue", "d8/d06/class_image_extraction_manager_1_1_extracted_image_queue.html", null ]
     ] ],
@@ -467,22 +569,69 @@ var hierarchy =
     [ "Stream", null, [
       [ "SipperDiskUtilities.SipperDiskFile", "dc/d2d/class_sipper_disk_utilities_1_1_sipper_disk_file.html", null ]
     ] ],
+    [ "SVM233::Cache", "d2/dfe/class_s_v_m233_1_1_cache.html", null ],
+    [ "SVM233::decision_function", "d5/dc1/struct_s_v_m233_1_1decision__function.html", null ],
+    [ "SVM233::Kernel", "d8/d26/class_s_v_m233_1_1_kernel.html", [
+      [ "SVM233::ONE_CLASS_Q", "d6/dbd/class_s_v_m233_1_1_o_n_e___c_l_a_s_s___q.html", null ],
+      [ "SVM233::SVC_Q", "d8/d0b/class_s_v_m233_1_1_s_v_c___q.html", null ],
+      [ "SVM233::SVR_Q", "dc/d7a/class_s_v_m233_1_1_s_v_r___q.html", null ]
+    ] ],
+    [ "SVM233::Solver", "d0/d20/class_s_v_m233_1_1_solver.html", [
+      [ "SVM233::Solver_NU", "de/d09/class_s_v_m233_1_1_solver___n_u.html", null ]
+    ] ],
+    [ "SVM233::Solver::SolutionInfo", "d0/d8e/struct_s_v_m233_1_1_solver_1_1_solution_info.html", null ],
     [ "SVM233::svm_model", "d4/d7f/struct_s_v_m233_1_1svm__model.html", null ],
     [ "SVM233::svm_node", "d1/d49/struct_s_v_m233_1_1svm__node.html", null ],
     [ "SVM233::svm_parameter", "d9/d0e/struct_s_v_m233_1_1svm__parameter.html", null ],
     [ "SVM233::svm_problem", "de/d11/struct_s_v_m233_1_1svm__problem.html", null ],
+    [ "SVM289_BFS::Cache", "dc/d0b/class_s_v_m289___b_f_s_1_1_cache.html", null ],
+    [ "SVM289_BFS::decision_function", "d7/d48/struct_s_v_m289___b_f_s_1_1decision__function.html", null ],
+    [ "SVM289_BFS::QMatrix", "de/d7f/class_s_v_m289___b_f_s_1_1_q_matrix.html", [
+      [ "SVM289_BFS::Kernel", "d8/d40/class_s_v_m289___b_f_s_1_1_kernel.html", [
+        [ "SVM289_BFS::ONE_CLASS_Q", "df/df8/class_s_v_m289___b_f_s_1_1_o_n_e___c_l_a_s_s___q.html", null ],
+        [ "SVM289_BFS::SVC_Q", "db/d49/class_s_v_m289___b_f_s_1_1_s_v_c___q.html", null ],
+        [ "SVM289_BFS::SVR_Q", "d0/dc9/class_s_v_m289___b_f_s_1_1_s_v_r___q.html", null ]
+      ] ]
+    ] ],
+    [ "SVM289_BFS::Solver", "d4/d48/class_s_v_m289___b_f_s_1_1_solver.html", [
+      [ "SVM289_BFS::Solver_NU", "d1/d7a/class_s_v_m289___b_f_s_1_1_solver___n_u.html", null ]
+    ] ],
+    [ "SVM289_BFS::Solver::SolutionInfo", "d1/d1c/struct_s_v_m289___b_f_s_1_1_solver_1_1_solution_info.html", null ],
     [ "SVM289_BFS::svm_model", "d1/d9a/struct_s_v_m289___b_f_s_1_1svm__model.html", null ],
     [ "SVM289_BFS::svm_parameter", "db/d4b/struct_s_v_m289___b_f_s_1_1svm__parameter.html", null ],
     [ "SVM289_BFS::svm_problem", "d3/d26/struct_s_v_m289___b_f_s_1_1svm__problem.html", null ],
+    [ "SVM289_MFS::Cache", "d4/d7b/class_s_v_m289___m_f_s_1_1_cache.html", null ],
+    [ "SVM289_MFS::decision_function", "d0/d90/struct_s_v_m289___m_f_s_1_1decision__function.html", null ],
+    [ "SVM289_MFS::QMatrix", "d0/dba/class_s_v_m289___m_f_s_1_1_q_matrix.html", [
+      [ "SVM289_MFS::Kernel", "d4/d17/class_s_v_m289___m_f_s_1_1_kernel.html", [
+        [ "SVM289_MFS::ONE_CLASS_Q", "db/dc2/class_s_v_m289___m_f_s_1_1_o_n_e___c_l_a_s_s___q.html", null ],
+        [ "SVM289_MFS::SVC_Q", "d1/d41/class_s_v_m289___m_f_s_1_1_s_v_c___q.html", null ],
+        [ "SVM289_MFS::SVR_Q", "dd/d58/class_s_v_m289___m_f_s_1_1_s_v_r___q.html", null ]
+      ] ]
+    ] ],
+    [ "SVM289_MFS::Solver", "d3/da4/class_s_v_m289___m_f_s_1_1_solver.html", [
+      [ "SVM289_MFS::Solver_NU", "db/d8c/class_s_v_m289___m_f_s_1_1_solver___n_u.html", null ]
+    ] ],
+    [ "SVM289_MFS::Solver::SolutionInfo", "d9/d9e/struct_s_v_m289___m_f_s_1_1_solver_1_1_solution_info.html", null ],
     [ "SVM289_MFS::svm_model", "d6/df6/struct_s_v_m289___m_f_s_1_1svm__model.html", null ],
     [ "SVM289_MFS::svm_parameter", "d6/d22/struct_s_v_m289___m_f_s_1_1svm__parameter.html", null ],
     [ "SVM289_MFS::svm_problem", "df/dfa/struct_s_v_m289___m_f_s_1_1svm__problem.html", null ],
+    [ "SvmParmsComparison", "d6/d3c/class_svm_parms_comparison.html", null ],
+    [ "IComparer", null, [
+      [ "PicesInterface::PicesClassList::ClassNameComparitor", "d6/d11/class_pices_class_list_1_1_class_name_comparitor.html", null ],
+      [ "PicesInterface::PicesFeatureVectorList::FeatureVectorComparitorByImageFileName", "d2/d31/class_pices_interface_1_1_pices_feature_vector_list_1_1_feature_vector_comparitor_by_image_file_name.html", null ],
+      [ "PicesInterface::PicesPredictionList::SortPredictionsByProbability", "df/daa/class_pices_prediction_list_1_1_sort_predictions_by_probability.html", null ],
+      [ "PicesInterface::PicesPredictionList::SortPredictionsByVotes", "d3/d51/class_pices_prediction_list_1_1_sort_predictions_by_votes.html", null ]
+    ] ],
     [ "Form", null, [
       [ "PicesInterface::FeatureFileNamePrompter", "d0/d36/class_pices_interface_1_1_feature_file_name_prompter.html", null ],
       [ "PicesInterface::PicesDataBaseServerPrompter", "d5/d9f/class_pices_interface_1_1_pices_data_base_server_prompter.html", null ],
       [ "SipperFile.DepthPlot2", "df/d32/class_sipper_file_1_1_depth_plot2.html", null ],
       [ "SipperFile.SipperConfigForm", "d2/d30/class_sipper_file_1_1_sipper_config_form.html", null ]
     ] ],
+    [ "TestAccuracyComparison", "db/d4d/class_test_accuracy_comparison.html", null ],
+    [ "TestAccuracyNormComparison", "dc/d72/class_test_accuracy_norm_comparison.html", null ],
+    [ "TestGradeComparison", "dc/df5/class_test_grade_comparison.html", null ],
     [ "TreeNode", null, [
       [ "SipperFile.TreeNodeCruise", "dd/db1/class_sipper_file_1_1_tree_node_cruise.html", null ],
       [ "SipperFile.TreeNodeDeployment", "d0/d69/class_sipper_file_1_1_tree_node_deployment.html", null ],

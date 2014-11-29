@@ -1,7 +1,6 @@
 var _usf_cas_cor_8h =
 [
-    [ "UsfCasCor", "d3/d23/class_m_l_l_1_1_usf_cas_cor.html", "d3/d23/class_m_l_l_1_1_usf_cas_cor" ],
-    [ "parmentry", "d2/dfa/struct_m_l_l_1_1_usf_cas_cor_1_1parmentry.html", "d2/dfa/struct_m_l_l_1_1_usf_cas_cor_1_1parmentry" ],
+    [ "_BOOLEAN_TYPE_", "da/de9/_usf_cas_cor_8h.html#a403c048400fae3ec0bdb7ff4f4603cb2", null ],
     [ "ASYMSIGMOID", "da/de9/_usf_cas_cor_8h.html#a251595d21b0ad833249932dfcd5e1932", null ],
     [ "BINARY", "da/de9/_usf_cas_cor_8h.html#acc166508d5cfbf4100f8622ce97f4985", null ],
     [ "BITS", "da/de9/_usf_cas_cor_8h.html#a9d2a7c69bd3fabc41e1ee87df2f283b3", null ],
@@ -41,7 +40,6 @@ var _usf_cas_cor_8h =
     [ "VARSIGMOID", "da/de9/_usf_cas_cor_8h.html#a48c3357bad9305a46df39c5c42d9efcd", null ],
     [ "WARN", "da/de9/_usf_cas_cor_8h.html#a271d8f7f52be750e5c744a394ec71344", null ],
     [ "WIN", "da/de9/_usf_cas_cor_8h.html#a43105771f16e2da3078149f0de528e9b", null ],
-    [ "UsfCasCorPtr", "da/de9/_usf_cas_cor_8h.html#abadc604912cbb9d28e1bcab133d23b54", null ],
     [ "Boolean", "da/de9/_usf_cas_cor_8h.html#ae7d38601dfbd73adbe5c1b3ec34e0e13", [
       [ "False", "da/de9/_usf_cas_cor_8h.html#ae7d38601dfbd73adbe5c1b3ec34e0e13af9d46b7804d93a4fcde88489a1b68c24", null ],
       [ "True", "da/de9/_usf_cas_cor_8h.html#ae7d38601dfbd73adbe5c1b3ec34e0e13a6d32c34708a0a3507c4bdb89219d650b", null ]

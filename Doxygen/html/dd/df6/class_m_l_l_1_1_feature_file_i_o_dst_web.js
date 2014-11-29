@@ -1,5 +1,7 @@
 var class_m_l_l_1_1_feature_file_i_o_dst_web =
 [
+    [ "AttrDescLine", "dd/da2/class_feature_file_i_o_dst_web_1_1_attr_desc_line.html", "dd/da2/class_feature_file_i_o_dst_web_1_1_attr_desc_line" ],
+    [ "AttrDescLineComparator", "d5/d12/class_feature_file_i_o_dst_web_1_1_attr_desc_line_comparator.html", "d5/d12/class_feature_file_i_o_dst_web_1_1_attr_desc_line_comparator" ],
     [ "FeatureFileIODstWebPtr", "dd/df6/class_m_l_l_1_1_feature_file_i_o_dst_web.html#a6e5b1bbacc21ccb0fe0544901d8d1737", null ],
     [ "FeatureFileIODstWeb", "dd/df6/class_m_l_l_1_1_feature_file_i_o_dst_web.html#a55cf200c96d41a203977578174e6e48b", null ],
     [ "~FeatureFileIODstWeb", "dd/df6/class_m_l_l_1_1_feature_file_i_o_dst_web.html#a2b82d9c18471917898c922c2d6bcfb6f", null ],

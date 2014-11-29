@@ -1,5 +1,6 @@
 var class_k_k_u_1_1_k_k_str_list =
 [
+    [ "StringComparison", "d3/d7c/class_k_k_str_list_1_1_string_comparison.html", "d3/d7c/class_k_k_str_list_1_1_string_comparison" ],
     [ "KKStrListPtr", "d3/d84/class_k_k_u_1_1_k_k_str_list.html#a39daf9a39917e35ff316e34fa038b3c4", null ],
     [ "KKStrList", "d3/d84/class_k_k_u_1_1_k_k_str_list.html#a5a0ab9ed6970552f90de67ce22efb8fb", null ],
     [ "KKStrList", "d3/d84/class_k_k_u_1_1_k_k_str_list.html#a1e6557c33b11dd3c3c4ff51a538d7353", null ],

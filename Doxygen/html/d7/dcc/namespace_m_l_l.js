@@ -61,6 +61,7 @@ var namespace_m_l_l =
     [ "FeatureVector", "d9/d00/class_m_l_l_1_1_feature_vector.html", "d9/d00/class_m_l_l_1_1_feature_vector" ],
     [ "FeatureVectorList", "d2/d85/class_m_l_l_1_1_feature_vector_list.html", "d2/d85/class_m_l_l_1_1_feature_vector_list" ],
     [ "FileDesc", "dc/d79/class_m_l_l_1_1_file_desc.html", "dc/d79/class_m_l_l_1_1_file_desc" ],
+    [ "FileDescList", "dd/d37/class_m_l_l_1_1_file_desc_list.html", "dd/d37/class_m_l_l_1_1_file_desc_list" ],
     [ "GPSDataPoint", "d8/d7b/class_m_l_l_1_1_g_p_s_data_point.html", null ],
     [ "ImageDataTreeEntry", "d5/d43/class_m_l_l_1_1_image_data_tree_entry.html", "d5/d43/class_m_l_l_1_1_image_data_tree_entry" ],
     [ "ImageFeatures", "d3/dc7/class_m_l_l_1_1_image_features.html", "d3/dc7/class_m_l_l_1_1_image_features" ],
@@ -88,6 +89,7 @@ var namespace_m_l_l =
     [ "ModelUsfCasCor", "da/d59/class_m_l_l_1_1_model_usf_cas_cor.html", "da/d59/class_m_l_l_1_1_model_usf_cas_cor" ],
     [ "NormalizationParms", "db/dae/class_m_l_l_1_1_normalization_parms.html", "db/dae/class_m_l_l_1_1_normalization_parms" ],
     [ "Orderings", "dc/d5e/class_m_l_l_1_1_orderings.html", "dc/d5e/class_m_l_l_1_1_orderings" ],
+    [ "PicesApplication", "da/d17/class_m_l_l_1_1_pices_application.html", "da/d17/class_m_l_l_1_1_pices_application" ],
     [ "ProbNamePair", "d9/d99/class_m_l_l_1_1_prob_name_pair.html", "d9/d99/class_m_l_l_1_1_prob_name_pair" ],
     [ "SipperBlob", "d6/d0a/class_m_l_l_1_1_sipper_blob.html", "d6/d0a/class_m_l_l_1_1_sipper_blob" ],
     [ "SipperExtractionImageManager", "d3/d58/class_m_l_l_1_1_sipper_extraction_image_manager.html", "d3/d58/class_m_l_l_1_1_sipper_extraction_image_manager" ],
@@ -100,6 +102,5 @@ var namespace_m_l_l =
     [ "TrainingConfiguration2", "d9/df9/class_m_l_l_1_1_training_configuration2.html", "d9/df9/class_m_l_l_1_1_training_configuration2" ],
     [ "TrainingConfiguration2List", "d5/df3/class_m_l_l_1_1_training_configuration2_list.html", "d5/df3/class_m_l_l_1_1_training_configuration2_list" ],
     [ "TrainingProcess2", "d4/d4d/class_m_l_l_1_1_training_process2.html", "d4/d4d/class_m_l_l_1_1_training_process2" ],
-    [ "UsfCasCor", "d3/d23/class_m_l_l_1_1_usf_cas_cor.html", "d3/d23/class_m_l_l_1_1_usf_cas_cor" ],
     [ "VolumeSampledStat", "d3/d69/class_m_l_l_1_1_volume_sampled_stat.html", null ]
 ];
