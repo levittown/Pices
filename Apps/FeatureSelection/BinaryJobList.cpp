@@ -38,6 +38,7 @@ using namespace  MLL;
 
 #include "BinaryJobList.h"
 #include "Processor.h"
+using namespace  FeatureSelectionApp;
 
 
 

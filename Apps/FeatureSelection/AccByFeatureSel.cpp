@@ -42,7 +42,7 @@ using namespace KKU;
 using namespace  MLL;
 
 #include  "AccByFeatureSel.h"
-
+using namespace  FeatureSelectionApp;
 
 
 AccByFeatureSel::AccByFeatureSel (MLClassConstPtr  _class1,

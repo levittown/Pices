@@ -15,13 +15,8 @@
 //#include  <sys/loadavg.h>
 #include <unistd.h>
 #endif
-
-
 #include  "MemoryDebug.h"
-
 using namespace std;
-
-
 
 #include "BasicTypes.h"
 #include "KKQueue.h"
@@ -30,13 +25,10 @@ using namespace std;
 #include "Str.h"
 using namespace KKU;
 
-
-
 #include "ConfusionMatrix2.h"
 #include "CrossValidation.h"
 #include "TrainingProcess2.h"
 using namespace  MLL;
-
 
 #include "ValidationResults.h"
 #include "BinaryJob.h"
@@ -44,6 +36,7 @@ using namespace  MLL;
 #include "JobRandomSplit.h"
 #include "Processor.h"
 #include "Results.h"
+using namespace  FeatureSelectionApp;
 
 
 
@@ -58,8 +51,8 @@ ValidationResults::ValidationResults (RunLog&  _log):
 ValidationResults::ValidationResults (FinalResultType            _resultType,
                                       TrainingConfiguration2Ptr  _config,
                                       CrossValidationPtr         _crossValidation,
-                                      FeatureVectorListPtr      _trainData,
-                                      const KKStr&              _hostName,
+                                      FeatureVectorListPtr       _trainData,
+                                      const KKStr&               _hostName,
                                       int                        _classedCorrectlySize,
                                       bool*                      _classedCorrectly,
                                       JobValidationPtr           _job,

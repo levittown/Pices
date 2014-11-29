@@ -33,12 +33,11 @@ using namespace KKU;
 #include "MLClass.h"
 using namespace MLL;
 
-
 #include "FeatureSelectionTypes.h"
+using namespace  FeatureSelectionApp;
 
 
-
-poProcessingOrder  ProcessingOrderFromStr (const KKStr&  procOrderStr)
+poProcessingOrder  FeatureSelectionApp::ProcessingOrderFromStr (const KKStr&  procOrderStr)
 {
   if  (procOrderStr.EqualIgnoreCase ("StandardOrder")  ||  procOrderStr.EqualIgnoreCase ("Standard"))
     return  poStandard;
@@ -51,7 +50,7 @@ poProcessingOrder  ProcessingOrderFromStr (const KKStr&  procOrderStr)
 
 
 
-KKStr  ProcessingOrderToStr (poProcessingOrder  order)
+KKStr  FeatureSelectionApp::ProcessingOrderToStr (poProcessingOrder  order)
 {
   if  (order == poStandard)
     return "StandardOrder";
@@ -65,7 +64,7 @@ KKStr  ProcessingOrderToStr (poProcessingOrder  order)
 
 
 
-MajorSteps  MajorStepFromStr (KKStr  majorStepStr)
+MajorSteps  FeatureSelectionApp::MajorStepFromStr (KKStr  majorStepStr)
 {
   majorStepStr.Upper ();
 
@@ -105,7 +104,7 @@ MajorSteps  MajorStepFromStr (KKStr  majorStepStr)
 
 
 
-KKStr  MajorStepToStr (MajorSteps  step)
+KKStr  FeatureSelectionApp::MajorStepToStr (MajorSteps  step)
 {
   if  (step == msMfsParmTuningPre)
     return  "MfsParmTuningPre";
@@ -142,7 +141,7 @@ KKStr  MajorStepToStr (MajorSteps  step)
 
 
 
-FinalResultType  FinalResultTypeFromStr (const KKStr&  s)
+FinalResultType  FeatureSelectionApp::FinalResultTypeFromStr (const KKStr&  s)
 {
   if  (s.EqualIgnoreCase ("NoTuningAllFeatures"))
     return frtNoTuningAllFeatures;
@@ -170,7 +169,7 @@ FinalResultType  FinalResultTypeFromStr (const KKStr&  s)
 
 
 
-KKStr  FinalResultTypeToStr (FinalResultType  frt)
+KKStr  FeatureSelectionApp::FinalResultTypeToStr (FinalResultType  frt)
 {
   switch  (frt)
   {
@@ -188,7 +187,7 @@ KKStr  FinalResultTypeToStr (FinalResultType  frt)
 
 
 
-stSearchTypes  SearchTypeFromStr (KKStr  searchTypeStr)
+stSearchTypes  FeatureSelectionApp::SearchTypeFromStr (KKStr  searchTypeStr)
 {
   searchTypeStr.Upper ();
 
@@ -218,7 +217,7 @@ stSearchTypes  SearchTypeFromStr (KKStr  searchTypeStr)
 
 
 
-KKStr  SearchTypeToStr (stSearchTypes  _searchType)
+KKStr  FeatureSelectionApp::SearchTypeToStr (stSearchTypes  _searchType)
 {
   if  (_searchType == stFeatureSelectionSearch)
     return  "Feature";
@@ -235,7 +234,7 @@ KKStr  SearchTypeToStr (stSearchTypes  _searchType)
 
 
 
-KKStr  GradingMethodToStr (GradingMethodType  gm)
+KKStr  FeatureSelectionApp::GradingMethodToStr (GradingMethodType  gm)
 {
   if  (gm == gmAccuracy)
     return  "gmAccuracy";
@@ -253,7 +252,7 @@ KKStr  GradingMethodToStr (GradingMethodType  gm)
 
 
 
-GradingMethodType  GradingMethodFromStr (const KKStr&  str)
+GradingMethodType  FeatureSelectionApp::GradingMethodFromStr (const KKStr&  str)
 {
   if  ((str.CompareIgnoreCase ("gmAccuracy") == 0)  ||  (str.CompareIgnoreCase ("Accuracy") == 0)  ||  (str.CompareIgnoreCase ("AccuracyMethod") == 0))
     return  gmAccuracy;
@@ -273,7 +272,7 @@ GradingMethodType  GradingMethodFromStr (const KKStr&  str)
 
 
 
-KKStr  JobSelectionCriteriaToStr (JobSelectionCriteriaType  jsc)
+KKStr  FeatureSelectionApp::JobSelectionCriteriaToStr (JobSelectionCriteriaType  jsc)
 {
   switch  (jsc)
   {
@@ -288,7 +287,7 @@ KKStr  JobSelectionCriteriaToStr (JobSelectionCriteriaType  jsc)
 
 
 
-JobSelectionCriteriaType  JobSelectionCriteriaFromStr (const KKStr&  str)
+JobSelectionCriteriaType  FeatureSelectionApp::JobSelectionCriteriaFromStr (const KKStr&  str)
 {
   KKStr  s = str.ToUpper ();
   if  ((s == "MOSTACCURATE")  ||  (s == "MA"))
@@ -317,7 +316,7 @@ JobSelectionCriteriaType  JobSelectionCriteriaFromStr (const KKStr&  str)
 //*  Processor is responsable for.                                        *
 //*                                                                       *
 //*************************************************************************
-KKStr  SearchMethodToStr (smSearchMethod  searchMethod)
+KKStr  FeatureSelectionApp::SearchMethodToStr (smSearchMethod  searchMethod)
 {
   if  (searchMethod == smBestCaseNext)
     return "BestCaseNext";
@@ -344,7 +343,7 @@ KKStr  SearchMethodToStr (smSearchMethod  searchMethod)
 
 
 
-smSearchMethod  SearchMethodFromStr (KKStr  searchMethodStr)
+smSearchMethod  FeatureSelectionApp::SearchMethodFromStr (KKStr  searchMethodStr)
 {
   searchMethodStr.Upper ();
 
@@ -374,7 +373,7 @@ smSearchMethod  SearchMethodFromStr (KKStr  searchMethodStr)
 
 
 
-KKStr  ProcessorStatusToStr (fsProcessorStatus  processorStatus)
+KKStr  FeatureSelectionApp::ProcessorStatusToStr (fsProcessorStatus  processorStatus)
 {
   if  (processorStatus == fsNotStarted)
     return "NotStarted";
@@ -392,7 +391,7 @@ KKStr  ProcessorStatusToStr (fsProcessorStatus  processorStatus)
 
 
 
-fsProcessorStatus  ProcessorStatusFromStr (const KKStr&  processorStatusStr)
+fsProcessorStatus  FeatureSelectionApp::ProcessorStatusFromStr (const KKStr&  processorStatusStr)
 {
   if  (processorStatusStr.EqualIgnoreCase ("NOTSTARTED"))
     return  fsNotStarted;
@@ -408,7 +407,7 @@ fsProcessorStatus  ProcessorStatusFromStr (const KKStr&  processorStatusStr)
 
 
 
-KKStr  FeatureCriteriaToStr (fcFeatureCriteria  featureCriteria)
+KKStr  FeatureSelectionApp::FeatureCriteriaToStr (fcFeatureCriteria  featureCriteria)
 {
   switch  (featureCriteria)
   {
@@ -427,7 +426,7 @@ KKStr  FeatureCriteriaToStr (fcFeatureCriteria  featureCriteria)
 
 
 
-fcFeatureCriteria  FeatureCriteriaFromStr (KKStr  featureCriteriaStr)
+fcFeatureCriteria  FeatureSelectionApp::FeatureCriteriaFromStr (KKStr  featureCriteriaStr)
 {
   featureCriteriaStr.Upper ();
   if  ((featureCriteriaStr == "MERGE2BEST")  ||  (featureCriteriaStr == "M2B"))

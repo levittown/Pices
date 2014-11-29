@@ -4,81 +4,83 @@
 #include "BinaryJob.h"
 
 
-class  JobRandomSplit:  public  BinaryJob
+namespace FeatureSelectionApp
 {
-public:
-  typedef  JobRandomSplit*  JobRandomSplitPtr;
+  class  JobRandomSplit:  public  BinaryJob
+  {
+  public:
+    typedef  JobRandomSplit*  JobRandomSplitPtr;
 
-  JobRandomSplit (const JobRandomSplit&  j);
-
-
-  JobRandomSplit (ProcessorPtr           _processor,
-                  int                    _parentId,
-                  const FeatureNumList&  _features,
-                  int                    _chgFeatureNum,
-                  int32                  _numOfRounds,
-                  double                 _cParm,
-                  double                 _gammaParm,
-                  float                  _aParm,
-                  int                    _splitNum
-                 );
-
-  JobRandomSplit (ProcessorPtr  _processor,
-                  KKStrParser&  _statusLine
-                 );
-
-  virtual
-    ~JobRandomSplit ();
+    JobRandomSplit (const JobRandomSplit&  j);
 
 
+    JobRandomSplit (ProcessorPtr           _processor,
+                    int                    _parentId,
+                    const FeatureNumList&  _features,
+                    int                    _chgFeatureNum,
+                    int32                  _numOfRounds,
+                    double                 _cParm,
+                    double                 _gammaParm,
+                    float                  _aParm,
+                    int                    _splitNum
+                   );
 
-  virtual  JobTypes  JobType ()  const;
+    JobRandomSplit (ProcessorPtr  _processor,
+                    KKStrParser&  _statusLine
+                   );
 
-  int  SplitNum ()  const  {return  splitNum;}
-
-  void  SplitNum (int _splitNum)   {splitNum = _splitNum;}
+    virtual
+      ~JobRandomSplit ();
 
 
 
-  virtual  void     EvaluateNode ();
+    virtual  JobTypes  JobType ()  const;
 
-  virtual
-  void     ReFresh (BinaryJob&  j);
- 
-  virtual
-  void  ReFresh (JobRandomSplit&  j);
+    int  SplitNum ()  const  {return  splitNum;}
 
-
-  virtual  KKStr    ToStatusStr ();
+    void  SplitNum (int _splitNum)   {splitNum = _splitNum;}
 
 
 
-private:
+    virtual  void     EvaluateNode ();
 
-  // Caller will take ownership of both 'randSplitTrainData' and 'randSplitTestData' which 
-  // meens it will be responable for deleting them when it is done with them.
-  void  CreateRandomSplitTrainAndTestExamples (FeatureVectorListPtr&  randSplitTrainData,
-                                               FeatureVectorListPtr&  randSplitTestData
-                                              );
-
-
-
-  void  ProcessStatusField (const KKStr&  fieldName,
-                            const KKStr&  fieldValue
-                           );
+    virtual
+    void     ReFresh (BinaryJob&  j);
+   
+    virtual
+    void  ReFresh (JobRandomSplit&  j);
 
 
-  void  ProcessStatusStr (KKStrParser&  statusStr);
+    virtual  KKStr    ToStatusStr ();
 
 
 
+  private:
 
-  int   splitNum;
+    // Caller will take ownership of both 'randSplitTrainData' and 'randSplitTestData' which 
+    // meens it will be responable for deleting them when it is done with them.
+    void  CreateRandomSplitTrainAndTestExamples (FeatureVectorListPtr&  randSplitTrainData,
+                                                 FeatureVectorListPtr&  randSplitTestData
+                                                );
 
-};  /* JobRandomSplit */
 
 
-typedef  JobRandomSplit::JobRandomSplitPtr  JobRandomSplitPtr;
+    void  ProcessStatusField (const KKStr&  fieldName,
+                              const KKStr&  fieldValue
+                             );
 
+
+    void  ProcessStatusStr (KKStrParser&  statusStr);
+
+
+
+
+    int   splitNum;
+
+  };  /* JobRandomSplit */
+
+
+  typedef  JobRandomSplit::JobRandomSplitPtr  JobRandomSplitPtr;
+}  /* FeatureSelection */
 
 #endif

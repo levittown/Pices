@@ -48,6 +48,8 @@ using namespace  MLL;
 #include "FeatureSelection.h"
 #include "FeatureSelectionTypes.h"
 #include "JobRandomSplit.h"
+using namespace  FeatureSelectionApp;
+
 
 /**
  @brief  Processor Constructor for managing FinalResults jobs.

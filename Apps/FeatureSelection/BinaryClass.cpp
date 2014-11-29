@@ -24,6 +24,7 @@ using namespace  MLL;
 
 
 #include "BinaryClass.h"
+using namespace  FeatureSelectionApp;
 
 
 BinaryClass::BinaryClass (MLClassConstPtr  _class1,

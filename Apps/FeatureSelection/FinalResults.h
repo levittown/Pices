@@ -26,88 +26,89 @@
 #include "ValidationResults.h"
 
 
-
-class  FinalResults
+namespace FeatureSelectionApp
 {
-public:
-  typedef  KKU::uint  uint;
+  class  FinalResults
+  {
+  public:
+    typedef  KKU::uint  uint;
 
-  typedef  FinalResults*  FinalResultsPtr;
+    typedef  FinalResults*  FinalResultsPtr;
 
-  FinalResults (const KKStr&  _summaryResultsFileName,
-                 double        _totalSearchTime,
-                 double        _totalProcessingTime,
-                 double        _elapsedClockTime,
-                 double        _longestPath,
-                 int           _jobCount,
-                 RunLog&       _log
-                );
+    FinalResults (const KKStr&  _summaryResultsFileName,
+                   double        _totalSearchTime,
+                   double        _totalProcessingTime,
+                   double        _elapsedClockTime,
+                   double        _longestPath,
+                   int           _jobCount,
+                   RunLog&       _log
+                  );
 
-  ~FinalResults ();
+    ~FinalResults ();
 
-  
-  ConfusionMatrix2Ptr  ConfusionMatrix ();
+    
+    ConfusionMatrix2Ptr  ConfusionMatrix ();
 
-  KKStr   Description ()  const;
+    KKStr   Description ()  const;
 
-  static  KKStr  HeaderLineHTML1 ();
-  static  KKStr  HeaderLineHTML2 ();
+    static  KKStr  HeaderLineHTML1 ();
+    static  KKStr  HeaderLineHTML2 ();
 
-  MLClassConstListPtr  MLClasses ()  const;
+    MLClassConstListPtr  MLClasses ()  const;
 
-  KKStr  LinkName () const;
+    KKStr  LinkName () const;
 
-  KKStr  ToHTMLStr () const;
+    KKStr  ToHTMLStr () const;
 
-  void   PrintConfigParametersRandomSplitsHTML (HTMLReport& r);
-  void   PrintConfigParametersValidationHTML   (HTMLReport& r);
+    void   PrintConfigParametersRandomSplitsHTML (HTMLReport& r);
+    void   PrintConfigParametersValidationHTML   (HTMLReport& r);
 
-  static
-  void   PrintAccuraciesByClassSummary (vector<FinalResultsPtr>&  results,
-                                        HTMLReport&                o,
-                                        bool                       validationData
-                                       );
+    static
+    void   PrintAccuraciesByClassSummary (vector<FinalResultsPtr>&  results,
+                                          HTMLReport&                o,
+                                          bool                       validationData
+                                         );
 
-  VectorFloat  RandomSplitClassCounts ()  const;
+    VectorFloat  RandomSplitClassCounts ()  const;
 
-  VectorFloat  RandomSplitAccuracies ()  const;
+    VectorFloat  RandomSplitAccuracies ()  const;
 
-  VectorFloat  RandomSplitAccuracyByClass  ()  const;
+    VectorFloat  RandomSplitAccuracyByClass  ()  const;
 
-  KKStr        SelectionMethodStr    ()  const;
+    KKStr        SelectionMethodStr    ()  const;
 
-  const bool*   ValidationClassedCorrectly     () const;
-  int           ValidationClassedCorrectlySize () const;
+    const bool*   ValidationClassedCorrectly     () const;
+    int           ValidationClassedCorrectlySize () const;
 
-  VectorFloat   ValidationAccuracyByClass  ()  const;
+    VectorFloat   ValidationAccuracyByClass  ()  const;
 
-  VectorFloat   ValidationClassCounts ()  const;
+    VectorFloat   ValidationClassCounts ()  const;
 
-  ConfusionMatrix2Ptr  ValidationConfusionMatrix ();
-
-
-private:
-  void  PrintConfigParametersHTML (HTMLReport&  r,
-                                   ResultsPtr   results
-                                  );
-
-  void  ReadInResultsFile (const KKStr&  fileName);
-
-  KKStr                      configFileName;
-  double                     elapsedClockTime;
-  int                        jobCount;
-  double                     longestPath;
-  RandomSplitResultsListPtr  randomSplitResults;
-  RandomSplitResultsPtr      randomSplitsAvg;
-  KKStr                      svmParameters;
-  double                     totalSearchTime;
-  double                     totalProcessingTime;
-  ValidationResultsPtr       validationResults;
-  RunLog&                    log;
-};
-typedef  FinalResults::FinalResultsPtr  FinalResultsPtr;
+    ConfusionMatrix2Ptr  ValidationConfusionMatrix ();
 
 
+  private:
+    void  PrintConfigParametersHTML (HTMLReport&  r,
+                                     ResultsPtr   results
+                                    );
+
+    void  ReadInResultsFile (const KKStr&  fileName);
+
+    KKStr                      configFileName;
+    double                     elapsedClockTime;
+    int                        jobCount;
+    double                     longestPath;
+    RandomSplitResultsListPtr  randomSplitResults;
+    RandomSplitResultsPtr      randomSplitsAvg;
+    KKStr                      svmParameters;
+    double                     totalSearchTime;
+    double                     totalProcessingTime;
+    ValidationResultsPtr       validationResults;
+    RunLog&                    log;
+  };  /* FinalResults */
+
+  typedef  FinalResults::FinalResultsPtr  FinalResultsPtr;
+}
 
 
 

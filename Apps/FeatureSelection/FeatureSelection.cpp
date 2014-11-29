@@ -69,8 +69,8 @@ using namespace MLL;
 #include "FinalResults.h"
 #include "FeatureSelection.h"
 #include "Processor.h"
-
 #include "FeatureSelection.h"
+using namespace  FeatureSelectionApp;
 
 // C:\users\kkramer\GradSchool\Thesis\TestSet9Classes\300_ImagesPerClass\UsingOld5ContourFeatures\BinaryFeatureSearch2
 // -C Thesis9Classes.cfg  -DataFile NineClasses_TestData.data  

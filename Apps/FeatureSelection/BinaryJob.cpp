@@ -42,6 +42,7 @@ using namespace  MLL;
 #include "BinaryJobList.h"
 #include "FeatureSelectionTypes.h"
 #include "Processor.h"
+using namespace  FeatureSelectionApp;
 
 
 BinaryJob::BinaryJob (const BinaryJob&  j):

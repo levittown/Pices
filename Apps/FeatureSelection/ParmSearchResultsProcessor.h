@@ -1,39 +1,40 @@
 #ifndef  _PARMSEARCHRESULTSPROCESSOR_
 #define  _PARMSEARCHRESULTSPROCESSOR_
 
-
-#ifndef  _FEATURESELECTION_
-class  FeatureSelection;
-typedef  FeatureSelection*  FeatureSelectionPtr;
-#endif
-
-
-#ifndef  _PROCESSOR_
-class  Processor;
-typedef  Processor*  ProcessorPtr;
-#endif
-
 #include  "BinaryJob.h"
 #include  "FeatureVector.h"
 
-
-class ParmSearchResultsProcessor
+namespace FeatureSelectionApp
 {
-
-public:
-  ParmSearchResultsProcessor (ProcessorPtr _processor);
-
-  ~ParmSearchResultsProcessor ();
-
-  BinaryJobListPtr  GetBestCandidates ();
+  #ifndef  _FEATURESELECTION_
+  class  FeatureSelection;
+  typedef  FeatureSelection*  FeatureSelectionPtr;
+  #endif
 
 
-private:
-  FeatureSelectionPtr  featureSelection;
-  ProcessorPtr         processor;
+  #ifndef  _PROCESSOR_
+  class  Processor;
+  typedef  Processor*  ProcessorPtr;
+  #endif
 
-  FeatureVectorListPtr  trainingData;
-  FeatureVectorListPtr  testData;
-};
+
+  class ParmSearchResultsProcessor
+  {
+  public:
+    ParmSearchResultsProcessor (ProcessorPtr _processor);
+
+    ~ParmSearchResultsProcessor ();
+
+    BinaryJobListPtr  GetBestCandidates ();
+
+
+  private:
+    FeatureSelectionPtr  featureSelection;
+    ProcessorPtr         processor;
+
+    FeatureVectorListPtr  trainingData;
+    FeatureVectorListPtr  testData;
+  };  /* ParmSearchResultsProcessor */
+}  /* FeatureSelection */
 
 #endif

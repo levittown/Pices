@@ -28,14 +28,13 @@ using namespace  KKU;
 using namespace  MLL;
 
 
-
-
 #include "ParmSearchResultsProcessor.h"
 
 #include "BinaryJob.h"
 #include "BinaryJobList.h"
 #include "FeatureSelection.h"
 #include "Processor.h"
+using namespace  FeatureSelectionApp;
 
 
 

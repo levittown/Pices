@@ -43,6 +43,7 @@ using namespace  MLL;
 #include "FeatureSelectionTypes.h"
 #include "Processor.h"
 #include "RandomSplitResults.h"
+using namespace  FeatureSelectionApp;
 
 
 

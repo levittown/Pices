@@ -15,46 +15,47 @@ typedef  AccByFeatureSelList*  AccByFeatureSelListPtr;
 
 #include  "BinaryJobList.h"
 
-
-class FeatureImpact
+namespace FeatureSelectionApp
 {
-public:
-  typedef  KKU::uint  uint;
-  typedef  FeatureImpact*  FeatureImpactPtr;
+  class FeatureImpact
+  {
+  public:
+    typedef  KKU::uint  uint;
+    typedef  FeatureImpact*  FeatureImpactPtr;
 
-  FeatureImpact (BinaryJobList&  jobs);
+    FeatureImpact (BinaryJobList&  jobs);
 
-  ~FeatureImpact ();
-
-
-  void   Report (ostream&  r);
-
-  void   ReportHTML (ostream&  r);
-
-  FeatureNumList  FeatureThatDontHurt ();
-
-  void  UpdateAccByFeatureSelList (AccByFeatureSelListPtr  accByFeatureSelList,
-                                   MLClassConstPtr      class1,
-                                   MLClassConstPtr      class2
-                                  );
-
-private:
-  FileDescPtr   fileDesc;
-  RunLog&       log;
-  VectorFloat   accuracyMeans;
-  VectorFloat   accuracyStdDevs;
-
-  VectorFloat   fMeasureMeans;
-  VectorFloat   fMeasureStdDevs;
-  vector<uint>  counts;
-
-  vector<VectorFloat>  accuracyImpacts;
-  vector<VectorFloat>  fMeasureImpacts;
-};  /* FeatureImpact */
+    ~FeatureImpact ();
 
 
-typedef  FeatureImpact::FeatureImpactPtr  FeatureImpactPtr;
+    void   Report (ostream&  r);
 
+    void   ReportHTML (ostream&  r);
+
+    FeatureNumList  FeatureThatDontHurt ();
+
+    void  UpdateAccByFeatureSelList (AccByFeatureSelListPtr  accByFeatureSelList,
+                                     MLClassConstPtr      class1,
+                                     MLClassConstPtr      class2
+                                    );
+
+  private:
+    FileDescPtr   fileDesc;
+    RunLog&       log;
+    VectorFloat   accuracyMeans;
+    VectorFloat   accuracyStdDevs;
+
+    VectorFloat   fMeasureMeans;
+    VectorFloat   fMeasureStdDevs;
+    vector<uint>  counts;
+
+    vector<VectorFloat>  accuracyImpacts;
+    vector<VectorFloat>  fMeasureImpacts;
+  };  /* FeatureImpact */
+
+
+  typedef  FeatureImpact::FeatureImpactPtr  FeatureImpactPtr;
+}
 
 
 #endif

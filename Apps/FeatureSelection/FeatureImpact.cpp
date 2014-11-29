@@ -37,6 +37,7 @@ using namespace MLL;
 #include "BinaryJob.h"
 #include "BinaryJobList.h"
 #include "FeatureImpact.h"
+using namespace  FeatureSelectionApp;
 
 
 

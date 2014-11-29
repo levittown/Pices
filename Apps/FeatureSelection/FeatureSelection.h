@@ -77,310 +77,308 @@
 #include "TrainingConfiguration2.h"
 
 
-#ifndef  _PROCESSOR_
-class  Processor;
-typedef  Processor*  ProcessorPtr;
-#endif
-
-#if  !defined(_ACCBYFEATURESEL_)
-class  AccByFeatureSel;
-typedef  AccByFeatureSel*  AccByFeatureSelPtr;
-class  AccByFeatureSelList;
-typedef  AccByFeatureSelList*  AccByFeatureSelListPtr;
-#endif
-
-
-
 #include  "BinaryClass.h"
 
 
-
-
-class  FeatureSelection
+namespace FeatureSelectionApp
 {
-public:
-  typedef  KKU::uint  uint;
+  #ifndef  _PROCESSOR_
+  class  Processor;
+  typedef  Processor*  ProcessorPtr;
+  #endif
 
-  FeatureSelection (int     argc,
-                    char**  argv
-                   );
-  
-  ~FeatureSelection ();
-
-
-  MLClassConstPtr        AddingAClass           ()  const {return addingAClass;}
-  bool                      AlreadyNormalized      ()  const {return alreadyNormalized;}
-  int                       BeamSize               ()  const {return beamSize;}
-  const KKStr&              ConfigFileName         ()  const {return configFileName;}
-  TrainingConfiguration2Ptr Config                 ()  const {return config;}
-  int                       ExpansionLimit         ()  const {return expansionLimit;}
-  fcFeatureCriteria         FeatureCriteria        ()  const {return  featureCriteria;}
-  bool                      FeatureCountPrefSmall  ()  const {return featureCountPrefSmall;}
-  GradingMethodType         GradingMethod          ()  const {return gradingMethod;}
-  bool                      JustGettingStats       ()  const {return justGettingStats;}
-  RunLog&                   Log                    ()        {return log;}
-  const KKStr&              HostName               ()  const {return hostName;}
-  MLClassConstListPtr    MLClasses           ()  const {return mlClasses;}
-  const FeatureNumList&     InitialFeatures        ()  const;
-  MajorSteps                MajorStep              ()  const {return majorStep;}
-  int                       MinTrainExamples       ()  const {return minTrainExamples;}
-  int                       NextProcessorId        ()  const {return nextProcessorId;}
-  int                       NumJobsAtATime         ()  const {return numJobsAtATime;}
-  int                       NumProcPerCombo        ()  const {return numProcPerCombo;}
-  int                       NumOfFolds             ()  const {return numOfFolds;}
-  JobSelectionCriteriaType  ParamSelCriteria       ()  const {return paramSelCriteria;}
-  MLClassConstPtr        PositiveClass          ()  const {return positiveClass;}
-  poProcessingOrder         ProcessingOrder        ()  const {return processingOrder;}
-  int                       RandomSplitsNum        ()  const {return randomSplitsNum;}
-  stSearchTypes             SearchType             ()  const {return searchType;}
-  FeatureVectorListPtr      TestData               ()  const {return testData;}
-  const KKStr&              TestDataFileName       ()  const {return testDataFileName;}
-  FeatureVectorListPtr      TrainingData           ()  const {return trainingData;}
-  const KKStr&              TrainingDataFileName   ()  const {return trainingDataFileName;}
-  const KKStr&              ValidationDataFileName ()  const {return validationDataFileName;}
-  FeatureVectorListPtr      ValidationData         ();
-  
-  void    Block ();
+  #if  !defined(_ACCBYFEATURESEL_)
+  class  AccByFeatureSel;
+  typedef  AccByFeatureSel*  AccByFeatureSelPtr;
+  class  AccByFeatureSelList;
+  typedef  AccByFeatureSelList*  AccByFeatureSelListPtr;
+  #endif
 
-  void    BuildResultConfigFile (const KKStr&       prevConfigFileName,
-                                 double&            totalCpuTimeUsed,
-                                 fcFeatureCriteria  featureCriteria
-                                );
 
-  KKStr   CommandLineStr  ();
- 
-  void    DisplayCommandUsage ();
+  class  FeatureSelection
+  {
+  public:
+    typedef  KKU::uint  uint;
+
+    FeatureSelection (int     argc,
+                      char**  argv
+                     );
+    
+    ~FeatureSelection ();
+
+
+    MLClassConstPtr           AddingAClass           ()  const {return addingAClass;}
+    bool                      AlreadyNormalized      ()  const {return alreadyNormalized;}
+    int                       BeamSize               ()  const {return beamSize;}
+    const KKStr&              ConfigFileName         ()  const {return configFileName;}
+    TrainingConfiguration2Ptr Config                 ()  const {return config;}
+    int                       ExpansionLimit         ()  const {return expansionLimit;}
+    fcFeatureCriteria         FeatureCriteria        ()  const {return  featureCriteria;}
+    bool                      FeatureCountPrefSmall  ()  const {return featureCountPrefSmall;}
+    GradingMethodType         GradingMethod          ()  const {return gradingMethod;}
+    bool                      JustGettingStats       ()  const {return justGettingStats;}
+    RunLog&                   Log                    ()        {return log;}
+    const KKStr&              HostName               ()  const {return hostName;}
+    MLClassConstListPtr       MLClasses              ()  const {return mlClasses;}
+    const FeatureNumList&     InitialFeatures        ()  const;
+    MajorSteps                MajorStep              ()  const {return majorStep;}
+    int                       MinTrainExamples       ()  const {return minTrainExamples;}
+    int                       NextProcessorId        ()  const {return nextProcessorId;}
+    int                       NumJobsAtATime         ()  const {return numJobsAtATime;}
+    int                       NumProcPerCombo        ()  const {return numProcPerCombo;}
+    int                       NumOfFolds             ()  const {return numOfFolds;}
+    JobSelectionCriteriaType  ParamSelCriteria       ()  const {return paramSelCriteria;}
+    MLClassConstPtr           PositiveClass          ()  const {return positiveClass;}
+    poProcessingOrder         ProcessingOrder        ()  const {return processingOrder;}
+    int                       RandomSplitsNum        ()  const {return randomSplitsNum;}
+    stSearchTypes             SearchType             ()  const {return searchType;}
+    FeatureVectorListPtr      TestData               ()  const {return testData;}
+    const KKStr&              TestDataFileName       ()  const {return testDataFileName;}
+    FeatureVectorListPtr      TrainingData           ()  const {return trainingData;}
+    const KKStr&              TrainingDataFileName   ()  const {return trainingDataFileName;}
+    const KKStr&              ValidationDataFileName ()  const {return validationDataFileName;}
+    FeatureVectorListPtr      ValidationData         ();
+    
+    void    Block ();
+
+    void    BuildResultConfigFile (const KKStr&       prevConfigFileName,
+                                   double&            totalCpuTimeUsed,
+                                   fcFeatureCriteria  featureCriteria
+                                  );
 
-  void    EndBlock ();
+    KKStr   CommandLineStr  ();
+   
+    void    DisplayCommandUsage ();
 
+    void    EndBlock ();
+
 
-  void    LoadFeatureData ();
+    void    LoadFeatureData ();
 
-  void    ProcessCmdLine (int    argc, 
-                          char **argv
-                         );
+    void    ProcessCmdLine (int    argc, 
+                            char **argv
+                           );
 
-  void    ProcessStatusFile (int     argc,  
-                             char**  argv
-                            );
+    void    ProcessStatusFile (int     argc,  
+                               char**  argv
+                              );
 
-  FeatureVectorListPtr  RandomSplit (int splitNum);
+    FeatureVectorListPtr  RandomSplit (int splitNum);
 
 
-  const   KKStr&  ResultConfigFileName ()  const  {return  resultConfigFileName;}
+    const   KKStr&  ResultConfigFileName ()  const  {return  resultConfigFileName;}
 
-  void    Run ();
+    void    Run ();
 
 
-private:
-  void                CheckForNextStep ();
+  private:
+    void                CheckForNextStep ();
 
-  void                CleanUpMemory ();
+    void                CleanUpMemory ();
 
-  BinaryClassListPtr  CreateInitialBinaryClassList ();
+    BinaryClassListPtr  CreateInitialBinaryClassList ();
 
-  BinaryClassListPtr  CreateInitialBinaryClassListBruitSvmSearch ();
+    BinaryClassListPtr  CreateInitialBinaryClassListBruitSvmSearch ();
 
-  BinaryClassListPtr  CreateInitialBinaryClassListFinalResultJobs ();
+    BinaryClassListPtr  CreateInitialBinaryClassListFinalResultJobs ();
 
-  BinaryClassListPtr  CreateInitialBinaryClassListBinaryComboSearchJobs ();
+    BinaryClassListPtr  CreateInitialBinaryClassListBinaryComboSearchJobs ();
 
-  ProcessorPtr        GetNextBinaryClassComboToRun ();
+    ProcessorPtr        GetNextBinaryClassComboToRun ();
 
-  void                FeatureImpactSummary ();
-  void                FeatureImpactSummary (AccByFeatureSelListPtr  fsSumList,
-                                            BinaryClassListPtr      binaryClasses
-                                           );
+    void                FeatureImpactSummary ();
+    void                FeatureImpactSummary (AccByFeatureSelListPtr  fsSumList,
+                                              BinaryClassListPtr      binaryClasses
+                                             );
 
-  void                FinalReport ();
+    void                FinalReport ();
 
-  void                GetProcessingStats ();
+    void                GetProcessingStats ();
 
-  /**
-   *  Given a list of Binary classes will load the original Status files for each one and return 
-   *  the total number of Cpu Seconds.  This can be usefull to determine the total number of CPU
-   *  seconds used to prcess a Major Step.
-   */
-  double              GetTotalCpuSecs (BinaryClassListPtr  binClasses,
-                                       double&             totalProcessingTime,
-                                       double&             elapsedClockTime,
-                                       double&             longestPath,
-                                       int&                jobCount
-                                      );
-  
-  double              GetTotalCpuSecs (MajorSteps  step,
-                                       double&     totalProcessingTime,
-                                       double&     elapsedClockTime,
-                                       double&     longestPath,
-                                       int&        jobCount
-                                     );
+    /**
+     *  Given a list of Binary classes will load the original Status files for each one and return 
+     *  the total number of Cpu Seconds.  This can be usefull to determine the total number of CPU
+     *  seconds used to prcess a Major Step.
+     */
+    double              GetTotalCpuSecs (BinaryClassListPtr  binClasses,
+                                         double&             totalProcessingTime,
+                                         double&             elapsedClockTime,
+                                         double&             longestPath,
+                                         int&                jobCount
+                                        );
+    
+    double              GetTotalCpuSecs (MajorSteps  step,
+                                         double&     totalProcessingTime,
+                                         double&     elapsedClockTime,
+                                         double&     longestPath,
+                                         int&        jobCount
+                                       );
 
-  void                LoadRunTimeData ();
+    void                LoadRunTimeData ();
 
-  void                LoadValidationData ();
+    void                LoadValidationData ();
 
-  TrainingConfiguration2Ptr  OpenConfig (const KKStr&  fn);
+    TrainingConfiguration2Ptr  OpenConfig (const KKStr&  fn);
 
-  void                PerformInitialSetup (int argc, char** argv);
+    void                PerformInitialSetup (int argc, char** argv);
 
-  void                ProcessRestart ();
+    void                ProcessRestart ();
 
-  void                RandomSplitsBuild ();  // Will create the Random Splits of the combined Train, Test, and Validation data.
+    void                RandomSplitsBuild ();  // Will create the Random Splits of the combined Train, Test, and Validation data.
 
-  void                ReduceProcessorCount (ProcessorPtr     processor,
-                                            ClassPairStatus  status
-                                           );
+    void                ReduceProcessorCount (ProcessorPtr     processor,
+                                              ClassPairStatus  status
+                                             );
 
-  FinalResultsPtr    RunAValidation (const KKStr&  summaryResultsFileName,
-                                      double        totalCpuSecsSearching,
-                                      double        totalProcessingTime,
-                                      double        elapsedTime,
-                                      double        longestPath, 
-                                      int           jobCount
-                                     );
+    FinalResultsPtr    RunAValidation (const KKStr&  summaryResultsFileName,
+                                        double        totalCpuSecsSearching,
+                                        double        totalProcessingTime,
+                                        double        elapsedTime,
+                                        double        longestPath, 
+                                        int           jobCount
+                                       );
 
-  void                SetQuitRunningFlag ();
+    void                SetQuitRunningFlag ();
 
-  void                SetMajorStep (MajorSteps  steps);
+    void                SetMajorStep (MajorSteps  steps);
 
-  void                SetUpConfigFileNames ();
+    void                SetUpConfigFileNames ();
 
-  void                SetUpForNextMajorStep (BinaryClassListPtr&  binaryClasses,
-                                             double&              totalCpuTimeUsed
-                                            );
+    void                SetUpForNextMajorStep (BinaryClassListPtr&  binaryClasses,
+                                               double&              totalCpuTimeUsed
+                                              );
 
-  void                SetUpForNextMajorStepHallOrder (BinaryClassListPtr&  binaryClasses,
-                                                      double&              totalCpuTimeUsed
-                                                     );
+    void                SetUpForNextMajorStepHallOrder (BinaryClassListPtr&  binaryClasses,
+                                                        double&              totalCpuTimeUsed
+                                                       );
 
-  void                SetUpForNextMajorStepStandardOrder (BinaryClassListPtr&  binaryClasses,
-                                                          double&              totalCpuTimeUsed
-                                                         );
+    void                SetUpForNextMajorStepStandardOrder (BinaryClassListPtr&  binaryClasses,
+                                                            double&              totalCpuTimeUsed
+                                                           );
 
-  void                SetUpToBruitSvmSearch ();
+    void                SetUpToBruitSvmSearch ();
 
-  void                SetUpToGenerateFinalReports ();  // Used when user wanrts to regenerate Final Results Report.
+    void                SetUpToGenerateFinalReports ();  // Used when user wanrts to regenerate Final Results Report.
 
 
-  BinaryClassListPtr  StatusFileLoad ();
+    BinaryClassListPtr  StatusFileLoad ();
 
-  void                StatusFileUpdate (BinaryClassListPtr  binClasses);
+    void                StatusFileUpdate (BinaryClassListPtr  binClasses);
 
-  MLClassConstPtr        addingAClass;              // Used when adding a class to a previously completed feature selection.
+    MLClassConstPtr        addingAClass;              // Used when adding a class to a previously completed feature selection.
 
-  bool                      alreadyNormalized;
+    bool                      alreadyNormalized;
 
-  int                       beamSize;
+    int                       beamSize;
 
-  bool                      byBinaryClasses;           // 'true'  = Search by binary class combinations
-                                                       // 'false' = Search for all classes combined.
- 
-  bool                      cancelFlag;
+    bool                      byBinaryClasses;           // 'true'  = Search by binary class combinations
+                                                         // 'false' = Search for all classes combined.
+   
+    bool                      cancelFlag;
 
-  KKStr                     configFileName;            // The config file name with directory path where it was located.
-  KKStr                     configFileNameSpecified;   // The 'configFileName' as specified on command line.
-  TrainingConfiguration2Ptr config;
+    KKStr                     configFileName;            // The config file name with directory path where it was located.
+    KKStr                     configFileNameSpecified;   // The 'configFileName' as specified on command line.
+    TrainingConfiguration2Ptr config;
 
-  KKStr                     configFileNameMfsTuned;
-  KKStr                     configFileNameMfsFeaturesSel;
-  KKStr                     configFileNameMfsFeatureSelTuned;
-  KKStr                     configFileNameMfsTunedFeaturesSel;
+    KKStr                     configFileNameMfsTuned;
+    KKStr                     configFileNameMfsFeaturesSel;
+    KKStr                     configFileNameMfsFeatureSelTuned;
+    KKStr                     configFileNameMfsTunedFeaturesSel;
 
-  KKStr                     configFileNameBfsTuned;
-  KKStr                     configFileNameBfsFeaturesSel;
-  KKStr                     configFileNameBfsFeaturesSelTuned;
-  KKStr                     configFileNameBfsTunedFeaturesSel;
-  KKStr                     configFileNameBfsTunedFeaturesSelTuned;
+    KKStr                     configFileNameBfsTuned;
+    KKStr                     configFileNameBfsFeaturesSel;
+    KKStr                     configFileNameBfsFeaturesSelTuned;
+    KKStr                     configFileNameBfsTunedFeaturesSel;
+    KKStr                     configFileNameBfsTunedFeaturesSelTuned;
 
-  int                       expansionLimit;
+    int                       expansionLimit;
 
-  FeatureFileIOPtr          driver;      // Format that the Feature Files are in, ex C45
+    FeatureFileIOPtr          driver;      // Format that the Feature Files are in, ex C45
 
-  fcFeatureCriteria         featureCriteria;
+    fcFeatureCriteria         featureCriteria;
 
-  bool                      featureCountPrefSmall;   // true = preference for smallest number of features, else largest number of features.
+    bool                      featureCountPrefSmall;   // true = preference for smallest number of features, else largest number of features.
 
-  FileDescPtr               fileDesc;
+    FileDescPtr               fileDesc;
 
-  GradingMethodType         gradingMethod;
+    GradingMethodType         gradingMethod;
 
-  KKStr                     hostName;            // Host name of computer we are running on
+    KKStr                     hostName;            // Host name of computer we are running on
 
-  MLClassConstListPtr    mlClasses;
+    MLClassConstListPtr    mlClasses;
 
-  FeatureNumListPtr         initialFeatures;
-  KKStr                     initialFeaturesStr;
+    FeatureNumListPtr         initialFeatures;
+    KKStr                     initialFeaturesStr;
 
-  bool                      justGettingStats;    // If true means we are not doing any processing we want to collect stats from prev processing.
+    bool                      justGettingStats;    // If true means we are not doing any processing we want to collect stats from prev processing.
 
-  KKStr                     lockFileName;
-  int                       lockFile;
-  bool                      lockFileOpened;
+    KKStr                     lockFileName;
+    int                       lockFile;
+    bool                      lockFileOpened;
 
-  RunLog                    log;
+    RunLog                    log;
 
-  MajorSteps                majorStep;
+    MajorSteps                majorStep;
 
-  int                       minTrainExamples;  // 
+    int                       minTrainExamples;  // 
 
-  int                       nextProcessorId;
+    int                       nextProcessorId;
 
-  NormalizationParmsPtr     normalizationParms;
+    NormalizationParmsPtr     normalizationParms;
 
-  int                       numOfFolds;
+    int                       numOfFolds;
 
-  int                       numJobsAtATime;
+    int                       numJobsAtATime;
 
-  int                       numProcPerCombo;  // for BinaryCombos default to 1
-                                              // for all classes where there is only one combo
-                                              // then as many as we want.
+    int                       numProcPerCombo;  // for BinaryCombos default to 1
+                                                // for all classes where there is only one combo
+                                                // then as many as we want.
 
 
-  poProcessingOrder         processingOrder;        // The order of the major steps.
+    poProcessingOrder         processingOrder;        // The order of the major steps.
 
-  JobSelectionCriteriaType  paramSelCriteria;       // Criteria used to select next jobs to expand during parameter grid search
+    JobSelectionCriteriaType  paramSelCriteria;       // Criteria used to select next jobs to expand during parameter grid search
 
-  MLClassConstPtr        positiveClass;
+    MLClassConstPtr        positiveClass;
 
-  int                       procId;                // Process ID assigned by OS
+    int                       procId;                // Process ID assigned by OS
 
-  bool                      quitRunning;
+    bool                      quitRunning;
 
-  OrderingsPtr              randomSplits;
+    OrderingsPtr              randomSplits;
 
-  int                       randomSplitsNum;        // Number opf Random Splits that we will be using 
+    int                       randomSplitsNum;        // Number opf Random Splits that we will be using 
 
-  KKStr                     randomSplitsFileName;   // Will contain all data that will be used by RandomSplits;  that is all the data from
-                                                    // Train, Test, and Validation feature files.
+    KKStr                     randomSplitsFileName;   // Will contain all data that will be used by RandomSplits;  that is all the data from
+                                                      // Train, Test, and Validation feature files.
 
-  KKStr                     randomSplitsIndexName;  // Will have the index of all the sperate orderings used by RandmSplits.
+    KKStr                     randomSplitsIndexName;  // Will have the index of all the sperate orderings used by RandmSplits.
 
-  KKStr                     resultFileName;
+    KKStr                     resultFileName;
 
-  KKStr                     resultConfigFileName;
+    KKStr                     resultConfigFileName;
 
-  stSearchTypes             searchType;
+    stSearchTypes             searchType;
 
-  KKStr                     statusFileName;
+    KKStr                     statusFileName;
 
-  FeatureVectorListPtr      testData;
+    FeatureVectorListPtr      testData;
 
-  KKStr                     testDataFileName;
+    KKStr                     testDataFileName;
 
-  FeatureVectorListPtr      trainingData;
- 
-  KKStr                     trainingDataFileName;
+    FeatureVectorListPtr      trainingData;
+   
+    KKStr                     trainingDataFileName;
 
-  FeatureVectorListPtr      trainingTestData;
+    FeatureVectorListPtr      trainingTestData;
 
-  FeatureVectorListPtr      validationData;
+    FeatureVectorListPtr      validationData;
 
-  KKStr                     validationDataFileName;
-};
+    KKStr                     validationDataFileName;
+  };
 
 
-typedef  FeatureSelection*  FeatureSelectionPtr;
-
-
+  typedef  FeatureSelection*  FeatureSelectionPtr;
+}
 
 #endif
