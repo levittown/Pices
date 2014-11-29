@@ -21,12 +21,19 @@ var hierarchy =
     [ "KKU::BmpImage::PalletBuilder", "dd/d56/class_bmp_image_1_1_pallet_builder.html", null ],
     [ "KKU::BmpImage::PalletBuilder::RGBQUAD_Pred", "d1/dd1/class_bmp_image_1_1_pallet_builder_1_1_r_g_b_q_u_a_d___pred.html", null ],
     [ "KKU::BmpImage::WordParts", "d9/da0/union_bmp_image_1_1_word_parts.html", null ],
+    [ "CDialog", null, [
+      [ "CAboutDlg", "de/d70/class_c_about_dlg.html", null ],
+      [ "CImageExtractionWindowsDlg", "d2/d9c/class_c_image_extraction_windows_dlg.html", null ]
+    ] ],
     [ "MLL::ClassProbList::ProbabilityComparer", "de/d4e/class_class_prob_list_1_1_probability_comparer.html", null ],
     [ "MLL::ClassProbList::VotesComparer", "da/d79/class_class_prob_list_1_1_votes_comparer.html", null ],
     [ "MLL::ClassStatisticList::ClassStatisticSortComparrison", "d4/d5c/class_class_statistic_list_1_1_class_statistic_sort_comparrison.html", null ],
     [ "MLL::ClassStatisticList::ClassStatSortByCount", "dc/de6/class_class_statistic_list_1_1_class_stat_sort_by_count.html", null ],
     [ "Configuration", null, [
       [ "MLL::TrainingConfiguration2", "d9/df9/class_m_l_l_1_1_training_configuration2.html", null ]
+    ] ],
+    [ "CWinApp", null, [
+      [ "CImageExtractionWindowsApp", "d9/def/class_c_image_extraction_windows_app.html", null ]
     ] ],
     [ "MLL::DataBaseImageList::SpatialComparison", "df/da2/class_data_base_image_list_1_1_spatial_comparison.html", null ],
     [ "MLL::DataBaseLogEntryList::ProgCodeComparison", "d6/d33/class_data_base_log_entry_list_1_1_prog_code_comparison.html", null ],
