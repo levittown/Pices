@@ -7,22 +7,22 @@
 #include "Str.h"
 
 
-namespace  ImportGPS_DataNameSpace
+namespace  ImportGPSDataApp
 {
   class  SipperFileEntryList;
   typedef  SipperFileEntryList*  SipperFileEntryListPtr;
 
-  class  ImportGPS_Data:  public PicesApplication
+  class  ImportGPSData:  public PicesApplication
   {
   public:
     typedef  enum  {GDF_NULL, GDF_WeatherBird, GDF_GPGGA, GDF_SpecialtyDiverI}  GpsDataFormat;
 
-    ImportGPS_Data ();
+    ImportGPSData ();
 
-    ~ImportGPS_Data ();
+    ~ImportGPSData ();
 
     virtual 
-    const char*  ApplicationName () const  {return  "ImportGPS_Data";}
+    const char*  ApplicationName () const  {return  "ImportGPSData";}
 
 
     virtual
@@ -63,7 +63,7 @@ namespace  ImportGPS_DataNameSpace
     SipperFileListPtr        sipperFiles;
     SipperFileEntryListPtr   sipperFileEntries;
     KKStr                    srcDirectory;
-  };  /* ImportGPS_Data */
-}  /* ImportGPS_DataNameSpace */
+  };  /* ImportGPSData */
+}  /* ImportGPSDataApp */
 
 #endif

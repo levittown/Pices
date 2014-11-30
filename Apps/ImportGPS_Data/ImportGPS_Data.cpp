@@ -27,10 +27,10 @@ using namespace  SipperHardware;
 using namespace MLL;
 
 
-#include "ImportGPS_Data.h"
+#include "ImportGPSData.h"
 
 
-using namespace  ImportGPS_DataNameSpace;
+using namespace  ImportGPSDataApp;
 
 // -SrcDir  D:\Pices\Cruises\WB1101\GpsData
 
@@ -69,7 +69,7 @@ public:
 typedef  SipperFileEntry*  SipperFileEntryPtr;
 
 
-class  ImportGPS_DataNameSpace::SipperFileEntryList:  public KKQueue<SipperFileEntry>
+class  ImportGPSDataApp::SipperFileEntryList:  public KKQueue<SipperFileEntry>
 {
 public:
   SipperFileEntryList (const SipperFileList&  sipperFiles,
@@ -197,12 +197,12 @@ public:
   }
 }; /* SipperFileEntryList */
 
-typedef  ImportGPS_DataNameSpace::SipperFileEntryList*  SipperFileEntryListPtr;
+typedef  ImportGPSDataApp::SipperFileEntryList*  SipperFileEntryListPtr;
 
 
 
 
-ImportGPS_Data::ImportGPS_Data ():
+ImportGPSData::ImportGPSData ():
 
    PicesApplication  (),
    cruise            (NULL),
@@ -218,7 +218,7 @@ ImportGPS_Data::ImportGPS_Data ():
 
 
 
-ImportGPS_Data::~ImportGPS_Data ()
+ImportGPSData::~ImportGPSData ()
 {
   delete  cruise;             cruise            = NULL;
   delete  deployments;        deployments       = NULL;
@@ -228,7 +228,7 @@ ImportGPS_Data::~ImportGPS_Data ()
 
 
 
-void  ImportGPS_Data::InitalizeApplication (int32   argc,
+void  ImportGPSData::InitalizeApplication (int32   argc,
                                             char**  argv
                                            )
 {
@@ -238,7 +238,7 @@ void  ImportGPS_Data::InitalizeApplication (int32   argc,
   if  (srcDirectory.Empty ())
   {
     log.Level (-1) << endl << endl 
-                   << "ImportGPS_Data    ***ERROR***   you must provide at least one '-src' parameter." << endl
+                   << "ImportGPSData    ***ERROR***   you must provide at least one '-src' parameter." << endl
                    << endl;
     DisplayCommandLineParameters ();
     Abort (true);
@@ -248,7 +248,7 @@ void  ImportGPS_Data::InitalizeApplication (int32   argc,
   if  (!osValidDirectory (srcDirectory))
   {
     log.Level (-1) << endl << endl 
-                   << "ImportGPS_Data    ***ERROR***   The specified Source Directory[" << srcDirectory << "] is not valid." << endl
+                   << "ImportGPSData    ***ERROR***   The specified Source Directory[" << srcDirectory << "] is not valid." << endl
                    << endl;
     DisplayCommandLineParameters ();
     Abort (true);
@@ -257,7 +257,7 @@ void  ImportGPS_Data::InitalizeApplication (int32   argc,
 
   if  (cruiseStr.Empty ())
   {
-    log.Level (-1) << endl << "ImportGPS_Data::ImportGPS_Data   ***ERROR***     Cruse must be stecified." << endl;
+    log.Level (-1) << endl << "ImportGPSData::ImportGPSData   ***ERROR***     Cruse must be stecified." << endl;
     Abort (true);
   }
 }  /* InitalizeApplication */
@@ -268,7 +268,7 @@ void  ImportGPS_Data::InitalizeApplication (int32   argc,
 
 
 
-ImportGPS_Data::GpsDataFormat  ImportGPS_Data::GpsDataFormatFromStr (const KKStr& str)
+ImportGPSData::GpsDataFormat  ImportGPSData::GpsDataFormatFromStr (const KKStr& str)
 {
   if  ((str.EqualIgnoreCase ("WB"))  ||  (str.EqualIgnoreCase ("WEATHERBIRD")))
     return  GDF_WeatherBird;
@@ -285,7 +285,7 @@ ImportGPS_Data::GpsDataFormat  ImportGPS_Data::GpsDataFormatFromStr (const KKStr
 
 
 
-KKStr  ImportGPS_Data::GpsDataFormatToStr (GpsDataFormat  format)
+KKStr  ImportGPSData::GpsDataFormatToStr (GpsDataFormat  format)
 {
   if  (format == GDF_WeatherBird)
     return "WeatherBird";
@@ -313,7 +313,7 @@ KKStr  ImportGPS_Data::GpsDataFormatToStr (GpsDataFormat  format)
 // -cruise  WB0911     -FF WeatherBird        -src "D:\Users\kkramer\DropBox\Dropbox\Sipper\GPS_Data\2011-01\WB1101\GpsData"  -DH 
 
 
-bool  ImportGPS_Data::ProcessCmdLineParameter (const KKStr&  parmSwitch, 
+bool  ImportGPSData::ProcessCmdLineParameter (const KKStr&  parmSwitch, 
                                                const KKStr&  parmValue
                                               )
 {
@@ -374,7 +374,7 @@ bool  ImportGPS_Data::ProcessCmdLineParameter (const KKStr&  parmSwitch,
 
 
 
-void   ImportGPS_Data::DisplayCommandLineParameters ()
+void   ImportGPSData::DisplayCommandLineParameters ()
 {
   PicesApplication::DisplayCommandLineParameters ();
   log << endl
@@ -382,7 +382,7 @@ void   ImportGPS_Data::DisplayCommandLineParameters ()
       << endl
       << endl
       << "Examples:"                                                                        << endl
-      << "  ImportGPS_Data  -SrcDir C:\\Pices\\Cruises\\EB1101\\"                           << endl
+      << "  ImportGPSData  -SrcDir C:\\Pices\\Cruises\\EB1101\\"                           << endl
       << endl
       << "           Will scan the specified directory for Weatherbird GPS data files."     << endl
       << "           Each GPS data file in directory will be scanned and appropriate"       << endl
@@ -395,7 +395,7 @@ void   ImportGPS_Data::DisplayCommandLineParameters ()
 DateTime  lastEndDate (0, 1, 1, 0, 0, 0);
 
 
-void  ImportGPS_Data::UpdateInstrumentData (const DateTime&  gpsTimeStamp,
+void  ImportGPSData::UpdateInstrumentData (const DateTime&  gpsTimeStamp,
                                             double           lattitude,
                                             double           longitude
                                            )
@@ -405,7 +405,7 @@ void  ImportGPS_Data::UpdateInstrumentData (const DateTime&  gpsTimeStamp,
 
   if  ((lattitude == 0.0)  ||  (longitude == 0.0))
   {
-    log.Level (-1) << endl << "ImportGPS_Data::UpdateInstrumentData      ***ERROR***   Lattitude[" << lattitude << "]  Longitude[" << longitude << "] is invalid." << endl;
+    log.Level (-1) << endl << "ImportGPSData::UpdateInstrumentData      ***ERROR***   Lattitude[" << lattitude << "]  Longitude[" << longitude << "] is invalid." << endl;
     return;
   }
 
@@ -462,7 +462,7 @@ void  ImportGPS_Data::UpdateInstrumentData (const DateTime&  gpsTimeStamp,
  *@brief  Imports GPS data from files created by Weatherbird system.
  *@details  Originally wriiten to upload GPS data for GULF 2010-may cruise
  */
-void  ImportGPS_Data::ImportGPSDataWeatherBird (const KKStr&  fileName)
+void  ImportGPSData::ImportGPSDataWeatherBird (const KKStr&  fileName)
 {
   ifstream  i (fileName.Str ());
   if  (!i.is_open ())
@@ -536,7 +536,7 @@ void  ImportGPS_Data::ImportGPSDataWeatherBird (const KKStr&  fileName)
 
 /**
  */
-void  ImportGPS_Data::ImportGPSDataGPGGA (const KKStr&  fileName)
+void  ImportGPSData::ImportGPSDataGPGGA (const KKStr&  fileName)
 {
   ifstream  i (fileName.Str ());
   if  (!i.is_open ())
@@ -637,7 +637,7 @@ void  ImportGPS_Data::ImportGPSDataGPGGA (const KKStr&  fileName)
 
 
 
-void  ImportGPS_Data::ImportGPSDataSpecialtyDiverI (const KKStr&  fileName)
+void  ImportGPSData::ImportGPSDataSpecialtyDiverI (const KKStr&  fileName)
 {
   ifstream  i (fileName.Str ());
   if  (!i.is_open ())
@@ -747,7 +747,7 @@ void  ImportGPS_Data::ImportGPSDataSpecialtyDiverI (const KKStr&  fileName)
 
 
 
-void   ImportGPS_Data::Main ()
+void   ImportGPSData::Main ()
 {
   if  (Abort ())
     return;
@@ -756,7 +756,7 @@ void   ImportGPS_Data::Main ()
   if  (!cruise)
   {
     log.Level (-1) << endl << endl 
-      << "ImportGPS_Data::Main    ***ERROR***    Cruise[" << cruiseStr << "] not in database."  << endl
+      << "ImportGPSData::Main    ***ERROR***    Cruise[" << cruiseStr << "] not in database."  << endl
       << endl;
     Abort (true);
     return;
@@ -766,7 +766,7 @@ void   ImportGPS_Data::Main ()
   if  (!sipperFiles)
   {
     log.Level (-1) << endl << endl 
-      << "ImportGPS_Data::Main    ***ERROR***    No SipperFile table entries found."  << endl
+      << "ImportGPSData::Main    ***ERROR***    No SipperFile table entries found."  << endl
       << endl;
     Abort (true);
     return;
@@ -778,7 +778,7 @@ void   ImportGPS_Data::Main ()
   if  ((!deployments)  ||  (deployments->QueueSize () < 1))
   {
     log.Level (-1) << endl << endl 
-      << "ImportGPS_Data::Main    ***ERROR***    No Deployments found."  << endl
+      << "ImportGPSData::Main    ***ERROR***    No Deployments found."  << endl
       << endl;
     Abort (true);
     return;
@@ -805,7 +805,7 @@ void   ImportGPS_Data::Main ()
   if  ((!filesToExtract)  ||  (filesToExtract->QueueSize () < 1))
   {
     log.Level (-1) << endl << endl 
-      << "ImportGPS_Data::Main    ***ERROR***    No files found to extract."  << endl
+      << "ImportGPSData::Main    ***ERROR***    No files found to extract."  << endl
       << endl;
     delete  filesToExtract;
     filesToExtract = NULL;
@@ -843,7 +843,7 @@ int  main (int     argc,
            char**  argv
           )
 {
-  ImportGPS_Data  importGpsApp;
+  ImportGPSData  importGpsApp;
   importGpsApp.InitalizeApplication (argc, argv);
   if  (importGpsApp.Abort ())
     return 1;

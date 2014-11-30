@@ -41,7 +41,7 @@
  *                  generates reports where user can select the classification granularity with respect to
  *                  class hierarchy.
  *
- * - ImportGPS_Data Imports GPS data collected by ship into Pices database.
+ * - ImportGPSData Imports GPS data collected by ship into Pices database.
  *
  * - SpatialAnalysis 
  *

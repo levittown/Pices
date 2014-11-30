@@ -10,10 +10,10 @@
 //*  Kurt Kramer                                                            *
 //*  2009-10-10                                                             *
 //*                                                                         *
-//*   This code is currently not in use.  I am toying with the idea to make *
-//*   a general Job Management Frame Work.  The Idea is that 'Job' and      *
+//*   This code is currently not in use. I am toying with the idea to make  *
+//*   a general Job Management Frame Work. The Idea is that 'Job' and       *
 //*   'JobManager' would be used to build specific Job Management code      *
-//*   arround.  In the case of 'FeatureSeletion'  we would detrive sub-     *
+//*   arround. In the case of 'FeatureSeletion'  we would detrive sub-      *
 //*   classes to manage the Major Speps and Jobs which would then in turn   *
 //*   call a different set of Derved classes that would manage Binary,      * 
 //*   MultiClass,  Parameter Tuning, and Feature Selection tasks.           *
@@ -31,10 +31,10 @@
 
 
 
-#include  "KKQueue.h"
-#include  "OSservices.h"
-#include  "RunLog.h"
-#include  "Str.h"
+#include "KKQueue.h"
+#include "OSservices.h"
+#include "RunLog.h"
+#include "Str.h"
 
 
 
@@ -123,8 +123,8 @@ namespace  JobManagment
     JobStatus          Status        () const  {return status;}
     KKStr              StatusStr     () const;
 
-    void   JobId     (int        _jobId)   {jobId   = _jobId;}
-    void   Status    (JobStatus  _status)  {status  = _status;}
+    void   JobId    (int        _jobId)   {jobId   = _jobId;}
+    void   Status   (JobStatus  _status)  {status  = _status;}
 
 
 
@@ -145,7 +145,7 @@ namespace  JobManagment
 
     /**
      *@brief Imjpelmentation specific field processing.
-     *@details Any SubClass of Job  needs to define this method.  Whenever the 'ProcessStatusStr' method can not identify a field
+     *@details Any SubClass of Job needs to define this method. Whenever the 'ProcessStatusStr' method can not identify a field
      * it will call this method to let the child Class process the field.
      */
     virtual
@@ -157,9 +157,9 @@ namespace  JobManagment
     /**
      *@brief  Write out completed job results to status file.
      *@details This method will get called right after the "Job" status line gets written when a Job is completed.  
-     * See 'JobManager::GetNextSetOfJobs'.  If a job needs to write more data to the Status file then you want to 
+     * See 'JobManager::GetNextSetOfJobs'. If a job needs to write more data to the Status file then you want to 
      * put on a single status line this is where you would do it.   You write all the text in a format that you 
-     * want to support.  'JobManager' will bracket it with <Job JobType=Job::JobType, JobId=####>   and </Job>
+     * want to support. 'JobManager' will bracket it with <Job JobType=Job::JobType, JobId=####> and </Job>
      *@code
      * ex:
      *<RandomSplitJob>
@@ -174,7 +174,7 @@ namespace  JobManagment
 
 
     /**@
-     *@brief Works with 'WriteCompletedJobData';  You use this to load in data written by 'WriteCompletedJobData'
+     *@brief Works with 'WriteCompletedJobData'; You use this to load in data written by 'WriteCompletedJobData'
      */
     virtual  
       void  CompletedJobDataRead (istream& i);
@@ -209,7 +209,7 @@ namespace  JobManagment
     int             jobId;
     int             parentId;
     JobManagerPtr   manager;
-    int             numProcessors;         /**< Number of CPU's that are currently processing this node;  That is 
+    int             numProcessors;         /**< Number of CPU's that are currently processing this node; That is 
                                             * the number that are currently calling the 'ProcessNode' method.
                                             */
 
@@ -258,8 +258,6 @@ namespace  JobManagment
     JobPtr            LookUpByJobId (int  jobId);
 
     void              PushOnBack (JobPtr  j);
-
-
 
   private:
     RunLog&          log;

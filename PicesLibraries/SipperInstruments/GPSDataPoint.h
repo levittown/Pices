@@ -2,14 +2,7 @@
 #define _GPSDATAPOINT_
 
 
-/**
- *@class MLL::GPSDataPoint
- *@details
- *  Keeps track of one GPS datapoint consisting of the DateTime,  Average Latitude and Longitude, of a given time interval.
- *  binDepth, and volumeSampled.
- *  
- *@author  Kurt Kramer
- */
+
 #include <map>
 
 #include "BasicTypes.h"
@@ -20,6 +13,16 @@ using namespace KKU;
 
 namespace  SipperHardware
 {
+  /**
+   *@brief Represents a single GPS entry from a imported GPS data source such as that provided by the research 
+   * vesels that SIPPER is deployed on.
+   *@details
+   * Research vessels will record GPS data into text gfiles throughout the lengthof their cruises. This data
+   * is collected an dimported into the PICES database via the "ImportGPSData"
+   Keeps track of one GPS datapoint consisting of the DateTime,  Average Latitude and Longitude, of a given time interval.
+   *  binDepth, and volumeSampled.
+   *  
+   */
   class GPSDataPoint
   {
   public:
