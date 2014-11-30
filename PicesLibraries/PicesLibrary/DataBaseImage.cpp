@@ -385,8 +385,8 @@ VectorFloat  DataBaseImageList::CalculateDensitesByQuadrat (float        scanRat
     DataBaseImagePtr  i = *idx;
     if  (i->SipperFileName () != lastSipperFileName)
     {
-      // We started a new SIPPER file;  so we will now use the time differenmce between then to
-      // deternine distance,
+      // We started a new SIPPER file;  so we will now use the time difference between then to
+      // determine distance,
       InstrumentDataPtr  lastId = id;
       id = InstrumentDataFileManager::GetClosestInstrumentData (i->ImageFileName (), cancelFlag, log);
       DateTime  deltaTime = id->CtdDate () - lastId->CtdDate ();

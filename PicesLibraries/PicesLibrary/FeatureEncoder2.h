@@ -70,7 +70,7 @@ namespace MLL
 
 
   private:
-    // The next several routines were coppied from the BitReduction class with minimal changs.
+    // The next several routines were copied from the BitReduction class with minimal changes.
     CompressionStats  compress (const FeatureVectorList&  examples,
                                 FeatureVectorListPtr      compressed_example_list
                                );
@@ -93,7 +93,7 @@ namespace MLL
 
     const AttributeTypeVector&        attributeVector;
     int32*                            cardinalityDest;
-    const VectorInt&                  cardinalityVector;   // Will not own, passed in by creater
+    const VectorInt&                  cardinalityVector;   /**< Will not own, passed in by creator. */
     int32                             codedNumOfFeatures;
     ModelParam::CompressionMethodType compressionMethod;
     int32*                            destFeatureNums;

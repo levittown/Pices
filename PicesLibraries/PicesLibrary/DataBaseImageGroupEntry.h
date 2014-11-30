@@ -2,22 +2,19 @@
 #define  _DATABASEIMAGEGROUPENTRY_
 
 
-#include  "Str.h"
-#include  "KKQueue.h"
+#include "Str.h"
+#include "KKQueue.h"
 
 
 
 namespace MLL 
 {
-
-
   #if  !defined(_DATABASEIMAGE_)
     class  DataBaseImage;
     typedef  DataBaseImage*  DataBaseImagePtr;
     class  DataBaseImageList;
     typedef  DataBaseImageList*  DataBaseImageListPtr;
   #endif
-
 
 
   class DataBaseImageGroupEntry
@@ -37,14 +34,14 @@ namespace MLL
     ~DataBaseImageGroupEntry ();
 
 
-    int32           ImageGroupId  ()  const  {return  imageGroupId;}
+    int32         ImageGroupId  ()  const  {return  imageGroupId;}
     const KKStr&  ImageFileName ()  const  {return  imageFileName;}
 
-    void    ImageGroupId  (int32           _imageGroupId)   {imageGroupId  = _imageGroupId;}
+    void    ImageGroupId  (int32         _imageGroupId)   {imageGroupId  = _imageGroupId;}
     void    ImageFileName (const KKStr&  _imageFileName)  {imageFileName = _imageFileName;}
 
   private:
-    int32    imageGroupId;
+    int32  imageGroupId;
     KKStr  imageFileName;
   };  /* DataBaseImageGroupEntry */
 
@@ -61,7 +58,7 @@ namespace MLL
 
     DataBaseImageGroupEntryList (const DataBaseImageGroupEntryList&  imageGroupEntries);
 
-    DataBaseImageGroupEntryList (int32                         groupId,
+    DataBaseImageGroupEntryList (int32                       groupId,
                                  const DataBaseImageListPtr  images
                                 );
 

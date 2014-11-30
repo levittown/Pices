@@ -73,12 +73,12 @@ namespace MLL
 
     /**
      *@brief Loads the contents of a feature data file and returns a ImageFeaturesList container object.
-     *@param[in]  _fileName   Feature file that is being syncronized.
-     *@param[in,out] _mlClasses All classes encounterd during the loading of the feature file will be added to this list.
+     *@param[in]  _fileName   Feature file that is being synchronized.
+     *@param[in,out] _mlClasses All classes encounter during the loading of the feature file will be added to this list.
      *@param[in]  _maxCount Maximum number of examples to load, -1 = load all
      *@param[in]  _cancelFlag If this flag turns true the load will terminate and return to caller.
      *@param[out] _successful False will be returned if load failed.
-     *@param[out] _changesMade If the routine hatloaded the feature data determined that it neeeded to make
+     *@param[out] _changesMade If the routine had loaded the feature data determined that it needed to make
      *            changes this flag will be set 'true'.
      *@param[in]  _log Where to send diagnostic messages to.
      *@return  A ImageFeaturesList container object; this object will own all the examples loaded.
@@ -100,7 +100,7 @@ namespace MLL
      *@param[in]  _selFeatures Specify specific features to save, typically all features.
      *@param[in]  _examples Examples that are to be saved.
      *@param[in]  _numExamplesWritten Will reflect the num examples written, caller will be able to monitor.
-     *@param[in]  _cancelFlag If this flag turns true the writting of data will terminate and return to caller.
+     *@param[in]  _cancelFlag If this flag turns true the writing of data will terminate and return to caller.
      *@param[out] _successful False will be returned if the save failed.
      *@param[in]  _log log file to send messages to.
      */
@@ -119,13 +119,13 @@ namespace MLL
      *@brief Saves the feature file in multiple parts with no one single part larger that 64k examples.
      *@details Same as 'SaveFeatureFile', if more than 64k examples will break into multiple files.
      *         If there are more than 64k examples, will save all images into 'fileName', but also
-     *         a second copy of them into files with same name plust seq num with max of 64k eamples
+     *         a second copy of them into files with same name pluss seq num with max of 64k examples
      *         in each one.
      *
      *@param[in]  _fileName  Name of file top same examples/images to.
      *@param[in]  _selFeatures Specify specific features to save, typically all features.
      *@param[in]  _examples Examples that are to be saved.
-     *@param[in]  _cancelFlag If this flag turns true the writting of data will terminate and return to caller.
+     *@param[in]  _cancelFlag If this flag turns true the writing of data will terminate and return to caller.
      *@param[out] _successful False will be returned if the save failed.
      *@param[in]  _log log file to send messages to.
      */
@@ -149,11 +149,11 @@ namespace MLL
      *@brief  Create a FileDesc object from the input stream '_in'.
      *@details  All derived classes must implement this method.  It is called by 'LoadFeatureFile'
      *          before it starts reading in the feature data.  
-     *@param[in]  _fileName  Name of file to read top get FileDesc data from.  Ex  in c45 this wiould be the names file.
+     *@param[in]  _fileName  Name of file to read top get FileDesc data from.  Ex  in c45 this would be the names file.
      *@param[in]  _in        Input Stream t read from.
      *@param[out] _classes   Must be pointing to a valid MLClassList object.  As class names are encountered add them to this list.
-     *@param[out] _estSize   If you cabn drive the number of examples in the feature file populate this parameter.
-     *@param[out] _errorMessage  If a error in processing occurs; place a description of th eerror in this parameter.
+     *@param[out] _estSize   If you can drive the number of examples in the feature file populate this parameter.
+     *@param[out] _errorMessage  If a error in processing occurs; place a description of the error in this parameter.
      *@param      _log
      */
     virtual  FileDescPtr  GetFileDesc (const KKStr&            _fileName,
@@ -168,12 +168,12 @@ namespace MLL
     /**
      *@brief To be implemented by derived classes; loads the contents of a feature data file and returns a ImageFeaturesList container object.
      *@param[in]  _fileName   Feature file that is being loaded.
-     *@param[in]  _fileDesc  Description of featyuire data that is to be loaded.
-     *@param[in,out] _classes All classes encounterd during the loading of the feature file will be added to this list.
+     *@param[in]  _fileDesc  Description of feature data that is to be loaded.
+     *@param[in,out] _classes All classes encountered during the loading of the feature file will be added to this list.
      *@param[in]  _in  input stream that feature data is to be loaded/read from.
      *@param[in]  _maxCount Maximum number of examples to load, -1 = load all
      *@param[in]  _cancelFlag If this flag turns true the load will terminate and return to caller.
-     *@param[out] _changesMade If the routine hatloaded the feature data determined that it neeeded to make
+     *@param[out] _changesMade If the routine had loaded the feature data determined that it neeeded to make
      *            changes this flag will be set 'true'.
      *@param[out] _errorMessage If an error occurs during the loading a description iof this error will be placed here.
      *@param[in]  _log Where to send diagnostic messages to.
@@ -181,7 +181,7 @@ namespace MLL
      */
     virtual  FeatureVectorListPtr  LoadFile (const KKStr&          _fileName,
                                              const FileDescPtr     _fileDesc,
-                                             MLClassConstList&  _classes, 
+                                             MLClassConstList&     _classes,
                                              std::istream&         _in,
                                              long                  _maxCount,    /**< Maximum # images to load. */
                                              volatile const bool&  _cancelFlag,
@@ -192,26 +192,26 @@ namespace MLL
 
 
     /**
-     *@brief  To be implmenetd by derived classes; save examples to output stream '_out'.
+     *@brief  To be implemented by derived classes; save examples to output stream '_out'.
      *@param[in]  _data  Examples that are to be written to saved to the output stream.
      *@param[in]  _fileName  Name of file top same examples/images to.
      *@param[in]  _selFeatures Specify specific features to save, typically all features.
      *@param[out] _out  Output stream to save feature data to.
      *@param[out] _numExamplesWritten Will reflect the num examples written, caller will be able to monitor.
-     *@param[in]  _cancelFlag If this flag turns true the writting of data will terminate and return to caller.
+     *@param[in]  _cancelFlag If this flag turns true the writing of data will terminate and return to caller.
      *@param[out] _successful False will be returned if the save failed.
      *@param[out] _errorMessage If the save fails (_successful == false)  then a description of the error will be placed here.
      *@param[in]  _log log file to send messages to.
      */
-    virtual  void   SaveFile (FeatureVectorList&      _data,
-                              const KKStr&            _fileName,
-                              const FeatureNumList&   _selFeatures,
-                              std::ostream&           _out,
-                              uint32&                 _numExamplesWritten,
-                              volatile const bool&    _cancelFlag,
-                              bool&                   _successful,
-                              KKStr&                  _errorMessage,
-                              RunLog&                 _log
+    virtual  void   SaveFile (FeatureVectorList&     _data,
+                              const KKStr&           _fileName,
+                              const FeatureNumList&  _selFeatures,
+                              std::ostream&          _out,
+                              uint32&                _numExamplesWritten,
+                              volatile const bool&   _cancelFlag,
+                              bool&                  _successful,
+                              KKStr&                 _errorMessage,
+                              RunLog&                _log
                              ) = 0;
 
 
@@ -243,11 +243,11 @@ namespace MLL
   protected:
     /**
      *@brief Will retrieve the next token from the input stream. 
-     *@details Leading and trailing blank charaters will be skipped. A token will be seperated 
-     *         by any charater in '_delimiters' or 'EndOfLine', or 'EndOfFile'.  If a 'EndOfLine' 
+     *@details Leading and trailing blank characters will be skipped. A token will be separated
+     *         by any character in '_delimiters' or 'EndOfLine', or 'EndOfFile'.  If a 'EndOfLine'
      *         or 'EndOfFile' occur while reading in a token the respective flags  '_eol'  and 
      *         '_eof'  will be set to false but the following call to this function will set the 
-     *         resepective flag to true and return a empty token.
+     *         respective flag to true and return a empty token.
      *
      *@param[in]  _in          Stream to read from,
      *@param[in]  _delimiters  List of valid delimiter characters.
@@ -256,19 +256,18 @@ namespace MLL
      *@param[out] _eof         Set true if at end of file;
      *@param[out] _eol         Set true if at end of line.  
      */
-     void  GetToken (std::istream&  _in,
-                     const char*    _delimiters,
-                     KKStr&         _token,
-                     bool&          _eof, 
-                     bool&          _eol
+     void  GetToken (std::istream& _in,
+                     const char*   _delimiters,
+                     KKStr&        _token,
+                     bool&         _eof,
+                     bool&         _eol
                     );
 
 
-     void  GetLine (std::istream&  _in,
-                    KKStr&         _line,
-                    bool&          _eof
+     void  GetLine (std::istream& _in,
+                    KKStr&        _line,
+                    bool&         _eof
                    );
-
 
   private:
     bool    canRead;

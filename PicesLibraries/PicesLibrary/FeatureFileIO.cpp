@@ -1,54 +1,45 @@
-#include  "FirstIncludes.h"
-
+#include "FirstIncludes.h"
 #include <stdio.h>
 #include <math.h>
-
-
-#include  <ctype.h>
-#include  <time.h>
-
-#include  <string>
-#include  <iostream>
-#include  <fstream>
-#include  <vector>
-
-#include  "MemoryDebug.h"
-
+#include <ctype.h>
+#include <time.h>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include "MemoryDebug.h"
 using namespace std;
 
 
-#include  "BasicTypes.h"
-#include  "DateTime.h"
-#include  "OSservices.h"
-#include  "RunLog.h"
-#include  "Str.h"
+#include "BasicTypes.h"
+#include "DateTime.h"
+#include "OSservices.h"
+#include "RunLog.h"
+#include "Str.h"
 using namespace KKU;
 
 
-#include  "FeatureFileIO.h"
-#include  "FeatureFileIOArff.h"
-#include  "FeatureFileIOC45.h"
-#include  "FeatureFileIOColumn.h"
-#include  "FeatureFileIODstWeb.h"
-#include  "FeatureFileIOPices.h"
-#include  "FeatureFileIORoberts.h"
-#include  "FeatureFileIOSparse.h"
-#include  "FeatureFileIOUCI.h"
-
-#include  "FileDesc.h"
-#include  "GoalKeeper.h"
-#include  "MLClass.h"
+#include "FeatureFileIO.h"
+#include "FeatureFileIOArff.h"
+#include "FeatureFileIOC45.h"
+#include "FeatureFileIOColumn.h"
+#include "FeatureFileIODstWeb.h"
+#include "FeatureFileIOPices.h"
+#include "FeatureFileIORoberts.h"
+#include "FeatureFileIOSparse.h"
+#include "FeatureFileIOUCI.h"
+#include "FileDesc.h"
+#include "GoalKeeper.h"
+#include "MLClass.h"
 using namespace MLL;
 
 
 
 
-
-
-void  ReportError (RunLog&        log,
+void  ReportError (RunLog&       log,
                    const KKStr&  fileName,
                    const KKStr&  funcName,
-                   int32            lineCount,
+                   int32         lineCount,
                    const KKStr&  errorDesc
                   )
 {
@@ -109,12 +100,12 @@ void  FeatureFileIO::RegisterAllDrivers ()
 
 
 /**
- @brief  Before you terminate your application and after all FeatureFileIO activity is done
-         call this method to destroy statically dynamically allocated data structures.
- @details  This metjod undoes everything that 'RegisterAllDrivers' does.  Its primary 
-           usefullness is aid in tracking down memory leaks.  This way the '_CrtSetDbgFlag'
-           debuging functyionality will not report the memory allocated by the different 
-           feature FileIO drivers.
+ *@brief  Before you terminate your application and after all FeatureFileIO activity is done
+ *        call this method to destroy statically dynamically allocated data structures.
+ *@details  This method undoes everything that 'RegisterAllDrivers' does. Its primary
+ *          usefulness is aid in tracking down memory leaks. This way the '_CrtSetDbgFlag'
+ *          debugging functionality will not report the memory allocated by the different
+ *          feature FileIO drivers.
  */
 void  FeatureFileIO::FinalCleanUp ()
 {
@@ -456,7 +447,7 @@ void  FeatureFileIO::GetToken (istream&     _in,
 
 FeatureVectorListPtr  FeatureFileIO::LoadFeatureFile 
                                       (const KKStr&          _fileName,
-                                       MLClassConstList&  _mlClasses,
+                                       MLClassConstList&     _mlClasses,
                                        long                  _maxCount,
                                        volatile const bool&  _cancelFlag,    // will be monitored,  if set to True  Load will terminate.
                                        bool&                 _successful,

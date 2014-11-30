@@ -1,18 +1,13 @@
-#include  "FirstIncludes.h"
-
-#include  <ctype.h>
-#include  <time.h>
-
-#include  <fstream>
-#include  <iostream>
-#include  <map>
-#include  <string>
-#include  <vector>
-
-#include  "MemoryDebug.h"
-#include  "BasicTypes.h"
-
-
+#include "FirstIncludes.h"
+#include <ctype.h>
+#include <time.h>
+#include <fstream>
+#include <iostream>
+#include <map>
+#include <string>
+#include <vector>
+#include "MemoryDebug.h"
+#include "BasicTypes.h"
 using namespace std;
 
 #include "OSservices.h"
@@ -20,7 +15,6 @@ using namespace KKU;
 
 #include "SipperVariables.h"
 using namespace SipperHardware;
-
 
 #include "DataBaseServer.h"
 using  namespace  MLL;
@@ -233,7 +227,7 @@ void  DataBaseServerList::ReadConfigFile ()
   char  buff[1024];
   while  (fgets (buff, sizeof (buff), in))
   {
-    buff[sizeof(buff) - 1] = 0;  // Just to make sure that bufer not comepletely full
+    buff[sizeof(buff) - 1] = 0;  // Just to make sure that buffer not completely full
     KKStr  ln (buff);
 
     if  (ln.Len () < 3)

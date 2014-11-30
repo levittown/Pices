@@ -25,15 +25,15 @@ namespace MLL
   {
   public:
     ClassProb (MLClassConstPtr _classLabel,
-               double             _probability,
-               float              _votes
+               double          _probability,
+               float           _votes
               );
 
     ClassProb (const ClassProb&  _pair);
 
     MLClassConstPtr  classLabel;
-    double              probability;
-    float               votes;
+    double           probability;
+    float            votes;
   };
   typedef  ClassProb*  ClassProbPtr;
 

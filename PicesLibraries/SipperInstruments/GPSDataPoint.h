@@ -1,8 +1,6 @@
 #if  !defined(_GPSDATAPOINT_)
 #define _GPSDATAPOINT_
 
-
-
 #include <map>
 
 #include "BasicTypes.h"
@@ -14,14 +12,12 @@ using namespace KKU;
 namespace  SipperHardware
 {
   /**
-   *@brief Represents a single GPS entry from a imported GPS data source such as that provided by the research 
-   * vesels that SIPPER is deployed on.
+   *@brief Represents a single GPS datapoint entry (GMT DateTime, Latitude and Longitude) from a imported GPS data source
+   * provided by the research Vessels that SIPPER is deployed on.
    *@details
-   * Research vessels will record GPS data into text gfiles throughout the lengthof their cruises. This data
-   * is collected an dimported into the PICES database via the "ImportGPSData"
-   Keeps track of one GPS datapoint consisting of the DateTime,  Average Latitude and Longitude, of a given time interval.
-   *  binDepth, and volumeSampled.
-   *  
+   * Research vessels will record GPS data into text files throughout the length of their cruises. Temporal granularity
+   * will range from a couple seconds to a minute. This data is imported into the PICES database via the ImportGPSDataApp
+   * application. The data is kept in the GpsData table of the PICES database.
    */
   class GPSDataPoint
   {
@@ -35,7 +31,6 @@ namespace  SipperHardware
     GPSDataPoint ();
 
     GPSDataPoint (const GPSDataPoint&  _dataPoint);
-
 
     GPSDataPoint (DateTime _ctdDateTime,
                   TimeType _gpsStartTime,

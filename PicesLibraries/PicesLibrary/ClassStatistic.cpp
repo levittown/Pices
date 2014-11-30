@@ -20,7 +20,7 @@ using namespace  MLL;
 
 ClassStatistic::ClassStatistic (const ClassStatistic&  right):
   mlClass (right.mlClass),
-  count      (right.count)
+  count   (right.count)
 {
 }
 

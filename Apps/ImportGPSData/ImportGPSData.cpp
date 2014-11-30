@@ -36,9 +36,7 @@ using namespace  ImportGPSDataApp;
 
 // E:\Users\kkramer\Dropbox\Sipper\GPS_Data
 // -cruise  SD01       -FF SpecialtyDiverI   -src ".\2010-09"
-
 // -cruise WB0813  -FF WeatherBird  -src "D:\Users\kkramer\Dropbox\Sipper\GPS_Data\2013-08_Weatherbird2\MetData"
-
 
 class  SipperFileEntry
 {
@@ -378,7 +376,7 @@ void   ImportGPSData::DisplayCommandLineParameters ()
 {
   PicesApplication::DisplayCommandLineParameters ();
   log << endl
-      << "    -SrcDir <Source Directory>  The directorty where GPS data files are located." << endl
+      << "    -SrcDir <Source Directory>  The directory where GPS data files are located." << endl
       << endl
       << endl
       << "Examples:"                                                                        << endl

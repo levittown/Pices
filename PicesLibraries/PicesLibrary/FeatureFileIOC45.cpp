@@ -49,7 +49,7 @@ FeatureFileIOC45::~FeatureFileIOC45()
 
 FeatureVectorListPtr  FeatureFileIOC45::LoadFeatureFile 
                                       (const KKStr&          _fileName,
-                                       MLClassConstList&  _mlClasses,
+                                       MLClassConstList&     _mlClasses,
                                        long                  _maxCount,
                                        volatile const bool&  _cancelFlag,    // will be monitored,  if set to True  Load will terminate.
                                        bool&                 _successful,

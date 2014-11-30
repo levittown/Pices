@@ -48,8 +48,8 @@ namespace MLL
                     FileDescPtr                _fileDesc,
                     MLL::AttributeTypeVector&  _attributeTypes,   
                     VectorInt&                 _cardinalityTable,
-                    MLClassConstPtr         _class1,
-                    MLClassConstPtr         _class2,
+                    MLClassConstPtr            _class1,
+                    MLClassConstPtr            _class2,
                     RunLog&                    _log
                    );
     
@@ -67,7 +67,7 @@ namespace MLL
      *@brief  Compresses 'src' images, allocating new 'xSpace' data structure.
      *@param[in]  src              Images that are to be compressed
      *@param[in]  assignments      Class Assignments
-     *@param[in]  xSpace           will allocate enough xSpace nodes and place compresed results in this structure.
+     *@param[in]  xSpace           will allocate enough xSpace nodes and place compressed results in this structure.
      *@param[out] totalxSpaceUsed  number nodes used in xSpace</param>
      *@param[out] prob             Data Structure that is used by SVMLib
      */
@@ -92,9 +92,9 @@ namespace MLL
     FeatureVectorListPtr  EncodeAllExamples (const FeatureVectorListPtr  srcData);
 
 
-    FeatureVectorPtr  EncodeAImage (FileDescPtr       encodedFileDesc,
-                                    FeatureVectorPtr  src
-                                   );
+    FeatureVectorPtr      EncodeAImage (FileDescPtr       encodedFileDesc,
+                                        FeatureVectorPtr  src
+                                       );
 
     int32               MemoryConsumedEstimated ()  const;
 
@@ -112,32 +112,32 @@ namespace MLL
      * Computes the number of XSpace nodes that need to be allocated to 
      * represent the contents of a specified FeatureVectorList.  Will 
      * account for features that have a value of 0;  that is features 
-     * that have a value of '0' do not need a xSpace node allocatd for
+     * that have a value of '0' do not need a xSpace node allocated for
      * them.
      */
     int32  DetermineNumberOfNeededXspaceNodes (FeatureVectorListPtr   src)  const;
 
 
 
-    MLL::AttributeTypeVector&    attributeTypes;     // Will not own, passed in by creater
-    int32*                       cardinalityDest;
-    VectorInt&                   cardinalityTable;   // Will not own, passed in by creater
-    MLClassConstPtr           class1;
-    MLClassConstPtr           class2;
-    int32                        codedNumOfFeatures;
-    SVM_CompressionMethod        compressionMethod;
-    int32*                       destFeatureNums;
-    FileDescPtr                  destFileDesc;
-    FeWhatToDoPtr                destWhatToDo;
-    SVM_EncodingMethod           encodingMethod;
-    FileDescPtr                  fileDesc;
-    RunLog&                      log;
-    int32                        numEncodedFeatures;
-    int32                        numOfFeatures;
-    FeatureNumList               selectedFeatures;
-    int32*                       srcFeatureNums;
-    const SVMparam&              svmParam;
-    int32                        xSpaceNeededPerImage;
+    MLL::AttributeTypeVector&  attributeTypes;     /**< Will not own, passed in by creator */
+    int32*                     cardinalityDest;
+    VectorInt&                 cardinalityTable;   /**< Will not own, passed in by creator */
+    MLClassConstPtr            class1;
+    MLClassConstPtr            class2;
+    int32                      codedNumOfFeatures;
+    SVM_CompressionMethod      compressionMethod;
+    int32*                     destFeatureNums;
+    FileDescPtr                destFileDesc;
+    FeWhatToDoPtr              destWhatToDo;
+    SVM_EncodingMethod         encodingMethod;
+    FileDescPtr                fileDesc;
+    RunLog&                    log;
+    int32                      numEncodedFeatures;
+    int32                      numOfFeatures;
+    FeatureNumList             selectedFeatures;
+    int32*                     srcFeatureNums;
+    const SVMparam&            svmParam;
+    int32                      xSpaceNeededPerImage;
   };  /* FeatureEncoder */
 
 

@@ -47,12 +47,12 @@ FeatureFileIOArff::~FeatureFileIOArff(void)
 
 
 
-FileDescPtr  FeatureFileIOArff::GetFileDesc (const KKStr&            _fileName,
-                                             istream&                _in,
+FileDescPtr  FeatureFileIOArff::GetFileDesc (const KKStr&         _fileName,
+                                             istream&             _in,
                                              MLClassConstListPtr  _classes,
-                                             int32&                  _estSize,
-                                             KKStr&                  _errorMessage,
-                                             RunLog&                 _log
+                                             int32&               _estSize,
+                                             KKStr&               _errorMessage,
+                                             RunLog&              _log
                                             )
 {
   _log.Level (10) << endl << endl 

@@ -76,35 +76,35 @@ typedef  TrainingProcess2*  TrainingProcess2Ptr;
 
     MLClassConstPtr   ClassifyAImage    (FeatureVector&  example);
 
-    void  ClassifyAImage (FeatureVector&       example,
-                          MLClassConstPtr&  predClass1,
-                          MLClassConstPtr&  predClass2,
-                          int32&               predClass1Votes,
-                          int32&               predClass2Votes,
-                          double&              knownClassProb,
-                          double&              predClass1Prob,
-                          double&              predClass2Prob,
-                          int32&               numOfWinners,
-                          double&              breakTie,
-                          double&              compact
+    void  ClassifyAImage (FeatureVector&    xample,
+                          MLClassConstPtr&  redClass1,
+                          MLClassConstPtr&  redClass2,
+                          int32&            redClass1Votes,
+                          int32&            redClass2Votes,
+                          double&           nownClassProb,
+                          double&           redClass1Prob,
+                          double&           redClass2Prob,
+                          int32&            umOfWinners,
+                          double&           reakTie,
+                          double&           ompact
                          );
  
     MLClassConstPtr   ClassifyAImage (FeatureVector&  example,
-                                         int32&          numOfWinners,
-                                         bool&           knownClassOneOfTheWinners
-                                        );
+                                      int32&          numOfWinners,
+                                      bool&           knownClassOneOfTheWinners
+                                     );
 
     MLClassConstPtr   ClassifyAImage (FeatureVector&  example,
-                                         double&         probability,
-                                         int32&          numOfWinners,
-                                         bool&           knownClassOneOfTheWinners,
-                                         double&         breakTie
-                                        );
+                                      double&         probability,
+                                      int32&          numOfWinners,
+                                      bool&           knownClassOneOfTheWinners,
+                                      double&         breakTie
+                                     );
 
     /**
      *@brief  For a given two class pair return the names of the 'numToFind' worst S/V's.
      *@details  This method will iterate through all the S/V's removing them one at a 
-     *          time and recompute the decision boundary and probability.  It will then
+     *          time and recompute the decision boundary and probability. It will then
      *          return the S/V's that when removed improve the probability in 'c1's 
      *          the most.
      *@param[in]  example  Example that was classified incorrectly.
@@ -112,8 +112,8 @@ typedef  TrainingProcess2*  TrainingProcess2Ptr;
      *@param[in]  c1  Class that the 'example; parameter should have been classed as.
      *@param[in]  c2  Class that it was classified as.
      */
-    vector<ProbNamePair>  FindWorstSupportVectors (FeatureVectorPtr    example,
-                                                   int32               numToFind,
+    vector<ProbNamePair>  FindWorstSupportVectors (FeatureVectorPtr example,
+                                                   int32            numToFind,
                                                    MLClassConstPtr  c1,
                                                    MLClassConstPtr  c2
                                                   );
@@ -129,8 +129,8 @@ typedef  TrainingProcess2*  TrainingProcess2Ptr;
      *@param[in]  c1  Class that the 'example; parameter should have been classed as.
      *@param[in]  c2  Class that it was classified as.
      */
-    vector<ProbNamePair>  FindWorstSupportVectors2 (FeatureVectorPtr    example,
-                                                    int32               numToFind,
+    vector<ProbNamePair>  FindWorstSupportVectors2 (FeatureVectorPtr example,
+                                                    int32            numToFind,
                                                     MLClassConstPtr  c1,
                                                     MLClassConstPtr  c2
                                                    );
@@ -148,9 +148,9 @@ typedef  TrainingProcess2*  TrainingProcess2Ptr;
      *@param probabilities [out] Pointer to list of double's,  must be as large as 'classes'  The probability for each corresponding class will be stored hear.
      */
     void                 ProbabilitiesByClass (const MLClassConstList&  classes,
-                                               FeatureVectorPtr            example,
-                                               int32*                      votes,
-                                               double*                     probabilities
+                                               FeatureVectorPtr         example,
+                                               int32*                   votes,
+                                               double*                  probabilities
                                               );
 
     
@@ -166,7 +166,7 @@ typedef  TrainingProcess2*  TrainingProcess2Ptr;
 
 
     void                 RetrieveCrossProbTable (MLClassConstList&  classes,
-                                                 double**              crossProbTable  // two dimension matrix that needs to be classes.QueueSize ()  squared.
+                                                 double**           crossProbTable  // two dimension matrix that needs to be classes.QueueSize ()  squared.
                                                 );
 
 
@@ -180,17 +180,17 @@ typedef  TrainingProcess2*  TrainingProcess2Ptr;
     MLClassConstPtr  ClassifyAImageOneLevel (FeatureVector&  example);
  
     MLClassConstPtr  ClassifyAImageOneLevel (FeatureVector&  example,
-                                                int32&          numOfWinners,
-                                                bool&           knownClassOneOfTheWinners
-                                               );
+                                             int32&          numOfWinners,
+                                             bool&           knownClassOneOfTheWinners
+                                            );
 
 
     MLClassConstPtr  ClassifyAImageOneLevel (FeatureVector&  example,
-                                                double&         probability,
-                                                int32&          numOfWinners, 
-                                                bool&           knownClassOneOfTheWinners,
-                                                double&         breakTie
-                                               );
+                                             double&         probability,
+                                             int32&          numOfWinners,
+                                             bool&           knownClassOneOfTheWinners,
+                                             double&         breakTie
+                                            );
 
 
     //************************************************************
@@ -208,9 +208,9 @@ typedef  TrainingProcess2*  TrainingProcess2Ptr;
     RunLog&                log;
   
     MLClassConstPtr        noiseMLClass;    /**< Point to class that represents Noise Images
-                                                *  The object pointed to will also be included 
-                                                *  in mlClasses.
-                                                */
+                                             *  The object pointed to will also be included
+                                             *  in mlClasses.
+                                             */
     TrainingProcess2Ptr    trainingProcess;   
 
     ModelPtr               trainedModel;

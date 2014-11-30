@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="ImportGPSData"
-	ProjectGUID="{E0B37EA5-C409-46AB-B63D-DD520E7A9F90}"
+	ProjectGUID="{9A814312-7EB9-4A1C-BDBD-187F45A57EB1}"
 	RootNamespace="ImportGPSData"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"

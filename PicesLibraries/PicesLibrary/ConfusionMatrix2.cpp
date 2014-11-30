@@ -28,12 +28,12 @@ using namespace  MLL;
 
 
 ConfusionMatrix2::ConfusionMatrix2 (const MLClassConstList&  _classes,  // Will make its own copy of '_classes'
-                                    istream&                    f,
-                                    int32                       _bucketSize,
-                                    int32                       _numOfBuckets,
-                                    int32                       _numOfProbBuckets,
-                                    int32                       _probBucketSize,
-                                    RunLog&                     _log
+                                    istream&                 f,
+                                    int32                    _bucketSize,
+                                    int32                    _numOfBuckets,
+                                    int32                    _numOfProbBuckets,
+                                    int32                    _probBucketSize,
+                                    RunLog&                  _log
                                    ):
   bucketSize                  (_bucketSize),
   classCount                  (0),
@@ -1815,10 +1815,10 @@ void   ConfusionMatrix2::PrintTrueFalsePositivesTabDelimited (ostream&  r)
 
 
 void   ConfusionMatrix2::ComputeFundamentalStats (MLClassConstPtr  ic,
-                                                  double&             truePositives,
-                                                  double&             trueNegatives,
-                                                  double&             falsePositives,
-                                                  double&             falseNegatives
+                                                  double&          truePositives,
+                                                  double&          trueNegatives,
+                                                  double&          falsePositives,
+                                                  double&          falseNegatives
                                                  )
                                                  const
 {

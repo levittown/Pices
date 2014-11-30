@@ -1,71 +1,6 @@
 #if  !defined(_IMAGECLASSCONSTLIST_)
 #define  _IMAGECLASSCONSTLIST_
 
-/**
- *@class  MLL::MLClass
- *@brief  Represents a "Class" in the Machine Learning Sense.
- *@author  Kurt Kramer
- *@details
- *@code
- **********************************************************************
- **                             MLClass                               *
- **                                                                   *
- **  Each instance of this class represents a single Class as used in *
- **  Machine Learning sense.  Each instance of 'FeatureVector' class  *
- **  will point to an instance of this class.  There can only be one  *
- **  instance of each Class in memory.  Specifically the 'name' field *
- **  will be unique.  This is enforced by making the constructor and  *
- **  destructor private.  The only way to create a new instance of a  *
- **  'MLClass' object is to call one of the the static methods of     *
- **  'CreateNewMLClass'.  These methods will look for a instance   *
- **  of 'MLClass' that already exists.  If one does not they will     *
- **  then create a new one.                                           *
- **                                                                   *
- **  Please refer to MLClassList at bottom of file.  That class is    *
- **  the object you will most be using when dealing with Images.      *
- **  classes.                                                         *
- **                                                                   *
- **  PicesClass  
- **  There is a special relationship between this class  and a class  *
- **  called 'PicesClass' in the 'PicesInterface' library'.  PicesClass*
- **  is a managed c++ version of this class.  There is a one-to-one   *
- **  correspondence between the two classes.  When ever a instance    *
- **  of 'PicesClass' gets created it will automatically call the      *
- **  the static method 'MLClass::CreateNewMLClass' to get the      *
- **  unmanaged version of the class.                                  *
- **                                                                   *
- **                                                                   *
- **  classId   - A unique number that is assigned by the Pices        *
- **              DataBase when a new class is added to it.            *
- **                                                                   *
- **  name      - Name of class; This name will be unique for the      *
- **              process. Underscore characters have special meaning  *
- **              to several methods in PicesLibrary.  They help       *
- **              separate the name into multiple class levels.        *
- **                                                                   *
- **  num       - Used by SVMModel when creating Training Models and   *
- **              Classifying an instance of a imageFeatures           *
- **                                                                   *
- **  parent    - Pointer to a instance of 'MLClass' that is the       *
- **              parent to this instance. And example would be a      *
- **              class called 'Copepod_Calanoid' will have a parent   *
- **              called 'Copepod'.  The parent class to all classes   *
- **              is "AllClasses"                                      *
- **                                                                   *
- **  unDefined - When set to true indicates that this class is not    *
- **              a Plankton or has not yet been classified as a       *
- **              Plankton.  This is set automatically when name is    *
- **              set. Names such as NOISE, UNKNOWN, UNDEFINED, NOISY, *
- **              and NONPLANKTON will be set to true  otherwise       *
- **              false.  The names are NOT case sensitive so for      *
- **              example  Noise, UnKnown, and noisy  would set  it    *
- **              false.                                               *
- **********************************************************************
- *@endcode
- *@see MLL::MLClassList, MLL::FeatureVector, PicesInterface::PicesClass
- *@see MLL::DataBase::MLClassLoad, MLL::DataBase::ImageInsert
- */
-
 
 #include "GoalKeeper.h"
 #include "RunLog.h"
@@ -90,9 +25,9 @@ namespace MLL
 
   /**
    *@class MLClassList
-   *@brief  Maintains a list of MLClass instances.
+   *@brief  Maintains a list of (MLClass const) instances where the list itself is constant.
    *@details  There will be only one instance of each MLClass by name and these instances will 
-   *          be owned by MLClass::existingMLClasses.
+   *  be owned by MLClass::existingMLClasses.
    */
   class  MLClassConstList:  public KKQueueConst<MLClass>
   {
@@ -128,7 +63,7 @@ namespace MLL
                                                      );
 
 
-    /** @brief  Clears the contens of this list and updates nameIndex structure. */
+    /** @brief  Clears the contents of this list and updates nameIndex structure. */
     virtual
       void  Clear ();
       
@@ -168,7 +103,7 @@ namespace MLL
     MLClassConstListPtr  ExtractListOfClassesForAGivenHierarchialLevel (int32 level)  const;
 
 
-    /** @brief  return pointer to instance with '_name';  if none exists, create one and add to list. */
+    /** @brief  return pointer to instance with '_name'; if none exists, create one and add to list. */
     virtual
     MLClassConstPtr  GetMLClassPtr (const KKStr& _name);
 
@@ -176,14 +111,14 @@ namespace MLL
 
     /**
      *@brief Return a pointer to the MLClass object that represents the unknown Class in the list. 
-     *@details That is the one with the name 'UNKNOWN'.  If none is found then one will be created 
+     *@details That is the one with the name 'UNKNOWN'. If none is found then one will be created
      * and added to the list.
      */
     MLClassConstPtr   GetUnKnownClass ();
 
 
     /**
-     *@brief  Returns a pointer of MLClass object with name (_name);  if none 
+     *@brief  Returns a pointer of MLClass object with name (_name); if none
      *        in list will then return NULL.
      *@param[in]  _name  Name of MLClass to search for.
      *@return  Pointer to MLClass or NULL  if not Found.

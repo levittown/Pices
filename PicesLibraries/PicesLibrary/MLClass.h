@@ -3,7 +3,7 @@
 
 /**
  *@class  MLL::MLClass
- *@brief  Represents a "Class" in the Machine Learnining Sense.
+ *@brief  Represents a "Class" in the Machine Learning Sense.
  *@author  Kurt Kramer
  *@details
  *@code
@@ -17,9 +17,9 @@
  **  will be unique.  This is enforced by making the constructor and  *
  **  destructor private.  The only way to create a new instance of a  *
  **  'MLClass' object is to call one of the the static methods of     *
- **  'CreateNewMLClass'.  These methods will look for a instance   *
- **  of 'MLClass' that already exists.  If one does not they will     *
- **  then create a new one.                                           *
+ **  'CreateNewMLClass'.  These methods will look for a instance of   *
+ **  'MLClass' that already exists.  If one does not they will then   *
+ **  create a new one.                                                *
  **                                                                   *
  **  Please refer to MLClassList at bottom of file.  That class is    *
  **  the object you will most be using when dealing with Images.      *
@@ -109,14 +109,14 @@ namespace MLL
      *@details
      *@code
      ************************************************************************
-     ** Used to get pointer to existing MLClass object that already      *
-     ** exists in 'existingMLClasses'.  If one does not exist then a new *
-     ** MLClass object with this name will be created.                   *
+     ** Used to get pointer to existing MLClass object that already exists  *
+     ** exists in 'existingMLClasses'.  If one does not exist then a new    *
+     ** MLClass object with this name will be created.                      *
      **                                                                     *
-     ** This is the only method that can actually create a MLClass       *
-     ** instance.  The idea is that there is only one MLClass object     *
-     ** ever created for each class.  All MLClassList container objects  *
-     ** will point to instances that are in 'existingMLClasses.          *
+     ** This is the only method that can actually create a MLClass instance.*
+     ** The idea is that there is only one MLClass object ever created for  *
+     ** each class.  All MLClassList container objects  will point to       *
+     ** instances that are in 'existingMLClasses.                           *
      ************************************************************************
      *@endcode
      *@param[in]  _name   Name of class to be created.
@@ -135,7 +135,7 @@ namespace MLL
      *@details Since the class name can not be duplicated and there are nameIndex structures maintained by each
      * 'MLClassList' instances we need to make sure the name is not already in use by another instance of 
      * 'mlClass'.  This is done by first trying to update the 'nameIndex' in 'existingMLClasses' (list
-     * of all 'inageClass' instances in existance); if tjs is sucessful will then change the name in 'mlClass'
+     * of all 'inageClass' instances in existence); if this is successful will then change the name in 'mlClass'
      * and update all existing 'MLClassList' instances 'nameIndex' structures.
      *
      *@param[in,out] mlClass Class having its name changed; upon entry should contain its original name; if
@@ -145,9 +145,9 @@ namespace MLL
      *@param[in] successful Returns 'true' if name was changed; if set to false then the 'name' field in 'mlClass'
      *                       will not be changed.
      */
-    static  void  ChangeNameOfClass (MLClassPtr  mlClass, 
-                                     const KKStr&   newName,
-                                     bool&          successful
+    static  void  ChangeNameOfClass (MLClassPtr    mlClass,
+                                     const KKStr&  newName,
+                                     bool&         successful
                                     );
 
     static  void  ResetAllParentsToAllClasses ();
@@ -188,7 +188,7 @@ namespace MLL
 
     const KKStr&        Description ()  const {return description;}
 
-    MLClassPtr       MLClassForGivenHierarchialLevel (KKU::uint16 level)  const;
+    MLClassPtr          MLClassForGivenHierarchialLevel (KKU::uint16 level)  const;
 
     bool                IsAnAncestor (MLClassConstPtr  c)  const;          /**< @brief Returns true if 'c' is an ancestor */
 
@@ -197,7 +197,7 @@ namespace MLL
     const  KKStr&       Name ()      const {return  name;}
     const  KKStr&       UpperName () const {return  upperName;}  /**< @brief Returns name capitalized. */
 
-    MLClassConstPtr  Parent () const {return parent;}
+    MLClassConstPtr     Parent () const {return parent;}
     void                Parent (MLClassConstPtr  _parent)  {parent = _parent;}
     const KKStr&        ParentName ()  const;
 
@@ -228,9 +228,9 @@ private:
     KKStr               name;         /**< @brief Name of Class.                                                              */
     KKStr               upperName;    /**< @brief Upper case version of name;  Used by LookUpByName to assist in performance. */
 
-    bool                unDefined;    /**< @brief A class whos name is "", "UnKnown", "UnDefined", or starts with "Noise_" */
+    bool                unDefined;    /**< @brief A class who's name is "", "UnKnown", "UnDefined", or starts with "Noise_" */
 
-    MLClassConstPtr  parent;       /**< @brief Supports the concept of Parent/Child classes as part of a hierarchy.
+    MLClassConstPtr     parent;       /**< @brief Supports the concept of Parent/Child classes as part of a hierarchy.
                                        *@details Adding this field to help support the PicesInterface version of this class.
                                        */
 
@@ -285,7 +285,7 @@ private:
                                                 );
 
 
-    /** @brief  Clears the contens of this list and updates nameIndex structure. */
+    /** @brief  Clears the contents of this list and updates nameIndex structure. */
     virtual
       void  Clear ();
       
@@ -361,8 +361,8 @@ private:
       
     static
       MLClassListPtr  MergeClassList (const MLClassList&  list1,
-                                         const MLClassList&  list2
-                                        );
+                                      const MLClassList&  list2
+                                     );
 
 
     KKU::uint16    NumHierarchialLevels ()  const;
@@ -375,29 +375,29 @@ private:
     MLClassPtr  PopFromFront ();
 
     virtual
-    void           PushOnBack (MLClassPtr  mlClass);
+    void        PushOnBack (MLClassPtr  mlClass);
 
     virtual
-    void           PushOnFront (MLClassPtr  mlClass);
+    void        PushOnFront (MLClassPtr  mlClass);
 
 
-    void           Save (KKStr   _fileName,
-                         bool&   _successfull
-                        );
+    void        Save (KKStr   _fileName,
+                      bool&   _successfull
+                     );
 
-    void           SortByName ();
+    void        SortByName ();
 
-    KKStr          ToString ()  const; 
+    KKStr       ToString ()  const;
 
-    KKStr          ToCommaDelimitedStr ()  const;
+    KKStr       ToCommaDelimitedStr ()  const;
 
-    KKStr          ToTabDelimitedStr ()  const;
+    KKStr       ToTabDelimitedStr ()  const;
 
-    void           WriteXML (std::ostream&  o)  const;
+    void        WriteXML (std::ostream&  o)  const;
 
-    bool           operator== (const MLClassList&  right)  const;
+    bool        operator== (const MLClassList&  right)  const;
 
-    bool           operator!= (const MLClassList&  right)  const;
+    bool        operator!= (const MLClassList&  right)  const;
 
                                                                        
     MLClassList& operator=  (const MLClassList&  right);
@@ -427,14 +427,13 @@ private:
 
     /**
      *@brief  Set the owner flag.
-     *@details Forcing Owner to be private to make sure that no list can own any 
-     * MLClass objects, to prevent accidental deletion of a 'MLClass'
-     * object.  Only 'MLClass::existingMLClasses' may own the contents 
-     * of its list.
+     *@details Forcing Owner to be private to make sure that no list can own any MLClass objects, to
+     * prevent accidental deletion of a 'MLClass' object.  Only 'MLClass::existingMLClasses' may own
+     * the contents of its list.
      */
     void      Owner (bool _owner)  {KKQueue<MLClass>::Owner (_owner);}
 
-    bool      undefinedLoaded;  /**< Indicates if the class that represents examples that have not beed 
+    bool      undefinedLoaded;  /**< Indicates if the class that represents examples that have not been
                                  *   classified yet has been loaded.
                                  */
 

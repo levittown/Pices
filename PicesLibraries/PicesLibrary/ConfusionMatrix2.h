@@ -45,12 +45,12 @@ namespace  MLL
     //  Will construct an instance of 'ConfusionMatrix2'  from the contents of the 
     //  provided  'istream' object. 
     ConfusionMatrix2 (const MLClassConstList&  _classes,  // Will make its own copy of '_classes'
-                      istream&                    f,
-                      int32                       _bucketSize,
-                      int32                       _numOfBuckets,
-                      int32                       _numOfProbBuckets,
-                      int32                       _probBucketSize,
-                      RunLog&                     _log
+                      istream&                 f,
+                      int32                    _bucketSize,
+                      int32                    _numOfBuckets,
+                      int32                    _numOfProbBuckets,
+                      int32                    _probBucketSize,
+                      RunLog&                  _log
                      );
 
     ~ConfusionMatrix2 ();
@@ -153,9 +153,12 @@ namespace  MLL
 
     void  WriteXML (ostream&  f)  const;
 
-    // Meant to work with 'ClassificationStatus.cs' of PicesCommander.  This will write a simple
-    // confusion matrix table; one row for each class.  'ClassificationStatus.cs'  will then use this
-    // data to adjust for bias in the learner.    
+
+    /**
+     * Meant to work with 'ClassificationStatus.cs' of PicesCommander. This will write a simple
+     * confusion matrix table; one row for each class. 'ClassificationStatus.cs' will then use this
+     * data to adjust for bias in the learner.
+     */
     void  WriteSimpleConfusionMatrix (ostream&  f)  const;
 
   private:
@@ -191,16 +194,16 @@ namespace  MLL
                                   );
 
     void  MakeSureWeHaveTheseClasses (const MLClassConstList&  classList,
-                                      RunLog&                     log
+                                      RunLog&                  log
                                      );
 
 
     void  PrintLatexTableColumnHeaders (ostream&  outFile);
 
-    void  PrintSingleLine (ostream&  _outFile,
-                           KKStr     _name,
-                           double    _lineTotal,
-                           double    _splits[]
+    void  PrintSingleLine (ostream& _outFile,
+                           KKStr    _name,
+                           double   _lineTotal,
+                           double   _splits[]
                           );
 
     void  PrintSingleLineTabDelimited (ostream&      _outFile,
@@ -209,25 +212,25 @@ namespace  MLL
                                        double        _splits[]
                                       );
 
-    void  PrintSingleLineHTML (ostream&       _outFile,
-                               const KKStr&   _name,
-                               double         _lineTotal,
-                               int32            _knownClassNum,
-                               double         _splits[]
+    void  PrintSingleLineHTML (ostream&      _outFile,
+                               const KKStr&  _name,
+                               double        _lineTotal,
+                               int32         _knownClassNum,
+                               double        _splits[]
                               );
 
     void  PrintSingleLineLatexTable (ostream&      _outFile,
-                                     int32           _knownClassNum, 
+                                     int32         _knownClassNum,
                                      const KKStr&  _name,
                                      double        _lineTotal,
                                      double        _splits[]
                                     );
 
 
-    void  PrintSingleLineShort (ostream&        _outFile,
-                                const KKStr&   _name,
-                                double          _lineTotal,
-                                double          _splits[]
+    void  PrintSingleLineShort (ostream&     _outFile,
+                                const KKStr& _name,
+                                double       _lineTotal,
+                                double       _splits[]
                                );
 
 
@@ -237,11 +240,11 @@ namespace  MLL
                             double    _splits[]
                            );
 
-    void  PrintPercentLineLatexTable (ostream&       _outFile,
-                                      int32          _rowNum,
-                                      const KKStr&   _name,
-                                      double         _lineTotal,
-                                      double         _splits[]
+    void  PrintPercentLineLatexTable (ostream&      _outFile,
+                                      int32         _rowNum,
+                                      const KKStr&  _name,
+                                      double        _lineTotal,
+                                      double        _splits[]
                                      );
 
     void  PrintPercentLineTabDelimited (ostream&      _outFile,
@@ -289,9 +292,9 @@ namespace  MLL
     vector<double*>  countByKnownClassBySize;
     vector<double>   countsByKnownClass;
 
-    MLClassConstList  classes;   /**< We will make our own unique copy of the MLClassConstList.
-                                     * This way we know the ordering which represents the numbering
-                                     * can not change behind our back.
+    MLClassConstList  classes;  /**< We will make our own unique copy of the MLClassConstList.
+                                 * This way we know the ordering which represents the numbering
+                                 * can not change behind our back.
                                  */
     int32            numOfBuckets;
     int32            numOfProbBuckets;

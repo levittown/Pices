@@ -63,14 +63,14 @@ namespace MLL
      *@details Will treat all classes from 'inputCounts' that are not in the internal 'classes' or 'otherClass' as a 'otherClass'.
      *  The adjusted counts will be computed using the stats earlier computed and saved in 'probOfDetection' and 'probOfFalseAlarm'.
      *  AdjustedCount = InputCount * probOfFalseAlarm / probOfDetection;
-     *@param[in] inputCounts List of counts retuned from the classifier; each entry will consist of the classification and its 
+     *@param[in] inputCounts List of counts returned from the classifier; each entry will consist of the classification and its
      *                       respective count.
      */
     ClassStatisticListPtr   AdjustClassificationCounts (const ClassStatisticList&  inputCounts,
                                                         RunLog&                    log
                                                        );
 
-    void  ComputeStatistics (); /**< computing  probOfDetection  and  probOfFalseAlarm(Specifiity) */
+    void  ComputeStatistics (); /**< computing  probOfDetection  and  probOfFalseAlarm(Specificity) */
 
 
     /**@brief Will lump all counts in 'inputCounts' into classes that match this instance 'classList' and 'otherClass' grouping. */
@@ -78,7 +78,7 @@ namespace MLL
 
     void  Prediction (MLClassConstPtr  knownClass,
                       MLClassConstPtr  predClass,
-                      RunLog&             log
+                      RunLog&          log
                      );
 
     void  PrintConfusionMatrixTabDelimited (ostream&  outFile);
@@ -131,18 +131,18 @@ namespace MLL
 
 
     MLClassConstList  classes;
-    KKU::DateTime        dateTimeComputed;
-    uint32*              knownByClass;
-    uint32               numClasses;    /**< Number of classes in 'classes' plus one for 'otherClass'. */
-    uint32               numCorrect;
-    uint32               numPredictions;
+    KKU::DateTime     dateTimeComputed;
+    uint32*           knownByClass;
+    uint32            numClasses;    /**< Number of classes in 'classes' plus one for 'otherClass'. */
+    uint32            numCorrect;
+    uint32            numPredictions;
     MLClassConstPtr   otherClass;
-    int32                otherClassIdx; /**< Index into 'classes' for 'otherClass'.                    */
+    int32             otherClassIdx; /**< Index into 'classes' for 'otherClass'.                    */
 
     /**
      * A two dimensional matrix where each column will represent known class.  The predictions of the known class
      * will be distributed across rows.  The last row and last column will represent the other class.  The first 
-     * N collumns and rows will reprsent the classes listed in "classes".  The concept is that a Dual classifoer
+     * N columns and rows will represent the classes listed in "classes".  The concept is that a Dual classifier
      * will be trained on the classes specified in "classes"  but the test data will come from all classes; 
      * that is the classes listed in "classes" and "otherClass".
      */

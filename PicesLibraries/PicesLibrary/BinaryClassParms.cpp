@@ -24,11 +24,11 @@ using namespace MLL;
 using namespace SVM233;
 
 
-BinaryClassParms::BinaryClassParms (MLClassConstPtr     _class1,
-                                    MLClassConstPtr     _class2,
-                                    const svm_parameter&   _param,
-                                    const FeatureNumList&  _selectedFeatures,
-                                    float                  _weight
+BinaryClassParms::BinaryClassParms (MLClassConstPtr       _class1,
+                                    MLClassConstPtr       _class2,
+                                    const svm_parameter&  _param,
+                                    const FeatureNumList& _selectedFeatures,
+                                    float                 _weight
                                    ):
     class1           (_class1),
     class2           (_class2),

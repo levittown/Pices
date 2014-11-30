@@ -19,24 +19,22 @@ namespace MLL
     ClassStatistic (const ClassStatistic&  right);
 
     ClassStatistic (MLClassConstPtr  _mlClass,
-                    uint32              _count
+                    uint32           _count
                    );
 
     uint32              Count      ()  const {return  count;}
-    MLClassConstPtr  MLClass ()  const {return  mlClass;}
+    MLClassConstPtr     MLClass    ()  const {return  mlClass;}
 
-    void                Increment  ()         {count++;}
+    void                Increment  ()        {count++;}
 
     const KKStr&        Name       ()  const;
 
     const  ClassStatistic&  operator+= (const ClassStatistic&  right);
 
   private:
-    MLClassConstPtr  mlClass;   /**< Does not own the mlClass object.                 */
+    MLClassConstPtr     mlClass;      /**< Does not own the mlClass object.                 */
 
-    uint32              count;        /**< Represents the number of imageFeatures objects in a
-                                       * a FeatureVectorList that point to mageClass
-                                       */
+    uint32              count;        /**< Represents the number of imageFeatures objects in a a FeatureVectorList that point to MLClass */
   };
 
   typedef  ClassStatistic*  ClassStatisticPtr;
@@ -72,8 +70,6 @@ namespace MLL
   };  /* ClassStatisticList */
 
   typedef  ClassStatisticList*  ClassStatisticListPtr;
-
-
 }  /* namespace MLL */
 
 #define  _CLASSSTATISTIC_

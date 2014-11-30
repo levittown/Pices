@@ -71,7 +71,7 @@ namespace MLL
     ~DuplicateImages ();
 
 
-    /** @brief  Will add all the examples; be carefull of ownership. */
+    /** @brief  Will add all the examples; be careful of ownership. */
     bool                   AddExamples (FeatureVectorListPtr  examples);
 
     /**
@@ -98,7 +98,7 @@ namespace MLL
 
     void                   PurgeDuplicates (FeatureVectorListPtr  examples,
                                             ostream*              report
-                                           );  /**<  if not equal NULL will list examles being purged. */
+                                           );  /**<  if not equal NULL will list examples being purged. */
 
     void                   ReportDuplicates (ostream&  o);
 

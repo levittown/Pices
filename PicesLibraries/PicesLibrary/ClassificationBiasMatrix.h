@@ -34,10 +34,10 @@ namespace MLL
    *    published 2006-july-06;  vol 216:309-311
    *@endcode
    *This class uses the results of a previous 10 fold cross validation confusion matrix to adjust the results of a
-   *classification run.  The application CrossValidation will create a parameter file in the directory 
-   *"${PicesHomeDir}\\DataFiles\\TrainingModels" that contains the confusion matrix.  The option "-BiasMatrix" 
+   *classification run. The application CrossValidation will create a parameter file in the directory
+   *"${PicesHomeDir}\\DataFiles\\TrainingModels" that contains the confusion matrix. The option "-BiasMatrix"
    *tells the CrossValidation program to generate this parameter file.  It will have the same name as the Configuration
-   *file with the extension ".BiasMatrix.txt" appended to the end.  There is a managed version of this class in
+   *file with the extension ".BiasMatrix.txt" appended to the end. There is a managed version of this class in
    *PicesInterface called PicesInterface::ClassificationBiasMatrix
   */
   class  ClassificationBiasMatrix
@@ -130,18 +130,18 @@ namespace MLL
                                     );
    
 
-    KKStr                   biasFileName;
+    KKStr                biasFileName;
     MLClassConstListPtr  classes;
-    MatrixPtr               counts;
-    KKStr                   configFileName;
-    KKStr                   configFileNameFromMatrixBiasFile;
-    DateTime                configDateTime;       /**< TimeStamp of Config file when this BiasMatrix was written */
-    DateTime                dateTimeFileWritten;
-    VectorKKStr             errMsgs;
-    int32                   numClasses;
-    MatrixPtr               probabilities;
-    RunLog&                 runLog;
-    bool                    valid;
+    MatrixPtr            counts;
+    KKStr                configFileName;
+    KKStr                configFileNameFromMatrixBiasFile;
+    DateTime             configDateTime;       /**< TimeStamp of Config file when this BiasMatrix was written */
+    DateTime             dateTimeFileWritten;
+    VectorKKStr          errMsgs;
+    int32                numClasses;
+    MatrixPtr            probabilities;
+    RunLog&              runLog;
+    bool                 valid;
   };
 
   typedef  ClassificationBiasMatrix::ClassificationBiasMatrixPtr  ClassificationBiasMatrixPtr;

@@ -182,18 +182,19 @@ namespace  MLL
     ConfusionMatrix2Ptr       confusionMatrix;
     ConfusionMatrix2Ptr*      cmByNumOfConflicts;
     FeatureVectorListPtr      examples;
-    MLClassConstListPtr    mlClasses;
+    MLClassConstListPtr       mlClasses;
     int32                     imagesPerClass;
     RunLog&                   log;
     int32                     maxNumOfConflicts;  // Will indicate the number confusionMatrices created in
                                                   // table in cmByNumOfConflicts;
     int32                     numOfFolds;
 
-    int32                     numSVs;               // Total Support Vectors Detected.
+    int32                     numSVs;             /**< Total Support Vectors Detected. */
 
-    int32                     totalNumSVs;          // This is different from 'numOfSupportVectors' it will reflect all the Support Vectors
-                                                    // that are created in a Multi Class SVM.  That is if a given example is used in three
-                                                    // different binary classifiers it will be counted three times.
+    int32                     totalNumSVs;        /**< This is different from 'numOfSupportVectors' it will reflect all the Support Vectors
+                                                   * that are created in a Multi Class SVM.  That is if a given example is used in three
+                                                   * different binary classifiers it will be counted three times.
+                                                   */
 
     int32*                    numOfWinnersCounts;
     int32*                    numOfWinnersCorrects;
@@ -236,7 +237,6 @@ namespace  MLL
 
     bool                      weOwnConfusionMatrix;
   };
-
 
   typedef  CrossValidation*  CrossValidationPtr;
 

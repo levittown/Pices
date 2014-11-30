@@ -16,10 +16,10 @@ namespace MLL
 
   /**
    @class  MLL::FeatureFileIOArff
-   @brief Support the writting of ARFF Formated Feature Files.
+   @brief Support the writing of ARFF Formated Feature Files.
    @details 
-   Supports the writting of the ARFF format as supprted by thw WEKA machine learning system
-   The ARFF format is very similar to the C45 file format; but thre is only one file that 
+   Supports the writing of the ARFF format as supported by the WEKA machine learning system
+   The ARFF format is very similar to the C45 file format; but there is only one file that
    contains the file description and examples in it.  
    see http://weka.wikispaces.com/ARFF+(book+version  for description.
    @see  FeatureFileIO
@@ -38,18 +38,18 @@ namespace MLL
 
 
   private:
-    virtual  FileDescPtr  GetFileDesc (const KKStr&            _fileName,
-                                       istream&                _in,
-                                       MLClassConstListPtr  _classList,
-                                       int32&                  _estSize,
-                                       KKStr&                  _errorMessage,
-                                       RunLog&                 _log
+    virtual  FileDescPtr  GetFileDesc (const KKStr&        _fileName,
+                                       istream&            _in,
+                                       MLClassConstListPtr _classList,
+                                       int32&              _estSize,
+                                       KKStr&              _errorMessage,
+                                       RunLog&             _log
                                       );
 
 
     virtual  FeatureVectorListPtr  LoadFile (const KKStr&          _fileName,
                                              const FileDescPtr     _fileDesc,
-                                             MLClassConstList&  _classes, 
+                                             MLClassConstList&     _classes,
                                              istream&              _in,
                                              long                  _maxCount,    // Maximum # images to load.
                                              volatile const bool&  _cancelFlag,

@@ -1,18 +1,16 @@
 #ifndef _CHAINHASH_
 #define _CHAINHASH_
 
-#include  <math.h>
+#include <math.h>
 #include <vector>
 #include <list>
 #include <algorithm>
-
-using namespace std;
-
 #include <time.h>
 #include <stdio.h>
+using namespace std;
+
 
 #include "OSservices.h"
-
 #include "Attribute.h"
 #include "FeatureNumList.h"
 #include "FileDesc.h"
@@ -21,7 +19,6 @@ using namespace std;
 
 namespace MLL 
 {
-
   class  ChainHashNode;
   typedef  ChainHashNode*  ChainHashNodePtr;
 
@@ -31,7 +28,6 @@ namespace MLL
     KKU::int32 index;
     KKU::int32 value;
   };
-
 
 
   template<class T>
@@ -74,13 +70,10 @@ namespace MLL
     const T&              NOT_FOUND;
     int32                 count;
     vector<list<int32> >  bucketList;
-    vector<T*>            nodeList;    /**< Where we keep a single list of all nodes
-                                        * inserted,  this way we will be able to
+    vector<T*>            nodeList;    /**< Where we keep a single list of all nodes inserted, this way we will be able to
                                         * clean up when being deleted.
                                         */
   };
-
-
 
 
 
@@ -99,10 +92,10 @@ namespace MLL
 
     ChainHashNode (const ChainHashNode& right);
 
-    ChainHashNode ( int32                  _example_index,
-                    int32                  _example_class_label,
-                    FeatureVectorPtr       _example,
-                    bool&                  _sucessfull
+    ChainHashNode ( int32             _example_index,
+                    int32             _example_class_label,
+                    FeatureVectorPtr  _example,
+                    bool&             _sucessfull
                   );
 
     ~ChainHashNode ();
@@ -486,7 +479,7 @@ namespace MLL
 
   void  CompareTwoSetsOfGroups (vector< vector <KKStr > >&  groups1,
                                 vector< vector <KKStr > >&  groups2,
-                                std::ostream&                r
+                                std::ostream&               r
                                );
 
 

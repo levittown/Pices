@@ -19,7 +19,6 @@
 
 #include "Raster.h"
 #include "Str.h"
-
 #include "MLLTypes.h"
 #include "MLClass.h"
 #include "ImageFeatures.h"
@@ -37,25 +36,25 @@ namespace  MLL
     typedef  ManagedClassList*  ManagedClassListPtr;
 
 
-    SipperExtractionImageManager (FileDescPtr    _fileDesc,
-                                  const KKStr&   _rootDir,
-                                  bool           _saveFeatureData,
-                                  int32          _veryLargeImageSize,
-                                  bool           _imagesAreClassified,
-                                  bool           _countOnly,
-                                  uint32         _imagesPerDirectory,
-                                  RunLog&        _log
+    SipperExtractionImageManager (FileDescPtr   _fileDesc,
+                                  const KKStr&  _rootDir,
+                                  bool          _saveFeatureData,
+                                  int32         _veryLargeImageSize,
+                                  bool          _imagesAreClassified,
+                                  bool          _countOnly,
+                                  uint32        _imagesPerDirectory,
+                                  RunLog&       _log
                                  );
 
     ~SipperExtractionImageManager ();
 
-    void  AddImage (const KKStr&        fileName,
+    void  AddImage (const KKStr&     fileName,
                     MLClassConstPtr  predClass,
-                    int32               size,
-                    float               depth,
-                    ImageFeaturesPtr    example,
-                    RasterPtr           raster,
-                    bool                colorize
+                    int32            size,
+                    float            depth,
+                    ImageFeaturesPtr example,
+                    RasterPtr        raster,
+                    bool             colorize
                    );
 
 
@@ -69,7 +68,7 @@ namespace  MLL
                               VectorUlong*  scanLinesPerMeterDepth
                              )  const;
 
-    void  SaveFrame (const KKStr&    _fileName,
+    void  SaveFrame (const KKStr&     _fileName,
                            RasterPtr  _raster,
                            bool       colorize
                     );

@@ -36,7 +36,7 @@ namespace  MLL
  * @param[in] _fileDesc
  * @param[in] _attributeTypes   caller keeps ownership,  but encoder will continue to reference it.
  * @param[in] _cardinalityTable caller keeps ownership,  but encoder will continue to reference it.
- * @param[in] _log A logfile stream. All important events will be ouput to this stream
+ * @param[in] _log A logfile stream. All important events will be output to this stream
  */
 FeatureEncoder2::FeatureEncoder2 (const ModelParam&  _param,
                                   FileDescPtr        _fileDesc,
@@ -54,7 +54,7 @@ FeatureEncoder2::FeatureEncoder2 (const ModelParam&  _param,
     encodingMethod       (ModelParam::NoEncoding),
     fileDesc             (_fileDesc),
     log                  (_log),
-    nominal_counters     (NULL),  // used by Bitreduction.
+    nominal_counters     (NULL),  // used by BitReduction.
     nominalCountersSize  (0),
     numOfFeatures        (0),
     srcFeatureNums       (NULL),
@@ -148,7 +148,7 @@ FeatureEncoder2::FeatureEncoder2 (const FeatureEncoder2&  _encoder):
     encodingMethod       (_encoder.encodingMethod),
     fileDesc             (_encoder.fileDesc),
     log                  (_encoder.log),
-    nominal_counters     (NULL),  // used by Bitreduction.
+    nominal_counters     (NULL),  // used by BitReduction.
     nominalCountersSize  (0),
     numOfFeatures        (_encoder.numOfFeatures),
     srcFeatureNums       (NULL),
@@ -395,8 +395,8 @@ FeatureVectorListPtr  FeatureEncoder2::EncodeAllExamples (const FeatureVectorLis
 
 /**
  * @brief Attempts to reduce the number of images in the images_list via compression
- *        if no compression specified will just copy refrences to images to compressed
- *        list, and flag as Opwner(false).
+ *        if no compression specified will just copy references to images to compressed
+ *        list, and flag as Owner(false).
  * @param[in] images_list The list of images you want to attempt to reduce
  * @param[out] compressed_images_list The reduced list of images
  * @return a CompressionStats struct containing the details of the compression
@@ -478,9 +478,8 @@ FeatureVectorListPtr  FeatureEncoder2::EncodedFeatureVectorList (const FeatureVe
 
 /**
  * @brief Performs bit reduction on the parameter p
- * @param[in,out] p The svm_problem you wish to apply bit reduction to
- * @param[in] param Needed for various reasons. Just accept it
- * @param[out] ratio The compression ratio
+ * @param[in]  examples
+ * @param[out] compressed_example_list  The compression ratio
  */
 CompressionStats  FeatureEncoder2::compress (const FeatureVectorList&  examples,
                                              FeatureVectorListPtr      compressed_example_list
@@ -530,7 +529,7 @@ CompressionStats  FeatureEncoder2::compress (const FeatureVectorList&  examples,
   FeatureVectorList::const_iterator  i;
   FeatureVectorPtr example;
   int32 example_index = 0;
-  bool success = false;  // indicates if example was succesfully inserted into hash table
+  bool success = false;  // indicates if example was successfully inserted into hash table
 
   example_index = 0;
 

@@ -39,13 +39,11 @@ namespace MLL
 
 
 
-
-
   /**
-   @class  DataBaseUpdate
-   @brief DataBaseUpdate connection management object.  All database communications will go through this class.
-   @author Kurt Kramer
-   @date Dec/01/2008
+   *@class  DataBaseUpdate
+   *@brief DataBaseUpdate connection management object; all database communications will go through this class.
+   *@author Kurt Kramer
+   *@date Dec/01/2008
    */
   class  DataBaseUpdate
   {
@@ -63,7 +61,6 @@ namespace MLL
     DataBaseUpdate (RunLog&  _log);
 
     ~DataBaseUpdate ();
-
 
     void  LoadSourceFile (const KKStr&  fileName,
                           DataBasePtr   dbConn,

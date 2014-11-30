@@ -46,11 +46,11 @@ namespace MLL
     typedef  SVM233::svm_parameter  svm_parameter;
 
     /** @brief  Constructor for 'BinaryClassParms' where caller supplies the two classes and parameters for that specific class pair. */
-    BinaryClassParms (MLClassConstPtr     _class1,
-                      MLClassConstPtr     _class2,
-                      const svm_parameter&   _param,
-                      const FeatureNumList&  _selectedFeatures,
-                      float                  _weight
+    BinaryClassParms (MLClassConstPtr       _class1,
+                      MLClassConstPtr       _class2,
+                      const svm_parameter&  _param,
+                      const FeatureNumList& _selectedFeatures,
+                      float                 _weight
                      );
     
     BinaryClassParms (const BinaryClassParms&  binaryClassParms);
@@ -58,15 +58,15 @@ namespace MLL
     ~BinaryClassParms ();
 
     static
-    BinaryClassParmsPtr  CreateFromTabDelStr (const KKStr&  _str,
-                                              FileDescPtr   _fileDesc,
-                                              RunLog&       _log
+    BinaryClassParmsPtr  CreateFromTabDelStr (const KKStr& _str,
+                                              FileDescPtr  _fileDesc,
+                                              RunLog&      _log
                                              );
 
     //  Member Access Methods
     double                 AParam           () const {return  param.A;}
-    MLClassConstPtr     Class1           () const {return  class1;}
-    MLClassConstPtr     Class2           () const {return  class2;}
+    MLClassConstPtr        Class1           () const {return  class1;}
+    MLClassConstPtr        Class2           () const {return  class2;}
     double                 C                () const {return  param.C;}
     const svm_parameter&   Param            () const {return  param;}
     const FeatureNumList&  SelectedFeatures () const {return  selectedFeatures;}
@@ -89,9 +89,9 @@ namespace MLL
     MLClassConstPtr  class1;
     MLClassConstPtr  class2;
 
-    svm_parameter       param;             // From SVMlib
-    FeatureNumList      selectedFeatures;  // Feature Number to use.
-    float               weight;
+    svm_parameter    param;             // From SVMlib
+    FeatureNumList   selectedFeatures;  // Feature Number to use.
+    float            weight;
   };  /* BinaryClassParms */
 
 

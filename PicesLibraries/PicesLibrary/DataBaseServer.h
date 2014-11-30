@@ -89,14 +89,12 @@ namespace MLL
     const KKStr&        DefaultServerDescription ()  const  {return defaultServerDescription;}
     void                DefaultServerDescription (const KKStr&   _defaultServerDescription)  {defaultServerDescription = _defaultServerDescription;}
 
-
     DataBaseServerPtr   LookUpByDescription (const KKStr&  _description);
 
-    DataBaseServerPtr   GetDefaultServer ();   // Will return a pointer to the DataBaseServer instance that
-                                               // has the same decription as "defaultServerDescription".
+    DataBaseServerPtr   GetDefaultServer ();   /**< Will return a pointer to the DataBaseServer instance that
+                                                * has the same description as "defaultServerDescription".
+                                                */
   
-
-
     RunLog&   Log ()   {return  log;}
 
     void  WriteConfigFile ()  const;

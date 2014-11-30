@@ -51,8 +51,8 @@ DuplicateImages::DuplicateImages (FeatureVectorListPtr  _examples,
 
 
 
-DuplicateImages::DuplicateImages (FileDescPtr  _fileDesc,
-                                  RunLog&      _log
+DuplicateImages::DuplicateImages (FileDescPtr _fileDesc,
+                                  RunLog&     _log
                                  ):
    duplicateCount     (0),
    duplicateDataCount (0),
@@ -112,7 +112,7 @@ bool   DuplicateImages::AddExamples (FeatureVectorListPtr  examples)
 /**
  * Will add one more image to list and if it turns out to be a
  * duplicate will return pointer to a "DuplicateImage" structure
- * that will contain a list of all imags that it is duplicate to.
+ * that will contain a list of all images that it is duplicate to.
  * If no duplicate found will then return a NULL pointer.
  */
 DuplicateImagePtr  DuplicateImages::AddSingleImage (FeatureVectorPtr  image)

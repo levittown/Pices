@@ -64,7 +64,7 @@ namespace MLL
 
     /**
       *@brief  Adds a allowable Nominal value to the Nominal or Symbolic field that this attribute represents.
-      *@details To only be used by instances of 'Attribute' that represent Nominal or Symbolic type attributes.  If the
+      *@details To only be used by instances of 'Attribute' that represent Nominal or Symbolic type attributes. If the
       *         Attribute type is not s 'Nominal' or 'Symbolic' then this method will throw am exception
       *@param[in] nominalValue A possible value that this instance of 'Attribute' could represent.
       *@param[out] alreadyExists Indicates if this instance of 'Attribute' already contains a nominal value called 'nominalValue'.
@@ -87,7 +87,7 @@ namespace MLL
     /**
      *@brief  Returns the nominal value for the given ordinal value.
      *@details For example: you could have a Attribute called DayOfTheWeek that would be type 'NominalAttribute'
-     *  where its possible values  are "Sun", "Mon", "Tue", "Wed", "Thur", "Fri", and "Sat".   In this case a call
+     *  where its possible values  are "Sun", "Mon", "Tue", "Wed", "Thur", "Fri", and "Sat". In this case a call
      *  to this method where 'code' == 3 would return "Wed".
      */
     const  

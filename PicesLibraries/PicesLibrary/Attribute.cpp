@@ -1,33 +1,29 @@
-#include  "FirstIncludes.h"
-
-#include  <stdio.h>
-#include  <ctype.h>
-#include  <time.h>
-
-#include  <string>
-#include  <iostream>
-#include  <fstream>
-#include  <vector>
-#include  <map>
-
-#include  "MemoryDebug.h"
-#include  "BasicTypes.h"
+#include "FirstIncludes.h"
+#include <stdio.h>
+#include <ctype.h>
+#include <time.h>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <map>
+#include "MemoryDebug.h"
+#include "BasicTypes.h"
 using namespace std;
 
 
 
-#include  "DateTime.h"
-#include  "OSservices.h"
-#include  "KKQueue.h"
-#include  "RunLog.h"
-#include  "Str.h"
+#include "DateTime.h"
+#include "OSservices.h"
+#include "KKQueue.h"
+#include "RunLog.h"
+#include "Str.h"
 using namespace KKU;
 
-#include  "Attribute.h"
-
-#include  "MLLTypes.h"
-#include  "FeatureNumList.h"
-#include  "MLClass.h"
+#include "Attribute.h"
+#include "MLLTypes.h"
+#include "FeatureNumList.h"
+#include "MLClass.h"
 //#include  "ImageFeatures.h"
 using namespace MLL;
 
@@ -48,7 +44,7 @@ Attribute::Attribute (const KKStr&   _name,
   if  ((type == NominalAttribute)  ||  (type == SymbolicAttribute))
   {
     nominalValuesUpper = new KKStrListIndexed (true,   // true == nominalValuesUpper will own its contents.
-                                               false   // false = Not Case Sensative.
+                                               false   // false = Not Case Sensitive.
                                               );
   }
 }

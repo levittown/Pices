@@ -85,9 +85,9 @@ namespace MLL
     static  void  Initialization ();
     static  void  FinalCleanUp ();
 
-    static  bool  EmbeddedServerRunning ();  /**< Indicates that the Embeded server has been initialize and cosumming resources */
+    static  bool  EmbeddedServerRunning ();  /**< Indicates that the Embedded server has been initialize and consuming resources */
 
-    static  DataBaseServerListPtr  GetListOfServers (RunLog&  _log);  /**< Returns a list of previosly defined MySQL servers that we can connect to. */
+    static  DataBaseServerListPtr  GetListOfServers (RunLog&  _log);  /**< Returns a list of previously defined MySQL servers that we can connect to. */
 
 
    
@@ -137,8 +137,8 @@ namespace MLL
                                          ConstCharStarArray  colsToReturn
                                         );
 
-    /// Wil make SQL Query call; if there is a disconnect from the database;  it will not try to
-    /// recconnect like the other 'QueryStatement2' calls.
+    /// Will make SQL Query call; if there is a disconnect from the database;  it will not try to
+    /// Reconnect like the other 'QueryStatement2' calls.
     int32  QueryStatement2 (const char*  queryStr,
                             int32        queryStrLen
                            );
@@ -175,8 +175,8 @@ namespace MLL
 
     /**
      *@brief Returns a List of FeatureVector's for specified SipperFile and if specified for Specified ImaegClass.
-     *@details The retrieval is driven by the Images table and a Left-Join is donewith the FeatureData table; so if 
-     * there is no coresponding FeatureData table enry for a image the FeaterData will be filled with 0's.
+     *@details The retrieval is driven by the Images table and a Left-Join is done with the FeatureData table; so if
+     * there is no corresponding FeatureData table entry for a image the FeaterData will be filled with 0's.
      *@param[in] classKeyToUse  If equal to 'V' will only return Validated examples.
      *@param[in] reExtractInstrumentData If set to true will Re-Extract Instrument data from the SipperFile.
      */
@@ -230,30 +230,30 @@ namespace MLL
     ///  Creates and entry in the Images table for 'image',
     ///  if either dimension of 'image' exceeds 100 it will save a reduced version of it in the thumbNail field of 'Images' 
     ///  and a full size version in the ImagesFullSize table.
-    void  ImageInsert (const RasterSipper&       image,
-                       const KKStr&              imageFileName,
-                       const KKStr&              sipperFileName,
-                             uint64              byteOffset,     // byteOffset of SipperRow containing TopLeftRow
-                             uint32              topLeftRow,
-                             uint32              topLeftCol,
-                             uint32              height,
-                             uint32              width,
-                             uint32              pixelCount,
-                             uchar               connectedPixelDist,
-                             uint32              extractionLogEntryId,
-                             uint32              classLogEntryId,
-                             uint32              centroidRow,
-                             uint32              centroidCol,
+    void  ImageInsert (const RasterSipper&    image,
+                       const KKStr&           imageFileName,
+                       const KKStr&           sipperFileName,
+                             uint64           byteOffset,     // byteOffset of SipperRow containing TopLeftRow
+                             uint32           topLeftRow,
+                             uint32           topLeftCol,
+                             uint32           height,
+                             uint32           width,
+                             uint32           pixelCount,
+                             uchar            connectedPixelDist,
+                             uint32           extractionLogEntryId,
+                             uint32           classLogEntryId,
+                             uint32           centroidRow,
+                             uint32           centroidCol,
                              MLClassConstPtr  class1,
-                             float               class1Prob,
+                             float            class1Prob,
                              MLClassConstPtr  class2,
-                             float               class2Prob,
+                             float            class2Prob,
                              MLClassConstPtr  validatedClass,
-                             float               depth,
-                             float               imageSize,
-                             PointListPtr        sizeCoordinates,
-                             int32&              imageId,
-                             bool&               successful
+                             float            depth,
+                             float            imageSize,
+                             PointListPtr     sizeCoordinates,
+                             int32&           imageId,
+                             bool&            successful
                        );
 
 
@@ -265,9 +265,9 @@ namespace MLL
      */
     void  ImagesEraseSipperFile (const KKStr&  _sipperFileName);
 
-    void  ImagesEraseSipperFileSizeRange (const   KKStr&  _sipperFileName,
-                                          uint32          _minSize,
-                                          uint32          _maxSize
+    void  ImagesEraseSipperFileSizeRange (const KKStr&  _sipperFileName,
+                                          uint32        _minSize,
+                                          uint32        _maxSize
                                          );
 
     DataBaseImagePtr      ImageLoad (uint32  imageId);  
@@ -290,8 +290,8 @@ namespace MLL
    
     DataBaseImageListPtr  ImagesQuery (DataBaseImageGroupPtr  imageGroup,
                                        const KKStr&           sipperFileName,
-                                       MLClassConstPtr     mlClass,
-                                       char                   classKeyToUse,   /**< 'P' - Use Prediced Class Key,  'V' - Validated Class */
+                                       MLClassConstPtr        mlClass,
+                                       char                   classKeyToUse,   /**< 'P' - Use Predicted Class Key,  'V' - Validated Class */
                                        float                  probMin,
                                        float                  probMax,
                                        int32                  sizeMin,
@@ -310,7 +310,7 @@ namespace MLL
                                        const KKStr&          cruiseName,
                                        const KKStr&          stationName,
                                        const KKStr&          deploymentNum,
-                                       MLClassConstPtr    mlClass,
+                                       MLClassConstPtr       mlClass,
                                        char                  classKeyToUse,
                                        float                 probMin,
                                        float                 probMax,
@@ -325,24 +325,24 @@ namespace MLL
                                       );
 
 
-    DataBaseImageListPtr  ImagesQuery (const KKStr&        cruiseName,
-                                       const KKStr&        stationName,
-                                       const KKStr&        deploymentNum,
-                                       MLClassConstPtr  mlClass,
-                                       char                classKeyToUse,
-                                       float               minProb,
-                                       float               minSize,
-                                       const KKStr&        dataField1Name,
-                                       float               dataField1Min,
-                                       float               dataField1Max,
-                                       const KKStr&        dataField2Name,
-                                       float               dataField2Min,
-                                       float               dataField2Max,
-                                       const KKStr&        dataField3Name,
-                                       float               dataField3Min,
-                                       float               dataField3Max,
-                                       uint32              restartImageId,
-                                       int32               limit            // Max # of rows 2 return.  -1 idicates no limit.
+    DataBaseImageListPtr  ImagesQuery (const KKStr&    cruiseName,
+                                       const KKStr&    stationName,
+                                       const KKStr&    deploymentNum,
+                                       MLClassConstPtr mlClass,
+                                       char            classKeyToUse,
+                                       float           minProb,
+                                       float           minSize,
+                                       const KKStr&    dataField1Name,
+                                       float           dataField1Min,
+                                       float           dataField1Max,
+                                       const KKStr&    dataField2Name,
+                                       float           dataField2Min,
+                                       float           dataField2Max,
+                                       const KKStr&    dataField3Name,
+                                       float           dataField3Min,
+                                       float           dataField3Max,
+                                       uint32          restartImageId,
+                                       int32           limit            // Max # of rows 2 return.  -1 idicates no limit.
                                       );
 
 
@@ -352,7 +352,7 @@ namespace MLL
                                      const KKStr&           stationName,
                                      const KKStr&           deploymentNum,
                                      const KKStr&           sipperFileName,
-                                     MLClassConstPtr     mlClass,
+                                     MLClassConstPtr        mlClass,
                                      char                   classKeyToUse,
                                      float                  probMin,
                                      float                  probMax,
@@ -366,15 +366,15 @@ namespace MLL
                                     );
     
 
-    DataBaseImageListPtr  ImagesQueryForScanLineRange (const KKStr&   sipperFileName,
-                                                       uint32         scanLineStart,
-                                                       uint32         scanLineEnd
+    DataBaseImageListPtr  ImagesQueryForScanLineRange (const KKStr&  sipperFileName,
+                                                       uint32        scanLineStart,
+                                                       uint32        scanLineEnd
                                                       );
 
 
-    VectorKKStr*          ImageListOfImageFileNamesByScanLineRange (const KKStr&   sipperFileName,
-                                                                    uint32         scanLineStart,
-                                                                    uint32         scanLineEnd
+    VectorKKStr*          ImageListOfImageFileNamesByScanLineRange (const KKStr&  sipperFileName,
+                                                                    uint32        scanLineStart,
+                                                                    uint32        scanLineEnd
                                                                    );
 
 
@@ -389,21 +389,21 @@ namespace MLL
                                           );
 
 
-    void  ImagesUpdatePredictions (const KKStr&        imageFileName,
-                                   MLClassConstPtr  class1Pred,
-                                   float               class1Prob,
-                                   MLClassConstPtr  class2Pred,
-                                   float               class2Prob,
-                                   uint32              logEntryId
+    void  ImagesUpdatePredictions (const KKStr&    imageFileName,
+                                   MLClassConstPtr class1Pred,
+                                   float           class1Prob,
+                                   MLClassConstPtr class2Pred,
+                                   float           class2Prob,
+                                   uint32          logEntryId
                                   );
 
 
     /**
      *@brief  Updates prediction on multiple images at one time.
-     *@param[in]  _logEntryId Log id of process that is doing th eclassification.
+     *@param[in]  _logEntryId Log id of process that is doing the classification.
      *@param[in]  _predictionList  A tab delimited string that will contain the list of predictions.  Each
-     *   image will be separated by line feed ('\n') charaters while each field for each uiage will be
-     *   separated by 'tabs'('\t').  So if there are two images with predictions the string will look like
+     *   image will be separated by line feed ('\n') characters while each field for each usage will be
+     *   separated by 'tabs'('\t'). So if there are two images with predictions the string will look like
      *   "<ImageFileRootName><\t><Class1Name><\t><Class1Prob><\t><Class2Name><\t><Class2Prob><\n><ImageFileRootName><\t><Class1Name><\t><Class1Prob><\t><Class2Name><\t><Class2Prob>"
      */
     void  ImagesUpdatePredictionsList (uint32        _logEntryId,
@@ -411,7 +411,7 @@ namespace MLL
                                       );
 
 
-    void  ImagesUpdateValidatedClass (const KKStr&        imageFileName, 
+    void  ImagesUpdateValidatedClass (const KKStr&     imageFileName,
                                       MLClassConstPtr  mlClass
                                      );
 
@@ -430,9 +430,9 @@ namespace MLL
 
 
     /// Update both the Validates and Class1Name
-    void  ImagesUpdateValidatedAndPredictClass (const KKStr&        imageFileName, 
+    void  ImagesUpdateValidatedAndPredictClass (const KKStr&     imageFileName,
                                                 MLClassConstPtr  mlClass, 
-                                                float               class1Prob
+                                                float            class1Prob
                                                );
 
     void  ImageUpdate (DataBaseImage&  dbImage,
@@ -442,7 +442,7 @@ namespace MLL
 
     ClassStatisticListPtr  ImageGetClassStatistics (DataBaseImageGroupPtr  imageGroup,
                                                     const KKStr&           sipperFileName,
-                                                    MLClassConstPtr     mlClass,
+                                                    MLClassConstPtr        mlClass,
                                                     char                   classKeyToUse,
                                                     float                  minProb,
                                                     float                  maxProb,
@@ -457,7 +457,7 @@ namespace MLL
                                                     const KKStr&           cruiseName,
                                                     const KKStr&           stationName,
                                                     const KKStr&           deploymentNum,
-                                                    MLClassConstPtr     mlClass,
+                                                    MLClassConstPtr        mlClass,
                                                     char                   classKeyToUse,
                                                     float                  minProb,
                                                     float                  maxProb,
@@ -469,14 +469,16 @@ namespace MLL
 
 
 
-    /// Will return a pointer to a vector<int32> instance that will contain counts of images
-    /// by depth.  Each element in the vector will represent a depth range such that
-    /// index 0 will be for depth range (0 <= images.Depth < depthIncrements)
-    /// index 1 will ""     ""      ""  (depthIncrements <= images.Depth < (2 * depthIncrements))
+    /**
+     * Will return a pointer to a vector<int32> instance that will contain counts of images
+     * by depth.  Each element in the vector will represent a depth range such that
+     * index 0 will be for depth range (0 <= images.Depth < depthIncrements)
+     * index 1 will ""     ""      ""  (depthIncrements <= images.Depth < (2 * depthIncrements))
+     */
     VectorUint*  ImageGetDepthStatistics (DataBaseImageGroupPtr  imageGroup,
                                           const KKStr&           sipperFileName,
                                           float                  depthIncrements,
-                                          MLClassConstPtr     mlClass,
+                                          MLClassConstPtr        mlClass,
                                           char                   classKeyToUse,
                                           float                  minProb,
                                           float                  maxProb,
@@ -512,10 +514,13 @@ namespace MLL
                                   const RasterSipper&  raster
                                  );
 
-    /// Will locate a original size version of the image; it will try in order 3 different sources.
-    /// 1) ThumbNail in Images Table.
-    /// 2) FullSizeImage in ImagesFullSize table
-    /// 3) will go to SipperFile
+    /**
+     * Will locate a original size version of the image; it will try in order 3 different sources:
+     *   -# ThumbNail in Images Table.
+     *   -# FullSizeImage in ImagesFullSize table
+     *   -# will go to SipperFile
+     *
+     */
     RasterSipperPtr  ImageFullSizeFind (const KKStr&  imageFileName);
 
 
@@ -566,17 +571,17 @@ namespace MLL
     /**
      *@brief  
      *@details
-     * Will insert a list of images into the same group in ImageGroupEntries.  A list of ImageFileNames
-     * that failed to be inserted with a description of the error will be returned.  If NULL is returned
-     * the the insertion failed completely.   A 2 x n matrix will be returned, One row for each image that
-     * failed insertion.  
+     * Will insert a list of images into the same group in ImageGroupEntries. A list of ImageFileNames
+     * that failed to be inserted with a description of the error will be returned. If NULL is returned
+     * the the insertion failed completely. A 2 x n matrix will be returned, One row for each image that
+     * failed insertion:
      *  - [0,0] = ImageFileName for row '0' that failed insertion
      *  - [0,1] = Description of error that caused insertion to fail.
      *
-     * Since there is a limitation on the length ogf the MySQL parameter of 64K  we need to make sure that the
-     * length of all the imageFileNames will be less than 64K  that is  sum_i (ImageFileNamess[i].Len ()) + imageFileNams.size () < 64000.
+     * Since there is a limitation on the length of the MySQL parameter of 64K  we need to make sure that the
+     * length of all the imageFileNames will be less than 64K that is sum_i (ImageFileNamess[i].Len ()) + imageFileNams.size () < 64000.
      */
-    KKStrMatrixPtr  ImageGroupEntriesInsert (int32                 groupId,         // Will insert a list of images into the same 
+    KKStrMatrixPtr  ImageGroupEntriesInsert (int32               groupId,         // Will insert a list of images into the same
                                              const VectorKKStr&  imageFileNames   // group
                                             );
 
@@ -589,7 +594,7 @@ namespace MLL
     //***********************************************************************************
 
     /**
-     *@brief Retrieves the closest Instrument Data that preceeds or equals 'ScanLine' but
+     *@brief Retrieves the closest Instrument Data that precedes or equals 'ScanLine' but
      * not more that 8192 scan-lines before.
      */
     InstrumentDataPtr  InstrumentDataGetByScanLine (const KKStr&  sipperFileName,
@@ -662,15 +667,15 @@ namespace MLL
      *  - 2) Replaces all entries in IntrumentData table for 'sipperFile' with what was just extracted. 
      *  - 3) Updates the InstrumentData fields in Images with data just extracted.
      *@endcode
-     *@param[in]  sipperFileName  Name of Sipper files that insrument data is to be extracted from; the root name wil be used.
+     *@param[in]  sipperFileName  Name of Sipper files that instrument data is to be extracted from; the root name will be used.
      *@param[in]  cancelFlag      The method will monitor this flag; if it goes true it will exit gracefully and return to caller.
      *@param[in]  msgBuff         Pointer to message buffer that the method will write NULL terminated strings to this field indicating progress;
      *@param[in]  msgBuffLen      Length in characters of 'msgBuff'.
      */
-    void  InstrumentDataReFreshSipperFile (const KKStr&   sipperFileName,
-                                           const bool&    cancelFlag,
-                                           char*          msgBuff,
-                                           int32          msgBuffLen
+    void  InstrumentDataReFreshSipperFile (const KKStr&  sipperFileName,
+                                           const bool&   cancelFlag,
+                                           char*         msgBuff,
+                                           int32         msgBuffLen
                                           );
 
     /**
@@ -891,7 +896,7 @@ namespace MLL
 
     static volatile int32  numDataBaseInstances;  /**< Will be incremented when the constructor is called and
                                                    * decremented when the destructor is called.  This way the
-                                                   * Constructor and Destructors will know if they should call
+                                                   * Constructor and Destructor's will know if they should call
                                                    * "mysql_library_init" and "mysql_library_end" respectively.
                                                    */
 
@@ -910,7 +915,7 @@ namespace MLL
     static DataBaseIndex   existingInstances;
 
 
-    /** Call this methid when a update is called that is not allowed when 'allowUpdates == false'. */
+    /** Call this method when a update is called that is not allowed when 'allowUpdates == false'. */
     static  void   UpdatesNotAllowed (const KKStr&  methodName);
 
 
@@ -942,7 +947,7 @@ namespace MLL
 
 
 
-    // Routines to format MySql dtatat types.
+    // Routines to format MySql datastat types.
     KKU::DateTime  DateTimeFromMySqlDateTimeField (KKStr  field);
 
     KKU::TimeType  TimeFromMySqlDateTimeField (KKStr field);
@@ -997,7 +1002,7 @@ namespace MLL
     bool               allowUpdates;        /**< Indicates that no updates are allowed; controlled by 
                                              * 'Permissions.cfg' file in ${PicesHomeDir}\Configurations        */
 
-    bool               useEmbeddedServer;   /**< When set to 'true' we are to operate as an embeded server.    */
+    bool               useEmbeddedServer;   /**< When set to 'true' we are to operate as an embedded server.    */
     MYSQL*             conn;
     DataBaseServerPtr  server;              /**< We will own this instance and be responsible for deleting.    */
     bool               duplicateKey;        /**< Is set to true during insert if a duplicate key error occurs. */

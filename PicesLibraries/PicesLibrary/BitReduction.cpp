@@ -11,15 +11,15 @@
 #include <vector>
 using namespace std;
 
-#include  "MemoryDebug.h"
-#include  "BasicTypes.h"
-#include  "OSservices.h"
+#include "MemoryDebug.h"
+#include "BasicTypes.h"
+#include "OSservices.h"
 using namespace KKU;
 
-#include  "MLLTypes.h"
-#include  "BitReduction.h"
-#include  "FileDesc.h"
-#include  "FeatureVector.h"
+#include "MLLTypes.h"
+#include "BitReduction.h"
+#include "FileDesc.h"
+#include "FeatureVector.h"
 using namespace  MLL;
 
 BitReduction::BitReduction (const SVMparam&        _param,
@@ -188,7 +188,7 @@ CompressionStats  BitReduction::compress (const FeatureVectorList&  examples,
   time_before = osGetSystemTimeUsed();
 
   CompressionStats stats;
-  //memset(&stats, 0, sizeof(stats));  // Could potentialy destroy a vat table, depending on implementatoin of c++
+  //memset(&stats, 0, sizeof(stats));  // Could potentially destroy a vat table, depending on implementation of c++
 
   // store information about the examples we're going to be processing
   type_table        = examples.FileDesc()->CreateAttributeTypeTable ();
@@ -651,9 +651,9 @@ void  CompressionStats::UpdateFromTabDelStr (const KKStr&  _str)
 
 struct  BitReduction::FeatureVar
 {
-  FeatureVar (int32            _featureNum,
+  FeatureVar (int32          _featureNum,
               AttributeType  _attributeType,
-              int32            _idx,
+              int32          _idx,
               double         _var
              ):
           attributeType (_attributeType),
@@ -663,8 +663,8 @@ struct  BitReduction::FeatureVar
         {}
 
     MLL::AttributeType  attributeType;
-    int32                 featureNum;
-    int32                 idx;
+    int32               featureNum;
+    int32               idx;
     double              var;
 };
 
@@ -737,8 +737,8 @@ public:
  * @param[in] Not Used
  */
 VectorInt32  BitReduction::DeriveBitReductionPlain (const FeatureVectorList&  examples,
-                                                  const ClassAssignments&   classAssignments
-                                                 )
+                                                    const ClassAssignments&   classAssignments
+                                                   )
 {
   int32 numOfFeatures = selectedFeatures.NumOfFeatures ();
   VectorInt32  bitsToReduceBy (numOfFeatures, param.BitsToReduceBy ());

@@ -9,7 +9,7 @@
  *@details
  * Used for the representation of a Single Plankton Image.  You create an instance of this object for
  * each single image you need to keep track of.  There is a specialized version of MLL::FeatureFileIO
- * caled  MLL::FeatureFileIOPices that is used to write and read feature Data files.  What makes this
+ * called  MLL::FeatureFileIOPices that is used to write and read feature Data files.  What makes this
  * class of MLL::FeatureVector special are the additional fields that are Plankton specific such as
  * centroidCol, centroidRow, latitude, longitude, numOfEdgePixels, Centroid within SIPPEER file
  * sfCentroidCol, sfCentroidRow and version.
@@ -65,7 +65,7 @@ namespace MLL
   //    Date     Prog     Ver#  Description
   // ==========  ======== ====  =================================================
   //
-  // 2004-11-27  Kurt      36   Added fields to support Grading Funtionality
+  // 2004-11-27  Kurt      36   Added fields to support Grading Functionality
   //
   // 2004-12-05  Kurt      37   fixed so that the additional contour features
   //                            created for my thesis are only implemented
@@ -74,11 +74,11 @@ namespace MLL
   // 2005-02-03  Kurt      38   Added 2 new Centroid fields that are relative
   //                            to the beginning of the file.
   //                            Added 2nd line to Raw format of Feature file,
-  //                            his line will list all the fields in teh file.
+  //                            his line will list all the fields in the file.
   //
   //
-  // 2007-11-12  Kurt      44   Added 4 new Instrumentation fieds 'Depth', Oxygen'
-  //                            'Florences', and 'Slinity'
+  // 2007-11-12  Kurt      44   Added 4 new Instrumentation fields 'Depth', Oxygen'
+  //                            'Fluorescences', and 'Salinity'
   //
   // 2008-08-25  Kurt      45   When the image is greater than a given threshold it will
   //                            be reduced in size by an integer such that the new size
@@ -88,7 +88,7 @@ namespace MLL
   //
   // 2010-11-17            51   Made a mistake in the way that EigenHead is calculated.  As
   //                            a result it is the inverse of what it was so had to
-  //                            force all the Feature Datafiles to recalculate.
+  //                            force all the Feature DataFiles to recalculate.
 
 
   #define   CurrentFeatureFileVersionNum  53
@@ -109,19 +109,19 @@ namespace MLL
     ImageFeatures (const ImageFeatures&  _image);
 
 
-    ImageFeatures (      RasterSipper&  _raster,
-                   MLClassConstPtr   _mlClass,
+    ImageFeatures (RasterSipper&        _raster,
+                   MLClassConstPtr      _mlClass,
                    RasterSipperListPtr  _saveImages = NULL
                   );
 
     ImageFeatures (const BmpImage&      _image,
-                   MLClassConstPtr   _mlClass,
+                   MLClassConstPtr      _mlClass,
                    RasterSipperListPtr  _saveImages = NULL
                   );
 
 
     ImageFeatures (KKStr                _fileName,
-                   MLClassConstPtr   _mlClass,
+                   MLClassConstPtr      _mlClass,
                    bool&                _successfull,
                    RasterSipperListPtr  _saveImages = NULL
                   );
@@ -198,7 +198,7 @@ namespace MLL
     virtual  const char*  UnderlyingClass () const  {return  "ImageFeatures";}
 
 
-    static  int32  FirstInstrumentDataField;          /**< @brief The first feature field that we get from a seperate instrument data field.  */
+    static  int32  FirstInstrumentDataField;          /**< @brief The first feature field that we get from a separate instrument data field.  */
 
     static  int32  NumSeperateInstrumentDataFields;   /**< @brief The number of features that come from Instrument data,  ex: Oxygen or Depth */
 
@@ -222,11 +222,12 @@ namespace MLL
     int32          numOfEdgePixels;
     float          sfCentroidCol;   //   centroid with respect to whole zipper file,
     double         sfCentroidRow;   //     ""     ""      ""     ""    ""    ""
-    short          version;         // This is the same versionNumber as in ImageFeaturesList
-                                    // It is related to the Feature calculation routine.  This
-                                    // will assist in us changing the feature calcs in the 
-                                    // future and  objects and methods having a meens of 
-                                    // knowing if the features are similar.
+    short          version;         /**< This is the same versionNumber as in ImageFeaturesList
+                                     * It is related to the Feature calculation routine.  This
+                                     * will assist in us changing the feature calcs in the
+                                     * future and  objects and methods having a means of
+                                     * knowing if the features are similar.
+                                     */
            
            
     static  const  int32    SizeThreshold;
@@ -373,8 +374,8 @@ namespace MLL
      *        '_owner' flag will either duplicate the ImageFeature instances or 
      *        just point to the same instances.
      *@details
-     *  Will create a duplicate List of images, in the same order.  If '_owner' = true
-     *  will create new instancs of contents and own them.  If 'owner' = false, will 
+     *  Will create a duplicate List of images, in the same order. If '_owner' = true
+     *  will create new instances of contents and own them. If 'owner' = false, will
      *  copy over pointers of existing instances.
      */
     ImageFeaturesList (const ImageFeaturesList&  images,
@@ -399,30 +400,30 @@ namespace MLL
      *@details
      * Will scan the directory _dirName for any image files.  For each image found a new instance of ImageFeatures
      * will be created whos features will be derived from the image.  These ImageFeatures' objects will be 
-     * assigned the class specified by '_mlClass'.  A new data file containg the extracted features will be 
+     * assigned the class specified by '_mlClass'.  A new data file containing the extracted features will be
      * saved in fileName.
      *
-     *@param[in] _log         Log file to write messages to.
-     *@param[in] _mlClass  Class to assign to new 'ImageFeatures' objects.
-     *@param[in] _dirName     Directory to scan for images.
-     *@param[in] _fileName    Name of file to contain the extracted feature data.  Will be og the Raw format.
+     *@param[in] _log       Log file to write messages to.
+     *@param[in] _mlClass   Class to assign to new 'ImageFeatures' objects.
+     *@param[in] _dirName   Directory to scan for images.
+     *@param[in] _fileName  Name of file to contain the extracted feature data.  Will be og the Raw format.
      */
-    ImageFeaturesList (RunLog&             _log,
+    ImageFeaturesList (RunLog&          _log,
                        MLClassConstPtr  _mlClass,
-                       const KKStr&        _dirName,
-                       const KKStr&        _fileName
+                       const KKStr&     _dirName,
+                       const KKStr&     _fileName
                       );
 
 
 
     /**
-     @brief  constructor that will create a list of images from _images that are assignd one of the 
+     @brief  constructor that will create a list of images from _images that are assigned one of the
              classes listed in _mlClasses.
      @details
         Will Create a list of images that are a subset of the ones in _images.  The subset will
         consist of the images who's mlClass is one of the  ones in mlClasses.  We will not own
         any the contents only point to the ones already in _images.
-      @param[in] _mlClasses  List of classes that we are intrested in.
+      @param[in] _mlClasses  List of classes that we are interested in.
       @param[in] _images        Source examples that we want to scan.
       @param[in] _log           
      */
@@ -433,21 +434,21 @@ namespace MLL
 
 
     /**
-     @brief
-     @details
-        This constructor is meant to create a list of 'ImageFeatures' objects from the FeatureVector
-        objects contained in featureVectorList.
-     @code
-     If  'featureVectorList'  owns its contents (that is 'featureVectorList.Owner () == true'  then
-        |  We will create new Instances of 'ImageFeatures' objects that we will own.
-        |  The underlying class of the 'FeatureVector' objects will be converted to a
-        |  'ImageFeatures'  class.
-     else
-        |  all the 'FeatureVector' objects in 'featureVectorList' must have an underlying class of
-        |  'ImageFeatures'.  If one or more do not then the program will halt with a message to
-        |  the log.
-    @endcode
-    */
+     *@brief
+     *@details
+     *   This constructor is meant to create a list of 'ImageFeatures' objects from the FeatureVector
+     *   objects contained in featureVectorList.
+     *@code
+     *If  'featureVectorList' owns its contents (that is 'featureVectorList.Owner () == true'  then
+     *   |  We will create new Instances of 'ImageFeatures' objects that we will own.
+     *   |  The underlying class of the 'FeatureVector' objects will be converted to a
+     *   |  'ImageFeatures'  class.
+     *else
+     *   |  all the 'FeatureVector' objects in 'featureVectorList' must have an underlying class of
+     *   |  'ImageFeatures'. If one or more do not then the program will halt with a message to
+     *   |  the log.
+     *@endcode
+     */
     ImageFeaturesList (const FeatureVectorList&  featureVectorList);
 
 
@@ -464,9 +465,9 @@ namespace MLL
 
     ImageFeaturesPtr       BinarySearchByName (const KKStr&  _imageFileName)  const;
 
-    VectorFloat            CalculateDensitesByQuadrat (float        scanRate,         // Scan Lines per Sec.
-                                                       float        quadratSize,      // Meters.
-                                                       float        defaultFlowRate,  // Meters per Sec
+    VectorFloat            CalculateDensitesByQuadrat (float        scanRate,         /**< Scan Lines per Sec. */
+                                                       float        quadratSize,      /**< Meters.             */
+                                                       float        defaultFlowRate,  /**< Meters per Sec.     */
                                                        const bool&  cancelFlag,
                                                        RunLog&      log
                                                       );
@@ -479,9 +480,9 @@ namespace MLL
      *@details
      *@code
      ***************************************************************************************************
-     ** Returns: a list of 'ImageFeatures' objects that have duplicate root file names.  The returned  *
+     ** Returns: a list of 'ImageFeatures' objects that have duplicate root file names. The returned   *
      ** list will not own these items.  All instances of the duplicate objects will be returned.       *
-     ** Ex:  if three insatnces have the same ImageFileName all three will be returned.                * 
+     ** Ex: if three instances have the same ImageFileName all three will be returned.                 *
      ***************************************************************************************************
      *@endcode
      */
@@ -489,19 +490,17 @@ namespace MLL
 
 
     ImageFeaturesListPtr   ExtractImagesForAGivenClass (MLClassConstPtr  _mlClass,
-                                                        int32               _maxToExtract = -1,
-                                                        FFLOAT              _minSize      = -1.0f
+                                                        int32            _maxToExtract = -1,
+                                                        FFLOAT           _minSize      = -1.0f
                                                        )  const;
-
-
 
 
     /**
      *@brief  Calculates the position in meters of each plankton Feature-Vector with respect to the first plankton particle in the SIPPER file.
-     *@details It is assumed that all the items in this list are from the same SIPPER file.  Item(FeatureVector) will be assigend a position 
-     *         in meters with respecvt to the first particle in the file.
+     *@details It is assumed that all the items in this list are from the same SIPPER file.  Item(FeatureVector) will be assigned a position
+     *         in meters with respect to the first particle in the file.
      *
-     *@param[in] instrumentData  Provies the flow rate from the instrument data will be used to calc  
+     *@param[in] instrumentData  Provides the flow rate from the instrument data will be used to calc
      *                           distance traveled; otherwise 'defaultFlowRate' will be used.
      *
      *@param[in] defaultScanRate Scan lines per second that the camera operates at, if <= 0 will assume 24950.0 scan lines/sec.
@@ -509,7 +508,7 @@ namespace MLL
      *@param[in] defaultFlowRate Flow rate to use if none provided by 'instrumentData'. if <= 0.0 will default to 1.0 meters/sec.
      *
      *@returns A Vector of doubles where each element in it will represent the distance in meters from the first particle in the SIPPER 
-     *         file.  There will be one entry for each "ImageFeatures" objet in the list and it wil be sorted from low to high.
+     *         file.  There will be one entry for each "ImageFeatures" object in the list and it will be sorted from low to high.
      */
     VectorDouble           ExtractPositionsByMeter (InstrumentDataListPtr  instrumentData,
                                                     float                  defaultScanRate,
@@ -518,15 +517,15 @@ namespace MLL
 
     void                   FixSipperFileScanLineAndColFields ();
 
-    void                   FeatureExtraction (const KKStr&       _dirName, 
-                                              const KKStr&       _fileName, 
+    void                   FeatureExtraction (const KKStr&    _dirName,
+                                              const KKStr&    _fileName,
                                               MLClassConstPtr _mlClass
                                              );
 
     VectorInt              CreateSpatialDistributionHistogram (InstrumentDataListPtr  instrumentData,
-                                                               float                  defaultScanRate,   // Scan rate to use if it can not be located from 
-                                                               float                  defaultFlowRate,   // Flow rate to use if no instrumentation data.
-                                                               float                  bucketSize         // Size of each histogram bucket.
+                                                               float                  defaultScanRate,   /**< Scan rate to use if it can not be located from.  */
+                                                               float                  defaultFlowRate,   /**< Flow rate to use if no instrumentation data.     */
+                                                               float                  bucketSize         /**< Size of each histogram bucket.                   */
                                                               );
 
     ImageFeaturesPtr       IdxToPtr (int32 idx) const;
@@ -549,8 +548,8 @@ namespace MLL
 
     void                   PrintSpatialHistogramReport (std::ostream&          r,
                                                         InstrumentDataListPtr  instrumentData,
-                                                        float                  defaultScanRate,   // Scan rate to use if it can not be located from 
-                                                        float                  defaultFlowRate,   // Flow rate to use if no instrumentation data.
+                                                        float                  defaultScanRate,   /**< Scan rate to use if it can not be located from. */
+                                                        float                  defaultFlowRate,   /**< Flow rate to use if no instrumentation data.    */
                                                         float                  bucketSize
                                                        );
 
@@ -682,8 +681,6 @@ namespace MLL
 
 
 
-
-
     class  iterator
     {
     private:
@@ -738,8 +735,6 @@ namespace MLL
       }
 
 
-
-
       bool  operator== (const iterator&  right)  const
       {
         return  idx == right.idx;
@@ -772,17 +767,16 @@ namespace MLL
 
 
 
-    short          version;        // Represents the version of the Feature data,  when ever I update
-                                   // the way Feastures are calculated I increment CurrentFeatureFileVersionNum
-                                   // by 1.   This way if we load a older FeatureData file we can be aware
-                                   // of this.  Methods like FeatureDataReSink will force the recalculation
-                                   // of Feature data if not up-to-date.  Also works in coordination
-                                   // with the version field in the ImageFeatures object.  A value of
-                                   // 0 indicates that we do not know what Version the feature data is.
-                                   // This can happen when not all the ImageFeatures objects in the list 
-                                   // have the same version number.
-
-
+    short          version;        /**< Represents the version of the Feature data, when ever I update
+                                    * the way Features are calculated I increment CurrentFeatureFileVersionNum
+                                    * by 1. This way if we load a older FeatureData file we can be aware
+                                    * of this. Methods like FeatureDataReSink will force the recalculation
+                                    * of Feature data if not up-to-date. Also works in coordination
+                                    * with the version field in the ImageFeatures object. A value of
+                                    * 0 indicates that we do not know what Version the feature data is.
+                                    * This can happen when not all the ImageFeatures objects in the list
+                                    * have the same version number.
+                                    */
     class  SpatialComparison
     {
     public:

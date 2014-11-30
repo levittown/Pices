@@ -13,11 +13,11 @@
 //*********************************************************************
 
 //#include  "svm.h"
-#include  "BasicTypes.h"
-#include  "SVMparam.h"
-#include  "ChainHash.h"
-#include  "FeatureVector.h"
-#include  "ClassAssignments.h"
+#include "BasicTypes.h"
+#include "SVMparam.h"
+#include "ChainHash.h"
+#include "FeatureVector.h"
+#include "ClassAssignments.h"
 
 
 namespace MLL 

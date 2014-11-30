@@ -10,7 +10,6 @@
 using namespace std;
 
 
-
 #include "OSservices.h"
 #include "RunLog.h"
 using namespace KKU;
@@ -27,12 +26,9 @@ using namespace MLL;
 
 
 
-
-
-
-AbundanceCorrectionMatrix::AbundanceCorrectionMatrix (MLClassConstList&  _classes,
-                                                      MLClassConstPtr    _otherClass,
-                                                      RunLog&               _log
+AbundanceCorrectionMatrix::AbundanceCorrectionMatrix (MLClassConstList& _classes,
+                                                      MLClassConstPtr   _otherClass,
+                                                      RunLog&           _log
                                                      ):
   classes          (_classes),
   dateTimeComputed (osGetLocalDateTime ()),
@@ -359,7 +355,7 @@ void  AbundanceCorrectionMatrix::WriteXml (ostream&  o)
   o << "<AbundanceCorrectionStats>"                                          << endl
     << "DateTimeComputed"  << "\t" << dateTimeComputed                       << endl
     << "NumClasses"        << "\t" << numClasses                             << endl
-    << "MLClasses"      << "\t" << classes.ToCommaDelimitedStr ()         << endl
+    << "MLClasses"         << "\t" << classes.ToCommaDelimitedStr ()         << endl
     << "OtherClass"        << "\t" << otherClass->Name ()                    << endl
     << "OtherClassIdx"     << "\t" << otherClassIdx                          << endl
     << "NumCorrect"        << "\t" << numCorrect                             << endl
@@ -694,7 +690,7 @@ ClassStatisticListPtr   AbundanceCorrectionMatrix::AdjustClassificationCounts (c
   if  ((probOfDetection.size () < numClasses)  ||  (probOfFalseAlarm.size () < numClasses))
   {
     log.Level (-1) << endl
-      << "AdjustClassificationCounts   ***ERROR***    parameters have not been computed;  can not perform adjustment." << endl
+      << "AdjustClassificationCounts   ***ERROR***    parameters have not been computed; can not perform adjustment." << endl
       << endl;
     return  NULL;
   }
@@ -721,7 +717,7 @@ ClassStatisticListPtr   AbundanceCorrectionMatrix::AdjustClassificationCounts (c
 
     uint32  adjCount = 0;
     float  pfa = probOfFalseAlarm[outputCountsIdx];
-    float  pd  = probOfDetection[outputCountsIdx];
+    float  pd  = probOfDetection [outputCountsIdx];
     if  ((pfa == 0.0f)  &&  (pd == 0.0f))
       adjCount = outputCounts[outputCountsIdx];
     else

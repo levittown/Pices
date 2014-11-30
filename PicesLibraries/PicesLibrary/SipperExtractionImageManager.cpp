@@ -39,8 +39,8 @@ namespace  MLL
 class  SipperExtractionImageManager::ImageEntry
 {
 public:
-  ImageEntry (const KKStr&        _fileName,
-              int32               _size,
+  ImageEntry (const KKStr&     _fileName,
+              int32            _size,
               MLClassConstPtr  _predClass
              ):
        fileName  (_fileName),
@@ -59,12 +59,12 @@ public:
 class  SipperExtractionImageManager::ManagedClass
 {
 public:
-  ManagedClass (FileDescPtr         _fileDesc,
+  ManagedClass (FileDescPtr      _fileDesc,
                 MLClassConstPtr  _mlClass,
-                const KKStr&        _rootDir,
-                bool                _saveFeatureData,
-                bool                _countOnly,
-                uint32              _imagesPerDirectory,
+                const KKStr&     _rootDir,
+                bool             _saveFeatureData,
+                bool             _countOnly,
+                uint32           _imagesPerDirectory,
                 RunLog&             _log
                );
 
@@ -75,12 +75,12 @@ public:
   MLClassConstPtr  MLClass     () const  {return mlClass;}
   int32               ImageCount     () const  {return imageCount;}
 
-  void  AddImage (const KKStr&        fileName,
-                  MLClassConstPtr  predClass,
-                  int32               size,
-                  ImageFeaturesPtr    example,
-                  RasterPtr           raster,
-                  bool                colorize
+  void  AddImage (const KKStr&      fileName,
+                  MLClassConstPtr   predClass,
+                  int32             size,
+                  ImageFeaturesPtr  example,
+                  RasterPtr         raster,
+                  bool              colorize
                  );
 
   void  CloseOutCurDirectory ();
@@ -102,7 +102,7 @@ private:
   ImageFeaturesListPtr  examplesCurDir;
   FileDescPtr           fileDesc;
   KKStr                 fullSubDirName;
-  MLClassConstPtr    mlClass;
+  MLClassConstPtr       mlClass;
   int32                 imageCount;
   uint32                imagesPerDirectory;
   RunLog&               log;
@@ -113,14 +113,14 @@ private:
 
 
 
-SipperExtractionImageManager::SipperExtractionImageManager (FileDescPtr    _fileDesc,
-                                                            const KKStr&   _rootDir,
-                                                            bool           _saveFeatureData,
-                                                            int32            _veryLargeImageSize,
-                                                            bool           _imagesAreClassified,
-                                                            bool           _countOnly,
-                                                            uint32         _imagesPerDirectory,
-                                                            RunLog&        _log
+SipperExtractionImageManager::SipperExtractionImageManager (FileDescPtr  _fileDesc,
+                                                            const KKStr& _rootDir,
+                                                            bool         _saveFeatureData,
+                                                            int32        _veryLargeImageSize,
+                                                            bool         _imagesAreClassified,
+                                                            bool         _countOnly,
+                                                            uint32       _imagesPerDirectory,
+                                                            RunLog&      _log
                                                            ):
      allExamples           (NULL),
      countOnly             (_countOnly),
@@ -216,7 +216,7 @@ void  SipperExtractionImageManager::ReportStatistics (ostream&  r)  const
   depthDistribution_10.PrintFormatedDistributionMatrix (r);
 
   r << endl << endl << endl << endl
-    << "Tab Deleimited Reports"  << endl;
+    << "Tab Delimited Reports"  << endl;
 
   r << endl << endl << endl
     << "Large Size Distribution" << endl
@@ -302,13 +302,13 @@ SipperExtractionImageManager::ManagedClassPtr  SipperExtractionImageManager::Man
 
 
 
-void  SipperExtractionImageManager::AddImage (const KKStr&        fileName,
-                                              MLClassConstPtr  predClass,
-                                              int32               size,
-                                              float               depth,
-                                              ImageFeaturesPtr    example,
-                                              RasterPtr           raster,
-                                              bool                colorize
+void  SipperExtractionImageManager::AddImage (const KKStr&      fileName,
+                                              MLClassConstPtr   predClass,
+                                              int32             size,
+                                              float             depth,
+                                              ImageFeaturesPtr  example,
+                                              RasterPtr         raster,
+                                              bool              colorize
                                              )
 {
   sizeDistributionLarge.Increment (predClass, size);
@@ -367,7 +367,7 @@ void  SipperExtractionImageManager::Flush ()
 
 
 
-void  SipperExtractionImageManager::SaveFrame (const KKStr&    _fileName,
+void  SipperExtractionImageManager::SaveFrame (const KKStr&     _fileName,
                                                      RasterPtr  _raster,
                                                      bool       _colorize
                                               )
