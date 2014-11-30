@@ -17,11 +17,11 @@ using namespace System::Diagnostics;
 namespace PicesInterface 
 {
   /**
-   @brief The Managed version of the OSServices methods defined in BaseLibrary.
-   @details
-    This class is the managed equivelent to the functions defined in OSservices 
-    in BaseLibrary.  In some cases we implement the code in the unmanaged world 
-    in others we encapsulate the Unmanaged call.
+   *@brief The Managed version of the OSServices methods defined in BaseLibrary.
+   *@details
+   * This class is the managed equivelent to the functions defined in OSservices 
+   * in BaseLibrary.  In some cases we implement the code in the unmanaged world 
+   * in others we encapsulate the Unmanaged call.
    */
   public ref class  OSservices
   {
@@ -70,7 +70,6 @@ namespace PicesInterface
     static String^   GetRootName (String^ fileName);
 
     static String^   GetRootNameWithExtension (String^  fullFileName);
-
 
     static KKU::DateTime     SystemDateTimeToKKuDateTime (System::DateTime  sytemDateTime);
 

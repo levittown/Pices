@@ -357,19 +357,9 @@ void CImageExtractionWindowsDlg::OnCancel()
       imageExtractionParms->Cancel (true);
 
     if  (multiThreadedExtractionManager)
-      multiThreadedExtractionManager->CancelProcessing (0);
+      multiThreadedExtractionManager->TerminateProcessing (0);
 
     cancelRequestStartTime = osGetLocalDateTime ();
-
-    /*
-      if   (::WaitForSingleObject (this->imageExtractionThread->m_hThread, 10000) == WAIT_OBJECT_0)
-      {
-        // Thread Canceled Successfully
-      
-      }
-
-      CDialog::OnCancel();
-    */
   }
   else
   {
