@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="ImportGPS_Data"
+	Name="ImportGPSData"
 	ProjectGUID="{E0B37EA5-C409-46AB-B63D-DD520E7A9F90}"
-	RootNamespace="ImportGPS_Data"
+	RootNamespace="ImportGPSData"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -330,7 +330,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\ImportGPS_Data.cpp"
+				RelativePath=".\ImportGPSData.cpp"
 				>
 			</File>
 		</Filter>
@@ -340,7 +340,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\ImportGPS_Data.h"
+				RelativePath=".\ImportGPSData.h"
 				>
 			</File>
 		</Filter>
