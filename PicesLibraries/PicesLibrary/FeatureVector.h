@@ -383,7 +383,7 @@ namespace MLL
     void                      FixSipperFileScanLineAndColFields ();
 
     // Attribute Type information of diff fields.
-    bool                      AllFieldsAreNumeric ()  const;                  /**< @brief  Returns true if all fields are numeric, no nominal fields.              */
+    bool                      AllFieldsAreNumeric ()  const;                    /**< @brief  Returns true if all fields are numeric, no nominal fields.              */
     MLL::AttributeType        FeatureType        (int32 featureNum) const;      /**< @brief  Returns the type of attribute for specified 'featureNum'. @see FileDesc */
     KKStr                     FeatureTypeStr     (int32 featureNum) const;
     int32                     FeatureCardinality (int32 featureNum) const;      /**< @brief Returns the number of values defined for a Nommnal Field. @see FileDesc::Cardinality */
@@ -392,14 +392,15 @@ namespace MLL
     int32                     FeatureCount       ()  const  {return numOfFeatures;}
     const FileDescPtr         FileDesc           ()  const  {return fileDesc;}
 
-    ClassStatisticListPtr     GetClassStatistics ()  const;                  /**< @brief Returns the number of FeatureVectors per class @see ClassStatisticList */
+    ClassStatisticListPtr     GetClassStatistics ()  const;                     /**< @brief Returns the number of FeatureVectors per class @see ClassStatisticList */
 
-    int32                     GetClassCount (MLClassConstPtr  c)  const;       /**< @brief Returns number of examples for a specific Class (MLClass).   */
+    int32                     GetClassCount (MLClassConstPtr  c)  const;        /**< @brief Returns number of examples for a specific Class (MLClass).   */
 
     RunLog&                   Log () {return  log;}
 
 
-    /** @brief  Returns a pointer to the FeatureVector which has '_imageFileName' 
+    /** 
+     *@brief  Returns a pointer to the FeatureVector which has '_imageFileName' 
      *@details If the list is currently sorted by ImageFileName  (curSortOrder == IFL_ByName)  then a Binary Search is performed
      *           otherwise a sequential search is performed.
      */
