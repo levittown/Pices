@@ -26,10 +26,10 @@ namespace  ImageExtractionManager
   class  ImageExtractionThread:  public KKThread
   {
   public:
-    ImageExtractionThread (ExtractionParms&      _parms,
-                           ExtractionManagerPtr  _extractionManager,
-                           const KKStr&          _threadName,
-                           MsgQueuePtr           _msgQueue
+    ImageExtractionThread (ExtractionParms&     _parms,
+                           ExtractionManagerPtr _extractionManager,
+                           const KKStr&         _threadName,
+                           MsgQueuePtr          _msgQueue
                           );
 
     virtual ~ImageExtractionThread ();
