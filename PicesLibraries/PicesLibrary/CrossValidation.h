@@ -21,10 +21,10 @@
  *                                                                   *
  *                                                                   *
  *  2005-01-07 Kurt Kramer  Added classedCorrectly parameter to      *
- *                          CrossValidate.  If not null it should    *
+ *                          CrossValidate. If not null it should     *
  *                          point to an array of bool that has as    *
  *                          many elemenst as there are in the        *
- *                          testImages list.  Each element reprsents *
+ *                          testImages list. Each element reprsents  *
  *                          weather the coresponding element in      *
  *                          testImages was classified correctly.     *
  *                                                                   *
@@ -192,7 +192,7 @@ namespace  MLL
     int32                     numSVs;             /**< Total Support Vectors Detected. */
 
     int32                     totalNumSVs;        /**< This is different from 'numOfSupportVectors' it will reflect all the Support Vectors
-                                                   * that are created in a Multi Class SVM.  That is if a given example is used in three
+                                                   * that are created in a Multi Class SVM. That is if a given example is used in three
                                                    * different binary classifiers it will be counted three times.
                                                    */
 

@@ -1689,8 +1689,8 @@ void  ActiveLearning::ProcessOneImageAtAtimeOneSpecificPass
   MLClassListPtr  classesInGroup = trainingConfiguration->ExtractClassList ();
 
   // Now that we built a trainingConfiguration object we need to remove all the training Libraries 
-  // that are not a member of groupClasses.  We do this by using the  "classesInGroup"  object that will
-  // contain a list of all classes in trainingConfiguration.  For each member in the list that does 
+  // that are not a member of groupClasses. We do this by using the  "classesInGroup"  object that will
+  // contain a list of all classes in trainingConfiguration. For each member in the list that does 
   // not exist in  "groupClasses"  we will remove from  "classesInGroup".
   MLClassPtr  mlClass;
   for  (int idx = classesInGroup->QueueSize () - 1; idx >= 0;  idx--)
@@ -1814,7 +1814,7 @@ void  ActiveLearning::ProcessOneImageAtAtimeOneSpecificPass
     for  (int retrainingInStreamBlock = 0;  retrainingInStreamBlock < retrainingsPerStreamBlock;  retrainingInStreamBlock++)
     {
       // We make a duplicate of the current contents of trainingImages and use that to generate the 
-      // training model.  This is done because the trainingModel will normalize their contents.
+      // training model. This is done because the trainingModel will normalize their contents.
 
       FeatureVectorListPtr  trainingImagesCopy = trainingImages->DuplicateListAndContents ();
  
@@ -1972,7 +1972,7 @@ void  ActiveLearning::ProcessCombinedClassJob (SortOrderType  sortOrder,
   {
     // We are running on a windows PC that is about to write to a Network drive
     // This tends to and exceptionaly long time,  not sure why,  but something to do 
-    // with the networ.  So we will write to a local drive 1st,  then perform a 
+    // with the networ. So we will write to a local drive 1st,  then perform a 
     // windows copy function.
 
     log.Level (10) << "ProcessCombinedClassJob    Writting Out Results to Local Drive,   Pass[" << pass << "]." << endl;
@@ -2258,7 +2258,7 @@ void  ActiveLearning::ProcessStatusFile (int     argc,
   FILE* statusFile = OpenStatusFile ();
   if  (!statusFile)
   {
-    //  We are doing our initial StartUp.  So lets set up the Status file.
+    //  We are doing our initial StartUp. So lets set up the Status file.
 
     ProcessCmdLineParameters (argc, argv);
  

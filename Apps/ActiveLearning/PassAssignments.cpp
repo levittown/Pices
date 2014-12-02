@@ -319,7 +319,7 @@ void  PassAssignments::Read (KKStr              fileName,
     if  (!fgets (buff, sizeof (buff), in))
     {
       log.Level (-1) << endl
-                     << "*** ERROR ***   PassAssignments::PassAssignments  FileName[" << fileName << "].   INVALID FORMAT" << endl
+                     << "*** ERROR ***   PassAssignments::PassAssignments  FileName[" << fileName << "]. INVALID FORMAT" << endl
                      << endl;
       fclose (in);
       return;
@@ -363,7 +363,7 @@ void  PassAssignments::Read (KKStr              fileName,
   if  ((!numOfPassesFound)  &&  (!numOfInitialImagesFound)  &&  (!numOfClassesFound))
   {
     log.Level (-1) << endl
-                   << "*** ERROR ***   PassAssignments::PassAssignments  FileName[" << fileName << "].   INVALID FORMAT" << endl
+                   << "*** ERROR ***   PassAssignments::PassAssignments  FileName[" << fileName << "]. INVALID FORMAT" << endl
                    << endl;
     fclose (in);
     return;

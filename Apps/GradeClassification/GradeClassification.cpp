@@ -129,7 +129,7 @@ void  GradeClassification::InitalizeApplication (int32   argc,
   if  (groundTruthDirName.Empty ())
   {
     log.Level (-1) << endl << endl << endl
-                   << "-GroundTruth directory was not specified.  This is a mandatory parameter." << endl
+                   << "-GroundTruth directory was not specified. This is a mandatory parameter." << endl
                    << endl;
     DisplayCommandLineParameters ();
     Abort (true);
@@ -278,21 +278,21 @@ void   GradeClassification::DisplayCommandLineParameters ()
        << "    -config     <FileName.>      Works in conjunction with '-GroundTruth'. It will"      << endl
        << "                                 build a classifier using the training data specified"   << endl
        << "                                 in the configuration file. It will then classify all"   << endl
-       << "                                 the images in the ground truth and grade.  It will"     << endl
+       << "                                 the images in the ground truth and grade. It will"      << endl
        << "                                 build and grade for each level of hierarchy."           << endl
        << endl
        << "    -r          <FileName>       Report Filename; defaults to StdOut (cout)."            << endl
        << endl
        << "    -s          <Dir-Path>       Sub-Directory of images to grade; Specify this instead" << endl
-       << "                                 of a config file.  Images in this directory will be"    << endl
+       << "                                 of a config file. Images in this directory will be"     << endl
        << "                                 graded against the GroundTruth directory."              << endl
        << endl
        << "    -H          <File-Name>      File where a 'html' formated report will be written"    << endl
-       << "                                 to.  Will default to Report-Filename with '.html"       << endl
+       << "                                 to. Will default to Report-Filename with '.html"        << endl
        << "                                 extension."                                             << endl
        << endl
        << "    -GroundTruth <Dir-Path>      Sub-Directory where ground-truth images will be"        << endl
-       << "                                 stored.  Directory name will indicate class."           << endl
+       << "                                 stored. Directory name will indicate class."            << endl
        << endl;
 }  /* DisplayCommandLineParameters */
 
@@ -356,7 +356,7 @@ void  GradeClassification::GradeSourceImagesAgainstGroundTruth ()
 {
   log.Level (10) << "GradeClassification::GradeSourceImagesAgainstGroundTruth" << endl;
 
-  // We were provided a GroundTruth directory and a SourceDirectory that is to be graded.  We 
+  // We were provided a GroundTruth directory and a SourceDirectory that is to be graded. We 
   // only need to load in both directories and f=grade the SourceDirectory against the GroundTruth
   // Directory.
 
@@ -646,7 +646,7 @@ void  GradeClassification::GradeExamplesAgainstGroundTruth (FeatureVectorListPtr
     }
   }
 
-  // Create ConfusionMatrix objects for each posible level of Hierarchy.  The 'resultsSummary' vector will 
+  // Create ConfusionMatrix objects for each posible level of Hierarchy. The 'resultsSummary' vector will 
   // end up owning the instances of 'ConfusionMatrix2' and th edestructr will be responable for deleting them.
   uint  curLevel = 0;
   vector<ConfusionMatrix2Ptr>  cmByLevel;

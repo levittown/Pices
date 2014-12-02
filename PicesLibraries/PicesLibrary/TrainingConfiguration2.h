@@ -290,7 +290,7 @@ namespace MLL
     int32                  examplesPerClass;
     FileDescPtr            fileDesc;
     MLClassConstListPtr    mlClasses;
-    bool                   mlClassesWeOwnIt;      /**< If we own it we will delete it in the destructor.  */
+    bool                   mlClassesWeOwnIt;      /**< If we own it we will delete it in the destructor. */
     RunLog&                log;
     ModelTypes             modelingMethod;
     ModelParamPtr          modelParameters;
@@ -301,27 +301,27 @@ namespace MLL
 
     MLClassConstPtr        noiseMLClass;
 
-    TrainingClassPtr       noiseTrainingClass;    /**< The specific Training Class that is to be used for noise images.  */
+    TrainingClassPtr       noiseTrainingClass;    /**< The specific Training Class that is to be used for noise images. */
 
     NormalizationParmsPtr  normalizationParms;
 
     MLClassConstPtr        otherClass;            /**< class that is to be used for "Other" examples when performing
-                                                   * adjustment calculations.  This was done as part of the Dual Class
-                                                   * classificatuion program.  When specified the acytual training of 
-                                                   * the classifier wil lnot inclusde this class.  It will be used when 
+                                                   * adjustment calculations. This was done as part of the Dual Class
+                                                   * classificatuion program. When specified the acytual training of 
+                                                   * the classifier wil lnot inclusde this class. It will be used when 
                                                    * a clas can not be determined.
                                                    */
 
     int32                  otherClassLineNum;     /**< Line where OtherClass in configuratyon was defined. */
 
     KKStr                  rootDir;               /**< Common directory that all images for this training
-                                                   * library come from.  This is determined by iterating 
+                                                   * library come from. This is determined by iterating 
                                                    * through all the 'trainingClasses' entries and 
                                                    * looking for the common string that they all start by.
                                                    */
                                             
-    TrainingClassList      trainingClasses;       /**< List of  'Training_Class' objects.  One for each 'Training_Classe' 
-                                                   * section defined in configuration file.  Plus one for the 'Noise_Images' 
+    TrainingClassList      trainingClasses;       /**< List of  'Training_Class' objects. One for each 'Training_Classe' 
+                                                   * section defined in configuration file. Plus one for the 'Noise_Images' 
                                                    * section.
                                                    */
 

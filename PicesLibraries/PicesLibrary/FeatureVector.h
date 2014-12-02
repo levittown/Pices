@@ -6,25 +6,12 @@
  *@class  MLL::FeatureVector
  *@brief  Represents a Feature Vector of a single example, labeled or unlabele
  *@author  Kurt Kramer
- *@details Used for the representation of a Single example.  You create an instance of 
+ *@details Used for the representation of a Single example. You create an instance of 
  *        this object for each single feature vector. You can subclass from this Class
- *        to make a specialized FeatureVector as in the ImageFeatures class.  Besides 
+ *        to make a specialized FeatureVector as in the ImageFeatures class. Besides 
  *        keeping track of feature data this class will also track other fields such as 
  *        ImageFileName which should indicate where the FeatureVector was derived from,
  *        probability, breakTie, and others.
- *code
- ********************************************************************************
- **                             FeatureVector                                     *
- **                                                                               *
- ** Used for the representation of a Single example.  You create an instance of   *
- ** this object for each single feature vector.                                   *     
- **                                                                               *
- ** This class was split from "ImageFeatures"; such that "ImageFeatures" is now   *
- ** derived from this class and contains code that is specialized for the SIPPER  *
- ** system.                                                                       *
- **                                                                               *
- **********************************************************************************
- *@endcode
  *@see FeatureVectorList
  *@see ImageFeatures
  *@see FeatureFileIO
@@ -55,9 +42,9 @@ namespace MLL
   /**
    *@class FeatureVector
    *@brief  Represents a Feature Vector of a single example, labeled or unlabele
-   *@details Used for the representation of a Single example.  You create an instance of 
+   *@details Used for the representation of a Single example. You create an instance of 
    *         this object for each single feature vector. You can subclass from this Class
-   *         to make a specialized FeatureVector as in the ImageFeatures class.  Besides 
+   *         to make a specialized FeatureVector as in the ImageFeatures class. Besides 
    *         keeping track of feature data this class will also track other fields such as 
    *         ImageFileName which should indicate where the FeatureVector was derived from,
    *         probability, breakTie, and others.
@@ -85,7 +72,7 @@ namespace MLL
     void  MissingData      (bool             _missingData)    {missingData    = _missingData;}     /**< @brief True indicates that not all the feature data was preseant when this example was loaded from a data file. */
     void  OrigSize         (FFLOAT           _origSize)       {origSize       = _origSize;}        /**< @brief The value of Feature[0] before normalization. */
     void  PredictedClass   (MLClassConstPtr  _predictedClass) {predictedClass = _predictedClass;}
-    void  Probability      (FFLOAT           _probability)    {probability    = _probability;}     /**< @brief Assign a prediction probability to this example.  */
+    void  Probability      (FFLOAT           _probability)    {probability    = _probability;}     /**< @brief Assign a prediction probability to this example. */
 
     /**
      *@brief Assign a value to a specific feature number for the feature vector. 
@@ -109,7 +96,7 @@ namespace MLL
     /**  
      *@brief  Assign a specific example a higher weight for training purposes. 
      *@details The SVM will multiply the cost parameter by this amount when training the classifier 
-     * for this specific example.  This was introduced when we implemented BitReduction. 
+     * for this specific example. This was introduced when we implemented BitReduction. 
      */
     void  TrainWeight      (float  _trainWeight)   {trainWeight  = _trainWeight;}  
 
@@ -133,23 +120,23 @@ namespace MLL
     bool                Validated          () const  {return validated;}
 
 
-    FFLOAT         FeatureData      (int32 featureNum)  const;          /** @returns The value of 'featureNum'                             */
-    const FFLOAT*  FeatureData      () const  {return featureData;}   /** @brief Returns as a pointer to the feature data itself.        */
-    FFLOAT*        FeatureDataAlter ()        {return featureData;}   /** @brief ame as 'FeatureData() except you can modify the data.   */
+    FFLOAT         FeatureData      (int32 featureNum)  const;        /** @returns The value of 'featureNum'                           */
+    const FFLOAT*  FeatureData      () const  {return featureData;}   /** @brief Returns as a pointer to the feature data itself.      */
+    FFLOAT*        FeatureDataAlter ()        {return featureData;}   /** @brief ame as 'FeatureData() except you can modify the data. */
                                                                       
     const FFLOAT*  FeatureDataConst () const  {return featureData;}
     bool           FeatureDataValid ();
 
     void    ResetNumOfFeatures (int32  newNumOfFeatures);  /*!< Used to reallocate memory for feature data. */
 
-    void    AddFeatureData (int32   _featureNum,   /**< Indicates which feature number to update.  */
-                            FFLOAT  _featureData   /**< New value to assign to '_featureNum'.      */
+    void    AddFeatureData (int32   _featureNum,   /**< Indicates which feature number to update. */
+                            FFLOAT  _featureData   /**< New value to assign to '_featureNum'.     */
                            );
 
     bool  operator== (FeatureVector &other_example)  const;
 
 
-    /** @brief Used by container classes such as 'FeatureVectorList'.  This way they can determine real underlyimg class. */
+    /** @brief Used by container classes such as 'FeatureVectorList'. This way they can determine real underlyimg class. */
     virtual  const char*  UnderlyingClass ()  const  {return  "FeatureVector";}
 
 
@@ -177,9 +164,9 @@ namespace MLL
     FFLOAT           probability;    /**< @brief Probability assigned by classifier to predicted Class. */
 
     float            trainWeight;    /**< @brief Weight to assign to this training image during Training.
-                                      *@details  Added to help support Bit Reduction.  Will default to 1.0.
+                                      *@details  Added to help support Bit Reduction. Will default to 1.0.
                                       * during the SVM training process the Cost parameter will be multiplied 
-                                      * by this amount.  
+                                      * by this amount.
                                       */
 
     bool             validated;      /**< @brief  If true then the 'mlClass' entry has been validated by 
@@ -200,7 +187,7 @@ namespace MLL
   /**
    *@class FeatureVectorList
    *@brief   Container class for FeatureVector derived objects. 
-   *@details Supports various functions with respect to maintaing a list of FeatureVector's.  These 
+   *@details Supports various functions with respect to maintaing a list of FeatureVector's. These 
    *         include randomizing there order creating a stratified list by class, extracting a list 
    *         of classes,  sorting by various criteria.
    */
@@ -238,7 +225,7 @@ namespace MLL
   public:
     /** 
      *@brief  Create a duplicate list, depending on the '_owner' parameter may also duplicate the contents.
-     *@details If '_owner' = true will create new instancs of contents and own them.  If 'owner' = false, will 
+     *@details If '_owner' = true will create new instancs of contents and own them. If 'owner' = false, will 
      *         copy over pointers to existing instances.
      *@param[in]  examples  Existing list of examples that we are going to copy.
      *@param[in]  _owner  If set to true will make a duplicate of the FeatureVectors in 'examples' and own then 
@@ -251,7 +238,7 @@ namespace MLL
 
     /**
      *@brief  Will Create a construct list from _examples who's belong to one of the ImagesClasses in '_mlClasses'.
-     *@details The subset will consist of the examples who's mlClass is one of the ones in _mlClasses.  We will not own these examples.
+     *@details The subset will consist of the examples who's mlClass is one of the ones in _mlClasses. We will not own these examples.
      *@param[in] _mlClasses  List of classes that we want to include.
      *@param[in] _examples      Source of feature Vectors to extract from.
      *@param[out] _log          Log file to send messages to.
@@ -264,7 +251,7 @@ namespace MLL
     
     /** 
      *@enum IFL_SortOrder
-     *@brief  Represents the different orders that a list of imageFeatures in an instance of FeatureVectorList object can be in.  
+     *@brief  Represents the different orders that a list of imageFeatures in an instance of FeatureVectorList object can be in. 
      */
     typedef  enum {IFL_UnSorted, 
                    IFL_ByName, 
@@ -293,8 +280,8 @@ namespace MLL
     /**
      *@brief Will search forthe example with the same nam as '_imageFileName'.
      *@details  If the list is  already sorted in name order will use a Binary Search otherwis a 
-     *  linear search.  The method 'SortByImageFileName' will set a flag 'curSortOrder' indicating
-     *  if the examples are sorted.  The idea is that if you know that will will be doing many 
+     *  linear search. The method 'SortByImageFileName' will set a flag 'curSortOrder' indicating
+     *  if the examples are sorted. The idea is that if you know that will will be doing many 
      *  searches then for performance reasons you should call 'SortByImageFileName' first. The
      *  methods 'PushOnBack', 'PushOnFront', and 'AddSingleExample' will reset 'curSortOrder' to 
      *  unsorted.
@@ -338,7 +325,7 @@ namespace MLL
 
     /**
      *@brief  Returns: a list of 'FeatureVector' objects that have duplicate root file names.
-     *@details The returned list will not own these items.  All instances of the duplicate objects will be returned.
+     *@details The returned list will not own these items. All instances of the duplicate objects will be returned.
      *        Ex:  if three instances have the same ImageFileName all three will be returned.
      */
     FeatureVectorListPtr      ExtractDuplicatesByRootImageFileName ();
@@ -378,7 +365,7 @@ namespace MLL
 
     //MLClassListPtr         ExtractListOfClasses ()  const;
 
-    MLClassConstListPtr    ExtractMLClassConstList ()  const;
+    MLClassConstListPtr       ExtractMLClassConstList ()  const;
 
     void                      FixSipperFileScanLineAndColFields ();
 
@@ -387,7 +374,7 @@ namespace MLL
     MLL::AttributeType        FeatureType        (int32 featureNum) const;      /**< @brief  Returns the type of attribute for specified 'featureNum'. @see FileDesc */
     KKStr                     FeatureTypeStr     (int32 featureNum) const;
     int32                     FeatureCardinality (int32 featureNum) const;      /**< @brief Returns the number of values defined for a Nommnal Field. @see FileDesc::Cardinality */
-    const KKStr&              FieldName          (int32 featureNum) const;      /**< @bnrie Returns name of Attribute Field.                                        */
+    const KKStr&              FieldName          (int32 featureNum) const;      /**< @bnrie Returns name of Attribute Field.                                         */
 
     int32                     FeatureCount       ()  const  {return numOfFeatures;}
     const FileDescPtr         FileDesc           ()  const  {return fileDesc;}
@@ -410,7 +397,7 @@ namespace MLL
     /** 
      *@brief   Returns a pointer to the FeatureVector who's ImageFileName rootname = _rootName *\
      *@details If the list is currently sorted by ImageFileName  (curSortOrder == IFL_ByRootName)  then a Binary Search is performed
-     *         otherwise a sequential search is performed.   The parameter _rootName is assumed to be just the root name of the file.
+     *         otherwise a sequential search is performed. The parameter _rootName is assumed to be just the root name of the file.
      *         that is you used osGetRootName  to et the root part.
      */
     FeatureVectorPtr          LookUpByRootName (const KKStr&  _rootName);
@@ -439,7 +426,7 @@ namespace MLL
     void                      RemoveDuplicateEntries ();
 
     /**
-     *@brief  Will save into a file the current ordering of FeatureVector instances in list.  
+     *@brief  Will save into a file the current ordering of FeatureVector instances in list.
      *@details This file can then be used at a later time to reproduce the exact same ordereing of FeatureVector objects from a file.
      *@see OrderUsingNamesFromAFile
      *@param[in]  fileName  Name of file where ImagFileNames will be writen to.
@@ -522,9 +509,9 @@ namespace MLL
 
 
     /** 
-     *@brief  Keeps track of the current order of FeatureVector entries in the list.  
-     *@details This helps functions such as LookUpByImageFileName to work more efficiently.  If in ImageFileName order 
-     *          it can then perform a binary search rather than a seq. scan.  This field is updated by the diff sort 
+     *@brief  Keeps track of the current order of FeatureVector entries in the list.
+     *@details This helps functions such as LookUpByImageFileName to work more efficiently. If in ImageFileName order 
+     *          it can then perform a binary search rather than a seq. scan. This field is updated by the diff sort 
      *          routines, and by the methods that allow you to add an entry.
      */
     IFL_SortOrder  curSortOrder;   

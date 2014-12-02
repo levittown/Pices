@@ -53,7 +53,7 @@ namespace  SipperHardware
 
   private:
     DateTime  ctdDateTime;
-    TimeType  gpsStartTime;   /**<  Time that this data point start covering from.  */
+    TimeType  gpsStartTime;   /**<  Time that this data point start covering from. */
     int32     sipperFileId;
     uint32    avgScanLine;
     double    avgLatitude;

@@ -1080,8 +1080,8 @@ float  ClassGroupTotals::Accuracy (int  retraining)  const
 
 
 float  ClassGroupTotals::AccuracyForRetrainingAndPass (int  retraining,
-                                                        int  randomPass
-                                                       )  const
+                                                       int  randomPass
+                                                      )  const
 {
   ValidateRetraining ("AccuracyForRetrainingAndPass", retraining);
   ValidatePass  ("AccuracyForRetrainingAndPass", randomPass);
@@ -1163,7 +1163,7 @@ void  ClassGroupTotals::CalcRetrainingAccuracyStats (int     retraining,
 
   //  2004-12-08  KK
   //  We want the stats calculated to refect the number of actual results files 
-  //  encountered.  This way we can get results before all active leaning jobs have completed.
+  //  encountered. This way we can get results before all active leaning jobs have completed.
   int  numPassesEncountered = 0;
 
   for  (randomPass = 0;  randomPass < numOfRandomPasses;  randomPass++)
@@ -1277,7 +1277,7 @@ void  ClassGroupTotals::CalcRetrainingSupportPointStats (int     retraining,
 
   //  2004-12-08  KK
   //  We want the stats calculated tp refect the number of actual results files 
-  //  encountered.  This way we can get results before all active leaning jobs have completed.
+  //  encountered. This way we can get results before all active leaning jobs have completed.
   int  numPassesEncountered = 0;
 
   int  numTrainingTimesEncounterd = 0;

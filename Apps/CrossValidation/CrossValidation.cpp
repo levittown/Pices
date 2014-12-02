@@ -1,7 +1,7 @@
 #include  "FirstIncludes.h"
 
 // Kurt Kramer  2012-03-01  
-// Added a Second Best Guess Confusion Matrix.  That is a confusion matrix that only reports the
+// Added a Second Best Guess Confusion Matrix. That is a confusion matrix that only reports the
 // results using the second best class as the predicted class when the first one wss wrong.
  
 #include <string>
@@ -645,7 +645,7 @@ void  CrossValidationApp::ProcessCmdLineParameter (KKStr  parmSwitch,
   else if  ((parmSwitch == "-DIR")  ||  (parmSwitch == "-DIRECTORY"))
   {
     // The user wants the rogram to build a feature file from the examples in 
-    // the directory structure pointed to by parValue.  The sub-dir names will
+    // the directory structure pointed to by parValue. The sub-dir names will
     // be used to specify the class name.
     directory = parmValue;
     if  (!osValidDirectory (directory))
@@ -975,7 +975,7 @@ void  CrossValidationApp::ProcessCmdLineParameters (int     argcXXX,
       runLog.Level (-1) << endl
                         << "ProcessCmdLineParameters   *** ERROR ***" << endl
                         << endl
-                        << "Error loading config file.  ErrorMessage[" << errorMessage << "]" << endl
+                        << "Error loading config file. ErrorMessage[" << errorMessage << "]" << endl
                         << endl;
       osWaitForEnter ();
       exit (-1);
@@ -1108,7 +1108,7 @@ void  CrossValidationApp::ProcessCmdLineParameters (int     argcXXX,
   else
   {
     // User has specified a file with feature data to use rathar than extrcating data
-    // from examples.  ( -U command line option)
+    // from examples. ( -U command line option)
     runLog.Level (10) << "ProcessCmdLineParameters::Loading Feature Data from File[" << loadFileName << "]." << endl;
 
     delete  examples;

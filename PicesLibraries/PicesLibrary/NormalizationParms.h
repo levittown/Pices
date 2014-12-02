@@ -51,7 +51,7 @@ namespace MLL
    *@brief  Normalization Parameters;  calculation and implementation.
    *@details Normalization parameters will be calculated for all features but 
    *when individual images are normalized, only the ones specified by 
-   *'_featuresToNormalize' will be normalized.              
+   *'_featuresToNormalize' will be normalized.
    */
   class  NormalizationParms
   {

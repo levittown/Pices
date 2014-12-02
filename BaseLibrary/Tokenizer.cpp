@@ -337,7 +337,7 @@ KKStrPtr  Tokenizer::ProcessStringToken (char strDelChar)
 
 KKStrPtr  Tokenizer::ProcessFieldToken ()
 {
-  // We have a token that we don't recognize.  We will create a token 
+  // We have a token that we don't recognize. We will create a token 
   // of type tokNULL and place all characters up till the next whitespace 
   // or delimiter character.
   KKStrPtr  field = new KKStr (10);

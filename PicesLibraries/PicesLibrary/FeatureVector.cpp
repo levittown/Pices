@@ -350,7 +350,7 @@ FeatureVectorList::FeatureVectorList (FeatureVectorList&  examples):
  *@details 
  *@code
  *if (owner == true)  then will also
- *   1) duplicate the cotents.  That is each example in the list will be 
+ *   1) duplicate the cotents. That is each example in the list will be 
  *      duplicated by calling the copy constructor.
  *   2) And the new list will own these newly created examples.
  *@endcode
@@ -373,7 +373,7 @@ FeatureVectorList::FeatureVectorList (const FeatureVectorList&  examples,
 /**
  *@brief  Constructs a list of examples that are a subset of the ones in _examples as dictatd by _mlClasses
  *@details
- * The subset will consist of the examples who's mlClass is one of the ones in mlClasses.  The new 
+ * The subset will consist of the examples who's mlClass is one of the ones in mlClasses. The new 
  * instance cratd will not own the contents;  it will just point to the existing examples that were in
  * '_examples'.
  *
@@ -428,7 +428,7 @@ int32  FeatureVectorList::MemoryConsumedEstimated ()  const
 /**
  *@details   
  *  Determines if the other FeatreVectorList has the same underlining layout;  that is each
- *  field is of the same type and meaning.  This way we can determine if one list contains
+ *  field is of the same type and meaning. This way we can determine if one list contains
  *  Apples while the other contains Oranges.
  */
 bool  FeatureVectorList::SameExceptForSymbolicData (const FeatureVectorList&  otherData)  const
@@ -470,7 +470,7 @@ void  FeatureVectorList::ValidateFileDescAndFieldNum (int32          fieldNum,
   if  (!fileDesc)
   {
     // This should never ever be able to happen,  but will check 
-    // any way.  If missing something has gone very very wring.
+    // any way. If missing something has gone very very wring.
     KKStr  msg (200);
     msg << "FeatureVectorList::" << funcName << "      *** ERROR ***  'fileDesc == NULL'";
     log.Level (-1) << endl << endl << msg << endl << endl;
@@ -789,8 +789,8 @@ FeatureVectorListPtr   FeatureVectorList::ExtractImagesForAGivenClass (MLClassCo
   if  (_maxToExtract < 1)
     _maxToExtract = QueueSize ();
 
-  // Create a new list structure that does not own the Images it contains.  This way when 
-  // this structure is deleted.  The example it contains are not deleted.
+  // Create a new list structure that does not own the Images it contains. This way when 
+  // this structure is deleted. The example it contains are not deleted.
   FeatureVectorListPtr  extractedImages = new FeatureVectorList (fileDesc, false, log, _maxToExtract);
 
   if  (!extractedImages)

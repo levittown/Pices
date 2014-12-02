@@ -68,7 +68,7 @@ namespace  KKU
   private:
     void  StartThreads (bool&  successful);
 
-    bool            crashed;            /**< Indicates if any one of the threads crashed.         */
+    bool            crashed;            /**< Indicates if any one of the threads crashed. */
     bool            doneExecuting;      /**< The last thing this instance will do in 'ManageTheExtraction'is set this flag to true. */
     uint32          maxNumThreads;
     bool            shutdownFlag;
@@ -76,9 +76,7 @@ namespace  KKU
     bool            terminateFlag;
     bool            terminateRequested;
 
-    KKThreadListPtr threads;           /**<  List of all threads created under this instance of 'KKThreadManager'.  It
-                                        * will own them.
-                                        */
+    KKThreadListPtr threads;           /**<  List of all threads created under this instance of 'KKThreadManager'.It will own them. */
 
   };  /* KKThreadManager */
 

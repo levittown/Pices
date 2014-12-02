@@ -415,7 +415,7 @@ void  ImportGPSData::UpdateInstrumentData (const DateTime&  gpsTimeStamp,
   // KAK 2013-06-20
   // Since SIPPER would be behind the ship and the GPS unit actually on the ship;  the GPS location 
   // with the same timestamp as that of the CTD instrument  would represent where SIPPER WILL BE, not 
-  // WHERE IT IS AT.   For this reason decided to bias towards the GPS entry that occurred before the 
+  // WHERE IT IS AT. For this reason decided to bias towards the GPS entry that occurred before the 
   // CTD data was collected.
   startDT = gpsTimeStamp;
   startDT.AddSeconds (0 - sfe->gpsAdjSecs);

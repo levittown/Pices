@@ -260,7 +260,7 @@ BOOL CImageExtractionWindowsDlg::OnInitDialog()
 		}
 	}
 
-	// Set the icon for this dialog.  The framework does this automatically
+	// Set the icon for this dialog. The framework does this automatically
 	//  when the application's main window is not a dialog
 	SetIcon(m_hIcon, TRUE);			// Set big icon
 	SetIcon(m_hIcon, FALSE);		// Set small icon
@@ -296,7 +296,7 @@ void CImageExtractionWindowsDlg::OnSysCommand(UINT nID, LPARAM lParam)
 
 
 // If you add a minimize button to your dialog, you will need the code below
-//  to draw the icon.  For MFC applications using the document/view model,
+//  to draw the icon. For MFC applications using the document/view model,
 //  this is automatically done for you by the framework.
 
 void CImageExtractionWindowsDlg::OnPaint() 

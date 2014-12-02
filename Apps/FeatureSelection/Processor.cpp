@@ -2105,7 +2105,7 @@ void  Processor::ProcessGridSearchExpansionMostAccurate (ofstream*  statusFile,
 
   else if  (numOfExpansions == 4)
   {
-    // We will now take best test results and settle on that "C" and "gamma".  From this point forwards 
+    // We will now take best test results and settle on that "C" and "gamma". From this point forwards 
     // we are interested in tuning the "A" parameter only using the "C" and "gamma that we decided on.
 
     BinaryJobPtr  highestGradedTestJob = binaryJobs->HighestGradedTestJob ();
@@ -2363,7 +2363,7 @@ void  Processor::ProcessGridSearchExpansionFastestFromBest (ofstream*  statusFil
   {
     // This is our third expansion
     //
-    // We will select the best jobs so far with respect top accuracy and running time.   
+    // We will select the best jobs so far with respect top accuracy and running time. 
     // and for the best 10 we will vary the 'A' parameter to try and get the 'AvgPredProb'
     // in line with training 'accuracy'.
     //
@@ -2420,7 +2420,7 @@ void  Processor::ProcessGridSearchExpansionFastestFromBest (ofstream*  statusFil
   {
     // This is our fifth expansion
     //
-    //  We are now interested in refining the 'A' probability.  The best job for each 'C' and
+    //  We are now interested in refining the 'A' probability. The best job for each 'C' and
     //  'gamma' pair of parmaters are selected and a search of the local 'A' paraeter area.
     //
     BinaryJobListPtr  highestGradedJobs = binaryJobs->ExtractHighestGrade (0.3f, 10);
@@ -2493,8 +2493,8 @@ void  Processor::ProcessTestResultsExpansion (ofstream*  statusFile,
                                              )
 {
   log.Level (10) << "Processor::ProcessTestResultsExpansion"  << endl;
-  // This expansion only gets run once.  Its job is to perform a test on the results of the feature test.  
-  // We will locate the jobs that have the highest training accuracy by feature count.  Then for each one 
+  // This expansion only gets run once. Its job is to perform a test on the results of the feature test.
+  // We will locate the jobs that have the highest training accuracy by feature count. Then for each one 
   // of them we will test against the test data set.
 
   BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
@@ -2583,7 +2583,7 @@ void  Processor::ProcessNextExpansion (ofstream*  statusFile)
     testJobs->Owner (false);
     if  ((testJobs != NULL)  &&  (testJobs->QueueSize () > 0))
     {
-      // We have already gereated and ran the Test Jobs.  We can now pick the best.
+      // We have already generated and ran the Test Jobs; we can now pick the best.
       searchMethod = smPickTheBest;
       *statusFile << "SearchMethod"  << "\t" << SearchMethodToStr (searchMethod)  << endl;
     }
@@ -3034,7 +3034,7 @@ BinaryJobListPtr  Processor::GetNextSetOfJobs (BinaryJobListPtr  completedJobs)
       }
       else
       {
-        // There are still some jobs that are running.   We are going to go to
+        // There are still some jobs that are running. We are going to go to
         // for now and try again later.
         //  
         // By leaving  "nextJob = NULL" we will drop straight through the rest of
@@ -3045,7 +3045,7 @@ BinaryJobListPtr  Processor::GetNextSetOfJobs (BinaryJobListPtr  completedJobs)
         double  cpuTimeUsed = fabs (currentCpuTime - lastCpuTimeReported);
         if  (cpuTimeUsed > 10.0)
         {
-          // In case we crash bvefore we get a chance to write this out.  Lets report our current usage.
+          // In case we crash bvefore we get a chance to write this out. Lets report our current usage.
           ReportCpuTimeUsed (statusFile);
         }
       }

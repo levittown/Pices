@@ -7,7 +7,6 @@
 #include "Str.h"
 using namespace  KKU;
 
-
 #include "ConfusionMatrix2.h"
 #include "FeatureNumList.h"
 #include "FileDesc.h"
@@ -32,9 +31,10 @@ public:
 
   ~CrossValidationApp ();
 
-  bool                       generateBiasMatrix;  // Create a simple Confusion matrix that is to be stored with the
-                                                  // classifier.  This matrix will then be used to adjust classification
-                                                  // results for learner bias.
+  bool                       generateBiasMatrix;  /**< Create a simple Confusion matrix that is to be stored with the
+                                                   * classifier. This matrix will then be used to adjust classification
+                                                   * results for learner bias.
+                                                   */
 
   bool                       cancelFlag;
 
@@ -57,16 +57,15 @@ public:
 
   FeatureVectorListPtr       examples;
 
-  MLClassConstListPtr     mlClasses;
+  MLClassConstListPtr        mlClasses;
 
   FeatureFileIOPtr           inputFormat;
 
   KKStr                      loadFileName;
 
-  KKStr                      missedClassedDir; // Directory where miss clasified examples should be 
-                                               // copied to.
+  KKStr                      missedClassedDir; /**< Directory where miss clasified examples should be copied to. */
 
-  MLClassConstPtr         noiseMLClass;
+  MLClassConstPtr            noiseMLClass;
 
   int                        numOfFolds;
 
@@ -83,7 +82,7 @@ public:
   float                      punishmentFactor;
 
   //  If greater than 0, will indicate that we want to randomly select that many fatures 
-  //  from the ones that are already specified in the configuration file.  0 Mean no 
+  //  from the ones that are already specified in the configuration file. Zero (0) means no 
   //  random fature selection
   int                        randomFeatures;
 
@@ -107,15 +106,13 @@ public:
 
   RunLog                     runLog;
 
-  KKStr                      saveFileName;         // file mame to save extracted examples into
-                                                   // if user specifies -s option.
+  KKStr                      saveFileName;         /**< file mame to save extracted examples into if user specifies -s option. */
 
-  float                      splitPercentage;      // A number gretare than 0 and less than 100.0%
+  float                      splitPercentage;      /**< A number gretare than 0 and less than 100.0%  */
 
   DateTime                   startTime;
 
-  bool                       tryEachFeature;       // If set to true,  will rerun the Cross Validation
-                                                   // once for each feature.
+  bool                       tryEachFeature;       /**< If set to true,  will rerun the Cross Validation once for each feature. */
 
   FeatureVectorListPtr       validationData;
 
@@ -131,23 +128,23 @@ public:
   void  CmdLineHelp ();
 
 
-  void  CrossValidate (FeatureVectorListPtr   testImages, 
-                       FeatureVectorListPtr   trainingImages,
-                       ConfusionMatrix2&      cm,
-                       ConfusionMatrix2&      cm2cdGuess,
-                       ConfusionMatrix2&      cmSmall,
-                       ConfusionMatrix2&      cmMed,
-                       ConfusionMatrix2&      cmLarge,
-                       int&                   foldCount,
-                       double&                foldAccuracy,
-                       int                    foldNum,
-                       double&                trainingTime,
-                       double&                classificationTime,
-                       int&                   reductionPreImageCount,
-                       int&                   reductionPostImageCount,
-                       double&                reductionTime,
-                       int&                   supportPoints,
-                       KKStr&                 bitReductionByFeature
+  void  CrossValidate (FeatureVectorListPtr  testImages, 
+                       FeatureVectorListPtr  trainingImages,
+                       ConfusionMatrix2&     cm,
+                       ConfusionMatrix2&     cm2cdGuess,
+                       ConfusionMatrix2&     cmSmall,
+                       ConfusionMatrix2&     cmMed,
+                       ConfusionMatrix2&     cmLarge,
+                       int&                  foldCount,
+                       double&               foldAccuracy,
+                       int                   foldNum,
+                       double&               trainingTime,
+                       double&               classificationTime,
+                       int&                  reductionPreImageCount,
+                       int&                  reductionPostImageCount,
+                       double&               reductionTime,
+                       int&                  supportPoints,
+                       KKStr&                bitReductionByFeature
                       );
 
 
@@ -159,9 +156,9 @@ public:
                                              );
 
 
-  KKStr  LocateImageFileUsingConfigurationFile (const  KKStr&        fileName,
-                                                 MLClassConstPtr  knownClass
-                                                );
+  KKStr  LocateImageFileUsingConfigurationFile (const  KKStr&    fileName,
+                                                MLClassConstPtr  knownClass
+                                               );
 
   void   ProcessCmdLineParameters (int     argc, 
                                    char**  argv
@@ -181,7 +178,7 @@ public:
   void   PrintSizeHistogram ();
 
 
-  void   PostMisclassifiedImage (KKStr               fileName,
+  void   PostMisclassifiedImage (KKStr            fileName,
                                  MLClassConstPtr  knownClass,
                                  MLClassConstPtr  predictedClass
                                 );
@@ -189,11 +186,11 @@ public:
 
   void  RandomlySelectedProcessResults (vector<CrossValidationRunPtr>&  crossValidations,
                                         int                             numToCombine,
-                                        KKStr                          order
+                                        KKStr                           order
                                        );
 
   void  RandomlySelectedResults (vector<CrossValidationRunPtr>&  crossValidations,
-                                 KKStr                          order
+                                 KKStr                           order
                                 );
 
   FeatureVectorListPtr  RandomlySampleData (const   FeatureVectorListPtr data, 

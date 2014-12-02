@@ -100,7 +100,7 @@ namespace SipperHardware
     int32   ScanRate         ()  const {return  25000;}
   
     virtual
-    int32   LineWidth        ()  const {return (int32)MAXLINELEN;}  /**< Returns the width in pixles of the associated scanner file.  */
+    int32   LineWidth        ()  const {return (int32)MAXLINELEN;}  /**< Returns the width in pixles of the associated scanner file. */
 
     virtual 
     void  GetNextLine (uchar*   lineBuff,
@@ -176,8 +176,9 @@ namespace SipperHardware
     bool                      iOwnInstrumentDataManager;
     FILE*                     inFile;
     InstrumentDataManagerPtr  instrumentDataManager;
-    bool                      invalidLine;   // Set to true if invalid data is detected on 
-                                             // a scan line.  Such as exceeding line length.
+    bool                      invalidLine;   /**< Set to true if invalid data is detected on 
+                                              * a scan line. Such as exceeding line length.
+                                              */
     RunLog&                   log;
     bool                      opened;
     uint32                    recCount;

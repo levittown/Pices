@@ -192,7 +192,7 @@ TrainingProcess2::TrainingProcess2 (const KKStr&         _configFileName,
     // We are not going to need the training trainingExamples we loaded so we can go ahead and delete them now.
     delete  trainingExamples;  trainingExamples = NULL;
 
-    buildDateTime = savedModelTimeStamp;  // Set to timestamp of save file for now.  Will be overwriiting by the
+    buildDateTime = savedModelTimeStamp;  // Set to timestamp of save file for now. Will be overwriiting by the
                                           // 'BuildDateTime' field in the save file if it exists.
 
     ifstream  in (savedModelName.Str ());
@@ -288,7 +288,7 @@ TrainingProcess2::TrainingProcess2 (const KKStr&         _configFileName,
     }
   }
 
-  //  At this point we should no longer need the training trainingExamples.  
+  //  At this point we should no longer need the training trainingExamples.
   delete  trainingExamples;  trainingExamples = NULL;
 
   log.Level (20) << "TrainingProcess2::TrainingProcess2  Exiting Constructor" << endl;
@@ -779,7 +779,7 @@ void  TrainingProcess2::Read (istream&  in,
 
     else if  (lineName.EqualIgnoreCase ("<SVMModel>"))
     {
-      // We are looking at an old 'Save' file format.  We need to rebuild a new model and save it.
+      // We are looking at an old 'Save' file format; we need to rebuild a new model and save it.
       log.Level (-1) << endl << endl 
         << "TrainingProcess2::Read   ***WARNING***   Save file is of Old Format;  it will need to be rebuilt."  << endl
         << endl;
@@ -941,7 +941,7 @@ void  TrainingProcess2::RemoveExcludeListFromTrainingData ()
 
 void  TrainingProcess2::CheckForDuplicates ()
 {
-  // Lets check for duplicate trainingExamples in training data.  Just to get a count, no other reason
+  // Lets check for duplicate trainingExamples in training data. Just to get a count, no other reason
   DuplicateImages  dupDetector (trainingExamples, log);
   duplicateCount = dupDetector.DuplicateCount ();
   if  (duplicateCount > 0)
@@ -1341,7 +1341,7 @@ int32  TrainingProcess2::DuplicateDataCount () const
 
 
 /**
- @brief If there is a config file; will return a list of its FormatErrors ().  
+ @brief If there is a config file; will return a list of its FormatErrors ().
  */
 VectorKKStr  TrainingProcess2::ConfigFileFormatErrors ()  const
 {

@@ -574,7 +574,7 @@ namespace  PicesInterface
                                                        float                     depthMin,
                                                        float                     depthMax,
                                                        uint                      restartImageId,
-                                                       int                       limit,             // Max # of rows to return.  -1 indicates no limit.
+                                                       int                       limit,             // Max # of rows to return. -1 indicates no limit.
                                                        bool                      includeThumbnail
                                                       )
   {
@@ -1360,9 +1360,15 @@ namespace  PicesInterface
   //*****************************************************************************************************
   //*                                  InstrumentData Routines.                                         *
   //*****************************************************************************************************
-  List<String^>^  PicesDataBase::InstrumentDataGetFieldNames ()  // Get the names of individule field names;  used by 
-  {                                                              // applications that will query InstrumentData table 
-    List<String^>^ results = gcnew List<String^> ();             // allowing users to select fields to query and display.
+
+
+  /**
+   *@brief Get the names of individule field names; used by applications that will query InstrumentData table 
+   * allowing users to select fields to query and display.
+   */
+  List<String^>^  PicesDataBase::InstrumentDataGetFieldNames ()
+  {                                                            
+    List<String^>^ results = gcnew List<String^> ();
 
     VectorKKStr names = dbConn->InstrumentDataGetFieldNames ();
     VectorKKStr::const_iterator  idx;
@@ -1375,8 +1381,11 @@ namespace  PicesInterface
 
 
 
-  PicesInstrumentData^  PicesDataBase::InstrumentDataGetByScanLine (String^  sipperFileName,   // Will retrieve the Instrument data that is 
-                                                                    uint     scanLine          // closest to 'ScanLine'
+  /**
+   *@brief Retrieves instrument data that is closest to the specified scan-line.
+   */
+  PicesInstrumentData^  PicesDataBase::InstrumentDataGetByScanLine (String^  sipperFileName,
+                                                                    uint     scanLine
                                                                    )
   {
     InstrumentDataPtr  id = dbConn->InstrumentDataGetByScanLine (PicesKKStr::SystemStringToKKStr (sipperFileName), scanLine);
@@ -2051,3 +2060,4 @@ namespace  PicesInterface
   }  /* SipperStationDelete */
 
 }  /* PicesInterface */
+

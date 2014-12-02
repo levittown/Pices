@@ -3451,7 +3451,7 @@ struct svm_model*  SVM233::Svm_Load_Model (istream&  f,
 
   KKStr  line (1024);  // Preallocating to at least 1024 chracters long.
 
-  // Get first non blank line.  It had better contain "<Smv239>"  otherwise we will consider this
+  // Get first non blank line. It had better contain "<Smv239>"  otherwise we will consider this
   // an invalid Training Model.
   {
     while  (f.getline (buff, sizeof (buff)))
@@ -3470,9 +3470,9 @@ struct svm_model*  SVM233::Svm_Load_Model (istream&  f,
 
   if  (!line.EqualIgnoreCase ("<Svm233>"))
   {
-    // We do not have a valid SVM239 model.   We will return a NULL
+    // We do not have a valid SVM239 model. We will return a NULL
     log.Level (-1) << endl << endl
-      << "SVM233::Svm_Load_Model    ***ERROR***    The '<Svm233>'  header is missing.  Not a valid model." << endl
+      << "SVM233::Svm_Load_Model    ***ERROR***    The '<Svm233>'  header is missing. Not a valid model." << endl
       << endl;
     delete  model;
     model = NULL;
@@ -4577,7 +4577,7 @@ void  SVM233::svm_margin (svm_model *model)
         if  (marginSqr <= 0.0)
         {
           cerr << endl << endl 
-            << "SVM233::svm_margin   ***ERROR***    the computed margin <= 0.0.   This is very bad." << endl
+            << "SVM233::svm_margin   ***ERROR***    the computed margin <= 0.0. This is very bad." << endl
             << endl;
           marginSqr = 0.1;
         }
@@ -4609,7 +4609,7 @@ void  SVM233::svm_GetSupportVectorStatistics (const struct svm_model*  model,
 
   if  (model == NULL)
   {
-    KKStr errMsg = "svm_GetupportVectorsStatistics  ***ERROR***   (model == NULL).   Model was not defined.";
+    KKStr errMsg = "svm_GetupportVectorsStatistics  ***ERROR***   (model == NULL). Model was not defined.";
     cerr << endl << endl << errMsg << endl << endl;
     throw KKStrException (errMsg);
   }

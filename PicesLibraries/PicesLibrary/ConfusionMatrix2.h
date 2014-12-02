@@ -10,11 +10,11 @@
 //*                                                                         *
 //*  Prog       Date      Description                                       *
 //*  ------- -----------  ------------------------------------------------- *
-//*  Kurt    Oct-19-2002  Increment Will now take MLClasses instead of   *
-//*                       numbers.  We will also make a unique copy of      *
-//*                       mlClassList.  This way we will not have to     *
-//*                       worry about the numbering in the classList        *
-//*                       behind our back.                                  * 
+//*  Kurt    Oct-19-2002  Increment Will now take MLClasses instead of      *
+//*                       numbers. We will also make a unique copy of       *
+//*                       mlClassList. This way we will not have to worry   *
+//*                       about the numbering in the classList behind our   *
+//*                       back.                                             * 
 //***************************************************************************
 //* 
 
@@ -42,8 +42,16 @@ namespace  MLL
     ConfusionMatrix2 (const ConfusionMatrix2&  cm);
 
 
-    //  Will construct an instance of 'ConfusionMatrix2'  from the contents of the 
-    //  provided  'istream' object. 
+    /**  
+     * Will construct an instance of 'ConfusionMatrix2'  from the contents of the provided  'istream' object. 
+     *@param[in]  _classes  Will make local copy of this instance; this way we know the ordering which represents the numbering can not change behind our back.
+     *@param[in]  f   File to write report to.
+     *@param[in]  _bucketSize  Will keep statistics by size of particles.
+     *@param[in]  _numOfBuckets Number of Size buckes that will be maintained.
+     *@param[in]  _numOfProbBuckets  Maximum number of probability buckets to keep track of, 
+     *@param[in]  _probBucketSize  Size of each probability bucket.
+     *@param[in]  _log  Logger where messages are writen to.
+     */
     ConfusionMatrix2 (const MLClassConstList&  _classes,  // Will make its own copy of '_classes'
                       istream&                 f,
                       int32                    _bucketSize,
@@ -79,16 +87,16 @@ namespace  MLL
 
     double   CountsByKnownClass (int32 knownClassIdx)  const;
 
-    const VectorDouble&   CountsByKnownClass ()  const;
+    const    VectorDouble&   CountsByKnownClass ()  const;
 
     void     FactorCounts (double  factor);    /**< Will multiply all counts by 'factor'  You would use this in conjunction with 'AddIn'. */
 
-    void   ComputeFundamentalStats (MLClassConstPtr  ic,
-                                    double&             truePositives,
-                                    double&             trueNegatives,
-                                    double&             falsePositives,
-                                    double&             falseNegatives
-                                   )
+    void     ComputeFundamentalStats (MLClassConstPtr  ic,
+                                      double&          truePositives,
+                                      double&          trueNegatives,
+                                      double&          falsePositives,
+                                      double&          falseNegatives
+                                     )
                                    const;
 
     float    FMeasure (MLClassConstPtr  positiveClass,
@@ -100,9 +108,9 @@ namespace  MLL
 
     void     Increment (MLClassConstPtr  _knownClass,
                         MLClassConstPtr  _predClass,
-                        int32               _size,
-                        double              _probability,
-                        RunLog&             _log
+                        int32            _size,
+                        double           _probability,
+                        RunLog&          _log
                        );
 
     VectorDouble   PredictedCounts ()  const;

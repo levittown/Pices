@@ -42,7 +42,7 @@
  *@Namespace JobManagment
  *@brief  A framework for managing a large number of processes(Jobs) in a multi-cpu/ multi-o/s environment.
  *@details The Idea is that 'Job' and  'JobManager' would be used to build specific Job Management code
- * arround.  In the case of 'FeatureSeletion'  we would detrive sub-classes to manage the Major Speps and 
+ * arround. In the case of 'FeatureSeletion'  we would detrive sub-classes to manage the Major Speps and 
  * Jobs which would then in turn call a different set of Derved classes that would manage Binary, MultiClass,  
  * Parameter Tuning, and Feature Selection tasks.
  *@code
@@ -76,7 +76,7 @@ namespace  JobManagment
 
     Job (const Job&  j);
 
-    //  To create a brand new job that has not been proceesed yet.  
+    //  To create a brand new job that has not been proceesed yet.
     Job (JobManagerPtr  _manager,
          int            _jobId,
          int            _parentId,
@@ -97,7 +97,7 @@ namespace  JobManagment
 
     typedef  map<KKStr, ConstructorPtr>  ConstructorIndex;
 
-    static  ConstructorIndex  registeredConstructors;  /**< Track all the different constructors.  Will be used to know wich constructor to
+    static  ConstructorIndex  registeredConstructors;  /**< Track all the different constructors. Will be used to know wich constructor to
                                                         * use when reading the status file.
                                                         */
 
@@ -156,9 +156,9 @@ namespace  JobManagment
 
     /**
      *@brief  Write out completed job results to status file.
-     *@details This method will get called right after the "Job" status line gets written when a Job is completed.  
+     *@details This method will get called right after the "Job" status line gets written when a Job is completed.
      * See 'JobManager::GetNextSetOfJobs'. If a job needs to write more data to the Status file then you want to 
-     * put on a single status line this is where you would do it.   You write all the text in a format that you 
+     * put on a single status line this is where you would do it. You write all the text in a format that you 
      * want to support. 'JobManager' will bracket it with <Job JobType=Job::JobType, JobId=####> and </Job>
      *@code
      * ex:

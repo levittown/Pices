@@ -18,7 +18,7 @@ namespace KKU
 
   /**
    *@brief   The base class to be used any thread.
-   *@details  This will be the base class for each one of the different types of processing.  
+   *@details  This will be the base class for each one of the different types of processing.
    */
   class  KKThread
   {

@@ -374,9 +374,9 @@ const VectorDouble&  ConfusionMatrix2::CountsByKnownClass ()  const
 
 void  ConfusionMatrix2::Increment (MLClassConstPtr  _knownClass,
                                    MLClassConstPtr  _predClass,
-                                   int32               _size,
-                                   double              _probability,
-                                   RunLog&             _log
+                                   int32            _size,
+                                   double           _probability,
+                                   RunLog&          _log
                                   )
 {
   int32  knownClassNum = -1;
@@ -1051,7 +1051,7 @@ void  ConfusionMatrix2::PrintConfusionMatrixHTML (ostream&  o)
       << "*******************        WARNING    WARNING   WARNING  WARNING        *********************<br />"  << endl
       << "*******************                                                     *********************<br />"  << endl
       << "*******************   There were invalid classes specified that were    *********************<br />"  << endl
-      << "*******************   not counted.    numInvalidClassesPredicted[" << numInvalidClassesPredicted << "] *********************<br />" << endl
+      << "*******************   not counted. numInvalidClassesPredicted [" << numInvalidClassesPredicted << "] *********************<br />" << endl
       << "*********************************************************************************************<br />"  << endl
       << "</p>"   << endl
       << "<br />" << endl;
@@ -1153,7 +1153,7 @@ void  ConfusionMatrix2::PrintConfusionMatrixAvgPredProbHTML (ostream&   o)
       << "*******************        WARNING    WARNING   WARNING   WARNING       *********************<br />"  << endl
       << "*******************                                                     *********************<br />"  << endl
       << "*******************   There were invalid classes specified that were    *********************<br />"  << endl
-      << "*******************   not counted.    numInvalidClassesPredicted[" << numInvalidClassesPredicted << "] *********************<br />" << endl
+      << "*******************   not counted. numInvalidClassesPredicted[" << numInvalidClassesPredicted << "]   *********************<br />" << endl
       << "*********************************************************************************************<br />"  << endl
       << "</p>"   << endl
       << "<br />" << endl;
@@ -1352,7 +1352,7 @@ void   ConfusionMatrix2::PrintConfusionMatrixTabDelimited (ostream&  outFile)
             << "*******************        WARNING    WARNING   WARNING  WARNING        *********************"  << endl
             << "*******************                                                     *********************"  << endl
             << "*******************   There were invalid classes specified that were    *********************"  << endl
-            << "*******************   not counted.    numInvalidClassesPredicted[" << numInvalidClassesPredicted << "] *********************" << endl
+            << "*******************   not counted. numInvalidClassesPredicted[" << numInvalidClassesPredicted << "]   *********************" << endl
             << "*********************************************************************************************"  << endl
             << endl;
   }

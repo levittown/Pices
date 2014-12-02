@@ -13,7 +13,7 @@
  * for future deployments.<br>
  *
  * The system consists of several applications and libraries. Most of the code is written in c++
- * and is meant to be O/S neutral. The GUI functionality is written in .net c#.  There is extensive
+ * and is meant to be O/S neutral. The GUI functionality is written in .net c#. There is extensive
  * use of Image Processing (IP) and Machine Learning (ML) techniques used in the processing of data.
  * 
  *
@@ -25,9 +25,9 @@
  * - PicesCommander  The main GUI application that provides a thumbnail view of collected plankton images; 
  *                  Provides charting functionality, classification processes, reporting facilities allowing 
  *                  user to analyze data by deployments, stations, instrument parameters(O^2, Depth, Salinity,
- *                  etc...).  Other functionality consists of validation of data, updating of training 
+ *                  etc...). Other functionality consists of validation of data, updating of training 
  *                  libraries(Active Learning), and reclassification of imagery based off user improved
- *                  training data.  Randomly extract data from deployments for ground-truthing to
+ *                  training data. Randomly extract data from deployments for ground-truthing to
  *                  help gauge classification performance.
  *
  * - WindowsImageExtraction Where raw Sipper data is fed into the system; this application extracts imagery,
@@ -77,7 +77,7 @@
  *     -# @link SipperHardware::InstrumentData InstrumentData @endlink Maintains the various instrument data fields that are embedded or associated with a SIPPER file such
  *                       as Depth, Pith, Roll, GPS Coordinates, Temperatue, etc ...
  *     -# @link SipperHardware::InstrumentDataReport InstrumentDataReport @endlink Base class to the different devices that will embed data into
- *                       the SIPPER File,such as the Pitch and Roll sensor, CTD, Battery.  Each specialization of this class will have the knowlede 
+ *                       the SIPPER File,such as the Pitch and Roll sensor, CTD, Battery. Each specialization of this class will have the knowlede 
  *                       on how to interpret/pase the related data stream.
  *     -# @link SipperHardware::InstrumentDataManager InstrumentDataManager @endlink Central reporting facility that all 
  *                      'InstrumentDataReport' derived classes send there data thru to be fused together resulting in instances

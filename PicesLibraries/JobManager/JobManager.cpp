@@ -245,7 +245,7 @@ void   JobManager::EndBlock ()
 
   if  (blockLevel > 0)
   {
-    // We are still nested in Block Levels.  must reach 'blockLevel == 0' before we can UnBlock.
+    // We are still nested in Block Levels must reach 'blockLevel == 0' before we can UnBlock.
     return;
   }
 
@@ -548,7 +548,7 @@ void   JobManager::ProcessJobXmlBlockOfText (const KKStr&  startStr,
   JobPtr  j = jobs->LookUpByJobId (jobId);
   if  (j == NULL)
   {
-    // We do not have this job in memory yet.  We will have to create it now.
+    // We do not have this job in memory yet; so we will have to create it now.
     KKStr  emptyStatusStr = "JobId\t" + StrFormatInt (jobId, "ZZZZ0");
     j = Job::CallAppropriateConstructor (this, jobTypeStr, emptyStatusStr);
   }
@@ -815,7 +815,7 @@ void   JobManager::ProcessNextExpansion (ostream&  o)
     }
   }
 
-  // Derived class will now peform expansion.  
+  // Derived class will now peform expansion.
   JobListPtr  expandedJobs = JobsExpandNextSetOfJobs (jobsJustCompleted);
   {
     if  (expandedJobs)
@@ -914,13 +914,12 @@ JobListPtr  JobManager::GetNextSetOfJobs (JobListPtr  completedJobs)
       }
       else
       {
-        // There are still some jobs that are running.   We are going to go to
+        // There are still some jobs that are running; we are going to go to return 
         // for now and try again later.
         //  
-        // By leaving  "nextJob = NULL" we will drop strait through the rest of
-        // this method and return to the caller with 'jobsToExecute' empty
-        // signaling that it will need to sleep for a while before calling 
-        // us again.
+        // By leaving  "nextJob = NULL" we will drop strait through the rest of this method and return to 
+        // the caller with 'jobsToExecute' empty signaling that it will need to sleep for a while before 
+        // calling us again.
       }
     }
 
