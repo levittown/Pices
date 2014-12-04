@@ -38,7 +38,7 @@ namespace MLL
     const KKStr&    ConfigFileName1        () const {return configFileName1;}
     const KKStr&    ConfigFileName2        () const {return configFileName2;}
     bool            FullHierarchyMustMatch () const {return fullHierarchyMustMatch;}
-    MLClassPtr   OtherClass             () const {return otherClass;}
+    MLClassPtr      OtherClass             () const {return otherClass;}
 
     virtual ModelParamTypes  ModelParamType () const {return mptDual;}
 
@@ -91,5 +91,4 @@ namespace MLL
 
 
 #endif
-
 

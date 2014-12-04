@@ -354,7 +354,7 @@ MLClassConstPtr  ModelDual::ReconcilePredictions (MLClassConstPtr  pred1,
     }
     else
     {
-      log.Level (-1) << "ModelDual::ReconcilePredictions ***WARNING***  Classifier[" << param->ConfigFileName1 () << "] did not return a prediction." << endl;
+      log.Level (-1) << "ModelDual::ReconcilePredictions  ***WARNING***  Classifier[" << param->ConfigFileName1 () << "] did not return a prediction." << endl;
       return pred2;
     }
   }
@@ -362,7 +362,7 @@ MLClassConstPtr  ModelDual::ReconcilePredictions (MLClassConstPtr  pred1,
   {
     if  (!pred2)
     {
-      log.Level (-1) << "ModelDual::ReconcilePredictions ***WARNING***  Classifier[" << param->ConfigFileName2 () << "] did not return a prediction." << endl;
+      log.Level (-1) << "ModelDual::ReconcilePredictions  ***WARNING***  Classifier[" << param->ConfigFileName2 () << "] did not return a prediction." << endl;
       return  pred1;
     }
   }
