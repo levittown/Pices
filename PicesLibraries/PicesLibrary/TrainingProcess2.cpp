@@ -55,7 +55,6 @@ using namespace  MLL;
 
 namespace  MLL
 {
-
 TrainingProcess2::TrainingProcess2 (const KKStr&         _configFileName,
                                     FeatureVectorListPtr _excludeList,
                                     FileDescPtr          _fileDesc,

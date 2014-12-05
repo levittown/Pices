@@ -835,7 +835,6 @@ void  ModelDual::RetrieveCrossProbTable (MLClassConstList&  _classes,
       _crossProbTable[x][y] = (crossProbTableC1[x][y] + crossProbTableC2[x][y]) / 2.0;
   }
 
-
   for  (x = 0;  x < numClasses;  ++x)
   {
     delete  crossProbTableC1[x];  crossProbTableC1[x] = NULL;
