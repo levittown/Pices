@@ -3820,6 +3820,204 @@ void  DetermineCropSettings ()
 
 
 
+int  BinarySearchFirstGreaterThan (int*  a,
+                                   int   leftIDX,
+                                   int   rightIDX,
+                                   int   target
+                                  )
+{
+  if  (a[leftIDX] > target)
+    return leftIDX;
+
+  if  (a[rightIDX] <= target)
+    return -1;
+
+  while  (leftIDX < rightIDX)
+  {
+    int m = (leftIDX + rightIDX) / 2;
+    if  ((a[m] > target)  &&  (a[m - 1] <= target))
+      return m;
+
+    if  (a[m] <= target)
+      leftIDX  = Min (m + 1, rightIDX);
+    else
+      rightIDX = Max (m - 1, leftIDX);
+  }
+
+  return  leftIDX;
+}  /* BinarySearchFirstGreaterThan */
+
+
+
+int  CountAlmostSortedIntervals (int   n,
+                                 int*  a
+                                )
+{
+  int  count = 0;
+  vector<int>   subSeqMinVals;
+  vector<int>   subSeqMinIdxs;
+  vector<int>   subSeqMaxVals;
+  vector<int>   subSeqMaxIdxs;
+
+  int  x = 0;
+  while  (x < n)
+  {
+    // Starting a new continuously increasing sequence.
+
+    int  minSubSeqIdx = x;
+    int  minSubSeqVal = a[x];
+    int  subSeqLen = 0;
+
+    while  (true)
+    {
+      int  val = a[x];
+
+      ++subSeqLen;
+      count += subSeqLen;
+  
+      {
+        // Lets pick up Seqs that start in prev SubSeqs.
+        int  curLowVal = a[minSubSeqIdx];
+
+        int  ssIDX = subSeqMinIdxs.size () - 1;
+        while  (ssIDX >= 0)
+        {
+          if  (subSeqMaxVals[ssIDX] >= val)
+          {
+            // No point looking any further back; because there is no way current index can be max.
+            break;
+          }
+
+          if  (subSeqMinVals[ssIDX] < minSubSeqVal)
+          {
+            // So we want to count the sequences that start with a value less than or equal to 'curLowVal',
+            // The most eficient way to do this now would be BST in the range of (subSeqMinIdxs[ssIDX] - subSeqMaxIdxs[ssIDX]).
+            // but want to test that this logic is sound before proceeding.
+            int  zed    = subSeqMinIdxs[ssIDX];
+            int  endIDX = subSeqMaxIdxs[ssIDX];
+
+            int  maxValIDX = BinarySearchFirstGreaterThan (a, zed, endIDX, curLowVal);
+            if  (maxValIDX < 0)
+            {
+              // all are less or equal to 'curLowVal'
+              count += 1 + (endIDX - zed);
+            }
+            else
+            {
+              count += (maxValIDX - zed);
+            }
+
+            if  (subSeqMinVals[ssIDX] < curLowVal)
+              curLowVal = subSeqMinVals[ssIDX];
+          }
+
+          --ssIDX;
+        }
+      }
+
+      ++x;
+      if  (x >= n)            break;
+      if  (a[x] <= a[x - 1])  break;
+    }
+
+    subSeqMinIdxs.push_back (minSubSeqIdx);
+    subSeqMinVals.push_back (minSubSeqVal);
+    subSeqMaxIdxs.push_back (x - 1);
+    subSeqMaxVals.push_back (a[x - 1]);
+  }
+
+  return count;
+}  /* CountAlmostSortedIntervals */
+
+
+
+
+
+
+
+int  BFCountAlmostSortedIntervals (int   n,
+                                   int*  a
+                                  )
+{
+  int  count = 0;
+  int  x = 0;
+  
+  for  (x = 0;  x < n;  ++x)
+  {
+    int  largest  = a[x];
+    int  smallest = a[x];
+    int  y = x + 1;
+    ++count;
+    while  ((y < n)  && (a[y] > a[x]))
+    {
+      if  (a[y] > largest)
+      {
+        ++count;
+        largest = a[y];
+      }
+      ++y;
+    }
+  }
+  
+  return  count;
+}  /* BFCountAlmostSortedIntervals */
+
+
+
+
+
+
+
+
+
+void  TestSubSeqCount ()
+{
+  //int a[] = {1, -3, 2, 4, 9, 1, 12, 19};
+  const int n = 10000;
+  int a[n];
+
+  int c = 0,  cBF = 0;
+
+  int loopCount = 0;
+
+  do
+  {
+    cout << "loopCount: " << loopCount << endl;
+    int x = 0;
+    for (x = 0;  x < n;  ++x)
+      a[x] = x;
+
+
+    x = rand () % 15;
+    while  (x < n)
+    {
+      int  zed = rand () % n;
+
+      int temp = a[x];
+      a[x] = a[zed];
+      a[zed] = temp;
+
+      x = x + (rand () % 15);
+    }
+ 
+    c = CountAlmostSortedIntervals (n, a);
+
+    cBF = BFCountAlmostSortedIntervals (n, a);
+    if  (c != cBF)
+    {
+      cout << c << "\t" << cBF << endl;
+    }
+    ++loopCount;
+  }
+  while  (true);
+
+  cout << "Count: " << c << endl;
+}  /* TestSubSeqCount */
+
+
+
+
+
 int  main (int    argc, 
            char** argv
           )
@@ -3828,6 +4026,14 @@ int  main (int    argc,
   #if  defined (WIN32)  &&  defined (_DEBUG)  &&  !defined(_NO_MEMORY_LEAK_CHECK_)
     _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF ); 
   #endif
+
+
+  if  (true)
+  {
+    TestSubSeqCount ();
+    exit (-1);
+  }
+
 
   if  (false)
   {
