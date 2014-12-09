@@ -3973,12 +3973,13 @@ int  BFCountAlmostSortedIntervals (int   n,
 void  TestSubSeqCount ()
 {
   //int a[] = {1, -3, 2, 4, 9, 1, 12, 19};
-  const int n = 10000;
+  const int n = 20;
   int a[n];
 
   int c = 0,  cBF = 0;
 
   int loopCount = 0;
+
 
   do
   {
@@ -3987,17 +3988,17 @@ void  TestSubSeqCount ()
     for (x = 0;  x < n;  ++x)
       a[x] = x;
 
-
-    x = rand () % 15;
+    //x = rand () % 15;
+    x = 0;
     while  (x < n)
     {
       int  zed = rand () % n;
-
       int temp = a[x];
       a[x] = a[zed];
       a[zed] = temp;
 
-      x = x + (rand () % 15);
+      ++x;
+      //x = x + (rand () % 15);
     }
  
     c = CountAlmostSortedIntervals (n, a);
