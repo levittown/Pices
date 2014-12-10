@@ -100,7 +100,7 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
 
 
   // 1)Determines Midpoint of deploymet from Instruments table.
-  KKStr  sqlStr = "Call ImagesSizeDataByDepthSipper10(" + deployment->CruiseName ().QuotedStr () + "," + deployment->StationName ().QuotedStr () + "," + deployment->DeploymentNum ().QuotedStr () +",1.0)";
+  KKStr  sqlStr = "Call ImagesSizeDataByDepthSipper11(" + deployment->CruiseName ().QuotedStr () + "," + deployment->StationName ().QuotedStr () + "," + deployment->DeploymentNum ().QuotedStr () + ",1.0, '2', 0.010, 1.1, 10.0)";
 
   VectorKKStr  columnNames;
   KKStrMatrixPtr results = db.QueryStatementReturnAllColumns (sqlStr.Str (), sqlStr.Len (), columnNames);
