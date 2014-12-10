@@ -1985,7 +1985,7 @@ begin
   declare _cropLeft           int    default 0;
   declare _cropRight          int    default 4094;
   declare _pixelsPerScanLine  int    default 4096;
-  declare _chamberWidth       float  default  96.0;
+  declare _chamberWidth       float  default  0.098;
   declare _pixelWidth         float  default  0.025263;  /* MiliMeters per Pixel */
   
   
@@ -2013,8 +2013,16 @@ begin
     ImageId           int    default 0,
     PixelCount        int    default 0,
     Depth             float  default 0.0,
-    area              float  default 0.0
+    Area              float  default 0.0,
+    Diameter          float  default 0.0
   );
+  
+  
+  
+  /*  PixelWidth  = (_chamberWidth / (id.CropRight - id.CropLeft))  */
+  /*  PixelHeight = (id.FlowRate . sf.ScanRate)                     */
+  /*  area = i.PixelCount * PixelWidth * PixelHeight * 1000.0       */
+  
   
 
   insert into TempSizeDistributionTable
@@ -2022,7 +2030,8 @@ begin
              i.ImageId,
              i.PixelCount,
              i.Depth,
-             i.PixelCount * _pixelWidth * (id.FlowRate1 / sf.ScanRate) * 1000.0  as area
+             i.PixelCount *  (_chamberWidth / (id.CropRight - id.CropLeft))  * (id.FlowRate1 / sf.ScanRate) * 1000.0  as Area,
+             2 * sqrt(i.PixelCount *  (_chamberWidth / (id.CropRight - id.CropLeft))  * (id.FlowRate1 / sf.ScanRate) * 1000.0 / 3.1415926)  as Diameter
          from  Images i 
          join (SipperFiles sf)     on(sf.SipperFileId  = i.SipperFileId)
          join (InstrumentData id)  on((id.SipperFileId = i.SipperFileId)  and  (id.ScanLine = Floor(TopLeftRow/4096) * 4096) )
@@ -2040,58 +2049,58 @@ begin
          count(T.ImageId)                                  as ImageCount,
          sum(T.PixelCount)                                 as TotalPixelCount,
 
-    sum((T.Area < 0.08))                         as  "<0.08",
-    sum((T.Area >= 0.08)  and  (T.Area < 0.09))  as  "Size_0.08",
-    sum((T.Area >= 0.09)  and  (T.Area < 0.10))  as  "Size_0.09",
-    sum((T.Area >= 0.10)  and  (T.Area < 0.11))  as  "Size_0.10",
-    sum((T.Area >= 0.11)  and  (T.Area < 0.12))  as  "Size_0.11",
-    sum((T.Area >= 0.12)  and  (T.Area < 0.13))  as  "Size_0.12",
-    sum((T.Area >= 0.13)  and  (T.Area < 0.14))  as  "Size_0.13",
-    sum((T.Area >= 0.14)  and  (T.Area < 0.15))  as  "Size_0.14",
-    sum((T.Area >= 0.15)  and  (T.Area < 0.17))  as  "Size_0.15",
-    sum((T.Area >= 0.17)  and  (T.Area < 0.19))  as  "Size_0.17",
-    sum((T.Area >= 0.19)  and  (T.Area < 0.21))  as  "Size_0.19",
-    sum((T.Area >= 0.21)  and  (T.Area < 0.23))  as  "Size_0.21",
-    sum((T.Area >= 0.23)  and  (T.Area < 0.25))  as  "Size_0.23",
-    sum((T.Area >= 0.25)  and  (T.Area < 0.28))  as  "Size_0.25",
-    sum((T.Area >= 0.28)  and  (T.Area < 0.31))  as  "Size_0.28",
-    sum((T.Area >= 0.31)  and  (T.Area < 0.34))  as  "Size_0.31",
-    sum((T.Area >= 0.34)  and  (T.Area < 0.37))  as  "Size_0.34",
-    sum((T.Area >= 0.37)  and  (T.Area < 0.41))  as  "Size_0.37",
-    sum((T.Area >= 0.41)  and  (T.Area < 0.45))  as  "Size_0.41",
-    sum((T.Area >= 0.45)  and  (T.Area < 0.50))  as  "Size_0.45",
-    sum((T.Area >= 0.50)  and  (T.Area < 0.55))  as  "Size_0.50",
-    sum((T.Area >= 0.55)  and  (T.Area < 0.61))  as  "Size_0.55",
-    sum((T.Area >= 0.61)  and  (T.Area < 0.67))  as  "Size_0.61",
-    sum((T.Area >= 0.67)  and  (T.Area < 0.74))  as  "Size_0.67",
-    sum((T.Area >= 0.74)  and  (T.Area < 0.81))  as  "Size_0.74",
-    sum((T.Area >= 0.81)  and  (T.Area < 0.89))  as  "Size_0.81",
-    sum((T.Area >= 0.89)  and  (T.Area < 0.98))  as  "Size_0.89",
-    sum((T.Area >= 0.98)  and  (T.Area < 1.08))  as  "Size_0.98",
-    sum((T.Area >= 1.08)  and  (T.Area < 1.19))  as  "Size_1.08",
-    sum((T.Area >= 1.19)  and  (T.Area < 1.31))  as  "Size_1.19",
-    sum((T.Area >= 1.31)  and  (T.Area < 1.44))  as  "Size_1.31",
-    sum((T.Area >= 1.44)  and  (T.Area < 1.58))  as  "Size_1.44",
-    sum((T.Area >= 1.58)  and  (T.Area < 1.74))  as  "Size_1.58",
-    sum((T.Area >= 1.74)  and  (T.Area < 1.91))  as  "Size_1.74",
-    sum((T.Area >= 1.91)  and  (T.Area < 2.10))  as  "Size_1.91",
-    sum((T.Area >= 2.10)  and  (T.Area < 2.31))  as  "Size_2.10",
-    sum((T.Area >= 2.31)  and  (T.Area < 2.54))  as  "Size_2.31",
-    sum((T.Area >= 2.54)  and  (T.Area < 2.79))  as  "Size_2.54",
-    sum((T.Area >= 2.79)  and  (T.Area < 3.07))  as  "Size_2.79",
-    sum((T.Area >= 3.07)  and  (T.Area < 3.38))  as  "Size_3.07",
-    sum((T.Area >= 3.38)  and  (T.Area < 3.72))  as  "Size_3.38",
-    sum((T.Area >= 3.72)  and  (T.Area < 4.09))  as  "Size_3.72",
-    sum((T.Area >= 4.09)  and  (T.Area < 4.50))  as  "Size_4.09",
-    sum((T.Area >= 4.50)  and  (T.Area < 4.95))  as  "Size_4.50",
-    sum((T.Area >= 4.95)  and  (T.Area < 5.45))  as  "Size_4.95",
-    sum((T.Area >= 5.45)  and  (T.Area < 6.00))  as  "Size_5.45",
-    sum((T.Area >= 6.00)  and  (T.Area < 6.60))  as  "Size_6.00",
-    sum((T.Area >= 6.60)  and  (T.Area < 7.26))  as  "Size_6.60",
-    sum((T.Area >= 7.26)  and  (T.Area < 7.99))  as  "Size_7.26",
-    sum((T.Area >= 7.99)  and  (T.Area < 8.79))  as  "Size_7.99",
-    sum((T.Area >= 8.79)  and  (T.Area < 9.67))  as  "Size_8.79",
-    sum((T.Area >= 9.67)  and  (T.Area < 10.64))  as  "Size_9.67",
+    sum((T.Area < 0.08))                           as  "<0.08",
+    sum((T.Area >= 0.08)   and  (T.Area < 0.09))   as  "Size_0.08",
+    sum((T.Area >= 0.09)   and  (T.Area < 0.10))   as  "Size_0.09",
+    sum((T.Area >= 0.10)   and  (T.Area < 0.11))   as  "Size_0.10",
+    sum((T.Area >= 0.11)   and  (T.Area < 0.12))   as  "Size_0.11",
+    sum((T.Area >= 0.12)   and  (T.Area < 0.13))   as  "Size_0.12",
+    sum((T.Area >= 0.13)   and  (T.Area < 0.14))   as  "Size_0.13",
+    sum((T.Area >= 0.14)   and  (T.Area < 0.15))   as  "Size_0.14",
+    sum((T.Area >= 0.15)   and  (T.Area < 0.17))   as  "Size_0.15",
+    sum((T.Area >= 0.17)   and  (T.Area < 0.19))   as  "Size_0.17",
+    sum((T.Area >= 0.19)   and  (T.Area < 0.21))   as  "Size_0.19",
+    sum((T.Area >= 0.21)   and  (T.Area < 0.23))   as  "Size_0.21",
+    sum((T.Area >= 0.23)   and  (T.Area < 0.25))   as  "Size_0.23",
+    sum((T.Area >= 0.25)   and  (T.Area < 0.28))   as  "Size_0.25",
+    sum((T.Area >= 0.28)   and  (T.Area < 0.31))   as  "Size_0.28",
+    sum((T.Area >= 0.31)   and  (T.Area < 0.34))   as  "Size_0.31",
+    sum((T.Area >= 0.34)   and  (T.Area < 0.37))   as  "Size_0.34",
+    sum((T.Area >= 0.37)   and  (T.Area < 0.41))   as  "Size_0.37",
+    sum((T.Area >= 0.41)   and  (T.Area < 0.45))   as  "Size_0.41",
+    sum((T.Area >= 0.45)   and  (T.Area < 0.50))   as  "Size_0.45",
+    sum((T.Area >= 0.50)   and  (T.Area < 0.55))   as  "Size_0.50",
+    sum((T.Area >= 0.55)   and  (T.Area < 0.61))   as  "Size_0.55",
+    sum((T.Area >= 0.61)   and  (T.Area < 0.67))   as  "Size_0.61",
+    sum((T.Area >= 0.67)   and  (T.Area < 0.74))   as  "Size_0.67",
+    sum((T.Area >= 0.74)   and  (T.Area < 0.81))   as  "Size_0.74",
+    sum((T.Area >= 0.81)   and  (T.Area < 0.89))   as  "Size_0.81",
+    sum((T.Area >= 0.89)   and  (T.Area < 0.98))   as  "Size_0.89",
+    sum((T.Area >= 0.98)   and  (T.Area < 1.08))   as  "Size_0.98",
+    sum((T.Area >= 1.08)   and  (T.Area < 1.19))   as  "Size_1.08",
+    sum((T.Area >= 1.19)   and  (T.Area < 1.31))   as  "Size_1.19",
+    sum((T.Area >= 1.31)   and  (T.Area < 1.44))   as  "Size_1.31",
+    sum((T.Area >= 1.44)   and  (T.Area < 1.58))   as  "Size_1.44",
+    sum((T.Area >= 1.58)   and  (T.Area < 1.74))   as  "Size_1.58",
+    sum((T.Area >= 1.74)   and  (T.Area < 1.91))   as  "Size_1.74",
+    sum((T.Area >= 1.91)   and  (T.Area < 2.10))   as  "Size_1.91",
+    sum((T.Area >= 2.10)   and  (T.Area < 2.31))   as  "Size_2.10",
+    sum((T.Area >= 2.31)   and  (T.Area < 2.54))   as  "Size_2.31",
+    sum((T.Area >= 2.54)   and  (T.Area < 2.79))   as  "Size_2.54",
+    sum((T.Area >= 2.79)   and  (T.Area < 3.07))   as  "Size_2.79",
+    sum((T.Area >= 3.07)   and  (T.Area < 3.38))   as  "Size_3.07",
+    sum((T.Area >= 3.38)   and  (T.Area < 3.72))   as  "Size_3.38",
+    sum((T.Area >= 3.72)   and  (T.Area < 4.09))   as  "Size_3.72",
+    sum((T.Area >= 4.09)   and  (T.Area < 4.50))   as  "Size_4.09",
+    sum((T.Area >= 4.50)   and  (T.Area < 4.95))   as  "Size_4.50",
+    sum((T.Area >= 4.95)   and  (T.Area < 5.45))   as  "Size_4.95",
+    sum((T.Area >= 5.45)   and  (T.Area < 6.00))   as  "Size_5.45",
+    sum((T.Area >= 6.00)   and  (T.Area < 6.60))   as  "Size_6.00",
+    sum((T.Area >= 6.60)   and  (T.Area < 7.26))   as  "Size_6.60",
+    sum((T.Area >= 7.26)   and  (T.Area < 7.99))   as  "Size_7.26",
+    sum((T.Area >= 7.99)   and  (T.Area < 8.79))   as  "Size_7.99",
+    sum((T.Area >= 8.79)   and  (T.Area < 9.67))   as  "Size_8.79",
+    sum((T.Area >= 9.67)   and  (T.Area < 10.64))  as  "Size_9.67",
     sum((T.Area >= 10.64)  and  (T.Area < 11.70))  as  "Size_10.64",
     sum((T.Area >= 11.70)  and  (T.Area < 12.87))  as  "Size_11.70",
     sum((T.Area >= 12.87)  and  (T.Area < 14.16))  as  "Size_12.87",
@@ -2115,8 +2124,8 @@ begin
     sum((T.Area >= 71.60)  and  (T.Area < 78.76))  as  "Size_71.60",
     sum((T.Area >= 78.76)  and  (T.Area < 86.64))  as  "Size_78.76",
     sum((T.Area >= 86.64)  and  (T.Area < 95.30))  as  "Size_86.64",
-    sum((T.Area >= 95.30)  and  (T.Area < 104.83))  as  "Size_95.30",
-    sum((T.Area >= 104.83))                         as  ">=104.83"
+    sum((T.Area >= 95.30)  and  (T.Area < 104.83)) as  "Size_95.30",
+    sum((T.Area >= 104.83))                        as  ">=104.83"
          from  TempSizeDistributionTable T 
          group by floor(T.Depth / _depthBinSize);        
         

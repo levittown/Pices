@@ -3820,6 +3820,166 @@ void  DetermineCropSettings ()
 
 
 
+
+
+typedef  long long  int64;
+
+
+
+
+
+class  FibonacciNums
+{
+public:
+  FibonacciNums ()
+  {
+    knownFibNums.push_back(0);
+    knownFibNums.push_back(1);
+  }  
+ 
+  
+  int64  FibonacciNum (int x)  
+  {
+    if  (x < 0)
+      return 0;
+
+    int  size = knownFibNums.size ();
+    while (size <= x)
+    {
+      int64 nextFibNum = knownFibNums[size - 2] + knownFibNums[size - 1];
+      knownFibNums.push_back (nextFibNum);
+      ++size;
+    }
+    
+    return knownFibNums[x];
+  }  /* FibonacciNum */
+
+
+  
+  /**  Returns true if 'num' is part of the 'Fibonacci sequence. */
+  bool  IsAFibonacciNum (int64  num)
+  {
+    if  (num > knownFibNums[knownFibNums.size () -1 ])
+    {
+      GrowKnownFibNums (num);
+      return  (num == knownFibNums[knownFibNums.size () -1]);
+    }
+    else
+    {
+      return (LookUpExisting (num) != -1);
+    }
+  }
+  
+    
+private:
+  /** Will grow list of knownFibNums'  until it reaches or excceds  'targetVal' */
+  void  GrowKnownFibNums (int64  targetVal)
+  {
+    int  size = knownFibNums.size ();
+    while  (knownFibNums[size - 1] < targetVal)
+    {
+      int64 nextFibNum = knownFibNums[size - 2] + knownFibNums[size - 1];
+      knownFibNums.push_back (nextFibNum);
+      ++size;
+    }
+  }  /* GrowKnownFibNums */
+  
+
+  
+  // Will return index of 'fibNum' or -1 if not exist.
+  int  LookUpExisting (int64  fibNum)
+  {
+    int  idx = -1;
+    int  l = 0;
+    int  r = knownFibNums.size () - 1;
+    
+    while  (l <= r)
+    {
+      int m = (l + r) / 2;
+      int64 zed = fibNum - knownFibNums[m]; 
+      if  (zed > 0)
+        l = m + 1;
+      else if  (zed < 0)
+        r = m - 1;
+      else
+      {
+        idx = m;
+        break;
+      }
+    }
+    return idx;
+  }
+  
+  vector<int64>  knownFibNums;  /**< Will be kept in order frm low to high of fibonacci numbers prev computed. */
+};  /* FibonacciNums */
+
+
+
+
+int TestFibonacciNums () 
+{
+  FibonacciNums  fibonacciNums;
+  
+  bool  x0 = fibonacciNums.IsAFibonacciNum (0);
+  
+  bool  x1 = fibonacciNums.IsAFibonacciNum (3);
+
+  bool  c2 = fibonacciNums.IsAFibonacciNum (4);
+
+  bool  c3 = fibonacciNums.IsAFibonacciNum (126);
+
+  bool  c4 = fibonacciNums.IsAFibonacciNum (28);
+
+  bool  c5 = fibonacciNums.IsAFibonacciNum (-12);
+
+  bool  c6 = fibonacciNums.IsAFibonacciNum (289133);
+
+  bool  c7 = fibonacciNums.IsAFibonacciNum (987);
+
+  bool  c8 = fibonacciNums.IsAFibonacciNum (0);
+
+  int  numFound = 0;
+  for  (int zed = 100;   zed < 10000000;  ++zed)
+  {
+    if  (fibonacciNums.IsAFibonacciNum (zed))
+    {
+      cout << zed << "\t" << "IsFibo" << endl;
+      ++numFound;
+    }
+  }
+
+  cout << "numFound: " << numFound << endl;
+
+  return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int  main (int    argc, 
            char** argv
           )
@@ -3829,6 +3989,13 @@ int  main (int    argc,
     _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF ); 
   #endif
 
+
+  if  (true)
+  {
+    TestFibonacciNums ();
+    exit (-1);
+  }
+    
   if  (false)
   {
     MarineSnowReport ();

@@ -1050,8 +1050,13 @@ begin
   select d.CropLeft, d.CropRight, d.ChamberWidth  into  _cropLeft, _cropRight, _chamberWidth
      from Deployments d
 		 where  (d.CruiseName     = _cruiseName)  and
-	            (d.StationName    = _stationName) and 
-                ((d.DeploymentNum = _deploymentNum) or (_deploymentNum = ""));
+	          (d.StationName    = _stationName) and 
+            ((d.DeploymentNum = _deploymentNum) or (_deploymentNum = ""));
+  
+  if  (_chamberWidth < 0.001)  then
+    set  _chamberWidth = 0.096;
+  end if;
+  
   
   set _secsPerRec = 4096.0 / _scanRate;
   set _midPoint = InstrumentDataGetMidPoint(_cruiseName, _stationName,_deploymentNum);
@@ -1061,7 +1066,7 @@ begin
            Floor(id.depth / _depthBinSize)                  as BinId,
            Floor(id.depth / _depthBinSize) * _depthBinSize  as BinDepth,
            4096 * count(id.ScanLine)                        as ScanLines,
-           sum(id.FlowRate1 * _secsPerRec * 0.098 * 0.098)  as VolumeSampled,
+           sum(id.FlowRate1 * _secsPerRec * _chamberWidth * 0.098)  as VolumeSampled,
            avg(id.Temperature)                              as TemperatureMean,
            avg(id.Salinity)                                 as SalinityMean,
            avg(id.Density)                                  as DenisityMean,
