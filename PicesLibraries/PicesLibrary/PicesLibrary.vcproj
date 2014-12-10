@@ -881,10 +881,6 @@
 			RelativePath=".\Makefile"
 			>
 		</File>
-		<File
-			RelativePath="..\Apps\SipperInterface\SipperCommand.cs"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

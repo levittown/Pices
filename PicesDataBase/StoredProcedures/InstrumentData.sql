@@ -595,7 +595,7 @@ drop procedure if exists  InstrumentDataByUpAndDownCast2;
 
 DELIMITER $$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `InstrumentDataByUpAndDownCast2`(in  _cruiseName      varChar(64),
+CREATE DEFINER=`root`@`localhost` procedure `InstrumentDataByUpAndDownCast2`(in  _cruiseName      varChar(64),
                                                                              in  _stationName     varChar(10),
                                                                              in  _deploymentNum   varChar(4)
                                                                             )
@@ -952,6 +952,7 @@ delimiter ;
 
 
 
+
 drop procedure  if exists InstrumentDataGetVolumePerMeterDepth;
 delimiter //
 
@@ -963,19 +964,32 @@ begin
   declare  _sipperFileId   int unsigned default 0;
   declare  _scanRate       int unsigned default 0;
   declare  _secsPerRec     float default 0.0;
+  declare  _chamberWidth   float default 0.0;
+  
+  select  sf.SipperFileId, sf.ScanRate, d.ChamberWidth  into  _sipperFileId, _scanRate, _chamberWidth
+      from SipperFiles sf  
+      join(Deployments d)  on(d.CruiseName = sf.CruiseName  and  d.StationName = sf.StationName  and  d.DeploymentNum = sf.DeploymentNum)
+      where  sf.SipperFileName = _sipperFileName;
 
+  /*
   set _sipperFileId = (select sf.SipperFileId  from  SipperFiles sf  where  sf.SipperFileName = _sipperFileName);
   set _scanRate     = (select sf.ScanRate      from  SipperFiles sf  where  sf.SipperFileName = _sipperFileName);
-  
+  set _chamberWidth = (select d.ChamberWidth)  from Deployments d  where d.CruiseName  
+  */
+    
   if  _scanRate < 1  then
     set _scanRate = 24950;
   end if;
   
+  if  _chamberWidth < 0.001  then
+    set  _chamberWidth = 0.098;
+  end if;
+  
   set _secsPerRec = 4096 / _scanRate;
 
-  select   Floor(id.depth / _depthBinSize)                  as BinId,
-           Floor(id.depth / _depthBinSize) * _depthBinSize  as BinDepth,
-           sum(id.FlowRate1 * _secsPerRec * 0.098 * 0.098)  as VolumeSampled
+  select   Floor(id.depth / _depthBinSize)                           as BinId,
+           Floor(id.depth / _depthBinSize) * _depthBinSize           as BinDepth,
+           sum(id.FlowRate1 * _secsPerRec * (_chamberWidth * 0.098)  as VolumeSampled
          from  InstrumentData id
          where id.SipperFileId = _sipperFileId
          group by Floor(id.depth / _depthBinSize)
@@ -983,6 +997,10 @@ begin
 end
 //
 delimiter ;
+
+
+
+
 
 
 
@@ -1035,7 +1053,7 @@ begin
   declare  _secsPerRec     float default 0.0;
   declare  _midPoint       DateTime default null;
   
-  declare  _chamberWidth   float  default 93.0;
+  declare  _chamberWidth   float  default 0.098;
   declare  _cropLeft       int    default 0;
   declare  _cropRight      int    default 4095;
   
@@ -1050,8 +1068,8 @@ begin
   select d.CropLeft, d.CropRight, d.ChamberWidth  into  _cropLeft, _cropRight, _chamberWidth
      from Deployments d
 		 where  (d.CruiseName     = _cruiseName)  and
-	            (d.StationName    = _stationName) and 
-                ((d.DeploymentNum = _deploymentNum) or (_deploymentNum = ""));
+	          (d.StationName    = _stationName) and 
+            ((d.DeploymentNum = _deploymentNum) or (_deploymentNum = ""));
   
   set _secsPerRec = 4096.0 / _scanRate;
   set _midPoint = InstrumentDataGetMidPoint(_cruiseName, _stationName,_deploymentNum);
@@ -1061,7 +1079,7 @@ begin
            Floor(id.depth / _depthBinSize)                  as BinId,
            Floor(id.depth / _depthBinSize) * _depthBinSize  as BinDepth,
            4096 * count(id.ScanLine)                        as ScanLines,
-           sum(id.FlowRate1 * _secsPerRec * 0.098 * 0.098)  as VolumeSampled,
+           sum(id.FlowRate1 * _secsPerRec * _chamberWidth * 0.098)  as VolumeSampled,
            avg(id.Temperature)                              as TemperatureMean,
            avg(id.Salinity)                                 as SalinityMean,
            avg(id.Density)                                  as DenisityMean,

@@ -80,6 +80,9 @@ namespace SipperFile
       Description.Text     = deployment.Description;
       Latitude.Text        = PicesKKStr.LatitudeToStr  (deployment.Latitude);
       Longitude.Text       = PicesKKStr.LongitudeToStr (deployment.Longitude);
+      String s = deployment.ChamberWidth.ToString (ChamberWidth.Mask);
+      s = s.PadLeft (ChamberWidth.Mask.Length);
+      ChamberWidth.Text    = s;
       DateTimeStart.Value  = deployment.DateTimeStart;
       DateTimeEnd.Value    = deployment.DateTimeEnd;
 
@@ -93,6 +96,7 @@ namespace SipperFile
         Description.ReadOnly        = false;
         Latitude.ReadOnly           = false;
         Longitude.ReadOnly          = false;
+        ChamberWidth.Enabled        = false;
         DateTimeStart.Enabled       = false;
         DateTimeEnd.Enabled         = false;
         SyncTimeStampActual.Enabled = false;
@@ -130,6 +134,7 @@ namespace SipperFile
       deployment.Description         = Description.Text;
       deployment.Latitude            = PicesKKStr.StrToLatitude  (Latitude.Text);
       deployment.Longitude           = PicesKKStr.StrToLongitude (Longitude.Text);
+      deployment.ChamberWidth        = PicesKKStr.StrToFloat     (ChamberWidth.Text);
       deployment.DateTimeStart       = DateTimeStart.Value;
       deployment.DateTimeEnd         = DateTimeEnd.Value;
       deployment.SyncTimeStampActual = SyncTimeStampActual.Value;
@@ -212,21 +217,44 @@ namespace SipperFile
     }
 
 
+    private  void  ValidateChamberWidth ()
+    {
+      errorProvider1.SetError (ChamberWidth, null);
+      float  chamberWidth = PicesKKStr.StrToFloat (ChamberWidth.Text);
+      if  (chamberWidth < 0.001)
+      {
+        validationErrorsFound = true;
+        errorProvider1.SetError (ChamberWidth, "Chamber Width of 1mm of less is unreasonable.");
+      }
+
+      else if  (chamberWidth >= 1.0000)
+      {
+        validationErrorsFound = true;
+        errorProvider1.SetError (ChamberWidth, "Chamber Width a Meter or greater is not reasonable.");
+      }
+    }
+
+
+
     private  void  ValidateAllFields ()
     {
       validationErrorsFound = false;
       ValidateDeploymentNum ();
       ValidateLatitude ();
       ValidateLongitude ();
+      ValidateChamberWidth ();
     }
 
 
     private  bool  ChangesMade ()
     {
+      float chamberWidthT = PicesKKStr.StrToFloat (ChamberWidth.Text);
+
       bool  changesMade = (DeploymentNum.Text                        != deployment.DeploymentNum)       ||
                           (Description.Text                          != deployment.Description)         ||
                           (PicesKKStr.StrToLatitude (Latitude.Text)  != deployment.Latitude)            ||
                           (PicesKKStr.StrToLongitude(Longitude.Text) != deployment.Longitude)           ||
+                          (chamberWidthT                             != deployment.ChamberWidth)        ||
                           (SyncTimeStampActual.Value                 != deployment.SyncTimeStampActual) ||
                           (SyncTimeStampCTD.Value                    != deployment.SyncTimeStampCTD)    ||
                           (SyncTimeStampGPS.Value                    != deployment.SyncTimeStampGPS)    ||

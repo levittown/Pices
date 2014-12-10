@@ -4898,7 +4898,7 @@ void   DataBase::SipperDeploymentInsert (const SipperDeployment&  deployment)
                         DateTimeToQuotedStr (deployment.SyncTimeStampGPS    ()) + ", " +
                         StrFormatInt (deployment.CropLeft  (), "####0")         + ", " +
                         StrFormatInt (deployment.CropRight (), "####0")         + ", " +
-                        StrFormatDouble (deployment.ChamberWidth (), "##0.000") + 
+                        StrFormatDouble (deployment.ChamberWidth (), "##0.0000") + 
                        ")";
   int32  returnCd = QueryStatement (sqlStr);
   ResultSetsClear ();
@@ -4928,7 +4928,7 @@ void   DataBase::SipperDeploymentUpdate (const SipperDeployment&  deployment)
                         DateTimeToQuotedStr (deployment.SyncTimeStampGPS    ()) + ", " +
                         StrFormatInt (deployment.CropLeft  (), "####0")         + ", " +
                         StrFormatInt (deployment.CropRight (), "####0")         + ", " + 
-                        StrFormatDouble (deployment.ChamberWidth (), "##0.000") + 
+                        StrFormatDouble (deployment.ChamberWidth (), "##0.0000") + 
                        ")";
   int32  returnCd = QueryStatement (sqlStr);
   ResultSetsClear ();

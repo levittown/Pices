@@ -60,6 +60,8 @@
       this.SyncTimeStampCTD = new System.Windows.Forms.DateTimePicker ();
       this.SyncTimeStampActualLabel = new System.Windows.Forms.Label ();
       this.SyncTimeStampActual = new System.Windows.Forms.DateTimePicker ();
+      this.ChamberWidthLabel = new System.Windows.Forms.Label ();
+      this.ChamberWidth = new System.Windows.Forms.MaskedTextBox ();
       ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit ();
       this.SuspendLayout ();
       // 
@@ -358,11 +360,33 @@
       this.SyncTimeStampActual.Size = new System.Drawing.Size (156, 22);
       this.SyncTimeStampActual.TabIndex = 30;
       // 
+      // ChamberWidthLabel
+      // 
+      this.ChamberWidthLabel.AutoSize = true;
+      this.ChamberWidthLabel.Font = new System.Drawing.Font ("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.ChamberWidthLabel.Location = new System.Drawing.Point (585, 221);
+      this.ChamberWidthLabel.Name = "ChamberWidthLabel";
+      this.ChamberWidthLabel.Size = new System.Drawing.Size (120, 13);
+      this.ChamberWidthLabel.TabIndex = 68;
+      this.ChamberWidthLabel.Text = "Chamber Width (meters)";
+      // 
+      // ChamberWidth
+      // 
+      this.ChamberWidth.Font = new System.Drawing.Font ("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.ChamberWidth.Location = new System.Drawing.Point (585, 236);
+      this.ChamberWidth.Mask = "#0.0000";
+      this.ChamberWidth.Name = "ChamberWidth";
+      this.ChamberWidth.Size = new System.Drawing.Size (120, 22);
+      this.ChamberWidth.TabIndex = 13;
+      this.ChamberWidth.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+      // 
       // DeploymentDialog
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF (6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size (741, 665);
+      this.Controls.Add (this.ChamberWidth);
+      this.Controls.Add (this.ChamberWidthLabel);
       this.Controls.Add (this.SyncTimeStampActualLabel);
       this.Controls.Add (this.SyncTimeStampActual);
       this.Controls.Add (this.SyncTimeStampCTDLabel);
@@ -435,5 +459,7 @@
     private System.Windows.Forms.Label SyncTimeStampGPSLabel;
     private System.Windows.Forms.Label SyncTimeStampActualLabel;
     private System.Windows.Forms.DateTimePicker SyncTimeStampActual;
+    private System.Windows.Forms.MaskedTextBox ChamberWidth;
+    private System.Windows.Forms.Label ChamberWidthLabel;
   }
 }
