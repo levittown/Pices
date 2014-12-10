@@ -4023,12 +4023,48 @@ double  FeatureSelection::GetTotalCpuSecs (BinaryClassListPtr  binClasses,
 }  /* GetTotalCpuSecs */
 
 
+void  Test ()
+{
+  int l = 167;
+  int r = 587;
+
+  int power = 1 << 13;
+  int  result = 0;
+
+  while  (power > 0)
+  {
+    int  lDiv = l / power;
+    int  rDiv = r / power;
+
+    int  lAndedWithPower = (l & power);
+    int  rAndedWithPower = (r & power);
+
+    if  (lAndedWithPower != rAndedWithPower)
+      break;
+
+    power = power >> 1;
+  }
+
+  while  (power > 0)
+  {
+    result += power;
+    power = power >> 1;
+  }
+
+  cout << result << endl;
+
+} /* Test */
+
+
+
 
 
 
 
 int  main (int argc, char **argv)
 {
+  Test ();
+
   osRunAsABackGroundProcess ();
    //osRunAsABackGroundProcess ();
 

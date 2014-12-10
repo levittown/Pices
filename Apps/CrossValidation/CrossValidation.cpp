@@ -3820,138 +3820,114 @@ void  DetermineCropSettings ()
 
 
 
-
-
-typedef  long long  int64;
-
-
-
-
-
-class  FibonacciNums
+int  BinarySearchFirstGreaterThan (int*  a,
+                                   int   leftIDX,
+                                   int   rightIDX,
+                                   int   target
+                                  )
 {
-public:
-  FibonacciNums ()
-  {
-    knownFibNums.push_back(0);
-    knownFibNums.push_back(1);
-  }  
- 
-  
-  int64  FibonacciNum (int x)  
-  {
-    if  (x < 0)
-      return 0;
+  if  (a[leftIDX] > target)
+    return leftIDX;
 
-    int  size = knownFibNums.size ();
-    while (size <= x)
-    {
-      int64 nextFibNum = knownFibNums[size - 2] + knownFibNums[size - 1];
-      knownFibNums.push_back (nextFibNum);
-      ++size;
-    }
-    
-    return knownFibNums[x];
-  }  /* FibonacciNum */
+  if  (a[rightIDX] <= target)
+    return -1;
 
-
-  
-  /**  Returns true if 'num' is part of the 'Fibonacci sequence. */
-  bool  IsAFibonacciNum (int64  num)
+  while  (leftIDX < rightIDX)
   {
-    if  (num > knownFibNums[knownFibNums.size () -1 ])
-    {
-      GrowKnownFibNums (num);
-      return  (num == knownFibNums[knownFibNums.size () -1]);
-    }
+    int m = (leftIDX + rightIDX) / 2;
+    if  ((a[m] > target)  &&  (a[m - 1] <= target))
+      return m;
+
+    if  (a[m] <= target)
+      leftIDX  = Min (m + 1, rightIDX);
     else
-    {
-      return (LookUpExisting (num) != -1);
-    }
+      rightIDX = Max (m - 1, leftIDX);
   }
-  
-    
-private:
-  /** Will grow list of knownFibNums'  until it reaches or excceds  'targetVal' */
-  void  GrowKnownFibNums (int64  targetVal)
-  {
-    int  size = knownFibNums.size ();
-    while  (knownFibNums[size - 1] < targetVal)
-    {
-      int64 nextFibNum = knownFibNums[size - 2] + knownFibNums[size - 1];
-      knownFibNums.push_back (nextFibNum);
-      ++size;
-    }
-  }  /* GrowKnownFibNums */
-  
 
-  
-  // Will return index of 'fibNum' or -1 if not exist.
-  int  LookUpExisting (int64  fibNum)
-  {
-    int  idx = -1;
-    int  l = 0;
-    int  r = knownFibNums.size () - 1;
-    
-    while  (l <= r)
-    {
-      int m = (l + r) / 2;
-      int64 zed = fibNum - knownFibNums[m]; 
-      if  (zed > 0)
-        l = m + 1;
-      else if  (zed < 0)
-        r = m - 1;
-      else
-      {
-        idx = m;
-        break;
-      }
-    }
-    return idx;
-  }
-  
-  vector<int64>  knownFibNums;  /**< Will be kept in order frm low to high of fibonacci numbers prev computed. */
-};  /* FibonacciNums */
+  return  leftIDX;
+}  /* BinarySearchFirstGreaterThan */
 
 
 
-
-int TestFibonacciNums () 
+int  CountAlmostSortedIntervals (int   n,
+                                 int*  a
+                                )
 {
-  FibonacciNums  fibonacciNums;
-  
-  bool  x0 = fibonacciNums.IsAFibonacciNum (0);
-  
-  bool  x1 = fibonacciNums.IsAFibonacciNum (3);
+  int  count = 0;
+  vector<int>   subSeqMinVals;
+  vector<int>   subSeqMinIdxs;
+  vector<int>   subSeqMaxVals;
+  vector<int>   subSeqMaxIdxs;
 
-  bool  c2 = fibonacciNums.IsAFibonacciNum (4);
-
-  bool  c3 = fibonacciNums.IsAFibonacciNum (126);
-
-  bool  c4 = fibonacciNums.IsAFibonacciNum (28);
-
-  bool  c5 = fibonacciNums.IsAFibonacciNum (-12);
-
-  bool  c6 = fibonacciNums.IsAFibonacciNum (289133);
-
-  bool  c7 = fibonacciNums.IsAFibonacciNum (987);
-
-  bool  c8 = fibonacciNums.IsAFibonacciNum (0);
-
-  int  numFound = 0;
-  for  (int zed = 100;   zed < 10000000;  ++zed)
+  int  x = 0;
+  while  (x < n)
   {
-    if  (fibonacciNums.IsAFibonacciNum (zed))
+    // Starting a new continuously increasing sequence.
+
+    int  minSubSeqIdx = x;
+    int  minSubSeqVal = a[x];
+    int  subSeqLen = 0;
+
+    while  (true)
     {
-      cout << zed << "\t" << "IsFibo" << endl;
-      ++numFound;
+      int  val = a[x];
+
+      ++subSeqLen;
+      count += subSeqLen;
+  
+      {
+        // Lets pick up Seqs that start in prev SubSeqs.
+        int  curLowVal = a[minSubSeqIdx];
+
+        int  ssIDX = subSeqMinIdxs.size () - 1;
+        while  (ssIDX >= 0)
+        {
+          if  (subSeqMaxVals[ssIDX] >= val)
+          {
+            // No point looking any further back; because there is no way current index can be max.
+            break;
+          }
+
+          if  (subSeqMinVals[ssIDX] < minSubSeqVal)
+          {
+            // So we want to count the sequences that start with a value less than or equal to 'curLowVal',
+            // The most eficient way to do this now would be BST in the range of (subSeqMinIdxs[ssIDX] - subSeqMaxIdxs[ssIDX]).
+            // but want to test that this logic is sound before proceeding.
+            int  zed    = subSeqMinIdxs[ssIDX];
+            int  endIDX = subSeqMaxIdxs[ssIDX];
+
+            int  maxValIDX = BinarySearchFirstGreaterThan (a, zed, endIDX, curLowVal);
+            if  (maxValIDX < 0)
+            {
+              // all are less or equal to 'curLowVal'
+              count += 1 + (endIDX - zed);
+            }
+            else
+            {
+              count += (maxValIDX - zed);
+            }
+
+            if  (subSeqMinVals[ssIDX] < curLowVal)
+              curLowVal = subSeqMinVals[ssIDX];
+          }
+
+          --ssIDX;
+        }
+      }
+
+      ++x;
+      if  (x >= n)            break;
+      if  (a[x] <= a[x - 1])  break;
     }
+
+    subSeqMinIdxs.push_back (minSubSeqIdx);
+    subSeqMinVals.push_back (minSubSeqVal);
+    subSeqMaxIdxs.push_back (x - 1);
+    subSeqMaxVals.push_back (a[x - 1]);
   }
 
-  cout << "numFound: " << numFound << endl;
-
-  return 0;
-}
+  return count;
+}  /* CountAlmostSortedIntervals */
 
 
 
@@ -3959,6 +3935,32 @@ int TestFibonacciNums ()
 
 
 
+int  BFCountAlmostSortedIntervals (int   n,
+                                   int*  a
+                                  )
+{
+  int  count = 0;
+  int  x = 0;
+  
+  for  (x = 0;  x < n;  ++x)
+  {
+    int  largest  = a[x];
+    int  smallest = a[x];
+    int  y = x + 1;
+    ++count;
+    while  ((y < n)  && (a[y] > a[x]))
+    {
+      if  (a[y] > largest)
+      {
+        ++count;
+        largest = a[y];
+      }
+      ++y;
+    }
+  }
+  
+  return  count;
+}  /* BFCountAlmostSortedIntervals */
 
 
 
@@ -3968,13 +3970,49 @@ int TestFibonacciNums ()
 
 
 
+void  TestSubSeqCount ()
+{
+  //int a[] = {1, -3, 2, 4, 9, 1, 12, 19};
+  const int n = 10000;
+  int a[n];
+
+  int c = 0,  cBF = 0;
+
+  int loopCount = 0;
+
+  do
+  {
+    cout << "loopCount: " << loopCount << endl;
+    int x = 0;
+    for (x = 0;  x < n;  ++x)
+      a[x] = x;
 
 
+    x = rand () % 15;
+    while  (x < n)
+    {
+      int  zed = rand () % n;
 
+      int temp = a[x];
+      a[x] = a[zed];
+      a[zed] = temp;
 
+      x = x + (rand () % 15);
+    }
+ 
+    c = CountAlmostSortedIntervals (n, a);
 
+    cBF = BFCountAlmostSortedIntervals (n, a);
+    if  (c != cBF)
+    {
+      cout << c << "\t" << cBF << endl;
+    }
+    ++loopCount;
+  }
+  while  (true);
 
-
+  cout << "Count: " << c << endl;
+}  /* TestSubSeqCount */
 
 
 
@@ -3990,12 +4028,21 @@ int  main (int    argc,
   #endif
 
 
-  if  (true)
+
+
+  if  (false)
+  {
+    TestSubSeqCount ();
+    exit (-1);
+  }
+
+  if  (false)
   {
     TestFibonacciNums ();
     exit (-1);
   }
     
+
   if  (false)
   {
     MarineSnowReport ();
