@@ -38,6 +38,7 @@ using namespace  KKU;
 #include "InstrumentDataFileManager.h"
 #include "InstrumentDataManager.h"
 #include "SipperBuff.h"
+#include "SipperVariables.h"
 using namespace SipperHardware;
 
 
@@ -55,6 +56,10 @@ using namespace  MLL;
 
 #define Q(x) #x
 #define QUOTE(x) Q(x)
+
+
+
+KKStr  marineSnowReportDirectory = "D:\\Users\\kkramer\\DropBox\\Dropbox\\USF_OilSpillGroup\\MarineSnow_2014-12-10";
 
 
 
@@ -91,6 +96,43 @@ public:
 };
 
 
+void  CreateThresholdHeaders (VectorFloat&  sizeThresholds,
+                              KKStr&        h1,
+                              KKStr&        h2
+                             )
+{
+  h1 = "";
+  h2 = "";
+  for  (uint32 c = 0;  c < sizeThresholds.size ();  ++c)
+  {
+    KKStr  mStr = "";
+    KKStr  sStr = "";
+    if (c == 0)
+    {
+      mStr = "";
+      sStr = "<" + StrFormatDouble (sizeThresholds[c], "0.0000");
+    }
+
+    else if  (c < (sizeThresholds.size () - 1))
+    {
+      float  m = (sizeThresholds[c] + sizeThresholds[c + 1]) / 2.0f;
+      mStr = StrFormatDouble (m, "0.0000");
+      sStr = ">=" + StrFormatDouble (sizeThresholds[c], "0.0000");
+    }
+
+    else
+    {
+      mStr = "";
+      sStr = ">=" + StrFormatDouble (sizeThresholds[c], "0.0000");
+    }
+
+    h1 << "\t" << mStr;
+    h2 << "\t" << sStr;
+  }
+}  /* CreateThresholdHeaders */
+
+
+
 
 DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
                                                 DataBase&            db
@@ -100,7 +142,7 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
 
 
   // 1)Determines Midpoint of deploymet from Instruments table.
-  KKStr  sqlStr = "Call ImagesSizeDataByDepthSipper11(" + deployment->CruiseName ().QuotedStr () + "," + deployment->StationName ().QuotedStr () + "," + deployment->DeploymentNum ().QuotedStr () + ",1.0, '2', 0.010, 1.1, 10.0)";
+  KKStr  sqlStr = "Call ImagesSizeDataByDepthSipper11(" + deployment->CruiseName ().QuotedStr () + "," + deployment->StationName ().QuotedStr () + "," + deployment->DeploymentNum ().QuotedStr () + ",1, '2', 0.005, 1.2, 20.0)";
 
   VectorKKStr  columnNames;
   KKStrMatrixPtr results = db.QueryStatementReturnAllColumns (sqlStr.Str (), sqlStr.Len (), columnNames);
@@ -130,9 +172,24 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
     countHeader[x] = columnName;
 
     float  sizeThreshold = 0;
-    int32 idx = columnName.LocateCharacter ('_');
-    if  (idx > 0)
-      sizeThreshold = columnName.SubStrPart (idx + 1).ToFloat ();
+
+    if  (x == 0)
+    {
+      sizeThreshold = columnName.SubStrPart (1).ToFloat ();
+    }
+
+    else if  (x <= (numCountCols - 1))
+    {
+      int32 idx = columnName.LocateCharacter ('_');
+      if  (idx > 0)
+        sizeThreshold = columnName.SubStrPart (idx + 1).ToFloat ();
+    }
+
+    else if  (x == (numCountCols - 1))
+    {
+      sizeThreshold = columnName.SubStrPart (2).ToFloat ();
+    }
+
     sizeThresholds.push_back (sizeThreshold);
   }
 
@@ -147,8 +204,7 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
   KKStr svnVersionStr = QUOTE (_SVNVERSION_);
 
   KKStr  reportRootName = deployment->CruiseName () + "-" + deployment->StationName () + "-" + deployment->DeploymentNum ();
-  KKStr  reportFileRootName1 = "C:\\Temp\\MarineSnow\\" + reportRootName + ".txt";
-
+  KKStr  reportFileRootName1 =  osAddSlash (marineSnowReportDirectory) + reportRootName + ".txt";
   ofstream  r1 (reportFileRootName1.Str ());
 
   r1 << "Cruise"     << "\t" << deployment->CruiseName    () << endl
@@ -167,14 +223,12 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
   KKStr  h1 (1024);
   KKStr  h2 (1024);
 
-  h1 << ""        << "\t" << "Depth"  << "\t" << "VolumeSampled" << "\t" << "Image"     << "\t"  << "Pixel";
-  h2 << "Down/Up" << "\t" << "(m)"    << "\t" << "m^3"           << "\t" << "Abundance" << "\t"  << "Count";
+  KKStr  thH1 (1024);
+  KKStr  thH2 (1024);
+  CreateThresholdHeaders (sizeThresholds, thH1, thH2);
 
-  for  (int32 c = 0;  c < numCountCols;  ++c)
-  {
-    h1 << "\t" << "";
-    h2 << "\t" << countHeader[c];
-  }
+  h1 << ""        << "\t" << "Depth"  << "\t" << "VolumeSampled" << "\t" << "Image"     << "\t"  << "Pixel" << thH1;
+  h2 << "Down/Up" << "\t" << "(m)"    << "\t" << "m^3"           << "\t" << "Abundance" << "\t"  << "Count" << thH2;
 
   VectorDouble  integratedAbundance (sizeThresholds.size (), 0.0);
   VectorInt32   integratedCounts    (sizeThresholds.size (), 0);
@@ -347,7 +401,8 @@ void  PrintSummaryReports (DataBasePtr                  db,
 {
   uint32  x = 0;
 
-  ofstream  r ("C:\\Temp\\MarineSnow\\Summary.txt");
+  KKStr  sumFileName = osAddSlash (marineSnowReportDirectory) + "Summary.txt";
+  ofstream  r (sumFileName.Str ());
 
   KKStr svnVersionStr = QUOTE (_SVNVERSION_);
 
@@ -371,12 +426,13 @@ void  PrintSummaryReports (DataBasePtr                  db,
 
   VectorFloat  sizeThresholds = (*idx)->sizeThresholds;
 
-  r << ""       << "\t" << ""        << "\t" << ""           << "\t" << "VolumeSampled" << endl;
-  r << "Cruise" << "\t" << "Station" << "\t" << "Deployment" << "\t" << "m^3";
-  for  (x = 0;  x < sizeThresholds.size ();  ++x)
-    r << "\t" << sizeThresholds[x];
-  r << endl;
+  KKStr h1 (1024);
+  KKStr h2 (1024);
 
+  CreateThresholdHeaders (sizeThresholds, h1, h2);
+
+  r << ""       << "\t" << ""        << "\t" << ""           << "\t" << "VolumeSampled" << h1 << endl;
+  r << "Cruise" << "\t" << "Station" << "\t" << "Deployment" << "\t" << "m^3"           << h2 << endl;
   for  (idx = summaries.begin ();  idx != summaries.end ();  ++idx)
   {
     DeploymentSummary*  ds = *idx;
@@ -391,15 +447,13 @@ void  PrintSummaryReports (DataBasePtr                  db,
   }
   r << endl << endl << endl << endl;
 
+
+
   r << "Summary  Integrated Abundance" << endl
     << endl;
 
-  r << ""       << "\t" << ""        << "\t" << ""           << "\t" << "VolumeSampled" << endl;
-  r << "Cruise" << "\t" << "Station" << "\t" << "Deployment" << "\t" << "m^3";
-  for  (x = 0;  x < sizeThresholds.size ();  ++x)
-    r << "\t" << sizeThresholds[x];
-  r << endl;
-
+  r << ""       << "\t" << ""        << "\t" << ""           << "\t" << "VolumeSampled" << h1 << endl;
+  r << "Cruise" << "\t" << "Station" << "\t" << "Deployment" << "\t" << "m^3"           << h2 << endl;
   for  (idx = summaries.begin ();  idx != summaries.end ();  ++idx)
   {
     DeploymentSummary*  ds = *idx;
@@ -415,15 +469,13 @@ void  PrintSummaryReports (DataBasePtr                  db,
   r << endl << endl << endl << endl;
 
 
+
+
   r << "Summary  Integrated log10(Abundance)" << endl
     << endl;
 
-  r << ""       << "\t" << ""        << "\t" << ""           << "\t" << "VolumeSampled" << endl;
-  r << "Cruise" << "\t" << "Station" << "\t" << "Deployment" << "\t" << "m^3";
-  for  (x = 0;  x < sizeThresholds.size ();  ++x)
-    r << "\t" << sizeThresholds[x];
-  r << endl;
-
+  r << ""       << "\t" << ""        << "\t" << ""           << "\t" << "VolumeSampled" << h1 << endl;
+  r << "Cruise" << "\t" << "Station" << "\t" << "Deployment" << "\t" << "m^3"           << h1 << endl;
   for  (idx = summaries.begin ();  idx != summaries.end ();  ++idx)
   {
     DeploymentSummary*  ds = *idx;
@@ -441,8 +493,6 @@ void  PrintSummaryReports (DataBasePtr                  db,
     r << endl;
   }
   r << endl << endl << endl << endl;
-
-
 }  /* PrintSummaryReports */
 
 
@@ -452,6 +502,10 @@ void  MarineSnowReport ()
 {
   RunLog  runLog;
   DataBasePtr  db = new DataBase (runLog);
+
+  marineSnowReportDirectory = osAddSlash (osAddSlash (SipperVariables::PicesReportDir ()) + "MarineSnowReports") + KKU::osGetLocalDateTime ().Date ().YYYYMMDD ();
+  //marineSnowReportDirectory = "D:\\Users\\kkramer\\DropBox\\Dropbox\\USF_OilSpillGroup\\MarineSnow_" + KKU::osGetLocalDateTime ().Date ().YYYYMMDD ();
+  KKU::osCreateDirectoryPath (marineSnowReportDirectory);
 
   vector<DeploymentSummary*>  summaries;
 
