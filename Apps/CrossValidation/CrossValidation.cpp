@@ -4029,12 +4029,20 @@ int  main (int    argc,
   #endif
 
 
-  if  (true)
+
+
+  if  (false)
   {
     TestSubSeqCount ();
     exit (-1);
   }
 
+  if  (false)
+  {
+    TestFibonacciNums ();
+    exit (-1);
+  }
+    
 
   if  (false)
   {

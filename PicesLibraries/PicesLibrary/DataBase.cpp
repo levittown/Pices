@@ -6290,9 +6290,6 @@ InstrumentDataMeansListPtr  DataBase::InstrumentDataBinByMeterDepth (const KKStr
                          NULL
                         };
 
-
-
-
   ResultSetLoad (fieldNames);
   if  (!resultSetMore)
   {

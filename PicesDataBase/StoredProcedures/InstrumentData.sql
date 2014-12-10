@@ -1070,6 +1070,14 @@ begin
 		 where  (d.CruiseName     = _cruiseName)  and
 	          (d.StationName    = _stationName) and 
             ((d.DeploymentNum = _deploymentNum) or (_deploymentNum = ""));
+<<<<<<< HEAD
+=======
+  
+  if  (_chamberWidth < 0.001)  then
+    set  _chamberWidth = 0.096;
+  end if;
+  
+>>>>>>> afeb1aa03f253c158a2d789f8d164f990d5c0d5d
   
   set _secsPerRec = 4096.0 / _scanRate;
   set _midPoint = InstrumentDataGetMidPoint(_cruiseName, _stationName,_deploymentNum);

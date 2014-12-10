@@ -1985,7 +1985,7 @@ begin
   declare _cropLeft           int    default 0;
   declare _cropRight          int    default 4094;
   declare _pixelsPerScanLine  int    default 4096;
-  declare _chamberWidth       float  default  96.0;
+  declare _chamberWidth       float  default  0.098;
   
   select  d.CropLeft, d.CropRight, d.ChamberWidth  into  _cropLeft, _cropRight, _chamberWidth
       from Deployments d
@@ -2011,8 +2011,16 @@ begin
     ImageId           int    default 0,
     PixelCount        int    default 0,
     Depth             float  default 0.0,
-    area              float  default 0.0
+    Area              float  default 0.0,
+    Diameter          float  default 0.0
   );
+  
+  
+  
+  /*  PixelWidth  = (_chamberWidth / (id.CropRight - id.CropLeft))  */
+  /*  PixelHeight = (id.FlowRate . sf.ScanRate)                     */
+  /*  area = i.PixelCount * PixelWidth * PixelHeight * 1000.0       */
+  
   
 
  /*  PixelWidth(meters)  = (_chamberWidth (meters) / (id.CropRigt - id.CropLeft)) */
@@ -2023,8 +2031,12 @@ begin
              i.ImageId,
              i.PixelCount,
              i.Depth,
+<<<<<<< .mine
              i.PixelCount * (_chamberWidth / (id.CropRigt - id.CropLeft)) * (id.FlowRate1 / sf.ScanRate) * 1000.0  as area
-             
+=======
+             i.PixelCount *  (_chamberWidth / (id.CropRight - id.CropLeft))  * (id.FlowRate1 / sf.ScanRate) * 1000.0  as Area,
+>>>>>>> .theirs
+             2 * sqrt(i.PixelCount *  (_chamberWidth / (id.CropRight - id.CropLeft))  * (id.FlowRate1 / sf.ScanRate) * 1000.0 / 3.1415926)  as Diameter
          from  Images i 
          join (SipperFiles sf)     on(sf.SipperFileId  = i.SipperFileId)
          join (InstrumentData id)  on((id.SipperFileId = i.SipperFileId)  and  (id.ScanLine = Floor(TopLeftRow/4096) * 4096) )
@@ -2117,8 +2129,8 @@ begin
     sum((T.Area >= 71.60)  and  (T.Area < 78.76))  as  "Size_71.60",
     sum((T.Area >= 78.76)  and  (T.Area < 86.64))  as  "Size_78.76",
     sum((T.Area >= 86.64)  and  (T.Area < 95.30))  as  "Size_86.64",
-    sum((T.Area >= 95.30)  and  (T.Area < 104.83))  as  "Size_95.30",
-    sum((T.Area >= 104.83))                         as  ">=104.83"
+    sum((T.Area >= 95.30)  and  (T.Area < 104.83)) as  "Size_95.30",
+    sum((T.Area >= 104.83))                        as  ">=104.83"
          from  TempSizeDistributionTable T 
          group by floor(T.Depth / _depthBinSize);        
         

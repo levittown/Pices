@@ -1,8 +1,5 @@
 #include "FirstIncludes.h"
 
-// Kurt Kramer  2012-03-01  
-// Added a Second Best Guess Confusion Matrix.  That is a confusion matrix that only reports the
-// results using the second best class as the predicted class when the first one wss wrong.
  
 #include <string>
 #include <ctype.h>
