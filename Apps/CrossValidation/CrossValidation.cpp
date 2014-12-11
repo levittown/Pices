@@ -494,7 +494,7 @@ CrossValidationApp::~CrossValidationApp ()
 {
   delete  validationData;     validationData   = NULL;
   delete  examples;           examples         = NULL;
-  delete  mlClasses;       mlClasses     = NULL;
+  delete  mlClasses;          mlClasses        = NULL;
   delete  config;             config           = NULL;
   delete  reportFileStream;   reportFileStream = NULL;
   delete  probReport;         probReport       = NULL;
@@ -3819,20 +3819,44 @@ void  DetermineCropSettings ()
 
 
 
+struct  ContSeqDesc
+{
+  ContSeqDesc  (int  _minVal,
+                int  _minValIdx,
+                int  _maxVal,
+                int  _maxValIdx
+               ):
+       minVal    (_minVal),
+       minValIdx (_minValIdx),
+       maxVal    (_maxVal),
+       maxValIdx (_maxValIdx)
+  {}
 
-int  BinarySearchFirstGreaterThan (int*  a,
-                                   int   leftIDX,
-                                   int   rightIDX,
-                                   int   target
+  int  minVal;
+  int  minValIdx;
+  int  maxVal;
+  int  maxValIdx;
+};  /* ContSeqDesc */
+
+
+
+int  BinarySearchFirstGreaterThan (int*               a,
+                                   const ContSeqDesc& seq,
+                                   int                target
                                   )
 {
+  int  leftIdx = seq.minValIdx;
+  int  rigttIdx = seq.maxValIdx;
+
   if  (a[leftIDX] > target)
     return leftIDX;
 
   if  (a[rightIDX] <= target)
     return -1;
 
-  while  (leftIDX < rightIDX)
+  ++leftIdx;
+
+  while  (leftIDX <= rightIDX)
   {
     int m = (leftIDX + rightIDX) / 2;
     if  ((a[m] > target)  &&  (a[m - 1] <= target))
@@ -3843,8 +3867,7 @@ int  BinarySearchFirstGreaterThan (int*  a,
     else
       rightIDX = Max (m - 1, leftIDX);
   }
-
-  return  leftIDX;
+  return  -1;
 }  /* BinarySearchFirstGreaterThan */
 
 
@@ -3854,10 +3877,7 @@ int  CountAlmostSortedIntervals (int   n,
                                 )
 {
   int  count = 0;
-  vector<int>   subSeqMinVals;
-  vector<int>   subSeqMinIdxs;
-  vector<int>   subSeqMaxVals;
-  vector<int>   subSeqMaxIdxs;
+  vector<ContSeqDesc>  contGreaterSeqs;
 
   int  x = 0;
   while  (x < n)
