@@ -3845,8 +3845,8 @@ int  BinarySearchFirstGreaterThan (int*               a,
                                    int                target
                                   )
 {
-  int  leftIdx = seq.minValIdx;
-  int  rigttIdx = seq.maxValIdx;
+  int  leftIDX = seq.minValIdx;
+  int  rightIDX = seq.maxValIdx;
 
   if  (a[leftIDX] > target)
     return leftIDX;
@@ -3854,7 +3854,7 @@ int  BinarySearchFirstGreaterThan (int*               a,
   if  (a[rightIDX] <= target)
     return -1;
 
-  ++leftIdx;
+  ++leftIDX;
 
   while  (leftIDX <= rightIDX)
   {
@@ -3863,9 +3863,9 @@ int  BinarySearchFirstGreaterThan (int*               a,
       return m;
 
     if  (a[m] <= target)
-      leftIDX  = Min (m + 1, rightIDX);
+      leftIDX  = m + 1;
     else
-      rightIDX = Max (m - 1, leftIDX);
+      rightIDX = m - 1;
   }
   return  -1;
 }  /* BinarySearchFirstGreaterThan */
@@ -3885,52 +3885,58 @@ int  CountAlmostSortedIntervals (int   n,
     // Starting a new continuously increasing sequence.
 
     int  minSubSeqIdx = x;
+    int  maxSubSeqIdx = x;
     int  minSubSeqVal = a[x];
+    int  maxSubSeqVal = minSubSeqVal;
     int  subSeqLen = 0;
 
     while  (true)
     {
       int  val = a[x];
+      maxSubSeqIdx = x;
+      maxSubSeqVal = val;
 
       ++subSeqLen;
       count += subSeqLen;
   
       {
         // Lets pick up Seqs that start in prev SubSeqs.
-        int  curLowVal = a[minSubSeqIdx];
+        int  curLowVal = minSubSeqVal;
 
-        int  ssIDX = subSeqMinIdxs.size () - 1;
+        int  ssIDX = contGreaterSeqs.size () - 1;
         while  (ssIDX >= 0)
         {
-          if  (subSeqMaxVals[ssIDX] >= val)
+          ContSeqDesc&  incSeq = contGreaterSeqs[ssIDX];
+
+          if  (incSeq.maxVal > val)
           {
             // No point looking any further back; because there is no way current index can be max.
             break;
           }
 
-          if  (subSeqMinVals[ssIDX] < minSubSeqVal)
+          if  (incSeq.minVal <= curLowVal)
           {
             // So we want to count the sequences that start with a value less than or equal to 'curLowVal',
             // The most eficient way to do this now would be BST in the range of (subSeqMinIdxs[ssIDX] - subSeqMaxIdxs[ssIDX]).
             // but want to test that this logic is sound before proceeding.
-            int  zed    = subSeqMinIdxs[ssIDX];
-            int  endIDX = subSeqMaxIdxs[ssIDX];
+            int  begIDX = incSeq.minValIdx;
+            int  endIDX = incSeq.maxValIdx;;
 
-            int  maxValIDX = BinarySearchFirstGreaterThan (a, zed, endIDX, curLowVal);
+
+            int  maxValIDX = BinarySearchFirstGreaterThan (a, incSeq, curLowVal);
             if  (maxValIDX < 0)
             {
               // all are less or equal to 'curLowVal'
-              count += 1 + (endIDX - zed);
+              count += (1 + (endIDX - begIDX));
             }
             else
             {
-              count += (maxValIDX - zed);
+              count += (maxValIDX - begIDX);
             }
-
-            if  (subSeqMinVals[ssIDX] < curLowVal)
-              curLowVal = subSeqMinVals[ssIDX];
           }
 
+          if  (incSeq.minVal  < curLowVal)
+            curLowVal = incSeq.minVal;
           --ssIDX;
         }
       }
@@ -3940,10 +3946,7 @@ int  CountAlmostSortedIntervals (int   n,
       if  (a[x] <= a[x - 1])  break;
     }
 
-    subSeqMinIdxs.push_back (minSubSeqIdx);
-    subSeqMinVals.push_back (minSubSeqVal);
-    subSeqMaxIdxs.push_back (x - 1);
-    subSeqMaxVals.push_back (a[x - 1]);
+    contGreaterSeqs.push_back (ContSeqDesc (minSubSeqVal, minSubSeqIdx, a[x - 1], x - 1)); 
   }
 
   return count;
@@ -3966,11 +3969,10 @@ int  BFCountAlmostSortedIntervals (int   n,
   {
     int  largest  = a[x];
     int  smallest = a[x];
-    int  y = x + 1;
-    ++count;
-    while  ((y < n)  && (a[y] > a[x]))
+    int  y = x;
+    while  ((y < n)  && (a[y] >= a[x]))
     {
-      if  (a[y] > largest)
+      if  (a[y] >= largest)
       {
         ++count;
         largest = a[y];
@@ -3993,40 +3995,63 @@ int  BFCountAlmostSortedIntervals (int   n,
 void  TestSubSeqCount ()
 {
   //int a[] = {1, -3, 2, 4, 9, 1, 12, 19};
-  const int n = 20;
+  const int n = 100;
   int a[n];
 
   int c = 0,  cBF = 0;
 
   int loopCount = 0;
 
+  int  errorsFound = 0;
+
+  ofstream r ("C:\\Temp\\AlmostSortedResults.txt");
 
   do
   {
-    cout << "loopCount: " << loopCount << endl;
-    int x = 0;
-    for (x = 0;  x < n;  ++x)
-      a[x] = x;
+    cout << "loopCount: " << loopCount << "\t" << "ErrorsFound: " << errorsFound << endl;
+    int x = -(n / 5);
+    for (int32  y = 0;  y < n;  ++y)
+    {
+      a[y] = x;
+      if  ((rand () % 10) != 0)
+        ++x;
+    }
 
     //x = rand () % 15;
-    x = 0;
-    while  (x < n)
+    x = rand() % 2;
+
+    int  nn = n - (rand() % 10);
+
+    while  (x < nn)
     {
-      int  zed = rand () % n;
+      int  zed = rand () % nn;
       int temp = a[x];
       a[x] = a[zed];
       a[zed] = temp;
-
       ++x;
+      // x = x + 1 + (rand() % 5);
       //x = x + (rand () % 15);
     }
  
-    c = CountAlmostSortedIntervals (n, a);
+    c = CountAlmostSortedIntervals (nn, a);
 
-    cBF = BFCountAlmostSortedIntervals (n, a);
+    cBF = BFCountAlmostSortedIntervals (nn, a);
     if  (c != cBF)
     {
-      cout << c << "\t" << cBF << endl;
+      ++errorsFound;
+      cout << endl
+           << "*******************************************" << endl
+           << endl
+           << "Error" << "\t" << c << "\t" << cBF << endl
+           << endl;
+      r << "***********************************************************************************************************" << endl;
+      r << "***********************************************************************************************************" << endl;
+      r << "Error" << "\t" << c << "\t" << "BruitForce: " << cBF << endl;
+      r << nn << endl;
+      for  (int32 x = 0; x << nn;  ++x)
+        r  << a[x] << endl;
+      r << endl;
+      r.flush ();
     }
     ++loopCount;
   }
@@ -4051,7 +4076,7 @@ int  main (int    argc,
 
 
 
-  if  (false)
+  if  (true)
   {
     TestSubSeqCount ();
     exit (-1);
@@ -4059,7 +4084,7 @@ int  main (int    argc,
 
   if  (false)
   {
-    TestFibonacciNums ();
+    /* TestFibonacciNums (); */
     exit (-1);
   }
     
