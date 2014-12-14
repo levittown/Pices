@@ -558,6 +558,19 @@ void  PicesClassList::UpdateParent (PicesClass^  srcClass,
 
 
 
+PicesClassList^   PicesClassList::ExtractMandatoryClasses ()
+{
+  PicesClassList^  result = gcnew PicesClassList ();
+  for each (PicesClass^ c in *this)
+  {
+    if  (c->Mandatory)
+      result->Add (c);
+  }
+  return result;
+}
+
+
+
 PicesClassList^  PicesClassList::ExtractListOfClassesForAGivenHierarchialLevel (uint level)
 {
   PicesClassList^  newList = gcnew PicesClassList ();

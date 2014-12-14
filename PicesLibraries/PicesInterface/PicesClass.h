@@ -50,7 +50,8 @@ namespace PicesInterface
                );
 
     property  int                 ClassId              {int          get ();}
-    property  String^             Description          {String^      get () {return description;};  void set (String^ _description);}
+    property  String^             Description          {String^      get () {return description;}   void set (String^ _description);}
+    property  bool                Mandatory            {bool         get () {return mandatory;}     void set (bool    _mandatory);}
     property  String^             Name                 {String^      get () {return name;}}
     property  String^             NameUpper            {String^      get () {return nameUpper;}}
     property  uint16              NumHierarchialLevels {uint16       get ();}
@@ -122,6 +123,7 @@ namespace PicesInterface
 
   private:
     String^       description;
+    bool          mandatory;
     String^       name;
     String^       nameUpper;
     PicesClass^   parent;

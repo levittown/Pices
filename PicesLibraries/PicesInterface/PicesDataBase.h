@@ -337,12 +337,12 @@ namespace PicesInterface
     void                   MLClassInsert (PicesClass^  picesClass);
 
     void                   MLClassInsertReturn (PicesClass^  mlClass,
-                                                   bool%        successful
-                                                  );
+                                                bool%        successful
+                                               );
 
     void                   MLClassUpdate (String^      oldClassName,   // if == nullptr  assumed taht name has not changed.
-                                             PicesClass^  picesClass
-                                            );
+                                          PicesClass^  picesClass
+                                         );
 
     void                   MLClassDelete (String^  className);
 

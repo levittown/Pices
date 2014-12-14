@@ -51,6 +51,8 @@ namespace PicesInterface
     static
     PicesClassList^   CreateFromCommaDelStr (String^  s);
 
+    PicesClassList^   ExtractMandatoryClasses ();
+
     PicesClassList^   ExtractListOfClassesForAGivenHierarchialLevel (uint level);
 
 

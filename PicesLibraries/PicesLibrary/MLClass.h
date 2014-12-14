@@ -190,7 +190,11 @@ namespace MLL
 
     MLClassPtr          MLClassForGivenHierarchialLevel (KKU::uint16 level)  const;
 
-    bool                IsAnAncestor (MLClassConstPtr  c)  const;          /**< @brief Returns true if 'c' is an ancestor */
+    void                Mandatory (bool _mandatory)  {mandatory = _mandatory;}
+
+    bool                Mandatory () const {return mandatory;}
+
+    bool                IsAnAncestor (MLClassConstPtr  c)  const;    /**< Returns true if 'c' is an ancestor */
 
     KKU::uint16         NumHierarchialLevels ()  const;
 
@@ -201,7 +205,7 @@ namespace MLL
     void                Parent (MLClassConstPtr  _parent)  {parent = _parent;}
     const KKStr&        ParentName ()  const;
 
-    void                ProcessRawData (KKStr&  data);  /**< @brief Parses 'data' and populates this instance
+    void                ProcessRawData (KKStr&  data);  /**< Parses 'data' and populates this instance.
                                                          *   @details Extracts name of class from first field in 'data' using whitespace
                                                          *   ',', ' ', '\n', '\r', or '\t' as delimiter.  Data will have this name removed from
                                                          *   the beginning of it.
@@ -211,7 +215,7 @@ namespace MLL
 
     void                StoredOnDataBase (bool _storedOnDataBase)  {storedOnDataBase = _storedOnDataBase;}
 
-    KKStr               ToString ()  const;  /**< @brief Returns a KKStr representing this instance.
+    KKStr               ToString ()  const;  /**< Returns a KKStr representing this instance.
                                               *   @details This string will later be written to a file.
                                               */
                     
@@ -223,19 +227,21 @@ namespace MLL
     void                WriteXML (std::ostream& o)  const;
     
 private:
-    int32               classId;      /**< @brief From MySQL table  Classes, '-1' indicates that not loaded from table        */
+    int32               classId;      /**< From MySQL table  Classes, '-1' indicates that not loaded from table        */
 
-    KKStr               name;         /**< @brief Name of Class.                                                              */
-    KKStr               upperName;    /**< @brief Upper case version of name;  Used by LookUpByName to assist in performance. */
+    bool                mandatory;    /**< Class nees to be included in Classification Status even if none occured. */
 
-    bool                unDefined;    /**< @brief A class who's name is "", "UnKnown", "UnDefined", or starts with "Noise_" */
+    KKStr               name;         /**< Name of Class.                                                              */
+    KKStr               upperName;    /**< Upper case version of name;  Used by LookUpByName to assist in performance. */
 
-    MLClassConstPtr     parent;       /**< @brief Supports the concept of Parent/Child classes as part of a hierarchy.
+    bool                unDefined;    /**< A class who's name is "", "UnKnown", "UnDefined", or starts with "Noise_" */
+
+    MLClassConstPtr     parent;       /**< Supports the concept of Parent/Child classes as part of a hierarchy.
                                        *@details Adding this field to help support the PicesInterface version of this class.
                                        */
 
     bool                storedOnDataBase;   
-                                      /**< @brief because we have no control over classes that users unilaterally create
+                                      /**< Because we have no control over classes that users unilaterally create
                                        * it would be useful to know which ones are stored in the PICES database
                                        * table "Classes".
                                        */
@@ -289,6 +295,9 @@ private:
     virtual
       void  Clear ();
       
+
+    MLClassListPtr   ExtractMandatoryClasses ()  const;
+
 
     /**
      *@brief  Using the class names create two title lines where we split

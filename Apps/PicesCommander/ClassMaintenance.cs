@@ -178,6 +178,7 @@ namespace PicesCommander
       ClassName.Text = pc.Name;
       ParentName.Text = pc.ParentName;
       Description.Text = pc.Description;
+      MandatoryBox.Checked = pc.Mandatory;
       MergeCheckBox.Checked = false;
       mergeClass = null;
       MergeClass.Enabled = false;
@@ -189,8 +190,6 @@ namespace PicesCommander
       MergeLabel.Enabled = false;
       MergeLabel.Visible = false;
     }
-
-
 
 
     private  String  ValidClassNameFormat (String  name)
@@ -321,9 +320,10 @@ namespace PicesCommander
         MergeHelpTextLabel.Enabled = true;
         MergeLabel.Visible = true;
         MergeLabel.Enabled = true;
-        ClassName.Text   = selectedClass.Name;
-        Description.Text = selectedClass.Description;
-        ParentName.Text  = selectedClass.ParentName;
+        ClassName.Text       = selectedClass.Name;
+        Description.Text     = selectedClass.Description;
+        ParentName.Text      = selectedClass.ParentName;
+        MandatoryBox.Checked = selectedClass.Mandatory;
       }
       else
       {
@@ -373,9 +373,10 @@ namespace PicesCommander
       if  (selectedClass == null)
         return  false;
 
-      if  ((ClassName.Text   != selectedClass.Name)        ||
-           (ParentName.Text  != selectedClass.ParentName)  ||
-           (Description.Text != selectedClass.Description)
+      if  ((ClassName.Text       != selectedClass.Name)        ||
+           (ParentName.Text      != selectedClass.ParentName)  ||
+           (Description.Text     != selectedClass.Description) ||
+           (MandatoryBox.Checked != selectedClass.Mandatory)
           )
         return true;
       else
@@ -405,6 +406,7 @@ namespace PicesCommander
       ParentName.Enabled         = false;
       ParentSearchButton.Enabled = false;
       Description.Enabled        = false;
+      MandatoryBox.Enabled       = false;
       UpdateButton.Enabled       = false;
       DeleteButton.Enabled       = false;
       MergeCheckBox.Enabled      = false;
@@ -418,14 +420,15 @@ namespace PicesCommander
 
     private  void  EnableAllFields ()
     {
-      ClassTree.Enabled          = true;
-      ClassName.Enabled          = true;
-      ParentName.Enabled         = true;
-      Description.Enabled        = true;
+      ClassTree.Enabled    = true;
+      ClassName.Enabled    = true;
+      ParentName.Enabled   = true;
+      Description.Enabled  = true;
+      MandatoryBox.Enabled = true;
       if  (allowUpdates)
       {
-        UpdateButton.Enabled       = true;
-        DeleteButton.Enabled       = true;
+        UpdateButton.Enabled = true;
+        DeleteButton.Enabled = true;
       }
       ParentSearchButton.Enabled = true;
 
@@ -549,7 +552,7 @@ namespace PicesCommander
       }
 
       PopulateClassMaintenancePanel (selectedClass);
-    }
+    }  /* ClassTree_AfterSelect */
 
 
     private  void  StartUpdateProcedure ()
@@ -567,6 +570,8 @@ namespace PicesCommander
 
       newClassEntry.Description = Description.Text;
       newClassEntry.Parent      = PicesClassList.GetUniqueClass (ParentName.Text, null);
+
+      newClassEntry.Mandatory   = MandatoryBox.Checked;
 
       DisableAllFields ();
       updateThread = new Thread (new ThreadStart (UpdateProcess));
@@ -817,9 +822,10 @@ namespace PicesCommander
 
         if  (selectedClass != null)
         {
-          ClassName.Text   = selectedClass.Name;
-          ParentName.Text  = selectedClass.ParentName;
-          Description.Text = selectedClass.Description;
+          ClassName.Text       = selectedClass.Name;
+          ParentName.Text      = selectedClass.ParentName;
+          Description.Text     = selectedClass.Description;
+          MandatoryBox.Checked = selectedClass.Mandatory;
         }
 
         EnableAllFields ();

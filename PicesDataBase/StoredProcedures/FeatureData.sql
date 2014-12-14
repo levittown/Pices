@@ -159,6 +159,7 @@ delimiter //
 
 create procedure  FeatureDataLoadByImageFileName (in _imageFileName   varchar(64))
 begin
+
   select i.ImageId,
          i.ImageFileName,
          i.SipperFileId,
@@ -179,10 +180,14 @@ begin
          (select c1.ClassName from Classes c1  where  c1.ClassId = i.Class1Id)          as  Class1Name,
          (select c2.ClassName from Classes c2  where  c2.ClassId = i.Class2Id)          as  Class2Name,
          (select c3.ClassName from Classes c3  where  c3.ClassId = i.ClassValidatedId)  as  ClassNameValidated,
+          i.PixelCount *  (d.ChamberWidth / (id.CropRight - id.CropLeft)) * 1000  * (id.FlowRate1 / sf.ScanRate) * 1000.0  as AreaMM,
          fd.*
 
    from Images i
            join(FeatureData fd)  on (fd.ImageId = i.ImageId)
+           join(SipperFiles sf)  on (sf.SipperFileId = i.SipperFileId)
+           join(Deployments d)   on (d.CruiseName = sf.CruiseName  and  d.StationName = sf.stationName  and  d.DeploymentNum = sf.deploymentNum)
+           left join(InstrumentData id)  on(id.SipperFileId=i.SipperFileid  and  id.ScanLine = (4096 * floor(i.TopLeftRow / 4096)))
            where i.ImageFileName = _imageFileName;
 END
 //
@@ -194,10 +199,8 @@ delimiter ;
 
 /* The following procedure has fields in same order as 'FeatureDataGetOneSipperFile'. */
 /* The following procedure has fields in same order as 'FeatureDataGetOneSipperFile'. */
-/* use  pices_new; */
-
+/* use  pices_new;drop procedure  if exists FeatureDataLoadByImageFileName2;          */
 drop procedure  if exists FeatureDataLoadByImageFileName2;
-
 delimiter //
 
 create procedure  FeatureDataLoadByImageFileName2 (in _imageFileName   varchar(64))
@@ -217,10 +220,14 @@ begin
           (select ClassName from Classes c2 where  c2.ClassId = i.ClassValidatedId) as ClassNameValidated,
           i.Depth  as ImagesDepth,
           (select id.CTDDateTime  from  InstrumentData id  where  id.SipperFileId = i.SipperFileId  and  id.ScanLine > i.TopLeftRow limit 1)  as  CtdDateTime,
+          i.PixelCount *  (d.ChamberWidth / (id.CropRight - id.CropLeft)) * 1000  * (id.FlowRate1 / sf.ScanRate) * 1000.0  as AreaMM,
           fd.* 
 
    from Images i
            join(FeatureData fd)  on (fd.ImageId = i.ImageId)
+           join(SipperFiles sf)  on (sf.SipperFileId = i.SipperFileId)
+           join(Deployments d)   on (d.CruiseName = sf.CruiseName  and  d.StationName = sf.stationName  and  d.DeploymentNum = sf.deploymentNum)
+           left join(InstrumentData id)  on(id.SipperFileId=i.SipperFileid  and  id.ScanLine = (4096 * floor(i.TopLeftRow / 4096)))
            where i.ImageFileName = _imageFileName;
 END
 //
@@ -242,9 +249,25 @@ create procedure  FeatureDataGetOneSipperFile (in _sipperFileName   varchar(48),
                                                in _classKeyToUse    char
                                               )
 begin
-  set  @sipperFileId = (select sf.SipperFileId  from SipperFiles sf  where  sf.SipperFileName = _sipperFileName);
-
-
+  declare _cruiseName     varchar(10)  default "";
+  declare _stationName    varchar(10)  default "";
+  declare _scanRate       float        default 0.0;
+  declare _secsPerRec     float        default 0.0;
+  declare _deploymentNum  varchar(10)  default "";
+  declare _chamberWidth   float        default 0.0;
+  declare _sipperFileId   int          default 0;
+  
+  select  sf.SipperFileId, sf.CruiseName, sf.StationName, sf.DeploymentNum, sf.ScanRate
+         into  _sipperFileId, _cruiseName, _stationName, _deploymentNum, _scanRate
+         from SipperFiles sf
+         where sf.SipperFileName = _sipperFileName;
+         
+  select  d.ChamberWidth  into _chamberWidth
+       from deployments d
+       where d.CruiseName = _cruiseName  and  d.StationName = _stationName  and  d.DeploymentNum = _deploymentNum;
+  
+  set _secsPerRec = 4096 / _scanRate;
+  
   if  _classKeyToUse = "V"  then
     select  i.ImageId,
             i.ImageFileName,
@@ -261,12 +284,13 @@ begin
             (select ClassName from Classes c2 where  c2.ClassId = i.ClassValidatedId) as ClassNameValidated,
             i.Depth  as ImagesDepth,
             id.CTDDateTime  as  CtdDateTime,
+            i.PixelCount *  (_chamberWidth / (id.CropRight - id.CropLeft)) * 1000  * (id.FlowRate1 / _scanRate) * 1000.0  as AreaMM,
             fd.* 
  
        from images i 
        left join(featuredata    fd)  on(fd.ImageId = i.ImageId)
 			 left join(InstrumentData id)  on(id.SipperFileId=i.SipperFileid  and  id.ScanLine = (4096 * floor(i.TopLeftRow / 4096)))
-       where  (i.SipperFileId =  @sipperFileId)  and  (i.ClassValidatedId is not null);
+       where  (i.SipperFileId =  _sipperFileId)  and  (i.ClassValidatedId is not null);
   else
     select  i.ImageId,
             i.ImageFileName,
@@ -283,12 +307,13 @@ begin
             (select ClassName from Classes c2 where  c2.ClassId = i.ClassValidatedId) as ClassNameValidated,
             i.Depth  as ImagesDepth,
             id.CTDDateTime  as  CtdDateTime,
+            i.PixelCount *  (_chamberWidth / (id.CropRight - id.CropLeft)) * 1000  * (id.FlowRate1 / _scanRate) * 1000.0  as AreaMM,
             fd.* 
  
        from images i 
        left join(featuredata    fd)  on(fd.ImageId = i.ImageId)
 			 left join(InstrumentData id)  on(id.SipperFileId=i.SipperFileid  and  id.ScanLine = (4096 * floor(i.TopLeftRow / 4096)))
-       where  i.SipperFileId =  @sipperFileId;
+       where  i.SipperFileId = _sipperFileId;
    end if;
 end;
 //
@@ -312,11 +337,28 @@ create procedure  FeatureDataGetOneSipperFileClassName (in  _sipperFileName   va
                                                         in  _classKeyToUse    char
                                                        )
 begin
-  declare  _sipperFileId   int  unsigned  default 0;
-  declare  _class1Id       int  unsigned  default 0;
+  declare _class1Id       int  unsigned  default 0;
+  declare _cruiseName     varchar(10)    default "";
+  declare _stationName    varchar(10)    default "";
+  declare _scanRate       float          default 0.0;
+  declare _secsPerRec     float          default 0.0;
+  declare _deploymentNum  varchar(10)    default "";
+  declare _chamberWidth   float          default 0.0;
+  declare _sipperFileId   int            default 0;
 
-  set  _sipperFileId = (select sf.SipperFileId  from SipperFiles sf  where  sf.SipperFileName = _sipperFileName);
+  select  sf.SipperFileId, sf.CruiseName, sf.StationName, sf.DeploymentNum, sf.ScanRate
+         into  _sipperFileId, _cruiseName, _stationName, _deploymentNum, _scanRate
+         from SipperFiles sf
+         where sf.SipperFileName = _sipperFileName;
+         
+  select  d.ChamberWidth  into _chamberWidth
+       from deployments d
+       where d.CruiseName = _cruiseName  and  d.StationName = _stationName  and  d.DeploymentNum = _deploymentNum;
+  
+  set _secsPerRec = 4096 / _scanRate;
+
   set  _class1Id     = (select c.ClassId  from Classes c  where c.ClassName = _class1Name);
+
 
   if  _classKeyToUse = "V"  then
     select  i.ImageId,
@@ -334,6 +376,7 @@ begin
             (select ClassName from Classes c2 where  c2.ClassId = i.ClassValidatedId) as ClassNameValidated,
             i.Depth  as ImagesDepth,
             id.CTDDateTime  as  CtdDateTime,
+            i.PixelCount *  (_chamberWidth / (id.CropRight - id.CropLeft)) * 1000  * (id.FlowRate1 / _scanRate) * 1000.0  as AreaMM,
             fd.*
 
        from images i 
@@ -357,6 +400,7 @@ begin
             (select ClassName from Classes c2 where  c2.ClassId = i.ClassValidatedId) as ClassNameValidated,
             i.Depth  as ImagesDepth,
             id.CTDDateTime  as  CtdDateTime,
+            i.PixelCount *  (_chamberWidth / (id.CropRight - id.CropLeft)) * 1000  * (id.FlowRate1 / _scanRate) * 1000.0  as AreaMM,
             fd.*
 
        from images i 
@@ -378,6 +422,7 @@ delimiter ;
 /*****************************************************************************************************************/
 /*****************************************************************************************************************/
 /* use  pices_new; */
+
 
 drop procedure  if exists FeatureDataGetOneImageGroup;
 
@@ -403,10 +448,13 @@ begin
             (select ClassName from Classes c2 where  c2.ClassId = i.ClassValidatedId) as ClassNameValidated,
             i.Depth  as ImagesDepth,
             id.CTDDateTime  as  CtdDateTime,
+            i.PixelCount *  (d.ChamberWidth / (id.CropRight - id.CropLeft)) * 1000  * (id.FlowRate1 / sf.ScanRate) * 1000.0  as AreaMM,
             fd.* 
 
       from images i
-          join (ImageGroupEntries  ig)  on(ig.ImageId = i.ImageId)
+          join(ImageGroupEntries   ig)  on(ig.ImageId = i.ImageId)
+          join(SipperFiles         sf)  on(sf.SipperFileId = i.SipperFileId)
+          join(Deployments         d)   on(d.CruiseName = sf.CruiseName  and  d.StationName = sf.stationName  and  d.DeploymentNum = sf.deploymentNum)
           left join(featuredata    fd)  on(fd.ImageId = i.ImageId)
           left join(InstrumentData id)  on(id.SipperFileId=i.SipperFileid  and  id.ScanLine = (4096 * floor(i.TopLeftRow / 4096)))
           where  (ig.ImageGroupId = _imageGroupId)  and  (i.ClassValidatedId is not null);
@@ -426,17 +474,21 @@ begin
             (select ClassName from Classes c2 where  c2.ClassId = i.ClassValidatedId) as ClassNameValidated,
             i.Depth  as ImagesDepth,
             id.CTDDateTime  as  CtdDateTime,
+            i.PixelCount *  (d.ChamberWidth / (id.CropRight - id.CropLeft)) * 1000  * (id.FlowRate1 / sf.ScanRate) * 1000.0  as AreaMM,
             fd.* 
 
       from images i
-          join (ImageGroupEntries ig)  on  (ig.ImageId = i.ImageId)
-          left join(featuredata fd)    on  (fd.ImageId = i.ImageId)
+          join(ImageGroupEntries   ig)  on(ig.ImageId = i.ImageId)
+          join(SipperFiles         sf)  on(sf.SipperFileId = i.SipperFileId)
+          join(Deployments         d)   on(d.CruiseName = sf.CruiseName  and  d.StationName = sf.stationName  and  d.DeploymentNum = sf.deploymentNum)
+          left join(featuredata fd)     on(fd.ImageId = i.ImageId)
           left join(InstrumentData id)  on(id.SipperFileId=i.SipperFileid  and  id.ScanLine = (4096 * floor(i.TopLeftRow / 4096)))
           where  ig.ImageGroupId = _imageGroupId;
   end if;
 end
 //
 delimiter ;
+
 
 
 
@@ -454,8 +506,8 @@ create procedure  FeatureDataGetOneImageGroupClassName (in  _imageGroupId   int,
                                                         in  _classKeyToUse  char
                                                        )
 begin
-  declare  _class1Id       int  unsigned  default 0;
-
+  declare _class1Id       int  unsigned  default 0;
+  
   set  _class1Id  = (select c.ClassId  from Classes c  where c.ClassName = _class1Name);
 
   if  _classKeyToUse = 'V'  then
@@ -474,12 +526,15 @@ begin
             (select ClassName from Classes c2 where  c2.ClassId = i.ClassValidatedId) as ClassNameValidated,
             i.Depth  as ImagesDepth,
             id.CTDDateTime  as  CtdDateTime,
+            i.PixelCount *  (d.ChamberWidth / (id.CropRight - id.CropLeft)) * 1000  * (id.FlowRate1 / sf.ScanRate) * 1000.0  as AreaMM,
             fd.* 
 
       from images i
-          join (ImageGroupEntries ig)  on  (ig.ImageId = i.ImageId)
-          left join(featuredata fd)    on  (fd.ImageId = i.ImageId)
-          left join(InstrumentData id)  on(id.SipperFileId=i.SipperFileid  and  id.ScanLine = (4096 * floor(i.TopLeftRow / 4096)))
+          join(ImageGroupEntries   ig) on(ig.ImageId = i.ImageId)
+          join(SipperFiles         sf) on(sf.SipperFileId = i.SipperFileId)
+          join(Deployments         d)  on(d.CruiseName = sf.CruiseName  and  d.StationName = sf.stationName  and  d.DeploymentNum = sf.deploymentNum)
+          left join(featuredata    fd) on(fd.ImageId = i.ImageId)
+          left join(InstrumentData id) on(id.SipperFileId=i.SipperFileid  and  id.ScanLine = (4096 * floor(i.TopLeftRow / 4096)))
           where  (ig.ImageGroupId = _imageGroupId)  and  (i.ClassValidatedId = _class1Id);
   else
     select  i.ImageId,
@@ -497,11 +552,14 @@ begin
             (select ClassName from Classes c2 where  c2.ClassId = i.ClassValidatedId) as ClassNameValidated,
             i.Depth  as ImagesDepth,
             id.CTDDateTime  as  CtdDateTime,
-            fd.* 
+            i.PixelCount *  (d.ChamberWidth / (id.CropRight - id.CropLeft)) * 1000  * (id.FlowRate1 / sf.ScanRate) * 1000.0  as AreaMM,
+            fd.*
 
       from images i
-          join (ImageGroupEntries ig)  on  (ig.ImageId = i.ImageId)
-          left join(featuredata fd)    on  (fd.ImageId = i.ImageId)
+          join(ImageGroupEntries   ig)  on(ig.ImageId = i.ImageId)
+          join(SipperFiles         sf)  on(sf.SipperFileId = i.SipperFileId)
+          join(Deployments          d)  on(d.CruiseName = sf.CruiseName  and  d.StationName = sf.stationName  and  d.DeploymentNum = sf.deploymentNum)
+          left join(featuredata    fd)  on(fd.ImageId = i.ImageId)
           left join(InstrumentData id)  on(id.SipperFileId=i.SipperFileid  and  id.ScanLine = (4096 * floor(i.TopLeftRow / 4096)))
           where  (ig.ImageGroupId = _imageGroupId)  and (i.Class1Id = _class1Id);
   end if;

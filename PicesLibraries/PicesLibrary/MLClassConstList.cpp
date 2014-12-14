@@ -416,6 +416,22 @@ KKStr  MLClassConstList::ToCommaDelimitedStr ()  const
 
 
 
+MLClassConstListPtr  MLClassConstList::ExtractMandatoryClasses ()  const
+{
+  MLClassConstListPtr  result = new MLClassConstList ();
+
+  const_iterator  idx;
+  for  (idx = begin();  idx != end ();  ++idx)
+  {
+    if  ((*idx)->Mandatory ())
+      result->PushOnBack (*idx);
+  }
+
+  return  result;
+}  /* ExtractMandatoryClasses */
+
+
+
 
 void  MLClassConstList::ExtractTwoTitleLines (KKStr&  titleLine1,
                                             KKStr&  titleLine2 

@@ -147,6 +147,7 @@ namespace MLL
     virtual  ~ImageFeatures ();
 
     // Access Methods.
+    void  AreaMMSquare     (float                _areaMMSquare)     {areaMMSquare     = _areaMMSquare;}
     void  CentroidCol      (FFLOAT               _centroidCol)      {centroidCol      = _centroidCol;}
     void  CentroidRow      (FFLOAT               _centroidRow)      {centroidRow      = _centroidRow;}
     void  CtdDateTime      (const KKU::DateTime& _ctdDateTime)      {ctdDateTime      = _ctdDateTime;}
@@ -166,6 +167,7 @@ namespace MLL
     void  Version          (short  _version)       {version          = _version;}
 
 
+    float          AreaMMSquare       () const  {return  areaMMSquare;}
     float          CentroidCol        () const  {return  centroidCol;}    /**< @brief Centroid column with respect to image.  */
     float          CentroidRow        () const  {return  centroidRow;}    /**< @brief Centroid row with respect to image.     */
     FFLOAT         Depth              () const  {return  FeatureData (DepthIndex);}
@@ -217,6 +219,7 @@ namespace MLL
     float          centroidCol;     //   cnetroid with just respect to the image.
     float          centroidRow;     //     ""     ""      ""     ""    ""    ""
     KKU::DateTime  ctdDateTime;
+    float          areaMMSquare;    /**< Size of image in Square mm. */
     double         latitude;
     double         longitude;
     int32          numOfEdgePixels;

@@ -1879,7 +1879,7 @@ ConstCharStarArray  DataBase::GetFeatureDataFieldNames ()
   }
 
   char**  fieldNames = NULL;
-  int32  fieldNamesSize = 16 + FeatureFileIOPices::PlanktonMaxNumOfFields ();
+  int32  fieldNamesSize = 17 + FeatureFileIOPices::PlanktonMaxNumOfFields ();
   fieldNames = new char*[fieldNamesSize];
   fieldNames[ 0] = STRDUP ("ImageId");
   fieldNames[ 1] = STRDUP ("ImageFileName");
@@ -1896,11 +1896,12 @@ ConstCharStarArray  DataBase::GetFeatureDataFieldNames ()
   fieldNames[12] = STRDUP ("ClassNameValidated");
   fieldNames[13] = STRDUP ("ImagesDepth");
   fieldNames[14] = STRDUP ("CtdDateTime");
+  fieldNames[15] = STRDUP ("AreaMM");
    
   int32  fieldNum = 0;
   for  (fieldNum = 0;  fieldNum < FeatureFileIOPices::PlanktonMaxNumOfFields ();  fieldNum++)
-    fieldNames[15 + fieldNum] = STRDUP (FeatureFileIOPices::PlanktonFieldName (fieldNum).Str ());
-  fieldNames[15 + fieldNum] = NULL;
+    fieldNames[16 + fieldNum] = STRDUP (FeatureFileIOPices::PlanktonFieldName (fieldNum).Str ());
+  fieldNames[16 + fieldNum] = NULL;
 
   featureDataFieldNames = fieldNames;
   blocker->EndBlock ();
@@ -1911,7 +1912,7 @@ ConstCharStarArray  DataBase::GetFeatureDataFieldNames ()
 
 
 
-ImageFeaturesListPtr   DataBase::FeatureDataProcessResults ()
+ImageFeaturesListPtr  DataBase::FeatureDataProcessResults ()
 {
   ConstCharStarArray   fieldNames = GetFeatureDataFieldNames ();
 
@@ -1956,9 +1957,10 @@ ImageFeaturesListPtr   DataBase::FeatureDataProcessResults ()
     classNameValidated = ResultSetGetField    (12);
     imagesDepth = ResultSetGetFloatField      (13);
     i->CtdDateTime (ResultSetGetDateTimeField (14));
+    i->AreaMMSquare (ResultSetGetFloatField   (15));
 
     for  (int32 fieldNum = 0;  fieldNum < FeatureFileIOPices::PlanktonMaxNumOfFields ();  fieldNum++)
-      i->FeatureData (fieldNum, ResultSetGetFloatField (15 + fieldNum));
+      i->FeatureData (fieldNum, ResultSetGetFloatField (16 + fieldNum));
 
     if  (class1Id == 0)
       class1Id = -1;
@@ -2150,11 +2152,11 @@ ImageFeaturesPtr   DataBase::FeatureDataRecLoad (DataBaseImagePtr  image)
  *@param[in] classKeyToUse             Indicates which ClassId field to use for selecting feature data by class;  'V' = 'Images.ClassValidatedId' otherwise 'Images.Class1Id'.
  *@param[in] reExtractInstrumentData:  True indicates to reextract feature data from the original SipperFile and update InmstrumentData tables.
  */
-ImageFeaturesListPtr  DataBase::FeatureDataGetOneSipperFile (const KKStr&        sipperFileName,
+ImageFeaturesListPtr  DataBase::FeatureDataGetOneSipperFile (const KKStr&     sipperFileName,
                                                              MLClassConstPtr  mlClass,
-                                                             char                classKeyToUse,
-                                                             bool                reExtractInstrumentData,
-                                                             bool&               cancelFlag
+                                                             char             classKeyToUse,
+                                                             bool             reExtractInstrumentData,
+                                                             bool&            cancelFlag
                                                             )
 {
   SipperFilePtr  sipperFile = NULL;
@@ -2241,7 +2243,7 @@ ImageFeaturesListPtr  DataBase::FeatureDataGetOneSipperFile (const KKStr&       
 
 
 ImageFeaturesListPtr  DataBase::FeatureDataForImageGroup (const DataBaseImageGroupPtr  imageGroup,
-                                                          MLClassConstPtr           mlClass,
+                                                          MLClassConstPtr              mlClass,
                                                           char                         classKeyToUse,
                                                           const bool&                  cancelFlag
                                                          )
@@ -2282,7 +2284,6 @@ ImageFeaturesListPtr  DataBase::FeatureDataForImageGroup (const DataBaseImageGro
 
   return  results;
 }  /* FeatureDataForImageGroup */
-
 
 
 
@@ -2496,14 +2497,14 @@ void  DataBase::GpsDataDelete (const KKStr&     cruiseName,
 //*******************************************************************************************
 //*******************************************************************************************
 //*******************************************************************************************
-//*                                 MLClass Routines                                     *
+//*                                   MLClass Routines                                      *
 //*******************************************************************************************
 //*******************************************************************************************
 //*******************************************************************************************
 
 MLClassListPtr   DataBase::MLClassProcessResults ()
 {
-  char const * const  fieldNames[] = {"ClassId", "ClassName", "ParentId", "Description", "ParentName", NULL};
+  char const * const  fieldNames[] = {"ClassId", "ClassName", "ParentId", "Description", "ParentName", "Mandatory", NULL};
 
   ResultSetLoad (fieldNames);
   if  (!resultSetMore)
@@ -2516,6 +2517,7 @@ MLClassListPtr   DataBase::MLClassProcessResults ()
   int32  parentId = -1;
   KKStr  description = "";
   KKStr  parentName = "";
+  bool   mandatory = false;
 
   while  (ResultSetFetchNextRow ())
   {
@@ -2524,9 +2526,11 @@ MLClassListPtr   DataBase::MLClassProcessResults ()
     parentId    = ResultSetGetIntField (2);
     description = ResultSetGetField    (3);
     parentName  = ResultSetGetField    (4);
+    mandatory   = ResultSetGetBool     (5);
 
     MLClassPtr  ic = MLClass::CreateNewMLClass (className, classId);
     ic->Description (description);
+    ic->Mandatory (mandatory);
     if  (!parentName.Empty ())
       ic->Parent (MLClass::CreateNewMLClass (parentName, parentId));
     else if  (parentId >= 0)
@@ -2556,28 +2560,30 @@ MLClassConstPtr  DataBase::MLClassLoad (const KKStr&  className)
     return NULL;
   }
 
-  ResultSetLoad (NULL);
+  char const *  fieldNames[] = {"ClassId", "ClassName", "ParentId", "ParentName", "Description", "Mandatory", NULL};
+
+  ResultSetLoad (fieldNames);
   if  (!resultSetMore)
     return  NULL;
 
   MLClassPtr  mlClass = NULL;
   while  (ResultSetFetchNextRow ())
   {
-    //delete  mlClass;   //We can never delete an instance of MLClass because there is only 
-                            //one global instance of each class that everone has to share.
     mlClass = NULL;
-    
-    int32  classId     = CharStarToInt32 (resultSetNextRow[0]);
-    KKStr  className   = resultSetNextRow[1];
-    int32  parentId    = CharStarToInt32 (resultSetNextRow[2]);
-    KKStr  parentName  = resultSetNextRow[3];
-    KKStr  description = resultSetNextRow[4];
+
+    int32  classId     = ResultSetGetIntField (0);
+    KKStr  className   = ResultSetGetField    (1);
+    int32  parentId    = ResultSetGetIntField (2);
+    KKStr  parentName  = ResultSetGetField    (3);
+    KKStr  description = ResultSetGetField    (4);
+    bool   mandatory   = ResultSetGetBool     (5);
 
     if  (!className.Empty ())
     {
       mlClass = MLClass::CreateNewMLClass (className, classId);
       mlClass->Description (description);
       mlClass->ClassId (classId);
+      mlClass->Mandatory (mandatory);
 
       parentName.TrimLeft ();
       parentName.TrimRight ();
@@ -2606,7 +2612,9 @@ MLClassConstListPtr  DataBase::MLClassLoadList ()
     return NULL;
   }
 
-  ResultSetLoad (NULL);
+  char const *  fieldNames[] = {"ClassId", "ClassName", "ParentId", "ParentName", "Description", "Mandatory", NULL};
+
+  ResultSetLoad (fieldNames);
   if  (!resultSetMore)
     return  NULL;
 
@@ -2619,16 +2627,17 @@ MLClassConstListPtr  DataBase::MLClassLoadList ()
 
   MLClassConstListPtr  classes = new MLClassConstList ();
 
-  vector<MLClassPtr>  classesWithParents;
-  vector<KKStr>          classesWithParentsNames;
+  vector<MLClassPtr>   classesWithParents;
+  vector<KKStr>        classesWithParentsNames;
 
   while  (ResultSetFetchNextRow ())
   {
-    int32  classId     = CharStarToInt32 (resultSetNextRow[0]);
-    KKStr  className   = resultSetNextRow[1];
-    int32  parentId    = CharStarToInt32 (resultSetNextRow[2]);
-    KKStr  parentName  = resultSetNextRow[3];
-    KKStr  description = resultSetNextRow[4];
+    int32  classId     = ResultSetGetIntField (0);
+    KKStr  className   = ResultSetGetField    (1);
+    int32  parentId    = ResultSetGetIntField (2);
+    KKStr  parentName  = ResultSetGetField    (3);
+    KKStr  description = ResultSetGetField    (4);
+    bool   mandatory   = ResultSetGetBool     (5);
 
     if  (!className.Empty ())
     {
@@ -2636,6 +2645,7 @@ MLClassConstListPtr  DataBase::MLClassLoadList ()
       c->Description (description);
       classes->PushOnBack (c);
       c->StoredOnDataBase (true);
+      c->Mandatory (mandatory);
 
       if  (!parentName.Empty ())
       {
@@ -2676,8 +2686,8 @@ MLClassConstListPtr  DataBase::MLClassLoadList ()
 
 
 void  DataBase::MLClassInsert (MLClass&  mlClass,
-                                  bool&        successful
-                                 )
+                               bool&     successful
+                              )
 {
   if  (!allowUpdates)
   {
@@ -2685,11 +2695,15 @@ void  DataBase::MLClassInsert (MLClass&  mlClass,
     return;
   }
 
+  KKStr  mandatoryStr = "F";
+  if  (mlClass.Mandatory ())
+    mandatoryStr = "T";
 
   KKStr  insertStr = "call MLClassInsert(" + 
-                     mlClass.Name ().QuotedStr ()        + ", " + 
-                     mlClass.ParentName  ().QuotedStr () + ", " +
-                     mlClass.Description ().QuotedStr () +
+                     mlClass.Name ().QuotedStr ()         + ", " + 
+                     mlClass.ParentName  ().QuotedStr ()  + ", " +
+                     mlClass.Description ().QuotedStr ()  + ", " +
+                     mandatoryStr.QuotedStr () +
                      ")";
   
   int32  returnCd = QueryStatement (insertStr);
@@ -2708,8 +2722,8 @@ void  DataBase::MLClassInsert (MLClass&  mlClass,
 
 
 void  DataBase::MLClassInsertReturn (MLClass&  mlClass,
-                                        bool&        successful
-                                       )
+                                     bool&     successful
+                                    )
 {
   if  (!allowUpdates)
   {
@@ -2717,9 +2731,14 @@ void  DataBase::MLClassInsertReturn (MLClass&  mlClass,
     return;
   }
 
+  KKStr  mandatoryStr = "F";
+  if  (mlClass.Mandatory ())
+    mandatoryStr = "T";
+
   KKStr  insertStr = "call MLClassInsertReturn(" + 
-                     mlClass.Name ().QuotedStr ()        + ", " + 
-                     mlClass.ParentName  ().QuotedStr () +
+                     mlClass.Name       ().QuotedStr () + ", " + 
+                     mlClass.ParentName ().QuotedStr () + ", " +
+                     mandatoryStr.QuotedStr () +
                      ")";
   
   int32  returnCd = QueryStatement (insertStr);
@@ -2741,10 +2760,10 @@ void  DataBase::MLClassInsertReturn (MLClass&  mlClass,
 
 
 
-void  DataBase::MLClassUpdate (const KKStr&       oldClassName,
-                                  const MLClass&  mlClass,
-                                  bool&              successful
-                                 )
+void  DataBase::MLClassUpdate (const KKStr&    oldClassName,
+                               const MLClass&  mlClass,
+                               bool&           successful
+                              )
 {
   if  (!allowUpdates)
   {
@@ -2752,11 +2771,16 @@ void  DataBase::MLClassUpdate (const KKStr&       oldClassName,
     return;
   }
 
+  KKStr  mandatoryStr = "F";
+  if  (mlClass.Mandatory ())
+    mandatoryStr = "T";
+
   KKStr updateStr = "Call MLClassUpdate(" +
-                          oldClassName.QuotedStr ()              + ", " +
-                          mlClass.Name ().QuotedStr ()        + ", " +
+                          oldClassName.QuotedStr ()           + ", " +
+                          mlClass.Name        ().QuotedStr () + ", " +
                           mlClass.ParentName  ().QuotedStr () + ", " +
-                          mlClass.Description ().QuotedStr () +
+                          mlClass.Description ().QuotedStr () + ", " +
+                          mandatoryStr.QuotedStr ()           +
                           ")";
 
   int32  returnCd = QueryStatement (updateStr);

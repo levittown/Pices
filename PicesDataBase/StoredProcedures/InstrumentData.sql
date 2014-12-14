@@ -236,13 +236,6 @@ delimiter ;
 
 
 
-
-
-
-
-
-
-
 /**********************************************************************************************************************/
 drop procedure  if exists InstrumentDataGetByScanLine;
 
@@ -332,7 +325,6 @@ create procedure  InstrumentDataGetMidPointOfDeployment (in  _cruiseName      va
 begin
   declare _maxDepth     float     default 0.0;
   declare _midPoint     datetime;
-
 
   set  _maxDepth = (select max(id.Depth)
                         from InstrumentData id
@@ -982,14 +974,14 @@ begin
   end if;
   
   if  _chamberWidth < 0.01  then
-    set  _chamberWidth = 0.098;
+    set  _chamberWidth = 0.096;
   end if;
   
   set _secsPerRec = 4096 / _scanRate;
 
   select   Floor(id.depth / _depthBinSize)                                     as BinId,
            Floor(id.depth / _depthBinSize) * _depthBinSize                     as BinDepth,
-           sum(id.FlowRate1 * _secsPerRec * (_chamberWidth / 1000.0) * 0.098)  as VolumeSampled
+           sum(id.FlowRate1 * _secsPerRec * (_chamberWidth / 1000.0) * 0.096)  as VolumeSampled
          from  InstrumentData id
          where id.SipperFileId = _sipperFileId
          group by Floor(id.depth / _depthBinSize)
@@ -1050,7 +1042,7 @@ begin
   declare  _secsPerRec     float default 0.0;
   declare  _midPoint       DateTime default null;
   
-  declare  _chamberWidth   float  default 0.098;
+  declare  _chamberWidth   float  default 0.096;
   declare  _cropLeft       int    default 0;
   declare  _cropRight      int    default 4095;
   
@@ -1069,7 +1061,7 @@ begin
             ((d.DeploymentNum = _deploymentNum) or (_deploymentNum = ""));
 
   if  (_chamberWidth < 0.001)  then
-    set  _chamberWidth = 0.098;
+    set  _chamberWidth = 0.096;
   end if;
   
   
@@ -1081,7 +1073,7 @@ begin
            Floor(id.depth / _depthBinSize)                  as BinId,
            Floor(id.depth / _depthBinSize) * _depthBinSize  as BinDepth,
            4096 * count(id.ScanLine)                        as ScanLines,
-           sum(id.FlowRate1 * _secsPerRec * _chamberWidth * 0.098)  as VolumeSampled,
+           sum(id.FlowRate1 * _secsPerRec * _chamberWidth * 0.096)  as VolumeSampled,
            avg(id.Temperature)                              as TemperatureMean,
            avg(id.Salinity)                                 as SalinityMean,
            avg(id.Density)                                  as DenisityMean,

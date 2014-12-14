@@ -52,6 +52,7 @@ namespace PicesCommander
       this.DeleteButton = new System.Windows.Forms.Button ();
       this.errorProvider1 = new System.Windows.Forms.ErrorProvider (this.components);
       this.updateTimer = new System.Windows.Forms.Timer (this.components);
+      this.MandatoryBox = new System.Windows.Forms.CheckBox ();
       this.ClassMaintenancePanel.SuspendLayout ();
       ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit ();
       this.SuspendLayout ();
@@ -72,7 +73,7 @@ namespace PicesCommander
       this.ClassTree.FullRowSelect = true;
       this.ClassTree.Location = new System.Drawing.Point (12, 55);
       this.ClassTree.Name = "ClassTree";
-      this.ClassTree.Size = new System.Drawing.Size (344, 514);
+      this.ClassTree.Size = new System.Drawing.Size (344, 563);
       this.ClassTree.TabIndex = 1;
       this.ClassTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler (this.ClassTree_AfterSelect);
       // 
@@ -137,12 +138,13 @@ namespace PicesCommander
       this.Description.Location = new System.Drawing.Point (76, 117);
       this.Description.Multiline = true;
       this.Description.Name = "Description";
-      this.Description.Size = new System.Drawing.Size (382, 85);
+      this.Description.Size = new System.Drawing.Size (382, 79);
       this.Description.TabIndex = 9;
       // 
       // ClassMaintenancePanel
       // 
       this.ClassMaintenancePanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.ClassMaintenancePanel.Controls.Add (this.MandatoryBox);
       this.ClassMaintenancePanel.Controls.Add (this.MergeHelpTextLabel);
       this.ClassMaintenancePanel.Controls.Add (this.UpdatingProgressBar);
       this.ClassMaintenancePanel.Controls.Add (this.MergeLabel);
@@ -163,13 +165,13 @@ namespace PicesCommander
       this.ClassMaintenancePanel.Controls.Add (this.DescriptionLabel);
       this.ClassMaintenancePanel.Location = new System.Drawing.Point (360, 55);
       this.ClassMaintenancePanel.Name = "ClassMaintenancePanel";
-      this.ClassMaintenancePanel.Size = new System.Drawing.Size (473, 514);
+      this.ClassMaintenancePanel.Size = new System.Drawing.Size (473, 563);
       this.ClassMaintenancePanel.TabIndex = 10;
       // 
       // MergeHelpTextLabel
       // 
       this.MergeHelpTextLabel.AutoSize = true;
-      this.MergeHelpTextLabel.Location = new System.Drawing.Point (75, 250);
+      this.MergeHelpTextLabel.Location = new System.Drawing.Point (75, 286);
       this.MergeHelpTextLabel.Name = "MergeHelpTextLabel";
       this.MergeHelpTextLabel.Size = new System.Drawing.Size (321, 13);
       this.MergeHelpTextLabel.TabIndex = 20;
@@ -177,7 +179,7 @@ namespace PicesCommander
       // 
       // UpdatingProgressBar
       // 
-      this.UpdatingProgressBar.Location = new System.Drawing.Point (14, 483);
+      this.UpdatingProgressBar.Location = new System.Drawing.Point (14, 527);
       this.UpdatingProgressBar.Name = "UpdatingProgressBar";
       this.UpdatingProgressBar.Size = new System.Drawing.Size (444, 20);
       this.UpdatingProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -187,7 +189,7 @@ namespace PicesCommander
       // MergeLabel
       // 
       this.MergeLabel.AutoSize = true;
-      this.MergeLabel.Location = new System.Drawing.Point (11, 269);
+      this.MergeLabel.Location = new System.Drawing.Point (14, 305);
       this.MergeLabel.Name = "MergeLabel";
       this.MergeLabel.Size = new System.Drawing.Size (63, 13);
       this.MergeLabel.TabIndex = 18;
@@ -196,7 +198,7 @@ namespace PicesCommander
       // MergeClass
       // 
       this.MergeClass.Font = new System.Drawing.Font ("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.MergeClass.Location = new System.Drawing.Point (75, 265);
+      this.MergeClass.Location = new System.Drawing.Point (78, 301);
       this.MergeClass.Name = "MergeClass";
       this.MergeClass.ReadOnly = true;
       this.MergeClass.Size = new System.Drawing.Size (332, 22);
@@ -206,7 +208,7 @@ namespace PicesCommander
       // 
       // MergeSearchButton
       // 
-      this.MergeSearchButton.Location = new System.Drawing.Point (417, 264);
+      this.MergeSearchButton.Location = new System.Drawing.Point (417, 300);
       this.MergeSearchButton.Name = "MergeSearchButton";
       this.MergeSearchButton.Size = new System.Drawing.Size (41, 23);
       this.MergeSearchButton.TabIndex = 17;
@@ -217,7 +219,7 @@ namespace PicesCommander
       // MergeCheckBox
       // 
       this.MergeCheckBox.AutoSize = true;
-      this.MergeCheckBox.Location = new System.Drawing.Point (78, 219);
+      this.MergeCheckBox.Location = new System.Drawing.Point (76, 255);
       this.MergeCheckBox.Name = "MergeCheckBox";
       this.MergeCheckBox.Size = new System.Drawing.Size (145, 17);
       this.MergeCheckBox.TabIndex = 15;
@@ -248,7 +250,7 @@ namespace PicesCommander
       // 
       // UpdateLog
       // 
-      this.UpdateLog.Location = new System.Drawing.Point (14, 335);
+      this.UpdateLog.Location = new System.Drawing.Point (14, 379);
       this.UpdateLog.Multiline = true;
       this.UpdateLog.Name = "UpdateLog";
       this.UpdateLog.ReadOnly = true;
@@ -259,7 +261,7 @@ namespace PicesCommander
       // 
       // UpdateButton
       // 
-      this.UpdateButton.Location = new System.Drawing.Point (14, 306);
+      this.UpdateButton.Location = new System.Drawing.Point (14, 350);
       this.UpdateButton.Name = "UpdateButton";
       this.UpdateButton.Size = new System.Drawing.Size (75, 23);
       this.UpdateButton.TabIndex = 12;
@@ -269,7 +271,7 @@ namespace PicesCommander
       // 
       // DeleteButton
       // 
-      this.DeleteButton.Location = new System.Drawing.Point (383, 306);
+      this.DeleteButton.Location = new System.Drawing.Point (383, 350);
       this.DeleteButton.Name = "DeleteButton";
       this.DeleteButton.Size = new System.Drawing.Size (75, 23);
       this.DeleteButton.TabIndex = 11;
@@ -286,11 +288,21 @@ namespace PicesCommander
       // 
       this.updateTimer.Tick += new System.EventHandler (this.updateTimer_Tick);
       // 
+      // MandatoryBox
+      // 
+      this.MandatoryBox.AutoSize = true;
+      this.MandatoryBox.Location = new System.Drawing.Point (76, 211);
+      this.MandatoryBox.Name = "MandatoryBox";
+      this.MandatoryBox.Size = new System.Drawing.Size (186, 17);
+      this.MandatoryBox.TabIndex = 22;
+      this.MandatoryBox.Text = "Mandatory in Classification Report";
+      this.MandatoryBox.UseVisualStyleBackColor = true;
+      // 
       // ClassMaintenance
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF (6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size (839, 576);
+      this.ClientSize = new System.Drawing.Size (839, 627);
       this.Controls.Add (this.ClassMaintenancePanel);
       this.Controls.Add (this.ClassTree);
       this.Controls.Add (this.TitleLabel);
@@ -333,5 +345,6 @@ namespace PicesCommander
     private System.Windows.Forms.Label MergeLabel;
     private System.Windows.Forms.ProgressBar UpdatingProgressBar;
     private System.Windows.Forms.Label MergeHelpTextLabel;
+    private System.Windows.Forms.CheckBox MandatoryBox;
   }
 }

@@ -1045,6 +1045,7 @@ namespace  PicesInterface
     {
       PicesClass^ result = PicesClassList::GetUniqueClass (mlClass);
       result->Description = PicesKKStr::KKStrToSystenStr (mlClass->Description ());
+      result->Mandatory = mlClass->Mandatory ();
 
       if  (mlClass->Parent () == NULL)
       {
@@ -1087,6 +1088,8 @@ namespace  PicesInterface
       MLClassConstPtr  ic = *idx;
 
       PicesClass^ c = PicesClassList::GetUniqueClass (PicesKKStr::KKStrToSystenStr (ic->Name ()), nullptr);
+      c->Mandatory = ic->Mandatory ();
+
       picesClasses->Add (c);
       if  (ic->Name ().EqualIgnoreCase ("ALLCLASSES"))
       {
@@ -1174,7 +1177,6 @@ namespace  PicesInterface
       oldClassNameKKStr = PicesKKStr::SystemStringToKKStr (picesClass->Name);
     else
       oldClassNameKKStr = PicesKKStr::SystemStringToKKStr (oldClassName);
-
 
     dbConn->MLClassUpdate (oldClassNameKKStr, *(picesClass->UnmanagedMLClass ()), b);
     lastOpSuccessful = b;

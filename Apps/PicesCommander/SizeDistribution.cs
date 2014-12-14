@@ -130,7 +130,7 @@ namespace PicesCommander
 
       o.WriteLine ();
     }
-  };  /* ClassTotals */
+  };  /* PrintTabDelLine */
 
 
 
@@ -198,6 +198,7 @@ namespace PicesCommander
     int              bucketCount = 0;
     int              bucketSize  = 0;
     ClassTotalsList  totals      = null;
+    PicesClassList   mandatoryClasses = null;
 
 
     public  SizeDistribution (int  _bucketCount,
@@ -208,12 +209,9 @@ namespace PicesCommander
       bucketSize  = _bucketSize;
 
       totals = new ClassTotalsList ();
-
       if  (bucketCount < 1)
         throw new Exception ("SizeDistribution     *** Invalid Bucket Size[" + bucketSize.ToString () + "] ***");
     }
-
-     
 
   
     public  void  CleanUpMemory ()
@@ -250,6 +248,26 @@ namespace PicesCommander
         classTotals.AddIn (ct);
       }
     }  /* SizeDistribution */
+
+
+
+    /// <summary>
+    /// Method used to giurantee that the specified class is included; even if none occur.
+    /// </summary>
+    /// <param name="mlClass">Class to add </param>
+    public void   InitiateClass (PicesClass  mlClass)
+    {
+      if  (mlClass == null)
+        mlClass = PicesClassList.GetUnKnownClassStatic ();
+
+      ClassTotals  classTotals = totals.LookUp (mlClass.Name);
+      if  (classTotals == null)
+      {
+        classTotals = new ClassTotals (mlClass.Name, bucketCount, bucketSize);
+        totals.Add (classTotals);
+      }    
+      return;
+    }  /* InitiateClass */
 
 
 
@@ -325,7 +343,7 @@ namespace PicesCommander
 
 
 
-    public  void     PrintTabDelDistributionMatrix (System.IO.StreamWriter  o)
+    public  void   PrintTabDelDistributionMatrix (System.IO.StreamWriter  o)
     {
       totals.SortByName ();
 

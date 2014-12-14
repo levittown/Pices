@@ -73,13 +73,14 @@ namespace  PicesInterface
   PicesClass::PicesClass (String^       _name,
                           PicesClass^   _parent
                          ):
-       children            (gcnew List<PicesClass^> ()),
-       description         (String::Empty),
+       children         (gcnew List<PicesClass^> ()),
+       description      (String::Empty),
        unmanagedMLClass (NULL),
-       name                (_name),
-       nameUpper           (_name->ToUpper ()),
-       parent              (_parent),
-       unDefined           (false)
+       mandatory        (false),
+       name             (_name),
+       nameUpper        (_name->ToUpper ()),
+       parent           (_parent),
+       unDefined        (false)
   {
     unmanagedMLClass = MLClass::CreateNewMLClass (PicesKKStr::SystemStringToKKStr (name));
     if  (_parent != nullptr)
@@ -96,13 +97,14 @@ namespace  PicesInterface
                           String^  _parentName
                          ):
 
-       children            (gcnew List<PicesClass^> ()),
-       description         (String::Empty),
-       unmanagedMLClass (NULL),
-       name                (_name),
-       nameUpper           (_name->ToUpper ()),
-       parent              (nullptr),
-       unDefined           (false)
+       children          (gcnew List<PicesClass^> ()),
+       description       (String::Empty),
+       unmanagedMLClass  (NULL),
+       mandatory         (false),
+       name              (_name),
+       nameUpper         (_name->ToUpper ()),
+       parent            (nullptr),
+       unDefined         (false)
   {
     unmanagedMLClass = MLClass::CreateNewMLClass (PicesKKStr::SystemStringToKKStr (name));
     if  (!String::IsNullOrEmpty (_parentName))
@@ -132,15 +134,21 @@ namespace  PicesInterface
   }
 
 
-
-
-
   void  PicesClass::Description::set (String^ _description)
   {
     description = _description;
     if  (unmanagedMLClass)
       unmanagedMLClass->Description (PicesKKStr::SystemStringToKKStr (description));
   }
+
+  
+  void  PicesClass::Mandatory::set (bool _mandatory)
+  {
+    mandatory = _mandatory;
+    if  (unmanagedMLClass)
+      unmanagedMLClass->Mandatory (mandatory);
+  }
+
 
 
 

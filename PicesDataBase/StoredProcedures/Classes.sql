@@ -11,7 +11,8 @@ begin
            c.ClassName,
            c.ParentId,
            (select c1.ClassName  from Classes c1  where c1.ClassId = c.ParentId)  as  ParentName,
-           c.Description
+           c.Description,
+           c.Mandatory
 
     from Classes c
     order by c.ClassName;
@@ -31,15 +32,16 @@ drop procedure    if exists ClassesRetrieveByName;
 delimiter //
 
 create procedure ClassesRetrieveByName(in  _ClassName  varChar(64))
-BEGIN
+begin
   select   c.ClassId,
            c.ClassName,
            c.ParentId,
            (select c1.ClassName  from Classes c1  where c1.ClassId = c.ParentId)  as  ParentName,
-           c.Description
+           c.Description,
+           c.Mandatory
     from Classes c
     where c.ClassName = _ClassName;
-END
+end
 //
 
 delimiter ;
@@ -55,17 +57,19 @@ drop procedure    if exists MLClassInsert;
 
 delimiter //
 
-CREATE PROCEDURE MLClassInsert(in  _ClassName    varChar(64),
+create procedure MLClassInsert(in  _ClassName    varChar(64),
                                in  _ParentName   varChar(64),
-                               in  _Description  varChar(255)
+                               in  _Description  varChar(255),
+                               in  _Mandatory    char(1)
                               )
-BEGIN
-  insert into Classes(ClassName, ParentId, Description)
+begin
+  insert into Classes(ClassName, ParentId, Description, Mandatory)
          values(_ClassName,
                 (select  c1.ClassId  from Classes c1  where  c1.ClassName = _ParentName),
-                _Description
+                _Description,
+                _Mandatory
                );
-END
+end
 //
 
 delimiter ;
@@ -116,21 +120,23 @@ drop procedure   if exists  MLClassUpdate;
 
 delimiter //
 
-CREATE PROCEDURE  MLClassUpdate(in  OldClassName    varChar(64),
+create procedure  MLClassUpdate(in  OldClassName    varChar(64),
                                 in  NewClassName    varChar(64),
                                 in  NewParentName   varChar(64),
-                                in  NewDescription  varChar(255)
+                                in  NewDescription  varChar(255),
+                                in  NewMandatory    char(1)
                                )
-BEGIN
+begin
   set  @newParentId = (select c1.classId from Classes c1 where c1.ClassName = NewParentName);
 
 
   update  Classes c
     set  c.ClassName    = NewClassName,
          c.ParentId     = @newParentId,
-         c.Description  = NewDescription
+         c.Description  = NewDescription,
+         c.Mandatory    = NewMandatory
      where  c.ClassName = OldClassName;
-END
+end
 //
 delimiter ;
 
@@ -145,7 +151,8 @@ drop procedure   if exists  MLClassInsertReturn;
 delimiter //
 
 create procedure MLClassInsertReturn (in  _name        varChar(64),
-                                      in  _parentName  varChar(64)
+                                      in  _parentName  varChar(64),
+                                      in  _Mandatory   char(1)
                                      )
 begin
   declare   _classId           int  default 0;
@@ -155,7 +162,7 @@ begin
   set  _parentId = (select c1.ClassId from  Classes c1  where  c1.ClassName = _parentName);
 
   if  (_classId is null)  then
-    call MLClassInsert (_name, _parentName, "Added by 'MLClassInsertReturn'");
+    call MLClassInsert (_name, _parentName, "Added by 'MLClassInsertReturn'", _Mandatory);
   end if;
 
 

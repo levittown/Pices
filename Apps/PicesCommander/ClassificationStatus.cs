@@ -114,7 +114,6 @@ namespace PicesCommander
 
     PicesSipperFileList  sipperFiles   = null;
 
-
     private   SizeDistribution      sizeDistribution        = null;
     private   SizeDistribution      depthDistribution_1     = null;
     private   SizeDistribution      depthDistribution_1Down = null;
@@ -489,6 +488,7 @@ namespace PicesCommander
         }
       }
     }  /* UpdateDisplayVariables */
+
 
 
     private DateTime ExecutableDateTimeStamp ()
@@ -943,7 +943,7 @@ namespace PicesCommander
 
 
 
-    private  void  GetClassificationStats ()
+    private  void  GetClassificationStats (PicesDataBase threadConn)
     {
       sizeDistribution        = new  SizeDistribution ( 50, 100);
       depthDistribution_1     = new  SizeDistribution (500,   1);
@@ -951,6 +951,21 @@ namespace PicesCommander
       depthDistribution_1Up   = new  SizeDistribution (500,   1);
       depthDistribution_10    = new  SizeDistribution ( 50,  10);
       numImagesClassified     = 0;
+
+      {
+        // Make sure that Mandatory classes are incluided in the report.
+        PicesClassList allClasses = threadConn.MLClassLoadList ();
+        PicesClassList mandatoryClasses = allClasses.ExtractMandatoryClasses ();
+        foreach  (PicesClass  pc in mandatoryClasses)
+        {
+          sizeDistribution.InitiateClass (pc);
+          depthDistribution_1.InitiateClass (pc);
+          depthDistribution_1Down.InitiateClass (pc);
+          depthDistribution_1Up.InitiateClass (pc);
+          depthDistribution_10.InitiateClass (pc);
+        }
+      }
+
 
       for  (int x = 0;  x < this.classifiersCount;  ++x)
       {
@@ -1037,9 +1052,10 @@ namespace PicesCommander
  
  
 
+
     private  void  PrintReport (PicesDataBase threadConn)
     {
-      GetClassificationStats ();
+      GetClassificationStats (threadConn);
 
       String  reportDir = OSservices.AddSlash (OSservices.AddSlash (PicesSipperVariables.PicesReportDir ()) + "ClassificationResults");
 

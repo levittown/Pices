@@ -68,6 +68,8 @@ namespace MLL
       void  Clear ();
       
 
+    MLClassConstListPtr  ExtractMandatoryClasses ()  const;
+
     /**
      *@brief  Using the class names create two title lines where we split
      *        names by "_" characters between the two lines.

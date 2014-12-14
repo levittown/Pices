@@ -176,7 +176,7 @@ short  ImageFeatures::FluorescenceIndex     = 87;
 
 ImageFeatures::ImageFeatures (int32  _numOfFeatures):
        FeatureVector (_numOfFeatures),
-
+        areaMMSquare     (0.0f),
         centroidCol      (-1),
         centroidRow      (-1),
         ctdDateTime      (),
@@ -193,7 +193,7 @@ ImageFeatures::ImageFeatures (int32  _numOfFeatures):
 
 ImageFeatures::ImageFeatures (const ImageFeatures&  _image):
   FeatureVector (_image),
-
+  areaMMSquare     (_image.areaMMSquare),
   centroidCol      (_image.centroidCol),
   centroidRow      (_image.centroidRow),
   ctdDateTime      (_image.ctdDateTime),
@@ -211,10 +211,11 @@ ImageFeatures::ImageFeatures (const ImageFeatures&  _image):
 
 
 ImageFeatures::ImageFeatures (const BmpImage&      _image,
-                              MLClassConstPtr   _mlClass,
+                              MLClassConstPtr      _mlClass,
                               RasterSipperListPtr  _saveImages
                              ):
   FeatureVector (FeatureFileIOPices::PlanktonMaxNumOfFields ()),
+  areaMMSquare     (0.0f),
   centroidCol      (-1),
   centroidRow      (-1),
   ctdDateTime      (),
@@ -227,7 +228,7 @@ ImageFeatures::ImageFeatures (const BmpImage&      _image,
 
 {
   MLClass       (_mlClass);
-  ImageFileName    (_image.FileName ());
+  ImageFileName (_image.FileName ());
 
   RasterSipperPtr raster = new RasterSipper (_image);
   CalcFeatures (*raster, _saveImages);
@@ -237,12 +238,13 @@ ImageFeatures::ImageFeatures (const BmpImage&      _image,
 
 
 
-ImageFeatures::ImageFeatures (      RasterSipper&  _raster,
-                              MLClassConstPtr   _mlClass,
+ImageFeatures::ImageFeatures (RasterSipper&        _raster,
+                              MLClassConstPtr      _mlClass,
                               RasterSipperListPtr  _saveImages
                              ):
   FeatureVector (FeatureFileIOPices::PlanktonMaxNumOfFields ()),
 
+  areaMMSquare     (0.0f),
   centroidCol      (-1),
   centroidRow      (-1),
   ctdDateTime      (),
@@ -270,13 +272,13 @@ ImageFeatures::ImageFeatures (      RasterSipper&  _raster,
 
 
 ImageFeatures::ImageFeatures (KKStr                _fileName,
-                              MLClassConstPtr   _mlClass,
+                              MLClassConstPtr      _mlClass,
                               bool&                _successfull,
                               RasterSipperListPtr  _saveImages
                              ):
 
 FeatureVector (FeatureFileIOPices::PlanktonMaxNumOfFields ()),
-
+  areaMMSquare     (0.0f),
   centroidCol      (-1),
   centroidRow      (-1),
   ctdDateTime      (),
@@ -388,6 +390,7 @@ FeatureVector (FeatureFileIOPices::PlanktonMaxNumOfFields ()),
 
 ImageFeatures::ImageFeatures (const FeatureVector&  featureVector):
    FeatureVector    (featureVector),
+   areaMMSquare     (0.0f),
    centroidCol      (-1),
    centroidRow      (-1),
    ctdDateTime      (),
@@ -404,6 +407,7 @@ ImageFeatures::ImageFeatures (const FeatureVector&  featureVector):
     // The underlying class is anothr ImageFeatures object.
     const ImageFeatures&  image = dynamic_cast<const ImageFeatures&>(featureVector);
 
+    areaMMSquare     = image.AreaMMSquare    ();
     centroidCol      = image.CentroidCol     ();
     centroidRow      = image.CentroidRow     ();
     ctdDateTime      = image.CtdDateTime     ();

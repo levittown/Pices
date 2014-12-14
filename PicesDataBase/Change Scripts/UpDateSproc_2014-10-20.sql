@@ -1,8 +1,13 @@
-ALTER TABLE `pices_new`.`instrumentdata` 
-    ADD COLUMN `CropLeft`      INT(5) UNSIGNED NULL DEFAULT 100 AFTER `CdomFluorescenceSensor`,
-    ADD COLUMN `CropRight`     INT(5) UNSIGNED NULL DEFAULT 3900 AFTER `CropLeft`,
-    ADD COLUMN `ActiveColumns` INT(5) UNSIGNED NULL DEFAULT 3801 AFTER `CropRight`;
+alter table `pices_new`.`instrumentdata` 
+    add column `CropLeft`      int(5) UNSIGNED NULL DEFAULT 100  after `CdomFluorescenceSensor`,
+    add column `CropRight`     int(5) UNSIGNED NULL DEFAULT 3900 after `CropLeft`,
+    add column `ActiveColumns` int(5) UNSIGNED NULL DEFAULT 3801 after `CropRight`;
     
     
-ALTER TABLE deployments
-    ADD COLUMN `ChamberWidth` FLOAT NULL DEFAULT 0.096 COMMENT 'Width of imaging chamber in Meters.' AFTER `CropRight`;
+alter table  deployments
+    ADD COLUMN `ChamberWidth` float null default 0.096 COMMENT 'Width of imaging chamber in Meters.' after `CropRight`;
+    
+    
+alter table classes
+    add column Mandatory char(1) not null default 'F' after `Description`;
+
