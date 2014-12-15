@@ -12,193 +12,208 @@ namespace PicesCommander
 //#define  BucketSize   100
 
 
-  class  ClassTotals  
-  {
-    int      bucketCount = 0;
-    int      bucketSize  = 0;
-    int      count       = 0;
-    String   name        = null;
-    String   nameUpper   = null;
-    int[]    sizeBuckets = null;
-
-
-    public  ClassTotals (String _name,
-                         int    _bucketCount,
-                         int    _bucketSize
-                        )
-    {
-      bucketCount  = _bucketCount;
-      bucketSize   = _bucketSize;
-      count        = 0;
-      name         = _name;
-      nameUpper    = _name.ToUpper ();
-      sizeBuckets  = new int[bucketCount];
-      for  (int x = 0; x < bucketCount; x++)
-         sizeBuckets[x] = 0;
-      count = 0;
-    }
-
-      
-    public  void  CleaUpMemory ()
-    {
-      sizeBuckets = null;
-    } 
-
-    public  String  Name       {get  {return name;}}
-
-    public  String  NameUpper  {get  {return  nameUpper;}}
-
-    public  void  Increment (int  size)
-    {
-      int  bucket = (int)((float)size / (float)bucketSize);
-      if  (bucket >= bucketCount)
-        bucket = bucketCount - 1;
-
-      if  (bucket < 0)
-        bucket = 0;
-
-      sizeBuckets[bucket]++;
-      count++;
-    }
-
-
-
-    public  void  AddIn (ClassTotals  classTotals)
-    {
-      int  idx;
-
-      count = count + classTotals.count;
-
-      for  (idx = 0; idx < bucketCount; idx++)
-        sizeBuckets[idx] = sizeBuckets[idx] + classTotals.sizeBuckets[idx];
-    }  /* AddIn */
-
-
-
-    public  int   BucketCount (int idx)
-    {
-      if  ((idx < 0)  &&  (idx >= bucketCount))
-        return 0;
-      return  sizeBuckets[idx];
-    }
-
-
-    public  void  PrintFormatedLine (System.IO.StreamWriter  o)
-    {
-      String  s = name.PadRight (20)   ;
-      o.Write (s);
-
-      s = count.ToString ().PadLeft (9);
-      o.Write (s);
-
-      int  bucket;
-
-      for (bucket = 0;  bucket < bucketCount;  bucket++)
-      {
-        s = sizeBuckets [bucket].ToString ().PadLeft (8);
-        o.Write (s);
-      }
-      o.WriteLine ();
-    }  /* PrintFormatedLine */
-
-
-
-    public  void  PrintCSVLine (System.IO.StreamWriter  o)
-    {
-      o.Write ("\"" + name + "\"," + count.ToString ());
-
-      int  bucket;
-
-      for (bucket = 0;  bucket <  bucketCount; bucket++)
-      {
-        o.Write ("," + sizeBuckets[bucket].ToString ());
-      }
-      o.WriteLine ();
-    }  /* PrintCSVLine */
-
-
-
-
-    public  void  PrintTabDelLine (System.IO.StreamWriter  o)
-    {
-      o.Write ("\"" + name + "\"" + "\t" + count.ToString ());
-
-      int  bucket;
-
-      for (bucket = 0;  bucket <  bucketCount; bucket++)
-        o.Write ("\t" + sizeBuckets[bucket].ToString ());
-
-      o.WriteLine ();
-    }
-  };  /* PrintTabDelLine */
-
-
-
-
-  class  ClassTotalsList:  List<ClassTotals>
-  {
-    public  ClassTotalsList ()
-    {
-    }
-    
-
-    public  void  CleanUpMemory ()
-    {
-      foreach  (ClassTotals ct in this)
-      {
-        ct.CleaUpMemory ();
-      }
-      Clear ();
-    }
-    
- 
-    public  ClassTotals  LookUp (String  _name)
-    {
-      _name = _name.ToUpper ();
-
-      int  idx;
-      ClassTotals  classTotals = null;
-      ClassTotals  temp        = null;
-
-      for  (idx = 0; (idx < Count)  &&  (classTotals == null);  idx++)
-      {
-        temp = (this)[idx];
-        if  (temp.NameUpper == _name)
-          classTotals = temp;
-      }
-
-      return  classTotals;
-    }  /* LookUp */
-
-
-
-    private class  ClassTotalsComparator:  IComparer<ClassTotals>
-    {
-      int  IComparer<ClassTotals>.Compare (ClassTotals x, ClassTotals y)  
-      {
-        return x.Name.CompareTo (y.Name);
-      }
-    }  /* ClassTotalsComparator */
-
-
-
-    public  void  SortByName ()
-    {
-      Sort (new ClassTotalsComparator ());
-    }
-
-  };  /* ClassTotalsList */
-
-
 
 
 
   public  class  SizeDistribution 
   {
+    public  class  ClassTotals  
+    {
+      int      bucketCount = 0;
+      int      bucketSize  = 0;
+      int      count       = 0;
+      String   name        = null;
+      String   nameUpper   = null;
+      int[]    sizeBuckets = null;
+
+
+      public  ClassTotals (String _name,
+                           int    _bucketCount,
+                           int    _bucketSize
+                          )
+      {
+        bucketCount  = _bucketCount;
+        bucketSize   = _bucketSize;
+        count        = 0;
+        name         = _name;
+        nameUpper    = _name.ToUpper ();
+        sizeBuckets  = new int[bucketCount];
+        for  (int x = 0; x < bucketCount; x++)
+           sizeBuckets[x] = 0;
+        count = 0;
+      }
+
+        
+      public  void  CleaUpMemory ()
+      {
+        sizeBuckets = null;
+      } 
+
+      public  String  Name       {get  {return name;}}
+
+      public  String  NameUpper  {get  {return  nameUpper;}}
+
+      public  void  Increment (int  size)
+      {
+        int  bucket = (int)((float)size / (float)bucketSize);
+        if  (bucket >= bucketCount)
+          bucket = bucketCount - 1;
+
+        if  (bucket < 0)
+          bucket = 0;
+
+        sizeBuckets[bucket]++;
+        count++;
+      }
+
+
+
+      public  void  AddIn (ClassTotals  classTotals)
+      {
+        int  idx;
+
+        count = count + classTotals.count;
+
+        for  (idx = 0; idx < bucketCount; idx++)
+          sizeBuckets[idx] = sizeBuckets[idx] + classTotals.sizeBuckets[idx];
+      }  /* AddIn */
+
+
+
+      public  int   BucketCount (int idx)
+      {
+        if  ((idx < 0)  &&  (idx >= bucketCount))
+          return 0;
+        return  sizeBuckets[idx];
+      }
+
+
+      public  void  PrintFormatedLine (System.IO.StreamWriter  o)
+      {
+        String  s = name.PadRight (20)   ;
+        o.Write (s);
+
+        s = count.ToString ().PadLeft (9);
+        o.Write (s);
+
+        int  bucket;
+
+        for (bucket = 0;  bucket < bucketCount;  bucket++)
+        {
+          s = sizeBuckets [bucket].ToString ().PadLeft (8);
+          o.Write (s);
+        }
+        o.WriteLine ();
+      }  /* PrintFormatedLine */
+
+
+
+      public  void  PrintCSVLine (System.IO.StreamWriter  o)
+      {
+        o.Write ("\"" + name + "\"," + count.ToString ());
+
+        int  bucket;
+
+        for (bucket = 0;  bucket <  bucketCount; bucket++)
+        {
+          o.Write ("," + sizeBuckets[bucket].ToString ());
+        }
+        o.WriteLine ();
+      }  /* PrintCSVLine */
+
+
+
+
+      public  void  PrintTabDelLine (System.IO.StreamWriter  o)
+      {
+        o.Write ("\"" + name + "\"" + "\t" + count.ToString ());
+
+        int  bucket;
+
+        for (bucket = 0;  bucket <  bucketCount; bucket++)
+          o.Write ("\t" + sizeBuckets[bucket].ToString ());
+
+        o.WriteLine ();
+      }
+    };  /* PrintTabDelLine */
+
+
+
+
+    class  ClassTotalsList:  List<ClassTotals>
+    {
+      public  ClassTotalsList ()
+      {
+      }
+      
+
+      public  void  CleanUpMemory ()
+      {
+        foreach  (ClassTotals ct in this)
+        {
+          ct.CleaUpMemory ();
+        }
+        Clear ();
+      }
+      
+   
+      public  ClassTotals  LookUp (String  _name)
+      {
+        _name = _name.ToUpper ();
+
+        int  idx;
+        ClassTotals  classTotals = null;
+        ClassTotals  temp        = null;
+
+        for  (idx = 0; (idx < Count)  &&  (classTotals == null);  idx++)
+        {
+          temp = (this)[idx];
+          if  (temp.NameUpper == _name)
+            classTotals = temp;
+        }
+
+        return  classTotals;
+      }  /* LookUp */
+
+
+
+      private class  ClassTotalsComparator:  IComparer<ClassTotals>
+      {
+        int  IComparer<ClassTotals>.Compare (ClassTotals x, ClassTotals y)  
+        {
+          return x.Name.CompareTo (y.Name);
+        }
+      }  /* ClassTotalsComparator */
+
+
+
+      public  void  SortByName ()
+      {
+        Sort (new ClassTotalsComparator ());
+      }
+
+    };  /* ClassTotalsList */
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     int              bucketCount = 0;
     int              bucketSize  = 0;
     ClassTotalsList  totals      = null;
-    PicesClassList   mandatoryClasses = null;
 
 
     public  SizeDistribution (int  _bucketCount,
@@ -221,6 +236,44 @@ namespace PicesCommander
 
       totals = null;
     }
+
+
+    
+    /// <summary>
+    /// Returns an instance of 'ClassTotals' that contains a summary of the classes that are decendent of 'ancestor'.
+    /// The newly instantiated instance will point to the same instances of 'ClassTotals'  that this instance points to.
+    /// As a result you should only call this method after you are done accumulating data.
+    /// </summary>
+    /// <param name="ancestor"></param>
+    /// <returns></returns>
+    public  ClassTotals  SumUpFamilyOfClasses (PicesClass  ancestor)
+    {
+      ClassTotals  familySummary = new ClassTotals (ancestor.Name, bucketCount, bucketSize);
+      AddFamilyOfClassesToSizeClassTotals (familySummary, ancestor);
+      return   familySummary;
+    }  /* ExtractFamilyOfClasses */
+
+
+
+
+    private  void  AddFamilyOfClassesToSizeClassTotals (ClassTotals   summary,
+                                                        PicesClass    ancestor
+                                                       )
+    {
+      ClassTotals  ct = totals.LookUp (ancestor.Name);
+      if  (ct != null)
+        summary.AddIn (ct);
+      
+      if  (ancestor.Children != null)
+      {
+        foreach  (PicesClass  pc in ancestor.Children)
+          AddFamilyOfClassesToSizeClassTotals (summary, pc);
+      }
+
+      return;
+    }  /* AddFamilyOfClassesToSizeClassTotals */
+
+
 
 
     /// <summary>
@@ -596,7 +649,6 @@ namespace PicesCommander
 
 
 
-    
     
     private  void  PrintFormatedHeader (System.IO.StreamWriter  o)
     {

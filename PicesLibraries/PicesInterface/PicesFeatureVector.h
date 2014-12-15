@@ -93,6 +93,7 @@ namespace PicesInterface
 
 
   public:
+    property float             AreaMMSquare       {float       get ();}
     property String^           ClassName          {String^     get ();}
     property System::DateTime  CtdDateTime        {System::DateTime    get ();}
     property float             Depth              {float       get ();  void  set (float        _depth);}

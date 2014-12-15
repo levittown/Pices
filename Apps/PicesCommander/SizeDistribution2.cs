@@ -20,14 +20,14 @@ namespace PicesCommander
   public  class  SizeDistribution2 
   {
    
-    class  ClassTotals2  
+    public  class  ClassTotals2  
     {
       int      bucketCount = 0;
       int      count       = 0;
       String   name        = null;
       String   nameUpper   = null;
       
-      float    sizeInitial      = 0.5f; /**<  Starting size; all following buckest will grow by growth factor. */
+      float    sizeInitial      = 0.1f; /**<  Starting size; all following buckest will grow by growth factor. */
       float    sizeGrowthFactor = 1.2f; 
       float    sizeEndRange     = 10.0f;
       float[]  sizeBucketStart  = null; /**<  the start of the size range for the respective bucket. */
@@ -214,7 +214,7 @@ namespace PicesCommander
     };  /* ClassTotals2List */
 
     
-    float    sizeInitial      = 0.5f; /**<  Starting size; all following buckest will grow by growth factor. */
+    float    sizeInitial      = 0.1f; /**<  Starting size; all following buckest will grow by growth factor. */
     float    sizeGrowthFactor = 1.2f; 
     float    sizeEndRange     = 10.0f;
     float[]  sizeBucketStart  = null; /**<  the start of the size range for the respective bucket. */
@@ -243,6 +243,7 @@ namespace PicesCommander
         while  (sizeBegin <= sizeEndRange)
         {
           sizeBegin = sizeBegin * sizeGrowthFactor;
+          sizeBegin = (float)Math.Round (sizeBegin, 4);
           ++bucketCount;
         }
 
@@ -265,6 +266,7 @@ namespace PicesCommander
         while  (sizeBegin <= sizeEndRange)
         {
           float  sizeEndOfRange = sizeBegin * sizeGrowthFactor;
+          sizeEndOfRange = (float)Math.Round (sizeEndOfRange, 4);
           sizeBucketStart[x] = sizeBegin;
           sizeBucketEnd  [x] = sizeEndOfRange;
           sizeBuckets    [x] = 0;
@@ -280,6 +282,80 @@ namespace PicesCommander
 
       totals = new ClassTotals2List ();
     }
+
+
+    /// <summary>
+    /// Returns an instance of 'ClassTotals' that contains a summary of the classes that are decendent of 'ancestor'.
+    /// </summary>
+    /// <param name="ancestor"></param>
+    /// <returns></returns>
+    public  ClassTotals2  SummarizeFamilyOfClasses (PicesClass  ancestor)
+    {
+      ClassTotals2  familySummary = new ClassTotals2 (ancestor.Name, sizeInitial, sizeGrowthFactor,sizeEndRange, bucketCount, sizeBucketStart, sizeBucketEnd);
+      AddFamilyOfClassesToSizeClassTotals (familySummary, ancestor);
+      return   familySummary;
+    }  /* ExtractFamilyOfClasses */
+
+
+
+
+    private  void  AddFamilyOfClassesToSizeClassTotals (ClassTotals2   summary,
+                                                        PicesClass     ancestor
+                                                       )
+    {
+      ClassTotals2  ct = totals.LookUp (ancestor.Name);
+      if  (ct != null)
+        summary.AddIn (ct);
+      
+      if  (ancestor.Children != null)
+      {
+        foreach  (PicesClass  pc in ancestor.Children)
+          AddFamilyOfClassesToSizeClassTotals (summary, pc);
+      }
+
+      return;
+    }  /* AddFamilyOfClassesToSizeClassTotals */
+
+
+
+
+    /// <summary>
+    /// Returns an instance of 'ClassTotals' that contains the ClassTotals that belong to the family of 'ancestor'.
+    /// The newly instantiated instance will point to the same instances of 'ClassTotals'  that this instance points to.
+    /// As a result you should only call this method after you are done accumulating data.
+    /// </summary>
+    /// <param name="ancestor"></param>
+    /// <returns></returns>
+    public  SizeDistribution2  ExtractFamilyOfClasses (PicesClass  ancestor)
+    {
+      SizeDistribution2  family = new SizeDistribution2 (sizeInitial, sizeGrowthFactor, sizeEndRange);
+      ExtractFamily (family, ancestor);
+      return   family;
+    }  /* ExtractFamilyOfClasses */
+
+
+
+
+    private  void  ExtractFamily (SizeDistribution2   family,
+                                  PicesClass          ancestor
+                                 )
+    {
+      ClassTotals2  ct = totals.LookUp (ancestor.Name);
+      if  (ct != null)
+        family.Add (ct);
+      
+      if  (ancestor.Children != null)
+      {
+        foreach  (PicesClass  pc in ancestor.Children)
+          ExtractFamily (family, pc);
+      }
+
+      return;
+    }  /* ExtractFamily */
+
+
+
+
 
   
 
@@ -320,6 +396,35 @@ namespace PicesCommander
         classTotals.AddIn (ct);
       }
     }  /* SizeDistribution2 */
+
+
+
+    //
+    /// <summary>
+    /// Will add in the contents of a ClassTotals2 instance into this instance of SizeDistribution2.
+    /// </summary>
+    /// <param name="x"></param>
+    public  void  Add (ClassTotals2  x)
+    {
+      if  ((x.SizeInitial       != this.sizeInitial)      ||
+           (x.SizeGrowthFactor  != this.sizeGrowthFactor) ||
+           (x.SizeEndRange      != this.sizeEndRange)
+          )
+      {
+        throw new Exception ("'SizeDistribution2.Add   ***ERROR***   Dimensions are not Compatable" + "\n" +
+                             "Left.sizeInitial      [" + sizeInitial.ToString      () + "]  Right [" + x.SizeInitial.ToString      () + "]" + "\n" +
+                             "Left.sizeGrowthFactor [" + sizeGrowthFactor.ToString () + "]  Right [" + x.SizeGrowthFactor.ToString () + "]" + "\n" +
+                             "Left.sizeEndRange     [" + sizeEndRange.ToString     () + "]  Right [" + x.SizeEndRange.ToString     () + "]"
+                             );
+      }
+
+      totals.Add (x);
+    }  /* SizeDistribution2 */
+
+
+
+
+
 
 
 
@@ -471,6 +576,38 @@ namespace PicesCommander
       }   
       o.WriteLine ();
       grandTotals.PrintTabDelLine (o);
+    }  /* PrintTabDelDistributionMatrix */
+
+
+
+
+
+
+    public  void   PrintTabDelDistributionMatrixSepartedByLevel1Classes (System.IO.StreamWriter  o,
+                                                                         String                  majorTitle
+                                                                        )
+    {
+      PicesClassList  allKnownClasses = PicesClassList.GetAllKnownClasses ();
+      PicesClassList  firstGeneration = new PicesClassList ();
+      foreach  (PicesClass pc in allKnownClasses)
+      {
+        if  (pc.ParentName.Equals ("ALLCLASSES", StringComparison.InvariantCultureIgnoreCase))
+          firstGeneration.Add (pc);
+      }
+      firstGeneration.SortByName ();
+
+      foreach  (PicesClass pc in firstGeneration)
+      {
+        SizeDistribution2  familySummary = this.ExtractFamilyOfClasses (pc);
+        if  (familySummary.totals.Count > 1)
+        {
+          o.WriteLine (majorTitle + "     *** Summary of " + pc.Name + " ***");
+          o.WriteLine ();
+          familySummary.PrintTabDelDistributionMatrix (o);
+          o.WriteLine ();
+          o.WriteLine ();
+        }
+      }
     }  /* PrintTabDelDistributionMatrix */
 
 

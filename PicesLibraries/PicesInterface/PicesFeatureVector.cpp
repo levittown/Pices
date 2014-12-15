@@ -212,6 +212,15 @@ namespace  PicesInterface
  
 
 
+  float  PicesFeatureVector::AreaMMSquare::get ()
+  {
+    if  (features)
+      return features->AreaMMSquare ();
+    else
+      return 0.0f;
+  }
+
+
 
   float  PicesFeatureVector::Depth::get ()
   {

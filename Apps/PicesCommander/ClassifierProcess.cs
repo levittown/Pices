@@ -17,7 +17,8 @@ namespace PicesCommander
     private  Queue<PredictionResult>    predictionUpdateQueue   = null;
     private  Queue<PicesFeatureVector>  featureVectorQueue      = null;
 
-    private  SizeDistribution           sizeDistribution        = null;
+    private  SizeDistribution2          sizeDistributionDown    = null;
+    private  SizeDistribution2          sizeDistributionUp      = null;
     private  SizeDistribution           depthDistribution_1     = null;
     private  SizeDistribution           depthDistribution_1Down = null;
     private  SizeDistribution           depthDistribution_1Up   = null;
@@ -110,7 +111,8 @@ namespace PicesCommander
 
     private  void  ClassInitialization ()
     {
-      sizeDistribution        = new  SizeDistribution ( 50, 100);
+      sizeDistributionDown    = new  SizeDistribution2 (0.1f, 1.2f, 10.0f);
+      sizeDistributionUp      = new  SizeDistribution2 (0.1f, 1.2f, 10.0f);
       depthDistribution_1     = new  SizeDistribution (500,   1);
       depthDistribution_1Down = new  SizeDistribution (500,   1);
       depthDistribution_1Up   = new  SizeDistribution (500,   1);
@@ -314,12 +316,17 @@ namespace PicesCommander
       lock  (classCounts)
       {
         classCounts.AddOne (pred1.MLClass);
-        sizeDistribution.Increment     (pred1.MLClass, (int)fv.OrigSize);
         depthDistribution_1.Increment  (pred1.MLClass, (int)fv.Depth);
         if  (downCast)
-          depthDistribution_1Up.Increment   (pred1.MLClass, (int)fv.Depth);
+        {
+          depthDistribution_1Up.Increment  (pred1.MLClass, (int)fv.Depth);
+          sizeDistributionDown.Increment   (pred1.MLClass, fv.AreaMMSquare);
+        }
         else
+        {
           depthDistribution_1Down.Increment (pred1.MLClass, (int)fv.Depth);
+          sizeDistributionUp.Increment      (pred1.MLClass, fv.AreaMMSquare);
+        }
         depthDistribution_10.Increment (pred1.MLClass, (int)fv.Depth);
         numImagesClassified++;
       }
@@ -470,15 +477,17 @@ namespace PicesCommander
 
 
 
-    public  void  UpdateClassificationStats (SizeDistribution  _sizeDistribution, 
-                                             SizeDistribution  _depthDistribution_1, 
-                                             SizeDistribution  _depthDistribution_1Down, 
-                                             SizeDistribution  _depthDistribution_1Up, 
-                                             SizeDistribution  _depthDistribution_10,
-                                             ref uint          _numImagesClassified
+    public  void  UpdateClassificationStats (SizeDistribution2  _sizeDistributionDown, 
+                                             SizeDistribution2  _sizeDistributionUp, 
+                                             SizeDistribution   _depthDistribution_1, 
+                                             SizeDistribution   _depthDistribution_1Down, 
+                                             SizeDistribution   _depthDistribution_1Up, 
+                                             SizeDistribution   _depthDistribution_10,
+                                             ref uint           _numImagesClassified
                                             )
     {
-      _sizeDistribution.Add        (sizeDistribution);
+      _sizeDistributionDown.Add    (sizeDistributionDown);
+      _sizeDistributionUp.Add      (sizeDistributionUp);
       _depthDistribution_1.Add     (depthDistribution_1);
       _depthDistribution_1Down.Add (depthDistribution_1Down);
       _depthDistribution_1Up.Add   (depthDistribution_1Up);

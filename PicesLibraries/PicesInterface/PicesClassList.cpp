@@ -450,6 +450,24 @@ void  PicesClassList::SortByName ()
 
 
 
+PicesClassList^  PicesClassList::GetAllKnownClasses ()
+{
+  getUniqueClassBlocker->StartBlock ();
+
+  PicesClassList^  results = gcnew PicesClassList ();
+  for each  (PicesClass^  pc in allClassesInUniverse)
+  {
+    results->Add (pc);
+  }
+
+  getUniqueClassBlocker->EndBlock ();
+
+  return  results;
+}  /* GetAllKnownClasses */
+
+
+
+
 //********************************************************************************
 //*  Supports the idea that there is only one instance of a class with the same  *
 //*  name in memory.                                                             *

@@ -85,6 +85,8 @@ namespace SipperFile
       this.LeftPanel = new System.Windows.Forms.Panel ();
       this.pictureBox1 = new System.Windows.Forms.PictureBox ();
       this.PlanktonImage = new System.Windows.Forms.PictureBox ();
+      this.AreaMMSquareLabel = new System.Windows.Forms.Label ();
+      this.AreaMMSquare = new System.Windows.Forms.TextBox ();
       this.RightPanel.SuspendLayout ();
       this.DataFields.SuspendLayout ();
       this.LeftPanel.SuspendLayout ();
@@ -296,6 +298,8 @@ namespace SipperFile
       // RightPanel
       // 
       this.RightPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.RightPanel.Controls.Add (this.AreaMMSquare);
+      this.RightPanel.Controls.Add (this.AreaMMSquareLabel);
       this.RightPanel.Controls.Add (this.EditButton);
       this.RightPanel.Controls.Add (this.ViewClassLogButton);
       this.RightPanel.Controls.Add (this.DateClass);
@@ -349,7 +353,7 @@ namespace SipperFile
       // 
       // EditButton
       // 
-      this.EditButton.Location = new System.Drawing.Point (413, 380);
+      this.EditButton.Location = new System.Drawing.Point (413, 393);
       this.EditButton.Name = "EditButton";
       this.EditButton.Size = new System.Drawing.Size (51, 23);
       this.EditButton.TabIndex = 50;
@@ -412,10 +416,10 @@ namespace SipperFile
       // ConnectedComponentDist
       // 
       this.ConnectedComponentDist.Font = new System.Drawing.Font ("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.ConnectedComponentDist.Location = new System.Drawing.Point (418, 317);
+      this.ConnectedComponentDist.Location = new System.Drawing.Point (386, 317);
       this.ConnectedComponentDist.Name = "ConnectedComponentDist";
       this.ConnectedComponentDist.ReadOnly = true;
-      this.ConnectedComponentDist.Size = new System.Drawing.Size (46, 22);
+      this.ConnectedComponentDist.Size = new System.Drawing.Size (78, 22);
       this.ConnectedComponentDist.TabIndex = 42;
       this.ConnectedComponentDist.TabStop = false;
       this.ConnectedComponentDist.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -423,7 +427,7 @@ namespace SipperFile
       // ConnectedComponentDistanceLabel
       // 
       this.ConnectedComponentDistanceLabel.AutoSize = true;
-      this.ConnectedComponentDistanceLabel.Location = new System.Drawing.Point (381, 321);
+      this.ConnectedComponentDistanceLabel.Location = new System.Drawing.Point (347, 321);
       this.ConnectedComponentDistanceLabel.Name = "ConnectedComponentDistanceLabel";
       this.ConnectedComponentDistanceLabel.Size = new System.Drawing.Size (29, 13);
       this.ConnectedComponentDistanceLabel.TabIndex = 41;
@@ -495,7 +499,7 @@ namespace SipperFile
       // 
       // SelectClassButtom
       // 
-      this.SelectClassButtom.Location = new System.Drawing.Point (385, 265);
+      this.SelectClassButtom.Location = new System.Drawing.Point (385, 266);
       this.SelectClassButtom.Name = "SelectClassButtom";
       this.SelectClassButtom.Size = new System.Drawing.Size (37, 25);
       this.SelectClassButtom.TabIndex = 24;
@@ -761,6 +765,26 @@ namespace SipperFile
       this.PlanktonImage.TabStop = false;
       this.PlanktonImage.Click += new System.EventHandler (this.PlanktonImage_Click);
       // 
+      // AreaMMSquareLabel
+      // 
+      this.AreaMMSquareLabel.AutoSize = true;
+      this.AreaMMSquareLabel.Location = new System.Drawing.Point (347, 356);
+      this.AreaMMSquareLabel.Name = "AreaMMSquareLabel";
+      this.AreaMMSquareLabel.Size = new System.Drawing.Size (35, 13);
+      this.AreaMMSquareLabel.TabIndex = 51;
+      this.AreaMMSquareLabel.Text = "mm^2";
+      // 
+      // AreaMMSquare
+      // 
+      this.AreaMMSquare.Font = new System.Drawing.Font ("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.AreaMMSquare.Location = new System.Drawing.Point (386, 352);
+      this.AreaMMSquare.Name = "AreaMMSquare";
+      this.AreaMMSquare.ReadOnly = true;
+      this.AreaMMSquare.Size = new System.Drawing.Size (75, 22);
+      this.AreaMMSquare.TabIndex = 52;
+      this.AreaMMSquare.TabStop = false;
+      this.AreaMMSquare.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+      // 
       // ImageViewer
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF (6F, 13F);
@@ -845,5 +869,7 @@ namespace SipperFile
     private System.Windows.Forms.Button ViewClassLogButton;
     private System.Windows.Forms.Button EditButton;
     private System.Windows.Forms.PictureBox pictureBox1;
+    private System.Windows.Forms.Label AreaMMSquareLabel;
+    private System.Windows.Forms.TextBox AreaMMSquare;
   }
 }

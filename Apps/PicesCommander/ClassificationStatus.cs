@@ -114,7 +114,8 @@ namespace PicesCommander
 
     PicesSipperFileList  sipperFiles   = null;
 
-    private   SizeDistribution      sizeDistribution        = null;
+    private   SizeDistribution2     sizeDistributionDown    = null;
+    private   SizeDistribution2     sizeDistributionUp      = null;
     private   SizeDistribution      depthDistribution_1     = null;
     private   SizeDistribution      depthDistribution_1Down = null;
     private   SizeDistribution      depthDistribution_1Up   = null;
@@ -945,11 +946,12 @@ namespace PicesCommander
 
     private  void  GetClassificationStats (PicesDataBase threadConn)
     {
-      sizeDistribution        = new  SizeDistribution ( 50, 100);
-      depthDistribution_1     = new  SizeDistribution (500,   1);
-      depthDistribution_1Down = new  SizeDistribution (500,   1);
-      depthDistribution_1Up   = new  SizeDistribution (500,   1);
-      depthDistribution_10    = new  SizeDistribution ( 50,  10);
+      sizeDistributionDown    = new  SizeDistribution2 (0.1f, 1.2f, 10.0f);
+      sizeDistributionUp      = new  SizeDistribution2 (0.1f, 1.2f, 10.0f);
+      depthDistribution_1     = new  SizeDistribution  (500,   1);
+      depthDistribution_1Down = new  SizeDistribution  (500,   1);
+      depthDistribution_1Up   = new  SizeDistribution  (500,   1);
+      depthDistribution_10    = new  SizeDistribution  ( 50,  10);
       numImagesClassified     = 0;
 
       {
@@ -958,7 +960,8 @@ namespace PicesCommander
         PicesClassList mandatoryClasses = allClasses.ExtractMandatoryClasses ();
         foreach  (PicesClass  pc in mandatoryClasses)
         {
-          sizeDistribution.InitiateClass (pc);
+          sizeDistributionDown.InitiateClass (pc);
+          sizeDistributionUp.InitiateClass (pc);
           depthDistribution_1.InitiateClass (pc);
           depthDistribution_1Down.InitiateClass (pc);
           depthDistribution_1Up.InitiateClass (pc);
@@ -966,10 +969,10 @@ namespace PicesCommander
         }
       }
 
-
       for  (int x = 0;  x < this.classifiersCount;  ++x)
       {
-        classifiers[x].UpdateClassificationStats (sizeDistribution, 
+        classifiers[x].UpdateClassificationStats (sizeDistributionDown,
+                                                  sizeDistributionUp,
                                                   depthDistribution_1,
                                                   depthDistribution_1Down,
                                                   depthDistribution_1Up,
@@ -1114,9 +1117,23 @@ namespace PicesCommander
 
         o.WriteLine ();
         o.WriteLine ();
-        o.WriteLine ("Size Distribution");
+        o.WriteLine ("Size (mm^2) Distribution Down Cast");
         o.WriteLine ();
-        sizeDistribution.PrintTabDelDistributionMatrix (o);
+        sizeDistributionDown.PrintTabDelDistributionMatrix (o);
+        o.WriteLine ();
+        o.WriteLine ();
+        sizeDistributionDown.PrintTabDelDistributionMatrixSepartedByLevel1Classes (o, "Size (mm^2) Distribution Down Cast");
+        o.WriteLine ();
+        o.WriteLine ();
+        o.WriteLine ();
+        o.WriteLine ();
+        o.WriteLine ();
+        o.WriteLine ("Size (mm^2) Distribution Up Cast");
+        o.WriteLine ();
+        sizeDistributionUp.PrintTabDelDistributionMatrix (o);
+        o.WriteLine ();
+        o.WriteLine ();
+        sizeDistributionUp.PrintTabDelDistributionMatrixSepartedByLevel1Classes (o, "Size (mm^2) Distribution Up Cast");
         o.WriteLine ();
         o.WriteLine ();
         o.WriteLine ();

@@ -56,25 +56,35 @@ namespace PicesInterface
     PicesClassList^   ExtractListOfClassesForAGivenHierarchialLevel (uint level);
 
 
-    // Will generate an array of 3 String's.  Each String will represent a seperate line to be 
-    // uses as a Class name Header.  Classes will be seperated by the tab('\t') character.
-    // The underscore('_') character in the Class name wil be used to deliminate what goes 
-    // on which line.  Ex:  The class name "Crustacean_Copepod_Oncea"  will have "Crustacean" 
-    // on the 1st line, "Copepod" on the second line, and "Oncea" on the third line.
+    /**
+     * Will generate an array of 3 String's.  Each String will represent a seperate line to be 
+     * uses as a Class name Header.  Classes will be seperated by the tab('\t') character.
+     * The underscore('_') character in the Class name wil be used to deliminate what goes 
+     * on which line.  Ex:  The class name "Crustacean_Copepod_Oncea"  will have "Crustacean" 
+     * on the 1st line, "Copepod" on the second line, and "Oncea" on the third line.
+     */
     List<String^>^    ExtractThreeTitleLines ();
 
+
+    static  PicesClassList^  GetAllKnownClasses ();
+
+
     
-    // Usinge the "_name" parameter will search the global ClassList(allClassesInUniverse)
-    // for an existing instance of 'PicesClass' that has the same name.  If one is found
-    // that is what is retuned to the caller; otherwise a new intance is created and returned 
-    // to the caller.  This new instance will also be added to 'allClassesInUniverse'.
+    /**
+     * Usinge the "_name" parameter will search the global ClassList(allClassesInUniverse)
+     * for an existing instance of 'PicesClass' that has the same name.  If one is found
+     * that is what is retuned to the caller; otherwise a new intance is created and returned 
+     * to the caller.  This new instance will also be added to 'allClassesInUniverse'.
+     */
     static  PicesClass^  GetUniqueClass (String^  _name,
                                          String^  _parentName
                                         );
 
 
-    // Will locate a PicesClass instance that has the same unmanaged mlClass reference.
-    // if none exists then will create a new one and add to 'allClassesInUniverse'.
+    /**
+     * Will locate a PicesClass instance that has the same unmanaged mlClass reference.
+     * if none exists then will create a new one and add to 'allClassesInUniverse'.
+     */
     static  PicesClass^  GetUniqueClass (MLClassConstPtr  mlClass);  
 
     static  PicesClass^  GetUnKnownClassStatic ();

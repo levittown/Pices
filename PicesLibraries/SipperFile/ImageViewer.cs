@@ -21,6 +21,7 @@ namespace SipperFile
     private  PicesRaster          raster          = null;
     private  PicesFeatureVector   featureVector   = null;
     private  PicesRunLog          runLog          = null;
+    private  PicesSipperFile      sippperFile     = null;
 
     private PicesDataBaseLogEntry extractionLogEntry = null;
     private PicesDataBaseLogEntry classLogEntry      = null;
@@ -113,6 +114,9 @@ namespace SipperFile
         extractionLogEntry = dbConn.LogEntriesSelect (image.ExtractionLogEntryId);
         classLogEntry      = dbConn.LogEntriesSelect (image.ClassLogEntryId);
       }
+
+      if  (image != null)
+        sippperFile = dbConn.SipperFileRecLoad (image.SipperFileName);
  
       DataLabels = new Label[4];
       DataLabels[0] = DataLabel0;
@@ -332,6 +336,9 @@ namespace SipperFile
         Lib2Pred2Prob.Text  = model2Prediction2.Probability.ToString ("##0.00%");
         Lib2Pred2Votes.Text = model2Prediction2.Votes.ToString ("#,##0");
       }
+
+      if  (featureVector != null)
+        AreaMMSquare.Text = featureVector.AreaMMSquare.ToString ();
 
       return;
     }  /* MakePredictions */
