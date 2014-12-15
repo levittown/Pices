@@ -371,7 +371,7 @@
     <Compile Include="SaveImagesToDisk.Designer.cs">
       <DependentUpon>SaveImagesToDisk.cs</DependentUpon>
     </Compile>
-    <Compile Include="SizeDistribution.cs" />
+    <Compile Include="SizeDistribution2.cs" />
     <Compile Include="SpatialAnalysis.cs">
       <SubType>Form</SubType>
     </Compile>
