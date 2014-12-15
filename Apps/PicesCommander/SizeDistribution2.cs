@@ -6,7 +6,7 @@ using  PicesInterface;
 
 
 /**
- *@brief  Cloned from "SizeDistribution" with the intent to use for Image Size in mm^2  a floating pont number.
+ *@brief  Cloned from "SizeDistribution2" with the intent to use for Image Size in mm^2  a floating pont number.
  *@details The sizing will range by a factor with a starting value and growth rate.
  */
 
@@ -17,8 +17,9 @@ namespace PicesCommander
 //#define  BucketSize   100
 
 
-  public  class  SizeDistribution 
+  public  class  SizeDistribution2 
   {
+   
     class  ClassTotals2  
     {
       int      bucketCount = 0;
@@ -34,10 +35,13 @@ namespace PicesCommander
       int[]    sizeBuckets      = null;
 
 
-      public  ClassTotals2 (String _name,
-                            float  _sizeInitial,
-                            float  _sizeGrowthFactor,
-                            float  _sizeMaxSize
+      public  ClassTotals2 (String   _name,
+                            float    _sizeInitial,
+                            float    _sizeGrowthFactor,
+                            float    _sizeEndRange,
+                            int      _bucketCount,
+                            float[]  _sizeBucketStart,
+                            float[]  _sizeBucketEnd
                           )
       {
         count            = 0;
@@ -46,57 +50,21 @@ namespace PicesCommander
         sizeInitial      = _sizeInitial;
         sizeGrowthFactor = _sizeGrowthFactor;
         sizeEndRange     = _sizeEndRange;
-
-        {
-          // Compute num number of uckets needed.
-          bucketCount = 0;
-          ++bucketCount; // For images less than "sizeInitial".
-
-          float sizeBegin = _sizeInitial;
-          while  (sizeBegin <= _sizeMaxSize)
-          {
-            sizeBegin = sizeBegin * sizeGrowthFactor;
-            ++bucketCount;
-          }
-
-          ++bucketCount;  // For images that are larger than "sizeEndRange".
-        }
-
-        sizeBuckets     = new int[bucketCount];
-        sizeBucketStart = new float[bucketCount];
-        sizeBucketEnd   = new float[bucketCount];
-
-        {
-          // Initialize Bucket arrays.
-          int x = 0;
-          sizeBucketStart[x] = 0.0f;
-          sizeBucketEnd  [x] = sizeInitial;
-          sizeBuckets    [x] = 0;
-          ++x;
-
-          float sizeBegin = _sizeInitial;
-          while  (sizeBegin <= _sizeMaxSize)
-          {
-            float  sizeEndOfRange = sizeBegin * sizeGrowthFactor;
-            sizeBucketStart[x] = sizeBegin;
-            sizeBucketEnd  [x] = sizeEndOfRange;
-            sizeBuckets    [x] = 0;
-            ++x;
-            sizeBegin = sizeEndOfRange;
-          }
-
-          sizeBucketStart[x] = sizeBegin;
-          sizeBucketEnd  [x] = 99999.9999f;;
-          sizeBuckets    [x] = 0;
-          ++x;
-        }
+        bucketCount      = _bucketCount;
+        sizeBucketStart  = _sizeBucketStart;
+        sizeBucketEnd    = _sizeBucketEnd;
+        sizeBuckets      = new int[bucketCount];
+        for  (int x = 0;  x < bucketCount;  ++x)
+          sizeBuckets[x] = 0;
         count = 0;
       }
-        
 
-      public  String  Name       {get  {return name;}}
 
-      public  String  NameUpper  {get  {return  nameUpper;}}
+      public  String  Name              {get  {return name;}}
+      public  String  NameUpper         {get  {return nameUpper;}}
+      public  float   SizeEndRange      {get  {return sizeEndRange;}}
+      public  float   SizeGrowthFactor  {get  {return sizeGrowthFactor;}}
+      public  float   SizeInitial       {get  {return sizeInitial;}}
 
 
       public  void  Increment (float  areaMM)
@@ -207,15 +175,6 @@ namespace PicesCommander
       }
       
 
-      public  void  CleanUpMemory ()
-      {
-        foreach  (ClassTotals2 ct in this)
-        {
-          ct.CleaUpMemory ();
-        }
-        Clear ();
-      }
-      
    
       public  ClassTotals2  LookUp (String  _name)
       {
@@ -254,10 +213,6 @@ namespace PicesCommander
 
     };  /* ClassTotals2List */
 
-      
-      
-      
-
     
     float    sizeInitial      = 0.5f; /**<  Starting size; all following buckest will grow by growth factor. */
     float    sizeGrowthFactor = 1.2f; 
@@ -265,47 +220,85 @@ namespace PicesCommander
     float[]  sizeBucketStart  = null; /**<  the start of the size range for the respective bucket. */
     float[]  sizeBucketEnd    = null; /**<  the end of the size range for the respective bucket.   */
     int[]    sizeBuckets      = null;
-    
-    int               bucketCount = 0;
-    int               bucketSize  = 0;
+    int      bucketCount      = 0;
     ClassTotals2List  totals      = null;
 
 
 
-    public  SizeDistribution (float  _sizeInitial,
-                              float  _sizeGrowthFactor,
-                              float  _sizeMaxSize
-                             )
+    public  SizeDistribution2 (float  _sizeInitial,
+                               float  _sizeGrowthFactor,
+                               float  _sizeEndRange
+                              )
     {
       sizeInitial      = _sizeInitial;
       sizeGrowthFactor = _sizeGrowthFactor;
       sizeEndRange     = _sizeEndRange;
+
+      {
+        // Compute num number of uckets needed.
+        bucketCount = 0;
+        ++bucketCount; // For images less than "sizeInitial".
+
+        float sizeBegin = _sizeInitial;
+        while  (sizeBegin <= sizeEndRange)
+        {
+          sizeBegin = sizeBegin * sizeGrowthFactor;
+          ++bucketCount;
+        }
+
+        ++bucketCount;  // For images that are larger than "sizeEndRange".
+      }
+
+      sizeBuckets     = new int  [bucketCount];
+      sizeBucketStart = new float[bucketCount];
+      sizeBucketEnd   = new float[bucketCount];
+
+      {
+        // Initialize Bucket arrays.
+        int x = 0;
+        sizeBucketStart[x] = 0.0f;
+        sizeBucketEnd  [x] = sizeInitial;
+        sizeBuckets    [x] = 0;
+        ++x;
+
+        float sizeBegin = sizeInitial;
+        while  (sizeBegin <= sizeEndRange)
+        {
+          float  sizeEndOfRange = sizeBegin * sizeGrowthFactor;
+          sizeBucketStart[x] = sizeBegin;
+          sizeBucketEnd  [x] = sizeEndOfRange;
+          sizeBuckets    [x] = 0;
+          ++x;
+          sizeBegin = sizeEndOfRange;
+        }
+
+        sizeBucketStart[x] = sizeBegin;
+        sizeBucketEnd  [x] = 99999.9999f;;
+        sizeBuckets    [x] = 0;
+        ++x;
+      }
+
       totals = new ClassTotals2List ();
-      if  (bucketCount < 1)
-        throw new Exception ("SizeDistribution     *** Invalid Bucket Size[" + bucketSize.ToString () + "] ***");
     }
 
   
-    public  void  CleanUpMemory ()
-    {
-      if  (totals != null)
-       totals.CleanUpMemory ();
-
-      totals = null;
-    }
-
 
     /// <summary>
-    /// Will add in the contents of another SizeDistribution instance into this instance.
+    /// Will add in the contents of another SizeDistribution2 instance into this instance.
     /// </summary>
-    /// <param name="x">The other 'SizeDistribution' instance to be acumulated to this instance.</param>
-    public  void  Add (SizeDistribution  x)
+    /// <param name="x">The other 'SizeDistribution2' instance to be acumulated to this instance.</param>
+    public  void  Add (SizeDistribution2  x)
     {
-      if  ((x.bucketCount != this.bucketCount)  ||  (x.bucketSize != this.bucketSize))
+      if  ((x.bucketCount       != this.bucketCount)      ||
+           (x.sizeInitial       != this.sizeInitial)      ||
+           (x.sizeGrowthFactor  != this.sizeGrowthFactor) ||
+           (x.sizeEndRange      != this.sizeEndRange)
+          )
       {
-        throw new Exception ("'SizeDistribution.Add   ***ERROR***   Dimensions are not the same" + "\n" +
-                             "Left.bucketCount[" + bucketCount.ToString () + "]  Right[" + x.bucketCount.ToString () + "]" + "\n" +
-                             "Left.bucketSize [" +this.bucketSize.ToString () + "]  Right.bucketSize[" + x.bucketSize.ToString () + "]"
+        throw new Exception ("'SizeDistribution2.Add   ***ERROR***   Dimensions are not the same" + "\n" +
+                             "Left.sizeInitial      [" + sizeInitial.ToString      () + "]  Right [" + x.sizeInitial.ToString      () + "]" + "\n" +
+                             "Left.sizeGrowthFactor [" + sizeGrowthFactor.ToString () + "]  Right [" + x.sizeGrowthFactor.ToString () + "]" + "\n" +
+                             "Left.sizeEndRange     [" + sizeEndRange.ToString     () + "]  Right [" + x.sizeEndRange.ToString     () + "]"
                              );
       }
 
@@ -314,12 +307,20 @@ namespace PicesCommander
         ClassTotals2  classTotals = totals.LookUp (ct.Name);
         if  (classTotals == null)
         {
-          classTotals = new ClassTotals2 (ct.Name, bucketCount, bucketSize);
+          classTotals = new ClassTotals2 (ct.Name,
+                                          sizeInitial,
+                                          sizeGrowthFactor,
+                                          sizeEndRange, 
+                                          bucketCount, 
+                                          sizeBucketStart, 
+                                          sizeBucketEnd
+                                         );
           totals.Add (classTotals);
         }    
         classTotals.AddIn (ct);
       }
-    }  /* SizeDistribution */
+    }  /* SizeDistribution2 */
+
 
 
 
@@ -335,7 +336,14 @@ namespace PicesCommander
       ClassTotals2  classTotals = totals.LookUp (mlClass.Name);
       if  (classTotals == null)
       {
-        classTotals = new ClassTotals2 (mlClass.Name, bucketCount, bucketSize);
+        classTotals = new ClassTotals2 (mlClass.Name, 
+                                        sizeInitial,
+                                        sizeGrowthFactor,
+                                        sizeEndRange,
+                                        bucketCount, 
+                                        sizeBucketStart, 
+                                        sizeBucketEnd
+                                       );
         totals.Add (classTotals);
       }    
       return;
@@ -345,7 +353,7 @@ namespace PicesCommander
 
 
     public void   Increment (PicesClass  mlClass,
-                             int         size
+                             float       areaMM
                             )
     {
       if  (mlClass == null)
@@ -354,16 +362,23 @@ namespace PicesCommander
       ClassTotals2  classTotals = totals.LookUp (mlClass.Name);
       if  (classTotals == null)
       {
-        classTotals = new ClassTotals2 (mlClass.Name, bucketCount, bucketSize);
+        classTotals = new ClassTotals2 (mlClass.Name, 
+                                        sizeInitial,
+                                        sizeGrowthFactor,
+                                        sizeEndRange,
+                                        bucketCount, 
+                                        sizeBucketStart, 
+                                        sizeBucketEnd
+                                       );
         totals.Add (classTotals);
       }    
 
-      classTotals.Increment (size);
+      classTotals.Increment (areaMM);
     }  /* Increment */
 
     
  
-    public  void     PrintFormatedDistributionMatrix (System.IO.StreamWriter  o)
+    public  void    PrintFormatedDistributionMatrix (System.IO.StreamWriter  o)
     {
       totals.SortByName ();
 
@@ -371,7 +386,14 @@ namespace PicesCommander
 
       ClassTotals2  classTotals = null;
 
-      ClassTotals2  grandTotals = new ClassTotals2 ("Grand Totals", bucketCount, bucketSize);
+      ClassTotals2  grandTotals = new ClassTotals2 ("Grand Totals",
+                                                    sizeInitial,
+                                                    sizeGrowthFactor,
+                                                    sizeEndRange,
+                                                    bucketCount,
+                                                    sizeBucketStart,
+                                                    sizeBucketEnd
+                                                   );
 
       int  idx;
 
@@ -396,7 +418,14 @@ namespace PicesCommander
 
       ClassTotals2  classTotals = null;
 
-      ClassTotals2  grandTotals = new ClassTotals2 ("Grand Totals", bucketCount, bucketSize);
+      ClassTotals2  grandTotals = new ClassTotals2 ("Grand Totals",
+                                                    sizeInitial,
+                                                    sizeGrowthFactor,
+                                                    sizeEndRange,
+                                                    bucketCount,
+                                                    sizeBucketStart,
+                                                    sizeBucketEnd
+                                                   );
 
       int  idx;
 
@@ -423,7 +452,14 @@ namespace PicesCommander
 
       ClassTotals2  classTotals = null;
 
-      ClassTotals2  grandTotals = new ClassTotals2 ("Grand Totals", bucketCount, bucketSize);
+      ClassTotals2  grandTotals = new ClassTotals2 ("Grand Totals",
+                                                    sizeInitial,
+                                                    sizeGrowthFactor,
+                                                    sizeEndRange,
+                                                    bucketCount,
+                                                    sizeBucketStart,
+                                                    sizeBucketEnd
+                                                   );
 
       int  idx;
 
@@ -440,11 +476,7 @@ namespace PicesCommander
 
 
 
-    public void  PrintByClassCollumns (System.IO.StreamWriter        o,
-                                       List<uint>                    scanLinesPerMeterDepth,
-                                       List<InstrumentStatsByDepth>  volumePerMeterDepth,
-                                       bool                          printDensity            /**< Indicates to print density rather than counts. */
-                                      )  
+    public void  PrintByClassCollumns (System.IO.StreamWriter  o)  
 
     {
       PicesClassList  classes = BuildMLClassList ();
@@ -453,7 +485,8 @@ namespace PicesCommander
       // Find the first and last buckets with activity
   
       int  firstBucket = -1;
-      int  lastBucket = 0;
+      int  lastBucket  = 0;
+
   
       for  (int bucketIDX = 0;  bucketIDX < bucketCount;  bucketIDX++)
       {
@@ -477,7 +510,7 @@ namespace PicesCommander
       {
         o.WriteLine ();
         o.WriteLine ();
-        o.WriteLine ("SizeDistribution::PrintByClassCollumns     *** There is no SizeDistribution Data ***");
+        o.WriteLine ("SizeDistribution2::PrintByClassCollumns     *** There is no SizeDistribution2 Data ***");
         o.WriteLine ();
         return;
       }
@@ -492,64 +525,22 @@ namespace PicesCommander
       while  (headLines.Count < 3)
         headLines.Add ("");
 
-      String s1 = "Abundance by Class";
-      if  (printDensity)
-        s1 = "Abundance/m-3";
-      
-      String  temperatureUOM      = PicesInstrumentData.TemperatureUnit;
-      String  fluorescenceUOM     = PicesInstrumentData.FluorescenceUnit;
-      String  densityUOM          = PicesInstrumentData.DensityUnit;
-      String  oxygenUOM           = PicesInstrumentData.OxygenUnit;
-      String  salinityUOM         = PicesInstrumentData.SalinityUnit;
-      String  transmisivityUMO    = PicesInstrumentData.TransmisivityUnit;
-      String  turbidityUMO        = PicesInstrumentData.TurbidityUnit;
-      String  cdomFluorescenceUMO = PicesInstrumentData.CdomFluorescenceUnit;
-
+      String s1 = "Abundance by Class by Size(mm^2)";
 
       //   [O2 (ml/L) * 44.64]/1.027 = O2 umol/kg 
 
-      o.WriteLine (""         + "\t" + ""      + "\t" + ""       + "\t" + s1);
-      o.WriteLine (""         + "\t" + ""      + "\t" + ""       + "\t" + headLines[0] + "\t" + s1);
-      o.WriteLine (""         + "\t" + "Scan"  + "\t" + "Volume" + "\t" + headLines[1] + "\t" + "All"     + "\t" + "Temperature"   + "\t" + "Salinity"  + "\t" + "Density"   + "\t" + "Fluorescence"  + "\t" + "FluorescenceSensor"  + "\t" + "Oxygen"  + "\t" + "Oxygen"   + "\t" + "Transmisivity"   + "\t" + "Turbidity"  + "\t" + "CdomFluorescence");
-      o.WriteLine ("Depth(m)" + "\t" + "Lines" + "\t" + "m-3"    + "\t" + headLines[2] + "\t" + "Classes" + "\t" + temperatureUOM  + "\t" + salinityUOM + "\t" + densityUOM  + "\t" + fluorescenceUOM + "\t" + "Volts"               + "\t" + oxygenUOM + "\t" + "umol/kg"  + "\t" + transmisivityUMO  + "\t" + turbidityUMO + "\t" + cdomFluorescenceUMO);
+      o.WriteLine (""       + "\t" + s1);
+      o.WriteLine (""       + "\t" + headLines[0] + "\t" + s1);
+      o.WriteLine ("Size"   + "\t" + headLines[1] + "\t" + "All");
+      o.WriteLine ("mm^2"   + "\t" + headLines[2] + "\t" + "Classes");
 
       ulong  totalScanLines = 0;
       double totalVolume    = 0.0f;
 
-      int    imageSize = firstBucket * bucketSize;
-
       for  (int bucketIDX = firstBucket;  bucketIDX <= lastBucket;  bucketIDX++)
       {
-        int  nextImageSize = imageSize + bucketSize;
-
-        ulong  scanLinesDepthForThisBucket = 0;
-        if  (scanLinesPerMeterDepth != null)
-        {
-          for  (int x = imageSize;  x < Math.Min (nextImageSize, scanLinesPerMeterDepth.Count);  x++)
-            scanLinesDepthForThisBucket += scanLinesPerMeterDepth[x];
-        }
-
-        InstrumentStatsByDepth  totalThisBucketIdx = new InstrumentStatsByDepth (bucketIDX);
-        double  volumeDepthForThisBucket = 0.0;
-        if  (volumePerMeterDepth != null)
-        {
-          if  (bucketIDX < volumePerMeterDepth.Count)
-            totalThisBucketIdx.Add (volumePerMeterDepth[bucketIDX]);
-          for  (int x = imageSize;  x < Math.Min (nextImageSize, volumePerMeterDepth.Count);  x++)
-          {
-            if  (x < volumePerMeterDepth.Count)
-              volumeDepthForThisBucket += volumePerMeterDepth[x].volumeSampled;
-          }
-        }
-        totalThisBucketIdx.ComputeMean ();
-
-        o.Write (imageSize.ToString ()                   + "\t" + 
-                 scanLinesDepthForThisBucket.ToString () + "\t" + 
-                 volumeDepthForThisBucket.ToString ()
-                );
-
-        totalScanLines += scanLinesDepthForThisBucket;
-        totalVolume    += volumeDepthForThisBucket;
+        String  sizeStr = sizeBucketStart[bucketIDX].ToString () + " <= x < " + sizeBucketEnd[bucketIDX].ToString ();
+        o.Write (sizeStr);
 
         int  bucketTotal = 0;
 
@@ -560,14 +551,7 @@ namespace PicesCommander
           ClassTotals2  classTotals = totals.LookUp (mlClass.Name);
 
           int  qtyThisBucket = classTotals.BucketCount (bucketIDX);
-          double  densityThisBucket = 0.0;
-          if  (volumeDepthForThisBucket != 0.0)
-            densityThisBucket = classTotals.BucketCount (bucketIDX) / volumeDepthForThisBucket;
-
-          if  (printDensity)
-            o.Write ("\t" + densityThisBucket.ToString ());
-          else
-            o.Write ("\t" + qtyThisBucket.ToString ());
+          o.Write ("\t" + qtyThisBucket.ToString ());
 
           bucketTotal          += qtyThisBucket;
           finalTotals[intIDX]  += qtyThisBucket;
@@ -577,23 +561,6 @@ namespace PicesCommander
         }
 
         o.Write ("\t" + bucketTotal);
-
-        if  (totalThisBucketIdx != null)
-        {
-          o.Write ("\t" + totalThisBucketIdx.temperatureMean        +
-                   "\t" + totalThisBucketIdx.salinityMean           +
-                   "\t" + totalThisBucketIdx.densityMean            +
-                   "\t" + totalThisBucketIdx.fluorescenceMean       +
-                   "\t" + totalThisBucketIdx.fluorescenceSensorMean +
-                   "\t" + totalThisBucketIdx.oxygenMean             +
-                   "\t" + totalThisBucketIdx.Oxygen_molPerKg        +
-                   "\t" + totalThisBucketIdx.transmisivityMean      +
-                   "\t" + totalThisBucketIdx.turbidityMean          +
-                   "\t" + totalThisBucketIdx.cdomFluorescenceMean
-                  );
-        }
-
-        imageSize = nextImageSize;
         o.WriteLine ();
 	    }
 
@@ -602,24 +569,9 @@ namespace PicesCommander
         o.Write ("FinalTotals" + "\t"  + totalScanLines + "\t" + totalVolume);
         for  (uint x = 0;  x < classes.Count;  x++)
         {
-          double  density = 0;
-          if  (totalVolume != 0.0)
-            density  = finalTotals[x] / totalVolume;
-
-          if  (printDensity)
-            o.Write ("\t" + "");
-          else
-            o.Write ("\t" + finalTotals[x]);
+          o.Write ("\t" + finalTotals[x]);
         }
-
-        double  grandTotalDensity = 0.0;
-        if  (totalVolume != 0.0)
-          grandTotalDensity = grandTotal / totalVolume;
-
-        if  (printDensity)
-          o.Write ("\t" + grandTotalDensity.ToString ());
-        else
-          o.Write ("\t" + grandTotal.ToString ());
+        o.Write ("\t" + grandTotal.ToString ());
         o.WriteLine ();
       }
 
@@ -649,6 +601,7 @@ namespace PicesCommander
 
 
 
+
     void  PrintCSVHeader (System.IO.StreamWriter  o)
     {
        o.Write ("\"Class Name\",Sum,");
@@ -658,8 +611,8 @@ namespace PicesCommander
 
        for (bucket = 0;  bucket <  (bucketCount - 1); bucket++)
        {
-          imageSize = imageSize + bucketSize;
-          o.Write ("," + imageSize.ToString ());
+         String  sizeStr = sizeBucketStart[bucket].ToString () + " <= x < " + sizeBucketEnd[bucket].ToString ();
+         o.Write ("," + sizeStr.ToString ());
        }
 
        o.Write (",>" + imageSize.ToString ());
@@ -673,27 +626,22 @@ namespace PicesCommander
     private  void  PrintFormatedHeader (System.IO.StreamWriter  o)
     {
       o.Write ("Class Name              TOTAL");
-      int  imageSize = 0;
       int  bucket;
 
-      for  (bucket = 0;  bucket <  (bucketCount - 1); bucket++)
+      for  (bucket = 0;  bucket <  bucketCount;  ++bucket)
       {
-        imageSize = imageSize + bucketSize;
-        String  sizeStr;
-        sizeStr = imageSize.ToString ().PadLeft (8);
+        String  sizeStr = sizeBucketStart[bucket].ToString () + " <= x < " + sizeBucketEnd[bucket].ToString ();
+        sizeStr = sizeStr.PadLeft (12);
         o.Write (sizeStr);
       }
 
-      String  s = ">" + imageSize.ToString ();
-      s = s.PadLeft (8);
-      o.Write (s);
       o.WriteLine ();
 
       o.Write ("==================      =====");
 
       for (bucket = 0;  bucket <  bucketCount; bucket++)
       {
-         o.Write ("    ====");
+         o.Write ("        ====");
       }
       o.WriteLine ();
     }  /* PrintFormatedHeader */
@@ -704,19 +652,16 @@ namespace PicesCommander
     {
       o.Write ("\"Class Name\"" + "\t" + "Sum");
 
-      int  imageSize = 0;
       int  bucket;
 
-      for (bucket = 0;  bucket <  (bucketCount - 1); bucket++)
+      for (bucket = 0;  bucket <  bucketCount; ++bucket)
       {
-         imageSize = imageSize + bucketSize;
-         o.Write ("\t" + imageSize.ToString ());
+        String  sizeStr = sizeBucketStart[bucket].ToString () + " <= x < " + sizeBucketEnd[bucket].ToString ();
+         o.Write ("\t" + sizeStr);
       }
-
-      o.Write ("\t" + ">" + imageSize.ToString ());
 
       o.WriteLine ();
     }  /* PrintTabDelHeader */
-  }  /* SizeDistribution */
+  }  /* SizeDistribution2 */
 }
 

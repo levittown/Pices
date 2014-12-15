@@ -453,3 +453,66 @@ end
 //
 delimiter ;
 
+
+
+
+update Classes c
+   set c.Mandatory="F";
+
+
+update Classes c
+   set c.Mandatory="T"
+   where (
+   c.ClassName="chaetognath"                            or
+   c.ClassName="Crustacean_Cladoceran_Evadne"           or
+   c.ClassName="crustacean_cladoceran_penilia"          or
+   c.ClassName="crustacean_copepod_calanoid"            or
+   c.ClassName="crustacean_copepod_copilia"             or
+   c.ClassName="crustacean_copepod_macrosetella"        or
+   c.ClassName="crustacean_copepod_nauplii"             or
+   c.ClassName="crustacean_copepod_oithona"             or
+   c.ClassName="crustacean_copepod_poecilostomatoid"    or
+   c.ClassName="crustacean_copepod_sapphirina"          or
+   c.ClassName="crustacean_eumalacostracan_euphausiid"  or
+   c.ClassName="crustacean_eumalacostracan_lucifer"     or
+   c.ClassName="crustacean_eumalacostracan_other"       or
+   c.ClassName="crustacean_ostracod"                    or
+   c.ClassName="detritus_blob"                          or
+   c.ClassName="detritus_molts"                         or
+   c.ClassName="detritus_snow"                          or
+   c.ClassName="echinoderm_bipinnaria"                  or
+   c.ClassName="echinoderm_plutei"                      or
+   c.ClassName="fish"                                   or
+   c.ClassName="fish_egg"                               or
+   c.ClassName="gelatinous_ctenophore"                  or
+   c.ClassName="gelatinous_hydromedusae_other"          or
+   c.ClassName="gelatinous_hydromedusae_small"          or
+   c.ClassName="gelatinous_siphonophore"                or
+   c.ClassName="gelatinous_tunicate_doliolid"           or
+   c.ClassName="gelatinous_tunicate_salp"               or
+   c.ClassName="larvacean"                              or
+   c.ClassName="larvae_doliolid"                        or
+   c.ClassName="larvae_polychaete"                      or
+   c.ClassName="larvae_tornaria"                        or
+   c.ClassName="mollusc_atlanta"                        or
+   c.ClassName="mollusc_pteropod_conical"               or
+   c.ClassName="mollusc_pteropod_gymnosome"             or
+   c.ClassName="mollusc_pteropod_pseudothecosomata"     or
+   c.ClassName="mollusc_pteropod_shell"                 or
+   c.ClassName="noise_bubbles"                          or
+   c.ClassName="noise_lines"                            or
+   c.ClassName="other"                                  or
+   c.ClassName="phytoplankton_diatomcentric"            or
+   c.ClassName="phytoplankton_diatomcoil"               or
+   c.ClassName="phytoplankton_strands"                  or
+   c.ClassName="phytoplankton_trichodesmium"            or
+   c.ClassName="polychaete"                             or
+   c.ClassName="protist_acantharia"                     or
+   c.ClassName="protist_electric"                       or
+   c.ClassName="protist_knobby"                         or
+   c.ClassName="protist_noctiluca"                      or
+   c.ClassName="protist_radio"                          or
+   c.ClassName="protist_collozoum"                      or
+   c.ClassName="protist_thalassicola"                   or
+   c.ClassName="protist_unknown"
+   );
