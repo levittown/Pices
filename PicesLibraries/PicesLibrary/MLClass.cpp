@@ -104,8 +104,8 @@ void  MLClass::DeleteImageClassList (MLClassListPtr  list)
 
 
 MLClassPtr  MLClass::CreateNewMLClass (const KKStr&  _name,
-                                                int32         _classId
-                                               )
+                                       int32         _classId
+                                      )
 {
   KKStr  upperName = _name.ToUpper ();
 
@@ -307,9 +307,11 @@ void  MLClass::FinalCleanUp ()
 MLClass::MLClass (const KKStr&  _name):
     classId          (-1),
     description      (),
+    mandatory        (false),
     name             (_name),
     parent           (NULL),
-    storedOnDataBase (false)
+    storedOnDataBase (false),
+    summarize        (false)
 
 {
   if  (name.Empty ())
@@ -373,7 +375,7 @@ KKStr  MLClass::ToString ()  const
 
 
 
-
+/*
 void  MLClass::ProcessRawData (KKStr&  _data)
 {
   name = _data.ExtractToken (" ,\n\t\r");
@@ -388,7 +390,8 @@ void  MLClass::ProcessRawData (KKStr&  _data)
              (upperName == "UNDEFINED")    ||  
              (upperName == "NOISE")        ||
              (upperName == "NONPLANKTON");
-} /* ProcessRawData */
+} /// / ProcessRawData 
+*/
 
 
 
@@ -455,7 +458,9 @@ void  MLClass::WriteXML (ostream& o)  const
     <<   "UnDefined="        << (unDefined ? "Y":"N")                         << ","
     <<   "Paremt="           << ((parent == NULL) ? "\"\"" : parent->Name ()) << ","
     <<   "StoredOnDataBase=" << (storedOnDataBase ? "Y" : "N")                << ","
-    <<   "Description="      << description.QuotedStr ()
+    <<   "Description="      << description.QuotedStr ()                      << ","
+    <<   "Mandatory="        << (mandatory  ? "Y" :"N")                       << ","
+    <<   "Summarize="        << (summarize  ? "Y" :"N")
     << " />"
     << endl;
 }  /* WriteXML */
@@ -558,11 +563,11 @@ void  MLClassList::Clear ()
 
 
 /** @brief  Update the nameIndex structure about a class name change. */
-void  MLClassList::ChangeNameOfClass (MLClassPtr  mlClass, 
-                                         const KKStr&   oldName,
-                                         const KKStr&   newName,
-                                         bool&          successful
-                                        )
+void  MLClassList::ChangeNameOfClass (MLClassPtr    mlClass, 
+                                      const KKStr&  oldName,
+                                      const KKStr&  newName,
+                                      bool&         successful
+                                     )
 {
   MLClassPtr  existingClass = this->LookUpByName (newName);
   if  ((existingClass != NULL)  &&  (existingClass != mlClass))
@@ -647,13 +652,13 @@ void  MLClassList::Load (const KKStr&  _fileName,
 
 
 void  MLClassList::Save (KKStr   _fileName,
-                            bool&    _successfull
-                           )
+                         bool&    _successfull
+                        )
 {
   ofstream outFile (_fileName.Str ());
 
-  int32             idx;
-  int32             qSize = QueueSize ();
+  int32        idx;
+  int32        qSize = QueueSize ();
   MLClassPtr   mlClass = NULL;
 
   for  (idx = 0; idx < qSize; idx++)
@@ -913,6 +918,22 @@ KKStr  MLClassList::ToCommaDelimitedStr ()  const
 
 
 
+MLClassListPtr  MLClassList::ExtractSummarizeClasses ()  const
+{
+  MLClassListPtr  result = new MLClassList ();
+
+  const_iterator  idx;
+  for  (idx = begin();  idx != end ();  ++idx)
+  {
+    if  ((*idx)->Summarize ())
+      result->PushOnBack (*idx);
+  }
+
+  return  result;
+}  /* ExtractSummarizeClasses */
+
+
+
 
 MLClassListPtr  MLClassList::ExtractMandatoryClasses ()  const
 {
@@ -965,9 +986,9 @@ void  MLClassList::ExtractTwoTitleLines (KKStr&  titleLine1,
 
 
 void  MLClassList::ExtractThreeTitleLines (KKStr&  titleLine1,
-                                              KKStr&  titleLine2, 
-                                              KKStr&  titleLine3 
-                                             ) const
+                                           KKStr&  titleLine2, 
+                                           KKStr&  titleLine3 
+                                          ) const
 {
   titleLine1 = "";
   titleLine2 = "";
@@ -1027,10 +1048,10 @@ void  MLClassList::ExtractThreeTitleLines (KKStr&  titleLine1,
 
 
 void  MLClassList::ExtractThreeTitleLines (KKStr&  titleLine1,
-                                              KKStr&  titleLine2, 
-                                              KKStr&  titleLine3,
-                                              int32     fieldWidth
-                                             ) const
+                                           KKStr&  titleLine2, 
+                                           KKStr&  titleLine3,
+                                           int32     fieldWidth
+                                          ) const
 {
   titleLine1 = "";
   titleLine2 = "";
@@ -1142,8 +1163,8 @@ MLClassListPtr  MLClassList::ExtractListOfClassesForAGivenHierarchialLevel (int3
 
 
 MLClassListPtr  MLClassList::MergeClassList (const MLClassList&  list1,
-                                                   const MLClassList&  list2
-                                                  )
+                                             const MLClassList&  list2
+                                            )
 {
   MLClassListPtr  result = new MLClassList (list1);
   MLClassList::const_iterator idx;
@@ -1165,8 +1186,8 @@ MLClassListPtr  MLClassList::MergeClassList (const MLClassList&  list1,
 
 
 MLClassListPtr  MLClassList::BuildListFromDelimtedStr (const KKStr&  s,
-                                                             char          delimiter
-                                                            )
+                                                       char          delimiter
+                                                      )
 {
   VectorKKStr  names = s.Split (',');
   MLClassListPtr  classList = new MLClassList ();
@@ -1414,8 +1435,8 @@ void  ClassIndexList::AddClass (MLClassConstPtr  _ic,
 
 
 void  ClassIndexList::AddClassIndexAssignment (MLClassConstPtr  _ic,
-                                               short               _classIndex,
-                                               bool&               _dupEntry
+                                               short            _classIndex,
+                                               bool&            _dupEntry
                                               )
 {
   _dupEntry = false;

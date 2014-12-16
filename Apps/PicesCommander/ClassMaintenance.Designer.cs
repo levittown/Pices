@@ -39,6 +39,7 @@ namespace PicesCommander
       this.ClassName = new System.Windows.Forms.TextBox ();
       this.Description = new System.Windows.Forms.TextBox ();
       this.ClassMaintenancePanel = new System.Windows.Forms.Panel ();
+      this.MandatoryBox = new System.Windows.Forms.CheckBox ();
       this.MergeHelpTextLabel = new System.Windows.Forms.Label ();
       this.UpdatingProgressBar = new System.Windows.Forms.ProgressBar ();
       this.MergeLabel = new System.Windows.Forms.Label ();
@@ -52,7 +53,7 @@ namespace PicesCommander
       this.DeleteButton = new System.Windows.Forms.Button ();
       this.errorProvider1 = new System.Windows.Forms.ErrorProvider (this.components);
       this.updateTimer = new System.Windows.Forms.Timer (this.components);
-      this.MandatoryBox = new System.Windows.Forms.CheckBox ();
+      this.SummarizeBox = new System.Windows.Forms.CheckBox ();
       this.ClassMaintenancePanel.SuspendLayout ();
       ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit ();
       this.SuspendLayout ();
@@ -144,6 +145,7 @@ namespace PicesCommander
       // ClassMaintenancePanel
       // 
       this.ClassMaintenancePanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.ClassMaintenancePanel.Controls.Add (this.SummarizeBox);
       this.ClassMaintenancePanel.Controls.Add (this.MandatoryBox);
       this.ClassMaintenancePanel.Controls.Add (this.MergeHelpTextLabel);
       this.ClassMaintenancePanel.Controls.Add (this.UpdatingProgressBar);
@@ -167,6 +169,16 @@ namespace PicesCommander
       this.ClassMaintenancePanel.Name = "ClassMaintenancePanel";
       this.ClassMaintenancePanel.Size = new System.Drawing.Size (473, 563);
       this.ClassMaintenancePanel.TabIndex = 10;
+      // 
+      // MandatoryBox
+      // 
+      this.MandatoryBox.AutoSize = true;
+      this.MandatoryBox.Location = new System.Drawing.Point (75, 207);
+      this.MandatoryBox.Name = "MandatoryBox";
+      this.MandatoryBox.Size = new System.Drawing.Size (186, 17);
+      this.MandatoryBox.TabIndex = 22;
+      this.MandatoryBox.Text = "Mandatory in Classification Report";
+      this.MandatoryBox.UseVisualStyleBackColor = true;
       // 
       // MergeHelpTextLabel
       // 
@@ -202,7 +214,7 @@ namespace PicesCommander
       this.MergeClass.Name = "MergeClass";
       this.MergeClass.ReadOnly = true;
       this.MergeClass.Size = new System.Drawing.Size (332, 22);
-      this.MergeClass.TabIndex = 16;
+      this.MergeClass.TabIndex = 35;
       this.MergeClass.TabStop = false;
       this.MergeClass.Validating += new System.ComponentModel.CancelEventHandler (this.MergeClass_Validating);
       // 
@@ -211,7 +223,7 @@ namespace PicesCommander
       this.MergeSearchButton.Location = new System.Drawing.Point (417, 300);
       this.MergeSearchButton.Name = "MergeSearchButton";
       this.MergeSearchButton.Size = new System.Drawing.Size (41, 23);
-      this.MergeSearchButton.TabIndex = 17;
+      this.MergeSearchButton.TabIndex = 40;
       this.MergeSearchButton.Text = "Srch";
       this.MergeSearchButton.UseVisualStyleBackColor = true;
       this.MergeSearchButton.Click += new System.EventHandler (this.MergeSearchButton_Click);
@@ -219,10 +231,10 @@ namespace PicesCommander
       // MergeCheckBox
       // 
       this.MergeCheckBox.AutoSize = true;
-      this.MergeCheckBox.Location = new System.Drawing.Point (76, 255);
+      this.MergeCheckBox.Location = new System.Drawing.Point (76, 258);
       this.MergeCheckBox.Name = "MergeCheckBox";
       this.MergeCheckBox.Size = new System.Drawing.Size (145, 17);
-      this.MergeCheckBox.TabIndex = 15;
+      this.MergeCheckBox.TabIndex = 30;
       this.MergeCheckBox.Text = "Merge with another Class";
       this.MergeCheckBox.UseVisualStyleBackColor = true;
       this.MergeCheckBox.Validating += new System.ComponentModel.CancelEventHandler (this.MergeCheckBox_Validating);
@@ -264,7 +276,7 @@ namespace PicesCommander
       this.UpdateButton.Location = new System.Drawing.Point (14, 350);
       this.UpdateButton.Name = "UpdateButton";
       this.UpdateButton.Size = new System.Drawing.Size (75, 23);
-      this.UpdateButton.TabIndex = 12;
+      this.UpdateButton.TabIndex = 90;
       this.UpdateButton.Text = "Update";
       this.UpdateButton.UseVisualStyleBackColor = true;
       this.UpdateButton.Click += new System.EventHandler (this.UpdateButton_Click);
@@ -274,7 +286,7 @@ namespace PicesCommander
       this.DeleteButton.Location = new System.Drawing.Point (383, 350);
       this.DeleteButton.Name = "DeleteButton";
       this.DeleteButton.Size = new System.Drawing.Size (75, 23);
-      this.DeleteButton.TabIndex = 11;
+      this.DeleteButton.TabIndex = 95;
       this.DeleteButton.TabStop = false;
       this.DeleteButton.Text = "Delete";
       this.DeleteButton.UseVisualStyleBackColor = true;
@@ -288,15 +300,15 @@ namespace PicesCommander
       // 
       this.updateTimer.Tick += new System.EventHandler (this.updateTimer_Tick);
       // 
-      // MandatoryBox
+      // SummarizeBox
       // 
-      this.MandatoryBox.AutoSize = true;
-      this.MandatoryBox.Location = new System.Drawing.Point (76, 211);
-      this.MandatoryBox.Name = "MandatoryBox";
-      this.MandatoryBox.Size = new System.Drawing.Size (186, 17);
-      this.MandatoryBox.TabIndex = 22;
-      this.MandatoryBox.Text = "Mandatory in Classification Report";
-      this.MandatoryBox.UseVisualStyleBackColor = true;
+      this.SummarizeBox.AutoSize = true;
+      this.SummarizeBox.Location = new System.Drawing.Point (272, 207);
+      this.SummarizeBox.Name = "SummarizeBox";
+      this.SummarizeBox.Size = new System.Drawing.Size (187, 17);
+      this.SummarizeBox.TabIndex = 23;
+      this.SummarizeBox.Text = "Summarize in Classification Report";
+      this.SummarizeBox.UseVisualStyleBackColor = true;
       // 
       // ClassMaintenance
       // 
@@ -346,5 +358,6 @@ namespace PicesCommander
     private System.Windows.Forms.ProgressBar UpdatingProgressBar;
     private System.Windows.Forms.Label MergeHelpTextLabel;
     private System.Windows.Forms.CheckBox MandatoryBox;
+    private System.Windows.Forms.CheckBox SummarizeBox;
   }
 }

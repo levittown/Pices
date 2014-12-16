@@ -179,6 +179,7 @@ namespace PicesCommander
       ParentName.Text = pc.ParentName;
       Description.Text = pc.Description;
       MandatoryBox.Checked = pc.Mandatory;
+      SummarizeBox.Checked = pc.Summarize;
       MergeCheckBox.Checked = false;
       mergeClass = null;
       MergeClass.Enabled = false;
@@ -324,6 +325,7 @@ namespace PicesCommander
         Description.Text     = selectedClass.Description;
         ParentName.Text      = selectedClass.ParentName;
         MandatoryBox.Checked = selectedClass.Mandatory;
+        SummarizeBox.Checked = selectedClass.Summarize;
       }
       else
       {
@@ -376,7 +378,8 @@ namespace PicesCommander
       if  ((ClassName.Text       != selectedClass.Name)        ||
            (ParentName.Text      != selectedClass.ParentName)  ||
            (Description.Text     != selectedClass.Description) ||
-           (MandatoryBox.Checked != selectedClass.Mandatory)
+           (MandatoryBox.Checked != selectedClass.Mandatory)   ||
+           (SummarizeBox.Checked != selectedClass.Summarize)
           )
         return true;
       else
@@ -407,6 +410,7 @@ namespace PicesCommander
       ParentSearchButton.Enabled = false;
       Description.Enabled        = false;
       MandatoryBox.Enabled       = false;
+      SummarizeBox.Enabled       = false;
       UpdateButton.Enabled       = false;
       DeleteButton.Enabled       = false;
       MergeCheckBox.Enabled      = false;
@@ -425,6 +429,7 @@ namespace PicesCommander
       ParentName.Enabled   = true;
       Description.Enabled  = true;
       MandatoryBox.Enabled = true;
+      SummarizeBox.Enabled = true;
       if  (allowUpdates)
       {
         UpdateButton.Enabled = true;
@@ -572,6 +577,7 @@ namespace PicesCommander
       newClassEntry.Parent      = PicesClassList.GetUniqueClass (ParentName.Text, null);
 
       newClassEntry.Mandatory   = MandatoryBox.Checked;
+      newClassEntry.Summarize   = SummarizeBox.Checked;
 
       DisableAllFields ();
       updateThread = new Thread (new ThreadStart (UpdateProcess));
@@ -826,6 +832,7 @@ namespace PicesCommander
           ParentName.Text      = selectedClass.ParentName;
           Description.Text     = selectedClass.Description;
           MandatoryBox.Checked = selectedClass.Mandatory;
+          SummarizeBox.Checked = selectedClass.Summarize;
         }
 
         EnableAllFields ();

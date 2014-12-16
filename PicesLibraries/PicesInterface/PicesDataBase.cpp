@@ -1046,6 +1046,7 @@ namespace  PicesInterface
       PicesClass^ result = PicesClassList::GetUniqueClass (mlClass);
       result->Description = PicesKKStr::KKStrToSystenStr (mlClass->Description ());
       result->Mandatory = mlClass->Mandatory ();
+      result->Summarize = mlClass->Summarize ();
 
       if  (mlClass->Parent () == NULL)
       {
@@ -1089,6 +1090,7 @@ namespace  PicesInterface
 
       PicesClass^ c = PicesClassList::GetUniqueClass (PicesKKStr::KKStrToSystenStr (ic->Name ()), nullptr);
       c->Mandatory = ic->Mandatory ();
+      c->Summarize = ic->Summarize ();
 
       picesClasses->Add (c);
       if  (ic->Name ().EqualIgnoreCase ("ALLCLASSES"))

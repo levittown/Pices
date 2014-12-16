@@ -194,18 +194,6 @@ namespace PicesCommander
 
     };  /* ClassTotalsList */
 
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
@@ -424,7 +412,8 @@ namespace PicesCommander
     public void  PrintByClassCollumns (System.IO.StreamWriter        o,
                                        List<uint>                    scanLinesPerMeterDepth,
                                        List<InstrumentStatsByDepth>  volumePerMeterDepth,
-                                       bool                          printDensity            /**< Indicates to print density rather than counts. */
+                                       bool                          printDensity,            /**< Indicates to print density rather than counts. */
+                                       PicesClassList                summarizeClasses         /**< List of classes that we need to pront summary columns for. */
                                       )  
 
     {
@@ -472,6 +461,16 @@ namespace PicesCommander
       List<String> headLines = classes.ExtractThreeTitleLines ();
       while  (headLines.Count < 3)
         headLines.Add ("");
+
+      List<String> summaryHeadLines = null;
+      if  (summarizeClasses == null)
+        summaryHeadLines = new List<String> ();
+      else
+        summaryHeadLines = summarizeClasses.ExtractTwoTitleLines ();
+
+      while  (summaryHeadLines.Count < 2)
+          summaryHeadLines.Add ("");
+      
 
       String s1 = "Abundance by Class";
       if  (printDensity)
@@ -609,7 +608,6 @@ namespace PicesCommander
 
 
 
-  
 
     private  PicesClassList  BuildMLClassList ()
     {

@@ -2504,7 +2504,7 @@ void  DataBase::GpsDataDelete (const KKStr&     cruiseName,
 
 MLClassListPtr   DataBase::MLClassProcessResults ()
 {
-  char const * const  fieldNames[] = {"ClassId", "ClassName", "ParentId", "Description", "ParentName", "Mandatory", NULL};
+  char const * const  fieldNames[] = {"ClassId", "ClassName", "ParentId", "Description", "ParentName", "Mandatory", "Summarize", NULL};
 
   ResultSetLoad (fieldNames);
   if  (!resultSetMore)
@@ -2518,6 +2518,7 @@ MLClassListPtr   DataBase::MLClassProcessResults ()
   KKStr  description = "";
   KKStr  parentName = "";
   bool   mandatory = false;
+  bool   summarize = false;
 
   while  (ResultSetFetchNextRow ())
   {
@@ -2527,10 +2528,15 @@ MLClassListPtr   DataBase::MLClassProcessResults ()
     description = ResultSetGetField    (3);
     parentName  = ResultSetGetField    (4);
     mandatory   = ResultSetGetBool     (5);
+    summarize   = ResultSetGetBool     (6);
+
+    parentName.TrimLeft ();
+    parentName.TrimRight ();
 
     MLClassPtr  ic = MLClass::CreateNewMLClass (className, classId);
     ic->Description (description);
     ic->Mandatory (mandatory);
+    ic->Summarize (summarize);
     if  (!parentName.Empty ())
       ic->Parent (MLClass::CreateNewMLClass (parentName, parentId));
     else if  (parentId >= 0)
@@ -2560,42 +2566,19 @@ MLClassConstPtr  DataBase::MLClassLoad (const KKStr&  className)
     return NULL;
   }
 
-  char const *  fieldNames[] = {"ClassId", "ClassName", "ParentId", "ParentName", "Description", "Mandatory", NULL};
+  MLClassConstPtr  result = NULL;
 
-  ResultSetLoad (fieldNames);
-  if  (!resultSetMore)
-    return  NULL;
-
-  MLClassPtr  mlClass = NULL;
-  while  (ResultSetFetchNextRow ())
+  MLClassListPtr classes = MLClassProcessResults ();
+  if  ((classes != NULL)  &&  (classes->size () > 0))
   {
-    mlClass = NULL;
-
-    int32  classId     = ResultSetGetIntField (0);
-    KKStr  className   = ResultSetGetField    (1);
-    int32  parentId    = ResultSetGetIntField (2);
-    KKStr  parentName  = ResultSetGetField    (3);
-    KKStr  description = ResultSetGetField    (4);
-    bool   mandatory   = ResultSetGetBool     (5);
-
-    if  (!className.Empty ())
-    {
-      mlClass = MLClass::CreateNewMLClass (className, classId);
-      mlClass->Description (description);
-      mlClass->ClassId (classId);
-      mlClass->Mandatory (mandatory);
-
-      parentName.TrimLeft ();
-      parentName.TrimRight ();
-      if  (!parentName.Empty ())
-        mlClass->Parent (MLClass::CreateNewMLClass (parentName, parentId));
-    }
+    result = classes->BackOfQueue ();
   }
 
-  ResulSetFree ();
-
   ResultSetsClear ();
-  return  mlClass;
+
+  delete  classes;
+  classes = NULL;
+  return result;
 }  /* MLClassLoad */
 
 
@@ -2612,7 +2595,7 @@ MLClassConstListPtr  DataBase::MLClassLoadList ()
     return NULL;
   }
 
-  char const *  fieldNames[] = {"ClassId", "ClassName", "ParentId", "ParentName", "Description", "Mandatory", NULL};
+  char const *  fieldNames[] = {"ClassId", "ClassName", "ParentId", "ParentName", "Description", "Mandatory", "Summarize", NULL};
 
   ResultSetLoad (fieldNames);
   if  (!resultSetMore)
@@ -2638,6 +2621,7 @@ MLClassConstListPtr  DataBase::MLClassLoadList ()
     KKStr  parentName  = ResultSetGetField    (3);
     KKStr  description = ResultSetGetField    (4);
     bool   mandatory   = ResultSetGetBool     (5);
+    bool   summarize   = ResultSetGetBool     (6);
 
     if  (!className.Empty ())
     {
@@ -2646,6 +2630,7 @@ MLClassConstListPtr  DataBase::MLClassLoadList ()
       classes->PushOnBack (c);
       c->StoredOnDataBase (true);
       c->Mandatory (mandatory);
+      c->Summarize (summarize);
 
       if  (!parentName.Empty ())
       {
@@ -2695,15 +2680,20 @@ void  DataBase::MLClassInsert (MLClass&  mlClass,
     return;
   }
 
-  KKStr  mandatoryStr = "F";
+  KKStr  mandatoryStr = "N";
   if  (mlClass.Mandatory ())
-    mandatoryStr = "T";
+    mandatoryStr = "Y";
+
+  KKStr  summarizeStr = "N";
+  if  (mlClass.Summarize ())
+    summarizeStr = "Y";
 
   KKStr  insertStr = "call MLClassInsert(" + 
                      mlClass.Name ().QuotedStr ()         + ", " + 
                      mlClass.ParentName  ().QuotedStr ()  + ", " +
                      mlClass.Description ().QuotedStr ()  + ", " +
-                     mandatoryStr.QuotedStr () +
+                     mandatoryStr.QuotedStr ()            + ", " +
+                     summarizeStr.QuotedStr ()            +
                      ")";
   
   int32  returnCd = QueryStatement (insertStr);
@@ -2731,14 +2721,20 @@ void  DataBase::MLClassInsertReturn (MLClass&  mlClass,
     return;
   }
 
-  KKStr  mandatoryStr = "F";
+  KKStr  mandatoryStr = "N";
   if  (mlClass.Mandatory ())
-    mandatoryStr = "T";
+    mandatoryStr = "Y";
+
+  KKStr  summarizeStr = "N";
+  if  (mlClass.Summarize ())
+    summarizeStr = "Y";
+
 
   KKStr  insertStr = "call MLClassInsertReturn(" + 
                      mlClass.Name       ().QuotedStr () + ", " + 
                      mlClass.ParentName ().QuotedStr () + ", " +
-                     mandatoryStr.QuotedStr () +
+                     mandatoryStr.QuotedStr () +        + ", " +
+                     summarizeStr.QuotedStr () +
                      ")";
   
   int32  returnCd = QueryStatement (insertStr);
@@ -2771,16 +2767,21 @@ void  DataBase::MLClassUpdate (const KKStr&    oldClassName,
     return;
   }
 
-  KKStr  mandatoryStr = "F";
+  KKStr  mandatoryStr = "N";
   if  (mlClass.Mandatory ())
-    mandatoryStr = "T";
+    mandatoryStr = "Y";
+
+  KKStr  summarizeStr = "N";
+  if  (mlClass.Summarize ())
+    summarizeStr = "Y";
 
   KKStr updateStr = "Call MLClassUpdate(" +
                           oldClassName.QuotedStr ()           + ", " +
                           mlClass.Name        ().QuotedStr () + ", " +
                           mlClass.ParentName  ().QuotedStr () + ", " +
                           mlClass.Description ().QuotedStr () + ", " +
-                          mandatoryStr.QuotedStr ()           +
+                          mandatoryStr.QuotedStr ()           + ", " +
+                          summarizeStr.QuotedStr ()           +
                           ")";
 
   int32  returnCd = QueryStatement (updateStr);
@@ -2852,30 +2853,30 @@ KKU::uchar*  DataBase::EncodeARasterImageIntoAThumbNail (const RasterSipper&  im
 
 
 
-void  DataBase::ImageInsert (const RasterSipper&       image,
-                             const KKStr&              imageFileName,
-                             const KKStr&              sipperFileName,
-                                   uint64              byteOffset,     // byteOffset of SipperRow containing TopLeftRow
-                                   uint32              topLeftRow,
-                                   uint32              topLeftCol,
-                                   uint32              height,
-                                   uint32              width,
-                                   uint32              pixelCount,
-                                   uchar               connectedPixelDist,
-                                   uint32              extractionLogEntryId,
-                                   uint32              classLogEntryId,
-                                   uint32              centroidRow,
-                                   uint32              centroidCol,
+void  DataBase::ImageInsert (const RasterSipper&    image,
+                             const KKStr&           imageFileName,
+                             const KKStr&           sipperFileName,
+                                   uint64           byteOffset,     // byteOffset of SipperRow containing TopLeftRow
+                                   uint32           topLeftRow,
+                                   uint32           topLeftCol,
+                                   uint32           height,
+                                   uint32           width,
+                                   uint32           pixelCount,
+                                   uchar            connectedPixelDist,
+                                   uint32           extractionLogEntryId,
+                                   uint32           classLogEntryId,
+                                   uint32           centroidRow,
+                                   uint32           centroidCol,
                                    MLClassConstPtr  class1,
-                                   float               class1Prob,
+                                   float            class1Prob,
                                    MLClassConstPtr  class2,
-                                   float               class2Prob,
+                                   float            class2Prob,
                                    MLClassConstPtr  validatedClass,
-                                   float               depth,
-                                   float               imageSize,
-                                   PointListPtr        sizeCoordinates,
-                                   int32&              imageId,
-                                   bool&               successful
+                                   float            depth,
+                                   float            imageSize,
+                                   PointListPtr     sizeCoordinates,
+                                   int32&           imageId,
+                                   bool&            successful
                             )
 {
   if  (!allowUpdates)
@@ -3081,7 +3082,7 @@ ClassStatisticListPtr  DataBase::ImageProcessClassStaticsResults ()
 
 ClassStatisticListPtr  DataBase::ImageGetClassStatistics (DataBaseImageGroupPtr  imageGroup,
                                                           const KKStr&           sipperFileName,
-                                                          MLClassConstPtr     mlClass,
+                                                          MLClassConstPtr        mlClass,
                                                           char                   classKeyToUse,
                                                           float                  minProb,
                                                           float                  maxProb,
@@ -3133,7 +3134,7 @@ ClassStatisticListPtr  DataBase::ImageGetClassStatistics (DataBaseImageGroupPtr 
                                                           const KKStr&           cruiseName,
                                                           const KKStr&           stationName,
                                                           const KKStr&           deploymentNum,
-                                                          MLClassConstPtr     mlClass,
+                                                          MLClassConstPtr        mlClass,
                                                           char                   classKeyToUse,
                                                           float                  minProb,
                                                           float                  maxProb,
@@ -3179,7 +3180,7 @@ ClassStatisticListPtr  DataBase::ImageGetClassStatistics (DataBaseImageGroupPtr 
 VectorUint*  DataBase::ImageGetDepthStatistics (DataBaseImageGroupPtr  imageGroup,
                                                 const KKStr&           sipperFileName,
                                                 float                  depthIncrements,
-                                                MLClassConstPtr     mlClass,
+                                                MLClassConstPtr        mlClass,
                                                 char                   classKeyToUse,
                                                 float                  minProb,
                                                 float                  maxProb,
@@ -3254,7 +3255,7 @@ VectorUint*  DataBase::ImageGetDepthStatistics (DataBaseImageGroupPtr  imageGrou
                                                 const KKStr&           stationName,
                                                 const KKStr&           deploymentNum,
                                                 float                  depthIncrements,
-                                                MLClassConstPtr     mlClass,
+                                                MLClassConstPtr        mlClass,
                                                 char                   classKeyToUse,
                                                 float                  minProb,
                                                 float                  maxProb,
@@ -3708,7 +3709,7 @@ DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  group,
 
 DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  imageGroup,
                                              const KKStr&           sipperFileName,
-                                             MLClassConstPtr     mlClass,
+                                             MLClassConstPtr        mlClass,
                                              char                   classKeyToUse,
                                              float                  probMin,
                                              float                  probMax,
@@ -3763,7 +3764,7 @@ DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  imageGroup,
                                              const KKStr&           cruiseName,
                                              const KKStr&           stationName,
                                              const KKStr&           deploymentNum,
-                                             MLClassConstPtr     mlClass,
+                                             MLClassConstPtr        mlClass,
                                              char                   classKeyToUse,
                                              float                  probMin,
                                              float                  probMax,
@@ -3939,12 +3940,12 @@ VectorKKStr*   DataBase::ImageListOfImageFileNamesByScanLineRange (const KKStr& 
 
 
 
-void  DataBase::ImagesUpdatePredictions (const KKStr&        imageFileName,
+void  DataBase::ImagesUpdatePredictions (const KKStr&     imageFileName,
                                          MLClassConstPtr  class1Pred,
-                                         float               class1Prob,
+                                         float            class1Prob,
                                          MLClassConstPtr  class2Pred,
-                                         float               class2Prob,
-                                         uint32              logEntryId
+                                         float            class2Prob,
+                                         uint32           logEntryId
                                        )
 {
   if  (!allowUpdates)
@@ -3998,7 +3999,7 @@ void  DataBase::ImagesUpdatePredictionsList (uint32        _logEntryId,
 
 
 
-void  DataBase::ImagesUpdateValidatedClass (const KKStr&        imageFileName, 
+void  DataBase::ImagesUpdateValidatedClass (const KKStr&     imageFileName, 
                                             MLClassConstPtr  mlClass
                                            )
 {
@@ -4231,9 +4232,9 @@ void  DataBase::ImageUpdate (DataBaseImage&  dbImage,
 
 
 
-void  DataBase::ImagesUpdateValidatedAndPredictClass (const KKStr&        imageFileName, 
+void  DataBase::ImagesUpdateValidatedAndPredictClass (const KKStr&     imageFileName, 
                                                       MLClassConstPtr  mlClass, 
-                                                      float               class1Prob
+                                                      float            class1Prob
                                                      )
 {
   if  (!allowUpdates)

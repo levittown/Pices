@@ -59,6 +59,7 @@ namespace PicesInterface
     property  String^             ParentName           {String^      get ();}
     property  List<PicesClass^>^  Children             {List<PicesClass^>^ get ();}
     property  bool                StoredOnDataBase     {bool         get ();                        void set (bool _StoredOnDataBase);}  
+    property  bool                Summarize            {bool         get () {return summarize;}     void set (bool    _summarize);}
     property  bool                UnDefined            {bool         get () {return unDefined;}}                                           /**< Inidicates that class undefined or Noise */
 
 
@@ -127,6 +128,7 @@ namespace PicesInterface
     String^       name;
     String^       nameUpper;
     PicesClass^   parent;
+    bool          summarize;
     MLClassPtr    unmanagedMLClass;  // Our link to the unmanaged version of this class;
     bool          unDefined;
 

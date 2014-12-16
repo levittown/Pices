@@ -80,6 +80,7 @@ namespace  PicesInterface
        name             (_name),
        nameUpper        (_name->ToUpper ()),
        parent           (_parent),
+       summarize        (false),
        unDefined        (false)
   {
     unmanagedMLClass = MLClass::CreateNewMLClass (PicesKKStr::SystemStringToKKStr (name));
@@ -104,6 +105,7 @@ namespace  PicesInterface
        name              (_name),
        nameUpper         (_name->ToUpper ()),
        parent            (nullptr),
+       summarize         (false),
        unDefined         (false)
   {
     unmanagedMLClass = MLClass::CreateNewMLClass (PicesKKStr::SystemStringToKKStr (name));
@@ -149,6 +151,14 @@ namespace  PicesInterface
       unmanagedMLClass->Mandatory (mandatory);
   }
 
+
+
+  void  PicesClass::Summarize::set (bool _summarize)
+  {
+    summarize = _summarize;
+    if  (unmanagedMLClass)
+      unmanagedMLClass->Summarize (summarize);
+  }
 
 
 
@@ -465,19 +475,21 @@ namespace  PicesInterface
                         "PicesClass.Save[" + fileName + "]",
                         MessageBoxButtons::OK
                        );
-     }
+    }
         
-     if  (sw != nullptr)
-     {
-       sw->WriteLine ("[IMAGE_CLASS]");
-       sw->WriteLine ("Name="         + name);
-       sw->WriteLine ("Description="  + description);
-       if  (parent != nullptr)
-         sw->WriteLine ("Parent="     + parent->Name);
-       sw->Close ();
-       delete  sw;
-       sw = nullptr;
-     }
+    if  (sw != nullptr)
+    {
+      sw->WriteLine ("[IMAGE_CLASS]");
+      sw->WriteLine ("Name="         + name);
+      sw->WriteLine ("Description="  + description);
+      if  (parent != nullptr)
+        sw->WriteLine ("Parent="     + parent->Name);
+      sw->WriteLine ("Mandatory="    + (mandatory ? "Y" : "N"));
+      sw->WriteLine ("Summarize="    + (summarize ? "Y" : "N"));
+      sw->Close ();
+      delete  sw;
+      sw = nullptr;
+    }
   }  /* Save */
 
 

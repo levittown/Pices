@@ -12,7 +12,8 @@ begin
            c.ParentId,
            (select c1.ClassName  from Classes c1  where c1.ClassId = c.ParentId)  as  ParentName,
            c.Description,
-           c.Mandatory
+           c.Mandatory,
+           c.Summarize
 
     from Classes c
     order by c.ClassName;
@@ -38,7 +39,8 @@ begin
            c.ParentId,
            (select c1.ClassName  from Classes c1  where c1.ClassId = c.ParentId)  as  ParentName,
            c.Description,
-           c.Mandatory
+           c.Mandatory,
+           c.Summarize
     from Classes c
     where c.ClassName = _ClassName;
 end
@@ -60,14 +62,16 @@ delimiter //
 create procedure MLClassInsert(in  _ClassName    varChar(64),
                                in  _ParentName   varChar(64),
                                in  _Description  varChar(255),
-                               in  _Mandatory    char(1)
+                               in  _Mandatory    char(1),
+                               in  _Summarize    char(1)
                               )
 begin
-  insert into Classes(ClassName, ParentId, Description, Mandatory)
+  insert into Classes(ClassName, ParentId, Description, Mandatory, Summarize)
          values(_ClassName,
                 (select  c1.ClassId  from Classes c1  where  c1.ClassName = _ParentName),
                 _Description,
-                _Mandatory
+                _Mandatory,
+                _Summarize
                );
 end
 //
@@ -124,7 +128,8 @@ create procedure  MLClassUpdate(in  OldClassName    varChar(64),
                                 in  NewClassName    varChar(64),
                                 in  NewParentName   varChar(64),
                                 in  NewDescription  varChar(255),
-                                in  NewMandatory    char(1)
+                                in  NewMandatory    char(1),
+                                in  NewSummarize    char(1)
                                )
 begin
   set  @newParentId = (select c1.classId from Classes c1 where c1.ClassName = NewParentName);
@@ -134,7 +139,8 @@ begin
     set  c.ClassName    = NewClassName,
          c.ParentId     = @newParentId,
          c.Description  = NewDescription,
-         c.Mandatory    = NewMandatory
+         c.Mandatory    = NewMandatory,
+         c.Summarize    = NewSummarize
      where  c.ClassName = OldClassName;
 end
 //
@@ -152,7 +158,8 @@ delimiter //
 
 create procedure MLClassInsertReturn (in  _name        varChar(64),
                                       in  _parentName  varChar(64),
-                                      in  _Mandatory   char(1)
+                                      in  _Mandatory   char(1),
+                                      in  _Summarize   char(1)
                                      )
 begin
   declare   _classId           int  default 0;
@@ -162,7 +169,7 @@ begin
   set  _parentId = (select c1.ClassId from  Classes c1  where  c1.ClassName = _parentName);
 
   if  (_classId is null)  then
-    call MLClassInsert (_name, _parentName, "Added by 'MLClassInsertReturn'", _Mandatory);
+    call MLClassInsert (_name, _parentName, "Added by 'MLClassInsertReturn'", _Mandatory. _Summarize);
   end if;
 
 
@@ -516,3 +523,5 @@ update Classes c
    c.ClassName="protist_thalassicola"                   or
    c.ClassName="protist_unknown"
    );
+   
+   

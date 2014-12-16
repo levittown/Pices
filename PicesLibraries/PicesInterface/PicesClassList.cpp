@@ -589,6 +589,20 @@ PicesClassList^   PicesClassList::ExtractMandatoryClasses ()
 
 
 
+PicesClassList^   PicesClassList::ExtractSummarizeClasses ()
+{
+  PicesClassList^  result = gcnew PicesClassList ();
+  for each (PicesClass^ c in *this)
+  {
+    if  (c->Summarize)
+      result->Add (c);
+  }
+  return result;
+}
+
+
+
+
 PicesClassList^  PicesClassList::ExtractListOfClassesForAGivenHierarchialLevel (uint level)
 {
   PicesClassList^  newList = gcnew PicesClassList ();
@@ -621,8 +635,8 @@ PicesClassList::ManagedClassLocator::ManagedClassLocator  ()
 }
 
 
-PicesClassList::Node::Node (MLClassConstPtr   _unmanagedClass,
-                            PicesClass^          _managedClass
+PicesClassList::Node::Node (MLClassConstPtr _unmanagedClass,
+                            PicesClass^     _managedClass
                            ):
        unmanagedClass (_unmanagedClass),
        managedClass   (_managedClass),
@@ -635,7 +649,7 @@ PicesClassList::Node::Node (MLClassConstPtr   _unmanagedClass,
   
 
 bool  PicesClassList::ManagedClassLocator::Add (MLClassConstPtr  unmanagedClass,
-                                                PicesClass^         managedClass
+                                                PicesClass^      managedClass
                                                )
 {
   if  (root == nullptr)
@@ -702,6 +716,40 @@ PicesClass^   PicesClassList::ManagedClassLocator::LookUp (MLClassConstPtr  unma
 }
 
 
+List<String^>^  PicesClassList::ExtractTwoTitleLines ()
+{
+  String^  hd1 = "";
+  String^  hd2 = "";
+
+  int x = 0;
+  for each (PicesClass^% pc in (*this))
+  {
+    if  (x > 0)
+    {
+      hd1 += "\t";
+      hd2 += "\t";
+    }
+
+    int y = pc->Name->IndexOf ('_');
+    if  (y < 0)
+    {
+      hd2 += pc->Name;
+    }
+    else
+    {
+      hd1 += pc->Name->Substring (0, y);
+      hd2 += pc->Name->Substring (y + 1);
+    }
+  }
+
+  List<String^>^  results = gcnew List<String^> ();
+  results->Add (hd1);
+  results->Add (hd2);
+
+  return  results;
+} /* ExtractTwoTitleLines */
+
+
 
 
 
@@ -710,7 +758,6 @@ List<String^>^  PicesClassList::ExtractThreeTitleLines ()
   KKStr  hd1 (Count * 30);
   KKStr  hd2 (Count * 30);
   KKStr  hd3 (Count * 30);
-
 
   int x;
   for  (x = 0;  x < Count;  x++)
@@ -745,7 +792,6 @@ List<String^>^  PicesClassList::ExtractThreeTitleLines ()
         part3 = className;
       }
     }
-
 
     switch  (numOfParts)
     {

@@ -1104,6 +1104,9 @@ namespace PicesCommander
       List<InstrumentStatsByDepth>  totalVolumePerMeterUp   = null;
       GetVolumePerMeterProfile (threadConn, ref totalVolumePerMeter, ref totalVolumePerMeterDown, ref totalVolumePerMeterUp);
 
+      PicesClassList  allClasses = threadConn.MLClassLoadList ();
+      PicesClassList  summarizeClasses = allClasses.ExtractSummarizeClasses ();
+
       reportFileName     = baseReportName + ".txt";
       depthReprtFileName = baseReportName + "_Depth.txt";
 
@@ -1142,7 +1145,7 @@ namespace PicesCommander
 
         o.WriteLine ("Abundance Distribution   - Class, Depth by 1 Meter Increments");
         o.WriteLine ();
-        depthDistribution_1.PrintByClassCollumns (o, totalScanLinesPerMeter, totalVolumePerMeter, false);
+        depthDistribution_1.PrintByClassCollumns (o, totalScanLinesPerMeter, totalVolumePerMeter, false, summarizeClasses);
         o.WriteLine ();
         o.WriteLine ();
         o.WriteLine ();
@@ -1150,7 +1153,7 @@ namespace PicesCommander
 
         o.WriteLine ("Abundance Density Distribution  - Class, Depth by 1 Meter Increments");
         o.WriteLine ();
-        depthDistribution_1.PrintByClassCollumns (o, totalScanLinesPerMeter, totalVolumePerMeter, true);
+        depthDistribution_1.PrintByClassCollumns (o, totalScanLinesPerMeter, totalVolumePerMeter, true, summarizeClasses);
         o.WriteLine ();
         o.WriteLine ();
         o.WriteLine ();
@@ -1159,7 +1162,7 @@ namespace PicesCommander
         o.WriteLine ("DownCast"  + "\t\t" + "Down-Cast"  + "\t\t" + "Down-Cast"  + "\t\t" + "Down-Cast"  + "\t\t" + "Down-Cast"  + "\t\t" + "Down-Cast");
         o.WriteLine ("Abundance Density Distribution  - Class, Depth by 1 Meter Increments       Down-Cast");
         o.WriteLine ();
-        depthDistribution_1Down.PrintByClassCollumns (o, totalScanLinesPerMeterDown, totalVolumePerMeterDown, true);
+        depthDistribution_1Down.PrintByClassCollumns (o, totalScanLinesPerMeterDown, totalVolumePerMeterDown, true, summarizeClasses);
         o.WriteLine ();
         o.WriteLine ();
         o.WriteLine ();
@@ -1168,7 +1171,7 @@ namespace PicesCommander
         o.WriteLine ("Up-Cast"  + "\t\t" + "Up-Cast"  + "\t\t" + "Up-Cast"  + "\t\t" + "Up-Cast"  + "\t\t" + "Up-Cast"  + "\t\t" + "Up-Cast");
         o.WriteLine ("Abundance Density Distribution  - Class, Depth by 1 Meter Increments      Up-Cast");
         o.WriteLine ();
-        depthDistribution_1Up.PrintByClassCollumns (o, totalScanLinesPerMeterUp, totalVolumePerMeterUp, true);
+        depthDistribution_1Up.PrintByClassCollumns (o, totalScanLinesPerMeterUp, totalVolumePerMeterUp, true, summarizeClasses);
         o.WriteLine ();
         o.WriteLine ();
         o.WriteLine ();
@@ -1178,7 +1181,7 @@ namespace PicesCommander
         
         o.WriteLine ("Abundance Distribution   - Class, Depth by 10 Meter Increments");
         o.WriteLine ();
-        depthDistribution_10.PrintByClassCollumns (o, totalScanLinesPerMeter, totalVolumePerMeter, false);
+        depthDistribution_10.PrintByClassCollumns (o, totalScanLinesPerMeter, totalVolumePerMeter, false, summarizeClasses);
         o.WriteLine ();
         o.WriteLine ();
         o.WriteLine ();
@@ -1186,7 +1189,7 @@ namespace PicesCommander
                 
         o.WriteLine ("Abundance Density Distribution  - Class, Depth by 10 Meter Increments");
         o.WriteLine ();
-        depthDistribution_10.PrintByClassCollumns (o, totalScanLinesPerMeter, totalVolumePerMeter, true);
+        depthDistribution_10.PrintByClassCollumns (o, totalScanLinesPerMeter, totalVolumePerMeter, true, summarizeClasses);
         o.WriteLine ();
         o.WriteLine ();
         o.WriteLine ();

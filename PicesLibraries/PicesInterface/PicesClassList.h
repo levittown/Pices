@@ -55,6 +55,24 @@ namespace PicesInterface
 
     PicesClassList^   ExtractListOfClassesForAGivenHierarchialLevel (uint level);
 
+    /**
+     * Returns list of classes hat ar ein this container that have the 'Summarize' flag set to true;  these are 
+     * classes that need to have a summary collumn printed in te classification report for them selevs and any 
+     * decendents they have.  Example if the 'Crustacea_Copepod' class has this field then there will be a 
+     * column in the report that sums up all the Crustacea_Copepod's and their children.
+     */
+    PicesClassList^   ExtractSummarizeClasses ();
+
+
+    /**
+     * Will generate an array of 2 String's.  Each String will represent a seperate line to be 
+     * uses as a Class name Header.  Classes will be seperated by the tab('\t') character.
+     * The underscore('_') character in the Class name wil be used to deliminate what goes 
+     * on which line.  Ex:  The class name "Crustacean_Copepod_Oncea"  will have "Crustacean" 
+     * on the 1st line and "Copepod-Oncea" on the second line.
+     */
+    List<String^>^    ExtractTwoTitleLines ();
+
 
     /**
      * Will generate an array of 3 String's.  Each String will represent a seperate line to be 

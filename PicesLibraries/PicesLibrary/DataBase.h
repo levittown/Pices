@@ -180,15 +180,15 @@ namespace MLL
      *@param[in] classKeyToUse  If equal to 'V' will only return Validated examples.
      *@param[in] reExtractInstrumentData If set to true will Re-Extract Instrument data from the SipperFile.
      */
-    ImageFeaturesListPtr  FeatureDataGetOneSipperFile (const KKStr&        sipperFileRootName,
+    ImageFeaturesListPtr  FeatureDataGetOneSipperFile (const KKStr&     sipperFileRootName,
                                                        MLClassConstPtr  mlClass,
-                                                       char                classKeyToUse,
-                                                       bool                reExtractInstrumentData,
-                                                       bool&               cancelFlag
+                                                       char             classKeyToUse,
+                                                       bool             reExtractInstrumentData,
+                                                       bool&            cancelFlag
                                                       );
 
     ImageFeaturesListPtr  FeatureDataForImageGroup (const DataBaseImageGroupPtr  imageGroup,
-                                                    MLClassConstPtr           mlClass,
+                                                    MLClassConstPtr              mlClass,
                                                     char                         classKeyToUse,
                                                     const bool&                  cancelFlag
                                                    );
@@ -492,7 +492,7 @@ namespace MLL
                                           const KKStr&           stationName,
                                           const KKStr&           deploymentNum,
                                           float                  depthIncrements,
-                                          MLClassConstPtr     mlClass,
+                                          MLClassConstPtr        mlClass,
                                           char                   classKeyToUse,
                                           float                  minProb,
                                           float                  maxProb,
@@ -531,13 +531,13 @@ namespace MLL
     MLClassConstListPtr  MLClassLoadList ();
 
     void  MLClassInsert (MLClass&  mlClass,
-                            bool&        successful
-                           );
+                         bool&        successful
+                        );
 
-    void  MLClassUpdate (const KKStr&       oldClassName,
-                            const MLClass&  mlClass,
-                            bool&              successful
-                           );
+    void  MLClassUpdate (const KKStr&    oldClassName,
+                         const MLClass&  mlClass,
+                         bool&           successful
+                        );
 
     /**
      *@brief  Inserts 'mlClass' into database if it is not already in it and then updates all the fields

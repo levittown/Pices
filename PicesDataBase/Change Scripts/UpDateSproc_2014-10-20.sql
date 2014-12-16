@@ -11,3 +11,6 @@ alter table  deployments
 alter table classes
     add column Mandatory char(1) not null default 'F' after `Description`;
 
+
+alter table classes
+    add column Summarize char(1) not null default 'F' after Mandatory;
