@@ -567,8 +567,8 @@ void  ClassificationBiasMatrix::PrintBiasMatrix (StreamWriter^  sw)
   sw->WriteLine ();
   sw->WriteLine ();
 
-  List<String^>^  classTitles = classes->ExtractThreeTitleLines ();
-  if  ((classTitles != nullptr)  &&  (classTitles->Count >= 3))
+  array<String^>^  classTitles = classes->ExtractThreeTitleLines ();
+  if  ((classTitles != nullptr)  &&  (classTitles->Length >= 3))
   {
     sw->WriteLine (""      + "\t" + ""      + "\t" + classTitles[0]);
     sw->WriteLine ("Class" + "\t" + ""      + "\t" + classTitles[1]);
@@ -644,8 +644,8 @@ void  ClassificationBiasMatrix::PrintAdjustedResults (StreamWriter^   sw,
     
     PerformAdjustmnts (classifiedCounts, adjustedReults, stdErrors);
 
-    List<String^>^  classTitles = classes->ExtractThreeTitleLines ();
-    if  ((classTitles != nullptr)  &&  (classTitles->Count >= 3))
+    array<String^>^  classTitles = classes->ExtractThreeTitleLines ();
+    if  ((classTitles != nullptr)  &&  (classTitles->Length >= 3))
     {
       sw->WriteLine (""             + "\t" + "\t" + classTitles[0]);
       sw->WriteLine (""             + "\t" + "\t" + classTitles[1]);

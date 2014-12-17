@@ -197,8 +197,6 @@ namespace PicesCommander
     
     
     
-    
-    
     int              bucketCount = 0;
     int              bucketSize  = 0;
     ClassTotalsList  totals      = null;
@@ -217,16 +215,35 @@ namespace PicesCommander
     }
 
   
-    public  void  CleanUpMemory ()
-    {
-      if  (totals != null)
-       totals.CleanUpMemory ();
 
-      totals = null;
-    }
+    /// <summary>
+    /// Returns an instance of 'ClassTotals' that contains a summary of the classes that are decendent of 'ancestor'.
+    /// The newly instantiated instance will point to the same instances of 'ClassTotals'  that this instance points to.
+    /// As a result you should only call this method after you are done accumulating data.
+    /// </summary>
+    /// <param name="ancestor"></param>
+    /// <returns></returns>
+    public  int  SumUpFamilyOfClassesForBucket (PicesClass  ancestor,
+                                                int         bucketIdx
+                                               )
+    {
+      int  bucketTotal = 0;
+      ClassTotals  ct = totals.LookUp (ancestor.Name);
+      if  (ct != null)
+        bucketTotal += ct.BucketCount (bucketIdx);
+
+      if  (ancestor.Children != null)
+      {
+        foreach (PicesClass pc in ancestor.Children)
+          bucketTotal += SumUpFamilyOfClassesForBucket (pc, bucketIdx);
+      }
+      return  bucketTotal;
+    }  /* SumUpFamilyOfClassesForBucket */
+
 
 
     
+
     /// <summary>
     /// Returns an instance of 'ClassTotals' that contains a summary of the classes that are decendent of 'ancestor'.
     /// The newly instantiated instance will point to the same instances of 'ClassTotals'  that this instance points to.
@@ -453,24 +470,43 @@ namespace PicesCommander
       }
 
       int[]  finalTotals = new int[classes.Count];
+      int[]  summaryTotals = null;
       for  (int zed = 0;  zed < classes.Count;  zed++)
         finalTotals[zed] = 0;
+      if  (summarizeClasses != null)
+      {
+        summaryTotals = new int[summarizeClasses.Count];
+        for (int zed = 0; zed < summaryTotals.Length;  ++zed)
+          summaryTotals[zed] = 0;
+      }
 
       int  grandTotal = 0;
 
-      List<String> headLines = classes.ExtractThreeTitleLines ();
-      while  (headLines.Count < 3)
-        headLines.Add ("");
+      String[] headLines = classes.ExtractThreeTitleLines ();
 
-      List<String> summaryHeadLines = null;
+      String[] summaryHeadLines = null;
       if  (summarizeClasses == null)
-        summaryHeadLines = new List<String> ();
+      {
+        summaryHeadLines = new String[3];
+        summaryHeadLines[0] = "";
+        summaryHeadLines[1] = "";
+        summaryHeadLines[2] = "";
+      }
       else
-        summaryHeadLines = summarizeClasses.ExtractTwoTitleLines ();
+      {
+        String[] temp = summarizeClasses.ExtractTwoTitleLines ();
 
-      while  (summaryHeadLines.Count < 2)
-          summaryHeadLines.Add ("");
-      
+        summaryHeadLines = new String[3];
+        summaryHeadLines[2] = temp[1];
+        summaryHeadLines[1] = temp[0];
+        summaryHeadLines[0] = "";
+        for  (int x = 0;  x < summarizeClasses.Count;  ++x)
+        {
+          if  (x > 0)
+            summaryHeadLines[0] += "\t";
+          summaryHeadLines[0] += "Summary";
+        }
+      }
 
       String s1 = "Abundance by Class";
       if  (printDensity)
@@ -489,9 +525,9 @@ namespace PicesCommander
       //   [O2 (ml/L) * 44.64]/1.027 = O2 umol/kg 
 
       o.WriteLine (""         + "\t" + ""      + "\t" + ""       + "\t" + s1);
-      o.WriteLine (""         + "\t" + ""      + "\t" + ""       + "\t" + headLines[0] + "\t" + s1);
-      o.WriteLine (""         + "\t" + "Scan"  + "\t" + "Volume" + "\t" + headLines[1] + "\t" + "All"     + "\t" + "Temperature"   + "\t" + "Salinity"  + "\t" + "Density"   + "\t" + "Fluorescence"  + "\t" + "FluorescenceSensor"  + "\t" + "Oxygen"  + "\t" + "Oxygen"   + "\t" + "Transmisivity"   + "\t" + "Turbidity"  + "\t" + "CdomFluorescence");
-      o.WriteLine ("Depth(m)" + "\t" + "Lines" + "\t" + "m-3"    + "\t" + headLines[2] + "\t" + "Classes" + "\t" + temperatureUOM  + "\t" + salinityUOM + "\t" + densityUOM  + "\t" + fluorescenceUOM + "\t" + "Volts"               + "\t" + oxygenUOM + "\t" + "umol/kg"  + "\t" + transmisivityUMO  + "\t" + turbidityUMO + "\t" + cdomFluorescenceUMO);
+      o.WriteLine (""         + "\t" + ""      + "\t" + ""       + "\t" + headLines[0] + "\t" + "" + "\t" + ""        + "\t" + "" + "\t" + summaryHeadLines[0] + "\t" + "" + "\t" + s1);
+      o.WriteLine (""         + "\t" + "Scan"  + "\t" + "Volume" + "\t" + headLines[1] + "\t" + "" + "\t" + "All"     + "\t" + "" + "\t" + summaryHeadLines[1] + "\t" + "" + "\t" + "Temperature"   + "\t" + "Salinity"  + "\t" + "Density"   + "\t" + "Fluorescence"  + "\t" + "FluorescenceSensor"  + "\t" + "Oxygen"  + "\t" + "Oxygen"   + "\t" + "Transmisivity"   + "\t" + "Turbidity"  + "\t" + "CdomFluorescence");
+      o.WriteLine ("Depth(m)" + "\t" + "Lines" + "\t" + "m-3"    + "\t" + headLines[2] + "\t" + "" + "\t" + "Classes" + "\t" + "" + "\t" + summaryHeadLines[2] + "\t" + "" + "\t" + temperatureUOM  + "\t" + salinityUOM + "\t" + densityUOM  + "\t" + fluorescenceUOM + "\t" + "Volts"               + "\t" + oxygenUOM + "\t" + "umol/kg"  + "\t" + transmisivityUMO  + "\t" + turbidityUMO + "\t" + cdomFluorescenceUMO);
 
       ulong  totalScanLines = 0;
       double totalVolume    = 0.0f;
@@ -556,7 +592,33 @@ namespace PicesCommander
           intIDX++;
         }
 
+        o.Write ("\t" + "");
         o.Write ("\t" + bucketTotal);
+        o.Write ("\t" + "");
+
+        if  ((summarizeClasses != null)  &&   (summarizeClasses.Count > 0))
+        {
+          int  zed = 0;
+          foreach (PicesClass pc in  summarizeClasses)
+          {
+            int  qtyThisBucket = SumUpFamilyOfClassesForBucket (pc, bucketIDX);
+            summaryTotals[zed] = qtyThisBucket;
+            if  (printDensity)
+            {
+              double  densityThisBucket = 0.0;
+              if  (volumeDepthForThisBucket != 0.0)
+                densityThisBucket = qtyThisBucket / volumeDepthForThisBucket;
+              o.Write ("\t" + densityThisBucket.ToString ());
+            }
+            else
+            {
+              o.Write ("\t" + qtyThisBucket.ToString ());
+            }
+            ++zed;
+          }
+        }
+
+        o.Write ("\t" + "");
 
         if  (totalThisBucketIdx != null)
         {
@@ -592,6 +654,7 @@ namespace PicesCommander
             o.Write ("\t" + finalTotals[x]);
         }
 
+        o.Write ("\t");
         double  grandTotalDensity = 0.0;
         if  (totalVolume != 0.0)
           grandTotalDensity = grandTotal / totalVolume;
@@ -600,6 +663,28 @@ namespace PicesCommander
           o.Write ("\t" + grandTotalDensity.ToString ());
         else
           o.Write ("\t" + grandTotal.ToString ());
+
+        o.Write ("\t");
+
+        if  (summaryTotals != null)
+        {
+          for  (uint x = 0;  x < summaryTotals.Length; ++x)
+          {
+            o.Write ("\t");
+            if  (printDensity)
+            {
+              if  (totalVolume != 0.0)
+                o.Write (summaryTotals[x] / totalVolume);
+              else
+                o.Write (0.0);
+            }
+            else
+            {
+              o.Write (summaryTotals[x]);
+            }
+          }
+        }
+
         o.WriteLine ();
       }
 

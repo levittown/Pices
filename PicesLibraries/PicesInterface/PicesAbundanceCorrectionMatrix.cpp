@@ -237,12 +237,12 @@ void  PicesAbundanceCorrectionMatrix::PrintAdjustedResults (StreamWriter^       
   PicesClassList^  classOrder = adjCounts->ToPicesClassList ();
   int  size = adjCounts->Count;
 
-  List<String^>^  classTitles = classOrder->ExtractThreeTitleLines ();
+  array<String^>^  classTitles = classOrder->ExtractThreeTitleLines ();
   if  (classTitles != nullptr)
   {
-    for  (int z = 0;  z < classTitles->Count;  ++z)
+    for  (int z = 0;  z < classTitles->Length;  ++z)
     {
-      if  (z >= (classTitles->Count - 1))
+      if  (z >= (classTitles->Length - 1))
         sw->Write ("Description");
 
       sw->WriteLine ("\t" + "\t" + classTitles[z]);

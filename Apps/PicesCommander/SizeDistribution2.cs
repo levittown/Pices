@@ -658,9 +658,7 @@ namespace PicesCommander
 
       int  grandTotal = 0;
 
-      List<String> headLines = classes.ExtractThreeTitleLines ();
-      while  (headLines.Count < 3)
-        headLines.Add ("");
+      String[] headLines = classes.ExtractThreeTitleLines ();
 
       String s1 = "Abundance by Class by Size(mm^2)";
 

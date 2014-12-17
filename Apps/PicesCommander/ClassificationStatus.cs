@@ -79,8 +79,8 @@ namespace PicesCommander
     private  PicesDataBaseLogEntry    logEntry = null;
     private  uint                     logEntryId = 0;
 
-    private  String  reportFileName     = null;
-    private  String  depthReprtFileName = null;
+    private  String  sizeReportFileName  = null;
+    private  String  depthReportFileName = null;
 
     private  float  depthMin = 0;
     private  float  depthMax = 0;
@@ -1107,131 +1107,108 @@ namespace PicesCommander
       PicesClassList  allClasses = threadConn.MLClassLoadList ();
       PicesClassList  summarizeClasses = allClasses.ExtractSummarizeClasses ();
 
-      reportFileName     = baseReportName + ".txt";
-      depthReprtFileName = baseReportName + "_Depth.txt";
+      sizeReportFileName  = baseReportName + "_Size.txt";
+      depthReportFileName = baseReportName + "_Depth.txt";
 
       {
-        System.IO.StreamWriter  o = new System.IO.StreamWriter (reportFileName);
+        System.IO.StreamWriter  oSize = new System.IO.StreamWriter (sizeReportFileName);
 
-        o.WriteLine ("Classification Report");
-        o.WriteLine ();
+        oSize.WriteLine ("Classification Report");
+        oSize.WriteLine ();
+        PrintReportRunTimeParameters (threadConn, oSize);
+        oSize.WriteLine ();
+        oSize.WriteLine ();
 
-        PrintReportRunTimeParameters (threadConn, o);
-
-        o.WriteLine ();
-        o.WriteLine ();
-        o.WriteLine ("Size (mm^2) Distribution Down Cast");
-        o.WriteLine ();
-        sizeDistributionDown.PrintTabDelDistributionMatrix (o);
-        o.WriteLine ();
-        o.WriteLine ();
-        sizeDistributionDown.PrintTabDelDistributionMatrixSepartedByLevel1Classes (o, "Size (mm^2) Distribution Down Cast");
-        o.WriteLine ();
-        o.WriteLine ();
-        o.WriteLine ();
-        o.WriteLine ();
-        o.WriteLine ();
-        o.WriteLine ("Size (mm^2) Distribution Up Cast");
-        o.WriteLine ();
-        sizeDistributionUp.PrintTabDelDistributionMatrix (o);
-        o.WriteLine ();
-        o.WriteLine ();
-        sizeDistributionUp.PrintTabDelDistributionMatrixSepartedByLevel1Classes (o, "Size (mm^2) Distribution Up Cast");
-        o.WriteLine ();
-        o.WriteLine ();
-        o.WriteLine ();
-        o.WriteLine ();
-        o.WriteLine ();
-
-        o.WriteLine ("Abundance Distribution   - Class, Depth by 1 Meter Increments");
-        o.WriteLine ();
-        depthDistribution_1.PrintByClassCollumns (o, totalScanLinesPerMeter, totalVolumePerMeter, false, summarizeClasses);
-        o.WriteLine ();
-        o.WriteLine ();
-        o.WriteLine ();
-        o.WriteLine ();
-
-        o.WriteLine ("Abundance Density Distribution  - Class, Depth by 1 Meter Increments");
-        o.WriteLine ();
-        depthDistribution_1.PrintByClassCollumns (o, totalScanLinesPerMeter, totalVolumePerMeter, true, summarizeClasses);
-        o.WriteLine ();
-        o.WriteLine ();
-        o.WriteLine ();
-        o.WriteLine ();
-
-        o.WriteLine ("DownCast"  + "\t\t" + "Down-Cast"  + "\t\t" + "Down-Cast"  + "\t\t" + "Down-Cast"  + "\t\t" + "Down-Cast"  + "\t\t" + "Down-Cast");
-        o.WriteLine ("Abundance Density Distribution  - Class, Depth by 1 Meter Increments       Down-Cast");
-        o.WriteLine ();
-        depthDistribution_1Down.PrintByClassCollumns (o, totalScanLinesPerMeterDown, totalVolumePerMeterDown, true, summarizeClasses);
-        o.WriteLine ();
-        o.WriteLine ();
-        o.WriteLine ();
-        o.WriteLine ();
-        
-        o.WriteLine ("Up-Cast"  + "\t\t" + "Up-Cast"  + "\t\t" + "Up-Cast"  + "\t\t" + "Up-Cast"  + "\t\t" + "Up-Cast"  + "\t\t" + "Up-Cast");
-        o.WriteLine ("Abundance Density Distribution  - Class, Depth by 1 Meter Increments      Up-Cast");
-        o.WriteLine ();
-        depthDistribution_1Up.PrintByClassCollumns (o, totalScanLinesPerMeterUp, totalVolumePerMeterUp, true, summarizeClasses);
-        o.WriteLine ();
-        o.WriteLine ();
-        o.WriteLine ();
-        o.WriteLine ();
-        o.WriteLine ();
-        o.WriteLine ();
-        
-        o.WriteLine ("Abundance Distribution   - Class, Depth by 10 Meter Increments");
-        o.WriteLine ();
-        depthDistribution_10.PrintByClassCollumns (o, totalScanLinesPerMeter, totalVolumePerMeter, false, summarizeClasses);
-        o.WriteLine ();
-        o.WriteLine ();
-        o.WriteLine ();
-        o.WriteLine ();
-                
-        o.WriteLine ("Abundance Density Distribution  - Class, Depth by 10 Meter Increments");
-        o.WriteLine ();
-        depthDistribution_10.PrintByClassCollumns (o, totalScanLinesPerMeter, totalVolumePerMeter, true, summarizeClasses);
-        o.WriteLine ();
-        o.WriteLine ();
-        o.WriteLine ();
-        o.WriteLine ();
-        o.WriteLine ();
-
-        PrintAbundanceAdjustedResults (o);
-        o.WriteLine ();
-        o.WriteLine ();
-        PrintBiasAdjustedResults  (o);
-
-        o.Close ();
+        oSize.WriteLine ("Size (mm^2) Distribution Down Cast");
+        oSize.WriteLine ();
+        sizeDistributionDown.PrintTabDelDistributionMatrix (oSize);
+        oSize.WriteLine ();
+        oSize.WriteLine ();
+        sizeDistributionDown.PrintTabDelDistributionMatrixSepartedByLevel1Classes (oSize, "Size (mm^2) Distribution Down Cast");
+        oSize.WriteLine ();
+        oSize.WriteLine ();
+        oSize.WriteLine ();
+        oSize.WriteLine ();
+        oSize.WriteLine ();
+        oSize.WriteLine ("Size (mm^2) Distribution Up Cast");
+        oSize.WriteLine ();
+        sizeDistributionUp.PrintTabDelDistributionMatrix (oSize);
+        oSize.WriteLine ();
+        oSize.WriteLine ();
+        sizeDistributionUp.PrintTabDelDistributionMatrixSepartedByLevel1Classes (oSize, "Size (mm^2) Distribution Up Cast");
+        oSize.WriteLine ();
+        oSize.WriteLine ();
+        oSize.WriteLine ();
+        oSize.WriteLine ();
+        oSize.WriteLine ();
+        oSize.Close ();
       }
 
       {
-        // Depth Report 
-        System.IO.StreamWriter  o = new System.IO.StreamWriter (depthReprtFileName);
+        System.IO.StreamWriter  oDepth = new System.IO.StreamWriter (depthReportFileName);
+        oDepth.WriteLine ("Classification Report");
+        oDepth.WriteLine ();
+        PrintReportRunTimeParameters (threadConn, oDepth);
+        oDepth.WriteLine ();
+        oDepth.WriteLine ();
+        oDepth.WriteLine ("Abundance Distribution   - Class, Depth by 1 Meter Increments");
+        oDepth.WriteLine ();
+        depthDistribution_1.PrintByClassCollumns (oDepth, totalScanLinesPerMeter, totalVolumePerMeter, false, summarizeClasses);
+        oDepth.WriteLine ();
+        oDepth.WriteLine ();
+        oDepth.WriteLine ();
+        oDepth.WriteLine ();
 
-        PrintReportRunTimeParameters (threadConn, o);
+        oDepth.WriteLine ("Abundance Density Distribution  - Class, Depth by 1 Meter Increments");
+        oDepth.WriteLine ();
+        depthDistribution_1.PrintByClassCollumns (oDepth, totalScanLinesPerMeter, totalVolumePerMeter, true, summarizeClasses);
+        oDepth.WriteLine ();
+        oDepth.WriteLine ();
+        oDepth.WriteLine ();
+        oDepth.WriteLine ();
 
-        o.WriteLine ("Abundance Distribution   - Class, Depth by 1 Meter Increments");
-        o.WriteLine ();
-        depthDistribution_1.PrintByClassCollumns (o, totalScanLinesPerMeter, totalVolumePerMeter, false);
-        o.WriteLine ();
-        o.WriteLine ();
-        o.WriteLine ("Abundance Density Distribution  - Class, Depth by 1 Meter Increments");
-        o.WriteLine ();
-        depthDistribution_1.PrintByClassCollumns (o, totalScanLinesPerMeter, totalVolumePerMeter, true);
-        o.WriteLine ();
-
-        o.WriteLine ();
-        o.WriteLine ();
-        o.WriteLine ("Abundance Distribution   - Class, Depth by 10 Meter Increments");
-        o.WriteLine ();
-        depthDistribution_10.PrintByClassCollumns (o, totalScanLinesPerMeter, totalVolumePerMeter, false);
-        o.WriteLine ();
-        o.WriteLine ();
-        o.WriteLine ("Abundance Density Distribution  - Class, Depth by 10 Meter Increments");
-        o.WriteLine ();
-        depthDistribution_10.PrintByClassCollumns (o, totalScanLinesPerMeter, totalVolumePerMeter, true);
+        oDepth.WriteLine ("DownCast"  + "\t\t" + "Down-Cast"  + "\t\t" + "Down-Cast"  + "\t\t" + "Down-Cast"  + "\t\t" + "Down-Cast"  + "\t\t" + "Down-Cast");
+        oDepth.WriteLine ("Abundance Density Distribution  - Class, Depth by 1 Meter Increments       Down-Cast");
+        oDepth.WriteLine ();
+        depthDistribution_1Down.PrintByClassCollumns (oDepth, totalScanLinesPerMeterDown, totalVolumePerMeterDown, true, summarizeClasses);
+        oDepth.WriteLine ();
+        oDepth.WriteLine ();
+        oDepth.WriteLine ();
+        oDepth.WriteLine ();
         
-        o.Close ();
+        oDepth.WriteLine ("Up-Cast"  + "\t\t" + "Up-Cast"  + "\t\t" + "Up-Cast"  + "\t\t" + "Up-Cast"  + "\t\t" + "Up-Cast"  + "\t\t" + "Up-Cast");
+        oDepth.WriteLine ("Abundance Density Distribution  - Class, Depth by 1 Meter Increments      Up-Cast");
+        oDepth.WriteLine ();
+        depthDistribution_1Up.PrintByClassCollumns (oDepth, totalScanLinesPerMeterUp, totalVolumePerMeterUp, true, summarizeClasses);
+        oDepth.WriteLine ();
+        oDepth.WriteLine ();
+        oDepth.WriteLine ();
+        oDepth.WriteLine ();
+        oDepth.WriteLine ();
+        oDepth.WriteLine ();
+        
+        oDepth.WriteLine ("Abundance Distribution   - Class, Depth by 10 Meter Increments");
+        oDepth.WriteLine ();
+        depthDistribution_10.PrintByClassCollumns (oDepth, totalScanLinesPerMeter, totalVolumePerMeter, false, summarizeClasses);
+        oDepth.WriteLine ();
+        oDepth.WriteLine ();
+        oDepth.WriteLine ();
+        oDepth.WriteLine ();
+                
+        oDepth.WriteLine ("Abundance Density Distribution  - Class, Depth by 10 Meter Increments");
+        oDepth.WriteLine ();
+        depthDistribution_10.PrintByClassCollumns (oDepth, totalScanLinesPerMeter, totalVolumePerMeter, true, summarizeClasses);
+        oDepth.WriteLine ();
+        oDepth.WriteLine ();
+        oDepth.WriteLine ();
+        oDepth.WriteLine ();
+        oDepth.WriteLine ();
+
+        PrintAbundanceAdjustedResults (oDepth);
+        oDepth.WriteLine ();
+        oDepth.WriteLine ();
+        PrintBiasAdjustedResults  (oDepth);
+        oDepth.Close ();
       }
     }  /* PrintReport */
 
@@ -1529,26 +1506,32 @@ namespace PicesCommander
       DialogResult dr = MessageBox.Show (this,
                                          "Classification Process Completed." + "\n" +
                                          "\n" +
-                                         "Do you want to open the report ?",
+                                         "Do you want to open the report files?",
                                          "Classification Process",
                                          MessageBoxButtons.YesNo
                                         );
       if  (dr == DialogResult.No)
         return;
 
-      Process proc = new Process();
-     
-      proc.StartInfo.WorkingDirectory = @"";
-//      proc.StartInfo.FileName = "Excell";
-//      proc.StartInfo.Arguments = reportFileName;
-      proc.StartInfo.FileName = reportFileName;
-//      proc.StartInfo.Arguments = reportFileName;
-      proc.StartInfo.UseShellExecute = true;
-      proc.StartInfo.RedirectStandardOutput = false;
-      proc.StartInfo.RedirectStandardError = false;
-      proc.Start();
-      //proc.WaitForExit();
-      //proc.Close();
+      {
+        Process proc = new Process();
+        proc.StartInfo.WorkingDirectory = @"";
+        proc.StartInfo.FileName = sizeReportFileName;
+        proc.StartInfo.UseShellExecute = true;
+        proc.StartInfo.RedirectStandardOutput = false;
+        proc.StartInfo.RedirectStandardError = false;
+        proc.Start();
+      }
+
+      {
+        Process proc2 = new Process();
+        proc2.StartInfo.WorkingDirectory = @"";
+        proc2.StartInfo.FileName = depthReportFileName;
+        proc2.StartInfo.UseShellExecute = true;
+        proc2.StartInfo.RedirectStandardOutput = false;
+        proc2.StartInfo.RedirectStandardError = false;
+        proc2.Start();
+      }
       
     }  /* ClassificationDone */
 

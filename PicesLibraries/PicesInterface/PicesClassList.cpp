@@ -716,7 +716,7 @@ PicesClass^   PicesClassList::ManagedClassLocator::LookUp (MLClassConstPtr  unma
 }
 
 
-List<String^>^  PicesClassList::ExtractTwoTitleLines ()
+array<String^>^  PicesClassList::ExtractTwoTitleLines ()
 {
   String^  hd1 = "";
   String^  hd2 = "";
@@ -740,11 +740,13 @@ List<String^>^  PicesClassList::ExtractTwoTitleLines ()
       hd1 += pc->Name->Substring (0, y);
       hd2 += pc->Name->Substring (y + 1);
     }
+
+    ++x;
   }
 
-  List<String^>^  results = gcnew List<String^> ();
-  results->Add (hd1);
-  results->Add (hd2);
+  array<String^>^  results = gcnew array<String^> (2);
+  results[0] = hd1;
+  results[1] = hd2;
 
   return  results;
 } /* ExtractTwoTitleLines */
@@ -753,66 +755,40 @@ List<String^>^  PicesClassList::ExtractTwoTitleLines ()
 
 
 
-List<String^>^  PicesClassList::ExtractThreeTitleLines ()
+array<String^>^  PicesClassList::ExtractThreeTitleLines ()
 {
-  KKStr  hd1 (Count * 30);
-  KKStr  hd2 (Count * 30);
-  KKStr  hd3 (Count * 30);
+  cli::array<String^>^  headerLines = gcnew cli::array<String^> (3);
+  headerLines[0] = "";
+  headerLines[1] = "";
+  headerLines[2] = "";
 
-  int x;
-  for  (x = 0;  x < Count;  x++)
+  int x = 0;
+  for each (PicesClass^% pc in (*this))
   {
     if  (x > 0)
     {
-      hd1 << "\t";
-      hd2 << "\t";
-      hd3 << "\t";
+      headerLines[0] += "\t";
+      headerLines[1] += "\t";
+      headerLines[2] += "\t";
     }
 
-    KKStr  part1 = "";
-    KKStr  part2 = "";
-    KKStr  part3 = "";
-
-    int  numOfParts = 0;
-
-    KKStr  className = PicesKKStr::SystemStringToKKStr((*this)[x]->Name);
-    className.TrimLeft ();
-    className.TrimRight ();
-   
-    numOfParts = 1;
-    part1 = className.ExtractToken ("_");
-    if  (!className.Empty ())
+    cli::array<String^>^  parts= pc->Name->Split ('_');
+    int y = Math::Max (0, 3 - parts->Length);
+    int z = 0;
+    while  (y < 3)
     {
-      numOfParts = 2;
-      part2 = className.ExtractToken ("_");
-
-      if  (!className.Empty ())
-      {
-        numOfParts = 3;
-        part3 = className;
-      }
+      headerLines[y] += parts[z];
+      ++y;
+      ++z;
     }
 
-    switch  (numOfParts)
+    while  (z < parts->Length)
     {
-      case 1: hd3 << part1;
-              break;
-
-      case 2: hd2 << part1;
-              hd3 << part2;
-              break;
-
-      case 3: hd1 << part1;
-              hd2 << part2;
-              hd3 << part3;
-              break;
+      headerLines[2] += ("_" + parts[z]);
+      ++z;
     }
+    ++x;
   }
 
-  List<String^>^  results = gcnew List<String^> ();
-  results->Add (PicesKKStr::KKStrToSystenStr (hd1));
-  results->Add (PicesKKStr::KKStrToSystenStr (hd2));
-  results->Add (PicesKKStr::KKStrToSystenStr (hd3));
-
-  return  results;
+  return  headerLines;
 }  /* ExtractThreeTitleLines */
