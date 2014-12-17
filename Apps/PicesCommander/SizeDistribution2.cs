@@ -116,50 +116,25 @@ namespace PicesCommander
       }
 
 
-      public  void  PrintFormatedLine (System.IO.StreamWriter  o)
-      {
-        String  s = name.PadRight (20)   ;
-        o.Write (s);
 
-        s = count.ToString ().PadLeft (9);
-        o.Write (s);
-
-        int  bucket;
-
-        for (bucket = 0;  bucket < bucketCount;  bucket++)
-        {
-          s = sizeBuckets [bucket].ToString ().PadLeft (8);
-          o.Write (s);
-        }
-        o.WriteLine ();
-      }  /* PrintFormatedLine */
-
-
-
-      public  void  PrintCSVLine (System.IO.StreamWriter  o)
-      {
-        o.Write ("\"" + name + "\"," + count.ToString ());
-
-        int  bucket;
-
-        for (bucket = 0;  bucket <  bucketCount; bucket++)
-        {
-          o.Write ("," + sizeBuckets[bucket].ToString ());
-        }
-        o.WriteLine ();
-      }  /* PrintCSVLine */
-
-
-
-
-      public  void  PrintTabDelLine (System.IO.StreamWriter  o)
+      public  void  PrintTabDelLine (System.IO.StreamWriter  o,
+                                     float                   volume
+                                    )
       {
         o.Write ("\"" + name + "\"" + "\t" + count.ToString ());
 
         int  bucket;
 
         for (bucket = 0;  bucket <  bucketCount; bucket++)
-          o.Write ("\t" + sizeBuckets[bucket].ToString ());
+        {
+          if  (volume == 0.0f)
+            o.Write ("\t" + sizeBuckets[bucket].ToString ());
+          else
+          {
+            float density = (float)sizeBuckets[bucket] / volume;
+            o.Write ("\t" + density.ToString ());
+          }
+        }
 
         o.WriteLine ();
       }
@@ -294,7 +269,7 @@ namespace PicesCommander
       ClassTotals2  familySummary = new ClassTotals2 (ancestor.Name, sizeInitial, sizeGrowthFactor,sizeEndRange, bucketCount, sizeBucketStart, sizeBucketEnd);
       AddFamilyOfClassesToSizeClassTotals (familySummary, ancestor);
       return   familySummary;
-    }  /* ExtractFamilyOfClasses */
+    }  /* SummarizeFamilyOfClasses */
 
 
 
@@ -481,75 +456,16 @@ namespace PicesCommander
       classTotals.Increment (areaMM);
     }  /* Increment */
 
-    
  
-    public  void    PrintFormatedDistributionMatrix (System.IO.StreamWriter  o)
-    {
-      totals.SortByName ();
 
-      PrintFormatedHeader (o);
-
-      ClassTotals2  classTotals = null;
-
-      ClassTotals2  grandTotals = new ClassTotals2 ("Grand Totals",
-                                                    sizeInitial,
-                                                    sizeGrowthFactor,
-                                                    sizeEndRange,
-                                                    bucketCount,
-                                                    sizeBucketStart,
-                                                    sizeBucketEnd
-                                                   );
-
-      int  idx;
-
-      for  (idx = 0;  idx < totals.Count;  idx++)
-      {
-        classTotals = totals[idx];
-        classTotals.PrintFormatedLine (o);
-        grandTotals.AddIn (classTotals);
-      }
-
-      o.WriteLine ();
-      grandTotals.PrintFormatedLine (o);
-    }  /* PrintFormatedDistributionMatrix */
-
-
-
-    public  void     PrintCSVDistributionMatrix (System.IO.StreamWriter  o)
-    {
-      totals.SortByName ();
-
-      PrintCSVHeader (o);
-
-      ClassTotals2  classTotals = null;
-
-      ClassTotals2  grandTotals = new ClassTotals2 ("Grand Totals",
-                                                    sizeInitial,
-                                                    sizeGrowthFactor,
-                                                    sizeEndRange,
-                                                    bucketCount,
-                                                    sizeBucketStart,
-                                                    sizeBucketEnd
-                                                   );
-
-      int  idx;
-
-      for  (idx = 0;  idx < totals.Count; idx++)
-      {
-        classTotals = totals[idx];
-        classTotals.PrintCSVLine (o);
-        grandTotals.AddIn (classTotals);
-      }
-
-      o.WriteLine ();
-      grandTotals.PrintCSVLine (o);
-    }  /* PrintCSVDistributionMatrix */
-
-
-
-
-
-    public  void   PrintTabDelDistributionMatrix (System.IO.StreamWriter  o)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="o">Output stream to print report to.</param>
+    /// <param name="volume">If volume == 0.0 then prints units otherwise prints the density units/mm^3. </param>
+    public  void   PrintTabDelDistributionMatrix (System.IO.StreamWriter  o,
+                                                  float                   volume
+                                                 )
     {
       totals.SortByName ();
 
@@ -571,11 +487,11 @@ namespace PicesCommander
       for  (idx = 0;  idx < totals.Count;  idx++)
       {
         classTotals = totals[idx];
-        classTotals.PrintTabDelLine (o);
+        classTotals.PrintTabDelLine (o, volume);
         grandTotals.AddIn (classTotals);
       }   
       o.WriteLine ();
-      grandTotals.PrintTabDelLine (o);
+      grandTotals.PrintTabDelLine (o, volume);
     }  /* PrintTabDelDistributionMatrix */
 
 
@@ -583,32 +499,28 @@ namespace PicesCommander
 
 
 
-    public  void   PrintTabDelDistributionMatrixSepartedByLevel1Classes (System.IO.StreamWriter  o,
-                                                                         String                  majorTitle
-                                                                        )
+    public  void   PrintTabDelDistributionMatrixesForSummaryClasses (System.IO.StreamWriter  o,
+                                                                     String                  majorTitle,
+                                                                     float                   volume
+                                                                    )
     {
       PicesClassList  allKnownClasses = PicesClassList.GetAllKnownClasses ();
-      PicesClassList  firstGeneration = new PicesClassList ();
-      foreach  (PicesClass pc in allKnownClasses)
-      {
-        if  (pc.ParentName.Equals ("ALLCLASSES", StringComparison.InvariantCultureIgnoreCase))
-          firstGeneration.Add (pc);
-      }
-      firstGeneration.SortByName ();
+      PicesClassList  allSummaryClasses = allKnownClasses.ExtractSummarizeClasses ();
+      allSummaryClasses.SortByName ();
 
-      foreach  (PicesClass pc in firstGeneration)
+      foreach  (PicesClass pc in allSummaryClasses)
       {
         SizeDistribution2  familySummary = this.ExtractFamilyOfClasses (pc);
         if  (familySummary.totals.Count > 1)
         {
           o.WriteLine (majorTitle + "     *** Summary of " + pc.Name + " ***");
           o.WriteLine ();
-          familySummary.PrintTabDelDistributionMatrix (o);
+          familySummary.PrintTabDelDistributionMatrix (o, volume);
           o.WriteLine ();
           o.WriteLine ();
         }
       }
-    }  /* PrintTabDelDistributionMatrix */
+    }  /* PrintTabDelDistributionMatrixesForSummaryClasses */
 
 
 

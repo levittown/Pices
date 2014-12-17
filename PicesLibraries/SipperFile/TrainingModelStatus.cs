@@ -211,8 +211,11 @@ namespace SipperFile
         // the abort function should have been called in 'ForceCancelation'.
         // So we are just going to exit the program now.
         Thread.Sleep (200);
-        trainingModelThread.Priority = ThreadPriority.Lowest;
-        trainingModelThread = null;
+        if  (trainingModelThread != null)
+        {
+          trainingModelThread.Priority = ThreadPriority.Lowest;
+          trainingModelThread = null;
+        }
         if  (trainingModel != null)
           trainingModel.CancelLoad ();
         Close ();

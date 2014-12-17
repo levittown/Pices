@@ -1054,6 +1054,17 @@ namespace PicesCommander
     }  /* PrintReportRunTimeParameters */
  
  
+    private  float  ComputeTotalVolume (List<InstrumentStatsByDepth>  volumePerMeter)
+    {
+      float  totalVolume = 0.0f;
+
+      foreach (InstrumentStatsByDepth isbd  in volumePerMeter)
+        totalVolume += isbd.volumeSampled;
+
+      return  totalVolume;
+    }  /* ComputeTotalVolume */
+
+
 
 
     private  void  PrintReport (PicesDataBase threadConn)
@@ -1104,6 +1115,10 @@ namespace PicesCommander
       List<InstrumentStatsByDepth>  totalVolumePerMeterUp   = null;
       GetVolumePerMeterProfile (threadConn, ref totalVolumePerMeter, ref totalVolumePerMeterDown, ref totalVolumePerMeterUp);
 
+      float totalVolume     = ComputeTotalVolume (totalVolumePerMeter);
+      float totalVolumeDown = ComputeTotalVolume (totalVolumePerMeterDown);
+      float totalVolumeUp   = ComputeTotalVolume (totalVolumePerMeterUp);
+
       PicesClassList  allClasses = threadConn.MLClassLoadList ();
       PicesClassList  summarizeClasses = allClasses.ExtractSummarizeClasses ();
 
@@ -1118,13 +1133,13 @@ namespace PicesCommander
         PrintReportRunTimeParameters (threadConn, oSize);
         oSize.WriteLine ();
         oSize.WriteLine ();
-
+        oSize.WriteLine ();
         oSize.WriteLine ("Size (mm^2) Distribution Down Cast");
         oSize.WriteLine ();
-        sizeDistributionDown.PrintTabDelDistributionMatrix (oSize);
+        sizeDistributionDown.PrintTabDelDistributionMatrix (oSize, totalVolumeDown);
         oSize.WriteLine ();
         oSize.WriteLine ();
-        sizeDistributionDown.PrintTabDelDistributionMatrixSepartedByLevel1Classes (oSize, "Size (mm^2) Distribution Down Cast");
+        sizeDistributionDown.PrintTabDelDistributionMatrixesForSummaryClasses (oSize, "Size (mm^2) Distribution Down Cast", totalVolumeDown);
         oSize.WriteLine ();
         oSize.WriteLine ();
         oSize.WriteLine ();
@@ -1132,15 +1147,16 @@ namespace PicesCommander
         oSize.WriteLine ();
         oSize.WriteLine ("Size (mm^2) Distribution Up Cast");
         oSize.WriteLine ();
-        sizeDistributionUp.PrintTabDelDistributionMatrix (oSize);
+        sizeDistributionUp.PrintTabDelDistributionMatrix (oSize, totalVolumeUp);
         oSize.WriteLine ();
         oSize.WriteLine ();
-        sizeDistributionUp.PrintTabDelDistributionMatrixSepartedByLevel1Classes (oSize, "Size (mm^2) Distribution Up Cast");
+        sizeDistributionUp.PrintTabDelDistributionMatrixesForSummaryClasses (oSize, "Size (mm^2) Distribution Up Cast", totalVolumeUp);
         oSize.WriteLine ();
         oSize.WriteLine ();
         oSize.WriteLine ();
         oSize.WriteLine ();
         oSize.WriteLine ();
+        
         oSize.Close ();
       }
 
@@ -1420,7 +1436,7 @@ namespace PicesCommander
                         "VolumeSampled",          // 4
                         "TemperatureMean",        // 5
                         "SalinityMean",           // 6
-                        "DenisityMean",            // 7
+                        "DenisityMean",           // 7
                         "FluorescenceMean",       // 8
                         "FluorescenceSensorMean", // 9
                         "OxygenMean",             // 10

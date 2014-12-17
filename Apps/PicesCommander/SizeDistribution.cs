@@ -593,7 +593,21 @@ namespace PicesCommander
         }
 
         o.Write ("\t" + "");
-        o.Write ("\t" + bucketTotal);
+        
+        {
+          if  (printDensity)
+          {
+            double  densityThisBucket = 0.0;
+            if  (volumeDepthForThisBucket != 0.0)
+              densityThisBucket = bucketTotal / volumeDepthForThisBucket;
+            o.Write ("\t" + densityThisBucket.ToString ());
+          }
+          else
+          {
+            o.Write ("\t" + bucketTotal);
+          }
+        }
+
         o.Write ("\t" + "");
 
         if  ((summarizeClasses != null)  &&   (summarizeClasses.Count > 0))
