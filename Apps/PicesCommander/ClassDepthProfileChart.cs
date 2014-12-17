@@ -1350,8 +1350,9 @@ namespace PicesCommander
     {
       goalie.StartBlock ();
       
-      ProfileChart.Titles.Clear ();
-      ProfileChart.Titles.Add ("Cruise: " + cruise + "  Station: " + station + "  Deployment: " + deployment);
+      //ProfileChart.Titles.Clear ();
+      // ProfileChart.Titles.Add ("Verticle Profile");
+      ProfileChart.Titles[1].Text = "Cruise: " + cruise + "  Station: " + station + "  Deployment: " + deployment;
 
       if  (!String.IsNullOrEmpty (criteriaStr))
         ProfileChart.Titles.Add (criteriaStr);

@@ -981,7 +981,7 @@ begin
 
   select   Floor(id.depth / _depthBinSize)                                     as BinId,
            Floor(id.depth / _depthBinSize) * _depthBinSize                     as BinDepth,
-           sum(id.FlowRate1 * _secsPerRec * (_chamberWidth / 1000.0) * 0.096)  as VolumeSampled
+           sum(id.FlowRate1 * _secsPerRec * _chamberWidth * 0.096)  as VolumeSampled
          from  InstrumentData id
          where id.SipperFileId = _sipperFileId
          group by Floor(id.depth / _depthBinSize)

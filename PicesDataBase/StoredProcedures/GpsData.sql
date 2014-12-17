@@ -96,12 +96,12 @@ end
 delimiter ;
 
 
-
+/*
 select distinct  id.SipperFileId, id.CTDDateTime from InstrumentData id
       join(SipperFiles sf)  on(sf.SipperFileId = id.SipperFileId)
       where sf.CruiseName="WB0814"
       order by id.CTDDateTime;
-
+*/
 
 drop procedure   if exists  GpsDataGetEstimate;
 

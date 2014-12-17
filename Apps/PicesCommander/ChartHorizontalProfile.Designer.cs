@@ -289,8 +289,10 @@
       this.ProfileChart.Size = new System.Drawing.Size (1160, 566);
       this.ProfileChart.TabIndex = 30;
       this.ProfileChart.Text = "Depth Profile";
+      title1.Font = new System.Drawing.Font ("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       title1.Name = "Title1";
       title1.Text = "Verticle Profile";
+      title2.Font = new System.Drawing.Font ("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       title2.Name = "Title2";
       title2.Text = "Cruise: jksdjsk  Station:XXX  Deployment: Alpa";
       this.ProfileChart.Titles.Add (title1);

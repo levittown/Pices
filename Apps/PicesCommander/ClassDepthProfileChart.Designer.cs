@@ -363,6 +363,7 @@
       this.ProfileChart.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
       this.ProfileChart.CausesValidation = false;
       chartArea1.AlignmentOrientation = ((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations)((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Vertical | System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Horizontal)));
+      chartArea1.AlignmentStyle = System.Windows.Forms.DataVisualization.Charting.AreaAlignmentStyles.None;
       chartArea1.AlignWithChartArea = "ChartArea1";
       chartArea1.AxisX.MajorGrid.Enabled = false;
       chartArea1.AxisX.Minimum = 0;
@@ -423,8 +424,10 @@
       this.ProfileChart.Size = new System.Drawing.Size (463, 621);
       this.ProfileChart.TabIndex = 30;
       this.ProfileChart.Text = "Depth Profile";
+      title1.Font = new System.Drawing.Font ("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       title1.Name = "Title1";
       title1.Text = "Verticle Profile";
+      title2.Font = new System.Drawing.Font ("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       title2.Name = "Title2";
       title2.Text = "Cruise: jksdjsk  Station:XXX  Deployment: Alpa";
       this.ProfileChart.Titles.Add (title1);
