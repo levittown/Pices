@@ -452,34 +452,35 @@ using namespace  MLL;
 
 // 2012-07-15  -c SixClasses_UsfCasCor.cfg -folds 10 -r c:\Temp\SixClasses_UsfCasCor.txt
 
-
 // -c USF_MFS.cfg
+
+// -dir D:\Users\kkramer\GitHub\Kaggle\GetTheData\train  -folds 10  -config Kaggle.cfg  -report D:\Users\kkramer\GitHub\Kaggle\GetTheData\train\Kaggle10Fold.txt
 
 CrossValidationApp::CrossValidationApp ()
   :
-    cancelFlag                       (false),
-    config                           (NULL),
-    copyMissClassedImages            (false),
-    directory                        (),
-    doRandomSplits                   (false),
-    featuresAreNormalizedAlready     (false),
-    fileDesc                         (NULL),
-    examples                         (NULL),
-    generateBiasMatrix               (false),
-    mlClasses                     (NULL),
-    inputFormat                      (FeatureFileIOPices::Driver ()),
-    numOfFolds                       (10),
-    numRandomSplits                  (30),
-    predictionReport                 (NULL),
-    probReport                       (NULL),
-    punishmentFactor                 (0.10f),
-    randomizeInputData               (false),
-    reduction_time                   (0.0),
-    report                           (NULL),
-    reportFileStream                 (NULL),
-    runLog                           (),
-    splitPercentage                  (0.30f),
-    validationData                   (NULL)
+    cancelFlag                   (false),
+    config                       (NULL),
+    copyMissClassedImages        (false),
+    directory                    (),
+    doRandomSplits               (false),
+    featuresAreNormalizedAlready (false),
+    fileDesc                     (NULL),
+    examples                     (NULL),
+    generateBiasMatrix           (false),
+    mlClasses                    (NULL),
+    inputFormat                  (FeatureFileIOPices::Driver ()),
+    numOfFolds                   (10),
+    numRandomSplits              (30),
+    predictionReport             (NULL),
+    probReport                   (NULL),
+    punishmentFactor             (0.10f),
+    randomizeInputData           (false),
+    reduction_time               (0.0),
+    report                       (NULL),
+    reportFileStream             (NULL),
+    runLog                       (),
+    splitPercentage              (0.30f),
+    validationData               (NULL)
 
 {
   InstrumentDataFileManager::Initialize ();
@@ -3181,234 +3182,6 @@ void  CreateBfsFromMfs (const KKStr&  mfsFileName,
 
 
 
-void  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
-                                  DataBase&            db
-                                 )
-{
-  if  (!deployment)
-    return;
-
-  cout << deployment->CruiseName () << "\t" << deployment->StationName () << "\t" << deployment->DeploymentNum () << endl;
-
-
-  // 1)Determines Midpoint of deploymet from Instruments table.
-  KKStr  sqlStr = "Call ImagesSizeDataByDepthSipper8(" + deployment->CruiseName ().QuotedStr () + "," + deployment->StationName ().QuotedStr () + "," + deployment->DeploymentNum ().QuotedStr () +",1.0)";
-
-  VectorKKStr  columnNames;
-  KKStrMatrixPtr results = db.QueryStatementReturnAllColumns (sqlStr.Str (), sqlStr.Len (), columnNames);
-  if  (results == NULL)
-  {
-    cout << "No results returend" << endl;
-    return;
-  }
-
-  int32  numRows = results->NumRows ();
-  int32  numCols = results->NumCols ();
-  int32  numCountCols = numCols - 8;
-
-  if  (numRows == 0)
-  {
-    delete  results;
-    results = NULL;
-    return;
-  }
-
-  VectorKKStr  countHeader (numCountCols);
-  for  (int32 x = 0;  x < numCountCols;  ++x)
-  {
-    countHeader[x] = columnNames[8 + x];
-  }
-
-  bool  cancelFlag = false;
-  InstrumentDataMeansListPtr  instData = db.InstrumentDataBinByMeterDepth (deployment->CruiseName (), deployment->StationName (), deployment->DeploymentNum (), 1.0f, cancelFlag);
-  if  (!instData)
-  {
-    cout << "no Instrument data." << endl << endl;
-    return;
-  }
-
-
-  KKStr  reportRootName = deployment->CruiseName () + "-" + deployment->StationName () + "-" + deployment->DeploymentNum ();
-  KKStr  reportFileRootName1 = "C:\\Temp\\MarineSnow\\" + reportRootName + ".txt";
-
-  ofstream  r1 (reportFileRootName1.Str ());
-
-  r1 << "Cruise"     << "\t" << deployment->CruiseName    () << endl
-     << "Station"    << "\t" << deployment->StationName   () << endl
-     << "Deployment" << "\t" << deployment->DeploymentNum () << endl
-     << "DateTime"   << "\t" << osGetLocalDateTime ()        << endl
-     << "DataBase"   << "\t" << db.ServerDescription ()      << endl
-     << "ProgName"   << "\t" << osGetProgName ()             << endl
-     << "HostName"   << "\t" << osGetHostName ()             << endl
-     << "UserName"   << "\t" << osGetUserName ()             << endl
-     << endl
-     << endl;
-
-  KKStr  h1 (1024);
-  KKStr  h2 (1024);
-
-  h1 << ""        << "\t" << "Depth"  << "\t" << "VolumeSampled" << "\t" << "Image"     << "\t"  << "Pixel";
-  h2 << "Down/Up" << "\t" << "(m)"    << "\t" << "m^3"           << "\t" << "Abundance" << "\t"  << "Count";
-
-  for  (int32 c = 0;  c < numCountCols;  ++c)
-  {
-    h1 << "\t" << "";
-    h2 << "\t" << countHeader[c];
-  }
-
-  KKStr  temperatureUOM   = InstrumentData::TemperatureUnit   ();
-  KKStr  salinityUOM      = InstrumentData::SalinityUnit      ();
-  KKStr  denisityUOM      = InstrumentData::DensityUnit       ();
-  KKStr  fluorescenceUOM  = InstrumentData::FluorescenceUnit  ();
-  KKStr  oxygenUOM        = InstrumentData::OxygenUnit        ();
-  KKStr  transmisivityUOM = InstrumentData::TransmisivityUnit ();
-  KKStr  turbidityUOM     = InstrumentData::TurbidityUnit     ();
-
-  h1 << "\t" << "Temperature"   << "\t" << "Salinity"  << "\t" << "Denisity"  << "\t" << "Fluorescence"  << "\t" << "Fluorescence-Sensor" << "\t" << "Oxygen"  << "\t" << "Oxygen"  << "\t" << "transmisivity"  << "\t" << "turbidity";
-  h2 << "\t" << temperatureUOM  << "\t" << salinityUOM << "\t" << denisityUOM << "\t" << fluorescenceUOM << "\t" << "Volts"               << "\t" << oxygenUOM << "\t" << "umol/kg" << "\t" << transmisivityUOM << "\t" << turbidityUOM;
-
-  r1 << endl << endl
-     << "Abundance / m^3" << endl
-     << endl
-     << h1 << endl
-     << h2 << endl;
-
-  for  (int32 rowIdx = 0;  rowIdx < numRows;  ++rowIdx)
-  {
-    KKStrList&  row = (*results)[rowIdx];
-
-    bool  downCast     = row[3].ToBool  ();
-    int32  bucketIdx   = row[4].ToInt32 ();
-    float  bucketDepth = row[5].ToFloat ();
-    int32  imageCount  = row[6].ToInt32 ();
-    int32  pixelCount  = row[7].ToInt32 ();
-
-    VectorInt32  counts (numCountCols, 0);
-    for  (int32 x = 0;  x < numCountCols;  ++x)
-      counts[x] = row[8 + x].ToInt32 ();
-
-    float  volumeSampled = 0.0f;
-    InstrumentDataMeansPtr  idm = instData->LookUp (downCast, bucketDepth);
-    if  (idm)
-      volumeSampled = idm->volumeSampled;
-
-    KKStr  begOfLine (128);
-    begOfLine << (downCast ? "Down" : "Up") << "\t" << bucketDepth << "\t" << volumeSampled << "\t" << imageCount << "\t" << pixelCount;
-
-    r1 << begOfLine;
-
-    for  (int32 x = 0;  x < numCountCols;  ++x)
-    {
-      float  density = 0.0f;
-      if  (volumeSampled != 0.0)
-        density = (float)counts[x] / volumeSampled;
-      r1 << "\t" << density;
-    }
-
-    if  (idm)
-    {
-      KKStr  instDataStr (256);
-
-      instDataStr << "\t" << idm->temperatureMean
-                  << "\t" << idm->salinityMean 
-                  << "\t" << idm->denisityMean
-                  << "\t" << idm->fluorescenceMean
-                  << "\t" << idm->fluorescenceSensorMean
-                  << "\t" << idm->oxygenMean
-                  << "\t" << idm->Oxygen_molPerKg_Mean ()
-                  << "\t" << idm->transmisivityMean 
-                  << "\t" << idm->turbidityMean;
-
-      r1 << instDataStr;
-    }
-
-    r1 << endl;
-  }
-
-
-  r1 << endl << endl << endl
-     << "Abundance" << endl
-     << endl;
-
-  r1 << h1 << endl;
-  r1 << h2 << endl;
-
-  for  (int32 rowIdx = 0;  rowIdx < numRows;  ++rowIdx)
-  {
-    KKStrList&  row = (*results)[rowIdx];
-
-    bool  downCast     = row[3].ToBool  ();
-    int32  bucketIdx   = row[4].ToInt32 ();
-    float  bucketDepth = row[5].ToFloat ();
-    int32  imageCount  = row[6].ToInt32 ();
-    int32  pixelCount  = row[7].ToInt32 ();
-
-    VectorInt32  counts (numCountCols, 0);
-    for  (int32 x = 0;  x < numCountCols;  ++x)
-      counts[x] = row[8 + x].ToInt32 ();
-
-    float  volumeSampled = 0.0f;
-    InstrumentDataMeansPtr  idm = instData->LookUp (downCast, bucketDepth);
-    if  (idm)
-      volumeSampled = idm->volumeSampled;
-
-    KKStr  begOfLine (128);
-    begOfLine << (downCast ? "Down" : "Up") << "\t" << bucketDepth << "\t" << volumeSampled << "\t" << imageCount << "\t" << pixelCount;
-
-    r1 << begOfLine;
-
-    for  (int32 x = 0;  x < numCountCols;  ++x)
-      r1 << "\t" << counts[x];
-
-    if  (idm)
-    {
-      KKStr  instDataStr (256);
-
-      instDataStr << "\t" << idm->temperatureMean
-                  << "\t" << idm->salinityMean 
-                  << "\t" << idm->denisityMean
-                  << "\t" << idm->fluorescenceMean
-                  << "\t" << idm->fluorescenceSensorMean
-                  << "\t" << idm->oxygenMean
-                  << "\t" << idm->Oxygen_molPerKg_Mean ()
-                  << "\t" << idm->transmisivityMean 
-                  << "\t" << idm->turbidityMean;
-
-      r1 << instDataStr;
-    }
-
-    r1 << endl;
-  }
-
-
-  delete  instData;  instData = NULL;
-  delete  results;   results  = NULL; 
-}  /* MarineSnowReportDeployment */
-
-
-
-
-void  MarineSnowReport ()
-{
-  RunLog  runLog;
-  DataBasePtr  db = new DataBase (runLog);
-
-  SipperDeploymentListPtr  deployments = db->SipperDeploymentLoad ("","");
-
-  SipperDeploymentList::const_iterator  idx;
-  for  (idx = deployments->begin ();  idx != deployments->end ();  ++idx)
-  {
-    MarineSnowReportDeployment (*idx, *db);
-  }
-
-  delete  db;
-  db = NULL;
-}  /* MarineSnowReport */
-
-
-
-
-
 
 
 
@@ -3836,15 +3609,7 @@ int  main (int    argc,
     exit (-1);
   }
     
-
   if  (false)
-  {
-    MarineSnowReport ();
-    exit (-1);
-  }
-
-
-  if  (true)
   {
     DetermineCropSettings ();
     exit (-1);

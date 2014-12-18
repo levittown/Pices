@@ -1126,9 +1126,9 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
 
   KKStr  className = _unknownClass->Name ();
 
-  _log.Level (10) << "FeatureDataReSink, dirName           [" << _dirName   << "]." << endl;
-  _log.Level (10) << "                   fileName          [" << _fileName  << "]." << endl;
-  _log.Level (10) << "                   UnKnownClass      [" << className  << "]." << endl;
+  _log.Level (10) << "FeatureDataReSink, dirName       [" << _dirName   << "]." << endl;
+  _log.Level (10) << "                   fileName      [" << _fileName  << "]." << endl;
+  _log.Level (10) << "                   UnKnownClass  [" << className  << "]." << endl;
 
   osAddLastSlash (_dirName);
   

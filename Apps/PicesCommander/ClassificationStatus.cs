@@ -1128,7 +1128,7 @@ namespace PicesCommander
       {
         System.IO.StreamWriter  oSize = new System.IO.StreamWriter (sizeReportFileName);
 
-        oSize.WriteLine ("Classification Report");
+        oSize.WriteLine ("Classification Report   Distribution by Class and Size(mm^2)");
         oSize.WriteLine ();
         PrintReportRunTimeParameters (threadConn, oSize);
         oSize.WriteLine ();
@@ -1136,10 +1136,39 @@ namespace PicesCommander
         oSize.WriteLine ();
         oSize.WriteLine ("Size (mm^2) Distribution Down Cast");
         oSize.WriteLine ();
+        sizeDistributionDown.PrintTabDelDistributionMatrix (oSize, 0.0f);
+        oSize.WriteLine ();
+        oSize.WriteLine ();
+        sizeDistributionDown.PrintTabDelDistributionMatrixesForSummaryClasses (oSize, "Size (mm^2) Distribution Down Cast", 0.0f);
+        oSize.WriteLine ();
+        oSize.WriteLine ();
+        oSize.WriteLine ();
+        oSize.WriteLine ();
+        oSize.WriteLine ();
+        oSize.WriteLine ("Size (mm^2) Distribution Up Cast");
+        oSize.WriteLine ();
+        sizeDistributionUp.PrintTabDelDistributionMatrix (oSize, 0.0f);
+        oSize.WriteLine ();
+        oSize.WriteLine ();
+        sizeDistributionUp.PrintTabDelDistributionMatrixesForSummaryClasses (oSize, "Size (mm^2) Distribution Up Cast", 0.0f);
+        oSize.WriteLine ();
+        oSize.WriteLine ();
+        oSize.WriteLine ();
+        oSize.WriteLine ();
+        oSize.WriteLine ();
+        oSize.WriteLine ();
+        oSize.WriteLine ();
+        oSize.WriteLine ();
+        oSize.WriteLine ("Classification Report   Density by Class and Size(mm^2)");
+        oSize.WriteLine ();
+        oSize.WriteLine ();
+        oSize.WriteLine ();
+        oSize.WriteLine ("Size (mm^2) Density Down Cast");
+        oSize.WriteLine ();
         sizeDistributionDown.PrintTabDelDistributionMatrix (oSize, totalVolumeDown);
         oSize.WriteLine ();
         oSize.WriteLine ();
-        sizeDistributionDown.PrintTabDelDistributionMatrixesForSummaryClasses (oSize, "Size (mm^2) Distribution Down Cast", totalVolumeDown);
+        sizeDistributionDown.PrintTabDelDistributionMatrixesForSummaryClasses (oSize, "Size (mm^2) Density Down Cast", totalVolumeDown);
         oSize.WriteLine ();
         oSize.WriteLine ();
         oSize.WriteLine ();
@@ -1150,7 +1179,7 @@ namespace PicesCommander
         sizeDistributionUp.PrintTabDelDistributionMatrix (oSize, totalVolumeUp);
         oSize.WriteLine ();
         oSize.WriteLine ();
-        sizeDistributionUp.PrintTabDelDistributionMatrixesForSummaryClasses (oSize, "Size (mm^2) Distribution Up Cast", totalVolumeUp);
+        sizeDistributionUp.PrintTabDelDistributionMatrixesForSummaryClasses (oSize, "Size (mm^2) Density Up Cast", totalVolumeUp);
         oSize.WriteLine ();
         oSize.WriteLine ();
         oSize.WriteLine ();

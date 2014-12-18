@@ -496,6 +496,8 @@ namespace KKU
     uint32    ToUint32     () const;
     uint64    ToUint64     () const;
 
+    wchar_t*  ToWchar_t    () const;
+
     KKStr&    TrimRight (const char* whiteSpaceChars = "\n\r\t ");
 
     void      TrimRightChar ();

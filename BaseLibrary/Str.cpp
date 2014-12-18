@@ -3396,6 +3396,28 @@ KKU::uint64  KKStr::ToUint64 () const
 
 
 
+wchar_t*  KKStr::ToWchar_t () const
+{
+  wchar_t* wa = NULL;
+  if  (val == NULL)
+  {
+    wa = new wchar_t[1];
+    mbstowcs (wa, "", 1);
+    return  wa;
+  }
+  else
+  {
+    size_t  wideLen = len + 1;
+    wa = new wchar_t[wideLen];
+    mbstowcs (wa, val, wideLen);
+  }
+  return wa;
+}
+
+
+
+
+
 double  KKStr::ToLatitude ()  const
 {
   KKStr latitudeStr (*this);

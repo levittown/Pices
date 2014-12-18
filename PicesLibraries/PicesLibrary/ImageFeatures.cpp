@@ -312,60 +312,13 @@ FeatureVector (FeatureFileIOPices::PlanktonMaxNumOfFields ()),
         image->ReAllocateForBiggerScreen ();
         image->Save (_fileName);
       }
-
       raster = new RasterSipper (*image);
     }
-
     delete  image;
   }
   else
   {
-    RasterPtr  workRaster = ReadImage (_fileName);
-    if  (workRaster)
-    {
-      RasterPtr  redChannel   = workRaster->ExtractChannel (RedChannel);
-      RasterPtr  greenChannel = workRaster->ExtractChannel (GreenChannel);
-      RasterPtr  blueChannel  = workRaster->ExtractChannel (BlueChannel);
-
-      RasterPtr  segmentedRedRaster   = redChannel->SegmentImage ();
-      RasterPtr  segmentedGreenRaster = greenChannel->SegmentImage ();
-      RasterPtr  segmentedBlueRaster  = blueChannel->SegmentImage ();
-
-      RasterSipperPtr  segmentedRaster = new RasterSipper (workRaster->Height (), workRaster->Width (), false);
-
-      for  (int32 r = 0;  r < raster->Height ();  r++)
-      {
-        for  (int32 c = 0;  c < raster->Width ();  c++)
-        {
-          if  ((segmentedRedRaster->ForegroundPixel   (r, c))  ||
-               (segmentedGreenRaster->ForegroundPixel (r, c))  ||
-               (segmentedBlueRaster->ForegroundPixel  (r, c))
-              )
-            segmentedRaster->SetPixelValue (r, c, raster->GetPixelValue (r, c));
-          else
-            segmentedRaster->SetPixelValue (r, c, 255);
-        }
-      }
-
-      KKStr rootName = osGetRootName (_fileName);
-
-      //KKStr  dirName = "C:\\Temp\\PolutionImages\\" + rootName;
-      //osCreateDirectoryPath (dirName);
-      //SaveImage (*segmentedRaster, dirName + DS + rootName + "_Segmented.bmp");
-
-      delete  redChannel;    redChannel = NULL;
-      delete  greenChannel;  greenChannel = NULL;
-      delete  blueChannel;   blueChannel  = NULL;
-
-      delete  segmentedRedRaster;    segmentedRedRaster   = NULL;
-      delete  segmentedGreenRaster;  segmentedGreenRaster = NULL;
-      delete  segmentedBlueRaster;   segmentedBlueRaster  = NULL;
-
-      // RasterSipperPtr  segmentedRaster = raster->SegmentImage ();
-      delete  workRaster;
-      workRaster = NULL;
-      raster = segmentedRaster;
-    }
+    raster = new RasterSipper (_fileName, _successfull);
   }
 
   if  (raster)

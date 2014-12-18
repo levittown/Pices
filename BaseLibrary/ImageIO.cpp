@@ -2,11 +2,21 @@
  * Copyright (C) 1994-2011 Kurt Kramer
  * For conditions of distribution and use, see copyright notice in KKU.h
  */
-#include  "FirstIncludes.h"
-
+#include "FirstIncludes.h"
 #include <iostream>
 #include <iostream>
 #include <vector>
+#include <string.h>
+
+#if  defined(OS_WINDOWS)
+#include <windows.h>
+#include <objidl.h>
+#include <gdiplus.h>
+using namespace Gdiplus;
+#pragma comment (lib,"Gdiplus.lib")
+#endif
+
+#include "MemoryDebug.h"
 using namespace std;
 
 
@@ -64,8 +74,9 @@ namespace KKU
 
 RasterPtr  ReadImage (const KKStr&  imageFileName);
 
-RasterPtr  ReadImagePNG (const KKStr&  imageFileName);
-RasterPtr  ReadImagePGM (const KKStr&  imageFileName);
+RasterPtr  ReadImagePNG      (const KKStr&  imageFileName);
+RasterPtr  ReadImagePGM      (const KKStr&  imageFileName);
+RasterPtr  ReadImageUsingGDI (const KKStr& imageFileName);
 
 
 void  SaveImage  (const Raster&  image, 
@@ -80,7 +91,11 @@ void  SaveImagePNG (const Raster&  image,
                     const KKStr&   imageFileName
                    );
 
+void  DefineImageIoAtExit ();
 
+void  ImageIoFinaleCleanUp ();
+
+bool  imageIoAtExitDefined = false;
 
 #ifdef  USE_CIMG
 
@@ -309,8 +324,158 @@ RasterPtr  ReadImage (const KKStr&  imageFileName)
     image = ReadImagePNG (imageFileName);
   }
 
+#if  defined(OS_WINDOWS)
+  else if  ((extension == "jpg")  ||  (extension == "tif")  ||  (extension == "tiff"))
+  {
+    image = ReadImageUsingGDI (imageFileName);
+    if  (!image->Color ())
+      image->ReverseImage ();
+  }
+#endif
   return  image;
 }  /* ReadImage */
+
+
+
+
+
+
+bool                gdiStarted            = false;
+GdiplusStartupInput gdiplusStartupInput;
+ULONG_PTR           gdiplusToken;
+
+RasterPtr  KKU::ReadImageUsingGDI (const KKStr&  imageFileName)
+{
+  if  (!gdiStarted)
+  {
+    GdiplusStartupInput gdiplusStartupInput;
+    ULONG_PTR           gdiplusToken;
+    // Initialize GDI+.
+    GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+
+    //GdiplusShutdown(gdiplusToken);
+
+    gdiStarted = true;
+    DefineImageIoAtExit ();
+  }
+
+  RasterPtr  r = NULL;
+  wchar_t*  imageFileNameWide = imageFileName.ToWchar_t ();
+
+  Bitmap*  bm = Bitmap::FromFile (imageFileNameWide, false);
+  if  (bm == NULL)
+  {
+    cerr << endl << "KKB::ReadImageUsingGDI   ***ERROR***  Reading file: " << imageFileName << endl;
+  }
+  else
+  {
+    kkuint32  height = bm->GetHeight ();
+    kkuint32  width  = bm->GetWidth ();
+
+    BitmapData* bitmapData = new BitmapData ();
+    Gdiplus::Rect rect (0, 0, width, height);
+
+    bm->LockBits(&rect, Gdiplus::ImageLockModeRead, bm->GetPixelFormat (), bitmapData);
+
+    Gdiplus::PixelFormat  pixFormat = bitmapData->PixelFormat;
+    kkint32  stride = bitmapData->Stride;
+    void*  scan0 = bitmapData->Scan0;
+
+    if  (pixFormat == PixelFormat24bppRGB)
+    {
+      r = new Raster (height, width, true);
+
+      kkint32  nOffset = stride - width * 3;
+      kkint32  bytesPerRow = width * 3 + nOffset;
+
+      uchar  red   = 255;
+      uchar  green = 255;
+      uchar  blue  = 255;
+      
+      kkuint32  row, col;
+
+      uchar*  ptr = (uchar*)(void*)scan0;
+
+      for  (row = 0;  row < height;  ++row)
+      {
+        for  (col = 0;  col < width;  ++col)
+        {
+          red   = *ptr;  ++ptr;
+          green = *ptr;  ++ptr;
+          blue  = *ptr;  ++ptr;
+
+          r->SetPixelValue (row, col, red, green, blue);
+        }
+        
+        ptr += nOffset;
+      }
+    }
+
+    else if  (pixFormat == PixelFormat8bppIndexed)
+    {
+      kkint32  paletteSize = bm->GetPaletteSize ();
+
+      ColorPalette* palette = (ColorPalette*)malloc (paletteSize);
+      bm->GetPalette (palette, paletteSize);
+
+      INT  paletteHasAlpha     = palette->Flags & PaletteFlagsHasAlpha;
+      INT  paletteHasGrayScale = palette->Flags & PaletteFlagsGrayScale;
+      INT  paletteHasHalftone  = palette->Flags & PaletteFlagsHalftone;
+
+      r = new Raster (height, width, false);
+      kkint32  nOffset = stride - width;
+      kkint32  bytesPerRow = width + nOffset;
+
+      uchar  index = 255;
+      
+      kkuint32  row, col;
+
+      uchar*  ptr = (uchar*)(void*)scan0;
+
+      for  (row = 0;  row < height;  ++row)
+      {
+        for  (col = 0;  col < width;  ++col)
+        {
+          index = *ptr;  ++ptr;
+
+          ARGB argb = palette->Entries[index];
+
+          kkint32  grayScaleValue = argb % 256;
+
+          r->SetPixelValue (row, col, (uchar)grayScaleValue);
+        }
+        
+        ptr += nOffset;
+      }
+
+      delete  palette;
+      palette = NULL;
+    }
+
+    bm->UnlockBits (bitmapData);
+
+    delete  bm;
+    bm = NULL;
+  }
+
+  delete  imageFileNameWide;
+  imageFileNameWide = NULL;
+  return  r;
+}
+
+#endif
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -658,6 +823,29 @@ void  SaveImagePNG (const Raster&  image,
 
 
 
+
+
+void  KKU::DefineImageIoAtExit ()
+{
+  if  (!imageIoAtExitDefined)
+  {
+    atexit (ImageIoFinaleCleanUp);
+    imageIoAtExitDefined = true;
+  }
+}
+
+
+void  KKU::ImageIoFinaleCleanUp ()
+{
+  if  (gdiStarted)
+  {
+    GdiplusShutdown(gdiplusToken);
+    gdiStarted = false;
+  }
+}
+
+
+
 void  DisplayImage  (const Raster& image)
 {
   int32  col = 0, row = 0;
@@ -675,7 +863,6 @@ void  DisplayImage  (const Raster& image)
 
 
 
-#endif
 
 
 
