@@ -98,6 +98,7 @@ using namespace  MLL;
 // 2011-05-23: -s I:\Pices\TrainingLibraries\MissclassNonOil -n I:\Pices\TrainingLibraries\MissclassNonOil.data -u
 
 // -s C:\Pices\TrainingLibraries\Gulf_2011 -n C:\Users\kkramer\SipperProject\Papers\BinaryFeatureSelection\Experiments\Gulf_2011\Gulf_2011.data  -u -r C:\Users\kkramer\SipperProject\Papers\BinaryFeatureSelection\Experiments\Gulf_2011\Gulf_2011_ExtractionReport.txt
+// -s D:\Users\kkramer\GitHub\Kaggle\Data\train   -n D:\Users\kkramer\GitHub\Kaggle\Data\train\Kagler.data
 
 ExtractFeatures::ExtractFeatures ():
   PicesApplication (),
@@ -107,6 +108,7 @@ ExtractFeatures::ExtractFeatures ():
   mlClass                      (MLClass::CreateNewMLClass ("UnKnown")),
   mlClasses                    (new MLClassConstList ()),
   images                       (NULL),
+  purgeDuplicates              (false),
   report                       (NULL),
   sourceRootDirPath            (),
   statusMessage                (),
@@ -294,6 +296,18 @@ bool  ExtractFeatures::ProcessCmdLineParameter (const KKStr&  parmSwitch,
   }
 
   else if  
+    (parmSwitch.EqualIgnoreCase ("-PurgeDuplicates")  ||
+     parmSwitch.EqualIgnoreCase ("-PG")               ||
+     parmSwitch.EqualIgnoreCase ("-P")
+    )
+  {
+    if  (parmValue.Empty ())
+      purgeDuplicates = true;
+    else
+      purgeDuplicates = parmValue.ToBool ();
+  }
+
+  else if  
     (parmSwitch.EqualIgnoreCase ("-S")          ||
      parmSwitch.EqualIgnoreCase ("-Source")     ||
      parmSwitch.EqualIgnoreCase ("-SourceDir")
@@ -331,6 +345,8 @@ void   ExtractFeatures::DisplayCommandLineParameters ()
        << "        images will be placed here."                                    << endl   
        << endl
        << "    -n  Name of File to store Calculated Features in."                  << endl
+       << endl
+       << "    -P  <Yes | No>  Purge Dupplicates; defaults to No."                 << endl
        << endl
        << "    -r  Report File,  Defaults to Command Line."                        << endl
        << endl
@@ -410,9 +426,8 @@ void  ExtractFeatures::ReportDuplicates ()
     *report << endl;
   }
 
-  duplicateChecker.PurgeDuplicates (images, report);
-
-  
+  if  (purgeDuplicates)
+    duplicateChecker.PurgeDuplicates (images, report);
 }  /* ReportDuplicates */
 
 

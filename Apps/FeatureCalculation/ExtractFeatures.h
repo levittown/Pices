@@ -64,6 +64,7 @@ private:
   MLClassConstPtr           mlClass;
   MLClassConstListPtr       mlClasses;
   ImageFeaturesListPtr      images;
+  bool                      purgeDuplicates;
   ostream*                  report;
   ofstream*                 reportFile;
   KKStr                     reportFileName;
