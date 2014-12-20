@@ -164,7 +164,6 @@ char  KKStrParser::GetNextTokenChar (const char* delStr)
 }
 
 
-
 KKU::DateTime  KKStrParser::GetNextTokenDateTime (const char* delStr)
 {
   return  KKU::DateTime (GetNextToken (delStr));

@@ -409,6 +409,79 @@ bool  KKU::osValidDirectory (const KKStr&  name)
 
 
 
+bool   KKU::osValidFileName (const KKStr&  _name)
+{
+  KKStrListPtr  errors = osValidFileNameErrors (_name);
+  if  (errors == NULL)
+    return true;
+  else
+  {
+    delete errors;
+    errors = NULL;
+    return false;
+  }
+}
+
+
+
+KKStrListPtr  KKU::osValidFileNameErrors (const KKStr&  _name)
+{
+  const char*  invalidChars = "\\\" :<>!?*";
+  const char*  invalidNames[] = {"CON",  "PRN",  "AUX",  "NUL",  "COM1", "COM2", 
+                                 "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", 
+                                 "COM9", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5",
+                                 "LPT6", "LPT7", "LPT8", "LPT9", 
+                                 NULL
+                                }; 
+
+  KKStrListPtr  errors = new KKStrList (true);
+  if  (_name.Empty ())
+  {
+    errors->PushOnBack (new KKStr ("Blank names are invalid!"));
+  }
+
+  else
+  {
+    // Check for invalid names.
+    kkint32  x = 0;
+    while  (invalidNames[x] != NULL)
+    {
+      if  (_name.EqualIgnoreCase (invalidNames[x]))
+        errors->PushOnBack (new KKStr ("Can not use \"" + _name + "\""));
+    }
+
+    // Check for invalid charcters
+    for  (x = 0;  x < _name.Len ();  ++x)
+    {
+      char c = _name[x];
+      if  (c == 0)
+        errors->PushOnBack (new KKStr ("Null character at position: " + StrFormatInt (x, "##0")));
+
+      else if  (c == ' ')
+        errors->PushOnBack (new KKStr ("No spaces allowed."));
+
+      else if  (c < 32)
+      {
+        errors->PushOnBack (new KKStr ("Character at position: " + StrFormatInt (x, "##0") + " has ordinal value of: " + StrFormatInt (c, "##0")));
+      }
+
+      else if  (strchr (invalidChars, c) != NULL)
+      {
+        KKStr invalidStr (2);
+        invalidStr.Append (c);
+        errors->PushOnBack (new KKStr ("Invalid character: " + invalidStr + "  at position: " + StrFormatInt (x, "##0")));
+      }
+    }
+  }
+
+  if  (errors->QueueSize () < 1)
+  {
+    delete  errors;
+    errors = NULL;
+  }
+
+  return errors;
+}  /* osValidFileNameErrors */
 
 
 
