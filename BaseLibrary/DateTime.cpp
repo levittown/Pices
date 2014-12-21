@@ -517,8 +517,6 @@ KKU::uint64  DateType::ToSeconds ()  const  {return  (uint64)(Days ()) * (uint64
 
 
 
-
-
 int32  DateType::Compare (const DateType&  right)  const
 {
   if  (year > right.year)

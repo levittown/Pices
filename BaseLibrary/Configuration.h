@@ -86,7 +86,6 @@ namespace KKU
     // Access Methods.
     const KKU::KKStr&  FileName () const  {return  fileName;}
 
-
     KKStrConstPtr      SectionName (int32 sectionNum)  const;       /**< @brief Returns the name of the section for specified index, if index not defined will return NULL. */
 
     int32              SectionNum (const KKU::KKStr&  sectionName)  const;

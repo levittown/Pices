@@ -399,7 +399,6 @@ void  Configuration::LoadFile ()
 
   int32  lastLineNum = 0;
 
-
   if  (fileName == "")
   {
     log.Level (-1) << "***ERROR*** Configuration::LoadFile   **** Opening File[" << fileName << "]. ****  Name is Blank ****" 
