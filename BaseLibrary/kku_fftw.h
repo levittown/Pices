@@ -126,7 +126,7 @@ namespace  KKU
 
 
   template<typename DftType>
-  class  KK_DFT
+  class  KK_DFT1D
   {
   public:
     typedef  std::complex<DftType>  DftComplexType;
