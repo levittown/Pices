@@ -2,11 +2,11 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <time.h>
-#include <string>
 #include <iostream>
 #include <fstream>
-#include <vector>
 #include <map>
+#include <string>
+#include <vector>
 #include "MemoryDebug.h"
 #include "BasicTypes.h"
 using namespace std;
@@ -149,7 +149,6 @@ KKStr&  Attribute::GetNominalValue (int32 code)  const
 
   return  *result;
 }  /* GetNominalValue */
-
 
 
 
