@@ -63,6 +63,11 @@ public:
 
   KKStr                      loadFileName;
 
+  int32                      logLossCount;
+  double                     logLossTotal;
+  double                     logLossMax;
+  double                     logLossMin;
+
   KKStr                      missedClassedDir; /**< Directory where miss clasified examples should be copied to. */
 
   MLClassConstPtr            noiseMLClass;

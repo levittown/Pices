@@ -413,7 +413,11 @@ namespace KKU
   bool           osValidDirectory (KKStrConstPtr  _name);
 
   bool           osValidDirectory (const KKStr&  _name);
+
+  bool           osValidFileName (const KKStr&  _name);
   
+  KKStrListPtr   osValidFileNameErrors (const KKStr&  _name);
+
   bool           osIsBackGroundProcess ();
 
   void           osRunAsABackGroundProcess ();
