@@ -513,7 +513,7 @@ namespace PicesCommander
         SizeDistribution2  familySummary = this.ExtractFamilyOfClasses (pc);
         if  (familySummary.totals.Count > 1)
         {
-          o.WriteLine (majorTitle + "     *** Summary of " + pc.Name + " ***");
+          o.WriteLine (majorTitle + "      *** Summary of " + pc.Name + " ***");
           o.WriteLine ();
           familySummary.PrintTabDelDistributionMatrix (o, volume);
           o.WriteLine ();
