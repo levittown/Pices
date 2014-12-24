@@ -49,6 +49,8 @@ namespace PicesCommander
 
     private  PicesDataBase            mainWinConn = null;
 
+    private  PicesSipperDeployment    deployment = null;
+
     private  DateTime                 midPoint;  /**< Mid point in deploymnet,  the DateTIme from CTD when SIPPER is at its deapest. */
 
     private  Thread                   selectionThread          = null;
@@ -125,6 +127,7 @@ namespace PicesCommander
     private   bool   allowUpdates = false;
 
 
+
     public ClassificationStatus (PicesCommander           _manager,
                                  PicesDataBaseImageGroup  _imageGroup,
                                  String                   _cruiseName,
@@ -198,6 +201,8 @@ namespace PicesCommander
       Station.Text    = stationName;
       Deployment.Text = deploymentNum;
       SipperFile.Text = sipperFileName;
+
+      deployment = mainWinConn.SipperDeploymentLoad (cruiseName, stationName, deploymentNum);
 
       if  (currentClass == null)
         CurrentClass.Text = "";
@@ -1023,7 +1028,23 @@ namespace PicesCommander
 
       if  (!String.IsNullOrEmpty (deploymentNum))
         o.WriteLine ("Deployment Num" + "\t" + deploymentNum);
- 
+
+      if  (deployment != null)
+      {
+        // For now we will assume that CTD is local time.
+        //TimeSpan  ts = deployment.SyncTimeStampGPS - deployment.SyncTimeStampActual;
+        TimeSpan  ts = new TimeSpan (-5, 0, 0);
+
+        DateTime  gmtDateTime = deployment.DateTimeStart + ts;
+        o.WriteLine ("Date Collected  " + "Local:" + "\t" + deployment.DateTimeStart.ToString ("yyyy/MM/dd") +
+                                          "GMT:"   + "\t" + gmtDateTime.ToString ("yyyy/MM/dd")
+                    );
+
+        o.WriteLine ("Time Collected  " + "Local:" + "\t" + deployment.DateTimeStart.ToString ("HH:mm:ss") +
+                                          "GMT:"   + "\t" + gmtDateTime.ToString ("HH:mm:ss")
+                    );
+      }
+
       if  (!String.IsNullOrEmpty (sipperFileName))
         o.WriteLine ("SipperFile Name" + "\t" + sipperFileName);
 
@@ -1128,29 +1149,29 @@ namespace PicesCommander
       {
         System.IO.StreamWriter  oSize = new System.IO.StreamWriter (sizeReportFileName);
 
-        oSize.WriteLine ("Classification Report   Distribution by Class and Size(mm^2)");
+        oSize.WriteLine ("Classification Report:   Distribution by Class and Size (mm^2)");
         oSize.WriteLine ();
         PrintReportRunTimeParameters (threadConn, oSize);
         oSize.WriteLine ();
         oSize.WriteLine ();
         oSize.WriteLine ();
-        oSize.WriteLine ("Size (mm^2) Distribution Down Cast");
+        oSize.WriteLine ("Size (mm^2) Distribution of number of individuals or particles (counts) summed over all depths for Down Cast");
         oSize.WriteLine ();
         sizeDistributionDown.PrintTabDelDistributionMatrix (oSize, 0.0f);
         oSize.WriteLine ();
         oSize.WriteLine ();
-        sizeDistributionDown.PrintTabDelDistributionMatrixesForSummaryClasses (oSize, "Size (mm^2) Distribution Down Cast", 0.0f);
+        sizeDistributionDown.PrintTabDelDistributionMatrixesForSummaryClasses (oSize, "Size (mm^2) Distribution of number of individuals or particles (counts) summed over all depths for Down Cast", 0.0f);
         oSize.WriteLine ();
         oSize.WriteLine ();
         oSize.WriteLine ();
         oSize.WriteLine ();
         oSize.WriteLine ();
-        oSize.WriteLine ("Size (mm^2) Distribution Up Cast");
+        oSize.WriteLine ("Size (mm^2) Distribution of number of individuals or particles (counts) summed over all depths for Up Cast");
         oSize.WriteLine ();
         sizeDistributionUp.PrintTabDelDistributionMatrix (oSize, 0.0f);
         oSize.WriteLine ();
         oSize.WriteLine ();
-        sizeDistributionUp.PrintTabDelDistributionMatrixesForSummaryClasses (oSize, "Size (mm^2) Distribution Up Cast", 0.0f);
+        sizeDistributionUp.PrintTabDelDistributionMatrixesForSummaryClasses (oSize, "Size (mm^2) Distribution of number of individuals or particles (counts) summed over all depths for Up Cast", 0.0f);
         oSize.WriteLine ();
         oSize.WriteLine ();
         oSize.WriteLine ();
@@ -1159,27 +1180,27 @@ namespace PicesCommander
         oSize.WriteLine ();
         oSize.WriteLine ();
         oSize.WriteLine ();
-        oSize.WriteLine ("Classification Report   Density by Class and Size(mm^2)");
+        oSize.WriteLine ("Classification Report:   Density (#/m3) by Class and Size (mm^2)");
         oSize.WriteLine ();
         oSize.WriteLine ();
         oSize.WriteLine ();
-        oSize.WriteLine ("Size (mm^2) Density Down Cast");
+        oSize.WriteLine ("Size (mm^2) Distribution of numbers of individuals or particles per m3 (density) summed over all depths of the Down Cast");
         oSize.WriteLine ();
         sizeDistributionDown.PrintTabDelDistributionMatrix (oSize, totalVolumeDown);
         oSize.WriteLine ();
         oSize.WriteLine ();
-        sizeDistributionDown.PrintTabDelDistributionMatrixesForSummaryClasses (oSize, "Size (mm^2) Density Down Cast", totalVolumeDown);
+        sizeDistributionDown.PrintTabDelDistributionMatrixesForSummaryClasses (oSize, "Size (mm^2) Distribution of numbers of individuals or particles per m3 (density) summed over all depths of the Down Cast", totalVolumeDown);
         oSize.WriteLine ();
         oSize.WriteLine ();
         oSize.WriteLine ();
         oSize.WriteLine ();
         oSize.WriteLine ();
-        oSize.WriteLine ("Size (mm^2) Distribution Up Cast");
+        oSize.WriteLine ("Size (mm^2) Distribution of numbers of individuals or particles per m3 (density) summed over all depths of the Up Cast");
         oSize.WriteLine ();
         sizeDistributionUp.PrintTabDelDistributionMatrix (oSize, totalVolumeUp);
         oSize.WriteLine ();
         oSize.WriteLine ();
-        sizeDistributionUp.PrintTabDelDistributionMatrixesForSummaryClasses (oSize, "Size (mm^2) Density Up Cast", totalVolumeUp);
+        sizeDistributionUp.PrintTabDelDistributionMatrixesForSummaryClasses (oSize, "Size (mm^2) Distribution of numbers of individuals or particles per m3 (density) summed over all depths of the Up Cast", totalVolumeUp);
         oSize.WriteLine ();
         oSize.WriteLine ();
         oSize.WriteLine ();
@@ -1191,12 +1212,12 @@ namespace PicesCommander
 
       {
         System.IO.StreamWriter  oDepth = new System.IO.StreamWriter (depthReportFileName);
-        oDepth.WriteLine ("Classification Report");
+        oDepth.WriteLine ("Classification Report: Counts Or Density Per Depth Increment Report");
         oDepth.WriteLine ();
         PrintReportRunTimeParameters (threadConn, oDepth);
         oDepth.WriteLine ();
         oDepth.WriteLine ();
-        oDepth.WriteLine ("Abundance Distribution   - Class, Depth by 1 Meter Increments");
+        oDepth.WriteLine ("Number of individuals in each Class (counts) by 1 meter depth Increments for Down and Up Cast Combined");
         oDepth.WriteLine ();
         depthDistribution_1.PrintByClassCollumns (oDepth, totalScanLinesPerMeter, totalVolumePerMeter, false, summarizeClasses);
         oDepth.WriteLine ();
@@ -1204,7 +1225,7 @@ namespace PicesCommander
         oDepth.WriteLine ();
         oDepth.WriteLine ();
 
-        oDepth.WriteLine ("Abundance Density Distribution  - Class, Depth by 1 Meter Increments");
+        oDepth.WriteLine ("Abundance Density (#/m3) for each Class by 1 meter depth Increments for Down and Up Casts Combined");
         oDepth.WriteLine ();
         depthDistribution_1.PrintByClassCollumns (oDepth, totalScanLinesPerMeter, totalVolumePerMeter, true, summarizeClasses);
         oDepth.WriteLine ();
@@ -1213,7 +1234,9 @@ namespace PicesCommander
         oDepth.WriteLine ();
 
         oDepth.WriteLine ("DownCast"  + "\t\t" + "Down-Cast"  + "\t\t" + "Down-Cast"  + "\t\t" + "Down-Cast"  + "\t\t" + "Down-Cast"  + "\t\t" + "Down-Cast");
-        oDepth.WriteLine ("Abundance Density Distribution  - Class, Depth by 1 Meter Increments       Down-Cast");
+        oDepth.WriteLine ();
+        oDepth.WriteLine ("Abundance Density (#/m3) for each Class by 1 meter depth Increments for the Down Cast");
+                          
         oDepth.WriteLine ();
         depthDistribution_1Down.PrintByClassCollumns (oDepth, totalScanLinesPerMeterDown, totalVolumePerMeterDown, true, summarizeClasses);
         oDepth.WriteLine ();
@@ -1222,7 +1245,8 @@ namespace PicesCommander
         oDepth.WriteLine ();
         
         oDepth.WriteLine ("Up-Cast"  + "\t\t" + "Up-Cast"  + "\t\t" + "Up-Cast"  + "\t\t" + "Up-Cast"  + "\t\t" + "Up-Cast"  + "\t\t" + "Up-Cast");
-        oDepth.WriteLine ("Abundance Density Distribution  - Class, Depth by 1 Meter Increments      Up-Cast");
+        oDepth.WriteLine ();
+        oDepth.WriteLine ("Abundance Density (#/m3) for each Class by 1 meter depth Increments for the Up Cast");
         oDepth.WriteLine ();
         depthDistribution_1Up.PrintByClassCollumns (oDepth, totalScanLinesPerMeterUp, totalVolumePerMeterUp, true, summarizeClasses);
         oDepth.WriteLine ();
@@ -1232,7 +1256,7 @@ namespace PicesCommander
         oDepth.WriteLine ();
         oDepth.WriteLine ();
         
-        oDepth.WriteLine ("Abundance Distribution   - Class, Depth by 10 Meter Increments");
+        oDepth.WriteLine ("Number of individuals in each Class (counts) by 1 meter depth Increments for Down and Up Cast Combined");
         oDepth.WriteLine ();
         depthDistribution_10.PrintByClassCollumns (oDepth, totalScanLinesPerMeter, totalVolumePerMeter, false, summarizeClasses);
         oDepth.WriteLine ();
@@ -1240,7 +1264,7 @@ namespace PicesCommander
         oDepth.WriteLine ();
         oDepth.WriteLine ();
                 
-        oDepth.WriteLine ("Abundance Density Distribution  - Class, Depth by 10 Meter Increments");
+        oDepth.WriteLine ("Abundance Density (#/m3) for each Class by 10 meter depth Increments for Down and Up Casts Combined");
         oDepth.WriteLine ();
         depthDistribution_10.PrintByClassCollumns (oDepth, totalScanLinesPerMeter, totalVolumePerMeter, true, summarizeClasses);
         oDepth.WriteLine ();
@@ -1249,10 +1273,12 @@ namespace PicesCommander
         oDepth.WriteLine ();
         oDepth.WriteLine ();
 
+        /*
         PrintAbundanceAdjustedResults (oDepth);
         oDepth.WriteLine ();
         oDepth.WriteLine ();
         PrintBiasAdjustedResults  (oDepth);
+        */
         oDepth.Close ();
       }
     }  /* PrintReport */

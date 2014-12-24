@@ -246,49 +246,49 @@ InstrumentData::~InstrumentData ()
 
 InstrumentData::FieldDesc  InstrumentData::fieldDescriptions[] =
 {
- // Name                      Short   UnitOfMeasure     Min   format 
-   {"CTD_Battery",            "CB",   "#",              0.0f, "#0"},      // 0
-   {"Conductivity",           "CD",   "Siemens/Meter",  0.0f, "#0.000"},  //  1
-   {"Density",                "DN",   "kg/m^3",         0.0f, "#0.00"},   //  2
-   {"Depth",                  "DP",   "Meters",         0.0f, "#0.00"},   //  3
-   {"FlowRate1",              "FR1",  "Meters/Sec",     0.0f, "#0.00"},   //  4
-   {"FlowRate2",              "FR2",  "Meters/Sec",     0.0f, "#0.00"},   //  5
-   {"Fluorescence",           "FL",   "� chl/liter",     0.0f, "#0.00"},   //  6
-   {"FluorescenceSensor",     "FLS",  "Volts",          0.0f, "#0.00"},   //  7
-   {"CdomFluorescence",       "CDM",  "ppb QSD",        0.0f, "#0.00"},   //  8
-   {"CdomFluorescenceSensor", "CDMS", "Volts",          0.0f, "#0.00"},   //  9
-   {"Illumination",           "IL",   "",               0.0f, "#0.00"},   // 10
-   {"Oxygen",                 "OXG",  "ml/L",           0.0f, "#0.00"},   // 11
-   {"OxygenSensor",           "OXGS", "Volts",          0.0f, "#0.00"},   // 12
-   {"Pressure",               "PR",   "PSI",            0.0f, "#0.00"},   // 13
-   {"Record Rate",            "RR",   "MB/Sec",         0.0f, "#0.00"},   // 14
-   {"Salinity",               "SAL",  "",               0.0f, "#0.00"},   // 15
-   {"SoundVelocity",          "SV",   "M/S",         1200.0f, "#0"},      // 16
-   {"Temperature",            "TMP",  "Celsius",       15.0f, "#0"},      // 17
-   {"Transmissivity",         "TRM",  "%Light",         0.0f, "#0.00"},   // 18
-   {"TransmissivitySensor",   "TRMS", "Volts",          0.0f, "#0.00"},   // 19
-   {"Turbidity",              "TRB",  "NTU",            0.0f, "#0.00"},   // 20
-   {"TurbiditySensor",        "TRBS", "Volts",          0.0f, "#0.00"},   // 21
-   {"Pitch",                  "PTCH", "Degrees",      -35.0f, "##0"},     // 22
-   {"Roll",                   "ROL",  "Degrees",      -35.0f, "##0"},     // 23 
+ // Name                      Short   UnitOfMeasure        Min   format 
+   {"CTD_Battery",            "CB",   "#",                 0.0f, "#0"},      // 0
+   {"Conductivity",           "CD",   "Siemens/Meter",     0.0f, "#0.000"},  //  1
+   {"Density",                "DN",   "kg/m^3",            0.0f, "#0.00"},   //  2
+   {"Depth",                  "DP",   "Meters",            0.0f, "#0.00"},   //  3
+   {"FlowRate1",              "FR1",  "Meters/Sec",        0.0f, "#0.00"},   //  4
+   {"FlowRate2",              "FR2",  "Meters/Sec",        0.0f, "#0.00"},   //  5
+   {"Fluorescence",           "FL",   "mg/m3",             0.0f, "#0.00"},   //  6
+   {"FluorescenceSensor",     "FLS",  "Volts",             0.0f, "#0.00"},   //  7
+   {"CdomFluorescence",       "CDM",  "ppb QSD",           0.0f, "#0.00"},   //  8
+   {"CdomFluorescenceSensor", "CDMS", "Volts",             0.0f, "#0.00"},   //  9
+   {"Illumination",           "IL",   "",                  0.0f, "#0.00"},   // 10
+   {"Oxygen",                 "OXG",  "ml/L",              0.0f, "#0.00"},   // 11
+   {"OxygenSensor",           "OXGS", "Volts",             0.0f, "#0.00"},   // 12
+   {"Pressure",               "PR",   "PSI",               0.0f, "#0.00"},   // 13
+   {"Record Rate",            "RR",   "MB/Sec",            0.0f, "#0.00"},   // 14
+   {"Salinity",               "SAL",  "",                  0.0f, "#0.00"},   // 15
+   {"SoundVelocity",          "SV",   "M/S",            1200.0f, "#0"},      // 16
+   {"Temperature",            "TMP",  "degrees Celsius",  15.0f, "#0"},      // 17
+   {"Transmissivity",         "TRM",  "%Light",            0.0f, "#0.00"},   // 18
+   {"TransmissivitySensor",   "TRMS", "Volts",             0.0f, "#0.00"},   // 19
+   {"Turbidity",              "TRB",  "NTU",               0.0f, "#0.00"},   // 20
+   {"TurbiditySensor",        "TRBS", "Volts",             0.0f, "#0.00"},   // 21
+   {"Pitch",                  "PTCH", "Degrees",         -35.0f, "##0"},     // 22
+   {"Roll",                   "ROL",  "Degrees",         -35.0f, "##0"},     // 23 
 
-   {"Bat1Level",              "BT1",  "Volts",          0.0f, "#0.0"},    // 24
-   {"Bat2Level",              "BT2",  "Volts",          0.0f, "#0.0"},    // 25
-   {"Bat3Level",              "BT3",  "Volts",          0.0f, "#0.0"},    // 26
-   {"Bat4Level",              "BT4",  "Volts",          0.0f, "#0.0"},    // 27
+   {"Bat1Level",              "BT1",  "Volts",             0.0f, "#0.0"},    // 24
+   {"Bat2Level",              "BT2",  "Volts",             0.0f, "#0.0"},    // 25
+   {"Bat3Level",              "BT3",  "Volts",             0.0f, "#0.0"},    // 26
+   {"Bat4Level",              "BT4",  "Volts",             0.0f, "#0.0"},    // 27
 
-   {"ScanLine",               "SL",   "",               0.0f, "##,###,##0"},     // 28
-   {"ByteOffset",             "BO",   "",               0.0f, "##,###,###,##0"}, // 29 
-   {"CTD_Date",               "CD",   "",               0.0f, "#0.00"},   // 30
-   {"ActiveBattery",          "AB",   "",               0.0f, "#0.00"},   // 31
-   {"Latitude",               "LAT",  "",               0.0f, "#0.00"},   // 32
-   {"Longitude",              "LOG",  "",               0.0f, "#0.00"},   // 33
+   {"ScanLine",               "SL",   "",                  0.0f, "##,###,##0"},     // 28
+   {"ByteOffset",             "BO",   "",                  0.0f, "##,###,###,##0"}, // 29 
+   {"CTD_Date",               "CD",   "",                  0.0f, "#0.00"},   // 30
+   {"ActiveBattery",          "AB",   "",                  0.0f, "#0.00"},   // 31
+   {"Latitude",               "LAT",  "",                  0.0f, "#0.00"},   // 32
+   {"Longitude",              "LOG",  "",                  0.0f, "#0.00"},   // 33
 
-   {"CropLeft",               "CL",   "",               0.0f, "####0"},   // 34
-   {"CropRight",              "CR",   "",               0.0f, "####0"},   // 35
-   {"ActiveColumns",          "AC",   "",               0.0f, "####0"},   // 36
+   {"CropLeft",               "CL",   "",                  0.0f, "####0"},   // 34
+   {"CropRight",              "CR",   "",                  0.0f, "####0"},   // 35
+   {"ActiveColumns",          "AC",   "",                  0.0f, "####0"},   // 36
    
-   {"",                       "",     "",               0.0f, "#0.00"}
+   {"",                       "",     "",                  0.0f, "#0.00"}
 };
 
 

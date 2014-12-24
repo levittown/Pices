@@ -114,10 +114,10 @@ namespace PicesInterface
     PicesFeatureVector^  FeatureDataRecLoad (PicesDataBaseImage^  image);
 
 
-    PicesFeatureVectorList^  FeatureDataGetOneSipperFile (String^        sipperFileName,
-                                                          PicesClass^    mlClass,
-                                                          System::Char   classKeyToUse,
-                                                          bool           reExtractInstrumentData
+    PicesFeatureVectorList^  FeatureDataGetOneSipperFile (String^       sipperFileName,
+                                                          PicesClass^   mlClass,
+                                                          System::Char  classKeyToUse,
+                                                          bool          reExtractInstrumentData
                                                          );
 
     
