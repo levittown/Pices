@@ -38,6 +38,17 @@ Blob::~Blob ()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 BlobPtr  BlobList::LookUpByBlobId (int32  blobId)
 {
   map<int32,BlobPtr>::iterator  idx;

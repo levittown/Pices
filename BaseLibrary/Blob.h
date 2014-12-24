@@ -78,6 +78,10 @@ namespace  KKU
 
     ~BlobList ();
 
+
+
+
+
     BlobPtr  LookUpByBlobId (int32  blobId);   /**< @brief  Will return pointer to blob with 'blobId'; if not found will return NULL. */
 
     BlobPtr  LocateLargestBlob ();             /**< @brief  Will return Blob with largest pixel count. */
