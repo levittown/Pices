@@ -132,7 +132,7 @@ namespace PicesCommander
           else
           {
             float density = (float)sizeBuckets[bucket] / volume;
-            o.Write ("\t" + density.ToString ());
+            o.Write ("\t" + density.ToString ("##,##0.000"));
           }
         }
 
@@ -524,111 +524,6 @@ namespace PicesCommander
 
 
 
-
-    public void  PrintByClassCollumns (System.IO.StreamWriter  o)  
-
-    {
-      PicesClassList  classes = BuildMLClassList ();
-      int  cIDX;
- 
-      // Find the first and last buckets with activity
-  
-      int  firstBucket = -1;
-      int  lastBucket  = 0;
-
-  
-      for  (int bucketIDX = 0;  bucketIDX < bucketCount;  bucketIDX++)
-      {
-        int  bucketTotal = 0;
-        for  (cIDX = 0;  cIDX < classes.Count;  cIDX++)
-        {
-          PicesClass   mlClass = classes[cIDX];
-          ClassTotals2  classTotals = totals.LookUp (mlClass.Name);
-          bucketTotal += classTotals.BucketCount (bucketIDX);
-        }
-
-        if  (bucketTotal > 0)
-        {
-          if  (firstBucket < 0)
-             firstBucket = bucketIDX;
-          lastBucket = bucketIDX;
-        }
-	    }
-
-      if  (firstBucket < 0)
-      {
-        o.WriteLine ();
-        o.WriteLine ();
-        o.WriteLine ("SizeDistribution2::PrintByClassCollumns     *** There is no SizeDistribution2 Data ***");
-        o.WriteLine ();
-        return;
-      }
-
-      int[]  finalTotals = new int[classes.Count];
-      for  (int zed = 0;  zed < classes.Count;  zed++)
-        finalTotals[zed] = 0;
-
-      int  grandTotal = 0;
-
-      String[] headLines = classes.ExtractThreeTitleLines ();
-
-      String s1 = "Abundance by Class by Size(mm^2)";
-
-      //   [O2 (ml/L) * 44.64]/1.027 = O2 umol/kg 
-
-      o.WriteLine (""       + "\t" + s1);
-      o.WriteLine (""       + "\t" + headLines[0] + "\t" + s1);
-      o.WriteLine ("Size"   + "\t" + headLines[1] + "\t" + "All");
-      o.WriteLine ("mm^2"   + "\t" + headLines[2] + "\t" + "Classes");
-
-      ulong  totalScanLines = 0;
-      double totalVolume    = 0.0f;
-
-      for  (int bucketIDX = firstBucket;  bucketIDX <= lastBucket;  bucketIDX++)
-      {
-        String  sizeStr = sizeBucketStart[bucketIDX].ToString () + " <= x < " + sizeBucketEnd[bucketIDX].ToString ();
-        o.Write (sizeStr);
-
-        int  bucketTotal = 0;
-
-        int  intIDX = 0;
-        for  (cIDX = 0;  cIDX < classes.Count;  cIDX++)
-        {
-          PicesClass   mlClass  = classes[cIDX];
-          ClassTotals2  classTotals = totals.LookUp (mlClass.Name);
-
-          int  qtyThisBucket = classTotals.BucketCount (bucketIDX);
-          o.Write ("\t" + qtyThisBucket.ToString ());
-
-          bucketTotal          += qtyThisBucket;
-          finalTotals[intIDX]  += qtyThisBucket;
-          grandTotal           += qtyThisBucket;
-
-          intIDX++;
-        }
-
-        o.Write ("\t" + bucketTotal);
-        o.WriteLine ();
-	    }
-
-      {
-        o.WriteLine ();
-        o.Write ("FinalTotals" + "\t"  + totalScanLines + "\t" + totalVolume);
-        for  (uint x = 0;  x < classes.Count;  x++)
-        {
-          o.Write ("\t" + finalTotals[x]);
-        }
-        o.Write ("\t" + grandTotal.ToString ());
-        o.WriteLine ();
-      }
-
-      classes = null;
-    }  /* ReportByClassCollumns */
-
-
-
-  
-
     private  PicesClassList  BuildMLClassList ()
     {
       PicesClassList  mlClasses = new PicesClassList ();
@@ -647,54 +542,7 @@ namespace PicesCommander
     }  /* BuildMLClassList */
 
 
-
-
-    void  PrintCSVHeader (System.IO.StreamWriter  o)
-    {
-       o.Write ("\"Class Name\",Sum,");
-
-       int  imageSize = 0;
-       int  bucket;
-
-       for (bucket = 0;  bucket <  (bucketCount - 1); bucket++)
-       {
-         String  sizeStr = sizeBucketStart[bucket].ToString () + " <= x < " + sizeBucketEnd[bucket].ToString ();
-         o.Write ("," + sizeStr.ToString ());
-       }
-
-       o.Write (",>" + imageSize.ToString ());
-       o.WriteLine ();
-    }  /* PrintCSVHeader */
-
-
-
     
-    
-    private  void  PrintFormatedHeader (System.IO.StreamWriter  o)
-    {
-      o.Write ("Class Name              TOTAL");
-      int  bucket;
-
-      for  (bucket = 0;  bucket <  bucketCount;  ++bucket)
-      {
-        String  sizeStr = sizeBucketStart[bucket].ToString () + " <= x < " + sizeBucketEnd[bucket].ToString ();
-        sizeStr = sizeStr.PadLeft (12);
-        o.Write (sizeStr);
-      }
-
-      o.WriteLine ();
-
-      o.Write ("==================      =====");
-
-      for (bucket = 0;  bucket <  bucketCount; bucket++)
-      {
-         o.Write ("        ====");
-      }
-      o.WriteLine ();
-    }  /* PrintFormatedHeader */
-
-
-
     private  void  PrintTabDelHeader (System.IO.StreamWriter  o)
     {
       o.Write ("\"Class Name\"" + "\t" + "Sum");

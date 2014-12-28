@@ -246,6 +246,26 @@ namespace PicesCommander
     }  /* PopulateMinMaxFields */
 
 
+    
+    private  String  SubInSuperScriptExponent (String s)
+    {
+      int x = s.IndexOf("-3");
+      while  (x >= 0)
+      {
+        s = s.Substring (0, x) + "\u00B3" + s.Substring (x + 2);
+        x = s.IndexOf("-3");
+      }
+
+      x = s.IndexOf("-2");
+      while  (x >= 0)
+      {
+        s = s.Substring (0, x) + "\u00B2" + s.Substring (x + 2);
+        x = s.IndexOf("-2");
+      }
+
+      return s;
+    }  /* SuperScriptExponent */
+
    
     private void ChartHorizontalProfile_Load (object sender, EventArgs e)
     {
@@ -1333,12 +1353,27 @@ namespace PicesCommander
     private  void  UpdateChartAreas ()
     {
       goalie.StartBlock ();
+
+      Font  chartTitleFont = new Font (FontFamily.GenericSerif, 12);
       
       ProfileChart.Titles.Clear ();
-      ProfileChart.Titles.Add ("Cruise: " + cruise + "  Station: " + station + "  Deployment: " + deployment);
+
+      if  (!String.IsNullOrEmpty (cruise))
+      {
+        String t2 = "";
+        t2 = "Cruise: " + cruise;
+        if  (!String.IsNullOrEmpty (station))
+        {
+          t2 += ("  Station: " + station);
+          if  (!String.IsNullOrEmpty (deployment))
+            t2 += ("  Deployment: " + deployment);
+        }
+
+        ProfileChart.Titles.Add (new Title (t2, Docking.Top, chartTitleFont, Color.Black));
+      }
 
       if  (!String.IsNullOrEmpty (criteriaStr))
-        ProfileChart.Titles.Add (criteriaStr);
+        ProfileChart.Titles.Add (new Title (criteriaStr, Docking.Top, chartTitleFont, Color.Black));
 
       if  (series.Count < 1)
       {
@@ -1347,24 +1382,26 @@ namespace PicesCommander
         return;
       }
 
+      Font  axisTitleFont = new Font (FontFamily.GenericSerif, 12);
+
       ChartArea ca = ProfileChart.ChartAreas[0];
       ca.AxisY.Minimum = 0;
-      ca.AxisY.Title = "Counts";
       if  (weightByVolume)
-        ca.AxisY.Title = "Counts/m-3";
+        ca.AxisY.Title = SubInSuperScriptExponent ("Counts/m-3");
+      else
+        ca.AxisY.Title = "Counts";
+
+      ca.AxisY.TitleFont = axisTitleFont;
 
       ca.AxisX.Minimum = 0;
       ca.AxisX.Title = "Time";
-
-      ca.AxisY.Title = "Count";
-      ca.AxisY.Minimum = 0;
+      ca.AxisX.TitleFont = axisTitleFont;
 
       ProfileChart.Series.Clear ();
 
       DataSeriesToPlot  instSeriesToPlot = null;
 
       int  seriesIDX = 0;
-
 
       int  distBetweenLabels = 50; 
       if  (series.Count > 0)
@@ -1384,7 +1421,7 @@ namespace PicesCommander
         s.ChartType = dstp.chartType;
         s.Name = dstp.legend;
 
-        ca.AxisY.Title = dstp.unitOfMeasure;
+        ca.AxisY.Title = SubInSuperScriptExponent (dstp.unitOfMeasure);
         ca.AxisY.LabelStyle.Format = dstp.formatStr;
         ca.AxisY.Minimum = 0;
         ca.AxisY.IsReversed = false;

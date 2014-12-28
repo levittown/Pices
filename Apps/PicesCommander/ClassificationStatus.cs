@@ -1033,14 +1033,14 @@ namespace PicesCommander
       {
         // For now we will assume that CTD is local time.
         //TimeSpan  ts = deployment.SyncTimeStampGPS - deployment.SyncTimeStampActual;
-        TimeSpan  ts = new TimeSpan (-5, 0, 0);
+        TimeSpan  ts = new TimeSpan (5, 0, 0);
 
         DateTime  gmtDateTime = deployment.DateTimeStart + ts;
-        o.WriteLine ("Date Collected  " + "Local:" + "\t" + deployment.DateTimeStart.ToString ("yyyy/MM/dd") +
+        o.WriteLine ("Date Collected  " + "Local:" + "\t" + deployment.DateTimeStart.ToString ("yyyy/MM/dd") + "\t" +
                                           "GMT:"   + "\t" + gmtDateTime.ToString ("yyyy/MM/dd")
                     );
 
-        o.WriteLine ("Time Collected  " + "Local:" + "\t" + deployment.DateTimeStart.ToString ("HH:mm:ss") +
+        o.WriteLine ("Time Collected  " + "Local:" + "\t" + deployment.DateTimeStart.ToString ("HH:mm:ss") + "\t" +
                                           "GMT:"   + "\t" + gmtDateTime.ToString ("HH:mm:ss")
                     );
       }

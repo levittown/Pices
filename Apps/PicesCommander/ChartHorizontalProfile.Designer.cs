@@ -251,11 +251,14 @@
       this.ProfileChart.CausesValidation = false;
       chartArea1.AlignmentOrientation = ((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations)((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Vertical | System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Horizontal)));
       chartArea1.AlignWithChartArea = "ChartArea1";
+      chartArea1.AxisX.LabelAutoFitMaxFontSize = 12;
+      chartArea1.AxisX.LabelAutoFitMinFontSize = 10;
       chartArea1.AxisX.MajorGrid.Enabled = false;
       chartArea1.AxisX.Minimum = 0;
       chartArea1.AxisX.Title = "Count/m^3";
       chartArea1.AxisX2.MajorGrid.Enabled = false;
       chartArea1.AxisY.LabelAutoFitMaxFontSize = 12;
+      chartArea1.AxisY.LabelAutoFitMinFontSize = 10;
       chartArea1.AxisY.MajorGrid.Enabled = false;
       chartArea1.AxisY.MajorTickMark.Interval = 0;
       chartArea1.AxisY.MajorTickMark.IntervalOffset = 0;

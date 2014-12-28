@@ -1346,16 +1346,56 @@ namespace PicesCommander
 
 
 
+    private  String  SubInSuperScriptExponent (String s)
+    {
+      int x = s.IndexOf("-3");
+      while  (x >= 0)
+      {
+        s = s.Substring (0, x) + "\u00B3" + s.Substring (x + 2);
+        x = s.IndexOf("-3");
+      }
+
+      x = s.IndexOf("-2");
+      while  (x >= 0)
+      {
+        s = s.Substring (0, x) + "\u00B2" + s.Substring (x + 2);
+        x = s.IndexOf("-2");
+      }
+
+      return s;
+    }  /* SuperScriptExponent */
+
+
+
+
     private  void  UpdateChartAreas ()
     {
       goalie.StartBlock ();
-      
-      //ProfileChart.Titles.Clear ();
-      // ProfileChart.Titles.Add ("Verticle Profile");
-      ProfileChart.Titles[1].Text = "Cruise: " + cruise + "  Station: " + station + "  Deployment: " + deployment;
+
+      ProfileChart.Titles.Clear ();
+      Font  chartTitleFont = new Font (FontFamily.GenericSerif, 12.0f);
+      ProfileChart.Titles.Add (new Title ("Vertical Profile", Docking.Top, chartTitleFont, Color.Black));
+
+      if  (!String.IsNullOrEmpty (cruise))
+      {
+        String t2 = "";
+        t2 = "Cruise: " + cruise;
+        if  (!String.IsNullOrEmpty (station))
+        {
+          t2 += ("  Station: " + station);
+          if  (!String.IsNullOrEmpty (deployment))
+            t2 += ("  Deployment: " + deployment);
+        }
+
+        ProfileChart.Titles.Add (new Title (t2, Docking.Top, chartTitleFont, Color.Black));
+      }
 
       if  (!String.IsNullOrEmpty (criteriaStr))
+      {
         ProfileChart.Titles.Add (criteriaStr);
+        ProfileChart.Titles[2].Font = chartTitleFont;
+        ProfileChart.Titles.Add (new Title (criteriaStr, Docking.Top, chartTitleFont, Color.Black));
+      }
 
       if  (series.Count < 1)
       {
@@ -1389,14 +1429,18 @@ namespace PicesCommander
         DepthAxisMax.Value = (Decimal)depthMaxToPlot;
       }
 
+      Font  axisTitleFont = new Font (FontFamily.GenericSerif, 12);
+
       ChartArea ca = ProfileChart.ChartAreas[0];
       ca.AxisY.IsReversed = true;
       ca.AxisY.Minimum = 0;
+
       ca.AxisY.Title = "Depth(m)";
-      //ca.AxisY.Title = "Depth(" + depthMinToPlot + " - " + depthMaxToPlot + ")";
 
       ca.AxisX.Minimum = 0;
-      ca.AxisX.Title = "Count/m-3";
+      ca.AxisX.Title = SubInSuperScriptExponent ("Count/m-3");  // Count/m^3
+      ca.AxisX.TitleFont = axisTitleFont;
+
       ca.AxisX2.MajorGrid.Enabled = false;
 
       ca.AxisY.IsReversed = true;
@@ -1404,6 +1448,7 @@ namespace PicesCommander
       ca.AxisY.Minimum = depthMinToPlot;
       ca.AxisY.Interval = intervalSize;
       ca.AxisY.LabelStyle.Format = depthFormatStr;
+
 
       Decimal  distFromFirstInterval = (Decimal)depthMinToPlot % (Decimal)intervalSize;
       double  intervalOffSet = (double)((Decimal)intervalSize - distFromFirstInterval);
@@ -1422,7 +1467,8 @@ namespace PicesCommander
 
       ca.AxisY.MinorTickMark.Interval = intervalMinorSize;
       ca.AxisY.MinorTickMark.IntervalOffset = intervalMinorOffSet;
-
+      ca.AxisY.TitleFont = axisTitleFont;
+      
       ProfileChart.Series.Clear ();
 
       DataSeriesToPlot  instSeriesToPlot = null;
@@ -1442,7 +1488,7 @@ namespace PicesCommander
         s.ChartType = dstp.chartType;
         s.Name = dstp.legend;
 
-        ca.AxisX.Title = dstp.unitOfMeasure;
+        ca.AxisX.Title = SubInSuperScriptExponent (dstp.unitOfMeasure);
         ca.AxisX.LabelStyle.Format =  dstp.formatStr;
         ca.AxisX.Minimum = 0;
         s.XAxisType = AxisType.Primary;
@@ -1473,10 +1519,11 @@ namespace PicesCommander
         s.Name = instSeriesToPlot.legend;
         s.BorderWidth = 2;
 
-        ca.AxisX2.Title = instSeriesToPlot.unitOfMeasure;
+        ca.AxisX2.Title = SubInSuperScriptExponent (instSeriesToPlot.unitOfMeasure);
         ca.AxisX2.LabelStyle.Format = instSeriesToPlot.formatStr;
         //ca.AxisX2.Minimum = dstp.minVal;
         ca.AxisX2.LabelStyle.Format = instSeriesToPlot.formatStr;
+        ca.AxisX2.TitleFont = axisTitleFont;
         s.XAxisType = AxisType.Secondary;
 
         s.Color = instSeriesToPlot.color;

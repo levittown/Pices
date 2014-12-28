@@ -48,7 +48,6 @@
       System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint12 = new System.Windows.Forms.DataVisualization.Charting.DataPoint (3.75, 3.8);
       System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint13 = new System.Windows.Forms.DataVisualization.Charting.DataPoint (7.56, 12);
       System.Windows.Forms.DataVisualization.Charting.Title title1 = new System.Windows.Forms.DataVisualization.Charting.Title ();
-      System.Windows.Forms.DataVisualization.Charting.Title title2 = new System.Windows.Forms.DataVisualization.Charting.Title ();
       this.ClassesToPlot = new System.Windows.Forms.DataGridView ();
       this.Class = new System.Windows.Forms.DataGridViewTextBoxColumn ();
       this.BrowseClasses = new System.Windows.Forms.DataGridViewButtonColumn ();
@@ -365,15 +364,17 @@
       chartArea1.AlignmentOrientation = ((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations)((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Vertical | System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Horizontal)));
       chartArea1.AlignmentStyle = System.Windows.Forms.DataVisualization.Charting.AreaAlignmentStyles.None;
       chartArea1.AlignWithChartArea = "ChartArea1";
+      chartArea1.AxisX.LabelAutoFitMinFontSize = 10;
       chartArea1.AxisX.LabelAutoFitStyle = ((System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles)((((System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.IncreaseFont | System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.StaggeredLabels)
                   | System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.LabelsAngleStep30)
                   | System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.WordWrap)));
       chartArea1.AxisX.MajorGrid.Enabled = false;
       chartArea1.AxisX.Minimum = 0;
-      chartArea1.AxisX.Title = "Count/m^3";
+      chartArea1.AxisX.Title = "Count/m-3";
+      chartArea1.AxisX2.LabelAutoFitMinFontSize = 10;
       chartArea1.AxisX2.MajorGrid.Enabled = false;
       chartArea1.AxisY.IsReversed = true;
-      chartArea1.AxisY.LabelAutoFitMaxFontSize = 12;
+      chartArea1.AxisY.LabelAutoFitMinFontSize = 10;
       chartArea1.AxisY.MajorGrid.Enabled = false;
       chartArea1.AxisY.MajorTickMark.Interval = 0;
       chartArea1.AxisY.MajorTickMark.IntervalOffset = 10;
@@ -430,11 +431,7 @@
       title1.Font = new System.Drawing.Font ("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       title1.Name = "Title1";
       title1.Text = "Verticle Profile";
-      title2.Font = new System.Drawing.Font ("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      title2.Name = "Title2";
-      title2.Text = "Cruise: jksdjsk  Station:XXX  Deployment: Alpa";
       this.ProfileChart.Titles.Add (title1);
-      this.ProfileChart.Titles.Add (title2);
       // 
       // DepthIncr
       // 
