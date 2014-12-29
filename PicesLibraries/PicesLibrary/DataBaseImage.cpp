@@ -43,6 +43,7 @@ DataBaseImage::DataBaseImage ():
     encodedThumbnail     (NULL),
     extractionLogEntryId (0),
     height               (0),
+    imageFileName        (),
     imageId              (0),
     imageSize            (0.0f),
     pixelCount           (0),
@@ -74,12 +75,6 @@ float  DataBaseImage::BreakTie () const
     return  (class2Prob - class1Prob);
 }
 
-
-
-KKStr  DataBaseImage::ImageFileName () const
-{
-  return  osGetRootName (sipperFileName) + "_" + StrFormatInt (topLeftRow, "00000000") + "_" + StrFormatInt (topLeftCol, "0000");
-}
 
 
 

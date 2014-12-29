@@ -82,6 +82,8 @@ namespace KKU
   typedef  Histogram*  HistogramPtr;
   #endif
 
+  #define DefaultBackgroundPixelTH  31
+
 
   /**
    *@class Raster 
@@ -254,7 +256,7 @@ namespace KKU
 
     uchar*   RedArea   ()    const  {return  redArea;}
     uchar*   GreenArea ()    const  {return  greenArea;}
-    uchar*   BlueArea ()     const  {return  blueArea;}
+    uchar*   BlueArea  ()    const  {return  blueArea;}
 
     float*   FourierMagArea ()  const {return fourierMagArea;}
 
@@ -325,6 +327,12 @@ namespace KKU
                                  int32          col,
                                  uchar          pixVal
                                 );
+
+
+    /**
+     *@brief returns true if there are any forground pixels within 'edgeWidth' pixels of the top, bottom, left, or right edges of the image.
+     */
+    bool          AreThereEdgePixels (int32 edgeWidth);
 
 
     /**
@@ -831,16 +839,15 @@ namespace KKU
 
     int32         MemoryConsumedEstimated ()  const;
 
+    void          Opening ();
+
+    void          Opening (MaskTypes mask);
+
     RasterPtr     Padded (int32 padding);  // Creates a Padded raster object.
 
     RasterPtr     ReversedImage ();
 
     void          ReverseImage ();   // Reverse the image Foreground and Background.
-
-    void          Opening ();
-
-    void          Opening (MaskTypes mask);
-
     RasterPtr     ReduceByEvenMultiple (int32  multiple)  const;
 
     RasterPtr     ReduceByFactor (float factor)  const;  //  0 < factor <= 1.0  ex: 0.5 = Make raster half size
@@ -889,6 +896,12 @@ namespace KKU
     RasterPtr     TightlyBounded (uint32 borderPixels)  const;
 
     RasterPtr     ToColor ()  const;
+
+    /**
+     *@brief  Sets all pixels that are in the Background Range ov values to BackgroundPixelValue.
+     */
+    void          WhiteOutBackground ();
+
 
     /**
      *@brief Compresses the image in Raster using zlib library and returns a pointer to compressed data.
@@ -1018,6 +1031,7 @@ namespace KKU
                                 uchar**  src,
                                 uchar**  dest
                                )  const;
+
 
 
   protected:

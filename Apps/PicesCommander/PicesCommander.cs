@@ -86,7 +86,7 @@ namespace PicesCommander
 
 
     //*   Variables for ThumbnailPanel Display
-    private  PlanktonImageLoader  imageLoader = null;  /**< Used to load Images frm database.  Will be polled 
+    private  PlanktonImageLoader  imageLoader = null;  /**< Used to load Images from database.  Will be polled 
                                                         * by "ThumbNailPanelTimer"  to update ThmbNailPanel
                                                         * Will get created when user double clicks on a 
                                                         * class.  If one already exists then will cancel that

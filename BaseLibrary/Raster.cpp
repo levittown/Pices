@@ -240,7 +240,7 @@ int32  Max9 (int32 x1,  int32 x2,  int32 x3,
 
 Raster::Raster ():
   backgroundPixelValue (0),
-  backgroundPixelTH    (31),
+  backgroundPixelTH    (DefaultBackgroundPixelTH),
   blobIds              (NULL),
   centroidCol          (0.0f),
   centroidRow          (0.0f),
@@ -273,7 +273,7 @@ Raster::Raster (int32  _height,
                ):
 
   backgroundPixelValue (0),
-  backgroundPixelTH    (31),
+  backgroundPixelTH    (DefaultBackgroundPixelTH),
   blobIds              (NULL),
   centroidCol          (0.0f),
   centroidRow          (0.0f),
@@ -310,7 +310,7 @@ Raster::Raster (int32 _height,
                ):
 
   backgroundPixelValue (0),
-  backgroundPixelTH    (31),
+  backgroundPixelTH    (DefaultBackgroundPixelTH),
   blobIds              (NULL),
   centroidCol          (0.0f),
   centroidRow          (0.0f),
@@ -343,7 +343,7 @@ Raster::Raster (int32 _height,
   {
     backgroundPixelValue = 255;
     foregroundPixelValue = 0;
-    backgroundPixelTH    = 255 - 31;
+    backgroundPixelTH    = 255 - DefaultBackgroundPixelTH;
   }
 
   AllocateImageArea ();
@@ -357,7 +357,7 @@ Raster::Raster (int32 _height,
 Raster::Raster (const BmpImage&  _bmpImage):
 
   backgroundPixelValue  (0),
-  backgroundPixelTH     (31),
+  backgroundPixelTH     (DefaultBackgroundPixelTH),
   blobIds               (NULL),
   centroidCol           (0.0f),
   centroidRow           (0.0f),
@@ -566,7 +566,7 @@ Raster::Raster (const KKStr&  _fileName,
                ):
 
   backgroundPixelValue  (0),
-  backgroundPixelTH     (31),
+  backgroundPixelTH     (DefaultBackgroundPixelTH),
   blobIds               (NULL),
   centroidCol           (-1),
   centroidRow           (-1),
@@ -632,7 +632,7 @@ Raster::Raster (int32    _height,
                 uchar**  _grayScaleRows
                ):
   backgroundPixelValue (0),
-  backgroundPixelTH    (31),
+  backgroundPixelTH    (DefaultBackgroundPixelTH),
   blobIds              (NULL),
   centroidCol          (0.0f),
   centroidRow          (0.0f),
@@ -667,7 +667,7 @@ Raster::Raster (int32         _height,
                 const uchar*  _grayScaleData
                ):
   backgroundPixelValue (0),
-  backgroundPixelTH    (31),
+  backgroundPixelTH    (DefaultBackgroundPixelTH),
   blobIds              (NULL),
   centroidCol          (0.0f),
   centroidRow          (0.0f),
@@ -705,7 +705,7 @@ Raster::Raster (int32         _height,
                 const uchar*  _blueChannel
                ):
   backgroundPixelValue (0),
-  backgroundPixelTH    (31),
+  backgroundPixelTH    (DefaultBackgroundPixelTH),
   blobIds              (NULL),
   centroidCol          (0.0f),
   centroidRow          (0.0f),
@@ -894,7 +894,7 @@ RasterPtr  Raster::AllocateARasterInstance (const Raster& r)  const
 
 
 
-RasterPtr  Raster::AllocateARasterInstance (const Raster& _raster,  /**<  Source Raster                             */
+RasterPtr  Raster::AllocateARasterInstance (const Raster& _raster,  /**<  Source Raster                                       */
                                             int32         _row,     /**<  Starting Row in '_raster' to copy from.             */
                                             int32         _col,     /**<  Starting Col in '_raster' to copy from.             */
                                             int32         _height,  /**<  Height of resultant raster. Will start from '_row'  */
@@ -1357,6 +1357,31 @@ void  Raster::SetPixelValue (ColorChannels  channel,
 }  /* SetPixelValue  */
 
 
+
+bool  Raster::AreThereEdgePixels (int32 edgeWidth)
+{
+  for  (int32 edgeIdx = 0;  edgeIdx < edgeWidth;  ++edgeIdx)
+  {
+    int32  topRow = edgeIdx;
+    int32  botRow = height - (edgeIdx + 1);
+
+    for  (int c = 0;  c < width;  ++c)
+    {
+      if  (ForegroundPixel (topRow, c)  ||  ForegroundPixel (botRow, c))
+        return true;
+    }
+
+    int32  leftCol = edgeIdx;
+    int32  rightCol = width - (1 + edgeIdx);
+
+    for  (int r = 0;  r < height;  ++r)
+    {
+      if  (ForegroundPixel (r, leftCol)  ||  ForegroundPixel (r, rightCol))
+        return true;
+    }
+  }
+  return  false;
+}  /* AreThereEdgePixels */
 
 
 
@@ -3384,10 +3409,10 @@ void  Raster::CalcAreaAndIntensityHistogram (int32&  area,
 
 
 
-void   Raster::CalcAreaAndIntensityFeatures (int32&    area,
+void   Raster::CalcAreaAndIntensityFeatures (int32&  area,
                                              float&  weighedSize,
                                              uint32  intensityHistBuckets[8],
-                                             int32&    areaWithWhiteSpace,
+                                             int32&  areaWithWhiteSpace,
                                              uint32  intensityHistBucketsWhiteSpace[8]
                                             )
 {
@@ -8039,6 +8064,29 @@ RasterPtr  Raster::CreateGrayScaleKLTOnMaskedArea (const Raster&  mask)  const
 
   return  result;
 }  /* CreateGrayScaleKLTOnMaskedArea */
+
+
+
+void   Raster::WhiteOutBackground ()
+{
+  for  (int32 r = 0;  r < height;  ++r)
+  {
+    for  (int32 c = 0;  c < width;  ++c)
+    {
+      if  (BackgroundPixel (r, c))
+      {
+        green[r][c] = backgroundPixelValue;
+        if  (color)
+        {
+          red[r][c] = backgroundPixelValue;
+          blue[r][c] = backgroundPixelValue;
+        }
+      }
+    }
+  }
+}  /* WhiteOutBackground */
+
+
 
 
 

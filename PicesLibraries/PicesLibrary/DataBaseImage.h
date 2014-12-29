@@ -68,7 +68,7 @@ namespace MLL
     uint32          EncodedThumbnailLen   () const  {return  encodedThumbnailLen;}
     uint32          ExtractionLogEntryId  () const  {return  extractionLogEntryId;}
     uint32          Height                () const  {return  height;}
-    KKStr           ImageFileName         () const;
+    KKStr           ImageFileName         () const  {return  imageFileName;}
     int32           ImageId               () const  {return  imageId;}
     float           ImageSize             () const  {return  imageSize;}
     uint32          PixelCount            () const  {return  pixelCount;}
@@ -101,6 +101,7 @@ namespace MLL
     void    EncodedThumbnailLen  (uint32            _encodedThumbnailLen)  {encodedThumbnailLen  = _encodedThumbnailLen;}
     void    ExtractionLogEntryId (uint32            _extractionLogEntryId) {extractionLogEntryId = _extractionLogEntryId;}
     void    Height               (uint32            _height)               {height               = _height;}
+    void    ImageFileName        (const KKStr&      _imageFileName)        {imageFileName        = _imageFileName;}
     void    ImageId              (int32             _imageId)              {imageId              = _imageId;}
     void    ImageSize            (float             _imageSize)            {imageSize            = _imageSize;}
     void    PixelCount           (uint32            _pixelCount)           {pixelCount           = _pixelCount;}
@@ -130,6 +131,7 @@ namespace MLL
     uint32        encodedThumbnailLen;
     uint32        extractionLogEntryId;
     uint32        height;
+    KKStr         imageFileName;
     int32         imageId;
     float         imageSize;
     uint32        pixelCount;

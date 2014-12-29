@@ -8,11 +8,12 @@ namespace PicesCommander
 {
   public class  PredictionResult
   {
-    public  PredictionResult (String  _imageRootName,
-                              int     _class1Id,
-                              double  _class1Prob,
-                              int     _class2Id,
-                              double  _class2Prob
+    public  PredictionResult (String               _imageRootName,
+                              int                  _class1Id,
+                              double               _class1Prob,
+                              int                  _class2Id,
+                              double               _class2Prob,
+                              PicesPredictionList  _probPredList
                              )
     {
       imageRootName = _imageRootName;
@@ -20,12 +21,14 @@ namespace PicesCommander
       class1Prob    = _class1Prob;
       class2Id      = _class2Id;
       class2Prob    = _class2Prob;
+      probPredList  = _probPredList;
     }
 
-    public  string  imageRootName;
-    public  int     class1Id;
-    public  double  class1Prob;
-    public  int     class2Id;
-    public  double  class2Prob;
+    public  string               imageRootName;
+    public  int                  class1Id;
+    public  double               class1Prob;
+    public  int                  class2Id;
+    public  double               class2Prob;
+    public  PicesPredictionList  probPredList;
   };  /* PredictionResult */
 }

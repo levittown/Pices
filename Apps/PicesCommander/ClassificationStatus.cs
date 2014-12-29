@@ -81,8 +81,10 @@ namespace PicesCommander
     private  PicesDataBaseLogEntry    logEntry = null;
     private  uint                     logEntryId = 0;
 
-    private  String  sizeReportFileName  = null;
-    private  String  depthReportFileName = null;
+    private  String  baseReportName           = null;
+    private  String  sizeReportFileName       = null;
+    private  String  depthReportFileName      = null;
+    private  String  kaggleSubmissionFileName = null;
 
     private  float  depthMin = 0;
     private  float  depthMax = 0;
@@ -230,6 +232,47 @@ namespace PicesCommander
 
       classCounts = new ClassStatSortedList ();
     }
+
+
+
+    private  void  DefineBaseReportName ()
+    {
+      String  reportDir = OSservices.AddSlash (OSservices.AddSlash (PicesSipperVariables.PicesReportDir ()) + "ClassificationResults");
+
+      OSservices.CreateDirectoryPath (reportDir);
+      baseReportName = reportDir + "ClassificationReport";
+
+      List<String>  subNames = new List<string> ();
+      if  (imageGroup != null)
+        subNames.Add ("Group-" + imageGroup.Name);
+
+      if  (!String.IsNullOrEmpty (cruiseName))
+        subNames.Add ("Cruise-" + cruiseName);
+
+      if  (!String.IsNullOrEmpty (stationName))
+        subNames.Add ("Station-" + stationName);
+
+      if  (!String.IsNullOrEmpty (deploymentNum))
+        subNames.Add ("Deployment-" + deploymentNum);
+
+      if  (!String.IsNullOrEmpty (sipperFileName))
+        subNames.Add ("SipperFile-" + sipperFileName);
+
+      foreach (String s in subNames)
+        baseReportName += "_" + s;
+
+      DateTime  dt = DateTime.Now;
+
+      String  timeStr = dt.ToString ("yyyyMMdd-HHmmss");
+
+      baseReportName = baseReportName + "_" + timeStr;
+
+      sizeReportFileName       = baseReportName + "_Size.txt";
+      depthReportFileName      = baseReportName + "_Depth.txt";
+      kaggleSubmissionFileName = baseReportName + "_Submission.csv";
+    }  /* DefineBaseReportName */
+    
+
 
 
     private  uint  GetNumberOfCores ()
@@ -515,12 +558,13 @@ namespace PicesCommander
       }
 
       return  compilationDateTime;
-    }
+    }  /* ExecutableDateTimeStamp */
 
 
     
     private  void  StartClassificationThreads ()
     {
+      DefineBaseReportName ();
       String  sipperRootName = "";
       if  (!String.IsNullOrEmpty (sipperFileName))
         sipperRootName = OSservices.GetRootName (sipperFileName);
@@ -537,6 +581,9 @@ namespace PicesCommander
       cpuTimeStart = Process.GetCurrentProcess ().TotalProcessorTime;
 
       MakeSureAllClassesExist (mainWinConn);
+
+      if  (classifier != null)
+        classesInClassifier = classifier.MLClasses ();
 
       predUpdateThread = new Thread (new ThreadStart (PredictionsUpdateProcess));
       predUpdateThread.Name = "PredictionUpdate";
@@ -624,9 +671,6 @@ namespace PicesCommander
 
       runTimeStart = DateTime.Now;
 
-      if  (classifier != null)
-        classesInClassifier = classifier.MLClasses ();
-
       selectionThreadRunning = true;
 
       sipperFiles = null;
@@ -658,6 +702,15 @@ namespace PicesCommander
         Thread.Sleep (1000);
       }
 
+      selectionProcessDone = true;  // This will let the DataBase update thread know it is OK to exit.
+      while  (predUpdateThreadRunning &&  (!cancelProcessing))
+      {
+        Thread.Sleep (1000);
+      }
+
+      if  (!!cancelProcessing)
+        Thread.Sleep (2000);
+
       runTimeEnd = DateTime.Now;
       
       if  (!cancelProcessing)
@@ -671,7 +724,6 @@ namespace PicesCommander
       PicesDataBase.ThreadEnd ();
 
       selectionThreadRunning = false;
-      selectionProcessDone   = true;
     }  /* SelectionProcess */
 
 
@@ -885,7 +937,31 @@ namespace PicesCommander
 
 
 
+    private  void  AddToSubmissionReport (System.IO.StreamWriter  submissionReport,
+                                          String                  imageRootName,
+                                          PicesPredictionList     probPredList
+                                         )
+    {
+      int idx = imageRootName.IndexOf ('_');
+      if  (idx >= 0)
+        imageRootName = imageRootName.Substring (idx + 1);
+      imageRootName += ".jpg";
+
+      submissionReport.Write (imageRootName);
+
+      foreach (PicesClass pc in classesInClassifier)
+      {
+        PicesPrediction  p = probPredList.LookUpByClass (pc);
+        if  (p == null)
+          submissionReport.Write (",0.0");
+        else
+          submissionReport.Write ("," + p.Probability);
+      }
+      submissionReport.WriteLine ();
+    }  /* AddToSubmissionReport */
+
         
+
     private void  PredictionsUpdateProcess ()
     {
       predUpdateThreadRunning = true;
@@ -894,6 +970,13 @@ namespace PicesCommander
       PicesRunLog  runLog = new PicesRunLog ();
 
       PicesDataBase  dbUpdateConn = PicesDataBase.GetGlobalDatabaseManagerNewInstance (runLog);
+
+      System.IO.StreamWriter  submissionReport = new System.IO.StreamWriter (kaggleSubmissionFileName);
+
+      submissionReport.Write ("image");
+      foreach  (PicesClass pc in classesInClassifier)
+        submissionReport.Write ("," + pc.Name);
+      submissionReport.WriteLine ();
 
       while  (!cancelProcessing)
       {
@@ -925,6 +1008,9 @@ namespace PicesCommander
                            pr.class1Prob.ToString () + "\t" +
                            pr.class2Id.ToString   () + "\t" +
                            pr.class2Prob.ToString ();
+
+              AddToSubmissionReport (submissionReport, pr.imageRootName,  pr.probPredList);
+
               ++numUpdatedThisSqlCall;
             }
           }
@@ -936,6 +1022,7 @@ namespace PicesCommander
         }
       }
 
+      submissionReport.Close ();
       dbUpdateConn.Close ();
       dbUpdateConn = null;
       runLog = null;
@@ -1092,37 +1179,6 @@ namespace PicesCommander
     {
       GetClassificationStats (threadConn);
 
-      String  reportDir = OSservices.AddSlash (OSservices.AddSlash (PicesSipperVariables.PicesReportDir ()) + "ClassificationResults");
-
-      OSservices.CreateDirectoryPath (reportDir);
-
-      String  baseReportName = reportDir + "ClassificationReport";
-
-      List<String>  subNames = new List<string> ();
-      if  (imageGroup != null)
-        subNames.Add ("Group-" + imageGroup.Name);
-
-      if  (!String.IsNullOrEmpty (cruiseName))
-        subNames.Add ("Cruise-" + cruiseName);
-
-      if  (!String.IsNullOrEmpty (stationName))
-        subNames.Add ("Station-" + stationName);
-
-      if  (!String.IsNullOrEmpty (deploymentNum))
-        subNames.Add ("Deployment-" + deploymentNum);
-
-      if  (!String.IsNullOrEmpty (sipperFileName))
-        subNames.Add ("SipperFile-" + sipperFileName);
-
-      foreach (String s in subNames)
-        baseReportName += "_" + s;
-
-      DateTime  dt = DateTime.Now;
-
-      String  timeStr = dt.ToString ("yyyyMMdd-HHmmss");
-
-      baseReportName = baseReportName + "_" + timeStr;
-      
       message = "Retrieving Scan Lines per Meter of Depth";
       List<uint>  totalScanLinesPerMeter     = null;
       List<uint>  totalScanLinesPerMeterDown = null;
@@ -1142,9 +1198,6 @@ namespace PicesCommander
 
       PicesClassList  allClasses = threadConn.MLClassLoadList ();
       PicesClassList  summarizeClasses = allClasses.ExtractSummarizeClasses ();
-
-      sizeReportFileName  = baseReportName + "_Size.txt";
-      depthReportFileName = baseReportName + "_Depth.txt";
 
       {
         System.IO.StreamWriter  oSize = new System.IO.StreamWriter (sizeReportFileName);
