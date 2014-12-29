@@ -32,6 +32,7 @@ namespace PicesInterface
 
     PicesPredictionList (MLL::ClassProbList&  predictions);
 
+    PicesPrediction^  LookUpByClass (PicesClass^ c);
 
     void  SortByProbabilityHighToLow ();
     void  SortByVotingHighToLow ();

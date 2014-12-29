@@ -94,11 +94,13 @@ namespace PicesInterface
 
   public:
     property float             AreaMMSquare       {float       get ();}
+    property float             CentroidCol        {float       get ();}
+    property float             CentroidRow        {float       get ();}
     property String^           ClassName          {String^     get ();}
     property System::DateTime  CtdDateTime        {System::DateTime    get ();}
     property float             Depth              {float       get ();  void  set (float        _depth);}
     property bool              FeatureDataMissing {bool        get ();}  // If feature values are 0.0f then will return 'true' else 'false'.
-    property PicesClass^       MLClass         {PicesClass^ get ();  void  set (PicesClass^  _mlClass);}
+    property PicesClass^       MLClass            {PicesClass^ get ();  void  set (PicesClass^  _mlClass);}
     property String^           ImageFileName      {String^     get ();  void  set (String^      _imageFileName);}
     property int               NumFeatures        {int         get ();}
     property float             OrigSize           {float       get ();}

@@ -141,6 +141,33 @@ namespace PicesInterface
 
 
     //*******************************************************************************************
+    void  ImageInsert (PicesRaster^    image,
+                       String^         imageFileName,
+                       String^         supperFileName,
+                       uint64          byteOffset,     /**< byteOffset of SipperRow containing TopLeftRow */
+                       uint32          topLeftRow,
+                       uint32          topLeftCol,
+                       uint32          height,
+                       uint32          width,
+                       uint32          pixelCount,
+                       uchar           connectedPixelDist,
+                       uint32          extractionLogEntryId,
+                       uint32          classLogEntryId,
+                       uint32          centroidRow,
+                       uint32          centroidCol,
+                       PicesClass^     class1,
+                       float           class1Prob,
+                       PicesClass^     class2,
+                       float           class2Prob,
+                       PicesClass^     validatedClass,
+                       float           depth,
+                       float           imageSize,
+                       PicesPointList^ sizeCoordinates,
+                       int32%          imageId,
+                       bool%           successful
+                      );
+
+
     PicesDataBaseImage^      ImageLoad (uint  imageId);
 
 

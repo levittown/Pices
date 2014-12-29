@@ -221,6 +221,23 @@ namespace  PicesInterface
   }
 
 
+  float  PicesFeatureVector::CentroidCol::get ()
+  {
+    if  (features)
+      return features->CentroidCol ();
+    else
+      return 0.0f;
+  }
+
+
+  float  PicesFeatureVector::CentroidRow::get ()
+  {
+    if  (features)
+      return features->CentroidCol ();
+    else
+      return 0.0f;
+  }
+
 
   float  PicesFeatureVector::Depth::get ()
   {

@@ -64,6 +64,24 @@ PicesPredictionList::PicesPredictionList (ClassProbList&  predictions):
 }
 
 
+PicesPrediction^  PicesPredictionList::LookUpByClass (PicesClass^ c)
+{
+  PicesPrediction^  result = nullptr;
+
+  for  (int x = 0;  x < Count;  ++x)
+  {
+    PicesPrediction^ p = (this)[x];
+    if  (p->ClassName->Equals (c->Name, StringComparison::InvariantCultureIgnoreCase))
+    {
+      result = p;
+      break;
+    }
+  }
+
+  return  result;
+}
+
+
 
     
 ref class PicesPredictionList::SortPredictionsByProbability: public System::Collections::Generic::IComparer<PicesPrediction^>

@@ -148,6 +148,8 @@ namespace PicesInterface
 
      PicesRaster^     OpenImage (MaskType  mt);
 
+     PicesRaster^     Padded (int32 padding);  /**< Duplicates image with extrac padding on all four sides. */
+
      PicesRaster^     ReversedImage ();
 
      void             Save (String^  fileName);

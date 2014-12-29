@@ -102,7 +102,7 @@ KKStr  SipperVariables::PicesHomeDir ()
           }
           else
           {
-            osDisplayWarning ("Can Not locate a valid PICES Hom Directory;    make sure 'PicesHomeDir' is setup correctly.");
+            osDisplayWarning ("Can Not locate a valid PICES Home Directory; make sure 'PicesKaggleHomeDir' is setup correctly.");
           }
         }
       }

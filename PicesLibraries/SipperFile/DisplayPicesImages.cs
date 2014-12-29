@@ -43,9 +43,12 @@ namespace SipperFile
       if  (di == null)
         return;
 
-      try  {files = di.GetFiles ("*.bmp");}  catch (Exception)  {files = null;}
+      try  {files = di.GetFiles ("*.*");}  catch (Exception)  {files = null;}
       if  (files != null)
+      {
+        files = ReduceToImageFiles (files);
         UpdateDisplayTimer.Enabled = true;
+      }
     }
 
 
@@ -59,7 +62,7 @@ namespace SipperFile
       dir  = OSservices.AddSlash (_dir);
       dir2 = OSservices.AddSlash (_dir2);
 
-      nameList      = _nameList;
+      nameList = _nameList;
 
       Text = dir;
 
@@ -74,10 +77,28 @@ namespace SipperFile
       if  (di == null)
         return;
 
-      try  {files = di.GetFiles ("*.bmp");}  catch (Exception)  {files = null;}
+      try  {files = di.GetFiles ("*.*");}  catch (Exception)  {files = null;}
+      files = ReduceToImageFiles (files);
       if  (files != null)
         UpdateDisplayTimer.Enabled = true;
     }
+
+
+
+
+    private  FileInfo[]  ReduceToImageFiles (FileInfo[]  src)
+    {
+      List<FileInfo>  result = new List<FileInfo> ();
+      foreach  (FileInfo fi in src)
+      {
+        if  (fi.Extension.Equals (".jpg", StringComparison.OrdinalIgnoreCase)  ||
+             fi.Extension.Equals (".bmp", StringComparison.OrdinalIgnoreCase)
+            )
+          result.Add (fi);
+      }
+      return result.ToArray ();
+    }  /* ReduceToImageFiles */
+
 
 
     /*! 

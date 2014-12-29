@@ -449,6 +449,97 @@ namespace  PicesInterface
   //****************************     PicesDataBaseImage  routines     ****************************
   //**********************************************************************************************
 
+
+
+
+
+void   PicesDataBase::ImageInsert (PicesRaster^    image,
+                                   String^         imageFileName,
+                                   String^         supperFileName,
+                                   uint64          byteOffset,     /**< byteOffset of SipperRow containing TopLeftRow */
+                                   uint32          topLeftRow,
+                                   uint32          topLeftCol,
+                                   uint32          height,
+                                   uint32          width,
+                                   uint32          pixelCount,
+                                   uchar           connectedPixelDist,
+                                   uint32          extractionLogEntryId,
+                                   uint32          classLogEntryId,
+                                   uint32          centroidRow,
+                                   uint32          centroidCol,
+                                   PicesClass^     class1,
+                                   float           class1Prob,
+                                   PicesClass^     class2,
+                                   float           class2Prob,
+                                   PicesClass^     validatedClass,
+                                   float           depth,
+                                   float           imageSize,
+                                   PicesPointList^ sizeCoordinates,
+                                   int32%          imageId,
+                                   bool%           successful
+                                  )
+{
+
+  MLClassConstPtr  umClass1          = NULL;
+  MLClassConstPtr  umClass2          = NULL;
+  MLClassConstPtr  umValidatedClass  = NULL;
+  PointListPtr     umSizeCoordinates = NULL;
+
+  if  (class1 != nullptr)
+    umClass1 = class1->UnmanagedMLClass ();
+
+  if  (class2 != nullptr)
+    umClass2 = class2->UnmanagedMLClass ();
+
+  if  (validatedClass != nullptr)
+    umValidatedClass = validatedClass->UnmanagedMLClass ();
+
+  if  (sizeCoordinates != nullptr)
+  {
+    umSizeCoordinates = new PointList (true);
+    for each  (PicesPoint^ pp in sizeCoordinates)
+      umSizeCoordinates->PushOnBack (new KKU::Point (pp->Row, pp->Col));
+  }
+
+  int32  umImageId    = 0;
+  bool   umSuccessful = false;
+
+  dbConn->ImageInsert (*(image->UnmanagedClass ()),
+                       PicesKKStr::SystemStringToKKStr (imageFileName),
+                       PicesKKStr::SystemStringToKKStr (supperFileName),
+                       byteOffset,
+                       topLeftRow,
+                       topLeftCol,
+                       height,
+                       width,
+                       pixelCount,
+                       connectedPixelDist,
+                       extractionLogEntryId,
+                       classLogEntryId,
+                       centroidRow,
+                       centroidCol,
+                       umClass1,
+                       class1Prob,
+                       umClass2,
+                       class2Prob,
+                       umValidatedClass,
+                       depth,
+                       imageSize,
+                       umSizeCoordinates,
+                       umImageId,
+                       umSuccessful
+                      );
+
+  delete  umSizeCoordinates;
+  umSizeCoordinates = NULL;
+  imageId    = umImageId;
+  successful = umSuccessful;
+}  /* ImageInsert */
+
+
+
+
+
   PicesDataBaseImage^  PicesDataBase::ImageLoad (uint  imageId)
   {
     DataBaseImagePtr image = dbConn->ImageLoad (imageId);

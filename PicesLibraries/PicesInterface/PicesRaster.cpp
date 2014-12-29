@@ -511,6 +511,14 @@ namespace  PicesInterface
 
 
 
+  PicesRaster^   PicesRaster::Padded (int32 padding)
+  {
+    RasterSipperPtr  paddedImage = raster->Padded (padding);
+    return gcnew PicesRaster (paddedImage);
+  }
+
+
+
   PicesRaster^   PicesRaster::ReversedImage ()
   {
     return gcnew PicesRaster (raster->ReversedImage ());
