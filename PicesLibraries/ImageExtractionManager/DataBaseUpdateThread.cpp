@@ -142,7 +142,6 @@ void  DataBaseUpdateThread::Run ()
 
   Status (tsRunning);
 
-
   ExtractedImagePtr  extractedImage = GetNextImageToUpdate ();
   while  (true)
   {

@@ -291,17 +291,48 @@ void saveData (svm_problem  ds,
 }
 
 
+/**
+ * Will normailize probabilites such that the sum of all equal 1.0 and no one probability will be less than 'minProbability'.
+ */
+void  NormalizeProbabilitiesWithAMinumum (int32    numClasses,
+                                          double*  probabilities,
+                                          double   minProbability
+                                         )
+{
+  double  sumGreaterOrEqualMin = 0.0;
+  int32 numLessThanMin = 0;
+
+  int32 x = 0;
+  for  (x = 0;  x < numClasses;  ++x)
+  {
+    if  (probabilities[x] < minProbability)
+      ++numLessThanMin;
+    else
+      sumGreaterOrEqualMin += probabilities[x];
+  }
+
+  double probLessMinTotal = numLessThanMin * minProbability;
+  double probLeftToAllocate  = 1.0 - probLessMinTotal;  
+
+  for  (x = 0;  x < numClasses;  ++x)
+  {
+    if  (probabilities[x] < minProbability)
+      probabilities[x] = minProbability;
+    else
+      probabilities[x] = (probabilities[x] / sumGreaterOrEqualMin) * probLeftToAllocate;
+  }
+}  /* NormalizeProbabilitiesWithAMinumum */
 
 
 
 
-void  ComputeProb  (int32                numClasses,               // Number of Classes
+void  ComputeProb  (int32              numClasses,             // Number of Classes
                     float              A,                      // probability parameter
                     vector<double>&    dist,                   // Distances for each binary classifier from decision boundary.
                     double**           crossClassProbTable,    // A 'numClass' x 'numClass' matrix;  will get the probabilities between classes.
-                    int32*               votes,                  // votes by class
+                    int32*             votes,                  // votes by class
                     double*            probabilities,          // Probabilities for Each Class
-                    int32                knownClassNum,          // -1 = Don't know the class otherwise the Number of the Class.
+                    int32              knownClassNum,          // -1 = Don't know the class otherwise the Number of the Class.
                     double             confidence,             // Used for calculating 'compact'  probability must exceed this 
                     double&            compact                 // 'knownClassNum'  and  'confidence'  need to be provided
                    )
@@ -370,6 +401,8 @@ void  ComputeProb  (int32                numClasses,               // Number of 
        }
      }
    }
+
+   //NormalizeProbabilitiesWithAMinumum (numClasses, probabilities, 0.002);
 }  /* ComputeProb */
 
 

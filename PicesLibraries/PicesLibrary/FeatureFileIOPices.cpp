@@ -182,12 +182,12 @@ VectorInt  FeatureFileIOPices::CreateIndirectionTable (const VectorKKStr&  field
 
 
 
-FileDescPtr  FeatureFileIOPices::GetFileDesc (const KKStr&            _fileName,
-                                              istream&                _in,
+FileDescPtr  FeatureFileIOPices::GetFileDesc (const KKStr&         _fileName,
+                                              istream&             _in,
                                               MLClassConstListPtr  _classes,
-                                              int32&                  _estSize,
-                                              KKStr&                  _errorMessage,
-                                              RunLog&                 _log
+                                              int32&               _estSize,
+                                              KKStr&               _errorMessage,
+                                              RunLog&              _log
                                              )
 {
   char  buff[102400];

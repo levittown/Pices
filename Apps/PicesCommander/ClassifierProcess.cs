@@ -251,6 +251,8 @@ namespace PicesCommander
     private  void  ProcessOneFeatureVector (PicesFeatureVector fv)
     {
       int x = midPoint.CompareTo (fv.CtdDateTime);
+
+      PicesPredictionList  probPredList = null;
       
       bool  downCast = (x < 0);
 
@@ -262,7 +264,7 @@ namespace PicesCommander
         if  ((fv.Validated)  &&  (validatedTrumps))
         {
           PicesClass validatedClass = AssignVallidatedClassAsPredictedClass (fv);
-          PredictClasses (fv, pred1, pred2, imageFileName, imageFileRootName);
+          probPredList= PredictClasses (fv, pred1, pred2, imageFileName, imageFileRootName);
           if  (validatedClass != null)
           {
             if  (pred1.MLClass != validatedClass)
@@ -275,7 +277,7 @@ namespace PicesCommander
         }
         else
         {
-          PredictClasses (fv, pred1, pred2, imageFileName, imageFileRootName);
+          probPredList = PredictClasses (fv, pred1, pred2, imageFileName, imageFileRootName);
         }
 
         String  imageRootName = OSservices.GetRootName (fv.ImageFileName);
@@ -294,7 +296,8 @@ namespace PicesCommander
                                                                pred1.MLClass.ClassId, 
                                                                pred1.Probability, 
                                                                pred2.MLClass.ClassId, 
-                                                               pred2.Probability
+                                                               pred2.Probability,
+                                                               probPredList
                                                               )
                                         );
         }
@@ -392,14 +395,15 @@ namespace PicesCommander
 
 
 
-    private void  PredictClasses (PicesFeatureVector  fv,
-                                  PicesPrediction     pred1, 
-                                  PicesPrediction     pred2,
-                                  String              imageFileName,
-                                  String              imageFileRootName
-                                 )
+    private PicesPredictionList  PredictClasses (PicesFeatureVector  fv,
+                                                 PicesPrediction     pred1, 
+                                                 PicesPrediction     pred2,
+                                                 String              imageFileName,
+                                                 String              imageFileRootName
+                                                )
     {
-      PicesFeatureVector  fvToUse = fv;
+      PicesFeatureVector   fvToUse = fv;
+      PicesPredictionList  probPredList = null;
 
       if  (fvToUse.FeatureDataMissing)
       {
@@ -433,12 +437,15 @@ namespace PicesCommander
       if  (fvToUse != null)
       {
         classifier.PredictClass (fvToUse, pred1, pred2);
+        probPredList = classifier.PredictProbabilities (fvToUse);
       }
       else
       {
         pred1.MLClass = PicesClassList.GetUnKnownClassStatic ();   pred1.Probability = 1.0f;
         pred2.MLClass = PicesClassList.GetUnKnownClassStatic ();   pred2.Probability = 0.0f;
       }
+
+      return probPredList;
     }  /* PredictClasses */
 
 

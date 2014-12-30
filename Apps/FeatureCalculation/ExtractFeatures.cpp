@@ -100,6 +100,8 @@ using namespace  MLL;
 // -s C:\Pices\TrainingLibraries\Gulf_2011 -n C:\Users\kkramer\SipperProject\Papers\BinaryFeatureSelection\Experiments\Gulf_2011\Gulf_2011.data  -u -r C:\Users\kkramer\SipperProject\Papers\BinaryFeatureSelection\Experiments\Gulf_2011\Gulf_2011_ExtractionReport.txt
 // -s D:\Users\kkramer\GitHub\Kaggle\Data\train   -n D:\Users\kkramer\GitHub\Kaggle\Data\train\Kagler.data
 
+// -s D:\Users\kkramer\PlanktonCompetition\trunk\Data\test  -n D:\Users\kkramer\PlanktonCompetition\trunk\Data\test\KaggleTestFeatureData.data
+
 ExtractFeatures::ExtractFeatures ():
   PicesApplication (),
 

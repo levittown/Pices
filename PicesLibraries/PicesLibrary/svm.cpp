@@ -16,8 +16,9 @@
 using namespace std;
 
 
-#include  "BasicTypes.h"
-#include  "OSservices.h"
+#include "BasicTypes.h"
+#include "KKStrParser.h"
+#include "OSservices.h"
 using namespace KKU;
 
 
@@ -3437,7 +3438,8 @@ struct svm_model*  SVM233::Svm_Load_Model (istream&  f,
 {
   svm_model*  model = new svm_model ();
 
-  char  buff[100000];
+  int32 bullAllocSize = 500000;
+  char* buff = new char[bullAllocSize];
 
   int32  numOfClasses       = -1;
   int32  numSVsLoaded       = 0;
@@ -3454,7 +3456,7 @@ struct svm_model*  SVM233::Svm_Load_Model (istream&  f,
   // Get first non blank line. It had better contain "<Smv239>"  otherwise we will consider this
   // an invalid Training Model.
   {
-    while  (f.getline (buff, sizeof (buff)))
+    while  (f.getline (buff, bullAllocSize))
     {
       line = buff;
       line.TrimLeft ("\n\r\t ");
@@ -3474,8 +3476,8 @@ struct svm_model*  SVM233::Svm_Load_Model (istream&  f,
     log.Level (-1) << endl << endl
       << "SVM233::Svm_Load_Model    ***ERROR***    The '<Svm233>'  header is missing. Not a valid model." << endl
       << endl;
-    delete  model;
-    model = NULL;
+    delete  model; model = NULL;
+    delete  buff;  buff = NULL;
     return NULL;
   }
 
@@ -3483,35 +3485,35 @@ struct svm_model*  SVM233::Svm_Load_Model (istream&  f,
    @todo Modify SVM233::Svm_Load_Model to read one token at a time rather than a whol eline at a time.
    */
 
-  while  (f.getline (buff, sizeof (buff)))
+  while  (f.getline (buff, bullAllocSize))
   {
-    KKStr  line (buff);
-    line.TrimLeft ();
-    line.TrimRight ();
+    KKStrParser  line (buff);
+    line.SkipWhiteSpace (" ");
 
-    if  (line == "<SvmMachine>")
+    KKStr lineName = line.GetNextToken ();
+
+    if  (lineName.EqualIgnoreCase ("<SvmMachine>"))
       continue;
 
-    if  (line == "</Svm233>")
+    if  (lineName.EqualIgnoreCase ("</Svm233>"))
       break;
 
-    KKStr  lineName = line.ExtractToken2 ("\t");
     lineName.Upper ();
 
     if  (lineName == "PARAMETERS")
     {
-      model->param.ParseTabDelStr (line);
+      model->param.ParseTabDelStr (line.GetRestOfLine ());
     }
 
     else if  (lineName == "NUMOFCLASSES")
     {
-      numOfClasses = line.ExtractTokenInt ("\t");
+      numOfClasses = line.GetNextTokenInt ("\t");
       model->nr_class = numOfClasses;
     }
 
     else if  (lineName == "TOTALNUMOFSUPPORTVECTORS")
     {
-      totalNumSVs = line.ExtractTokenInt ("\t");
+      totalNumSVs = line.GetNextTokenInt ("\t");
       model->l = totalNumSVs;
     }
 
@@ -3520,14 +3522,14 @@ struct svm_model*  SVM233::Svm_Load_Model (istream&  f,
       int32 n = numOfClasses * (numOfClasses - 1) / 2;
       model->rho = Malloc (double, n);
       for (int32 i = 0;  i < n;  i++)
-        model->rho[i] = line.ExtractTokenDouble ("\t");
+        model->rho[i] = line.GetNextTokenDouble ("\t");
     }
 
     else if  (lineName == "LABEL")
     {
       model->label = Malloc (int32, numOfClasses);
       for  (int32 i=0;  i < numOfClasses;  i++)
-        model->label[i] = line.ExtractTokenInt ("\t");
+        model->label[i] = line.GetNextTokenInt ("\t");
     }
   
 
@@ -3535,7 +3537,7 @@ struct svm_model*  SVM233::Svm_Load_Model (istream&  f,
     {
       model->nSV = Malloc(int32, numOfClasses);
       for  (int32 i = 0;  i < numOfClasses;  i++)
-        model->nSV[i] = line.ExtractTokenInt ("\t");
+        model->nSV[i] = line.GetNextTokenInt ("\t");
     }
 
 
@@ -3545,12 +3547,12 @@ struct svm_model*  SVM233::Svm_Load_Model (istream&  f,
       delete  model->margin;
       model->margin = new double[n];
       for (int32 i = 0;  i < n;  i++)
-        model->margin[i] = line.ExtractTokenDouble ("\t");
+        model->margin[i] = line.GetNextTokenDouble ("\t");
     }
 
     else if  (lineName == "TOTALNUMOFELEMENTS")
     {
-      totalNumOfElements = line.ExtractTokenInt ("\t");
+      totalNumOfElements = line.GetNextTokenInt ("\t");
 
       int32 m = model->nr_class - 1;
       int32 l = model->l;
@@ -3588,17 +3590,17 @@ struct svm_model*  SVM233::Svm_Load_Model (istream&  f,
       if  (lineName.EqualIgnoreCase ("SuportVectorNamed"))
       {
         // this Support Vector has a mame to it.
-        model->exampleNames.push_back (line.ExtractToken2 ("\t"));
+        model->exampleNames.push_back (line.GetNextToken ("\t"));
       }
 
       for (int32 j = 0;  j < numOfClasses - 1;  j++)
-        model->sv_coef[j][numSVsLoaded] = line.ExtractTokenDouble ("\t");
+        model->sv_coef[j][numSVsLoaded] = line.GetNextTokenDouble ("\t");
 
       model->SV[numSVsLoaded] = &(x_space[numElementsLoaded]);
-      while  ((!line.Empty ())  &&  (numElementsLoaded < (totalNumOfElements - 1)))
+      while  ((line.MoreTokens ())  &&  (numElementsLoaded < (totalNumOfElements - 1)))
       {
-        x_space[numElementsLoaded].index = line.ExtractTokenInt (":");
-        x_space[numElementsLoaded].value = line.ExtractTokenDouble ("\t");
+        x_space[numElementsLoaded].index = line.GetNextTokenInt (":");
+        x_space[numElementsLoaded].value = line.GetNextTokenDouble ("\t");
         numElementsLoaded++;
       }
 
@@ -3658,6 +3660,10 @@ struct svm_model*  SVM233::Svm_Load_Model (istream&  f,
 
   if  (model)
     model->kValueTable = new double[model->l];
+
+
+  delete  buff;
+  buff = NULL;
 
   return  model;
 }  /* Svm_Load_Model */

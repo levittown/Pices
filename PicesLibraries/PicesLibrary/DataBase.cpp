@@ -3318,6 +3318,7 @@ DataBaseImageListPtr  DataBase::ImageQueryProcessResults ()
   DataBaseImageListPtr  results = new DataBaseImageList (true);
  
   int32  imageIdIdx              = -1;
+  int32  imageFileNameIdx        = -1;
   int32  sipperFileNameIdx       = -1;
   int32  class1IdIdx             = -1;
   int32  class1NameIdx           = -1; 
@@ -3352,8 +3353,11 @@ DataBaseImageListPtr  DataBase::ImageQueryProcessResults ()
       KKStr  fieldName = field->name;
       if  (fieldName.CompareIgnoreCase ("ImageId") == 0)
         imageIdIdx = idx;
+
+      else if  (fieldName.EqualIgnoreCase ("ImageFileName"))
+        imageFileNameIdx = idx;
       
-      else if  (fieldName.CompareIgnoreCase ("sipperFileName") == 0)
+      else if  (fieldName.CompareIgnoreCase ("SipperFileName") == 0)
         sipperFileNameIdx = idx;
 
       else if  (fieldName.CompareIgnoreCase ("class1Id") == 0)
@@ -3454,6 +3458,9 @@ DataBaseImageListPtr  DataBase::ImageQueryProcessResults ()
 
     if  (imageIdIdx >= 0)
       i->ImageId (CharStarToUint32 (resultSetNextRow[imageIdIdx]));
+
+    if  (imageFileNameIdx >= 0)
+      i->ImageFileName (resultSetNextRow[imageFileNameIdx]);
 
     if  (sipperFileNameIdx >= 0)
       i->SipperFileName (resultSetNextRow[sipperFileNameIdx]);
@@ -4014,7 +4021,7 @@ void  DataBase::ImagesUpdateValidatedClass (const KKStr&     imageFileName,
 
   KKStr  updateStr (512);
 
-  updateStr << "call  ImagesUpdateValidatedClass(" << imageFileName.QuotedStr ()       << ", " 
+  updateStr << "call  ImagesUpdateValidatedClass(" << imageFileName.QuotedStr ()    << ", " 
             <<                                        mlClass->Name ().QuotedStr () << ", "
             <<                                        "1.0"                                                   
             <<                                 ")";
@@ -4436,6 +4443,7 @@ void   DataBase::ImageFullSizeSave (const KKStr&         imageFileName,
 RasterSipperPtr  DataBase::ImageFullSizeFind (const KKStr&  imageFileName)
 {
   DataBaseImagePtr i = this->ImageLoad (imageFileName);
+
   if  (!i)
   {
     // Without this entry there is no way to locate the image.

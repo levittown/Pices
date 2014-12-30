@@ -231,17 +231,17 @@ MLClassConstPtr  Classifier2::ClassifyAImageOneLevel (FeatureVector&  example,
 
 
 
-void  Classifier2::ClassifyAImage (FeatureVector&       example,
+void  Classifier2::ClassifyAImage (FeatureVector&    example,
                                    MLClassConstPtr&  predClass1,
                                    MLClassConstPtr&  predClass2,
-                                   int32&               predClass1Votes,
-                                   int32&               predClass2Votes,
-                                   double&              knownClassProb,
-                                   double&              predClass1Prob,
-                                   double&              predClass2Prob,
-                                   int32&               numOfWinners,
-                                   double&              breakTie,
-                                   double&              compact
+                                   int32&            predClass1Votes,
+                                   int32&            predClass2Votes,
+                                   double&           knownClassProb,
+                                   double&           predClass1Prob,
+                                   double&           predClass2Prob,
+                                   int32&            numOfWinners,
+                                   double&           breakTie,
+                                   double&           compact
                                   )
 {
   bool   knownClassOneOfTheWiners = false;

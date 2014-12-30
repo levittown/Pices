@@ -1421,19 +1421,19 @@ double   SVMModel::DistanceFromDecisionBoundary (FeatureVectorPtr    example,
 
 
 
-void   SVMModel::Predict (FeatureVectorPtr     example,
+void   SVMModel::Predict (FeatureVectorPtr  example,
                           MLClassConstPtr   knownClass,
                           MLClassConstPtr&  predClass,
                           MLClassConstPtr&  predClass2,
-                          int32&               predClass1Votes,
-                          int32&               predClass2Votes,
-                          double&              probOfKnownClass,
-                          double&              predClassProb,
-                          double&              predClass2Prob,
-                          double&              compact,
-                          int32&               numOfWinners,
-                          bool&                knownClassOneOfTheWinners,
-                          double&              breakTie
+                          int32&            predClass1Votes,
+                          int32&            predClass2Votes,
+                          double&           probOfKnownClass,
+                          double&           predClassProb,
+                          double&           predClass2Prob,
+                          double&           compact,
+                          int32&            numOfWinners,
+                          bool&             knownClassOneOfTheWinners,
+                          double&           breakTie
                          )
 {
   breakTie = 0.0f;   // expirements.

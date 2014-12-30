@@ -506,6 +506,8 @@ namespace MLL
     //***********************************************************************************
     RasterSipperPtr  ImageFullSizeLoad (const KKStr&  imageFileName);
 
+    RasterSipperPtr  ImageFullSizeLoad (int32  imageId);
+
 
     void       ImageFullSizeDelete (const KKStr&  imageFileName);
 
