@@ -45,12 +45,12 @@ FeatureFileIOUCI::~FeatureFileIOUCI ()
 
 
 
-FileDescPtr  FeatureFileIOUCI::GetFileDesc (const KKStr&            _fileName,
-                                            istream&                _in,
+FileDescPtr  FeatureFileIOUCI::GetFileDesc (const KKStr&         _fileName,
+                                            istream&             _in,
                                             MLClassConstListPtr  _classes,
-                                            int32&                  _estSize,
-                                            KKStr&                  _errorMessage,
-                                            RunLog&                 _log
+                                            int32&               _estSize,
+                                            KKStr&               _errorMessage,
+                                            RunLog&              _log
                                            )
 {
   _log.Level (20) << "FeatureFileIOUCI::GetFileDesc     FileName[" << _fileName << "]." << endl;
@@ -195,9 +195,21 @@ void   FeatureFileIOUCI::SaveFile (FeatureVectorList&     _data,
   int32  idx;
   int32  x;
 
+  FileDescPtr  fileDesc = _selFeatures.FileDesc ();
+
+  _out << "ImageFileName";
+  for  (x = 0; x < _selFeatures.NumOfFeatures (); x++)
+  {
+    int32  featureNum = _selFeatures[x];
+    _out << "," << fileDesc->FieldName (featureNum);
+  }
+  _out << "," << "ClassLabel" << endl;
+
   for  (idx = 0; idx < _data.QueueSize (); idx++)
   {
     example = _data.IdxToPtr (idx);
+
+    _out << ("Train_" + KKU::osGetRootName (example->ImageFileName ())) << ",";
 
     for  (x = 0; x < _selFeatures.NumOfFeatures (); x++)
     {
