@@ -1402,7 +1402,7 @@ begin
     set _classId = -1;  
   end if;                                       
 
-  set  _midPoint = InstrumentDataGetMidPoint(_cruiseName, _stationName, _deploymentNum);
+  set  _midPoint = InstrumentDataGetMidPointOfDeployment(_cruiseName, _stationName, _deploymentNum);
   
   
   
@@ -1763,7 +1763,7 @@ CREATE PROCEDURE `ImagesSizeDataByDepthSipper9`(in  _cruiseName       varChar(10
 begin 
   
   declare _midPoint     datetime;
-  set _midPoint = InstrumentDataGetMidPoint(_cruiseName, _stationName, _deploymentNum);
+  set _midPoint = InstrumentDataGetMidPointOfDeployment(_cruiseName, _stationName, _deploymentNum);
   
   select sf.CruiseName                                                as CruiseName,
          sf.StationName                                               as StationName,
@@ -1893,7 +1893,7 @@ begin
   
   set  _pixelWidth = _chamberWidth / _pixelsPerScanLine;
   
-  set _midPoint = InstrumentDataGetMidPoint(_cruiseName, _stationName, _deploymentNum);
+  set _midPoint = InstrumentDataGetMidPointOfDeployment(_cruiseName, _stationName, _deploymentNum);
   
   drop  temporary table if exists  TempSizeDistributionTable;
 
@@ -2032,7 +2032,7 @@ create procedure ImagesSizeDataByDepthSipper11 (in  _cruiseName       varChar(10
                                                 in  _stationName      varChar(10), 
                                                 in  _deploymentNum    varchar(4), 
                                                 in  _depthBinSize     int unsigned,
-                                                in  _statistic        char,           /* '0' = Area mm^2,  '1' = Diameter,  and '2' = Spheroid Volume */
+                                                in  _statistic        char,           /* '0' = Area mm^2,  '1' = Diameter,  '2' = Spheroid Volume and '3' = EBv ((4/3)(Pie)(Major/2)(Minor/2)^2) */
                                                 in  _initialValue     float,
                                                 in  _growtRate        float,
                                                 in  _endValue         float
@@ -2060,7 +2060,7 @@ begin
   
   set  _pixelWidth = _chamberWidth / _pixelsPerScanLine;
   
-  set _midPoint = InstrumentDataGetMidPoint(_cruiseName, _stationName, _deploymentNum);
+  set _midPoint = InstrumentDataGetMidPointOfDeployment(_cruiseName, _stationName, _deploymentNum);
   
   drop  temporary table if exists  TempSizeDistributionTable;
 
@@ -2098,6 +2098,7 @@ begin
   if  (_statistic = '2')  then
      set @sqlStr = concat(@sqlStr, '(4.0 / 3.0) * 3.1415926 * pow (sqrt(i.PixelCount *  (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000 * (id.FlowRate1 / sf.ScanRate) * 1000.0 / 3.1415926), 3)  as Statistic \n');
   end if;
+
   
   set @sqlStr = concat(@sqlStr, '    from  Images i  \n');
   set @sqlStr = concat(@sqlStr, '    join (SipperFiles sf)     on(sf.SipperFileId  = i.SipperFileId) \n');

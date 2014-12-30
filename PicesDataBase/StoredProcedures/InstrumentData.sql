@@ -311,6 +311,11 @@ delimiter ;
 
 
 
+/**********************************************************************************************************************/
+/**********************************************************************************************************************/
+drop  function  if exists InstrumentDataGetMidPoint;
+
+/**  "InstrumentDataGetMidPoint"  was replaced by "InstrumentDataGetMidPointOfDeployment"  */
 
 
 
@@ -330,7 +335,9 @@ begin
                         from InstrumentData id
                         join (SipperFiles sf)  on(sf.SipperFileId = id.SipperFileId)
                         where  sf.CruiseName = _cruiseName  and  sf.StationName = _stationName  and  sf.DeploymentNum = _deploymentNum
-                              and  id.CTDDateTime > "2000-01-01 00:01:01"
+                              and  id.CTDDateTime  > "2000-01-01 00:01:01"
+                              and  id.CTDDateTime  < "2020-12-31 23:59:59"
+                              and  id.CTDBattery   > 5.5   and  id.CTDBattery    < 14.0
                               and  id.Depth        < 1000
                               and  id.Temperature  > 0.0   and  id.Temperature   < 40.0
                               and  id.Salinity     > 20    and  id.Salinity      < 40.0
@@ -344,6 +351,8 @@ begin
                         where  sf.CruiseName = _cruiseName  and  sf.StationName = _stationName  and  sf.DeploymentNum = _deploymentNum
                               and  floor(id.Depth * 100) = floor(_maxDepth * 100)
                               and  id.CTDDateTime  > "2000-01-01 00:01:01"
+                              and  id.CTDDateTime  < "2020-12-31 23:59:59"
+                              and  id.CTDBattery   > 5.5   and  id.CTDBattery    < 14.0
                               and  id.Depth        < 1000
                               and  id.Temperature  > 0.0   and  id.Temperature   < 40.0
                               and  id.Salinity     > 20    and  id.Salinity      < 40.0
@@ -387,7 +396,7 @@ begin
     set  _classId = -1;
   end if;
 
-  set  _midPoint = InstrumentDataGetMidPoint(_cruiseName, _stationName, _deploymentNum);
+  set  _midPoint = InstrumentDataGetMidPointOfDeployment(_cruiseName, _stationName, _deploymentNum);
 
   drop  temporary table if exists  ImageCountStats;
 
@@ -459,6 +468,9 @@ begin
       left join (ImageCountStats ics)  on  (ics.UpCast = (id.CTDDateTime >= _midPoint)  and  ics.Depth = (floor(id.depth / _depthBinSize) * _depthBinSize))
       where  sf.CruiseName = _cruiseName  and  sf.StationName = _stationName  and  sf.DeploymentNum = _deploymentNum
         and  id.Depth  < 1000
+        and  id.CTDDateTime  > "2000-01-01 00:01:01"
+        and  id.CTDDateTime  < "2020-12-31 23:59:59"
+        and  id.CTDBattery   > 5.5  and  id.CTDBattery    < 14.0
         and  id.Temperature  > 0.0  and  id.Temperature   < 40.0
         and  id.Salinity     > 20   and  id.Salinity      < 40.0
         and  id.Density      > 13   and  id.Density       < 40.0
@@ -493,7 +505,7 @@ begin
     set  _classId = -1;
   end if;
 
-  set  _midPoint = InstrumentDataGetMidPoint(_cruiseName, _stationName, _deploymentNum);
+  set  _midPoint = InstrumentDataGetMidPointOfDeployment(_cruiseName, _stationName, _deploymentNum);
 
   drop  temporary table if exists  ImageCountStats;
 
@@ -565,7 +577,10 @@ begin
       join (SipperFiles sf)            on  (sf.SipperFileId = id.SipperFileId)
       left join (ImageCountStats ics)  on  (ics.UpCast = (id.CTDDateTime >= _midPoint)  and  ics.Depth = (floor(id.depth / _depthBinSize) * _depthBinSize))
       where  sf.CruiseName = _cruiseName  and  sf.StationName = _stationName  and  sf.DeploymentNum = _deploymentNum
-        and  id.Depth  < 1000
+        and  id.CTDDateTime  > "2000-01-01 00:01:01"
+        and  id.CTDDateTime  < "2020-12-31 23:59:59"
+        and  id.CTDBattery   > 5.5  and  id.CTDBattery    < 14.0
+        and  id.Depth        < 1000
         and  id.Temperature  > 0.0  and  id.Temperature   < 40.0
       group by (id.CTDDateTime >= _midPoint), floor(id.depth / _depthBinSize);
 
@@ -594,7 +609,7 @@ CREATE DEFINER=`root`@`localhost` procedure `InstrumentDataByUpAndDownCast2`(in 
 begin
   declare _midPoint     datetime;
 
-  set  _midPoint = InstrumentDataGetMidPoint(_cruiseName, _stationName, _deploymentNum);
+  set  _midPoint = InstrumentDataGetMidPointOfDeployment(_cruiseName, _stationName, _deploymentNum);
 
   select sf.SipperFileName,
          id.ScanLine             as  ScanLine,
@@ -621,6 +636,9 @@ begin
       join (SipperFiles sf)            on  (sf.SipperFileId = id.SipperFileId)
       where  sf.CruiseName = _cruiseName  and  sf.StationName = _stationName  and  sf.DeploymentNum = _deploymentNum
         and  id.Depth  < 1000
+        and  id.CTDDateTime  > "2000-01-01 00:01:01"
+        and  id.CTDDateTime  < "2020-12-31 23:59:59"
+        and  id.CTDBattery   > 5.5  and  id.CTDBattery    < 14.0
         and  id.Temperature  > 0.0  and  id.Temperature   < 40.0
       order by (id.CTDDateTime >= _midPoint), id.depth ;
 
@@ -745,6 +763,9 @@ begin
        left join (ImageCountStats ics)  on  ((ics.CruiseName = sf.CruiseName)  and  (ics.StationName = sf.StationName)  and  (ics.DeploymentNum = sf.DeploymentNum)  and  (ics.Depth = (floor(id.depth / _depthBinSize) * _depthBinSize)))
        where  (sf.CruiseName = _cruiseName)  and  (sf.StationName = _stationName)  and  (sf.DeploymentNum = _deploymentNum) 
          and  id.Depth  < 1000
+         and  id.CTDDateTime  > "2000-01-01 00:01:01"
+         and  id.CTDDateTime  < "2020-12-31 23:59:59"
+         and  id.CTDBattery   > 5.5  and  id.CTDBattery    < 14.0
          and  id.Temperature  > 0.0  and  id.Temperature   < 40.0
          and  id.Salinity     > 20   and  id.Salinity      < 40.0
          and  id.Density      > 18   and  id.Density       < 40.0
@@ -878,6 +899,9 @@ begin
          and  (sf.StationName = _stationName)  
          and  ((sf.DeploymentNum = _deploymentNum1)  or  (sf.DeploymentNum = _deploymentNum2)  or  (sf.DeploymentNum = _deploymentNum3)  or  (sf.DeploymentNum = _deploymentNum4))
          and  id.Depth  < 1000
+         and  id.CTDDateTime  > "2000-01-01 00:01:01"
+         and  id.CTDDateTime  < "2020-12-31 23:59:59"
+         and  id.CTDBattery   > 5.5  and  id.CTDBattery    < 14.0
          and  id.Temperature  > 0.0  and  id.Temperature   < 40.0
          and  id.Salinity     > 20   and  id.Salinity      < 40.0
          and  id.Density      > 18   and  id.Density       < 40.0
@@ -1066,7 +1090,7 @@ begin
   
   
   set _secsPerRec = 4096.0 / _scanRate;
-  set _midPoint = InstrumentDataGetMidPoint(_cruiseName, _stationName,_deploymentNum);
+  set _midPoint = InstrumentDataGetMidPointOfDeployment(_cruiseName, _stationName,_deploymentNum);
 
 
   select   (id.CtdDateTime < _midPoint)                     as DownCast,
@@ -1091,7 +1115,7 @@ begin
                and  (sf.StationName   = _stationName) 
                and  ((sf.DeploymentNum = _deploymentNum)  or  (_deploymentNum = " "))
                and  id.CTDDateTime > "2000-01-01 00:01:01"
-               and  id.CTDDateTime < "2030-01-01 00:01:01"
+               and  id.CTDDateTime < "2020-01-01 00:01:01"
                and  id.CTDBattery   > 5.5   and  id.CTDBattery    < 14.0
                and  id.Depth        > 0.5   and  id.Depth         < 500
                and  id.Temperature  > 0.0   and  id.Temperature   < 40.0
@@ -1106,64 +1130,6 @@ end
 delimiter ;
 
 
-
-
-
-
-
-/**********************************************************************************************************************/
-/**********************************************************************************************************************/
-drop  function  if exists InstrumentDataGetMidPoint;
-
-delimiter //
-create function InstrumentDataGetMidPoint (_cruiseName      varChar(10),
-                                           _stationName     varChar(10),
-                                           _deploymentNum   varchar(4)
-                                          )
-  returns DateTime  deterministic
-
-begin
-
-  declare _maxDepth     float     default 0.0;
-  declare _midPoint     datetime;
-
-  set  _maxDepth = (select max(id.Depth)
-                        from InstrumentData id
-                        join (SipperFiles sf)  on(sf.SipperFileId = id.SipperFileId)
-                        where      sf.CruiseName = _cruiseName  
-                              and  sf.StationName = _stationName  
-                              and  (sf.DeploymentNum = _deploymentNum   or  _deploymentNum = "")
-                              and  id.CTDDateTime > "2000-01-01 00:01:01"
-                              and  id.CTDDateTime < "2030-01-01 00:01:01"
-                              and  id.CTDBattery   > 5.5   and  id.CTDBattery    < 14.0
-                              and  id.Depth        > 0.5   and  id.Depth         < 500
-                              and  id.Temperature  > 0.0   and  id.Temperature   < 40.0
-                              and  id.Salinity     > 20    and  id.Salinity      < 40.0
-                              and  id.Density      > 13    and  id.Density       < 40.0
-                              and  id.Fluorescence > -2    and  id.Fluorescence  < 80.0
-                   );
-
-  set _midPoint = (select max(id.CTDDateTime)
-                        from InstrumentData id
-                        join (SipperFiles sf)  on(sf.SipperFileId = id.SipperFileId)
-                        where      sf.CruiseName = _cruiseName  
-                              and  sf.StationName = _stationName  
-                              and  (sf.DeploymentNum = _deploymentNum  or  _deploymentNum  = "")
-                              and  floor(id.Depth * 100) = floor(_maxDepth * 100)
-                              and  id.CTDDateTime  > "2000-01-01 00:01:01"
-                              and  id.CTDDateTime  < "2030-01-01 00:01:01"
-                              and  id.CTDBattery   > 5.5   and  id.CTDBattery    < 14.0
-                              and  id.Depth        > 0.5   and  id.Depth         < 500
-                              and  id.Temperature  > 0.0   and  id.Temperature   < 40.0
-                              and  id.Salinity     > 20    and  id.Salinity      < 40.0
-                              and  id.Density      > 13    and  id.Density       < 40.0
-                              and  id.Fluorescence > -2    and  id.Fluorescence  < 80.0
-                   );
-
-  return  _midPoint;
-end;
-//
-delimiter ;
 
 
 
