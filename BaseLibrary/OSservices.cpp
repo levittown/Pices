@@ -2009,6 +2009,9 @@ int64   KKU::osGetFileSize (const KKStr&  fileName)
 #if  defined(WIN32)
 void  KKU::osDisplayWarning (KKStr  _message)
 {
+  if  (backGroundProcess)
+    return;
+
   MessageBox (NULL,
               _message.Str (),
               "Warning",
