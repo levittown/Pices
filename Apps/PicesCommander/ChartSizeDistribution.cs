@@ -14,7 +14,7 @@ using PicesInterface;
 
 namespace PicesCommander
 {
-  public partial class ChartAbundancePredictedAndValidated : Form
+  public partial class ChartSizeDistribution : Form
   {
     PicesClassList  classes       = null;
     PicesClassList  activeClasses = null;
@@ -55,7 +55,7 @@ namespace PicesCommander
     private  bool             includeSubClasses = false;
     private  bool             weightByVolume    = false;
 
-    private  PicesGoalKeeper  goalie = new PicesGoalKeeper ("ChartAbundancePredictedAndValidated");
+    private  PicesGoalKeeper  goalie = new PicesGoalKeeper ("ChartSizeDistribution");
 
     private  bool  buildPlotDataRunning = false;
     private  bool  buildPlotDataDone    = false;
@@ -98,7 +98,7 @@ namespace PicesCommander
     private  float[]  depthVolumeProfile = null;
 
 
-    public ChartAbundancePredictedAndValidated (String                   _cruise,
+    public ChartSizeDistribution (String                   _cruise,
                                                 String                   _station,
                                                 String                   _deployment,
                                                 PicesDataBaseImageGroup  _group,
@@ -139,13 +139,13 @@ namespace PicesCommander
       filterProb  = ((probMin > 0.0f)  ||   (probMax  < 1.0f))  &&  (probMax > probMin);
       filterDepth = ((depthMax > 0)  &&  (depthMax > depthMin));
 
-      statusMsgs = new PicesMsgQueue ("ChartAbundancePredictedAndValidated-StatusMsgs");
-      msgQueue   = new PicesMsgQueue ("ChartAbundancePredictedAndValidated-RunLog");
+      statusMsgs = new PicesMsgQueue ("ChartSizeDistribution-StatusMsgs");
+      msgQueue   = new PicesMsgQueue ("ChartSizeDistribution-RunLog");
       runLog     = new PicesRunLog (msgQueue);
 
       mainWinConn = PicesDataBase.GetGlobalDatabaseManagerNewInstance (runLog);
 
-      configFileName = OSservices.AddSlash (PicesSipperVariables.PicesConfigurationDirectory ()) + "ChartAbundancePredictedAndValidated.cfg";
+      configFileName = OSservices.AddSlash (PicesSipperVariables.PicesConfigurationDirectory ()) + "ChartSizeDistribution.cfg";
 
       BuildCriteriaString ();
 
@@ -228,8 +228,8 @@ namespace PicesCommander
       IncludeSubClasses.Enabled = false;
       WeightByVolume.Enabled    = false;
       DepthAxisAuto.Enabled     = false;
-      DepthAxisMin.Enabled      = false;
-      DepthAxisMax.Enabled      = false;
+      InitialSize.Enabled      = false;
+      MaxSize.Enabled      = false;
       DepthAxisInterval.Enabled = false;
     }
 
@@ -242,8 +242,8 @@ namespace PicesCommander
       IncludeSubClasses.Enabled = true;
       WeightByVolume.Enabled    = true;
       DepthAxisAuto.Enabled     = true;
-      DepthAxisMin.Enabled      = true;
-      DepthAxisMax.Enabled      = true;
+      InitialSize.Enabled      = true;
+      MaxSize.Enabled      = true;
       DepthAxisInterval.Enabled = true;
     }
 
@@ -253,7 +253,7 @@ namespace PicesCommander
       System.IO.StreamWriter  o = null;
       try{o = new System.IO.StreamWriter (configFileName);}  catch  (Exception){o = null; return;}
       
-      o.WriteLine ("//ChartAbundancePredictedAndValidated Configuration File");
+      o.WriteLine ("//ChartSizeDistribution Configuration File");
       o.WriteLine ("//");
       o.WriteLine ("//DateTime Saved" + "\t" + DateTime.Now.ToString ("F"));
       o.WriteLine ("//");
@@ -263,8 +263,8 @@ namespace PicesCommander
       //o.WriteLine ("PlotAction"         + "\t" + ((String)(PlotAction.SelectedItem)));
       o.WriteLine ("DepthIncr"          + "\t" + DepthIncr.Value);
       o.WriteLine ("DepthAxisAuto"      + "\t" + (DepthAxisAuto.Checked ? "Yes" : "No"));
-      o.WriteLine ("DepthAxisMin"       + "\t" + DepthAxisMin.Value);
-      o.WriteLine ("DepthAxisMax"       + "\t" + DepthAxisMax.Value);
+      o.WriteLine ("DepthAxisMin"       + "\t" + InitialSize.Value);
+      o.WriteLine ("DepthAxisMax"       + "\t" + MaxSize.Value);
       o.WriteLine ("DepthAxisInterval"  + "\t" + DepthAxisInterval.Value);
 
       o.Close ();
@@ -355,7 +355,7 @@ namespace PicesCommander
     {
       if  (DepthAxisAuto.Checked)
       {
-        if  (DepthAxisMin.Value >= DepthAxisMax.Value)
+        if  (InitialSize.Value >= MaxSize.Value)
           errors.Add ("Min-Depth must be less than Max-Depth");
 
         if  (DepthAxisInterval.Value <= 0)
@@ -363,7 +363,7 @@ namespace PicesCommander
 
         else
         {
-          Decimal  range = (DepthAxisMax.Value - DepthAxisMin.Value);
+          Decimal  range = (MaxSize.Value - InitialSize.Value);
           if  ((range > 0)  &&  (range < DepthAxisInterval.Value))
             errors.Add ("Interval size is less than specified range.");
         }
@@ -779,15 +779,15 @@ namespace PicesCommander
                                  );
       if  (!DepthAxisAuto.Checked)
       {
-        depthMinToPlot = (float)DepthAxisMin.Value;
-        depthMaxToPlot = (float)DepthAxisMax.Value;
+        depthMinToPlot = (float)InitialSize.Value;
+        depthMaxToPlot = (float)MaxSize.Value;
         intervalSize   = (float)DepthAxisInterval.Value;
       }
       else
       {
         DepthAxisInterval.Value = (Decimal)intervalSize;
-        DepthAxisMin.Value = (Decimal)depthMinToPlot;
-        DepthAxisMax.Value = (Decimal)depthMaxToPlot;
+        InitialSize.Value = (Decimal)depthMinToPlot;
+        MaxSize.Value = (Decimal)depthMaxToPlot;
       }
 
       ChartArea ca = ProfileChart.ChartAreas[0];
@@ -1069,7 +1069,7 @@ namespace PicesCommander
     private  void  WriteTabDelToStream (TextWriter tw)
     {
       DateTime  curTime = DateTime.Now;
-      tw.WriteLine ("ChartAbundancePredictedAndValidated"); 
+      tw.WriteLine ("ChartSizeDistribution"); 
       tw.WriteLine ("DateTime" + "\t" + curTime.ToString ("yyyy/MM/dd HH:mm:ss")); 
       tw.WriteLine ();
       tw.WriteLine ("Cruise"               + "\t" + cruise);
@@ -1150,7 +1150,7 @@ namespace PicesCommander
       }
 
       tw.WriteLine ();
-      tw.WriteLine ("End of ChartAbundancePredictedAndValidated");
+      tw.WriteLine ("End of ChartSizeDistribution");
     }  /* WriteTabDelToStream */
 
 
