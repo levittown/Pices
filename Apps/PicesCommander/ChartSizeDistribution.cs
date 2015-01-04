@@ -48,7 +48,6 @@ namespace PicesCommander
 
     private  String           criteriaStr = "";
 
-    private  float            depthIncrement = 1.0f;
     private  PicesClass       classToPlot = null;
     private  bool             includeSubClasses = false;
     private  bool             weightByVolume    = false;
@@ -71,46 +70,27 @@ namespace PicesCommander
     private  bool    formIsMaximized = false;
 
 
-    private  class  DataSeriesToPlot
-    {
-      public  DataSeriesToPlot (char     _classKeyToUse,
-                                String   _legend,
-                                float[]  _density,
-                                float[]  _countsByDepth
-                               ) 
-      {
-        classKeyToUse      = _classKeyToUse;
-        legend             = _legend;
-        density            = _density;
-        countsByDepth      = _countsByDepth;
-      }
 
-      public  char      classKeyToUse;
-      public  float[]   countsByDepth;
-      public  float[]   density;
-      public  String    legend;
-    }
 
     
-    private  List<DataSeriesToPlot>  series = new List<DataSeriesToPlot> ();
     private  float[]  depthVolumeProfile = null;
 
 
     public ChartSizeDistribution (String                   _cruise,
-                                                String                   _station,
-                                                String                   _deployment,
-                                                PicesDataBaseImageGroup  _group,
-                                                PicesClass               _classToPlot,
-                                                int                      _sizeMin,
-                                                int                      _sizeMax,
-                                                float                    _probMin,
-                                                float                    _probMax,
-                                                float                    _depthMin,
-                                                float                    _depthMax,
-                                                PicesClassList           _classes,
-                                                PicesClassList           _activeClasses,
-                                                String                   _rootDir
-                                               )
+                                  String                   _station,
+                                  String                   _deployment,
+                                  PicesDataBaseImageGroup  _group,
+                                  PicesClass               _classToPlot,
+                                  int                      _sizeMin,
+                                  int                      _sizeMax,
+                                  float                    _probMin,
+                                  float                    _probMax,
+                                  float                    _depthMin,
+                                  float                    _depthMax,
+                                  PicesClassList           _classes,
+                                  PicesClassList           _activeClasses,
+                                  String                   _rootDir
+                                 )
     {
       cruise        = _cruise;
       station       = _station;
@@ -199,6 +179,8 @@ namespace PicesCommander
       Station_.Text    = station;
       Deployment_.Text = deployment;
 
+      SizeStatisticField.Items.Add (new 
+
       if  (classToPlot != null)
         ClassToPlot.Text = classToPlot.Name;
 
@@ -222,7 +204,7 @@ namespace PicesCommander
       IncludeSubClasses.Enabled = false;
       WeightByVolume.Enabled    = false;
       DepthAxisAuto.Enabled     = false;
-      InitialSizeField.Enabled      = false;
+      InitialSizeField.Enabled  = false;
       MaxSizeField.Enabled      = false;
       GrowthRateField.Enabled = false;
     }
@@ -236,7 +218,7 @@ namespace PicesCommander
       IncludeSubClasses.Enabled = true;
       WeightByVolume.Enabled    = true;
       DepthAxisAuto.Enabled     = true;
-      InitialSizeField.Enabled      = true;
+      InitialSizeField.Enabled  = true;
       MaxSizeField.Enabled      = true;
       GrowthRateField.Enabled = true;
     }
@@ -254,16 +236,31 @@ namespace PicesCommander
       o.WriteLine ("WidthLast"          + "\t" + widthLast);
       o.WriteLine ("HeightLast"         + "\t" + heightLast);
       o.WriteLine ("Maximized"          + "\t" + (formIsMaximized ? "YES":"NO"));
-      //o.WriteLine ("PlotAction"         + "\t" + ((String)(PlotAction.SelectedItem)));
-      o.WriteLine ("DepthIncr"          + "\t" + DepthIncr.Value);
-      o.WriteLine ("DepthAxisAuto"      + "\t" + (DepthAxisAuto.Checked ? "Yes" : "No"));
-      o.WriteLine ("DepthAxisMin"       + "\t" + InitialSizeField.Value);
-      o.WriteLine ("DepthAxisMax"       + "\t" + MaxSizeField.Value);
-      o.WriteLine ("DepthAxisInterval"  + "\t" + GrowthRateField.Value);
-
+      o.WriteLine ("ClassToPlot"        + "\t" + ClassToPlot.Text);
+      o.WriteLine ("IncludeSubClasses"  + "\t" + IncludeSubClasses.Checked);
+      o.WriteLine ("WeightByVolume"     + "\t" + WeightByVolume.Checked);
+      o.WriteLine ("SizeStatistic"      + "\t" + SizeStatisticField.Text);
+      o.WriteLine ("InitialSize"        + "\t" + InitialSizeField.Value.ToString ("###0.000"));
+      o.WriteLine ("MaxSize"            + "\t" + MaxSizeField.Value);
+      o.WriteLine ("GrowthRate"         + "\t" + GrowthRateField.Value);
       o.Close ();
       o = null;
     }
+
+
+    private  void  SetSizeStatistic (String  s)
+    {
+      foreach  (Object o in SizeStatisticField.Items)
+      {
+        if  (o.ToString ().Equals (s, StringComparison.InvariantCultureIgnoreCase))
+        {
+          SizeStatisticField.SelectedItem = o;
+          return;
+        }
+      }
+      SizeStatisticField.SelectedIndex = 0;
+    } /* SetSizeStatistic */
+
 
 
     private  void   LoadConfigurationFile ()
@@ -312,11 +309,42 @@ namespace PicesCommander
             screenWasMaximized  = (fieldValue.ToUpper () == "YES");
             break;
 
-          case  "TimeInterval":
-          case  "DepthIncr":
-            depthIncrement = (int)PicesKKStr.StrToFloat (fieldValue);
-            if  (depthIncrement > 0)
-              DepthIncr.Value = (decimal)depthIncrement;
+          case  "ClassToPlot":
+            ClassToPlot.Text = fieldValue;
+            break;
+
+          case  "IncludeSubClasses":
+            IncludeSubClasses.Checked = PicesKKStr.StrToBool (fieldValue);
+            break;
+            
+          case  "WeightByVolume":
+            WeightByVolume.Checked = PicesKKStr.StrToBool (fieldValue);
+            break;
+            
+          case  "SizeStatistic":
+            SetSizeStatistic (fieldValue);
+            break;
+
+          case  "InitialSize":
+            float  initialSize = PicesKKStr.StrToFloat (fieldValue);
+            if  ((initialSize <= 0.0)  ||  (initialSize >= 100.0f))
+              initialSize = 0.10f;
+            InitialSizeField.Value = (decimal)initialSize;
+            break;
+
+          case  "MaxSize":
+            float  maxSize = PicesKKStr.StrToFloat (fieldValue);
+            if  ((maxSize <= 0.0)  ||  (maxSize < (float)InitialSizeField.Value))
+              maxSize = Math.Max (1000.0f, (float)InitialSizeField.Value);
+
+            MaxSizeField.Value = (decimal)maxSize;
+            break;
+          
+          case  "GrowthRate":
+            float  growthRate = PicesKKStr.StrToFloat (fieldValue);
+            if  (growthRate <= 1.0f)
+              growthRate = 1.1f;
+            GrowthRateField.Value = (decimal)growthRate;
             break;
         }
       }
@@ -345,26 +373,6 @@ namespace PicesCommander
     }  /* LoadConfigurationFile */
 
 
-    private  void   ValidateDepthAxisSettings (ref List<String>  errors)
-    {
-      if  (DepthAxisAuto.Checked)
-      {
-        if  (InitialSizeField.Value >= MaxSizeField.Value)
-          errors.Add ("Min-Depth must be less than Max-Depth");
-
-        if  (GrowthRateField.Value <= 0)
-          errors.Add ("The increment must be greater than 0.");
-
-        else
-        {
-          Decimal  range = (MaxSizeField.Value - InitialSizeField.Value);
-          if  ((range > 0)  &&  (range < GrowthRateField.Value))
-            errors.Add ("Interval size is less than specified range.");
-        }
-      }
-      return;
-    }
-
 
     private  List<String>  ValidateFields ()
     {
@@ -372,10 +380,6 @@ namespace PicesCommander
 
       weightByVolume = WeightByVolume.Checked;
       includeSubClasses = IncludeSubClasses.Checked;
-
-      depthIncrement = (int)DepthIncr.Value;
-      if  (depthIncrement < 1)
-        errors.Add ("Depth Increment must be greater than zero.");
 
       if  (String.IsNullOrEmpty (ClassToPlot.Text))
         errors.Add ("You must specify class to plot.");
@@ -390,122 +394,7 @@ namespace PicesCommander
         return errors;
     }
 
-
-
-    private  float[]  MergeTwoLists (float[]  l1, float[] l2)
-    {
-      if  (l1 == null)       return l2;
-      else if  (l2 == null)  return l1;
-
-      int  minLen = 0;
-
-      float[]  from = null;
-      float[]  to   = null;
-
-      if  (l1.Length > l2.Length)
-      {from = l2;   to = l1;  minLen = l2.Length;}
-      else
-      {from = l1;   to = l2;  minLen = l1.Length;}
-
-      for  (int idx = 0;  idx < minLen;  ++idx)
-        to[idx] += from[idx];
-
-      return  to;
-    }
     
-
-    private  uint[]  MergeTwoLists (uint[]  l1, uint[] l2)
-    {
-      if  (l1 == null)       return l2;
-      else if  (l2 == null)  return l1;
-
-      int  minLen = 0;
-
-      uint[]  from = null;
-      uint[]  to   = null;
-
-      if  (l1.Length > l2.Length)
-      {from = l2;   to = l1;  minLen = l2.Length;}
-      else
-      {from = l1;   to = l2;  minLen = l1.Length;}
-
-      for  (int idx = 0;  idx < minLen;  ++idx)
-        to[idx] += from[idx];
-
-      return  to;
-    }
-    
-
-    private  float[]  CountsByDepth (PicesClass  c,
-                                     char        classKeyToUse
-                                    )
-    {
-      String  predOrValStr = "Validated";
-      if  (classKeyToUse != 'V')
-        predOrValStr =  "Predicted";
-
-      String msg = "Extracting Counts for \"" + c.Name + "\"" + "  " + predOrValStr;
-      statusMsgs.AddMsg (msg);
-      msgQueue.AddMsg (msg);
-
-      uint[]  counts = null;
-
-      PicesSipperFileList  sipperFiles = threadConn.SipperFileLoad (cruise, station, deployment);
-      foreach  (PicesSipperFile sf in sipperFiles)
-      {
-        if  (cancelRequested)
-          break;
-
-        msg = "Retrieving counts for Class[" + c.Name + "]  SipperFile[" + sf.SipperFileName + "]"  + predOrValStr;
-        statusMsgs.AddMsg ("Retrieving counts for Class[" + c.Name + "]  SipperFile[" + sf.SipperFileName + "]");
-    
-        uint[]  countsThisSipperFile 
-          = threadConn.ImageGetDepthStatistics (null,               // PicesDataBaseImageGroup^  imageGroup,
-                                                sf.SipperFileName,
-                                                depthIncrement,     // depthIncrements,
-                                                c,                  // mlClass,
-                                                classKeyToUse,      // classKeyToUse,
-                                                probMin,  probMax,
-                                                sizeMin,  sizeMax
-                                               );
-
-        counts = MergeTwoLists (counts, countsThisSipperFile);
-      }
-
-      if  (cancelRequested)
-        return null;
-      
-      if  (counts == null)
-      {
-        counts = new uint[1];
-        counts[0] = 0;
-      }
-
-      float[]  countsFloat = new float[counts.Length];
-      for  (int idx = 0;  idx < counts.Length;  ++idx)
-        countsFloat[idx] = counts[idx];
-
-      if  (!includeSubClasses)
-        return  countsFloat;
-      
-      List<PicesClass> children = c.Children;
-      if  (children != null)
-      {
-        foreach  (PicesClass  pc in children)
-        {
-          if  (cancelRequested)
-            break;
-
-          float[] countsForChild = CountsByDepth (pc, classKeyToUse);
-          if  (countsForChild != null)
-            countsFloat = MergeTwoLists (countsFloat, countsForChild);
-        }
-      }
-      return  countsFloat;
-    }  /* CountsByDepth */
-
-
-
 
     private  float[]  GetDepthVolumeProfile  ()
     {
@@ -522,37 +411,7 @@ namespace PicesCommander
 
 
     
-    private  void  AddToSeries (char  classKeyToUse)
-    {
-      if  (depthVolumeProfile == null)
-        return;
-
-      float[] counts = CountsByDepth (classToPlot, classKeyToUse);
-      if  ((counts == null)  ||  cancelRequested)
-        return;
-
-      float[]  density = new float[counts.Length];
-      
-      for  (int idx = 0;  idx < counts.Length;  ++idx)
-      {
-        float vol = 0;
-        if  (idx < depthVolumeProfile.Length)
-          vol = depthVolumeProfile[idx];
-        if  (vol == 0.0f)
-          density[idx] = 0.0f;
-        else
-          density[idx] = counts[idx] / vol;
-      }
-
-      String legend = (classKeyToUse == 'V') ? "Validated" : "Predicted";
-      
-      goalie.StartBlock ();
-      series.Add (new DataSeriesToPlot (classKeyToUse, legend, density, counts));
-      goalie.EndBlock ();
-    }  /* AddToSeries */
-
-    
-    
+  
     
     /// <summary>
     /// This method will be ran as a separate thread; it is respnable for collecting all the data needed to generate the plot.
@@ -574,9 +433,12 @@ namespace PicesCommander
       series = new List<DataSeriesToPlot> ();
 
       depthVolumeProfile = GetDepthVolumeProfile ();
-
+      /**
+       * 
       AddToSeries ('P');
       AddToSeries ('V');
+      */
+
 
       threadConn.Close ();
       threadConn = null;

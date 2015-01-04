@@ -321,12 +321,14 @@ drop  function  if exists InstrumentDataGetMidPoint;
 
 /**********************************************************************************************************************/
 drop procedure if exists  InstrumentDataGetMidPointOfDeployment;
+drop function  if exists  InstrumentDataGetMidPointOfDeployment;
 
 delimiter //
-create procedure  InstrumentDataGetMidPointOfDeployment (in  _cruiseName      varChar(64),
-                                                         in  _stationName     varChar(10),
-                                                         in  _deploymentNum   varChar(4)
-                                                        )
+create function  InstrumentDataGetMidPointOfDeployment (_cruiseName      varChar(64),
+                                                        _stationName     varChar(10),
+                                                        _deploymentNum   varChar(4)
+                                                       )
+                                                       returns  DateTime
 begin
   declare _maxDepth     float     default 0.0;
   declare _midPoint     datetime;
@@ -360,8 +362,7 @@ begin
                               and  id.Fluorescence > -2    and  id.Fluorescence  < 80.0
                    );
 
-
-  select  _midPoint  as "MidPoint";
+  Return  _midPoint;
 end;
 //
 

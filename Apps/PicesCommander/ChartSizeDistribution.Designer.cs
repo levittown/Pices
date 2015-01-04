@@ -29,9 +29,9 @@
     private void InitializeComponent ()
     {
       this.components = new System.ComponentModel.Container ();
-      System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea ();
-      System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend ();
-      System.Windows.Forms.DataVisualization.Charting.Title title1 = new System.Windows.Forms.DataVisualization.Charting.Title ();
+      System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea ();
+      System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend ();
+      System.Windows.Forms.DataVisualization.Charting.Title title2 = new System.Windows.Forms.DataVisualization.Charting.Title ();
       this.PlotButton = new System.Windows.Forms.Button ();
       this.CancelPlotButton = new System.Windows.Forms.Button ();
       this.ProfileChart = new System.Windows.Forms.DataVisualization.Charting.Chart ();
@@ -59,6 +59,8 @@
       this.InitialSizeField = new System.Windows.Forms.NumericUpDown ();
       this.panel1 = new System.Windows.Forms.Panel ();
       this.StatusMsgsLabel = new System.Windows.Forms.Label ();
+      this.SizeStatiticLabel = new System.Windows.Forms.Label ();
+      this.SizeStatisticField = new System.Windows.Forms.ComboBox ();
       ((System.ComponentModel.ISupportInitialize)(this.ProfileChart)).BeginInit ();
       this.SelectionCriteriaPanel.SuspendLayout ();
       ((System.ComponentModel.ISupportInitialize)(this.GrowthRateField)).BeginInit ();
@@ -93,40 +95,40 @@
       // 
       this.ProfileChart.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
       this.ProfileChart.CausesValidation = false;
-      chartArea1.AlignmentOrientation = ((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations)((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Vertical | System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Horizontal)));
-      chartArea1.AlignWithChartArea = "ChartArea1";
-      chartArea1.AxisX.LabelAutoFitMaxFontSize = 12;
-      chartArea1.AxisX.LabelStyle.Format = "##0.000";
-      chartArea1.AxisX.MajorGrid.Enabled = false;
-      chartArea1.AxisX.Title = "Count/m_3";
-      chartArea1.AxisX2.LabelStyle.Format = "##0.00";
-      chartArea1.AxisX2.MajorGrid.Enabled = false;
-      chartArea1.AxisY.IsStartedFromZero = false;
-      chartArea1.AxisY.LabelAutoFitMaxFontSize = 12;
-      chartArea1.AxisY.LabelStyle.Format = "#0.000";
-      chartArea1.AxisY.MajorGrid.Enabled = false;
-      chartArea1.AxisY.MajorTickMark.Interval = 0;
-      chartArea1.AxisY.MajorTickMark.IntervalOffset = 0;
-      chartArea1.AxisY.MajorTickMark.IntervalOffsetType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
-      chartArea1.AxisY.MajorTickMark.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
-      chartArea1.AxisY.Title = "Depth (m)";
-      chartArea1.AxisY2.MajorGrid.Enabled = false;
-      chartArea1.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-      chartArea1.Name = "ChartArea1";
-      this.ProfileChart.ChartAreas.Add (chartArea1);
-      legend1.Alignment = System.Drawing.StringAlignment.Far;
-      legend1.DockedToChartArea = "ChartArea1";
-      legend1.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
-      legend1.IsDockedInsideChartArea = false;
-      legend1.Name = "Legend1";
-      this.ProfileChart.Legends.Add (legend1);
+      chartArea2.AlignmentOrientation = ((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations)((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Vertical | System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Horizontal)));
+      chartArea2.AlignWithChartArea = "ChartArea1";
+      chartArea2.AxisX.LabelAutoFitMaxFontSize = 12;
+      chartArea2.AxisX.LabelStyle.Format = "##0.000";
+      chartArea2.AxisX.MajorGrid.Enabled = false;
+      chartArea2.AxisX.Title = "Count/m_3";
+      chartArea2.AxisX2.LabelStyle.Format = "##0.00";
+      chartArea2.AxisX2.MajorGrid.Enabled = false;
+      chartArea2.AxisY.IsStartedFromZero = false;
+      chartArea2.AxisY.LabelAutoFitMaxFontSize = 12;
+      chartArea2.AxisY.LabelStyle.Format = "#0.000";
+      chartArea2.AxisY.MajorGrid.Enabled = false;
+      chartArea2.AxisY.MajorTickMark.Interval = 0;
+      chartArea2.AxisY.MajorTickMark.IntervalOffset = 0;
+      chartArea2.AxisY.MajorTickMark.IntervalOffsetType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
+      chartArea2.AxisY.MajorTickMark.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
+      chartArea2.AxisY.Title = "Depth (m)";
+      chartArea2.AxisY2.MajorGrid.Enabled = false;
+      chartArea2.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+      chartArea2.Name = "ChartArea1";
+      this.ProfileChart.ChartAreas.Add (chartArea2);
+      legend2.Alignment = System.Drawing.StringAlignment.Far;
+      legend2.DockedToChartArea = "ChartArea1";
+      legend2.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
+      legend2.IsDockedInsideChartArea = false;
+      legend2.Name = "Legend1";
+      this.ProfileChart.Legends.Add (legend2);
       this.ProfileChart.Location = new System.Drawing.Point (447, 12);
       this.ProfileChart.Name = "ProfileChart";
       this.ProfileChart.Size = new System.Drawing.Size (521, 562);
       this.ProfileChart.TabIndex = 30;
       this.ProfileChart.Text = "Abundance/Deployment";
-      title1.Name = "Title1";
-      this.ProfileChart.Titles.Add (title1);
+      title2.Name = "Title1";
+      this.ProfileChart.Titles.Add (title2);
       // 
       // timer1
       // 
@@ -375,6 +377,8 @@
       // panel1
       // 
       this.panel1.BackColor = System.Drawing.Color.Silver;
+      this.panel1.Controls.Add (this.SizeStatisticField);
+      this.panel1.Controls.Add (this.SizeStatiticLabel);
       this.panel1.Controls.Add (this.ClassToPlotLabel);
       this.panel1.Controls.Add (this.GrowthRateLabel);
       this.panel1.Controls.Add (this.GrowthRateField);
@@ -399,6 +403,28 @@
       this.StatusMsgsLabel.Size = new System.Drawing.Size (37, 13);
       this.StatusMsgsLabel.TabIndex = 65;
       this.StatusMsgsLabel.Text = "Status";
+      // 
+      // SizeStatiticLabel
+      // 
+      this.SizeStatiticLabel.AutoSize = true;
+      this.SizeStatiticLabel.Location = new System.Drawing.Point (276, 122);
+      this.SizeStatiticLabel.Name = "SizeStatiticLabel";
+      this.SizeStatiticLabel.Size = new System.Drawing.Size (67, 13);
+      this.SizeStatiticLabel.TabIndex = 66;
+      this.SizeStatiticLabel.Text = "Size Statistic";
+      // 
+      // SizeStatisticField
+      // 
+      this.SizeStatisticField.FormattingEnabled = true;
+      this.SizeStatisticField.Items.AddRange (new object[] {
+            "Pixel Area",
+            "Diameter",
+            "Volume (SBv)",
+            "Volume (EBv)"});
+      this.SizeStatisticField.Location = new System.Drawing.Point (279, 138);
+      this.SizeStatisticField.Name = "SizeStatisticField";
+      this.SizeStatisticField.Size = new System.Drawing.Size (133, 21);
+      this.SizeStatisticField.TabIndex = 67;
       // 
       // ChartSizeDistribution
       // 
@@ -461,6 +487,8 @@
     private System.Windows.Forms.NumericUpDown InitialSizeField;
     private System.Windows.Forms.Panel panel1;
     private System.Windows.Forms.Label StatusMsgsLabel;
+    private System.Windows.Forms.ComboBox SizeStatisticField;
+    private System.Windows.Forms.Label SizeStatiticLabel;
 
 
   }

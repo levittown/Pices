@@ -1348,6 +1348,9 @@ delimiter ;
 
 
 
+
+
+
 /**********************************************************************************************************************/
 drop procedure  if exists ImagesDepthSizeSummary;
 
@@ -1376,6 +1379,164 @@ select   (i.depth      div _depthBinSize) * _depthBinSize  as DepthBucket,
 end;
 //
 delimiter ;
+
+
+
+
+
+
+drop procedure  if exists  ImagesSizeSizeHistogramByDepth;
+
+delimiter $$
+
+create procedure ImagesSizeSizeHistogramByDepth (in  _cruiseName       varChar(10),
+                                                 in  _stationName      varChar(10), 
+                                                 in  _deploymentNum    varchar(4), 
+                                                 in  _className        varChar(64),
+                                                 in  _depthBinSize     int unsigned,
+                                                 in  _statistic        char,           /* '0' = Area mm^2,  '1' = Diameter,  '2' = Spheroid Volume and '3' = EBv ((4/3)(Pie)(Major/2)(Minor/2)^2) */
+                                                 in  _initialValue     float,
+                                                 in  _growtRate        float,
+                                                 in  _endValue         float
+                                                )
+begin 
+  declare _classId            int    default -1;
+  declare _midPoint           datetime;
+  declare _cropLeft           int    default 0;
+  declare _cropRight          int    default 4094;
+  declare _pixelsPerScanLine  int    default 4096;
+  declare _chamberWidth       float  default  0.098;
+  declare _pixelWidth         float  default  0.025263;  /* MiliMeters per Pixel */
+  
+  
+  if  (_className is not null)  and  (_className <> "")  then
+    set _classId = (select c.classId from Classes c  where c.ClassName = _className);
+  end if;
+
+  select  d.CropLeft, d.CropRight, d.ChamberWidth  into  _cropLeft, _cropRight, _chamberWidth
+      from Deployments d
+      where  d.CruiseName    = _cruiseName  and
+             d.StationName   = _stationName  and 
+             d.DeploymentNum = _deploymentNum;
+      
+  if  _cropLeft < _cropRight  then
+    set _pixelsPerScanLine = _cropRight - _cropLeft;
+  else
+    set _pixelsPerScanLine = 3800;
+  end if;
+  
+  set  _pixelWidth = _chamberWidth / _pixelsPerScanLine;
+  
+  set _midPoint = InstrumentDataGetMidPointOfDeployment(_cruiseName, _stationName, _deploymentNum);
+  
+  drop  temporary table if exists  TempSizeDistributionTable;
+
+  create temporary table TempSizeDistributionTable
+  (
+    DownCast          char(1),
+    ImageId           int    default 0,
+    PixelCount        int    default 0,
+    Depth             float  default 0.0,
+    Statistic         float  default 0.0
+  );
+  
+  
+  /*  PixelWidth  (in mm)   = (_chamberWidth / (id.CropRight - id.CropLeft)) * 1000 */
+  /*  PixelHeight (in mm)   = (id.FlowRate . sf.ScanRate) * 1000                    */
+  /*  area        (in mm^2) = (i.PixelCount * PixelWidth * PixelHeight)             */
+
+
+  set  @sqlStr = 'insert into TempSizeDistributionTable \n';
+  set  @sqlStr = concat(@sqlStr, '    select (id.CTDDateTime <=\"', _midPoint, '\") as DownCast, \n');
+  set  @sqlStr = concat(@sqlStr, '           i.ImageId, \n');
+  set  @sqlStr = concat(@sqlStr, '           i.PixelCount, \n');
+  set  @sqlStr = concat(@sqlStr, '           i.Depth, \n');
+  set  @sqlStr = concat(@sqlStr, '          ');
+                 
+
+  if  (_statistic = '0')  then
+     set @sqlStr = concat(@sqlStr, 'i.PixelCount * (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000  * (id.FlowRate1 / sf.ScanRate) * 1000.0  as Statistic \n');
+  end if;
+  
+  if  (_statistic = '1')  then
+     set @sqlStr = concat(@sqlStr, '2 * sqrt(i.PixelCount *  (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000 * (id.FlowRate1 / sf.ScanRate) * 1000.0 / 3.1415926)  as Statistic \n');
+  end if;
+  
+  if  (_statistic = '2')  then
+     set @sqlStr = concat(@sqlStr, '(4.0 / 3.0) * 3.1415926 * pow (sqrt(i.PixelCount *  (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000 * (id.FlowRate1 / sf.ScanRate) * 1000.0 / 3.1415926), 3)  as Statistic \n');
+  end if;
+
+  
+  set @sqlStr = concat(@sqlStr, '    from  Images i  \n');
+  set @sqlStr = concat(@sqlStr, '    join (SipperFiles sf)     on(sf.SipperFileId  = i.SipperFileId) \n');
+  set @sqlStr = concat(@sqlStr, '    join (InstrumentData id)  on((id.SipperFileId = i.SipperFileId)  and  (id.ScanLine = Floor(TopLeftRow/4096) * 4096) ) \n');
+  set @sqlStr = concat(@sqlStr, '    where  (sf.CruiseName      = \"', _cruiseName,    '\") \n');
+  set @sqlStr = concat(@sqlStr, '       and (sf.StationName     = \"', _stationName,   '\") \n');
+  set @sqlStr = concat(@sqlStr, '       and (sf.DeploymentNum   = \"', _deploymentNum, '\") \n');
+  /* set @sqlStr = concat(@sqlStr, '       and (id.CTDDateTime    <= \"', _midPoint,      '\") \n');  */
+  if  (_classId >= 0)  then
+    set @sqlStr = concat(@sqlStr, '       and (i.Class1Id         = ', _classId, '); \n');
+  end if;
+  
+  PREPARE stmt1 FROM @sqlStr;
+  EXECUTE stmt1;
+  DEALLOCATE PREPARE stmt1;
+
+  set @sqlStr2 = 'select T.DownCast                                        as DownCast, \n';
+  set @sqlStr2 = concat(@sqlStr2, '       floor(T.Depth / ', _depthBinSize, ')                    as BucketIdx, \n');
+  set @sqlStr2 = concat(@sqlStr2, '       (floor(T.Depth / ', _depthBinSize, ') * ', _depthBinSize, ')  as BucketDepth, \n');
+  set @sqlStr2 = concat(@sqlStr2, '       count(T.ImageId)                                  as ImageCount, \n');
+  set @sqlStr2 = concat(@sqlStr2, '       sum(T.PixelCount)                                 as TotalPixelCount, \n');
+                
+  set @statVal = _initialValue;
+  
+  set @sqlStr2 = concat(@sqlStr2, '       sum((T.Statistic < ', Format (@statVal, 4), '))    as \"<',Format (@statVal, 4), '\", \n');
+
+  while  (@statVal < _endValue)  do
+    set @nextVal = round(@statVal * _growtRate, 4);
+    set @sqlStr2 = concat(@sqlStr2, '       sum((T.Statistic >= ', Format (@statVal, 4), ')  and  (T.Statistic < ', Format (@nextVal, 4), ')) as \"Size_', Format (@statVal, 4), '\", \n');
+    set @statVal = @nextVal;
+  end while;
+  
+  
+  set @sqlStr2 = concat(@sqlStr2, '       sum((T.Statistic >= ', Format (@statVal, 4), '))               as \">=', Format (@statVal, 4), '\" \n');
+  set @sqlStr2 = concat(@sqlStr2, '   from  TempSizeDistributionTable T \n');
+  set @sqlStr2 = concat(@sqlStr2, '   group by T.DownCast, floor(T.Depth / ', _depthBinSize, '); \n');        
+
+  PREPARE stmt2 FROM @sqlStr2;
+  EXECUTE stmt2;
+  DEALLOCATE PREPARE stmt2;
+  
+end$$
+delimiter ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
