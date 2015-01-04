@@ -2023,6 +2023,26 @@ delimiter ;
 
 
 
+drop  function  if exists ImagesComputeEBv;
+
+delimiter //
+create function ImagesTimeBucket  (imageId   int  unsigned.
+                                   _slotLen  int  unsigned
+                                  )
+  returns int float
+  deterministic
+
+begin
+  declare  _EBv  int float default 0.0;
+  
+  
+
+  return  _EBv;
+end;
+//
+delimiter ;
+
+
 
 drop procedure  if exists  ImagesSizeDataByDepthSipper11;
 
