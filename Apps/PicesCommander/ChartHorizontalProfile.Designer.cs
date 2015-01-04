@@ -255,7 +255,7 @@
       chartArea1.AxisX.LabelAutoFitMinFontSize = 10;
       chartArea1.AxisX.MajorGrid.Enabled = false;
       chartArea1.AxisX.Minimum = 0;
-      chartArea1.AxisX.Title = "Count/m^3";
+      chartArea1.AxisX.Title = "Count/m-3";
       chartArea1.AxisX2.MajorGrid.Enabled = false;
       chartArea1.AxisY.LabelAutoFitMaxFontSize = 12;
       chartArea1.AxisY.LabelAutoFitMinFontSize = 10;

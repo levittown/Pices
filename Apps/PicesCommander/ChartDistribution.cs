@@ -1296,15 +1296,51 @@ namespace PicesCommander
     }
 
 
+
+    private  String  SubInSuperScriptExponent (String s)
+    {
+      int x = s.IndexOf("-3");
+      while  (x >= 0)
+      {
+        s = s.Substring (0, x) + "\u00B3" + s.Substring (x + 2);
+        x = s.IndexOf("-3");
+      }
+
+      x = s.IndexOf("-2");
+      while  (x >= 0)
+      {
+        s = s.Substring (0, x) + "\u00B2" + s.Substring (x + 2);
+        x = s.IndexOf("-2");
+      }
+
+      return s;
+    }  /* SubInSuperScriptExponent */
+
+
+
     private  void  UpdateChartAreas ()
     {
       goalie.StartBlock ();
       
+      Font  chartTitleFont = new Font (FontFamily.GenericSerif, 12.0f);
+      Font  axisTitleFont  = new Font (FontFamily.GenericSerif, 12.0f);
+
       DepthProfileChart.Titles.Clear ();
-      DepthProfileChart.Titles.Add ("Cruise: " + cruise + "  Station: " + station + "  Deployment: " + deployment);
+
+      String t1 = "";
+      if  (!String.IsNullOrEmpty (cruise))
+      {
+        t1 = "Cruise: " + cruise;
+        if  (!String.IsNullOrEmpty (station))
+        {
+          t1 += ("  Station: " + station);
+          if  (!String.IsNullOrEmpty (deployment))
+            t1 += ("  Deployment: " + deployment);
+        }
+        DepthProfileChart.Titles.Add (new Title (t1, Docking.Top, chartTitleFont, Color.Black));
+      }
 
       String  title2 = "";
-
       if  (filterProb)
         AddToTitleLine (ref title2, "Probility: " + ProbRange.Text);
 
@@ -1317,7 +1353,7 @@ namespace PicesCommander
       if  (classKeyToUse == 'V')
         title2 += "(Validated)";
 
-      DepthProfileChart.Titles.Add (title2);
+      DepthProfileChart.Titles.Add (new Title (title2, Docking.Top, chartTitleFont, Color.Black));
 
       if  (series.Count < 1)
       {
@@ -1340,34 +1376,20 @@ namespace PicesCommander
 
       DepthProfileChart.Titles.Add (criteriaStr);
       ChartArea ca = DepthProfileChart.ChartAreas[0];
-      ca.AxisY.IsReversed = true;
-      ca.AxisY.Minimum = 0;
-      ca.AxisY.Title = "Depth(M)";
-
       ca.AlignmentOrientation = AreaAlignmentOrientations.Horizontal;
       ca.AlignmentStyle = ((AreaAlignmentStyles)((AreaAlignmentStyles.PlotPosition | AreaAlignmentStyles.AxesView)));
       ca.AlignWithChartArea = "ChartArea2";
       ca.AxisX.Minimum = 0;
-      ca.AxisX.Title = "Count/m-3";
+      ca.AxisX.Title = SubInSuperScriptExponent ("Count/m-3");
+      ca.AxisX.TitleFont = axisTitleFont;
       ca.AxisX2.MajorGrid.Enabled = false;
       ca.AxisY.IsReversed = true;
       ca.AxisY.Maximum = depthMaxToPlot;
       ca.AxisY.Minimum = depthMinToPlot;
       ca.AxisY.Interval = intervalSize;
       ca.AxisY.Title = "Depth in Meters";
+      ca.AxisY.TitleFont = axisTitleFont;
       ca.AxisY.LabelStyle.Format = depthFormatStr;
-
-      // Following will be maintained by the designer.
-      //ca.AxisX.MajorGrid.Enabled = false;
-      //ca.AxisX2.MajorGrid.Enabled = false;
-      //ca.AxisY.MajorGrid.Enabled = false;
-      //ca.Name = "ChartArea1";
-      //ca.AxisY2.MajorGrid.Enabled = false;
-      //ca.BorderWidth = 2;
-      //ca.Position.Auto = false;
-      //ca.Position.Height = 90F;
-      //ca.Position.Width = 45F;
-
 
       String  lastUnitOfMeasure = "";
       int  numTypeOfUnits = 0;
@@ -1387,8 +1409,9 @@ namespace PicesCommander
         s.Name = dstp.legend;
         lastUnitOfMeasure = dstp.unitOfMeasure;
 
-        ca.AxisX.Title = lastUnitOfMeasure;
-        ca.AxisX.LabelStyle.Format =  dstp.formatStr;
+        ca.AxisX.Title = SubInSuperScriptExponent (lastUnitOfMeasure);
+        ca.AxisX.TitleFont = axisTitleFont;
+        ca.AxisX.LabelStyle.Format = dstp.formatStr;
         ca.AxisX.Minimum = 0;
         s.XAxisType = AxisType.Primary;
  
@@ -1415,16 +1438,6 @@ namespace PicesCommander
       ca.AxisY.Interval = intervalSize;
       ca.AxisY.IsReversed = true;
 
-      // Following will be maintained by the designer.
-      // ca.AxisX.MajorGrid.Enabled = false;
-      // ca.AxisX2.MajorGrid.Enabled = false;
-      // ca.AxisY.MajorGrid.Enabled = false;
-      // ca.AxisY2.MajorGrid.Enabled = false;
-      // ca.Position.Auto = false;
-      // ca.Position.Height = 90F;
-      // ca.Position.Width = 45F;
-      // ca.Position.X = 48F;
-
       foreach  (DataSeriesToPlot dstp in series)
       {
         if  (dstp.sourceType != 'I')
@@ -1445,16 +1458,16 @@ namespace PicesCommander
 
           if  (numTypeOfUnits == 1)
           {
-            ca.AxisX.Title = lastUnitOfMeasure;
+            ca.AxisX.Title = SubInSuperScriptExponent (lastUnitOfMeasure);
             ca.AxisX.LabelStyle.Format =  dstp.formatStr;
-            //ca.AxisX.Minimum = dstp.minVal;
+            ca.AxisX.TitleFont = axisTitleFont;
           }
 
           else if  (numTypeOfUnits == 2)
           {
-            ca.AxisX2.Title = lastUnitOfMeasure;
+            ca.AxisX2.Title = SubInSuperScriptExponent (lastUnitOfMeasure);
             ca.AxisX2.LabelStyle.Format = dstp.formatStr;
-            //ca.AxisX2.Minimum = dstp.minVal;
+            ca.AxisX2.TitleFont = axisTitleFont;
             ca.AxisX2.LabelStyle.Format = dstp.formatStr;
           }
         }

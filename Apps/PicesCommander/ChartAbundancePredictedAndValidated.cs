@@ -732,29 +732,57 @@ namespace PicesCommander
     }
 
 
+    private  String  SubInSuperScriptExponent (String s)
+    {
+      int x = s.IndexOf("-3");
+      while  (x >= 0)
+      {
+        s = s.Substring (0, x) + "\u00B3" + s.Substring (x + 2);
+        x = s.IndexOf("-3");
+      }
+
+      x = s.IndexOf("-2");
+      while  (x >= 0)
+      {
+        s = s.Substring (0, x) + "\u00B2" + s.Substring (x + 2);
+        x = s.IndexOf("-2");
+      }
+
+      return s;
+    }  /* SuperScriptExponent */
+
 
     private  void  UpdateChartAreas ()
     {
       goalie.StartBlock ();
-      
-      String  t1 = "Cruise: " + cruise + "  Station: " + station;
-      if  (String.IsNullOrEmpty (deployment))
-        t1 += "  Deployment: " + deployment;
 
-      t1 += "  Class: " + classToPlot.Name;
+      Font  chartTitleFont = new Font (FontFamily.GenericSerif, 12.0f);
+      Font  axisTitleFont  = new Font (FontFamily.GenericSerif, 12.0f);
 
       ProfileChart.Titles.Clear ();
-      ProfileChart.Titles.Add (t1);
+      String t1 = "";
+      if  (!String.IsNullOrEmpty (cruise))
+      {
+        t1 = "Cruise: " + cruise;
+        if  (!String.IsNullOrEmpty (station))
+        {
+          t1 += ("  Station: " + station);
+          if  (!String.IsNullOrEmpty (deployment))
+            t1 += ("  Deployment: " + deployment);
+        }
+      }
+      t1 += "  Class: " + classToPlot.Name;
+      ProfileChart.Titles.Add (new Title (t1, Docking.Top, chartTitleFont, Color.Black));
 
       String  t2 = "";
       if  (group != null)
         AddToStr (ref t2, group.Name);
 
       if  (!String.IsNullOrEmpty (criteriaStr))
-        AddToStr (ref t2, criteriaStr);
+        AddToStr (ref t2, SubInSuperScriptExponent (criteriaStr));
 
       if  (!String.IsNullOrEmpty (t2))
-        ProfileChart.Titles.Add (t2);
+        ProfileChart.Titles.Add (new Title (t2, Docking.Top, chartTitleFont, Color.Black));
 
       ProfileChart.Series.Clear ();
 
@@ -793,10 +821,10 @@ namespace PicesCommander
       ca.AxisY.IsReversed = true;
       ca.AxisY.Minimum = 0;
       ca.AxisY.Title = "Depth(m)";
+      ca.AxisY.TitleFont = axisTitleFont;
       //ca.AxisY.Title = "Depth(" + depthMinToPlot + " - " + depthMaxToPlot + ")";
 
       ca.AxisX.Minimum = 0;
-      ca.AxisX.Title = "Count/m-3";
       ca.AxisX2.MajorGrid.Enabled = false;
 
       ca.AxisY.IsReversed = true;
@@ -827,7 +855,7 @@ namespace PicesCommander
 
       String  uintOfMeasure = "Count";
       if  (weightByVolume)
-        uintOfMeasure = "Count/m_3";
+        uintOfMeasure = "Count/m-3";
 
       // First we will plot class counts on CharArea1
       foreach  (DataSeriesToPlot dstp in series)
@@ -837,7 +865,8 @@ namespace PicesCommander
         s.ChartType =  SeriesChartType.Line;
         s.Name = dstp.legend;
 
-        ca.AxisX.Title = uintOfMeasure;
+        ca.AxisX.Title = SubInSuperScriptExponent (uintOfMeasure);
+        ca.AxisX.TitleFont = axisTitleFont;
         ca.AxisX.LabelStyle.Format =  "###,##0";
         ca.AxisX.Minimum = 0;
         s.XAxisType = AxisType.Primary;

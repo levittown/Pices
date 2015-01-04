@@ -807,17 +807,41 @@ namespace PicesCommander
       depthMaxToPlot = depthMinToPlot + intervalSize * numIntervals;
     }
 
+    
+
+    private  String  SubInSuperScriptExponent (String s)
+    {
+      int x = s.IndexOf("-3");
+      while  (x >= 0)
+      {
+        s = s.Substring (0, x) + "\u00B3" + s.Substring (x + 2);
+        x = s.IndexOf("-3");
+      }
+
+      x = s.IndexOf("-2");
+      while  (x >= 0)
+      {
+        s = s.Substring (0, x) + "\u00B2" + s.Substring (x + 2);
+        x = s.IndexOf("-2");
+      }
+
+      return s;
+    }  /* SuperScriptExponent */
+
 
 
     private  void  UpdateChartAreas ()
     {
       goalie.StartBlock ();
       
+      Font titleFont = new Font (FontFamily.GenericSansSerif, 12);
+      Font axisTitleFont = new Font (FontFamily.GenericSansSerif, 12);
+
       ProfileChart.Titles.Clear ();
-      ProfileChart.Titles.Add ("Cruise: " + cruise + "  Class: " + classToPlot.Name);
+      ProfileChart.Titles.Add (new Title ("Cruise: " + cruise + "  Class: " + classToPlot.Name, Docking.Top, titleFont, Color.Black));
 
       if  (!String.IsNullOrEmpty (criteriaStr))
-        ProfileChart.Titles.Add (criteriaStr);
+        ProfileChart.Titles.Add (new Title (criteriaStr, Docking.Top, titleFont, Color.Black));
 
       if  (series.Count < 1)
       {
@@ -858,7 +882,8 @@ namespace PicesCommander
       //ca.AxisY.Title = "Depth(" + depthMinToPlot + " - " + depthMaxToPlot + ")";
 
       ca.AxisX.Minimum = 0;
-      ca.AxisX.Title = "Count/m-3";
+      ca.AxisX.Title = SubInSuperScriptExponent ("Count/m-3");
+      ca.AxisX.TitleFont = axisTitleFont;
       ca.AxisX2.MajorGrid.Enabled = false;
 
       ca.AxisY.IsReversed = true;
@@ -866,6 +891,7 @@ namespace PicesCommander
       ca.AxisY.Minimum = depthMinToPlot;
       ca.AxisY.Interval = intervalSize;
       ca.AxisY.LabelStyle.Format = depthFormatStr;
+      ca.AxisY.TitleFont = axisTitleFont;
 
       Decimal  distFromFirstInterval = (Decimal)depthMinToPlot % (Decimal)intervalSize;
       double  intervalOffSet = (double)((Decimal)intervalSize - distFromFirstInterval);
@@ -899,9 +925,10 @@ namespace PicesCommander
         s.ChartType =  SeriesChartType.Line;
         s.Name = dstp.legend;
 
-        ca.AxisX.Title = uintOfMeasure;
+        ca.AxisX.Title = SubInSuperScriptExponent (uintOfMeasure);
         ca.AxisX.LabelStyle.Format =  "###,##0";
         ca.AxisX.Minimum = 0;
+        ca.AxisX.TitleFont = axisTitleFont;
         s.XAxisType = AxisType.Primary;
  
         s.BorderWidth = 2;

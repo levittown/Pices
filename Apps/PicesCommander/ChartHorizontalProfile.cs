@@ -850,17 +850,6 @@ namespace PicesCommander
     
 
 
-    private  float[]  VolumeByTime (PicesSipperFile  sf)
-    {
-      float[]  volumeByTime = null;
-
-      
-
-
-      return  volumeByTime;
-    }
-                                 
-
     /// <summary>
     /// Returns a Volume by 
     /// </summary>
@@ -869,6 +858,11 @@ namespace PicesCommander
     /// 
     private  List<DataPoint>   RetrieveVolumePerInstrumentDataRec (PicesSipperFile  sf)
     {
+      float chamberWidth = 0.96f;
+      PicesSipperDeployment  deployment = threadConn.SipperDeploymentLoad (sf.CruiseName, sf.StationName, sf.DeploymentNum);
+      if  (deployment != null)
+        chamberWidth = deployment.ChamberWidth;
+      
       long  initailTimeOffset = sf.DateTimeStart.ToBinary ();
 
       TimeSpan  deltaTime = (sf.DateTimeStart - initialStartTime);
@@ -893,7 +887,7 @@ namespace PicesCommander
       {
         int  scanLine = PicesKKStr.StrToInt (results[x][0]);
         double  flowRate = PicesKKStr.StrToFloat (results[x][1]);
-        double  volume = 0.098 * 0.098 * (flowRate * timePerInstrumentDataRec);
+        double  volume = 0.096 * chamberWidth * (flowRate * timePerInstrumentDataRec);
         flowRates.Add (new DataPoint (startScanLineOffset + scanLine, volume));
       }
       return  flowRates;
