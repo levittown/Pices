@@ -737,6 +737,10 @@ namespace PicesCommander
     private  void  UpdateChartAreas ()
     {
       goalie.StartBlock ();
+
+      Font titleFont = new Font (FontFamily.GenericSansSerif, 12);
+      Font axistTitleFont = new Font (FontFamily.GenericSansSerif, 12);
+
       
       String  t1 = "Cruise: " + cruise + "  Station: " + station;
       if  (String.IsNullOrEmpty (deployment))
@@ -745,7 +749,7 @@ namespace PicesCommander
       t1 += "  Class: " + classToPlot.Name;
 
       ProfileChart.Titles.Clear ();
-      ProfileChart.Titles.Add (t1);
+      ProfileChart.Titles.Add (new Title (t1, Docking.Top, titleFont, Color.Black));
 
       String  t2 = "";
       if  (group != null)
@@ -755,7 +759,7 @@ namespace PicesCommander
         AddToStr (ref t2, criteriaStr);
 
       if  (!String.IsNullOrEmpty (t2))
-        ProfileChart.Titles.Add (t2);
+        ProfileChart.Titles.Add (new Title (t2,Docking.Top, titleFont, Color.Black));
 
       ProfileChart.Series.Clear ();
 

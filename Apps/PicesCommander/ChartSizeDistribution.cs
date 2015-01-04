@@ -23,8 +23,6 @@ namespace PicesCommander
     private  String  cruise         = null;
     private  String  station        = null;
     private  String  deployment     = null;
-    private  String  groupName      = null;
-    private  PicesDataBaseImageGroup  group = null;
 
     private  int     sizeMin        = 150;
     private  int     sizeMax        = 0;
@@ -117,9 +115,6 @@ namespace PicesCommander
       cruise        = _cruise;
       station       = _station;
       deployment    = _deployment;
-      group         = _group;
-      if  (group != null)
-        groupName = group.Name;
       classToPlot   = _classToPlot;
       sizeMin       = _sizeMin;
       sizeMax       = _sizeMax;
@@ -203,7 +198,6 @@ namespace PicesCommander
       Cruise_.Text     = cruise;
       Station_.Text    = station;
       Deployment_.Text = deployment;
-      Group.Text       = groupName;
 
       if  (classToPlot != null)
         ClassToPlot.Text = classToPlot.Name;
@@ -228,9 +222,9 @@ namespace PicesCommander
       IncludeSubClasses.Enabled = false;
       WeightByVolume.Enabled    = false;
       DepthAxisAuto.Enabled     = false;
-      InitialSize.Enabled      = false;
-      MaxSize.Enabled      = false;
-      DepthAxisInterval.Enabled = false;
+      InitialSizeField.Enabled      = false;
+      MaxSizeField.Enabled      = false;
+      GrowthRateField.Enabled = false;
     }
 
 
@@ -242,9 +236,9 @@ namespace PicesCommander
       IncludeSubClasses.Enabled = true;
       WeightByVolume.Enabled    = true;
       DepthAxisAuto.Enabled     = true;
-      InitialSize.Enabled      = true;
-      MaxSize.Enabled      = true;
-      DepthAxisInterval.Enabled = true;
+      InitialSizeField.Enabled      = true;
+      MaxSizeField.Enabled      = true;
+      GrowthRateField.Enabled = true;
     }
 
 
@@ -263,9 +257,9 @@ namespace PicesCommander
       //o.WriteLine ("PlotAction"         + "\t" + ((String)(PlotAction.SelectedItem)));
       o.WriteLine ("DepthIncr"          + "\t" + DepthIncr.Value);
       o.WriteLine ("DepthAxisAuto"      + "\t" + (DepthAxisAuto.Checked ? "Yes" : "No"));
-      o.WriteLine ("DepthAxisMin"       + "\t" + InitialSize.Value);
-      o.WriteLine ("DepthAxisMax"       + "\t" + MaxSize.Value);
-      o.WriteLine ("DepthAxisInterval"  + "\t" + DepthAxisInterval.Value);
+      o.WriteLine ("DepthAxisMin"       + "\t" + InitialSizeField.Value);
+      o.WriteLine ("DepthAxisMax"       + "\t" + MaxSizeField.Value);
+      o.WriteLine ("DepthAxisInterval"  + "\t" + GrowthRateField.Value);
 
       o.Close ();
       o = null;
@@ -355,16 +349,16 @@ namespace PicesCommander
     {
       if  (DepthAxisAuto.Checked)
       {
-        if  (InitialSize.Value >= MaxSize.Value)
+        if  (InitialSizeField.Value >= MaxSizeField.Value)
           errors.Add ("Min-Depth must be less than Max-Depth");
 
-        if  (DepthAxisInterval.Value <= 0)
+        if  (GrowthRateField.Value <= 0)
           errors.Add ("The increment must be greater than 0.");
 
         else
         {
-          Decimal  range = (MaxSize.Value - InitialSize.Value);
-          if  ((range > 0)  &&  (range < DepthAxisInterval.Value))
+          Decimal  range = (MaxSizeField.Value - InitialSizeField.Value);
+          if  ((range > 0)  &&  (range < GrowthRateField.Value))
             errors.Add ("Interval size is less than specified range.");
         }
       }
@@ -466,7 +460,7 @@ namespace PicesCommander
         statusMsgs.AddMsg ("Retrieving counts for Class[" + c.Name + "]  SipperFile[" + sf.SipperFileName + "]");
     
         uint[]  countsThisSipperFile 
-          = threadConn.ImageGetDepthStatistics (group,              // PicesDataBaseImageGroup^  imageGroup,
+          = threadConn.ImageGetDepthStatistics (null,               // PicesDataBaseImageGroup^  imageGroup,
                                                 sf.SipperFileName,
                                                 depthIncrement,     // depthIncrements,
                                                 c,                  // mlClass,
@@ -630,113 +624,13 @@ namespace PicesCommander
     }
 
 
-    private  void  DetermineDepthMinMaxToPlot (ref float   depthMinToPlot,
-                                               ref float   depthMaxToPlot,
-                                               ref float   numIntervals,
-                                               ref float   intervalSize,
-                                               ref string  depthFormatStr
-                                              )
-    {
-      float  min = float.MaxValue;
-      float  max = float.MinValue;
-      numIntervals = 10.0f;
-      intervalSize = 10.0f;
-
-      foreach  (DataSeriesToPlot dstp in series)
-      {
-        for  (int depthIDX = 0;  depthIDX < dstp.countsByDepth.Length;  ++depthIDX)
-        {
-          float  depth = depthIDX * depthIncrement;
-          if  (dstp.countsByDepth[depthIDX] == 0.0)
-            continue;
-          if  (depth < min)
-            min = depth;
-
-          if  (depth > max)
-            max = depth;
-        }
-      }
-
-      float  depthDelta = max - min;
-      float  depthRange = 2.0f;
-      numIntervals = 0.25f;
-      depthFormatStr = "##,##0";
-      intervalSize = -1.0f;
-
-      if  (depthDelta <= 2.0f)
-      {
-        depthRange = 2.0f;
-        intervalSize = 0.25f;
-        depthFormatStr = "#,##0.00";
-      }
-
-      else if  (depthDelta <= 5.0f)
-      {
-        depthRange = (float)Math.Ceiling (depthDelta);
-        intervalSize = 0.5f;
-        depthFormatStr = "#,##0.0";
-      }
-
-      else if  (depthDelta <= 10.0f)
-      {
-        depthRange = (float)Math.Ceiling (depthDelta);
-        intervalSize = FindBestInetrvaleSize (1, 3, (int)depthRange);
-      }
-
-      else if  (depthDelta < 15.0f)
-      {
-        depthRange = 1.0f * (float)Math.Ceiling ((depthDelta / 1.0f));
-        intervalSize = FindBestInetrvaleSize (2, 4, (int)depthRange);
-      }
-
-      else if  (depthDelta < 20.0f)
-      {
-        depthRange = 2.0f * (float)Math.Ceiling ((depthDelta / 2.0f));
-        intervalSize = FindBestInetrvaleSize (2, 5, (int)depthRange);
-      }
-
-      else if  (depthDelta < 50.0f)
-      {
-        depthRange = 5.0f * (float)Math.Ceiling ((depthDelta / 5.0f));
-        intervalSize = FindBestInetrvaleSize (5, 10, (int)depthRange);
-      }
-
-      else if  (depthDelta < 75.0f)
-      {
-        depthRange = 5.0f * (float)Math.Ceiling ((depthDelta / 5.0f));
-        intervalSize = FindBestInetrvaleSize (10, 15, (int)depthRange);
-      }
-
-      else if  (depthDelta < 100.0f)
-        depthRange = 10.0f * (float)Math.Ceiling ((depthDelta / 10.0f));
-
-      else if  (depthDelta <= 200f)
-        depthRange = 20.0f * (float)Math.Ceiling ((depthDelta / 20.0f));
-
-      else if  (depthDelta <= 300.0f)
-        depthRange = 30.0f * (float)Math.Ceiling ((depthDelta / 30.0f));
-
-      else if  (depthDelta <= 400.0f)
-        depthRange = 40.0f * (float)Math.Ceiling ((depthDelta / 30.0f));
-
-      else
-        depthRange = 100.0f * (float)Math.Floor (depthDelta / 100.0f);
-
-      if  (intervalSize < 0.0f)
-        intervalSize = depthRange / 10.0f;
-
-      numIntervals = (int)(0.5f + depthRange / intervalSize);
-
-      float incrPerMeter = 1.0f / intervalSize;
-      depthMinToPlot = (float)Math.Floor (min * incrPerMeter) / incrPerMeter;
-      depthMaxToPlot = depthMinToPlot + intervalSize * numIntervals;
-    }
-
 
 
     private  void  UpdateChartAreas ()
     {
       goalie.StartBlock ();
+
+      Font titleFont = new Font (FontFamily.GenericSansSerif, 12);
       
       String  t1 = "Cruise: " + cruise + "  Station: " + station;
       if  (String.IsNullOrEmpty (deployment))
@@ -745,17 +639,10 @@ namespace PicesCommander
       t1 += "  Class: " + classToPlot.Name;
 
       ProfileChart.Titles.Clear ();
-      ProfileChart.Titles.Add (t1);
-
-      String  t2 = "";
-      if  (group != null)
-        AddToStr (ref t2, group.Name);
+      ProfileChart.Titles.Add (new Title (t1, Docking.Top, titleFont, Color.Black));
 
       if  (!String.IsNullOrEmpty (criteriaStr))
-        AddToStr (ref t2, criteriaStr);
-
-      if  (!String.IsNullOrEmpty (t2))
-        ProfileChart.Titles.Add (t2);
+        ProfileChart.Titles.Add (new Title (criteriaStr, Docking.Top, titleFont, Color.Black));
 
       ProfileChart.Series.Clear ();
 
@@ -765,58 +652,44 @@ namespace PicesCommander
         return;
       }
 
-      float   depthMinToPlot = 0.0f;
-      float   depthMaxToPlot = 100.0f;
-      float   numIntervals   = 10.0f;
-      float   intervalSize   = 10.0f;
+      float   initialSize  = 0.0f;
+      float   maxSize      = 100.0f;
+      float   growthRate   = 10.0f;
       String  depthFormatStr = "##,##0";
 
-      DetermineDepthMinMaxToPlot (ref depthMinToPlot,
-                                  ref depthMaxToPlot,
-                                  ref numIntervals,
-                                  ref intervalSize,
-                                  ref depthFormatStr
-                                 );
-      if  (!DepthAxisAuto.Checked)
-      {
-        depthMinToPlot = (float)InitialSize.Value;
-        depthMaxToPlot = (float)MaxSize.Value;
-        intervalSize   = (float)DepthAxisInterval.Value;
-      }
-      else
-      {
-        DepthAxisInterval.Value = (Decimal)intervalSize;
-        InitialSize.Value = (Decimal)depthMinToPlot;
-        MaxSize.Value = (Decimal)depthMaxToPlot;
-      }
+      initialSize = (float)InitialSizeField.Value;
+      maxSize     = (float)MaxSizeField.Value;
+      growthRate  = (float)GrowthRateField.Value;
+
+
 
       ChartArea ca = ProfileChart.ChartAreas[0];
       ca.AxisY.IsReversed = true;
       ca.AxisY.Minimum = 0;
       ca.AxisY.Title = "Depth(m)";
-      //ca.AxisY.Title = "Depth(" + depthMinToPlot + " - " + depthMaxToPlot + ")";
+      //ca.AxisY.Title = "Depth(" + initialSize + " - " + maxSize + ")";
 
       ca.AxisX.Minimum = 0;
       ca.AxisX.Title = "Count/m-3";
       ca.AxisX2.MajorGrid.Enabled = false;
 
       ca.AxisY.IsReversed = true;
-      ca.AxisY.Maximum = depthMaxToPlot;
-      ca.AxisY.Minimum = depthMinToPlot;
-      ca.AxisY.Interval = intervalSize;
+      ca.AxisY.Maximum = maxSize;
+      ca.AxisY.Minimum = initialSize;
+      ca.AxisY.Interval = growthRate;
       ca.AxisY.LabelStyle.Format = depthFormatStr;
 
-      Decimal  distFromFirstInterval = (Decimal)depthMinToPlot % (Decimal)intervalSize;
-      double  intervalOffSet = (double)((Decimal)intervalSize - distFromFirstInterval);
-      if  (intervalOffSet == intervalSize)
+      Decimal  distFromFirstInterval = (Decimal)initialSize % (Decimal)growthRate;
+      double  intervalOffSet = (double)((Decimal)growthRate - distFromFirstInterval);
+      if  (intervalOffSet == growthRate)
         intervalOffSet = 0;
 
       ca.AxisY.IntervalOffset = intervalOffSet;
-      ca.AxisY.MajorTickMark.Interval = intervalSize;
+      ca.AxisY.MajorTickMark.Interval = growthRate;
       ca.AxisY.MajorTickMark.IntervalOffset = intervalOffSet;
 
-      float   intervalMinorSize = intervalSize / 2.0f;
-      Decimal  distFromFirstIntervalMinor = (Decimal)depthMinToPlot % (Decimal)intervalMinorSize;
+      float   intervalMinorSize = growthRate / 2.0f;
+      Decimal  distFromFirstIntervalMinor = (Decimal)initialSize % (Decimal)intervalMinorSize;
       double  intervalMinorOffSet = (double)((Decimal)intervalMinorSize - distFromFirstIntervalMinor);
       if  (intervalMinorOffSet == intervalMinorSize)
         intervalMinorOffSet = 0.0;
@@ -848,7 +721,7 @@ namespace PicesCommander
         for  (int depthIDX = 0;  depthIDX < dstp.countsByDepth.Length;  ++depthIDX)
         {
           float  yValue = depthIDX * depthIncrement;
-          if  ((yValue >= depthMinToPlot)  &&  (yValue <= depthMaxToPlot))
+          if  ((yValue >= initialSize)  &&  (yValue <= maxSize))
           {
             if  (weightByVolume)
               s.Points.Add (new DataPoint (dstp.density[depthIDX], yValue));
@@ -1075,7 +948,6 @@ namespace PicesCommander
       tw.WriteLine ("Cruise"               + "\t" + cruise);
       tw.WriteLine ("Station"              + "\t" + station);
       tw.WriteLine ("Deployment"           + "\t" + deployment);
-      tw.WriteLine ("Group"                + "\t" + groupName);
       tw.WriteLine ("Class"                + "\t" + classToPlot.Name);
       tw.WriteLine ("Weight-by-Volume"     + "\t" + (weightByVolume    ? "Yes" : "No"));
       tw.WriteLine ("Include-Sub-Classes"  + "\t" + (includeSubClasses ? "Yes" : "No"));
