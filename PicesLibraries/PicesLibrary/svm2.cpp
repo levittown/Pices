@@ -20,12 +20,13 @@
 using namespace  std;
 
 
-#include  "OSservices.h"
-#include  "Str.h"
+#include "KKException.h"
+#include "OSservices.h"
+#include "Str.h"
 using namespace  KKU;
 
 
-#include  "FeatureVector.h"
+#include "FeatureVector.h"
 using namespace  MLL;
 
 #include "svm2.h"
@@ -2835,7 +2836,7 @@ decision_function  SVM289_MFS::svm_train_one (const svm_problem&    prob,
         KKStr errMsg = "SVM289_MFS::svm_train_one   ***ERROR***   Invalid Solver Defined.";
         errMsg << "   Solver[" << param.svm_type << "]";
         _log.Level (-1) << endl << endl << errMsg << endl << endl;
-        throw KKStrException (errMsg);
+        throw KKException (errMsg);
       }
   }
 

@@ -445,6 +445,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ImageSizeDistribution.h"
+				>
+			</File>
+			<File
 				RelativePath=".\KArray.h"
 				>
 			</File>
@@ -754,6 +758,10 @@
 			</File>
 			<File
 				RelativePath=".\ImageFeaturesNameIndexed.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ImageSizeDistribution.cpp"
 				>
 			</File>
 			<File

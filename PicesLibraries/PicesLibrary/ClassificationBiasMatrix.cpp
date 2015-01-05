@@ -1,29 +1,30 @@
-#include  "FirstIncludes.h"
+#include "FirstIncludes.h"
 
-#include  <stdio.h>
-#include  <math.h>
-#include  <ctype.h>
-#include  <time.h>
-#include  <fstream>
-#include  <iostream>
-#include  <map>
-#include  <ostream>
-#include  <string>
-#include  <vector>
+#include <stdio.h>
+#include <math.h>
+#include <ctype.h>
+#include <time.h>
+#include <fstream>
+#include <iostream>
+#include <map>
+#include <ostream>
+#include <string>
+#include <vector>
 using namespace  std;
 
-#include  "MemoryDebug.h"
+#include "MemoryDebug.h"
 
 
-#include  "BasicTypes.h"
-#include  "Str.h"
-#include  "Matrix.h"
-#include  "OSservices.h"
-#include  "RunLog.h"
+#include "BasicTypes.h"
+#include "KKException.h"
+#include "Str.h"
+#include "Matrix.h"
+#include "OSservices.h"
+#include "RunLog.h"
 using namespace  KKU;
 
 
-#include  "MLClass.h"
+#include "MLClass.h"
 using namespace  MLL;
 
 #include "ClassificationBiasMatrix.h"
@@ -404,7 +405,7 @@ void  ClassificationBiasMatrix::ReadSimpleConfusionMatrix (istream&           sr
     KKStr  errMsg = "ReadSimpleConfusionMatrix   ***ERROR***  The 'Classes'  line was never provided.";
     runLog.Level (-1) << errMsg << endl;
     valid = false;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   int32  classesRowIdx = 0;
@@ -431,7 +432,7 @@ void  ClassificationBiasMatrix::ReadSimpleConfusionMatrix (istream&           sr
         KKStr  errMsg = "ReadSimpleConfusionMatrix   ***ERROR***  'Classes'  was not provided before 'DataRow'.";
         runLog.Level (-1) << errMsg << endl;
         valid = false;
-        throw KKStrException (errMsg);
+        throw KKException (errMsg);
       }
 
       KKStr  className = l.ExtractToken2 ("\t");
@@ -446,7 +447,7 @@ void  ClassificationBiasMatrix::ReadSimpleConfusionMatrix (istream&           sr
         KKStr  errMsg = "ReadSimpleConfusionMatrix   ***ERROR***  DataRow specifies class[" + className + "] which is not defined by caller";
         runLog.Level (-1) << errMsg << endl;
         valid = false;
-        throw KKStrException (errMsg);
+        throw KKException (errMsg);
       }
 
       if  (fileClassesIdx < 0)
@@ -454,7 +455,7 @@ void  ClassificationBiasMatrix::ReadSimpleConfusionMatrix (istream&           sr
         KKStr errMsg = "ReadSimpleConfusionMatrix   ***ERROR***  DataRow specifies class[" + className + "] was not defined in 'Classes' line.";
         runLog.Level (-1) << errMsg << endl;
         valid = false;
-        throw KKStrException (errMsg);
+        throw KKException (errMsg);
       }
 
       int32  classesRowIdx = classesIdx;
@@ -465,7 +466,7 @@ void  ClassificationBiasMatrix::ReadSimpleConfusionMatrix (istream&           sr
         KKStr  errMsg = "ReadSimpleConfusionMatrix   ***ERROR***  DataRow Class[" + className + "]  number[" + StrFormatInt ((int32)dataFields.size (), "ZZZ0") + "] of values provided does not match number of Classes.";
         runLog.Level (-1) << errMsg << endl;
         valid = false;
-        throw KKStrException (errMsg);
+        throw KKException (errMsg);
       }
 
       for  (int32 c = 0;  c < numClasses;  c++)
@@ -586,7 +587,7 @@ void   ClassificationBiasMatrix::PerformAdjustmnts (const VectorDouble&  classif
                    "]  and Prev Defined ClassList[" + StrFormatInt (numClasses, "ZZZ0") + "].";
     runLog.Level (-1) << errMsg << endl;
     valid = false;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   int32 x = 0;
@@ -677,7 +678,7 @@ void  ClassificationBiasMatrix::PrintBiasMatrix (ostream& sw)
     KKStr  errMsg = "ClassificationBiasMatrix::PrintBiasMatrix  ***ERROR***   'Classes' not defined;  this indicates that this object was not properly initialized.";
     runLog.Level (-1) << errMsg << endl;
     valid = false;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   sw << "BiasMatrix File Name            [" << biasFileName                     << "]" << endl
@@ -752,7 +753,7 @@ void  ClassificationBiasMatrix::PrintAdjustedResults (ostream&             sw,
     KKStr  errMsg = "ClassificationBiasMatrix::PrintAdjustedResults  ***ERROR***  Number of entries in 'classifiedCounts' not equal the number of classes";
     errMsg << errMsg << endl;
     valid = false;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   try
@@ -785,8 +786,8 @@ void  ClassificationBiasMatrix::PrintAdjustedResults (ostream&             sw,
       sw << "\t" << StrFormatDouble (stdErrors[col], "Z,ZZZ,ZZ0.0");
     sw << endl;
   }
-  catch  (const KKStrException& errMsg)
+  catch  (const KKException& errMsg)
   {
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 }  /* PrintAdjustedResults */

@@ -12,6 +12,7 @@ using namespace std;
 
 
 #include "BasicTypes.h"
+#include "KKException.h"
 #include "OSservices.h"
 #include "RunLog.h"
 using namespace  KKU;
@@ -348,7 +349,7 @@ void  FeatureNumList::AddFeature (uint16  featureNum)
            << "    FeastureNum[" << featureNum << "]  MaxNumOfFeatures[" << fileDesc->NumOfFields () << "]";
 
     cerr << std::endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   else if  (numOfFeatures >= featureNumsAllocatedSize)
@@ -851,7 +852,7 @@ FeatureNumList  FeatureNumList::operator*  (const FeatureNumList&  rightSide)  c
     errMsg << endl
            << "      The associated FileDesc instances are not the same.";
     cerr << endl << endl << errMsg << endl <<endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   FeatureNumList  result (fileDesc);
@@ -983,7 +984,7 @@ FeatureNumList  FeatureNumList::operator+ (uint16  rightSide) const
     KKStr errMsg = "FeatureNumList::operator+  ***ERROR***";
     errMsg <<" Feature[" << rightSide << "]  is too large.";
     cerr << endl << endl << errMsg << endl <<endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
   
   FeatureNumList  result (*this);
@@ -1001,7 +1002,7 @@ FeatureNumList  FeatureNumList::operator-  (uint16  rightSide) const
     KKStr errMsg = "FeatureNumList::operator-  ***ERROR***";
     errMsg <<" Feature[" << rightSide << "]  is too large.";
     cerr << endl << endl << errMsg << endl <<endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   FeatureNumList  result (*this);
@@ -1024,7 +1025,7 @@ FeatureNumList  FeatureNumList::operator- (const FeatureNumList&  rightSide) con
     errMsg << endl
            << "      The associated FileDesc instances are not the same.";
     cerr << endl << endl << errMsg << endl <<endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   FeatureNumList  result (*this);
@@ -1110,7 +1111,7 @@ AttributeType  FeatureNumList::FeatureAttributeType (int32 idx)  const
   {
     KKStr errMsg = "FeatureNumList::AttributeType   ***ERROR***  'fileDesc == NULL'   There is a major porgramming flaw.";
     cerr << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   return  fileDesc->Type (featureNums[idx]);

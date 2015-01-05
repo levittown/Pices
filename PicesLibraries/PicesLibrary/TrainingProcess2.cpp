@@ -25,6 +25,7 @@ using namespace  std;
 
 
 #include "BasicTypes.h"
+#include "KKException.h"
 #include "OSservices.h"
 #include "RBTree.h"
 #include "Str.h"
@@ -730,7 +731,7 @@ void  TrainingProcess2::WriteXml (ostream&  o)
     {
       model->WriteXML (o);
     }
-    catch  (KKStrException e)
+    catch  (KKException e)
     {
       log.Level (-1) << endl 
               << "TrainingProcess2::WriteXml   ***ERROR***   Exception SavingModel" << endl
@@ -826,7 +827,7 @@ void  TrainingProcess2::Read (istream&  in,
             << endl;
         }
       }
-      catch  (const KKStrException&  e)
+      catch  (const KKException&  e)
       {
         successful = false;
         log.Level (-1) << endl << endl
@@ -1156,7 +1157,7 @@ void  TrainingProcess2::CreateModelsFromTrainingData ()
                        false     // false = 'model' We are not giving ownership of TrainingExdamples to model.
                       );
   }
-  catch  (const KKStrException&  e)
+  catch  (const KKException&  e)
   {
     log.Level (-1) << endl << endl
       << "TrainingProcess2::CreateModelsFromTrainingData   ***ERROR***   Exception occurecd while running 'Model::TrainModel'." << endl

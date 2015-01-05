@@ -31,6 +31,7 @@ using namespace std;
 
 // Base Library
 #include "BasicTypes.h"
+#include "KKException.h"
 #include "OSservices.h"
 #include "RasterSipper.h"
 using namespace KKU;
@@ -1213,7 +1214,7 @@ RasterSipperPtr  DataBase::ResultSetGetRasterField (uint32 fieldIdx)
   {
     r = RasterSipper::FromCompressor ((uchar*)buffer, bufferLen);
   }
-  catch  (const KKStrException&  e1)
+  catch  (const KKException&  e1)
   {
     ErrorLogMsg ("DataBase::ResultSetGetRasterField      Exception Thrown calling   'RasterSipper::FromCompressor' \n" + e1.ToString ());
     r = NULL;
@@ -4308,6 +4309,160 @@ void  DataBase::ImageUpdateInstrumentDataFields (InstrumentDataPtr  instumentDat
 
 
 
+
+
+
+void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruiseName,
+                                               const KKStr&               stationName,
+                                               const KKStr&               deploymentNum,
+                                               const KKStr&               className,
+                                               float                      depthBinSize,
+                                               char                       statistic,
+                                               float                      initialValue,
+                                               float                      growthRate,
+                                               float                      endValue,
+                                               ImageSizeDistributionPtr&  downCast,
+                                               ImageSizeDistributionPtr&  upCast
+                                              )
+{
+  delete  downCast;   downCast = NULL;
+  delete  upCast;     upCast   = NULL;
+
+  KKStr  sqlStr (1024);
+
+  KKStr  statisticStr;
+  statisticStr.Append (statistic);
+
+  sqlStr << "call ImagesSizeSizeHistogramByDepth(" 
+         <<               cruiseName.QuotedStr ()
+         <<       ","  << stationName.QuotedStr ()
+         <<       ","  << deploymentNum.QuotedStr ()
+         <<       ","  << className.QuotedStr ()
+         <<       ","  << depthBinSize
+         <<       ","  << statisticStr.QuotedStr ()
+         <<       ","  << initialValue
+         <<       ","  << growthRate
+         <<       ","  << endValue
+         <<       ")";
+  
+  VectorKKStr  columnsReturned;
+
+  KKStrMatrixPtr  results = QueryStatementReturnAllColumns (sqlStr.Str (), 
+                                                            sqlStr.Len (),
+                                                            columnsReturned
+                                                           );
+  if  (!results)
+    return;
+
+
+  int32  downCastIdx        = -1;
+  int32  bucketIdx          = -1;
+  int32  bucketDepthIdx     = -1;
+  int32  imageCountIdx      = -1;
+  int32  totalPixelCountIdx = -1;
+  int32  firstSizeBucketIdx = -1;
+
+  VectorFloat  startValues;
+  VectorFloat  endValues;
+
+  float   lastEndValue = 0.0f;
+
+  uint32  columnIdx = 0;
+  while  (columnIdx < columnsReturned.size ())
+  {
+    const KKStr&  colName = columnsReturned[columnIdx];
+    if  (colName.EqualIgnoreCase ("DownCast"))
+    {
+      downCastIdx = columnIdx;
+    }
+
+    else if  (colName.EqualIgnoreCase ("BucketIdx"))
+    {
+      bucketIdx = columnIdx;
+    }
+
+    else if  (colName.EqualIgnoreCase ("BucketDepth"))
+    {
+      bucketDepthIdx = columnIdx;
+    }
+
+    else if  (colName.EqualIgnoreCase ("ImageCount"))
+    {
+      imageCountIdx = columnIdx;
+    }
+
+    else if  (colName.EqualIgnoreCase ("TotalPixelCount"))
+    {
+      totalPixelCountIdx = columnIdx;
+    }
+
+    else if  (colName[0] == '<')
+    {
+      firstSizeBucketIdx = columnIdx;
+      startValues.push_back (0.0f);
+      lastEndValue = colName.SubStrPart (1).ToFloat ();
+      endValues.push_back (lastEndValue);
+    }
+
+    else if  (colName.SubStrPart (0, 5) == "Size_")
+    {
+      startValues.push_back (lastEndValue);
+      lastEndValue = colName.SubStrPart (5).ToFloat ();
+      endValues.push_back (lastEndValue);
+    }
+
+    else if  (colName.SubStrPart (0, 2) == ">=")
+    {
+      startValues.push_back (colName.SubStrPart (2).ToFloat ());
+      endValues.push_back (9999999.99f);
+    }
+  }
+
+  uint32  sizeBucketCount = startValues.size ();
+
+  for  (uint32  resultsIDX = 0;  resultsIDX < results->NumRows ();  ++resultsIDX)
+  {
+    KKStrList& row = (*results)[resultsIDX];
+    bool  downCastRow = row[downCastIdx].ToBool ();
+
+    ImageSizeDistributionPtr  sizeDistribution = NULL;
+
+    if  (downCastRow)
+    {
+      if (!downCast)
+      {
+        downCast = new ImageSizeDistribution (depthBinSize, initialValue, growthRate, endValue, startValues, endValues, log);
+      }
+      sizeDistribution = downCast;
+    }
+    else
+    {
+      if  (!upCast)
+      {
+        upCast = new ImageSizeDistribution (depthBinSize, initialValue, growthRate, endValue, startValues, endValues, log);
+      }
+      sizeDistribution = upCast;
+    }
+
+    float  depth           = row[bucketDepthIdx].ToFloat ();
+    int32  imageCount      = row[imageCountIdx].ToInt32 ();
+    int32  totalPixelCount = row[totalPixelCountIdx].ToInt32 ();
+
+    sizeDistribution->DefineRow (depth, imageCount, totalPixelCount);
+    for  (uint32  zed = firstSizeBucketIdx, sizeIdx = 0;  zed < row.size ();  ++zed, ++sizeIdx)
+    {
+      sizeDistribution->AddData (sizeIdx, row[zed].ToInt32 ());
+    }
+  }
+
+  return;
+}  /* ImagesSizeDistributionByDepth */
+
+
+
+
+
+
 //*************************************************************************************
 //*                             Image Full SizeRoutines                               *
 //*************************************************************************************
@@ -4456,27 +4611,27 @@ RasterSipperPtr  DataBase::ImageFullSizeFind (const KKStr&  imageFileName)
   {
     try
     {r = i->ThumbNail (log);}
-    catch (KKStrException& e1)  {throw KKStrException ("DataBase::ImageFullSizeFind  Exception while calling 'ThumbNail'  " + e1.ToString ());}
-    catch (std::exception& e2)  {throw KKStrException ("DataBase::ImageFullSizeFind  std::exception while calling 'ThumbNail'.", e2.what ());}
-    catch (...)                 {throw KKStrException ("DataBase::ImageFullSizeFind  Exception while calling 'ThumbNail'.");}
+    catch (KKException& e1)  {throw KKException ("DataBase::ImageFullSizeFind  Exception while calling 'ThumbNail'  " + e1.ToString ());}
+    catch (std::exception& e2)  {throw KKException ("DataBase::ImageFullSizeFind  std::exception while calling 'ThumbNail'.", e2.what ());}
+    catch (...)                 {throw KKException ("DataBase::ImageFullSizeFind  Exception while calling 'ThumbNail'.");}
   }
 
   if  (!r)
   {
     // Will now try the ImagesFullSize table
     try  {r = ImageFullSizeLoad (imageFileName);}
-    catch (KKStrException& e1)  {throw KKStrException ("DataBase::ImageFullSizeFind  Exception while calling 'ImageFullSizeLoad'  " + e1.ToString ());}
-    catch (std::exception& e2)  {throw KKStrException ("DataBase::ImageFullSizeFind  std::exception while calling 'ImageFullSizeLoad'.", e2.what ());}
-    catch (...)                 {throw KKStrException ("DataBase::ImageFullSizeFind  Exception while calling 'ImageFullSizeLoad'.");}
+    catch (KKException& e1)  {throw KKException ("DataBase::ImageFullSizeFind  Exception while calling 'ImageFullSizeLoad'  " + e1.ToString ());}
+    catch (std::exception& e2)  {throw KKException ("DataBase::ImageFullSizeFind  std::exception while calling 'ImageFullSizeLoad'.", e2.what ());}
+    catch (...)                 {throw KKException ("DataBase::ImageFullSizeFind  Exception while calling 'ImageFullSizeLoad'.");}
   }
 
   if  (!r)
   {
     // Will now try to go to original sipper file.
     try  {r = i->GetOrigImageFromSipperFile (log);}
-    catch (KKStrException& e1)  {throw KKStrException ("DataBase::ImageFullSizeFind  Exception while calling 'GetOrigImageFromSipperFile'  " + e1.ToString ());}
-    catch (std::exception& e2)  {throw KKStrException ("DataBase::ImageFullSizeFind  std::exception while calling 'GetOrigImageFromSipperFile'.", e2.what ());}
-    catch (...)                 {throw KKStrException ("DataBase::ImageFullSizeFind  Exception while calling 'GetOrigImageFromSipperFile'.");}
+    catch (KKException& e1)  {throw KKException ("DataBase::ImageFullSizeFind  Exception while calling 'GetOrigImageFromSipperFile'  " + e1.ToString ());}
+    catch (std::exception& e2)  {throw KKException ("DataBase::ImageFullSizeFind  std::exception while calling 'GetOrigImageFromSipperFile'.", e2.what ());}
+    catch (...)                 {throw KKException ("DataBase::ImageFullSizeFind  Exception while calling 'GetOrigImageFromSipperFile'.");}
 
     if  (r != NULL)
     {

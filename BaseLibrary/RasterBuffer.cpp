@@ -11,24 +11,21 @@
 #include  <semaphore.h>
 #endif
 
-#include  <errno.h>
-#include  <stdlib.h>
-#include  <istream>
-#include  <iostream>
-#include  <queue>
-#include  <vector>
+#include <errno.h>
+#include <stdlib.h>
+#include <istream>
+#include <iostream>
+#include <queue>
+#include <vector>
 using namespace std;
 
 
-#include  "BasicTypes.h"
-#include  "GoalKeeper.h"
-#include  "OSservices.h"
-using namespace KKU;
-
-
-#include  "RasterBuffer.h"
-
-#include  "Raster.h"
+#include "BasicTypes.h"
+#include "GoalKeeper.h"
+#include "KKException.h"
+#include "OSservices.h"
+#include "RasterBuffer.h"
+#include "Raster.h"
 using  namespace  KKU;
 
 
@@ -105,7 +102,7 @@ void  RasterBuffer::AddRaster (RasterPtr  raster)
     KKStr  errMsg;
     errMsg << "RasterBuffer::AddRaster    raster ==  NULL";
     cerr << std::endl << std::endl << errMsg << std::endl << std::endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   gateKeeper->StartBlock ();

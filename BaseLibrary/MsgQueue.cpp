@@ -20,6 +20,7 @@ using namespace std;
 
 
 #include "MsgQueue.h"
+#include "KKException.h"
 #include "GoalKeeper.h"
 #include "OSservices.h"
 using  namespace  KKU;
@@ -60,7 +61,7 @@ void  MsgQueue::AddMsg (KKStrPtr  msg)
     KKStr  errMsg;
     errMsg << "MsgQueue::AddMsg ==  NULL";
     cerr << std::endl << std::endl << errMsg << std::endl << std::endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   gateKeeper->StartBlock ();

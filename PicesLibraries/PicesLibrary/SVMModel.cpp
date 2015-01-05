@@ -18,6 +18,7 @@
 using namespace  std;
 
 
+#include "KKException.h"
 #include "OSservices.h"
 #include "RunLog.h"
 #include "Str.h"
@@ -1845,7 +1846,7 @@ void  SVMModel::PredictByBinaryCombos (FeatureVectorPtr     example,
         KKStr  errMsg;
         errMsg << "SVMModel::PredictByBinaryCombos   ***ERROR***   No feature encoder for model[" << modelIDX << "]";
         log.Level (-1) << endl << endl << errMsg << endl << endl;
-        throw KKStrException (errMsg);
+        throw KKException (errMsg);
       }
 
       binaryFeatureEncoders[modelIDX]->EncodeAImage (example, predictXSpace, xSpaceUsed);
@@ -2126,7 +2127,7 @@ void  SVMModel::PredictProbabilitiesByBinaryCombos (FeatureVectorPtr            
         KKStr  errMsg;
         errMsg << "SVMModel::PredictProbabilitiesByBinaryCombos   ***ERROR***   No feature encoder for model[" << modelIDX << "]";
         log.Level (-1) << endl << endl << errMsg << endl << endl;
-        throw KKStrException (errMsg);
+        throw KKException (errMsg);
       }
 
       int32  xSpaceUsed;
@@ -2332,7 +2333,7 @@ vector<ProbNamePair>  SVMModel::FindWorstSupportVectors (FeatureVectorPtr    exa
     KKStr  errMsg;
     errMsg << "SVMModel::FindWorstSupportVectors   ***ERROR***   No feature encoder for model[" << modelIDX << "]";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   int32  xSpaceUsed;
@@ -2425,7 +2426,7 @@ vector<ProbNamePair>  SVMModel::FindWorstSupportVectors2 (FeatureVectorPtr    ex
     KKStr  errMsg;
     errMsg << "SVMModel::FindWorstSupportVectors2   ***ERROR***   No feature encoder for model[" << modelIDX << "]";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   int32  xSpaceUsed;

@@ -983,44 +983,6 @@ namespace KKU
                         );
 
 
-  class  KKStrException: public std::exception
-  {
-  public:
-    KKStrException ();
-    
-    KKStrException (const KKStrException&  _exception);
-    
-    KKStrException (const KKStr&           _exceptionStr);
-
-    KKStrException (const KKStr&           _exceptionStr,
-                    const std::exception&  _innerException
-                   );
-
-    KKStrException (const char*  _exceptionStr);
-
-    //KKStrException (const char*  &_exceptionStr);
-    
-    KKStrException (const char*            _exceptionStr,
-                    const std::exception&  _innerException
-                   );
-
-    KKStrException (const char*  _exceptionStr,
-                    const char*  _innerException
-                   );
-
-
-    virtual  ~KKStrException ()  throw ();
-
-    virtual  const KKStr&  ToString ()  const;
-
-    virtual  const char*  what () const throw ();
-
-
-  private:
-    KKStr  exceptionStr;
-  };
-
-
   KKStr StrFromInt16  (int16  i);
   KKStr StrFromUint16 (uint16 ui);
   KKStr StrFromInt32  (int32  i);

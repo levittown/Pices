@@ -17,6 +17,7 @@ using namespace std;
 
 
 #include "BasicTypes.h"
+#include "KKException.h"
 #include "KKStrParser.h"
 #include "OSservices.h"
 using namespace KKU;
@@ -4617,7 +4618,7 @@ void  SVM233::svm_GetSupportVectorStatistics (const struct svm_model*  model,
   {
     KKStr errMsg = "svm_GetupportVectorsStatistics  ***ERROR***   (model == NULL). Model was not defined.";
     cerr << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   if  (model->param.svm_type == ONE_CLASS   ||

@@ -25,6 +25,7 @@ using namespace  std;
 
 
 #include "BasicTypes.h"
+#include "KKException.h"
 #include "RunLog.h"
 using namespace  KKU;
 
@@ -58,7 +59,7 @@ Classifier2::Classifier2 (TrainingProcess2Ptr  _trainer,
     log.Level (-1) << endl
       << "Classifier2::Classifier2    ***ERROR***     (_trainer == NULL)" << endl
       << endl;
-    throw KKStrException ("Classifier2::Classifier2    ***ERROR***     (_trainer == NULL)");
+    throw KKException ("Classifier2::Classifier2    ***ERROR***     (_trainer == NULL)");
   }
 
 
@@ -67,7 +68,7 @@ Classifier2::Classifier2 (TrainingProcess2Ptr  _trainer,
     log.Level (-1) << endl
       << "Classifier2::Classifier2    ***ERROR***     '_trainer' is invalid." << endl
       << endl;
-    throw KKStrException ("Classifier2::Classifier2    ***ERROR***     '_trainer' is invalid.");
+    throw KKException ("Classifier2::Classifier2    ***ERROR***     '_trainer' is invalid.");
   }
 
   featuresAlreadyNormalized = trainingProcess->FeaturesAlreadyNormalized ();
@@ -77,14 +78,14 @@ Classifier2::Classifier2 (TrainingProcess2Ptr  _trainer,
   {
     KKStr errMsg = "Classifier2::Classifier2    ***ERROR***     (trainedModel == NULL).";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   if  (!trainedModel->ValidModel ())
   {
     KKStr errMsg = "Classifier2::Classifier2    ***ERROR***     trainedModel is not valid.";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   log.Level (20) << "Classifier2::Classifier2" << endl;

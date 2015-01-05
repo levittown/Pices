@@ -366,6 +366,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\KKException.h"
+				>
+			</File>
+			<File
 				RelativePath=".\KKQueue.h"
 				>
 			</File>
@@ -563,6 +567,10 @@
 			</File>
 			<File
 				RelativePath=".\ImageIO.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\KKException.cpp"
 				>
 			</File>
 			<File

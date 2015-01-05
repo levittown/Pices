@@ -24,6 +24,7 @@ using namespace std;
 
 
 #include "BMPImage.h"
+#include "KKException.h"
 #include "OSservices.h"
 #include "Raster.h"
 using namespace KKU;
@@ -376,7 +377,7 @@ uchar*  BmpImage::CodedPixels::CreatePixelDataStructure8Bit (int32&  len)
       {
         KKStr  errMsg = "BmpImage::CodedPixels::CreatePixelDataStructure8Bit    ***ERROR***     Allocation of 'newBuff'  failed.";
         cerr << std::endl << std::endl << errMsg << std::endl << std::endl;
-        throw  KKStrException (errMsg);
+        throw  KKException (errMsg);
       }
 
       memset (newBuff, 0, newBuffSize);
@@ -2255,7 +2256,7 @@ void  BmpImage::SaveGrayscaleInverted4Bit (const KKStr&  _fileName)
   {
     KKStr  errMsg = "BmpImage::SaveGrayscaleInverted4Bit,  Error opening BMP File[" + fileName + "].";
     cerr << errMsg << std::endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   int32  x = 0;
@@ -2316,7 +2317,7 @@ void  BmpImage::SaveGrayscaleInverted8Bit (const KKStr&  _fileName)
   {
     KKStr  errMsg = "BmpImage::SaveGrayscaleInverted8Bit,  Error opening BMP File[" + fileName + "].";
     cerr << errMsg << std::endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   int32  x = 0;
@@ -2379,7 +2380,7 @@ void  BmpImage::Save (const KKStr&  _fileName)
   {
     KKStr  errMsg = "BmpImage::Save,  Error opening BMP File[" + fileName + "].";
     cerr << errMsg << std::endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   if  (color)

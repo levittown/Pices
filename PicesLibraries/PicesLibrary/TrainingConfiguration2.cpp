@@ -13,6 +13,7 @@ using namespace  std;
 
 
 #include "BasicTypes.h"
+#include "KKException.h"
 #include "OSservices.h"
 #include "RunLog.h"
 using namespace  KKU;
@@ -146,7 +147,7 @@ TrainingConfiguration2::TrainingConfiguration2 (FileDescPtr   _fileDesc,
   {
     KKStr  errMsg = "TrainingConfiguration2    ***ERROR***   FileDesc == NULL";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   if  (!FormatGood ())
@@ -205,7 +206,7 @@ TrainingConfiguration2::TrainingConfiguration2 (FileDescPtr             _fileDes
   {
     KKStr  errMsg = "TrainingConfiguration2    ***ERROR***   FileDesc == NULL";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   if  (_mlClasses)
@@ -275,7 +276,7 @@ TrainingConfiguration2::TrainingConfiguration2 (FileDescPtr             _fileDes
   {
     KKStr  errMsg = "TrainingConfiguration2    ***ERROR***   FileDesc == NULL";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   if  (_mlClasses)
@@ -884,7 +885,7 @@ const SVMparam&  TrainingConfiguration2::SVMparamREF ()  const
   {
     KKStr  errMsg = "TrainingConfiguration2::SVMparamREF   ***ERROR***   (modelingMethod != mmOldSVM)";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw new KKStrException (errMsg);
+    throw new KKException (errMsg);
   }
 }  /* SVMparam */
 
@@ -1098,7 +1099,7 @@ void  TrainingConfiguration2::SetFeatureNums (const  FeatureNumList&  features)
 
     KKStr  errMsg = "TrainingConfiguration2::SetFeatureNums      ***ERROR***     MisMatch in FileDesc.";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   if  (modelParameters)

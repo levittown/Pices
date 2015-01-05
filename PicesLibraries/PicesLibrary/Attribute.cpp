@@ -13,6 +13,7 @@ using namespace std;
 
 
 
+#include "KKException.h"
 #include "DateTime.h"
 #include "OSservices.h"
 #include "KKQueue.h"
@@ -94,7 +95,7 @@ void  Attribute::ValidateNominalType (const KKStr&  funcName)  const
     KKStr  msg (80);
     msg <<  "Attribute::ValidateNominalType   Attribute[" << funcName << "] must be a Nominal or Symbolic Type to perform this operation.";
     cerr << std::endl << msg << std::endl << std::endl;
-    throw  KKStrException (msg);
+    throw  KKException (msg);
   }
 
   return;

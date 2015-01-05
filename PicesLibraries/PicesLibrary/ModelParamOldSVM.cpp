@@ -12,6 +12,7 @@
 using namespace std;
 
 #include "BasicTypes.h"
+#include "KKException.h"
 #include "OSservices.h"
 #include "RunLog.h"
 using namespace KKU;
@@ -37,7 +38,7 @@ ModelParamOldSVM::ModelParamOldSVM  (FileDescPtr  _fileDesc,
   {
     KKStr errMsg = "ModelParamOldSVM::ModelParamOldSVM  *** ERROR ***  (fileDesc == NULL)";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw  KKStrException (errMsg);
+    throw  KKException (errMsg);
   }
 
   svmParameters = new SVMparam (_fileDesc, _log);

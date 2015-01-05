@@ -1386,19 +1386,20 @@ delimiter ;
 
 
 drop procedure  if exists  ImagesSizeSizeHistogramByDepth;
+drop procedure  if exists  ImagesSizeDistributionByDepth;
 
 delimiter $$
 
-create procedure ImagesSizeSizeHistogramByDepth (in  _cruiseName       varChar(10),
-                                                 in  _stationName      varChar(10), 
-                                                 in  _deploymentNum    varchar(4), 
-                                                 in  _className        varChar(64),
-                                                 in  _depthBinSize     int unsigned,
-                                                 in  _statistic        char,           /* '0' = Area mm^2,  '1' = Diameter,  '2' = Spheroid Volume and '3' = EBv ((4/3)(Pie)(Major/2)(Minor/2)^2) */
-                                                 in  _initialValue     float,
-                                                 in  _growtRate        float,
-                                                 in  _endValue         float
-                                                )
+create procedure ImagesSizeDistributionByDepth (in  _cruiseName       varChar(10),
+                                                in  _stationName      varChar(10), 
+                                                in  _deploymentNum    varchar(4), 
+                                                in  _className        varChar(64),
+                                                in  _depthBinSize     int unsigned,
+                                                in  _statistic        char,           /* '0' = Area mm^2,  '1' = Diameter,  '2' = Spheroid Volume and '3' = EBv ((4/3)(Pie)(Major/2)(Minor/2)^2) */
+                                                in  _initialValue     float,
+                                                in  _growtRate        float,
+                                                in  _endValue         float
+                                               )
 begin 
   declare _classId            int    default -1;
   declare _midPoint           datetime;

@@ -7,8 +7,8 @@
 #include <set>
 #include <vector>
 
-#include  "Str.h"
-#include  "RunLog.h"
+#include "Str.h"
+#include "RunLog.h"
 
 /**
  *@namespace  SVM233
@@ -188,7 +188,7 @@ struct svm_model
 
   svm_model (const   svm_model& _model)
   {
-    throw KKStrException ("svm_model::svm_model (const   svm_model& _model)  ***ERROR***  Not Supported");
+    throw KKException ("svm_model::svm_model (const   svm_model& _model)  ***ERROR***  Not Supported");
   }
 
   int32  MemoryConsumedEstimated ()  const

@@ -19,6 +19,7 @@ using namespace  std;
 
 
 #include "BasicTypes.h"
+#include "KKException.h"
 #include "OSservices.h"
 #include "RunLog.h"
 #include "Str.h"
@@ -125,7 +126,7 @@ ClassProbListPtr  ModelKnn::ProbabilitiesByClass (FeatureVectorPtr  example)
   {
     KKStr errMsg = "ModelKnn::ProbabilitiesByClass   ***ERROR***      (classLabelAssigments == NULL)";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   bool  newExampleCreated = false;
@@ -224,7 +225,7 @@ void  ModelKnn::TrainModel (FeatureVectorListPtr  _trainExamples,
   {
     Model::TrainModel (_trainExamples, _alreadyNormalized, _takeOwnership);
   }
-  catch  (const KKStrException& e)
+  catch  (const KKException& e)
   {
     validModel = false;
     throw e;

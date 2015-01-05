@@ -18,6 +18,7 @@ using namespace std;
 
 
 #include "BasicTypes.h"
+#include "KKException.h"
 #include "OSservices.h"
 #include "RunLog.h"
 #include "Str.h"
@@ -124,7 +125,7 @@ void  ModelUsfCasCor::TrainModel (FeatureVectorListPtr  _trainExamples,
     validModel = false;
     KKStr  errMsg = "ModelUsfCasCor::TrainModel   (param == NULL)";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   if  (usfCasCorClassifier)
@@ -137,26 +138,26 @@ void  ModelUsfCasCor::TrainModel (FeatureVectorListPtr  _trainExamples,
   {
     Model::TrainModel (_trainExamples, _alreadyNormalized, _takeOwnership);
   }
-  catch (const KKStrException&  e)
+  catch (const KKException&  e)
   {
     validModel = false;
     KKStr  errMsg = "ModelUsfCasCor::TrainModel  ***ERROR*** Exception occured calling 'Model::TrainModel'.";
     log.Level (-1) << endl << errMsg << endl << e.ToString () << endl << endl;
-    throw  KKStrException (errMsg, e);
+    throw  KKException (errMsg, e);
   }
   catch (const exception& e2)
   {
     validModel = false;
     KKStr errMsg = "ModelUsfCasCor::TrainModel  ***ERROR*** Exception occured calling 'Model::TrainModel'.";
     log.Level (-1) << endl << endl << errMsg << endl << e2.what () << endl << endl;
-    throw KKStrException (errMsg, e2);
+    throw KKException (errMsg, e2);
   }
   catch (...)
   {
     validModel = false;
     KKStr errMsg = "ModelUsfCasCor::TrainModel  ***ERROR*** Exception occured calling 'Model::TrainModel'.";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   // 'Model::TrainModel'  Will have performed any BitReduction and Feature Encoding 
@@ -230,7 +231,7 @@ void  ModelUsfCasCor::Predict (FeatureVectorPtr     example,
   {
     KKStr errMsg = "ModelUsfCasCor::Predict   ***ERROR***      (usfCasCorClassifier == NULL)";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
 
@@ -281,7 +282,7 @@ ClassProbListPtr  ModelUsfCasCor::ProbabilitiesByClass (FeatureVectorPtr  exampl
   {
     KKStr errMsg = "ModelUsfCasCor::ProbabilitiesByClass   ***ERROR***      (usfCasCorClassifier == NULL)";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   bool  newExampleCreated = false;
@@ -313,7 +314,7 @@ void  ModelUsfCasCor::ProbabilitiesByClass (FeatureVectorPtr            example,
   {
     KKStr errMsg = "ModelUsfCasCor::ProbabilitiesByClass   ***ERROR***      (usfCasCorClassifier == NULL)";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   VectorFloat  probabilities;
@@ -388,7 +389,7 @@ void   ModelUsfCasCor::ProbabilitiesByClass (FeatureVectorPtr         _example,
   {
     KKStr errMsg = "ModelUsfCasCor::ProbabilitiesByClass   ***ERROR***      (usfCasCorClassifier == NULL)";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   VectorFloat  probabilities;

@@ -20,6 +20,7 @@ using namespace KKU;
 
 #include "Classifier2.h"
 #include "ConfusionMatrix2.h"
+#include "KKException.h"
 #include "FeatureVector.h"
 #include "MLClass.h"
 #include "TrainingConfiguration2.h"
@@ -196,7 +197,7 @@ void  TrainTestThread::Start ()
                                                );
 	if  (windowsThread == NULL) 
   {
-		throw KKStrException ("Failed to create thread");
+		throw KKException ("Failed to create thread");
 	}
   else 
   {
@@ -228,13 +229,13 @@ void  TrainTestThread::SetPriority (int tp)
 {
 	if  (windowsThread == NULL) 
   {
-		throw KKStrException ("Thread object is null");
+		throw KKException ("Thread object is null");
 	}
   else 
   {
 		if  (SetThreadPriority (windowsThread, tp) == 0) 
     {
-			throw KKStrException ("Failed to set priority");
+			throw KKException ("Failed to set priority");
 		}
   }
 }  /* SetPriority */

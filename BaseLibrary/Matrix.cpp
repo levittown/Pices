@@ -2,22 +2,23 @@
  * Copyright (C) 1994-2011 Kurt Kramer
  * For conditions of distribution and use, see copyright notice in KKU.h
  */
-#include  "FirstIncludes.h"
-#include  <stdlib.h>
-#include  <string.h>
-#include  <stdio.h>
-#include  <math.h>
-#include  <fstream>
-#include  <iostream>
-#include  <ostream>
-#include  <vector>
-#include  "MemoryDebug.h"
+#include "FirstIncludes.h"
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include <math.h>
+#include <fstream>
+#include <iostream>
+#include <ostream>
+#include <vector>
+#include "MemoryDebug.h"
 using namespace std;
 
 
-#include  "Matrix.h"
-#include  "OSservices.h"
-#include  "Str.h"
+#include "Matrix.h"
+#include "KKException.h"
+#include "OSservices.h"
+#include "Str.h"
 using namespace KKU;
 
 
@@ -40,7 +41,7 @@ Row::Row  (int32    _numOfCols,
 	KKStr  msg;
 	msg << "Row::Row  **** ERROR **** Invalid Dimension[" << _numOfCols << "].";
     cerr << std::endl  << msg << std::endl << std::endl;
-    throw KKStrException (msg);
+    throw KKException (msg);
   }
 }
 
@@ -120,7 +121,7 @@ Matrix::Matrix (int32  _numOfRows,
     KKStr  msg(80);
     msg << "Matrix::Matrix   **** ERROR ****,  Row Dimension[" << _numOfRows << "]  Invalid.";
     cerr << std::endl << msg <<std::endl << std::endl;
-    throw KKStrException (msg);
+    throw KKException (msg);
   }
 
   if  (_numOfCols < 0)
@@ -128,7 +129,7 @@ Matrix::Matrix (int32  _numOfRows,
 	KKStr  msg(80);
 	msg << "Matrix::Matrix   **** ERROR ****,  Col Dimension[" << _numOfCols << "]  Invalid.";
 	cerr << std::endl << msg <<std::endl << std::endl;
-	throw KKStrException (msg);
+	throw KKException (msg);
   }
 
   AllocateStorage ();
@@ -272,7 +273,7 @@ Row&  Matrix::operator[] (int32  rowIDX) const
     KKStr  msg (80);
     msg << "Matrix::operator[]   **** ERROR ****,  Row Index[" << rowIDX << "]  Invalid.";
     cerr << std::endl << msg  << std::endl  << std::endl;
-    throw  KKStrException (msg);
+    throw  KKException (msg);
   }
 
   return  (rows[rowIDX]);
@@ -288,7 +289,7 @@ double  Matrix::DeterminantSlow ()
     KKStr  msg (80);
     msg << "Matrix::Determinant   *** ERROR ***   Dimensions are not Square[" << numOfRows << "," << numOfCols << "]  Invalid.";
     cerr << std::endl << msg  << std::endl  << std::endl;
-    throw  KKStrException (msg);
+    throw  KKException (msg);
   }
 
   if  (numOfCols == 1)
@@ -372,7 +373,7 @@ Matrix  Matrix::operator+ (const Matrix&  right)
     KKStr  msg (100);
     msg << "Matrix::operator+   **** ERROR ****,  Dimensions Don't Match [" << numOfRows << "," << numOfCols << "] + [" << right.numOfRows << "," << right.numOfCols << "].";
     cerr << std::endl << msg << std::endl << std::endl;
-    throw  KKStrException (msg);
+    throw  KKException (msg);
   }
 
   Matrix  result (*this);
@@ -399,7 +400,7 @@ Matrix&  Matrix::operator+= (const Matrix&  right)
     KKStr  msg (100);
     msg << "Matrix::operator+=   **** ERROR ****,  Dimensions Don't Match [" << numOfRows << "," << numOfCols << "] + [" << right.numOfRows << "," << right.numOfCols << "].";
     cerr << std::endl << msg << std::endl << std::endl;
-    throw  KKStrException (msg);
+    throw  KKException (msg);
   }
 
   double*  rightDataArea  = right.dataArea;
@@ -422,7 +423,7 @@ Matrix  Matrix::operator- (const Matrix&  right)
     KKStr  msg (100);
     msg << "Matrix::operator-   **** ERROR ****,  Dimensions Don't Match [" << numOfRows << "," << numOfCols << "] + [" << right.numOfRows << "," << right.numOfCols << "].";
     cerr << std::endl << msg << std::endl << std::endl;
-    throw  KKStrException (msg);
+    throw  KKException (msg);
   }
 
   Matrix  result (*this);
@@ -480,7 +481,7 @@ Matrix  Matrix::operator* (const Matrix&  right)
     KKStr  msg (100);
     msg << "Matrix::operator*   **** ERROR ****,  Dimension Mismatch  Left["  << numOfRows << "," << numOfCols << "]  Right[" << right.numOfRows << "," << right.numOfCols << "].";
     cerr << std::endl << msg << std::endl << std::endl;
-    throw  KKStrException (msg);
+    throw  KKException (msg);
   }
 
   int32  col;
@@ -734,7 +735,7 @@ Matrix  Matrix::Inverse ()
     msg <<  "Matrix::Inverse   *** ERROR ***   Dimensions are not Square[" << numOfRows << "," << numOfCols << "]  Invalid.";
 
     cerr << std::endl << msg << std::endl << std::endl;
-    throw  KKStrException (msg);
+    throw  KKException (msg);
   }
 
   double  det = Determinant ();

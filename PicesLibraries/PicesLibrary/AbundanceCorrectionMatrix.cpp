@@ -10,6 +10,7 @@
 using namespace std;
 
 
+#include "KKException.h"
 #include "OSservices.h"
 #include "RunLog.h"
 using namespace KKU;
@@ -531,7 +532,7 @@ void  AbundanceCorrectionMatrix::AddIn (const AbundanceCorrectionMatrix&  m,
     log.Level (-1) << endl << endl
       << errMsg << endl
       << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   for  (uint32 x = 0;  x < numClasses;  ++x)

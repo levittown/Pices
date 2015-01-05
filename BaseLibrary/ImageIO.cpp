@@ -55,17 +55,12 @@ using namespace std;
 
 #include "MemoryDebug.h"
 #include "BasicTypes.h"
-
-using namespace KKU;
-
-
-
-
-#include "ImageIO.h"
-
 #include "Histogram.h"
+#include "KKException.h"
 #include "OSservices.h"
 #include "Raster.h"
+
+#include "ImageIO.h"
 
 
 namespace KKU
@@ -679,19 +674,19 @@ void  SaveImage  (const Raster&  image,
     }
     catch  (const KKStr&  errMsg)
     {
-      throw KKStrException (errMsg);
+      throw KKException (errMsg);
     }
-    catch  (const KKStrException&  errMsg)
+    catch  (const KKException&  errMsg)
     {
       KKStr msg = "SaveImage  Exception  Saving image using 'BmpImage'";
       cerr << std::endl << msg << std::endl << std::endl;
-      throw KKStrException (msg, errMsg);
+      throw KKException (msg, errMsg);
     }
     catch (...)
     {
       KKStr  errMsg = "SaveImage   Exception occurred calling 'BmpImage::Save'  for file[" + imageFileName + "]";
       cerr << std::endl << errMsg << std::endl << std::endl;
-      throw  KKStrException (errMsg);
+      throw  KKException (errMsg);
     }
   }
 
@@ -713,7 +708,7 @@ void  SaveImage  (const Raster&  image,
          << "SaveImage     *** ERROR ***    " << std::endl
          << errMsg << std::endl
          << std::endl;
-    throw  KKStrException (errMsg);
+    throw  KKException (errMsg);
   }
 
   return;
@@ -768,7 +763,7 @@ void  SaveImagePNG (const Raster&  image,
   {
     KKStr  errMsg = "SaveImagePNG   Error opening File[" + imageFileName + "]";
     cerr << std::endl << errMsg  << std::endl << std::endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   {
@@ -1205,19 +1200,19 @@ void  SaveImageGrayscaleInverted4Bit (const Raster&  image,
   }
   catch  (const KKStr&  errMsg)
   {
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
-  catch  (const KKStrException&  errMsg)
+  catch  (const KKException&  errMsg)
   {
     KKStr msg = "SaveImage  Exception  Saving image using 'BmpImage'";
     cerr << std::endl << msg << std::endl << std::endl;
-    throw KKStrException (msg, errMsg);
+    throw KKException (msg, errMsg);
   }
   catch (...)
   {
     KKStr  errMsg = "SaveImage   Exception occured calling 'BmpImage::Save'  for file[" + _fileName + "]";
     cerr << std::endl << errMsg << std::endl << std::endl;
-    throw  KKStrException (errMsg);
+    throw  KKException (errMsg);
   }
 }  /* SaveImageGrayscaleInverted4Bit */
 
@@ -1240,19 +1235,19 @@ void  SaveImageGrayscaleInverted8Bit (const Raster&  image,
   }
   catch  (const KKStr&  errMsg)
   {
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
-  catch  (const KKStrException&  errMsg)
+  catch  (const KKException&  errMsg)
   {
     KKStr msg = "SaveImage  Exception  Saving image using 'BmpImage'";
     cerr << std::endl << msg << std::endl << std::endl;
-    throw KKStrException (msg, errMsg);
+    throw KKException (msg, errMsg);
   }
   catch (...)
   {
     KKStr  errMsg = "SaveImage   Exception occurred calling 'BmpImage::Save'  for file[" + _fileName + "]";
     cerr << std::endl << errMsg << std::endl << std::endl;
-    throw  KKStrException (errMsg);
+    throw  KKException (errMsg);
   }
 }  /* SaveImageGrayscaleInverted4Bit */
 

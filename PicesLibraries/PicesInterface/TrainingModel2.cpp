@@ -5,43 +5,44 @@
 #include <math.h>
 
 
-#include  <ctype.h>
-#include  <time.h>
+#include <ctype.h>
+#include <time.h>
 
-#include  <fstream>
-#include  <iostream>
-#include  <map>
-#include  <ostream>
-#include  <string>
-#include  <vector>
+#include <fstream>
+#include <iostream>
+#include <map>
+#include <ostream>
+#include <string>
+#include <vector>
 using namespace std;
 
-#include  "MemoryDebug.h"
-#include  "BasicTypes.h"
-#include  "..\\BaseLibrary\\GoalKeeper.h"
-#include  "ImageIO.h"
-#include  "Raster.h"
-#include  "RunLog.h"
-#include  "Str.h"
+#include "MemoryDebug.h"
+#include "BasicTypes.h"
+#include "..\\BaseLibrary\\GoalKeeper.h"
+#include "ImageIO.h"
+#include "KKException.h"
+#include "Raster.h"
+#include "RunLog.h"
+#include "Str.h"
 using namespace KKU;
 
 
-#include  "InstrumentDataFileManager.h"
+#include "InstrumentDataFileManager.h"
 
-#include  "Classifier2.h"
-#include  "ClassProb.h"
-#include  "FeatureFileIOPices.h"
-#include  "TrainingConfiguration2.h"
+#include "Classifier2.h"
+#include "ClassProb.h"
+#include "FeatureFileIOPices.h"
+#include "TrainingConfiguration2.h"
 
-#include  "PicesFeatureVector.h"
-#include  "PicesFeatureVectorList.h"
-#include  "PicesSipperVariables.h"
-#include  "PicesTrainingConfiguration.h"
-#include  "PicesKKStr.h"
-#include  "PicesRaster.h"
-#include  "SipperVariables.h"
+#include "PicesFeatureVector.h"
+#include "PicesFeatureVectorList.h"
+#include "PicesSipperVariables.h"
+#include "PicesTrainingConfiguration.h"
+#include "PicesKKStr.h"
+#include "PicesRaster.h"
+#include "SipperVariables.h"
 
-#include  "TrainingModel2.h"
+#include "TrainingModel2.h"
 
 using namespace PicesInterface;
 
@@ -1024,9 +1025,9 @@ PicesPredictionList^   TrainingModel2::PredictProbabilities (PicesFeatureVector^
   {
     classifier->ProbabilitiesByClass (*classes, unKnownExample, votes, probabilities);
   }
-  catch  (KKStrException& e2)
+  catch  (KKException& e2)
   {
-    KKStr  errMsg = "TrainingModel2::PredictProbabilities   KKStrException occured calling 'ProbabilitiesByClass'.\n\n" + e2.ToString ();
+    KKStr  errMsg = "TrainingModel2::PredictProbabilities   KKException occured calling 'ProbabilitiesByClass'.\n\n" + e2.ToString ();
     System::Windows::Forms::MessageBox::Show (PicesKKStr::KKStrToSystenStr (errMsg), "TrainingModel2::PredictProbabilities");
     delete  unKnownExample;  unKnownExample = NULL;
     return nullptr;

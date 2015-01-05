@@ -28,6 +28,7 @@ using namespace std;
 #include "ConvexHull.h"
 #include "Histogram.h"
 #include "ImageIO.h"
+#include "KKException.h"
 #include "Matrix.h"
 #include "OSservices.h"
 #include "SimpleCompressor.h"
@@ -665,7 +666,7 @@ RasterSipperPtr  RasterSipper::FromCompressor (const uchar*  compressedBuff,    
   {
     KKStr errMsg = "RasterSipper::FromCompressor  Exception thrown calling 'Compressor::Decompress'.";
     cerr << errMsg << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   if  (!unCompressedBuff)
@@ -956,7 +957,7 @@ RasterSipperList::RasterSipperList (const RasterList&  rasterList,
     if  (sp == NULL)
     {
       if  (!_owner)
-        throw KKStrException ("RasterSipperList::RasterSipperList  instance in container is not a 'RasterSipperPtr'");
+        throw KKException ("RasterSipperList::RasterSipperList  instance in container is not a 'RasterSipperPtr'");
       else
         PushOnBack (new RasterSipper (*r));
     }
@@ -983,7 +984,7 @@ RasterSipperList::RasterSipperList (const RasterList&  rasterList):
     if  (sp == NULL)
     {
       if  (!Owner ())
-        throw KKStrException ("RasterSipperList::RasterSipperList  instance in container is not a 'RasterSipperPtr'");
+        throw KKException ("RasterSipperList::RasterSipperList  instance in container is not a 'RasterSipperPtr'");
       else
         PushOnBack (new RasterSipper (*r));
     }

@@ -455,6 +455,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\PicesImageSizeDistribution.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\PicesInstrumentData.cpp"
 				>
 			</File>
@@ -662,6 +666,10 @@
 			</File>
 			<File
 				RelativePath=".\PicesGPSDataPoint.h"
+				>
+			</File>
+			<File
+				RelativePath=".\PicesImageSizeDistribution.h"
 				>
 			</File>
 			<File

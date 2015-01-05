@@ -17,6 +17,7 @@ using namespace std;
 
 
 #include "BasicTypes.h"
+#include "KKException.h"
 #include "OSservices.h"
 #include "Str.h"
 using namespace  KKU;
@@ -491,7 +492,7 @@ void   FeatureFileConverter::NormalizeExamples (ModelParam&         param,
     {
       KKStr  errMsg = "Could not load normalization parameters file[" + nornParmsFileName + "]";
       log.Level (-1) << endl << "NormalizeExamples    *** ERROR ***    " << errMsg << endl << endl;
-      throw KKStrException (errMsg);
+      throw KKException (errMsg);
     }
   }
   else
@@ -503,7 +504,7 @@ void   FeatureFileConverter::NormalizeExamples (ModelParam&         param,
     {
       KKStr  errMsg = "Could not save normalization parameters file[" + nornParmsFileName + "]";
       log.Level (-1) << endl << "NormalizeExamples    *** ERROR ***      " << errMsg << endl << endl;
-      throw  KKStrException (errMsg);
+      throw  KKException (errMsg);
     }
   }
 

@@ -15,6 +15,7 @@
 using namespace  std;
 
 
+#include "KKException.h"
 #include "OSservices.h"
 #include "RunLog.h"
 #include "Str.h"
@@ -179,14 +180,14 @@ ModelParamOldSVMPtr   ModelOldSVM::Param () const
   {
     KKStr errMsg = "ModelOldSVM::Param   ***ERROR***  param not defined (param == NULL).";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   if  (param->ModelParamType () != ModelParam::mptOldSVM)
   {
     KKStr errMsg = "ModelOldSVM::Param   ***ERROR***  param variable of wrong type.";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   return  dynamic_cast<ModelParamOldSVMPtr> (param);
@@ -343,7 +344,7 @@ ClassProbListPtr  ModelOldSVM::ProbabilitiesByClass (FeatureVectorPtr  example)
   {
     KKStr errMsg = "ModelOldSVM::ProbabilitiesByClass   ***ERROR***      (svmModel == NULL)";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   bool  newExampleCreated = false;
@@ -556,7 +557,7 @@ void  ModelOldSVM::TrainModel (FeatureVectorListPtr  _trainExamples,
     validModel = false;
     KKStr errMsg = " ModelOldSVM::TrainModel  ***ERROR***    (svmParam == NULL).";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   {

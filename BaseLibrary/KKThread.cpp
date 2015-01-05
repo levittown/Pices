@@ -19,6 +19,7 @@ using namespace std;
 #endif
 
 #include "BasicTypes.h"
+#include "KKException.h"
 #include "MsgQueue.h"
 #include "KKThread.h"
 using namespace KKU;
@@ -204,7 +205,7 @@ void  KKThread::Start (bool&  successful)
   if  (windowsThread == NULL)
   {
 	successful = false;
-    throw KKStrException ("Failed to create thread");
+    throw KKException ("Failed to create thread");
   }
   else
   {
@@ -224,7 +225,7 @@ void  KKThread::Start (bool&  successful)
   if  (returnCd != 0)
   {
 	successful = false;
-    throw KKStrException ("Failed to create thread");
+    throw KKException ("Failed to create thread");
   }
   else 
   {

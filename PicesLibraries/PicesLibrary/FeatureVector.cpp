@@ -17,6 +17,7 @@ using namespace  std;
 
 #include "BasicTypes.h"
 #include "DateTime.h"
+#include "KKException.h"
 #include "OSservices.h"
 #include "RunLog.h"
 #include "Str.h"
@@ -474,7 +475,7 @@ void  FeatureVectorList::ValidateFileDescAndFieldNum (int32          fieldNum,
     KKStr  msg (200);
     msg << "FeatureVectorList::" << funcName << "      *** ERROR ***  'fileDesc == NULL'";
     log.Level (-1) << endl << endl << msg << endl << endl;
-    throw KKStrException (msg);
+    throw KKException (msg);
   }
 
   if  ((fieldNum < 0)  ||  (fieldNum >= (int32)fileDesc->NumOfFields ()))
@@ -482,7 +483,7 @@ void  FeatureVectorList::ValidateFileDescAndFieldNum (int32          fieldNum,
     KKStr  msg (200);
     msg << "FeatureVectorList::" << funcName << "    *** ERROR ***    FeatureNum[" << fieldNum << "] is out of range.";
     log.Level (-1) << endl << endl << msg << endl << endl;
-    throw KKStrException (msg);
+    throw KKException (msg);
   }
 } /* ValidateFileDescAndFieldNum */
 

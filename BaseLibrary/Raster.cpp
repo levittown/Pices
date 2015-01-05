@@ -33,6 +33,7 @@ using namespace std;
 #include "GoalKeeper.h"
 #include "Histogram.h"
 #include "ImageIO.h"
+#include "KKException.h"
 #include "kku_fftw.h"
 #include "Matrix.h"
 #include "OSservices.h"
@@ -737,7 +738,7 @@ Raster::Raster (int32         _height,
     KKU::KKStr errMsg;
     errMsg << "Raster::Raster    ***ERROR***   One of the [rpvided channels is 'NULL'.";
     cerr << std::endl << std::endl << errMsg << std::endl << std::endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   memcpy (redArea,   _redChannel,   totPixels);
@@ -833,10 +834,10 @@ void  Raster::Initialize (int32    _height,
   color = false;
 
   if  (_grayScaleData == NULL)
-    throw KKStrException ("Raster::Initialize    _grayScaleData == NULL");
+    throw KKException ("Raster::Initialize    _grayScaleData == NULL");
 
   if  (_grayScaleRows == NULL)
-    throw KKStrException ("Raster::Initialize    _grayScaleRows == NULL");
+    throw KKException ("Raster::Initialize    _grayScaleRows == NULL");
 
   greenArea = _grayScaleData;
   green = _grayScaleRows;
@@ -867,7 +868,7 @@ void  Raster::Initialize (int32    _height,
        (_green == NULL)  ||  (_greenArea == NULL)  ||
        (_blue  == NULL)  ||  (_blueArea  == NULL)
       )
-    throw KKStrException ("Raster::Initialize    One or more of the Color channels == NULL");
+    throw KKException ("Raster::Initialize    One or more of the Color channels == NULL");
 
   redArea   = _redArea;     red    = _red;
   greenArea = _greenArea;   green  = _green;

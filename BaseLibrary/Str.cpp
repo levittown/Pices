@@ -19,7 +19,8 @@
 using namespace std;
 
 
-#include  "Str.h"
+#include "KKException.h"
+#include "Str.h"
 using namespace KKU;
 
 
@@ -749,7 +750,7 @@ void  KKStr::AllocateStrSpace (uint32  size)
     cerr << "KKStr::AllocateStrSpace   ***ERROR***      Size["  << size << "] is larger than StrIntMax[" << StrIntMax << "]" << std::endl;
     KKStr  errStr (150);
     errStr << "KKStr::AllocateStrSpace   ***ERROR***      Size["  << size << "] is larger than StrIntMax[" << StrIntMax << "]";
-    throw  KKStrException (errStr);
+    throw  KKException (errStr);
   }
 
   val = new char[size];
@@ -784,7 +785,7 @@ void  KKStr::GrowAllocatedStrSpace (uint32  newAllocatedSize)
     KKStr  errMsg (128);
     errMsg << "KKStr::GrowAllocatedStrSpace  ***ERROR***" << "  newAllocatedSize[" << newAllocatedSize << "]  is smaller than allocatedSize[" << allocatedSize << "]";
     cerr  << std::endl << std::endl << errMsg << std::endl << std::endl;
-    throw  KKStrException (errMsg);
+    throw  KKException (errMsg);
   }
 
   if  (newAllocatedSize >= (StrIntMax - 5))
@@ -3750,7 +3751,7 @@ KKStr&  KKStr::operator<< (const char*  right)
   {
     const char*  msg = "KKStr&  operator<<(const char*  right)    **** ERROR ****  right==NULL";
     cerr << std::endl << msg <<  std::endl << std::endl;
-    throw KKStrException (msg);
+    throw KKException (msg);
   }
 
   Append (right);
@@ -4653,81 +4654,6 @@ KKStr& KKStr::operator<< (ostream& (* mf)(ostream &))
   mf (o);
   Append (o.str ().c_str ());
   return  *this;
-}
-
-
-KKStrException::KKStrException ():
-  std::exception ()
-{
-}
-
-
-KKStrException::KKStrException (const KKStrException&  _exception):
-  std::exception (),
-  exceptionStr (_exception.exceptionStr)
-{
-}
-
-
-KKStrException::KKStrException (const char*  _exceptionStr):
-  std::exception (),
-  exceptionStr (_exceptionStr)
-{
-}
-
-
-KKStrException::KKStrException (const KKStr&  _exceptionStr):
-  std::exception (),
-  exceptionStr (_exceptionStr)
-{
-}
-
-
-KKStrException::KKStrException (const KKStr&           _exceptionStr,
-                                const std::exception&  _innerException
-                               ):
-  std::exception (_innerException),
-  exceptionStr ()
-{
-  exceptionStr << _exceptionStr << endl
-               << _innerException.what ();
-}
-
-
-
-KKStrException::KKStrException (const char*            _exceptionStr,
-                                const std::exception&  _innerException
-                               )
-{
-  exceptionStr << _exceptionStr << endl
-               << _innerException.what ();
-}
-
-
-KKStrException::KKStrException (const char*  _exceptionStr,
-                                const char*  _innerException
-                               )
-{
-  exceptionStr << _exceptionStr << endl
-               << _innerException;
-}
-
-
-
-KKStrException::~KKStrException ()  throw ()
-{
-}
-
-
-const KKStr&  KKStrException::ToString ()  const
-{
-  return  exceptionStr;
-}
-
-
-const char*  KKStrException::what () const throw ()
-{
-  return  exceptionStr.Str ();
 }
 
 

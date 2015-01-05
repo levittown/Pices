@@ -19,6 +19,7 @@ using namespace  std;
 #include "ContourFollower.h"
 #include "ConvexHull.h"
 #include "DateTime.h"
+#include "KKException.h"
 #include "ImageIO.h"
 #include "OSservices.h"
 #include "RasterSipper.h"
@@ -1200,7 +1201,7 @@ ImageFeaturesList::ImageFeaturesList (const FeatureVectorList&  featureVectorLis
         msg << "ImageFeaturesList Copy Constructor for FeatureVectorList  Example[" <<  featureVector->ImageFileName () 
             << "] does not have a underlying type of 'ImageFeatures'.";
         log.Level (-1) << endl << endl << msg << endl << endl;
-        throw KKStrException (msg);
+        throw KKException (msg);
       }
     }
   }

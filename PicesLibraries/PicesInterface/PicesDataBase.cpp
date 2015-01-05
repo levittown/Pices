@@ -15,6 +15,7 @@ using namespace std;
 
 #include "MemoryDebug.h"
 #include "BasicTypes.h"
+#include "KKException.h"
 #include "..\BaseLibrary\GoalKeeper.h"
 using namespace KKU;
 
@@ -1111,7 +1112,7 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
     RasterSipperPtr  r = NULL;
 
     try  {r = dbConn->ImageFullSizeFind (PicesKKStr::SystemStringToKKStr (imageFileName));}
-    catch  (KKStrException&  e1)  {throw gcnew Exception ("PicesDataBase::ImageFullSizeFind KKStrException\n" +  PicesKKStr::KKStrToSystenStr (e1.ToString ()));}
+    catch  (KKException&  e1)  {throw gcnew Exception ("PicesDataBase::ImageFullSizeFind KKException\n" +  PicesKKStr::KKStrToSystenStr (e1.ToString ()));}
     catch  (exception&       e2)  {throw gcnew Exception ("PicesDataBase::ImageFullSizeFind std::exception\n" +  PicesKKStr::KKStrToSystenStr (e2.what ()));}
     catch  (...)                  {throw gcnew Exception ("PicesDataBase::ImageFullSizeFind Exception ocured");}
     if  (!r)

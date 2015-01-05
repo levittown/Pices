@@ -30,6 +30,7 @@ using namespace SipperHardware;
 #include "DataBaseImageValidatedEntry.h"
 #include "DataBaseLogEntry.h"
 #include "FileDesc.h"
+#include "ImageSizeDistribution.h"
 #include "MLClass.h"
 
 
@@ -438,6 +439,21 @@ namespace MLL
     void  ImageUpdate (DataBaseImage&  dbImage,
                        RasterSipper&   image
                       );
+
+
+    
+    void  ImagesSizeDistributionByDepth (const KKStr&               cruiseName,
+                                         const KKStr&               stationName,
+                                         const KKStr&               deploymentNum,
+                                         const KKStr&               className,
+                                         float                      depthBinSize,
+                                         char                       statistic,
+                                         float                      initialValue,
+                                         float                      growthRate,
+                                         float                      endValue,
+                                         ImageSizeDistributionPtr&  downCast,
+                                         ImageSizeDistributionPtr&  upCast
+                                        );
 
 
     ClassStatisticListPtr  ImageGetClassStatistics (DataBaseImageGroupPtr  imageGroup,

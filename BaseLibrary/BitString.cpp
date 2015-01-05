@@ -19,6 +19,7 @@ using namespace std;
 
 #include "BitString.h"
 #include "BasicTypes.h"
+#include "KKException.h"
 using namespace KKU;
 
 
@@ -563,7 +564,7 @@ void  BitString::ListOfSetBits16 (VectorUint16&  setBits)  const
     KKStr  msg (50);
     msg << "BitString::ListOfSetBits  BitLen[" << bitLen << "] of this instance of BitString exceeds capacity of 'VectorUint16'.";
     cerr << std::endl << "BitString::ListOfSetBits   ***ERROR***   " << msg << std::endl << std::endl;
-    throw KKStrException (msg);
+    throw KKException (msg);
   }
 
   setBits.clear ();

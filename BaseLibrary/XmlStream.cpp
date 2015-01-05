@@ -18,6 +18,7 @@ using namespace std;
 
 #include "BitString.h"
 #include "BasicTypes.h"
+#include "KKException.h"
 #include "Tokenizer.h"
 using namespace KKU;
 
@@ -425,7 +426,7 @@ void   XmlStream::RegisterXmlElementCreator  (const KKStr&       elementName,
       // Trying to register two different 'XmlElementCreator' functions.  This is VERY VERY bad.
       KKStr  errMsg = "XmlStream::RegisterXmlElementCreator   ***WARNING***   Trying to register[" + elementName + "] as two different Creator functions.";
       cerr << std::endl << errMsg << std::endl;
-      throw KKStrException (errMsg);
+      throw KKException (errMsg);
     }
   }
 

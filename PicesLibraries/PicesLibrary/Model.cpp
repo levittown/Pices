@@ -15,6 +15,7 @@ using namespace  std;
 
 
 #include "BasicTypes.h"
+#include "KKException.h"
 #include "OSservices.h"
 #include "RunLog.h"
 #include "Str.h"
@@ -297,7 +298,7 @@ ModelPtr  Model::CreateFromStream (istream&              i,
   {
     model->ReadXML (i, successful);
   }
-  catch  (const KKStrException& e)
+  catch  (const KKException& e)
   {
     _log.Level (-1) << endl << endl
       << "Model::CreateFromStream    ***ERROR***  Exception occurred in executing 'ReadXML'" << endl
@@ -412,26 +413,26 @@ ModelPtr  Model::CreateAModel (ModelTypes            _modelType,
                        break;
     }  /* end of switch */
   }
-  catch  (const KKStrException&  e)
+  catch  (const KKException&  e)
   {
     delete  model; model = NULL; throw  e;
   }
   catch  (const std::exception&  e)
   {
     delete  model;  model = NULL;
-    throw  KKStrException ("Model::CreateAModel  Exception calling constructor.", e);
+    throw  KKException ("Model::CreateAModel  Exception calling constructor.", e);
   }
   catch  (const char*  e2)
   {
     delete  model; model = NULL;
     KKStr  exceptionStr = "Model::CreateAModel  Exception calling constructor[";
     exceptionStr << e2 << "]."; 
-    throw  KKStrException (exceptionStr);
+    throw  KKException (exceptionStr);
   }
   catch  (...)
   {
     delete  model;  model = NULL;
-    throw  KKStrException ("Model::CreateAModel  Exception calling constructor.  No info provided.");
+    throw  KKException ("Model::CreateAModel  Exception calling constructor.  No info provided.");
   }
 
   return  model;
@@ -506,7 +507,7 @@ void  Model::DeAllocateSpace ()
 int32  Model::BitsToReduceBy () const
 {
   if  (!param)
-    throw KKStrException ("Model::BitsToReduceBy  'param == NULL'.");
+    throw KKException ("Model::BitsToReduceBy  'param == NULL'.");
   return param->BitsToReduceBy ();
 }
 
@@ -515,7 +516,7 @@ int32  Model::BitsToReduceBy () const
 const FeatureEncoder2&  Model::Encoder () const
 {
   if  (!encoder)
-    throw KKStrException ("Model::GetFeatureNums  'encoder == NULL'.");
+    throw KKException ("Model::GetFeatureNums  'encoder == NULL'.");
   return *encoder;
 }
 
@@ -524,7 +525,7 @@ const FeatureEncoder2&  Model::Encoder () const
 const FeatureNumList&   Model::GetFeatureNums ()  const
 {
   if  (!param)
-    throw KKStrException ("Model::GetFeatureNums  'param == NULL'.");
+    throw KKException ("Model::GetFeatureNums  'param == NULL'.");
   return  param->SelectedFeatures ();
 }
 
@@ -532,7 +533,7 @@ const FeatureNumList&   Model::GetFeatureNums ()  const
 bool  Model::NormalizeNominalAttributes ()  const
 {
   if  (!param)
-    throw KKStrException ("Model::NormalizeNominalAttributes  'param == NULL'.");
+    throw KKException ("Model::NormalizeNominalAttributes  'param == NULL'.");
 
   if  (param->EncodingMethod () == ModelParam::NoEncoding)
     return  true;
@@ -545,7 +546,7 @@ bool  Model::NormalizeNominalAttributes ()  const
 const FeatureNumList&  Model::SelectedFeatures () const
 {
   if  (!param)
-    throw KKStrException ("Model::GetFeatureNums  'param'.");
+    throw KKException ("Model::GetFeatureNums  'param'.");
   return  param->SelectedFeatures ();
 }
 
@@ -732,7 +733,7 @@ void  Model::ReadXML (istream&  i,
         KKStr  errMsg;
         errMsg << "Exception executing function 'ModelParam::CreateModelParam'.  Exception[" << e.what () << "]";
         log.Level (-1) << endl << "Model::ReadXML    ***ERROR***    "  << errMsg << endl << endl;
-        throw KKStrException (errMsg);
+        throw KKException (errMsg);
       }
 
       if  (!param)
@@ -772,7 +773,7 @@ void  Model::ReadXML (istream&  i,
         log.Level (-1) << endl << endl
                        << errMsg << endl
                        << endl;
-        throw KKStrException (errMsg);
+        throw KKException (errMsg);
       }
     }
     else if  (field.EqualIgnoreCase ("<SpecificImplementation>"))
@@ -862,14 +863,14 @@ void  Model::TrainModel (FeatureVectorListPtr  _trainExamples,
   {
     KKStr  errMsg = "ModelSvmBase::TrainModel   (_trainExamples == NULL)";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   if  (_trainExamples->QueueSize () < 2)
   {
     KKStr  errMsg = "ModelSvmBase::TrainModel   (_trainExamples == NULL)";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   weOwnTrainExamples = _takeOwnership;

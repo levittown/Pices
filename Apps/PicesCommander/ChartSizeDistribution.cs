@@ -20,18 +20,18 @@ namespace PicesCommander
     PicesClassList  activeClasses = null;
     String          rootDir       = "";
 
-    private  String  cruise         = null;
-    private  String  station        = null;
-    private  String  deployment     = null;
+    private  String  cruise       = null;
+    private  String  station      = null;
+    private  String  deployment   = null;
 
-    private  int     sizeMin        = 150;
-    private  int     sizeMax        = 0;
+    private  int     sizeMin      = 150;
+    private  int     sizeMax      = 0;
 
-    private  float   probMin        = 0.0f;
-    private  float   probMax        = 1.0f;
+    private  float   probMin      = 0.0f;
+    private  float   probMax      = 1.0f;
 
-    private  float   depthMin       = 0.0f;
-    private  float   depthMax       = 0.0f;
+    private  float   depthMin     = 0.0f;
+    private  float   depthMax     = 0.0f;
 
     private  bool    filterSize   = false;
     private  bool    filterProb   = false;

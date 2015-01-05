@@ -15,6 +15,7 @@ using namespace std;
 
 
 #include "BasicTypes.h"
+#include "KKException.h"
 #include "OSservices.h"
 #include "RunLog.h"
 #include "Str.h"
@@ -171,7 +172,7 @@ void  ModelDual::TrainModel (FeatureVectorListPtr  _trainExamples,
     validModel = false;
     KKStr  errMsg = "ModelDual::TrainModel   (param == NULL)";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   DeleteExistingClassifiers ();
@@ -180,26 +181,26 @@ void  ModelDual::TrainModel (FeatureVectorListPtr  _trainExamples,
   {
     Model::TrainModel (_trainExamples, _alreadyNormalized, _takeOwnership);
   }
-  catch (const KKStrException&  e)
+  catch (const KKException&  e)
   {
     validModel = false;
     KKStr  errMsg = "ModelDual::TrainModel  ***ERROR*** Exception occurred calling 'Model::TrainModel'.";
     log.Level (-1) << endl << errMsg << endl << e.ToString () << endl << endl;
-    throw  KKStrException (errMsg, e);
+    throw  KKException (errMsg, e);
   }
   catch (const exception& e2)
   {
     validModel = false;
     KKStr errMsg = "ModelDual::TrainModel  ***ERROR*** Exception occurred calling 'Model::TrainModel'.";
     log.Level (-1) << endl << endl << errMsg << endl << e2.what () << endl << endl;
-    throw KKStrException (errMsg, e2);
+    throw KKException (errMsg, e2);
   }
   catch (...)
   {
     validModel = false;
     KKStr errMsg = "ModelDual::TrainModel  ***ERROR*** Exception occurred calling 'Model::TrainModel'.";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
     
   // 'Model::TrainModel'  Will have performed any BitReduction and Feature Encoding 
@@ -216,7 +217,7 @@ void  ModelDual::TrainModel (FeatureVectorListPtr  _trainExamples,
       validModel = false;
       KKStr errMsg = "ModelDual::TrainModel  ***ERROR***  Could not find Configuration[" + param->ConfigFileName1 () + "].";
       log.Level (-1) << endl << endl << errMsg << endl << endl;
-      throw KKStrException (errMsg);
+      throw KKException (errMsg);
     }
 
     if  (!TrainingConfiguration2::ConfigFileExists (param->ConfigFileName2 ()))
@@ -224,7 +225,7 @@ void  ModelDual::TrainModel (FeatureVectorListPtr  _trainExamples,
       validModel = false;
       KKStr errMsg = "ModelDual::TrainModel  ***ERROR***  Could not find Configuration[" + param->ConfigFileName2 () + "].";
       log.Level (-1) << endl << endl << errMsg << endl << endl;
-      throw KKStrException (errMsg);
+      throw KKException (errMsg);
     }
   }
 
@@ -234,7 +235,7 @@ void  ModelDual::TrainModel (FeatureVectorListPtr  _trainExamples,
     validModel = false;
     KKStr errMsg = "ModelDual::TrainModel  ***ERROR***  Configuration[" + param->ConfigFileName1 () + "] is not valid.";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   config2 = new TrainingConfiguration2 (fileDesc, param->ConfigFileName2 (), log, false);
@@ -243,7 +244,7 @@ void  ModelDual::TrainModel (FeatureVectorListPtr  _trainExamples,
     validModel = false;
     KKStr errMsg = "ModelDual::TrainModel  ***ERROR***  Configuration[" + param->ConfigFileName2 () + "] is not valid.";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   KKStr  statusMsg;
@@ -263,7 +264,7 @@ void  ModelDual::TrainModel (FeatureVectorListPtr  _trainExamples,
     validModel = false;
     KKStr errMsg = "ModelDual::TrainModel  ***ERROR***  Error building TrainingProcess for [" + param->ConfigFileName1 () + "]  Msg[" + statusMsg + "].";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   try  
@@ -273,7 +274,7 @@ void  ModelDual::TrainModel (FeatureVectorListPtr  _trainExamples,
     TrainingTimeEnd ();
   }
   
-  catch (const KKStrException&  e)
+  catch (const KKException&  e)
   {
     validModel = false;
     KKStr errMsg = "ModelDual::TrainModel  ***ERROR***  Error creating models from training data  Config[" + param->ConfigFileName1 () + "]  Msg[" + statusMsg + "]  Msg[" << trainer1StatusMsg << "].";
@@ -286,7 +287,7 @@ void  ModelDual::TrainModel (FeatureVectorListPtr  _trainExamples,
     validModel = false;
     KKStr errMsg = "ModelDual::TrainModel  ***ERROR***  Error creating models from training data  Config[" + param->ConfigFileName1 () + "]  Msg[" + statusMsg + "]  Msg[" << trainer1StatusMsg << "].";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   trainer2 = new TrainingProcess2 (config2, 
@@ -304,11 +305,11 @@ void  ModelDual::TrainModel (FeatureVectorListPtr  _trainExamples,
     validModel = false;
     KKStr errMsg = "ModelDual::TrainModel  ***ERROR***  Error building TrainingProcess for [" + param->ConfigFileName2 () + "]  Msg[" + statusMsg + "].";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   try  {trainer2->CreateModelsFromTrainingData ();}
-  catch (const KKStrException&  e)
+  catch (const KKException&  e)
   {
     validModel = false;
     KKStr errMsg = "ModelDual::TrainModel  ***ERROR***  Error creating models from training data  Config[" + param->ConfigFileName1 () + "]  Msg[" + statusMsg + "]  Msg[" << trainer2StatusMsg << "].";
@@ -321,7 +322,7 @@ void  ModelDual::TrainModel (FeatureVectorListPtr  _trainExamples,
     validModel = false;
     KKStr errMsg = "ModelDual::TrainModel  ***ERROR***  Error creating models from training data  Config[" + param->ConfigFileName1 () + "]  Msg[" + statusMsg + "]  Msg[" << trainer2StatusMsg << "].";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
-    throw KKStrException (errMsg);
+    throw KKException (errMsg);
   }
 
   classifier1 = new Classifier2 (trainer1, log);
