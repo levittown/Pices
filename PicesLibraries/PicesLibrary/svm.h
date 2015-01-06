@@ -7,6 +7,7 @@
 #include <set>
 #include <vector>
 
+#include "KKException.h"
 #include "Str.h"
 #include "RunLog.h"
 

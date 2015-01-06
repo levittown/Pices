@@ -4451,7 +4451,7 @@ void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruise
     sizeDistribution->DefineRow (depth, imageCount, totalPixelCount);
     for  (uint32  zed = firstSizeBucketIdx, sizeIdx = 0;  zed < row.size ();  ++zed, ++sizeIdx)
     {
-      sizeDistribution->AddData (sizeIdx, row[zed].ToInt32 ());
+      sizeDistribution->AddData (depth, sizeIdx, row[zed].ToInt32 ());
     }
   }
 

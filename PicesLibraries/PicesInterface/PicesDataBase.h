@@ -13,6 +13,7 @@
 #include "PicesFeatureVector.h"
 #include "PicesFeatureVectorList.h"
 #include "PicesGPSDataPoint.h"
+#include "PicesImageSizeDistribution.h"
 #include "PicesInstrumentData.h"
 #include "PicesPoint.h"
 #include "PicesSipperFile.h"
@@ -337,6 +338,20 @@ namespace PicesInterface
                                  PicesPointList^  sizeCoordinates, 
                                  float            imageSize
                                 );
+
+    void  ImagesSizeDistributionByDepth (String^                       cruiseName,
+                                         String^                       stationName,
+                                         String^                       deploymentNum,
+                                         String^                       className,
+                                         float                         depthBinSize,
+                                         char                          statistic,
+                                         float                         initialValue,
+                                         float                         growthRate,
+                                         float                         endValue,
+                                         PicesImageSizeDistribution^%  downCast,
+                                         PicesImageSizeDistribution^%  upCast
+                                        );
+
 
     //***********************************************************************************
     PicesRaster^  ImageFullSizeLoad (String^  imageFileName);

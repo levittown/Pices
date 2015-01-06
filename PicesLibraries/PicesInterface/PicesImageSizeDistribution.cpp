@@ -33,6 +33,22 @@ namespace  PicesInterface
 {
 
 
+  PicesImageSizeDistributionRow::PicesImageSizeDistributionRow (ImageSizeDistributionRowPtr  _imageSizeDistributionRow)
+  {
+    imageSizeDistributionRow = _imageSizeDistributionRow;
+  }
+
+  
+  array<uint>^  PicesImageSizeDistributionRow::Distribution ()
+  {
+    const VectorUint32&  dist = imageSizeDistributionRow->Distribution ();
+
+    array<uint>^  result = gcnew array<uint> (dist.size ());
+    return  result;
+  }
+
+
+
   PicesImageSizeDistribution::PicesImageSizeDistribution (ImageSizeDistributionPtr  _imageSizeDistribution)
   {
     imageSizeDistribution = _imageSizeDistribution;

@@ -12,7 +12,24 @@ using namespace System::Diagnostics;
 
 namespace PicesInterface 
 {
-  public  ref class PicesImageSizeDistribution  
+  public  ref class  PicesImageSizeDistributionRow
+  {
+  public:
+    PicesImageSizeDistributionRow (ImageSizeDistributionRowPtr  _imageSizeDistributionRow);
+
+    property  float  Depth       {float  get ()  {return imageSizeDistributionRow->Depth       ();}}
+    property  uint   ImageCount  {uint   get ()  {return imageSizeDistributionRow->ImageCount  ();}}
+    property  uint   TotalPixels {uint   get ()  {return imageSizeDistributionRow->TotalPixels ();}}
+
+    array<uint>^  Distribution ();
+
+  private:
+    MLL::ImageSizeDistributionRowPtr  imageSizeDistributionRow;
+  };  /* PicesImageSizeDistributionRow */
+
+
+
+  public  ref class  PicesImageSizeDistribution  
   {
   public:
     PicesImageSizeDistribution (ImageSizeDistributionPtr  _imageSizeDistributionPtr);
@@ -29,7 +46,7 @@ namespace PicesInterface
     property  float   GrowthRate      {float   get ()  {return  imageSizeDistribution->GrowthRate     ();}}
     property  float   EndValue        {float   get ()  {return  imageSizeDistribution->EndValue       ();}}
     property  int     NumSizeBuckets  {int     get ()  {return  imageSizeDistribution->NumSizeBuckets ();}}
-    property  int     NumDepthBins    {int     get ()  {return  imageSizeDistribution->->NumDepthBins ();}}
+    property  int     NumDepthBins    {int     get ()  {return  imageSizeDistribution->NumDepthBins   ();}}
 
     MLL::ImageSizeDistributionPtr  UnmanagedClass ()  {return  imageSizeDistribution;}
 

@@ -17,6 +17,30 @@ using namespace  MLL;
 
 
 
+ImageSizeDistributionRow::ImageSizeDistributionRow (float     _depth,
+                                                    kkuint32  _numSizeBuckets,
+                                                    kkuint32  _imageCount,
+                                                    kkuint32  _totalPixels
+                                                   ):
+   depth        (_depth),
+   distribution (_numSizeBuckets, 0),
+   imageCount   (_imageCount),
+   totalPixels  (_totalPixels)
+{
+}
+
+
+void  ImageSizeDistributionRow::AddData (kkuint32  _sizeIdx,
+                                         kkuint32  _count
+                                        )
+{
+  while  (_sizeIdx >= distribution.size ())
+    distribution.push_back (0);
+  distribution[_sizeIdx] = _count;
+}  /* AddData */
+
+
+
 
 
 
@@ -30,17 +54,14 @@ ImageSizeDistribution::ImageSizeDistribution (float               _depthBinSize,
                                               RunLog&             _runLog
                                              ):
 
-    depthBinSize      (_depthBinSize),
-    initialValue      (_initialValue),
-    growthRate        (_growtRate),
-    endValue          (_endValue),
-    numSizeBuckets    (0),
-    sizeStartValues   (_sizeStartValues),
-    sizeEndValues     (_sizeEndValues),
-    sizeDistribution  (),
-    depths            (),
-    imageCounts       (),
-    pixelCounts       ()
+    depthBinSize       (_depthBinSize),
+    initialValue       (_initialValue),
+    growthRate         (_growtRate),
+    endValue           (_endValue),
+    numSizeBuckets     (0),
+    sizeStartValues    (_sizeStartValues),
+    sizeEndValues      (_sizeEndValues),
+    depthDistributions ()
 {
   numSizeBuckets = sizeStartValues.size ();
   if  (sizeStartValues.size () != sizeEndValues.size ())
@@ -53,37 +74,43 @@ ImageSizeDistribution::ImageSizeDistribution (float               _depthBinSize,
 
 
 
+void  ImageSizeDistribution::PopulateDistributions (kkuint32  depthIdx)
+{
+  while  (depthDistributions.size () <= depthIdx)
+  {
+    kkuint32  idx = depthDistributions.size ();
+    depthDistributions.push_back (new ImageSizeDistributionRow (idx * depthBinSize, numSizeBuckets, 0, 0));
+  }
+}  /* PopulateDistributions */
 
 
-void  ImageSizeDistribution::DefineRow (float    _depth,
-                                        kkint32  _imageCount,
-                                        kkint32  _totalPixelCount
+
+
+void  ImageSizeDistribution::DefineRow (float     _depth,
+                                        kkuint32  _imageCount,
+                                        kkuint32  _totalPixelCount
                                        )
 {
   kkuint32  depthIdx = (int)(_depth / depthBinSize);
+  PopulateDistributions (depthIdx);
+  ImageSizeDistributionRowPtr  row = depthDistributions[depthIdx];
+  row->ImageCount  (_imageCount);
+  row->TotalPixels (_totalPixelCount);
+}  /* DefineRow */
 
-  while  (depths.size () <= depthIdx)
-  {
-    kkint32  x = depths.size ();
-    depths.push_back ((x + 1) * depthBinSize);
-    sizeDistribution.push_back (VectorInt32 (numSizeBuckets, 0));
-    imageCounts.push_back (0);
-    pixelCounts.push_back (0);
-  }
-  imageCounts[depthIdx] = _imageCount;
-  pixelCounts[depthIdx] = _totalPixelCount;
-}
+
+
 
 
  
-
-
- 
-void  ImageSizeDistribution::AddData  (kkint32  _sizeBucketIdx,
-                                       kkint32  _count
+void  ImageSizeDistribution::AddData  (float     _depth,
+                                       kkuint32  _sizeBucketIdx,
+                                       kkuint32  _count
                                       )
 {
-  kkint32  x = depths.size () - 1;
-  sizeDistribution[x][_sizeBucketIdx] += _count;
+  kkuint32  depthIdx = (kkuint32)(_depth / depthBinSize);
+  PopulateDistributions (depthIdx);
+  ImageSizeDistributionRowPtr  row = depthDistributions[depthIdx];
+  row->AddData (_sizeBucketIdx, _count);
 }
                     

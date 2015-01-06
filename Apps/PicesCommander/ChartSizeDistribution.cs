@@ -179,8 +179,6 @@ namespace PicesCommander
       Station_.Text    = station;
       Deployment_.Text = deployment;
 
-      SizeStatisticField.Items.Add (new 
-
       if  (classToPlot != null)
         ClassToPlot.Text = classToPlot.Name;
 
@@ -198,29 +196,25 @@ namespace PicesCommander
 
     private  void  DisableControls ()
     {
-      DepthIncr.Enabled      = false;
-      PlotButton.Enabled        = false;
-      DepthIncr.Enabled         = false;
-      IncludeSubClasses.Enabled = false;
-      WeightByVolume.Enabled    = false;
-      DepthAxisAuto.Enabled     = false;
-      InitialSizeField.Enabled  = false;
-      MaxSizeField.Enabled      = false;
-      GrowthRateField.Enabled = false;
+      PlotButton.Enabled         = false;
+      IncludeSubClasses.Enabled  = false;
+      WeightByVolume.Enabled     = false;
+      InitialSizeField.Enabled   = false;
+      MaxSizeField.Enabled       = false;
+      GrowthRateField.Enabled    = false;
+      SizeStatisticField.Enabled = false;
     }
 
 
     private  void  EnableControls ()
     {
-      DepthIncr.Enabled         = true;
-      PlotButton.Enabled        = true;
-      DepthIncr.Enabled         = true;
-      IncludeSubClasses.Enabled = true;
-      WeightByVolume.Enabled    = true;
-      DepthAxisAuto.Enabled     = true;
-      InitialSizeField.Enabled  = true;
-      MaxSizeField.Enabled      = true;
-      GrowthRateField.Enabled = true;
+      PlotButton.Enabled         = true;
+      IncludeSubClasses.Enabled  = true;
+      WeightByVolume.Enabled     = true;
+      InitialSizeField.Enabled   = true;
+      MaxSizeField.Enabled       = true;
+      GrowthRateField.Enabled    = true;
+      SizeStatisticField.Enabled = true;
     }
 
 
@@ -243,6 +237,7 @@ namespace PicesCommander
       o.WriteLine ("InitialSize"        + "\t" + InitialSizeField.Value.ToString ("###0.000"));
       o.WriteLine ("MaxSize"            + "\t" + MaxSizeField.Value);
       o.WriteLine ("GrowthRate"         + "\t" + GrowthRateField.Value);
+      o.WriteLine ("SizeStatistic"      + "\t" + SizeStatisticField.SelectedItem.ToString ());
       o.Close ();
       o = null;
     }
@@ -386,8 +381,6 @@ namespace PicesCommander
       else
         classToPlot = PicesClassList.GetUniqueClass (ClassToPlot.Text, "");
 
-      ValidateDepthAxisSettings (ref errors);
-
       if  (errors.Count < 1)
         return null;
       else
@@ -402,7 +395,7 @@ namespace PicesCommander
       msgQueue.AddMsg (msg);
       statusMsgs.AddMsg (msg);
       PicesVolumeSampledStatList 
-        volStats = threadConn.InstrumentDataGetVolumePerMeterDepth (cruise, station, deployment, depthIncrement);
+        volStats = threadConn.InstrumentDataGetVolumePerMeterDepth (cruise, station, deployment, 1.0f);
       if  (volStats == null)
         return  null;
 
@@ -427,17 +420,15 @@ namespace PicesCommander
 
       buildPlotDataRunning = true;
 
-      depthIncrement = (int)DepthIncr.Value;
       classToPlot    = PicesClassList.GetUniqueClass (ClassToPlot.Text, "");
 
-      series = new List<DataSeriesToPlot> ();
+      // series = new List<DataSeriesToPlot> ();
 
       depthVolumeProfile = GetDepthVolumeProfile ();
-      /**
-       * 
-      AddToSeries ('P');
-      AddToSeries ('V');
-      */
+
+      //PicesImageSizeDistribution  sizeDistribution
+      //  = threadConn.Image
+
 
 
       threadConn.Close ();

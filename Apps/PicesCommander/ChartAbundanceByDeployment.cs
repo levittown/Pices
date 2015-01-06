@@ -915,7 +915,7 @@ namespace PicesCommander
 
       String  uintOfMeasure = "Count";
       if  (weightByVolume)
-        uintOfMeasure = "Count/m_3";
+        uintOfMeasure = "Count/m-3";
 
       // First we will plot class counts on CharArea1
       foreach  (DataSeriesToPlot dstp in series)

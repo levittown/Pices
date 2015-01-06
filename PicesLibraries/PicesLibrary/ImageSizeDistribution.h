@@ -12,6 +12,40 @@
 
 namespace MLL
 {
+  class  ImageSizeDistributionRow
+  {
+  public:
+    ImageSizeDistributionRow (float     _depth,
+                              kkuint32  _numSizeBuckets,
+                              kkuint32  _imageCount,
+                              kkuint32  _totalPixels
+                             );
+
+
+    float                Depth        ()  const  {return depth;}
+    kkuint32             ImageCount   ()  const  {return imageCount;}
+    kkuint32             TotalPixels  ()  const  {return totalPixels;}
+    const VectorUint32&  Distribution ()  const  {return distribution;}
+
+    void  ImageCount   (kkuint32  _imageCount)  {imageCount  = _imageCount;}
+    void  TotalPixels  (kkuint32  _totalPixels) {totalPixels = _totalPixels;}
+
+    void  AddData (kkuint32  _sizeIdx,
+                   kkuint32  _count
+                  );
+
+  private:
+    float         depth;
+    VectorUint32  distribution;
+    kkuint32      imageCount;
+    kkuint32      totalPixels;
+  };  /* ImageSizeDistributionRow */
+
+  typedef  ImageSizeDistributionRow*  ImageSizeDistributionRowPtr;
+
+
+
+
   class  ImageSizeDistribution
   {
   public:
@@ -24,42 +58,39 @@ namespace MLL
                            RunLog&             _runLog
                           );
 
-    float    DepthBinSize   () const  {return  depthBinSize;}
-    float    InitialValue   () const  {return  initialValue;}
-    float    GrowthRate     () const  {return  growthRate;}
-    float    EndValue       () const  {return  endValue;}
-    kkint32  NumSizeBuckets () const  {return  numSizeBuckets;}
-    kkint32  NumDepthBins   () const  {return  (kkint32)depths.size ();}
+    float     DepthBinSize   () const  {return  depthBinSize;}
+    float     InitialValue   () const  {return  initialValue;}
+    float     GrowthRate     () const  {return  growthRate;}
+    float     EndValue       () const  {return  endValue;}
+    kkuint32  NumSizeBuckets () const  {return  numSizeBuckets;}
+    kkuint32  NumDepthBins   () const  {return  depthDistributions.size ();}
 
     const VectorFloat&  SizeStartValues ()  const  {return sizeStartValues;}
-    const VectorFloat&  sizeEndValues   ()  const  {return sizeStartValues;}
+    const VectorFloat&  SizeEndValues   ()  const  {return sizeStartValues;}
 
-
-
-
-    void  DefineRow (float    _depth,
-                     kkint32  _imageCount,
-                     kkint32  _totalPixelCount
+    void  DefineRow (float     _depth,
+                     kkuint32  _imageCount,
+                     kkuint32  _totalPixelCount
                     );
 
-    void  AddData  (kkint32   _sizeBucketIdx,
-                    kkint32   _count
+    void  AddData  (float     _depth,
+                    kkuint32  _sizeBucketIdx,
+                    kkuint32  _count
                    );
                     
-
   private:
+    void  PopulateDistributions (kkuint32  depthIdx);
+
     float                depthBinSize;
     float                initialValue;
     float                growthRate;
     float                endValue;
     kkint32              numSizeBuckets;
+
+    vector<ImageSizeDistributionRowPtr>  depthDistributions;
+
     VectorFloat          sizeStartValues;
     VectorFloat          sizeEndValues;
-    vector<VectorInt32>  sizeDistribution;   /**<  Each row represents a depth range,  and each column a Size Range */
-    VectorFloat          depths;
-    VectorInt32          imageCounts;        /**<  Each entr represents number images in the coresponding depth range. */
-    VectorInt32          pixelCounts;        /**<  Total number of piels in coresponding depth range. */
-
   };  /* ImageSizeDistribution */
 
   typedef  ImageSizeDistribution*  ImageSizeDistributionPtr;

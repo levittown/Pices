@@ -1078,6 +1078,50 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
   }  /* ImagesUpdateValidatedAndPredictClass */
 
 
+  void  PicesDataBase::ImagesSizeDistributionByDepth 
+                                (String^                       cruiseName,
+                                 String^                       stationName,
+                                 String^                       deploymentNum,
+                                 String^                       className,
+                                 float                         depthBinSize,
+                                 char                          statistic,
+                                 float                         initialValue,
+                                 float                         growthRate,
+                                 float                         endValue,
+                                 PicesImageSizeDistribution^%  downCast,
+                                 PicesImageSizeDistribution^%  upCast
+                                )
+  {
+    ImageSizeDistributionPtr   downCastUM = NULL;
+    ImageSizeDistributionPtr   upCastUM   = NULL;
+
+    dbConn->ImagesSizeDistributionByDepth 
+       (PicesKKStr::SystemStringToKKStr (cruiseName),
+        PicesKKStr::SystemStringToKKStr (stationName),
+        PicesKKStr::SystemStringToKKStr (deploymentNum),
+        PicesKKStr::SystemStringToKKStr (className),
+        depthBinSize,
+        statistic,
+        initialValue,
+        growthRate,
+        endValue,
+        downCastUM,
+        upCastUM
+       );
+
+   if  (downCastUM)
+     downCast = gcnew PicesImageSizeDistribution (downCastUM);
+   else
+     downCast = nullptr;
+
+   if  (upCastUM)
+     upCast = gcnew PicesImageSizeDistribution (upCastUM);
+   else
+     upCast = nullptr;
+  }  /* ImagesSizeDistributionByDepth */
+
+
+
 
 
   //***************************************************************************************
