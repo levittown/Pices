@@ -426,11 +426,18 @@ namespace PicesCommander
 
       depthVolumeProfile = GetDepthVolumeProfile ();
 
-      //PicesImageSizeDistribution  sizeDistribution
-      //  = threadConn.Image
-
-
-
+      sbyte  ch = (sbyte)'2';
+      PicesImageSizeDistribution  downCast = null;
+      PicesImageSizeDistribution  upCast = null;
+      threadConn.ImagesSizeDistributionByDepth (this.cruise, this.station, this.deployment, ClassToPlot.Text,
+                                                1.0f,
+                                                ch,
+                                                (float)InitialSizeField.Value,
+                                                (float)GrowthRateField.Value,
+                                                (float)MaxSizeField.Value,
+                                                ref downCast,
+                                                ref upCast
+                                               );
       threadConn.Close ();
       threadConn = null;
       GC.Collect ();
@@ -455,6 +462,8 @@ namespace PicesCommander
         threadConn.CancelFlag = true;
       statusMsgs.AddMsg ("Cancel Requested");
     }
+
+
 
 
     private int  FindBestInetrvaleSize (int minSize, int maxSize, int range)
@@ -483,6 +492,8 @@ namespace PicesCommander
     {
       goalie.StartBlock ();
 
+      /*
+
       Font titleFont = new Font (FontFamily.GenericSansSerif, 12);
       
       String  t1 = "Cruise: " + cruise + "  Station: " + station;
@@ -499,6 +510,10 @@ namespace PicesCommander
 
       ProfileChart.Series.Clear ();
 
+
+      
+      
+      
       if  (series.Count < 1)
       {
         goalie.EndBlock ();
@@ -554,41 +569,36 @@ namespace PicesCommander
 
       String  uintOfMeasure = "Count";
       if  (weightByVolume)
-        uintOfMeasure = "Count/m_3";
+        uintOfMeasure = "Count/m-3";
 
-      // First we will plot class counts on CharArea1
-      foreach  (DataSeriesToPlot dstp in series)
-      {
-        Series s = new Series (dstp.legend);
-        s.ChartArea = "ChartArea1";
-        s.ChartType =  SeriesChartType.Line;
-        s.Name = dstp.legend;
-
-        ca.AxisX.Title = uintOfMeasure;
-        ca.AxisX.LabelStyle.Format =  "###,##0";
-        ca.AxisX.Minimum = 0;
-        s.XAxisType = AxisType.Primary;
+      Series s = new Series (dstp.legend);
+      s.ChartArea = "ChartArea1";
+      s.ChartType =  SeriesChartType.Column;
+      ca.AxisX.Title = uintOfMeasure;
+      ca.AxisX.LabelStyle.Format =  "###,##0";
+      ca.AxisX.Minimum = 0;
+      s.XAxisType = AxisType.Primary;
  
-        s.BorderWidth = 2;
+      s.BorderWidth = 2;
 
-        for  (int depthIDX = 0;  depthIDX < dstp.countsByDepth.Length;  ++depthIDX)
+      for  (int depthIDX = 0;  depthIDX < dstp.countsByDepth.Length;  ++depthIDX)
+      {
+        float  yValue = depthIDX * depthIncrement;
+        if  ((yValue >= initialSize)  &&  (yValue <= maxSize))
         {
-          float  yValue = depthIDX * depthIncrement;
-          if  ((yValue >= initialSize)  &&  (yValue <= maxSize))
-          {
-            if  (weightByVolume)
-              s.Points.Add (new DataPoint (dstp.density[depthIDX], yValue));
-            else
-              s.Points.Add (new DataPoint (dstp.countsByDepth[depthIDX], yValue));
-          }
+          if  (weightByVolume)
+            s.Points.Add (new DataPoint (dstp.density[depthIDX], yValue));
+          else
+            s.Points.Add (new DataPoint (dstp.countsByDepth[depthIDX], yValue));
         }
-
-        ProfileChart.Series.Add (s);
       }
+
+      ProfileChart.Series.Add (s);
 
       ProfileChart.ChartAreas[0].RecalculateAxesScale ();
 
       goalie.EndBlock ();
+       */
     }  /* UpdateChartAreas */
 
 
@@ -804,7 +814,6 @@ namespace PicesCommander
       tw.WriteLine ("Class"                + "\t" + classToPlot.Name);
       tw.WriteLine ("Weight-by-Volume"     + "\t" + (weightByVolume    ? "Yes" : "No"));
       tw.WriteLine ("Include-Sub-Classes"  + "\t" + (includeSubClasses ? "Yes" : "No"));
-      tw.WriteLine ("Depth-Increment"      + "\t" + depthIncrement);
       tw.WriteLine ();
       tw.WriteLine ("There will be two tables below: 1-Density, 2-Counts.");
       tw.WriteLine ();
@@ -815,6 +824,7 @@ namespace PicesCommander
       tw.WriteLine ();
       int  largestIdx = 0;
       tw.Write ("Depth" + "\t" + "Vol-Sampled");
+      /*
       foreach (DataSeriesToPlot dstp in series)
       {
         String s = dstp.legend;
@@ -873,6 +883,7 @@ namespace PicesCommander
         }
         tw.WriteLine ();
       }
+      */
 
       tw.WriteLine ();
       tw.WriteLine ("End of ChartSizeDistribution");

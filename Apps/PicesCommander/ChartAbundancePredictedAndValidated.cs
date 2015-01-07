@@ -756,23 +756,12 @@ namespace PicesCommander
     private  void  UpdateChartAreas ()
     {
       goalie.StartBlock ();
-<<<<<<< HEAD
-=======
 
-      Font titleFont = new Font (FontFamily.GenericSansSerif, 12);
-      Font axistTitleFont = new Font (FontFamily.GenericSansSerif, 12);
-
-      
-      String  t1 = "Cruise: " + cruise + "  Station: " + station;
-      if  (String.IsNullOrEmpty (deployment))
-        t1 += "  Deployment: " + deployment;
->>>>>>> 0f33a17e599c86adceee516679ff610177c9cfaf
-
-      Font  chartTitleFont = new Font (FontFamily.GenericSerif, 12.0f);
+      Font  titleFont = new Font (FontFamily.GenericSerif, 12.0f);
       Font  axisTitleFont  = new Font (FontFamily.GenericSerif, 12.0f);
 
       ProfileChart.Titles.Clear ();
-<<<<<<< HEAD
+
       String t1 = "";
       if  (!String.IsNullOrEmpty (cruise))
       {
@@ -785,10 +774,7 @@ namespace PicesCommander
         }
       }
       t1 += "  Class: " + classToPlot.Name;
-      ProfileChart.Titles.Add (new Title (t1, Docking.Top, chartTitleFont, Color.Black));
-=======
       ProfileChart.Titles.Add (new Title (t1, Docking.Top, titleFont, Color.Black));
->>>>>>> 0f33a17e599c86adceee516679ff610177c9cfaf
 
       String  t2 = "";
       if  (group != null)
@@ -798,11 +784,7 @@ namespace PicesCommander
         AddToStr (ref t2, SubInSuperScriptExponent (criteriaStr));
 
       if  (!String.IsNullOrEmpty (t2))
-<<<<<<< HEAD
-        ProfileChart.Titles.Add (new Title (t2, Docking.Top, chartTitleFont, Color.Black));
-=======
-        ProfileChart.Titles.Add (new Title (t2,Docking.Top, titleFont, Color.Black));
->>>>>>> 0f33a17e599c86adceee516679ff610177c9cfaf
+        ProfileChart.Titles.Add (new Title (t2, Docking.Top, titleFont, Color.Black));
 
       ProfileChart.Series.Clear ();
 

@@ -30,15 +30,43 @@ ImageSizeDistributionRow::ImageSizeDistributionRow (float     _depth,
 }
 
 
+
+
+void  ImageSizeDistributionRow::AddImageCountPixelCount (kkuint32  _imageCount,
+                                                         kkuint32  _pixelCount
+                                                        )
+{
+  imageCount  += _imageCount;
+  totalPixels += _pixelCount;
+}  /* AddImageCountPixelCount */
+
+
+
+
 void  ImageSizeDistributionRow::AddData (kkuint32  _sizeIdx,
                                          kkuint32  _count
                                         )
 {
   while  (_sizeIdx >= distribution.size ())
     distribution.push_back (0);
-  distribution[_sizeIdx] = _count;
+  distribution[_sizeIdx] += _count;
 }  /* AddData */
 
+
+
+void  ImageSizeDistributionRow::AddIn (const ImageSizeDistributionRow&  right)
+{
+  kkint32  xL = distribution.size ();
+  kkint32  xR = right.distribution.size ();
+
+  kkint32  xM = Min (xL, xR);
+
+  for  (kkint32  x = 0;  x < xM;  ++x)
+    distribution[x] += right.distribution[x];
+
+  imageCount  += right.imageCount;
+  totalPixels += right.totalPixels;
+}  /* AddIn */
 
 
 
@@ -61,7 +89,8 @@ ImageSizeDistribution::ImageSizeDistribution (float               _depthBinSize,
     numSizeBuckets     (0),
     sizeStartValues    (_sizeStartValues),
     sizeEndValues      (_sizeEndValues),
-    depthDistributions ()
+    depthDistributions (),
+    allDepths          (NULL)
 {
   numSizeBuckets = sizeStartValues.size ();
   if  (sizeStartValues.size () != sizeEndValues.size ())
@@ -69,6 +98,17 @@ ImageSizeDistribution::ImageSizeDistribution (float               _depthBinSize,
     KKStr  errMsg = "Size of 'sizeStartValues' and 'sizeEndValues'  don't match.";
     _runLog.Level (-1) << endl << "ImageSizeDistribution   ***ERROR***   " << errMsg << endl << endl;
     throw KKException (errMsg);
+  }
+  allDepths = new ImageSizeDistributionRow (-1.0f, numSizeBuckets, 0, 0);
+}
+
+
+ImageSizeDistribution::~ImageSizeDistribution ()
+{
+  for  (kkuint32  x = 0;  x < depthDistributions.size ();  ++x)
+  {
+    delete  depthDistributions[x];
+    depthDistributions[x] = NULL;
   }
 }
 
@@ -96,6 +136,7 @@ void  ImageSizeDistribution::DefineRow (float     _depth,
   ImageSizeDistributionRowPtr  row = depthDistributions[depthIdx];
   row->ImageCount  (_imageCount);
   row->TotalPixels (_totalPixelCount);
+  allDepths->AddImageCountPixelCount (_imageCount, _totalPixelCount);
 }  /* DefineRow */
 
 
@@ -112,5 +153,37 @@ void  ImageSizeDistribution::AddData  (float     _depth,
   PopulateDistributions (depthIdx);
   ImageSizeDistributionRowPtr  row = depthDistributions[depthIdx];
   row->AddData (_sizeBucketIdx, _count);
+  allDepths->AddData (_sizeBucketIdx, _count);
 }
                     
+
+
+void  ImageSizeDistribution::AddIn (const ImageSizeDistribution&  right,
+                                    RunLog&                       log
+                                   )
+{
+  if  (numSizeBuckets != right.numSizeBuckets)
+  {
+    KKStr  errMsg (128);
+    errMsg << "ImageSizeDistribution::AddIn   ***ERROR***  SizeBuckets Difference   left[" << numSizeBuckets << "]  right[" << right.numSizeBuckets << "].";
+    log.Level (-1) << endl << errMsg << endl << endl;
+    throw KKException (errMsg);
+  }
+
+  if  (this->depthBinSize != right.numSizeBuckets)
+  {
+    KKStr  errMsg (128);
+    errMsg << "ImageSizeDistribution::AddIn   ***ERROR***  SizeBuckets Difference   left[" << numSizeBuckets << "]  right[" << right.numSizeBuckets << "].";
+    log.Level (-1) << endl << errMsg << endl << endl;
+    throw KKException (errMsg);
+  }
+
+  kkuint32  xL = depthDistributions.size ();
+  kkuint32  xR = right.depthDistributions.size ();
+  kkuint32  xM = Min (xL, xR);
+
+  for  (kkuint32 x = 0;  x < xM;  ++x)
+  {
+    depthDistributions[x]->AddIn (*(right.depthDistributions[x]));
+  }
+}  /* AddIn */

@@ -34,6 +34,12 @@ namespace MLL
                    kkuint32  _count
                   );
 
+    void  AddImageCountPixelCount (kkuint32  _imageCount,
+                                   kkuint32  _pixelCount
+                                  );
+
+    void  AddIn (const ImageSizeDistributionRow&  right);
+
   private:
     float         depth;
     VectorUint32  distribution;
@@ -58,6 +64,8 @@ namespace MLL
                            RunLog&             _runLog
                           );
 
+    ~ImageSizeDistribution ();
+
     float     DepthBinSize   () const  {return  depthBinSize;}
     float     InitialValue   () const  {return  initialValue;}
     float     GrowthRate     () const  {return  growthRate;}
@@ -68,6 +76,11 @@ namespace MLL
     const VectorFloat&  SizeStartValues ()  const  {return sizeStartValues;}
     const VectorFloat&  SizeEndValues   ()  const  {return sizeStartValues;}
 
+
+
+    ImageSizeDistributionRow&   AllDepths ()  const  {return *allDepths;}
+
+
     void  DefineRow (float     _depth,
                      kkuint32  _imageCount,
                      kkuint32  _totalPixelCount
@@ -77,7 +90,12 @@ namespace MLL
                     kkuint32  _sizeBucketIdx,
                     kkuint32  _count
                    );
-                    
+
+    void  AddIn (const ImageSizeDistribution&  right,
+                 RunLog&                       log
+                );
+
+
   private:
     void  PopulateDistributions (kkuint32  depthIdx);
 
@@ -88,6 +106,8 @@ namespace MLL
     kkint32              numSizeBuckets;
 
     vector<ImageSizeDistributionRowPtr>  depthDistributions;
+    ImageSizeDistributionRowPtr          allDepths;
+
 
     VectorFloat          sizeStartValues;
     VectorFloat          sizeEndValues;
