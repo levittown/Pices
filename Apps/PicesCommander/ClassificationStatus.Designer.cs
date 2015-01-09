@@ -75,6 +75,7 @@ namespace PicesCommander
       this.Updated = new System.Windows.Forms.TextBox ();
       this.ErrorsDetected = new System.Windows.Forms.TextBox ();
       this.ErrorsDetectedLabel = new System.Windows.Forms.Label ();
+      this.ExcludeNoise = new System.Windows.Forms.CheckBox ();
       this.SelectionCriteriaPanel.SuspendLayout ();
       ((System.ComponentModel.ISupportInitialize)(this.ImagesClassifiedGrid)).BeginInit ();
       this.SuspendLayout ();
@@ -165,6 +166,7 @@ namespace PicesCommander
       // 
       this.SelectionCriteriaPanel.BackColor = System.Drawing.Color.FromArgb (((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
       this.SelectionCriteriaPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.SelectionCriteriaPanel.Controls.Add (this.ExcludeNoise);
       this.SelectionCriteriaPanel.Controls.Add (this.ProbMinMaxLabel);
       this.SelectionCriteriaPanel.Controls.Add (this.DepthMinMaxLabel);
       this.SelectionCriteriaPanel.Controls.Add (this.SizeMinMaxLabel);
@@ -191,7 +193,7 @@ namespace PicesCommander
       this.SelectionCriteriaPanel.Controls.Add (this.StationLabel);
       this.SelectionCriteriaPanel.Location = new System.Drawing.Point (10, 45);
       this.SelectionCriteriaPanel.Name = "SelectionCriteriaPanel";
-      this.SelectionCriteriaPanel.Size = new System.Drawing.Size (549, 241);
+      this.SelectionCriteriaPanel.Size = new System.Drawing.Size (549, 264);
       this.SelectionCriteriaPanel.TabIndex = 9;
       // 
       // ProbMinMaxLabel
@@ -351,7 +353,7 @@ namespace PicesCommander
       this.ImagesClassifiedGrid.Columns.AddRange (new System.Windows.Forms.DataGridViewColumn[] {
             this.ClassName,
             this.ImageClassCount});
-      this.ImagesClassifiedGrid.Location = new System.Drawing.Point (10, 398);
+      this.ImagesClassifiedGrid.Location = new System.Drawing.Point (10, 426);
       this.ImagesClassifiedGrid.Name = "ImagesClassifiedGrid";
       this.ImagesClassifiedGrid.RowHeadersVisible = false;
       this.ImagesClassifiedGrid.Size = new System.Drawing.Size (549, 270);
@@ -373,7 +375,7 @@ namespace PicesCommander
       // 
       // StartButton
       // 
-      this.StartButton.Location = new System.Drawing.Point (10, 673);
+      this.StartButton.Location = new System.Drawing.Point (10, 701);
       this.StartButton.Name = "StartButton";
       this.StartButton.Size = new System.Drawing.Size (75, 23);
       this.StartButton.TabIndex = 11;
@@ -384,7 +386,7 @@ namespace PicesCommander
       // cancelButton
       // 
       this.cancelButton.Enabled = false;
-      this.cancelButton.Location = new System.Drawing.Point (485, 673);
+      this.cancelButton.Location = new System.Drawing.Point (485, 701);
       this.cancelButton.Name = "cancelButton";
       this.cancelButton.Size = new System.Drawing.Size (75, 23);
       this.cancelButton.TabIndex = 12;
@@ -395,7 +397,7 @@ namespace PicesCommander
       // SipperFilesReadLabel
       // 
       this.SipperFilesReadLabel.AutoSize = true;
-      this.SipperFilesReadLabel.Location = new System.Drawing.Point (7, 298);
+      this.SipperFilesReadLabel.Location = new System.Drawing.Point (7, 326);
       this.SipperFilesReadLabel.Name = "SipperFilesReadLabel";
       this.SipperFilesReadLabel.Size = new System.Drawing.Size (90, 13);
       this.SipperFilesReadLabel.TabIndex = 13;
@@ -403,7 +405,7 @@ namespace PicesCommander
       // 
       // SipperFilesRead
       // 
-      this.SipperFilesRead.Location = new System.Drawing.Point (10, 311);
+      this.SipperFilesRead.Location = new System.Drawing.Point (10, 339);
       this.SipperFilesRead.Name = "SipperFilesRead";
       this.SipperFilesRead.ReadOnly = true;
       this.SipperFilesRead.Size = new System.Drawing.Size (98, 20);
@@ -412,7 +414,7 @@ namespace PicesCommander
       // AwaitingUpdateLabel
       // 
       this.AwaitingUpdateLabel.AutoSize = true;
-      this.AwaitingUpdateLabel.Location = new System.Drawing.Point (312, 298);
+      this.AwaitingUpdateLabel.Location = new System.Drawing.Point (312, 326);
       this.AwaitingUpdateLabel.Name = "AwaitingUpdateLabel";
       this.AwaitingUpdateLabel.Size = new System.Drawing.Size (85, 13);
       this.AwaitingUpdateLabel.TabIndex = 15;
@@ -420,7 +422,7 @@ namespace PicesCommander
       // 
       // AwaitingUpdate
       // 
-      this.AwaitingUpdate.Location = new System.Drawing.Point (315, 310);
+      this.AwaitingUpdate.Location = new System.Drawing.Point (315, 338);
       this.AwaitingUpdate.Name = "AwaitingUpdate";
       this.AwaitingUpdate.ReadOnly = true;
       this.AwaitingUpdate.Size = new System.Drawing.Size (100, 20);
@@ -432,7 +434,7 @@ namespace PicesCommander
       // 
       // AwaitingClassification
       // 
-      this.AwaitingClassification.Location = new System.Drawing.Point (162, 311);
+      this.AwaitingClassification.Location = new System.Drawing.Point (162, 339);
       this.AwaitingClassification.Name = "AwaitingClassification";
       this.AwaitingClassification.ReadOnly = true;
       this.AwaitingClassification.Size = new System.Drawing.Size (100, 20);
@@ -441,7 +443,7 @@ namespace PicesCommander
       // AwaitingClassificationLabel
       // 
       this.AwaitingClassificationLabel.AutoSize = true;
-      this.AwaitingClassificationLabel.Location = new System.Drawing.Point (159, 298);
+      this.AwaitingClassificationLabel.Location = new System.Drawing.Point (159, 326);
       this.AwaitingClassificationLabel.Name = "AwaitingClassificationLabel";
       this.AwaitingClassificationLabel.Size = new System.Drawing.Size (111, 13);
       this.AwaitingClassificationLabel.TabIndex = 19;
@@ -449,7 +451,7 @@ namespace PicesCommander
       // 
       // Classified
       // 
-      this.Classified.Location = new System.Drawing.Point (162, 358);
+      this.Classified.Location = new System.Drawing.Point (162, 386);
       this.Classified.Name = "Classified";
       this.Classified.ReadOnly = true;
       this.Classified.Size = new System.Drawing.Size (100, 20);
@@ -458,7 +460,7 @@ namespace PicesCommander
       // ClassifiedLabel
       // 
       this.ClassifiedLabel.AutoSize = true;
-      this.ClassifiedLabel.Location = new System.Drawing.Point (159, 342);
+      this.ClassifiedLabel.Location = new System.Drawing.Point (159, 370);
       this.ClassifiedLabel.Name = "ClassifiedLabel";
       this.ClassifiedLabel.Size = new System.Drawing.Size (51, 13);
       this.ClassifiedLabel.TabIndex = 26;
@@ -467,7 +469,7 @@ namespace PicesCommander
       // ImagesReadLabel
       // 
       this.ImagesReadLabel.AutoSize = true;
-      this.ImagesReadLabel.Location = new System.Drawing.Point (7, 342);
+      this.ImagesReadLabel.Location = new System.Drawing.Point (7, 370);
       this.ImagesReadLabel.Name = "ImagesReadLabel";
       this.ImagesReadLabel.Size = new System.Drawing.Size (70, 13);
       this.ImagesReadLabel.TabIndex = 28;
@@ -475,7 +477,7 @@ namespace PicesCommander
       // 
       // ImagesRead
       // 
-      this.ImagesRead.Location = new System.Drawing.Point (10, 358);
+      this.ImagesRead.Location = new System.Drawing.Point (10, 386);
       this.ImagesRead.Name = "ImagesRead";
       this.ImagesRead.ReadOnly = true;
       this.ImagesRead.Size = new System.Drawing.Size (98, 20);
@@ -484,7 +486,7 @@ namespace PicesCommander
       // UpdatedLabel
       // 
       this.UpdatedLabel.AutoSize = true;
-      this.UpdatedLabel.Location = new System.Drawing.Point (312, 342);
+      this.UpdatedLabel.Location = new System.Drawing.Point (312, 370);
       this.UpdatedLabel.Name = "UpdatedLabel";
       this.UpdatedLabel.Size = new System.Drawing.Size (48, 13);
       this.UpdatedLabel.TabIndex = 30;
@@ -492,7 +494,7 @@ namespace PicesCommander
       // 
       // Updated
       // 
-      this.Updated.Location = new System.Drawing.Point (315, 358);
+      this.Updated.Location = new System.Drawing.Point (315, 386);
       this.Updated.Name = "Updated";
       this.Updated.ReadOnly = true;
       this.Updated.Size = new System.Drawing.Size (100, 20);
@@ -500,7 +502,7 @@ namespace PicesCommander
       // 
       // ErrorsDetected
       // 
-      this.ErrorsDetected.Location = new System.Drawing.Point (458, 311);
+      this.ErrorsDetected.Location = new System.Drawing.Point (458, 339);
       this.ErrorsDetected.Name = "ErrorsDetected";
       this.ErrorsDetected.ReadOnly = true;
       this.ErrorsDetected.Size = new System.Drawing.Size (100, 20);
@@ -509,17 +511,29 @@ namespace PicesCommander
       // ErrorsDetectedLabel
       // 
       this.ErrorsDetectedLabel.AutoSize = true;
-      this.ErrorsDetectedLabel.Location = new System.Drawing.Point (457, 298);
+      this.ErrorsDetectedLabel.Location = new System.Drawing.Point (457, 326);
       this.ErrorsDetectedLabel.Name = "ErrorsDetectedLabel";
       this.ErrorsDetectedLabel.Size = new System.Drawing.Size (81, 13);
       this.ErrorsDetectedLabel.TabIndex = 33;
       this.ErrorsDetectedLabel.Text = "Errors Detected";
       // 
+      // ExcludeNoise
+      // 
+      this.ExcludeNoise.AutoSize = true;
+      this.ExcludeNoise.Checked = true;
+      this.ExcludeNoise.CheckState = System.Windows.Forms.CheckState.Checked;
+      this.ExcludeNoise.Location = new System.Drawing.Point (6, 239);
+      this.ExcludeNoise.Name = "ExcludeNoise";
+      this.ExcludeNoise.Size = new System.Drawing.Size (94, 17);
+      this.ExcludeNoise.TabIndex = 25;
+      this.ExcludeNoise.Text = "Exclude Noise";
+      this.ExcludeNoise.UseVisualStyleBackColor = true;
+      // 
       // ClassificationStatus
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF (6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size (571, 703);
+      this.ClientSize = new System.Drawing.Size (571, 730);
       this.Controls.Add (this.ErrorsDetectedLabel);
       this.Controls.Add (this.ErrorsDetected);
       this.Controls.Add (this.Updated);
@@ -539,7 +553,6 @@ namespace PicesCommander
       this.Controls.Add (this.ImagesClassifiedGrid);
       this.Controls.Add (this.SelectionCriteriaPanel);
       this.Controls.Add (this.TitleLabel);
-      this.MaximumSize = new System.Drawing.Size (587, 741);
       this.MinimumSize = new System.Drawing.Size (587, 741);
       this.Name = "ClassificationStatus";
       this.Text = "ClassificationStatus";
@@ -601,5 +614,6 @@ namespace PicesCommander
     private System.Windows.Forms.TextBox Updated;
     private System.Windows.Forms.TextBox ErrorsDetected;
     private System.Windows.Forms.Label ErrorsDetectedLabel;
+    private System.Windows.Forms.CheckBox ExcludeNoise;
   }
 }

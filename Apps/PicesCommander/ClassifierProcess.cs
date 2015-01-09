@@ -12,6 +12,7 @@ namespace PicesCommander
   {
     private  int                        processorNum            = -1;
     private  bool                       cancelFlag              = false;
+    private  bool                       excludeNoise            = false;
     private  bool                       reClassify              = false;
     private  bool                       validatedTrumps         = false;
     private  Queue<PredictionResult>    predictionUpdateQueue   = null;
@@ -55,6 +56,7 @@ namespace PicesCommander
                                TrainingModel2            _classifier,
                                bool                      _reClassify,
                                bool                      _validatedTrumps,
+                               bool                      _excludeNoise,
                                Queue<PredictionResult>   _predictionUpdateQueue,
                                Queue<PicesFeatureVector> _featureVectorQueue,
                                DateTime                  _midPoint,
@@ -66,6 +68,7 @@ namespace PicesCommander
       classifier            = _classifier;
       reClassify            = _reClassify;
       validatedTrumps       = _validatedTrumps;
+      excludeNoise          = _excludeNoise;
       predictionUpdateQueue = _predictionUpdateQueue;
       featureVectorQueue    = _featureVectorQueue;
       dbServer              = _dbServer;
@@ -84,6 +87,7 @@ namespace PicesCommander
                                String                    _classifierName,
                                bool                      _reClassify,
                                bool                      _validatedTrumps,
+                               bool                      _excludeNoise,
                                Queue<PredictionResult>   _predictionUpdateQueue,
                                Queue<PicesFeatureVector> _featureVectorQueue,
                                DateTime                  _midPoint,
@@ -96,6 +100,7 @@ namespace PicesCommander
       classifierName        = _classifierName;
       reClassify            = _reClassify;
       validatedTrumps       = _validatedTrumps;
+      excludeNoise          = _excludeNoise;
       predictionUpdateQueue = _predictionUpdateQueue;
       featureVectorQueue    = _featureVectorQueue;
       dbServer              = _dbServer;
@@ -316,22 +321,33 @@ namespace PicesCommander
         }
       }
 
-      lock  (classCounts)
+      String  className = pred1.ClassName;
+      bool  noiseClass = ((className.Length >= 5)  &&
+                          (className.Substring (0, 5).Equals ("Noise", StringComparison.InvariantCultureIgnoreCase))
+                         );
+
+      if  (noiseClass)
       {
-        classCounts.AddOne (pred1.MLClass);
-        depthDistribution_1.Increment  (pred1.MLClass, (int)fv.Depth);
-        if  (downCast)
+      }
+      else
+      {
+        lock  (classCounts)
         {
-          depthDistribution_1Up.Increment  (pred1.MLClass, (int)fv.Depth);
-          sizeDistributionDown.Increment   (pred1.MLClass, fv.AreaMMSquare);
+          classCounts.AddOne (pred1.MLClass);
+          depthDistribution_1.Increment  (pred1.MLClass, (int)fv.Depth);
+          if  (downCast)
+          {
+            depthDistribution_1Up.Increment  (pred1.MLClass, (int)fv.Depth);
+            sizeDistributionDown.Increment   (pred1.MLClass, fv.AreaMMSquare);
+          }
+          else
+          {
+            depthDistribution_1Down.Increment (pred1.MLClass, (int)fv.Depth);
+            sizeDistributionUp.Increment      (pred1.MLClass, fv.AreaMMSquare);
+          }
+          depthDistribution_10.Increment (pred1.MLClass, (int)fv.Depth);
+          numImagesClassified++;
         }
-        else
-        {
-          depthDistribution_1Down.Increment (pred1.MLClass, (int)fv.Depth);
-          sizeDistributionUp.Increment      (pred1.MLClass, fv.AreaMMSquare);
-        }
-        depthDistribution_10.Increment (pred1.MLClass, (int)fv.Depth);
-        numImagesClassified++;
       }
     }  /* ProcessOneFeatureVector */
 

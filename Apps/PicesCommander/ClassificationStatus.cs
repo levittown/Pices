@@ -331,6 +331,9 @@ namespace PicesCommander
       if  (validatedTrumps)
         cmdLine += " -ValidatedTrumps";
 
+      if  (ExcludeNoise.Checked)
+        cmdLine += " -ExcludeNoise";
+
       cmdLine += (" -ReClassify " + (reClassify ? "Yes" : "No"));
 
       if  ((depthMin > 0)  ||  (depthMax > 0))
@@ -619,6 +622,7 @@ namespace PicesCommander
                                                   classifier,
                                                   reClassify, 
                                                   validatedTrumps, 
+                                                  ExcludeNoise.Checked,
                                                   predictionUpdateQueue, 
                                                   featureVectorQueue,
                                                   midPoint,
@@ -632,7 +636,8 @@ namespace PicesCommander
                                                   x, 
                                                   (classifier == null) ? "" : classifier.ModelName,
                                                   reClassify, 
-                                                  validatedTrumps, 
+                                                  validatedTrumps,
+                                                  ExcludeNoise.Checked,
                                                   predictionUpdateQueue, 
                                                   featureVectorQueue,
                                                   midPoint,
@@ -1103,8 +1108,9 @@ namespace PicesCommander
 
       o.WriteLine ();
 
-      o.WriteLine ("Re-Classify"      + "\t" + (reClassify      ? "Yes" : "No"));
-      o.WriteLine ("Validated Trumps" + "\t" + (validatedTrumps ? "Yes" : "No"));
+      o.WriteLine ("Re-Classify"      + "\t" + (reClassify           ? "Yes" : "No"));
+      o.WriteLine ("Validated Trumps" + "\t" + (validatedTrumps      ? "Yes" : "No"));
+      o.WriteLine ("Exclude Noise"    + "\t" + (ExcludeNoise.Checked ? "Yes" : "No"));
 
       if  (imageGroup != null)
         o.WriteLine ("Group Name" + "\t" + imageGroup.Name);
