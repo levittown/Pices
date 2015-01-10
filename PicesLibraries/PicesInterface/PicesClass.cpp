@@ -162,6 +162,16 @@ namespace  PicesInterface
 
 
 
+  bool  PicesClass::NoiseClass::get ()
+  {
+    if  (this->Name->Length < 5)
+      return false;
+
+    return  this->Name->Substring (0, 5)->Equals ("Noise", StringComparison::InvariantCultureIgnoreCase);
+  }
+
+
+
   uint16  PicesClass::NumHierarchialLevels::get ()
   {
     if  (unmanagedMLClass)

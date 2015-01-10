@@ -430,7 +430,7 @@ namespace PicesCommander
                                        List<uint>                    scanLinesPerMeterDepth,
                                        List<InstrumentStatsByDepth>  volumePerMeterDepth,
                                        bool                          printDensity,            /**< Indicates to print density rather than counts. */
-                                       PicesClassList                summarizeClasses         /**< List of classes that we need to pront summary columns for. */
+                                       PicesClassList                summarizeClasses         /**< List of classes that we need to print summary columns for. */
                                       )  
 
     {

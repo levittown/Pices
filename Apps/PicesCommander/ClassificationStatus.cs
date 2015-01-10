@@ -1057,12 +1057,15 @@ namespace PicesCommander
         PicesClassList mandatoryClasses = allClasses.ExtractMandatoryClasses ();
         foreach  (PicesClass  pc in mandatoryClasses)
         {
-          sizeDistributionDown.InitiateClass (pc);
-          sizeDistributionUp.InitiateClass (pc);
-          depthDistribution_1.InitiateClass (pc);
-          depthDistribution_1Down.InitiateClass (pc);
-          depthDistribution_1Up.InitiateClass (pc);
-          depthDistribution_10.InitiateClass (pc);
+          if  ((!ExcludeNoise.Checked)  ||  (!pc.NoiseClass))
+          {
+            sizeDistributionDown.InitiateClass (pc);
+            sizeDistributionUp.InitiateClass (pc);
+            depthDistribution_1.InitiateClass (pc);
+            depthDistribution_1Down.InitiateClass (pc);
+            depthDistribution_1Up.InitiateClass (pc);
+            depthDistribution_10.InitiateClass (pc);
+          }
         }
       }
 

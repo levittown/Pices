@@ -196,7 +196,7 @@ namespace PicesCommander
     float[]  sizeBucketEnd    = null; /**<  the end of the size range for the respective bucket.   */
     int[]    sizeBuckets      = null;
     int      bucketCount      = 0;
-    ClassTotals2List  totals      = null;
+    ClassTotals2List  totals  = null;
 
 
 
@@ -405,7 +405,7 @@ namespace PicesCommander
 
 
     /// <summary>
-    /// Method used to giurantee that the specified class is included; even if none occur.
+    /// Method used to gurantee that the specified class is included; even if none occur.
     /// </summary>
     /// <param name="mlClass">Class to add </param>
     public void   InitiateClass (PicesClass  mlClass)

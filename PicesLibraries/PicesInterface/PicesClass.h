@@ -54,6 +54,7 @@ namespace PicesInterface
     property  bool                Mandatory            {bool         get () {return mandatory;}     void set (bool    _mandatory);}
     property  String^             Name                 {String^      get () {return name;}}
     property  String^             NameUpper            {String^      get () {return nameUpper;}}
+    property  bool                NoiseClass           {bool         get ();}
     property  uint16              NumHierarchialLevels {uint16       get ();}
     property  PicesClass^         Parent               {PicesClass^  get () {return parent;}        void set (PicesClass^ _parent);}
     property  String^             ParentName           {String^      get ();}
