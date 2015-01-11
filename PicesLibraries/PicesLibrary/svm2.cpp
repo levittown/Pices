@@ -1082,9 +1082,9 @@ double  SVM289_MFS::Kernel::dot (const FeatureVector&  px,
 
 
 double  SVM289_MFS::Kernel::DotStatic (const FeatureVector&   px, 
-                                   const FeatureVector&   py,
-                                   const FeatureNumList&  selFeatures
-                                  ) 
+                                       const FeatureVector&   py,
+                                       const FeatureNumList&  selFeatures
+                                      ) 
 {
   int32  numFeatures = selFeatures.NumSelFeatures ();
 
