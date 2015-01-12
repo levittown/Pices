@@ -33,9 +33,26 @@ namespace  PicesInterface
 {
 
 
-  PicesImageSizeDistributionRow::PicesImageSizeDistributionRow (ImageSizeDistributionRowPtr  _imageSizeDistributionRow)
+  PicesImageSizeDistributionRow::PicesImageSizeDistributionRow (ImageSizeDistributionRowPtr  _imageSizeDistributionRow,
+                                                                bool                         _willOwn
+                                                               )
   {
     imageSizeDistributionRow = _imageSizeDistributionRow;
+    owner = _willOwn;
+  }
+
+
+  PicesImageSizeDistributionRow::~PicesImageSizeDistributionRow ()
+  {
+    this->~PicesImageSizeDistributionRow ();
+  }
+
+
+  PicesImageSizeDistributionRow::!PicesImageSizeDistributionRow ()
+  {
+    if  (owner)
+      delete  imageSizeDistributionRow;
+    imageSizeDistributionRow = NULL;
   }
 
   
@@ -44,6 +61,9 @@ namespace  PicesInterface
     const VectorUint32&  dist = imageSizeDistributionRow->Distribution ();
 
     array<uint>^  result = gcnew array<uint> (dist.size ());
+
+    for  (uint x = 0;  x < dist.size ();  ++x)
+      result[x] = dist[x];
     return  result;
   }
 
@@ -67,6 +87,46 @@ namespace  PicesInterface
     delete  imageSizeDistribution;
     imageSizeDistribution = NULL;
   }
+
+
+
+  array<float>^  PicesImageSizeDistribution::SizeStartValues ()
+  {
+    const VectorFloat&  startValues = imageSizeDistribution->SizeStartValues ();
+    array<float>^  a = gcnew array<float> (startValues.size ());
+    for  (uint x = 0;  x <  startValues.size ();  ++x)
+      a[x] = startValues[x];
+
+    return a;
+  }
+
+
+  array<float>^  PicesImageSizeDistribution::SizeEndValues   ()
+  {
+    const VectorFloat&  endValues = imageSizeDistribution->SizeEndValues ();
+    array<float>^  a = gcnew array<float> (endValues.size ());
+    for  (uint x = 0;  x <  endValues.size ();  ++x)
+      a[x] = endValues[x];
+
+    return a;
+  }
+
+
+
+  void  PicesImageSizeDistribution::AddIn (PicesImageSizeDistribution^  right,
+                                           PicesRunLog^                 log
+                                          )
+  {
+    imageSizeDistribution->AddIn (*right->UnmanagedClass (), log->Log ());
+  }  /* AddIn */
+
+
+
+  PicesImageSizeDistributionRow^  PicesImageSizeDistribution::AllDepths ()
+  {
+    return gcnew PicesImageSizeDistributionRow (new ImageSizeDistributionRow (imageSizeDistribution->AllDepths ()), true);
+  }  /* AllDepths */
+
 
 
 }  /* PicesInterface */

@@ -52,6 +52,9 @@ namespace PicesCommander
     private  bool             includeSubClasses = false;
     private  bool             weightByVolume    = false;
 
+    private  PicesImageSizeDistribution  downCast = null;
+    private  PicesImageSizeDistribution  upCast   = null;
+
     private  PicesGoalKeeper  goalie = new PicesGoalKeeper ("ChartSizeDistribution");
 
     private  bool  buildPlotDataRunning = false;
@@ -70,16 +73,12 @@ namespace PicesCommander
     private  bool    formIsMaximized = false;
 
 
-
-
-    
     private  float[]  depthVolumeProfile = null;
 
 
     public ChartSizeDistribution (String                   _cruise,
                                   String                   _station,
                                   String                   _deployment,
-                                  PicesDataBaseImageGroup  _group,
                                   PicesClass               _classToPlot,
                                   int                      _sizeMin,
                                   int                      _sizeMax,
@@ -237,7 +236,8 @@ namespace PicesCommander
       o.WriteLine ("InitialSize"        + "\t" + InitialSizeField.Value.ToString ("###0.000"));
       o.WriteLine ("MaxSize"            + "\t" + MaxSizeField.Value);
       o.WriteLine ("GrowthRate"         + "\t" + GrowthRateField.Value);
-      o.WriteLine ("SizeStatistic"      + "\t" + SizeStatisticField.SelectedItem.ToString ());
+      if  (SizeStatisticField.SelectedItem != null)
+        o.WriteLine ("SizeStatistic"    + "\t" + SizeStatisticField.SelectedItem.ToString ());
       o.Close ();
       o = null;
     }
@@ -364,6 +364,9 @@ namespace PicesCommander
         Width  = Math.Max (savedWidth,  MinimumSize.Width);
       }
 
+      if  (SizeStatisticField.SelectedItem == null)
+        SizeStatisticField.SelectedItem = SizeStatisticField.Items[0];
+
       OnResizeEnd (new EventArgs ());
     }  /* LoadConfigurationFile */
 
@@ -403,6 +406,51 @@ namespace PicesCommander
     }
 
 
+    private  void  SizeDistributionForAClass (PicesClass                      c,
+                                              bool                            includeChildren,
+                                              ref PicesImageSizeDistribution  downCastAcumulated,
+                                              ref PicesImageSizeDistribution  upCastAcumulated
+                                             )
+    {
+      statusMsgs.AddMsg ("Extracting for Class[" + c.Name + "]");
+      sbyte  ch = (sbyte)'2';
+      PicesImageSizeDistribution  classDownCast = null;
+      PicesImageSizeDistribution  classUpCast = null;
+      threadConn.ImagesSizeDistributionByDepth (this.cruise, this.station, this.deployment, c.Name,
+                                                1.0f,
+                                                ch,
+                                                (float)InitialSizeField.Value,
+                                                (float)GrowthRateField.Value,
+                                                (float)MaxSizeField.Value,
+                                                ref classDownCast,
+                                                ref classUpCast
+                                               );
+      if  (classDownCast != null)
+      {
+        if  (downCastAcumulated == null)
+          downCastAcumulated = classDownCast;
+        else
+          downCastAcumulated.AddIn (classDownCast, runLog);
+      }
+
+      if  (classUpCast != null)
+      {
+        if  (upCastAcumulated == null)
+          upCastAcumulated = classUpCast;
+        else
+          upCastAcumulated.AddIn (classUpCast, runLog);
+      }
+
+      if  (includeChildren)
+      {
+        foreach  (PicesClass  pc in  c.Children)
+        {
+          if  (cancelRequested)
+            break;
+          SizeDistributionForAClass (pc, includeChildren, ref downCastAcumulated, ref upCastAcumulated);
+        }
+      }
+    }  /* SizeDistributionForAClass */
     
   
     
@@ -427,22 +475,20 @@ namespace PicesCommander
       depthVolumeProfile = GetDepthVolumeProfile ();
 
       sbyte  ch = (sbyte)'2';
-      PicesImageSizeDistribution  downCast = null;
-      PicesImageSizeDistribution  upCast = null;
-      threadConn.ImagesSizeDistributionByDepth (this.cruise, this.station, this.deployment, ClassToPlot.Text,
-                                                1.0f,
-                                                ch,
-                                                (float)InitialSizeField.Value,
-                                                (float)GrowthRateField.Value,
-                                                (float)MaxSizeField.Value,
-                                                ref downCast,
-                                                ref upCast
-                                               );
+      downCast = null;
+      upCast = null;
+
+      goalie.StartBlock ();
+      
+      SizeDistributionForAClass (PicesClassList.GetUniqueClass (ClassToPlot.Text, ""), IncludeSubClasses.Checked, ref downCast, ref upCast);
+
       threadConn.Close ();
       threadConn = null;
       GC.Collect ();
       PicesDataBase.ThreadEnd ();
 
+      goalie.EndBlock ();
+      
       if  (cancelRequested)
         statusMsgs.AddMsg ("Plotting of data CANCELLED!!!");
       else
@@ -487,15 +533,39 @@ namespace PicesCommander
 
 
 
+    private  String  SubInSuperScriptExponent (String s)
+    {
+      int x = s.IndexOf("-3");
+      while  (x >= 0)
+      {
+        s = s.Substring (0, x) + "\u00B3" + s.Substring (x + 2);
+        x = s.IndexOf("-3");
+      }
+
+      x = s.IndexOf("-2");
+      while  (x >= 0)
+      {
+        s = s.Substring (0, x) + "\u00B2" + s.Substring (x + 2);
+        x = s.IndexOf("-2");
+      }
+
+      return s;
+    }  /* SuperScriptExponent */
+
+
 
     private  void  UpdateChartAreas ()
     {
+      if  (downCast == null)
+        return;
+
       goalie.StartBlock ();
 
-      /*
+      PicesImageSizeDistributionRow  totals = downCast.AllDepths ();
 
-      Font titleFont = new Font (FontFamily.GenericSansSerif, 12);
-      
+      Font titleFont     = new Font (FontFamily.GenericSansSerif, 12);
+      Font axisLabelFont = new Font (FontFamily.GenericSansSerif, 12);
+     
       String  t1 = "Cruise: " + cruise + "  Station: " + station;
       if  (String.IsNullOrEmpty (deployment))
         t1 += "  Deployment: " + deployment;
@@ -510,95 +580,41 @@ namespace PicesCommander
 
       ProfileChart.Series.Clear ();
 
-
-      
-      
-      
-      if  (series.Count < 1)
-      {
-        goalie.EndBlock ();
-        return;
-      }
-
-      float   initialSize  = 0.0f;
-      float   maxSize      = 100.0f;
-      float   growthRate   = 10.0f;
-      String  depthFormatStr = "##,##0";
-
-      initialSize = (float)InitialSizeField.Value;
-      maxSize     = (float)MaxSizeField.Value;
-      growthRate  = (float)GrowthRateField.Value;
-
-
-
       ChartArea ca = ProfileChart.ChartAreas[0];
-      ca.AxisY.IsReversed = true;
-      ca.AxisY.Minimum = 0;
-      ca.AxisY.Title = "Depth(m)";
-      //ca.AxisY.Title = "Depth(" + initialSize + " - " + maxSize + ")";
 
-      ca.AxisX.Minimum = 0;
-      ca.AxisX.Title = "Count/m-3";
-      ca.AxisX2.MajorGrid.Enabled = false;
-
-      ca.AxisY.IsReversed = true;
-      ca.AxisY.Maximum = maxSize;
-      ca.AxisY.Minimum = initialSize;
-      ca.AxisY.Interval = growthRate;
-      ca.AxisY.LabelStyle.Format = depthFormatStr;
-
-      Decimal  distFromFirstInterval = (Decimal)initialSize % (Decimal)growthRate;
-      double  intervalOffSet = (double)((Decimal)growthRate - distFromFirstInterval);
-      if  (intervalOffSet == growthRate)
-        intervalOffSet = 0;
-
-      ca.AxisY.IntervalOffset = intervalOffSet;
-      ca.AxisY.MajorTickMark.Interval = growthRate;
-      ca.AxisY.MajorTickMark.IntervalOffset = intervalOffSet;
-
-      float   intervalMinorSize = growthRate / 2.0f;
-      Decimal  distFromFirstIntervalMinor = (Decimal)initialSize % (Decimal)intervalMinorSize;
-      double  intervalMinorOffSet = (double)((Decimal)intervalMinorSize - distFromFirstIntervalMinor);
-      if  (intervalMinorOffSet == intervalMinorSize)
-        intervalMinorOffSet = 0.0;
-
-      ca.AxisY.MinorTickMark.Interval = intervalMinorSize;
-      ca.AxisY.MinorTickMark.IntervalOffset = intervalMinorOffSet;
-
-      ProfileChart.Series.Clear ();
-
-      String  uintOfMeasure = "Count";
-      if  (weightByVolume)
-        uintOfMeasure = "Count/m-3";
-
-      Series s = new Series (dstp.legend);
+      Series s = new Series ("Size Distribution");
       s.ChartArea = "ChartArea1";
-      s.ChartType =  SeriesChartType.Column;
-      ca.AxisX.Title = uintOfMeasure;
-      ca.AxisX.LabelStyle.Format =  "###,##0";
-      ca.AxisX.Minimum = 0;
+      s.ChartType =  SeriesChartType.Line;
+
+      uint[]   distribution = totals.Distribution ();
+      float[]  startValues  = downCast.SizeStartValues ();
+      float[]  endValues    = downCast.SizeEndValues   ();
+      for  (int x = 0;  x < distribution.Length;  ++x)
+      {
+        float  midPoint = (startValues[x] + endValues[x]) / 2.0f;
+        DataPoint dp = new DataPoint (midPoint, 1 + distribution[x]);
+        s.Points.Add (dp);
+      }
       s.XAxisType = AxisType.Primary;
+      s.YAxisType = AxisType.Primary;
+
+      if  (WeightByVolume.Checked)
+        ca.AxisY.Title = SubInSuperScriptExponent ("Density (Particles/m-3)");
+      else
+        ca.AxisY.Title = SubInSuperScriptExponent ("Count");
+
+      ca.AxisX.Title = SubInSuperScriptExponent ("Size(m-3)");
+      ca.AxisX.LabelStyle.Format =  "###,##0";
+      
+      ca.AxisY.IsLogarithmic = true;
+      ca.AxisX.IsLogarithmic = true;
  
       s.BorderWidth = 2;
-
-      for  (int depthIDX = 0;  depthIDX < dstp.countsByDepth.Length;  ++depthIDX)
-      {
-        float  yValue = depthIDX * depthIncrement;
-        if  ((yValue >= initialSize)  &&  (yValue <= maxSize))
-        {
-          if  (weightByVolume)
-            s.Points.Add (new DataPoint (dstp.density[depthIDX], yValue));
-          else
-            s.Points.Add (new DataPoint (dstp.countsByDepth[depthIDX], yValue));
-        }
-      }
-
       ProfileChart.Series.Add (s);
 
       ProfileChart.ChartAreas[0].RecalculateAxesScale ();
 
       goalie.EndBlock ();
-       */
     }  /* UpdateChartAreas */
 
 
@@ -890,8 +906,7 @@ namespace PicesCommander
     }  /* WriteTabDelToStream */
 
 
-
-    private void ChartAbundanceByDeployment_FormClosing (object sender, FormClosingEventArgs e)
+    private void ChartSizeDistribution_FormClosing (object sender, FormClosingEventArgs e)
     {
       if  (buildPlotDataRunning)
       {
@@ -953,5 +968,6 @@ namespace PicesCommander
           ClassToPlot.Text = pc.Name;
       }
     }
+
   }
 }

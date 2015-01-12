@@ -142,6 +142,7 @@ namespace PicesCommander
       this.WeightByVolume = new System.Windows.Forms.CheckBox ();
       this.PlotType = new ChartControls.RadioButtonList ();
       this.DistributionChart = new System.Windows.Forms.DataVisualization.Charting.Chart ();
+      this.sizeDistributionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem ();
       this.SelectionCriteriaPanel.SuspendLayout ();
       this.menuStrip1.SuspendLayout ();
       this.NavigationPanel.SuspendLayout ();
@@ -564,7 +565,8 @@ namespace PicesCommander
             this.abundanceByDeploymentToolStripMenuItem,
             this.abundancePredictedValidatedToolStripMenuItem,
             this.horizontalProfileToolStripMenuItem,
-            this.gPSChartsToolStripMenuItem});
+            this.gPSChartsToolStripMenuItem,
+            this.sizeDistributionToolStripMenuItem});
       this.chartsToolStripMenuItem.Name = "chartsToolStripMenuItem";
       this.chartsToolStripMenuItem.Size = new System.Drawing.Size (53, 20);
       this.chartsToolStripMenuItem.Text = "Charts";
@@ -1212,6 +1214,13 @@ namespace PicesCommander
       this.DistributionChart.TabIndex = 0;
       this.DistributionChart.Text = "Distribution";
       // 
+      // sizeDistributionToolStripMenuItem
+      // 
+      this.sizeDistributionToolStripMenuItem.Name = "sizeDistributionToolStripMenuItem";
+      this.sizeDistributionToolStripMenuItem.Size = new System.Drawing.Size (313, 22);
+      this.sizeDistributionToolStripMenuItem.Text = "Size Distribution";
+      this.sizeDistributionToolStripMenuItem.Click += new System.EventHandler (this.sizeDistributionToolStripMenuItem_Click);
+      // 
       // PicesCommander
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF (6F, 13F);
@@ -1373,6 +1382,7 @@ namespace PicesCommander
     private System.Windows.Forms.Button HorizontalProfileButon;
     private System.Windows.Forms.Button AbundancePredValidatedButton;
     private System.Windows.Forms.ToolStripMenuItem abundancePredictedValidatedToolStripMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem sizeDistributionToolStripMenuItem;
   }
 }
 

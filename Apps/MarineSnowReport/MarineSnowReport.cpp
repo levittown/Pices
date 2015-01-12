@@ -59,6 +59,16 @@ using namespace  MLL;
 
 
 
+
+//Aug 2010,   "WB1008"
+//Sept 2011,  "WB0911"
+//Aug 2012,   "WB0812"
+//Aug 2013,   "WB0813"
+//Aug 2014,   "WB0814"
+
+
+
+
 KKStr  marineSnowReportDirectory = "D:\\Users\\kkramer\\DropBox\\Dropbox\\USF_OilSpillGroup\\MarineSnow_2014-12-10";
 
 
@@ -142,7 +152,10 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
 
 
   // 1)Determines Midpoint of deploymet from Instruments table.
-  KKStr  sqlStr = "Call ImagesSizeDataByDepthSipper11(" + deployment->CruiseName ().QuotedStr () + "," + deployment->StationName ().QuotedStr () + "," + deployment->DeploymentNum ().QuotedStr () + ",1, '2', 0.005, 1.2, 20.0)";
+  KKStr  sqlStr = "Call ImagesSizeDataByDepthSipper11(" + deployment->CruiseName ().QuotedStr () + "," + 
+                                                          deployment->StationName ().QuotedStr () + "," + 
+                                                          deployment->DeploymentNum ().QuotedStr () + 
+                                                          ",1, '2', 0.005, 1.2, 40.0)";
 
   VectorKKStr  columnNames;
   KKStrMatrixPtr results = db.QueryStatementReturnAllColumns (sqlStr.Str (), sqlStr.Len (), columnNames);
@@ -178,7 +191,7 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
       sizeThreshold = columnName.SubStrPart (1).ToFloat ();
     }
 
-    else if  (x <= (numCountCols - 1))
+    else if  (x < (numCountCols - 1))
     {
       int32 idx = columnName.LocateCharacter ('_');
       if  (idx > 0)
@@ -393,6 +406,23 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
 }  /* MarineSnowReportDeployment */
 
 
+class  ComparereDeploymentSummaryByStation
+{
+public:
+  bool  operator ()  (DeploymentSummary*  left,
+                      DeploymentSummary*  right
+                     )
+  {
+    if  (left->stationName < right->stationName)
+      return true;
+    else if  (left->stationName > right->stationName)
+      return false;
+    else
+      return  (left->cruiseName < right->cruiseName);
+
+  }
+
+};
 
 
 void  PrintSummaryReports (DataBasePtr                  db,
@@ -400,6 +430,10 @@ void  PrintSummaryReports (DataBasePtr                  db,
                           )
 {
   uint32  x = 0;
+
+  ComparereDeploymentSummaryByStation  comparer;
+
+  sort (summaries.begin (), summaries.end (), comparer);
 
   KKStr  sumFileName = osAddSlash (marineSnowReportDirectory) + "Summary.txt";
   ofstream  r (sumFileName.Str ());
@@ -447,8 +481,6 @@ void  PrintSummaryReports (DataBasePtr                  db,
   }
   r << endl << endl << endl << endl;
 
-
-
   r << "Summary  Integrated Abundance" << endl
     << endl;
 
@@ -469,13 +501,11 @@ void  PrintSummaryReports (DataBasePtr                  db,
   r << endl << endl << endl << endl;
 
 
-
-
   r << "Summary  Integrated log10(Abundance)" << endl
     << endl;
 
   r << ""       << "\t" << ""        << "\t" << ""           << "\t" << "VolumeSampled" << h1 << endl;
-  r << "Cruise" << "\t" << "Station" << "\t" << "Deployment" << "\t" << "m^3"           << h1 << endl;
+  r << "Cruise" << "\t" << "Station" << "\t" << "Deployment" << "\t" << "m^3"           << h2 << endl;
   for  (idx = summaries.begin ();  idx != summaries.end ();  ++idx)
   {
     DeploymentSummary*  ds = *idx;
@@ -523,7 +553,22 @@ void  MarineSnowReport ()
          (deployment->CruiseName ().SubStrPart (0, 2).EqualIgnoreCase ("HRS"))
         )
      continue;
-         
+
+
+    if  ((deployment->CruiseName ().EqualIgnoreCase ("WB1008"))  ||
+         (deployment->CruiseName ().EqualIgnoreCase ("WB0911"))  ||
+         (deployment->CruiseName ().EqualIgnoreCase ("WB0812"))  ||
+         (deployment->CruiseName ().EqualIgnoreCase ("WB0813"))  ||
+         (deployment->CruiseName ().EqualIgnoreCase ("WB0814"))
+        )
+    {
+      runLog.Level (10) << "MarineSnowReport    Found Cruise: " << deployment->CruiseName ()  << endl;
+    }
+    else
+    {
+      continue;
+    }
+
     DeploymentSummary*  sumary = MarineSnowReportDeployment (*idx, *db);
     if  (sumary)
       summaries.push_back (sumary);

@@ -15,8 +15,17 @@ namespace PicesInterface
   public  ref class  PicesImageSizeDistributionRow
   {
   public:
-    PicesImageSizeDistributionRow (ImageSizeDistributionRowPtr  _imageSizeDistributionRow);
+    PicesImageSizeDistributionRow (ImageSizeDistributionRowPtr  _imageSizeDistributionRow,
+                                   bool                         _willOwn
+                                  );
 
+  private:
+    ~PicesImageSizeDistributionRow ();
+
+  protected:
+    !PicesImageSizeDistributionRow ();
+
+  public:
     property  float  Depth       {float  get ()  {return imageSizeDistributionRow->Depth       ();}}
     property  uint   ImageCount  {uint   get ()  {return imageSizeDistributionRow->ImageCount  ();}}
     property  uint   TotalPixels {uint   get ()  {return imageSizeDistributionRow->TotalPixels ();}}
@@ -25,6 +34,7 @@ namespace PicesInterface
 
   private:
     MLL::ImageSizeDistributionRowPtr  imageSizeDistributionRow;
+    bool                              owner;
   };  /* PicesImageSizeDistributionRow */
 
 
@@ -49,6 +59,15 @@ namespace PicesInterface
     property  int     NumDepthBins    {int     get ()  {return  imageSizeDistribution->NumDepthBins   ();}}
 
     MLL::ImageSizeDistributionPtr  UnmanagedClass ()  {return  imageSizeDistribution;}
+
+    array<float>^  SizeStartValues ();
+    array<float>^  SizeEndValues   ();
+
+    void  AddIn (PicesImageSizeDistribution^  right,
+                 PicesRunLog^                 log
+                );
+
+    PicesImageSizeDistributionRow^   AllDepths ();
 
   private:
     MLL::ImageSizeDistributionPtr  imageSizeDistribution;

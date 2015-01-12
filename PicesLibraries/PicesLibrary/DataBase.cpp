@@ -4333,7 +4333,7 @@ void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruise
   KKStr  statisticStr;
   statisticStr.Append (statistic);
 
-  sqlStr << "call ImagesSizeSizeHistogramByDepth(" 
+  sqlStr << "call ImagesSizeDistributionByDepth(" 
          <<               cruiseName.QuotedStr ()
          <<       ","  << stationName.QuotedStr ()
          <<       ","  << deploymentNum.QuotedStr ()
@@ -4353,7 +4353,6 @@ void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruise
                                                            );
   if  (!results)
     return;
-
 
   int32  downCastIdx        = -1;
   int32  bucketIdx          = -1;
@@ -4399,24 +4398,26 @@ void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruise
     else if  (colName[0] == '<')
     {
       firstSizeBucketIdx = columnIdx;
-      startValues.push_back (0.0f);
       lastEndValue = colName.SubStrPart (1).ToFloat ();
-      endValues.push_back (lastEndValue);
+      startValues.push_back (0.0f);
     }
 
-    else if  (colName.SubStrPart (0, 5) == "Size_")
+    else if  (colName.SubStrPart (0, 4) == "Size_")
     {
-      startValues.push_back (lastEndValue);
       lastEndValue = colName.SubStrPart (5).ToFloat ();
       endValues.push_back (lastEndValue);
+      startValues.push_back (lastEndValue);
     }
 
-    else if  (colName.SubStrPart (0, 2) == ">=")
+    else if  (colName.SubStrPart (0, 1) == ">=")
     {
-      startValues.push_back (colName.SubStrPart (2).ToFloat ());
-      endValues.push_back (9999999.99f);
+      lastEndValue = colName.SubStrPart (2).ToFloat ();
+      endValues.push_back (lastEndValue);
+      startValues.push_back (lastEndValue);
     }
+    ++columnIdx;
   }
+  endValues.push_back (9999999.99f);
 
   uint32  sizeBucketCount = startValues.size ();
 

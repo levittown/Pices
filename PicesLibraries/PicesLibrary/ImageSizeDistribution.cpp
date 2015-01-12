@@ -32,6 +32,18 @@ ImageSizeDistributionRow::ImageSizeDistributionRow (float     _depth,
 
 
 
+ImageSizeDistributionRow::ImageSizeDistributionRow (const ImageSizeDistributionRow&  row):
+   depth        (row.depth),
+   distribution (row.distribution),
+   imageCount   (row.imageCount),
+   totalPixels  (row.totalPixels)
+{
+  
+}
+
+
+
+
 void  ImageSizeDistributionRow::AddImageCountPixelCount (kkuint32  _imageCount,
                                                          kkuint32  _pixelCount
                                                         )
@@ -170,7 +182,7 @@ void  ImageSizeDistribution::AddIn (const ImageSizeDistribution&  right,
     throw KKException (errMsg);
   }
 
-  if  (this->depthBinSize != right.numSizeBuckets)
+  if  (this->numSizeBuckets != right.numSizeBuckets)
   {
     KKStr  errMsg (128);
     errMsg << "ImageSizeDistribution::AddIn   ***ERROR***  SizeBuckets Difference   left[" << numSizeBuckets << "]  right[" << right.numSizeBuckets << "].";

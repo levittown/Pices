@@ -133,7 +133,7 @@ NormalizationParms::NormalizationParms (FileDescPtr  _fileDesc,
                  << fileName << "]." 
                  << endl;
 
-  attriuteTypes            = fileDesc->CreateAttributeTypeTable ();
+  attriuteTypes  = fileDesc->CreateAttributeTypeTable ();
 
   KKStr  field;
 

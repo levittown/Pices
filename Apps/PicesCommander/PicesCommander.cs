@@ -3049,12 +3049,12 @@ namespace PicesCommander
 
 
 
-    private void  AbundancePredValidatedButton_Click (object sender, EventArgs e)
+    private  bool  VerifyDeploymentSelected (String  chartDesc)
     {
       if  (String.IsNullOrEmpty (Cruise.Text)  ||  String.IsNullOrEmpty (Station.Text))
       {
-        MessageBox.Show (this, "A single deployment must be specified!", "Chart Abundance (Pred - Validated)", MessageBoxButtons.OK);
-        return;
+        MessageBox.Show (this, "A single deployment must be specified!", chartDesc, MessageBoxButtons.OK);
+        return  false;
       }
 
       if  (String.IsNullOrEmpty (Deployment.Text))
@@ -3062,11 +3062,19 @@ namespace PicesCommander
         PicesSipperDeploymentList deployments = dbConn.SipperDeploymentLoad (Cruise.Text, Station.Text);
         if  ((deployments == null)  ||  (deployments.Count != 1))
         {
-          MessageBox.Show (this, "A single deployment must be specified!", "Chart Abundance (Pred - Validated)", MessageBoxButtons.OK);
-          return;
+          MessageBox.Show (this, "A single deployment must be specified!", chartDesc, MessageBoxButtons.OK);
+          return  false;
         }
       }
+      return  true;
+    }  /* VerifyDeploymentSelected */
 
+
+
+    private void  AbundancePredValidatedButton_Click (object sender, EventArgs e)
+    {
+      if  (!VerifyDeploymentSelected ("Chart Abundance (Pred - Validated)"))
+        return;
       ChartAbundancePredictedAndValidated abdc 
         = new ChartAbundancePredictedAndValidated (Cruise.Text, 
                                                    Station.Text, 
@@ -3083,5 +3091,24 @@ namespace PicesCommander
       abdc.ShowDialog (this);    
     }
 
+
+    private void sizeDistributionToolStripMenuItem_Click (object sender, EventArgs e)
+    {
+      if  (!VerifyDeploymentSelected ("Size Distribution Chart"))
+        return;
+
+      ChartSizeDistribution  csd = new ChartSizeDistribution (Cruise.Text, 
+                                                              Station.Text, 
+                                                              Deployment.Text,
+                                                              thumbnailClass,
+                                                              sizeMin,    sizeMax,
+                                                              probMin,    probMax,
+                                                              depthMin,   depthMax,
+                                                              allClasses, 
+                                                              activeClasses, 
+                                                              rootDir
+                                                             );
+      csd.ShowDialog (this);
+    }
   }
 }

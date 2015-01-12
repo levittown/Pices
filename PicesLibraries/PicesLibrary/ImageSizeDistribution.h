@@ -15,6 +15,8 @@ namespace MLL
   class  ImageSizeDistributionRow
   {
   public:
+    ImageSizeDistributionRow (const ImageSizeDistributionRow&  row);
+
     ImageSizeDistributionRow (float     _depth,
                               kkuint32  _numSizeBuckets,
                               kkuint32  _imageCount,
@@ -74,7 +76,7 @@ namespace MLL
     kkuint32  NumDepthBins   () const  {return  depthDistributions.size ();}
 
     const VectorFloat&  SizeStartValues ()  const  {return sizeStartValues;}
-    const VectorFloat&  SizeEndValues   ()  const  {return sizeStartValues;}
+    const VectorFloat&  SizeEndValues   ()  const  {return sizeEndValues;}
 
 
 
