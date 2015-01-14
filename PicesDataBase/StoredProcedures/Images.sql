@@ -2224,7 +2224,7 @@ begin
   declare _cropLeft           int    default 0;
   declare _cropRight          int    default 4094;
   declare _pixelsPerScanLine  int    default 4096;
-  declare _chamberWidth       float  default  0.098;
+  declare _chamberWidth       float  default  0.096;
   declare _pixelWidth         float  default  0.025263;  /* MiliMeters per Pixel */
   
 

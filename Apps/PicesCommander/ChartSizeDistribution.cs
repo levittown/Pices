@@ -391,8 +391,13 @@ namespace PicesCommander
     }
 
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="cast">'U'=Up-Cast, 'D'=Down-Cast, 'B'-Combined Up/Down Cast</param>
+    /// <returns></returns>
 
-    private  float[]  GetDepthVolumeProfile  ()
+    private  float[]  GetDepthVolumeProfile  (char  cast)
     {
       String  msg = "Retrieving Depth-Volume profile Station[" + cruise + "]  Station[" + station + "]  Deployment[" + deployment + "].";
       msgQueue.AddMsg (msg);
@@ -589,9 +594,18 @@ namespace PicesCommander
       uint[]   distribution = totals.Distribution ();
       float[]  startValues  = downCast.SizeStartValues ();
       float[]  endValues    = downCast.SizeEndValues   ();
+
+      float  minX = float.MaxValue;
+      float  minY = float.MaxValue;
+      float  maxX = float.MinValue;
+      float  maxY = float.MinValue;
+
+
       for  (int x = 0;  x < distribution.Length;  ++x)
       {
         float  midPoint = (startValues[x] + endValues[x]) / 2.0f;
+        minX = Math.Min (minX, midPoint);
+        minY = Math.Min (minY, distribution[x]
         DataPoint dp = new DataPoint (midPoint, 1 + distribution[x]);
         s.Points.Add (dp);
       }
