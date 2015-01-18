@@ -477,7 +477,7 @@ namespace PicesCommander
 
       // series = new List<DataSeriesToPlot> ();
 
-      depthVolumeProfile = GetDepthVolumeProfile ();
+      depthVolumeProfile = GetDepthVolumeProfile ('D');
 
       sbyte  ch = (sbyte)'2';
       downCast = null;
@@ -559,6 +559,7 @@ namespace PicesCommander
 
 
 
+
     private  void  UpdateChartAreas ()
     {
       if  (downCast == null)
@@ -600,12 +601,13 @@ namespace PicesCommander
       float  maxX = float.MinValue;
       float  maxY = float.MinValue;
 
-
       for  (int x = 0;  x < distribution.Length;  ++x)
       {
         float  midPoint = (startValues[x] + endValues[x]) / 2.0f;
         minX = Math.Min (minX, midPoint);
-        minY = Math.Min (minY, distribution[x]
+        minY = Math.Min (minY, distribution[x]);
+        maxX = Math.Max (maxX, midPoint);
+        maxY = Math.Max (maxY, distribution[x]);
         DataPoint dp = new DataPoint (midPoint, 1 + distribution[x]);
         s.Points.Add (dp);
       }

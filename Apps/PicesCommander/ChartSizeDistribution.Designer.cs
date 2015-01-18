@@ -29,10 +29,10 @@
     private void InitializeComponent ()
     {
       this.components = new System.ComponentModel.Container ();
-      System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea ();
-      System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend ();
-      System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series ();
-      System.Windows.Forms.DataVisualization.Charting.Title title1 = new System.Windows.Forms.DataVisualization.Charting.Title ();
+      System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea ();
+      System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend ();
+      System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series ();
+      System.Windows.Forms.DataVisualization.Charting.Title title2 = new System.Windows.Forms.DataVisualization.Charting.Title ();
       this.PlotButton = new System.Windows.Forms.Button ();
       this.CancelPlotButton = new System.Windows.Forms.Button ();
       this.ProfileChart = new System.Windows.Forms.DataVisualization.Charting.Chart ();
@@ -62,6 +62,8 @@
       this.SizeStatisticField = new System.Windows.Forms.ComboBox ();
       this.SizeStatiticLabel = new System.Windows.Forms.Label ();
       this.StatusMsgsLabel = new System.Windows.Forms.Label ();
+      this.CastField = new System.Windows.Forms.ComboBox ();
+      this.CastLabel = new System.Windows.Forms.Label ();
       ((System.ComponentModel.ISupportInitialize)(this.ProfileChart)).BeginInit ();
       this.SelectionCriteriaPanel.SuspendLayout ();
       ((System.ComponentModel.ISupportInitialize)(this.GrowthRateField)).BeginInit ();
@@ -96,46 +98,46 @@
       // 
       this.ProfileChart.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
       this.ProfileChart.CausesValidation = false;
-      chartArea1.AlignmentOrientation = ((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations)((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Vertical | System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Horizontal)));
-      chartArea1.AlignWithChartArea = "ChartArea1";
-      chartArea1.AxisX.LabelAutoFitMaxFontSize = 12;
-      chartArea1.AxisX.LabelStyle.Format = "##0.000";
-      chartArea1.AxisX.MajorGrid.Enabled = false;
-      chartArea1.AxisX.Title = "Size mm^3";
-      chartArea1.AxisX2.LabelStyle.Format = "##0.00";
-      chartArea1.AxisX2.MajorGrid.Enabled = false;
-      chartArea1.AxisY.IsStartedFromZero = false;
-      chartArea1.AxisY.LabelAutoFitMaxFontSize = 12;
-      chartArea1.AxisY.LabelStyle.Format = "#0.000";
-      chartArea1.AxisY.MajorGrid.Enabled = false;
-      chartArea1.AxisY.MajorTickMark.Interval = 0;
-      chartArea1.AxisY.MajorTickMark.IntervalOffset = 0;
-      chartArea1.AxisY.MajorTickMark.IntervalOffsetType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
-      chartArea1.AxisY.MajorTickMark.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
-      chartArea1.AxisY.Title = "Log10 Denisty";
-      chartArea1.AxisY2.MajorGrid.Enabled = false;
-      chartArea1.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-      chartArea1.Name = "ChartArea1";
-      this.ProfileChart.ChartAreas.Add (chartArea1);
-      legend1.Alignment = System.Drawing.StringAlignment.Far;
-      legend1.DockedToChartArea = "ChartArea1";
-      legend1.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
-      legend1.IsDockedInsideChartArea = false;
-      legend1.Name = "Legend1";
-      this.ProfileChart.Legends.Add (legend1);
+      chartArea2.AlignmentOrientation = ((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations)((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Vertical | System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Horizontal)));
+      chartArea2.AlignWithChartArea = "ChartArea1";
+      chartArea2.AxisX.LabelAutoFitMaxFontSize = 12;
+      chartArea2.AxisX.LabelStyle.Format = "##0.000";
+      chartArea2.AxisX.MajorGrid.Enabled = false;
+      chartArea2.AxisX.Title = "Size mm^3";
+      chartArea2.AxisX2.LabelStyle.Format = "##0.00";
+      chartArea2.AxisX2.MajorGrid.Enabled = false;
+      chartArea2.AxisY.IsStartedFromZero = false;
+      chartArea2.AxisY.LabelAutoFitMaxFontSize = 12;
+      chartArea2.AxisY.LabelStyle.Format = "#0.000";
+      chartArea2.AxisY.MajorGrid.Enabled = false;
+      chartArea2.AxisY.MajorTickMark.Interval = 0;
+      chartArea2.AxisY.MajorTickMark.IntervalOffset = 0;
+      chartArea2.AxisY.MajorTickMark.IntervalOffsetType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
+      chartArea2.AxisY.MajorTickMark.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
+      chartArea2.AxisY.Title = "Log10 Denisty";
+      chartArea2.AxisY2.MajorGrid.Enabled = false;
+      chartArea2.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+      chartArea2.Name = "ChartArea1";
+      this.ProfileChart.ChartAreas.Add (chartArea2);
+      legend2.Alignment = System.Drawing.StringAlignment.Far;
+      legend2.DockedToChartArea = "ChartArea1";
+      legend2.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
+      legend2.IsDockedInsideChartArea = false;
+      legend2.Name = "Legend1";
+      this.ProfileChart.Legends.Add (legend2);
       this.ProfileChart.Location = new System.Drawing.Point (447, 12);
       this.ProfileChart.Name = "ProfileChart";
-      series1.ChartArea = "ChartArea1";
-      series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-      series1.Font = new System.Drawing.Font ("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      series1.Legend = "Legend1";
-      series1.Name = "Series1";
-      this.ProfileChart.Series.Add (series1);
+      series2.ChartArea = "ChartArea1";
+      series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+      series2.Font = new System.Drawing.Font ("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      series2.Legend = "Legend1";
+      series2.Name = "Series1";
+      this.ProfileChart.Series.Add (series2);
       this.ProfileChart.Size = new System.Drawing.Size (521, 562);
       this.ProfileChart.TabIndex = 30;
       this.ProfileChart.Text = "Abundance/Deployment";
-      title1.Name = "Title1";
-      this.ProfileChart.Titles.Add (title1);
+      title2.Name = "Title1";
+      this.ProfileChart.Titles.Add (title2);
       // 
       // timer1
       // 
@@ -201,7 +203,7 @@
       this.WeightByVolume.Checked = true;
       this.WeightByVolume.CheckState = System.Windows.Forms.CheckState.Checked;
       this.WeightByVolume.Font = new System.Drawing.Font ("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.WeightByVolume.Location = new System.Drawing.Point (181, 82);
+      this.WeightByVolume.Location = new System.Drawing.Point (172, 82);
       this.WeightByVolume.Name = "WeightByVolume";
       this.WeightByVolume.Size = new System.Drawing.Size (141, 21);
       this.WeightByVolume.TabIndex = 56;
@@ -373,7 +375,7 @@
             0});
       this.InitialSizeField.Name = "InitialSizeField";
       this.InitialSizeField.Size = new System.Drawing.Size (63, 20);
-      this.InitialSizeField.TabIndex = 58;
+      this.InitialSizeField.TabIndex = 60;
       this.InitialSizeField.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       this.InitialSizeField.Value = new decimal (new int[] {
             4,
@@ -384,6 +386,8 @@
       // panel1
       // 
       this.panel1.BackColor = System.Drawing.Color.Silver;
+      this.panel1.Controls.Add (this.CastLabel);
+      this.panel1.Controls.Add (this.CastField);
       this.panel1.Controls.Add (this.SizeStatisticField);
       this.panel1.Controls.Add (this.SizeStatiticLabel);
       this.panel1.Controls.Add (this.ClassToPlotLabel);
@@ -414,6 +418,7 @@
       this.SizeStatisticField.Name = "SizeStatisticField";
       this.SizeStatisticField.Size = new System.Drawing.Size (133, 21);
       this.SizeStatisticField.TabIndex = 67;
+      this.SizeStatisticField.Text = "Down";
       // 
       // SizeStatiticLabel
       // 
@@ -432,6 +437,27 @@
       this.StatusMsgsLabel.Size = new System.Drawing.Size (37, 13);
       this.StatusMsgsLabel.TabIndex = 65;
       this.StatusMsgsLabel.Text = "Status";
+      // 
+      // CastField
+      // 
+      this.CastField.FormattingEnabled = true;
+      this.CastField.Items.AddRange (new object[] {
+            "Down",
+            "Up",
+            "Both"});
+      this.CastField.Location = new System.Drawing.Point (324, 82);
+      this.CastField.Name = "CastField";
+      this.CastField.Size = new System.Drawing.Size (88, 21);
+      this.CastField.TabIndex = 57;
+      // 
+      // CastLabel
+      // 
+      this.CastLabel.AutoSize = true;
+      this.CastLabel.Location = new System.Drawing.Point (324, 67);
+      this.CastLabel.Name = "CastLabel";
+      this.CastLabel.Size = new System.Drawing.Size (28, 13);
+      this.CastLabel.TabIndex = 68;
+      this.CastLabel.Text = "Cast";
       // 
       // ChartSizeDistribution
       // 
@@ -496,6 +522,8 @@
     private System.Windows.Forms.Label StatusMsgsLabel;
     private System.Windows.Forms.ComboBox SizeStatisticField;
     private System.Windows.Forms.Label SizeStatiticLabel;
+    private System.Windows.Forms.Label CastLabel;
+    private System.Windows.Forms.ComboBox CastField;
 
 
   }
