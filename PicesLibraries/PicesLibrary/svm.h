@@ -112,15 +112,15 @@ namespace  SVM233
     // luo
 
     void  Gamma      (double  _gamma)      {gamma       = _gamma;}
-    void  KernalType (int32     _kernalType) {kernel_type = _kernalType;}
+    void  KernalType (int32   _kernalType) {kernel_type = _kernalType;}
 
     double  Gamma      ()  const {return  gamma;}
     int32   KernalType ()  const {return  kernel_type;}
 
     int32   MemoryConsumedEstimated ()  const;
 
-    void  ProcessSvmParameter (KKStr  cmd,
-                               KKStr  value,
+    void  ProcessSvmParameter (KKStr   cmd,
+                               KKStr   value,
                                double  valueNum,
                                bool&   parmUsed
                               );
@@ -134,24 +134,24 @@ namespace  SVM233
 //
 struct svm_model
 {
-  svm_parameter  param;        // parameter
-  int32          nr_class;     // number of classes, = 2 in regression/one class svm
-  int32          l;            // total #SV
-  VectorKKStr    exampleNames; /*!< allows the user to provide names to the labels  */
-  svm_node**     SV;           /*!< SVs (SV[l])    Support vector feature numbers   */
-  double**       sv_coef;      // coefficients for SVs in decision functions (sv_coef[n-1][l])
-  double*        rho;          // constants in decision functions (rho[n*(n-1)/2])
+  svm_parameter    param;        // parameter
+  int32            nr_class;     // number of classes, = 2 in regression/one class svm
+  int32            l;            // total #SV
+  VectorKKStr      exampleNames; /*!< allows the user to provide names to the labels  */
+  svm_node**       SV;           /*!< SVs (SV[l])    Support vector feature numbers   */
+  double**         sv_coef;      // coefficients for SVs in decision functions (sv_coef[n-1][l])
+  double*          rho;          // constants in decision functions (rho[n*(n-1)/2])
 
   // for classification only
 
-  int32*  label;   // label of each class (label[n])
-  int32*  nSV;     // number of SVs for each class (nSV[n])
-                 // nSV[0] + nSV[1] + ... + nSV[n-1] = l
-                 // XXX
+  int32*           label;   // label of each class (label[n])
+  int32*           nSV;     // number of SVs for each class (nSV[n])
+                            // nSV[0] + nSV[1] + ... + nSV[n-1] = l
+                            // XXX
   //luo add
-  int32*   SVIndex;
-  int32*   nonSVIndex;
-  int32    numNonSV;
+  int32*           SVIndex;
+  int32*           nonSVIndex;
+  int32            numNonSV;
 
   std::set<int32>  BSVIndex;
   double*          margin;

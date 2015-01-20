@@ -4048,10 +4048,10 @@ double  SVM233::svm_predict (const svm_model*      model,
 
 
 /****************************************************************************************/
-double  SVM233::svm_predictTwoClasses (const svm_model*    model,
-                                       const svm_node*     x,
-                                       double&             dist,
-                                       int32               excludeSupportVectorIDX
+double  SVM233::svm_predictTwoClasses (const svm_model*  model,
+                                       const svm_node*   x,
+                                       double&           dist,
+                                       int32             excludeSupportVectorIDX
                                       )
 {
   int32  winner = 0;

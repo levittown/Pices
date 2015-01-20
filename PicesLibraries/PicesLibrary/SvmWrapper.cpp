@@ -473,6 +473,7 @@ void   MLL::SvmPredictClass (SVMparam&               svmParam,
                              double&                 breakTie
                             )
 {
+
   const struct svm_parameter&  param = svmParam.Param ();
 
   compact = 0.0;
@@ -481,7 +482,6 @@ void   MLL::SvmPredictClass (SVMparam&               svmParam,
 
   int32 numBinary = (NUMCLASS * (NUMCLASS - 1)) / 2;
   Dvector dist (numBinary, 0);
-
 
   int32  maxIndex = int32 (svm_predict (subModel[0], unknownClassFeatureData, dist, winners, -1));
   ComputeProb  (NUMCLASS,

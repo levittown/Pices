@@ -23,7 +23,7 @@ namespace MLL {
 typedef enum {NORMAL, BAGGING, BOOSTING, SUBSPACE, SAMPLESV} Learn_Type;
 
 
-typedef  std::vector<int32>    Ivector;
+typedef  std::vector<int32>  Ivector;
 typedef  std::vector<float>  Fvector;
 typedef  std::vector<double> Dvector;
 
@@ -106,13 +106,13 @@ void   SvmPredictClass (SVMparam&               svmParam,
 
 
 int32  SvmPredictTwoClass (const struct svm_parameter&   param,
-                         svm_model**                   submodel, 
-                         const svm_node*               unKnownData, 
-                         int32                           desired, 
-                         double&                       dist,
-                         double&                       probability,
-                         int32                           excludeSupportVectorIDX
-                        );
+                           svm_model**                   submodel, 
+                           const svm_node*               unKnownData, 
+                           int32                         desired, 
+                           double&                       dist,
+                           double&                       probability,
+                           int32                         excludeSupportVectorIDX
+                          );
 
 void   SvmDestroyModel (struct svm_model**  subModel);
 
