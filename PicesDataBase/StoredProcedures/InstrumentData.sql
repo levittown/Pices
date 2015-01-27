@@ -147,7 +147,8 @@ begin
                OxygenSensor,     Pressure,            RecordRate,       
                Salinity,         SoundVelocity,       Temperature,      
                Transmisivity,    TransmisivitySensor, Turbidity,        
-               TurbiditySensor,  Pitch,               Roll
+               TurbiditySensor,  Pitch,               Roll,
+               CropLeft,         CropRight,           ActiveColumns               
               )
           values 
              (
