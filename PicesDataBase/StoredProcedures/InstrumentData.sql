@@ -374,6 +374,38 @@ delimiter ;
 
 
 
+/**********************************************************************************************************************/
+drop procedure if exists  InstrumentDataGetMidPointOfDeployment2;
+
+delimiter //
+create procedure  InstrumentDataGetMidPointOfDeployment2 (_cruiseName      varChar(64),
+                                                          _stationName     varChar(10),
+                                                          _deploymentNum   varChar(4)
+                                                         )
+begin
+  select  InstrumentDataGetMidPointOfDeployment (_cruiseName, _stationName, _deploymentNum)  as  MidPoint;
+end;
+//
+
+delimiter ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

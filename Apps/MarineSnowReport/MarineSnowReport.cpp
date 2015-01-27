@@ -155,7 +155,7 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
   KKStr  sqlStr = "Call ImagesSizeDataByDepthSipper11(" + deployment->CruiseName ().QuotedStr () + "," + 
                                                           deployment->StationName ().QuotedStr () + "," + 
                                                           deployment->DeploymentNum ().QuotedStr () + 
-                                                          ",1, '0', 0.005, 1.2, 80.0)";
+                                                          ",1, '0', 0.005, 1.2, 170.0)";
 
   VectorKKStr  columnNames;
   KKStrMatrixPtr results = db.QueryStatementReturnAllColumns (sqlStr.Str (), sqlStr.Len (), columnNames);

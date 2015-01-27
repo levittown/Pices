@@ -1759,7 +1759,7 @@ namespace PicesCommander
 
     private  DateTime  GetMidPoint ()
     {
-      String  sqlStr = "call  InstrumentDataGetMidPointOfDeployment(\"" + cruiseName + "\", \"" + stationName + "\", \"" + deploymentNum + "\")";
+      String  sqlStr = "call  InstrumentDataGetMidPointOfDeployment2(\"" + cruiseName + "\", \"" + stationName + "\", \"" + deploymentNum + "\")";
 
       String[]  colNames = {"MidPoint"};
       String[][]  results = mainWinConn.QueryStatement (sqlStr, colNames);
