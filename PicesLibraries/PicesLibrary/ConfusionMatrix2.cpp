@@ -3045,7 +3045,7 @@ ConfusionMatrix2Ptr  ConfusionMatrix2::BuildFromIstreamXML (istream&  f,
   char  buff[10240];
   buff[0] = 0;
 
-  long   startPos = f.tellg ();
+  kkint64   startPos = f.tellg ();
   MLClassListPtr  classes = NULL;
 
   int32  bucketSize        = -1;
