@@ -731,6 +731,12 @@ namespace PicesCommander
         }
       }
 
+      if  (min > max)
+      {
+        min = 0.0f;
+        max = 100.0f;
+      }
+
       float  depthDelta = max - min;
       float  depthRange = 2.0f;
       numIntervals = 0.25f;

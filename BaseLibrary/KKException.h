@@ -48,7 +48,7 @@ namespace KKU
 
     KKException (const char*  _exceptionStr);
 
-    //KKException (const char*  &_exceptionStr);
+	//KKException (const char*  &_exceptionStr);
     
     KKException (const char*            _exceptionStr,
                  const std::exception&  _innerException

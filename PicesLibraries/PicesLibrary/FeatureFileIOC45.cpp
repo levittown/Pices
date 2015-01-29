@@ -1120,7 +1120,7 @@ void   FeatureFileIOC45::SaveFile (FeatureVectorList&     _data,
     delete  stats;
   }
 
-  int32  origPrecision = _out.precision ();
+  int32  origPrecision = (int32)_out.precision ();
   _out.precision (9);
 
   FeatureVectorPtr   example = NULL;

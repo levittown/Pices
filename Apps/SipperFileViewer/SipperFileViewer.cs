@@ -792,7 +792,7 @@ namespace SipperFileViewer
 
       if  (idx < 0)
       {
-        StripLine  sl = new StripLine ();
+        System.Windows.Forms.DataVisualization.Charting.StripLine  sl = new StripLine ();
         sl.BorderColor = c;
         sl.Interval = 1000000;
         sl.IntervalOffset = offsetInSecs;

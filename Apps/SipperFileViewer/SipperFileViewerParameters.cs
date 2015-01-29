@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using SipperFile;
 using System.Drawing.Imaging;
-using System.Windows.Forms.DataVisualization;
+//using System.Windows.Forms.DataVisualization;
 
 using  PicesInterface;
 
