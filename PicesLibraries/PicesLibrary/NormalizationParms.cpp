@@ -358,7 +358,7 @@ void  NormalizationParms::Write (ostream&  o)
 {
   int32  i = 0;
 
-  int32  origPrecision = o.precision ();
+  int32  origPrecision = (int32)o.precision ();
   o.precision (12);
 
   o << "<NormalizationParms>"      << endl;

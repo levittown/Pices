@@ -698,7 +698,7 @@ void   FeatureFileIOPices::SaveFile (FeatureVectorList&     _data,
       {
         int32  mlClassIdx = classIdx.GetClassIndex (example->MLClass        ());
         int32  predClassIdx  = classIdx.GetClassIndex (example->PredictedClass ());
-        int32  p = _out.precision ();
+        int32  p = (int32)_out.precision ();
         _out.precision (11);
         _out << example->ClassName          () << "\t" 
              << mlClassIdx                     << "\t"

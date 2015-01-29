@@ -92,7 +92,9 @@ namespace KKU
     typedef  unsigned __int32  uint32;
     typedef  unsigned __int32  kkuint32;
     typedef  __int64           int64;
+    typedef  __int64           kkint64;
     typedef  unsigned __int64  uint64;
+    typedef  unsigned __int64  kkuint64;
   #else
   #if  defined(__GNUG__)
     typedef  int8_t            int8;     /**<@brief  8  bit signed integer.   */
@@ -108,7 +110,9 @@ namespace KKU
     typedef  uint32_t          uint32;
     typedef  uint32_t          kkuint32;
     typedef  int64_t           int64;
+    typedef  int64_t           kkint64;
     typedef  uint64_t          uint64;
+    typedef  uint64_t          kkuint64;
 #else
     typedef  __INT8_TYPE__     int8;
     typedef  __INT8_TYPE__     kkint8;

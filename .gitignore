@@ -1,5 +1,7 @@
 Debug
 Release
+Backup
+Backup*
 *.libs
 *.a
 *.al
@@ -34,3 +36,5 @@ Thumbs.db
 /Apps/PicesCommander/obj/Debug/ResolveAssemblyReference.cache
 *.kkramer.user
 
+*.vcxproj
+*.filters
