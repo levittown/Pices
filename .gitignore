@@ -1,5 +1,7 @@
 Debug
 Release
+Backup
+Backup*
 *.libs
 *.a
 *.al
