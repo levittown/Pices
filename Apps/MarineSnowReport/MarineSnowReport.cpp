@@ -555,7 +555,6 @@ void  MarineSnowReport ()
      continue;
 
 
-    /*
     if  ((deployment->CruiseName ().EqualIgnoreCase ("WB1008"))  ||
          (deployment->CruiseName ().EqualIgnoreCase ("WB0911"))  ||
          (deployment->CruiseName ().EqualIgnoreCase ("WB0812"))  ||
@@ -569,8 +568,6 @@ void  MarineSnowReport ()
     {
       continue;
     }
-    */
-
 
     DeploymentSummary*  sumary = MarineSnowReportDeployment (*idx, *db);
     if  (sumary)
