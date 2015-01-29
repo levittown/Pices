@@ -8,6 +8,7 @@ Release
 *.dll
 *.exe
 *.idb
+*.ilk
 *.la
 *.lib
 *.lo
@@ -19,6 +20,7 @@ Release
 *.pyc
 *.pyo
 *.rej
+*.sdf
 *.so
 *.suo
 *.tif
@@ -34,3 +36,6 @@ Thumbs.db
 /Apps/PicesCommander/obj/Debug/ResolveAssemblyReference.cache
 *.kkramer.user
 
+Backup/Apps/ChartControls/Battery.cs
+Backup/Apps/ChartControls/Battery.Designer.cs
+Backup/Apps
