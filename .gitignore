@@ -21,6 +21,7 @@ Backup*
 *.pyc
 *.pyo
 *.rej
+*.sdf
 *.so
 *.suo
 *.tif
