@@ -26,10 +26,11 @@ namespace PicesInterface
     !PicesImageSizeDistributionRow ();
 
   public:
-    property  float  Depth       {float  get ()  {return imageSizeDistributionRow->Depth       ();}}
-    property  uint   ImageCount  {uint   get ()  {return imageSizeDistributionRow->ImageCount  ();}}
-    property  uint   TotalPixels {uint   get ()  {return imageSizeDistributionRow->TotalPixels ();}}
-
+    property  float  Depth           {float  get ()  {return imageSizeDistributionRow->Depth           ();}}
+    property  uint   ImageCount      {uint   get ()  {return imageSizeDistributionRow->ImageCount      ();}}
+    property  uint   TotalPixels     {uint   get ()  {return imageSizeDistributionRow->TotalPixels     ();}}
+    property  uint   TotalFilledArea {uint   get ()  {return imageSizeDistributionRow->TotalFilledArea ();}}
+    
     array<uint>^  Distribution ();
 
   private:

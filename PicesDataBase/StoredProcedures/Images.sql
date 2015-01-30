@@ -1384,7 +1384,6 @@ delimiter ;
 
 
 
-
 drop procedure  if exists  ImagesSizeSizeHistogramByDepth;
 drop procedure  if exists  ImagesSizeDistributionByDepth;
 
@@ -1437,6 +1436,7 @@ begin
     DownCast          char(1),
     ImageId           int    default 0,
     PixelCount        int    default 0,
+    FilledArea        int    default 0,
     Depth             float  default 0.0,
     Statistic         float  default 0.0
   );
@@ -1451,25 +1451,27 @@ begin
   set  @sqlStr = concat(@sqlStr, '    select (id.CTDDateTime <=\"', _midPoint, '\") as DownCast, \n');
   set  @sqlStr = concat(@sqlStr, '           i.ImageId, \n');
   set  @sqlStr = concat(@sqlStr, '           i.PixelCount, \n');
+  set  @sqlStr = concat(@sqlStr, '           fd.FilledArea, \n');
   set  @sqlStr = concat(@sqlStr, '           i.Depth, \n');
   set  @sqlStr = concat(@sqlStr, '          ');
                  
 
   if  (_statistic = '0')  then
-     set @sqlStr = concat(@sqlStr, 'i.PixelCount * (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000  * (id.FlowRate1 / sf.ScanRate) * 1000.0  as Statistic \n');
+     set @sqlStr = concat(@sqlStr, 'fd.FilledArea * (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000  * (id.FlowRate1 / sf.ScanRate) * 1000.0  as Statistic \n');
   end if;
   
   if  (_statistic = '1')  then
-     set @sqlStr = concat(@sqlStr, '2 * sqrt(i.PixelCount *  (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000 * (id.FlowRate1 / sf.ScanRate) * 1000.0 / 3.1415926)  as Statistic \n');
+     set @sqlStr = concat(@sqlStr, '2 * sqrt(fd.FilledArea *  (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000 * (id.FlowRate1 / sf.ScanRate) * 1000.0 / 3.1415926)  as Statistic \n');
   end if;
   
   if  (_statistic = '2')  then
-     set @sqlStr = concat(@sqlStr, '(4.0 / 3.0) * 3.1415926 * pow (sqrt(i.PixelCount *  (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000 * (id.FlowRate1 / sf.ScanRate) * 1000.0 / 3.1415926), 3)  as Statistic \n');
+     set @sqlStr = concat(@sqlStr, '(4.0 / 3.0) * 3.1415926 * pow (sqrt(fd.FilledArea *  (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000 * (id.FlowRate1 / sf.ScanRate) * 1000.0 / 3.1415926), 3)  as Statistic \n');
   end if;
 
   
   set @sqlStr = concat(@sqlStr, '    from  Images i  \n');
   set @sqlStr = concat(@sqlStr, '    join (SipperFiles sf)     on(sf.SipperFileId  = i.SipperFileId) \n');
+  set @sqlStr = concat(@sqlStr, '    join (FeatureData fd)     on(fd.ImageId       = i.ImageId) \n');
   set @sqlStr = concat(@sqlStr, '    join (InstrumentData id)  on((id.SipperFileId = i.SipperFileId)  and  (id.ScanLine = Floor(TopLeftRow/4096) * 4096) ) \n');
   set @sqlStr = concat(@sqlStr, '    where  (sf.CruiseName      = \"', _cruiseName,    '\") \n');
   set @sqlStr = concat(@sqlStr, '       and (sf.StationName     = \"', _stationName,   '\") \n');
@@ -1488,6 +1490,7 @@ begin
   set @sqlStr2 = concat(@sqlStr2, '       (floor(T.Depth / ', _depthBinSize, ') * ', _depthBinSize, ')  as BucketDepth, \n');
   set @sqlStr2 = concat(@sqlStr2, '       count(T.ImageId)                                  as ImageCount, \n');
   set @sqlStr2 = concat(@sqlStr2, '       sum(T.PixelCount)                                 as TotalPixelCount, \n');
+  set @sqlStr2 = concat(@sqlStr2, '       sum(T.FilledArea)                                 as TotalFilledArea, \n');
                 
   set @statVal = _initialValue;
   
@@ -1524,26 +1527,6 @@ delimiter ;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /**********************************************************************************************************************/
 drop procedure  if exists ImagesStatsByUpAndDownCast;
 
@@ -1565,8 +1548,6 @@ begin
   end if;                                       
 
   set  _midPoint = InstrumentDataGetMidPointOfDeployment(_cruiseName, _stationName, _deploymentNum);
-  
-  
   
   
   select (id.CTDDateTime >= _midPoint)                     as upCast,
@@ -2251,6 +2232,7 @@ begin
     DownCast          char(1),
     ImageId           int    default 0,
     PixelCount        int    default 0,
+    FilledArea        int    default 0,
     Depth             float  default 0.0,
     Statistic         float  default 0.0
   );
@@ -2265,25 +2247,26 @@ begin
   set  @sqlStr = concat(@sqlStr, '    select (id.CTDDateTime <=\"', _midPoint, '\") as DownCast, \n');
   set  @sqlStr = concat(@sqlStr, '           i.ImageId, \n');
   set  @sqlStr = concat(@sqlStr, '           i.PixelCount, \n');
+  set  @sqlStr = concat(@sqlStr, '           fd.FilledArea, \n');
   set  @sqlStr = concat(@sqlStr, '           i.Depth, \n');
   set  @sqlStr = concat(@sqlStr, '          ');
-                 
 
   if  (_statistic = '0')  then
-     set @sqlStr = concat(@sqlStr, 'i.PixelCount * (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000  * (id.FlowRate1 / sf.ScanRate) * 1000.0  as Statistic \n');
+     set @sqlStr = concat(@sqlStr, 'fd.FilledArea * (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000  * (id.FlowRate1 / sf.ScanRate) * 1000.0  as Statistic \n');
   end if;
   
   if  (_statistic = '1')  then
-     set @sqlStr = concat(@sqlStr, '2 * sqrt(i.PixelCount *  (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000 * (id.FlowRate1 / sf.ScanRate) * 1000.0 / 3.1415926)  as Statistic \n');
+     set @sqlStr = concat(@sqlStr, '2 * sqrt(fd.FilledArea *  (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000 * (id.FlowRate1 / sf.ScanRate) * 1000.0 / 3.1415926)  as Statistic \n');
   end if;
   
   if  (_statistic = '2')  then
-     set @sqlStr = concat(@sqlStr, '(4.0 / 3.0) * 3.1415926 * pow (sqrt(i.PixelCount *  (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000 * (id.FlowRate1 / sf.ScanRate) * 1000.0 / 3.1415926), 3)  as Statistic \n');
+     set @sqlStr = concat(@sqlStr, '(4.0 / 3.0) * 3.1415926 * pow (sqrt(fd.FilledArea *  (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000 * (id.FlowRate1 / sf.ScanRate) * 1000.0 / 3.1415926), 3)  as Statistic \n');
   end if;
 
   
   set @sqlStr = concat(@sqlStr, '    from  Images i  \n');
   set @sqlStr = concat(@sqlStr, '    join (SipperFiles sf)     on(sf.SipperFileId  = i.SipperFileId) \n');
+  set @sqlStr = concat(@sqlStr, '    join (FeatureData fd)     on(fd.ImageId       = i.ImageId) \n');
   set @sqlStr = concat(@sqlStr, '    join (InstrumentData id)  on((id.SipperFileId = i.SipperFileId)  and  (id.ScanLine = Floor(TopLeftRow/4096) * 4096) ) \n');
   set @sqlStr = concat(@sqlStr, '    where  (sf.CruiseName      = \"', _cruiseName,    '\")  and \n');
   set @sqlStr = concat(@sqlStr, '           (sf.StationName     = \"', _stationName,   '\")  and \n');
@@ -2300,7 +2283,8 @@ begin
   set @sqlStr2 = concat(@sqlStr2, '       (floor(T.Depth / ', _depthBinSize, ') * ', _depthBinSize, ')  as BucketDepth, \n');
   set @sqlStr2 = concat(@sqlStr2, '       count(T.ImageId)                                  as ImageCount, \n');
   set @sqlStr2 = concat(@sqlStr2, '       sum(T.PixelCount)                                 as TotalPixelCount, \n');
-                
+  set @sqlStr2 = concat(@sqlStr2, '       sum(T.FilledArea)                                 as TotalFilledArea, \n');
+
   set @statVal = _initialValue;
   
   set @sqlStr2 = concat(@sqlStr2, '       sum((T.Statistic < ', Format (@statVal, 4), '))    as \"<',Format (@statVal, 4), '\", \n');

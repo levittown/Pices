@@ -54,9 +54,8 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
-      <Command>echo #define  _SVNVERSION_ \&gt;SvnVersion.h
-svnversion &gt;&gt;SvnVersion.h
-</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
     <ClCompile>
       <Optimization>Disabled</Optimization>
@@ -77,9 +76,8 @@ svnversion &gt;&gt;SvnVersion.h
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <PreBuildEvent>
-      <Command>echo #define  _SVNVERSION_ \&gt;SvnVersion.h
-svnversion &gt;&gt;SvnVersion.h
-</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>

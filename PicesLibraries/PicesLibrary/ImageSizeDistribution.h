@@ -24,20 +24,23 @@ namespace MLL
                              );
 
 
-    float                Depth        ()  const  {return depth;}
-    kkuint32             ImageCount   ()  const  {return imageCount;}
-    kkuint32             TotalPixels  ()  const  {return totalPixels;}
-    const VectorUint32&  Distribution ()  const  {return distribution;}
+    float                Depth           ()  const  {return depth;}
+    kkuint32             ImageCount      ()  const  {return imageCount;}
+    kkuint32             TotalPixels     ()  const  {return totalPixels;}
+    kkuint32             TotalFilledArea ()  const  {return totalFilledArea;}
+    const VectorUint32&  Distribution    ()  const  {return distribution;}
 
-    void  ImageCount   (kkuint32  _imageCount)  {imageCount  = _imageCount;}
-    void  TotalPixels  (kkuint32  _totalPixels) {totalPixels = _totalPixels;}
+    void  ImageCount      (kkuint32  _imageCount)      {imageCount      = _imageCount;}
+    void  TotalPixels     (kkuint32  _totalPixels)     {totalPixels     = _totalPixels;}
+    void  TotalFilledArea (kkuint32  _totalFilledArea) {totalFilledArea = _totalFilledArea;}
 
     void  AddData (kkuint32  _sizeIdx,
                    kkuint32  _count
                   );
 
     void  AddImageCountPixelCount (kkuint32  _imageCount,
-                                   kkuint32  _pixelCount
+                                   kkuint32  _pixelCount,
+                                   kkuint32  _filledArea
                                   );
 
     void  AddIn (const ImageSizeDistributionRow&  right);
@@ -47,6 +50,7 @@ namespace MLL
     VectorUint32  distribution;
     kkuint32      imageCount;
     kkuint32      totalPixels;
+    kkuint32      totalFilledArea;
   };  /* ImageSizeDistributionRow */
 
   typedef  ImageSizeDistributionRow*  ImageSizeDistributionRowPtr;
@@ -85,7 +89,8 @@ namespace MLL
 
     void  DefineRow (float     _depth,
                      kkuint32  _imageCount,
-                     kkuint32  _totalPixelCount
+                     kkuint32  _totalPixelCount,
+                     kkuint32  _totalFilledAreaf
                     );
 
     void  AddData  (float     _depth,

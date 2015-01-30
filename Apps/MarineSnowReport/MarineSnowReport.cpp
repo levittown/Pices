@@ -50,7 +50,7 @@ using namespace  MLL;
 
 
 
-#include "SvnVersion.h"
+//#include "SvnVersion.h"
 #include "MarineSnowReport.h"
 
 
@@ -167,7 +167,7 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
 
   int32  numRows = results->NumRows ();
   int32  numCols = results->NumCols ();
-  int32  numCountCols = numCols - 5;
+  int32  numCountCols = numCols - 6;
 
   if  (numRows == 0)
   {
@@ -181,7 +181,7 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
   VectorKKStr  countHeader (numCountCols);
   for  (int32 x = 0;  x < numCountCols;  ++x)
   {
-    KKStr  columnName = columnNames[5 + x];
+    KKStr  columnName = columnNames[6 + x];
     countHeader[x] = columnName;
 
     float  sizeThreshold = 0;
@@ -240,8 +240,8 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
   KKStr  thH2 (1024);
   CreateThresholdHeaders (sizeThresholds, thH1, thH2);
 
-  h1 << ""        << "\t" << "Depth"  << "\t" << "VolumeSampled" << "\t" << "Image"     << "\t"  << "Pixel" << thH1;
-  h2 << "Down/Up" << "\t" << "(m)"    << "\t" << "m^3"           << "\t" << "Abundance" << "\t"  << "Count" << thH2;
+  h1 << ""        << "\t" << "Depth"  << "\t" << "VolumeSampled" << "\t" << "Image"     << "\t"  << "Pixel" << "\t" << "Filled" << thH1;
+  h2 << "Down/Up" << "\t" << "(m)"    << "\t" << "m^3"           << "\t" << "Abundance" << "\t"  << "Count" << "\t" << "Area"   << thH2;
 
   VectorDouble  integratedAbundance (sizeThresholds.size (), 0.0);
   VectorInt32   integratedCounts    (sizeThresholds.size (), 0);
@@ -273,10 +273,11 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
     float  bucketDepth = row[2].ToFloat ();
     int32  imageCount  = row[3].ToInt32 ();
     int32  pixelCount  = row[4].ToInt32 ();
+    int32  filledArea  = row[5].ToInt32 ();
 
     VectorInt32  counts (numCountCols, 0);
     for  (int32 x = 0;  x < numCountCols;  ++x)
-      counts[x] = row[5 + x].ToInt32 ();
+      counts[x] = row[6 + x].ToInt32 ();
 
     float  volumeSampled = 0.0f;
     InstrumentDataMeansPtr  idm = instData->LookUp (downCast, bucketDepth);
@@ -286,7 +287,7 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
     totalVolumeSampled += volumeSampled;
 
     KKStr  begOfLine (128);
-    begOfLine << (downCast ? "Down" : "Up") << "\t" << bucketDepth << "\t" << volumeSampled << "\t" << imageCount << "\t" << pixelCount;
+    begOfLine << (downCast ? "Down" : "Up") << "\t" << bucketDepth << "\t" << volumeSampled << "\t" << imageCount << "\t" << pixelCount << "\t" << filledArea;
 
     r1 << begOfLine;
 
@@ -357,10 +358,11 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
     float  bucketDepth = row[2].ToFloat ();
     int32  imageCount  = row[3].ToInt32 ();
     int32  pixelCount  = row[4].ToInt32 ();
+    int32  filledArea  = row[5].ToInt32 ();
 
     VectorInt32  counts (numCountCols, 0);
     for  (int32 x = 0;  x < numCountCols;  ++x)
-      counts[x] = row[5 + x].ToInt32 ();
+      counts[x] = row[6 + x].ToInt32 ();
 
     float  volumeSampled = 0.0f;
     InstrumentDataMeansPtr  idm = instData->LookUp (downCast, bucketDepth);
@@ -368,7 +370,7 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
       volumeSampled = idm->volumeSampled;
 
     KKStr  begOfLine (128);
-    begOfLine << (downCast ? "Down" : "Up") << "\t" << bucketDepth << "\t" << volumeSampled << "\t" << imageCount << "\t" << pixelCount;
+    begOfLine << (downCast ? "Down" : "Up") << "\t" << bucketDepth << "\t" << volumeSampled << "\t" << imageCount << "\t" << pixelCount << "\t" << filledArea;
 
     r1 << begOfLine;
 
@@ -404,6 +406,9 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
 
   return  new DeploymentSummary (deployment->CruiseName (), deployment->StationName (), deployment->DeploymentNum (), totalVolumeSampled, sizeThresholds, integratedAbundance, integratedCounts);
 }  /* MarineSnowReportDeployment */
+
+
+
 
 
 class  ComparereDeploymentSummaryByStation
@@ -554,13 +559,15 @@ void  MarineSnowReport ()
         )
      continue;
 
-
     /*
     if  ((deployment->CruiseName ().EqualIgnoreCase ("WB1008"))  ||
          (deployment->CruiseName ().EqualIgnoreCase ("WB0911"))  ||
          (deployment->CruiseName ().EqualIgnoreCase ("WB0812"))  ||
          (deployment->CruiseName ().EqualIgnoreCase ("WB0813"))  ||
          (deployment->CruiseName ().EqualIgnoreCase ("WB0814"))
+        )
+        */
+    if  ((deployment->CruiseName ().EqualIgnoreCase ("WB0814"))
         )
     {
       runLog.Level (10) << "MarineSnowReport    Found Cruise: " << deployment->CruiseName ()  << endl;
@@ -569,7 +576,6 @@ void  MarineSnowReport ()
     {
       continue;
     }
-    */
 
 
     DeploymentSummary*  sumary = MarineSnowReportDeployment (*idx, *db);
