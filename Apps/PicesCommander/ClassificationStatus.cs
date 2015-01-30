@@ -1157,6 +1157,7 @@ namespace PicesCommander
       o.WriteLine ("End Time" + "\t"   + runTimeEnd.ToString  ("yyyy/MM/dd - HH:mm:ss"));
       TimeSpan  elaspeTime = runTimeEnd - runTimeStart;
       o.WriteLine ("Elasped Time" + "\t" + elaspeTime.ToString ());
+      o.WriteLine ("Mid Point"    + "\t" + midPoint.ToString ("yyyy/MM/dd HH:mm:ss"));
 
       if  (errorMsgs.Count > 0)
       {
