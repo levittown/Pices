@@ -2149,9 +2149,10 @@ ImageFeaturesPtr   DataBase::FeatureDataRecLoad (DataBaseImagePtr  image)
 /**
  *@brief  Loads all Images with related Feature data for the specified 'SipperFile'
  *@param[in] sipperFileName            Sipper file to retrieve feature data for.
- *@param[in] mlClass                You are only interested in feature data for a specific class;  whether predicted or va;idated class depends on 'classKeyToUse'.
+ *@param[in] mlClass                   You are only interested in feature data for a specific class;  whether predicted or va;idated class depends on 'classKeyToUse'.
  *@param[in] classKeyToUse             Indicates which ClassId field to use for selecting feature data by class;  'V' = 'Images.ClassValidatedId' otherwise 'Images.Class1Id'.
  *@param[in] reExtractInstrumentData:  True indicates to reextract feature data from the original SipperFile and update InmstrumentData tables.
+ *@param[in] cancelFlag                Flag will be monitored;  if turbs true it the methid will return at 1st chance.
  */
 ImageFeaturesListPtr  DataBase::FeatureDataGetOneSipperFile (const KKStr&     sipperFileName,
                                                              MLClassConstPtr  mlClass,
