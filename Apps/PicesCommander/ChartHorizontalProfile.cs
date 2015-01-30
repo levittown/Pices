@@ -1224,6 +1224,16 @@ namespace PicesCommander
         whereStr += ("  and   sf.DeploymentNum = \"" + deployment + "\"");
       whereStr += ")";
 
+
+      whereStr += "       and  id.CTDDateTime  > \"2000-01-01 00:01:01\"\n";
+      whereStr += "       and  id.CTDDateTime  < \"2020-12-31 23:59:59\"\n";
+      whereStr += "       and  id.CTDBattery   > 5.5   and  id.CTDBattery    < 14.0\n";
+      whereStr += "       and  id.Depth        < 1000\n";
+      whereStr += "       and  id.Temperature  > 0.0   and  id.Temperature   < 40.0\n";
+      whereStr += "       and  id.Salinity     > 20    and  id.Salinity      < 40.0\n";
+      whereStr += "       and  id.Density      > 13    and  id.Density       < 40.0\n";
+      whereStr += "       and  id.Fluorescence > -2    and  id.Fluorescence  < 80.0";
+      
       String  sqlStr = "select id.CTDDateTime, id." + instName + "\n" + 
                        "       from InstrumentData id"         + "\n" + 
                        "       join(SipperFiles sf)  on(sf.SipperFileId = id.SipperFileId)" + "\n" +

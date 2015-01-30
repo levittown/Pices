@@ -45,11 +45,13 @@ ImageSizeDistributionRow::ImageSizeDistributionRow (const ImageSizeDistributionR
 
 
 void  ImageSizeDistributionRow::AddImageCountPixelCount (kkuint32  _imageCount,
-                                                         kkuint32  _pixelCount
+                                                         kkuint32  _pixelCount,
+                                                         kkuint32  _filledArea
                                                         )
 {
-  imageCount  += _imageCount;
-  totalPixels += _pixelCount;
+  imageCount       += _imageCount;
+  totalPixels      += _pixelCount;
+  totalFilledArea  += _filledArea;
 }  /* AddImageCountPixelCount */
 
 
@@ -140,15 +142,17 @@ void  ImageSizeDistribution::PopulateDistributions (kkuint32  depthIdx)
 
 void  ImageSizeDistribution::DefineRow (float     _depth,
                                         kkuint32  _imageCount,
-                                        kkuint32  _totalPixelCount
+                                        kkuint32  _totalPixelCount,
+                                        kkuint32  _totalFilledArea
                                        )
 {
   kkuint32  depthIdx = (int)(_depth / depthBinSize);
   PopulateDistributions (depthIdx);
   ImageSizeDistributionRowPtr  row = depthDistributions[depthIdx];
-  row->ImageCount  (_imageCount);
-  row->TotalPixels (_totalPixelCount);
-  allDepths->AddImageCountPixelCount (_imageCount, _totalPixelCount);
+  row->ImageCount      (_imageCount);
+  row->TotalPixels     (_totalPixelCount);
+  row->TotalFilledArea (_totalFilledArea);
+  allDepths->AddImageCountPixelCount (_imageCount, _totalPixelCount, _totalFilledArea);
 }  /* DefineRow */
 
 

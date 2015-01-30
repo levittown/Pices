@@ -4360,6 +4360,7 @@ void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruise
   int32  bucketDepthIdx     = -1;
   int32  imageCountIdx      = -1;
   int32  totalPixelCountIdx = -1;
+  int32  totalFilledAreaIdx = -1;
   int32  firstSizeBucketIdx = -1;
 
   VectorFloat  startValues;
@@ -4394,6 +4395,11 @@ void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruise
     else if  (colName.EqualIgnoreCase ("TotalPixelCount"))
     {
       totalPixelCountIdx = columnIdx;
+    }
+
+    else if  (colName.EqualIgnoreCase ("TotalFilledArea"))
+    {
+      totalFilledAreaIdx = columnIdx;
     }
 
     else if  (colName[0] == '<')
@@ -4446,11 +4452,20 @@ void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruise
       sizeDistribution = upCast;
     }
 
+
+    int32  totalPixelCount = 0;
+    int32  totalFilledArea = 0;
+
     float  depth           = row[bucketDepthIdx].ToFloat ();
     int32  imageCount      = row[imageCountIdx].ToInt32 ();
-    int32  totalPixelCount = row[totalPixelCountIdx].ToInt32 ();
 
-    sizeDistribution->DefineRow (depth, imageCount, totalPixelCount);
+    if  (totalPixelCountIdx >= 0)
+      totalPixelCount = row[totalPixelCountIdx].ToInt32 ();
+
+    if  (totalFilledAreaIdx >= 0)
+      totalFilledArea = row[totalFilledAreaIdx].ToInt32 ();
+
+    sizeDistribution->DefineRow (depth, imageCount, totalPixelCount, totalFilledArea);
     for  (uint32  zed = firstSizeBucketIdx, sizeIdx = 0;  zed < row.size ();  ++zed, ++sizeIdx)
     {
       sizeDistribution->AddData (depth, sizeIdx, row[zed].ToInt32 ());
