@@ -1389,15 +1389,15 @@ drop procedure  if exists  ImagesSizeDistributionByDepth;
 
 delimiter $$
 
-create procedure ImagesSizeDistributionByDepth (in  _cruiseName       varChar(10),
-                                                in  _stationName      varChar(10), 
-                                                in  _deploymentNum    varchar(4), 
-                                                in  _className        varChar(64),
-                                                in  _depthBinSize     int unsigned,
-                                                in  _statistic        char,           /* '0' = Area mm^2,  '1' = Diameter,  '2' = Spheroid Volume and '3' = EBv ((4/3)(Pie)(Major/2)(Minor/2)^2) */
-                                                in  _initialValue     float,
-                                                in  _growtRate        float,
-                                                in  _endValue         float
+create procedure ImagesSizeDistributionByDepth (in  _cruiseName      varChar(10),
+                                                in  _stationName     varChar(10), 
+                                                in  _deploymentNum   varchar(4), 
+                                                in  _className       varChar(64),
+                                                in  _depthBinSize    int unsigned,
+                                                in  _statistic       char,           /* '0' = Area mm^2,  '1' = Diameter,  '2' = Spheroid Volume and '3' = EBv ((4/3)(Pie)(Major/2)(Minor/2)^2) */
+                                                in  _initialValue    float,
+                                                in  _growtRate       float,
+                                                in  _endValue        float
                                                )
 begin 
   declare _classId            int    default -1;
@@ -1478,7 +1478,7 @@ begin
   set @sqlStr = concat(@sqlStr, '       and (sf.DeploymentNum   = \"', _deploymentNum, '\") \n');
   /* set @sqlStr = concat(@sqlStr, '       and (id.CTDDateTime    <= \"', _midPoint,      '\") \n');  */
   if  (_classId >= 0)  then
-    set @sqlStr = concat(@sqlStr, '       and (i.Class1Id         = ', _classId, '); \n');
+    set @sqlStr = concat(@sqlStr, '       and ((i.ClassValidatedId = ', _classId, ')  or  (i.ClassValidatedId is null  and  i.class1Id = ', _classId, ')); \n');
   end if;
   
   PREPARE stmt1 FROM @sqlStr;
@@ -2272,7 +2272,7 @@ begin
   set @sqlStr = concat(@sqlStr, '           (sf.StationName     = \"', _stationName,   '\")  and \n');
   set @sqlStr = concat(@sqlStr, '           (sf.DeploymentNum   = \"', _deploymentNum, '\")  and \n');
   set @sqlStr = concat(@sqlStr, '           (id.CTDDateTime    <= \"', _midPoint,      '\")  and \n');
-  set @sqlStr = concat(@sqlStr, '           (i.Class1Id in (select  c.ClassId  from Classes c  where c.ClassName like "%snow%")); \n');
+  set @sqlStr = concat(@sqlStr, '           (i.Class1Id in (select  c.ClassId  from Classes c  where c.ClassName like "%detritus%")); \n');
   
   PREPARE stmt1 FROM @sqlStr;
   EXECUTE stmt1;
@@ -2346,20 +2346,6 @@ begin
 end;
 //
 delimiter ;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2845,6 +2831,48 @@ begin
         from images i
         where  (i.SipperFileId = _sipperFileId)  and  ((i.ClassValidatedId >= 0)  or  (i.SizeCoordinates <> ""));
   end if;
+end;
+//
+delimiter ;
+
+
+
+
+
+
+/************************************************************************************************************************/
+call  ImagesExportClassificationByCruise("WB1008", "2013-08-27 17:10:54");
+
+
+
+
+
+/************************************************************************************************************************/
+drop procedure  if   exists  ImagesExportClassificationByCruise;
+
+delimiter //
+create procedure  ImagesExportClassificationByCruise (in  _cruiseName         char(10),
+                                                      in  _thresholdDateTime  datetime
+                                                     )
+begin
+  declare _outFileName     varchar(128);
+
+  set  _outFileName = concat("C:\\Temp\\PicesExportData\\ImagesClassificationCruise_", _cruiseName, ".txt");
+
+  set  @sqlStr = 'select i.ImageId, i.ImageFileName, i.ClassLogEntryId, i.Class1Id, i.Class1Prob  \n';
+  set  @sqlStr = concat(@sqlStr, '    into outfile \"', _outFileName, '\", '  fields terminated by "\\t" optionaly enclosed by \""\"  lines terminated by "\\n"');
+  set  @sqlStr = concat(@sqlStr, '    from Images i \n');
+  set  @sqlStr = concat(@sqlStr, '    join (SipperFiles sf)  on (sf.SipperFileId  = i.SipperFileId) \n');
+  set  @sqlStr = concat(@sqlStr, '    join (LogEntries le)   on (le.LogEntryId    = i.ClassLogEntryId) \n');
+  set  @sqlStr = concat(@sqlStr, '    where   le.DateTimeStart > ', _thresholdDateTime, '   and   sf.CruiseName = ', _cruiseName, '; \n');
+
+  select @sqlStr;
+
+  /*
+  PREPARE stmt1 FROM @sqlStr;
+  EXECUTE stmt1;
+  DEALLOCATE PREPARE stmt1;
+  */
 end;
 //
 delimiter ;
