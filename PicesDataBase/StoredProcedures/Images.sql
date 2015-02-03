@@ -2848,6 +2848,7 @@ call  ImagesExportClassificationByCruise("WB1008", "2013-08-27 17:10:54");
 
 
 /************************************************************************************************************************/
+/************************************************************************************************************************/
 drop procedure  if   exists  ImagesExportClassificationByCruise;
 
 delimiter //
@@ -2857,23 +2858,63 @@ create procedure  ImagesExportClassificationByCruise (in  _cruiseName         ch
 begin
   declare _outFileName     varchar(128);
 
-  set  _outFileName = concat("C:\\Temp\\PicesExportData\\ImagesClassificationCruise_", _cruiseName, ".txt");
+  set  _outFileName = concat("C:\\\\Temp\\\\PicesExportData\\\\ImagesClassificationCruise_", _cruiseName, ".txt");
 
   set  @sqlStr = 'select i.ImageId, i.ImageFileName, i.ClassLogEntryId, i.Class1Id, i.Class1Prob  \n';
-  set  @sqlStr = concat(@sqlStr, '    into outfile \"', _outFileName, '\", '  fields terminated by "\\t" optionaly enclosed by \""\"  lines terminated by "\\n"');
+  set  @sqlStr = concat(@sqlStr, '    into outfile \"', _outFileName, '\"', '  fields terminated by "\\t" optionally enclosed by "\\""  lines terminated by "\\n"');
   set  @sqlStr = concat(@sqlStr, '    from Images i \n');
   set  @sqlStr = concat(@sqlStr, '    join (SipperFiles sf)  on (sf.SipperFileId  = i.SipperFileId) \n');
   set  @sqlStr = concat(@sqlStr, '    join (LogEntries le)   on (le.LogEntryId    = i.ClassLogEntryId) \n');
-  set  @sqlStr = concat(@sqlStr, '    where   le.DateTimeStart > ', _thresholdDateTime, '   and   sf.CruiseName = ', _cruiseName, '; \n');
+  set  @sqlStr = concat(@sqlStr, '    where   le.DateTimeStart > "', _thresholdDateTime, '"   and   sf.CruiseName = "', _cruiseName, '"; \n');
 
   select @sqlStr;
 
-  /*
   PREPARE stmt1 FROM @sqlStr;
   EXECUTE stmt1;
   DEALLOCATE PREPARE stmt1;
-  */
 end;
 //
 delimiter ;
+
+
+
+
+
+
+
+/************************************************************************************************************************/
+drop procedure  if   exists  ImagesExportClassificationData;
+
+delimiter //
+create procedure  ImagesExportClassificationData ()
+begin
+  declare done             int default 0;
+  declare _cruiseName      varchar(10);
+
+  declare cur1 cursor for  select c.CruiseName
+                                  from Cruises c
+                                  order by c.CruiseName;
+
+  declare continue HANDLER for not found set done = 1;
+
+  open cur1;
+
+  repeat
+    fetch  cur1 into _cruiseName;
+    if not done then
+       call  ImagesExportClassificationByCruise (_cruiseName, "2014-08-27 17:10:54");
+       commit;
+    end if;
+  until done end repeat;
+
+  close cur1;
+end;
+//
+delimiter ;
+
+
+
+
+
+
 
