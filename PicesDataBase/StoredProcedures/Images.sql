@@ -893,7 +893,6 @@ begin
     set  _class1Id = (select  c.ClassId  from  Classes c  where c.ClassName = _class1Name);
   end if;
   
-  
   update Images i  set  i.Class1Id        = _class1Id,
                         i.Class1Prob      = _class1Prob,
                         i.Class2Id        = _class2Id,
