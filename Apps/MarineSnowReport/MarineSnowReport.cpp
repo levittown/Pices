@@ -172,6 +172,7 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
     MLClassConstPtr c = *idx;
     ImageSizeDistributionPtr  downCast = NULL;
     ImageSizeDistributionPtr  upCast   = NULL;
+    ImageSizeDistributionPtr  combinedCast   = NULL;
     db.ImagesSizeDistributionByDepth (deployment->CruiseName (), deployment->StationName (), deployment->DeploymentNum (), c->Name (), 
                                       1.0f, '0', 0.005f, 1.2f, 170.0f, 
                                       downCast, upCast
@@ -179,11 +180,22 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
 
     if  (downCast)
     {
+      combinedCast = downCast;
+      if  (upCast)
+        combinedCast->AddIn (*downCast, runLog);
+    }
+    else if  (upCast)
+    {
+      combinedCast = upCast;
+    }
+
+    if  (combinedCast)
+    {
       if  (!totalDownCast)
       {
         totalDownCast = new ImageSizeDistribution (downCast->DepthBinSize (), downCast->InitialValue (), downCast->GrowthRate (), downCast->EndValue (), downCast->SizeStartValues (), downCast->SizeStartValues (), runLog);
       }
-      totalDownCast ->AddIn (*downCast, runLog);
+      totalDownCast ->AddIn (*combinedCast, runLog);
     }
 
     delete  downCast;  downCast = NULL;
