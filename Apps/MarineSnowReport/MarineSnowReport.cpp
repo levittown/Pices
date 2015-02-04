@@ -145,66 +145,69 @@ void  CreateThresholdHeaders (VectorFloat&  sizeThresholds,
 
 
 DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
-                                                DataBase&            db
+                                                DataBase&            db,
+                                                RunLog&              runLog
                                                )
 {
   cout << deployment->CruiseName () << "\t" << deployment->StationName () << "\t" << deployment->DeploymentNum () << endl;
 
+  MLClassConstListPtr  allClasses = db.MLClassLoadList ();
 
-  // 1)Determines Midpoint of deploymet from Instruments table.
-  KKStr  sqlStr = "Call ImagesSizeDataByDepthSipper11(" + deployment->CruiseName ().QuotedStr () + "," + 
-                                                          deployment->StationName ().QuotedStr () + "," + 
-                                                          deployment->DeploymentNum ().QuotedStr () + 
-                                                          ",1, '0', 0.005, 1.2, 170.0)";
+  ImageSizeDistributionPtr  downCast = NULL;
+  ImageSizeDistributionPtr  upCast   = NULL;
 
-  VectorKKStr  columnNames;
-  KKStrMatrixPtr results = db.QueryStatementReturnAllColumns (sqlStr.Str (), sqlStr.Len (), columnNames);
-  if  (results == NULL)
+  ImageSizeDistributionPtr  totalDownCast = NULL;
+
+  MLClassConstPtr  detritusClass = allClasses->LookUpByName ("Detritus");
+  MLClassConstListPtr  classes = detritusClass->BuildListOfDecendents (detritusClass);
+  if  (classes->PtrToIdx (detritusClass) < 0)
+    classes->AddMLClass (detritusClass);
+
+  delete  allClasses;
+  allClasses = NULL;
+
+  MLClassConstList::const_iterator  idx;
+  for  (idx = classes->begin ();  idx != classes->end ();  ++idx)
   {
-    cout << "No results returend" << endl;
+    MLClassConstPtr c = *idx;
+    ImageSizeDistributionPtr  downCast = NULL;
+    ImageSizeDistributionPtr  upCast   = NULL;
+    db.ImagesSizeDistributionByDepth (deployment->CruiseName (), deployment->StationName (), deployment->DeploymentNum (), c->Name (), 
+                                      1.0f, '0', 0.005f, 1.2f, 170.0f, 
+                                      downCast, upCast
+                                    );
+
+    if  (downCast)
+    {
+      if  (!totalDownCast)
+      {
+        totalDownCast = new ImageSizeDistribution (downCast->DepthBinSize (), downCast->InitialValue (), downCast->GrowthRate (), downCast->EndValue (), downCast->SizeStartValues (), downCast->SizeStartValues (), runLog);
+      }
+      totalDownCast ->AddIn (*downCast, runLog);
+    }
+
+    delete  downCast;  downCast = NULL;
+    delete  upCast;    upCast   = NULL;
+  }
+  
+  if  (!totalDownCast)
+  {
+    runLog.Level (-1) << "MarineSnowReportDeployment    ***ERROR***    No results returend" << endl;
     return NULL;
   }
-
-  int32  numRows = results->NumRows ();
-  int32  numCols = results->NumCols ();
-  int32  numCountCols = numCols - 6;
+  
+  int32  numRows = totalDownCast->NumDepthBins ();         // numRows = results->NumRows ();
+  //int32  numCols =                                       // numCols = results->NumCols ();
+  int32  numCountCols = totalDownCast->NumSizeBuckets ();  // numCountCols = numCols - 6;
 
   if  (numRows == 0)
   {
-    delete  results;
-    results = NULL;
+    delete  totalDownCast;
+    totalDownCast = NULL;
     return  NULL;
   }
 
-  VectorFloat  sizeThresholds;
-
-  VectorKKStr  countHeader (numCountCols);
-  for  (int32 x = 0;  x < numCountCols;  ++x)
-  {
-    KKStr  columnName = columnNames[6 + x];
-    countHeader[x] = columnName;
-
-    float  sizeThreshold = 0;
-
-    if  (x == 0)
-    {
-      sizeThreshold = columnName.SubStrPart (1).ToFloat ();
-    }
-
-    else if  (x < (numCountCols - 1))
-    {
-      int32 idx = columnName.LocateCharacter ('_');
-      if  (idx > 0)
-        sizeThreshold = columnName.SubStrPart (idx + 1).ToFloat ();
-    }
-
-    else if  (x == (numCountCols - 1))
-    {
-      sizeThreshold = columnName.SubStrPart (2).ToFloat ();
-    }
-
-    sizeThresholds.push_back (sizeThreshold);
-  }
+  VectorFloat  sizeThresholds = totalDownCast->SizeStartValues ();
 
   bool  cancelFlag = false;
   InstrumentDataMeansListPtr  instData = db.InstrumentDataBinByMeterDepth (deployment->CruiseName (), deployment->StationName (), deployment->DeploymentNum (), 1.0f, cancelFlag);
@@ -266,18 +269,19 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
 
   for  (int32 rowIdx = 0;  rowIdx < numRows;  ++rowIdx)
   {
-    KKStrList&  row = (*results)[rowIdx];
 
-    bool  downCast     = row[0].ToBool  ();
-    int32  bucketIdx   = row[1].ToInt32 ();
-    float  bucketDepth = row[2].ToFloat ();
-    int32  imageCount  = row[3].ToInt32 ();
-    int32  pixelCount  = row[4].ToInt32 ();
-    int32  filledArea  = row[5].ToInt32 ();
+    ImageSizeDistributionRowPtr  row = totalDownCast->GetDepthBin ((kkuint32)rowIdx);
+    if  (!row)
+      continue;
 
-    VectorInt32  counts (numCountCols, 0);
-    for  (int32 x = 0;  x < numCountCols;  ++x)
-      counts[x] = row[6 + x].ToInt32 ();
+    bool   downCast    = true;
+    int32  bucketIdx   = rowIdx;
+    float  bucketDepth = row->Depth ();
+    int32  imageCount  = (kkint32)row->ImageCount ();
+    int32  pixelCount  = row->TotalPixels ();
+    int32  filledArea  = row->TotalFilledArea ();
+
+    const VectorUint32&  counts = row->Distribution ();
 
     float  volumeSampled = 0.0f;
     InstrumentDataMeansPtr  idm = instData->LookUp (downCast, bucketDepth);
@@ -351,18 +355,18 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
 
   for  (int32 rowIdx = 0;  rowIdx < numRows;  ++rowIdx)
   {
-    KKStrList&  row = (*results)[rowIdx];
+    ImageSizeDistributionRowPtr  row = totalDownCast->GetDepthBin ((kkuint32)rowIdx);
+    if  (!row)
+      continue;
 
-    bool  downCast     = row[0].ToBool  ();
-    int32  bucketIdx   = row[1].ToInt32 ();
-    float  bucketDepth = row[2].ToFloat ();
-    int32  imageCount  = row[3].ToInt32 ();
-    int32  pixelCount  = row[4].ToInt32 ();
-    int32  filledArea  = row[5].ToInt32 ();
+    bool   downCast    = true;
+    int32  bucketIdx   = rowIdx;
+    float  bucketDepth = row->Depth ();
+    int32  imageCount  = (kkint32)row->ImageCount ();
+    int32  pixelCount  = row->TotalPixels ();
+    int32  filledArea  = row->TotalFilledArea ();
 
-    VectorInt32  counts (numCountCols, 0);
-    for  (int32 x = 0;  x < numCountCols;  ++x)
-      counts[x] = row[6 + x].ToInt32 ();
+    const VectorUint32&  counts = row->Distribution ();
 
     float  volumeSampled = 0.0f;
     InstrumentDataMeansPtr  idm = instData->LookUp (downCast, bucketDepth);
@@ -401,8 +405,8 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
   for  (uint32 x = 0;  x < integratedCounts.size ();  ++x)
     r1 << "\t" << integratedCounts[x];
 
-  delete  instData;  instData = NULL;
-  delete  results;   results  = NULL;
+  delete  instData;        instData = NULL;
+  delete  totalDownCast;   totalDownCast  = NULL;
 
   return  new DeploymentSummary (deployment->CruiseName (), deployment->StationName (), deployment->DeploymentNum (), totalVolumeSampled, sizeThresholds, integratedAbundance, integratedCounts);
 }  /* MarineSnowReportDeployment */
@@ -573,7 +577,7 @@ void  MarineSnowReport ()
       continue;
     }
 
-    DeploymentSummary*  sumary = MarineSnowReportDeployment (*idx, *db);
+    DeploymentSummary*  sumary = MarineSnowReportDeployment (*idx, *db, runLog);
     if  (sumary)
       summaries.push_back (sumary);
     ++loopCount;

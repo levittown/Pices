@@ -2917,3 +2917,11 @@ delimiter ;
 
 
 
+select  *  from Images i
+           join(SipperFiles sf)  on(sf.SipperFileId = i.SipperFileId)
+           where  sf.CruiseMame="WB0812"  and  sf.StationName = "DSH08";
+
+
+
+
+

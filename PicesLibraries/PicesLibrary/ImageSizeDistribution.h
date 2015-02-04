@@ -20,7 +20,8 @@ namespace MLL
     ImageSizeDistributionRow (float     _depth,
                               kkuint32  _numSizeBuckets,
                               kkuint32  _imageCount,
-                              kkuint32  _totalPixels
+                              kkuint32  _totalPixels,
+                              kkuint32  _totalFilledArea
                              );
 
 
@@ -29,7 +30,7 @@ namespace MLL
     kkuint32             TotalPixels     ()  const  {return totalPixels;}
     kkuint32             TotalFilledArea ()  const  {return totalFilledArea;}
     const VectorUint32&  Distribution    ()  const  {return distribution;}
-
+    
     void  ImageCount      (kkuint32  _imageCount)      {imageCount      = _imageCount;}
     void  TotalPixels     (kkuint32  _totalPixels)     {totalPixels     = _totalPixels;}
     void  TotalFilledArea (kkuint32  _totalFilledArea) {totalFilledArea = _totalFilledArea;}
@@ -78,6 +79,8 @@ namespace MLL
     float     EndValue       () const  {return  endValue;}
     kkuint32  NumSizeBuckets () const  {return  numSizeBuckets;}
     kkuint32  NumDepthBins   () const  {return  depthDistributions.size ();}
+
+    ImageSizeDistributionRowPtr  GetDepthBin (kkuint32  depthBinIdx);
 
     const VectorFloat&  SizeStartValues ()  const  {return sizeStartValues;}
     const VectorFloat&  SizeEndValues   ()  const  {return sizeEndValues;}

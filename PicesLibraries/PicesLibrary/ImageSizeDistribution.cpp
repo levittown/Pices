@@ -20,12 +20,14 @@ using namespace  MLL;
 ImageSizeDistributionRow::ImageSizeDistributionRow (float     _depth,
                                                     kkuint32  _numSizeBuckets,
                                                     kkuint32  _imageCount,
-                                                    kkuint32  _totalPixels
+                                                    kkuint32  _totalPixels,
+                                                    kkuint32  _totalFilledArea
                                                    ):
-   depth        (_depth),
-   distribution (_numSizeBuckets, 0),
-   imageCount   (_imageCount),
-   totalPixels  (_totalPixels)
+   depth           (_depth),
+   distribution    (_numSizeBuckets, 0),
+   imageCount      (_imageCount),
+   totalPixels     (_totalPixels),
+   totalFilledArea (_totalFilledArea)
 {
 }
 
@@ -33,10 +35,11 @@ ImageSizeDistributionRow::ImageSizeDistributionRow (float     _depth,
 
 
 ImageSizeDistributionRow::ImageSizeDistributionRow (const ImageSizeDistributionRow&  row):
-   depth        (row.depth),
-   distribution (row.distribution),
-   imageCount   (row.imageCount),
-   totalPixels  (row.totalPixels)
+   depth            (row.depth),
+   distribution     (row.distribution),
+   imageCount       (row.imageCount),
+   totalPixels      (row.totalPixels),
+   totalFilledArea  (row.totalFilledArea)
 {
   
 }
@@ -78,11 +81,10 @@ void  ImageSizeDistributionRow::AddIn (const ImageSizeDistributionRow&  right)
   for  (kkint32  x = 0;  x < xM;  ++x)
     distribution[x] += right.distribution[x];
 
-  imageCount  += right.imageCount;
-  totalPixels += right.totalPixels;
+  imageCount      += right.imageCount;
+  totalPixels     += right.totalPixels;
+  totalFilledArea += right.totalFilledArea;
 }  /* AddIn */
-
-
 
 
 
@@ -113,7 +115,7 @@ ImageSizeDistribution::ImageSizeDistribution (float               _depthBinSize,
     _runLog.Level (-1) << endl << "ImageSizeDistribution   ***ERROR***   " << errMsg << endl << endl;
     throw KKException (errMsg);
   }
-  allDepths = new ImageSizeDistributionRow (-1.0f, numSizeBuckets, 0, 0);
+  allDepths = new ImageSizeDistributionRow (-1.0f, numSizeBuckets, 0, 0, 0);
 }
 
 
@@ -128,12 +130,29 @@ ImageSizeDistribution::~ImageSizeDistribution ()
 
 
 
+/**
+ *@brief  Returns pointer to ImageSizeDistributionRow  that is index 'depthBinIdx'.
+ *@details  Caller will not own the entry;  so do not delete it!
+ */
+ImageSizeDistributionRowPtr  ImageSizeDistribution::GetDepthBin (kkuint32  depthBinIdx)
+{
+  if  (depthBinIdx >= depthDistributions.size ())
+    return NULL;
+  else
+    return depthDistributions[depthBinIdx];
+}
+
+
+
+
+
+
 void  ImageSizeDistribution::PopulateDistributions (kkuint32  depthIdx)
 {
   while  (depthDistributions.size () <= depthIdx)
   {
     kkuint32  idx = depthDistributions.size ();
-    depthDistributions.push_back (new ImageSizeDistributionRow (idx * depthBinSize, numSizeBuckets, 0, 0));
+    depthDistributions.push_back (new ImageSizeDistributionRow (idx * depthBinSize, numSizeBuckets, 0, 0, 0));
   }
 }  /* PopulateDistributions */
 
@@ -194,12 +213,13 @@ void  ImageSizeDistribution::AddIn (const ImageSizeDistribution&  right,
     throw KKException (errMsg);
   }
 
-  kkuint32  xL = depthDistributions.size ();
-  kkuint32  xR = right.depthDistributions.size ();
-  kkuint32  xM = Min (xL, xR);
+  if  (depthDistributions.size () < right.depthDistributions.size ())
+    PopulateDistributions (right.depthDistributions.size ());
 
-  for  (kkuint32 x = 0;  x < xM;  ++x)
+
+  for  (kkuint32 x = 0;  x < right.depthDistributions.size ();  ++x)
   {
     depthDistributions[x]->AddIn (*(right.depthDistributions[x]));
+    allDepths->AddIn (*(right.depthDistributions[x]));
   }
 }  /* AddIn */
