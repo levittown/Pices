@@ -411,6 +411,8 @@ namespace PicesCommander
     }
 
 
+
+
     private  void  SizeDistributionForAClass (PicesClass                      c,
                                               bool                            includeChildren,
                                               ref PicesImageSizeDistribution  downCastAcumulated,
@@ -458,6 +460,9 @@ namespace PicesCommander
     }  /* SizeDistributionForAClass */
     
   
+
+
+
     
     /// <summary>
     /// This method will be ran as a separate thread; it is respnable for collecting all the data needed to generate the plot.
@@ -485,7 +490,11 @@ namespace PicesCommander
 
       goalie.StartBlock ();
       
-      SizeDistributionForAClass (PicesClassList.GetUniqueClass (ClassToPlot.Text, ""), IncludeSubClasses.Checked, ref downCast, ref upCast);
+      SizeDistributionForAClass (PicesClassList.GetUniqueClass (ClassToPlot.Text, ""), 
+                                 IncludeSubClasses.Checked, 
+                                 ref downCast, 
+                                 ref upCast
+                                );
 
       threadConn.Close ();
       threadConn = null;

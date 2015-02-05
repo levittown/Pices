@@ -30,7 +30,7 @@ begin
                                                     (not isnull(id.CTDDateTime)) and
                                                     (id.CTDDateTime  > "2000-01-01 00:01:01")  and  
                                                     (id.CTDDateTime  < "2020-12-31 23:59:59")  and
-													(id.CTDBattery   > 5.5)    and  (id.CTDBattery   < 14.0)  and
+                                                    (id.CTDBattery   > 5.5)    and  (id.CTDBattery   < 14.0)  and
                                                     (id.Depth        < 1000)                                  and
                                                     (id.Temperature  > 0.0)    and  (id.Temperature  < 40.0)  and
                                                     (id.Salinity     > 20)     and  (id.Salinity     < 40.0)  and
@@ -60,55 +60,6 @@ delimiter ;
 
 
 
-
-
-
-
-
-create procedure  SipperFilesUpdateScanLinesAllFiles ()
-begin
-  declare done             int default 0;
-  declare _sipperFileName  varchar(48);
-  declare _sipperFileId    int default 0;
-
-  declare cur1 cursor for  select sf.SipperFileId, sf.SipperFileName
-                                  from SipperFiles sf
-                                  order by sf.SipperFileName;
-
-  declare continue HANDLER for not found set done = 1;
-
-  open cur1;
-
-  repeat
-    fetch  cur1 into _sipperFileId, _sipperFileName;
-    if not done then
-       update SipperFiles sf
-              set sf.NumScanLines   = (select Max(id.ScanLine) from InstrumentData id
-                                              where id.SipperFileId = _sipperFileId
-                                      ),
-                  sf.DateTimeStart  = (select Min(id.CTDDateTime)  from InstrumentData id
-                                              where (id.SipperFileId = _sipperFileId)   and   (id.CTDDateTime > "1990-01-01 12:00:00")  and  (not isnull(id.CTDDateTime)) and
-																							  (id.CTDBattery > 7)  and  (id.CTDBattery < 15)  and  (Time(id.CTDDateTime) <> "00:00:00")
-                                      ),
-                  sf.latitude       = (select id.Latitde  from InstrumentData id  
-                                              where  (id.SipperFileId = _sipperFileId)   and   (id.Latitde != 0.0)  and  (not isnull(id.Latitde))  and  (id.ScanLine > 20000)
-                                              order by id.ScanLine  
-                                              limit 1
-                                      ),
-                  sf.Longitude      = (select id.Longitude  from InstrumentData id  
-                                              where  (id.SipperFileId = _sipperFileId)   and   (id.Longitude != 0.0)  and  (not isnull(id.Longitude))  and  (id.ScanLine > 20000)
-                                              order by id.ScanLine  
-                                              limit 1
-                                      )
-               where sf.SipperFileId = _sipperFileId;
-
-    end if;
-  until done end repeat;
-
-  close cur1;
-end;
-//
-delimiter ;
 
 
 
@@ -150,24 +101,33 @@ begin
               set sf.NumScanLines   = (select Max(id.ScanLine) from InstrumentData id
                                               where id.SipperFileId = _sipperFileId
                                       ),
+
                   sf.DateTimeStart  = (select Min(id.CTDDateTime)  from InstrumentData id
-                                              where (id.SipperFileId = _sipperFileId)   and   (id.CTDDateTime > "1990-01-01 12:00:00")  and  (not isnull(id.CTDDateTime)) and
-																							  (id.CTDBattery > 7)  and  (id.CTDBattery < 15)  and  (Time(id.CTDDateTime) <> "00:00:00")
+                                              where (id.SipperFileId = _sipperFileId)   and   
+                                                    (not isnull(id.CTDDateTime)) and
+                                                    (id.CTDDateTime  > "2000-01-01 00:01:01")  and  
+                                                    (id.CTDDateTime  < "2020-12-31 23:59:59")  and
+                                                    (id.CTDBattery   > 5.5)    and  (id.CTDBattery   < 14.0)  and
+                                                    (id.Depth        < 1000)                                  and
+                                                    (id.Temperature  > 0.0)    and  (id.Temperature  < 40.0)  and
+                                                    (id.Salinity     > 20)     and  (id.Salinity     < 40.0)  and
+                                                    (id.Density      > 13)     and  (id.Density      < 40.0)  and
+                                                    (id.Fluorescence > -2)     and  (id.Fluorescence < 80.0)
                                       )
                where sf.SipperFileId = _sipperFileId;
     end if;
        
-    set _latitude = 0;
-    set _longitude = 0;
+    set _latitude  = 0.0;
+    set _longitude = 0.0;
     
     set _latitude = (select  id.Latitde  from InstrumentData id  
-                             where  (id.SipperFileId = _sipperFileId)   and   (id.Latitde != 0.0)  and  (not isnull(id.Latitde))  and  (id.ScanLine > 20000)
+                             where  (id.SipperFileId = _sipperFileId)   and   (id.Latitde != 0.0)  and  (not isnull(id.Latitde))  and  (id.ScanLine > 100000)
                              order by id.ScanLine  
                              limit 1
                     );
                     
     set  _longitude = (select id.Longitude  from InstrumentData id  
-                                              where  (id.SipperFileId = _sipperFileId)   and   (id.Longitude != 0.0)  and  (not isnull(id.Longitude))  and  (id.ScanLine > 20000)
+                                              where  (id.SipperFileId = _sipperFileId)   and   (id.Longitude != 0.0)  and  (not isnull(id.Longitude))  and  (id.ScanLine > 100000)
                                               order by id.ScanLine  
                                               limit 1
                       );
@@ -282,21 +242,22 @@ begin
   
 
   set  numScanLines  = (select Max(id.ScanLine) from InstrumentData id  where id.SipperFileId = sipperFileId);
-                                              
-
-  set  CTDDateTimeStart = (select Min(id.CTDDateTime)  from InstrumentData id
-                                 where (id.SipperFileId = sipperFileId)   and   (id.CTDDateTime > "1990-01-01 12:00:00")  and  (not isnull(id.CTDDateTime))  and
-                                                                                (id.CTDBattery > 7)  and  (id.CTDBattery < 15)  and  (Time(id.CTDDateTime) <> "00:00:00")
-                                 );
-
-
-  set  CTDDateTimeEnd   = (select Max(id.CTDDateTime)  from InstrumentData id
-                               where (id.SipperFileId = sipperFileId)   and   (id.CTDDateTime > "1990-01-01 12:00:00")  and  (not isnull(id.CTDDateTime))  and
-                                                                              (id.CTDBattery > 7)  and  (id.CTDBattery < 15)  and  (Time(id.CTDDateTime) <> "00:00:00")
-                               );
-
+       
+  select Min(id.CTDDateTime), Max(id.CTDDateTime)  into  CTDDateTimeStart, CTDDateTimeEnd   
+         from InstrumentData id
+         where (id.SipperFileId = sipperFileId)   and   
+               (not isnull(id.CTDDateTime))               and
+               (id.CTDDateTime  > "2000-01-01 00:01:01")  and  
+               (id.CTDDateTime  < "2020-12-31 23:59:59")  and
+               (id.Depth        < 1000)                   and
+               (id.Temperature  > 0.0)    and  (id.Temperature  < 40.0)  and
+               (id.Salinity     > 20)     and  (id.Salinity     < 40.0)  and
+               (id.Density      > 13)     and  (id.Density      < 40.0)  and
+               (id.Fluorescence > -2)     and  (id.Fluorescence < 80.0)  and
+               (id.CTDBattery   > 7)      and  (id.CTDBattery   < 15)    and  
+               (id.CTDBattery   > 5.5)    and  (id.CTDBattery   < 14.0);
+       
   select  sipperFileId, sipperFileName, numScanLines, CTDDateTimeStart, CTDDateTimeEnd;
-
 end;
 //
 delimiter ;
@@ -326,15 +287,20 @@ begin
 
 
   set _dateTimeStart = (select Min(id.CTDDateTime)  from InstrumentData id
-                              where (id.SipperFileId = _sipperFileId)     and
-                                    (id.CTDDateTime > "1990-01-01 12:00:00")  and
-                                    (not isnull(id.CTDDateTime)) and
-                                    (id.CTDBattery > 7)  and  (id.CTDBattery < 15)  and  
-                                    (Time(id.CTDDateTime) <> "00:00:00")
+                              where (id.SipperFileId = _sipperFileId)          and
+                                    (not isnull(id.CTDDateTime))               and
+                                    (id.CTDDateTime  > "2000-01-01 00:01:01")  and  
+                                    (id.CTDDateTime  < "2020-12-31 23:59:59")  and
+                                    (id.Depth        < 1000)                   and
+                                    (id.Temperature  > 0.0)    and  (id.Temperature  < 40.0)  and
+                                    (id.Salinity     > 20)     and  (id.Salinity     < 40.0)  and
+                                    (id.Density      > 13)     and  (id.Density      < 40.0)  and
+                                    (id.Fluorescence > -2)     and  (id.Fluorescence < 80.0)  and
+                                    (id.CTDBattery   > 7)      and  (id.CTDBattery   < 15)    and  
+                                    (id.CTDBattery   > 5.5)    and  (id.CTDBattery   < 14.0)
                       );
 
   set _numImages = (select count(*) from Images i where  i.SipperFileId = _sipperFileId);
-
 
   select  _numScanLines as NumScanLines, _dateTimeStart as  DateTimeStart,  _numImages as NumImages, _sipperFileId as SipperFileId;
 end;

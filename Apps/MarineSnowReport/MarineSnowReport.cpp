@@ -339,14 +339,14 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
 
   r1 << endl;
 
-  r1 << "" << "\t" << "" << "\t" << "" << "\t" << "Integrated Abundance" << "\t" << "";
+  r1 << "" << "\t" << "" << "\t" << "" << "\t" << "" << "\t" << "Integrated Abundance" << "\t" << "";
   for  (uint32 x = 0;  x < integratedAbundance.size ();  ++x)
   {
     r1 << "\t" << integratedAbundance[x];
   }
   r1 << endl;
 
-  r1 << "" << "\t" << "" << "\t" << "" << "\t" << "Integrated log10(Abundance)" << "\t" << "";
+  r1 << "" << "\t" << "" << "\t" << "" << "\t" << "" << "\t" << "Integrated log10(Abundance)" << "\t" << "";
   for  (uint32 x = 0;  x < integratedAbundance.size ();  ++x)
   {
     double  zed = integratedAbundance[x] + 1.0;
@@ -413,7 +413,7 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
     r1 << endl;
   }
 
-  r1 << "" << "\t" << "" << "\t" << "" << "\t" << "Integrated Counts" << "\t" << "";
+  r1 << "" << "\t" << "" << "\t" << "" << "\t" << "" << "\t" << "Integrated Counts" << "\t" << "";
   for  (uint32 x = 0;  x < integratedCounts.size ();  ++x)
     r1 << "\t" << integratedCounts[x];
 
