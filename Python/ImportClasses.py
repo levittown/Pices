@@ -105,56 +105,34 @@ def  TimeFromHHMMSS(s):
 
 
 
-def  LoadSipperFileLookUp(fileName, db, c):
+
+def  LoadClassExtenalTranslationTable(fileName):
   try:
-    sipperFilesData = open(fileName)
+    classData = open(fileName)
   except  OSError  as  err:
     print("Could not open \"" + fileName + "\".");
     return  None
-  sipperFileDic = {}
-  for  l in sipperFilesData:
+  classDic = {}
+  for  l in classData:
     fields=l.split('\t')
-    if  len(fields) > 1:
-      sipperFileIdExt = ToInt (fields[0])
-      sipperFileName  = fields[1]
-      sqlStr=("select SipperFileId from SipperFiles where SipperFileName = " + sipperFileName)
-      c.execute(sqlStr)
-      for  (sipperFileId)  in  c:
-        sipperFileDic[sipperFileIdExt] = sipperFileId[0]
-  sipperFilesData.close()
-  return  sipperFileDic
+    if  len(fields) > 3:
+      classId   = ToInt (fields[0])
+      classMame = fields[1].strip("\"")
+      classDic[classId] = classMame
+  classData.close()
+  return  classDic
 
 
 
 
 
-def  LogEntryExist(db, c, _logEntryIdExt, _progName, _cmdLine, _dateTimeStart):
-  progNameOF      = ""
-  cmdLineOF       = ""
-  dateTimeStartOF = ""
-
-  logEntryInDB = False
-
-  sqlStr = ("select ProgName, CmdLine, DateTimeStart  from  LogEntries  where  LogEntryId = " + str(_logEntryIdExt))
+def  IdentifyClass(db, c, className):
+  ourClassId = -1
+  sqlStr=('select ClassId from Classes where ClassName = "' + className + '"')
   c.execute(sqlStr)
-  for  (progNameOF, cmdLineOF, dateTimeStartOF)  in  c:
-    if  (progNameOF == _progName):
-      if  (cmdLineOF != _cmdLine):
-        print(cmdLineOF)
-        print(_cmdLine)
-      else:
-        if  (dateTimeStartOF == _dateTimeStart):
-           logEntryInDB = True
-
-  if  logEntryInDB != True:
-    sqlStr = ("select LogEntryId, ProgName, CmdLine, DateTimeStart  from  LogEntries  where  externalLogEntryId = " + str(_logEntryIdExt))
-    c.execute(sqlStr)
-    for  (logEntryIdOF, progNameOF, cmdLineOF, dateTimeStartOF)  in  c:
-      if  (progNameOF == _progName)  and  (cmdLineOF == _cmdLine)  and  (dateTimeStartOF == _dateTimeStart):
-        logEntryInDB = True
-  return  logEntryInDB
-
-
+  for  (classId)  in  c:
+     ourClassId = classId[0]
+  return  ourClassId
 
 
 
@@ -163,7 +141,7 @@ def  LogEntryExist(db, c, _logEntryIdExt, _progName, _cmdLine, _dateTimeStart):
 
 
 
-def  ImportLogEntries(dirName):
+def  ImportClassEntries(dirName):
   try:
        #db = mysql.connector.Connect(user='kkramer',
        #                             password="tree10peach",
@@ -195,60 +173,42 @@ def  ImportLogEntries(dirName):
 
   c = db.cursor()
 
-  sipperFileName = os.path.join(dirName, "SipperFiles") + ".txt"
-  sipperFileIdLookUp = LoadSipperFileLookUp(sipperFileName, db, c)
-  
-  fullLogEntryFileName = os.path.join(dirName, "LogEntries") + ".txt"
-  logEntryData = open(fullLogEntryFileName)
+
+  classesFileName = os.path.join(dirName, "Classes") + ".txt"
+  classNameLookUp = LoadClassExtenalTranslationTable (classesFileName)
+
+  classesData = open(classesFileName)
 
   count = 0
 
-  for  l in logEntryData:
+  for  l in classesData:
     fields=l.split('\t')
-    if  len(fields) > 13:
-      logEntryIdExt       = ToInt(fields[0])
-      progCode            = fields[1]
-      progName            = fields[2]
-      dateTimeCompiled    = fields[3]
-      cmdLine             = eval('"' + fields[4].replace('"','') + '"')
-      CompName            = fields[5]
-      dataBaseUserName    = fields[6]
-      compUserName        = fields[7]
-      dateTimeStart       = fields[8]
-      dateTimeStartUtc    = fields[9]
-      dateTimeEnd         = fields[10]
-      cpuTimeUsed         = fields[11]
-      completionStatus    = fields[12]
-      sipperFileIdExt     = ToInt(fields[13])
-      sipperFileIdOur = 0
-      if  sipperFileIdExt > 0:
-        try:
-          sipperFileIdOur = sipperFileIdLookUp[sipperFileIdExt]
-        except:
-          sipperFileIdOur = 0
+    if  len(fields) > 2:
+      classIdExt  = ToInt(fields[0])
+      className   = fields[1].strip('"')
+      parentIdExt = ToInt(fields[2])
+      description = fields[3]
+      mandatory   = fields[4]
+      summarize   = fields[5]
 
-      #Make sure that this entry is not already in the database.
-      if  (LogEntryExist (db, c, logEntryIdExt, progName.strip("\""), cmdLine.strip("\""), DateTimeFromStr(dateTimeStart))):
-        print(str(logEntryIdExt) + " already in database.")
-      else:
-        sqlStr = ("insert into LogEntries(ProgCode, ProgName, DateTimeCompiled, CmdLine, " +
-                  "CompName, DataBaseUserName, CompUserName, DateTimeStart, DateTimeStartUtc, DateTimeEnd, " +
-                  "CpuTimeUsed, CompletionStatus, SipperFileId, externalLogEntryId)" + " " +
-           "values(" + progCode             + "," +
-                       progName             + "," +
-                       dateTimeCompiled     + "," +
-                       "\"" + cmdLine +"\"" + "," +
-                       CompName             + "," +
-                       dataBaseUserName     + "," +
-                       compUserName         + "," +
-                       dateTimeStart        + "," +
-                       dateTimeStartUtc     + "," +
-                       dateTimeEnd          + "," +
-                       cpuTimeUsed          + "," +
-                       completionStatus     + "," +
-                       str(sipperFileIdOur) + "," +
-                       str(logEntryIdExt)   +
-                  ")"
+      classIdOurs = IdentifyClass (db, c, className)
+      if  (classIdOurs < 0):
+        parentIdOurs = 1
+        try:
+          parentName = classNameLookUp[parentIdExt]
+        except:
+          parentName = ""
+
+        if  (parentName != ""):
+          parentIdOurs = IdentifyClass (db, c, parentName)
+
+        if  (parentIdOurs < 1):
+          parentIdOurs = 1
+
+        sqlStr = ('insert into  classes(ClassName, ParentId)' + ' ' +
+                  'values(' + '"' + className + '"'  + ', ' +
+                             str(parentIdOurs)      +
+                        ')'
                   )
         print (sqlStr)
         try:
@@ -256,7 +216,8 @@ def  ImportLogEntries(dirName):
           db.commit()
         except  mysql.connector.Error  as err:
           print(err)
-  logEntryData.close ()
+        
+  classesData.close ()
 
 
 
@@ -264,7 +225,7 @@ def  main():
   #rootDir="E:\\Users\\kkramer\\Dropbox\\Sipper\\FromAndrewToKurt\\Validation\\2014-09-16\\"
   #rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews"
   rootDir="C:\\Pices\\UpdatesFromOtherServers"
-  ImportLogEntries(rootDir)
+  ImportClassEntries(rootDir)
   print("\n\n    *** Import Completed ***\n\n")
 
 

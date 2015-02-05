@@ -56,25 +56,26 @@ def  TimeFromHHMMSS(s):
 
 
 
+
+
 def  LoadClassList(fileName, db, c):
   try:
     classData = open(fileName)
   except  OSError  as  err:
     print("Could not open \"" + fileName + "\".");
     return  None
-  classDic = {}
+  classDict = {}
   for  l in classData:
     fields=l.split('\t')
     if  len(fields) > 3:
       extClassId = ToInt (fields[0])
-      className  = fields[1].strip("\"")
-      classDic[classId] = className
-      sqlStr=("select ClassId from Classes where ClassName = \"" + className + "\")
+      className  = fields[1].strip('"')
+      sqlStr=('select ClassId from Classes where ClassName = "' + className + '"')
       c.execute(sqlStr)
       for  (ClassId)  in  c:
-        classDict[extClassId] = ClassId
+        classDict[extClassId] = ClassId[0]
   classData.close()
-  return  classDic
+  return  classDict
 
 
 
@@ -130,11 +131,11 @@ def  ImportValidationDataInDirectory(dirName):
   c = db.cursor()
   
   fullClassFileName = os.path.join(dirName, "Classes") + ".txt"
-  classDic = LoadClassList(fullClassFileName)
+  classDic = LoadClassList(fullClassFileName, db, c)
   if  classDic is None:
     return
 
-  logEntryDict = LoadLogentryLookup(db, c)
+  logEntryDict = LoadLogEntryLookup(db, c)
   if  logEntryDict is None:
     print("***ERROR***  Failed to load 'Log Entries'")
     return
@@ -153,9 +154,14 @@ def  ImportValidationDataInDirectory(dirName):
       extLogEntryId  = ToInt    (fields[2])
       extClass1Id    = ToInt    (fields[3])
       class1Prob     = ToFloat  (fields[4])
-      outClass1Id    = classDic [classId]
+      try:
+        ourClass1Id    = classDic [extClass1Id]
+      except:
+        print("Image :" + imageFileName + "  ExtClassID :" + str(extClass1Id) + " Missing Entry in Translation table.")
+        ourClass1Id = 0
+        
       ourLogEntryId = 0
-      if  (ourLogEntryId > 0):
+      if  (extLogEntryId > 0):
         ourLogEntryId = logEntryDict[extLogEntryId]
 
       sqlStr = ("update Images i "
@@ -164,7 +170,7 @@ def  ImportValidationDataInDirectory(dirName):
                 +       "i.ClassLogEntryId = " + str(ourLogEntryId) 
                 +  " where  i.ImageFileName = " + "\"" + imageFileName + "\"")
 
-      if  ((count % 50) == 0):
+      if  ((count % 100) == 0):
         print(count, ": ", sqlStr)
       try:
         c.execute(sqlStr)

@@ -146,6 +146,8 @@ void  CreateThresholdHeaders (VectorFloat&  sizeThresholds,
 
 DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
                                                 DataBase&            db,
+                                                const KKStr&         statistic,
+                                                const KKStr&         statisticStr,
                                                 RunLog&              runLog
                                                )
 {
@@ -166,36 +168,54 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
   delete  allClasses;
   allClasses = NULL;
 
+  char  statisticCode = '0';
+  float  startValue = 0.005f;
+  float  growthRate = 1.2f;
+  float  endValue   = 170.0f;
+
+  if  (statistic == "0")
+  {
+    statisticCode = '0';
+    startValue    = 0.005f;
+    growthRate    = 1.2f;
+    endValue      = 170.0f;
+  }
+
+  else if  (statistic == "1")
+  {
+    statisticCode = '1';
+    startValue    = 0.01f;
+    growthRate    = 1.1f;
+    endValue      = 170.0f;
+  }
+
+  else if  (statistic == "2")
+  {
+    statisticCode = '2';
+    startValue    = 0.005f;
+    growthRate    = 1.2f;
+    endValue      = 170.0f;
+  }
+
+
   MLClassConstList::const_iterator  idx;
   for  (idx = classes->begin ();  idx != classes->end ();  ++idx)
   {
     MLClassConstPtr c = *idx;
     ImageSizeDistributionPtr  downCast = NULL;
     ImageSizeDistributionPtr  upCast   = NULL;
-    ImageSizeDistributionPtr  combinedCast   = NULL;
     db.ImagesSizeDistributionByDepth (deployment->CruiseName (), deployment->StationName (), deployment->DeploymentNum (), c->Name (), 
-                                      1.0f, '0', 0.005f, 1.2f, 170.0f, 
+                                      1.0f, statisticCode, startValue, growthRate, endValue, 
                                       downCast, upCast
                                     );
 
     if  (downCast)
     {
-      combinedCast = downCast;
-      if  (upCast)
-        combinedCast->AddIn (*downCast, runLog);
-    }
-    else if  (upCast)
-    {
-      combinedCast = upCast;
-    }
-
-    if  (combinedCast)
-    {
       if  (!totalDownCast)
       {
         totalDownCast = new ImageSizeDistribution (downCast->DepthBinSize (), downCast->InitialValue (), downCast->GrowthRate (), downCast->EndValue (), downCast->SizeStartValues (), downCast->SizeStartValues (), runLog);
       }
-      totalDownCast ->AddIn (*combinedCast, runLog);
+      totalDownCast ->AddIn (*downCast, runLog);
     }
 
     delete  downCast;  downCast = NULL;
@@ -245,6 +265,7 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
      << "SvnVersion" << "\t" << svnVersionStr                << endl
      << "HostName"   << "\t" << osGetHostName ()             << endl
      << "UserName"   << "\t" << osGetUserName ()             << endl
+     << "StatisticCode" << "\t" << statistic << "\t" << statisticStr << endl
      << endl
      << endl;
 
@@ -447,7 +468,9 @@ public:
 
 
 void  PrintSummaryReports (DataBasePtr                  db,
-                           vector<DeploymentSummary*>&  summaries
+                           vector<DeploymentSummary*>&  summaries,
+                           const KKStr&                 statistic,
+                           const KKStr&                 statisticStr
                           )
 {
   uint32  x = 0;
@@ -468,6 +491,7 @@ void  PrintSummaryReports (DataBasePtr                  db,
      << "SvnVersion" << "\t" << svnVersionStr                << endl
      << "HostName"   << "\t" << osGetHostName ()             << endl
      << "UserName"   << "\t" << osGetUserName ()             << endl
+     << "Statistic"  << "\t" << statistic << "\t" << statisticStr << endl
      << endl
      << endl
      << endl;
@@ -549,12 +573,21 @@ void  PrintSummaryReports (DataBasePtr                  db,
 
 
 
-void  MarineSnowReport ()
+void  MarineSnowReport (const KKStr&  statistic)
 {
   RunLog  runLog;
   DataBasePtr  db = new DataBase (runLog);
 
-  marineSnowReportDirectory = osAddSlash (osAddSlash (SipperVariables::PicesReportDir ()) + "MarineSnowReports") + KKU::osGetLocalDateTime ().Date ().YYYYMMDD ();
+  KKStr  statisticStr = "UnKnown";
+  if  (statistic == "0")
+    statisticStr = "Area";
+  else if  (statistic == "1")
+    statisticStr = "Diameter";
+  else
+    statisticStr = "Volume";
+
+
+  marineSnowReportDirectory = osAddSlash (osAddSlash (SipperVariables::PicesReportDir ()) + "MarineSnowReports") + KKU::osGetLocalDateTime ().Date ().YYYYMMDD () + "_" + statisticStr;
   //marineSnowReportDirectory = "D:\\Users\\kkramer\\DropBox\\Dropbox\\USF_OilSpillGroup\\MarineSnow_" + KKU::osGetLocalDateTime ().Date ().YYYYMMDD ();
   KKU::osCreateDirectoryPath (marineSnowReportDirectory);
 
@@ -589,13 +622,13 @@ void  MarineSnowReport ()
       continue;
     }
 
-    DeploymentSummary*  sumary = MarineSnowReportDeployment (*idx, *db, runLog);
+    DeploymentSummary*  sumary = MarineSnowReportDeployment (*idx, *db, statistic, statisticStr, runLog);
     if  (sumary)
       summaries.push_back (sumary);
     ++loopCount;
   }
 
-  PrintSummaryReports (db, summaries);
+  PrintSummaryReports (db, summaries, statistic, statisticStr);
 
   delete  db;
   db = NULL;
@@ -618,7 +651,7 @@ int  main (int    argc,
     _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF ); 
   #endif
 
-  MarineSnowReport ();
+  MarineSnowReport ("1");
 
   return 0;
 }

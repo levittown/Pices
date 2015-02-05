@@ -105,55 +105,25 @@ def  TimeFromHHMMSS(s):
 
 
 
-def  LoadSipperFileLookUp(fileName, db, c):
-  try:
-    sipperFilesData = open(fileName)
-  except  OSError  as  err:
-    print("Could not open \"" + fileName + "\".");
-    return  None
-  sipperFileDic = {}
-  for  l in sipperFilesData:
-    fields=l.split('\t')
-    if  len(fields) > 1:
-      sipperFileIdExt = ToInt (fields[0])
-      sipperFileName  = fields[1]
-      sqlStr=("select SipperFileId from SipperFiles where SipperFileName = " + sipperFileName)
-      c.execute(sqlStr)
-      for  (sipperFileId)  in  c:
-        sipperFileDic[sipperFileIdExt] = sipperFileId[0]
-  sipperFilesData.close()
-  return  sipperFileDic
 
 
+def  SipperFileExist (db, c, _sipperFileIdExt, _sipperFileName):
+  sipperFileIdOF = -1
+  sipperFileNameOF = ""
+  sipperFileInDB = False
 
+  _sipperFileName = _sipperFileName.strip('"')
 
+  sipperFileIdOur = -1
 
-def  LogEntryExist(db, c, _logEntryIdExt, _progName, _cmdLine, _dateTimeStart):
-  progNameOF      = ""
-  cmdLineOF       = ""
-  dateTimeStartOF = ""
-
-  logEntryInDB = False
-
-  sqlStr = ("select ProgName, CmdLine, DateTimeStart  from  LogEntries  where  LogEntryId = " + str(_logEntryIdExt))
+  sqlStr = ('select SipperFileId, SipperFileName  from  SipperFiles  where  SipperFileName = "' + _sipperFileName + '"')
   c.execute(sqlStr)
-  for  (progNameOF, cmdLineOF, dateTimeStartOF)  in  c:
-    if  (progNameOF == _progName):
-      if  (cmdLineOF != _cmdLine):
-        print(cmdLineOF)
-        print(_cmdLine)
-      else:
-        if  (dateTimeStartOF == _dateTimeStart):
-           logEntryInDB = True
+  for  (sipperFileIdOF, sipperFileNameOF)  in  c:
+    if  (sipperFileNameOF == _sipperFileName):
+      sipperFileInDB = True
+      sipperFileIdOur = sipperFileIdOF
 
-  if  logEntryInDB != True:
-    sqlStr = ("select LogEntryId, ProgName, CmdLine, DateTimeStart  from  LogEntries  where  externalLogEntryId = " + str(_logEntryIdExt))
-    c.execute(sqlStr)
-    for  (logEntryIdOF, progNameOF, cmdLineOF, dateTimeStartOF)  in  c:
-      if  (progNameOF == _progName)  and  (cmdLineOF == _cmdLine)  and  (dateTimeStartOF == _dateTimeStart):
-        logEntryInDB = True
-  return  logEntryInDB
-
+  return  sipperFileIdOur
 
 
 
@@ -196,58 +166,79 @@ def  ImportLogEntries(dirName):
   c = db.cursor()
 
   sipperFileName = os.path.join(dirName, "SipperFiles") + ".txt"
-  sipperFileIdLookUp = LoadSipperFileLookUp(sipperFileName, db, c)
-  
-  fullLogEntryFileName = os.path.join(dirName, "LogEntries") + ".txt"
-  logEntryData = open(fullLogEntryFileName)
+  sipperFileData = open(sipperFileName)
 
   count = 0
 
-  for  l in logEntryData:
+  for  l in sipperFileData:
+    print(l)
     fields=l.split('\t')
+    fieldCount = len(fields)
     if  len(fields) > 13:
-      logEntryIdExt       = ToInt(fields[0])
-      progCode            = fields[1]
-      progName            = fields[2]
-      dateTimeCompiled    = fields[3]
-      cmdLine             = eval('"' + fields[4].replace('"','') + '"')
-      CompName            = fields[5]
-      dataBaseUserName    = fields[6]
-      compUserName        = fields[7]
+      sipperFileIdExt     = ToInt(fields[0])
+      sipperFileName      = fields[1]
+      cruiseName          = fields[2]
+      stationName         = fields[3]
+      deploymentNum       = fields[4]  # eval('"' + fields[4].replace('"','') + '"')
+      description         = fields[5]
+      latitude            = fields[6]
+      longitude           = fields[7]
       dateTimeStart       = fields[8]
-      dateTimeStartUtc    = fields[9]
-      dateTimeEnd         = fields[10]
-      cpuTimeUsed         = fields[11]
-      completionStatus    = fields[12]
-      sipperFileIdExt     = ToInt(fields[13])
-      sipperFileIdOur = 0
-      if  sipperFileIdExt > 0:
-        try:
-          sipperFileIdOur = sipperFileIdLookUp[sipperFileIdExt]
-        except:
-          sipperFileIdOur = 0
+
+      sp0Instrument       = fields[9]
+      sp1Instrument       = fields[10]
+      sp2Instrument       = fields[11]
+      sp3Instrument       = fields[12]
+      
+      ctdExt0             = ToInt(fields[13])
+      ctdExt1             = ToInt(fields[14])
+      ctdExt2             = ToInt(fields[15])
+      ctdExt3             = ToInt(fields[16])
+
+      sizeInBytes             = ToInt(fields[17])
+      numScanLines            = ToInt(fields[18])
+      scanRate                = ToFloat(fields[19])
+      depth                   = ToFloat(fields[20])
+      extractionStatus        = fields[21]
+      extractionScanLineStart = ToInt(fields[22])
+      extractionScanLineEnd   = ToInt(fields[23])
 
       #Make sure that this entry is not already in the database.
-      if  (LogEntryExist (db, c, logEntryIdExt, progName.strip("\""), cmdLine.strip("\""), DateTimeFromStr(dateTimeStart))):
-        print(str(logEntryIdExt) + " already in database.")
+      sipperFileIdOur = SipperFileExist (db, c, sipperFileIdExt, sipperFileName.strip("\""))
+      if  (sipperFileIdOur >= 0):
+        print(sipperFileName + " already in database  ExternalId :" + str(sipperFileIdExt) + "  OurId :" + str(sipperFileIdOur))
       else:
-        sqlStr = ("insert into LogEntries(ProgCode, ProgName, DateTimeCompiled, CmdLine, " +
-                  "CompName, DataBaseUserName, CompUserName, DateTimeStart, DateTimeStartUtc, DateTimeEnd, " +
-                  "CpuTimeUsed, CompletionStatus, SipperFileId, externalLogEntryId)" + " " +
-           "values(" + progCode             + "," +
-                       progName             + "," +
-                       dateTimeCompiled     + "," +
-                       "\"" + cmdLine +"\"" + "," +
-                       CompName             + "," +
-                       dataBaseUserName     + "," +
-                       compUserName         + "," +
-                       dateTimeStart        + "," +
-                       dateTimeStartUtc     + "," +
-                       dateTimeEnd          + "," +
-                       cpuTimeUsed          + "," +
-                       completionStatus     + "," +
-                       str(sipperFileIdOur) + "," +
-                       str(logEntryIdExt)   +
+        sqlStr = ("insert into SipperFiles(sipperFileName, ProgName, cruiseName, stationName, deploymentNum, " +
+                  "description, latitude, longitude, dateTimeStart, sp0Instrument, sp1Instrument, sp2Instrument, sp3Instrument, " +
+                  "ctdExt0, ctdExt1, ctdExt2, ctdExt3, sizeInBytes, numScanLines, scanRate, depth, extractionStatus, " +
+                  " extractionScanLineStart, extractionScanLineEnd)" + " " +
+           "values(" +
+                    sipperFileName + ", " +
+                    cruiseName     + ", " +
+                    stationName    + ", " +
+                    deploymentNum  + ", " +
+                    description    + ", " +
+                    latitude       + ", " +
+                    longitude      + ", " +
+                    dateTimeStart  + ", " +
+
+                    sp0Instrument  + ", " +
+                    sp1Instrument  + ", " +
+                    sp2Instrument  + ", " +
+                    sp3Instrument  + ", " +
+      
+                    ctdExt0        + ", " +
+                    ctdExt1        + ", " +
+                    ctdExt2        + ", " +
+                    ctdExt3        + ", " +
+
+                    sizeInBytes    + ", " +
+                    numScanLines   + ", " +
+                    scanRate       + ", " +
+                    depth          + ", " +
+                    extractionStatus  + ", " +
+                    extractionScanLineStart  + ", " +
+                    extractionScanLineEnd +
                   ")"
                   )
         print (sqlStr)
@@ -256,7 +247,7 @@ def  ImportLogEntries(dirName):
           db.commit()
         except  mysql.connector.Error  as err:
           print(err)
-  logEntryData.close ()
+  sipperFileData.close ()
 
 
 
