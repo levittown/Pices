@@ -1379,6 +1379,8 @@ namespace PicesCommander
         return;
       }
 
+      double  maxEndDateTime = 0.0;
+
       Font  axisTitleFont = new Font (FontFamily.GenericSerif, 12);
 
       ChartArea ca = ProfileChart.ChartAreas[0];
@@ -1435,6 +1437,8 @@ namespace PicesCommander
         foreach  (DataPoint dp in dstp.data)
         {
           s.Points.Add (dp);
+          if  (dp.XValue > maxEndDateTime)
+            maxEndDateTime = dp.XValue;
         }
 
         ProfileChart.Series.Add (s);
@@ -1471,6 +1475,8 @@ namespace PicesCommander
         foreach  (DataPoint dp in instSeriesToPlot.data)
         {
           s.Points.Add (dp);
+          if  (dp.XValue > maxEndDateTime)
+            maxEndDateTime = dp.XValue;
         }
 
         s.Legend = "Legend1";
@@ -1478,22 +1484,40 @@ namespace PicesCommander
         ProfileChart.Series.Add (s);
       }
 
-      ProfileChart.ChartAreas[0].AxisX.Minimum = initialStartTime.ToOADate ();
-      //ProfileChart.ChartAreas[0].AxisX.Maximum = lastDateTime.ToOADate ();
+
+
+      
+      double  minStartDateTime = initialStartTime.ToOADate ();
+      ProfileChart.ChartAreas[0].AxisX.Minimum = minStartDateTime;
+      ProfileChart.ChartAreas[0].AxisX.Maximum = maxEndDateTime;
 
       ProfileChart.ChartAreas[0].AxisX.IntervalOffsetType = DateTimeIntervalType.Seconds;
       ProfileChart.ChartAreas[0].AxisX.IntervalOffset = initialStartTime.ToOADate ();
       ProfileChart.ChartAreas[0].AxisX.IntervalType = DateTimeIntervalType.Seconds;
       ProfileChart.ChartAreas[0].AxisX.Interval = (double)timeInterval;
 
-
-      //ProfileChart.Series[0].XValueType = ChartValueType.DateTime;
       ProfileChart.ChartAreas[0].AxisX.LabelStyle.Enabled = true;
-      ProfileChart.ChartAreas[0].AxisX.LabelStyle.IntervalType = DateTimeIntervalType.Seconds;
-      ProfileChart.ChartAreas[0].AxisX.LabelStyle.Format = "HH:mm:ss";
-      //ProfileChart.ChartAreas[0].AxisX.Interval = 1;
-      //ProfileChart.ChartAreas[0].AxisX.IntervalOffset = 1;
+      ProfileChart.ChartAreas[0].AxisX.LabelStyle.Angle = -45;
+      //ProfileChart.ChartAreas[0].AxisX.LabelStyle.IntervalType = DateTimeIntervalType.Seconds;
+      //ProfileChart.ChartAreas[0].AxisX.LabelStyle.Format = "HH:mm:ss";
 
+      {
+        ProfileChart.ChartAreas[0].AxisX.CustomLabels.Clear ();
+        double  range = maxEndDateTime - minStartDateTime;
+        double  lableInterval = range / 8.0;
+        double  curDateTime = minStartDateTime;
+        for  (int x = 0;  x < 8;  ++x)
+        {
+          double  endDateTime = curDateTime + lableInterval;
+          DateTime dt = DateTime.FromOADate (curDateTime);
+          CustomLabel cl = new CustomLabel ();
+          cl.FromPosition = curDateTime;
+          cl.Text = dt.ToString ("HH:mm:ss");
+          cl.ToPosition = endDateTime;
+          ProfileChart.ChartAreas[0].AxisX.CustomLabels.Add (cl);
+          curDateTime = endDateTime;
+        }
+      }
 
       ProfileChart.ChartAreas[0].RecalculateAxesScale ();
 
