@@ -223,3 +223,30 @@ void  ImageSizeDistribution::AddIn (const ImageSizeDistribution&  right,
     allDepths->AddIn (*(right.depthDistributions[x]));
   }
 }  /* AddIn */
+
+
+
+kkint32  ImageSizeDistribution::IdentifySizeBucket (float  size)
+{
+  if  (sizeEndValues.size () < 1)
+    return -1;
+  if  ((size < sizeStartValues[0])  ||  (size > sizeEndValues[sizeEndValues.size () - 1]))
+    return -1;
+
+  kkuint32  left = 0;
+  kkuint32  right = sizeStartValues.size () - 1;
+  kkuint32  middle = 0;
+  while  (left <= right)
+  {
+    middle = (left + right) / 2;
+    if  (size < sizeStartValues[middle])
+      right = middle - 1;
+    else if   (size >= sizeEndValues[middle])
+      left = middle + 1;
+
+    else
+      return  (kkint32)middle;
+  }
+
+  return -1;
+}  /* IdentifySizeBucket */

@@ -3101,9 +3101,6 @@ namespace PicesCommander
                                                               Station.Text, 
                                                               Deployment.Text,
                                                               thumbnailClass,
-                                                              sizeMin,    sizeMax,
-                                                              probMin,    probMax,
-                                                              depthMin,   depthMax,
                                                               allClasses, 
                                                               activeClasses, 
                                                               rootDir

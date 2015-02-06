@@ -38,6 +38,7 @@ namespace PicesInterface
     the PicesClassList object called PicesClassList::GetUniqueClass.
    */
 
+
   public ref  class PicesClass
   {
   public:
@@ -63,8 +64,10 @@ namespace PicesInterface
     property  bool                Summarize            {bool         get () {return summarize;}     void set (bool    _summarize);}
     property  bool                UnDefined            {bool         get () {return unDefined;}}                                           /**< Inidicates that class undefined or Noise */
 
-
     void    AddAChild  (PicesClass^  child);
+
+    List<PicesClass^>^  BuildListOfDecendents ();
+
 
     bool    ChangeNameOfClass (String^ newName);  /**< Will only change the name if no other instance of 'MLClass' is using the new name */
 

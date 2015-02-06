@@ -105,6 +105,7 @@ namespace MLL
                  RunLog&                       log
                 );
 
+    kkint32  IdentifySizeBucket (float  size);
 
   private:
     void  PopulateDistributions (kkuint32  depthIdx);

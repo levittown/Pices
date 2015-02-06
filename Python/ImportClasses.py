@@ -190,27 +190,36 @@ def  ImportClassEntries(dirName):
       description = fields[3]
       mandatory   = fields[4]
       summarize   = fields[5]
-
+      parentIdOurs = 1
+      try:
+        parentName = classNameLookUp[parentIdExt]
+      except:
+        parentName = ""
+      if  (parentName != ""):
+        parentIdOurs = IdentifyClass (db, c, parentName)
+      if  (parentIdOurs < 1):
+        parentIdOurs = 1
       classIdOurs = IdentifyClass (db, c, className)
       if  (classIdOurs < 0):
-        parentIdOurs = 1
-        try:
-          parentName = classNameLookUp[parentIdExt]
-        except:
-          parentName = ""
-
-        if  (parentName != ""):
-          parentIdOurs = IdentifyClass (db, c, parentName)
-
-        if  (parentIdOurs < 1):
-          parentIdOurs = 1
-
         sqlStr = ('insert into  classes(ClassName, ParentId)' + ' ' +
                   'values(' + '"' + className + '"'  + ', ' +
                              str(parentIdOurs)      +
                         ')'
                   )
         print (sqlStr)
+        try:
+          c.execute(sqlStr)
+          db.commit()
+        except  mysql.connector.Error  as err:
+          print(err)
+      else:
+        sqlStr = ('update Classes c  '  +
+                     'set c.ParentId = '  + str(parentIdOurs) + ', ' +
+                         'c.Mandatory = ' + mandatory         + ', ' +
+                         'c.Summarize = ' + summarize         + ' '  +
+                     'where c.ClassName = ' + '"' + className + '"'
+                  )
+        print(sqlStr)
         try:
           c.execute(sqlStr)
           db.commit()

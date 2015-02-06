@@ -68,11 +68,25 @@ namespace  PicesInterface
   }
 
 
+  void  PicesImageSizeDistributionRow::AddIn (PicesImageSizeDistributionRow^  right)  
+  {
+    imageSizeDistributionRow->AddIn (*(right->UnmanagedClass ()));
+  }
+
+
 
   PicesImageSizeDistribution::PicesImageSizeDistribution (ImageSizeDistributionPtr  _imageSizeDistribution)
   {
     imageSizeDistribution = _imageSizeDistribution;
   }
+
+
+
+  PicesImageSizeDistribution::PicesImageSizeDistribution (PicesImageSizeDistribution^  _imageSizeDistribution)
+  {
+    imageSizeDistribution = new ImageSizeDistribution (*_imageSizeDistribution->UnmanagedClass ());
+  }
+
 
 
   PicesImageSizeDistribution::~PicesImageSizeDistribution ()
@@ -128,5 +142,10 @@ namespace  PicesInterface
   }  /* AllDepths */
 
 
+
+  kkint32  PicesImageSizeDistribution::IdentifySizeBucket (float  size)
+  {
+    return  imageSizeDistribution->IdentifySizeBucket (size);
+  }
 
 }  /* PicesInterface */

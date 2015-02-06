@@ -325,12 +325,34 @@ namespace  PicesInterface
 
 
 
+List<PicesClass^>^  PicesClass::BuildListOfDecendents ()
+{
+  if  (children == nullptr)
+    return  nullptr;
+
+  List<PicesClass^>^  decendents = gcnew List<PicesClass^> ();
+  for each  (PicesClass^  pc  in  children)
+  {
+    decendents->Add (pc);
+    List<PicesClass^>^  childsDecendents = pc->BuildListOfDecendents ();
+    if  (childsDecendents != nullptr)
+    {
+      for each  (PicesClass^  childDecendent in  childsDecendents)
+        decendents->Add (childDecendent);
+    }
+  }
+  return  decendents;
+}  /* BuildListOfDecendents */
+
+
+
+
+
 
   void  PicesClass::RemoveAChild (PicesClass^ child)
   {
     if  (children == nullptr)
       return;
-          
     int  x = 0;
     for  (x = 0;  x < children->Count;  x++)
     {

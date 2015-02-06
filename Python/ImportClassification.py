@@ -97,7 +97,53 @@ def  LoadLogEntryLookup(db, c):
 
 
 
-def  ImportValidationDataInDirectory(dirName):
+def  ImportClassificationDataOneFile(fileNum, fullFileName, classDic, logEntryDict, db, c):
+  classificationData = open(fullFileName)
+
+  count = 0
+
+  for  l in classificationData:
+    fields=l.split('\t')
+    if  len(fields) > 1:
+      imageId        = ToInt    (fields[0])
+      imageFileName  = fields[1].strip("\"")
+      extLogEntryId  = ToInt    (fields[2])
+      extClass1Id    = ToInt    (fields[3])
+      class1Prob     = ToFloat  (fields[4])
+      try:
+        ourClass1Id    = classDic [extClass1Id]
+      except:
+        print("Image :" + imageFileName + "  ExtClassID :" + str(extClass1Id) + " Missing Entry in Translation table.")
+        ourClass1Id = 0
+        
+      ourLogEntryId = 0
+      if  (extLogEntryId > 0):
+        ourLogEntryId = logEntryDict[extLogEntryId]
+
+      sqlStr = ("update Images i "
+                +  "set  i.Class1Id = " + str(ourClass1Id)  + ", "
+                +       "i.Class1Prob = " + str(class1Prob) + ", " 
+                +       "i.ClassLogEntryId = " + str(ourLogEntryId) 
+                +  " where  i.ImageFileName = " + "\"" + imageFileName + "\"")
+
+      if  ((count % 100) == 0):
+        print(fileNum, " " , count, ": ", sqlStr)
+      try:
+        c.execute(sqlStr)
+        db.commit()
+      except  mysql.connector.Error  as err:
+        print(err)
+      count = count + 1
+    fields = None
+  classificationData.close ()
+
+
+
+
+
+
+
+def  ImportClassificationData(dirName):
   try:
        #db = mysql.connector.Connect(user='kkramer',
        #                             password="tree10peach",
@@ -139,54 +185,21 @@ def  ImportValidationDataInDirectory(dirName):
   if  logEntryDict is None:
     print("***ERROR***  Failed to load 'Log Entries'")
     return
-  
-  fullClassificationFileName = os.path.join(dirName, "ImagesClassificationCruise_WB0212") + ".txt"
 
-  classificationData = open(fullClassificationFileName)
-
-  count = 0
-
-  for  l in classificationData:
-    fields=l.split('\t')
-    if  len(fields) > 1:
-      imageId        = ToInt    (fields[0])
-      imageFileName  = fields[1].strip("\"")
-      extLogEntryId  = ToInt    (fields[2])
-      extClass1Id    = ToInt    (fields[3])
-      class1Prob     = ToFloat  (fields[4])
-      try:
-        ourClass1Id    = classDic [extClass1Id]
-      except:
-        print("Image :" + imageFileName + "  ExtClassID :" + str(extClass1Id) + " Missing Entry in Translation table.")
-        ourClass1Id = 0
-        
-      ourLogEntryId = 0
-      if  (extLogEntryId > 0):
-        ourLogEntryId = logEntryDict[extLogEntryId]
-
-      sqlStr = ("update Images i "
-                +  "set  i.Class1Id = " + str(ourClass1Id)  + ", "
-                +       "i.Class1Prob = " + str(class1Prob) + ", " 
-                +       "i.ClassLogEntryId = " + str(ourLogEntryId) 
-                +  " where  i.ImageFileName = " + "\"" + imageFileName + "\"")
-
-      if  ((count % 100) == 0):
-        print(count, ": ", sqlStr)
-      try:
-        c.execute(sqlStr)
-        db.commit()
-      except  mysql.connector.Error  as err:
-        print(err)
-      count = count + 1
-  classificationData.close ()
-
-
+#  ImportClassificationDataOneFile(1, (os.path.join(dirName, "ImagesClassificationCruise_WB0511") + ".txt"), classDic, logEntryDict, db, c)
+#  ImportClassificationDataOneFile(2, (os.path.join(dirName, "ImagesClassificationCruise_WB0512") + ".txt"), classDic, logEntryDict, db, c)
+#  ImportClassificationDataOneFile(3, (os.path.join(dirName, "ImagesClassificationCruise_WB0611") + ".txt"), classDic, logEntryDict, db, c)
+#  ImportClassificationDataOneFile(4, (os.path.join(dirName, "ImagesClassificationCruise_WB0812") + ".txt"), classDic, logEntryDict, db, c)
+  ImportClassificationDataOneFile(5, (os.path.join(dirName, "ImagesClassificationCruise_WB0813") + ".txt"), classDic, logEntryDict, db, c)
+#  ImportClassificationDataOneFile(6, (os.path.join(dirName, "ImagesClassificationCruise_WB0814") + ".txt"), classDic, logEntryDict, db, c)
+#  ImportClassificationDataOneFile(7, (os.path.join(dirName, "ImagesClassificationCruise_WB0911") + ".txt"), classDic, logEntryDict, db, c)
+#  ImportClassificationDataOneFile(8, (os.path.join(dirName, "ImagesClassificationCruise_WB1008") + ".txt"), classDic, logEntryDict, db, c)
 
 def  main():
   #rootDir="E:\\Users\\kkramer\\Dropbox\\Sipper\\FromAndrewToKurt\\Validation\\2014-09-16\\"
   #rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews"
   rootDir="C:\\Pices\\UpdatesFromOtherServers"
-  ImportValidationDataInDirectory(rootDir)
+  ImportClassificationData(rootDir)
 
 
 main()

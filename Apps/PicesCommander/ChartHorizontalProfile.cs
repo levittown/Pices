@@ -1431,7 +1431,6 @@ namespace PicesCommander
         s.Color = dstp.color;
         s.BorderWidth = 2;
 
-        int  dpIDX = 0;
         DateTime  ctdDateTime = new DateTime (initialStartTime.Ticks);
 
         foreach  (DataPoint dp in dstp.data)
@@ -1471,7 +1470,6 @@ namespace PicesCommander
         s.Color = instSeriesToPlot.color;
 
         DateTime  dpDateTime = new DateTime (initialStartTime.Ticks);
-        int  dpIDX = 0;
         foreach  (DataPoint dp in instSeriesToPlot.data)
         {
           s.Points.Add (dp);
