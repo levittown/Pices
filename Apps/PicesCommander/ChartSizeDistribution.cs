@@ -43,6 +43,7 @@ namespace PicesCommander
     private  PicesImageSizeDistribution     upCast   = null;
     private  PicesImageSizeDistribution     bucketsDisplayed = null;  // Will contain the data thatis actually displayed in the Chart; depending of Cast options.
     private  PicesImageSizeDistributionRow  integratedDepth = null;
+    private  uint[]                         integratedDepthDistribution = null;
 
 
     private  String  cast              = "Down";
@@ -474,6 +475,7 @@ namespace PicesCommander
       }
 
       integratedDepth = bucketsDisplayed.AllDepths ();
+      integratedDepthDistribution = integratedDepth.Distribution ();
 
       threadConn.Close ();
       threadConn = null;
@@ -588,7 +590,6 @@ namespace PicesCommander
       s.ChartArea = "ChartArea1";
       s.ChartType = SeriesChartType.Column;
 
-      uint[]   distribution = integratedDepth.Distribution ();
       float[]  startValues  = bucketsDisplayed.SizeStartValues ();
       float[]  endValues    = bucketsDisplayed.SizeEndValues   ();
 
@@ -597,7 +598,7 @@ namespace PicesCommander
       float  maxX = float.MinValue;
       float  maxY = float.MinValue;
 
-      for  (int x = 0;  x < distribution.Length;  ++x)
+      for  (int x = 0;  x < integratedDepthDistribution.Length;  ++x)
       {
         float  sv = startValues[x];
         float  ev = sv * growthRate;
@@ -605,12 +606,21 @@ namespace PicesCommander
         if  (sv <= 0.0f)
           midPoint = initialSizeValue / 2.0f;
 
-        float  d = (float)Math.Log10 ((double)(distribution[x] + 1));
-        minY = Math.Min (minY, d);
-        maxY = Math.Max (maxY, d);
+        double  d = (double)integratedDepthDistribution[x];
+        if  (weightByVolume)
+        {
+          if ((depthVolumeProfile.Length > x) && (depthVolumeProfile[x] != 0.0))
+            d = d / depthVolumeProfile[x];
+          else
+            d = 0.0;
+        }
+        float log10D = (float)Math.Log10 (d + 1.0);
+
+        minY = Math.Min (minY, log10D);
+        maxY = Math.Max (maxY, log10D);
         minX = Math.Min (minX, midPoint);
         maxX = Math.Max (maxX, midPoint);
-        DataPoint dp = new DataPoint (midPoint, d);
+        DataPoint dp = new DataPoint (midPoint, log10D);
         s.Points.Add (dp);
       }
       s.XAxisType = AxisType.Primary;
@@ -618,7 +628,7 @@ namespace PicesCommander
       ProfileChart.ChartAreas[0].AxisY.LogarithmBase = 10.0;
       ProfileChart.ChartAreas[0].AxisY.LabelStyle.Format = "##,###,##0";
 
-      if  (WeightByVolume.Checked)
+      if  (weightByVolume)
         ca.AxisY.Title = SubInSuperScriptExponent ("Log 10  Abundance");
       else
         ca.AxisY.Title = SubInSuperScriptExponent ("Log 10  Count");
@@ -1053,6 +1063,9 @@ namespace PicesCommander
       if  ((ProfileChart.Series.Count < 1)  ||  (sizeBucket < 0))
         return;
 
+      if (sizeBucket >= integratedDepthDistribution.Length)
+        return;
+
       Series  s = ProfileChart.Series[0];
       if  (sizeBucket >= s.Points.Count)
         return;
@@ -1060,11 +1073,20 @@ namespace PicesCommander
       ClearHighLightedBucket ();
 
       DataPoint dp = s.Points[sizeBucket];
-      s.Points[sizeBucket].Label = dp.YValues[0].ToString("###,##0.00") + "(" + dp.XValue.ToString("##0.000") + ")";
+      double  d = (double)integratedDepthDistribution[sizeBucket];
+      if  (weightByVolume)
+      {
+        if ((depthVolumeProfile.Length > sizeBucket) && (depthVolumeProfile[sizeBucket] != 0.0))
+          d = d / depthVolumeProfile[sizeBucket];
+        else
+          d = 0.0;
+      }
+      
+      s.Points[sizeBucket].Label = d.ToString("###,##0.0") + "(" + dp.XValue.ToString("##0.000") + ")";
       s.Points[sizeBucket].Color = Color.Red;
 
       selectedSizeBucket = sizeBucket;
-    }
+    }  /* HighLightSizeBucket */
 
 
 
@@ -1082,7 +1104,6 @@ namespace PicesCommander
       if  (sizeBucket < 0)
         return;
       HighLightSizeBucket (sizeBucket);
-
-    }
+    }  /* ProfileChart_MouseClick */
   }
 }
