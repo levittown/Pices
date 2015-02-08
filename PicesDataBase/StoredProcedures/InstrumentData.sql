@@ -1053,6 +1053,81 @@ delimiter ;
 
 
 
+drop procedure  if exists InstrumentDataDeploymentVolumeSampled;
+delimiter //
+
+create procedure  InstrumentDataDeploymentVolumeSampled (in  _cruiseName      varChar(10),
+                                                         in  _stationName     varChar(10),
+                                                         in  _deploymentNum   varchar(4),
+                                                         in  _depthBinSize    float
+                                                        )
+begin
+  declare  _scanRate       float unsigned default 24950;
+  declare  _secsPerRec     float default 0.0;
+  declare  _midPoint       DateTime default null;
+  
+  declare  _chamberWidth   float  default 0.096;
+  declare  _cropLeft       int    default 0;
+  declare  _cropRight      int    default 4095;
+  
+  set _scanRate = (select max(sf.ScanRate)  from  SipperFiles sf  
+					            where  (sf.CruiseName    = _cruiseName)  and
+								             (sf.StationName   = _stationName) and 
+                             ((sf.DeploymentNum = _deploymentNum)  or (_deploymentNum = "")));
+  if  _scanRate < 100  then
+    set _scanRate = 24950.3;
+  end if;
+  
+  select d.CropLeft, d.CropRight, d.ChamberWidth  into  _cropLeft, _cropRight, _chamberWidth
+     from Deployments d
+		 where  (d.CruiseName     = _cruiseName)  and
+	          (d.StationName    = _stationName) and 
+            ((d.DeploymentNum = _deploymentNum) or (_deploymentNum = ""));
+
+  if  (_chamberWidth < 0.001)  then
+    set  _chamberWidth = 0.096;
+  end if;
+  
+  
+  set _secsPerRec = 4096.0 / _scanRate;
+  set _midPoint = InstrumentDataGetMidPointOfDeployment(_cruiseName, _stationName,_deploymentNum);
+
+
+  select   (id.CtdDateTime < _midPoint)                     as DownCast,
+           Floor(id.depth / _depthBinSize)                  as BinId,
+           Floor(id.depth / _depthBinSize) * _depthBinSize  as BinDepth,
+           4096 * count(id.ScanLine)                        as ScanLines,
+           sum(id.FlowRate1 * _secsPerRec * _chamberWidth * 0.096)  as VolumeSampled
+           
+         from  InstrumentData id
+         join(SipperFiles sf)  on  (sf.SipperFileId = id.SipperFileId)
+         where      (sf.CruiseName    = _cruiseName)  
+               and  (sf.StationName   = _stationName) 
+               and  ((sf.DeploymentNum = _deploymentNum)  or  (_deploymentNum = " "))
+               and  id.CTDDateTime > "2000-01-01 00:01:01"
+               and  id.CTDDateTime < "2020-01-01 00:01:01"
+               and  id.CTDBattery   > 5.5   and  id.CTDBattery    < 14.0
+               and  id.Depth        > 0.5   and  id.Depth         < 500
+               and  id.Temperature  > 0.0   and  id.Temperature   < 40.0
+               and  id.Salinity     > 20    and  id.Salinity      < 40.0
+               and  id.Density      > 13    and  id.Density       < 40.0
+               and  id.Fluorescence > -2    and  id.Fluorescence  < 80.0
+               
+         group by (id.CtdDateTime < _midPoint), Floor(id.depth / _depthBinSize)
+         order by (id.CtdDateTime < _midPoint), Floor(id.depth / _depthBinSize); 
+end
+//
+delimiter ;
+
+
+
+
+
+
+
+
+
+
 
 
 

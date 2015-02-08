@@ -37,14 +37,11 @@ namespace PicesCommander
 
     private  PicesClass       classToPlot = null;
     private  bool             includeSubClasses = false;
-    private  bool             weightByVolume    = false;
 
     private  PicesImageSizeDistribution     downCast = null;
     private  PicesImageSizeDistribution     upCast   = null;
     private  PicesImageSizeDistribution     bucketsDisplayed = null;  // Will contain the data thatis actually displayed in the Chart; depending of Cast options.
-    private  PicesImageSizeDistributionRow  integratedDepth = null;
-    private  uint[]                         integratedDepthDistribution = null;
-
+    private  float[]                        integratedDensityDistribution = null;
 
     private  String  cast              = "Down";
     private  char    statistic         = '0';
@@ -129,20 +126,21 @@ namespace PicesCommander
       if  (classToPlot != null)
         ClassToPlot.Text = classToPlot.Name;
 
+      /*
       ContextMenuStrip cms = new ContextMenuStrip ();
-      cms.Items.Add ("Copy Chart to clipboard",               null, CopyChartToClipboard);
-      cms.Items.Add ("Save Chart to Disk",                    null, SaveChartToDisk);
-      cms.Items.Add ("Copy Data Tab-Delimited to Clipboard",  null, SaveTabDelToClipBoard);
-      cms.Items.Add ("Save Data Tab-Delimited to Disk",       null, SaveTabDelToDisk);
+      cms.Items.Add ("Copy Chart to clipboard",              null, CopyChartToClipboard);
+      cms.Items.Add ("Save Chart to Disk",                   null, SaveChartToDisk);
+      cms.Items.Add ("Copy Data Tab-Delimited to Clipboard", null, SaveTabDelToClipBoard);
+      cms.Items.Add ("Save Data Tab-Delimited to Disk",      null, SaveTabDelToDisk);
 
       ProfileChart.ContextMenuStrip = cms;
+      */
 
       CastField.SelectedItem = CastField.Items[0];
       CastField.Text         = (String)CastField.Items[0];
 
       SizeStatisticField.SelectedItem = SizeStatisticField.Items[0];
       SizeStatisticField.Text         = (String)SizeStatisticField.Items[0];
-
 
       LoadConfigurationFile ();
     }
@@ -152,7 +150,6 @@ namespace PicesCommander
     {
       PlotButton.Enabled         = false;
       IncludeSubClasses.Enabled  = false;
-      WeightByVolume.Enabled     = false;
       InitialSizeField.Enabled   = false;
       MaxSizeField.Enabled       = false;
       GrowthRateField.Enabled    = false;
@@ -164,7 +161,6 @@ namespace PicesCommander
     {
       PlotButton.Enabled         = true;
       IncludeSubClasses.Enabled  = true;
-      WeightByVolume.Enabled     = true;
       InitialSizeField.Enabled   = true;
       MaxSizeField.Enabled       = true;
       GrowthRateField.Enabled    = true;
@@ -186,7 +182,6 @@ namespace PicesCommander
       o.WriteLine ("Maximized"          + "\t" + (formIsMaximized ? "YES":"NO"));
       o.WriteLine ("ClassToPlot"        + "\t" + ClassToPlot.Text);
       o.WriteLine ("IncludeSubClasses"  + "\t" + IncludeSubClasses.Checked);
-      o.WriteLine ("WeightByVolume"     + "\t" + WeightByVolume.Checked);
       o.WriteLine ("SizeStatistic"      + "\t" + SizeStatisticField.Text);
       o.WriteLine ("InitialSize"        + "\t" + InitialSizeField.Value.ToString ("###0.000"));
       o.WriteLine ("MaxSize"            + "\t" + MaxSizeField.Value);
@@ -267,10 +262,6 @@ namespace PicesCommander
             IncludeSubClasses.Checked = PicesKKStr.StrToBool (fieldValue);
             break;
             
-          case  "WeightByVolume":
-            WeightByVolume.Checked = PicesKKStr.StrToBool (fieldValue);
-            break;
-            
           case  "SizeStatistic":
             SetSizeStatistic (fieldValue);
             break;
@@ -343,7 +334,6 @@ namespace PicesCommander
       growthRate       = (float)GrowthRateField.Value;
       initialSizeValue = (float)InitialSizeField.Value;
 
-      weightByVolume = WeightByVolume.Checked;
       includeSubClasses = IncludeSubClasses.Checked;
 
       if  (String.IsNullOrEmpty (ClassToPlot.Text))
@@ -474,8 +464,7 @@ namespace PicesCommander
         bucketsDisplayed.AddIn (upCast, runLog);
       }
 
-      integratedDepth = bucketsDisplayed.AllDepths ();
-      integratedDepthDistribution = integratedDepth.Distribution ();
+      integratedDensityDistribution = bucketsDisplayed.IntegratedDensityDistribution ();
 
       threadConn.Close ();
       threadConn = null;
@@ -552,7 +541,7 @@ namespace PicesCommander
 
     private  void  UpdateChartAreas ()
     {
-      if  (integratedDepth == null)
+      if  (integratedDensityDistribution == null)
         return;
 
       goalie.StartBlock ();
@@ -598,7 +587,7 @@ namespace PicesCommander
       float  maxX = float.MinValue;
       float  maxY = float.MinValue;
 
-      for  (int x = 0;  x < integratedDepthDistribution.Length;  ++x)
+      for  (int x = 0;  x < integratedDensityDistribution.Length;  ++x)
       {
         float  sv = startValues[x];
         float  ev = sv * growthRate;
@@ -606,14 +595,7 @@ namespace PicesCommander
         if  (sv <= 0.0f)
           midPoint = initialSizeValue / 2.0f;
 
-        double  d = (double)integratedDepthDistribution[x];
-        if  (weightByVolume)
-        {
-          if ((depthVolumeProfile.Length > x) && (depthVolumeProfile[x] != 0.0))
-            d = d / depthVolumeProfile[x];
-          else
-            d = 0.0;
-        }
+        double  d = (double)integratedDensityDistribution[x];
         float log10D = (float)Math.Log10 (d + 1.0);
 
         minY = Math.Min (minY, log10D);
@@ -628,10 +610,7 @@ namespace PicesCommander
       ProfileChart.ChartAreas[0].AxisY.LogarithmBase = 10.0;
       ProfileChart.ChartAreas[0].AxisY.LabelStyle.Format = "##,###,##0";
 
-      if  (weightByVolume)
-        ca.AxisY.Title = SubInSuperScriptExponent ("Log 10  Abundance");
-      else
-        ca.AxisY.Title = SubInSuperScriptExponent ("Log 10  Count");
+      ca.AxisY.Title = SubInSuperScriptExponent ("Log 10  Abundance");
 
       switch  (statistic)
       {
@@ -898,7 +877,6 @@ namespace PicesCommander
       tw.WriteLine ("Station"              + "\t" + station);
       tw.WriteLine ("Deployment"           + "\t" + deployment);
       tw.WriteLine ("Class"                + "\t" + classToPlot.Name);
-      tw.WriteLine ("Weight-by-Volume"     + "\t" + (weightByVolume    ? "Yes" : "No"));
       tw.WriteLine ("Include-Sub-Classes"  + "\t" + (includeSubClasses ? "Yes" : "No"));
       tw.WriteLine ();
       tw.WriteLine ("There will be two tables below: 1-Density, 2-Counts.");
@@ -1063,7 +1041,7 @@ namespace PicesCommander
       if  ((ProfileChart.Series.Count < 1)  ||  (sizeBucket < 0))
         return;
 
-      if (sizeBucket >= integratedDepthDistribution.Length)
+      if (sizeBucket >= integratedDensityDistribution.Length)
         return;
 
       Series  s = ProfileChart.Series[0];
@@ -1073,15 +1051,7 @@ namespace PicesCommander
       ClearHighLightedBucket ();
 
       DataPoint dp = s.Points[sizeBucket];
-      double  d = (double)integratedDepthDistribution[sizeBucket];
-      if  (weightByVolume)
-      {
-        if ((depthVolumeProfile.Length > sizeBucket) && (depthVolumeProfile[sizeBucket] != 0.0))
-          d = d / depthVolumeProfile[sizeBucket];
-        else
-          d = 0.0;
-      }
-      
+      double  d = (double)integratedDensityDistribution[sizeBucket];
       s.Points[sizeBucket].Label = d.ToString("###,##0.0") + "(" + dp.XValue.ToString("##0.000") + ")";
       s.Points[sizeBucket].Color = Color.Red;
 
@@ -1089,21 +1059,90 @@ namespace PicesCommander
     }  /* HighLightSizeBucket */
 
 
-
-    private void ProfileChart_MouseClick (object sender, MouseEventArgs e)
+    private  void   ChartContextMenu (Point p, 
+                                      int   sizeBucket
+                                     )
     {
+      MenuItem  i1 = new MenuItem ("Copy Chart to clipboard",              CopyChartToClipboard);
+      MenuItem  i2 = new MenuItem ("Save Chart to Disk",                   SaveChartToDisk);
+      MenuItem  i3 = new MenuItem ("Copy Data Tab-Delimited to Clipboard", SaveTabDelToClipBoard);
+      MenuItem  i4 = new MenuItem ("Save Data Tab-Delimited to Disk",      SaveTabDelToDisk);
+      MenuItem  i5 = new MenuItem ("Display Images for Size Range",        DisplayImagesForASizeBucket);
+      MenuItem  i6 = new MenuItem ("Chart Verticle Distribution",          ChartVerticleDistributionForASizeBucket);
+      MenuItem[] menuItems = null;
+      if  (sizeBucket >= 0)
+        menuItems = new MenuItem[]{i1, i2, i3, i4, i5, i6};
+      else
+        menuItems = new MenuItem[]{i1, i2, i3, i4};
+      ContextMenu  buttonMenu = new ContextMenu (menuItems);
+      buttonMenu.Show (ProfileChart, p);
+    }
+
+
+    private  void   DisplayImagesForASizeBucket (Object sender, EventArgs e)
+    {
+      if  ((selectedSizeBucket < 0)  ||  (bucketsDisplayed == null)   ||  (selectedSizeBucket >= bucketsDisplayed.NumSizeBuckets))
+        return;
+
+      float  sizeStart = 0.0f;
+      float  sizeEnd   = 0.0f;
+      uint   imageCount = 0;
+
+      bucketsDisplayed.GetSizeBucketStats ((uint)selectedSizeBucket, ref imageCount, ref sizeStart, ref sizeEnd);
+
+      char  castChar = 'B';
+      if       (cast == "Down")  castChar = 'D';
+      else if  (cast == "Up")    castChar = 'U';
+
+      PicesDataBaseImageList  images =  mainWinConn.ImagesQueryDeploymentSizeRange (cruise, station, deployment, classToPlot, castChar, statistic, sizeStart, sizeEnd, 0.0f, 0.0f, 1000);
+      
+      DisplayPicesImages dpi = new DisplayPicesImages (mainWinConn, bucketsDisplayed, selectedSizeBucket, images);
+      dpi.ShowDialog (this);
+    }
+
+    private  void   ChartVerticleDistributionForASizeBucket (Object sender, EventArgs e)
+    {
+      //
+    }
+
+
+
+    private  void  ProfileChart_MouseClick (object sender, MouseEventArgs e)
+    {
+      if  ((ProfileChart.Series == null)  ||  (ProfileChart.Series.Count < 1))
+        return;
+
+      Series s = ProfileChart.Series[0];
+
       Point  p = e.Location;
       ChartArea  ca = ProfileChart.ChartAreas[0];
       double yValue = ca.AxisY.PixelPositionToValue ((double)p.Y);
       double xValue = ca.AxisX.PixelPositionToValue ((double)p.X);
-      
-      // Because the x-axis is Log10 of the actiual value we need to raise 10 to the power of xValue.
+
+      // Because the x-axis is Log10 of the actiual value we need to raise 10 to the power of xValue to get the actual size.
       xValue = Math.Pow (10, xValue);
 
-      int  sizeBucket = bucketsDisplayed.IdentifySizeBucket ((float)xValue);
-      if  (sizeBucket < 0)
-        return;
-      HighLightSizeBucket (sizeBucket);
+      int  sizeBucket = -1;
+      if  (bucketsDisplayed != null)
+        sizeBucket = bucketsDisplayed.IdentifySizeBucket ((float)xValue);
+
+      if  (sizeBucket >= 0)
+      {
+        if  (sizeBucket >= s.Points.Count)
+          sizeBucket = -1;
+        else
+        {
+          double  y = s.Points[sizeBucket].YValues[0];
+          if  ((yValue - y) > 0.3)
+            sizeBucket = -1;
+        }
+      }
+
+      if  (sizeBucket >= 0)
+        HighLightSizeBucket (sizeBucket);
+
+      if  (e.Button == System.Windows.Forms.MouseButtons.Right)
+        ChartContextMenu (p, sizeBucket); 
     }  /* ProfileChart_MouseClick */
   }
 }

@@ -42,7 +42,6 @@
       this.SelectClassButton = new System.Windows.Forms.Button();
       this.ClassToPlotLabel = new System.Windows.Forms.Label();
       this.IncludeSubClasses = new System.Windows.Forms.CheckBox();
-      this.WeightByVolume = new System.Windows.Forms.CheckBox();
       this.SelectionCriteriaPanel = new System.Windows.Forms.Panel();
       this.Deployment_ = new System.Windows.Forms.TextBox();
       this.Station_ = new System.Windows.Forms.TextBox();
@@ -195,19 +194,6 @@
       this.IncludeSubClasses.TabIndex = 55;
       this.IncludeSubClasses.Text = "Include Sub-Classes";
       this.IncludeSubClasses.UseVisualStyleBackColor = true;
-      // 
-      // WeightByVolume
-      // 
-      this.WeightByVolume.AutoSize = true;
-      this.WeightByVolume.Checked = true;
-      this.WeightByVolume.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.WeightByVolume.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.WeightByVolume.Location = new System.Drawing.Point(172, 79);
-      this.WeightByVolume.Name = "WeightByVolume";
-      this.WeightByVolume.Size = new System.Drawing.Size(141, 21);
-      this.WeightByVolume.TabIndex = 56;
-      this.WeightByVolume.Text = "Weight by Volume";
-      this.WeightByVolume.UseVisualStyleBackColor = true;
       // 
       // SelectionCriteriaPanel
       // 
@@ -379,7 +365,6 @@
       this.panel1.Controls.Add(this.SelectClassButton);
       this.panel1.Controls.Add(this.InitialSizeLabel);
       this.panel1.Controls.Add(this.IncludeSubClasses);
-      this.panel1.Controls.Add(this.WeightByVolume);
       this.panel1.Controls.Add(this.InitialSizeField);
       this.panel1.Location = new System.Drawing.Point(12, 94);
       this.panel1.Name = "panel1";
@@ -483,7 +468,6 @@
     private System.Windows.Forms.Button SelectClassButton;
     private System.Windows.Forms.Label ClassToPlotLabel;
     private System.Windows.Forms.CheckBox IncludeSubClasses;
-    private System.Windows.Forms.CheckBox WeightByVolume;
     private System.Windows.Forms.Panel SelectionCriteriaPanel;
     private System.Windows.Forms.Label DeploymentLabel;
     private System.Windows.Forms.Label CruiseLabel;

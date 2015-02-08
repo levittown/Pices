@@ -143,9 +143,41 @@ namespace  PicesInterface
 
 
 
+  void  PicesImageSizeDistribution::GetSizeBucketStats (uint     _sizeBucketIdx,
+                                                        uint%    _count,
+                                                        float%   _sizeStart,
+                                                        float%   _sizeEnd
+                                                       )
+  {
+    kkuint32  count = 0;
+    float     sizeStart = 0.0f;
+    float     sizeEnd   = 0.0f;
+
+    imageSizeDistribution->GetSizeBucketStats (_sizeBucketIdx, count, sizeStart, sizeEnd);
+
+    _count     = count;
+    _sizeStart = sizeStart;
+    _sizeEnd   = sizeEnd;
+  }
+
+
+
+
+
   kkint32  PicesImageSizeDistribution::IdentifySizeBucket (float  size)
   {
     return  imageSizeDistribution->IdentifySizeBucket (size);
   }
 
+
+  array<float>^  PicesImageSizeDistribution::IntegratedDensityDistribution ()
+  {
+    VectorFloat  distribution  = imageSizeDistribution->IntegratedDensityDistribution();
+    array<float>^  results = gcnew array<float>(distribution.size ());
+    for  (kkuint32 x = 0;  x < distribution.size (); ++x)
+      results[x] = distribution[x];
+    return  results;
+  }
+
+  
 }  /* PicesInterface */

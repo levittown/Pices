@@ -535,7 +535,7 @@ begin
                       "i.Class2Id,  (select c2.ClassName from Classes c2  where c2.ClassId = i.Class2Id) as Class2Name, i.Class2Prob, ",            "\n",
                       "i.ClassValidatedId,  (select c3.ClassName from Classes c3  where c3.ClassId = i.ClassValidatedId) as ClassNameValidated, ",  "\n",
                       "i.TopLeftRow, i.TopLeftCol, i.PixelCount, i.ConnectedPixelDist, i.ExtractionLogEntryId, i.ClassLogEntryId, i.Height, ",      "\n",
-                      "i.Width, i.ByteOffset, i.depth, i.ImageSize, i.SizeCoordinates",     "\n"
+                      "i.Width, i.ByteOffset, i.depth, i.ImageSize, i.SizeCoordinates",  "\n"
                  );
   if  (_includeThumbNail = "1")  then
     set @s = concat(@s, ", i.ThumbNail");
@@ -837,6 +837,124 @@ begin
 end;
 //
 delimiter ;
+
+
+
+/***************************************************************************************************************************************/
+drop procedure  if exists  ImagesExtractDeploymentSizeRange;
+drop procedure  if exists  ImagesQueryDeploymentSizeRange;
+
+delimiter $$
+
+create procedure ImagesQueryDeploymentSizeRange (in  _cruiseName      varChar(10),
+                                                 in  _stationName     varChar(10), 
+                                                 in  _deploymentNum   varchar(4), 
+                                                 in  _className       varChar(64),
+                                                 in  _cast            char,           /**< 'U' = UpCast, 'D' = DownCast,  'B' = Both' */
+                                                 in  _statistic       char,           /* '0' = Area mm^2,  '1' = Diameter,  '2' = Spheroid Volume and '3' = EBv ((4/3)(Pie)(Major/2)(Minor/2)^2) */
+                                                 in  _sizeStart       float,          /* Must Be equal or greater than this size.                                                                */
+                                                 in  _sizeEnd         float,          /* Must be less than this size.                                                                            */
+                                                 in  _depthMin        float,
+                                                 in  _depthMax        float,
+                                                 in  _sampleQty       int             /* 0 = slecte all eligable rows;  > 0 indicates randomly selecting '_sampleQty' rows.   */
+                                                )
+begin 
+/*
+  Returns List of Images for the Specified Deployment that are in a specifoied Size Range for the Specified Size Statistic.
+*/
+  declare _classId            int    default -1;
+  declare _midPoint           datetime;
+  declare _cropLeft           int    default 0;
+  declare _cropRight          int    default 4094;
+  declare _pixelsPerScanLine  int    default 4096;
+  declare _chamberWidth       float  default 0.096;
+  declare _pixelWidth         float  default 0.025263;  /* MiliMeters per Pixel */
+  
+  if  (_className is not null)  and  (_className <> "")  then
+    set _classId = (select c.classId from Classes c  where c.ClassName = _className);
+  end if;
+
+  select  d.CropLeft, d.CropRight, d.ChamberWidth  into  _cropLeft, _cropRight, _chamberWidth
+      from Deployments d
+      where  d.CruiseName    = _cruiseName  and
+             d.StationName   = _stationName  and 
+             d.DeploymentNum = _deploymentNum;
+      
+  if  _cropLeft < _cropRight  then
+    set _pixelsPerScanLine = _cropRight - _cropLeft;
+  else
+    set _pixelsPerScanLine = 3800;
+  end if;
+  
+  set  _pixelWidth = _chamberWidth / _pixelsPerScanLine;
+  
+  set _midPoint = InstrumentDataGetMidPointOfDeployment(_cruiseName, _stationName, _deploymentNum);
+
+  set  @statExp = "";
+
+  if  (_statistic = '0')  then
+     set @statExp = concat('fd.FilledArea * (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000  * (id.FlowRate1 / sf.ScanRate) * 1000.0');
+  end if;
+  
+  if  (_statistic = '1')  then
+     set @statExp = concat('2 * sqrt(fd.FilledArea *  (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000 * (id.FlowRate1 / sf.ScanRate) * 1000.0 / 3.1415926)');
+  end if;
+  
+  if  (_statistic = '2')  then
+     set @statExp = concat('(4.0 / 3.0) * 3.1415926 * pow (sqrt(fd.FilledArea *  (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000 * (id.FlowRate1 / sf.ScanRate) * 1000.0 / 3.1415926), 3)');
+  end if;
+  
+  
+  set @sqlStr = "";
+  set @sqlStr = concat(@sqlStr, 'select ',  ImagesQuerySelectFieldNames (True), '\n');
+  set @sqlStr = concat(@sqlStr, '    from  Images i  \n');
+  set @sqlStr = concat(@sqlStr, '    join (SipperFiles sf)     on(sf.SipperFileId  = i.SipperFileId) \n');
+  set @sqlStr = concat(@sqlStr, '    join (FeatureData fd)     on(fd.ImageId       = i.ImageId) \n');
+  set @sqlStr = concat(@sqlStr, '    join (InstrumentData id)  on((id.SipperFileId = i.SipperFileId)  and  (id.ScanLine = Floor(TopLeftRow/4096) * 4096) ) \n');
+  set @sqlStr = concat(@sqlStr, '    where  (sf.CruiseName      = \"', _cruiseName,    '\") \n');
+  set @sqlStr = concat(@sqlStr, '       and (sf.StationName     = \"', _stationName,   '\") \n');
+  set @sqlStr = concat(@sqlStr, '       and (sf.DeploymentNum   = \"', _deploymentNum, '\") \n');
+
+  if  (_classId >= 0)  then
+    set @sqlStr = concat(@sqlStr, '       and ((i.ClassValidatedId = ', _classId, ')  or  (i.ClassValidatedId is null  and  i.class1Id = ', _classId, ')) \n');
+  end if;
+  if  (_cast = 'U')  then
+    set @sqlStr = concat(@sqlStr, '       and (id.CTDDateTime > "', _midPoint, '") \n');
+  end if;
+  if  (_cast = 'D')  then
+    set @sqlStr = concat(@sqlStr, '       and (id.CTDDateTime <= "', _midPoint, '") \n');
+  end if;
+  if  (_depthMin > 0.0)  then
+    set @sqlStr = concat(@sqlStr, '       and ((i.Depth >= ', _depthMin, ')\n');
+  end if;
+  if  (_depthMax > 0.0)  then
+    set @sqlStr = concat(@sqlStr, '       and ((i.Depth <  ', _depthMax, ')\n');
+  end if;
+  
+  set @sqlStr = concat(@sqlStr, '       and ((', @statExp, ')   >= ', _sizeStart, ') \n');
+  set @sqlStr = concat(@sqlStr, '       and ((', @statExp, ')   <  ', _sizeEnd,   ') \n');
+  
+  if   (_sampleQty > 0)  then
+    set @sqlStr = concat(@sqlStr, '     order by rand()  limit ', _sampleQty, '  \n');
+  end if;
+  
+  set @sqlStr = concat(@sqlStr, ';\n');
+  
+  PREPARE stmt1 FROM @sqlStr;
+  EXECUTE stmt1;
+  DEALLOCATE PREPARE stmt1;
+  
+end$$
+delimiter ;
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1512,120 +1630,6 @@ begin
   
 end$$
 delimiter ;
-
-
-
-
-
-
-
-drop procedure  if exists  ImagesExtractDeploymentSizeRange;
-
-delimiter $$
-
-create procedure ImagesExtractDeploymentSizeRange (in  _cruiseName      varChar(10),
-                                                   in  _stationName     varChar(10), 
-                                                   in  _deploymentNum   varchar(4), 
-                                                   in  _className       varChar(64),
-                                                   in  _statistic       char,           /* '0' = Area mm^2,  '1' = Diameter,  '2' = Spheroid Volume and '3' = EBv ((4/3)(Pie)(Major/2)(Minor/2)^2) */
-                                                   in  _sizeStart       float,          /* Must Be equal or greater than this size.                                                                */
-                                                   in  _sizeEnd         float,          /* Must be less than this size.                                                                            */
-                                                   in  _depthMin        float,
-                                                   in  _depthMax        float,
-                                                   in  _sampleQty       int             /* 0 = slecte all eligable rows;  > 0 indicates randomly selecting '_sampleQty' rows.   */
-                                                  )
-begin 
-  declare _classId            int    default -1;
-  declare _midPoint           datetime;
-  declare _cropLeft           int    default 0;
-  declare _cropRight          int    default 4094;
-  declare _pixelsPerScanLine  int    default 4096;
-  declare _chamberWidth       float  default 0.096;
-  declare _pixelWidth         float  default 0.025263;  /* MiliMeters per Pixel */
-  
-  if  (_className is not null)  and  (_className <> "")  then
-    set _classId = (select c.classId from Classes c  where c.ClassName = _className);
-  end if;
-
-  select  d.CropLeft, d.CropRight, d.ChamberWidth  into  _cropLeft, _cropRight, _chamberWidth
-      from Deployments d
-      where  d.CruiseName    = _cruiseName  and
-             d.StationName   = _stationName  and 
-             d.DeploymentNum = _deploymentNum;
-      
-  if  _cropLeft < _cropRight  then
-    set _pixelsPerScanLine = _cropRight - _cropLeft;
-  else
-    set _pixelsPerScanLine = 3800;
-  end if;
-  
-  set  _pixelWidth = _chamberWidth / _pixelsPerScanLine;
-  
-  set _midPoint = InstrumentDataGetMidPointOfDeployment(_cruiseName, _stationName, _deploymentNum);
-
-  set  @statExp = "";
-
-  if  (_statistic = '0')  then
-     set @statExp = concat('fd.FilledArea * (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000  * (id.FlowRate1 / sf.ScanRate) * 1000.0');
-  end if;
-  
-  if  (_statistic = '1')  then
-     set @statExp = concat('2 * sqrt(fd.FilledArea *  (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000 * (id.FlowRate1 / sf.ScanRate) * 1000.0 / 3.1415926)');
-  end if;
-  
-  if  (_statistic = '2')  then
-     set @statExp = concat('(4.0 / 3.0) * 3.1415926 * pow (sqrt(fd.FilledArea *  (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000 * (id.FlowRate1 / sf.ScanRate) * 1000.0 / 3.1415926), 3)');
-  end if;
-  
-
-  set @sqlStr = "";
-  set @sqlStr = concat(@sqlStr, 'select (id.CTDDateTime <=\"', _midPoint, '\") as DownCast, \n');
-  set @sqlStr = concat(@sqlStr, '       i.ImageId, \n');
-  set @sqlStr = concat(@sqlStr, '       i.Depth, \n');
-  set @sqlStr = concat(@sqlStr, '       i.PixelCount, \n');
-  set @sqlStr = concat(@sqlStr, '       fd.FilledArea, \n');
-  set @sqlStr = concat(@sqlStr, '      ', @statExp, ' as SizeStatistic, \n');
-  set @sqlStr = concat(@sqlStr, '       id.FlowRate1, \n');
-  set @sqlStr = concat(@sqlStr, '       (id.CropRight - id.CropLeft)  as CropWidth \n');
-  set @sqlStr = concat(@sqlStr, '    from  Images i  \n');
-  set @sqlStr = concat(@sqlStr, '    join (SipperFiles sf)     on(sf.SipperFileId  = i.SipperFileId) \n');
-  set @sqlStr = concat(@sqlStr, '    join (FeatureData fd)     on(fd.ImageId       = i.ImageId) \n');
-  set @sqlStr = concat(@sqlStr, '    join (InstrumentData id)  on((id.SipperFileId = i.SipperFileId)  and  (id.ScanLine = Floor(TopLeftRow/4096) * 4096) ) \n');
-  set @sqlStr = concat(@sqlStr, '    where  (sf.CruiseName      = \"', _cruiseName,    '\") \n');
-  set @sqlStr = concat(@sqlStr, '       and (sf.StationName     = \"', _stationName,   '\") \n');
-  set @sqlStr = concat(@sqlStr, '       and (sf.DeploymentNum   = \"', _deploymentNum, '\") \n');
-
-  if  (_classId >= 0)  then
-    set @sqlStr = concat(@sqlStr, '       and ((i.ClassValidatedId = ', _classId, ')  or  (i.ClassValidatedId is null  and  i.class1Id = ', _classId, ')) \n');
-  end if;
-  if  (_depthMin > 0.0)  then
-    set @sqlStr = concat(@sqlStr, '       and ((i.Depth >= ', _depthMin, ')\n');
-  end if;
-  if  (_depthMax > 0.0)  then
-    set @sqlStr = concat(@sqlStr, '       and ((i.Depth <  ', _depthMax, ')\n');
-  end if;
-  
-  set @sqlStr = concat(@sqlStr, '       and ((', @statExp, ')   >= ', _sizeStart, ') \n');
-  set @sqlStr = concat(@sqlStr, '       and ((', @statExp, ')   <  ', _sizeEnd,   ') \n');
-  
-  if   (_sampleQty > 0)  then
-    set @sqlStr = concat(@sqlStr, '     order by rand()  limit ', _sampleQty, '  \n');
-  end if;
-  
-  set @sqlStr = concat(@sqlStr, ';\n');
-  
-  select  @sqlStr;
-  PREPARE stmt1 FROM @sqlStr;
-  EXECUTE stmt1;
-  DEALLOCATE PREPARE stmt1;
-  
-end$$
-delimiter ;
-
-
-
-
-
 
 
 

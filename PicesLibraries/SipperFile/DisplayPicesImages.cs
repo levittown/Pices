@@ -26,6 +26,11 @@ namespace SipperFile
 
     private  String[]              svNames = null;
 
+    /*  These next four variables will be used when displaying images that are in the Pices database.  */
+    PicesDataBase                  dbConn = null;
+    PicesDataBaseImageList         picesImages = null;
+    PicesImageSizeDistribution     sizeDistribution = null;
+    int                            selectedSizeIndex = 0;
 
 
     public DisplayPicesImages (String  _dir)
@@ -86,6 +91,33 @@ namespace SipperFile
 
 
 
+    public DisplayPicesImages (PicesDataBase                _dbConn,
+                               PicesImageSizeDistribution   _sizeDistribution,
+                               int                          _selectedSizeIndex,
+                               PicesDataBaseImageList       _picesImages
+                              )
+    {
+      InitializeComponent ();
+
+      dbConn            = _dbConn;
+      sizeDistribution  = _sizeDistribution;
+      picesImages       = _picesImages;
+      selectedSizeIndex = _selectedSizeIndex;
+
+      float[] startValues = sizeDistribution.SizeStartValues ();
+      float[] endValues    = sizeDistribution.SizeEndValues ();
+
+      if  ((selectedSizeIndex >= 0)  &&  (selectedSizeIndex < startValues.Length))
+      {
+        Text = "Depth Size Range [" + startValues[selectedSizeIndex].ToString ("###,##0") + " - " + endValues[selectedSizeIndex].ToString ("#,###,##0") + "]";
+      }
+
+      UpdateDisplayTimer.Enabled = true;
+    }
+
+
+
+
     private  FileInfo[]  ReduceToImageFiles (FileInfo[]  src)
     {
       List<FileInfo>  result = new List<FileInfo> ();
@@ -129,6 +161,71 @@ namespace SipperFile
     }  /* GetThumbnailImageAbort */
 
     private  System.IntPtr  thumbNailCallBackData = IntPtr.Zero;
+
+
+    private  void  LoadNextImageFromPicesList ()
+    {
+      if  (picesImages == null)
+        return;
+
+      if  (lastImageIndexLoaded >= picesImages.Count)
+      {
+        UpdateDisplayTimer.Enabled = false;
+        return;
+      }
+
+      Font font = new System.Drawing.Font("Courier New", 8.0f, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+
+      Image  image = null;
+      
+      PicesDataBaseImage  pi = picesImages[lastImageIndexLoaded];
+      lastImageIndexLoaded++;
+
+      image = pi.Thumbnail ();
+      if  (image == null)
+         return;
+
+      float  ratio = 1.0f;
+      int  maxDim = Math.Max (image.Height, image.Width);
+      if  (maxDim > 150)
+         ratio = 150.0f / (float)maxDim;
+
+      PictureBox pb = new PictureBox ();
+      pb.BorderStyle = BorderStyle.FixedSingle;
+
+      int h = (int)((float)image.Height * ratio);
+      int w = (int)((float)image.Width  * ratio);
+
+      pb.Height = h + 2;
+      pb.Width  = w + 2;
+      pb.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(PicesThumbNail_MouseDoubleClick);
+      pb.Name = pi.ImageFileName;
+
+      Image thumbNail = image.GetThumbnailImage (w, h, GetThumbnailImageAbort, thumbNailCallBackData);
+      pb.Image = thumbNail;
+
+      FlowLayoutPanel pan = new FlowLayoutPanel ();
+      pan.Size = new Size (Math.Max (170, w + 10), 200);
+      //pan.Height = h + 80;
+      //pan.Width  = Math.Max (160, w + 10);
+
+      String  rootName = OSservices.GetRootName (pi.ImageFileName);
+      
+      pan.Controls.Add (pb);
+      TextBox tb = new TextBox ();
+      tb.Width = pan.Width - 8;
+      tb.Text = "Depth " + pi.Depth.ToString ("##0.0");
+      tb.Font = font;
+      pan.Controls.Add (tb);
+
+      pan.BorderStyle = BorderStyle.FixedSingle;
+
+      pan.BackColor = Color.White;
+      
+      thumbNails.Add (pan);
+      ImageDisplayPanel.Controls.Add (pan);
+    }  /* LoadNextImageFromPicesList */
+
 
 
 
@@ -231,6 +328,9 @@ namespace SipperFile
     }  /* LocateRootName */
 
 
+
+
+
     private  void  LoadNextImageFromNameList ()
     {
       if  (nameList == null)
@@ -329,6 +429,10 @@ namespace SipperFile
     }  /* LoadNextImageFromDir */
 
 
+
+
+
+
     void  RemoveImageFromTrainigLibray (Object sender, EventArgs e)
     {
       if  (sender == null)
@@ -371,9 +475,31 @@ namespace SipperFile
     }
 
 
+    private  void  PicesThumbNail_MouseDoubleClick (object sender, MouseEventArgs e)
+    {
+      if  (e.Button == MouseButtons.Left)
+      {
+        PictureBox pb = (PictureBox)sender;
+        String  imageFileName = pb.Name;
+
+        PicesDataBaseImage pi =  dbConn.ImageLoad (imageFileName);
+        if  (pi != null)
+        {
+          PicesRaster pr = dbConn.ImageFullSizeLoad (imageFileName);
+          ImageViewer  iv = new ImageViewer (pr, pi, null);
+          iv.ShowDialog (this);
+        }
+      }
+    }
+
+
+
     private void  UpdateDisplayTimer_Tick (object sender, EventArgs e)
     {
-      if  (nameList != null)
+      if  (picesImages != null)
+        LoadNextImageFromPicesList ();
+
+      else if  (nameList != null)
         LoadNextImageFromNameList ();
       else
         LoadNextImageFromDir ();

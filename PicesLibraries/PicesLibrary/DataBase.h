@@ -372,6 +372,20 @@ namespace MLL
                                                        uint32        scanLineEnd
                                                       );
 
+    
+    DataBaseImageListPtr  ImagesQueryDeploymentSizeRange (const KKStr&     cruiseName,
+                                                          const KKStr&     stationName,
+                                                          const KKStr&     deploymentNum,
+                                                          MLClassConstPtr  mlClass,
+                                                          char             cast,         /**< 'U' = UpCast, 'D' = DownCast,  'B' = Both' */
+                                                          char             statistic,    /**< '0' = Area mm^2,  '1' = Diameter,  '2' = Spheroid Volume and '3' = EBv ((4/3)(Pie)(Major/2)(Minor/2)^2) */
+                                                          float            sizeStart,
+                                                          float            sizeEnd,
+                                                          float            depthMin,
+                                                          float            depthMax,
+                                                          kkint32          sampleQty
+                                                         );
+
 
     VectorKKStr*          ImageListOfImageFileNamesByScanLineRange (const KKStr&  sipperFileName,
                                                                     uint32        scanLineStart,
@@ -454,6 +468,7 @@ namespace MLL
                                          ImageSizeDistributionPtr&  downCast,
                                          ImageSizeDistributionPtr&  upCast
                                         );
+
 
 
     ClassStatisticListPtr  ImageGetClassStatistics (DataBaseImageGroupPtr  imageGroup,
@@ -702,6 +717,15 @@ namespace MLL
     VolumeSampledStatListPtr  InstrumentDataGetVolumePerMeterDepth (const KKStr&  siperFileName,
                                                                     float         depthBinSize
                                                                    );
+
+    void  InstrumentDataDeploymentVolumeSampled (const KKStr&               cruiseName,
+                                                 const KKStr&               stationName,
+                                                 const KKStr&               deploymentNum,
+                                                 float                      depthBinSize,
+                                                 VolumeSampledStatListPtr&  downCast,
+                                                 VolumeSampledStatListPtr&  upCast
+                                                );
+
 
 
     /**

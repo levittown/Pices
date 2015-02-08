@@ -76,7 +76,16 @@ namespace PicesInterface
 
     PicesImageSizeDistributionRow^   AllDepths ();
 
+    void  GetSizeBucketStats (uint       _sizeBucketIdx,
+                              uint%      _count,
+                              float%    _sizeStart,
+                              float%    _sizeEnd
+                             );
+
     kkint32  IdentifySizeBucket (float  size);
+
+    array<float>^  IntegratedDensityDistribution ();
+
 
   private:
     MLL::ImageSizeDistributionPtr  imageSizeDistribution;

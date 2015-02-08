@@ -769,6 +769,73 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
 
 
 
+  PicesDataBaseImageList^  PicesDataBase::ImagesQueryDeploymentSizeRange 
+                                 (String^       cruiseName,
+                                  String^       stationName,
+                                  String^       deploymentNum,
+                                  PicesClass^   mlClass,
+                                  System::Char  cast,         /**< 'U' = UpCast, 'D' = DownCast,  'B' = Both' */
+                                  System::Char  statistic,    /**< '0' = Area mm^2,  '1' = Diameter,  '2' = Spheroid Volume and '3' = EBv ((4/3)(Pie)(Major/2)(Minor/2)^2) */
+                                  float         sizeStart,
+                                  float         sizeEnd,
+                                  float         depthMin,
+                                  float         depthMax,
+                                  int           sampleQty
+                                 )
+  {
+    *cancelFlag = false;
+    MLClassPtr  unmanagedClass = NULL;
+    if  (mlClass != nullptr)
+      unmanagedClass = mlClass->UnmanagedMLClass ();
+
+    char  castChar = 'D';
+    char  statisticChar = '1';
+
+    if  (cast == 'D')
+      castChar = 'D';
+    else if  (cast == 'U')
+      castChar = 'U';
+    else
+      castChar = 'B';
+
+    if       (statistic == '0')  statisticChar = '0';
+    else if  (statistic == '1')  statisticChar = '1';
+    else if  (statistic == '2')  statisticChar = '2';
+    else if  (statistic == '3')  statisticChar = '3';
+    
+    DataBaseImageListPtr  images = dbConn->ImagesQueryDeploymentSizeRange 
+                      (PicesKKStr::SystemStringToKKStr (cruiseName),
+                       PicesKKStr::SystemStringToKKStr (stationName),
+                       PicesKKStr::SystemStringToKKStr (deploymentNum),
+                       unmanagedClass,  
+                       castChar,
+                       statisticChar,
+                       sizeStart, sizeEnd,
+                       depthMin,  depthMax,
+                       sampleQty
+                      );
+
+    lastOpSuccessful = dbConn->Valid ();
+
+    if  (images == NULL)
+      return  nullptr;
+
+    if  (*cancelFlag)
+    {
+      delete  images;
+      return  nullptr;
+    }
+
+    PicesDataBaseImageList^  picesImages = gcnew PicesDataBaseImageList (images);
+    images->Owner (false);
+    delete  images;
+    images = NULL;
+    return  picesImages;
+  }  /* ImagesQueryDeploymentSizeRange */
+
+
+
+
 
 
 
