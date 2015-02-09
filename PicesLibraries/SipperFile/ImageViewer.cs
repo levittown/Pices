@@ -15,13 +15,13 @@ namespace SipperFile
 {
   public partial class ImageViewer : Form
   {
-    private  PicesClassList       classes         = null;
-    private  PicesDataBase        dbConn          = null;
-    private  PicesDataBaseImage   image           = null;
-    private  PicesRaster          raster          = null;
-    private  PicesFeatureVector   featureVector   = null;
-    private  PicesRunLog          runLog          = null;
-    private  PicesSipperFile      sippperFile     = null;
+    private  PicesClassList       classes        = null;
+    private  PicesDataBase        dbConn         = null;
+    private  PicesDataBaseImage   image          = null;
+    private  PicesRaster          raster         = null;
+    private  PicesFeatureVector   featureVector  = null;
+    private  PicesRunLog          runLog         = null;
+    private  PicesSipperFile      sipperFile     = null;
 
     private PicesDataBaseLogEntry extractionLogEntry = null;
     private PicesDataBaseLogEntry classLogEntry      = null;
@@ -116,7 +116,7 @@ namespace SipperFile
       }
 
       if  (image != null)
-        sippperFile = dbConn.SipperFileRecLoad (image.SipperFileName);
+        sipperFile = dbConn.SipperFileRecLoad (image.SipperFileName);
  
       DataLabels = new Label[4];
       DataLabels[0] = DataLabel0;
@@ -283,18 +283,42 @@ namespace SipperFile
         return;
       }
 
+      PicesInstrumentData id = dbConn.InstrumentDataGetByScanLine (image.SipperFileName, image.TopLeftRow);
+
       featureVector = dbConn.FeatureDataRecLoad (image);
       if  (featureVector == null)
       {
         featureVector = new PicesFeatureVector (raster, image.ImageFileName, null, runLog);
         // Since we had to compute the FeatureDatya from the raster we now need to
         // get the instrument data that matches it.
-        PicesInstrumentData id = dbConn.InstrumentDataGetByScanLine (image.SipperFileName, image.TopLeftRow);
         if  (id != null)
           featureVector.AddInstrumentData (id);
 
         dbConn.FeatureDataInsertRow (image.SipperFileName, featureVector);
       }
+
+      float  esd = 0.0f;
+      float  eBv = 0.0f;
+      float  filledArea = image.PixelCount;
+      float  chamberWidth = 0.096f;
+      float  cropWidth = (3900.0f - 200.0f);
+      float  scanRate  = 24950.0f;
+      float  flowRate1 = 0.5f;
+      
+      if  (featureVector != null)
+        filledArea = featureVector.FilledArea;
+
+      if  (id != null)
+      {
+        cropWidth = (float)(id.CropRight - id.CropLeft);
+        flowRate1 = id.FlowRate1;
+      }
+
+      if  (sipperFile != null)
+        scanRate = sipperFile.ScanRate;
+
+      esd = (float)(2.0 * Math.Sqrt (filledArea *  (0.096 / cropWidth) * 1000.0 * (id.FlowRate1 / sipperFile.ScanRate) * 1000.0 / 3.1415926));
+      eBv = (float)((4.0 / 3.0) * Math.PI * Math.Pow (Math.Sqrt (filledArea *  (chamberWidth / cropWidth) * 1000 * (flowRate1 / scanRate) * 1000.0 / Math.PI), 3));
 
       PicesPrediction  model1Prediction1 = new PicesPrediction (null, 0, 0.0f);
       PicesPrediction  model1Prediction2 = new PicesPrediction (null, 0, 0.0f);
@@ -338,7 +362,10 @@ namespace SipperFile
       }
 
       if  (featureVector != null)
-        AreaMMSquare.Text = featureVector.AreaMMSquare.ToString ();
+        AreaMMSquare.Text = featureVector.AreaMMSquare.ToString ("#,##0.000");
+
+      ESD.Text = esd.ToString ("#,##0.00");
+      EBv.Text = eBv.ToString ("##0.0000");
 
       return;
     }  /* MakePredictions */

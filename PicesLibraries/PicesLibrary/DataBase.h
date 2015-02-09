@@ -383,7 +383,9 @@ namespace MLL
                                                           float            sizeEnd,
                                                           float            depthMin,
                                                           float            depthMax,
-                                                          kkint32          sampleQty
+                                                          kkint32          sampleQty,
+                                                          bool             includeChildren,
+                                                          VolConstBool&    cancelFlag
                                                          );
 
 
@@ -564,13 +566,17 @@ namespace MLL
     MLClassConstListPtr  MLClassLoadList ();
 
     void  MLClassInsert (MLClass&  mlClass,
-                         bool&        successful
+                         bool&     successful
                         );
 
     void  MLClassUpdate (const KKStr&    oldClassName,
                          const MLClass&  mlClass,
                          bool&           successful
                         );
+
+
+    MLClassConstListPtr  MLClassLoadChildren (const KKStr&  className);
+
 
     /**
      *@brief  Inserts 'mlClass' into database if it is not already in it and then updates all the fields

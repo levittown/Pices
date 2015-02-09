@@ -138,6 +138,8 @@ namespace KKU
   #define int64_min   -9223372036854775808
   #define uint64_max   18446744073709551615
 
+  typedef  volatile const bool  VolConstBool;  /**< Commonly used for passing Cancel Flag in multi threaded environment.  */
+
   typedef  char const * const  * const ConstCharStarArray;
 
   typedef  std::vector<bool>   VectorBool;

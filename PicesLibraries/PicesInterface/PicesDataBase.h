@@ -245,7 +245,8 @@ namespace PicesInterface
                                                              float         sizeEnd,
                                                              float         depthMin,
                                                              float         depthMax,
-                                                             int           sampleQty
+                                                             int           sampleQty,
+                                                             bool          includeChildren
                                                             );
 
 

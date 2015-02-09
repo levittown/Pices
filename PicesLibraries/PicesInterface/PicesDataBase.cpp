@@ -780,7 +780,8 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
                                   float         sizeEnd,
                                   float         depthMin,
                                   float         depthMax,
-                                  int           sampleQty
+                                  int           sampleQty,
+                                  bool          includeChildren
                                  )
   {
     *cancelFlag = false;
@@ -812,7 +813,9 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
                        statisticChar,
                        sizeStart, sizeEnd,
                        depthMin,  depthMax,
-                       sampleQty
+                       sampleQty,
+                       includeChildren,
+                       *cancelFlag
                       );
 
     lastOpSuccessful = dbConn->Valid ();

@@ -168,6 +168,12 @@
     <Compile Include="ChartSizeDistribution.Designer.cs">
       <DependentUpon>ChartSizeDistribution.cs</DependentUpon>
     </Compile>
+    <Compile Include="ChartSizeDepthDistribution.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChartSizeDepthDistribution.Designer.cs">
+      <DependentUpon>ChartSizeDepthDistribution.cs</DependentUpon>
+    </Compile>
     <Compile Include="InstrumentStatsByDepth.cs" />
     <Compile Include="SaveActiveTrainingModelFeatureData.cs">
       <SubType>Form</SubType>
@@ -293,6 +299,10 @@
       <DependentUpon>ChartSizeDistribution.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="ChartSizeDepthDistribution.resx">
+      <DependentUpon>ChartSizeDepthDistribution.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="SaveActiveTrainingModelFeatureData.resx">
       <DependentUpon>SaveActiveTrainingModelFeatureData.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -368,6 +378,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="PicesCommander_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

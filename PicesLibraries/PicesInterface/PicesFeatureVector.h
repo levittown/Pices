@@ -100,6 +100,7 @@ namespace PicesInterface
     property System::DateTime  CtdDateTime        {System::DateTime    get ();}
     property float             Depth              {float       get ();  void  set (float        _depth);}
     property bool              FeatureDataMissing {bool        get ();}  // If feature values are 0.0f then will return 'true' else 'false'.
+    property float             FilledArea         {float       get ();}
     property PicesClass^       MLClass            {PicesClass^ get ();  void  set (PicesClass^  _mlClass);}
     property String^           ImageFileName      {String^     get ();  void  set (String^      _imageFileName);}
     property int               NumFeatures        {int         get ();}

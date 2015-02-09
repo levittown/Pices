@@ -245,7 +245,7 @@ create procedure   InstrumentDataGetByScanLine (in _sipperFileName   varChar(48)
                                                 in _scanLine         int unsigned
                                                )
 begin
-  declare  _sipperFileId     int unsigned default 0;
+  declare  _sipperFileId    int unsigned default 0;
   declare  _startScanLine   int unsigned default 0;
 
   if  _scanLine > 8192  then
@@ -388,15 +388,6 @@ end;
 //
 
 delimiter ;
-
-
-
-
-
-
-
-
-
 
 
 

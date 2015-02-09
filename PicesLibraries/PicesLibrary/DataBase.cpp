@@ -2671,6 +2671,31 @@ MLClassConstListPtr  DataBase::MLClassLoadList ()
 
 
 
+MLClassConstListPtr  DataBase::MLClassLoadChildren (const KKStr&  className)
+{
+  KKStr  selectStr (128);
+
+  selectStr << "call MLClassLoadChildren(" << className.QuotedStr () << ")";
+  int32  returnCd = QueryStatement (selectStr);
+  if  (returnCd != 0)
+  {
+    log.Level (-1) << endl << endl << "DataBase::MLClassLoadChildren     ***ERROR***" << endl << endl
+                   << "Error[" << lastMySqlErrorDesc << "]" << endl << endl;
+    return NULL;
+  }
+
+  MLClassListPtr temp = MLClassProcessResults ();
+  ResultSetsClear ();
+
+  MLClassConstListPtr results = new MLClassConstList (*temp);
+  delete temp;
+  temp = NULL;
+  return results;
+}  /* MLClassLoadChildren */
+
+
+
+
 
 void  DataBase::MLClassInsert (MLClass&  mlClass,
                                bool&     successful
@@ -3923,9 +3948,14 @@ DataBaseImageListPtr  DataBase::ImagesQueryDeploymentSizeRange (const KKStr&    
                                                                 float            sizeEnd,
                                                                 float            depthMin,
                                                                 float            depthMax,
-                                                                kkint32          sampleQty
+                                                                kkint32          sampleQty,
+                                                                bool             includeChildren,
+                                                                VolConstBool&    cancelFlag
                                                                )
 {
+  if  (cancelFlag)
+    return NULL;
+
   KKStr  sqlStr(512);
 
   KKStr  className (32);
@@ -3935,7 +3965,6 @@ DataBaseImageListPtr  DataBase::ImagesQueryDeploymentSizeRange (const KKStr&    
   castStr.Append (cast);
   KKStr  statisticStr;
   statisticStr.Append (statistic);
-
 
   sqlStr  << "call  ImagesQueryDeploymentSizeRange("  
             << cruiseName.QuotedStr       ()         << ", "
@@ -3957,9 +3986,44 @@ DataBaseImageListPtr  DataBase::ImagesQueryDeploymentSizeRange (const KKStr&    
 
   ResultSetsClear ();
 
+  if  ((mlClass != NULL)   &&  includeChildren)
+  {
+    MLClassConstListPtr  children = MLClassLoadChildren (mlClass->Name ());
+    if  (children)
+    {
+      MLClassConstList::const_iterator  idx;
+      for  (idx = children->begin ();  idx != children->end ();  ++idx)
+      {
+        MLClassConstPtr  child = *idx;
+        DataBaseImageListPtr  childsImages 
+          = ImagesQueryDeploymentSizeRange (cruiseName, stationName, deploymentNum,
+                                            child,
+                                            cast,       statistic,
+                                            sizeStart,  sizeEnd,
+                                            depthMin,   depthMax,
+                                            sampleQty,
+                                            includeChildren,
+                                            cancelFlag
+                                           );
+        if  (results)
+        {
+          results->AddQueue (*childsImages);
+          childsImages->Owner (false);
+          delete  childsImages;
+          childsImages = NULL;
+        }
+        else
+        {
+          results = childsImages;
+        }
+      }
+      delete  children;
+      children = NULL;
+    }
+  }
+
   return  results;
 }  /* ImagesExtractDeploymentSizeRange */
-
 
 
 
@@ -4713,7 +4777,7 @@ RasterSipperPtr  DataBase::ImageFullSizeFind (const KKStr&  imageFileName)
   {
     try
     {r = i->ThumbNail (log);}
-    catch (KKException& e1)  {throw KKException ("DataBase::ImageFullSizeFind  Exception while calling 'ThumbNail'  " + e1.ToString ());}
+    catch (KKException& e1)     {throw KKException ("DataBase::ImageFullSizeFind  Exception while calling 'ThumbNail'  " + e1.ToString ());}
     catch (std::exception& e2)  {throw KKException ("DataBase::ImageFullSizeFind  std::exception while calling 'ThumbNail'.", e2);}
     catch (...)                 {throw KKException ("DataBase::ImageFullSizeFind  Exception while calling 'ThumbNail'.");}
   }

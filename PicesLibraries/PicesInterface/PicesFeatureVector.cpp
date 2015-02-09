@@ -248,6 +248,12 @@ namespace  PicesInterface
 
 
 
+  float  PicesFeatureVector::FilledArea::get ()
+  {
+    return features->FilledArea ();
+  }
+
+
   PicesClass^   PicesFeatureVector::MLClass::get ()
   {
     if  (mlClass != nullptr)

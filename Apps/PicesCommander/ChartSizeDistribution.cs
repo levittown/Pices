@@ -65,10 +65,7 @@ namespace PicesCommander
     private  String  configFileName = "";
     private  bool    formIsMaximized = false;
 
-
-    private  float[]  depthVolumeProfile = null;
-
-    private  int      selectedSizeBucket = -1;
+    private  int     selectedSizeBucket = -1;
 
 
 
@@ -125,16 +122,6 @@ namespace PicesCommander
 
       if  (classToPlot != null)
         ClassToPlot.Text = classToPlot.Name;
-
-      /*
-      ContextMenuStrip cms = new ContextMenuStrip ();
-      cms.Items.Add ("Copy Chart to clipboard",              null, CopyChartToClipboard);
-      cms.Items.Add ("Save Chart to Disk",                   null, SaveChartToDisk);
-      cms.Items.Add ("Copy Data Tab-Delimited to Clipboard", null, SaveTabDelToClipBoard);
-      cms.Items.Add ("Save Data Tab-Delimited to Disk",      null, SaveTabDelToDisk);
-
-      ProfileChart.ContextMenuStrip = cms;
-      */
 
       CastField.SelectedItem = CastField.Items[0];
       CastField.Text         = (String)CastField.Items[0];
@@ -348,27 +335,6 @@ namespace PicesCommander
     }
 
     
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="cast">'U'=Up-Cast, 'D'=Down-Cast, 'B'-Combined Up/Down Cast</param>
-    /// <returns></returns>
-
-    private  float[]  GetDepthVolumeProfile  (char  cast)
-    {
-      String  msg = "Retrieving Depth-Volume profile Station[" + cruise + "]  Station[" + station + "]  Deployment[" + deployment + "].";
-      msgQueue.AddMsg (msg);
-      statusMsgs.AddMsg (msg);
-      PicesVolumeSampledStatList 
-        volStats = threadConn.InstrumentDataGetVolumePerMeterDepth (cruise, station, deployment, 1.0f);
-      if  (volStats == null)
-        return  null;
-
-      return  volStats.ToArray ();
-    }
-
-
-
 
     private  void  SizeDistributionForAClass (PicesClass                      c,
                                               bool                            includeChildren,
@@ -438,8 +404,6 @@ namespace PicesCommander
 
       classToPlot = PicesClassList.GetUniqueClass (ClassToPlot.Text, "");
 
-      depthVolumeProfile = GetDepthVolumeProfile ('D');
-
       sbyte  ch = (sbyte)statistic;
       downCast = null;
       upCast = null;
@@ -491,28 +455,6 @@ namespace PicesCommander
       if  (threadConn != null)
         threadConn.CancelFlag = true;
       statusMsgs.AddMsg ("Cancel Requested");
-    }
-
-
-
-
-    private int  FindBestInetrvaleSize (int minSize, int maxSize, int range)
-    {
-      int  smallestInterval = range % maxSize;
-      int  intervalThatIsSmallest = maxSize;
-
-      int zed = maxSize - 1;
-      while  (zed >= minSize)
-      {
-        int  mod = range % zed;
-        if  (mod <= smallestInterval)
-        {
-          smallestInterval = mod;
-          intervalThatIsSmallest = zed;
-        }
-        --zed;
-      }
-      return  intervalThatIsSmallest;
     }
 
 
@@ -1094,7 +1036,7 @@ namespace PicesCommander
       if       (cast == "Down")  castChar = 'D';
       else if  (cast == "Up")    castChar = 'U';
 
-      PicesDataBaseImageList  images =  mainWinConn.ImagesQueryDeploymentSizeRange (cruise, station, deployment, classToPlot, castChar, statistic, sizeStart, sizeEnd, 0.0f, 0.0f, 1000);
+      PicesDataBaseImageList  images =  mainWinConn.ImagesQueryDeploymentSizeRange (cruise, station, deployment, classToPlot, castChar, statistic, sizeStart, sizeEnd, 0.0f, 0.0f, 1000, true);
       
       DisplayPicesImages dpi = new DisplayPicesImages (mainWinConn, bucketsDisplayed, selectedSizeBucket, images);
       dpi.ShowDialog (this);

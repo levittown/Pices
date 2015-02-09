@@ -98,6 +98,7 @@ namespace SipperFile
                               )
     {
       InitializeComponent ();
+      thumbNails = new List<FlowLayoutPanel> ();
 
       dbConn            = _dbConn;
       sizeDistribution  = _sizeDistribution;
@@ -109,7 +110,7 @@ namespace SipperFile
 
       if  ((selectedSizeIndex >= 0)  &&  (selectedSizeIndex < startValues.Length))
       {
-        Text = "Depth Size Range [" + startValues[selectedSizeIndex].ToString ("###,##0") + " - " + endValues[selectedSizeIndex].ToString ("#,###,##0") + "]";
+        Text = "Depth Size Range [" + startValues[selectedSizeIndex].ToString ("###,##0.000") + " - " + endValues[selectedSizeIndex].ToString ("#,###,##0.000") + "]";
       }
 
       UpdateDisplayTimer.Enabled = true;
@@ -485,7 +486,7 @@ namespace SipperFile
         PicesDataBaseImage pi =  dbConn.ImageLoad (imageFileName);
         if  (pi != null)
         {
-          PicesRaster pr = dbConn.ImageFullSizeLoad (imageFileName);
+          PicesRaster  pr = dbConn.ImageFullSizeFind (imageFileName);
           ImageViewer  iv = new ImageViewer (pr, pi, null);
           iv.ShowDialog (this);
         }

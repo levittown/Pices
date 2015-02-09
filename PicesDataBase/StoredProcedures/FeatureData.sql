@@ -220,9 +220,8 @@ begin
           (select ClassName from Classes c2 where  c2.ClassId = i.ClassValidatedId) as ClassNameValidated,
           i.Depth  as ImagesDepth,
           (select id.CTDDateTime  from  InstrumentData id  where  id.SipperFileId = i.SipperFileId  and  id.ScanLine > i.TopLeftRow limit 1)  as  CtdDateTime,
-          i.PixelCount *  (d.ChamberWidth / (id.CropRight - id.CropLeft)) * 1000  * (id.FlowRate1 / sf.ScanRate) * 1000.0  as AreaMM,
+          fd.FilledArea *  (d.ChamberWidth / (id.CropRight - id.CropLeft)) * 1000  * (id.FlowRate1 / sf.ScanRate) * 1000.0  as AreaMM,
           fd.* 
-
    from Images i
            join(FeatureData fd)  on (fd.ImageId = i.ImageId)
            join(SipperFiles sf)  on (sf.SipperFileId = i.SipperFileId)
@@ -232,7 +231,6 @@ begin
 END
 //
 delimiter ;
-
 
 
 

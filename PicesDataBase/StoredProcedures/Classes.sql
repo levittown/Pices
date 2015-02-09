@@ -53,6 +53,32 @@ delimiter ;
 
 
 
+
+/**********************************************************************************************************************/
+drop procedure    if exists MLClassLoadChildren;
+
+delimiter //
+
+create procedure MLClassLoadChildren (in  _ClassName  varChar(64))
+begin
+  declare   _classId         int  default 0;
+  set  _classId = (select ClassId from Classes  where ClassName = _ClassName);
+  if  (_classId > 0)  then
+     select * from Classes c  where c.ParentId = _classId;
+  end if;
+end
+//
+
+delimiter ;
+
+
+
+
+
+
+
+
+
 /**********************************************************************************************************************/
 drop procedure    if exists ImageClassInsert;
 drop procedure    if exists MLClassInsert;
