@@ -15,7 +15,8 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -89,6 +90,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -100,6 +102,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\PicesLibraries\PicesInterface\PicesInterface.vcxproj">
+      <Project>{8f609a95-37bc-4e0f-8cd5-4196a86cd4b8}</Project>
+      <Name>PicesInterface</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PicesLibraries\SipperFile\SipperFile.csproj">
       <Project>{662D4BB9-C075-465C-9CA6-A8231E221B70}</Project>
       <Name>SipperFile</Name>

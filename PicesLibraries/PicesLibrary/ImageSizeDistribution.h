@@ -110,6 +110,8 @@ namespace MLL
                  RunLog&                       log
                 );
 
+    VectorFloat  DepthProfileForSizeBin (kkuint32  _sizeBucketIdx);
+
     void  GetSizeBucketStats (kkuint32   _sizeBucketIdx,
                               kkuint32&  _count,
                               float&     _sizeStart,
@@ -119,6 +121,9 @@ namespace MLL
     kkint32  IdentifySizeBucket (float  size);
 
     VectorFloat   IntegratedDensityDistribution ()  const;
+
+    VectorFloat  VolumeSampledByDepthBucket ();
+
 
   private:
     void  PopulateDistributions (kkuint32  depthIdx);

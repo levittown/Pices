@@ -67,6 +67,9 @@ namespace PicesCommander
 
     private  int     selectedSizeBucket = -1;
 
+    private  Font titleFont     = new Font (FontFamily.GenericSansSerif, 12);
+    private  Font axisLabelFont = new Font (FontFamily.GenericSansSerif, 12);
+    private  Font dataPoingFont = new Font (FontFamily.GenericSansSerif, 12, FontStyle.Bold);
 
 
     public ChartSizeDistribution (String          _cruise,
@@ -488,9 +491,6 @@ namespace PicesCommander
 
       goalie.StartBlock ();
 
-      Font titleFont     = new Font (FontFamily.GenericSansSerif, 12);
-      Font axisLabelFont = new Font (FontFamily.GenericSansSerif, 12);
-
       String  t1 = "Abundance by Size";
       switch  (statistic)
       {
@@ -529,13 +529,32 @@ namespace PicesCommander
       float  maxX = float.MinValue;
       float  maxY = float.MinValue;
 
+      List<CustomLabel>  customLabels = new List<CustomLabel> ();
       for  (int x = 0;  x < integratedDensityDistribution.Length;  ++x)
       {
         float  sv = startValues[x];
         float  ev = sv * growthRate;
-        float  midPoint = (sv +ev) / 2.0f;
         if  (sv <= 0.0f)
-          midPoint = initialSizeValue / 2.0f;
+        {
+          sv = initialSizeValue / growthRate;
+          ev = initialSizeValue;
+        }
+        float  midPoint = (sv + ev) / 2.0f;
+        
+        {
+          double  svLog10 = Math.Log10 (sv);
+          double  evLog10 = Math.Log10 (ev);
+          CustomLabel cl = null;
+          if  (midPoint < 1.0f)
+            cl = new CustomLabel (svLog10, evLog10, midPoint.ToString ("#0.000"), 0, LabelMarkStyle.SideMark);
+          else if  (midPoint < 10.0f)
+            cl = new CustomLabel (svLog10, evLog10, midPoint.ToString ("#0.00"), 0, LabelMarkStyle.SideMark);
+          else if  (midPoint < 100.0f)
+            cl = new CustomLabel (svLog10, evLog10, midPoint.ToString ("##0.0"), 0, LabelMarkStyle.SideMark);
+          else 
+            cl = new CustomLabel (svLog10, evLog10, midPoint.ToString ("##,##0"), 0, LabelMarkStyle.SideMark);
+          customLabels.Add (cl);
+        }
 
         double  d = (double)integratedDensityDistribution[x];
         float log10D = (float)Math.Log10 (d + 1.0);
@@ -552,32 +571,48 @@ namespace PicesCommander
       ProfileChart.ChartAreas[0].AxisY.LogarithmBase = 10.0;
       ProfileChart.ChartAreas[0].AxisY.LabelStyle.Format = "##,###,##0";
 
+      {
+        ca.AxisX.CustomLabels.Clear ();
+        ca.AxisX.CustomLabels.Add (customLabels[1]);
+        int n = 8;
+        float  interSpace = (float)customLabels.Count / (float)(n + 1);
+        for  (int x = 1;  x <= n;  ++x)
+        {
+          int  idx = 1 + (int)((float)x * interSpace + 0.5f);
+          ca.AxisX.CustomLabels.Add (customLabels[idx]);
+        }
+
+        ca.AxisX.CustomLabels.Add (customLabels[customLabels.Count - 1]);
+      }
+
+
       ca.AxisY.Title = SubInSuperScriptExponent ("Log 10  Abundance");
 
       switch  (statistic)
       {
       case '0':
         ca.AxisX.Title = SubInSuperScriptExponent ("area(m-2)");
-        ca.AxisX.LabelStyle.Format =  "##,##0.000";
+        //ca.AxisX.LabelStyle.Format =  "##,##0.000";
         break;
 
       case '1':
         ca.AxisX.Title = SubInSuperScriptExponent ("Length(mili-meters)");
-        ca.AxisX.LabelStyle.Format =  "##00.00";
+        //ca.AxisX.LabelStyle.Format =  "##00.00";
         break;
 
       case '2':
         ca.AxisX.Title = SubInSuperScriptExponent ("Volume(mm-3)");
-        ca.AxisX.LabelStyle.Format =  "##0.0000";
+        //ca.AxisX.LabelStyle.Format =  "##0.0000";
         break;
 
       case '3':
         ca.AxisX.Title = SubInSuperScriptExponent ("Volume(mm-3)");
-        ca.AxisX.LabelStyle.Format =  "##0.0000";
+        //ca.AxisX.LabelStyle.Format =  "##0.0000";
         break;
       }
 
       ca.AxisX.IsLogarithmic    = true;
+      //ca.AxisX.Minimum          = 0.0;
       ca.AxisX.Maximum          = maxX;
       ca.AxisX.LabelStyle.Angle = 45;
       ca.AxisX.LabelStyle.Font  = axisLabelFont;
@@ -639,7 +674,7 @@ namespace PicesCommander
       String msg = statusMsgs.GetNextMsg ();
       while  (msg != null)
       {
-        Status.AppendText (msg);
+        Status.AppendText (msg + "\n");
         msg = statusMsgs.GetNextMsg ();
       }
 
@@ -896,6 +931,8 @@ namespace PicesCommander
     }  /* WriteTabDelToStream */
 
 
+    
+    
     private void ChartSizeDistribution_FormClosing (object sender, FormClosingEventArgs e)
     {
       if  (buildPlotDataRunning)
@@ -995,10 +1032,14 @@ namespace PicesCommander
       DataPoint dp = s.Points[sizeBucket];
       double  d = (double)integratedDensityDistribution[sizeBucket];
       s.Points[sizeBucket].Label = d.ToString("###,##0.0") + "(" + dp.XValue.ToString("##0.000") + ")";
+      s.Points[sizeBucket].Font = axisLabelFont;
+
       s.Points[sizeBucket].Color = Color.Red;
 
       selectedSizeBucket = sizeBucket;
     }  /* HighLightSizeBucket */
+
+
 
 
     private  void   ChartContextMenu (Point p, 
@@ -1038,13 +1079,18 @@ namespace PicesCommander
 
       PicesDataBaseImageList  images =  mainWinConn.ImagesQueryDeploymentSizeRange (cruise, station, deployment, classToPlot, castChar, statistic, sizeStart, sizeEnd, 0.0f, 0.0f, 1000, true);
       
-      DisplayPicesImages dpi = new DisplayPicesImages (mainWinConn, bucketsDisplayed, selectedSizeBucket, images);
+      DisplayPicesImages dpi = new DisplayPicesImages (mainWinConn, bucketsDisplayed, selectedSizeBucket, 0.0f, 0.0f, images);
       dpi.ShowDialog (this);
     }
 
+
+
+
     private  void   ChartVerticleDistributionForASizeBucket (Object sender, EventArgs e)
     {
-      //
+      ChartSizeDepthDistribution  csdd = new ChartSizeDepthDistribution  
+        (cruise, station, deployment, classToPlot, includeSubClasses, statistic, cast, bucketsDisplayed, selectedSizeBucket);
+      csdd.ShowDialog (this);
     }
 
 

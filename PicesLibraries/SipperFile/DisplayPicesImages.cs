@@ -31,6 +31,10 @@ namespace SipperFile
     PicesDataBaseImageList         picesImages = null;
     PicesImageSizeDistribution     sizeDistribution = null;
     int                            selectedSizeIndex = 0;
+    float                          depthMin = 0.0f;
+    float                          depthMax = 0.0f;
+
+    String                         lastSaveImageDir = null;
 
 
     public DisplayPicesImages (String  _dir)
@@ -91,10 +95,12 @@ namespace SipperFile
 
 
 
-    public DisplayPicesImages (PicesDataBase                _dbConn,
-                               PicesImageSizeDistribution   _sizeDistribution,
-                               int                          _selectedSizeIndex,
-                               PicesDataBaseImageList       _picesImages
+    public DisplayPicesImages (PicesDataBase               _dbConn,
+                               PicesImageSizeDistribution  _sizeDistribution,
+                               int                         _selectedSizeIndex,
+                               float                       _depthMin,
+                               float                       _depthMax,
+                               PicesDataBaseImageList      _picesImages
                               )
     {
       InitializeComponent ();
@@ -104,13 +110,18 @@ namespace SipperFile
       sizeDistribution  = _sizeDistribution;
       picesImages       = _picesImages;
       selectedSizeIndex = _selectedSizeIndex;
+      depthMin          = _depthMin;
+      depthMax          = _depthMax;
 
       float[] startValues = sizeDistribution.SizeStartValues ();
       float[] endValues    = sizeDistribution.SizeEndValues ();
 
       if  ((selectedSizeIndex >= 0)  &&  (selectedSizeIndex < startValues.Length))
       {
-        Text = "Depth Size Range [" + startValues[selectedSizeIndex].ToString ("###,##0.000") + " - " + endValues[selectedSizeIndex].ToString ("#,###,##0.000") + "]";
+        String  t = "Size Range [" + startValues[selectedSizeIndex].ToString ("###,##0.000") + " - " + endValues[selectedSizeIndex].ToString ("#,###,##0.000") + "]";
+        if (depthMax > 0.0f)
+          t = t + "   Depth Range [" + depthMin.ToString ("##0.0") + " - " + depthMax.ToString ("##0.0") + "]";
+        Text = t;
       }
 
       UpdateDisplayTimer.Enabled = true;
@@ -131,6 +142,7 @@ namespace SipperFile
       }
       return result.ToArray ();
     }  /* ReduceToImageFiles */
+
 
 
 
@@ -162,6 +174,8 @@ namespace SipperFile
     }  /* GetThumbnailImageAbort */
 
     private  System.IntPtr  thumbNailCallBackData = IntPtr.Zero;
+
+
 
 
     private  void  LoadNextImageFromPicesList ()
@@ -199,7 +213,8 @@ namespace SipperFile
 
       pb.Height = h + 2;
       pb.Width  = w + 2;
-      pb.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(PicesThumbNail_MouseDoubleClick);
+      //pb.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(PicesThumbNail_MouseDoubleClick);
+      pb.MouseClick += new MouseEventHandler (MouseClickEvent);
       pb.Name = pi.ImageFileName;
 
       Image thumbNail = image.GetThumbnailImage (w, h, GetThumbnailImageAbort, thumbNailCallBackData);
@@ -476,13 +491,15 @@ namespace SipperFile
     }
 
 
+    private  String  lastSelectedImageFileName = "";
+
+    /*
     private  void  PicesThumbNail_MouseDoubleClick (object sender, MouseEventArgs e)
     {
       if  (e.Button == MouseButtons.Left)
       {
         PictureBox pb = (PictureBox)sender;
         String  imageFileName = pb.Name;
-
         PicesDataBaseImage pi =  dbConn.ImageLoad (imageFileName);
         if  (pi != null)
         {
@@ -491,7 +508,138 @@ namespace SipperFile
           iv.ShowDialog (this);
         }
       }
+
     }
+     */
+
+
+    private  String  lastSelectedImage = "";
+
+    private void  MouseClickEvent  (object sender, MouseEventArgs e)
+    {
+      if  (e.Button == MouseButtons.Right)
+      {
+        PictureBox pb = (PictureBox)sender;
+        lastSelectedImage = pb.Name;
+        MenuItem  i1 = new MenuItem ("Copy Image to Clipboard",  CopyImageToClipboard);
+        MenuItem  i2 = new MenuItem ("Save Image",               SaveImage);
+        MenuItem  i3 = new MenuItem ("View Image",               ViewImage);
+
+        MenuItem[] menuItems = new MenuItem[]{i1, i2, i3};
+        ContextMenu  buttonMenu = new ContextMenu (menuItems);
+        buttonMenu.Show (pb, e.Location);
+      }
+      else if  ((e.Button == System.Windows.Forms.MouseButtons.Left))
+      {
+        PictureBox pb = (PictureBox)sender;
+        lastSelectedImage = pb.Name;
+        ViewImage (sender, e);
+      }
+    }
+
+
+
+
+    private  void  ViewImage (Object sender, EventArgs e)
+    {
+      String  imageFileName = lastSelectedImage;
+      PicesDataBaseImage pi =  dbConn.ImageLoad (imageFileName);
+      if  (pi != null)
+      {
+        PicesRaster  pr = dbConn.ImageFullSizeFind (imageFileName);
+        ImageViewer  iv = new ImageViewer (pr, pi, null);
+        iv.ShowDialog (this);
+      }
+    }
+
+
+
+    
+    private  void  CopyImageToClipboard (Object sender, EventArgs e)
+    {
+      String  imageFileName = lastSelectedImage;
+
+      PicesDataBaseImage pi =  dbConn.ImageLoad (imageFileName);
+      if  (pi != null)
+      {
+        PicesRaster  pr = dbConn.ImageFullSizeFind (imageFileName);
+        Image  i = pr.BuildBitmap ();
+        if  (i != null)
+          Clipboard.SetImage (i);
+      }
+    }  /* CopyImageToClipboard */
+
+
+
+
+    private  void  SaveImage (Object sender, EventArgs e)
+    {
+      String  imageFileName = lastSelectedImage;
+
+      PicesRaster  pr = dbConn.ImageFullSizeFind (imageFileName);
+      
+      FolderBrowserDialog  fbd = new FolderBrowserDialog ();
+
+      fbd.Description         = "Select directory to save images to";
+      fbd.ShowNewFolderButton = true;
+      fbd.SelectedPath        = lastSaveImageDir;
+      DialogResult  dr = fbd.ShowDialog ();
+      if  (dr == DialogResult.OK)
+      {
+        if  (lastSaveImageDir != fbd.SelectedPath)
+          lastSaveImageDir = fbd.SelectedPath;
+      
+        String  destDir = OSservices.AddSlash (fbd.SelectedPath);
+        
+        System.IO.DirectoryInfo di = new System.IO.DirectoryInfo (destDir);
+        if  (!di.Exists)
+        {
+          MessageBox.Show (this, "No Such Directory [" + destDir + "]", "Save Images", MessageBoxButtons.OK);
+          return;
+        }
+        
+        String  fullFileName = destDir + imageFileName + ".bmp";
+
+        try {pr.Save(fullFileName); }
+        catch (Exception  e3)
+        {
+          MessageBox.Show (this, 
+                           "Exception occured saving image\n\n" + e3.ToString (), 
+                           "Save Image",
+                           MessageBoxButtons.OK
+                          );
+        }
+      }
+    }  /* SaveImage */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

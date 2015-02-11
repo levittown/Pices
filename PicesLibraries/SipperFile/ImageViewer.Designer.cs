@@ -377,7 +377,7 @@ namespace SipperFile
       this.EBvLabel.Name = "EBvLabel";
       this.EBvLabel.Size = new System.Drawing.Size(27, 13);
       this.EBvLabel.TabIndex = 55;
-      this.EBvLabel.Text = "EBv";
+      this.EBvLabel.Text = "SBv";
       // 
       // ESD
       // 

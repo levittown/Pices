@@ -807,6 +807,8 @@ namespace SipperFile
         activeClasses = ActiveTrainingLibraries.Model1 ().MLClasses ();
       }
 
+      if  (classes == null)
+        classes = dbConn.MLClassLoadList ();
       SelectAPicesClass  sapc = new SelectAPicesClass (classes, rootDir, activeClasses);
 
       if  (!String.IsNullOrEmpty (ValidatedClassName.Text))

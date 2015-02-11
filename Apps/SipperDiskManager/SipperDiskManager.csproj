@@ -109,6 +109,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\PicesLibraries\PicesInterface\PicesInterface.vcxproj">
+      <Project>{8f609a95-37bc-4e0f-8cd5-4196a86cd4b8}</Project>
+      <Name>PicesInterface</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PicesLibraries\SipperDiskUtilities\SipperDiskUtilities.csproj">
       <Project>{24D8DD76-795E-4975-8297-BF1F5FBE5649}</Project>
       <Name>SipperDiskUtilities</Name>

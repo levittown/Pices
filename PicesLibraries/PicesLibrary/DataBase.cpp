@@ -4436,9 +4436,9 @@ void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruise
                                                const KKStr&               className,
                                                float                      depthBinSize,
                                                char                       statistic,
-                                               float                      initialValue,
-                                               float                      growthRate,
-                                               float                      endValue,
+                                               double                     initialValue,
+                                               double                     growthRate,
+                                               double                     endValue,
                                                ImageSizeDistributionPtr&  downCast,
                                                ImageSizeDistributionPtr&  upCast
                                               )
@@ -4446,8 +4446,7 @@ void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruise
   delete  downCast;   downCast = NULL;
   delete  upCast;     upCast   = NULL;
 
-  
-  
+
   VolumeSampledStatListPtr  volSampledUpCast = NULL;
   VolumeSampledStatListPtr  volSampledDownCast = NULL;
 

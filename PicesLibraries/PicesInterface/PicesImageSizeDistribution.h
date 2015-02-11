@@ -76,6 +76,10 @@ namespace PicesInterface
 
     PicesImageSizeDistributionRow^   AllDepths ();
 
+    array<float>^  DepthProfileForSizeBin (uint32  _sizeBucketIdx);
+
+    PicesImageSizeDistributionRow^   GetDepthBin (uint  depthBinIdx);
+
     void  GetSizeBucketStats (uint       _sizeBucketIdx,
                               uint%      _count,
                               float%    _sizeStart,
@@ -86,6 +90,7 @@ namespace PicesInterface
 
     array<float>^  IntegratedDensityDistribution ();
 
+    array<float>^  VolumeSampledByDepthBucket ();
 
   private:
     MLL::ImageSizeDistributionPtr  imageSizeDistribution;

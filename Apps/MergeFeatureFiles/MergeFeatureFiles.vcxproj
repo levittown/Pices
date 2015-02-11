@@ -175,16 +175,8 @@
       <Project>{5a4b9b15-9745-4aba-b1a8-ffbc85d1d5df}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\..\OutsidePackages\UsfCasCor\UsfCasCor.vcxproj">
-      <Project>{673f758b-5cf9-4c6c-b9b3-1376680f44f3}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
     <ProjectReference Include="..\..\PicesLibraries\PicesLibrary\PicesLibrary.vcxproj">
       <Project>{fa9c865e-0227-4ebc-a291-ed0f2453afb3}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\SipperInterface\SipperInterface.csproj">
-      <Project>{e620fd29-fc27-42ad-9c75-1e5d2b81b1b7}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>

@@ -28,13 +28,11 @@
     /// </summary>
     private void InitializeComponent ()
     {
-      this.components = new System.ComponentModel.Container();
       System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
       System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
       System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
       System.Windows.Forms.DataVisualization.Charting.Title title2 = new System.Windows.Forms.DataVisualization.Charting.Title();
       this.ProfileChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
-      this.timer1 = new System.Windows.Forms.Timer(this.components);
       this.ClassToPlot = new System.Windows.Forms.TextBox();
       this.ClassToPlotLabel = new System.Windows.Forms.Label();
       this.SelectionCriteriaPanel = new System.Windows.Forms.Panel();
@@ -46,6 +44,7 @@
       this.SizeStatiticLabel = new System.Windows.Forms.Label();
       this.SizeRangeLabel = new System.Windows.Forms.Label();
       this.SizeRangeField = new System.Windows.Forms.TextBox();
+      this.PlotLogDensity = new System.Windows.Forms.CheckBox();
       ((System.ComponentModel.ISupportInitialize)(this.ProfileChart)).BeginInit();
       this.SelectionCriteriaPanel.SuspendLayout();
       this.SuspendLayout();
@@ -81,7 +80,7 @@
       legend2.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Top;
       legend2.Name = "Legend1";
       this.ProfileChart.Legends.Add(legend2);
-      this.ProfileChart.Location = new System.Drawing.Point(12, 90);
+      this.ProfileChart.Location = new System.Drawing.Point(12, 110);
       this.ProfileChart.Name = "ProfileChart";
       series2.ChartArea = "ChartArea1";
       series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -89,21 +88,16 @@
       series2.Legend = "Legend1";
       series2.Name = "Series1";
       this.ProfileChart.Series.Add(series2);
-      this.ProfileChart.Size = new System.Drawing.Size(822, 518);
+      this.ProfileChart.Size = new System.Drawing.Size(822, 522);
       this.ProfileChart.TabIndex = 30;
       this.ProfileChart.Text = "Abundance/Deployment";
       title2.Name = "Title1";
       this.ProfileChart.Titles.Add(title2);
       this.ProfileChart.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ProfileChart_MouseClick);
       // 
-      // timer1
-      // 
-      this.timer1.Interval = 50;
-      this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-      // 
       // ClassToPlot
       // 
-      this.ClassToPlot.Location = new System.Drawing.Point(182, 30);
+      this.ClassToPlot.Location = new System.Drawing.Point(182, 25);
       this.ClassToPlot.Name = "ClassToPlot";
       this.ClassToPlot.ReadOnly = true;
       this.ClassToPlot.Size = new System.Drawing.Size(328, 20);
@@ -112,7 +106,7 @@
       // ClassToPlotLabel
       // 
       this.ClassToPlotLabel.AutoSize = true;
-      this.ClassToPlotLabel.Location = new System.Drawing.Point(179, 14);
+      this.ClassToPlotLabel.Location = new System.Drawing.Point(179, 9);
       this.ClassToPlotLabel.Name = "ClassToPlotLabel";
       this.ClassToPlotLabel.Size = new System.Drawing.Size(32, 13);
       this.ClassToPlotLabel.TabIndex = 54;
@@ -122,6 +116,7 @@
       // 
       this.SelectionCriteriaPanel.BackColor = System.Drawing.Color.Silver;
       this.SelectionCriteriaPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.SelectionCriteriaPanel.Controls.Add(this.PlotLogDensity);
       this.SelectionCriteriaPanel.Controls.Add(this.CastField);
       this.SelectionCriteriaPanel.Controls.Add(this.CastLabel);
       this.SelectionCriteriaPanel.Controls.Add(this.DeploymentField);
@@ -134,12 +129,12 @@
       this.SelectionCriteriaPanel.Controls.Add(this.SizeRangeField);
       this.SelectionCriteriaPanel.Location = new System.Drawing.Point(12, 12);
       this.SelectionCriteriaPanel.Name = "SelectionCriteriaPanel";
-      this.SelectionCriteriaPanel.Size = new System.Drawing.Size(822, 72);
+      this.SelectionCriteriaPanel.Size = new System.Drawing.Size(822, 82);
       this.SelectionCriteriaPanel.TabIndex = 57;
       // 
       // CastField
       // 
-      this.CastField.Location = new System.Drawing.Point(751, 30);
+      this.CastField.Location = new System.Drawing.Point(751, 25);
       this.CastField.Name = "CastField";
       this.CastField.ReadOnly = true;
       this.CastField.Size = new System.Drawing.Size(64, 20);
@@ -148,7 +143,7 @@
       // CastLabel
       // 
       this.CastLabel.AutoSize = true;
-      this.CastLabel.Location = new System.Drawing.Point(748, 14);
+      this.CastLabel.Location = new System.Drawing.Point(748, 9);
       this.CastLabel.Name = "CastLabel";
       this.CastLabel.Size = new System.Drawing.Size(28, 13);
       this.CastLabel.TabIndex = 72;
@@ -156,7 +151,7 @@
       // 
       // DeploymentField
       // 
-      this.DeploymentField.Location = new System.Drawing.Point(3, 30);
+      this.DeploymentField.Location = new System.Drawing.Point(3, 25);
       this.DeploymentField.Name = "DeploymentField";
       this.DeploymentField.ReadOnly = true;
       this.DeploymentField.Size = new System.Drawing.Size(173, 20);
@@ -164,7 +159,7 @@
       // 
       // SizeStaisticField
       // 
-      this.SizeStaisticField.Location = new System.Drawing.Point(649, 30);
+      this.SizeStaisticField.Location = new System.Drawing.Point(649, 25);
       this.SizeStaisticField.Name = "SizeStaisticField";
       this.SizeStaisticField.ReadOnly = true;
       this.SizeStaisticField.Size = new System.Drawing.Size(89, 20);
@@ -173,7 +168,7 @@
       // DeploymentLabel
       // 
       this.DeploymentLabel.AutoSize = true;
-      this.DeploymentLabel.Location = new System.Drawing.Point(3, 14);
+      this.DeploymentLabel.Location = new System.Drawing.Point(3, 9);
       this.DeploymentLabel.Name = "DeploymentLabel";
       this.DeploymentLabel.Size = new System.Drawing.Size(63, 13);
       this.DeploymentLabel.TabIndex = 3;
@@ -182,7 +177,7 @@
       // SizeStatiticLabel
       // 
       this.SizeStatiticLabel.AutoSize = true;
-      this.SizeStatiticLabel.Location = new System.Drawing.Point(646, 14);
+      this.SizeStatiticLabel.Location = new System.Drawing.Point(646, 9);
       this.SizeStatiticLabel.Name = "SizeStatiticLabel";
       this.SizeStatiticLabel.Size = new System.Drawing.Size(67, 13);
       this.SizeStatiticLabel.TabIndex = 66;
@@ -191,7 +186,7 @@
       // SizeRangeLabel
       // 
       this.SizeRangeLabel.AutoSize = true;
-      this.SizeRangeLabel.Location = new System.Drawing.Point(520, 14);
+      this.SizeRangeLabel.Location = new System.Drawing.Point(520, 9);
       this.SizeRangeLabel.Name = "SizeRangeLabel";
       this.SizeRangeLabel.Size = new System.Drawing.Size(62, 13);
       this.SizeRangeLabel.TabIndex = 60;
@@ -199,17 +194,28 @@
       // 
       // SizeRangeField
       // 
-      this.SizeRangeField.Location = new System.Drawing.Point(522, 30);
+      this.SizeRangeField.Location = new System.Drawing.Point(522, 25);
       this.SizeRangeField.Name = "SizeRangeField";
       this.SizeRangeField.ReadOnly = true;
       this.SizeRangeField.Size = new System.Drawing.Size(115, 20);
       this.SizeRangeField.TabIndex = 68;
       // 
+      // PlotLogDensity
+      // 
+      this.PlotLogDensity.AutoSize = true;
+      this.PlotLogDensity.Location = new System.Drawing.Point(6, 56);
+      this.PlotLogDensity.Name = "PlotLogDensity";
+      this.PlotLogDensity.Size = new System.Drawing.Size(82, 17);
+      this.PlotLogDensity.TabIndex = 74;
+      this.PlotLogDensity.Text = "Log Density";
+      this.PlotLogDensity.UseVisualStyleBackColor = true;
+      this.PlotLogDensity.CheckedChanged += new System.EventHandler(this.PlotLogDensity_CheckedChanged);
+      // 
       // ChartSizeDepthDistribution
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(849, 620);
+      this.ClientSize = new System.Drawing.Size(849, 644);
       this.Controls.Add(this.SelectionCriteriaPanel);
       this.Controls.Add(this.ProfileChart);
       this.MinimumSize = new System.Drawing.Size(865, 658);
@@ -229,7 +235,6 @@
     #endregion
 
     private System.Windows.Forms.DataVisualization.Charting.Chart ProfileChart;
-    private System.Windows.Forms.Timer timer1;
     private System.Windows.Forms.TextBox ClassToPlot;
     private System.Windows.Forms.Label ClassToPlotLabel;
     private System.Windows.Forms.Panel SelectionCriteriaPanel;
@@ -241,6 +246,7 @@
     private System.Windows.Forms.Label CastLabel;
     private System.Windows.Forms.TextBox SizeStaisticField;
     private System.Windows.Forms.TextBox SizeRangeField;
+    private System.Windows.Forms.CheckBox PlotLogDensity;
 
 
   }

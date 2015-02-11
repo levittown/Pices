@@ -464,9 +464,9 @@ namespace MLL
                                          const KKStr&               className,
                                          float                      depthBinSize,
                                          char                       statistic,
-                                         float                      initialValue,
-                                         float                      growthRate,
-                                         float                      endValue,
+                                         double                     initialValue,
+                                         double                     growthRate,
+                                         double                    endValue,
                                          ImageSizeDistributionPtr&  downCast,
                                          ImageSizeDistributionPtr&  upCast
                                         );

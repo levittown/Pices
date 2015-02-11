@@ -171,32 +171,32 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
   allClasses = NULL;
 
   char  statisticCode = '0';
-  float  startValue = 0.005f;
-  float  growthRate = 1.2f;
-  float  endValue   = 170.0f;
+  double  startValue = 0.005;
+  double  growthRate = 1.2;
+  double  endValue   = 170.0;
 
   if  (statistic == "0")
   {
     statisticCode = '0';
-    startValue    = 0.005f;
-    growthRate    = 1.2f;
-    endValue      = 170.0f;
+    startValue    = 0.010;
+    growthRate    = 1.122462048; // k = 2^(1/6)
+    endValue      = 1000.0;
   }
 
   else if  (statistic == "1")
   {
     statisticCode = '1';
-    startValue    = 0.01f;
-    growthRate    = 1.1f;
-    endValue      = 170.0f;
+    startValue    = 0.10;
+    growthRate    = 1.059463094;  // k = 2^(1/12)
+    endValue      = 100.0;
   }
 
   else if  (statistic == "2")
   {
     statisticCode = '2';
-    startValue    = 0.005f;
-    growthRate    = 1.2f;
-    endValue      = 170.0f;
+    startValue    = 0.001;
+    growthRate    = 1.189207115;  // k = 2^(1/4)
+    endValue      = 10000.0;
   }
 
 
@@ -575,6 +575,21 @@ void  PrintSummaryReports (DataBasePtr                  db,
 
 
 
+void   CleanUpSummaries (vector<DeploymentSummary*>&  summaries)
+{
+  vector<DeploymentSummary*>::iterator  idx;
+  for  (idx = summaries.begin ();  idx != summaries.end ();  ++idx)
+  {
+    DeploymentSummary* s = *idx;
+    delete  s;
+    s = NULL;
+  }
+  summaries.clear ();
+}
+
+
+
+
 void  MarineSnowReport (const KKStr&  statistic)
 {
   RunLog  runLog;
@@ -632,6 +647,9 @@ void  MarineSnowReport (const KKStr&  statistic)
 
   PrintSummaryReports (db, summaries, statistic, statisticStr);
 
+
+  CleanUpSummaries (summaries);
+
   delete  db;
   db = NULL;
 }  /* MarineSnowReport */
@@ -653,7 +671,7 @@ int  main (int    argc,
     _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF ); 
   #endif
 
-  MarineSnowReport ("1");
+  MarineSnowReport ("2");
 
   return 0;
 }

@@ -264,7 +264,7 @@
       // GrowthRateLabel
       // 
       this.GrowthRateLabel.AutoSize = true;
-      this.GrowthRateLabel.Location = new System.Drawing.Point(184, 122);
+      this.GrowthRateLabel.Location = new System.Drawing.Point(180, 122);
       this.GrowthRateLabel.Name = "GrowthRateLabel";
       this.GrowthRateLabel.Size = new System.Drawing.Size(64, 13);
       this.GrowthRateLabel.TabIndex = 64;
@@ -272,15 +272,15 @@
       // 
       // GrowthRateField
       // 
-      this.GrowthRateField.DecimalPlaces = 2;
+      this.GrowthRateField.DecimalPlaces = 4;
       this.GrowthRateField.Increment = new decimal(new int[] {
             5,
             0,
             0,
             131072});
-      this.GrowthRateField.Location = new System.Drawing.Point(185, 138);
+      this.GrowthRateField.Location = new System.Drawing.Point(181, 138);
       this.GrowthRateField.Name = "GrowthRateField";
-      this.GrowthRateField.Size = new System.Drawing.Size(63, 20);
+      this.GrowthRateField.Size = new System.Drawing.Size(74, 20);
       this.GrowthRateField.TabIndex = 63;
       this.GrowthRateField.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       this.GrowthRateField.Value = new decimal(new int[] {
@@ -302,7 +302,7 @@
       // 
       this.MaxSizeField.Location = new System.Drawing.Point(95, 138);
       this.MaxSizeField.Maximum = new decimal(new int[] {
-            500,
+            10000,
             0,
             0,
             0});
@@ -327,20 +327,15 @@
       // 
       // InitialSizeField
       // 
-      this.InitialSizeField.DecimalPlaces = 2;
+      this.InitialSizeField.DecimalPlaces = 3;
       this.InitialSizeField.Increment = new decimal(new int[] {
             1,
             0,
             0,
             65536});
       this.InitialSizeField.Location = new System.Drawing.Point(5, 138);
-      this.InitialSizeField.Maximum = new decimal(new int[] {
-            300,
-            0,
-            0,
-            0});
       this.InitialSizeField.Name = "InitialSizeField";
-      this.InitialSizeField.Size = new System.Drawing.Size(63, 20);
+      this.InitialSizeField.Size = new System.Drawing.Size(70, 20);
       this.InitialSizeField.TabIndex = 60;
       this.InitialSizeField.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       this.InitialSizeField.Value = new decimal(new int[] {

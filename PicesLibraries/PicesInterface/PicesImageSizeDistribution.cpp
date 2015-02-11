@@ -143,6 +143,17 @@ namespace  PicesInterface
 
 
 
+  PicesImageSizeDistributionRow^   PicesImageSizeDistribution::GetDepthBin (uint  depthBinIdx)
+  {
+    ImageSizeDistributionRowPtr  row =  imageSizeDistribution->GetDepthBin (depthBinIdx);
+    if  (row == NULL)
+      return nullptr;
+    PicesImageSizeDistributionRow^  result = gcnew PicesImageSizeDistributionRow (row, false);
+    return  result;
+  }
+
+  
+
   void  PicesImageSizeDistribution::GetSizeBucketStats (uint     _sizeBucketIdx,
                                                         uint%    _count,
                                                         float%   _sizeStart,
@@ -162,8 +173,6 @@ namespace  PicesInterface
 
 
 
-
-
   kkint32  PicesImageSizeDistribution::IdentifySizeBucket (float  size)
   {
     return  imageSizeDistribution->IdentifySizeBucket (size);
@@ -180,4 +189,38 @@ namespace  PicesInterface
   }
 
   
+  array<float>^   PicesImageSizeDistribution::DepthProfileForSizeBin (uint32  _sizeBucketIdx)
+  {
+    VectorFloat  depthDistribution = imageSizeDistribution->DepthProfileForSizeBin (_sizeBucketIdx);
+    if  (depthDistribution.size () < 1)
+      return nullptr;
+
+    array<float>^ result = gcnew array<float> (depthDistribution.size ());
+
+    for  (uint x = 0;  x < depthDistribution.size ();  ++x)
+      result[x] = depthDistribution[x];
+
+    return  result;
+  }  /* DepthProfileForSizeBin */
+
+  
+
+  array<float>^  PicesImageSizeDistribution::VolumeSampledByDepthBucket ()
+  {
+    VectorFloat  volumeSamplesProfile = imageSizeDistribution->VolumeSampledByDepthBucket ();
+    if  (volumeSamplesProfile.size () < 1)
+      return nullptr;
+
+    array<float>^ result = gcnew array<float> (volumeSamplesProfile.size ());
+
+    for  (uint x = 0;  x < volumeSamplesProfile.size ();  ++x)
+      result[x] = volumeSamplesProfile[x];
+
+    return  result;
+  }
+
+
+
+
+
 }  /* PicesInterface */

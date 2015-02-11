@@ -237,6 +237,42 @@ void  ImageSizeDistribution::AddIn (const ImageSizeDistribution&  right,
 
 
 
+VectorFloat  ImageSizeDistribution::DepthProfileForSizeBin (kkuint32  _sizeBucketIdx)
+{
+  VectorFloat result (NumDepthBins (), 0.0f);
+  for  (kkuint32  depthIdx = 0;  depthIdx < NumDepthBins ();  ++depthIdx)
+  {
+    ImageSizeDistributionRowPtr row = depthDistributions[depthIdx];
+    const VectorUint32&  distribution = row->Distribution ();
+    if  (_sizeBucketIdx < distribution.size ())
+    {
+      if  (row->VolumneSampled () != 0.0)
+        result[depthIdx] = distribution[_sizeBucketIdx] / row->VolumneSampled ();
+    }
+  }
+  return  result;
+}  /* DepthProfileForSizeBin */
+
+
+
+
+VectorFloat  ImageSizeDistribution::VolumeSampledByDepthBucket ()
+{
+  VectorFloat result (depthDistributions.size (), 0.0f);
+  for  (kkuint32  depthIdx = 0;  depthIdx < depthDistributions.size ();  ++depthIdx)
+  {
+    ImageSizeDistributionRowPtr row = depthDistributions[depthIdx];
+    const VectorUint32&  distribution = row->Distribution ();
+    result[depthIdx] = row->VolumneSampled ();
+  }
+  return  result;
+}  /* DepthProfileForSizeBin */
+
+
+
+
+
+
 void  ImageSizeDistribution::GetSizeBucketStats (kkuint32   _sizeBucketIdx,
                                                  kkuint32&  _count,
                                                  float&     _sizeStart,
