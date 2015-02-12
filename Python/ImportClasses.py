@@ -117,8 +117,8 @@ def  LoadClassExtenalTranslationTable(fileName):
     fields=l.split('\t')
     if  len(fields) > 3:
       classId   = ToInt (fields[0])
-      classMame = fields[1].strip("\"")
-      classDic[classId] = classMame
+      className = fields[1].strip("\"")
+      classDic[classId] = className
   classData.close()
   return  classDic
 
@@ -143,22 +143,26 @@ def  IdentifyClass(db, c, className):
 
 def  ImportClassEntries(dirName):
   try:
-       #db = mysql.connector.Connect(user='kkramer',
-       #                             password="tree10peach",
-       #                             host='sipper-db2.marine.usf.edu',
-       #                             database='pices_new'
-       #                          )
-              
+       db = mysql.connector.Connect(user='kkramer',
+                                    password="tree10peach",
+                                    host='sipper-db2.marine.usf.edu',
+                                    database='pices_new'
+                                 )
        #db = mysql.connector.Connect(user='kkramer',
        #                             password="tree10peach",
        #                             host='sipper-db2.marine.usf.edu',
        #                             database='pices_new'
        #                           )
-       db = mysql.connector.Connect(user='kkramer',
-                                    password="tree10peach",
-                                    host='localhost',
-                                    database='pices_new'
-                                  )
+       #db = mysql.connector.Connect(user='kkramer',
+       #                            password="tree10peach",
+       #                            host='localhost',
+       #                            database='pices_new'
+       #                           )
+       #db = mysql.connector.Connect(user='root',
+       #                            password="dasani30",
+       #                            host='localhost',
+       #                            database='pices_new'
+       #                           )
   except  mysql.connector.Error as err:
     db = None
     if  err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
@@ -172,7 +176,6 @@ def  ImportClassEntries(dirName):
     return
 
   c = db.cursor()
-
 
   classesFileName = os.path.join(dirName, "Classes") + ".txt"
   classNameLookUp = LoadClassExtenalTranslationTable (classesFileName)
@@ -200,6 +203,8 @@ def  ImportClassEntries(dirName):
       if  (parentIdOurs < 1):
         parentIdOurs = 1
       classIdOurs = IdentifyClass (db, c, className)
+      if  (parentIdOurs == classIdOurs):
+        parentIdOurs = 0
       if  (classIdOurs < 0):
         sqlStr = ('insert into  classes(ClassName, ParentId)' + ' ' +
                   'values(' + '"' + className + '"'  + ', ' +
@@ -233,7 +238,8 @@ def  ImportClassEntries(dirName):
 def  main():
   #rootDir="E:\\Users\\kkramer\\Dropbox\\Sipper\\FromAndrewToKurt\\Validation\\2014-09-16\\"
   #rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews"
-  rootDir="C:\\Pices\\UpdatesFromOtherServers"
+  rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews\\2015-02-11"
+  #rootDir="C:\\Pices\\UpdatesFromOtherServers"
   ImportClassEntries(rootDir)
   print("\n\n    *** Import Completed ***\n\n")
 

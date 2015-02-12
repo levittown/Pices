@@ -141,16 +141,21 @@ def  ImportLogEntries(dirName):
        #                             database='pices_new'
        #                          )
               
-       #db = mysql.connector.Connect(user='kkramer',
-       #                             password="tree10peach",
-       #                             host='sipper-db2.marine.usf.edu',
-       #                             database='pices_new'
-       #                           )
        db = mysql.connector.Connect(user='kkramer',
                                     password="tree10peach",
-                                    host='localhost',
+                                    host='sipper-db2.marine.usf.edu',
                                     database='pices_new'
                                   )
+       #db = mysql.connector.Connect(user='kkramer',
+       #                             password="tree10peach",
+       #                             host='localhost',
+       #                             database='pices_new'
+       #                           )
+       #db = mysql.connector.Connect(user='root',
+       #                             password="dasani30",
+       #                             host='localhost',
+       #                             database='pices_new'
+       #                           )
   except  mysql.connector.Error as err:
     db = None
     if  err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
@@ -174,15 +179,15 @@ def  ImportLogEntries(dirName):
     print(l)
     fields=l.split('\t')
     fieldCount = len(fields)
-    if  len(fields) > 13:
+    if  len(fields) > 23:
       sipperFileIdExt     = ToInt(fields[0])
       sipperFileName      = fields[1]
       cruiseName          = fields[2]
       stationName         = fields[3]
       deploymentNum       = fields[4]  # eval('"' + fields[4].replace('"','') + '"')
       description         = fields[5]
-      latitude            = fields[6]
-      longitude           = fields[7]
+      latitude            = ToFloat(fields[6])
+      longitude           = ToFloat(fields[7])
       dateTimeStart       = fields[8]
 
       sp0Instrument       = fields[9]
@@ -190,10 +195,10 @@ def  ImportLogEntries(dirName):
       sp2Instrument       = fields[11]
       sp3Instrument       = fields[12]
       
-      ctdExt0             = ToInt(fields[13])
-      ctdExt1             = ToInt(fields[14])
-      ctdExt2             = ToInt(fields[15])
-      ctdExt3             = ToInt(fields[16])
+      ctdExt0             = fields[13]
+      ctdExt1             = fields[14]
+      ctdExt2             = fields[15]
+      ctdExt3             = fields[16]
 
       sizeInBytes             = ToInt(fields[17])
       numScanLines            = ToInt(fields[18])
@@ -208,6 +213,8 @@ def  ImportLogEntries(dirName):
       if  (sipperFileIdOur >= 0):
         print(sipperFileName + " already in database  ExternalId :" + str(sipperFileIdExt) + "  OurId :" + str(sipperFileIdOur))
       else:
+        extractionScanLineEndStr = str(extractionScanLineEnd)
+        
         sqlStr = ("insert into SipperFiles(sipperFileName, ProgName, cruiseName, stationName, deploymentNum, " +
                   "description, latitude, longitude, dateTimeStart, sp0Instrument, sp1Instrument, sp2Instrument, sp3Instrument, " +
                   "ctdExt0, ctdExt1, ctdExt2, ctdExt3, sizeInBytes, numScanLines, scanRate, depth, extractionStatus, " +
@@ -218,27 +225,24 @@ def  ImportLogEntries(dirName):
                     stationName    + ", " +
                     deploymentNum  + ", " +
                     description    + ", " +
-                    latitude       + ", " +
-                    longitude      + ", " +
+                    str(latitude)       + ", " +
+                    str(longitude)      + ", " +
                     dateTimeStart  + ", " +
-
                     sp0Instrument  + ", " +
                     sp1Instrument  + ", " +
                     sp2Instrument  + ", " +
                     sp3Instrument  + ", " +
-      
                     ctdExt0        + ", " +
                     ctdExt1        + ", " +
                     ctdExt2        + ", " +
                     ctdExt3        + ", " +
-
-                    sizeInBytes    + ", " +
-                    numScanLines   + ", " +
-                    scanRate       + ", " +
-                    depth          + ", " +
-                    extractionStatus  + ", " +
-                    extractionScanLineStart  + ", " +
-                    extractionScanLineEnd +
+                    str(sizeInBytes)    + ", " +
+                    str(numScanLines)   + ", " +
+                    str(scanRate)       + ", " +
+                    str(depth)          + ", " +
+                    extractionStatus              + ", " +
+                    str(extractionScanLineStart)  + ", " +
+                    extractionScanLineEndStr   +
                   ")"
                   )
         print (sqlStr)
@@ -254,7 +258,8 @@ def  ImportLogEntries(dirName):
 def  main():
   #rootDir="E:\\Users\\kkramer\\Dropbox\\Sipper\\FromAndrewToKurt\\Validation\\2014-09-16\\"
   #rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews"
-  rootDir="C:\\Pices\\UpdatesFromOtherServers"
+  rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews\\2015-02-11"
+  #rootDir="C:\\Pices\\UpdatesFromOtherServers"
   ImportLogEntries(rootDir)
   print("\n\n    *** Import Completed ***\n\n")
 
