@@ -91,9 +91,17 @@ namespace SipperFileViewer
 
 
 
-    public SipperFileViewer ()
+    private  void  BeforeCallingInitializeComponent ()
     {
       sipperFileViewerConfigFileName = OSservices.AddSlash (PicesSipperVariables.PicesConfigurationDirectory ()) + "SipperFileViewer.txt";
+    }
+
+
+
+
+    public SipperFileViewer ()
+    {
+      BeforeCallingInitializeComponent ();
       InitializeComponent ();
       Initialization ();
     }
@@ -102,8 +110,9 @@ namespace SipperFileViewer
 
     public SipperFileViewer (string  fileName)
     {
-      sipperFileViewerConfigFileName = OSservices.AddSlash (PicesSipperVariables.PicesConfigurationDirectory ()) + "SipperFileViewer.txt";
       initialFileName = fileName;
+      BeforeCallingInitializeComponent ();
+      InitializeComponent ();
       InitializeComponent ();
       Initialization ();
     }
@@ -115,11 +124,10 @@ namespace SipperFileViewer
                              string  _sipperFileName
                             )
     {
-      sipperFileViewerConfigFileName = OSservices.AddSlash (PicesSipperVariables.PicesConfigurationDirectory ()) + "SipperFileViewer.txt";
       initialStream  = stream;
       windowTitle    = _windowTitle;
       sipperFileName = _sipperFileName;
-      
+      BeforeCallingInitializeComponent ();
       InitializeComponent ();
       Initialization ();
     }

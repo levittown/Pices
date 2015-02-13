@@ -98,9 +98,13 @@ def  LoadLogEntryLookup(db, c):
 
 
 def  ImportClassificationDataOneFile(fileNum, fullFileName, classDic, logEntryDict, db, c):
+  updateErrorFileName = fullFileName + ".UpdateErrors.txt"
+  updateErrorFile = open(updateErrorFileName, mode='w');
+
   classificationData = open(fullFileName)
 
   count = 0
+  errorCount = 0
 
   for  l in classificationData:
     fields=l.split('\t')
@@ -132,12 +136,14 @@ def  ImportClassificationDataOneFile(fileNum, fullFileName, classDic, logEntryDi
         c.execute(sqlStr)
         db.commit()
       except  mysql.connector.Error  as err:
+        updateErrorFile.write(str(imageId) + "\t" + imageFileName + "\t" + err + "\n");
         print(err)
+        errorCount = errorCount + 1
       count = count + 1
     fields = None
+
+  updateErrorFile.close ()
   classificationData.close ()
-
-
 
 
 
@@ -186,19 +192,22 @@ def  ImportClassificationData(dirName):
     print("***ERROR***  Failed to load 'Log Entries'")
     return
 
-#  ImportClassificationDataOneFile(1, (os.path.join(dirName, "ImagesClassificationCruise_WB0511") + ".txt"), classDic, logEntryDict, db, c)
-#  ImportClassificationDataOneFile(2, (os.path.join(dirName, "ImagesClassificationCruise_WB0512") + ".txt"), classDic, logEntryDict, db, c)
-#  ImportClassificationDataOneFile(3, (os.path.join(dirName, "ImagesClassificationCruise_WB0611") + ".txt"), classDic, logEntryDict, db, c)
-#  ImportClassificationDataOneFile(4, (os.path.join(dirName, "ImagesClassificationCruise_WB0812") + ".txt"), classDic, logEntryDict, db, c)
-  ImportClassificationDataOneFile(5, (os.path.join(dirName, "ImagesClassificationCruise_WB0813") + ".txt"), classDic, logEntryDict, db, c)
-#  ImportClassificationDataOneFile(6, (os.path.join(dirName, "ImagesClassificationCruise_WB0814") + ".txt"), classDic, logEntryDict, db, c)
-#  ImportClassificationDataOneFile(7, (os.path.join(dirName, "ImagesClassificationCruise_WB0911") + ".txt"), classDic, logEntryDict, db, c)
-#  ImportClassificationDataOneFile(8, (os.path.join(dirName, "ImagesClassificationCruise_WB1008") + ".txt"), classDic, logEntryDict, db, c)
+
+
+
+  #ImportClassificationDataOneFile(1, (os.path.join(dirName, "ImageClassification_BE0412") + ".txt"), classDic, logEntryDict, db, c)
+  ImportClassificationDataOneFile(2, (os.path.join(dirName, "ImageClassification_BE0413") + ".txt"), classDic, logEntryDict, db, c)
+  ImportClassificationDataOneFile(3, (os.path.join(dirName, "ImageClassification_WB0812") + ".txt"), classDic, logEntryDict, db, c)
+  ImportClassificationDataOneFile(4, (os.path.join(dirName, "ImageClassification_WB0813") + ".txt"), classDic, logEntryDict, db, c)
+  ImportClassificationDataOneFile(5, (os.path.join(dirName, "ImageClassification_WB0814") + ".txt"), classDic, logEntryDict, db, c)
+  #ImportClassificationDataOneFile(6, (os.path.join(dirName, "ImagesClassificationCruise_WB0814") + ".txt"), classDic, logEntryDict, db, c)
+  #ImportClassificationDataOneFile(7, (os.path.join(dirName, "ImagesClassificationCruise_WB0911") + ".txt"), classDic, logEntryDict, db, c)
+  #ImportClassificationDataOneFile(8, (os.path.join(dirName, "ImagesClassificationCruise_WB1008") + ".txt"), classDic, logEntryDict, db, c)
 
 def  main():
   #rootDir="E:\\Users\\kkramer\\Dropbox\\Sipper\\FromAndrewToKurt\\Validation\\2014-09-16\\"
   #rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews"
-  rootDir="C:\\Pices\\UpdatesFromOtherServers"
+  rootDir="C:\\Pices\\UpdatesFromOtherServers\\2015-03-11"
   ImportClassificationData(rootDir)
 
 

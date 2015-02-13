@@ -529,7 +529,8 @@ namespace SipperFile
         ContextMenu  buttonMenu = new ContextMenu (menuItems);
         buttonMenu.Show (pb, e.Location);
       }
-      else if  ((e.Button == System.Windows.Forms.MouseButtons.Left))
+
+      else if  ((e.Button == System.Windows.Forms.MouseButtons.Left)  &&  (e.Clicks == 2))
       {
         PictureBox pb = (PictureBox)sender;
         lastSelectedImage = pb.Name;
@@ -611,28 +612,6 @@ namespace SipperFile
         }
       }
     }  /* SaveImage */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

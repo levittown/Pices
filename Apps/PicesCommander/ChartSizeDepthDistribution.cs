@@ -34,7 +34,7 @@ namespace PicesCommander
     private  float[]            sizeEndValues      = null;
     private  float[]            depthProfile       = null;
     private  float[]            volumeSampled      = null;
-    private  int                selectedDepthCol   = -1;   //  The currently selected depth column.
+    private  int                selectedDepthBin   = -1;   //  The currently selected depth column.
 
     Font titleFont     = new Font (FontFamily.GenericSansSerif, 12);
     Font axisLabelFont = new Font (FontFamily.GenericSansSerif, 12);
@@ -111,7 +111,6 @@ namespace PicesCommander
       heightLast = Height;
       widthLast  = Width;
 
-
       DeploymentField.Text = cruise + "-" + station + "-" + deployment;
 
       if  (classToPlot != null)
@@ -175,30 +174,30 @@ namespace PicesCommander
       case '3': t1 = "Abundance by Estimated Elipsoid Volume"; break;
       }
 
-      String  t2 = "Cruise: " + cruise + "  Station: " + station;
-      if  (String.IsNullOrEmpty (deployment))
-        t2 += "  Deployment: " + deployment;
-      t2 += "  Class: " + classToPlot.Name;
-
-      String t3 = statisticStr + " - " + cast + "-Cast";
+      String  t2 = cruise + "-" + station;
+      if  (!String.IsNullOrEmpty (deployment))
+        t2 += ("-" + deployment);
+      t2 += ("  " + classToPlot.Name);
+      t2 += "  ";
+      t2 += (cast + "-Cast"  +  "  Size-Range(" + sizeStart.ToString () + " - " + sizeEnd.ToString () + ")");
 
       ProfileChart.Titles.Clear ();
       ProfileChart.Titles.Add (new Title (t1, Docking.Top, titleFont, Color.Black));
       ProfileChart.Titles.Add (new Title (t2, Docking.Top, titleFont, Color.Black));
-      ProfileChart.Titles.Add (new Title (t3, Docking.Top, titleFont, Color.Black));
+      //ProfileChart.Titles.Add (new Title (t3, Docking.Top, titleFont, Color.Black));
 
       ProfileChart.Series.Clear ();
 
-      ChartArea ca = ProfileChart.ChartAreas[0];
+      ChartArea ca1 = ProfileChart.ChartAreas[0];
+      ChartArea ca2 = ProfileChart.ChartAreas[1];
 
       Series s = new Series ("Size Distribution");
       s.ChartArea = "ChartArea1";
-      s.ChartType = SeriesChartType.Column;
+      s.ChartType = SeriesChartType.Line;
 
       Series s2 = new Series ("Volumne Sampled");
-      s2.ChartArea = "ChartArea1";
+      s2.ChartArea = "ChartArea2";
       s2.ChartType = SeriesChartType.Line;
-
 
       float  minX = float.MaxValue;
       float  minY = float.MaxValue;
@@ -212,62 +211,63 @@ namespace PicesCommander
         if  (row == null)
           continue;
         float  depth = row.Depth;
-        double d = 0.0;
+        double density = 0.0;
         if  (depthBin < depthProfile.Length)
-           d = (double)depthProfile[depthBin];
+           density = (double)depthProfile[depthBin];
 
         if  (plotLogDensity)
-          d = (float)Math.Log10 (d + 1.0);
+          density = (float)Math.Log10 (density + 1.0);
 
-        minY = Math.Min (minY, (float)d);
-        maxY = Math.Max (maxY, (float)d);
-        minX = Math.Min (minX, depth);
-        maxX = Math.Max (maxX, depth);
-        DataPoint dp = new DataPoint (depth, d);
+        minX = Math.Min (minX, (float)density);
+        maxX = Math.Max (maxX, (float)density);
+        minY = Math.Min (minY, depth);
+        maxY = Math.Max (maxY, depth);
+        DataPoint dp = new DataPoint (density, depth);
         s.Points.Add (dp);
 
         double  vs = 0.0;
         if  (depthBin < volumeSampled.Length)
           vs = volumeSampled[depthBin];
-        DataPoint dp2 = new DataPoint (depth, vs);
+        DataPoint dp2 = new DataPoint (vs, depth);
         s2.Points.Add (dp2);
       }
       s.XAxisType = AxisType.Primary;
       s.YAxisType = AxisType.Primary;
       s2.XAxisType = AxisType.Primary;
-      s2.YAxisType = AxisType.Secondary;
+      s2.YAxisType = AxisType.Primary;
       s2.Color = Color.Black;
 
       if  (plotLogDensity)
-        ca.AxisY.Title = SubInSuperScriptExponent ("Log 10  Abundance");
+        ca1.AxisX.Title = SubInSuperScriptExponent ("Log 10  Abundance");
       else
-        ca.AxisY.Title = SubInSuperScriptExponent ("Abundance");
+        ca1.AxisX.Title = SubInSuperScriptExponent ("Abundance");
 
-      ca.AxisX.Title = SubInSuperScriptExponent ("Depth (Meters)");
-      ca.AxisX.LabelStyle.Format =  "##,##0.0";
+      ca1.AxisY.Title = SubInSuperScriptExponent ("Depth (Meters)");
+      ca1.AxisY.LabelStyle.Format =  "##,##0";
 
-      ca.AxisX.IsLogarithmic     = false;
-      ca.AxisX.Minimum           = 0.0;
-      //ca.AxisX.Maximum           = maxX;
-      ca.AxisX.LabelStyle.Angle  = 45;
-      ca.AxisX.LabelStyle.Font   = axisLabelFont;
-      ca.AxisX.TitleFont         = axisLabelFont;
+      ca1.AxisX.IsLogarithmic     = false;
+      ca1.AxisX.Minimum           = 0.0;
+      //ca1.AxisX.Maximum           = maxX;
+      ca1.AxisX.LabelStyle.Angle  = 90;
+      ca1.AxisX.LabelStyle.Font   = axisLabelFont;
+      ca1.AxisX.TitleFont         = axisLabelFont;
 
-      ca.AxisY.Minimum           = 0.0;
-      ca.AxisY.IsLogarithmic     = false;
-      ca.AxisY.LabelStyle.Font   = axisLabelFont;
-      ca.AxisY.TitleFont         = axisLabelFont;
+      ca1.AxisY.Minimum           = 0.0;
+      ca1.AxisY.IsLogarithmic     = false;
+      ca1.AxisY.LabelStyle.Font   = axisLabelFont;
+      ca1.AxisY.TitleFont         = axisLabelFont;
       if  (plotLogDensity)
-        ca.AxisY.LabelStyle.Format =  "##,##0.0";
+        ca1.AxisX.LabelStyle.Format =  "##,##0.0";
       else
-        ca.AxisY.LabelStyle.Format =  "##,##0";
+        ca1.AxisX.LabelStyle.Format =  "##,##0";
 
-      ca.AxisY2.Title = SubInSuperScriptExponent ("Volume Sampled (mm-3)");
-      ca.AxisY2.Minimum = 0.0;
-      ca.AxisY2.IsLogarithmic     = false;
-      ca.AxisY2.LabelStyle.Font   = axisLabelFont;
-      ca.AxisY2.TitleFont         = axisLabelFont;
-      ca.AxisY2.LabelStyle.Format =  "##0.0";
+      ca2.AxisX.Title = SubInSuperScriptExponent ("Volume Sampled (mm-3)");
+      ca2.AxisX.Minimum = 0.0;
+      ca2.AxisX.IsLogarithmic     = false;
+      ca2.AxisX.LabelStyle.Font   = axisLabelFont;
+      ca2.AxisX.TitleFont         = axisLabelFont;
+      ca2.AxisX.LabelStyle.Format =  "##0.00";
+      ca2.AxisX.LabelStyle.Angle  = 90;
 
       s.BorderWidth = 2;
       ProfileChart.Series.Add (s);
@@ -532,39 +532,42 @@ namespace PicesCommander
 
     private  void  ClearHighLightedBucket ()
     {
-      if  ((ProfileChart.Series.Count < 1)  ||  (selectedDepthCol < 0))
+      if  ((ProfileChart.Series.Count < 1)  ||  (selectedDepthBin < 0))
         return;
 
       Series  s = ProfileChart.Series[0];
-      if  (selectedDepthCol >= s.Points.Count)
+      if  (selectedDepthBin >= s.Points.Count)
         return;
 
-      s.Points[selectedDepthCol].Label = "";
-      s.Points[selectedDepthCol].Color = s.Color;
+      s.Points[selectedDepthBin].Label = "";
+      s.Points[selectedDepthBin].Color = s.Color;
+      s.Points[selectedDepthBin].MarkerStyle = s.MarkerStyle;
+      s.Points[selectedDepthBin].MarkerSize = s.MarkerSize;
+      s.Points[selectedDepthBin].MarkerColor = s.MarkerColor;
 
-      selectedDepthCol = -1;
+      selectedDepthBin = -1;
     }  /* ClearHighLightedBucket*/
 
 
 
 
-    private  void  HighLightSizeBucket (int  depthCol)
+    private  void  HighLightSizeBucket (int  depthBin)
     {
-      if  ((ProfileChart.Series.Count < 1)  ||  (depthCol < 0))
+      if  ((ProfileChart.Series.Count < 1)  ||  (depthBin < 0))
         return;
 
-      if  (depthCol >= depthProfile.Length)
+      if  (depthBin >= depthProfile.Length)
         return;
 
       Series  s = ProfileChart.Series[0];
-      if  (depthCol >= s.Points.Count)
+      if  (depthBin >= s.Points.Count)
         return;
 
       ClearHighLightedBucket ();
 
-      DataPoint dp = s.Points[depthCol];
+      DataPoint dp = s.Points[depthBin];
 
-      PicesImageSizeDistributionRow  depthRow = sizeDistribution.GetDepthBin ((uint)depthCol);
+      PicesImageSizeDistributionRow  depthRow = sizeDistribution.GetDepthBin ((uint)depthBin);
       if  (depthRow == null)
         return;
       uint[] distribution = depthRow.Distribution ();
@@ -572,16 +575,33 @@ namespace PicesCommander
         return;
 
       double  volSampled = 0.0f;
-      if  (depthCol < volumeSampled.Length)
-        volSampled = volumeSampled[depthCol];
-      double  d = 0.0;
+      if  (depthBin < volumeSampled.Length)
+        volSampled = volumeSampled[depthBin];
+      double  density = 0.0;
       if  (volSampled > 0.0)
-        d = (double)distribution[selectedSizeBucket] / volSampled;
-      s.Points[depthCol].Label = d.ToString("###,##0.0") + "(" + dp.XValue.ToString("##0.000") + ")";
-      s.Points[depthCol].Color = Color.Red;
-      s.Points[depthCol].Font = dataPointFont;
+        density = (double)distribution[selectedSizeBucket] / volSampled;
 
-      selectedDepthCol = depthCol;
+      s.Points[depthBin].Label = density.ToString ("###,##0.0") + "(" + dp.YValues[0].ToString ("##0.0 m") + ")";
+      s.Points[depthBin].Color = Color.Red;
+      s.Points[depthBin].Font = dataPointFont;
+      s.Points[depthBin].MarkerStyle = MarkerStyle.Circle;
+      s.Points[depthBin].MarkerSize = s.MarkerSize * 3;
+      s.Points[depthBin].MarkerColor = Color.Red;
+      s.Points[depthBin].LabelBackColor = Color.White;
+
+      Series s2 = ProfileChart.Series[1];
+      if  (depthBin >= s2.Points.Count)
+        return;
+
+      DataPoint dp2 = s2.Points[depthBin];
+      dp2.Label = volSampled.ToString ("#0.00") + "m^3";
+      dp2.Color = Color.Red;
+      dp2.Font = dataPointFont;
+      dp2.MarkerStyle = MarkerStyle.Circle;
+      dp2.MarkerSize = s.MarkerSize * 3;
+      dp2.MarkerColor = Color.Red;
+
+      selectedDepthBin = depthBin;
     }  /* HighLightSizeBucket */
 
 
@@ -610,7 +630,7 @@ namespace PicesCommander
 
     private  void   DisplayImagesForDepthBin (Object sender, EventArgs e)
     {
-      if  ((selectedDepthCol < 0)  ||  (sizeDistribution == null)   ||  (selectedDepthCol >= sizeDistribution.NumDepthBins))
+      if  ((selectedDepthBin < 0)  ||  (sizeDistribution == null)   ||  (selectedDepthBin >= sizeDistribution.NumDepthBins))
         return;
 
       float  sizeStart = 0.0f;
@@ -623,7 +643,7 @@ namespace PicesCommander
       if       (cast == "Down")  castChar = 'D';
       else if  (cast == "Up")    castChar = 'U';
 
-      float  depthMin = selectedDepthCol * sizeDistribution.DepthBinSize;
+      float  depthMin = selectedDepthBin * sizeDistribution.DepthBinSize;
       float  depthMax = depthMin + sizeDistribution.DepthBinSize;
 
       PicesDataBaseImageList  images =  mainWinConn.ImagesQueryDeploymentSizeRange (cruise, station, deployment, classToPlot, castChar, statistic, sizeStart, sizeEnd, depthMin, depthMax, 1000, true);
@@ -649,7 +669,7 @@ namespace PicesCommander
       double xValue = ca.AxisX.PixelPositionToValue ((double)p.X);
 
       int  depthBin = -1;
-      depthBin = (int)(xValue / sizeDistribution.DepthBinSize);
+      depthBin = (int)(yValue / sizeDistribution.DepthBinSize);
 
       if  (depthBin >= 0)
       {
@@ -657,9 +677,9 @@ namespace PicesCommander
           depthBin = -1;
         else
         {
-          double  y = s.Points[depthBin].YValues[0];
-          if  ((yValue - y) > 0.6)
-            depthBin = -1;
+          double  x = s.Points[depthBin].YValues[0];
+          //if  (Math.Abs (xValue - x) > 0.6)
+          //  depthBin = -1;
         }
       }
 
