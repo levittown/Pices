@@ -171,16 +171,22 @@ def  ImportLogEntries(dirName):
        #                             database='pices_new'
        #                          )
               
-       #db = mysql.connector.Connect(user='kkramer',
-       #                             password="tree10peach",
-       #                             host='sipper-db2.marine.usf.edu',
-       #                             database='pices_new'
-       #                           )
        db = mysql.connector.Connect(user='kkramer',
                                     password="tree10peach",
-                                    host='localhost',
+                                    host='sipper-db2.marine.usf.edu',
                                     database='pices_new'
                                   )
+       #db = mysql.connector.Connect(user='kkramer',
+       #                             password="tree10peach",
+       #                             host='localhost',
+       #                             database='pices_new'
+       #                           )
+       #db = mysql.connector.Connect(user='root',
+       #                             password="dasani30",
+       #                             host='localhost',
+       #                             database='pices_new'
+       #                           )
+       
   except  mysql.connector.Error as err:
     db = None
     if  err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
@@ -200,9 +206,7 @@ def  ImportLogEntries(dirName):
   
   fullLogEntryFileName = os.path.join(dirName, "LogEntries") + ".txt"
   logEntryData = open(fullLogEntryFileName)
-
   count = 0
-
   for  l in logEntryData:
     fields=l.split('\t')
     if  len(fields) > 13:
@@ -263,7 +267,8 @@ def  ImportLogEntries(dirName):
 def  main():
   #rootDir="E:\\Users\\kkramer\\Dropbox\\Sipper\\FromAndrewToKurt\\Validation\\2014-09-16\\"
   #rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews"
-  rootDir="C:\\Pices\\UpdatesFromOtherServers"
+  #rootDir="C:\\Pices\\UpdatesFromOtherServers"
+  rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews\\2015-02-11"
   ImportLogEntries(rootDir)
   print("\n\n    *** Import Completed ***\n\n")
 

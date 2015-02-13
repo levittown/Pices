@@ -93,8 +93,9 @@ def  ImportValidationDataInDirectory(dirName):
        #                             host='sipper-db2.marine.usf.edu',
        #                             database='pices_new'
        #                           )
-       db = mysql.connector.Connect(user='kkramer',
-                                    password="tree10peach",
+       
+       db = mysql.connector.Connect(user='root',
+                                    password="dasani30",
                                     host='localhost',
                                     database='pices_new'
                                   )
@@ -149,8 +150,8 @@ def  ImportValidationDataInDirectory(dirName):
 
 def  main():
   #rootDir="E:\\Users\\kkramer\\Dropbox\\Sipper\\FromAndrewToKurt\\Validation\\2014-09-16\\"
-  #rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews"
-  rootDir="C:\\Pices\\UpdatesFromOtherServers"
+  rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews"
+  #rootDir="C:\\Pices\\UpdatesFromOtherServers"
   ImportValidationDataInDirectory(rootDir)
 
 
