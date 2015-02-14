@@ -536,15 +536,26 @@ namespace PicesCommander
         return;
 
       Series  s = ProfileChart.Series[0];
-      if  (selectedDepthBin >= s.Points.Count)
-        return;
+      if  (selectedDepthBin < s.Points.Count)
+      {
+        DataPoint dp = s.Points[selectedDepthBin];
+        dp.Label       = "";
+        dp.Color       = s.Color;
+        dp.MarkerStyle = s.MarkerStyle;
+        dp.MarkerSize  = s.MarkerSize;
+        dp.MarkerColor = s.MarkerColor;
+      }
 
-      s.Points[selectedDepthBin].Label = "";
-      s.Points[selectedDepthBin].Color = s.Color;
-      s.Points[selectedDepthBin].MarkerStyle = s.MarkerStyle;
-      s.Points[selectedDepthBin].MarkerSize = s.MarkerSize;
-      s.Points[selectedDepthBin].MarkerColor = s.MarkerColor;
-
+      Series  s2 = ProfileChart.Series[1];
+      if  (selectedDepthBin < s2.Points.Count)
+      {
+        DataPoint dp2  = s2.Points[selectedDepthBin];
+        dp2.Label       = "";
+        dp2.Color       = s2.Color;
+        dp2.MarkerStyle = s2.MarkerStyle;
+        dp2.MarkerSize  = s2.MarkerSize;
+        dp2.MarkerColor = s2.MarkerColor;
+      }
       selectedDepthBin = -1;
     }  /* ClearHighLightedBucket*/
 
@@ -581,13 +592,13 @@ namespace PicesCommander
       if  (volSampled > 0.0)
         density = (double)distribution[selectedSizeBucket] / volSampled;
 
-      s.Points[depthBin].Label = density.ToString ("###,##0.0") + "(" + dp.YValues[0].ToString ("##0.0 m") + ")";
-      s.Points[depthBin].Color = Color.Red;
-      s.Points[depthBin].Font = dataPointFont;
-      s.Points[depthBin].MarkerStyle = MarkerStyle.Circle;
-      s.Points[depthBin].MarkerSize = s.MarkerSize * 3;
-      s.Points[depthBin].MarkerColor = Color.Red;
-      s.Points[depthBin].LabelBackColor = Color.White;
+      dp.Label = density.ToString ("###,##0.0") + "(" + dp.YValues[0].ToString ("##0.0 m") + ")";
+      dp.Color = Color.Red;
+      dp.Font = dataPointFont;
+      dp.MarkerStyle = MarkerStyle.Circle;
+      dp.MarkerSize = s.MarkerSize * 3;
+      dp.MarkerColor = Color.Red;
+      dp.LabelBackColor = Color.White;
 
       Series s2 = ProfileChart.Series[1];
       if  (depthBin >= s2.Points.Count)
@@ -600,6 +611,7 @@ namespace PicesCommander
       dp2.MarkerStyle = MarkerStyle.Circle;
       dp2.MarkerSize = s.MarkerSize * 3;
       dp2.MarkerColor = Color.Red;
+      dp2.LabelBackColor = Color.White;
 
       selectedDepthBin = depthBin;
     }  /* HighLightSizeBucket */

@@ -279,6 +279,12 @@ begin
   delete from  Images
     where Images.ImageId = _imageID;
   commit;
+
+  set @userName = user();
+  set @idx =locate("@", @userName);
+  if  (@idx > 0)  then
+    set  @userName = substr(@userName,1,@idx-1);
+  end if;
   
   Insert into ImagesLogEntries (ImageId, ImageFileName, ValidatedClassName, DateTimeOccured, Action, DataBaseUserName)
          values (_imageId,
@@ -286,7 +292,7 @@ begin
                  "",
                  Now(),
                  "D",
-                 User() 
+                 @userName 
                 );     
 end;  
 //
@@ -1155,15 +1161,21 @@ begin
                        i.Class1Id          = _validatedClassId,
                        i.Class1Prob        = _class1Prob
          where i.imageId = _imageId;
+
+
+  set @userName = user();
+  set @idx =locate("@", @userName);
+  if  (@idx > 0)  then
+    set  @userName = substr(@userName,1,@idx-1);
+  end if;         
          
-         
- Insert into ImagesLogEntries (ImageId, ImageFileName, ValidatedClassName, DateTimeOccured, Action, DataBaseUserName)
+  Insert into ImagesLogEntries (ImageId, ImageFileName, ValidatedClassName, DateTimeOccured, Action, DataBaseUserName)
          values (_imageId,
                  _imageFileName,
                  _className,
                  @_DateNow,
                  "V",
-                 User() 
+                 @userName 
                 );         
          
 end;
@@ -1205,13 +1217,20 @@ begin
            where i.imageId = _imageId;
          
          
+  set @userName = user();
+  set @idx =locate("@", @userName);
+  if  (@idx > 0)  then
+    set  @userName = substr(@userName,1,@idx-1);
+  end if;         
+         
+
    Insert into ImagesLogEntries (ImageId, ImageFileName, ValidatedClassName, DateTimeOccured, Action, DataBaseUserName)
            values (_imageId,
                    _imageFileName,
                    _className,
                    @_DateNow,
                    "V",
-                   User() 
+                   @userName
                   );      
   end if;
   
@@ -1271,13 +1290,19 @@ begin
   update Images i  set i.ClassValidatedId  = NULL
          where i.ImageId       = _imageId;
          
+  set @userName = user();
+  set @idx =locate("@", @userName);
+  if  (@idx > 0)  then
+    set  @userName = substr(@userName,1,@idx-1);
+  end if;
+
   Insert into ImagesLogEntries (ImageId, ImageFileName, ValidatedClassName, DateTimeOccured, Action, DataBaseUserName)
          values (_imageId,
                  _imageFileName,
                  "",
                  @_DateNow,
                  "R",
-                 User() 
+                 @userName 
                 );           
 end;
 //

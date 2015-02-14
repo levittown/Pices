@@ -24,10 +24,10 @@
  @endcode
  @see  MLL::SVMparam, MLL::ModelParamOldSVM, MLL::SVM233
  */
+#include "KKQueue.h"
 
-#include  "svm.h"
-
-#include  "FeatureNumList.h"
+#include "svm.h"
+#include "FeatureNumList.h"
 
 namespace MLL
 {
@@ -144,6 +144,10 @@ namespace MLL
 
     int32   MemoryConsumedEstimated ()  const;
 
+    void  PushOnBack  (BinaryClassParmsPtr  binaryParms);
+
+    void  PushOnFront (BinaryClassParmsPtr  binaryParms);
+
     void  ReadXML (FILE*        i,
                    FileDescPtr  fileDesc,
                    RunLog&      log
@@ -158,7 +162,21 @@ namespace MLL
 
 
   private:
+     struct  KeyField
+     {
+       KeyField (MLClassConstPtr  _class1,  
+                 MLClassConstPtr  _class2
+                );
 
+       bool  operator< (const KeyField& p2)  const;
+
+       MLClassConstPtr  class1;
+       MLClassConstPtr  class2;
+     };
+
+     typedef  map<KeyField,BinaryClassParmsPtr>   ClassIndexType;
+     typedef  pair<KeyField, BinaryClassParmsPtr>  ClassIndexPair;
+     ClassIndexType  classIndex;
   };
 
 
