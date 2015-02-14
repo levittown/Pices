@@ -18,6 +18,7 @@ using namespace std;
 
 #include "BasicTypes.h"
 #include "DateTime.h"
+#include "GlobalGoalKeeper.h"
 #include "ImageIO.h"
 #include "OSservices.h"
 #include "RunLog.h"
@@ -1408,15 +1409,20 @@ FileDescPtr  FeatureFileIOPices::NewPlanktonFile (RunLog&  _log)
   if  (planktonFileDesc)
     return  planktonFileDesc;
 
-  bool  alreadyExists = false;
-  planktonFileDesc = new FileDesc ();
-  for  (int32 fieldNum = 0;  fieldNum < MaxNumPlanktonRawFields;  fieldNum++)
+  GlobalGoalKeeper::StartBlock ();
+
+  if  (!planktonFileDesc)
   {
-    planktonFileDesc->AddAAttribute (PlanktonFieldName (fieldNum), NumericAttribute, alreadyExists);
+    bool  alreadyExists = false;
+    planktonFileDesc = new FileDesc ();
+    for  (int32 fieldNum = 0;  fieldNum < MaxNumPlanktonRawFields;  fieldNum++)
+      planktonFileDesc->AddAAttribute (PlanktonFieldName (fieldNum), NumericAttribute, alreadyExists);
+
+    // Lets make sure that one was already created by opening up a data file.
+    planktonFileDesc = FileDesc::GetExistingFileDesc (planktonFileDesc);
   }
 
-  // Lets make sure that one was already created by opening up a data file.
-  planktonFileDesc = FileDesc::GetExistingFileDesc (planktonFileDesc);
+  GlobalGoalKeeper::EndBlock ();
 
   return  planktonFileDesc;
 }  /* NewPlanktonFile () */

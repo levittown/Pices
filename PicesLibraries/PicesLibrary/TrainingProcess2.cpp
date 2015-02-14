@@ -63,7 +63,7 @@ TrainingProcess2::TrainingProcess2 (const KKStr&         _configFileName,
                                     ostream*             _report,
                                     bool                 _forceRebuild,
                                     bool                 _checkForDuplicates,
-                                    volatile const bool& _cancelFlag,
+                                    VolConstBool&        _cancelFlag,
                                     KKStr&               _statusMessage
                                    ):
   abort                     (false),
@@ -78,7 +78,7 @@ TrainingProcess2::TrainingProcess2 (const KKStr&         _configFileName,
   trainingExamples          (NULL),
   excludeList               (_excludeList),
   fileDesc                  (_fileDesc),
-  mlClasses              (NULL),
+  mlClasses                 (NULL),
   log                       (_log),
   model                     (NULL),
   report                    (_report),
@@ -86,7 +86,7 @@ TrainingProcess2::TrainingProcess2 (const KKStr&         _configFileName,
   statusMessage             (_statusMessage),
   weOwnConfig               (true),
   weOwnTrainingExamples     (true),
-  weOwnMLClasses         (true)
+  weOwnMLClasses            (true)
 
 {
   log.Level (10) << "TrainingProcess2::TrainingProcess2   9 Parameters." << endl;
@@ -305,7 +305,7 @@ TrainingProcess2::TrainingProcess2 (const KKStr&          _configFileName,
                                     FileDescPtr           _fileDesc,
                                     RunLog&               _log,
                                     uint32                _level,
-                                    volatile const bool&  _cancelFlag,
+                                    VolConstBool&         _cancelFlag,
                                     KKStr&                _statusMessage
                                    ):
 
@@ -321,7 +321,7 @@ TrainingProcess2::TrainingProcess2 (const KKStr&          _configFileName,
   trainingExamples          (NULL),
   excludeList               (_excludeList),
   fileDesc                  (_fileDesc),
-  mlClasses              (NULL),
+  mlClasses                 (NULL),
   log                       (_log),
   model                     (NULL),
   report                    (NULL),
@@ -329,7 +329,7 @@ TrainingProcess2::TrainingProcess2 (const KKStr&          _configFileName,
   statusMessage             (_statusMessage),
   weOwnConfig               (true),
   weOwnTrainingExamples     (true),
-  weOwnMLClasses         (true)
+  weOwnMLClasses            (true)
 {
   log.Level (20) << "TrainingProcess2::TrainingProcess2" << endl;
 
@@ -408,12 +408,12 @@ TrainingProcess2::TrainingProcess2 (const KKStr&          _configFileName,
 
 
 
-TrainingProcess2::TrainingProcess2 (const KKStr&          _configFileName,
-                                    FileDescPtr           _fileDesc,
-                                    RunLog&               _log,
-                                    bool                  _featuresAlreadyNormalized,
-                                    volatile const bool&  _cancelFlag,
-                                    KKStr&                _statusMessage
+TrainingProcess2::TrainingProcess2 (const KKStr&   _configFileName,
+                                    FileDescPtr    _fileDesc,
+                                    RunLog&        _log,
+                                    bool           _featuresAlreadyNormalized,
+                                    VolConstBool&  _cancelFlag,
+                                    KKStr&         _statusMessage
                                    ):
 
   abort                     (false),
@@ -428,7 +428,7 @@ TrainingProcess2::TrainingProcess2 (const KKStr&          _configFileName,
   trainingExamples          (NULL),
   excludeList               (NULL),
   fileDesc                  (_fileDesc),
-  mlClasses              (new MLClassConstList ()),
+  mlClasses                 (new MLClassConstList ()),
   log                       (_log),
   model                     (NULL),
   report                    (NULL),
@@ -436,7 +436,7 @@ TrainingProcess2::TrainingProcess2 (const KKStr&          _configFileName,
   statusMessage             (_statusMessage),
   weOwnConfig               (true),
   weOwnTrainingExamples     (true),
-  weOwnMLClasses         (true)
+  weOwnMLClasses            (true)
 
 {
   log.Level (20) << "TrainingProcess2::TrainingProcess2     Loading an existing trained model" << endl;
@@ -462,7 +462,6 @@ TrainingProcess2::TrainingProcess2 (const KKStr&          _configFileName,
 
   bool  successful = false;
 
-
   Read (in, successful);
 
   if  ((!successful)  ||  (model && (!model->ValidModel ())))
@@ -485,12 +484,12 @@ TrainingProcess2::TrainingProcess2 (const KKStr&          _configFileName,
 
 
 
-TrainingProcess2::TrainingProcess2 (istream&              _in,
-                                    FileDescPtr           _fileDesc,
-                                    RunLog&               _log,
-                                    bool                  _featuresAlreadyNormalized,
-                                    volatile const bool&  _cancelFlag,
-                                    KKStr&                _statusMessage
+TrainingProcess2::TrainingProcess2 (istream&       _in,
+                                    FileDescPtr    _fileDesc,
+                                    RunLog&        _log,
+                                    bool           _featuresAlreadyNormalized,
+                                    VolConstBool&  _cancelFlag,
+                                    KKStr&         _statusMessage
                                    ):
 
   abort                     (false),
@@ -505,7 +504,7 @@ TrainingProcess2::TrainingProcess2 (istream&              _in,
   trainingExamples          (NULL),
   excludeList               (NULL),
   fileDesc                  (_fileDesc),
-  mlClasses              (new MLClassConstList ()),
+  mlClasses                 (new MLClassConstList ()),
   log                       (_log),
   model                     (NULL),
   report                    (NULL),
@@ -513,7 +512,7 @@ TrainingProcess2::TrainingProcess2 (istream&              _in,
   statusMessage             (_statusMessage),
   weOwnConfig               (true),
   weOwnTrainingExamples     (true),
-  weOwnMLClasses         (true)
+  weOwnMLClasses            (true)
 
 {
   log.Level (20) << "TrainingProcess2::TrainingProcess2     Loading an existing trained model" << endl;
@@ -548,7 +547,7 @@ TrainingProcess2::TrainingProcess2 (TrainingConfiguration2Ptr _config,
                                     FileDescPtr               _fileDesc,
                                     RunLog&                   _log,
                                     bool                      _featuresAlreadyNormalized,
-                                    volatile const bool&      _cancelFlag,
+                                    VolConstBool&             _cancelFlag,
                                     KKStr&                    _statusMessage
                                    )
 :

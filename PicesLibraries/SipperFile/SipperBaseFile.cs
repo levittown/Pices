@@ -662,7 +662,7 @@ namespace SipperFile
               int  frameNumPrev     = largestKnowmFrameNum - RecordingRateNumSamplingFrames;
               if  (frameNumPrev < 0)
                 frameNumPrev = 0;
-                
+
               int   scanLineRow      = largestKnowmFrameNum * ScanLinesPerFrame;
               int   scanLineRowPrev  = frameNumPrev * ScanLinesPerFrame;
               int   scanLinesDelta   = scanLineRow - scanLineRowPrev + 1;

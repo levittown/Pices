@@ -235,6 +235,22 @@ namespace PicesInterface
 
 
 
+    PicesDataBaseImageList^  ImagesQueryDeploymentSizeRange (String^       cruiseName,
+                                                             String^       stationName,
+                                                             String^       deploymentNum,
+                                                             PicesClass^   mlClass,
+                                                             System::Char  cast,         /**< 'U' = UpCast, 'D' = DownCast,  'B' = Both' */
+                                                             System::Char  statistic,    /**< '0' = Area mm^2,  '1' = Diameter,  '2' = Spheroid Volume and '3' = EBv ((4/3)(Pie)(Major/2)(Minor/2)^2) */
+                                                             float         sizeStart,
+                                                             float         sizeEnd,
+                                                             float         depthMin,
+                                                             float         depthMax,
+                                                             int           sampleQty,
+                                                             bool          includeChildren
+                                                            );
+
+
+
     PicesClassStatisticList^  ImageGetClassStatistics (PicesDataBaseImageGroup^  imageGroup,
                                                        String^                   sipperFileName,
                                                        PicesClass^               mlClass,

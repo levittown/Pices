@@ -26,6 +26,15 @@ namespace SipperFile
 
     private  String[]              svNames = null;
 
+    /*  These next four variables will be used when displaying images that are in the Pices database.  */
+    PicesDataBase                  dbConn = null;
+    PicesDataBaseImageList         picesImages = null;
+    PicesImageSizeDistribution     sizeDistribution = null;
+    int                            selectedSizeIndex = 0;
+    float                          depthMin = 0.0f;
+    float                          depthMax = 0.0f;
+
+    String                         lastSaveImageDir = null;
 
 
     public DisplayPicesImages (String  _dir)
@@ -86,6 +95,41 @@ namespace SipperFile
 
 
 
+    public DisplayPicesImages (PicesDataBase               _dbConn,
+                               PicesImageSizeDistribution  _sizeDistribution,
+                               int                         _selectedSizeIndex,
+                               float                       _depthMin,
+                               float                       _depthMax,
+                               PicesDataBaseImageList      _picesImages
+                              )
+    {
+      InitializeComponent ();
+      thumbNails = new List<FlowLayoutPanel> ();
+
+      dbConn            = _dbConn;
+      sizeDistribution  = _sizeDistribution;
+      picesImages       = _picesImages;
+      selectedSizeIndex = _selectedSizeIndex;
+      depthMin          = _depthMin;
+      depthMax          = _depthMax;
+
+      float[] startValues = sizeDistribution.SizeStartValues ();
+      float[] endValues    = sizeDistribution.SizeEndValues ();
+
+      if  ((selectedSizeIndex >= 0)  &&  (selectedSizeIndex < startValues.Length))
+      {
+        String  t = "Size Range [" + startValues[selectedSizeIndex].ToString ("###,##0.000") + " - " + endValues[selectedSizeIndex].ToString ("#,###,##0.000") + "]";
+        if (depthMax > 0.0f)
+          t = t + "   Depth Range [" + depthMin.ToString ("##0.0") + " - " + depthMax.ToString ("##0.0") + "]";
+        Text = t;
+      }
+
+      UpdateDisplayTimer.Enabled = true;
+    }
+
+
+
+
     private  FileInfo[]  ReduceToImageFiles (FileInfo[]  src)
     {
       List<FileInfo>  result = new List<FileInfo> ();
@@ -98,6 +142,7 @@ namespace SipperFile
       }
       return result.ToArray ();
     }  /* ReduceToImageFiles */
+
 
 
 
@@ -129,6 +174,74 @@ namespace SipperFile
     }  /* GetThumbnailImageAbort */
 
     private  System.IntPtr  thumbNailCallBackData = IntPtr.Zero;
+
+
+
+
+    private  void  LoadNextImageFromPicesList ()
+    {
+      if  (picesImages == null)
+        return;
+
+      if  (lastImageIndexLoaded >= picesImages.Count)
+      {
+        UpdateDisplayTimer.Enabled = false;
+        return;
+      }
+
+      Font font = new System.Drawing.Font("Courier New", 8.0f, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+
+      Image  image = null;
+      
+      PicesDataBaseImage  pi = picesImages[lastImageIndexLoaded];
+      lastImageIndexLoaded++;
+
+      image = pi.Thumbnail ();
+      if  (image == null)
+         return;
+
+      float  ratio = 1.0f;
+      int  maxDim = Math.Max (image.Height, image.Width);
+      if  (maxDim > 150)
+         ratio = 150.0f / (float)maxDim;
+
+      PictureBox pb = new PictureBox ();
+      pb.BorderStyle = BorderStyle.FixedSingle;
+
+      int h = (int)((float)image.Height * ratio);
+      int w = (int)((float)image.Width  * ratio);
+
+      pb.Height = h + 2;
+      pb.Width  = w + 2;
+      //pb.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(PicesThumbNail_MouseDoubleClick);
+      pb.MouseClick += new MouseEventHandler (MouseClickEvent);
+      pb.Name = pi.ImageFileName;
+
+      Image thumbNail = image.GetThumbnailImage (w, h, GetThumbnailImageAbort, thumbNailCallBackData);
+      pb.Image = thumbNail;
+
+      FlowLayoutPanel pan = new FlowLayoutPanel ();
+      pan.Size = new Size (Math.Max (170, w + 10), 200);
+      //pan.Height = h + 80;
+      //pan.Width  = Math.Max (160, w + 10);
+
+      String  rootName = OSservices.GetRootName (pi.ImageFileName);
+      
+      pan.Controls.Add (pb);
+      TextBox tb = new TextBox ();
+      tb.Width = pan.Width - 8;
+      tb.Text = "Depth " + pi.Depth.ToString ("##0.0");
+      tb.Font = font;
+      pan.Controls.Add (tb);
+
+      pan.BorderStyle = BorderStyle.FixedSingle;
+
+      pan.BackColor = Color.White;
+      
+      thumbNails.Add (pan);
+      ImageDisplayPanel.Controls.Add (pan);
+    }  /* LoadNextImageFromPicesList */
+
 
 
 
@@ -231,6 +344,9 @@ namespace SipperFile
     }  /* LocateRootName */
 
 
+
+
+
     private  void  LoadNextImageFromNameList ()
     {
       if  (nameList == null)
@@ -329,6 +445,10 @@ namespace SipperFile
     }  /* LoadNextImageFromDir */
 
 
+
+
+
+
     void  RemoveImageFromTrainigLibray (Object sender, EventArgs e)
     {
       if  (sender == null)
@@ -371,9 +491,143 @@ namespace SipperFile
     }
 
 
+    private  String  lastSelectedImageFileName = "";
+
+    /*
+    private  void  PicesThumbNail_MouseDoubleClick (object sender, MouseEventArgs e)
+    {
+      if  (e.Button == MouseButtons.Left)
+      {
+        PictureBox pb = (PictureBox)sender;
+        String  imageFileName = pb.Name;
+        PicesDataBaseImage pi =  dbConn.ImageLoad (imageFileName);
+        if  (pi != null)
+        {
+          PicesRaster  pr = dbConn.ImageFullSizeFind (imageFileName);
+          ImageViewer  iv = new ImageViewer (pr, pi, null);
+          iv.ShowDialog (this);
+        }
+      }
+
+    }
+     */
+
+
+    private  String  lastSelectedImage = "";
+
+    private void  MouseClickEvent  (object sender, MouseEventArgs e)
+    {
+      if  (e.Button == MouseButtons.Right)
+      {
+        PictureBox pb = (PictureBox)sender;
+        lastSelectedImage = pb.Name;
+        MenuItem  i1 = new MenuItem ("Copy Image to Clipboard",  CopyImageToClipboard);
+        MenuItem  i2 = new MenuItem ("Save Image",               SaveImage);
+        MenuItem  i3 = new MenuItem ("View Image",               ViewImage);
+
+        MenuItem[] menuItems = new MenuItem[]{i1, i2, i3};
+        ContextMenu  buttonMenu = new ContextMenu (menuItems);
+        buttonMenu.Show (pb, e.Location);
+      }
+
+      else if  ((e.Button == System.Windows.Forms.MouseButtons.Left)  &&  (e.Clicks == 2))
+      {
+        PictureBox pb = (PictureBox)sender;
+        lastSelectedImage = pb.Name;
+        ViewImage (sender, e);
+      }
+    }
+
+
+
+
+    private  void  ViewImage (Object sender, EventArgs e)
+    {
+      String  imageFileName = lastSelectedImage;
+      PicesDataBaseImage pi =  dbConn.ImageLoad (imageFileName);
+      if  (pi != null)
+      {
+        PicesRaster  pr = dbConn.ImageFullSizeFind (imageFileName);
+        ImageViewer  iv = new ImageViewer (pr, pi, null);
+        iv.ShowDialog (this);
+      }
+    }
+
+
+
+    
+    private  void  CopyImageToClipboard (Object sender, EventArgs e)
+    {
+      String  imageFileName = lastSelectedImage;
+
+      PicesDataBaseImage pi =  dbConn.ImageLoad (imageFileName);
+      if  (pi != null)
+      {
+        PicesRaster  pr = dbConn.ImageFullSizeFind (imageFileName);
+        Image  i = pr.BuildBitmap ();
+        if  (i != null)
+          Clipboard.SetImage (i);
+      }
+    }  /* CopyImageToClipboard */
+
+
+
+
+    private  void  SaveImage (Object sender, EventArgs e)
+    {
+      String  imageFileName = lastSelectedImage;
+
+      PicesRaster  pr = dbConn.ImageFullSizeFind (imageFileName);
+      
+      FolderBrowserDialog  fbd = new FolderBrowserDialog ();
+
+      fbd.Description         = "Select directory to save images to";
+      fbd.ShowNewFolderButton = true;
+      fbd.SelectedPath        = lastSaveImageDir;
+      DialogResult  dr = fbd.ShowDialog ();
+      if  (dr == DialogResult.OK)
+      {
+        if  (lastSaveImageDir != fbd.SelectedPath)
+          lastSaveImageDir = fbd.SelectedPath;
+      
+        String  destDir = OSservices.AddSlash (fbd.SelectedPath);
+        
+        System.IO.DirectoryInfo di = new System.IO.DirectoryInfo (destDir);
+        if  (!di.Exists)
+        {
+          MessageBox.Show (this, "No Such Directory [" + destDir + "]", "Save Images", MessageBoxButtons.OK);
+          return;
+        }
+        
+        String  fullFileName = destDir + imageFileName + ".bmp";
+
+        try {pr.Save(fullFileName); }
+        catch (Exception  e3)
+        {
+          MessageBox.Show (this, 
+                           "Exception occured saving image\n\n" + e3.ToString (), 
+                           "Save Image",
+                           MessageBoxButtons.OK
+                          );
+        }
+      }
+    }  /* SaveImage */
+
+
+
+
+
+
+
+
+
+
     private void  UpdateDisplayTimer_Tick (object sender, EventArgs e)
     {
-      if  (nameList != null)
+      if  (picesImages != null)
+        LoadNextImageFromPicesList ();
+
+      else if  (nameList != null)
         LoadNextImageFromNameList ();
       else
         LoadNextImageFromDir ();

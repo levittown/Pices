@@ -33,6 +33,10 @@ namespace PicesInterface
     
     array<uint>^  Distribution ();
 
+    MLL::ImageSizeDistributionRowPtr  UnmanagedClass ()  {return  imageSizeDistributionRow;}
+
+    void  AddIn (PicesImageSizeDistributionRow^  right);
+
   private:
     MLL::ImageSizeDistributionRowPtr  imageSizeDistributionRow;
     bool                              owner;
@@ -44,6 +48,8 @@ namespace PicesInterface
   {
   public:
     PicesImageSizeDistribution (ImageSizeDistributionPtr  _imageSizeDistributionPtr);
+  
+    PicesImageSizeDistribution (PicesImageSizeDistribution^  _imageSizeDistribution);
 
   private:
     ~PicesImageSizeDistribution ();
@@ -69,6 +75,22 @@ namespace PicesInterface
                 );
 
     PicesImageSizeDistributionRow^   AllDepths ();
+
+    array<float>^  DepthProfileForSizeBin (uint32  _sizeBucketIdx);
+
+    PicesImageSizeDistributionRow^   GetDepthBin (uint  depthBinIdx);
+
+    void  GetSizeBucketStats (uint       _sizeBucketIdx,
+                              uint%      _count,
+                              float%    _sizeStart,
+                              float%    _sizeEnd
+                             );
+
+    kkint32  IdentifySizeBucket (float  size);
+
+    array<float>^  IntegratedDensityDistribution ();
+
+    array<float>^  VolumeSampledByDepthBucket ();
 
   private:
     MLL::ImageSizeDistributionPtr  imageSizeDistribution;

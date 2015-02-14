@@ -70,7 +70,7 @@ KKStr   BinaryClassParms::Class1Name ()  const
 KKStr   BinaryClassParms::Class2Name ()  const
 {
   if  (class2)
-    return  class2->Name ();
+    return class2->Name ();
   else
     return "";
 }  /* Class2Name */
@@ -186,6 +186,8 @@ BinaryClassParmsList::~BinaryClassParmsList ()
 }
 
 
+
+
 int32  BinaryClassParmsList::MemoryConsumedEstimated ()  const
 {
   int32  memoryConsumedEstimated = sizeof (BinaryClassParmsList);
@@ -246,29 +248,22 @@ BinaryClassParmsPtr  BinaryClassParmsList::LookUp (MLClassConstPtr  _class1,
                                                    MLClassConstPtr  _class2
                                                   )  const
 {
-  const_iterator  idx;
-
-  BinaryClassParmsPtr  binaryParms = NULL; 
-
-  for  (idx = begin ();  idx != end ();  idx++)
+  KeyField kf (_class1, _class2);
+  ClassIndexType::const_iterator  idx;
+  idx = classIndex.find (kf);
+  if  (idx == classIndex.end ())
   {
-    binaryParms = *idx;
-
-    if  (_class1 == binaryParms->Class1 ())
-    {
-      if  (_class2 == binaryParms->Class2 ())
-        return  binaryParms;
-    }
-
-    else if  (_class1 == binaryParms->Class2 ())
-    {
-      if  (_class2 == binaryParms->Class1 ())
-        return  binaryParms;
-    }
+    kf.class1 = _class2;
+    kf.class2 = _class1;
+    idx = classIndex.find (kf);
   }
 
-  return  NULL;
+  if  (idx == classIndex.end ())
+    return NULL;
+  else
+    return idx->second;
 }  /* LookUp */
+
 
 
 
@@ -367,3 +362,77 @@ void  BinaryClassParmsList::ReadXML (istream&     i,
     }
   }
 }  /* ReadXML */
+
+
+
+
+
+void  BinaryClassParmsList::PushOnBack  (BinaryClassParmsPtr  binaryParms)
+{
+  BinaryClassParmsPtr  existingEntry = LookUp (binaryParms->Class1 (), binaryParms->Class2 ());
+  if  (existingEntry)
+  {
+    // We have a duplicate entry
+    KKStr  errMsg (128);
+    errMsg << "BinaryClassParmsList::PushOnBack   ***ERROR***  Duplicate Entry   " << binaryParms->Class1Name () << "\t" << binaryParms->Class2Name () << endl;
+    cerr << errMsg << endl;
+    throw  KKException (errMsg);
+  }
+
+  KKQueue<BinaryClassParms>::PushOnBack (binaryParms);
+  KeyField kf (binaryParms->Class1 (), binaryParms->Class2 ());
+  classIndex.insert(ClassIndexPair (kf, binaryParms));
+}  /* PushOnBack */
+
+
+
+
+void  BinaryClassParmsList::PushOnFront (BinaryClassParmsPtr  binaryParms)
+{
+  BinaryClassParmsPtr  existingEntry = LookUp (binaryParms->Class1 (), binaryParms->Class2 ());
+  if  (existingEntry)
+  {
+    // We have a duplicate entry
+    KKStr  errMsg (128);
+    errMsg << "BinaryClassParmsList::PushOnFront   ***ERROR***  Duplicate Entry   " << binaryParms->Class1Name () << "\t" << binaryParms->Class2Name () << endl;
+    cerr << errMsg << endl;
+    throw  KKException (errMsg);
+  }
+
+  KKQueue<BinaryClassParms>::PushOnFront (binaryParms);
+  KeyField kf (binaryParms->Class1 (), binaryParms->Class2 ());
+  classIndex.insert(ClassIndexPair (kf, binaryParms));
+}  /* PushOnFront */
+
+
+
+
+
+BinaryClassParmsList::KeyField::KeyField (MLClassConstPtr  _class1,  
+                                          MLClassConstPtr  _class2
+                                         ):
+    class1 (_class1), 
+    class2 (_class2)
+{
+}
+
+
+
+
+bool  BinaryClassParmsList::KeyField::operator< (const KeyField& p2) const
+{
+  kkint32 x = class1->Name ().Compare(p2.class1->Name ());
+  if  (x < 0)
+    return true;
+
+  else if  (x > 0)
+    return false;
+
+  else 
+    return class2->Name () < p2.class2->Name ();
+}
+
+
+
+
+

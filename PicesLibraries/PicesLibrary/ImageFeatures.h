@@ -172,6 +172,7 @@ namespace MLL
     float          CentroidRow        () const  {return  centroidRow;}    /**< @brief Centroid row with respect to image.     */
     FFLOAT         Depth              () const  {return  FeatureData (DepthIndex);}
     KKU::DateTime  CtdDateTime        () const  {return  ctdDateTime;}
+    FFLOAT         FilledArea         () const  {return  FeatureData (FilledAreaIndex);}
     FFLOAT         Fluorescence       () const  {return  FeatureData (FluorescenceIndex);}
     FFLOAT         FlowRate1          () const  {return  FeatureData (FlowRate1Index);}
     FFLOAT         FlowRate2          () const  {return  FeatureData (FlowRate2Index);}

@@ -266,20 +266,20 @@ namespace MLL
     MLClassConstPtr  Predict (FeatureVectorPtr  image) = 0;
   
     virtual
-    void                Predict (FeatureVectorPtr     example,
-                                 MLClassConstPtr   knownClass,
-                                 MLClassConstPtr&  predClass1,
-                                 MLClassConstPtr&  predClass2,
-                                 int32&               predClass1Votes,
-                                 int32&               predClass2Votes,
-                                 double&              probOfKnownClass,
-                                 double&              predClass1Prob,
-                                 double&              predClass2Prob,
-                                 double&              compact,
-                                 int32&               numOfWinners,
-                                 bool&                knownClassOneOfTheWinners,
-                                 double&              breakTie
-                                ) = 0;
+    void    Predict (FeatureVectorPtr  example,
+                     MLClassConstPtr   knownClass,
+                     MLClassConstPtr&  predClass1,
+                     MLClassConstPtr&  predClass2,
+                     int32&            predClass1Votes,
+                     int32&            predClass2Votes,
+                     double&           probOfKnownClass,
+                     double&           predClass1Prob,
+                     double&           predClass2Prob,
+                     double&           compact,
+                     int32&            numOfWinners,
+                     bool&             knownClassOneOfTheWinners,
+                     double&           breakTie
+                    ) = 0;
 
 
     virtual 
@@ -297,10 +297,10 @@ namespace MLL
 
 
     virtual
-    void  ProbabilitiesByClass (FeatureVectorPtr            example,
+    void  ProbabilitiesByClass (FeatureVectorPtr         example,
                                 const MLClassConstList&  _mlClasses,
-                                int32*                      _votes,
-                                double*                     _probabilities
+                                int32*                   _votes,
+                                double*                  _probabilities
                                ) = 0;
 
     /**

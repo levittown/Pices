@@ -84,7 +84,6 @@ namespace PicesCommander
     private  String  baseReportName           = null;
     private  String  sizeReportFileName       = null;
     private  String  depthReportFileName      = null;
-    private  String  kaggleSubmissionFileName = null;
 
     private  float  depthMin = 0;
     private  float  depthMax = 0;
@@ -269,7 +268,6 @@ namespace PicesCommander
 
       sizeReportFileName       = baseReportName + "_Size.txt";
       depthReportFileName      = baseReportName + "_Depth.txt";
-      kaggleSubmissionFileName = baseReportName + "_Submission.csv";
     }  /* DefineBaseReportName */
     
 
@@ -942,29 +940,6 @@ namespace PicesCommander
 
 
 
-    private  void  AddToSubmissionReport (System.IO.StreamWriter  submissionReport,
-                                          String                  imageRootName,
-                                          PicesPredictionList     probPredList
-                                         )
-    {
-      int idx = imageRootName.IndexOf ('_');
-      if  (idx >= 0)
-        imageRootName = imageRootName.Substring (idx + 1);
-      imageRootName += ".jpg";
-
-      submissionReport.Write (imageRootName);
-
-      foreach (PicesClass pc in classesInClassifier)
-      {
-        PicesPrediction  p = probPredList.LookUpByClass (pc);
-        if  (p == null)
-          submissionReport.Write (",0.0");
-        else
-          submissionReport.Write ("," + p.Probability);
-      }
-      submissionReport.WriteLine ();
-    }  /* AddToSubmissionReport */
-
         
 
     private void  PredictionsUpdateProcess ()
@@ -975,13 +950,6 @@ namespace PicesCommander
       PicesRunLog  runLog = new PicesRunLog ();
 
       PicesDataBase  dbUpdateConn = PicesDataBase.GetGlobalDatabaseManagerNewInstance (runLog);
-
-      System.IO.StreamWriter  submissionReport = new System.IO.StreamWriter (kaggleSubmissionFileName);
-
-      submissionReport.Write ("image");
-      foreach  (PicesClass pc in classesInClassifier)
-        submissionReport.Write ("," + pc.Name);
-      submissionReport.WriteLine ();
 
       while  (!cancelProcessing)
       {
@@ -1014,8 +982,6 @@ namespace PicesCommander
                            pr.class2Id.ToString   () + "\t" +
                            pr.class2Prob.ToString ();
 
-              AddToSubmissionReport (submissionReport, pr.imageRootName,  pr.probPredList);
-
               ++numUpdatedThisSqlCall;
             }
           }
@@ -1027,7 +993,6 @@ namespace PicesCommander
         }
       }
 
-      submissionReport.Close ();
       dbUpdateConn.Close ();
       dbUpdateConn = null;
       runLog = null;

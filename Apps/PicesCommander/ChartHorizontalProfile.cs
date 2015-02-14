@@ -41,7 +41,7 @@ namespace PicesCommander
     private  String  criteriaStr  = "";
 
     //  All plot entries along the x-axis will be with respect to 'initialStartTime' but offset by number of scan lines.
-    private  DateTime  initialStartTime; /**< The Statt Time of the 1st SipperFile  in the deployment. */
+    private  DateTime  initialStartTime; /**< The Start Time of the 1st SipperFile  in the deployment. */
 
     private  double    scanRate;         /**< Scan rate of camera during the deployment.               */
 
@@ -49,6 +49,7 @@ namespace PicesCommander
 
     private  float           timeInterval  = 1.0f;
     private  float           scanLinesInterval = 29950.0f;
+    //private  float           scanLinesInterval = 4096.0f;
     private  bool            includeSubClasses = false;
 
     private  String          infinityStr = ((char)8734).ToString ();
@@ -964,7 +965,7 @@ namespace PicesCommander
             intervalNextScanLine = idScanLineNext - 1;
 
           int  deltaScanLines = 1 + intervalNextScanLine - intervalScanLine;
-          float  vol = (float)((flowRates[idx] * (deltaScanLines / scanRate)) * 0.098f * 0.098f);
+          float  vol = (float)((flowRates[idx] * (deltaScanLines / scanRate)) * 0.096f * 0.096f);
 
           while  (intervalIdx >= volProfile.Count)
             volProfile.Add (0.0f);
@@ -1038,32 +1039,32 @@ namespace PicesCommander
 
       String  intervalIdx = "Floor ((" + startScanLine.ToString () + " + i.TopLeftRow) / " + sl + ")";
 
-      String  sqlString = "select count(*)"                + " as Count, " + 
+      String  sqlString = "select count(*)"                + " as Count, "       + 
                                   intervalIdx              + " as IntervalIdx, " + 
-                                  intervalIdx + " * " + sl + " as ScanRow"           + "\n" +
-                          "       from images i"                                     + "\n" +
-                          "       where " + whereStr                                 + "\n" +
+                                  intervalIdx + " * " + sl + " as ScanRow"       + "\n" +
+                          "       from images i"                                 + "\n" +
+                          "       where "    + whereStr                          + "\n" +
                           "       group by " + intervalIdx;
 
       String[]  colNames = {"Count", "IntervalIdx", "ScanRow"};
       String[][]  results = threadConn.QueryStatement (sqlString, colNames);
-      if  ((results == null)  ||  (results.Length < 1))
-        return;
-
-      String  lastIdxStr = results[results.Length - 1][1];
-      int  lastIdx = PicesKKStr.StrToInt (lastIdxStr);
-
-      while  (counts.Count < lastIdx)
-        counts.Add (0);
-
-      for  (int x = 0; x < results.Length; x++)
+      if  ((results != null)  &&  (results.Length > 0))
       {
-        int  count = PicesKKStr.StrToInt (results[x][0]);
-        int  idx   = PicesKKStr.StrToInt (results[x][1]);
+         String  lastIdxStr = results[results.Length - 1][1];
+         int  lastIdx = PicesKKStr.StrToInt (lastIdxStr);
 
-        if  ((idx < 0)  ||  (idx >= lastIdx))
-          continue;
-        counts[idx] += count;
+         while  (counts.Count < lastIdx)
+           counts.Add (0);
+
+         for  (int x = 0; x < results.Length; x++)
+         {
+           int  count = PicesKKStr.StrToInt (results[x][0]);
+           int  idx   = PicesKKStr.StrToInt (results[x][1]);
+
+           if  ((idx < 0)  ||  (idx >= lastIdx))
+             continue;
+           counts[idx] += count;
+         }
       }
 
       if  (includeSubClasses)
@@ -1158,17 +1159,17 @@ namespace PicesCommander
         weightedCounts.Add (weightedCount);
       }
 
+      DateTime  dt = new DateTime (initialStartTime.Ticks);
       List<DataPoint>  data = new List<DataPoint> ();
       for  (int idx = 0;  idx < counts.Count;  ++idx)
       {
         if  (weightByVolume)
-          data.Add (new DataPoint (idx * scanLinesInterval, weightedCounts[idx]));
+          data.Add (new DataPoint (dt.ToOADate (), weightedCounts[idx]));
         else
-          data.Add (new DataPoint (idx * scanLinesInterval, counts[idx]));
+          data.Add (new DataPoint (dt.ToOADate (), counts[idx]));
+        dt = dt.AddSeconds ((double)timeInterval);
       }
-
       goalie.StartBlock ();
-
       series.Add (new DataSeriesToPlot ('C', unitOfMeasure, pc.Name, data, counts, 0, "###,##0", charType, color));
       goalie.EndBlock ();
     }  /* AddClassToSeries */
@@ -1181,10 +1182,12 @@ namespace PicesCommander
     {
       String  unitOfMeasure = "m-3";
 
+      DateTime dp = new DateTime (initialStartTime.Ticks);
       List<DataPoint>  data = new List<DataPoint> ();
       for  (int idx = 0;  (idx < timeVolumeProfile.Count)  &&  (!cancelRequested);  ++idx)
       {
-        data.Add (new DataPoint (idx * scanLinesInterval, timeVolumeProfile[idx]));
+        data.Add (new DataPoint (dp.ToOADate (), timeVolumeProfile[idx]));
+        dp = dp.AddSeconds ((double)timeInterval);
       }
 
       goalie.StartBlock ();
@@ -1269,17 +1272,7 @@ namespace PicesCommander
         if  (ts.Hours > 12)
           continue;
 
-        double  intervalScanLines = ts.TotalSeconds * scanRate;
-        int  intervalIDX = (int)(0.5f + intervalScanLines / scanLinesInterval);
-        //while  (data.Count <= intervalIDX)
-        //{
-        //  data.Add (new DataPoint (data.Count * scanLinesInterval, 0.0));
-        //}
-        //
-        //data[intervalIDX].YValues[0] = value;
-        data.Add (new DataPoint (intervalScanLines, value));
-      
-      
+        data.Add (new DataPoint (dt.ToOADate (), value));
       }
 
       goalie.StartBlock ();
@@ -1386,6 +1379,8 @@ namespace PicesCommander
         return;
       }
 
+      double  maxEndDateTime = 0.0;
+
       Font  axisTitleFont = new Font (FontFamily.GenericSerif, 12);
 
       ChartArea ca = ProfileChart.ChartAreas[0];
@@ -1397,7 +1392,7 @@ namespace PicesCommander
 
       ca.AxisY.TitleFont = axisTitleFont;
 
-      ca.AxisX.Minimum = 0;
+      //ca.AxisX.Minimum = 0;
       ca.AxisX.Title = "Time";
       ca.AxisX.TitleFont = axisTitleFont;
 
@@ -1431,23 +1426,18 @@ namespace PicesCommander
         ca.AxisY.IsReversed = false;
         s.YAxisType = AxisType.Primary;
         s.XAxisType = AxisType.Primary;
+        s.XValueType = ChartValueType.DateTime;
  
         s.Color = dstp.color;
         s.BorderWidth = 2;
 
-        int  dpIDX = 0;
+        DateTime  ctdDateTime = new DateTime (initialStartTime.Ticks);
+
         foreach  (DataPoint dp in dstp.data)
         {
-          float  yValue = (float)dp.YValues[0];
-          if  (seriesIDX == 0)
-          {
-            DateTime  ctdDateTime = initialStartTime;
-            double  offsetSecs = dpIDX * timeInterval;
-            ctdDateTime  = ctdDateTime.AddSeconds (offsetSecs);
-            dp.AxisLabel = ctdDateTime.ToString ("HH:mm:ss");
-          }
           s.Points.Add (dp);
-          ++dpIDX;
+          if  (dp.XValue > maxEndDateTime)
+            maxEndDateTime = dp.XValue;
         }
 
         ProfileChart.Series.Add (s);
@@ -1470,28 +1460,61 @@ namespace PicesCommander
         s.ChartArea = "ChartArea1";
 
         s.ChartType = instSeriesToPlot.chartType;
+        s.XValueType = ChartValueType.DateTime;
         s.Name = instSeriesToPlot.legend;
         s.BorderWidth = 2;
 
         s.YAxisType = AxisType.Secondary;
+        s.XAxisType = AxisType.Primary;
 
         s.Color = instSeriesToPlot.color;
 
-        int  dpIDX = 0;
+        DateTime  dpDateTime = new DateTime (initialStartTime.Ticks);
         foreach  (DataPoint dp in instSeriesToPlot.data)
         {
-          float  yValue = (float)dp.YValues[0];
-          //DateTime  ctdDateTime = initialStartTime;
-          //double  offsetSecs = dpIDX * timeInterval;
-          //ctdDateTime = ctdDateTime.AddSeconds (offsetSecs);
-          //dp.AxisLabel = ctdDateTime.ToString ("HH:mm:ss");
           s.Points.Add (dp);
-          ++dpIDX;
+          if  (dp.XValue > maxEndDateTime)
+            maxEndDateTime = dp.XValue;
         }
 
         s.Legend = "Legend1";
 
         ProfileChart.Series.Add (s);
+      }
+
+
+
+      
+      double  minStartDateTime = initialStartTime.ToOADate ();
+      ProfileChart.ChartAreas[0].AxisX.Minimum = minStartDateTime;
+      ProfileChart.ChartAreas[0].AxisX.Maximum = maxEndDateTime;
+
+      ProfileChart.ChartAreas[0].AxisX.IntervalOffsetType = DateTimeIntervalType.Seconds;
+      ProfileChart.ChartAreas[0].AxisX.IntervalOffset = initialStartTime.ToOADate ();
+      ProfileChart.ChartAreas[0].AxisX.IntervalType = DateTimeIntervalType.Seconds;
+      ProfileChart.ChartAreas[0].AxisX.Interval = (double)timeInterval;
+
+      ProfileChart.ChartAreas[0].AxisX.LabelStyle.Enabled = true;
+      ProfileChart.ChartAreas[0].AxisX.LabelStyle.Angle = -45;
+      //ProfileChart.ChartAreas[0].AxisX.LabelStyle.IntervalType = DateTimeIntervalType.Seconds;
+      //ProfileChart.ChartAreas[0].AxisX.LabelStyle.Format = "HH:mm:ss";
+
+      {
+        ProfileChart.ChartAreas[0].AxisX.CustomLabels.Clear ();
+        double  range = maxEndDateTime - minStartDateTime;
+        double  lableInterval = range / 8.0;
+        double  curDateTime = minStartDateTime;
+        for  (int x = 0;  x < 8;  ++x)
+        {
+          double  endDateTime = curDateTime + lableInterval;
+          DateTime dt = DateTime.FromOADate (curDateTime);
+          CustomLabel cl = new CustomLabel ();
+          cl.FromPosition = curDateTime;
+          cl.Text = dt.ToString ("HH:mm:ss");
+          cl.ToPosition = endDateTime;
+          ProfileChart.ChartAreas[0].AxisX.CustomLabels.Add (cl);
+          curDateTime = endDateTime;
+        }
       }
 
       ProfileChart.ChartAreas[0].RecalculateAxesScale ();
@@ -1543,25 +1566,23 @@ namespace PicesCommander
     private  float  DetermineScanRate ()
     {
       float  scanRate = 29950;
-
-      String  sqlStr = "select avg (sf.ScanRate)  as  ScanRate"      + "\n" +
-                       "       from SipperFiles sf"                  + "\n" +
-                       "       where sf.CruiseName = \"" + cruise        + "\"  and  " + 
-                                    "sf.StationName = \"" + station      + "\"  and  " +
-                                    "sf.DeploymentNum = \"" + deployment + "\"  and  " +
-                                    "sf.ScanRate > 1000" + 
-                                    "\n";
-
-      String[]  colNames = {"ScanRate"};
-      
-      String[][]  results = mainWinConn.QueryStatement (sqlStr, colNames);
-      if  ((results != null)  ||  (results.Length == 1))
+      PicesSipperFileList  sipperFiles = mainWinConn.SipperFileLoad (cruise, station, deployment);
+      if  (sipperFiles != null)
       {
-        scanRate = PicesKKStr.StrToFloat (results[0][0]);
-        if  ((scanRate < 1000)  ||  (scanRate > 40000))
-          scanRate = 29950;
-      }
+        List<float>  scanRates = new List<float> ();
+        foreach (PicesSipperFile  sf in sipperFiles)
+        {
+          if  (sf.ScanRate > 0.0f)
+            scanRates.Add (sf.ScanRate);
+        }
 
+        if  (scanRates.Count > 0)
+        {
+          scanRates.Sort ();
+          int  middle = scanRates.Count / 2;
+          scanRate = scanRates[middle];
+        }
+      }
       return scanRate;
     }  /* DetermineScanRate */
 

@@ -43,29 +43,29 @@ using namespace  MLL;
 
 
 Model::Model (const Model&  _model):
-    alreadyNormalized          (false),
-    cancelFlag                 (_model.cancelFlag),
-    classes                    (NULL),
-    classesIndex               (NULL),
-    compression_stats          (),
-    crossClassProbTable        (NULL),
-    crossClassProbTableSize    (0),
-    fileDesc                   (_model.fileDesc),
-    encoder                    (NULL),
-    log                        (_model.log),
-    name                       (_model.name),
-    normParms                  (NULL),
-    numOfClasses               (_model.numOfClasses),
-    classProbs                 (NULL),
-    rootFileName               (_model.rootFileName),
-    param                      (NULL),
-    trainExamples              (NULL),
-    trianingPrepTime           (0.0),
-    trainingTime               (_model.trainingTime),
-    trainingTimeStart          (_model.trainingTime),
-    votes                      (NULL),
-    validModel                 (_model.validModel),
-    weOwnTrainExamples         (false)
+    alreadyNormalized         (false),
+    cancelFlag                (_model.cancelFlag),
+    classes                   (NULL),
+    classesIndex              (NULL),
+    compression_stats         (),
+    crossClassProbTable       (NULL),
+    crossClassProbTableSize   (0),
+    fileDesc                  (_model.fileDesc),
+    encoder                   (NULL),
+    log                       (_model.log),
+    name                      (_model.name),
+    normParms                 (NULL),
+    numOfClasses              (_model.numOfClasses),
+    classProbs                (NULL),
+    rootFileName              (_model.rootFileName),
+    param                     (NULL),
+    trainExamples             (NULL),
+    trianingPrepTime          (0.0),
+    trainingTime              (_model.trainingTime),
+    trainingTimeStart         (_model.trainingTime),
+    votes                     (NULL),
+    validModel                (_model.validModel),
+    weOwnTrainExamples        (false)
 {
   numOfClasses = 0;
   if  (_model.param != NULL)
@@ -124,7 +124,7 @@ Model::Model (FileDescPtr           _fileDesc,
     
     
 /**
- *@brief Creates a new svm model from the provided image (example) data
+ *@brief Use this custructor if you want to create a model from example data
  *@param[in] _name 
  *@param[in] _param Will make own locale copy.
  *@param[in] _examples The image data we will be building the model from

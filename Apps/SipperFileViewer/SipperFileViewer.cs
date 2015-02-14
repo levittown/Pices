@@ -91,9 +91,17 @@ namespace SipperFileViewer
 
 
 
-    public SipperFileViewer ()
+    private  void  BeforeCallingInitializeComponent ()
     {
       sipperFileViewerConfigFileName = OSservices.AddSlash (PicesSipperVariables.PicesConfigurationDirectory ()) + "SipperFileViewer.txt";
+    }
+
+
+
+
+    public SipperFileViewer ()
+    {
+      BeforeCallingInitializeComponent ();
       InitializeComponent ();
       Initialization ();
     }
@@ -102,8 +110,9 @@ namespace SipperFileViewer
 
     public SipperFileViewer (string  fileName)
     {
-      sipperFileViewerConfigFileName = OSservices.AddSlash (PicesSipperVariables.PicesConfigurationDirectory ()) + "SipperFileViewer.txt";
       initialFileName = fileName;
+      BeforeCallingInitializeComponent ();
+      InitializeComponent ();
       InitializeComponent ();
       Initialization ();
     }
@@ -115,11 +124,10 @@ namespace SipperFileViewer
                              string  _sipperFileName
                             )
     {
-      sipperFileViewerConfigFileName = OSservices.AddSlash (PicesSipperVariables.PicesConfigurationDirectory ()) + "SipperFileViewer.txt";
       initialStream  = stream;
       windowTitle    = _windowTitle;
       sipperFileName = _sipperFileName;
-      
+      BeforeCallingInitializeComponent ();
       InitializeComponent ();
       Initialization ();
     }
@@ -792,7 +800,7 @@ namespace SipperFileViewer
 
       if  (idx < 0)
       {
-        StripLine  sl = new StripLine ();
+        System.Windows.Forms.DataVisualization.Charting.StripLine  sl = new StripLine ();
         sl.BorderColor = c;
         sl.Interval = 1000000;
         sl.IntervalOffset = offsetInSecs;

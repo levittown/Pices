@@ -83,7 +83,7 @@ namespace MLL
      *                             will be specified.
      *
      *@param[in]  _excludeList  List of Feature Vectors that are to be excluded from the TrainingData.
-     *                          If will check by both ImageFileName and FeatureValues. If this param-
+     *                          If will check by both ImageFileName and FeatureValues. If this parameter
      *                          is not equal to NULL then will not save the Training model.  Will
      *                          NOT take ownership of list or its contents.  Caller still owns it.
      *
@@ -115,7 +115,7 @@ namespace MLL
                       std::ostream*        _report,
                       bool                 _forceRebuild,
                       bool                 _checkForDuplicates,
-                      volatile const bool& _cancelFlag,
+                      VolConstBool&        _cancelFlag,
                       KKStr&               _statusMessage
                      );
 
@@ -156,7 +156,7 @@ namespace MLL
                        FileDescPtr          _fileDesc,
                        RunLog&              _log,
                        uint32               _level,            // Class hierarchy level to train at.
-                       volatile const bool& _cancelFlag, 
+                       VolConstBool&        _cancelFlag, 
                        KKStr&               _statusMessage
                       );
 
@@ -185,12 +185,12 @@ namespace MLL
       *@param[out] _statusMessage  Caller can monitor this field for messages that can be displayed to 
       *                            the user as a way of letting them know what is happening.
       */
-     TrainingProcess2 (const KKStr&          _configFileName,
-                       FileDescPtr           _fileDesc,
-                       RunLog&               _log,
-                       bool                  _featuresAlreadyNormalized,
-                       volatile const bool&  _cancelFlag,
-                       KKStr&                _statusMessage
+     TrainingProcess2 (const KKStr&   _configFileName,
+                       FileDescPtr    _fileDesc,
+                       RunLog&        _log,
+                       bool           _featuresAlreadyNormalized,
+                       VolConstBool&  _cancelFlag,
+                       KKStr&         _statusMessage
                       );
 
 
@@ -215,12 +215,12 @@ namespace MLL
       *@param[out] _statusMessage  Caller can monitor this field for messages that can be displayed to 
       *                            the user as a way of letting them know what is happening.
       */
-     TrainingProcess2 (istream&              _in,
-                       FileDescPtr           _fileDesc,
-                       RunLog&               _log,
-                       bool                  _featuresAlreadyNormalized,
-                       volatile const bool&  _cancelFlag,
-                       KKStr&                _statusMessage
+     TrainingProcess2 (istream&       _in,
+                       FileDescPtr    _fileDesc,
+                       RunLog&        _log,
+                       bool           _featuresAlreadyNormalized,
+                       VolConstBool&  _cancelFlag,
+                       KKStr&         _statusMessage
                       );
 
 
@@ -245,7 +245,7 @@ namespace MLL
                        FileDescPtr                _fileDesc,
                        RunLog&                    _log,
                        bool                       _featuresAlreadyNormalized,
-                       volatile const bool&       _cancelFlag,
+                       VolConstBool&              _cancelFlag,
                        KKStr&                     _statusMessage
                       );
 

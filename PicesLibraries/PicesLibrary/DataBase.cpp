@@ -2671,6 +2671,31 @@ MLClassConstListPtr  DataBase::MLClassLoadList ()
 
 
 
+MLClassConstListPtr  DataBase::MLClassLoadChildren (const KKStr&  className)
+{
+  KKStr  selectStr (128);
+
+  selectStr << "call MLClassLoadChildren(" << className.QuotedStr () << ")";
+  int32  returnCd = QueryStatement (selectStr);
+  if  (returnCd != 0)
+  {
+    log.Level (-1) << endl << endl << "DataBase::MLClassLoadChildren     ***ERROR***" << endl << endl
+                   << "Error[" << lastMySqlErrorDesc << "]" << endl << endl;
+    return NULL;
+  }
+
+  MLClassListPtr temp = MLClassProcessResults ();
+  ResultSetsClear ();
+
+  MLClassConstListPtr results = new MLClassConstList (*temp);
+  delete temp;
+  temp = NULL;
+  return results;
+}  /* MLClassLoadChildren */
+
+
+
+
 
 void  DataBase::MLClassInsert (MLClass&  mlClass,
                                bool&     successful
@@ -3913,6 +3938,98 @@ DataBaseImageListPtr  DataBase::ImagesQueryForScanLineRange (const KKStr&   sipp
 
 
 
+DataBaseImageListPtr  DataBase::ImagesQueryDeploymentSizeRange (const KKStr&     cruiseName,
+                                                                const KKStr&     stationName,
+                                                                const KKStr&     deploymentNum,
+                                                                MLClassConstPtr  mlClass,
+                                                                char             cast,         /**< 'U' = UpCast, 'D' = DownCast,  'B' = Both' */
+                                                                char             statistic,    /**< '0' = Area mm^2,  '1' = Diameter,  '2' = Spheroid Volume and '3' = EBv ((4/3)(Pie)(Major/2)(Minor/2)^2) */
+                                                                float            sizeStart,
+                                                                float            sizeEnd,
+                                                                float            depthMin,
+                                                                float            depthMax,
+                                                                kkint32          sampleQty,
+                                                                bool             includeChildren,
+                                                                VolConstBool&    cancelFlag
+                                                               )
+{
+  if  (cancelFlag)
+    return NULL;
+
+  KKStr  sqlStr(512);
+
+  KKStr  className (32);
+  if  (mlClass)  className = mlClass->Name ();
+
+  KKStr  castStr = "";
+  castStr.Append (cast);
+  KKStr  statisticStr;
+  statisticStr.Append (statistic);
+
+  sqlStr  << "call  ImagesQueryDeploymentSizeRange("  
+            << cruiseName.QuotedStr       ()         << ", "
+            << stationName.QuotedStr      ()         << ", "
+            << deploymentNum.QuotedStr    ()         << ", "
+            << className.QuotedStr        ()         << ", "
+            << castStr.QuotedStr          ()         << ", "
+            << statisticStr.QuotedStr     ()         << ", "
+            << sizeStart  << ", " << sizeEnd         << ", "
+            << depthMin   << ", " << depthMax        << ", "
+            << sampleQty
+            << ")";
+   
+  int32  returnCd = QueryStatement (sqlStr);
+  if  (returnCd != 0)
+    return NULL;
+
+  DataBaseImageListPtr results = ImageQueryProcessResults ();
+
+  ResultSetsClear ();
+
+  if  ((mlClass != NULL)   &&  includeChildren)
+  {
+    MLClassConstListPtr  children = MLClassLoadChildren (mlClass->Name ());
+    if  (children)
+    {
+      MLClassConstList::const_iterator  idx;
+      for  (idx = children->begin ();  idx != children->end ();  ++idx)
+      {
+        MLClassConstPtr  child = *idx;
+        DataBaseImageListPtr  childsImages 
+          = ImagesQueryDeploymentSizeRange (cruiseName, stationName, deploymentNum,
+                                            child,
+                                            cast,       statistic,
+                                            sizeStart,  sizeEnd,
+                                            depthMin,   depthMax,
+                                            sampleQty,
+                                            includeChildren,
+                                            cancelFlag
+                                           );
+        if  (results)
+        {
+          results->AddQueue (*childsImages);
+          childsImages->Owner (false);
+          delete  childsImages;
+          childsImages = NULL;
+        }
+        else
+        {
+          results = childsImages;
+        }
+      }
+      delete  children;
+      children = NULL;
+    }
+  }
+
+  return  results;
+}  /* ImagesExtractDeploymentSizeRange */
+
+
+
+
+
+
 VectorKKStr*   DataBase::ImageListOfImageFileNamesByScanLineRange (const KKStr&   sipperFileName,
                                                                    uint32         scanLineStart,
                                                                    uint32         scanLineEnd
@@ -4319,15 +4436,21 @@ void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruise
                                                const KKStr&               className,
                                                float                      depthBinSize,
                                                char                       statistic,
-                                               float                      initialValue,
-                                               float                      growthRate,
-                                               float                      endValue,
+                                               double                     initialValue,
+                                               double                     growthRate,
+                                               double                     endValue,
                                                ImageSizeDistributionPtr&  downCast,
                                                ImageSizeDistributionPtr&  upCast
                                               )
 {
   delete  downCast;   downCast = NULL;
   delete  upCast;     upCast   = NULL;
+
+
+  VolumeSampledStatListPtr  volSampledUpCast = NULL;
+  VolumeSampledStatListPtr  volSampledDownCast = NULL;
+
+  InstrumentDataDeploymentVolumeSampled (cruiseName, stationName, deploymentNum, depthBinSize, volSampledDownCast, volSampledUpCast);
 
   KKStr  sqlStr (1024);
 
@@ -4353,7 +4476,11 @@ void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruise
                                                             columnsReturned
                                                            );
   if  (!results)
+  {
+    delete volSampledDownCast;  volSampledDownCast = NULL;
+    delete volSampledUpCast;    volSampledUpCast   = NULL;
     return;
+  }
 
   int32  downCastIdx        = -1;
   int32  bucketIdx          = -1;
@@ -4435,6 +4562,24 @@ void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruise
 
     ImageSizeDistributionPtr  sizeDistribution = NULL;
 
+    float  volSampled = 0.0f;
+
+    int32  totalPixelCount = 0;
+    int32  totalFilledArea = 0;
+
+    float  depth      = row[bucketDepthIdx].ToFloat ();
+    int32  imageCount = row[imageCountIdx].ToInt32 ();
+
+    kkint32  depthBinIdx = (kkint32)(depth / depthBinSize);
+
+    if  (totalPixelCountIdx >= 0)
+      totalPixelCount = row[totalPixelCountIdx].ToInt32 ();
+
+    if  (totalFilledAreaIdx >= 0)
+      totalFilledArea = row[totalFilledAreaIdx].ToInt32 ();
+
+    VolumeSampledStatPtr  volStat = NULL;
+
     if  (downCastRow)
     {
       if (!downCast)
@@ -4442,6 +4587,10 @@ void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruise
         downCast = new ImageSizeDistribution (depthBinSize, initialValue, growthRate, endValue, startValues, endValues, log);
       }
       sizeDistribution = downCast;
+      if  (volSampledDownCast)
+        volStat = volSampledDownCast->Locate (depthBinIdx);
+      else
+        volStat = NULL;
     }
     else
     {
@@ -4450,27 +4599,26 @@ void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruise
         upCast = new ImageSizeDistribution (depthBinSize, initialValue, growthRate, endValue, startValues, endValues, log);
       }
       sizeDistribution = upCast;
+      if  (volSampledUpCast)
+        volStat = volSampledUpCast->Locate (depthBinIdx);
+      else
+        volStat = NULL;
     }
 
+    if  (volStat)
+      volSampled = volStat->VolumeSampled ();
 
-    int32  totalPixelCount = 0;
-    int32  totalFilledArea = 0;
 
-    float  depth           = row[bucketDepthIdx].ToFloat ();
-    int32  imageCount      = row[imageCountIdx].ToInt32 ();
-
-    if  (totalPixelCountIdx >= 0)
-      totalPixelCount = row[totalPixelCountIdx].ToInt32 ();
-
-    if  (totalFilledAreaIdx >= 0)
-      totalFilledArea = row[totalFilledAreaIdx].ToInt32 ();
-
-    sizeDistribution->DefineRow (depth, imageCount, totalPixelCount, totalFilledArea);
+    sizeDistribution->DefineRow (depth, imageCount, totalPixelCount, totalFilledArea, volSampled);
     for  (uint32  zed = firstSizeBucketIdx, sizeIdx = 0;  zed < row.size ();  ++zed, ++sizeIdx)
     {
       sizeDistribution->AddData (depth, sizeIdx, row[zed].ToInt32 ());
     }
   }
+
+  delete  results;             results            = NULL;
+  delete  volSampledUpCast;    volSampledUpCast   = NULL;
+  delete  volSampledDownCast;  volSampledDownCast = NULL;
 
   return;
 }  /* ImagesSizeDistributionByDepth */
@@ -4628,7 +4776,7 @@ RasterSipperPtr  DataBase::ImageFullSizeFind (const KKStr&  imageFileName)
   {
     try
     {r = i->ThumbNail (log);}
-    catch (KKException& e1)  {throw KKException ("DataBase::ImageFullSizeFind  Exception while calling 'ThumbNail'  " + e1.ToString ());}
+    catch (KKException& e1)     {throw KKException ("DataBase::ImageFullSizeFind  Exception while calling 'ThumbNail'  " + e1.ToString ());}
     catch (std::exception& e2)  {throw KKException ("DataBase::ImageFullSizeFind  std::exception while calling 'ThumbNail'.", e2);}
     catch (...)                 {throw KKException ("DataBase::ImageFullSizeFind  Exception while calling 'ThumbNail'.");}
   }
@@ -6469,6 +6617,64 @@ VolumeSampledStatListPtr  DataBase::InstrumentDataGetVolumePerMeterDepth (const 
 
   return  results;
 }  /* InstrumentDataGetVolumePerMeterDepth */
+
+
+
+
+
+
+void  DataBase::InstrumentDataDeploymentVolumeSampled (const KKStr&               cruiseName,
+                                                       const KKStr&               stationName,
+                                                       const KKStr&               deploymentNum,
+                                                       float                      depthBinSize,
+                                                       VolumeSampledStatListPtr&  downCastStats,
+                                                       VolumeSampledStatListPtr&  upCastStats
+                                                      )
+{
+  KKStr  depthBinSizeStr = StrFormatDouble (depthBinSize, "##0.0");
+  KKStr  sqlStr = "Call  InstrumentDataDeploymentVolumeSampled(" + cruiseName.QuotedStr () + "," + stationName.QuotedStr () + "," + deploymentNum.QuotedStr () + "," + depthBinSizeStr + ")";
+
+  int32  returnCd = QueryStatement (sqlStr);
+  if  (returnCd != 0)
+    return;
+
+  char const *  fieldNames[] 
+                      = {"DownCast", "BinId", "BinDepth", "ScanLines", "VolumeSampled", NULL};
+
+  ResultSetLoad (fieldNames);
+  if  (!resultSetMore)
+  {
+    log.Level (-1) << endl << "DataBase::InstrumentDataDeploymentVolumeSampled   ResultSets not returned." << endl;
+    return;
+  }
+
+  delete  downCastStats;  downCastStats = NULL;
+  delete  upCastStats;    upCastStats   = NULL;
+
+  downCastStats = new VolumeSampledStatList ();
+  upCastStats   = new VolumeSampledStatList ();
+  while  (ResultSetFetchNextRow ())
+  {
+    bool  downCast       = ResultSetGetBool        (0);
+    int32 binId          = ResultSetGetIntField    (1);
+    float binDepth       = ResultSetGetFloatField  (2);
+    int32 scanLines      = ResultSetGetIntField    (3);
+    float volumeSampled  = ResultSetGetFloatField  (4);
+
+    VolumeSampledStatPtr  stat = new VolumeSampledStat (binId, binDepth, volumeSampled);
+    if  (downCast)
+      downCastStats->Add (*stat);
+    else
+      upCastStats->Add (*stat);
+    delete  stat;
+    stat = NULL;
+  }
+
+  ResulSetFree ();
+  ResultSetsClear ();
+  return;
+}  /* InstrumentDataDeploymentVolumeSampled */
+
 
 
 

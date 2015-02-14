@@ -259,7 +259,7 @@ namespace PicesCommander
 
       PicesPredictionList  probPredList = null;
       
-      bool  downCast = (x < 0);
+      bool  downCast = (x > 0);
 
       if  (reClassify)
       {

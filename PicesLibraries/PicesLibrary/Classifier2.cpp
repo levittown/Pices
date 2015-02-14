@@ -45,14 +45,14 @@ Classifier2::Classifier2 (TrainingProcess2Ptr  _trainer,
 
   abort                     (false),
   featuresAlreadyNormalized (false),
-  mlClasses              (NULL),
+  mlClasses                 (NULL),
   log                       (_log),
   trainedModel              (NULL),
   trainedModelOldSVM        (NULL),
   trainedModelSVMModel      (NULL),
-  noiseMLClass           (NULL),
+  noiseMLClass              (NULL),
   trainingProcess           (_trainer),
-  unKnownMLClass         (NULL)
+  unKnownMLClass            (NULL)
 {
   if  (!_trainer)
   {
