@@ -290,9 +290,9 @@ namespace MLL
   class  UsfCasCor
   {
   public:
-    UsfCasCor (FileDescPtr           _fileDesc,
-               volatile const bool&  _cancelFlag,
-               RunLog&               _log
+    UsfCasCor (FileDescPtr    _fileDesc,
+               VolConstBool&  _cancelFlag,
+               RunLog&        _log
               );
 
     ~UsfCasCor ();
@@ -776,13 +776,13 @@ namespace MLL
 
     MLClassConstListPtr  classes;            /**<  Classes that the training data consisted of.  */
 
-    FileDescPtr        fileDesc;
+    FileDescPtr          fileDesc;
 
-    FeatureNumListPtr  selectedFeatures;   /**< The selected features that are to be used from the source training data. */
+    FeatureNumListPtr    selectedFeatures;   /**< The selected features that are to be used from the source training data. */
 
-    RunLog&  log;
+    RunLog&              log;
 
-    volatile const bool&  cancelFlag;
+    VolConstBool&        cancelFlag;
 
   };  /* UsfCasCor */
 

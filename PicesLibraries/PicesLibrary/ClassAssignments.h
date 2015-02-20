@@ -66,7 +66,7 @@ namespace MLL
 
     MLClassConstPtr      GetMLClassByIndex (size_t idx);
 
-    MLClassConstPtr      GetMLClass    (int16 num);
+    MLClassConstPtr      GetMLClass    (int16 num)  const;
 
     MLClassList          GetMLClasses (int16 num)  const;
 

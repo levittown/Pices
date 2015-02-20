@@ -239,9 +239,9 @@ const char*  _(const char* str)
 
 
 
-UsfCasCor::UsfCasCor (FileDescPtr           _fileDesc,
-                      volatile const bool&  _cancelFlag,
-                      RunLog&               _log
+UsfCasCor::UsfCasCor (FileDescPtr    _fileDesc,
+                      VolConstBool&  _cancelFlag,
+                      RunLog&        _log
                      ):
 
   //***************************************************************
@@ -590,15 +590,15 @@ MLClassConstPtr  UsfCasCor::PredictClass (FeatureVectorPtr  example)
 
 
 
-void  UsfCasCor::PredictConfidences (FeatureVectorPtr            example,
+void  UsfCasCor::PredictConfidences (FeatureVectorPtr         example,
                                      MLClassConstPtr          knownClass,
                                      MLClassConstPtr&         predClass1,
-                                     float&                      predClass1Prob,
+                                     float&                   predClass1Prob,
                                      MLClassConstPtr&         predClass2,
-                                     float&                      predClass2Prob,
-                                     float&                      knownClassProb,
+                                     float&                   predClass2Prob,
+                                     float&                   knownClassProb,
                                      const MLClassConstList&  classOrder,      /**< Dictates the order in which 'probabilities' will be populatd. */
-                                     VectorFloat&                probabilities
+                                     VectorFloat&             probabilities
                                     )
 {
   float  totalFeature = example->TotalOfFeatureData ();
@@ -695,8 +695,6 @@ void  UsfCasCor::PredictConfidences (FeatureVectorPtr            example,
 
 
 
-
-
 ClassProbListPtr  UsfCasCor::PredictClassConfidences (FeatureVectorPtr  example)
 {
   float  totalFeature = example->TotalOfFeatureData ();
@@ -730,7 +728,6 @@ ClassProbListPtr  UsfCasCor::PredictClassConfidences (FeatureVectorPtr  example)
     for  (int j = 0;  j < Noutputs;  j++)
       totalDelta += (Outputs[j] - SigmoidMin);
   } 
-
 
   ClassProbListPtr  results = new ClassProbList (true);
 

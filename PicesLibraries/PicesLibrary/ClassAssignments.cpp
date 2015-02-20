@@ -84,9 +84,9 @@ void  ClassAssignments::AddMLClass (MLClassConstPtr  mlClass,
 
 
 
-MLClassConstPtr  ClassAssignments::GetMLClass (int16 num)
+MLClassConstPtr  ClassAssignments::GetMLClass (int16 num)  const
 {
-  multimap<int16, MLClassConstPtr>::iterator p;
+  multimap<int16, MLClassConstPtr>::const_iterator p;
   p = find (num);
   if (p == end ())
     return NULL;
