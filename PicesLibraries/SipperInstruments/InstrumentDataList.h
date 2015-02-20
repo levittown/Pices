@@ -44,10 +44,10 @@ namespace  SipperHardware
   
     typedef  InstrumentDataList*  InstrumentDataListPtr;
   
-    static  InstrumentDataListPtr   CreateFromSipperFile (const KKStr&          fullSipperFileName,
-                                                          SipperFilePtr         sipperFile,
-                                                          volatile const bool&  cancelFlag,
-                                                          RunLog&               log
+    static  InstrumentDataListPtr   CreateFromSipperFile (const KKStr&   fullSipperFileName,
+                                                          SipperFilePtr  sipperFile,
+                                                          VolConstBool&  cancelFlag,
+                                                          RunLog&        log
                                                          );
   
     void  Save (const KKStr&  fileName,
@@ -76,9 +76,9 @@ namespace  SipperHardware
     const KKStr&  SipperFileName ()  const  {return  sipperFileName;}
   
   
-    VectorFloat  GetVolumePerMeterProfile (SipperFilePtr   sipperFile,
-                                           volatile bool&  cancelFlag,
-                                           RunLog&         log
+    VectorFloat  GetVolumePerMeterProfile (SipperFilePtr  sipperFile,
+                                           VolConstBool&  cancelFlag,
+                                           RunLog&        log
                                           ) const;
   
   

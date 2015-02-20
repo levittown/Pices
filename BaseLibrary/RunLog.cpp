@@ -387,6 +387,18 @@ RunLog&  RunLog::operator<< (KKStrConstPtr  right)
 }
 
 
+
+RunLog&  RunLog::operator<< (const VectorKKStr& right)
+{
+  VectorKKStr::const_iterator  idx;
+  for  (idx = right.begin ();  idx != right.end ();  ++idx)
+    (*this) << *idx << endl;
+  return *this;
+}
+
+
+
+
 RunLog& RunLog::operator<< (ostream& (* mf)(ostream &))
 {
   if  (curLevel <= loggingLevel)

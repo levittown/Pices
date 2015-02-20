@@ -68,10 +68,10 @@ InstrumentDataList::~InstrumentDataList ()
 
 
 
-InstrumentDataListPtr  InstrumentDataList::CreateFromSipperFile (const KKStr&          fullSipperFileName,
-                                                                 SipperFilePtr         sipperFile,
-                                                                 volatile const bool&  cancelFlag,
-                                                                 RunLog&               log
+InstrumentDataListPtr  InstrumentDataList::CreateFromSipperFile (const KKStr&   fullSipperFileName,
+                                                                 SipperFilePtr  sipperFile,
+                                                                 VolConstBool&  cancelFlag,
+                                                                 RunLog&        log
                                                                 )
 {
   log.Level (10) << "InstrumentDataList::CreateFromSipperFile    FullSipperFileName[" << fullSipperFileName << "]" << endl;
@@ -571,9 +571,9 @@ InstrumentDataPtr  InstrumentDataList::SearchForNearestScanLine (uint32  scanLin
 
 
 
-VectorFloat  InstrumentDataList::GetVolumePerMeterProfile (SipperFilePtr   sipperFile,
-                                                           volatile bool&  cancelFlag,
-                                                           RunLog&         log
+VectorFloat  InstrumentDataList::GetVolumePerMeterProfile (SipperFilePtr  sipperFile,
+                                                           VolConstBool&  cancelFlag,
+                                                           RunLog&        log
                                                           )  const
 {
   VectorFloat  volumePerMeter;

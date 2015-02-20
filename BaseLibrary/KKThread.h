@@ -48,12 +48,12 @@ namespace KKU
 
 
 
-    volatile const bool&   CancelFlag    ()  const  {return terminateFlag;}
-    bool                   Crashed       ()  const  {return crashed;}
-    ThreadStatus           Status        ()  const  {return status;}
-    volatile const bool&   ShutdownFlag  ()  const  {return shutdownFlag;}
-    bool                   TerminateFlag ()  const  {return terminateFlag;}
-    const KKStr&           ThreadName    ()  const  {return threadName;}
+    VolConstBool&   CancelFlag    ()  const  {return terminateFlag;}
+    bool            Crashed       ()  const  {return crashed;}
+    ThreadStatus    Status        ()  const  {return status;}
+    VolConstBool&   ShutdownFlag  ()  const  {return shutdownFlag;}
+    bool            TerminateFlag ()  const  {return terminateFlag;}
+    const KKStr&    ThreadName    ()  const  {return threadName;}
 
     void    Crashed (bool         _crashed)  {crashed = _crashed;}
     void    Status  (ThreadStatus _status)   {status  = _status;}

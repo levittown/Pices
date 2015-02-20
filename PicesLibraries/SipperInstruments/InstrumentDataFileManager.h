@@ -101,28 +101,28 @@ namespace  SipperHardware
     InstrumentDataFileManager ();
     ~InstrumentDataFileManager ();
   
-    void   GetClosestInstrumentData (const KKStr&          imageFileName,
-                                     InstrumentDataPtr&    instrumentData,
-                                     volatile const bool&  cancelFlag,
-                                     RunLog&               log
+    void   GetClosestInstrumentData (const KKStr&        imageFileName,
+                                     InstrumentDataPtr&  instrumentData,
+                                     VolConstBool&       cancelFlag,
+                                     RunLog&             log
                                     );
   
-    VectorFloat  GetVolumePerMeterProfile2 (const KKStr&    sipperFileName,
-                                            SipperFilePtr   sipperFile,
-                                            volatile bool&  cancelFlag,
-                                            RunLog&         log
+    VectorFloat  GetVolumePerMeterProfile2 (const KKStr&   sipperFileName,
+                                            SipperFilePtr  sipperFile,
+                                            VolConstBool&  cancelFlag,
+                                            RunLog&        log
                                            );
   
-    VectorUlong  GetScanLinesPerMeterProfile2 (const KKStr&    sipperFileName,
-                                               SipperFilePtr   sipperFile,
-                                               volatile bool&  cancelFlag,
-                                               RunLog&         log
+    VectorUlong  GetScanLinesPerMeterProfile2 (const KKStr&   sipperFileName,
+                                               SipperFilePtr  sipperFile,
+                                               VolConstBool&  cancelFlag,
+                                               RunLog&        log
                                               );
   
   
-    static  InstrumentDataPtr  GetClosestInstrumentData (const KKStr&          imageFileName,
-                                                         volatile const bool&  cancelFlag,
-                                                         RunLog&               log
+    static  InstrumentDataPtr  GetClosestInstrumentData (const KKStr&   imageFileName,
+                                                         VolConstBool&  cancelFlag,
+                                                         RunLog&        log
                                                         );
     
   
@@ -131,30 +131,30 @@ namespace  SipperHardware
   
     static  VectorKKStr  GetListOfSipperFiles (RunLog&  log);
     
-    static  VectorUlong  GetScanLinesPerMeterProfile (const KKStr&    sipperFileName,
-                                                      SipperFilePtr   sipperFile,
-                                                      volatile bool&  cancelFlag,
-                                                      RunLog&         log
+    static  VectorUlong  GetScanLinesPerMeterProfile (const KKStr&   sipperFileName,
+                                                      SipperFilePtr  sipperFile,
+                                                      VolConstBool&  cancelFlag,
+                                                      RunLog&        log
                                                      );
   
-    static  VectorFloat  GetVolumePerMeterProfile (const KKStr&    sipperFileName,
-                                                   SipperFilePtr   sipperFile,
-                                                   volatile bool&  cancelFlag,
-                                                   RunLog&         log
+    static  VectorFloat  GetVolumePerMeterProfile (const KKStr&   sipperFileName,
+                                                   SipperFilePtr  sipperFile,
+                                                   VolConstBool&  cancelFlag,
+                                                   RunLog&        log
                                                   );
   
    
     static  InstrumentDataListPtr   GetInstrumentDataForSipperFile (const KKStr&   sipperFileName,
                                                                     SipperFilePtr  sipperFile,
                                                                     bool           forceReExtract,
-                                                                    volatile bool& cancelFlag,
+                                                                    VolConstBool&  cancelFlag,
                                                                     RunLog&        log
                                                                    );
   
-    static  InstrumentDataListPtr   ReExtractInstrumentDataForSipperFile (const KKStr&         sipperFileName,
-                                                                          SipperFilePtr        sipperFile,
-                                                                          volatile const bool& cancelFlag,
-                                                                          RunLog&              log
+    static  InstrumentDataListPtr   ReExtractInstrumentDataForSipperFile (const KKStr&   sipperFileName,
+                                                                          SipperFilePtr  sipperFile,
+                                                                          VolConstBool&  cancelFlag,
+                                                                          RunLog&        log
                                                                          );
   
     static  RasterSipperPtr  GetOrigSipperImage (const KKStr&  sipperFileRootName,
@@ -224,11 +224,11 @@ namespace  SipperHardware
     void  LoadKnownSipperFileNames ();
   
   
-    InstrumentDataListPtr   GetInstrumentDataListForSipperFile (const KKStr&         sipperRootName,
-                                                                SipperFilePtr        sipperFile,
-                                                                bool                 forceReExtract,
-                                                                volatile const bool& cancelFlag,
-                                                                RunLog&              log
+    InstrumentDataListPtr   GetInstrumentDataListForSipperFile (const KKStr&   sipperRootName,
+                                                                SipperFilePtr  sipperFile,
+                                                                bool           forceReExtract,
+                                                                VolConstBool&  cancelFlag,
+                                                                RunLog&        log
                                                                );
   
   

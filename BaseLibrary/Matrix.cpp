@@ -15,8 +15,8 @@
 using namespace std;
 
 
-#include "Matrix.h"
 #include "KKException.h"
+#include "Matrix.h"
 #include "OSservices.h"
 #include "Str.h"
 using namespace KKU;

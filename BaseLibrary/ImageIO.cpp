@@ -53,14 +53,13 @@ using namespace std;
 #endif
 
 
-#include "MemoryDebug.h"
 #include "BasicTypes.h"
 #include "Histogram.h"
+#include "ImageIO.h"
 #include "KKException.h"
 #include "OSservices.h"
 #include "Raster.h"
-
-#include "ImageIO.h"
+using namespace KKU;
 
 
 namespace KKU

@@ -132,10 +132,11 @@ namespace KKU
     RunLog&  operator<< (uint64         right);
     RunLog&  operator<< (double         right);
 
-    RunLog&  operator<< (char           right);
-    RunLog&  operator<< (const char*    right);
-    RunLog&  operator<< (const KKStr&   right);
-    RunLog&  operator<< (KKStrConstPtr  right);
+    RunLog&  operator<< (char               right);
+    RunLog&  operator<< (const char*        right);
+    RunLog&  operator<< (const KKStr&       right);
+    RunLog&  operator<< (KKStrConstPtr      right);
+    RunLog&  operator<< (const VectorKKStr& right);
 
     RunLog&  operator<< (ostream& (* mf)(ostream &));
 

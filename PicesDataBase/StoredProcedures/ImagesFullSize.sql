@@ -18,6 +18,26 @@ delimiter ;
 
 
 
+drop procedure  if exists ImagesFullSizeLoadById;
+
+delimiter //
+
+create procedure  ImagesFullSizeLoadById (in  _imageId    int unsigned)
+
+begin
+  select i.ImageId, i.ImageFileName, ifs.FullSizeImage
+        from  images  i
+        join  (ImagesFullSize ifs)  on(ifs.ImageId = i.ImageId)  
+        where  i.ImageId = _imageId;
+end
+//
+delimiter ;
+
+
+
+
+
+
 
 drop procedure  if exists ImagesFullSizeSave;
 delimiter //

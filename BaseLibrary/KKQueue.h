@@ -143,31 +143,31 @@ namespace  KKU
        *          with the state of the 'Owner' flags. If you are not careful you can have both containers thinking they own the same entries. I suggest
        *          that after you add the contents of 'q' to this container that the caller set the 'owner' flag of 'q' to false.
        */
-      void      AddQueue       (const KKQueue& q);                    
+      virtual void       AddQueue       (const KKQueue& q);                    
                                                                    
-      EntryPtr  BackOfQueue    ()                       const;  /**< @brief  Returns pointer of last element in the container without removing it.  If the container is empty will return NULL.  */
-      void      Compress       ();                              /**< @brief  No longer does anything. */
-      void      DeleteContents ();                              /**< @brief  Empties the container, if 'owner' is set to true will call the destructor on each element.                     */
-      void      DeleteEntry    (EntryPtr _entry);               /**< @brief  Removes from KKQueue the entry who's pointer = '_entry'                                                           */
-      void      DeleteEntry    (uint32   _idx);                 /**< @brief  Removes from KKQueue the entry who's index = '_idx'.                                                              */
-      EntryPtr  FrontOfQueue   ()                       const;  /**< @brief  Returns a pointer to the element that is at from of the queue with out removing it from the queue.                */
-      uint32    GrowthRate     ()                       const;
-      void      GrowthRate     (uint32   _growthRate);
-      EntryPtr  IdxToPtr       (uint32   idx)           const;  /**< @brief  Returns back a pointer to the element who's index is 'idx'. If 'idx' is less than 0 or >= QueueSize()  will return NULL.               */
+      EntryPtr           BackOfQueue    ()                       const;  /**< @brief  Returns pointer of last element in the container without removing it.  If the container is empty will return NULL.  */
+      void               Compress       ();                              /**< @brief  No longer does anything. */
+      void               DeleteContents ();                              /**< @brief  Empties the container, if 'owner' is set to true will call the destructor on each element.                     */
+      void               DeleteEntry    (EntryPtr _entry);               /**< @brief  Removes from KKQueue the entry who's pointer = '_entry'                                                           */
+      void               DeleteEntry    (uint32   _idx);                 /**< @brief  Removes from KKQueue the entry who's index = '_idx'.                                                              */
+      EntryPtr           FrontOfQueue   ()                       const;  /**< @brief  Returns a pointer to the element that is at from of the queue with out removing it from the queue.                */
+      uint32             GrowthRate     ()                       const;
+      void               GrowthRate     (uint32   _growthRate);
+      EntryPtr           IdxToPtr       (uint32   idx)           const;  /**< @brief  Returns back a pointer to the element who's index is 'idx'. If 'idx' is less than 0 or >= QueueSize()  will return NULL.               */
 
-      int32     LocateEntry    (EntryConstPtr _entry)   const;  /**< @brief  Returns the index of the element who's address is '_entry'. If not found in container will return back -1.                             */
-      EntryPtr  LookAtBack     ()                       const;  /**< @brief  Returns pointer to element at Back of container with out removing it from the container.  If container is empty will return back NULL  */ 
-      EntryPtr  LookAtFront    ()                       const;  /**< @brief  Returns pointer to element at Front of container with out removing it from the container.  If container is empty will return back NULL */ 
-      bool      Owner          ()                       const;
-      void      Owner          (bool     _owner);               /**< @brief  You can specify who owns the contents of the container.  '_owner' == true means when the container is deleted it will also call the destructor for each element it contains. */
-      void      PushOnFront    (EntryPtr _entry);               /**< @brief  Adds '_entry' to the Front of the container.                                                      */
-      void      PushOnBack     (EntryPtr _entry);               /**< @brief  Adds '_entry' to the End of the container.                                                        */
-      EntryPtr  PopFromFront   ();                              /**< @brief  Removes the first element in the container and returns its pointer.  If the container is empty will return NULL.  */
-      EntryPtr  PopFromBack    ();                              /**< @brief  Removes the last element in the container and returns its pointer. If the container is empty will return NULL.    */
-      int32     PtrToIdx       (EntryConstPtr _entry)   const;  /**< @brief  returns the index of the 'entry' that has the same pointer as '_entry', if none found returns -1 */
-      void      RandomizeOrder ();
-      void      RandomizeOrder (int64     seed);
-      int32     QueueSize      ()                       const;  /**< @brief  Same as calling vector<>::size().  Returns the number of elements in KKQueue  */
+      int32              LocateEntry    (EntryConstPtr _entry)   const;  /**< @brief  Returns the index of the element who's address is '_entry'. If not found in container will return back -1.                             */
+      virtual  EntryPtr  LookAtBack     ()                       const;  /**< @brief  Returns pointer to element at Back of container with out removing it from the container.  If container is empty will return back NULL  */ 
+      virtual  EntryPtr  LookAtFront    ()                       const;  /**< @brief  Returns pointer to element at Front of container with out removing it from the container.  If container is empty will return back NULL */ 
+      bool               Owner          ()                       const;
+      void               Owner          (bool     _owner);               /**< @brief  You can specify who owns the contents of the container.  '_owner' == true means when the container is deleted it will also call the destructor for each element it contains. */
+      virtual  void      PushOnFront    (EntryPtr _entry);               /**< @brief  Adds '_entry' to the Front of the container.                                                      */
+      virtual  void      PushOnBack     (EntryPtr _entry);               /**< @brief  Adds '_entry' to the End of the container.                                                        */
+      virtual  EntryPtr  PopFromFront   ();                              /**< @brief  Removes the first element in the container and returns its pointer.  If the container is empty will return NULL.  */
+      virtual  EntryPtr  PopFromBack    ();                              /**< @brief  Removes the last element in the container and returns its pointer. If the container is empty will return NULL.    */
+      int32              PtrToIdx       (EntryConstPtr _entry)   const;  /**< @brief  returns the index of the 'entry' that has the same pointer as '_entry', if none found returns -1 */
+      void               RandomizeOrder ();
+      void               RandomizeOrder (int64     seed);
+      int32              QueueSize      ()                       const;  /**< @brief  Same as calling vector<>::size().  Returns the number of elements in KKQueue  */
       //void      Sort           (QueueComparison<Entry>*  comparison);
 
       void      SetIdxToPtr    (uint32  _idx,

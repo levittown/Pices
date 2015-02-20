@@ -73,6 +73,7 @@ namespace MLL
     float                  Weight           () const {return  weight;}
 
     // member Update methods
+    void  AParam           (float                  _A)                 {param.A           = _A;}
     void  C                (double                 _c)                 {param.C           = _c;}
     void  Gamma            (double                 _gamma)             {param.gamma       = _gamma;}
     void  Param            (const svm_parameter&   _param)             {param             = _param;}
