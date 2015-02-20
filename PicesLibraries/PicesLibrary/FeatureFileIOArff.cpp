@@ -67,15 +67,15 @@ FileDescPtr  FeatureFileIOArff::GetFileDesc (const KKStr&         _fileName,
 
 
 
-FeatureVectorListPtr  FeatureFileIOArff::LoadFile (const KKStr&          _fileName,
-                                                   const FileDescPtr     _fileDesc,
+FeatureVectorListPtr  FeatureFileIOArff::LoadFile (const KKStr&       _fileName,
+                                                   const FileDescPtr  _fileDesc,
                                                    MLClassConstList&  _classes, 
-                                                   istream&              _in,
-                                                   long                  _maxCount,    // Maximum # images to load.
-                                                   volatile const bool&  _cancelFlag,
-                                                   bool&                _changesMade,
-                                                   KKStr&               _errorMessage,
-                                                   RunLog&              _log
+                                                   istream&           _in,
+                                                   long               _maxCount,    // Maximum # images to load.
+                                                   VolConstBool&      _cancelFlag,
+                                                   bool&              _changesMade,
+                                                   KKStr&             _errorMessage,
+                                                   RunLog&            _log
                                                   )
 {
   _log.Level (10) << endl << endl 
@@ -94,7 +94,7 @@ void   FeatureFileIOArff::SaveFile (FeatureVectorList&     _data,
                                     const FeatureNumList&  _selFeatures,
                                     ostream&               _out,
                                     uint32&                _numExamplesWritten,
-                                    volatile const bool&   _cancelFlag,
+                                    VolConstBool&          _cancelFlag,
                                     bool&                  _successful,
                                     KKStr&                 _errorMessage,
                                     RunLog&                _log

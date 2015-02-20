@@ -194,9 +194,6 @@ KKStr  DataBase::FloatToStr (float f)
 
 
 
-
-
-
 GoalKeeperPtr            DataBase::blocker                  = NULL;
 volatile KKU::int32      DataBase::numDataBaseInstances     = 0;
 volatile bool            DataBase::mySqlEmbeddedServerInitailzied = false;

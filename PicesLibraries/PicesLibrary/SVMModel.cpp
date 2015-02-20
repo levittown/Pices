@@ -167,11 +167,11 @@ void  SVMModel::GreaterVotes (bool     useProbability,
 
 
 
-SVMModel::SVMModel (const KKStr&          _rootFileName,   // Create from existing Model on Disk.
-                    bool&                 _successful,
-                    FileDescPtr           _fileDesc,
-                    RunLog&               _log,
-                    volatile const bool&  _cancelFlag
+SVMModel::SVMModel (const KKStr&   _rootFileName,   // Create from existing Model on Disk.
+                    bool&          _successful,
+                    FileDescPtr    _fileDesc,
+                    RunLog&        _log,
+                    VolConstBool&  _cancelFlag
                    )
 :  
   assignments              (_log),
@@ -238,11 +238,11 @@ SVMModel::SVMModel (const KKStr&          _rootFileName,   // Create from existi
 }
 
 
-SVMModel::SVMModel (istream&              _in,   // Create from existing Model on Disk.
-                    bool&                 _successful,
-                    FileDescPtr           _fileDesc,
-                    RunLog&               _log,
-                    volatile const bool&  _cancelFlag
+SVMModel::SVMModel (istream&       _in,   // Create from existing Model on Disk.
+                    bool&          _successful,
+                    FileDescPtr    _fileDesc,
+                    RunLog&        _log,
+                    VolConstBool&  _cancelFlag
                    )
 :  
   assignments              (_log),
@@ -298,12 +298,13 @@ SVMModel::SVMModel (istream&              _in,   // Create from existing Model o
 }
 
 
-SVMModel::SVMModel (SVMparam&             _svmParam,      // Create new model from
-                    FeatureVectorList&    _examples,        // Training data.
-                    ClassAssignments&     _assignmnets,
-                    FileDescPtr           _fileDesc,
-                    RunLog&               _log,
-                    volatile const bool&  _cancelFlag
+
+SVMModel::SVMModel (SVMparam&           _svmParam,      // Create new model from
+                    FeatureVectorList&  _examples,        // Training data.
+                    ClassAssignments&   _assignmnets,
+                    FileDescPtr         _fileDesc,
+                    RunLog&             _log,
+                    VolConstBool&       _cancelFlag
                    )
 :
   assignments              (_assignmnets),
@@ -1367,9 +1368,9 @@ void  SVMModel::ReadBinaryCombos (istream& i)
 
 
 
-double   SVMModel::DistanceFromDecisionBoundary (FeatureVectorPtr    example,
-                                                 MLClassConstPtr  class1,
-                                                 MLClassConstPtr  class2
+double   SVMModel::DistanceFromDecisionBoundary (FeatureVectorPtr  example,
+                                                 MLClassConstPtr   class1,
+                                                 MLClassConstPtr   class2
                                                 )
 {
   if  (svmParam.MachineType () != BinaryCombos)
@@ -1554,17 +1555,18 @@ void   SVMModel::Predict (FeatureVectorPtr  example,
 
 
 
-void   SVMModel::PredictOneVsAll (XSpacePtr            xSpace,
+
+void   SVMModel::PredictOneVsAll (XSpacePtr         xSpace,
                                   MLClassConstPtr   knownClass,
                                   MLClassConstPtr&  predClass,  
                                   MLClassConstPtr&  predClass2,  
-                                  double&              probOfKnownClass,
-                                  double&              predClassProb,
-                                  double&              predClass2Prob,
-                                  double&              compact,
-                                  int32&               numOfWinners,
-                                  bool&                knownClassOneOfTheWinners,
-                                  double&              breakTie
+                                  double&           probOfKnownClass,
+                                  double&           predClassProb,
+                                  double&           predClass2Prob,
+                                  double&           compact,
+                                  int32&            numOfWinners,
+                                  bool&             knownClassOneOfTheWinners,
+                                  double&           breakTie
                                  )
 
 {
@@ -1625,7 +1627,7 @@ void   SVMModel::PredictOneVsAll (XSpacePtr            xSpace,
     vector<int32>  winners;
 
     double*  tempProbabilities = new double[numOfClasses + 2];  // kk 2004-12-22     // I am addin 2 as a deperate measure to deal with a memory corruption problem   kak
-    int32*     tempVotes         = new int32[numOfClasses + 2];
+    int32*   tempVotes         = new int32[numOfClasses + 2];
 
     int32  predClass1Votes = -1;
     int32  predClass2Votes = -1;
@@ -1749,20 +1751,21 @@ void   SVMModel::PredictOneVsAll (XSpacePtr            xSpace,
 
 MLClassConstPtr  SVMModel::Predict (FeatureVectorPtr  example)
 {
-  double              breakTie         = -1.0f;
-  double              compact          = -1.0;
-  bool                knownClassOneOfTheWinners = false;
-  int32               numOfWinners     = -1;
+  double           breakTie         = -1.0f;
+  double           compact          = -1.0;
+  bool             knownClassOneOfTheWinners = false;
+  int32            numOfWinners     = -1;
   MLClassConstPtr  pred1            = NULL;
   MLClassConstPtr  pred2            = NULL;
-  double              predClass1Prob   = -1.0;
-  double              predClass2Prob   = -1.0;
-  double              probOfKnownClass = -1.0;
+  double           predClass1Prob   = -1.0;
+  double           predClass2Prob   = -1.0;
+  double           probOfKnownClass = -1.0;
 
-  int32               predClass1Votes  = -1;
-  int32               predClass2Votes  = -1;
+  int32            predClass1Votes  = -1;
+  int32            predClass2Votes  = -1;
   
 
+  
   Predict (example, 
            NULL,
            pred1,
@@ -1785,19 +1788,19 @@ MLClassConstPtr  SVMModel::Predict (FeatureVectorPtr  example)
 
 
 
-void  SVMModel::PredictByBinaryCombos (FeatureVectorPtr     example,
+void  SVMModel::PredictByBinaryCombos (FeatureVectorPtr  example,
                                        MLClassConstPtr   knownClass,
                                        MLClassConstPtr&  predClass1,
                                        MLClassConstPtr&  predClass2,
-                                       int32&               predClass1Votes,
-                                       int32&               predClass2Votes,
-                                       double&              probOfKnownClass,
-                                       double&              predClass1Prob,
-                                       double&              predClass2Prob,
-                                       double&              breakTie,
-                                       double&              compact,
-                                       int32&               numOfWinners,
-                                       bool&                knownClassOneOfTheWinners
+                                       int32&            predClass1Votes,
+                                       int32&            predClass2Votes,
+                                       double&           probOfKnownClass,
+                                       double&           predClass1Prob,
+                                       double&           predClass2Prob,
+                                       double&           breakTie,
+                                       double&           compact,
+                                       int32&            numOfWinners,
+                                       bool&             knownClassOneOfTheWinners
                                       )
 {
   int32     classIDX;

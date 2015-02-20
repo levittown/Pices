@@ -12,15 +12,15 @@ namespace  MLL
   public:
     typedef  ModelKnn*  ModelKnnPtr;
 
-    ModelKnn (FileDescPtr           _fileDesc,
-              volatile const bool&  _cancelFlag,
-              RunLog&               _log
+    ModelKnn (FileDescPtr    _fileDesc,
+              VolConstBool&  _cancelFlag,
+              RunLog&        _log
              );
   
     ModelKnn (const KKStr&          _name,
               const ModelParamKnn&  _param,         // Create new model from
               FileDescPtr           _fileDesc,
-              volatile const bool&  _cancelFlag,
+              VolConstBool&         _cancelFlag,
               RunLog&               _log
              );
   

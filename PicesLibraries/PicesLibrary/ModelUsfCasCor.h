@@ -27,15 +27,15 @@ namespace  MLL
     typedef  ModelUsfCasCor*  ModelUsfCasCorPtr;
 
 
-    ModelUsfCasCor (FileDescPtr           _fileDesc,
-                    volatile const bool&  _cancelFlag,
-                    RunLog&               _log
+    ModelUsfCasCor (FileDescPtr    _fileDesc,
+                    VolConstBool&  _cancelFlag,
+                    RunLog&        _log
                   );
 
     ModelUsfCasCor (const KKStr&               _name,
                     const ModelParamUsfCasCor& _param,         // Create new model from
                     FileDescPtr                _fileDesc,
-                    volatile const bool&       _cancelFlag,
+                    VolConstBool&              _cancelFlag,
                     RunLog&                    _log
                    );
   

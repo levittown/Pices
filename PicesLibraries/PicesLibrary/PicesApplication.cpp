@@ -252,7 +252,6 @@ bool  PicesApplication::ProcessConfigFileParameter  (const KKStr&  parmSwitch,
   configFileFullPath = TrainingConfiguration2::GetEffectiveConfigFileName (configFileName);
 
   bool  valid = TrainingConfiguration2::ConfigFileExists (configFileFullPath);
-
   if  (!valid)
   {
     log.Level (-1) << endl

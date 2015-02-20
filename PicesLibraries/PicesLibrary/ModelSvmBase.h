@@ -26,16 +26,16 @@ namespace  MLL
     typedef  ModelSvmBase*  ModelSvmBasePtr;
 
 
-    ModelSvmBase (FileDescPtr           _fileDesc,
-                  volatile const bool&  _cancelFlag,
-                  RunLog&               _log
+    ModelSvmBase (FileDescPtr    _fileDesc,
+                  VolConstBool&  _cancelFlag,
+                  RunLog&        _log
                 );
 
-    ModelSvmBase (const KKStr&             _name,
-                  const ModelParamSvmBase& _param,         // Create new model from
-                  FileDescPtr              _fileDesc,
-                  volatile const bool&     _cancelFlag,
-                  RunLog&                  _log
+    ModelSvmBase (const KKStr&              _name,
+                  const ModelParamSvmBase&  _param,         // Create new model from
+                  FileDescPtr               _fileDesc,
+                  VolConstBool&             _cancelFlag,
+                  RunLog&                   _log
                  );
   
     ModelSvmBase (const ModelSvmBase&   _model);

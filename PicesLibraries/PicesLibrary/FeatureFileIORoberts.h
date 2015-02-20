@@ -35,36 +35,36 @@ namespace MLL
 
     static  FeatureFileIORobertsPtr  Driver ()  {return &driver;}
 
-    virtual  FileDescPtr  GetFileDesc (const KKStr&            _fileName,
-                                       istream&                _in,
+    virtual  FileDescPtr  GetFileDesc (const KKStr&         _fileName,
+                                       istream&             _in,
                                        MLClassConstListPtr  _classList,
-                                       int32&                  _estSize,
-                                       KKStr&                  _errorMessage,
-                                       RunLog&                 _log
+                                       int32&               _estSize,
+                                       KKStr&               _errorMessage,
+                                       RunLog&              _log
                                       );
 
 
-    virtual  FeatureVectorListPtr  LoadFile (const KKStr&          _fileName,
-                                             const FileDescPtr     _fileDesc,
+    virtual  FeatureVectorListPtr  LoadFile (const KKStr&       _fileName,
+                                             const FileDescPtr  _fileDesc,
                                              MLClassConstList&  _classes, 
-                                             istream&              _in,
-                                             long                  _maxCount,    // Maximum # images to load.
-                                             volatile const bool&  _cancelFlag,
-                                             bool&                 _changesMade,
-                                             KKStr&                _errorMessage,
-                                             RunLog&               _log
+                                             istream&           _in,
+                                             long               _maxCount,    // Maximum # images to load.
+                                             VolConstBool&      _cancelFlag,
+                                             bool&              _changesMade,
+                                             KKStr&             _errorMessage,
+                                             RunLog&            _log
                                             );
 
 
-    virtual  void   SaveFile (FeatureVectorList&      _data,
-                              const KKStr&            _fileName,
-                              const FeatureNumList&   _selFeatures,
-                              ostream&                _out,
-                              uint32&                 _numExamplesWritten,
-                              volatile const bool&    _cancelFlag,
-                              bool&                   _successful,
-                              KKStr&                  _errorMessage,
-                              RunLog&                 _log
+    virtual  void   SaveFile (FeatureVectorList&     _data,
+                              const KKStr&           _fileName,
+                              const FeatureNumList&  _selFeatures,
+                              ostream&               _out,
+                              uint32&                _numExamplesWritten,
+                              VolConstBool&          _cancelFlag,
+                              bool&                  _successful,
+                              KKStr&                 _errorMessage,
+                              RunLog&                _log
                              );
 
 

@@ -39,9 +39,9 @@ using namespace  MLL;
 
 
 
-ModelKnn::ModelKnn (FileDescPtr           _fileDesc,
-                    volatile const bool&  _cancelFlag,
-                    RunLog&               _log
+ModelKnn::ModelKnn (FileDescPtr    _fileDesc,
+                    VolConstBool&  _cancelFlag,
+                    RunLog&        _log
                    ):
   Model (_fileDesc, _cancelFlag, _log),
   param (NULL)
@@ -54,7 +54,7 @@ ModelKnn::ModelKnn (FileDescPtr           _fileDesc,
 ModelKnn::ModelKnn (const KKStr&          _name,
                     const ModelParamKnn&  _param,
                     FileDescPtr           _fileDesc,
-                    volatile const bool&  _cancelFlag,
+                    VolConstBool&         _cancelFlag,
                     RunLog&               _log
                    ):
   Model (_name, _param, _fileDesc, _cancelFlag, _log),

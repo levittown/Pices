@@ -32,9 +32,9 @@ using namespace  KKU;
 using namespace  MLL;
 
 
-ModelSvmBase::ModelSvmBase (FileDescPtr           _fileDesc,
-                            volatile const bool&  _cancelFlag,
-                            RunLog&               _log
+ModelSvmBase::ModelSvmBase (FileDescPtr    _fileDesc,
+                            VolConstBool&  _cancelFlag,
+                            RunLog&        _log
                            ):
   Model (_fileDesc, _cancelFlag, _log),
   param                (NULL),
@@ -45,7 +45,7 @@ ModelSvmBase::ModelSvmBase (FileDescPtr           _fileDesc,
 ModelSvmBase::ModelSvmBase (const KKStr&             _name,
                             const ModelParamSvmBase& _param,         // Create new model from
                             FileDescPtr              _fileDesc,
-                            volatile const bool&     _cancelFlag,
+                            VolConstBool&            _cancelFlag,
                             RunLog&                  _log
                            ):
   Model (_name, _param, _fileDesc, _cancelFlag, _log),

@@ -23,7 +23,7 @@ namespace MLL {
 typedef enum {NORMAL, BAGGING, BOOSTING, SUBSPACE, SAMPLESV} Learn_Type;
 
 
-typedef  std::vector<int32>  Ivector;
+typedef  std::vector<int32>    Ivector;
 typedef  std::vector<float>  Fvector;
 typedef  std::vector<double> Dvector;
 

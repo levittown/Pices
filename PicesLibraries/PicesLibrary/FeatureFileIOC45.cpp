@@ -48,13 +48,13 @@ FeatureFileIOC45::~FeatureFileIOC45()
 
 
 FeatureVectorListPtr  FeatureFileIOC45::LoadFeatureFile 
-                                      (const KKStr&          _fileName,
-                                       MLClassConstList&     _mlClasses,
-                                       long                  _maxCount,
-                                       volatile const bool&  _cancelFlag,    // will be monitored,  if set to True  Load will terminate.
-                                       bool&                 _successful,
-                                       bool&                 _changesMade,
-                                       RunLog&               _log
+                                      (const KKStr&       _fileName,
+                                       MLClassConstList&  _mlClasses,
+                                       long               _maxCount,
+                                       VolConstBool&      _cancelFlag,    // will be monitored,  if set to True  Load will terminate.
+                                       bool&              _successful,
+                                       bool&              _changesMade,
+                                       RunLog&            _log
                                       )
 {
   _log.Level (10) << "FeatureFileIOC45::LoadFeatureFile  File[" << _fileName << "]  FileFormat[" << DriverName () << "]" << endl;
@@ -728,15 +728,15 @@ KKStr  FeatureFileIOC45::C45ReadNextToken (istream&     in,
 
 
 
-FeatureVectorListPtr  FeatureFileIOC45::LoadFile (const KKStr&          _fileName,
-                                                  const FileDescPtr     _fileDesc,
+FeatureVectorListPtr  FeatureFileIOC45::LoadFile (const KKStr&       _fileName,
+                                                  const FileDescPtr  _fileDesc,
                                                   MLClassConstList&  _classes, 
-                                                  istream&              _in,
-                                                  long                  _maxCount,    // Maximum # images to load.
-                                                  volatile const bool&  _cancelFlag,
-                                                  bool&                 _changesMade,
-                                                  KKStr&                _errorMessage,
-                                                  RunLog&               _log
+                                                  istream&           _in,
+                                                  long               _maxCount,    // Maximum # images to load.
+                                                  VolConstBool&      _cancelFlag,
+                                                  bool&              _changesMade,
+                                                  KKStr&             _errorMessage,
+                                                  RunLog&            _log
                                                 )
 {
   _log.Level (10) << "FeatureFileIOC45::LoadFile   FileName[" << _fileName << "]" << endl;
@@ -1028,7 +1028,7 @@ void   FeatureFileIOC45::SaveFile (FeatureVectorList&     _data,
                                    const FeatureNumList&  _selFeatures,
                                    ostream&               _out,
                                    uint32&                _numExamplesWritten,
-                                   volatile const bool&   _cancelFlag,
+                                   VolConstBool&          _cancelFlag,
                                    bool&                  _successful,
                                    KKStr&                 _errorMessage,
                                    RunLog&                _log
@@ -1120,7 +1120,7 @@ void   FeatureFileIOC45::SaveFile (FeatureVectorList&     _data,
     delete  stats;
   }
 
-  int32  origPrecision = (int32)_out.precision ();
+  int32  origPrecision = _out.precision ();
   _out.precision (9);
 
   FeatureVectorPtr   example = NULL;
