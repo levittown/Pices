@@ -121,15 +121,15 @@ FileDescPtr  FeatureFileIOSparse::GetFileDesc (const KKStr&            _fileName
 
 
 
-FeatureVectorListPtr  FeatureFileIOSparse::LoadFile (const KKStr&          _fileName,
-                                                     const FileDescPtr     _fileDesc,
+FeatureVectorListPtr  FeatureFileIOSparse::LoadFile (const KKStr&       _fileName,
+                                                     const FileDescPtr  _fileDesc,
                                                      MLClassConstList&  _classes, 
-                                                     istream&              _in,
-                                                     long                  _maxCount,    // Maximum # images to load.
-                                                     volatile const bool&  _cancelFlag,
-                                                     bool&                 _changesMade,
-                                                     KKStr&                _errorMessage,
-                                                     RunLog&               _log
+                                                     istream&           _in,
+                                                     long               _maxCount,    // Maximum # images to load.
+                                                     VolConstBool&      _cancelFlag,
+                                                     bool&              _changesMade,
+                                                     KKStr&             _errorMessage,
+                                                     RunLog&            _log
                                                    )
 {
   _log.Level (20) << "FeatureFileIOSparse::LoadFile   FileName[" << _fileName << "]" << endl;
@@ -218,15 +218,15 @@ FeatureVectorListPtr  FeatureFileIOSparse::LoadFile (const KKStr&          _file
 
 
 
-void   FeatureFileIOSparse::SaveFile (FeatureVectorList&      _data,
-                                      const KKStr&            _fileName,
-                                      const FeatureNumList&   _selFeatures,
-                                      ostream&                _out,
-                                      uint32&                 _numExamplesWritten,
-                                      volatile const bool&    _cancelFlag,
-                                      bool&                   _successful,
-                                      KKStr&                  _errorMessage,
-                                      RunLog&                 _log
+void   FeatureFileIOSparse::SaveFile (FeatureVectorList&     _data,
+                                      const KKStr&           _fileName,
+                                      const FeatureNumList&  _selFeatures,
+                                      ostream&               _out,
+                                      uint32&                _numExamplesWritten,
+                                      VolConstBool&          _cancelFlag,
+                                      bool&                  _successful,
+                                      KKStr&                 _errorMessage,
+                                      RunLog&                _log
                                      )
 {
   _log.Level (20) << "FeatureFileIOSparse::SaveFile     FileName[" << _fileName << "]." << endl;

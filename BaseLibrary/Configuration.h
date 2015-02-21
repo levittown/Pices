@@ -60,7 +60,7 @@ namespace KKU
 
     const VectorKKStr&   FormatErrors ()  const {return formatErrors;}
 
-    VectorKKStr          FormatErrorsWithLineNumbers ()  const;
+    VectorKKStr   FormatErrorsWithLineNumbers ()  const;
 
     void  FormatErrorsAdd (int32         lineNum, 
                            const KKStr&  error

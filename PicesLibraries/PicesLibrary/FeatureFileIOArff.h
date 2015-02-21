@@ -47,27 +47,27 @@ namespace MLL
                                       );
 
 
-    virtual  FeatureVectorListPtr  LoadFile (const KKStr&          _fileName,
-                                             const FileDescPtr     _fileDesc,
-                                             MLClassConstList&     _classes,
-                                             istream&              _in,
-                                             long                  _maxCount,    // Maximum # images to load.
-                                             volatile const bool&  _cancelFlag,
-                                             bool&                 _changesMade,
-                                             KKStr&                _errorMessage,
-                                             RunLog&               _log
+    virtual  FeatureVectorListPtr  LoadFile (const KKStr&       _fileName,
+                                             const FileDescPtr  _fileDesc,
+                                             MLClassConstList&  _classes,
+                                             istream&           _in,
+                                             long               _maxCount,    // Maximum # images to load.
+                                             VolConstBool&      _cancelFlag,
+                                             bool&              _changesMade,
+                                             KKStr&             _errorMessage,
+                                             RunLog&            _log
                                             );
 
 
-    virtual  void   SaveFile (FeatureVectorList&      _data,
-                              const KKStr&            _fileName,
-                              const FeatureNumList&   _selFeatures,
-                              ostream&                _out,
-                              uint32&                 _numExamplesWritten,
-                              volatile const bool&    _cancelFlag,
-                              bool&                   _successful,
-                              KKStr&                  _errorMessage,
-                              RunLog&                 _log
+    virtual  void   SaveFile (FeatureVectorList&     _data,
+                              const KKStr&           _fileName,
+                              const FeatureNumList&  _selFeatures,
+                              ostream&               _out,
+                              uint32&                _numExamplesWritten,
+                              VolConstBool&          _cancelFlag,
+                              bool&                  _successful,
+                              KKStr&                 _errorMessage,
+                              RunLog&                _log
                              );
 
 

@@ -45,27 +45,27 @@ namespace MLL
 
 
     virtual  
-      FeatureVectorListPtr  LoadFeatureFile (const KKStr&          _fileName,
-                                             MLClassConstList&     _mlClasses,
-                                             long                  _maxCount,
-                                             volatile const bool&  _cancelFlag,
-                                             bool&                 _successful,
-                                             bool&                 _changesMade,
-                                             RunLog&               _log
+      FeatureVectorListPtr  LoadFeatureFile (const KKStr&       _fileName,
+                                             MLClassConstList&  _mlClasses,
+                                             long               _maxCount,
+                                             VolConstBool&      _cancelFlag,
+                                             bool&              _successful,
+                                             bool&              _changesMade,
+                                             RunLog&            _log
                                             );
 
 
 
     virtual  
-      FeatureVectorListPtr  LoadFile (const KKStr&          _fileName,
-                                      const FileDescPtr     _fileDesc,
-                                      MLClassConstList&     _classes,
-                                      istream&              _in,
-                                      long                  _maxCount,    // Maximum # images to load.
-                                      volatile const bool&  _cancelFlag,
-                                      bool&                 _changesMade,
-                                      KKStr&                _errorMessage,
-                                      RunLog&               _log
+      FeatureVectorListPtr  LoadFile (const KKStr&       _fileName,
+                                      const FileDescPtr  _fileDesc,
+                                      MLClassConstList&  _classes,
+                                      istream&           _in,
+                                      long               _maxCount,    // Maximum # images to load.
+                                      VolConstBool&      _cancelFlag,
+                                      bool&              _changesMade,
+                                      KKStr&             _errorMessage,
+                                      RunLog&            _log
                                      );
 
 
@@ -75,7 +75,7 @@ namespace MLL
                        const FeatureNumList& _selFeatures,
                        ostream&              _out,
                        uint32&               _numExamplesWritten,
-                       volatile const bool&  _cancelFlag,
+                       VolConstBool&         _cancelFlag,
                        bool&                 _successful,
                        KKStr&                _errorMessage,
                        RunLog&               _log

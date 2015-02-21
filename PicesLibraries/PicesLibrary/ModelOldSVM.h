@@ -46,16 +46,16 @@ namespace MLL
   public:
     typedef  ModelOldSVM*  ModelOldSVMPtr;
 
-    ModelOldSVM (FileDescPtr           _fileDesc,
-                 volatile const bool&  _cancelFlag,
-                 RunLog&               _log
+    ModelOldSVM (FileDescPtr    _fileDesc,
+                 VolConstBool&  _cancelFlag,
+                 RunLog&        _log
                 );
 
-    ModelOldSVM (const KKStr&            _name,
-                 const ModelParamOldSVM& _param,         // Create new model from
-                 FileDescPtr             _fileDesc,
-                 volatile const bool&    _cancelFlag,
-                 RunLog&                 _log
+    ModelOldSVM (const KKStr&             _name,
+                 const ModelParamOldSVM&  _param,         // Create new model from
+                 FileDescPtr              _fileDesc,
+                 VolConstBool&            _cancelFlag,
+                 RunLog&                  _log
                 );
   
     ModelOldSVM (const ModelOldSVM&   _madel);

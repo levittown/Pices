@@ -1,36 +1,33 @@
-#include  "FirstIncludes.h"
+#include "FirstIncludes.h"
 
-#include  <stdio.h>
+#include <stdio.h>
 
-#include  <fstream>
-#include  <string>
-#include  <iostream>
-#include  <vector>
+#include <fstream>
+#include <string>
+#include <iostream>
+#include <vector>
 
 
 
-#include  "MemoryDebug.h"
+#include "MemoryDebug.h"
 using namespace std;
 
-#include  "BasicTypes.h"
-#include  "MLLTypes.h"
+#include "BasicTypes.h"
+#include "MLLTypes.h"
 
 using namespace KKU;
 using namespace MLL;
 
 
+#include "SVMparam.h"
 
-
-#include  "SVMparam.h"
-
-
-#include  "BinaryClassParms.h"
-#include  "ClassAssignments.h"
-#include  "FeatureVector.h"
-#include  "FileDesc.h"
-#include  "MLClass.h"
-#include  "OSservices.h"
-#include  "RunLog.h"
+#include "BinaryClassParms.h"
+#include "ClassAssignments.h"
+#include "FeatureVector.h"
+#include "FileDesc.h"
+#include "MLClass.h"
+#include "OSservices.h"
+#include "RunLog.h"
 
 
 
@@ -182,8 +179,6 @@ void  SVMparam::C_Param (double  _CC)
 
 
 
-
-
 void  SVMparam::ParseCmdLineParameter (const KKStr&  parameter,
                                        const KKStr&  value,
                                        bool&         parameterUsed,
@@ -199,7 +194,6 @@ void  SVMparam::ParseCmdLineParameter (const KKStr&  parameter,
   field.Upper ();
   KKStr valueUpper (value);
   valueUpper.Upper ();
-
 
   param.ProcessSvmParameter (parameter,value, valueNum, parameterUsed);
   if  (parameterUsed)
@@ -467,7 +461,6 @@ void  SVMparam::WriteXML (ostream&  o)  const
     << "</SelectedFeatures>"
     << endl;
 
-
   if  (binaryParmsList)
     binaryParmsList->WriteXML (o);
 
@@ -563,9 +556,6 @@ void  SVMparam::ReadXML (FILE*  i)
     }
   }
 }  /* ReadXML */
-
-
-
 
 
 
@@ -903,8 +893,8 @@ void  SVMparam::C_Param (MLClassConstPtr  class1,
 
 
 
-void  SVMparam::SetBinaryClassFields (MLClassConstPtr     class1,
-                                      MLClassConstPtr     class2,
+void  SVMparam::SetBinaryClassFields (MLClassConstPtr        class1,
+                                      MLClassConstPtr        class2,
                                       const svm_parameter&   _param,
                                       const FeatureNumList&  _features,
                                       float                  _weight

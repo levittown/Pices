@@ -19,9 +19,9 @@
 using namespace std;
 
 
-#include "MsgQueue.h"
-#include "KKException.h"
 #include "GoalKeeper.h"
+#include "KKException.h"
+#include "MsgQueue.h"
 #include "OSservices.h"
 using  namespace  KKU;
 

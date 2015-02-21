@@ -65,7 +65,7 @@ namespace MLL
                          const FeatureNumList&  _selFeatures,
                          FeatureVectorList&     _examples,
                          uint32&                _numExamplesWritten,
-                         volatile const bool&   _cancelFlag,
+                         VolConstBool&          _cancelFlag,
                          bool&                  _successful,
                          RunLog&                log
                         );
@@ -84,13 +84,13 @@ namespace MLL
      *@return  A ImageFeaturesList container object; this object will own all the examples loaded.
      */
     virtual  
-      FeatureVectorListPtr  LoadFeatureFile (const KKStr&          _fileName,
+      FeatureVectorListPtr  LoadFeatureFile (const KKStr&       _fileName,
                                              MLClassConstList&  _mlClasses,
-                                             long                  _maxCount,
-                                             volatile const bool&  _cancelFlag,    // will be monitored,  if set to True  Load will terminate.
-                                             bool&                 _successful,
-                                             bool&                 _changesMade,
-                                             RunLog&               _log
+                                             long               _maxCount,
+                                             VolConstBool&      _cancelFlag,    // will be monitored,  if set to True  Load will terminate.
+                                             bool&              _successful,
+                                             bool&              _changesMade,
+                                             RunLog&            _log
                                             );
 
       
@@ -109,7 +109,7 @@ namespace MLL
                              const FeatureNumList&  _selFeatures,
                              FeatureVectorList&     _examples,
                              uint32&                _numExamplesWritten,  // caller will be able to manitor this variable.
-                             volatile const bool&   _cancelFlag,
+                             VolConstBool&          _cancelFlag,
                              bool&                  _successful,
                              RunLog&                _log
                             );
@@ -132,7 +132,7 @@ namespace MLL
     void  SaveFeatureFileMultipleParts (const KKStr&           _fileName, 
                                         const FeatureNumList&  _selFeatures,
                                         FeatureVectorList&     _examples,
-                                        volatile const bool&   _cancelFlag,
+                                        VolConstBool&          _cancelFlag,
                                         bool&                  _successful,
                                         RunLog&                _log
                                        );
@@ -179,15 +179,15 @@ namespace MLL
      *@param[in]  _log Where to send diagnostic messages to.
      *@return  A ImageFeaturesList container object; this object will own all the examples loaded;  if an error occurs NULL will be returned.
      */
-    virtual  FeatureVectorListPtr  LoadFile (const KKStr&          _fileName,
-                                             const FileDescPtr     _fileDesc,
-                                             MLClassConstList&     _classes,
-                                             std::istream&         _in,
-                                             long                  _maxCount,    /**< Maximum # images to load. */
-                                             volatile const bool&  _cancelFlag,
-                                             bool&                 _changesMade,
-                                             KKStr&                _errorMessage,
-                                             RunLog&               _log
+    virtual  FeatureVectorListPtr  LoadFile (const KKStr&       _fileName,
+                                             const FileDescPtr  _fileDesc,
+                                             MLClassConstList&  _classes,
+                                             std::istream&      _in,
+                                             long               _maxCount,    /**< Maximum # images to load. */
+                                             VolConstBool&      _cancelFlag,
+                                             bool&              _changesMade,
+                                             KKStr&             _errorMessage,
+                                             RunLog&            _log
                                             ) = 0;
 
 
@@ -208,7 +208,7 @@ namespace MLL
                               const FeatureNumList&  _selFeatures,
                               std::ostream&          _out,
                               uint32&                _numExamplesWritten,
-                              volatile const bool&   _cancelFlag,
+                              VolConstBool&          _cancelFlag,
                               bool&                  _successful,
                               KKStr&                 _errorMessage,
                               RunLog&                _log

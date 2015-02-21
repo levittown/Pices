@@ -87,11 +87,11 @@ namespace MLL
      *@param[in]  _log A logfile stream. All important events will be ouput to this stream
      *@param[in]  _cancelFlag  If set to true any process running in SVMModel will terminate.
      */
-    SVMModel (const KKStr&          _rootFileName,   
-              bool&                 _successful,
-              FileDescPtr           _fileDesc,
-              RunLog&               _log,
-              volatile const bool&  _cancelFlag
+    SVMModel (const KKStr&   _rootFileName,   
+              bool&          _successful,
+              FileDescPtr    _fileDesc,
+              RunLog&        _log,
+              VolConstBool&  _cancelFlag
              );
     
 
@@ -107,11 +107,11 @@ namespace MLL
      *@param[in]  _log A logfile stream. All important events will be ouput to this stream
      *@param[in]  _cancelFlag  If set to true any process running in SVMModel will terminate.
      */
-    SVMModel (istream&              _in,   // Create from existing Model on Disk.
-              bool&                 _successful,
-              FileDescPtr           _fileDesc,
-              RunLog&               _log,
-              volatile const bool&  _cancelFlag
+    SVMModel (istream&       _in,   // Create from existing Model on Disk.
+              bool&          _successful,
+              FileDescPtr    _fileDesc,
+              RunLog&        _log,
+              VolConstBool&  _cancelFlag
              );
 
 
@@ -133,12 +133,12 @@ namespace MLL
      *@param[in]  _cancelFlag  The training process will monitor this flag; if it goes true it
      *            return to caller.
      */
-    SVMModel (SVMparam&             _svmParam,
-              FeatureVectorList&    _examples,
-              ClassAssignments&     _assignments,
-              FileDescPtr           _fileDesc,
-              RunLog&               _log,
-              volatile const bool&  _cancelFlag
+    SVMModel (SVMparam&           _svmParam,
+              FeatureVectorList&  _examples,
+              ClassAssignments&   _assignments,
+              FileDescPtr         _fileDesc,
+              RunLog&             _log,
+              VolConstBool&       _cancelFlag
              );
 
 
@@ -530,11 +530,11 @@ namespace MLL
     BinaryClassParmsPtr*   binaryParameters;      /**< only used when doing Classification with diff Feature 
                                                    * Selection by 2 class combo's
                                                    */
-    volatile const bool&   cancelFlag;
+    VolConstBool&          cancelFlag;
 
     vector<int32>          cardinality_table;
 
-    MLClassConstPtr*    classIdxTable;         /**< Supports reverse class lookUp,  indexed by ClassAssignments num,
+    MLClassConstPtr*       classIdxTable;         /**< Supports reverse class lookUp,  indexed by ClassAssignments num,
                                                    * works with assignments.
                                                    */
     CompressionStats       compression_stats;

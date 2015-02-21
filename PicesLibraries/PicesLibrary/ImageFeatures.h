@@ -59,6 +59,7 @@ namespace MLL
   #endif
 
 
+
   //#define  InfinityValue  (FFLOAT)99999999999999.99
   //#define  NaNvalute      (FFLOAT)99999999999999.99
 

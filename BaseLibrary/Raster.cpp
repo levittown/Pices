@@ -56,7 +56,6 @@ void  Raster::Initialize ()
     atexit (Raster::FinalCleanUp);
   }
   goalKeeper->EndBlock ();
-
 }
 
 
@@ -179,6 +178,19 @@ int32  freqHistBucketIdx[256] =
            6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, // 192 - 223
            7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7  // 224 - 255
           };
+
+int32  freqHist16BucketIdx[256] = 
+          {0,   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, //   0  - 31
+           2,   2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3, //  31  - 63
+           4,   4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5, //  64  - 95
+           6,   6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7, //  96 - 127
+           8,   8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9, // 128 - 159
+           10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, // 160 - 191
+           12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, // 192 - 223
+           14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15  // 224 - 255
+          };
+
+
 
 inline  
 int32  Min (int32  x1,  int32  x2)
@@ -3438,7 +3450,6 @@ void   Raster::CalcAreaAndIntensityFeatures (int32&  area,
    intensityHistBucketsWhiteSpace[x] = 0;
   }
 
-
   maxPixVal = 0;
   uchar  pixVal;
 
@@ -3472,7 +3483,50 @@ void   Raster::CalcAreaAndIntensityFeatures (int32&  area,
 
 
 
-void   Raster::CalcAreaAndIntensityFeatures (int32&    area,
+void   Raster::CalcAreaAndIntensityFeatures16 (int32&  area,
+                                               float&  weighedSize,
+                                               uint32  intensityHistBuckets[16]
+                                              )
+{
+  int32  x;
+
+  long  totalPixelValues = 0;
+
+  area               = 0;
+  weighedSize        = 0.0f;
+  maxPixVal          = 0;
+
+  for  (x = 0;  x < 16;  x++)
+  {
+   intensityHistBuckets[x] = 0;
+  }
+
+  maxPixVal = 0;
+  uchar  pixVal;
+
+  for  (x = 0;  x < totPixels;  x++)
+  {
+    pixVal = greenArea [x];
+    if  (pixVal > maxPixVal)
+      maxPixVal = pixVal;
+    if  (ForegroundPixel (pixVal))
+    {
+      area++;
+      intensityHistBuckets[freqHist16BucketIdx[pixVal]]++;
+      totalPixelValues += pixVal;
+    }
+  }
+
+  foregroundPixelCount = area;
+
+  weighedSize = (float)totalPixelValues / (float)maxPixVal;
+}  /* CalcAreaAndIntensityFeatures16 */
+
+
+
+
+
+void   Raster::CalcAreaAndIntensityFeatures (int32&  area,
                                              float&  weighedSize,
                                              uint32  intensityHistBuckets[8]
                                             )
@@ -6296,7 +6350,7 @@ RasterPtr  Raster::SobelEdgeDetector ()
 
 RasterPtr  Raster::BinarizeByThreshold (uchar  min,
                                         uchar  max
-                                       )
+                                       )  const
 {
   RasterPtr result = AllocateARasterInstance (height, width, false);
 

@@ -274,15 +274,15 @@ FileDescPtr  FeatureFileIOPices::GetFileDesc (const KKStr&         _fileName,
 
 
 
-ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&          _fileName,
-                                                    const FileDescPtr     _fileDesc,
+ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&       _fileName,
+                                                    const FileDescPtr  _fileDesc,
                                                     MLClassConstList&  _classes, 
-                                                    istream&              _in,
-                                                    long                  _maxCount,    // Maximum # images to load,  less than '0'  indicates all.
-                                                    volatile const bool&  _cancelFlag,
-                                                    bool&                 _changesMade,
-                                                    KKStr&                _errorMessage,
-                                                    RunLog&               _log
+                                                    istream&           _in,
+                                                    long               _maxCount,    // Maximum # images to load,  less than '0'  indicates all.
+                                                    VolConstBool&      _cancelFlag,
+                                                    bool&              _changesMade,
+                                                    KKStr&             _errorMessage,
+                                                    RunLog&            _log
                                                    )
 {
   _log.Level (10) << "FeatureFileIOPices::LoadFile   Loading file[" << _fileName << "]." << endl;
@@ -596,7 +596,7 @@ void   FeatureFileIOPices::SaveFile (FeatureVectorList&     _data,
                                      const FeatureNumList&  _selFeatures,
                                      ostream&               _out,
                                      uint32&                _numExamplesWritten,
-                                     volatile const bool&   _cancelFlag,
+                                     VolConstBool&          _cancelFlag,
                                      bool&                  _successful,
                                      KKStr&                 _errorMessage,
                                      RunLog&                _log
@@ -880,13 +880,13 @@ int32   FeatureFileIOPices::PlanktonMaxNumOfFields ()
 
 
 ImageFeaturesListPtr  FeatureFileIOPices::LoadInSubDirectoryTree 
-                                             (KKStr                 _rootDir,
-                                              MLClassConstList&     _mlClasses,
-                                              bool                  _useDirectoryNameForClassName,
-                                              DataBasePtr           _dataBase,
-                                              volatile const bool&  _cancelFlag, 
-                                              bool                  _rewiteRootFeatureFile,
-                                              RunLog&               _log
+                                             (KKStr              _rootDir,
+                                              MLClassConstList&  _mlClasses,
+                                              bool               _useDirectoryNameForClassName,
+                                              DataBasePtr        _dataBase,
+                                              VolConstBool&      _cancelFlag, 
+                                              bool               _rewiteRootFeatureFile,
+                                              RunLog&            _log
                                              )
 {
   _log.Level (10) << "FeatureFileIOPices::LoadInSubDirectoryTree    rootDir[" << _rootDir << "]." << endl;
@@ -1029,12 +1029,12 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadInSubDirectoryTree
 
 
 void  FeatureFileIOPices::ReFreshInstrumentData 
-                       (const KKStr&          _imageFileName,
-                        ImageFeaturesPtr      _featureVector,
-                        DataBasePtr           _dataBase,
-                        volatile const bool&  _cancelFlag,
-                        bool&                 _changesMade,
-                        RunLog&               _log
+                       (const KKStr&      _imageFileName,
+                        ImageFeaturesPtr  _featureVector,
+                        DataBasePtr       _dataBase,
+                        VolConstBool&     _cancelFlag,
+                        bool&             _changesMade,
+                        RunLog&           _log
                        )
 {
   bool  weOwnInstrumentData = false;
@@ -1099,16 +1099,16 @@ void  FeatureFileIOPices::ReFreshInstrumentData
 
 
 ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink 
-                                        (KKStr                 _dirName, 
-                                         const KKStr&          _fileName, 
-                                         MLClassConstPtr       _unknownClass,
-                                         bool                  _useDirectoryNameForClassName,
-                                         DataBasePtr           _dataBase,
-                                         MLClassConstList&     _mlClasses,
-                                         volatile const bool&  _cancelFlag,    // will be monitored,  if set to True  Load will terminate.
-                                         bool&                 _changesMade,
-                                         DateTime&             _timeStamp,
-                                         RunLog&               _log
+                                        (KKStr              _dirName, 
+                                         const KKStr&       _fileName, 
+                                         MLClassConstPtr    _unknownClass,
+                                         bool               _useDirectoryNameForClassName,
+                                         DataBasePtr        _dataBase,
+                                         MLClassConstList&  _mlClasses,
+                                         VolConstBool&      _cancelFlag,    // will be monitored,  if set to True  Load will terminate.
+                                         bool&              _changesMade,
+                                         DateTime&          _timeStamp,
+                                         RunLog&            _log
                                         )
 {
   _changesMade = false;
@@ -1389,8 +1389,8 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
     _timeStamp = osGetLocalDateTime ();
   }
 
-  delete  fileNameList;
-  delete  origFeatureData;
+  delete  fileNameList;     fileNameList    = NULL;
+  delete  origFeatureData;  origFeatureData = NULL;
 
   InstrumentDataFileManager::InitializePop ();
 

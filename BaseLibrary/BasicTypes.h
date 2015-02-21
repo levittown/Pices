@@ -127,7 +127,9 @@ namespace KKU
     typedef  __UINT32_TYPE__   uint32;
     typedef  __UINT32_TYPE__   kkuint32;
     typedef  __INT64_TYPE__    int64;
+    typedef  __INT64_TYPE__    kkint64;
     typedef  __UINT64_TYPE__   uint64;
+    typedef  __UINT64_TYPE__   kkuint64;
   #endif
   #endif
 

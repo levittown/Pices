@@ -38,9 +38,9 @@ using namespace MLL;
 
 
 
-ModelOldSVM::ModelOldSVM (FileDescPtr           _fileDesc,
-                          volatile const bool&  _cancelFlag,
-                          RunLog&               _log
+ModelOldSVM::ModelOldSVM (FileDescPtr    _fileDesc,
+                          VolConstBool&  _cancelFlag,
+                          RunLog&        _log
                          ):
   Model (_fileDesc, _cancelFlag, _log),
   assignments (NULL),
@@ -63,7 +63,7 @@ ModelOldSVM::ModelOldSVM (FileDescPtr           _fileDesc,
 ModelOldSVM::ModelOldSVM (const KKStr&            _name,
                           const ModelParamOldSVM& _param,         // Create new model from
                           FileDescPtr             _fileDesc,
-                          volatile const bool&    _cancelFlag,
+                          VolConstBool&           _cancelFlag,
                           RunLog&                 _log
                          )
 :

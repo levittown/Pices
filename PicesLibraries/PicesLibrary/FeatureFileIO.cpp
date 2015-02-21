@@ -446,13 +446,13 @@ void  FeatureFileIO::GetToken (istream&     _in,
 
 
 FeatureVectorListPtr  FeatureFileIO::LoadFeatureFile 
-                                      (const KKStr&          _fileName,
-                                       MLClassConstList&     _mlClasses,
-                                       long                  _maxCount,
-                                       volatile const bool&  _cancelFlag,    // will be monitored,  if set to True  Load will terminate.
-                                       bool&                 _successful,
-                                       bool&                 _changesMade,
-                                       RunLog&               _log
+                                      (const KKStr&       _fileName,
+                                       MLClassConstList&  _mlClasses,
+                                       long               _maxCount,
+                                       VolConstBool&      _cancelFlag,    // will be monitored,  if set to True  Load will terminate.
+                                       bool&              _successful,
+                                       bool&              _changesMade,
+                                       RunLog&            _log
                                       )
 {
   _log.Level (10) << "LoadFeatureFile  File[" << _fileName << "]  FileFormat[" << driverName << "]" << endl;
@@ -511,7 +511,7 @@ void   FeatureFileIO::AppendToFile (const KKStr&           _fileName,
                                     const FeatureNumList&  _selFeatures,
                                     FeatureVectorList&     _examples,
                                     uint32&                _numExamplesWritten,
-                                    volatile const bool&   _cancelFlag,
+                                    VolConstBool&          _cancelFlag,
                                     bool&                  _successful,
                                     RunLog&                _log
                                    )
@@ -555,7 +555,7 @@ void  FeatureFileIO::SaveFeatureFile (const KKStr&           _fileName,
                                       const FeatureNumList&  _selFeatures,
                                       FeatureVectorList&     _examples,
                                       uint32&                _numExamplesWritten,
-                                      volatile const bool&   _cancelFlag,
+                                      VolConstBool&          _cancelFlag,
                                       bool&                  _successful,
                                       RunLog&                _log
                                      )
@@ -586,7 +586,7 @@ void  FeatureFileIO::SaveFeatureFile (const KKStr&           _fileName,
 void  FeatureFileIO::SaveFeatureFileMultipleParts (const KKStr&           _fileName, 
                                                    const FeatureNumList&  _selFeatures,
                                                    FeatureVectorList&     _examples,
-                                                   volatile const bool&   _cancelFlag,
+                                                   VolConstBool&          _cancelFlag,
                                                    bool&                  _successful,
                                                    RunLog&                _log
                                                   )

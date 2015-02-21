@@ -33,9 +33,9 @@ using namespace  KKU;
 using namespace  MLL;
 
 
-ModelDual::ModelDual (FileDescPtr           _fileDesc,
-                      volatile const bool&  _cancelFlag,
-                      RunLog&               _log
+ModelDual::ModelDual (FileDescPtr    _fileDesc,
+                      VolConstBool&  _cancelFlag,
+                      RunLog&        _log
                      ):
   Model (_fileDesc, _cancelFlag, _log),
   param         (NULL),
@@ -49,11 +49,11 @@ ModelDual::ModelDual (FileDescPtr           _fileDesc,
 }
 
 
-ModelDual::ModelDual (const KKStr&          _name,
-                      const ModelParamDual& _param,         // Create new model from
-                      FileDescPtr           _fileDesc,
-                      volatile const bool&  _cancelFlag,
-                      RunLog&               _log
+ModelDual::ModelDual (const KKStr&           _name,
+                      const ModelParamDual&  _param,         // Create new model from
+                      FileDescPtr            _fileDesc,
+                      VolConstBool&          _cancelFlag,
+                      RunLog&                _log
                      ):
   Model (_name, _param, _fileDesc, _cancelFlag, _log),
   param         (NULL),

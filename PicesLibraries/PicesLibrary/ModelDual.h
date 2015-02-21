@@ -71,15 +71,15 @@ namespace  MLL
     typedef  ModelDual*  ModelDualPtr;
 
 
-    ModelDual (FileDescPtr           _fileDesc,
-               volatile const bool&  _cancelFlag,
-               RunLog&               _log
+    ModelDual (FileDescPtr    _fileDesc,
+               VolConstBool&  _cancelFlag,
+               RunLog&        _log
               );
 
     ModelDual (const KKStr&          _name,
                const ModelParamDual& _param,         // Create new model from
                FileDescPtr           _fileDesc,
-               volatile const bool&  _cancelFlag,
+               VolConstBool&         _cancelFlag,
                RunLog&               _log
               );
   

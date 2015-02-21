@@ -128,15 +128,15 @@ FileDescPtr  FeatureFileIOColumn::GetFileDesc (const KKStr&            _fileName
 
 
 
-FeatureVectorListPtr  FeatureFileIOColumn::LoadFile (const KKStr&          _fileName,
-                                                     const FileDescPtr     _fileDesc,
+FeatureVectorListPtr  FeatureFileIOColumn::LoadFile (const KKStr&       _fileName,
+                                                     const FileDescPtr  _fileDesc,
                                                      MLClassConstList&  _classes, 
-                                                     istream&              _in,
-                                                     long                  _maxCount,    // Maximum # images to load.
-                                                     volatile const bool&  _cancelFlag,
-                                                     bool&                 _changesMade,
-                                                     KKStr&                _errorMessage,
-                                                     RunLog&               _log
+                                                     istream&           _in,
+                                                     long               _maxCount,    // Maximum # images to load.
+                                                     VolConstBool&      _cancelFlag,
+                                                     bool&              _changesMade,
+                                                     KKStr&             _errorMessage,
+                                                     RunLog&            _log
                                                    )
 {
   _log.Level (20) << "FeatureFileIOColumn::LoadFile   FileName[" << _fileName << "]" << endl;
@@ -243,14 +243,14 @@ void   FeatureFileIOColumn::SaveFile (FeatureVectorList&     _data,
                                       const FeatureNumList&  _selFeatures,
                                       ostream&               _out,
                                       uint32&                _numExamplesWritten,
-                                      volatile const bool&   _cancelFlag,
+                                      VolConstBool&          _cancelFlag,
                                       bool&                  _successful,
                                       KKStr&                 _errorMessage,
                                       RunLog&                _log
                                      )
 {
   _log.Level (20) << "FeatureFileIOColumn::SaveFile     FileName[" << _fileName << "]." << endl;
-  int32  p = (int32)_out.precision ();
+  int32  p = _out.precision ();
   _out.precision (9);
 
   FileDescPtr  fileDesc = _data.FileDesc ();

@@ -239,9 +239,9 @@ KKStr  InstrumentDataFileManager::SipperFileRootNameFromSipperImageFileName (con
 
 
 
-InstrumentDataPtr  InstrumentDataFileManager::GetClosestInstrumentData (const KKStr&          imageFileName,
-                                                                        volatile const bool&  cancelFlag,
-                                                                        RunLog&               log
+InstrumentDataPtr  InstrumentDataFileManager::GetClosestInstrumentData (const KKStr&   imageFileName,
+                                                                        VolConstBool&  cancelFlag,
+                                                                        RunLog&        log
                                                                        )
 {
   InstrumentDataPtr  instrumentData = NULL;
@@ -255,10 +255,10 @@ InstrumentDataPtr  InstrumentDataFileManager::GetClosestInstrumentData (const KK
 
 
 
-void  InstrumentDataFileManager::GetClosestInstrumentData (const KKStr&          imageFileName,
-                                                           InstrumentDataPtr&    instrumentData,
-                                                           volatile const bool&  cancelFlag,
-                                                           RunLog&               log
+void  InstrumentDataFileManager::GetClosestInstrumentData (const KKStr&        imageFileName,
+                                                           InstrumentDataPtr&  instrumentData,
+                                                           VolConstBool&       cancelFlag,
+                                                           RunLog&             log
                                                           )
 {
   KKStr  sipperFileName;
@@ -411,7 +411,7 @@ void  InstrumentDataFileManager::LoadKnownSipperFileNames ()
 InstrumentDataListPtr   InstrumentDataFileManager::GetInstrumentDataForSipperFile (const KKStr&    sipperFileName,
                                                                                    SipperFilePtr   sipperFile,
                                                                                    bool            forceReExtract,
-                                                                                   volatile bool&  cancelFlag,
+                                                                                   VolConstBool&   cancelFlag,
                                                                                    RunLog&         log
                                                                                   )
 {
@@ -427,10 +427,10 @@ InstrumentDataListPtr   InstrumentDataFileManager::GetInstrumentDataForSipperFil
 
 
 
-InstrumentDataListPtr   InstrumentDataFileManager::ReExtractInstrumentDataForSipperFile (const KKStr&          sipperFileName,
-                                                                                         SipperFilePtr         sipperFile,
-                                                                                         volatile const bool&  cancelFlag,
-                                                                                         RunLog&               log
+InstrumentDataListPtr   InstrumentDataFileManager::ReExtractInstrumentDataForSipperFile (const KKStr&   sipperFileName,
+                                                                                         SipperFilePtr  sipperFile,
+                                                                                         VolConstBool&  cancelFlag,
+                                                                                         RunLog&        log
                                                                                         )
 {
   if  (instrumentDataManager == NULL)
@@ -446,11 +446,11 @@ InstrumentDataListPtr   InstrumentDataFileManager::ReExtractInstrumentDataForSip
 
 
 
-InstrumentDataListPtr  InstrumentDataFileManager::GetInstrumentDataListForSipperFile (const KKStr&          sipperRootName,
-                                                                                      SipperFilePtr         sipperFile,
-                                                                                      bool                  forceReExtract,
-                                                                                      volatile const bool&  cancelFlag,
-                                                                                      RunLog&               log
+InstrumentDataListPtr  InstrumentDataFileManager::GetInstrumentDataListForSipperFile (const KKStr&   sipperRootName,
+                                                                                      SipperFilePtr  sipperFile,
+                                                                                      bool           forceReExtract,
+                                                                                      VolConstBool&  cancelFlag,
+                                                                                      RunLog&        log
                                                                                      )
 {
   if  (cancelFlag)
@@ -535,10 +535,10 @@ InstrumentDataListPtr  InstrumentDataFileManager::GetInstrumentDataListForSipper
 
 
 
-VectorFloat  InstrumentDataFileManager::GetVolumePerMeterProfile2 (const KKStr&    sipperFileName,
-                                                                   SipperFilePtr   sipperFile,
-                                                                   volatile bool&  cancelFlag,
-                                                                   RunLog&         log
+VectorFloat  InstrumentDataFileManager::GetVolumePerMeterProfile2 (const KKStr&   sipperFileName,
+                                                                   SipperFilePtr  sipperFile,
+                                                                   VolConstBool&  cancelFlag,
+                                                                   RunLog&        log
                                                                   )
 {
   KKStr  sipperRootName = osGetRootName (sipperFileName);
@@ -563,10 +563,10 @@ VectorFloat  InstrumentDataFileManager::GetVolumePerMeterProfile2 (const KKStr& 
 
 
 
-VectorUlong  InstrumentDataFileManager::GetScanLinesPerMeterProfile2 (const KKStr&    sipperFileName,
-                                                                      SipperFilePtr   sipperFile,
-                                                                      volatile bool&  cancelFlag,
-                                                                      RunLog&         log
+VectorUlong  InstrumentDataFileManager::GetScanLinesPerMeterProfile2 (const KKStr&   sipperFileName,
+                                                                      SipperFilePtr  sipperFile,
+                                                                      VolConstBool&  cancelFlag,
+                                                                      RunLog&        log
                                                                      )
 {
   KKStr  sipperRootName = osGetRootName (sipperFileName);
@@ -591,10 +591,10 @@ VectorUlong  InstrumentDataFileManager::GetScanLinesPerMeterProfile2 (const KKSt
 
 
 
-VectorFloat  InstrumentDataFileManager::GetVolumePerMeterProfile (const KKStr&    sipperFileName,
-                                                                  SipperFilePtr   sipperFile,
-                                                                  volatile bool&  cancelFlag,
-                                                                  RunLog&         log
+VectorFloat  InstrumentDataFileManager::GetVolumePerMeterProfile (const KKStr&   sipperFileName,
+                                                                  SipperFilePtr  sipperFile,
+                                                                  VolConstBool&  cancelFlag,
+                                                                  RunLog&        log
                                                                  )
 {
   if  (instrumentDataManager == NULL)
@@ -606,10 +606,10 @@ VectorFloat  InstrumentDataFileManager::GetVolumePerMeterProfile (const KKStr&  
 
 
 
-VectorUlong  InstrumentDataFileManager::GetScanLinesPerMeterProfile (const KKStr&    sipperFileName,
-                                                                     SipperFilePtr   sipperFile,
-                                                                     volatile bool&  cancelFlag,
-                                                                     RunLog&         log
+VectorUlong  InstrumentDataFileManager::GetScanLinesPerMeterProfile (const KKStr&   sipperFileName,
+                                                                     SipperFilePtr  sipperFile,
+                                                                     VolConstBool&  cancelFlag,
+                                                                     RunLog&        log
                                                                     )
 {
   if  (instrumentDataManager == NULL)

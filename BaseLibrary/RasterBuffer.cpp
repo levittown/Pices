@@ -3,12 +3,12 @@
  * Copyright (C) 2011-2011  Kurt Kramer
  * For conditions of distribution and use, see copyright notice in KKU.h
  */
-#include  "FirstIncludes.h"
+#include "FirstIncludes.h"
 #if  defined(WIN32)
-#include  <windows.h>
+#include <windows.h>
 #else
-#include  <fcntl.h>
-#include  <semaphore.h>
+#include <fcntl.h>
+#include <semaphore.h>
 #endif
 
 #include <errno.h>
@@ -20,11 +20,11 @@
 using namespace std;
 
 
+#include "RasterBuffer.h"
 #include "BasicTypes.h"
 #include "GoalKeeper.h"
 #include "KKException.h"
 #include "OSservices.h"
-#include "RasterBuffer.h"
 #include "Raster.h"
 using  namespace  KKU;
 

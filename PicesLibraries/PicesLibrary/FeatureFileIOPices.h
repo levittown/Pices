@@ -57,27 +57,27 @@ namespace MLL
                                       );
 
 
-    virtual  ImageFeaturesListPtr  LoadFile (const KKStr&          _fileName,
-                                             const FileDescPtr     _fileDesc,
-                                             MLClassConstList&     _classes, 
-                                             std::istream&         _in,
-                                             long                  _maxCount,    // Maximum # images to load.
-                                             volatile const bool&  _cancelFlag,
-                                             bool&                 _changesMade,
-                                             KKStr&                _errorMessage,
-                                             RunLog&               _log
+    virtual  ImageFeaturesListPtr  LoadFile (const KKStr&       _fileName,
+                                             const FileDescPtr  _fileDesc,
+                                             MLClassConstList&  _classes, 
+                                             std::istream&      _in,
+                                             long               _maxCount,    // Maximum # images to load.
+                                             VolConstBool&      _cancelFlag,
+                                             bool&              _changesMade,
+                                             KKStr&             _errorMessage,
+                                             RunLog&            _log
                                             );
 
 
-    virtual  void   SaveFile (FeatureVectorList&      _data,
-                              const KKStr&            _fileName,
-                              const FeatureNumList&   _selFeatures,
-                              std::ostream&           _out,
-                              uint32&                 _numExamplesWritten,
-                              volatile const bool&    _cancelFlag,
-                              bool&                   _successful,
-                              KKStr&                  _errorMessage,
-                              RunLog&                 _log
+    virtual  void   SaveFile (FeatureVectorList&     _data,
+                              const KKStr&           _fileName,
+                              const FeatureNumList&  _selFeatures,
+                              std::ostream&          _out,
+                              uint32&                _numExamplesWritten,
+                              VolConstBool&          _cancelFlag,
+                              bool&                  _successful,
+                              KKStr&                 _errorMessage,
+                              RunLog&                _log
                              );
 
 
@@ -114,19 +114,17 @@ namespace MLL
      *@returns - A ImageFeaturesList container object.  This object will own all the examples loaded
      */
     static
-    ImageFeaturesListPtr  FeatureDataReSink (KKStr                 _dirName, 
-                                             const KKStr&          _fileName, 
-                                             MLClassConstPtr       _unknownClass,
-                                             bool                  _useDirectoryNameForClassName,
-                                             DataBasePtr           _dataBase,
-                                             MLClassConstList&     _mlClasses,
-                                             volatile const bool&  _cancelFlag,    // will be monitored,  if set to True  Load will terminate.
-                                             bool&                 _changesMade,
-                                             KKU::DateTime&        _timeStamp,
-                                             RunLog&               _log
+    ImageFeaturesListPtr  FeatureDataReSink (KKStr              _dirName, 
+                                             const KKStr&       _fileName, 
+                                             MLClassConstPtr    _unknownClass,
+                                             bool               _useDirectoryNameForClassName,
+                                             DataBasePtr        _dataBase,
+                                             MLClassConstList&  _mlClasses,
+                                             VolConstBool&      _cancelFlag,    // will be monitored,  if set to True  Load will terminate.
+                                             bool&              _changesMade,
+                                             KKU::DateTime&     _timeStamp,
+                                             RunLog&            _log
                                             );
-
-
 
 
 
@@ -149,13 +147,13 @@ namespace MLL
      *@returns - A ImageFeaturesList container object.  This object will own all the examples loaded.
      */
     static
-      ImageFeaturesListPtr  LoadInSubDirectoryTree (KKStr                 _rootDir,
-                                                    MLClassConstList&     _mlClasses,
-                                                    bool                  _useDirectoryNameForClassName,
-                                                    DataBasePtr           _dataBase,
-                                                    volatile const bool&  _cancelFlag,
-                                                    bool                  _rewiteRootFeatureFile,
-                                                    RunLog&               _log
+      ImageFeaturesListPtr  LoadInSubDirectoryTree (KKStr              _rootDir,
+                                                    MLClassConstList&  _mlClasses,
+                                                    bool               _useDirectoryNameForClassName,
+                                                    DataBasePtr        _dataBase,
+                                                    VolConstBool&      _cancelFlag,
+                                                    bool               _rewiteRootFeatureFile,
+                                                    RunLog&            _log
                                                    );
 
 
@@ -204,12 +202,12 @@ namespace MLL
      *@param[in] _log  Logger to send messages to.
      */
     static
-    void  ReFreshInstrumentData (const KKStr&          _imageFileName,
-                                 ImageFeaturesPtr      _featureVector,
-                                 DataBasePtr           _dataBase,
-                                 volatile const bool&  _cancelFlag,
-                                 bool&                 _changesMade,
-                                 RunLog&               _log
+    void  ReFreshInstrumentData (const KKStr&      _imageFileName,
+                                 ImageFeaturesPtr  _featureVector,
+                                 DataBasePtr       _dataBase,
+                                 VolConstBool&     _cancelFlag,
+                                 bool&             _changesMade,
+                                 RunLog&           _log
                                 );
 
 

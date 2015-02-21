@@ -87,9 +87,9 @@ namespace MLL
     /**
      *@brief  Use this when you are planning on creating a empty model without parameters.
      */
-    Model (FileDescPtr           _fileDesc,
-           volatile const bool&  _cancelFlag,
-           RunLog&               _log
+    Model (FileDescPtr    _fileDesc,
+           VolConstBool&  _cancelFlag,
+           RunLog&        _log
           );
 
 
@@ -100,11 +100,11 @@ namespace MLL
      *@param[in]  _cancelFlag  Will monitor; if at any point it turns true this instance is to terminate and return to caller.
      *@param[in,out]  _log  Logging file.
      */
-    Model (const KKStr&           _name,
-           const ModelParam&      _param,         // Create new model from
-           FileDescPtr            _fileDesc,
-           volatile  const bool&  _cancelFlag,
-           RunLog&                _log
+    Model (const KKStr&       _name,
+           const ModelParam&  _param,         // Create new model from
+           FileDescPtr        _fileDesc,
+           VolConstBool&      _cancelFlag,
+           RunLog&            _log
           );
 
   
@@ -126,12 +126,12 @@ namespace MLL
      *@param[in,out]  _log  Logging file.
      */
     static 
-      ModelPtr  CreateAModel (ModelTypes            _modelType,
-                              const KKStr&          _name,
-                              const ModelParam&     _param,      /**< Will make a duplicate copy of */
-                              FileDescPtr           _fileDesc,
-                              volatile const bool&  _cancelFlag,
-                              RunLog&               _log
+      ModelPtr  CreateAModel (ModelTypes         _modelType,
+                              const KKStr&       _name,
+                              const ModelParam&  _param,      /**< Will make a duplicate copy of */
+                              FileDescPtr        _fileDesc,
+                              VolConstBool&      _cancelFlag,
+                              RunLog&            _log
                              );
   
     /**
@@ -144,10 +144,10 @@ namespace MLL
      *@param[in,out]  _log  Logging file.
      */
     static
-      ModelPtr  CreateFromStream (istream&              i,
-                                  FileDescPtr           _fileDesc,
-                                  volatile const bool&  _cancelFlag,
-                                  RunLog&               _log
+      ModelPtr  CreateFromStream (istream&       i,
+                                  FileDescPtr    _fileDesc,
+                                  VolConstBool&  _cancelFlag,
+                                  RunLog&        _log
                                  );
     virtual
     ModelPtr                 Duplicate () const = 0;
@@ -367,9 +367,9 @@ namespace MLL
 
     bool                   alreadyNormalized;
 
-    volatile const bool&   cancelFlag;
+    VolConstBool&          cancelFlag;
 
-    MLClassConstListPtr classes;
+    MLClassConstListPtr    classes;
 
     ClassIndexListPtr      classesIndex;
 

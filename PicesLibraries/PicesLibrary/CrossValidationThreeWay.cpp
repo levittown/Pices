@@ -68,7 +68,7 @@ CrossValidationThreeWay::CrossValidationThreeWay (TrainingConfiguration2Ptr  _co
    featuresAlreadyNormalized    (_featuresAlreadyNormalized),
    foldAccuracies               (NULL),
    grade                        (0.0),
-   mlClasses                 (_mlClasses),
+   mlClasses                    (_mlClasses),
    examples                     (_examples),
    log                          (_log),
    maxProb                      (-999.99),

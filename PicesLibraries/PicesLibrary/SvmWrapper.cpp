@@ -51,18 +51,18 @@ using namespace std;
 
 
 
-#include  "MemoryDebug.h"
-#include  "BasicTypes.h"
-#include  "OSservices.h"
+#include "MemoryDebug.h"
+#include "BasicTypes.h"
+#include "OSservices.h"
 using namespace KKU;
 
 
 
-#include  "SvmWrapper.h"
+#include "SvmWrapper.h"
 
 
-#include  "MLLTypes.h"
-#include  "svm.h"
+#include "MLLTypes.h"
+#include "svm.h"
 
 
 
@@ -527,13 +527,13 @@ void   MLL::SvmPredictClass (SVMparam&               svmParam,
 
 
 int32  MLL::SvmPredictTwoClass (const struct svm_parameter&   param,
-                              svm_model**                   submodel, 
-                              const svm_node*               unKnownData, 
-                              int32                           desired, 
-                              double&                       dist,
-                              double&                       probability,
-                              int32                           excludeSupportVectorIDX
-                             )
+                                svm_model**                   submodel, 
+                                const svm_node*               unKnownData, 
+                                int32                         desired, 
+                                double&                       dist,
+                                double&                       probability,
+                                int32                         excludeSupportVectorIDX
+                               )
 {
   if  (submodel[0]->nr_class != 2)
   {

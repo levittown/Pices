@@ -659,7 +659,7 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
   
 
   RasterSipperPtr open5Raster = new RasterSipper (*raster);
-  open5Raster->Opening (SQUARE5);
+  open5Raster->Opening (MorphOp::SQUARE5);
   FFLOAT  areaOpen5 = FFLOAT (open5Raster->ForegroundPixelCount ());
   if  (saveImages)
     Save (*open5Raster, "Opening5_" + StrFormatInt ((int32)areaOpen5, "ZZZZZZ0"), saveImages);
@@ -668,7 +668,7 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
   
 
   RasterSipperPtr open7Raster = new RasterSipper (*raster);
-  open7Raster->Opening (SQUARE7);
+  open7Raster->Opening (MorphOp::SQUARE7);
   FFLOAT  areaOpen7 = FFLOAT (open7Raster->ForegroundPixelCount ());
   if  (saveImages)
     Save (*open7Raster, "Opening7_" + StrFormatInt ((int32)areaOpen7, "ZZZZZZ0"), saveImages);
@@ -676,7 +676,7 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
   open7Raster = NULL;
   
   RasterSipperPtr open9Raster = new RasterSipper (*raster);
-  open9Raster->Opening (SQUARE9);
+  open9Raster->Opening (MorphOp::SQUARE9);
   FFLOAT  areaOpen9 = (FFLOAT)open9Raster->ForegroundPixelCount ();
   if  (saveImages)
     Save (*open9Raster, "Opening9_" + StrFormatInt ((int32)areaOpen9, "ZZZZZZ0"), saveImages);
@@ -697,7 +697,7 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
   close3Raster = NULL;
   
   RasterSipperPtr close5Raster = new RasterSipper (*raster);
-  close5Raster->Closing (SQUARE5);
+  close5Raster->Closing (MorphOp::SQUARE5);
   FFLOAT  areaClose5 = FFLOAT (close5Raster->ForegroundPixelCount ());
   if  (saveImages)
     Save (*close5Raster, "Close5_" + StrFormatInt ((int32)areaClose5, "ZZZZZZ0"), saveImages);
@@ -705,7 +705,7 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
   close5Raster = NULL;
   
   RasterSipperPtr close7Raster = new RasterSipper (*raster);
-  close7Raster->Closing (SQUARE7);
+  close7Raster->Closing (MorphOp::SQUARE7);
   FFLOAT  areaClose7 = FFLOAT (close7Raster->ForegroundPixelCount ());
   if  (saveImages)
     Save (*close7Raster, "Close7_" + StrFormatInt ((int32)areaClose7, "ZZZZZZ0"), saveImages);
@@ -716,7 +716,6 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
   #if defined (DEBUB_CalcFeatures)
   cout << "CalcFeatures   After Morphalogical Opertations." << std::endl;
   #endif
-
 
   {
     featureData[SizeIndex]    = FFLOAT (momentf[0]);
@@ -751,7 +750,6 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
     featureData[EdgeSizeIndex]       = FFLOAT (edgeMomentf[0] * (FFLOAT)reductionFactor);
     featureData[WeighedMoment0Index] = weighedSizeBeforeReduction;
   }
-
 
   if ((area > convexf)  &&  (convexf > 0))
      featureData[TransparancyConvexHullIndex] = 1.0;
@@ -942,7 +940,7 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
       int32  numOfTries = 0;
       while  (!successful)
       {
-        countourImage.Dialation (); // We want the image tob completly connected.
+        countourImage.Dialation (); // We want the image to be completly connected.
         {
           Save  (countourImage, "_JustBeforeContour", saveImages);
           ContourFollower contourFollower (countourImage, log);

@@ -833,9 +833,9 @@ PointListPtr  RasterSipper::DeriveImageLength () const
   float  eigenRatio;
   float  orientationAngle;
 
-  RasterSipperPtr  workRaster = CreateErodedImage (SQUARE3);
+  RasterSipperPtr  workRaster = CreateErodedImage (MorphOp::SQUARE3);
   workRaster->FillHole ();
-  workRaster->Erosion (SQUARE7);
+  workRaster->Erosion (MorphOp::SQUARE7);
   workRaster->ConnectedComponent (3);
   workRaster->CalcOrientationAndEigerRatio (eigenRatio,
                                             orientationAngle

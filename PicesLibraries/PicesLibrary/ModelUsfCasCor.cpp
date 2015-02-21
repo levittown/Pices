@@ -33,9 +33,9 @@ using namespace  KKU;
 using namespace  MLL;
 
 
-ModelUsfCasCor::ModelUsfCasCor (FileDescPtr           _fileDesc,
-                                volatile const bool&  _cancelFlag,
-                                RunLog&               _log
+ModelUsfCasCor::ModelUsfCasCor (FileDescPtr    _fileDesc,
+                                VolConstBool&  _cancelFlag,
+                                RunLog&        _log
                                ):
   Model (_fileDesc, _cancelFlag, _log),
   param               (NULL),
@@ -44,11 +44,11 @@ ModelUsfCasCor::ModelUsfCasCor (FileDescPtr           _fileDesc,
 }
 
 
-ModelUsfCasCor::ModelUsfCasCor (const KKStr&               _name,
-                                const ModelParamUsfCasCor& _param,         // Create new model from
-                                FileDescPtr                _fileDesc,
-                                volatile const bool&       _cancelFlag,
-                                RunLog&                    _log
+ModelUsfCasCor::ModelUsfCasCor (const KKStr&                _name,
+                                const ModelParamUsfCasCor&  _param,         // Create new model from
+                                FileDescPtr                 _fileDesc,
+                                VolConstBool&               _cancelFlag,
+                                RunLog&                     _log
                                ):
   Model (_name, _param, _fileDesc, _cancelFlag, _log),
   param               (NULL),
@@ -304,10 +304,10 @@ ClassProbListPtr  ModelUsfCasCor::ProbabilitiesByClass (FeatureVectorPtr  exampl
 
 
 
-void  ModelUsfCasCor::ProbabilitiesByClass (FeatureVectorPtr            example,
+void  ModelUsfCasCor::ProbabilitiesByClass (FeatureVectorPtr         example,
                                             const MLClassConstList&  _mlClasses,
-                                            int32*                      _votes,
-                                            double*                     _probabilities
+                                            int32*                   _votes,
+                                            double*                  _probabilities
                                            )
 {
   if  (!usfCasCorClassifier)

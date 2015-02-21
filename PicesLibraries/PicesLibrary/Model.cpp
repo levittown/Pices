@@ -92,9 +92,9 @@ Model::Model (const Model&  _model):
 /**
  *@brief  Use this when you are planning on creating a empty model without parameters.
  */
-Model::Model (FileDescPtr           _fileDesc,
-              volatile const bool&  _cancelFlag,
-              RunLog&               _log
+Model::Model (FileDescPtr    _fileDesc,
+              VolConstBool&  _cancelFlag,
+              RunLog&        _log
              ):
     alreadyNormalized    (false),
     cancelFlag           (_cancelFlag),
@@ -131,11 +131,11 @@ Model::Model (FileDescPtr           _fileDesc,
  *@param[in] _fileDesc A description of the data file.
  *@param[in] _log A logfile stream. All important events will be output to this stream
  */
-Model::Model (const KKStr&          _name,
-              const ModelParam&     _param,      // Create new model from
-              FileDescPtr           _fileDesc,
-              volatile const bool&  _cancelFlag,
-              RunLog&               _log
+Model::Model (const KKStr&       _name,
+              const ModelParam&  _param,      // Create new model from
+              FileDescPtr        _fileDesc,
+              VolConstBool&      _cancelFlag,
+              RunLog&            _log
              ):
     alreadyNormalized          (false),
     cancelFlag                 (_cancelFlag),
@@ -219,10 +219,10 @@ KKStr  Model::Description ()  const
 
 
 
-ModelPtr  Model::CreateFromStream (istream&              i,
-                                   FileDescPtr           _fileDesc,
-                                   volatile const bool&  _cancelFlag,
-                                   RunLog&               _log
+ModelPtr  Model::CreateFromStream (istream&       i,
+                                   FileDescPtr    _fileDesc,
+                                   VolConstBool&  _cancelFlag,
+                                   RunLog&        _log
                                   )
 {
   istream::pos_type startPos = i.tellg ();
@@ -384,12 +384,12 @@ Model::ModelTypes  Model::ModelTypeFromStr (const KKStr&  _modelingTypeStr)
 
 
 
-ModelPtr  Model::CreateAModel (ModelTypes            _modelType,
-                               const KKStr&          _name,
-                               const ModelParam&     _param,  
-                               FileDescPtr           _fileDesc,
-                               volatile const bool&  _cancelFlag,
-                               RunLog&               _log
+ModelPtr  Model::CreateAModel (ModelTypes         _modelType,
+                               const KKStr&       _name,
+                               const ModelParam&  _param,  
+                               FileDescPtr        _fileDesc,
+                               VolConstBool&      _cancelFlag,
+                               RunLog&            _log
                               )
 {
   ModelPtr  model = NULL;
@@ -1005,6 +1005,45 @@ FeatureVectorPtr  Model::PrepExampleForPrediction (FeatureVectorPtr  fv,
 
   return  fv;
 }  /* PrepExampleForPrediction */
+
+
+
+
+/**
+ * Will normailize probabilites such that the sum of all equal 1.0 and no one probability will be less than 'minProbability'.
+ */
+void  Model::NormalizeProbabilitiesWithAMinumum (int32    numClasses,
+                                                 double*  probabilities,
+                                                 double   minProbability
+                                                )
+{
+  double  sumGreaterOrEqualMin = 0.0;
+  int32 numLessThanMin = 0;
+
+  int32 x = 0;
+  for  (x = 0;  x < numClasses;  ++x)
+  {
+    if  (probabilities[x] < minProbability)
+      ++numLessThanMin;
+    else
+      sumGreaterOrEqualMin += probabilities[x];
+  }
+
+  double probLessMinTotal = numLessThanMin * minProbability;
+  double probLeftToAllocate  = 1.0 - probLessMinTotal;  
+
+  for  (x = 0;  x < numClasses;  ++x)
+  {
+    if  (probabilities[x] < minProbability)
+      probabilities[x] = minProbability;
+    else
+      probabilities[x] = (probabilities[x] / sumGreaterOrEqualMin) * probLeftToAllocate;
+  }
+}  /* NormalizeProbabilitiesWithAMinumum */
+
+
+
+
 
 
 

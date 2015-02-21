@@ -18,7 +18,6 @@
 #include "MemoryDebug.h"
 using namespace std;
 
-
 #include "KKException.h"
 #include "Str.h"
 using namespace KKU;

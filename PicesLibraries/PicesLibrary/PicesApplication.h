@@ -129,7 +129,7 @@ namespace MLL
   protected:
 
     /**
-     *@A derived class would call this method in its version of 'InitalizeApplication' just before calling
+     *@brief A derived class would call this method in its version of 'InitalizeApplication' just before calling
      * 'PicesApplication::InitalizeApplication' to let it know that the Training Model Configuration parameter
      * is required.
      */

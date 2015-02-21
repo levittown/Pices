@@ -9,6 +9,7 @@
 
 #include "BasicTypes.h"
 #include "KKQueue.h"
+#include "MorphOp.h"
 #include "Str.h"
 #include "PixelValue.h"
 #include "Point.h"
@@ -55,16 +56,8 @@ namespace KKU
   #endif
 
 
-  typedef  enum  
-  {
-    CROSS3   = 0,
-    CROSS5   = 1,
-    SQUARE3  = 2,
-    SQUARE5  = 3,
-    SQUARE7  = 4,
-    SQUARE9  = 5,
-    SQUARE11 = 6
-  }  MaskTypes;
+  typedef  MorphOp::MaskTypes      MaskTypes;
+  typedef  MorphOp::StructureType  StructureType;
 
 
   typedef  enum  {RedChannel, GreenChannel, BlueChannel}  ColorChannels;
@@ -108,6 +101,8 @@ namespace KKU
   {
   public:
     typedef  Raster*  RasterPtr;
+    typedef  Raster  const  RasterConst;
+    typedef  RasterConst*   RasterConstPtr;
 
     Raster ();
 
@@ -352,7 +347,7 @@ namespace KKU
 
     RasterPtr     BinarizeByThreshold (uchar  min,
                                        uchar  max
-                                      );
+                                      )  const;
 
     /**
      *@brief  Return the ID of the blob that the specified pixel location belongs to.
@@ -402,6 +397,12 @@ namespace KKU
                                                       uint32  intensityHistBuckets[8]
                                                      );
     
+
+
+    void          CalcAreaAndIntensityFeatures16 (int32&  area,
+                                                  float&  weighedSize,
+                                                  uint32  intensityHistBuckets[16]
+                                                 );
 
 
     /**
@@ -1079,7 +1080,11 @@ namespace KKU
   };  /* Raster */
 
 
-  typedef  Raster::RasterPtr  RasterPtr;
+  typedef  Raster::RasterPtr       RasterPtr;
+  typedef  Raster::RasterConstPtr  RasterConstPtr;
+
+#define  _Raster_Defined_
+
 
 
   typedef  struct  
@@ -1116,8 +1121,10 @@ namespace KKU
    RasterPtr  CreateSmoothedFrame ();
   };
 
-
   typedef  RasterList*  RasterListPtr;
+
+#define  _RasterList_Defined_
+
 
 }  /* namespace KKU; */
 #endif
