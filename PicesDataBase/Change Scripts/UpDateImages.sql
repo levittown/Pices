@@ -29,4 +29,4 @@ ALTER TABLE `pices_new`.`images`
     ADD CONSTRAINT `ImagesValidatedId` FOREIGN KEY (`ClassValidatedId`) REFERENCES `pices_new`.`classes` (`ClassId`)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION;
-  
+  

@@ -116,87 +116,106 @@ namespace KKU
      *          value of (255, 255, 255) and  pixel value 255 will point to the color value of (0, 0, 0).
      *          This way when displaying the image background will appear as white.
      */
-    Raster (int32  _height,
-            int32  _width
+    Raster (kkint32  _height,
+            kkint32  _width
            );
 
 
     /**
      *@brief  Constructs a blank image with given dimensions.  
-     *@details  The third parameter determines whether it will be a color or grayscale image, If a Color
-     *          image then all three color channel will be set to = 255 which stands for white. If
+     *@details  The third parameter determines whether it will be a color or grayscale image,  If a Color
+     *          image then all three color channel will be set to = 255 which stands for white.  If
      *          Grayscale the green channel will be set to 0.
      */
-    Raster (int32 _height,
-            int32 _width,
-            bool  _color
+    Raster (kkint32 _height,
+            kkint32 _width,
+            bool    _color
            );
 
     /**
      *@brief  Constructs a Raster from a BMP image loaded from disk.
-     *@details If BMP Image is a grayscale value pixel values will be reversed. See description of
+     *@details If BMP Image is a grayscale value pixel values will be reversed.  See description of
      *        grayscale constructor.
      */
     Raster (const BmpImage&  _bmpImage);
 
 
     /**
-     *@brief Constructs a new Raster using a subset of the specified Raster as its source. The
+     *@brief Constructs a new Raster using a subset of the specified Raster as its source.  The
      *      dimensions of the resultant raster will be '_height', and '_width'
      */
     Raster (const Raster& _raster,  /**<  Source Raster                             */
-            int32         _row,     /**<  Starting Row in '_raster' to copy from.             */
-            int32         _col,     /**<  Starting Col in '_raster' to copy from.             */
-            int32         _height,  /**<  Height of resultant raster. Will start from '_row'  */
-            int32         _width    /**<  Width of resultant raster.                          */
+            kkint32       _row,     /**<  Starting Row in '_raster' to copy from.             */
+            kkint32       _col,     /**<  Starting Col in '_raster' to copy from.             */
+            kkint32       _height,  /**<  Height of resultant raster. Will start from '_row'  */
+            kkint32       _width    /**<  Width of resultant raster.                          */
            );
 
     /**
-     * Constructs a Raster that will be as large as the specified '_mask'  at the point
-     * specified by '_row' and '_col'.
-     * \see MaskTypes
+     *@brief Constructs a Raster that will be the same size as the specified '_mask' with the top left specified by '_row' and '_col'.
+     *@details The Height and Width of the resultant image will come from the bias of the specified mask.  The Image data will come from
+     * the specified raster using '_row' and '_col' to specify the top left column.
+     *@param[in]  _raster  Source Raster to extract data from.
+     *@param[in]  _mask  Used to derive height and with of resultant image.
+     *@param[in]  _row  Starting row where image data is to be extracted from.
+     *@param[in]  _col  Starting column where image data is to be extracted from.
+     *@see MaskTypes
      */
     Raster (const Raster&   _raster,
-            MaskTypes       _mask,    /*!< \see MaskTyps  Generated 'Raster' with be the of the mask.   */
-            int32           _row,
-            int32           _col
+            MaskTypes       _mask,
+            kkint32         _row,
+            kkint32         _col
            );
 
     /**
      *@brief  Constructs a Raster image from by reading an existing image File such as a BMP file.
-     *@details  Will read from the specified file (fileName) the existing image. If the load fails then
+     *@details  Will read from the specified file (fileName) the existing image.  If the load fails then 
      *          the contents of this object will be undefined.
      *@param[in]  fileName  Name of Image file to read.
      *@param[out] validFile  If image successfully loaded will be set to 'True' otherwise 'False'.
      */
-    Raster (const KKStr&  fileName,    /*!<  \param  fileName  name of image file to load/                    */
-            bool&         validFile    /*!<  \param  validFile will return true if image successfully loaded. */
+    Raster (const KKStr&  fileName,    /**<  @param  fileName  name of image file to load/                    */
+            bool&         validFile    /**<  @param  validFile will return true if image successfully loaded. */
            );
 
 
     /**
      *@brief  Construct a raster object that will utilize a image already in memory.
-     *@details  This instance will not own the raster data. It will only point to it.
+     *@details  This instance will NOT OWN the raster data; It will only point to it.  That means when this instance 
+     * is destroyed the raster data will still be left intact.
+     *@param[in]  _height  Height of image.
+     *@param[in]  _width   Width of image.
+     *@param[in]  _grayScaleData   Source grayscale raster data; needs to be continuous and of length (_height * _width) with data 
+     *                             stored row major.
+     *@param[in]  _grayScaleRows   Two dimensional array where each entry will point into the respective image row data in '_grayScaleData'.
      */
-    Raster (int32    _height,
-            int32    _width,
+    Raster (kkint32  _height,
+            kkint32  _width,
             uchar*   _grayScaleData,
             uchar**  _grayScaleRows
            );
 
     /**
-     *@brief  Construct a Grayscale Raster object using provided raw data,
+     *@brief  Construct a Grayscale Raster object using provided raw data.
+     *@param[in] _height Image Height.
+     *@param[in] _width  Image Width.
+     *@param[in] _grayScaleData 8 Bit grayscale data, Row Major, that is to be used to populate new instance.
      */
-    Raster (int32         _height,
-            int32         _width,
+    Raster (kkint32       _height,
+            kkint32       _width,
             const uchar*  _grayScaleData
            );
 
     /**
      *@brief  Construct a Color Raster object using provided raw data,
+     *@param[in] _height Image Height.
+     *@param[in] _width  Image Width.
+     *@param[in] _redChannel   8 Bit data, Row Major, that is to be used to populate the red channel.
+     *@param[in] _greenChannel 8 Bit data, Row Major, that is to be used to populate the green channel.
+     *@param[in] _blueChannel  8 Bit data, Row Major, that is to be used to populate the blue channel.
      */
-    Raster (int32         _height,
-            int32         _width,
+    Raster (kkint32       _height,
+            kkint32       _width,
             const uchar*  _redChannel,
             const uchar*  _greenChannel,
             const uchar*  _blueChannel

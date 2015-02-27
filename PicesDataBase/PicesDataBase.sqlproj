@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <UpgradedFromDBP>True</UpgradedFromDBP>
+    <Name>dbpProjectName</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{172664fc-bf78-440a-a20e-3ccf13981497}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql110DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <UpgradedFromDBP>True</UpgradedFromDBP>
+    <RootNamespace>dbpProjectName</RootNamespace>
+    <PostUpgradeAddToSCC>;C:\Users\Kurt\GitHub\Pices\PicesDataBase\PicesDataBase.sqlproj;C:\Users\Kurt\GitHub\Pices\PicesDataBase\Connections.txt</PostUpgradeAddToSCC>
+    <UpgradedFromDBP>True</UpgradedFromDBP>
+    <AssemblyName>dbpProjectName</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <!-- VS10 without SP1 will not have VisualStudioVersion set, so do that here -->
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Change Scripts" />
+    <Folder Include="Create Scripts" />
+    <Folder Include="Queries" />
+    <Folder Include="StoredProcedures" />
+    <Folder Include="Properties" />
+  </ItemGroup>
+  <ItemGroup>
+    <NotInBuild Include="Connections.txt" />
+    <NotInBuild Include="Change Scripts\Conversion.sql" />
+    <NotInBuild Include="Change Scripts\Script1.sql" />
+    <NotInBuild Include="Change Scripts\Update21.sql" />
+    <NotInBuild Include="Change Scripts\Update22.sql" />
+    <NotInBuild Include="Change Scripts\UpDateImages.sql" />
+    <NotInBuild Include="Change Scripts\UpDateSproc.sql" />
+    <NotInBuild Include="Change Scripts\UpDateSproc_2014-10-20.sql" />
+    <NotInBuild Include="Create Scripts\CreateAllTables.sql" />
+    <NotInBuild Include="Create Scripts\PicesDataBase.dbo.Classes.SQL" />
+    <NotInBuild Include="Create Scripts\PicesDataBase.dbo.Cruises.SQL" />
+    <NotInBuild Include="Create Scripts\PicesDataBase.dbo.CtdSensors.SQL" />
+    <NotInBuild Include="Create Scripts\PicesDataBase.dbo.Deployments.SQL" />
+    <NotInBuild Include="Create Scripts\PicesDataBase.dbo.FeatureData.sql" />
+    <NotInBuild Include="Create Scripts\PicesDataBase.dbo.GpsData.SQL" />
+    <NotInBuild Include="Create Scripts\PicesDataBase.dbo.ImageGroup.SQL" />
+    <NotInBuild Include="Create Scripts\PicesDataBase.dbo.ImageGroupEntries.SQL" />
+    <NotInBuild Include="Create Scripts\PicesDataBase.dbo.Images.SQL" />
+    <NotInBuild Include="Create Scripts\PicesDataBase.dbo.ImagesFullSize.sql" />
+    <NotInBuild Include="Create Scripts\PicesDataBase.dbo.ImagesLogEntries.SQL" />
+    <NotInBuild Include="Create Scripts\PicesDataBase.dbo.InstrumentData.SQL" />
+    <NotInBuild Include="Create Scripts\PicesDataBase.dbo.Instruments.SQL" />
+    <NotInBuild Include="Create Scripts\PicesDataBase.dbo.LogEntries.SQL" />
+    <NotInBuild Include="Create Scripts\PicesDataBase.dbo.MissingFeatureData.SQL" />
+    <NotInBuild Include="Create Scripts\PicesDataBase.dbo.SipperFiles.SQL" />
+    <NotInBuild Include="Create Scripts\PicesDataBase.dbo.Stations.SQL" />
+    <NotInBuild Include="Create Scripts\PicesDataBase.dbo.TrainingLibraries.sql" />
+    <NotInBuild Include="Create Scripts\PicesDataBase.dbo.ValidationLogEntries.SQL" />
+    <NotInBuild Include="Create Scripts\PicesDataImagGroup.dbo.Images.SQL" />
+    <NotInBuild Include="StoredProcedures\Classes.sql" />
+    <NotInBuild Include="StoredProcedures\Cruises.sql" />
+    <NotInBuild Include="StoredProcedures\Deployments.sql" />
+    <NotInBuild Include="StoredProcedures\FeatureData.sql" />
+    <NotInBuild Include="StoredProcedures\GpsData.sql" />
+    <NotInBuild Include="StoredProcedures\ImageGroup.sql" />
+    <NotInBuild Include="StoredProcedures\ImageGroupEntries.sql" />
+    <NotInBuild Include="StoredProcedures\Images.sql" />
+    <NotInBuild Include="StoredProcedures\ImagesFullSize.sql" />
+    <NotInBuild Include="StoredProcedures\InstrumentData.sql" />
+    <NotInBuild Include="StoredProcedures\LogEntries.sql" />
+    <NotInBuild Include="StoredProcedures\MissingFeatureData.sql" />
+    <NotInBuild Include="StoredProcedures\SipperFiles.sql" />
+    <NotInBuild Include="StoredProcedures\Stations.sql" />
+  </ItemGroup>
+</Project>

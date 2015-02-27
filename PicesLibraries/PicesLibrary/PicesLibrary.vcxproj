@@ -1,0 +1,303 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="EmbeddedDebug|Win32">
+      <Configuration>EmbeddedDebug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="EmbeddedRelease|Win32">
+      <Configuration>EmbeddedRelease</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{FA9C865E-0227-4EBC-A291-ED0F2453AFB3}</ProjectGuid>
+    <RootNamespace>PicesLibrary</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedRelease|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedDebug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedRelease|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedDebug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>11.0.50727.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)\Libraries\$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)\Libraries\$(Configuration)\</OutDir>
+    <IntDir>Release\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedDebug|Win32'">
+    <OutDir>$(SolutionDir)\Libraries\$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedRelease|Win32'">
+    <OutDir>$(SolutionDir)\Libraries\$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(SolutionDir)\BaseLibrary;$(SolutionDir)\PicesLibraries\SipperInstruments;$(SolutionDir)\OutsidePackages\MySqlWin32\include;$(SolutionDir)\OutsidePackages\fftw-3.3.2;$(SolutionDir)\OutsidePackages\zlib123;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;EMBEDDED_MYSQL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>$(SolutionDir)\BaseLibrary;$(SolutionDir)\PicesLibraries\SipperInstruments;$(SolutionDir)\OutsidePackages\MySqlWin32\include;$(SolutionDir)\OutsidePackages\fftw-3.3.2;$(SolutionDir)\OutsidePackages\zlib123;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;EMBEDDED_MYSQL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedDebug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(SolutionDir)\BaseLibrary;$(SolutionDir)\PicesLibraries\SipperInstruments;$(SolutionDir)\OutsidePackages\MySqlWin32\include;$(SolutionDir)\OutsidePackages\fftw-3.3.2;$(SolutionDir)\OutsidePackages\zlib123;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;EMBEDDED_MYSQL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedRelease|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>$(SolutionDir)\BaseLibrary;$(SolutionDir)\PicesLibraries\SipperInstruments;$(SolutionDir)\OutsidePackages\MySqlWin32\include;$(SolutionDir)\OutsidePackages\fftw-3.3.2;$(SolutionDir)\OutsidePackages\zlib123;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;EMBEDDED_MYSQL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="AbundanceCorrectionMatrix.h" />
+    <ClInclude Include="Attribute.h" />
+    <ClInclude Include="BinaryClassParms.h" />
+    <ClInclude Include="BitReduction.h" />
+    <ClInclude Include="ChainHash.h" />
+    <ClInclude Include="ClassAssignments.h" />
+    <ClInclude Include="ClassificationBiasMatrix.h" />
+    <ClInclude Include="Classifier2.h" />
+    <ClInclude Include="ClassProb.h" />
+    <ClInclude Include="ClassStatistic.h" />
+    <ClInclude Include="ConfusionMatrix2.h" />
+    <ClInclude Include="CrossValidation.h" />
+    <ClInclude Include="CrossValidationMxN.h" />
+    <ClInclude Include="CrossValidationThreeWay.h" />
+    <ClInclude Include="CrossValidationVoting.h" />
+    <ClInclude Include="DataBase.h" />
+    <ClInclude Include="DataBaseGpsData.h" />
+    <ClInclude Include="DataBaseImage.h" />
+    <ClInclude Include="DataBaseImageEntry.h" />
+    <ClInclude Include="DataBaseImageGroup.h" />
+    <ClInclude Include="DataBaseImageGroupEntry.h" />
+    <ClInclude Include="DataBaseImageValidatedEntry.h" />
+    <ClInclude Include="DataBaseLogEntry.h" />
+    <ClInclude Include="DataBaseServer.h" />
+    <ClInclude Include="DataBaseUpdate.h" />
+    <ClInclude Include="DuplicateImages.h" />
+    <ClInclude Include="FeatureEncoder.h" />
+    <ClInclude Include="FeatureEncoder2.h" />
+    <ClInclude Include="FeatureFileIO.h" />
+    <ClInclude Include="FeatureFileIOArff.h" />
+    <ClInclude Include="FeatureFileIOC45.h" />
+    <ClInclude Include="FeatureFileIOColumn.h" />
+    <ClInclude Include="FeatureFileIODstWeb.h" />
+    <ClInclude Include="FeatureFileIOPices.h" />
+    <ClInclude Include="FeatureFileIORoberts.h" />
+    <ClInclude Include="FeatureFileIOSparse.h" />
+    <ClInclude Include="FeatureFileIOUCI.h" />
+    <ClInclude Include="FeatureNumList.h" />
+    <ClInclude Include="FeatureVector.h" />
+    <ClInclude Include="FileDesc.h" />
+    <ClInclude Include="ImageFeatures.h" />
+    <ClInclude Include="ImageFeaturesDataIndexed.h" />
+    <ClInclude Include="ImageFeaturesNameIndexed.h" />
+    <ClInclude Include="ImageSizeDistribution.h" />
+    <ClInclude Include="KArray.h" />
+    <ClInclude Include="MLClass.h" />
+    <ClInclude Include="MLClassConstList.h" />
+    <ClInclude Include="MLLTypes.h" />
+    <ClInclude Include="Model.h" />
+    <ClInclude Include="ModelDual.h" />
+    <ClInclude Include="ModelKnn.h" />
+    <ClInclude Include="ModelOldSVM.h" />
+    <ClInclude Include="ModelParam.h" />
+    <ClInclude Include="ModelParamDual.h" />
+    <ClInclude Include="ModelParamKnn.h" />
+    <ClInclude Include="ModelParamOldSVM.h" />
+    <ClInclude Include="ModelParamSvmBase.h" />
+    <ClInclude Include="ModelParamUsfCasCor.h" />
+    <ClInclude Include="ModelSvmBase.h" />
+    <ClInclude Include="ModelUsfCasCor.h" />
+    <ClInclude Include="NormalizationParms.h" />
+    <ClInclude Include="Orderings.h" />
+    <ClInclude Include="PicesApplication.h" />
+    <ClInclude Include="SipperBlob.h" />
+    <ClInclude Include="SipperExtractionImageManager.h" />
+    <ClInclude Include="SizeDistribution.h" />
+    <ClInclude Include="svm.h" />
+    <ClInclude Include="svm2.h" />
+    <ClInclude Include="svm289_BFS.h" />
+    <ClInclude Include="SVMModel.h" />
+    <ClInclude Include="SVMparam.h" />
+    <ClInclude Include="SvmWrapper.h" />
+    <ClInclude Include="TrainingClass.h" />
+    <ClInclude Include="TrainingConfiguration2.h" />
+    <ClInclude Include="TrainingProcess2.h" />
+    <ClInclude Include="UsfCasCor.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AbundanceCorrectionMatrix.cpp" />
+    <ClCompile Include="Attribute.cpp" />
+    <ClCompile Include="BinaryClassParms.cpp" />
+    <ClCompile Include="BitReduction.cpp" />
+    <ClCompile Include="ChainHash.cpp" />
+    <ClCompile Include="ClassAssignments.cpp" />
+    <ClCompile Include="ClassificationBiasMatrix.cpp" />
+    <ClCompile Include="Classifier2.cpp" />
+    <ClCompile Include="ClassProb.cpp" />
+    <ClCompile Include="ClassStatistic.cpp" />
+    <ClCompile Include="ConfusionMatrix2.cpp" />
+    <ClCompile Include="CrossValidation.cpp" />
+    <ClCompile Include="CrossValidationMxN.cpp" />
+    <ClCompile Include="CrossValidationThreeWay.cpp" />
+    <ClCompile Include="CrossValidationVoting.cpp" />
+    <ClCompile Include="DataBase.cpp" />
+    <ClCompile Include="DataBaseGpsData.cpp" />
+    <ClCompile Include="DataBaseImage.cpp" />
+    <ClCompile Include="DataBaseImageEntry.cpp" />
+    <ClCompile Include="DataBaseImageGroup.cpp" />
+    <ClCompile Include="DataBaseImageGroupEntry.cpp" />
+    <ClCompile Include="DataBaseImageValidatedEntry.cpp" />
+    <ClCompile Include="DataBaseLogEntry.cpp" />
+    <ClCompile Include="DataBaseServer.cpp" />
+    <ClCompile Include="DataBaseUpdate.cpp" />
+    <ClCompile Include="DuplicateImages.cpp" />
+    <ClCompile Include="FeatureEncoder.cpp" />
+    <ClCompile Include="FeatureEncoder2.cpp" />
+    <ClCompile Include="FeatureFileIO.cpp" />
+    <ClCompile Include="FeatureFileIOArff.cpp" />
+    <ClCompile Include="FeatureFileIOC45.cpp" />
+    <ClCompile Include="FeatureFileIOColumn.cpp" />
+    <ClCompile Include="FeatureFileIODstWeb.cpp" />
+    <ClCompile Include="FeatureFileIOPices.cpp" />
+    <ClCompile Include="FeatureFileIORoberts.cpp" />
+    <ClCompile Include="FeatureFileIOSparse.cpp" />
+    <ClCompile Include="FeatureFileIOUCI.cpp" />
+    <ClCompile Include="FeatureNumList.cpp" />
+    <ClCompile Include="FeatureVector.cpp" />
+    <ClCompile Include="FileDesc.cpp" />
+    <ClCompile Include="ImageFeatures.cpp" />
+    <ClCompile Include="ImageFeaturesDataIndexed.cpp" />
+    <ClCompile Include="ImageFeaturesNameIndexed.cpp" />
+    <ClCompile Include="ImageSizeDistribution.cpp" />
+    <ClCompile Include="MLClass.cpp" />
+    <ClCompile Include="MLClassConstList.cpp" />
+    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="ModelDual.cpp" />
+    <ClCompile Include="ModelKnn.cpp" />
+    <ClCompile Include="ModelOldSVM.cpp" />
+    <ClCompile Include="ModelParam.cpp" />
+    <ClCompile Include="ModelParamDual.cpp" />
+    <ClCompile Include="ModelParamKnn.cpp" />
+    <ClCompile Include="ModelParamOldSVM.cpp" />
+    <ClCompile Include="ModelParamSvmBase.cpp" />
+    <ClCompile Include="ModelParamUsfCasCor.cpp" />
+    <ClCompile Include="ModelSvmBase.cpp" />
+    <ClCompile Include="ModelUsfCasCor.cpp" />
+    <ClCompile Include="NormalizationParms.cpp" />
+    <ClCompile Include="Orderings.cpp" />
+    <ClCompile Include="PicesApplication.cpp" />
+    <ClCompile Include="SipperBlob.cpp" />
+    <ClCompile Include="SipperExtractionImageManager.cpp" />
+    <ClCompile Include="SizeDistribution.cpp" />
+    <ClCompile Include="svm.cpp" />
+    <ClCompile Include="svm2.cpp" />
+    <ClCompile Include="svm289_BFS.cpp" />
+    <ClCompile Include="SVMModel.cpp" />
+    <ClCompile Include="SVMparam.cpp" />
+    <ClCompile Include="SvmWrapper.cpp" />
+    <ClCompile Include="TrainingClass.cpp" />
+    <ClCompile Include="TrainingConfiguration2.cpp" />
+    <ClCompile Include="TrainingProcess2.cpp" />
+    <ClCompile Include="UsfCasCor.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Makefile" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\BaseLibrary\BaseLibrary.vcxproj">
+      <Project>{5a4b9b15-9745-4aba-b1a8-ffbc85d1d5df}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\OutsidePackages\zlib123\projects\visualc6\zlib.vcxproj">
+      <Project>{7c37d3e1-52ba-4dc0-9c7b-49375bf46b37}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\SipperInstruments\SipperInstruments.vcxproj">
+      <Project>{b1867f2d-9e97-4e33-a56b-297caf616589}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

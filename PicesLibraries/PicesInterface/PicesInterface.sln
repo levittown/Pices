@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PicesInterface", "PicesInterface.vcxproj", "{8F609A95-37BC-4E0F-8CD5-4196A86CD4B8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		EmbeddedDebug|Win32 = EmbeddedDebug|Win32
+		EmbeddedRelease|Win32 = EmbeddedRelease|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8F609A95-37BC-4E0F-8CD5-4196A86CD4B8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8F609A95-37BC-4E0F-8CD5-4196A86CD4B8}.Debug|Win32.Build.0 = Debug|Win32
+		{8F609A95-37BC-4E0F-8CD5-4196A86CD4B8}.EmbeddedDebug|Win32.ActiveCfg = EmbeddedDebug|Win32
+		{8F609A95-37BC-4E0F-8CD5-4196A86CD4B8}.EmbeddedDebug|Win32.Build.0 = EmbeddedDebug|Win32
+		{8F609A95-37BC-4E0F-8CD5-4196A86CD4B8}.EmbeddedRelease|Win32.ActiveCfg = EmbeddedRelease|Win32
+		{8F609A95-37BC-4E0F-8CD5-4196A86CD4B8}.EmbeddedRelease|Win32.Build.0 = EmbeddedRelease|Win32
+		{8F609A95-37BC-4E0F-8CD5-4196A86CD4B8}.Release|Win32.ActiveCfg = Release|Win32
+		{8F609A95-37BC-4E0F-8CD5-4196A86CD4B8}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1481,9 +1481,6 @@ namespace PicesCommander
 
         ProfileChart.Series.Add (s);
       }
-
-
-
       
       double  minStartDateTime = initialStartTime.ToOADate ();
       ProfileChart.ChartAreas[0].AxisX.Minimum = minStartDateTime;

@@ -186,6 +186,8 @@ BinaryClassParmsList::~BinaryClassParmsList ()
 }
 
 
+
+
 int32  BinaryClassParmsList::MemoryConsumedEstimated ()  const
 {
   int32  memoryConsumedEstimated = sizeof (BinaryClassParmsList);
@@ -261,6 +263,7 @@ BinaryClassParmsPtr  BinaryClassParmsList::LookUp (MLClassConstPtr  _class1,
   else
     return idx->second;
 }  /* LookUp */
+
 
 
 

@@ -1,4 +1,5 @@
-﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <PublishUrlHistory>http://figment.cse.usf.edu/~kkramer/sipper/Software/Pices/SetUp/|publish\|ftp://bigpine.cse.usf.edu/public.html/sipper/Software/Pices/SipperInterface/</PublishUrlHistory>
     <InstallUrlHistory>
@@ -13,6 +14,7 @@
     <VerifyUploadedFiles>false</VerifyUploadedFiles>
     <ReferencePath>C:\Program Files (x86)\Business Objects\Common\2.8\managed\</ReferencePath>
     <EnableSecurityDebugging>false</EnableSecurityDebugging>
+    <ErrorReportUrlHistory />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>

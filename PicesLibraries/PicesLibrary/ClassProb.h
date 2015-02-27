@@ -7,7 +7,6 @@
  */
 
 #include "BasicTypes.h"
-#include "KKQueue.h"
 #include "Str.h"
 
 
@@ -38,14 +37,11 @@ namespace MLL
   };
   typedef  ClassProb*  ClassProbPtr;
 
-#define  _ClassProb_Defined_
 
 
   class  ClassProbList:  public  KKQueue<ClassProb>
   {
   public:
-    typedef  ClassProbList*  ClassProbListPtr;
-
     ClassProbList ();
     ClassProbList (bool owner);
     ClassProbList (const ClassProbList&  pairList);

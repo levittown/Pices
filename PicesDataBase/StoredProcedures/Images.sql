@@ -272,6 +272,12 @@ begin
   delete from  Images
     where Images.ImageId = _imageID;
   commit;
+
+  set @userName = user();
+  set @idx =locate("@", @userName);
+  if  (@idx > 0)  then
+    set  @userName = substr(@userName,1,@idx-1);
+  end if;
   
   Insert into ImagesLogEntries (ImageId, ImageFileName, ValidatedClassName, DateTimeOccured, Action, DataBaseUserName)
          values (_imageId,
@@ -279,7 +285,7 @@ begin
                  "",
                  Now(),
                  "D",
-                 User() 
+                 @userName 
                 );     
 end;  
 //
@@ -535,7 +541,7 @@ begin
                       "i.Class2Id,  (select c2.ClassName from Classes c2  where c2.ClassId = i.Class2Id) as Class2Name, i.Class2Prob, ",            "\n",
                       "i.ClassValidatedId,  (select c3.ClassName from Classes c3  where c3.ClassId = i.ClassValidatedId) as ClassNameValidated, ",  "\n",
                       "i.TopLeftRow, i.TopLeftCol, i.PixelCount, i.ConnectedPixelDist, i.ExtractionLogEntryId, i.ClassLogEntryId, i.Height, ",      "\n",
-                      "i.Width, i.ByteOffset, i.depth, i.ImageSize, i.SizeCoordinates",     "\n"
+                      "i.Width, i.ByteOffset, i.depth, i.ImageSize, i.SizeCoordinates",  "\n"
                  );
   if  (_includeThumbNail = "1")  then
     set @s = concat(@s, ", i.ThumbNail");
@@ -840,6 +846,134 @@ delimiter ;
 
 
 
+/***************************************************************************************************************************************/
+drop procedure  if exists  ImagesExtractDeploymentSizeRange;
+drop procedure  if exists  ImagesQueryDeploymentSizeRange;
+
+delimiter $$
+
+create procedure ImagesQueryDeploymentSizeRange (in  _cruiseName      varChar(10),
+                                                 in  _stationName     varChar(10), 
+                                                 in  _deploymentNum   varchar(4), 
+                                                 in  _className       varChar(64),
+                                                 in  _cast            char,           /**< 'U' = UpCast, 'D' = DownCast,  'B' = Both' */
+                                                 in  _statistic       char,           /* '0' = Area mm^2,  '1' = Diameter,  '2' = Spheroid Volume and '3' = EBv ((4/3)(Pie)(Major/2)(Minor/2)^2) */
+                                                 in  _sizeStart       float,          /* Must Be equal or greater than this size.                                                                */
+                                                 in  _sizeEnd         float,          /* Must be less than this size.                                                                            */
+                                                 in  _depthMin        float,
+                                                 in  _depthMax        float,
+                                                 in  _sampleQty       int             /* 0 = slecte all eligable rows;  > 0 indicates randomly selecting '_sampleQty' rows.   */
+                                                )
+begin 
+/*
+  Returns List of Images for the Specified Deployment that are in a specifoied Size Range for the Specified Size Statistic.
+*/
+  declare _classId            int    default -1;
+  declare _midPoint           datetime;
+  declare _cropLeft           int    default 0;
+  declare _cropRight          int    default 4094;
+  declare _pixelsPerScanLine  int    default 4096;
+  declare _chamberWidth       float  default 0.096;
+  declare _pixelWidth         float  default 0.025263;  /* MiliMeters per Pixel */
+  
+
+  set  @deploymentNum = _deploymentNum;
+
+  if  (_deploymentNum is null)  or  (_deploymentNum = "")  or (_deploymentNum = " ")  then
+     set @deploymentNum = (select d.DeploymentNum  from  Deployments d where d.CruiseName    = _cruiseName  and  d.StationName   = _stationName);
+  end if;
+
+
+  if  (_className is not null)  and  (_className <> "")  then
+    set _classId = (select c.classId from Classes c  where c.ClassName = _className);
+  end if;
+
+  select  d.CropLeft, d.CropRight, d.ChamberWidth  into  _cropLeft, _cropRight, _chamberWidth
+      from Deployments d
+      where  d.CruiseName    = _cruiseName  and
+             d.StationName   = _stationName  and 
+             d.DeploymentNum = @deploymentNum;
+      
+  if  _cropLeft < _cropRight  then
+    set _pixelsPerScanLine = _cropRight - _cropLeft;
+  else
+    set _pixelsPerScanLine = 3800;
+  end if;
+  
+  set  _pixelWidth = _chamberWidth / _pixelsPerScanLine;
+  
+  set _midPoint = InstrumentDataGetMidPointOfDeployment(_cruiseName, _stationName,  @deploymentNum);
+
+  set  @statExp = "";
+
+  if  (_statistic = '0')  then
+     set @statExp = concat('fd.FilledArea * (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000  * (id.FlowRate1 / sf.ScanRate) * 1000.0');
+  end if;
+  
+  if  (_statistic = '1')  then
+     set @statExp = concat('2 * sqrt(fd.FilledArea *  (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000 * (id.FlowRate1 / sf.ScanRate) * 1000.0 / 3.1415926)');
+  end if;
+  
+  if  (_statistic = '2')  then
+     set @statExp = concat('(4.0 / 3.0) * 3.1415926 * pow (sqrt(fd.FilledArea *  (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000 * (id.FlowRate1 / sf.ScanRate) * 1000.0 / 3.1415926), 3)');
+  end if;
+  
+  
+  set @sqlStr = "";
+  set @sqlStr = concat(@sqlStr, 'select ',  ImagesQuerySelectFieldNames (True), '\n');
+  set @sqlStr = concat(@sqlStr, '    from  Images i  \n');
+  set @sqlStr = concat(@sqlStr, '    join (SipperFiles sf)     on(sf.SipperFileId  = i.SipperFileId) \n');
+  set @sqlStr = concat(@sqlStr, '    join (FeatureData fd)     on(fd.ImageId       = i.ImageId) \n');
+  set @sqlStr = concat(@sqlStr, '    join (InstrumentData id)  on((id.SipperFileId = i.SipperFileId)  and  (id.ScanLine = Floor(TopLeftRow/4096) * 4096) ) \n');
+  set @sqlStr = concat(@sqlStr, '    where  (sf.CruiseName      = \"', _cruiseName,    '\") \n');
+  set @sqlStr = concat(@sqlStr, '       and (sf.StationName     = \"', _stationName,   '\") \n');
+  set @sqlStr = concat(@sqlStr, '       and (sf.DeploymentNum   = \"', @deploymentNum, '\") \n');
+
+  if  (_classId >= 0)  then
+    set @sqlStr = concat(@sqlStr, '       and ((i.ClassValidatedId = ', _classId, ')  or  (i.ClassValidatedId is null  and  i.class1Id = ', _classId, ')) \n');
+  end if;
+  if  (_cast = 'U')  then
+    set @sqlStr = concat(@sqlStr, '       and (id.CTDDateTime > "', _midPoint, '") \n');
+  end if;
+  if  (_cast = 'D')  then
+    set @sqlStr = concat(@sqlStr, '       and (id.CTDDateTime <= "', _midPoint, '") \n');
+  end if;
+  if  (_depthMin > 0.0)  then
+    set @sqlStr = concat(@sqlStr, '       and (i.Depth >= ', _depthMin, ')\n');
+  end if;
+  if  (_depthMax > 0.0)  then
+    set @sqlStr = concat(@sqlStr, '       and (i.Depth <  ', _depthMax, ')\n');
+  end if;
+
+  set @sqlStr = concat(@sqlStr, '       and (id.FlowRate1       > 0.02) \n'); 
+  set @sqlStr = concat(@sqlStr, '       and ((', @statExp, ')   >= ', _sizeStart, ') \n');
+  set @sqlStr = concat(@sqlStr, '       and ((', @statExp, ')   <  ', _sizeEnd,   ') \n');
+  
+  if   (_sampleQty > 0)  then
+    set @sqlStr = concat(@sqlStr, '     order by rand()  limit ', _sampleQty, '  \n');
+  end if;
+  
+  set @sqlStr = concat(@sqlStr, ';\n');
+  
+  PREPARE stmt1 FROM @sqlStr;
+  EXECUTE stmt1;
+  DEALLOCATE PREPARE stmt1;
+  
+end$$
+delimiter ;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -892,7 +1026,6 @@ begin
     call MLClassInsert(_class1Name, "AllClasses", "Added by 'ImagesUpdatePredictions'");
     set  _class1Id = (select  c.ClassId  from  Classes c  where c.ClassName = _class1Name);
   end if;
-  
   
   update Images i  set  i.Class1Id        = _class1Id,
                         i.Class1Prob      = _class1Prob,
@@ -1021,15 +1154,21 @@ begin
                        i.Class1Id          = _validatedClassId,
                        i.Class1Prob        = _class1Prob
          where i.imageId = _imageId;
+
+
+  set @userName = user();
+  set @idx =locate("@", @userName);
+  if  (@idx > 0)  then
+    set  @userName = substr(@userName,1,@idx-1);
+  end if;         
          
-         
- Insert into ImagesLogEntries (ImageId, ImageFileName, ValidatedClassName, DateTimeOccured, Action, DataBaseUserName)
+  Insert into ImagesLogEntries (ImageId, ImageFileName, ValidatedClassName, DateTimeOccured, Action, DataBaseUserName)
          values (_imageId,
                  _imageFileName,
                  _className,
                  @_DateNow,
                  "V",
-                 User() 
+                 @userName 
                 );         
          
 end;
@@ -1071,13 +1210,20 @@ begin
            where i.imageId = _imageId;
          
          
+  set @userName = user();
+  set @idx =locate("@", @userName);
+  if  (@idx > 0)  then
+    set  @userName = substr(@userName,1,@idx-1);
+  end if;         
+         
+
    Insert into ImagesLogEntries (ImageId, ImageFileName, ValidatedClassName, DateTimeOccured, Action, DataBaseUserName)
            values (_imageId,
                    _imageFileName,
                    _className,
                    @_DateNow,
                    "V",
-                   User() 
+                   @userName
                   );      
   end if;
   
@@ -1137,13 +1283,19 @@ begin
   update Images i  set i.ClassValidatedId  = NULL
          where i.ImageId       = _imageId;
          
+  set @userName = user();
+  set @idx =locate("@", @userName);
+  if  (@idx > 0)  then
+    set  @userName = substr(@userName,1,@idx-1);
+  end if;
+
   Insert into ImagesLogEntries (ImageId, ImageFileName, ValidatedClassName, DateTimeOccured, Action, DataBaseUserName)
          values (_imageId,
                  _imageFileName,
                  "",
                  @_DateNow,
                  "R",
-                 User() 
+                 @userName 
                 );           
 end;
 //
@@ -1389,15 +1541,15 @@ drop procedure  if exists  ImagesSizeDistributionByDepth;
 
 delimiter $$
 
-create procedure ImagesSizeDistributionByDepth (in  _cruiseName       varChar(10),
-                                                in  _stationName      varChar(10), 
-                                                in  _deploymentNum    varchar(4), 
-                                                in  _className        varChar(64),
-                                                in  _depthBinSize     int unsigned,
-                                                in  _statistic        char,           /* '0' = Area mm^2,  '1' = Diameter,  '2' = Spheroid Volume and '3' = EBv ((4/3)(Pie)(Major/2)(Minor/2)^2) */
-                                                in  _initialValue     float,
-                                                in  _growtRate        float,
-                                                in  _endValue         float
+create procedure ImagesSizeDistributionByDepth (in  _cruiseName      varChar(10),
+                                                in  _stationName     varChar(10), 
+                                                in  _deploymentNum   varchar(4), 
+                                                in  _className       varChar(64),
+                                                in  _depthBinSize    int unsigned,
+                                                in  _statistic       char,           /* '0' = Area mm^2,  '1' = Diameter,  '2' = Spheroid Volume and '3' = EBv ((4/3)(Pie)(Major/2)(Minor/2)^2) */
+                                                in  _initialValue    float,
+                                                in  _growtRate       float,
+                                                in  _endValue        float
                                                )
 begin 
   declare _classId            int    default -1;
@@ -1408,17 +1560,21 @@ begin
   declare _chamberWidth       float  default  0.098;
   declare _pixelWidth         float  default  0.025263;  /* MiliMeters per Pixel */
   
-  
   if  (_className is not null)  and  (_className <> "")  then
     set _classId = (select c.classId from Classes c  where c.ClassName = _className);
   end if;
 
+  set  @deploymentNum = _deploymentNum;
+  if  (_deploymentNum is null)  or  (_deploymentNum = "")  or (_deploymentNum = " ")  then
+     set @deploymentNum = (select d.DeploymentNum  from  Deployments d where d.CruiseName    = _cruiseName  and  d.StationName   = _stationName);
+  end if;
+
   select  d.CropLeft, d.CropRight, d.ChamberWidth  into  _cropLeft, _cropRight, _chamberWidth
-      from Deployments d
-      where  d.CruiseName    = _cruiseName  and
-             d.StationName   = _stationName  and 
-             d.DeploymentNum = _deploymentNum;
-      
+        from Deployments d
+        where  d.CruiseName    = _cruiseName  and
+               d.StationName   = _stationName  and
+               d.DeploymentNum = @deploymentNum;
+  
   if  _cropLeft < _cropRight  then
     set _pixelsPerScanLine = _cropRight - _cropLeft;
   else
@@ -1427,7 +1583,7 @@ begin
   
   set  _pixelWidth = _chamberWidth / _pixelsPerScanLine;
   
-  set _midPoint = InstrumentDataGetMidPointOfDeployment(_cruiseName, _stationName, _deploymentNum);
+  set _midPoint = InstrumentDataGetMidPointOfDeployment(_cruiseName, _stationName, @deploymentNum);
   
   drop  temporary table if exists  TempSizeDistributionTable;
 
@@ -1442,11 +1598,6 @@ begin
   );
   
   
-  /*  PixelWidth  (in mm)   = (_chamberWidth / (id.CropRight - id.CropLeft)) * 1000 */
-  /*  PixelHeight (in mm)   = (id.FlowRate . sf.ScanRate) * 1000                    */
-  /*  area        (in mm^2) = (i.PixelCount * PixelWidth * PixelHeight)             */
-
-
   set  @sqlStr = 'insert into TempSizeDistributionTable \n';
   set  @sqlStr = concat(@sqlStr, '    select (id.CTDDateTime <=\"', _midPoint, '\") as DownCast, \n');
   set  @sqlStr = concat(@sqlStr, '           i.ImageId, \n');
@@ -1468,6 +1619,12 @@ begin
      set @sqlStr = concat(@sqlStr, '(4.0 / 3.0) * 3.1415926 * pow (sqrt(fd.FilledArea *  (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000 * (id.FlowRate1 / sf.ScanRate) * 1000.0 / 3.1415926), 3)  as Statistic \n');
   end if;
 
+  if  (_statistic = '3')  then
+     /* fd.Length and fd.Width equal the Legth and th ewidth of the bounding box that tightly encloses the image.  They are computed in "ImagesFeatures.cpp" as part */
+     /* of the Feature computation procedure. */
+     set @sqlStr = concat(@sqlStr, '(4.0 / 3.0) * 3.1415926 * ((fd.Length / 2.0) / 2.0) * pow (((fd.Width / 2.0) / 2.0), 2)  as Statistic \n');
+  end if;
+
   
   set @sqlStr = concat(@sqlStr, '    from  Images i  \n');
   set @sqlStr = concat(@sqlStr, '    join (SipperFiles sf)     on(sf.SipperFileId  = i.SipperFileId) \n');
@@ -1475,11 +1632,13 @@ begin
   set @sqlStr = concat(@sqlStr, '    join (InstrumentData id)  on((id.SipperFileId = i.SipperFileId)  and  (id.ScanLine = Floor(TopLeftRow/4096) * 4096) ) \n');
   set @sqlStr = concat(@sqlStr, '    where  (sf.CruiseName      = \"', _cruiseName,    '\") \n');
   set @sqlStr = concat(@sqlStr, '       and (sf.StationName     = \"', _stationName,   '\") \n');
-  set @sqlStr = concat(@sqlStr, '       and (sf.DeploymentNum   = \"', _deploymentNum, '\") \n');
-  /* set @sqlStr = concat(@sqlStr, '       and (id.CTDDateTime    <= \"', _midPoint,      '\") \n');  */
+  set @sqlStr = concat(@sqlStr, '       and (sf.DeploymentNum   = \"', @deploymentNum, '\") \n');
+  set @sqlStr = concat(@sqlStr, '       and (id.FlowRate1       > 0.02) \n'); 
   if  (_classId >= 0)  then
-    set @sqlStr = concat(@sqlStr, '       and (i.Class1Id         = ', _classId, '); \n');
+    set @sqlStr = concat(@sqlStr, '       and ((i.ClassValidatedId = ', _classId, ')  or  (i.ClassValidatedId is null  and  i.class1Id = ', _classId, ')); \n');
   end if;
+  
+  /* select  _classId, _deploymentNum, _midPoint, @sqlStr; */
   
   PREPARE stmt1 FROM @sqlStr;
   EXECUTE stmt1;
@@ -1493,7 +1652,7 @@ begin
   set @sqlStr2 = concat(@sqlStr2, '       sum(T.FilledArea)                                 as TotalFilledArea, \n');
                 
   set @statVal = _initialValue;
-  
+  /*
   set @sqlStr2 = concat(@sqlStr2, '       sum((T.Statistic < ', Format (@statVal, 4), '))    as \"<',Format (@statVal, 4), '\", \n');
 
   while  (@statVal < _endValue)  do
@@ -1501,9 +1660,19 @@ begin
     set @sqlStr2 = concat(@sqlStr2, '       sum((T.Statistic >= ', Format (@statVal, 4), ')  and  (T.Statistic < ', Format (@nextVal, 4), ')) as \"Size_', Format (@statVal, 4), '\", \n');
     set @statVal = @nextVal;
   end while;
-  
-  
+
   set @sqlStr2 = concat(@sqlStr2, '       sum((T.Statistic >= ', Format (@statVal, 4), '))               as \">=', Format (@statVal, 4), '\" \n');
+  */
+
+  set @sqlStr2 = concat(@sqlStr2, '       sum((T.Statistic < ', @statVal, '))    as \"<',@statVal, '\", \n');
+
+  while  (@statVal < _endValue)  do
+    set @nextVal = round(@statVal * _growtRate, 4);
+    set @sqlStr2 = concat(@sqlStr2, '       sum((T.Statistic >= ', @statVal, ')  and  (T.Statistic < ', @nextVal, ')) as \"Size_', @statVal, '\", \n');
+    set @statVal = @nextVal;
+  end while;
+  set @sqlStr2 = concat(@sqlStr2, '       sum((T.Statistic >= ', @statVal, '))               as \">=', @statVal, '\" \n');
+
   set @sqlStr2 = concat(@sqlStr2, '   from  TempSizeDistributionTable T \n');
   set @sqlStr2 = concat(@sqlStr2, '   group by T.DownCast, floor(T.Depth / ', _depthBinSize, '); \n');        
 
@@ -1513,11 +1682,6 @@ begin
   
 end$$
 delimiter ;
-
-
-
-
-
 
 
 
@@ -2166,25 +2330,6 @@ delimiter ;
 
 
 
-drop  function  if exists ImagesComputeEBv;
-
-delimiter //
-create function ImagesTimeBucket  (imageId   int  unsigned.
-                                   _slotLen  int  unsigned
-                                  )
-  returns int float
-  deterministic
-
-begin
-  declare  _EBv  int float default 0.0;
-  
-  
-
-  return  _EBv;
-end;
-//
-delimiter ;
-
 
 
 drop procedure  if exists  ImagesSizeDataByDepthSipper11;
@@ -2272,7 +2417,7 @@ begin
   set @sqlStr = concat(@sqlStr, '           (sf.StationName     = \"', _stationName,   '\")  and \n');
   set @sqlStr = concat(@sqlStr, '           (sf.DeploymentNum   = \"', _deploymentNum, '\")  and \n');
   set @sqlStr = concat(@sqlStr, '           (id.CTDDateTime    <= \"', _midPoint,      '\")  and \n');
-  set @sqlStr = concat(@sqlStr, '           (i.Class1Id in (select  c.ClassId  from Classes c  where c.ClassName like "%snow%")); \n');
+  set @sqlStr = concat(@sqlStr, '           (i.Class1Id in (select  c.ClassId  from Classes c  where c.ClassName like "%detritus%")); \n');
   
   PREPARE stmt1 FROM @sqlStr;
   EXECUTE stmt1;
@@ -2346,20 +2491,6 @@ begin
 end;
 //
 delimiter ;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2848,4 +2979,80 @@ begin
 end;
 //
 delimiter ;
+
+
+
+
+
+
+
+/************************************************************************************************************************/
+/************************************************************************************************************************/
+drop procedure  if   exists  ImagesExportClassificationByCruise;
+
+delimiter //
+create procedure  ImagesExportClassificationByCruise (in  _cruiseName         char(10),
+                                                      in  _thresholdDateTime  datetime
+                                                     )
+begin
+  declare _outFileName     varchar(128);
+
+  set  _outFileName = concat("C:\\\\Temp\\\\PicesExportData\\\\ImagesClassificationCruise_", _cruiseName, ".txt");
+
+  set  @sqlStr = 'select i.ImageId, i.ImageFileName, i.ClassLogEntryId, i.Class1Id, i.Class1Prob  \n';
+  set  @sqlStr = concat(@sqlStr, '    into outfile \"', _outFileName, '\"', '  fields terminated by "\\t" optionally enclosed by "\\""  lines terminated by "\\n"');
+  set  @sqlStr = concat(@sqlStr, '    from Images i \n');
+  set  @sqlStr = concat(@sqlStr, '    join (SipperFiles sf)  on (sf.SipperFileId  = i.SipperFileId) \n');
+  set  @sqlStr = concat(@sqlStr, '    join (LogEntries le)   on (le.LogEntryId    = i.ClassLogEntryId) \n');
+  set  @sqlStr = concat(@sqlStr, '    where   le.DateTimeStart > "', _thresholdDateTime, '"   and   sf.CruiseName = "', _cruiseName, '"; \n');
+
+  select @sqlStr;
+
+  PREPARE stmt1 FROM @sqlStr;
+  EXECUTE stmt1;
+  DEALLOCATE PREPARE stmt1;
+end;
+//
+delimiter ;
+
+
+
+
+
+
+
+/************************************************************************************************************************/
+drop procedure  if   exists  ImagesExportClassificationData;
+
+delimiter //
+create procedure  ImagesExportClassificationData ()
+begin
+  declare done             int default 0;
+  declare _cruiseName      varchar(10);
+
+  declare cur1 cursor for  select c.CruiseName
+                                  from Cruises c
+                                  order by c.CruiseName;
+
+  declare continue HANDLER for not found set done = 1;
+
+  open cur1;
+
+  repeat
+    fetch  cur1 into _cruiseName;
+    if not done then
+       call  ImagesExportClassificationByCruise (_cruiseName, "2014-08-27 17:10:54");
+       commit;
+    end if;
+  until done end repeat;
+
+  close cur1;
+end;
+//
+delimiter ;
+
+
+
+
+
 

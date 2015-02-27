@@ -106,6 +106,8 @@ public:
 };
 
 
+
+
 void  CreateThresholdHeaders (VectorFloat&  sizeThresholds,
                               KKStr&        h1,
                               KKStr&        h2
@@ -145,66 +147,101 @@ void  CreateThresholdHeaders (VectorFloat&  sizeThresholds,
 
 
 DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
-                                                DataBase&            db
+                                                DataBase&            db,
+                                                const KKStr&         statistic,
+                                                const KKStr&         statisticStr,
+                                                RunLog&              runLog
                                                )
 {
   cout << deployment->CruiseName () << "\t" << deployment->StationName () << "\t" << deployment->DeploymentNum () << endl;
 
+  MLClassConstListPtr  allClasses = db.MLClassLoadList ();
 
-  // 1)Determines Midpoint of deploymet from Instruments table.
-  KKStr  sqlStr = "Call ImagesSizeDataByDepthSipper11(" + deployment->CruiseName ().QuotedStr () + "," + 
-                                                          deployment->StationName ().QuotedStr () + "," + 
-                                                          deployment->DeploymentNum ().QuotedStr () + 
-                                                          ",1, '0', 0.005, 1.2, 170.0)";
+  ImageSizeDistributionPtr  downCast = NULL;
+  ImageSizeDistributionPtr  upCast   = NULL;
 
-  VectorKKStr  columnNames;
-  KKStrMatrixPtr results = db.QueryStatementReturnAllColumns (sqlStr.Str (), sqlStr.Len (), columnNames);
-  if  (results == NULL)
+  ImageSizeDistributionPtr  totalDownCast = NULL;
+
+  MLClassConstPtr  detritusClass = allClasses->LookUpByName ("Detritus");
+  MLClassConstListPtr  classes = detritusClass->BuildListOfDecendents (detritusClass);
+  if  (classes->PtrToIdx (detritusClass) < 0)
+    classes->AddMLClass (detritusClass);
+
+  delete  allClasses;
+  allClasses = NULL;
+
+  char  statisticCode = '0';
+  double  startValue = 0.005;
+  double  growthRate = 1.2;
+  double  endValue   = 170.0;
+
+  if  (statistic == "0")
   {
-    cout << "No results returend" << endl;
-    return NULL;
+    statisticCode = '0';
+    startValue    = 0.010;
+    growthRate    = 1.122462048; // k = 2^(1/6)
+    endValue      = 1000.0;
   }
 
-  int32  numRows = results->NumRows ();
-  int32  numCols = results->NumCols ();
-  int32  numCountCols = numCols - 6;
+  else if  (statistic == "1")
+  {
+    statisticCode = '1';
+    startValue    = 0.10;
+    growthRate    = 1.059463094;  // k = 2^(1/12)
+    endValue      = 100.0;
+  }
+
+  else if  (statistic == "2")
+  {
+    statisticCode = '2';
+    startValue    = 0.001;
+    growthRate    = 1.189207115;  // k = 2^(1/4)
+    endValue      = 10000.0;
+  }
+
+
+  MLClassConstList::const_iterator  idx;
+  for  (idx = classes->begin ();  idx != classes->end ();  ++idx)
+  {
+    MLClassConstPtr c = *idx;
+    ImageSizeDistributionPtr  downCast = NULL;
+    ImageSizeDistributionPtr  upCast   = NULL;
+    db.ImagesSizeDistributionByDepth (deployment->CruiseName (), deployment->StationName (), deployment->DeploymentNum (), c->Name (), 
+                                      1.0f, statisticCode, startValue, growthRate, endValue, 
+                                      downCast, upCast
+                                    );
+
+    if  (downCast)
+    {
+      if  (!totalDownCast)
+      {
+        totalDownCast = new ImageSizeDistribution (downCast->DepthBinSize (), downCast->InitialValue (), downCast->GrowthRate (), downCast->EndValue (), downCast->SizeStartValues (), downCast->SizeStartValues (), runLog);
+      }
+      totalDownCast ->AddIn (*downCast, runLog);
+    }
+
+    delete  downCast;  downCast = NULL;
+    delete  upCast;    upCast   = NULL;
+  }
+  
+  if  (!totalDownCast)
+  {
+    runLog.Level (-1) << "MarineSnowReportDeployment    ***ERROR***    No results returend" << endl;
+    return NULL;
+  }
+  
+  int32  numRows = totalDownCast->NumDepthBins ();         // numRows = results->NumRows ();
+  //int32  numCols =                                       // numCols = results->NumCols ();
+  int32  numCountCols = totalDownCast->NumSizeBuckets ();  // numCountCols = numCols - 6;
 
   if  (numRows == 0)
   {
-    delete  results;
-    results = NULL;
+    delete  totalDownCast;
+    totalDownCast = NULL;
     return  NULL;
   }
 
-  VectorFloat  sizeThresholds;
-
-  VectorKKStr  countHeader (numCountCols);
-  for  (int32 x = 0;  x < numCountCols;  ++x)
-  {
-    KKStr  columnName = columnNames[6 + x];
-    countHeader[x] = columnName;
-
-    float  sizeThreshold = 0;
-
-    if  (x == 0)
-    {
-      sizeThreshold = columnName.SubStrPart (1).ToFloat ();
-    }
-
-    else if  (x < (numCountCols - 1))
-    {
-      int32 idx = columnName.LocateCharacter ('_');
-      if  (idx > 0)
-        sizeThreshold = columnName.SubStrPart (idx + 1).ToFloat ();
-    }
-
-    else if  (x == (numCountCols - 1))
-    {
-      sizeThreshold = columnName.SubStrPart (2).ToFloat ();
-    }
-
-    sizeThresholds.push_back (sizeThreshold);
-  }
+  VectorFloat  sizeThresholds = totalDownCast->SizeStartValues ();
 
   bool  cancelFlag = false;
   InstrumentDataMeansListPtr  instData = db.InstrumentDataBinByMeterDepth (deployment->CruiseName (), deployment->StationName (), deployment->DeploymentNum (), 1.0f, cancelFlag);
@@ -230,6 +267,7 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
      << "SvnVersion" << "\t" << svnVersionStr                << endl
      << "HostName"   << "\t" << osGetHostName ()             << endl
      << "UserName"   << "\t" << osGetUserName ()             << endl
+     << "StatisticCode" << "\t" << statistic << "\t" << statisticStr << endl
      << endl
      << endl;
 
@@ -266,18 +304,19 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
 
   for  (int32 rowIdx = 0;  rowIdx < numRows;  ++rowIdx)
   {
-    KKStrList&  row = (*results)[rowIdx];
 
-    bool  downCast     = row[0].ToBool  ();
-    int32  bucketIdx   = row[1].ToInt32 ();
-    float  bucketDepth = row[2].ToFloat ();
-    int32  imageCount  = row[3].ToInt32 ();
-    int32  pixelCount  = row[4].ToInt32 ();
-    int32  filledArea  = row[5].ToInt32 ();
+    ImageSizeDistributionRowPtr  row = totalDownCast->GetDepthBin ((kkuint32)rowIdx);
+    if  (!row)
+      continue;
 
-    VectorInt32  counts (numCountCols, 0);
-    for  (int32 x = 0;  x < numCountCols;  ++x)
-      counts[x] = row[6 + x].ToInt32 ();
+    bool   downCast    = true;
+    int32  bucketIdx   = rowIdx;
+    float  bucketDepth = row->Depth ();
+    int32  imageCount  = (kkint32)row->ImageCount ();
+    int32  pixelCount  = row->TotalPixels ();
+    int32  filledArea  = row->TotalFilledArea ();
+
+    const VectorUint32&  counts = row->Distribution ();
 
     float  volumeSampled = 0.0f;
     InstrumentDataMeansPtr  idm = instData->LookUp (downCast, bucketDepth);
@@ -323,14 +362,14 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
 
   r1 << endl;
 
-  r1 << "" << "\t" << "" << "\t" << "" << "\t" << "Integrated Abundance" << "\t" << "";
+  r1 << "" << "\t" << "" << "\t" << "" << "\t" << "" << "\t" << "Integrated Abundance" << "\t" << "";
   for  (uint32 x = 0;  x < integratedAbundance.size ();  ++x)
   {
     r1 << "\t" << integratedAbundance[x];
   }
   r1 << endl;
 
-  r1 << "" << "\t" << "" << "\t" << "" << "\t" << "Integrated log10(Abundance)" << "\t" << "";
+  r1 << "" << "\t" << "" << "\t" << "" << "\t" << "" << "\t" << "Integrated log10(Abundance)" << "\t" << "";
   for  (uint32 x = 0;  x < integratedAbundance.size ();  ++x)
   {
     double  zed = integratedAbundance[x] + 1.0;
@@ -351,18 +390,18 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
 
   for  (int32 rowIdx = 0;  rowIdx < numRows;  ++rowIdx)
   {
-    KKStrList&  row = (*results)[rowIdx];
+    ImageSizeDistributionRowPtr  row = totalDownCast->GetDepthBin ((kkuint32)rowIdx);
+    if  (!row)
+      continue;
 
-    bool  downCast     = row[0].ToBool  ();
-    int32  bucketIdx   = row[1].ToInt32 ();
-    float  bucketDepth = row[2].ToFloat ();
-    int32  imageCount  = row[3].ToInt32 ();
-    int32  pixelCount  = row[4].ToInt32 ();
-    int32  filledArea  = row[5].ToInt32 ();
+    bool   downCast    = true;
+    int32  bucketIdx   = rowIdx;
+    float  bucketDepth = row->Depth ();
+    int32  imageCount  = (kkint32)row->ImageCount ();
+    int32  pixelCount  = row->TotalPixels ();
+    int32  filledArea  = row->TotalFilledArea ();
 
-    VectorInt32  counts (numCountCols, 0);
-    for  (int32 x = 0;  x < numCountCols;  ++x)
-      counts[x] = row[6 + x].ToInt32 ();
+    const VectorUint32&  counts = row->Distribution ();
 
     float  volumeSampled = 0.0f;
     InstrumentDataMeansPtr  idm = instData->LookUp (downCast, bucketDepth);
@@ -397,12 +436,12 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
     r1 << endl;
   }
 
-  r1 << "" << "\t" << "" << "\t" << "" << "\t" << "Integrated Counts" << "\t" << "";
+  r1 << "" << "\t" << "" << "\t" << "" << "\t" << "" << "\t" << "Integrated Counts" << "\t" << "";
   for  (uint32 x = 0;  x < integratedCounts.size ();  ++x)
     r1 << "\t" << integratedCounts[x];
 
-  delete  instData;  instData = NULL;
-  delete  results;   results  = NULL;
+  delete  instData;        instData = NULL;
+  delete  totalDownCast;   totalDownCast  = NULL;
 
   return  new DeploymentSummary (deployment->CruiseName (), deployment->StationName (), deployment->DeploymentNum (), totalVolumeSampled, sizeThresholds, integratedAbundance, integratedCounts);
 }  /* MarineSnowReportDeployment */
@@ -431,7 +470,9 @@ public:
 
 
 void  PrintSummaryReports (DataBasePtr                  db,
-                           vector<DeploymentSummary*>&  summaries
+                           vector<DeploymentSummary*>&  summaries,
+                           const KKStr&                 statistic,
+                           const KKStr&                 statisticStr
                           )
 {
   uint32  x = 0;
@@ -452,6 +493,7 @@ void  PrintSummaryReports (DataBasePtr                  db,
      << "SvnVersion" << "\t" << svnVersionStr                << endl
      << "HostName"   << "\t" << osGetHostName ()             << endl
      << "UserName"   << "\t" << osGetUserName ()             << endl
+     << "Statistic"  << "\t" << statistic << "\t" << statisticStr << endl
      << endl
      << endl
      << endl;
@@ -533,12 +575,36 @@ void  PrintSummaryReports (DataBasePtr                  db,
 
 
 
-void  MarineSnowReport ()
+void   CleanUpSummaries (vector<DeploymentSummary*>&  summaries)
+{
+  vector<DeploymentSummary*>::iterator  idx;
+  for  (idx = summaries.begin ();  idx != summaries.end ();  ++idx)
+  {
+    DeploymentSummary* s = *idx;
+    delete  s;
+    s = NULL;
+  }
+  summaries.clear ();
+}
+
+
+
+
+void  MarineSnowReport (const KKStr&  statistic)
 {
   RunLog  runLog;
   DataBasePtr  db = new DataBase (runLog);
 
-  marineSnowReportDirectory = osAddSlash (osAddSlash (SipperVariables::PicesReportDir ()) + "MarineSnowReports") + KKU::osGetLocalDateTime ().Date ().YYYYMMDD ();
+  KKStr  statisticStr = "UnKnown";
+  if  (statistic == "0")
+    statisticStr = "Area";
+  else if  (statistic == "1")
+    statisticStr = "Diameter";
+  else
+    statisticStr = "Volume";
+
+
+  marineSnowReportDirectory = osAddSlash (osAddSlash (SipperVariables::PicesReportDir ()) + "MarineSnowReports") + KKU::osGetLocalDateTime ().Date ().YYYYMMDD () + "_" + statisticStr;
   //marineSnowReportDirectory = "D:\\Users\\kkramer\\DropBox\\Dropbox\\USF_OilSpillGroup\\MarineSnow_" + KKU::osGetLocalDateTime ().Date ().YYYYMMDD ();
   KKU::osCreateDirectoryPath (marineSnowReportDirectory);
 
@@ -573,13 +639,16 @@ void  MarineSnowReport ()
       continue;
     }
 
-    DeploymentSummary*  sumary = MarineSnowReportDeployment (*idx, *db);
+    DeploymentSummary*  sumary = MarineSnowReportDeployment (*idx, *db, statistic, statisticStr, runLog);
     if  (sumary)
       summaries.push_back (sumary);
     ++loopCount;
   }
 
-  PrintSummaryReports (db, summaries);
+  PrintSummaryReports (db, summaries, statistic, statisticStr);
+
+
+  CleanUpSummaries (summaries);
 
   delete  db;
   db = NULL;
@@ -602,7 +671,7 @@ int  main (int    argc,
     _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF ); 
   #endif
 
-  MarineSnowReport ();
+  MarineSnowReport ("2");
 
   return 0;
 }

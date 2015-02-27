@@ -1,7 +1,5 @@
 Debug
 Release
-Backup
-Backup*
 *.libs
 *.a
 *.al
@@ -10,6 +8,7 @@ Backup*
 *.dll
 *.exe
 *.idb
+*.ilk
 *.la
 *.lib
 *.lo
@@ -23,7 +22,6 @@ Backup*
 *.rej
 *.sdf
 *.so
-*.suo
 *.tif
 *.zip
 *.so.[0-9]*
@@ -37,5 +35,10 @@ Thumbs.db
 /Apps/PicesCommander/obj/Debug/ResolveAssemblyReference.cache
 *.kkramer.user
 
-*.vcxproj
-*.filters
+Backup/Apps/ChartControls/Battery.cs
+Backup/Apps/ChartControls/Battery.Designer.cs
+Backup/Apps
+PicesDataBase.dbmdl
+
+PicesDataBase/PicesDataBase.dbmdl
+PicesDataBase/PicesDataBase.dbmdl
