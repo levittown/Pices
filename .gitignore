@@ -22,7 +22,6 @@ Release
 *.rej
 *.sdf
 *.so
-*.suo
 *.tif
 *.zip
 *.so.[0-9]*
@@ -39,3 +38,5 @@ Thumbs.db
 Backup/Apps/ChartControls/Battery.cs
 Backup/Apps/ChartControls/Battery.Designer.cs
 Backup/Apps
+PicesDataBase.dbmdl
+
