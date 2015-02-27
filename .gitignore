@@ -22,7 +22,6 @@ Release
 *.rej
 *.sdf
 *.so
-*.suo
 *.tif
 *.zip
 *.so.[0-9]*
