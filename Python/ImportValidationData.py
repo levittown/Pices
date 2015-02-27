@@ -62,29 +62,44 @@ def  LoadClassList(fileName):
   except  OSError  as  err:
     print("Could not open \"" + fileName + "\".");
     return  None
-
   classDic = {}
-
   for  l in classData:
     fields=l.split('\t')
     if  len(fields) > 3:
-      classId = ToInt (fields[0])
-      classMame = fields[1]
+      classId   = ToInt (fields[0])
+      classMame = fields[1].strip("\"")
       classDic[classId] = classMame
-
   classData.close()
-  
   return  classDic
+
+
+
+
+
+#Server	Description:Default	Embedded:No	HostName:localhost	UserName:root	PassWord:Dasani30!	PortNum: 3306	MySqlDataDir:	DataBaseName:pices_new
 
 
 
 def  ImportValidationDataInDirectory(dirName):
   try:
+       #db = mysql.connector.Connect(user='kkramer',
+       #                             password="tree10peach",
+       #                             host='sipper-db2.marine.usf.edu',
+       #                             database='pices_new'
+       #                          )
+              
+       #db = mysql.connector.Connect(user='kkramer',
+       #                             password="tree10peach",
+       #                             host='sipper-db2.marine.usf.edu',
+       #                             database='pices_new'
+       #                           )
+       
        db = mysql.connector.Connect(user='root',
                                     password="dasani30",
-                                    host='sipper-db.marine.usf.edu',
+                                    host='localhost',
                                     database='pices_new'
                                   )
+
   except  mysql.connector.Error as err:
     db = None
     if  err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
@@ -99,39 +114,44 @@ def  ImportValidationDataInDirectory(dirName):
 
   c = db.cursor()
   
-  fullClassFileName = os.path.join(dirName, "ClassList") + ".txt"
+  fullClassFileName = os.path.join(dirName, "Classes") + ".txt"
   classDic = LoadClassList(fullClassFileName)
   if  classDic is None:
     return
 
-  fullValdationFileName = os.path.join(dirName, "ValidatedImagesList") + ".txt"
+  fullValdationFileName = os.path.join(dirName, "ValidatedImages") + ".txt"
 
   validationData = open(fullValdationFileName)
+
+  count = 0
 
   for  l in validationData:
     fields=l.split('\t')
     if  len(fields) > 1:
-      imageFileName=fields[0]
+      imageFileName=fields[0].strip("\"")
       classId=ToInt(fields[1])
       className=classDic[classId]
-
       sqlStr="call ImagesUpdateValidatedClassIfDiff(" + "\""  + imageFileName  + "\"" + "," + \
                                                         "\""  + className      + "\"" + "," + \
                                                         "1.0" + \
                                                    ")"
-      print(sqlStr)
+      if  ((count % 50) == 0):
+        print(count, ": ", sqlStr)
       try:
         c.execute(sqlStr)
         db.commit()
       except  mysql.connector.Error  as err:
         print(err)
+      count = count + 1
    
   validationData.close ()
   
 
 
 def  main():
-  rootDir="E:\\Users\\kkramer\\Dropbox\\Sipper\\FromAndrewToKurt\\Validation\\2014-09-16\\"
+  #rootDir="E:\\Users\\kkramer\\Dropbox\\Sipper\\FromAndrewToKurt\\Validation\\2014-09-16\\"
+  rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews"
+  #rootDir="C:\\Pices\\UpdatesFromOtherServers"
   ImportValidationDataInDirectory(rootDir)
 
 
