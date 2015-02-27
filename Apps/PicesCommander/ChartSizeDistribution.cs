@@ -40,7 +40,7 @@ namespace PicesCommander
 
     private  PicesImageSizeDistribution     downCast = null;
     private  PicesImageSizeDistribution     upCast   = null;
-    private  PicesImageSizeDistribution     bucketsDisplayed = null;  // Will contain the data thatis actually displayed in the Chart; depending of Cast options.
+    private  PicesImageSizeDistribution     bucketsDisplayed = null;  // Will contain the data that is actually displayed in the Chart; depending of Cast options.
     private  float[]                        integratedDensityDistribution = null;
 
     private  String  cast              = "Down";

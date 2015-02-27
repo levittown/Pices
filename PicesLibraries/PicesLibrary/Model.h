@@ -352,6 +352,10 @@ namespace MLL
 
     void  DeAllocateSpace ();
 
+    void  Model::NormalizeProbabilitiesWithAMinumum (int32    numClasses,
+                                                     double*  probabilities,
+                                                     double   minProbability
+                                                    );
 
     void  Read         (istream& i,
                         bool&    _successful
