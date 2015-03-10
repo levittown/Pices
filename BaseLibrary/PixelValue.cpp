@@ -122,7 +122,7 @@ void  PixelValue::ToHSI (float&  hue,
   }
 
   // compute saturation
-  sat = 1 - 3 * min (min (redF, greenF), blueF) / (redF + greenF + blueF);
+  sat = 1 - 3 * Min (Min (redF, greenF), blueF) / (redF + greenF + blueF);
 
   // compute intensity
   intensity = (redF + greenF + blueF) / 3;

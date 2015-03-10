@@ -131,8 +131,8 @@ namespace  KKU
   public:
     typedef  std::complex<DftType>  DftComplexType;
 
-    KK_DFT1D (int32 _size,
-              bool  _forwardTransform
+    KK_DFT1D (kkint32 _size,
+              bool    _forwardTransform
              );
 
     ~KK_DFT1D ();
