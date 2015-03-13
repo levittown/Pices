@@ -113,7 +113,6 @@ namespace SipperFileViewer
       initialFileName = fileName;
       BeforeCallingInitializeComponent ();
       InitializeComponent ();
-      InitializeComponent ();
       Initialization ();
     }
 
