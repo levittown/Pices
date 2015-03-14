@@ -1,15 +1,15 @@
 /* ImageIO.cpp -- O/S Independent routines to load and save Raster Images.
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 
 #ifndef  _IMAGEIO_
 #define  _IMAGEIO_
 
-#include  "Str.h"
+#include  "KKStr.h"
 
 
-namespace KKU
+namespace KKB
 {
   /**
    *@file ImageIO.h
@@ -70,7 +70,7 @@ namespace KKU
                                    KKStr      fileName
                                   );
 
-} /* namespace KKU; */
+} /* namespace KKB; */
 
 #endif
 

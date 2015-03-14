@@ -12,9 +12,9 @@
 using namespace  std;
 
 
-#include "BasicTypes.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKBaseTypes.h"
+#include "KKStr.h"
+using namespace  KKB;
 
 #include "LogicalFrame.h"
 #include "LogicalFrameQueue.h"
@@ -23,9 +23,9 @@ using namespace  ImageExtractionManager;
 
 
 LogicalFrameQueue::LogicalFrameQueue (const ExtractionParms&  _parms,
-                                      uint32                  _maxSize,
-                                      uint32                  _frameHeightMax,
-                                      uint32                  _frameWidth,
+                                      kkuint32                _maxSize,
+                                      kkuint32                _frameHeightMax,
+                                      kkuint32                _frameWidth,
                                       const bool&             _cancelFlag
                                      ):
     parms                (_parms),
@@ -57,9 +57,9 @@ LogicalFrameQueue::~LogicalFrameQueue ()
 
 
 
-int32  LogicalFrameQueue::MemoryConsumedEstimated ()  const
+kkint32  LogicalFrameQueue::MemoryConsumedEstimated ()  const
 {
-  int32  memoryConsumedEstimated = sizeof (*this);
+  kkint32  memoryConsumedEstimated = sizeof (*this);
 
   vector<LogicalFramePtr>::const_iterator  idx;
   for  (idx = allFrames.begin ();  idx != allFrames.end ();  ++idx)
@@ -73,9 +73,9 @@ int32  LogicalFrameQueue::MemoryConsumedEstimated ()  const
 
 
 
-uint32  LogicalFrameQueue::FramesOnQueue ()
+kkuint32  LogicalFrameQueue::FramesOnQueue ()
 {
-  uint32  framesOnQueue = 0;
+  kkuint32  framesOnQueue = 0;
   goalie->StartBlock ();
   framesOnQueue = framesAwaitingProcessing.size ();
   goalie->EndBlock ();

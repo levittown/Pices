@@ -19,9 +19,9 @@
 //*                                                                               *
 //*********************************************************************************
 
-#include "Str.h"
+#include "KKStr.h"
 #include "RunLog.h"
-using  namespace  KKU;
+using  namespace  KKB;
 
 #include "CTD_Plus_Data.h"
 
@@ -61,8 +61,8 @@ namespace SipperHardware
   class InstrumentDataManager
   {
   public:
-    typedef  KKU::int32   int32;
-    typedef  KKU::uint32  uint32;
+    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::kkuint32  kkuint32;
 
     /**
      *@brief Creates new instance,
@@ -105,45 +105,45 @@ namespace SipperHardware
      *@param[in]  text          Set to true = text data,  false = binary data.
      *@param[in]  data          data from SIPPER file.
     */
-    void  ReportInstrumentData (uint32 curScanLine,
+    void  ReportInstrumentData (kkuint32 curScanLine,
                                 uchar  instrumentId,
                                 bool   text,
                                 uchar  data
                                );
   
-    void   BatteryData (int32               _scanLine,
-                        int32               _activeBattery, 
+    void   BatteryData (kkint32             _scanLine,
+                        kkint32             _activeBattery, 
                         const VectorFloat&  _batteryLevels
                        );
   
-    void   CompReportLine (int32  scanLine);
+    void   CompReportLine (kkint32  scanLine);
   
     InstrumentDataPtr  CreateInstrumentData ()  const;
   
-    void   CTDdataPlus    (int32                 _scanLine,
+    void   CTDdataPlus    (kkint32               _scanLine,
                            const CTD_Plus_Data&  _ctdData
                           );
   
-    void   FlowRates      (int32 _scanLine,
+    void   FlowRates      (kkint32 _scanLine,
                            float _meter1FlowRate,
                            float _meter2FlowRate
                           );
   
-    void   Location       (int32            _scanLine,
+    void   Location       (kkint32          _scanLine,
                            double           _latitude,
                            double           _longitude,
                            const TimeType&  _gpsTime
                           );
   
-    void   Meter1FlowRate (int32  _scanLine, 
+    void   Meter1FlowRate (kkint32  _scanLine, 
                            float  _meter1FlowRate
                           );
   
-    void   Meter2FlowRate (int32  _scanLine, 
+    void   Meter2FlowRate (kkint32  _scanLine, 
                            float  _meter2FlowRate
                           );
   
-    void   PitchAndRollData (int32  _scanLine,
+    void   PitchAndRollData (kkint32  _scanLine,
                              float  _pitch,
                              float  _roll
                             );
@@ -178,11 +178,11 @@ namespace SipperHardware
   private:
     void  InitializeLatitude ();
 
-    int32                     activeBattery;
+    kkint32                   activeBattery;
     VectorFloat               batteryLevels;
     ofstream*                 compReport;
-    uint64                    compReportLastCTDSecs;
-    int32                     compReportLastScanLine;
+    kkuint64                  compReportLastCTDSecs;
+    kkint32                   compReportLastScanLine;
     CTD_Plus_Data             ctdData;
     bool                      ctdDataRead;            // true indicates that a complete CTD record has been processed.
     InstrumentDataReportPtr*  dataReports;
@@ -202,10 +202,10 @@ namespace SipperHardware
     InstrumentDataReportPtr*  textReports;
   
     // Fields to suport tracking scan lines per meter depth.
-    int32                     depthLastReported;
-    int32                     depthMax;
-    uint32                    lastScanLine;
-    uint32*                   scanLinesPerMeterDepth;
+    kkint32                   depthLastReported;
+    kkint32                   depthMax;
+    kkuint32                  lastScanLine;
+    kkuint32*                   scanLinesPerMeterDepth;
   };
   
   typedef  InstrumentDataManager*  InstrumentDataManagerPtr;

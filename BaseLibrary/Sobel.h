@@ -1,11 +1,11 @@
 /* Sobel.h -- Performs Sobel Edge Detection on a Raster image.
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #ifndef  _SOBEL_
 #define  _SOBEL_
 
-namespace KKU
+namespace KKB
 {
   #ifndef  _RASTER_
   class  Raster;
@@ -27,14 +27,14 @@ namespace KKU
 
     float**    edgeAngles;
 
-    int32**    edgeMagnitudes;   /**< Will be stored as square,  to save the time of computing floating point operations. */
+    kkint32**    edgeMagnitudes;   /**< Will be stored as square,  to save the time of computing floating point operations. */
 
-    int32      height;
-    int32      maxMagnitude;     /**< Like edgeMagnitudes will be stored as a Square */
+    kkint32    height;
+    kkint32    maxMagnitude;     /**< Like edgeMagnitudes will be stored as a Square */
     RasterPtr  raster;
-    int32      width;
+    kkint32    width;
   };  /* Sobel */
 
-} /* namespace KKU; */
+} /* namespace KKB; */
 
 #endif

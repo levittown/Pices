@@ -3,7 +3,7 @@
 
 #include  "PicesApplication.h"
 #include  "RunLog.h"
-#include  "Str.h"
+#include  "KKStr.h"
 
 #include  "FileDesc.h"
 #include  "MLClass.h"
@@ -28,7 +28,7 @@ public:
 	virtual const char* ApplicationName ()  const  {return  "FeatureFileStats";}
 
   virtual
-  void  InitalizeApplication (int32   argc,
+  void  InitalizeApplication (kkint32 argc,
                               char**  argv
                              );
 

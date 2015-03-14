@@ -5,7 +5,7 @@
 #include "KKStrParser.h"
 #include "OSservices.h"
 #include "RunLog.h"
-#include "Str.h"
+#include "KKStr.h"
 
 #include "CrossValidation.h"
 #include "FeatureNumList.h"
@@ -46,7 +46,7 @@ namespace FeatureSelectionApp
                int             _parentId,
                FeatureNumList  _features,
                int             _chgFeatureNum,
-               int32           _numOfRounds,
+               kkint32         _numOfRounds,
                double          _cParm,
                double          _gammaParm,
                float           _aParm
@@ -93,7 +93,7 @@ namespace FeatureSelectionApp
     const
     FeatureNumList&     Features              () const {return features;}
     int                 JobId                 () const {return jobId;}
-    int32               NumOfRounds        () const {return numOfRounds;}
+    kkint32             NumOfRounds        () const {return numOfRounds;}
     int                 ParentId              () const {return parentId;}
     ProcessorPtr        Processor             () const {return processor;}
     double              ProcessingTime        () const {return processingTime;}
@@ -122,7 +122,7 @@ namespace FeatureSelectionApp
     void   GammaParm          (double             _gammaParm)         {gammaParm        = _gammaParm;}
     void   Grade              (float              _grade)             {grade            = _grade;}
     void   JobId              (int                _jobId)             {jobId            = _jobId;}
-    void   NumOfRounds        (int32              _numOfRounds)       {numOfRounds      = _numOfRounds;}
+    void   NumOfRounds        (kkint32            _numOfRounds)       {numOfRounds      = _numOfRounds;}
     void   ProcessingTime     (double             _processingTime)    {processingTime   = _processingTime;}
     void   Status             (bjBinaryJobStatus  _status)            {status           = _status;}
     void   TestAccuracy       (float              _testAccuracy)      {testAccuracy     = _testAccuracy;}
@@ -222,7 +222,7 @@ namespace FeatureSelectionApp
     double               cParm;
     double               gammaParm;
     float                aParm;
-    int32                numOfRounds;
+    kkint32              numOfRounds;
 
     bool                 validateOnly;
   };

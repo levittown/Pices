@@ -96,25 +96,25 @@ public:
 
   bool  Eof ()      {return  eof;}
 
-  uint32  CurRow ()   {return  curRow;} 
+  kkuint32  CurRow ()   {return  curRow;} 
 
   bool  Opened ()   {return  opened;}
 
-  uint32  RecCount () {return  recCount;}
+  kkuint32  RecCount () {return  recCount;}
 
   void  GetNextLine (uchar* lineBuff,
-                     uint32 lineBuffSize,
-                     uint32&  lineSize,
-                     uint32 colCount[],
-                     uint32&  pixelsInRow,
+                     kkuint32 lineBuffSize,
+                     kkuint32&  lineSize,
+                     kkuint32 colCount[],
+                     kkuint32&  pixelsInRow,
                      bool&  flow);
 
-  void  SkipToScanLine (uint32  scanLine);
+  void  SkipToScanLine (kkuint32  scanLine);
 
 private:
 
   inline
-  void  GetNextSipperRec (uint32&  spaceLeft,
+  void  GetNextSipperRec (kkuint32&  spaceLeft,
                           uchar&   cameraNum,
                           bool&    raw,
                           bool&    eol,
@@ -123,7 +123,7 @@ private:
                           uchar&   pixel1,
                           uchar&   pixel2,
                           uchar&   pixel3,
-                          uint32&  numOfBlanks,
+                          kkuint32&  numOfBlanks,
                           bool&    moreRecs);
 
 

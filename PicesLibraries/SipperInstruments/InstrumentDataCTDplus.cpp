@@ -10,10 +10,10 @@
 #include  "MemoryDebug.h"
 using namespace std;
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "OSservices.h"
-#include  "Str.h"
-using namespace KKU;
+#include  "KKStr.h"
+using namespace KKB;
 
 
 #include  "InstrumentDataCTDplus.h"
@@ -28,7 +28,7 @@ using namespace SipperHardware;
 InstrumentDataCTDplus::InstrumentDataCTDplus (InstrumentDataManagerPtr _manager,
                                               const KKStr&             _reportDir,
                                               bool                     _text,
-                                              int32                    _instrumentId
+                                              kkint32                  _instrumentId
                                              ):
 
     InstrumentDataReport (_manager, _reportDir, _text, _instrumentId, false),
@@ -198,7 +198,7 @@ void  InstrumentDataCTDplus::ProcessCTDdata (const KKStr&  txt)
 
 
 
-void  InstrumentDataCTDplus::ReportInstrumentData (uint32 curScanLine,
+void  InstrumentDataCTDplus::ReportInstrumentData (kkuint32 curScanLine,
                                                    uchar  sensorData
                                                   )
 {
@@ -261,12 +261,12 @@ void  InstrumentDataCTDplus::ReportInstrumentData (uint32 curScanLine,
  */
 void  InstrumentDataCTDplus::ParseTxtBlock (KKStr&  block)
 {
-  int32 lineStartIdx = 0;
-  int32 lineEndIdx   = 0;
+  kkint32 lineStartIdx = 0;
+  kkint32 lineEndIdx   = 0;
 
   while  (block.Len () > 122)
   {
-    int32  monthIdx = LocateAMonthNameStr (block);
+    kkint32  monthIdx = LocateAMonthNameStr (block);
 
     if  (monthIdx < 0)
     {
@@ -306,10 +306,10 @@ void  InstrumentDataCTDplus::ParseTxtBlock (KKStr&  block)
 
 
 
-int32 InstrumentDataCTDplus::LocateAMonthNameStr (const KKStr& str)
+kkint32 InstrumentDataCTDplus::LocateAMonthNameStr (const KKStr& str)
 {
-  int32 idx = 0;
-  int32 lastIdx = str.Len () - 6;
+  kkint32 idx = 0;
+  kkint32 lastIdx = str.Len () - 6;
   const char* s = str.Str ();
 
   char  c0, c1, c2;

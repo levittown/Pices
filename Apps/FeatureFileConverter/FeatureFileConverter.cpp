@@ -16,11 +16,11 @@
 using namespace std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "KKException.h"
 #include "OSservices.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 #include "FeatureEncoder2.h"
 #include "FeatureFileIO.h"
@@ -148,7 +148,7 @@ FeatureFileConverter::~FeatureFileConverter ()
 
 
 
-void  FeatureFileConverter::InitalizeApplication (int32   argc,
+void  FeatureFileConverter::InitalizeApplication (kkint32 argc,
                                                   char**  argv
                                                  )
 {
@@ -842,7 +842,7 @@ void  SplitForestCoverFile ()
     c++;
   }
 
-  KKU::uint  numExamplesWritten = 0;
+  KKB::uint  numExamplesWritten = 0;
   FeatureFileIOC45::Driver ()->SaveFeatureFile 
                   ("CovType_TwoClass.data", 
                    trainData->AllFeatures (),
@@ -889,7 +889,7 @@ void  NormalizeAllValidatdData ()
      log
     );
 
-  uint32  numWritten = 0;
+  kkuint32  numWritten = 0;
 
   NormalizationParms parms (true, *fd, log);
   parms.NormalizeImages (fd);
@@ -922,7 +922,7 @@ int  main (int     argc,
   //exit (0);
 
   time_t     long_time;
-  SRand48 ((KKU::uint)time (&long_time));
+  SRand48 ((KKB::uint)time (&long_time));
   FeatureFileConverter fileConverter;
   fileConverter.InitalizeApplication (argc, argv);
   if  (!fileConverter.Abort ())

@@ -20,14 +20,14 @@ namespace  SipperHardware
     const   KKStr&           Description   () const  {return description;}
     double                   Latitude      () const  {return latitude;}
     double                   Longitude     () const  {return longitude;}
-    const   KKU::DateTime&   DateTimeStart () const  {return dateTimeStart;}
+    const   KKB::DateTime&   DateTimeStart () const  {return dateTimeStart;}
 
     void  CruiseName     (const KKStr&          _cruiseName)     {cruiseName    = _cruiseName;}
     void  StationName    (const KKStr&          _stationName)    {stationName   = _stationName;}
     void  Description    (const KKStr&          _description)    {description   = _description;}
     void  Latitude       (double                _latitude)       {latitude      = _latitude;}
     void  Longitude      (double                _longitude)      {longitude     = _longitude;}
-    void  DateTimeStart  (const KKU::DateTime&  _dateTimeStart)  {dateTimeStart = _dateTimeStart;}
+    void  DateTimeStart  (const KKB::DateTime&  _dateTimeStart)  {dateTimeStart = _dateTimeStart;}
 
   private:
     KKStr          cruiseName;
@@ -35,7 +35,7 @@ namespace  SipperHardware
     KKStr          description;
     double         latitude;
     double         longitude;
-    KKU::DateTime  dateTimeStart;
+    KKB::DateTime  dateTimeStart;
   };  /* SipperStation */
 
 

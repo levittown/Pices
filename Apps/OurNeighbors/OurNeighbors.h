@@ -2,8 +2,8 @@
 #define  _OURNEIGHBORS_
 
 #include "RunLog.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 #include "ImageFeatures.h"
 #include "MLClass.h"
@@ -21,7 +21,7 @@ public:
 
 	~OurNeighbors();
 
-  void  InitalizeApplication (int32   argc,
+  void  InitalizeApplication (kkint32 argc,
                               char**  argv
                              );
 
@@ -42,12 +42,12 @@ private:
 
 
   LLoydsEntryPtr       DeriveLLoydsBins (const ImageFeaturesList&  examples,
-                                         int32                     lloydsBinSize
+                                         kkint32                   lloydsBinSize
                                         );
 
   MLClassConstPtr      DetermineClassFromFileName (const  KKStr&  fileName);
 
-  int32                LastScanLine (const ImageFeaturesList&  images)  const;
+  kkint32              LastScanLine (const ImageFeaturesList&  images)  const;
 
   void                 RemoveExcludedClasses (ImageFeaturesListPtr&  examples);
 
@@ -55,7 +55,7 @@ private:
 
 
 
-  int32                bucketSize;
+  kkint32              bucketSize;
   bool                 cancelFlag;
   MLClassConstListPtr  excludedClasses;   // List of classes to exclude from report.
   KKStr                featureFileName;
@@ -66,12 +66,12 @@ private:
 	KKStr                htmlFileName;
 	MLClassConstPtr      mlClass;
 	MLClassConstListPtr  mlClasses;
-  int32                lastScanLine;  // Last scan line in SIPPER file;  
-  int32                baseLLoydsBinSize;
+  kkint32              lastScanLine;  // Last scan line in SIPPER file;  
+  kkint32              baseLLoydsBinSize;
   KKStr                lloydsBinsFileName;
   NeighborType         neighborType;
-  int32                numOfIterations;
-  int32                numOfBuckets;
+  kkint32              numOfIterations;
+  kkint32              numOfBuckets;
   bool                 randomizeLocations;
 	ostream*             report;
 	ofstream*            reportFile;

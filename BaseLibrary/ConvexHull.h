@@ -15,10 +15,10 @@
  */
 
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 
 
-namespace KKU
+namespace KKB
 {
   #ifndef  _POINT_
   class  Point;
@@ -44,7 +44,7 @@ namespace KKU
 
     RasterPtr  Filter (Raster&  src);
 
-    int32   ConvexArea ();
+    kkint32 ConvexArea ();
 
     void    Draw (Raster& output);
 
@@ -68,7 +68,7 @@ namespace KKU
 
     void    Merge ();
       
-    int32   RelativeCCW (Point&  sp,
+    kkint32 RelativeCCW (Point&  sp,
                          Point&  ep,
                          Point&  p);
 
@@ -78,7 +78,7 @@ namespace KKU
 		                 Point& c);
 
 
-    int32         convexArea;
+    kkint32       convexArea;
 
     PointListPtr  upperPoints;
     PointListPtr  lowerPoints;
@@ -87,6 +87,6 @@ namespace KKU
   };
 
   typedef  ConvexHull*  ConvexHullPtr;
-}  /* namespace KKU; */
+}  /* namespace KKB; */
 
 #endif

@@ -18,7 +18,7 @@
 //******************************************************************************
 
 #include "Raster.h"
-#include "Str.h"
+#include "KKStr.h"
 #include "MLLTypes.h"
 #include "MLClass.h"
 #include "ImageFeatures.h"
@@ -39,10 +39,10 @@ namespace  MLL
     SipperExtractionImageManager (FileDescPtr   _fileDesc,
                                   const KKStr&  _rootDir,
                                   bool          _saveFeatureData,
-                                  int32         _veryLargeImageSize,
+                                  kkint32       _veryLargeImageSize,
                                   bool          _imagesAreClassified,
                                   bool          _countOnly,
-                                  uint32        _imagesPerDirectory,
+                                  kkuint32      _imagesPerDirectory,
                                   RunLog&       _log
                                  );
 
@@ -50,7 +50,7 @@ namespace  MLL
 
     void  AddImage (const KKStr&     fileName,
                     MLClassConstPtr  predClass,
-                    int32            size,
+                    kkint32          size,
                     float            depth,
                     ImageFeaturesPtr example,
                     RasterPtr        raster,
@@ -85,7 +85,7 @@ namespace  MLL
     SizeDistribution      depthDistribution_10;    // using a SizeDistribution structure to implement counts by depth
     FileDescPtr           fileDesc;
     bool                  imagesAreClassified;
-    uint32                imagesPerDirectory;
+    kkuint32              imagesPerDirectory;
     RunLog&               log;
     ManagedClassPtr       largeImages;
     ManagedClassPtr       lastManagedClassUsed;
@@ -96,7 +96,7 @@ namespace  MLL
     SizeDistribution      sizeDistributionMed;
     SizeDistribution      sizeDistributionSmall;
 
-    int32                 veryLargeImageSize;
+    kkint32               veryLargeImageSize;
 
     class  ImageEntry;
     class  ManagedClasssesSortByClassName;

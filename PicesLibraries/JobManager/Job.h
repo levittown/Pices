@@ -34,7 +34,7 @@
 #include "KKQueue.h"
 #include "OSservices.h"
 #include "RunLog.h"
-#include "Str.h"
+#include "KKStr.h"
 
 
 

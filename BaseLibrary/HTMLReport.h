@@ -2,7 +2,7 @@
 #define  _HTMLREPORT_
 
 #include  "DateTime.h"
-#include  "Str.h"
+#include  "KKStr.h"
 
 
 #ifndef  WIN32
@@ -11,7 +11,7 @@
 
 
 
-namespace KKU 
+namespace KKB 
 {
   class  HTMLReport
   {
@@ -33,10 +33,10 @@ namespace KKU
     ostream&  OStream ()  {return  r;}
 
 
-    friend  HTMLReport&  operator<< (HTMLReport&  htmlReport,  int32           right);
-    friend  HTMLReport&  operator<< (HTMLReport&  htmlReport,  uint32          right);
-    friend  HTMLReport&  operator<< (HTMLReport&  htmlReport,  int64           right);
-    friend  HTMLReport&  operator<< (HTMLReport&  htmlReport,  uint64          right);
+    friend  HTMLReport&  operator<< (HTMLReport&  htmlReport,  kkint32         right);
+    friend  HTMLReport&  operator<< (HTMLReport&  htmlReport,  kkuint32        right);
+    friend  HTMLReport&  operator<< (HTMLReport&  htmlReport,  kkint64         right);
+    friend  HTMLReport&  operator<< (HTMLReport&  htmlReport,  kkuint64        right);
     friend  HTMLReport&  operator<< (HTMLReport&  htmlReport,  double          right);
 
     friend  HTMLReport&  operator<< (HTMLReport&  htmlReport,  char            right);
@@ -82,11 +82,11 @@ namespace KKU
 
 
   HTMLReport&  operator<< (HTMLReport&  htmlReport,
-                           int32        right
+                           kkint32      right
                           );
 
   HTMLReport&  operator<< (HTMLReport&     htmlReport,
-                       uint32      right);
+                       kkuint32    right);
 
   HTMLReport&  operator<< (HTMLReport&  htmlReport,
                            long         right
@@ -124,6 +124,6 @@ namespace KKU
                            const DateTime&  right
                           );
 
-}  /* namespace KKU */
+}  /* namespace KKB */
 
 #endif

@@ -1,9 +1,9 @@
 #pragma once
 
 #include "DateTime.h"
-#include "Str.h"
+#include "KKStr.h"
 #include "Matrix.h"
-using namespace  KKU;
+using namespace  KKB;
 
 #include "MLClass.h"
 using namespace  MLL;

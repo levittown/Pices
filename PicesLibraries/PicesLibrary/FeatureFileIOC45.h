@@ -38,7 +38,7 @@ namespace MLL
     virtual  FileDescPtr  GetFileDesc (const KKStr&         _fileName,
                                        istream&             _in,
                                        MLClassConstListPtr  _classList,
-                                       int32&               _estSize,
+                                       kkint32&               _estSize,
                                        KKStr&               _errorMessage,
                                        RunLog&              _log
                                       );
@@ -74,7 +74,7 @@ namespace MLL
                        const KKStr&          _fileName,
                        const FeatureNumList& _selFeatures,
                        ostream&              _out,
-                       uint32&               _numExamplesWritten,
+                       kkuint32&               _numExamplesWritten,
                        VolConstBool&         _cancelFlag,
                        bool&                 _successful,
                        KKStr&                _errorMessage,
@@ -92,7 +92,7 @@ namespace MLL
 
     void  C45StrPreProcessName (KKStr&  ln);
 
-    int32  C45LocateNextCharacter (const KKStr& txt,
+    kkint32  C45LocateNextCharacter (const KKStr& txt,
                                    char         ch
                                   );
 

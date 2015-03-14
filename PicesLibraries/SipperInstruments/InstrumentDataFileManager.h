@@ -51,20 +51,22 @@
  ***************************************************************************************************************
  @endcode
  */
-#include  "BasicTypes.h"
+#include "KKBaseTypes.h"
 
-#ifdef  WIN32
-#include  "..\\BaseLibrary\\GoalKeeper.h"
-#else
-#include "../BaseLibrary/GoalKeeper.h"
-#endif
+#include "GoalKeeper.h"
 
-#include  "RasterSipper.h"
-#include  "RunLog.h"
-#include  "Str.h"
-using  namespace KKU;
+//#ifdef  WIN32
+//#include  "..\\BaseLibrary\\GoalKeeper.h"
+//#else
+//#include "../BaseLibrary/GoalKeeper.h"
+//#endif
 
-#include  "SipperFile.h"
+#include "RasterSipper.h"
+#include "RunLog.h"
+#include "KKStr.h"
+using  namespace KKB;
+
+#include "SipperFile.h"
 
 
 
@@ -93,10 +95,10 @@ namespace  SipperHardware
   class InstrumentDataFileManager
   {
   public:
-    typedef  KKU::int32   int32;
-    typedef  KKU::uint32  uint32;
-    typedef  KKU::int64   int64;
-    typedef  KKU::uint64  uint64;
+    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::kkuint32  kkuint32;
+    typedef  KKB::kkint64 kkint64;
+    typedef  KKB::kkuint64  kkuint64;
 
     InstrumentDataFileManager ();
     ~InstrumentDataFileManager ();
@@ -158,12 +160,12 @@ namespace  SipperHardware
                                                                          );
   
     static  RasterSipperPtr  GetOrigSipperImage (const KKStr&  sipperFileRootName,
-                                                 KKU::uint64   byteOffset,
-                                                 uint32        topLeftRow,
-                                                 uint32        tooLeftCol,
-                                                 uint32        height,
-                                                 uint32        width,
-                                                 KKU::uchar    connectedComponentDist,  /**< Siize of structure used by Connected Component Analysis */
+                                                 KKB::kkuint64 byteOffset,
+                                                 kkuint32      topLeftRow,
+                                                 kkuint32      tooLeftCol,
+                                                 kkuint32      height,
+                                                 kkuint32      width,
+                                                 KKB::uchar    connectedComponentDist,  /**< Siize of structure used by Connected Component Analysis */
                                                  RunLog&       log
                                                 );
   
@@ -195,7 +197,7 @@ namespace  SipperHardware
   
     static  InstrumentDataFileManager*                instrumentDataManager;
      
-    static  int32                                     initializedStackSize;
+    static  kkint32                                   initializedStackSize;
   
     static  GoalKeeperPtr                             blocker;
   

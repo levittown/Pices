@@ -14,9 +14,9 @@
 using namespace std;
 
 #include  "MemoryDebug.h"
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "OSservices.h"
-//using namespace KKU;
+//using namespace KKB;
 
 #include  "PicesSipperCruise.h"
 #include  "PicesKKStr.h"
@@ -57,7 +57,7 @@ PicesSipperCruise::~PicesSipperCruise  ()
 
 
 	
-System::DateTime   ToSystemDateTime (const  KKU::DateType&  date)
+System::DateTime   ToSystemDateTime (const  KKB::DateType&  date)
 {
   System::DateTime  dt;
 
@@ -68,10 +68,10 @@ System::DateTime   ToSystemDateTime (const  KKU::DateType&  date)
 }
 
 
-KKU::DateType   ToKkuDateType (System::DateTime   dt)
+KKB::DateType   ToKkuDateType (System::DateTime   dt)
 {
   
-  return  KKU::DateType (dt.Year, dt.Month, dt.Day);
+  return  KKB::DateType (dt.Year, dt.Month, dt.Day);
 }
 
 

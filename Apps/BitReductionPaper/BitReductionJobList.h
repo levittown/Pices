@@ -13,13 +13,13 @@
 #include  "Orderings.h"
 #include  "KKQueue.h"
 #include  "RunLog.h"
-#include  "Str.h"
+#include  "KKStr.h"
 #include  "SVMparam.h"
 #include  "TrainingConfiguration.h"
 
 
 
-#include  "Str.h"
+#include  "KKStr.h"
 
 #define  MaxNumOfRandomSplits 50
 

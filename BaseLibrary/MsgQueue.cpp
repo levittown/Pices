@@ -1,7 +1,7 @@
 /* MsgQueue.h -- Implements a Message Queue allowing multiple threads to add and remove messages using KKStr 
  *                   instances without corrupting memory.
  * Copyright (C) 2011-2011  Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #include  "FirstIncludes.h"
 #if  defined(WIN32)
@@ -23,7 +23,7 @@ using namespace std;
 #include "KKException.h"
 #include "MsgQueue.h"
 #include "OSservices.h"
-using  namespace  KKU;
+using  namespace  KKB;
 
 
 MsgQueue::MsgQueue (const KKStr&  _name):        /* Name of buffer, must be unique */
@@ -100,9 +100,9 @@ KKStrPtr  MsgQueue::GetNextMsg ()
 
 
 
-int32  MsgQueue::MemoryConsumedEstimated ()
+kkint32  MsgQueue::MemoryConsumedEstimated ()
 {
-  int32  result = 0;
+  kkint32  result = 0;
   gateKeeper->StartBlock ();
   result = memoryConsumed;
   gateKeeper->EndBlock ();

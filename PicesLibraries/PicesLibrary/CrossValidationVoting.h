@@ -95,7 +95,7 @@ namespace  MLL
     CrossValidationVoting (TrainingConfigurationList2Ptr  _configs,
                            FeatureVectorListPtr           _examples,
                            MLClassConstListPtr         _mlClasses,
-                           int32                          _numOfFolds,
+                           kkint32                        _numOfFolds,
                            bool                           _featuresAreAlreadyNormalized,
                            FileDescPtr                    _fileDesc,
                            RunLog&                        _log
@@ -114,12 +114,12 @@ namespace  MLL
 
     float   Accuracy ();
     double  ClassificationTime ()         const {return  classificationTime;}
-    float   FoldAccuracy (int32 foldNum)  const;
+    float   FoldAccuracy (kkint32 foldNum)  const;
     KKStr   FoldAccuracysToStr ()         const;
     KKStr   FoldStr ()                    const;
-    int32   NumOfSupportVectors       ()  const {return  numOfSupportVectors;}
-    int32   ReductionPreExampleCount ()   const {return  reductionPreExampleCount;}
-    int32   ReductionPostExampleCount ()  const {return  reductionPostExampleCount;}
+    kkint32 NumOfSupportVectors       ()  const {return  numOfSupportVectors;}
+    kkint32 ReductionPreExampleCount ()   const {return  reductionPreExampleCount;}
+    kkint32 ReductionPostExampleCount ()  const {return  reductionPostExampleCount;}
     float   ReductionRatio ()             const;
     double  ReductionTime ()              const {return  reductionTime;}
     double  TrainingTime ()               const {return  trainingTime;}
@@ -130,7 +130,7 @@ namespace  MLL
 
     void  CrossValidate (FeatureVectorListPtr   testImages, 
                          FeatureVectorListPtr   trainingImages,
-                         int32                  foldNum,
+                         kkint32                foldNum,
                          bool*                  classedCorrectly = NULL
                         );
 
@@ -141,25 +141,25 @@ namespace  MLL
     bool                          featuresAreAlreadyNormalized;
     FileDescPtr                   fileDesc;
     float*                        foldAccuracies;
-    int32*                        foldCounts;
+    kkint32*                        foldCounts;
     ConfusionMatrix2Ptr           confusionMatrix;
     ConfusionMatrix2Ptr*          cmByNumOfConflicts;
     FeatureVectorListPtr          examples;
     MLClassConstListPtr        mlClasses;
-    int32                         examplesPerClass;
+    kkint32                       examplesPerClass;
     RunLog&                       log;
-    int32                         maxNumOfConflicts;  // Will indicate the number confusionMatrices created in
+    kkint32                       maxNumOfConflicts;  // Will indicate the number confusionMatrices created in
                                                       // table in cmByNumOfConflicts;
-    int32                         numOfFolds;
-    int32                         numOfSupportVectors;
-    int32*                        numOfWinnersCounts;
-    int32*                        numOfWinnersCorrects;
-    int32*                        numOfWinnersOneOfTheWinners;
+    kkint32                       numOfFolds;
+    kkint32                       numOfSupportVectors;
+    kkint32*                        numOfWinnersCounts;
+    kkint32*                        numOfWinnersCorrects;
+    kkint32*                        numOfWinnersOneOfTheWinners;
 
     double                        classificationTime;
     double                        reductionTime;
-    int32                         reductionPreExampleCount;
-    int32                         reductionPostExampleCount;
+    kkint32                       reductionPreExampleCount;
+    kkint32                       reductionPostExampleCount;
     double                        trainingTime;
   };
 

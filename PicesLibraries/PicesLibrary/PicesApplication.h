@@ -7,9 +7,9 @@
  */
 
 #include "Application.h"
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "RunLog.h"
-#include "Str.h"
+#include "KKStr.h"
 
 
 namespace MLL
@@ -89,7 +89,7 @@ namespace MLL
      *@details This constructor is not interested in any command line parameters.
      *@param[in]  _log  A reference to a RunLog object.
      */
-    PicesApplication (KKU::RunLog&  _log);
+    PicesApplication (KKB::RunLog&  _log);
 
 
 
@@ -109,7 +109,7 @@ namespace MLL
      *@param[in]  argv  List of asciiz strings; one string for each argument.
      */
     virtual
-    void     InitalizeApplication (int32   argc,
+    void     InitalizeApplication (kkint32 argc,
                                    char**  argv
                                   );
 
@@ -182,6 +182,6 @@ namespace MLL
     bool               dataBaseRequired;
 
   };  /* PicesApplication */
-}  /* NameSpace KKU */
+}  /* NameSpace KKB */
 
 #endif

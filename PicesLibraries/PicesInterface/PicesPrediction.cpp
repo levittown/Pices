@@ -18,22 +18,15 @@ using namespace System;
 using namespace System::Threading;
 using namespace System::Windows::Forms;
 
-#include  "MemoryDebug.h"
-#include  "BasicTypes.h"
-#include  "..\\BaseLibrary\\GoalKeeper.h"
-#include  "OSservices.h"
-
-using namespace KKU;
-
-
-//#include "MLClass.h"
-
-//#include "PicesKKStr.h"
+#include "MemoryDebug.h"
+#include "KKBaseTypes.h"
+#include "GoalKeeper.h"
+#include "OSservices.h"
+using namespace KKB;
 
 
 #include  "PicesClass.h"
 #include  "PicesPrediction.h"
-
 using namespace PicesInterface;
 
 

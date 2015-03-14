@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <memory>
 
-typedef  unsigned int32  uint32;
+typedef  unsigned kkint32  kkuint32;
 
 
 namespace MLL
@@ -29,20 +29,20 @@ class  KArray
 typedef  Entry*  EntryPtr;
 
 private:
-    uint32      allocSize;
+    kkuint32    allocSize;
 
     EntryPtr  block;
 
     Entry     initialValue;
 
-    uint32      growthRate;
+    kkuint32    growthRate;
 
-    uint32      size;
+    kkuint32    size;
 
     
 
 public:
-    KArray (int32   _initialSize,
+    KArray (kkint32 _initialSize,
             Entry _initialValue);
 
 
@@ -52,12 +52,12 @@ public:
     ~KArray ();
 
 
-    void  Swap (uint32 idx1,  
-                uint32 idx2
+    void  Swap (kkuint32 idx1,  
+                kkuint32 idx2
                );
 
 
-    Entry&    operator[] (int32 i);
+    Entry&    operator[] (kkint32 i);
 
 
     KArray&   operator= (KArray& k);
@@ -78,7 +78,7 @@ private:
 
 
 template <class Entry>
-KArray<Entry>::KArray (int32   _initialSize,
+KArray<Entry>::KArray (kkint32 _initialSize,
                        Entry _initialValue
                       ):
     initialValue (_initialValue),
@@ -96,7 +96,7 @@ KArray<Entry>::KArray (int32   _initialSize,
   block = new Entry[growthRate];
   allocSIze = growthRate;
 
-  for (int32 i = 0; i < allocSize; i++)
+  for (kkint32 i = 0; i < allocSize; i++)
   {
     block[i] = initialValue;
   }
@@ -114,7 +114,7 @@ KArray<Entry>::KArray (KArray&  k):
   block = new Entry[size];
   allocSize = size;
 
-  for  (uint32 i = 0;  i < size;  i++)
+  for  (kkuint32 i = 0;  i < size;  i++)
      block[i] = k.block[i];
 } 
 
@@ -131,8 +131,8 @@ KArray<Entry>::~KArray ()
 
 
 template <class Entry>
-void  KArray<Entry>::Swap (uint32 idx1,  
-                           uint32 idx2
+void  KArray<Entry>::Swap (kkuint32 idx1,  
+                           kkuint32 idx2
                           )
 {
   Entry  temp = block[idx1];
@@ -144,16 +144,16 @@ void  KArray<Entry>::Swap (uint32 idx1,
 
 
 template <class Entry>
-Entry&   KArray<Entry>::operator[] (int32 i)
+Entry&   KArray<Entry>::operator[] (kkint32 i)
 {
   if  (i > size)
   {
     if  (i > allocSize)
     {
-      uint32  newAllocSize = i + growthRate;
+      kkuint32  newAllocSize = i + growthRate;
       Entry*  newBlock = new Entry[newAllocSize];
 
-      uint32  i = 0;
+      kkuint32  i = 0;
       while  (i < size)
       {
         newBlock[i] = block[i];
@@ -189,7 +189,7 @@ KArray<Entry>&   KArray<Entry>::operator= (KArray& k)
   allocSize = size;
   growthRate = k.growthRate;
 
-  for  (uint32 i = 0;  i < size;  i++)
+  for  (kkuint32 i = 0;  i < size;  i++)
      block[i] = k.block[i];
 
   return *this;
@@ -200,8 +200,8 @@ KArray<Entry>&   KArray<Entry>::operator= (KArray& k)
 
 void  KArray<Entry>::Randomize ()
 {
-  uint32   i;
-  uint32   j;
+  kkuint32 i;
+  kkuint32 j;
 
   srand (time (0));
   for  (i = 0;  i < numEntries;  i++)

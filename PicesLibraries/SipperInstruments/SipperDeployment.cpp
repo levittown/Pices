@@ -11,10 +11,10 @@
 #include  "MemoryDebug.h"
 using namespace std;
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "OSservices.h"
-#include  "Str.h"
-using namespace KKU;
+#include  "KKStr.h"
+using namespace KKB;
 
 
 #include "SipperDeployment.h"

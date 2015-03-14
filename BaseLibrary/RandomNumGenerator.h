@@ -1,13 +1,13 @@
 /* RandomNumGenerator.h -- Class that represents one Random Number Generator.
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #ifndef  _KKU_RANDOMNUMGENERATOR_
 #define  _KKU_RANDOMNUMGENERATOR_
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 
-namespace  KKU
+namespace  KKB
 {
   /**
    *@brief  Represents one single random number generator.
@@ -29,12 +29,12 @@ namespace  KKU
   
   
   private:
-    int64 _lrand48_sequence;
+    kkint64 _lrand48_sequence;
   
-    static const int64 a; 
-    static const int64 c; 
-    static const int64 m;
-    static const int64 mask;
+    static const kkint64 a; 
+    static const kkint64 c; 
+    static const kkint64 m;
+    static const kkint64 mask;
   };  /* RandomNumGenerator */
 }
 

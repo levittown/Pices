@@ -1,6 +1,6 @@
 /* GoalKeeper.cpp -- Implements blocking routines to support thread synchronization.
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #include  "FirstIncludes.h"
 
@@ -23,7 +23,7 @@ using namespace std;
 
 #include "GoalKeeper.h"
 #include "OSservices.h"
-using namespace  KKU;
+using namespace  KKB;
 
 
 GoalKeeper::GoalKeeper (const KKStr&  _name):
@@ -54,7 +54,7 @@ GoalKeeper::~GoalKeeper ()
 
 
 
-int32  GoalKeeper::MemoryConsumedEstimated ()  const
+kkint32  GoalKeeper::MemoryConsumedEstimated ()  const
 {
   return  (sizeof (GoalKeeper) + name.MemoryConsumedEstimated ());
 }
@@ -73,7 +73,7 @@ bool   GoalKeeper::BlockedByAnotherThread ()
   if  (!blocked)
     return false;
 
-  int32  curThreadId = KKU::osGetThreadId ();
+  kkint32  curThreadId = KKB::osGetThreadId ();
   return  (blocked  &&  (curThreadId != blockerThreadId));
 }
 
@@ -104,7 +104,7 @@ void  GoalKeeper::CriticalSectionEnd ()
 
 void  GoalKeeper::StartBlock ()
 {
-  int32  curThreadId = KKU::osGetThreadId ();
+  kkint32  curThreadId = KKB::osGetThreadId ();
   
   bool           firstPassThruLoop = true;
   bool           weAreBlocked      = true;
@@ -184,9 +184,9 @@ void  GoalKeeper::StartBlock ()
 
 void   GoalKeeper::EndBlock ()
 {
-  int32  curProcessorId = KKU::osGetThreadId ();
+  kkint32  curProcessorId = KKB::osGetThreadId ();
 
-  int32 errorCode = 0;   // 0=No Error;  
+  kkint32 errorCode = 0;   // 0=No Error;  
                          // 1=There is no Block
                          // 2=Different thread holds the block
                          // 3=Failure to get a lock
@@ -344,18 +344,18 @@ void  GoalKeeper::CreateAndStartBlock(const KKStr&             _name,
 
 
 
-int32  GoalKeeper::NumBlockedThreads ()
+kkint32  GoalKeeper::NumBlockedThreads ()
 {
-  int32  x = 0;
+  kkint32  x = 0;
   x =  numBlockedThreads;
   return  x;
 }
 
 
 
-int32  GoalKeeper::BlockerThreadId ()
+kkint32  GoalKeeper::BlockerThreadId ()
 {
-  int32  x = 0;
+  kkint32  x = 0;
   x =  blockerThreadId;
   return  x;
 }

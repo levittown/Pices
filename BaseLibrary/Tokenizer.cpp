@@ -1,6 +1,6 @@
 /* Tokenizer.cpp -- Class to Manage Token Parsing
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #include "FirstIncludes.h"
 #include <iostream>
@@ -15,9 +15,9 @@ using namespace std;
 
 
 #include "Tokenizer.h"
-#include "Str.h"
+#include "KKStr.h"
 #include "TokenBuffer.h"
-using namespace KKU;
+using namespace KKB;
 
 
 
@@ -143,15 +143,15 @@ KKStrListPtr  Tokenizer::GetNextTokens (const KKStr& delToken)
 
 
 
-KKStrConstPtr  Tokenizer::Peek (uint32 idx)
+KKStrConstPtr  Tokenizer::Peek (kkuint32 idx)
 {
-  while  ((tokenList.QueueSize () < (int32)(idx + 1))  &&  !atEndOfFile)
+  while  ((tokenList.QueueSize () < (kkint32)(idx + 1))  &&  !atEndOfFile)
     ReadInNextLogicalToken ();
 
   if  (idx >= tokenList.size ())
     return NULL;
 
-  return  tokenList.IdxToPtr ((int32)idx);
+  return  tokenList.IdxToPtr ((kkint32)idx);
 }  /* Peek */
 
 
@@ -356,7 +356,7 @@ KKStrPtr  Tokenizer::ProcessFieldToken ()
 
 
 
-KKStrConstPtr  Tokenizer::operator[](uint32 idx)
+KKStrConstPtr  Tokenizer::operator[](kkuint32 idx)
 {
   return Peek (idx);
 }  /* operator[] */

@@ -2,7 +2,7 @@
 #define  _MODELPARAMUSFCASCOR_
 
 #include "RunLog.h"
-#include "Str.h"
+#include "KKStr.h"
 
 #include "ModelParam.h"
 
@@ -26,7 +26,7 @@ namespace MLL
                           int          _out_limit,
                           int          _number_of_rounds,
                           int          _number_of_trials,
-                          int64        _random_seed,
+                          kkint64      _random_seed,
                           bool         _useCache,
                           RunLog&      _log
                          );
@@ -43,7 +43,7 @@ namespace MLL
     int    Out_limit        () const {return out_limit;}
     int    Number_of_rounds () const {return number_of_rounds;}
     int    Number_of_trials () const {return number_of_trials;}
-    int64  Random_seed      () const {return random_seed;}
+    kkint64  Random_seed      () const {return random_seed;}
     bool   UseCache         () const {return useCache;}
 
 
@@ -52,7 +52,7 @@ namespace MLL
     void  Out_limit        (int    _out_limit)        {out_limit         = _out_limit;}
     void  Number_of_rounds (int    _number_of_rounds) {number_of_rounds  = _number_of_rounds;}
     void  Number_of_trials (int    _number_of_trials) {number_of_trials  = _number_of_trials;}
-    void  Random_seed      (int64  _random_seed)      {random_seed       = _random_seed;}
+    void  Random_seed      (kkint64  _random_seed)      {random_seed       = _random_seed;}
     void  UseCache         (bool   _useCache)         {useCache          = _useCache;}
 
 
@@ -80,7 +80,7 @@ namespace MLL
     int    out_limit;
     int    number_of_rounds;
     int    number_of_trials;
-    int64  random_seed;
+    kkint64  random_seed;
     bool   useCache;
   };  /* ModelParamUsfCasCor */
 

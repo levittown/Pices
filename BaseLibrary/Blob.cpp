@@ -1,6 +1,6 @@
 /* Blob.cpp -- Works with Raster class to track individual connected component in Raster.
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 
 #include  "FirstIncludes.h"
@@ -14,12 +14,12 @@ using namespace std;
 
 #include "BitString.h"
 #include "Blob.h"
-using namespace KKU;
+using namespace KKB;
 
 
 
 
-Blob::Blob (int32  _id):
+Blob::Blob (kkint32  _id):
   colLeft    (0),
   colRight   (0),
   id         (_id),
@@ -49,9 +49,9 @@ Blob::~Blob ()
 
 
 
-BlobPtr  BlobList::LookUpByBlobId (int32  blobId)
+BlobPtr  BlobList::LookUpByBlobId (kkint32  blobId)
 {
-  map<int32,BlobPtr>::iterator  idx;
+  map<kkint32,BlobPtr>::iterator  idx;
   idx = blobIndex.find (blobId);
   if  (idx == blobIndex.end ())
     return NULL;
@@ -73,8 +73,8 @@ BlobList::~BlobList ()
 }
 
 
-BlobPtr  BlobList::NewBlob (uint32  rowTop,
-                            uint32  colLeft
+BlobPtr  BlobList::NewBlob (kkuint32  rowTop,
+                            kkuint32  colLeft
                            )
 {
   BlobPtr blob = new Blob (nextBlobId);
@@ -92,23 +92,23 @@ BlobPtr  BlobList::NewBlob (uint32  rowTop,
 
 
 void  BlobList::MergeBlobIds (BlobPtr  blob,
-                              int32    blobId,
-                              int32**  blobIds
+                              kkint32  blobId,
+                              kkint32**  blobIds
                              )
 {                               
-  int32  newId = blob->Id ();
+  kkint32  newId = blob->Id ();
   
-  map<int32,BlobPtr>::iterator  idx;
+  map<kkint32,BlobPtr>::iterator  idx;
   idx = blobIndex.find (blobId);
   if  (idx == blobIndex.end ())
     return;
   BlobPtr  blobToMerge = idx->second;
 
-  int32  col;
-  int32  row;
+  kkint32  col;
+  kkint32  row;
 
-  int32  rowBot   = blobToMerge->rowBot;
-  int32  colRight = blobToMerge->colRight;
+  kkint32  rowBot   = blobToMerge->rowBot;
+  kkint32  colRight = blobToMerge->colRight;
 
   for  (row = blobToMerge->rowTop; row <= rowBot; row++)
   {
@@ -134,12 +134,12 @@ void  BlobList::MergeBlobIds (BlobPtr  blob,
 
 
 BlobPtr  BlobList::MergeIntoSingleBlob (BlobPtr  blob1,
-                                        int32    blob2Id,
-                                        int32**  blobIds
+                                        kkint32  blob2Id,
+                                        kkint32**  blobIds
                                        )
 {                               
-  int32  blob1Id = blob1->Id ();
-  map<int32,BlobPtr>::iterator  idx;
+  kkint32  blob1Id = blob1->Id ();
+  map<kkint32,BlobPtr>::iterator  idx;
   idx = blobIndex.find (blob2Id);
   if  (idx == blobIndex.end ())
     return  blob1;
@@ -164,14 +164,14 @@ BlobPtr  BlobList::MergeIntoSingleBlob (BlobPtr  blob1,
     destBlob = blob2;
   }
 
-  int32    destBlobId = destBlob->Id ();
-  int32    srcBlobId  = srcBlob->Id ();
+  kkint32  destBlobId = destBlob->Id ();
+  kkint32  srcBlobId  = srcBlob->Id ();
 
-  int32  col = 0;
-  int32  row = 0;
+  kkint32  col = 0;
+  kkint32  row = 0;
 
-  int32  rowBot   = srcBlob->rowBot;
-  int32  colRight = srcBlob->colRight;
+  kkint32  rowBot   = srcBlob->rowBot;
+  kkint32  colRight = srcBlob->colRight;
 
   for  (row = srcBlob->rowTop;  row <= rowBot;  ++row)
   {
@@ -202,11 +202,11 @@ BlobPtr  BlobList::MergeIntoSingleBlob (BlobPtr  blob1,
 
 BlobPtr  BlobList::LocateLargestBlob ()
 {
-  int32     idx;
-  int32     qSize = QueueSize ();
+  kkint32   idx;
+  kkint32   qSize = QueueSize ();
   BlobPtr   blob     = NULL;
   BlobPtr   tempBlob = NULL;
-  int32     largestSize = 0;
+  kkint32   largestSize = 0;
 
   for  (idx = 0; idx < qSize; idx++)
   {
@@ -224,17 +224,17 @@ BlobPtr  BlobList::LocateLargestBlob ()
 
 BlobPtr  BlobList::LocateMostComplete ()
 {
-  int32     idx;
-  int32     qSize = QueueSize ();
+  kkint32   idx;
+  kkint32   qSize = QueueSize ();
   BlobPtr   blob     = NULL;
   BlobPtr   tempBlob = NULL;
-  int32     largestSize = 0;
+  kkint32   largestSize = 0;
 
   for  (idx = 0; idx < qSize; idx++)
   {
     tempBlob = IdxToPtr (idx);
 
-    int32  size = tempBlob->Height () * tempBlob->Width ();
+    kkint32  size = tempBlob->Height () * tempBlob->Width ();
     if  (size > largestSize)
     {
       largestSize = size;
@@ -251,7 +251,7 @@ BlobPtr  BlobList::LocateMostComplete ()
 
 void  BlobList::PushOnBack  (BlobPtr  blob)
 {
-  blobIndex.insert (pair<int32, BlobPtr> (blob->Id (), blob));
+  blobIndex.insert (pair<kkint32, BlobPtr> (blob->Id (), blob));
   KKQueue<Blob>::PushOnBack  (blob);
 }  /* PushOnBack */
 
@@ -259,7 +259,7 @@ void  BlobList::PushOnBack  (BlobPtr  blob)
 
 void  BlobList::PushOnFront (BlobPtr  blob)
 {
-  blobIndex.insert (pair<int32, BlobPtr> (blob->Id (), blob));
+  blobIndex.insert (pair<kkint32, BlobPtr> (blob->Id (), blob));
   KKQueue<Blob>::PushOnFront  (blob);
 }
 

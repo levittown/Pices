@@ -18,12 +18,12 @@
 using namespace  std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "KKException.h"
 #include "OSservices.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 
 #include "Model.h"
@@ -104,13 +104,13 @@ void  ModelKnn::Predict (FeatureVectorPtr  example,
                          MLClassConstPtr   knownClass,
                          MLClassConstPtr&  predClass1,
                          MLClassConstPtr&  predClass2,
-                         int32&            predClass1Votes,
-                         int32&            predClass2Votes,
+                         kkint32&            predClass1Votes,
+                         kkint32&            predClass2Votes,
                          double&           probOfKnownClass,
                          double&           predClass1Prob,
                          double&           predClass2Prob,
                          double&           compact,
-                         int32&            numOfWinners,
+                         kkint32&            numOfWinners,
                          bool&             knownClassOneOfTheWinners,
                          double&           breakTie
                         )
@@ -141,7 +141,7 @@ ClassProbListPtr  ModelKnn::ProbabilitiesByClass (FeatureVectorPtr  example)
   }
 
   ClassProbListPtr  results = new ClassProbList ();
-  int32  idx;
+  kkint32  idx;
   for  (idx = 0;  idx < numOfClasses;  idx++)
   {
     MLClassConstPtr  ic = classesIndex->GetMLClass (idx);
@@ -156,7 +156,7 @@ ClassProbListPtr  ModelKnn::ProbabilitiesByClass (FeatureVectorPtr  example)
 
 void  ModelKnn::ProbabilitiesByClass (FeatureVectorPtr         example,
                                       const MLClassConstList&  _mlClasses,
-                                      int32*                   _votes,
+                                      kkint32*                   _votes,
                                       double*                  _probabilities
                                      )
 {
@@ -182,7 +182,7 @@ void  ModelKnn::ReadSpecificImplementationXML (istream&  i,
 
   KKStr  modelFileName;
 
-  int32  numOfModels = 0;
+  kkint32  numOfModels = 0;
 
   while  (i.getline (buff, sizeof (buff)))
   {

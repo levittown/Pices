@@ -2,7 +2,7 @@
 #define  __GRADE_CLASSIFICATION_H__
 
 #include "HTMLReport.h"
-using namespace  KKU;
+using namespace  KKB;
 
 #include "PicesApplication.h"
 #include "ConfusionMatrix2.h"
@@ -18,14 +18,14 @@ using  namespace  MLL;
 class  GradeClassification: public PicesApplication
 {
 public:
-  typedef  KKU::uint  uint;
+  typedef  KKB::uint  uint;
 
   GradeClassification ();
 
   ~GradeClassification ();
 
   virtual
-  void  InitalizeApplication (int32   argc,
+  void  InitalizeApplication (kkint32 argc,
                               char**  argv
                              );  
   

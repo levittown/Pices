@@ -13,10 +13,10 @@
 
 using namespace std;
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "OSservices.h"
 #include "RunLog.h"
-using namespace KKU;
+using namespace KKB;
 
 #include "Instrument.h"
 #include "InstrumentDataFileManager.h"
@@ -63,7 +63,7 @@ DeleteDuplicateImages::~DeleteDuplicateImages ()
 
 
 
-void  DeleteDuplicateImages::InitalizeApplication (int32   argc,
+void  DeleteDuplicateImages::InitalizeApplication (kkint32 argc,
                                                    char**  argv
                                                   )
 {
@@ -302,12 +302,12 @@ int  main (int  argc,  char**  argv)
 
     FileDescPtr fd = FileDesc::NewPlanktonFile (rl);
 
-    KKU::KKStr  dirPath = "C:\\TrainingApp\\etpC_training_heirarchy";
-    KKU::KKStr  configFileName = osGetRootNameOfDirectory (dirPath) + ".cfg";
+    KKB::KKStr  dirPath = "C:\\TrainingApp\\etpC_training_heirarchy";
+    KKB::KKStr  configFileName = osGetRootNameOfDirectory (dirPath) + ".cfg";
 
-    KKU::KKStr  statusMsg;
+    KKB::KKStr  statusMsg;
 
-    KKU::KKStr  specificConfigFileName = TrainingConfiguration2::GetEffectiveConfigFileName (configFileName);
+    KKB::KKStr  specificConfigFileName = TrainingConfiguration2::GetEffectiveConfigFileName (configFileName);
 
     bool    cancelFlag   = false;
     KKStr   errorMessage = "";

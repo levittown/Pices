@@ -6,8 +6,8 @@
  *@author  Kurt Kramer
  */
 
-#include "BasicTypes.h"
-#include "Str.h"
+#include "KKBaseTypes.h"
+#include "KKStr.h"
 
 
 namespace MLL

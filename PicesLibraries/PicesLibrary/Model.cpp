@@ -14,12 +14,12 @@
 using namespace  std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "KKException.h"
 #include "OSservices.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 
 #include "Model.h"
@@ -192,9 +192,9 @@ Model::~Model ()
 }
 
 
-KKU::int32  Model::MemoryConsumedEstimated ()  const
+KKB::kkint32  Model::MemoryConsumedEstimated ()  const
 {
-  KKU::int32  memoryConsumedEstimated = sizeof (Model) + rootFileName.MemoryConsumedEstimated ();
+  KKB::kkint32  memoryConsumedEstimated = sizeof (Model) + rootFileName.MemoryConsumedEstimated ();
   if  (classes)              memoryConsumedEstimated += classes->MemoryConsumedEstimated ();
   if  (classesIndex)         memoryConsumedEstimated += classesIndex->MemoryConsumedEstimated ();
   if  (classProbs)           memoryConsumedEstimated += numOfClasses * sizeof (double);
@@ -202,7 +202,7 @@ KKU::int32  Model::MemoryConsumedEstimated ()  const
   if  (encoder)              memoryConsumedEstimated += encoder->MemoryConsumedEstimated ();
   if  (normParms)            memoryConsumedEstimated += normParms->MemoryConsumedEstimated ();
   if  (param)                memoryConsumedEstimated += param->MemoryConsumedEstimated ();
-  if  (votes)                memoryConsumedEstimated += numOfClasses * sizeof (int32);
+  if  (votes)                memoryConsumedEstimated += numOfClasses * sizeof (kkint32);
 
   if  (weOwnTrainExamples  &&  (trainExamples != NULL))
     memoryConsumedEstimated += trainExamples->MemoryConsumedEstimated ();
@@ -443,8 +443,8 @@ ModelPtr  Model::CreateAModel (ModelTypes         _modelType,
 
 void  Model::AllocatePredictionVariables ()
 {
-  int32  x = 0;
-  int32  y = 0;
+  kkint32  x = 0;
+  kkint32  y = 0;
 
   DeAllocateSpace ();
 
@@ -464,7 +464,7 @@ void  Model::AllocatePredictionVariables ()
   {
     crossClassProbTableSize = numOfClasses;
     classProbs    = new double[numOfClasses];
-    votes         = new int32 [numOfClasses];
+    votes         = new kkint32 [numOfClasses];
     crossClassProbTable = new double*[numOfClasses];
     for  (x = 0;  x < numOfClasses;  x++)
     {
@@ -483,7 +483,7 @@ void  Model::AllocatePredictionVariables ()
 
 void  Model::DeAllocateSpace ()
 {
-  int32  x = 0;
+  kkint32  x = 0;
   if  (crossClassProbTable)
   {
     for  (x = 0;  x < numOfClasses;  x++)
@@ -504,7 +504,7 @@ void  Model::DeAllocateSpace ()
 
 
 
-int32  Model::BitsToReduceBy () const
+kkint32  Model::BitsToReduceBy () const
 {
   if  (!param)
     throw KKException ("Model::BitsToReduceBy  'param == NULL'.");
@@ -1012,15 +1012,15 @@ FeatureVectorPtr  Model::PrepExampleForPrediction (FeatureVectorPtr  fv,
 /**
  * Will normailize probabilites such that the sum of all equal 1.0 and no one probability will be less than 'minProbability'.
  */
-void  Model::NormalizeProbabilitiesWithAMinumum (int32    numClasses,
+void  Model::NormalizeProbabilitiesWithAMinumum (kkint32  numClasses,
                                                  double*  probabilities,
                                                  double   minProbability
                                                 )
 {
   double  sumGreaterOrEqualMin = 0.0;
-  int32 numLessThanMin = 0;
+  kkint32 numLessThanMin = 0;
 
-  int32 x = 0;
+  kkint32 x = 0;
   for  (x = 0;  x < numClasses;  ++x)
   {
     if  (probabilities[x] < minProbability)
@@ -1052,8 +1052,8 @@ void  Model::NormalizeProbabilitiesWithAMinumum (int32    numClasses,
  */
 void  Model::ReduceTrainExamples ()
 {
-  int32   examplesPerClass = param->ExamplesPerClass ();
-  uint32  zed = 0;
+  kkint32 examplesPerClass = param->ExamplesPerClass ();
+  kkuint32  zed = 0;
 
   if  (examplesPerClass < 0)
     examplesPerClass = int32_max;
@@ -1074,7 +1074,7 @@ void  Model::ReduceTrainExamples ()
 
     for  (zed = 0;  (zed < stats->size ())  &&  (!reductionNeeded);  zed++)
     {
-      if  (stats->IdxToPtr (zed)->Count () > (uint32)examplesPerClass)
+      if  (stats->IdxToPtr (zed)->Count () > (kkuint32)examplesPerClass)
         reductionNeeded  = true;
     }
 
@@ -1104,7 +1104,7 @@ void  Model::ReduceTrainExamples ()
       continue;
     }
 
-    if  (examplesThisClass->size () <= (uint32)examplesPerClass)
+    if  (examplesThisClass->size () <= (kkuint32)examplesPerClass)
     {
       reducedSet->AddQueue (*examplesThisClass);
     }
@@ -1112,7 +1112,7 @@ void  Model::ReduceTrainExamples ()
     {
       examplesThisClass->RandomizeOrder ();
       zed = 0;
-      while  (zed < (uint32)examplesPerClass)
+      while  (zed < (kkuint32)examplesPerClass)
       {
         reducedSet->PushOnBack (examplesThisClass->IdxToPtr (zed));
         zed++;
@@ -1170,8 +1170,8 @@ void  Model::RetrieveCrossProbTable (MLClassConstList&  classes,
     return;
   }
 
-  int32*  indexTable = new int32[classes.QueueSize ()];
-  int32   x, y;
+  kkint32*  indexTable = new kkint32[classes.QueueSize ()];
+  kkint32 x, y;
   for  (x = 0;  x < classes.QueueSize ();  x++)
   {
     for  (y = 0;  y < classes.QueueSize ();  y++)
@@ -1203,18 +1203,18 @@ void  Model::RetrieveCrossProbTable (MLClassConstList&  classes,
   // xIdx, yIdx  = 'SVMNodel'  Class Indexed.
   for  (x = 0;  x < classes.QueueSize ();  x++)
   {
-    int32 xIdx = indexTable[x];
+    kkint32 xIdx = indexTable[x];
     if  (xIdx >= 0)
     {
       for  (y = 0;  y < classes.QueueSize ();  y++)
       {
-        int32  yIdx = indexTable[y];
+        kkint32  yIdx = indexTable[y];
         if  (yIdx >= 0)
         {
           if  ((x != xIdx)  ||  (y != yIdx))
           {
             //kak  I just added this check to see when this situation actually occurs.
-            int32  zed = 111;
+            kkint32  zed = 111;
           }
 
           crossClassProbTable[x][y] = this->crossClassProbTable[xIdx][yIdx];

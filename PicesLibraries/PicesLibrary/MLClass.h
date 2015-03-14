@@ -69,7 +69,7 @@
 
 #include "GoalKeeper.h"
 #include "RunLog.h"
-#include "Str.h"
+#include "KKStr.h"
 #include "KKQueue.h"
 
 
@@ -99,8 +99,8 @@ namespace MLL
 
 
   public:
-    typedef  KKU::int32   int32;
-    typedef  KKU::uint32  uint32;
+    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::kkuint32  kkuint32;
 
     static  MLClassListPtr  GlobalClassList ();
 
@@ -123,12 +123,12 @@ namespace MLL
      *@return  Pointer to an instance of 'MLClass' that will have the name '_name'.
      */
     static  MLClassPtr       CreateNewMLClass (const KKStr&  _name,
-                                                  int32         _classId = -1
+                                                  kkint32       _classId = -1
                                                  );
 
     static  MLClassConstPtr  GetUnKnownClassStatic ();
 
-    static  MLClassConstPtr  GetByClassId (int32  _classId);
+    static  MLClassConstPtr  GetByClassId (kkint32  _classId);
 
     /**  
      *@brief  Changes the name of an existing class verifying that a duplicate does not get created.
@@ -181,20 +181,20 @@ namespace MLL
     static MLClassConstListPtr  BuildListOfDecendents (MLClassConstPtr  parent);
    
 
-    int32               ClassId ()  const  {return classId;}  /**< From MySQL table  Classes, '-1' indicates that not loaded from mydsql table. */
-    void                ClassId (int32 _classId)  {classId = _classId;}
+    kkint32             ClassId ()  const  {return classId;}  /**< From MySQL table  Classes, '-1' indicates that not loaded from mydsql table. */
+    void                ClassId (kkint32 _classId)  {classId = _classId;}
 
     const KKStr&        Description ()  const {return description;}
     void                Description (const KKStr&  _description)  {description = _description;}
 
     bool                IsAnAncestor (MLClassConstPtr  c)  const;    /**< Returns true if 'c' is an ancestor */
 
-    MLClassPtr          MLClassForGivenHierarchialLevel (KKU::uint16 level)  const;
+    MLClassPtr          MLClassForGivenHierarchialLevel (KKB::kkuint16 level)  const;
 
     bool                Mandatory () const {return mandatory;}
     void                Mandatory (bool _mandatory)  {mandatory = _mandatory;}
 
-    KKU::uint16         NumHierarchialLevels ()  const;
+    KKB::kkuint16       NumHierarchialLevels ()  const;
 
     const  KKStr&       Name ()      const {return  name;}
     const  KKStr&       UpperName () const {return  upperName;}  /**< Returns name capitalized. */
@@ -231,7 +231,7 @@ namespace MLL
     void                WriteXML (std::ostream& o)  const;
     
 private:
-    int32               classId;      /**< From MySQL table  Classes, '-1' indicates that not loaded from mydsql table. */
+    kkint32             classId;      /**< From MySQL table  Classes, '-1' indicates that not loaded from mydsql table. */
 
     KKStr               description;
 
@@ -276,8 +276,8 @@ private:
   class  MLClassList:  public KKQueue<MLClass>
   {
   public:
-    typedef  KKU::int32   int32;
-    typedef  KKU::uint32  uint32;
+    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::kkuint32  kkuint32;
 
     MLClassList ();
 
@@ -333,7 +333,7 @@ private:
     void  ExtractThreeTitleLines (KKStr&  titleLine1,
                                   KKStr&  titleLine2, 
                                   KKStr&  titleLine3,
-                                  int32   fieldWidth
+                                  kkint32 fieldWidth
                                  ) const;
 
     /**
@@ -344,7 +344,7 @@ private:
     KKStr   ExtractHTMLTableHeader () const;
 
 
-    MLClassListPtr  ExtractListOfClassesForAGivenHierarchialLevel (int32 level);
+    MLClassListPtr  ExtractListOfClassesForAGivenHierarchialLevel (kkint32 level);
 
 
     /** @brief  return pointer to instance with '_name';  if none exists, create one and add to list. */
@@ -372,14 +372,14 @@ private:
 
 
     virtual
-    MLClassPtr  LookUpByClassId (int32  _classId)  const;
+    MLClassPtr  LookUpByClassId (kkint32  _classId)  const;
 
 
     void           Load (const KKStr&  _fileName,
                          bool&         _successfull
                         );
 
-    int32          MemoryConsumedEstimated () const;
+    kkint32        MemoryConsumedEstimated () const;
       
     static
       MLClassListPtr  MergeClassList (const MLClassList&  list1,
@@ -387,7 +387,7 @@ private:
                                      );
 
 
-    KKU::uint16    NumHierarchialLevels ()  const;
+    KKB::kkuint16  NumHierarchialLevels ()  const;
 
 
     virtual
@@ -501,8 +501,8 @@ private:
   public:
     typedef  ClassIndexList*  ClassIndexListPtr;
 
-    typedef  KKU::int32   int32;
-    typedef  KKU::uint32  uint32;
+    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::kkuint32  kkuint32;
 
     ClassIndexList ();
     ClassIndexList (const ClassIndexList&       _list);
@@ -532,7 +532,7 @@ private:
      */
     MLClassConstPtr  GetMLClass (short classIndex);
 
-    int32  MemoryConsumedEstimated ()  const;
+    kkint32  MemoryConsumedEstimated ()  const;
 
     void   ParseClassIndexList (const KKStr&  s);
 

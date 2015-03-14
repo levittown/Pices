@@ -1,6 +1,6 @@
 /* RasterSipper.cpp -- Class for one raster image.
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #include "FirstIncludes.h"
 
@@ -21,7 +21,7 @@ using namespace std;
 
 #include "RasterSipper.h"
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "Blob.h"
 #include "BMPImage.h"
 #include "Compressor.h"
@@ -33,7 +33,7 @@ using namespace std;
 #include "OSservices.h"
 #include "SimpleCompressor.h"
 #include "Sobel.h"
-using namespace KKU;
+using namespace KKB;
 
 
 RasterSipper::RasterSipper (): Raster ()
@@ -41,8 +41,8 @@ RasterSipper::RasterSipper (): Raster ()
 }
 
 
-RasterSipper::RasterSipper (int32  _height,
-                            int32  _width
+RasterSipper::RasterSipper (kkint32  _height,
+                            kkint32  _width
                            ):
   Raster (_height, _width)
 {
@@ -50,8 +50,8 @@ RasterSipper::RasterSipper (int32  _height,
 
 
 
-RasterSipper::RasterSipper (int32 _height,
-                            int32 _width,
+RasterSipper::RasterSipper (kkint32 _height,
+                            kkint32 _width,
                             bool  _color
                            ):
   Raster (_height, _width, _color)
@@ -89,10 +89,10 @@ RasterSipper::RasterSipper (const Raster&  _raster):
 
 
 RasterSipper::RasterSipper (const RasterSipper&  _raster,
-                            int32                _row,
-                            int32                _col,
-                            int32                _height,
-                            int32                _width
+                            kkint32              _row,
+                            kkint32              _col,
+                            kkint32              _height,
+                            kkint32              _width
                            ):
   Raster (_raster, _row, _col, _height, _width)
 {
@@ -102,8 +102,8 @@ RasterSipper::RasterSipper (const RasterSipper&  _raster,
 
 RasterSipper::RasterSipper (const RasterSipper& _raster,
                             MaskTypes           _mask,
-                            int32               _row,
-                            int32               _col
+                            kkint32             _row,
+                            kkint32             _col
                            ):
   Raster (_raster, _mask, _row, _col)
 {
@@ -127,8 +127,8 @@ RasterSipper::RasterSipper (const KKStr&  _fileName,
 
 
 
-RasterSipper::RasterSipper (int32    _height,
-                            int32    _width,
+RasterSipper::RasterSipper (kkint32  _height,
+                            kkint32  _width,
                             uchar*   _grayScaleData,
                             uchar**  _grayScaleRows
                            ):
@@ -139,8 +139,8 @@ RasterSipper::RasterSipper (int32    _height,
 
 
 
-RasterSipper::RasterSipper (int32         _height,
-                            int32         _width,
+RasterSipper::RasterSipper (kkint32       _height,
+                            kkint32       _width,
                             const uchar*  _grayScaleData
                            ):
   Raster (_height, _width, _grayScaleData)
@@ -148,8 +148,8 @@ RasterSipper::RasterSipper (int32         _height,
 }
 
 
-RasterSipper::RasterSipper (int32         _height,
-                            int32         _width,
+RasterSipper::RasterSipper (kkint32       _height,
+                            kkint32       _width,
                             const uchar*  _redChannel,
                             const uchar*  _greenChannel,
                             const uchar*  _blueChannel
@@ -167,7 +167,7 @@ RasterSipper::~RasterSipper ()
 
 
 
-int32  RasterSipper::MemoryConsumedEstimated ()  const
+kkint32  RasterSipper::MemoryConsumedEstimated ()  const
 {
   return  Raster::MemoryConsumedEstimated ();
 }
@@ -176,44 +176,37 @@ int32  RasterSipper::MemoryConsumedEstimated ()  const
 
 RasterSipperPtr  RasterSipper::TurnIntoSipperRasterPtr (RasterPtr& r)
 {
-  RasterSipperPtr  sr = new RasterSipper ();
+  if  (r == NULL)
+    return NULL;
 
-  if  (r->Color ())
+  if  (typeid (*r) == typeid (RasterSipper))
   {
-    sr->Initialize (r->Height (),
-                    r->Width  (),
-                    r->RedArea   (),  r->Red   (),
-                    r->GreenArea (),  r->Green (),
-                    r->BlueArea  (),  r->Blue  (),
-                    true
-                   );
+    RasterSipperPtr  rs = dynamic_cast<RasterSipperPtr> (r);
+    r = NULL;
+    return rs;
   }
   else
   {
-    sr->Initialize (r->Height (),
-                    r->Width  (),
-                    r->GreenArea (),  r->Green (),
-                    true
-                   );
+    RasterSipperPtr  rs = new RasterSipper ();
+    rs->TakeOwnershipOfAnotherRastersData (*r);
+    r->WeOwnRasterData (false);
+    delete  r;
+    r = NULL;
+    return rs;
   }
-
-  r->WeOwnRasterData (false);
-  delete  r;
-  r = NULL;
-
-  return sr;
 }
 
 
 
 
-RasterPtr  RasterSipper::AllocateARasterInstance (int32  height,
-                                                  int32  width,
+RasterPtr  RasterSipper::AllocateARasterInstance (kkint32  height,
+                                                  kkint32  width,
                                                   bool   color
                                                  )  const
 {
   return new RasterSipper (height, width, color);
 }
+
 
 
 
@@ -226,33 +219,32 @@ RasterPtr  RasterSipper::AllocateARasterInstance (const Raster& r)  const
 
 
 RasterPtr  RasterSipper::AllocateARasterInstance (const Raster& _raster,  /**<  Source Raster                                       */
-                                                  int32         _row,     /**<  Starting Row in '_raster' to copy from.             */
-                                                  int32         _col,     /**<  Starting Col in '_raster' to copy from.             */
-                                                  int32         _height,  /**<  Height of resultant raster. Will start from '_row'  */
-                                                  int32         _width    /**<  Width of resultant raster.                          */
+                                                  kkint32       _row,     /**<  Starting Row in '_raster' to copy from.             */
+                                                  kkint32       _col,     /**<  Starting Col in '_raster' to copy from.             */
+                                                  kkint32       _height,  /**<  Height of resultant raster. Will start from '_row'  */
+                                                  kkint32       _width    /**<  Width of resultant raster.                          */
                                                  )
 {
-  return new RasterSipper (dynamic_cast<const RasterSipper&>(_raster), _row, _col, _height, _width);
+  RasterPtr  r = new Raster (_raster, _row, _col, _height, _width);
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }
 
 
 
-
-
-
-
 RasterSipperPtr  RasterSipper::CreatePaddedRaster (BmpImage&  image,
-                                                   int32      padding
+                                                   kkint32    padding
                                                   )
 {
-   return dynamic_cast<RasterSipperPtr>(Raster::CreatePaddedRaster (image, padding));
+  RasterPtr  r = Raster::CreatePaddedRaster (image, padding);
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* CreatePaddedRaster */
 
 
 
 RasterSipperPtr   RasterSipper::ReversedImage ()
 {
-  return dynamic_cast<RasterSipperPtr>(Raster::ReversedImage ());
+  RasterPtr  r = Raster::ReversedImage ();
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* ReversedImage */
 
 
@@ -260,7 +252,8 @@ RasterSipperPtr   RasterSipper::ReversedImage ()
 
 RasterSipperPtr  RasterSipper::CreateDialatedRaster ()  const
 {
-  return dynamic_cast<RasterSipperPtr>(Raster::CreateDialatedRaster ());
+  RasterPtr  r = Raster::CreateDialatedRaster ();
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* CreateDialatedRaster */
 
 
@@ -268,7 +261,8 @@ RasterSipperPtr  RasterSipper::CreateDialatedRaster ()  const
 
 RasterSipperPtr  RasterSipper::CreateDialatedRaster (MaskTypes  mask)  const
 {
-  return  dynamic_cast<RasterSipperPtr> (Raster::CreateDialatedRaster (mask));
+  RasterPtr  r = Raster::CreateDialatedRaster (mask);
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* CreateDialatedRaster */
 
 
@@ -277,7 +271,8 @@ RasterSipperPtr  RasterSipper::CreateDialatedRaster (MaskTypes  mask)  const
 
 RasterSipperPtr  RasterSipper::CreateErodedImage (MaskTypes  mask)  const
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::CreateErodedImage (mask));
+  RasterPtr  r = Raster::CreateErodedImage (mask);
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* Erosion  */
 
 
@@ -289,7 +284,8 @@ RasterSipperPtr  RasterSipper::CreateErodedImage (MaskTypes  mask)  const
  */
 RasterSipperPtr  RasterSipper::CreateColorWithBlobsLabeldByColor (BlobListPtr  blobs)
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::CreateColorWithBlobsLabeldByColor (blobs));
+  RasterPtr  r = Raster::CreateColorWithBlobsLabeldByColor (blobs);
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* CreateColorWithBlobsLabeldByColor*/
 
 
@@ -298,7 +294,8 @@ RasterSipperPtr  RasterSipper::CreateFromOrginalImageWithSpecifidBlobsOnly (Rast
                                                                             BlobListPtr      blobs
                                                                            )
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::CreateFromOrginalImageWithSpecifidBlobsOnly (origImage, blobs));
+  RasterPtr  r = Raster::CreateFromOrginalImageWithSpecifidBlobsOnly (origImage, blobs);
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* CreateFromOrginalImageWithSpecifidBlobsOnly*/
 
 
@@ -306,13 +303,14 @@ RasterSipperPtr  RasterSipper::CreateFromOrginalImageWithSpecifidBlobsOnly (Rast
 
 
 RasterSipperPtr  RasterSipper::ExtractABlobTightly (const BlobPtr  blob,
-                                                    int32          padding
+                                                    kkint32        padding
                                                    )  const
 {
   if  (blob == NULL)
     return NULL;
 
-  return dynamic_cast<RasterSipperPtr> (Raster::ExtractABlobTightly (blob, padding));
+  RasterPtr  r = Raster::ExtractABlobTightly (blob, padding);
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* ExtractABlobTightly */
 
 
@@ -320,7 +318,11 @@ RasterSipperPtr  RasterSipper::ExtractABlobTightly (const BlobPtr  blob,
 
 RasterSipperPtr  RasterSipper::ExtractABlob (const BlobPtr  blob)  const
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::ExtractABlob (blob));
+  RasterPtr  b = Raster::ExtractABlob (blob);
+  if  (b)
+    return  RasterSipper::TurnIntoSipperRasterPtr (b);
+  else
+    return  NULL;
 }  /* ExtractABlob */
 
 
@@ -329,7 +331,8 @@ RasterSipperPtr  RasterSipper::ExtractABlob (const BlobPtr  blob)  const
 
 RasterSipperPtr  RasterSipper::FastFourierKK ()  const
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::FastFourierKK ());
+  RasterPtr  r = Raster::FastFourierKK ();
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* FastFourierKK */
 
 
@@ -338,7 +341,8 @@ RasterSipperPtr  RasterSipper::FastFourierKK ()  const
 
 RasterSipperPtr  RasterSipper::FastFourier ()  const
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::FastFourier ());
+  RasterPtr  r = Raster::FastFourier ();
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* FastFourier */
 
 
@@ -346,7 +350,8 @@ RasterSipperPtr  RasterSipper::FastFourier ()  const
 
 RasterSipperPtr  RasterSipper::SwapQuadrants ()  const
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::SwapQuadrants ());
+  RasterPtr  r = Raster::SwapQuadrants ();
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* SwapQuadrants  */
 
 
@@ -365,7 +370,8 @@ RasterSipperPtr  RasterSipper::Rotate (float  turnAngle)
 
 RasterSipperPtr  RasterSipper::CreateGrayScale ()  const
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::CreateGrayScale ());
+  RasterPtr  r = Raster::CreateGrayScale ();
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* CreateGrayScale */
 
 
@@ -374,7 +380,8 @@ RasterSipperPtr  RasterSipper::CreateGrayScale ()  const
 
 RasterSipperPtr  RasterSipper::HistogramEqualizedImage ()  const
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::HistogramEqualizedImage ());
+  RasterPtr  r = Raster::HistogramEqualizedImage ();
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* HistogramEqualizedImage */
 
 
@@ -383,7 +390,8 @@ RasterSipperPtr  RasterSipper::HistogramEqualizedImage ()  const
 
 RasterSipperPtr  RasterSipper::HistogramEqualizedImage (HistogramPtr  equalizedHistogram)  const
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::HistogramEqualizedImage (equalizedHistogram));
+  RasterPtr  r = Raster::HistogramEqualizedImage (equalizedHistogram);
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* HistogramEqualizedImage */
 
 
@@ -392,32 +400,35 @@ RasterSipperPtr  RasterSipper::HistogramEqualizedImage (HistogramPtr  equalizedH
 
 RasterSipperPtr  RasterSipper::HistogramGrayscaleImage ()  const
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::HistogramGrayscaleImage ());
+  RasterPtr  r = Raster::HistogramGrayscaleImage ();
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* HistogramGrayscaleImage */
 
 
 
 RasterSipperPtr  RasterSipper::HistogramImage (ColorChannels  channel)  const
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::HistogramImage (channel));
+  RasterPtr  r = Raster::HistogramImage (channel);
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* HistogramImage */
 
 
 
 
 
-RasterSipperPtr  RasterSipper::CreateSmoothImage (int32 maskSize)  const
+RasterSipperPtr  RasterSipper::CreateSmoothImage (kkint32 maskSize)  const
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::CreateSmoothImage (maskSize));
+  RasterPtr  r = Raster::CreateSmoothImage (maskSize);
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 } /* CreateSmoothImage */
 
 
 
 
-
-RasterSipperPtr  RasterSipper::CreateSmoothedMediumImage (int32 maskSize)  const
+RasterSipperPtr  RasterSipper::CreateSmoothedMediumImage (kkint32 maskSize)  const
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::CreateSmoothedMediumImage (maskSize));
+  RasterPtr  r = Raster::CreateSmoothedMediumImage (maskSize);
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 } /* CreateSmoothedMediumImage */
 
 
@@ -425,23 +436,27 @@ RasterSipperPtr  RasterSipper::CreateSmoothedMediumImage (int32 maskSize)  const
 
 RasterSipperPtr  RasterSipper::HalfSize ()
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::HalfSize ());
+  RasterPtr  r = Raster::HalfSize ();
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* HalfSize */
 
 
 
 
 
-RasterSipperPtr  RasterSipper::ReduceByEvenMultiple (int32  multiple)  const
+RasterSipperPtr  RasterSipper::ReduceByEvenMultiple (kkint32  multiple)  const
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::ReduceByEvenMultiple (multiple));
+  RasterPtr  r = Raster::ReduceByEvenMultiple (multiple);
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* ReduceByEvenMultiple */
+
 
 
 
 RasterSipperPtr  RasterSipper::ReduceByFactor (float factor)  const  //  0 < factor <= 1.0
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::ReduceByFactor (factor));
+  RasterPtr  r = Raster::ReduceByFactor (factor);
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* ReduceByFactor */
 
 
@@ -449,7 +464,8 @@ RasterSipperPtr  RasterSipper::ReduceByFactor (float factor)  const  //  0 < fac
 
 RasterSipperPtr  RasterSipper::SobelEdgeDetector ()
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::SobelEdgeDetector ());
+  RasterPtr  r = Raster::SobelEdgeDetector ();
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* SobelEdgeDetector */
 
 
@@ -459,7 +475,8 @@ RasterSipperPtr  RasterSipper::BinarizeByThreshold (uchar  min,
                                                     uchar  max
                                                    )
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::BinarizeByThreshold (min, max));
+  RasterPtr  r = Raster::BinarizeByThreshold (min, max);
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* BinarizeByThreshold */
 
 
@@ -480,7 +497,8 @@ float  RasterSipper::ComputeSegmentLens (const PointListPtr  points,
 
 RasterSipperPtr  RasterSipper::ExtractChannel (ColorChannels  channel)
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::ExtractChannel (channel));
+  RasterPtr  r = Raster::ExtractChannel (channel);
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* ExtractChannel */
 
 
@@ -492,14 +510,15 @@ RasterSipperPtr  RasterSipper::ExtractChannel (ColorChannels  channel)
 //******************************************************************************
 RasterSipperPtr   RasterSipper::SegmentImage (bool  save)
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::SegmentImage (save));
+  RasterPtr  r = Raster::SegmentImage (save);
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* SegmentImage */
 
 
 
 
-RasterSipperListPtr  RasterSipper::SplitImageIntoEqualParts (int32 numColSplits,
-                                                             int32 numRowSplits
+RasterSipperListPtr  RasterSipper::SplitImageIntoEqualParts (kkint32 numColSplits,
+                                                             kkint32 numRowSplits
                                                             )  const
 {
   RasterListPtr  rasterParts = Raster::SplitImageIntoEqualParts (numColSplits, numRowSplits);
@@ -517,47 +536,52 @@ RasterSipperListPtr  RasterSipper::SplitImageIntoEqualParts (int32 numColSplits,
 
 RasterSipperPtr  RasterSipper::ThinContour ()
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::ThinContour ());
+  RasterPtr  r = Raster::ThinContour ();
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* ThinContour */
 
 
 
 
-RasterSipperPtr  RasterSipper::TightlyBounded (uint32 borderPixels)  const
+RasterSipperPtr  RasterSipper::TightlyBounded (kkuint32 borderPixels)  const
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::TightlyBounded (borderPixels));
+  RasterPtr  r = Raster::TightlyBounded (borderPixels);
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* TightlyBounded */
 
 
 
 RasterSipperPtr  RasterSipper::ToColor ()  const
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::ToColor ());
+  RasterPtr  r = Raster::ToColor ();
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* ToColor */
 
 
 
-RasterSipperPtr  RasterSipper::BandPass (float  lowerFreqBound,    // Number's between 0.0 and 1.0
-                                         float  upperFreqBound     // Represent percentage.
+RasterSipperPtr  RasterSipper::BandPass (float  lowerFreqBound,    /**< Number's between 0.0 and 1.0  */
+                                         float  upperFreqBound,    /**< Represent percentage.         */
+                                         bool   retainBackground
                                         )
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::BandPass (lowerFreqBound, upperFreqBound));
+  RasterPtr  r = Raster::BandPass(lowerFreqBound, upperFreqBound, retainBackground);
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* BandPass */
 
 
 
 
 
-uchar*   RasterSipper::SimpleCompression (uint32&  buffLen) const // Will create a compress image using 'SimpleCompression'
+uchar*   RasterSipper::SimpleCompression (kkuint32&  buffLen) const // Will create a compress image using 'SimpleCompression'
 {
-  int32  totalPixs = Height () * Width ();
+  kkint32  totalPixs = Height () * Width ();
 
   SimpleCompressor  compressor (totalPixs);
 
   compressor.Add16BitInt (Height ());
   compressor.Add16BitInt (Width ());
 
-  int32  x;
+  kkint32  x;
   for  (x = 0;  x < totalPixs;  x++)
     compressor.AddByte (greenArea[x]);
 
@@ -571,7 +595,7 @@ uchar*   RasterSipper::SimpleCompression (uint32&  buffLen) const // Will create
 
 // Creates a raster from a compressedBuff created by 'SimpleCompression'
 RasterSipperPtr  RasterSipper::FromSimpleCompression (const uchar*  compressedBuff,
-                                                      uint32        compressedBuffLen
+                                                      kkuint32      compressedBuffLen
                                                      )  
 {
   // I expect simple run length compressed data to be passed in.  The data was  orginally 
@@ -590,7 +614,7 @@ RasterSipperPtr  RasterSipper::FromSimpleCompression (const uchar*  compressedBu
   //
   //          Each byte inthe raster represents one pixel 0 - 255 grayscale;  where 0=background.
 
-  uint32  unCompressedSize = 0;
+  kkuint32  unCompressedSize = 0;
 
   if  (compressedBuff == NULL)
   {
@@ -611,8 +635,8 @@ RasterSipperPtr  RasterSipper::FromSimpleCompression (const uchar*  compressedBu
 
   // The first Four Bytes have the image Height, and Width.
 
-  int32  height = uncompressedBuff[0] * 256 +  uncompressedBuff[1];
-  int32  width  = uncompressedBuff[2] * 256 +  uncompressedBuff[3];
+  kkint32  height = uncompressedBuff[0] * 256 +  uncompressedBuff[1];
+  kkint32  width  = uncompressedBuff[2] * 256 +  uncompressedBuff[3];
 
   if  ((height < 1)  ||  (height > 1000)  ||  (width < 1)  ||  (width > 1000))
   {
@@ -622,7 +646,7 @@ RasterSipperPtr  RasterSipper::FromSimpleCompression (const uchar*  compressedBu
     return new RasterSipper (20, 20, false);
   }
 
-  uint32  totalPixels = height * width;
+  kkuint32  totalPixels = height * width;
   if  (unCompressedSize > (totalPixels + 4))
   {
     cerr << endl
@@ -633,10 +657,10 @@ RasterSipperPtr  RasterSipper::FromSimpleCompression (const uchar*  compressedBu
   RasterSipperPtr  result = new RasterSipper (height, width, false);
   uchar* greenArea = result->GreenArea ();
 
-  uint32  nextIdx = 4;
-  uint32  greanAreaIdx = 0;
+  kkuint32  nextIdx = 4;
+  kkuint32  greanAreaIdx = 0;
 
-  while  ((nextIdx < (uint32)unCompressedSize)  &&  (greanAreaIdx < totalPixels))
+  while  ((nextIdx < (kkuint32)unCompressedSize)  &&  (greanAreaIdx < totalPixels))
   {
     greenArea[greanAreaIdx] = uncompressedBuff[nextIdx];
     nextIdx++;
@@ -653,10 +677,10 @@ RasterSipperPtr  RasterSipper::FromSimpleCompression (const uchar*  compressedBu
 
 
 RasterSipperPtr  RasterSipper::FromCompressor (const uchar*  compressedBuff,    // Creates a raster from a compressedBuff created by 'Compressor'(zlib)
-                                               uint32        compressedBuffLen
+                                               kkuint32      compressedBuffLen
                                               )
 {
-  uint32  unCompressedBuffLen = 0;
+  kkuint32  unCompressedBuffLen = 0;
   uchar*  unCompressedBuff = NULL;
   try
   {
@@ -685,14 +709,14 @@ RasterSipperPtr  RasterSipper::FromCompressor (const uchar*  compressedBuff,    
   // xxxxx                    Red  Channel
   // xxxxx                    Blue Channel
 
-  uint32  height = 0;
-  uint32  width  = 0;
+  kkuint32  height = 0;
+  kkuint32  width  = 0;
   height = unCompressedBuff[0] + unCompressedBuff[1] * 256 + unCompressedBuff[2] * 256 * 256 + unCompressedBuff[3] * 256 * 256 * 256;
   width  = unCompressedBuff[4] + unCompressedBuff[5] * 256 + unCompressedBuff[6] * 256 * 256 + unCompressedBuff[7] * 256 * 256 * 256;
 
   bool color = (unCompressedBuff[8] == 1);
 
-  uint32  totalPixels = height * width;
+  kkuint32  totalPixels = height * width;
   if  ((totalPixels > (100 * 1024 * 1024))  ||  (height < 1)  ||  (width < 1))
   {
     cerr << std::endl << std::endl << "Raster::FromCompressor  Height[" << height << "]  Width[" << width << "]  is not valid." << std::endl << std::endl;
@@ -701,7 +725,7 @@ RasterSipperPtr  RasterSipper::FromCompressor (const uchar*  compressedBuff,    
     return NULL;
   }
 
-  uint32  totalDataNeeded = totalPixels + (color ? (2 * totalPixels) : 0) + 9;
+  kkuint32  totalDataNeeded = totalPixels + (color ? (2 * totalPixels) : 0) + 9;
   if  (totalDataNeeded > unCompressedBuffLen)
   {
     cerr << std::endl << std::endl 
@@ -713,10 +737,10 @@ RasterSipperPtr  RasterSipper::FromCompressor (const uchar*  compressedBuff,    
     return NULL;
   }
 
-  RasterSipperPtr  r = new RasterSipper ((int32)height, (int32)width, color);
+  RasterSipperPtr  r = new RasterSipper ((kkint32)height, (kkint32)width, color);
 
-  uint32 nextIdx = 9;
-  uint32 x;
+  kkuint32 nextIdx = 9;
+  kkuint32 x;
 
   uchar*  greenArea = r->GreenArea ();
   for  (x = 0;  x < totalPixels;  x++, nextIdx++)
@@ -742,16 +766,18 @@ RasterSipperPtr  RasterSipper::FromCompressor (const uchar*  compressedBuff,    
 
 
 
-RasterSipperPtr   RasterSipper::Padded (int32 padding)
+RasterSipperPtr   RasterSipper::Padded (kkint32 padding)
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::Padded (padding));
+  RasterPtr  r = Raster::Padded (padding);
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }
 
 
 
 RasterSipperPtr  RasterSipper::CreateGaussianSmoothedImage (float sigma)  const
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::CreateGaussianSmoothedImage (sigma));
+  RasterPtr  r = Raster::CreateGaussianSmoothedImage (sigma);
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* CreateGaussianSmoothedImage */
 
 
@@ -764,7 +790,8 @@ RasterSipperPtr  RasterSipper::ThresholdInHSI (float              thresholdH,
                                                const PixelValue&  flagValue
                                               )
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::ThresholdInHSI (thresholdH, thresholdS, thresholdI, distance, flagValue));
+  RasterPtr  r = Raster::ThresholdInHSI (thresholdH, thresholdS, thresholdI, distance, flagValue);
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* ThresholdingHSI */
 
 
@@ -772,7 +799,8 @@ RasterSipperPtr  RasterSipper::ThresholdInHSI (float              thresholdH,
 
 RasterSipperPtr  RasterSipper::CreateGrayScaleKLT ()  const
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::CreateGrayScaleKLT ());
+  RasterPtr  r = Raster::CreateGrayScaleKLT ();
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* CreateGrayScaleKLT */
 
 
@@ -780,48 +808,17 @@ RasterSipperPtr  RasterSipper::CreateGrayScaleKLT ()  const
 
 RasterSipperPtr  RasterSipper::CreateGrayScaleKLTOnMaskedArea (const RasterSipper&  mask)  const
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::CreateGrayScaleKLTOnMaskedArea (mask));
+  RasterPtr  r = Raster::CreateGrayScaleKLTOnMaskedArea (mask);
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* CreateGrayScaleKLTOnMaskedArea */
 
 
 
 RasterSipperPtr  RasterSipper::CreateColorImageFromLabels ()
 {
-  return dynamic_cast<RasterSipperPtr> (Raster::CreateColorImageFromLabels ());
+  RasterPtr  r = Raster::CreateColorImageFromLabels ();
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
 }  /* CreateColorImageFromLabels */
-
-
-
-
-
-
-
-Point  DerivePreRotatedPoint (int32   height,
-                              int32   width,
-                              Point&  rotatedPoint, 
-                              float   turnAngle
-                             )
-{
-  int32  diag = (int32)sqrt ((float)(height * height + width * width)) + 10;
-
-  float  a11 = (float)(cos (-turnAngle));
-  float  a12 = (float)(sin (-turnAngle));
-  float  b1  = width  * 0.5f;
-
-  float  a21 = -a12;
-  float  a22 = a11;
-  float  b2  = height * 0.5f;
-
-  int32  halfDiag = (diag + 1) / 2;
-
-  int32  centDestRow = rotatedPoint.Row () - halfDiag;
-  int32  centDestCol = rotatedPoint.Col () - halfDiag;
-
-  int32  srcY = (int32)((float)(a21 * centDestCol) + (float)(a22 * centDestRow) + b2 + 0.5);
-  int32  srcX = (int32)((float)(a11 * centDestCol) + (float)(a12 * centDestRow) + b1 + 0.5);
-
-  return  Point (srcY, srcX);
-}
 
 
 
@@ -847,37 +844,37 @@ PointListPtr  RasterSipper::DeriveImageLength () const
   }
  
   RasterSipperPtr rotatedImage = workRaster->Rotate (orientationAngle);
-  int32  tlRow;
-  int32  tlCol;
-  int32  brRow;
-  int32  brCol;
+  kkint32  tlRow;
+  kkint32  tlCol;
+  kkint32  brRow;
+  kkint32  brCol;
 
   rotatedImage->FindBoundingBox (tlRow, tlCol, brRow, brCol);
   if  (tlRow >= 0)
   {
     uchar**  imageData = rotatedImage->Green ();
 
-    int32  boxWidth  = brCol - tlCol;
-    int32  boxHeight = brRow - tlRow;
+    kkint32  boxWidth  = brCol - tlCol;
+    kkint32  boxHeight = brRow - tlRow;
 
-    int32  mark1Col = (int32)((float)boxWidth * 0.05f + 0.5f) + tlCol;
-    int32  mark2Col = (int32)((float)boxWidth * 0.95f + 0.5f) + tlCol;
+    kkint32  mark1Col = (kkint32)((float)boxWidth * 0.05f + 0.5f) + tlCol;
+    kkint32  mark2Col = (kkint32)((float)boxWidth * 0.95f + 0.5f) + tlCol;
 
-    int32  a1RowTot   = 0;
-    int32  a1ColTot   = 0;
-    int32  a1PixCount = 0l;
+    kkint32  a1RowTot   = 0;
+    kkint32  a1ColTot   = 0;
+    kkint32  a1PixCount = 0l;
 
-    int32  a2RowTot   = 0;
-    int32  a2ColTot   = 0;
-    int32  a2PixCount = 0l;
+    kkint32  a2RowTot   = 0;
+    kkint32  a2ColTot   = 0;
+    kkint32  a2PixCount = 0l;
 
-    int32  a3RowTot   = 0;
-    int32  a3ColTot   = 0;
-    int32  a3PixCount = 0;
+    kkint32  a3RowTot   = 0;
+    kkint32  a3ColTot   = 0;
+    kkint32  a3PixCount = 0;
 
-    for  (int32 row = tlRow;  row <= brRow;  ++row)
+    for  (kkint32 row = tlRow;  row <= brRow;  ++row)
     {
-      int32 col = 0;
+      kkint32 col = 0;
 
       uchar*  rowData = imageData[row];
 
@@ -921,9 +918,9 @@ PointListPtr  RasterSipper::DeriveImageLength () const
     Point p3 ((int)(0.5f + a3RowTot / a3PixCount), (int)(0.5f + a3ColTot / a3PixCount));
 
    
-    Point p1Orig = DerivePreRotatedPoint (height, width, p1, orientationAngle);
-    Point p2Orig = DerivePreRotatedPoint (height, width, p2, orientationAngle);
-    Point p3Orig = DerivePreRotatedPoint (height, width, p3, orientationAngle);
+    Point p1Orig = RotateDerivePreRotatedPoint (height, width, p1, orientationAngle);
+    Point p2Orig = RotateDerivePreRotatedPoint (height, width, p2, orientationAngle);
+    Point p3Orig = RotateDerivePreRotatedPoint (height, width, p3, orientationAngle);
 
     results = new PointList (true);
     results->PushOnBack (new Point (p1Orig));
@@ -948,25 +945,24 @@ RasterSipperList::RasterSipperList (const RasterList&  rasterList,
                                    ):
      KKQueue<RasterSipper> (_owner)
 {
-
   RasterList::const_iterator  idx;
   for  (idx = rasterList.begin ();  idx != rasterList.end ();  ++idx)
   {
     RasterPtr  r = *idx;
-    RasterSipperPtr sp = dynamic_cast<RasterSipperPtr> (r);
-    if  (sp == NULL)
+    if  (typeid(*r) == typeid(RasterSipper))
+    {
+      RasterSipperPtr  sp = dynamic_cast<RasterSipperPtr> (r);
+      if  (!_owner)
+        PushOnBack (sp);
+      else
+        PushOnBack (new RasterSipper (*sp));
+    }
+    else
     {
       if  (!_owner)
         throw KKException ("RasterSipperList::RasterSipperList  instance in container is not a 'RasterSipperPtr'");
       else
         PushOnBack (new RasterSipper (*r));
-    }
-    else
-    {
-      if  (!_owner)
-        PushOnBack (sp);
-      else
-        PushOnBack (new RasterSipper (*sp));
     }
   }
 }
@@ -980,20 +976,20 @@ RasterSipperList::RasterSipperList (const RasterList&  rasterList):
   for  (idx = rasterList.begin ();  idx != rasterList.end ();  ++idx)
   {
     RasterPtr  r = *idx;
-    RasterSipperPtr sp = dynamic_cast<RasterSipperPtr> (r);
-    if  (sp == NULL)
+    if  (typeid(*r) == typeid(RasterSipper))
+    {
+      RasterSipperPtr  sp = dynamic_cast<RasterSipperPtr> (r);
+      if  (!Owner ())
+        PushOnBack (sp);
+      else
+        PushOnBack (new RasterSipper (*sp));
+    }
+    else
     {
       if  (!Owner ())
         throw KKException ("RasterSipperList::RasterSipperList  instance in container is not a 'RasterSipperPtr'");
       else
         PushOnBack (new RasterSipper (*r));
-    }
-    else
-    {
-      if  (!Owner ())
-        PushOnBack (sp);
-      else
-        PushOnBack (new RasterSipper (*sp));
     }
   }
 }

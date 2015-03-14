@@ -10,11 +10,11 @@
 using namespace std;
 
 #include "MemoryDebug.h"
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "BMPImage.h"
 #include "ImageIO.h"
 #include "OSservices.h"
-using namespace KKU;
+using namespace KKB;
 
 
 #include "SipperExtractionImageManager.h"
@@ -40,7 +40,7 @@ class  SipperExtractionImageManager::ImageEntry
 {
 public:
   ImageEntry (const KKStr&     _fileName,
-              int32            _size,
+              kkint32          _size,
               MLClassConstPtr  _predClass
              ):
        fileName  (_fileName),
@@ -50,7 +50,7 @@ public:
 
   KKStr               fileName;
   MLClassConstPtr  predClass;
-  int32               size;
+  kkint32             size;
 };  /* ImageEntry */
 
 
@@ -64,7 +64,7 @@ public:
                 const KKStr&     _rootDir,
                 bool             _saveFeatureData,
                 bool             _countOnly,
-                uint32           _imagesPerDirectory,
+                kkuint32         _imagesPerDirectory,
                 RunLog&             _log
                );
 
@@ -73,11 +73,11 @@ public:
   const KKStr&        ClassName      () const;
   const KKStr&        ClassNameUpper () const;
   MLClassConstPtr  MLClass     () const  {return mlClass;}
-  int32               ImageCount     () const  {return imageCount;}
+  kkint32             ImageCount     () const  {return imageCount;}
 
   void  AddImage (const KKStr&      fileName,
                   MLClassConstPtr   predClass,
-                  int32             size,
+                  kkint32           size,
                   ImageFeaturesPtr  example,
                   RasterPtr         raster,
                   bool              colorize
@@ -96,15 +96,15 @@ public:
 
 private:
   bool                  countOnly;
-  int32                 curSubDirNum;
+  kkint32               curSubDirNum;
   KKStr                 curSubDirName;
   ImageEntryListPtr     entries;
   ImageFeaturesListPtr  examplesCurDir;
   FileDescPtr           fileDesc;
   KKStr                 fullSubDirName;
   MLClassConstPtr       mlClass;
-  int32                 imageCount;
-  uint32                imagesPerDirectory;
+  kkint32               imageCount;
+  kkuint32              imagesPerDirectory;
   RunLog&               log;
   KKStr                 rootDir;
   bool                  saveFeatureData;
@@ -116,10 +116,10 @@ private:
 SipperExtractionImageManager::SipperExtractionImageManager (FileDescPtr  _fileDesc,
                                                             const KKStr& _rootDir,
                                                             bool         _saveFeatureData,
-                                                            int32        _veryLargeImageSize,
+                                                            kkint32      _veryLargeImageSize,
                                                             bool         _imagesAreClassified,
                                                             bool         _countOnly,
-                                                            uint32       _imagesPerDirectory,
+                                                            kkuint32     _imagesPerDirectory,
                                                             RunLog&      _log
                                                            ):
      allExamples           (NULL),
@@ -304,7 +304,7 @@ SipperExtractionImageManager::ManagedClassPtr  SipperExtractionImageManager::Man
 
 void  SipperExtractionImageManager::AddImage (const KKStr&      fileName,
                                               MLClassConstPtr   predClass,
-                                              int32             size,
+                                              kkint32           size,
                                               float             depth,
                                               ImageFeaturesPtr  example,
                                               RasterPtr         raster,
@@ -314,8 +314,8 @@ void  SipperExtractionImageManager::AddImage (const KKStr&      fileName,
   sizeDistributionLarge.Increment (predClass, size);
   sizeDistributionMed.Increment   (predClass, size);
   sizeDistributionSmall.Increment (predClass, size);
-  depthDistribution_10.Increment  (predClass, int32 (floor (depth)));
-  depthDistribution_1.Increment   (predClass, int32 (floor (depth)));
+  depthDistribution_10.Increment  (predClass, kkint32 (floor (depth)));
+  depthDistribution_1.Increment   (predClass, kkint32 (floor (depth)));
 
   if  (size > veryLargeImageSize)
   {
@@ -452,7 +452,7 @@ SipperExtractionImageManager::ManagedClass::ManagedClass
                             const KKStr&        _rootDir,
                             bool                _saveFeatureData,
                             bool                _countOnly,
-                            uint32              _imagesPerDirectory,
+                            kkuint32            _imagesPerDirectory,
                             RunLog&             _log
                            ):
     
@@ -541,7 +541,7 @@ void  SipperExtractionImageManager::ManagedClass::StartNewDirectory ()
 void  SipperExtractionImageManager::ManagedClass::AddImage 
                              (const KKStr&         fileName,
                               MLClassConstPtr   predClass,
-                              int32                size,
+                              kkint32              size,
                               ImageFeaturesPtr     example,
                               RasterPtr            raster,
                               bool                 colorize
@@ -616,7 +616,7 @@ void  SipperExtractionImageManager::ManagedClass::CloseOutCurDirectory ()
 
     bool    cancelFlag  = false;
     bool    successful  = false;
-    uint32  numExamplesWritten = 0;
+    kkuint32  numExamplesWritten = 0;
 
     FeatureFileIOPices::Driver ()->SaveFeatureFile (fullFeatureFileName, 
                                                     examplesCurDir->AllFeatures (),

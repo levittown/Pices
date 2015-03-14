@@ -11,14 +11,14 @@
 #include <vector>
 
 #include "MemoryDebug.h"
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 
 using namespace std;
 
 #include "Compressor.h"
 #include "OSservices.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 #include "PicesApplication.h"
 using namespace MLL;
@@ -43,7 +43,7 @@ ImportFullSizeFromSqlBackUp::~ImportFullSizeFromSqlBackUp ()
 
 
 
-void  ImportFullSizeFromSqlBackUp::InitalizeApplication (int32   argc,
+void  ImportFullSizeFromSqlBackUp::InitalizeApplication (kkint32 argc,
                                                          char**  argv
                                                         )
 {

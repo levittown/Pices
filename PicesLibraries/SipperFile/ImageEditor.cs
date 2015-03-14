@@ -142,8 +142,8 @@ namespace SipperFile
         PicesRaster  result = null;
         switch  (operation)
         {
-          case  PicesRaster.OperationType.BandPass:           result = r.BandPass            (lowerBound,   upperBound); break;
-          case  PicesRaster.OperationType.Binarize:           result = r.Binarize            ();           break;
+          case  PicesRaster.OperationType.BandPass:           result = r.BandPass            (lowerBound, upperBound, true); break;
+          case  PicesRaster.OperationType.Binarize:           result = r.Binarize            ();                  break;
           case  PicesRaster.OperationType.BinarizeTH:         result = r.BinarizeByThreshold (thLowerBound, thUpperBound); break;
           case  PicesRaster.OperationType.Closing:            result = r.CloseImage          (mask);              break;
           case  PicesRaster.OperationType.ConnectedComponent: result = r.ConnectedComponent  ((byte)maskSize);    break;

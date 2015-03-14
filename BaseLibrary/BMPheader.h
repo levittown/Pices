@@ -1,9 +1,9 @@
 #ifndef  _BMPHEADER_
 #define  _BMPHEADER_
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 
-namespace  KKU
+namespace  KKB
 {
 /**
  *@file  BMPheader.h
@@ -15,7 +15,7 @@ namespace  KKU
 
 #ifndef WIN32
 
-//typedef  unsigned int32 uint32;
+//typedef  unsigned kkint32 kkuint32;
 
 //typedef  unsigned char  uchar;
 
@@ -25,8 +25,8 @@ namespace  KKU
 //typedef unsigned  _int32  DWORD;
 
 typedef  unsigned short  WORD;
-typedef  uint32          DWORD;
-typedef  int32           LONG;
+typedef  kkuint32        DWORD;
+typedef  kkint32         LONG;
 typedef  unsigned char   BYTE;
 
 #define  BI_RLE4  2

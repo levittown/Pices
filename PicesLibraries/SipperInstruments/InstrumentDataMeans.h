@@ -3,10 +3,10 @@
 
 #include <map>
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "DateTime.h"
 #include "GoalKeeper.h"
-using namespace KKU;
+using namespace KKB;
 
 
 namespace SipperHardware
@@ -14,14 +14,14 @@ namespace SipperHardware
   class  InstrumentDataMeans
   {
   public:
-    typedef  KKU::int32  int32;
+    typedef  KKB::kkint32  kkint32;
 
     InstrumentDataMeans ();
 
     InstrumentDataMeans (bool   _downCast,
-                         int32  _depthBin,
+                         kkint32  _depthBin,
                          float  _binDepth,
-                         int32  _scanLines,
+                         kkint32  _scanLines,
                          float  _volumeSampled,
                          float  _temperatureMean,
                          float  _salinityMean,
@@ -38,9 +38,9 @@ namespace SipperHardware
     float  Oxygen_molPerKg_Mean () const  {return  (oxygenMean * 44.64f) / 1.027f;}
         
     bool   downCast;
-    int32  depthBin;
+    kkint32  depthBin;
     float  binDepth;
-    int32  scanLines;
+    kkint32  scanLines;
     float  volumeSampled;
     float  temperatureMean;
     float  salinityMean;

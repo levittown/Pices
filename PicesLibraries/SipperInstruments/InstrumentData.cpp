@@ -11,9 +11,9 @@
 
 using namespace std;
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "DateTime.h"
-using namespace KKU;
+using namespace KKB;
 
 
 
@@ -64,7 +64,7 @@ InstrumentData::InstrumentData (const InstrumentData&   id):
 
   ctdDate        = id.ctdDate;
 
-  for  (int32 x = 0;  x < numDataFields;  x++)
+  for  (kkint32 x = 0;  x < numDataFields;  x++)
     data[x] = id.data[x];
 
   latitude   = id.latitude;
@@ -94,10 +94,10 @@ InstrumentData::InstrumentData (      KKStrParser&  line,
 {
   InitializeDataVariables ();
 
-  uint32  n = (uint32)fieldIndirections.size ();
+  kkuint32  n = (kkuint32)fieldIndirections.size ();
 
   KKStr  field (64);
-  uint32  x = 0;
+  kkuint32  x = 0;
   for  (x = 0;  x < n;  x++)
   {
     field = line.GetNextToken ("\t");
@@ -110,8 +110,8 @@ InstrumentData::InstrumentData (      KKStrParser&  line,
 
 
 
-InstrumentData::InstrumentData (uint32           _scanLine,
-                                uint32           _byteOffset,
+InstrumentData::InstrumentData (kkuint32         _scanLine,
+                                kkuint32         _byteOffset,
                                 const DateTime&  _ctdDate,
                                 char             _activeBattery,
                                 double           _latitude,
@@ -144,9 +144,9 @@ InstrumentData::InstrumentData (uint32           _scanLine,
                                 float            _bat2Level,
                                 float            _bat3Level,
                                 float            _bat4Level,
-                                uint16           _cropLeft,
-                                uint16           _cropRight,
-                                uint16           _activeColumns
+                                kkuint16         _cropLeft,
+                                kkuint16         _cropRight,
+                                kkuint16         _activeColumns
                                ):
 
   activeBattery (_activeBattery),
@@ -213,7 +213,7 @@ void  InstrumentData::InitializeDataVariables ()
   cropLeft      = 0;
   cropRight     = 4095;
   data = new float[numDataFields];
-  for  (int32 x = 0;  x < numDataFields;  x++)
+  for  (kkint32 x = 0;  x < numDataFields;  x++)
     data[x] = 0.0;
 
   scanLine   = 0;
@@ -299,61 +299,61 @@ void  InstrumentData::CreateBlocker ()
 }
 
       
-map<KKStr,uint32>*  InstrumentData::fieldNamesUpperIdx     = NULL;
-map<KKStr,uint32>*  InstrumentData::shortFieldNamesIdx     = NULL;
+map<KKStr,kkuint32>*  InstrumentData::fieldNamesUpperIdx     = NULL;
+map<KKStr,kkuint32>*  InstrumentData::shortFieldNamesIdx     = NULL;
 GoalKeeperPtr       InstrumentData::blocker                = NULL;
 bool                InstrumentData::needToRunFinalCleanUp = false;
 
 
-int32  InstrumentData::numFields     = -1;
-int32  InstrumentData::numDataFields = 28;
+kkint32  InstrumentData::numFields     = -1;
+kkint32  InstrumentData::numDataFields = 28;
 
-int32  InstrumentData::ctdBatteryIndex          =   0;
-int32  InstrumentData::ConductivityIndex        =   1;
-int32  InstrumentData::densityIndex             =   2;
-int32  InstrumentData::depthIndex               =   3;
-int32  InstrumentData::flowRate1Index           =   4;
-int32  InstrumentData::flowRate2Index           =   5;
-int32  InstrumentData::fluorescenceIndex        =   6;
-int32  InstrumentData::fluorescenceSensorIndex  =   7;
-int32  InstrumentData::cdomFluorescenceIndex        =   8;
-int32  InstrumentData::cdomFluorescenceSensorIndex  =   9;
-int32  InstrumentData::illuminationIndex        =  10; 
-int32  InstrumentData::oxygenIndex              =  11;
-int32  InstrumentData::oxygenSensorIndex        =  12;
-int32  InstrumentData::pressureIndex            =  13;
-int32  InstrumentData::recordRateIndex          =  14;
-int32  InstrumentData::salinityIndex            =  15;
-int32  InstrumentData::soundVelocityIndex       =  16;
-int32  InstrumentData::temperatureIndex         =  17;
-int32  InstrumentData::transmisivityIndex       =  18;
-int32  InstrumentData::transmisivitySensorIndex =  19;
-int32  InstrumentData::turbidityIndex           =  20;
-int32  InstrumentData::turbiditySensorIndex     =  21;
+kkint32  InstrumentData::ctdBatteryIndex          =   0;
+kkint32  InstrumentData::ConductivityIndex        =   1;
+kkint32  InstrumentData::densityIndex             =   2;
+kkint32  InstrumentData::depthIndex               =   3;
+kkint32  InstrumentData::flowRate1Index           =   4;
+kkint32  InstrumentData::flowRate2Index           =   5;
+kkint32  InstrumentData::fluorescenceIndex        =   6;
+kkint32  InstrumentData::fluorescenceSensorIndex  =   7;
+kkint32  InstrumentData::cdomFluorescenceIndex        =   8;
+kkint32  InstrumentData::cdomFluorescenceSensorIndex  =   9;
+kkint32  InstrumentData::illuminationIndex        =  10; 
+kkint32  InstrumentData::oxygenIndex              =  11;
+kkint32  InstrumentData::oxygenSensorIndex        =  12;
+kkint32  InstrumentData::pressureIndex            =  13;
+kkint32  InstrumentData::recordRateIndex          =  14;
+kkint32  InstrumentData::salinityIndex            =  15;
+kkint32  InstrumentData::soundVelocityIndex       =  16;
+kkint32  InstrumentData::temperatureIndex         =  17;
+kkint32  InstrumentData::transmisivityIndex       =  18;
+kkint32  InstrumentData::transmisivitySensorIndex =  19;
+kkint32  InstrumentData::turbidityIndex           =  20;
+kkint32  InstrumentData::turbiditySensorIndex     =  21;
 
-int32  InstrumentData::pitchIndex               =  22;
-int32  InstrumentData::rollIndex                =  23;
+kkint32  InstrumentData::pitchIndex               =  22;
+kkint32  InstrumentData::rollIndex                =  23;
 
-int32  InstrumentData::bat1LevelIndex           =  24;
-int32  InstrumentData::bat2LevelIndex           =  25;
-int32  InstrumentData::bat3LevelIndex           =  26;
-int32  InstrumentData::bat4LevelIndex           =  27;
+kkint32  InstrumentData::bat1LevelIndex           =  24;
+kkint32  InstrumentData::bat2LevelIndex           =  25;
+kkint32  InstrumentData::bat3LevelIndex           =  26;
+kkint32  InstrumentData::bat4LevelIndex           =  27;
 
-int32  InstrumentData::scanLineIndex            =  28;
-int32  InstrumentData::byteOffsetIndex          =  29;
-int32  InstrumentData::ctdDateIndex             =  30;
-int32  InstrumentData::activeBatteryIndex       =  31;
-int32  InstrumentData::latitudeIndex            =  32;
-int32  InstrumentData::longitudeIndex           =  33;
+kkint32  InstrumentData::scanLineIndex            =  28;
+kkint32  InstrumentData::byteOffsetIndex          =  29;
+kkint32  InstrumentData::ctdDateIndex             =  30;
+kkint32  InstrumentData::activeBatteryIndex       =  31;
+kkint32  InstrumentData::latitudeIndex            =  32;
+kkint32  InstrumentData::longitudeIndex           =  33;
 
-int32  InstrumentData::cropLeftIndex            =  34;
-int32  InstrumentData::cropRightIndex           =  35;
-int32  InstrumentData::activeColumnsIndex       =  36;
-
-
+kkint32  InstrumentData::cropLeftIndex            =  34;
+kkint32  InstrumentData::cropRightIndex           =  35;
+kkint32  InstrumentData::activeColumnsIndex       =  36;
 
 
-const KKStr&  InstrumentData::FieldName (int32 fieldIndex)
+
+
+const KKStr&  InstrumentData::FieldName (kkint32 fieldIndex)
 {
   if  ((fieldIndex < 0)  ||  (fieldIndex >= NumFields ()))
     return KKStr::EmptyStr ();
@@ -363,7 +363,7 @@ const KKStr&  InstrumentData::FieldName (int32 fieldIndex)
 
 
 
-const KKStr&  InstrumentData::ShortFieldName (int32 fieldIndex)
+const KKStr&  InstrumentData::ShortFieldName (kkint32 fieldIndex)
 {
   if  ((fieldIndex < 0)  ||  (fieldIndex >= NumFields ()))
     return KKStr::EmptyStr ();
@@ -373,7 +373,7 @@ const KKStr&  InstrumentData::ShortFieldName (int32 fieldIndex)
 
 
 
-const KKStr&  InstrumentData::FieldUnitOfMeasure (int32 fieldIndex)
+const KKStr&  InstrumentData::FieldUnitOfMeasure (kkint32 fieldIndex)
 {
   if  ((fieldIndex < 0)  ||  (fieldIndex >= NumFields ()))
     return KKStr::EmptyStr ();
@@ -382,7 +382,7 @@ const KKStr&  InstrumentData::FieldUnitOfMeasure (int32 fieldIndex)
 }
 
 
-float  InstrumentData::FieldMinValue (int32 fieldIndex)
+float  InstrumentData::FieldMinValue (kkint32 fieldIndex)
 {
   if  ((fieldIndex < 0)  ||  (fieldIndex >= NumFields ()))
     return 0.0f;
@@ -392,7 +392,7 @@ float  InstrumentData::FieldMinValue (int32 fieldIndex)
 
 
 
-const KKStr&  InstrumentData::FieldFormatStr (int32 fieldIndex)
+const KKStr&  InstrumentData::FieldFormatStr (kkint32 fieldIndex)
 {
   if  ((fieldIndex < 0)  ||  (fieldIndex >= NumFields ()))
     return KKStr::EmptyStr ();
@@ -402,7 +402,7 @@ const KKStr&  InstrumentData::FieldFormatStr (int32 fieldIndex)
 
 
 
-int32  InstrumentData::NumFields ()
+kkint32  InstrumentData::NumFields ()
 {
   if  (numFields < 0)
   {
@@ -417,7 +417,7 @@ int32  InstrumentData::NumFields ()
 
 
 
-int32  InstrumentData::GetFieldNum (const KKStr&  s)
+kkint32  InstrumentData::GetFieldNum (const KKStr&  s)
 {
   if  (fieldNamesUpperIdx == NULL)
   {
@@ -425,13 +425,13 @@ int32  InstrumentData::GetFieldNum (const KKStr&  s)
     blocker->StartBlock ();
     if  (fieldNamesUpperIdx == NULL)
     {
-      int32  n = NumFields ();
+      kkint32  n = NumFields ();
 
-      fieldNamesUpperIdx = new map<KKStr,uint32> ();
-      for  (int32 x = 0;  x < n;  ++x)
+      fieldNamesUpperIdx = new map<KKStr,kkuint32> ();
+      for  (kkint32 x = 0;  x < n;  ++x)
       {
         KKStr  upperName = fieldDescriptions[x].name.ToUpper ();
-        fieldNamesUpperIdx->insert (pair<KKStr,uint32> (upperName, x));
+        fieldNamesUpperIdx->insert (pair<KKStr,kkuint32> (upperName, x));
       }
       needToRunFinalCleanUp = true;
       atexit (InstrumentData::FinalCleanUp);
@@ -439,7 +439,7 @@ int32  InstrumentData::GetFieldNum (const KKStr&  s)
     blocker->EndBlock ();
   }
   
-  map<KKStr,uint32>::iterator  idx;
+  map<KKStr,kkuint32>::iterator  idx;
 
   idx = fieldNamesUpperIdx->find (s.ToUpper ());
   if  (idx == fieldNamesUpperIdx->end ())
@@ -452,23 +452,23 @@ int32  InstrumentData::GetFieldNum (const KKStr&  s)
 
 
 
-int32  InstrumentData::GetFieldNumFromShortName (const KKStr&  s)
+kkint32  InstrumentData::GetFieldNumFromShortName (const KKStr&  s)
 {
-  int32  n = NumFields ();
+  kkint32  n = NumFields ();
 
   if  (shortFieldNamesIdx == NULL)
   {
-    int32  n = NumFields ();
-    shortFieldNamesIdx = new map<KKStr,uint32> ();
+    kkint32  n = NumFields ();
+    shortFieldNamesIdx = new map<KKStr,kkuint32> ();
 
-    for  (int32 x = 0;  x < n;  x++)
+    for  (kkint32 x = 0;  x < n;  x++)
     {
       KKStr  uperName = fieldDescriptions[x].shortDesc.ToUpper ();
-      shortFieldNamesIdx->insert (pair<KKStr,uint32> (uperName, x));
+      shortFieldNamesIdx->insert (pair<KKStr,kkuint32> (uperName, x));
     }
   }
 
-  map<KKStr,uint32>::iterator  idx;
+  map<KKStr,kkuint32>::iterator  idx;
 
   idx = shortFieldNamesIdx->find (s.ToUpper ());
   if  (idx == shortFieldNamesIdx->end ())
@@ -482,8 +482,8 @@ int32  InstrumentData::GetFieldNumFromShortName (const KKStr&  s)
 
 VectorIntPtr  InstrumentData::CreateFieldIndirectionVectorFromTabDelStr (KKStrParser& s)
 {
-  int32  x;
-  uint32  n = NumFields ();
+  kkint32  x;
+  kkuint32  n = NumFields ();
   VectorIntPtr  indirectionVector = new VectorInt ();
 
   VectorKKStr  names = s.Split ("\t");
@@ -495,9 +495,9 @@ VectorIntPtr  InstrumentData::CreateFieldIndirectionVectorFromTabDelStr (KKStrPa
        << endl;
   }
 
-  for  (x = 0;  x < (int32)names.size ();  x++)
+  for  (x = 0;  x < (kkint32)names.size ();  x++)
   {
-    int32  fieldNum = GetFieldNum (names[x]);
+    kkint32  fieldNum = GetFieldNum (names[x]);
     indirectionVector->push_back (fieldNum);
   }
 
@@ -509,8 +509,8 @@ VectorIntPtr  InstrumentData::CreateFieldIndirectionVectorFromTabDelStr (KKStrPa
 
 VectorIntPtr  InstrumentData::CreateDefaultFieldIndirectionList ()
 {
-  int32  x;
-  int32  n = NumFields ();
+  kkint32  x;
+  kkint32  n = NumFields ();
   VectorIntPtr  indirectionVector = new VectorInt ();
   for  (x = 0;  x < n;  x++)
     indirectionVector->push_back (x);
@@ -520,7 +520,7 @@ VectorIntPtr  InstrumentData::CreateDefaultFieldIndirectionList ()
 
 
 
-KKStr  InstrumentData::FieldToStr (int32  fieldIndex)  const
+KKStr  InstrumentData::FieldToStr (kkint32  fieldIndex)  const
 {
   if  (fieldIndex == scanLineIndex)
     return  StrFromUint32 (scanLine);
@@ -577,7 +577,7 @@ KKStr  InstrumentData::FieldToStr (int32  fieldIndex)  const
 
 
 
-void  InstrumentData::UpdateFromStr (int32         fieldIndex,
+void  InstrumentData::UpdateFromStr (kkint32       fieldIndex,
                                      const KKStr&  s
                                     )
 {
@@ -619,19 +619,19 @@ void  InstrumentData::UpdateFromStr (int32         fieldIndex,
 
   if  (fieldIndex == cropLeftIndex)
   {
-    cropLeft = (uint16)s.ToUint32 ();
+    cropLeft = (kkuint16)s.ToUint32 ();
     return;
   }
 
   if  (fieldIndex == cropRightIndex)
   {
-    cropRight = (uint16)s.ToUint32 ();
+    cropRight = (kkuint16)s.ToUint32 ();
     return;
   }
 
   if  (fieldIndex == activeColumnsIndex)
   {
-    activeColumns = (uint16)s.ToUint32 ();
+    activeColumns = (kkuint16)s.ToUint32 ();
     return;
   }
 
@@ -645,7 +645,7 @@ void  InstrumentData::UpdateFromStr (int32         fieldIndex,
 
 KKStr  InstrumentData::ToTabDelStr ()  const
 {
-  int32  x = 0;
+  kkint32  x = 0;
 
   KKStr  ln (200);
 
@@ -666,7 +666,7 @@ void   InstrumentData::RefreshDataFields (const InstrumentData&  id)
   if  (!data)
     data = new float[numDataFields];
 
-  for  (int32 x = 0;  x  < numDataFields;  x++)
+  for  (kkint32 x = 0;  x  < numDataFields;  x++)
     data[x] = id.data[x];
 
   activeBattery = id.ActiveBattery ();
@@ -719,6 +719,6 @@ void  InstrumentData::FinalCleanUp ()
   needToRunFinalCleanUp = false;
 
   blocker->EndBlock ();
-  delete  blocker;
+  GoalKeeper::Destroy (blocker);
   blocker = NULL;
 }  /* FinalCleanUp */

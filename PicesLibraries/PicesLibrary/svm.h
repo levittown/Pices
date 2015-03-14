@@ -8,7 +8,7 @@
 #include <vector>
 
 #include "KKException.h"
-#include "Str.h"
+#include "KKStr.h"
 #include "RunLog.h"
 
 /**
@@ -23,7 +23,7 @@
 
 namespace  SVM233
 {
-  const int32 SCALE = 100;
+  const kkint32 SCALE = 100;
 
 
   struct svm_node
@@ -44,10 +44,10 @@ namespace  SVM233
     svm_problem ();
     ~svm_problem ();
 
-    int32              l;
+    kkint32            l;
     double*            y;
     VectorKKStr        exampleNames;    /*!< allows the user to provide names to the labels  */
-    int32*             index; //luo add
+    kkint32*             index; //luo add
     struct svm_node**  x;
     double*            W;
 
@@ -76,48 +76,48 @@ namespace  SVM233
     double   coef0;        /* for poly/sigmoid */
     double   degree;       /* for poly */
     double   gamma;        /* for poly/rbf/sigmoid */
-    int32    kernel_type;
-    int32    svm_type;
+    kkint32  kernel_type;
+    kkint32  svm_type;
 
     /* these are for training only */
     double   C;            /* for C_SVC, EPSILON_SVR and NU_SVR */
     double   cache_size;   /* in MB */
     double   eps;          /* stopping criteria */
-    int32    nr_weight;    /* for C_SVC */
+    kkint32  nr_weight;    /* for C_SVC */
     double   nu;           /* for NU_SVC, ONE_CLASS, and NU_SVR */
     double   p;            /* for EPSILON_SVR */
-    int32    probability;  /* do probability estimates */
-    int32    shrinking;    /* use the shrinking heuristics */
+    kkint32  probability;  /* do probability estimates */
+    kkint32  shrinking;    /* use the shrinking heuristics */
     double*  weight;       /* for C_SVC */
-    int32*   weight_label; /* for C_SVC */
+    kkint32*   weight_label; /* for C_SVC */
 
 
     //luo add
     float    A;
-    int32    boosting;
+    kkint32  boosting;
     float    cBoost;
     double   confidence;
-    int32    dim;
-    int32    dimSelect;
+    kkint32  dim;
+    kkint32  dimSelect;
     double*  featureWeight;
-    int32    hist;
-    int32    nr_class;
-    int32    numSVM;
-    int32    retrain;     //number of iterations for bit reduction
+    kkint32  hist;
+    kkint32  nr_class;
+    kkint32  numSVM;
+    kkint32  retrain;     //number of iterations for bit reduction
     float    sample;      //random sample ratio
-    int32    sampleSV;
+    kkint32  sampleSV;
     float    threshold;   //threshold for merging two training images
 
 
     // luo
 
     void  Gamma      (double  _gamma)      {gamma       = _gamma;}
-    void  KernalType (int32   _kernalType) {kernel_type = _kernalType;}
+    void  KernalType (kkint32 _kernalType) {kernel_type = _kernalType;}
 
     double  Gamma      ()  const {return  gamma;}
-    int32   KernalType ()  const {return  kernel_type;}
+    kkint32 KernalType ()  const {return  kernel_type;}
 
-    int32   MemoryConsumedEstimated ()  const;
+    kkint32 MemoryConsumedEstimated ()  const;
 
     void  ProcessSvmParameter (KKStr   cmd,
                                KKStr   value,
@@ -135,8 +135,8 @@ namespace  SVM233
 struct svm_model
 {
   svm_parameter    param;        // parameter
-  int32            nr_class;     // number of classes, = 2 in regression/one class svm
-  int32            l;            // total #SV
+  kkint32          nr_class;     // number of classes, = 2 in regression/one class svm
+  kkint32          l;            // total #SV
   VectorKKStr      exampleNames; /*!< allows the user to provide names to the labels  */
   svm_node**       SV;           /*!< SVs (SV[l])    Support vector feature numbers   */
   double**         sv_coef;      // coefficients for SVs in decision functions (sv_coef[n-1][l])
@@ -144,20 +144,20 @@ struct svm_model
 
   // for classification only
 
-  int32*           label;   // label of each class (label[n])
-  int32*           nSV;     // number of SVs for each class (nSV[n])
+  kkint32*           label;   // label of each class (label[n])
+  kkint32*           nSV;     // number of SVs for each class (nSV[n])
                             // nSV[0] + nSV[1] + ... + nSV[n-1] = l
                             // XXX
   //luo add
-  int32*           SVIndex;
-  int32*           nonSVIndex;
-  int32            numNonSV;
+  kkint32*           SVIndex;
+  kkint32*           nonSVIndex;
+  kkint32          numNonSV;
 
-  std::set<int32>  BSVIndex;
+  std::set<kkint32>  BSVIndex;
   double*          margin;
   double           weight;
 
-  int32            dim;
+  kkint32          dim;
   double*          featureWeight;
   //luo
 
@@ -192,17 +192,17 @@ struct svm_model
     throw KKException ("svm_model::svm_model (const   svm_model& _model)  ***ERROR***  Not Supported");
   }
 
-  int32  MemoryConsumedEstimated ()  const
+  kkint32  MemoryConsumedEstimated ()  const
   {
-    int32  memoryConsumedEstimated = sizeof (svm_model)
+    kkint32  memoryConsumedEstimated = sizeof (svm_model)
       +  param.MemoryConsumedEstimated ()
-      +  (int32)exampleNames.size () * 40;
+      +  (kkint32)exampleNames.size () * 40;
 
     if  (SV)             memoryConsumedEstimated  += sizeof (svm_node*) * l;
     if  (sv_coef)        memoryConsumedEstimated  += (nr_class - 1) * sizeof (double*) + l * (nr_class - 1) * sizeof (double);
     if  (rho)            memoryConsumedEstimated  += l * sizeof (double);
-    if  (label)          memoryConsumedEstimated  += nr_class * sizeof (int32);
-    if  (nSV)            memoryConsumedEstimated  += nr_class * sizeof (int32);
+    if  (label)          memoryConsumedEstimated  += nr_class * sizeof (kkint32);
+    if  (nSV)            memoryConsumedEstimated  += nr_class * sizeof (kkint32);
     if  (featureWeight)  memoryConsumedEstimated  += dim * sizeof (double);
     if  (kValueTable)    memoryConsumedEstimated  += sizeof (double) * l;
     if  ((xSpace != NULL) &&  weOwnXspace)  
@@ -222,7 +222,7 @@ struct svm_model
 
     if  (sv_coef)
     {
-      for  (int32 i = 0;  i < (nr_class - 1);  i++)
+      for  (kkint32 i = 0;  i < (nr_class - 1);  i++)
       {
         free (sv_coef[i]);
         sv_coef[i] = NULL;
@@ -252,9 +252,9 @@ struct svm_model
     }
   }
 
-  KKStr  SupportVectorName (int32 svIDX)
+  KKStr  SupportVectorName (kkint32 svIDX)
   {
-    if  (svIDX < (int32)exampleNames.size ())
+    if  (svIDX < (kkint32)exampleNames.size ())
       return  exampleNames[svIDX];
     else
       return  "SV" + StrFormatInt (svIDX, "ZZZ#");
@@ -277,7 +277,7 @@ struct svm_model*  Svm_Load_Model (istream&  f,
                                   );
 
 
-int32   svm_save_model    (const char*              model_file_name, 
+kkint32 svm_save_model    (const char*              model_file_name, 
                            const struct svm_model*  model
                           );
 
@@ -286,16 +286,16 @@ void    Svm_Save_Model (std::ostream&      o,
                        );
 
 
-int32   svm_get_nr_class  (const struct svm_model*  model);
+kkint32 svm_get_nr_class  (const struct svm_model*  model);
 
 
 void    svm_get_labels    (const struct svm_model*  model, 
-                           int32*                     label
+                           kkint32*                     label
                           );
 
 void    svm_GetSupportVectorStatistics (const struct svm_model*  model,
-                                        int32&                   numSVs,         // The number of training examp
-                                        int32&                   totalNumSVs
+                                        kkint32&                   numSVs,         // The number of training examp
+                                        kkint32&                   totalNumSVs
                                        );
 
 
@@ -319,8 +319,8 @@ double  svm_predict  (const struct svm_model*  model,
 double  svm_predict  (const struct svm_model*  model, 
                       const svm_node*          x, 
                       std::vector<double>&     dist,
-                      std::vector<int32>&      winners,
-                      int32                    excludeSupportVectorIDX
+                      std::vector<kkint32>&      winners,
+                      kkint32                  excludeSupportVectorIDX
                      );
 
 
@@ -334,11 +334,11 @@ double  svm_predict  (const struct svm_model*  model,
 double  svm_predictTwoClasses (const svm_model*  model,
                                const svm_node*   x,
                                double&           dist,
-                               int32             excludeSupportVectorIDX
+                               kkint32           excludeSupportVectorIDX
                               );
 
 svm_problem*  svm_BuildProbFromTwoClassModel  (const svm_model*   model,
-                                               int32              excludeSupportVectorIDX
+                                               kkint32            excludeSupportVectorIDX
                                               );
 
 

@@ -1,7 +1,7 @@
 #if  !defined(_DATABASEIMAGEENTRY_)
 #define  _DATABASEIMAGEENTRY_
 
-#include  "Str.h"
+#include  "KKStr.h"
 
 //**********************************************************************************************************
 //*  Created to help support Harvester.cs.  The idea is that we want to Transmit a minimal amount of data  *

@@ -2,7 +2,7 @@
  * Copyright (C) 1994-2013 Kurt Kramer
  * For conditions of distribution and use, see copyright notice in KKB.h
  *
- *  This module originally developed as part of the KKU library; brought into this library for convenience sake.
+ *  This module originally developed as part of the KKB library; brought into this library for convenience sake.
  */
 #include "FirstIncludes.h"
 
@@ -15,7 +15,7 @@ using namespace std;
 
 #include "GoalKeeper.h"
 #include "GlobalGoalKeeper.h"
-using namespace  KKU;
+using namespace  KKB;
 
 
 

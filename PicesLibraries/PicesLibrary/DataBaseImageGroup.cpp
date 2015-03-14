@@ -12,18 +12,18 @@
 using namespace std;
 
 #include  "MemoryDebug.h"
-#include  "BasicTypes.h"
-using namespace KKU;
+#include  "KKBaseTypes.h"
+using namespace KKB;
 
 #include "DataBaseImageGroup.h"
 using namespace  MLL;
 
 
 
-DataBaseImageGroup::DataBaseImageGroup (int32           _imageGroupId,
+DataBaseImageGroup::DataBaseImageGroup (kkint32         _imageGroupId,
                                         const KKStr&  _name,
                                         const KKStr&  _description,
-                                        uint32          _count
+                                        kkuint32        _count
                                         ):
      imageGroupId (_imageGroupId),
      name         (_name),
@@ -73,7 +73,7 @@ void  DataBaseImageGroup::ValidName (KKStr&  _name,
   if  ((c < 'A')  ||  (c > 'Z'))
     _errorDesc << "First characted must be ('A' thru 'Z')";
 
-  for  (int32 x = 0;  x < _name.Len ();  x++)
+  for  (kkint32 x = 0;  x < _name.Len ();  x++)
   {
     c = toupper (_name[(int)x]);
     if  ((c >= 'A')  &&  (c <= 'Z'))

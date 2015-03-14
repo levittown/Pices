@@ -26,8 +26,8 @@
 #include "KKQueue.h"
 #include "RasterSipper.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 #include "InstrumentData.h"
 #include "InstrumentDataList.h"
@@ -60,8 +60,8 @@ namespace MLL
 
 
 
-  //#define  InfinityValue  (FFLOAT)99999999999999.99
-  //#define  NaNvalute      (FFLOAT)99999999999999.99
+  //#define  InfinityValue  (FVFloat)99999999999999.99
+  //#define  NaNvalute      (FVFloat)99999999999999.99
 
   //    Date     Prog     Ver#  Description
   // ==========  ======== ====  =================================================
@@ -70,7 +70,7 @@ namespace MLL
   //
   // 2004-12-05  Kurt      37   fixed so that the additional contour features
   //                            created for my thesis are only implemented
-  //                            if "IMPLEMENTSAMPLING" is defined in BasicTypes.h
+  //                            if "IMPLEMENTSAMPLING" is defined in KKBaseTypes.h
   //
   // 2005-02-03  Kurt      38   Added 2 new Centroid fields that are relative
   //                            to the beginning of the file.
@@ -100,12 +100,12 @@ namespace MLL
   public:
     typedef  ImageFeatures*  ImageFeaturesPtr;
 
-    typedef  KKU::int32   int32;
-    typedef  KKU::uint32  uint32;
+    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::kkuint32  kkuint32;
 
     //ImageFeatures (MLClassPtr  mlClass);
 
-    ImageFeatures (int32  _numOfFeatures);
+    ImageFeatures (kkint32  _numOfFeatures);
 
     ImageFeatures (const ImageFeatures&  _image);
 
@@ -149,20 +149,20 @@ namespace MLL
 
     // Access Methods.
     void  AreaMMSquare     (float                _areaMMSquare)     {areaMMSquare     = _areaMMSquare;}
-    void  CentroidCol      (FFLOAT               _centroidCol)      {centroidCol      = _centroidCol;}
-    void  CentroidRow      (FFLOAT               _centroidRow)      {centroidRow      = _centroidRow;}
-    void  CtdDateTime      (const KKU::DateTime& _ctdDateTime)      {ctdDateTime      = _ctdDateTime;}
-    void  Depth            (FFLOAT               _depth)            {FeatureData (DepthIndex,        _depth);}
-    void  Fluorescence     (FFLOAT               _fluorescence)     {FeatureData (FluorescenceIndex, _fluorescence);}
-    void  FlowRate1        (FFLOAT               _flowRate1)        {FeatureData (FlowRate1Index,    _flowRate1);}
-    void  FlowRate2        (FFLOAT               _flowRate2)        {FeatureData (FlowRate2Index,    _flowRate2);}
+    void  CentroidCol      (FVFloat               _centroidCol)      {centroidCol      = _centroidCol;}
+    void  CentroidRow      (FVFloat               _centroidRow)      {centroidRow      = _centroidRow;}
+    void  CtdDateTime      (const KKB::DateTime& _ctdDateTime)      {ctdDateTime      = _ctdDateTime;}
+    void  Depth            (FVFloat               _depth)            {FeatureData (DepthIndex,        _depth);}
+    void  Fluorescence     (FVFloat               _fluorescence)     {FeatureData (FluorescenceIndex, _fluorescence);}
+    void  FlowRate1        (FVFloat               _flowRate1)        {FeatureData (FlowRate1Index,    _flowRate1);}
+    void  FlowRate2        (FVFloat               _flowRate2)        {FeatureData (FlowRate2Index,    _flowRate2);}
     void  Latitude         (double               _laditude)         {latitude         = _laditude;}
     void  Longitude        (double               _longitude)        {longitude        = _longitude;}
-    void  NumOfEdgePixels  (int32                _numOfEdgePixels)  {numOfEdgePixels  = _numOfEdgePixels;}
-    void  Oxygen           (FFLOAT               _oxygen)           {FeatureData (OxygenIndex,   _oxygen);}
-    void  Salinity         (FFLOAT               _salinity)         {FeatureData (SalinityIndex, _salinity);}
+    void  NumOfEdgePixels  (kkint32              _numOfEdgePixels)  {numOfEdgePixels  = _numOfEdgePixels;}
+    void  Oxygen           (FVFloat               _oxygen)           {FeatureData (OxygenIndex,   _oxygen);}
+    void  Salinity         (FVFloat               _salinity)         {FeatureData (SalinityIndex, _salinity);}
 
-    void  SfCentroidCol    (FFLOAT _SfCentroidCol) {sfCentroidCol    = _SfCentroidCol;}
+    void  SfCentroidCol    (FVFloat _SfCentroidCol) {sfCentroidCol    = _SfCentroidCol;}
     void  SfCentroidRow    (double _SfCentroidRow) {sfCentroidRow    = _SfCentroidRow;}
 
     void  Version          (short  _version)       {version          = _version;}
@@ -171,27 +171,27 @@ namespace MLL
     float          AreaMMSquare       () const  {return  areaMMSquare;}
     float          CentroidCol        () const  {return  centroidCol;}    /**< @brief Centroid column with respect to image.  */
     float          CentroidRow        () const  {return  centroidRow;}    /**< @brief Centroid row with respect to image.     */
-    FFLOAT         Depth              () const  {return  FeatureData (DepthIndex);}
-    KKU::DateTime  CtdDateTime        () const  {return  ctdDateTime;}
-    FFLOAT         FilledArea         () const  {return  FeatureData (FilledAreaIndex);}
-    FFLOAT         Fluorescence       () const  {return  FeatureData (FluorescenceIndex);}
-    FFLOAT         FlowRate1          () const  {return  FeatureData (FlowRate1Index);}
-    FFLOAT         FlowRate2          () const  {return  FeatureData (FlowRate2Index);}
+    FVFloat         Depth              () const  {return  FeatureData (DepthIndex);}
+    KKB::DateTime  CtdDateTime        () const  {return  ctdDateTime;}
+    FVFloat         FilledArea         () const  {return  FeatureData (FilledAreaIndex);}
+    FVFloat         Fluorescence       () const  {return  FeatureData (FluorescenceIndex);}
+    FVFloat         FlowRate1          () const  {return  FeatureData (FlowRate1Index);}
+    FVFloat         FlowRate2          () const  {return  FeatureData (FlowRate2Index);}
     double         Latitude           () const  {return  latitude;}
-    FFLOAT         Length             () const  {return  FeatureData (LengthIndex);}
+    FVFloat         Length             () const  {return  FeatureData (LengthIndex);}
     double         Longitude          () const  {return  longitude;}
-    int32          NumOfEdgePixels    () const  {return  numOfEdgePixels;}
-    FFLOAT         Oxygen             () const  {return  FeatureData (OxygenIndex);}
-    FFLOAT         Salinity           () const  {return  FeatureData (SalinityIndex);}
+    kkint32        NumOfEdgePixels    () const  {return  numOfEdgePixels;}
+    FVFloat         Oxygen             () const  {return  FeatureData (OxygenIndex);}
+    FVFloat         Salinity           () const  {return  FeatureData (SalinityIndex);}
     float          SfCentroidCol      () const  {return  sfCentroidCol;}  /**< @brief Centroid column with respect to whole Sipper File. */
     double         SfCentroidRow      () const  {return  sfCentroidRow;}  /**< @brief Centroid row with respect to whole Sipper File.    */
     short          Version            () const  {return  version;}
-    FFLOAT         Width              () const  {return  FeatureData (WidthIndex);}
+    FVFloat         Width              () const  {return  FeatureData (WidthIndex);}
 
     virtual
-    int32  MemoryConsumedEstimated ()  const;
+    kkint32  MemoryConsumedEstimated ()  const;
 
-    void  ResetNumOfFeatures (int32    newNumOfFeatures);  // Used to reallocate memory for feature data.
+    void  ResetNumOfFeatures (kkint32  newNumOfFeatures);  // Used to reallocate memory for feature data.
     void  ResetVersion       (short  newVersion);
 
 
@@ -202,9 +202,9 @@ namespace MLL
     virtual  const char*  UnderlyingClass () const  {return  "ImageFeatures";}
 
 
-    static  int32  FirstInstrumentDataField;          /**< @brief The first feature field that we get from a separate instrument data field.  */
+    static  kkint32  FirstInstrumentDataField;          /**< @brief The first feature field that we get from a separate instrument data field.  */
 
-    static  int32  NumSeperateInstrumentDataFields;   /**< @brief The number of features that come from Instrument data,  ex: Oxygen or Depth */
+    static  kkint32  NumSeperateInstrumentDataFields;   /**< @brief The number of features that come from Instrument data,  ex: Oxygen or Depth */
 
 
 
@@ -220,11 +220,11 @@ namespace MLL
 
     float          centroidCol;     //   cnetroid with just respect to the image.
     float          centroidRow;     //     ""     ""      ""     ""    ""    ""
-    KKU::DateTime  ctdDateTime;
+    KKB::DateTime  ctdDateTime;
     float          areaMMSquare;    /**< Size of image in Square mm. */
     double         latitude;
     double         longitude;
-    int32          numOfEdgePixels;
+    kkint32        numOfEdgePixels;
     float          sfCentroidCol;   //   centroid with respect to whole zipper file,
     double         sfCentroidRow;   //     ""     ""      ""     ""    ""    ""
     short          version;         /**< This is the same versionNumber as in ImageFeaturesList
@@ -235,7 +235,7 @@ namespace MLL
                                      */
            
            
-    static  const  int32    SizeThreshold;
+    static  const  kkint32  SizeThreshold;
 
     static  short  SizeIndex;                   // 0;
     static  short  Moment1Index;                // 1;
@@ -354,14 +354,14 @@ namespace MLL
     typedef  SipperHardware::InstrumentDataPtr      InstrumentDataPtr;
     typedef  SipperHardware::InstrumentDataListPtr  InstrumentDataListPtr;
 
-    typedef  KKU::int32   int32;
-    typedef  KKU::uint32  uint32;
+    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::kkuint32  kkuint32;
 
 
     ImageFeaturesList (FileDescPtr  _fileDesc,
                        bool         _owner,
                        RunLog&      _log,
-                       int32        _size = 1000
+                       kkint32      _size = 1000
                       );
 
   private:
@@ -495,8 +495,8 @@ namespace MLL
 
 
     ImageFeaturesListPtr   ExtractImagesForAGivenClass (MLClassConstPtr  _mlClass,
-                                                        int32            _maxToExtract = -1,
-                                                        FFLOAT           _minSize      = -1.0f
+                                                        kkint32          _maxToExtract = -1,
+                                                        FVFloat           _minSize      = -1.0f
                                                        )  const;
 
 
@@ -533,7 +533,7 @@ namespace MLL
                                                                float                  bucketSize         /**< Size of each histogram bucket.                   */
                                                               );
 
-    ImageFeaturesPtr       IdxToPtr (int32 idx) const;
+    ImageFeaturesPtr       IdxToPtr (kkint32 idx) const;
 
     ImageFeaturesPtr       LookUpByImageFileName (const KKStr&  _imageFileName)  const;
 
@@ -564,12 +564,12 @@ namespace MLL
 
     void                   SortBySpatialDistance ();
 
-    ImageFeaturesListPtr   StratifyAmoungstClasses (int32  numOfFolds);
+    ImageFeaturesListPtr   StratifyAmoungstClasses (kkint32  numOfFolds);
 
 
     ImageFeaturesListPtr   StratifyAmoungstClasses (MLClassConstListPtr  mlClasses,
-                                                    int32                   maxImagesPerClass,
-                                                    int32                   numOfFolds
+                                                    kkint32                 maxImagesPerClass,
+                                                    kkint32                 numOfFolds
                                                    );
 
 

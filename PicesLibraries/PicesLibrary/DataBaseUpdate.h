@@ -13,8 +13,8 @@
 #include  "GoalKeeper.h"
 #include  "Raster.h"
 #include  "RunLog.h"
-#include  "Str.h"
-using namespace KKU;
+#include  "KKStr.h"
+using namespace KKB;
 
 
 
@@ -50,12 +50,12 @@ namespace MLL
   public:
     typedef  DataBaseUpdate*  DataBaseUpdatePtr;
 
-    typedef  KKU::uchar   uchar;
-    typedef  KKU::ulong   ulong;
-    typedef  KKU::int32   int32;
-    typedef  KKU::uint32  uint32;
-    typedef  KKU::int64   int64;
-    typedef  KKU::uint64  uint64;
+    typedef  KKB::uchar   uchar;
+    typedef  KKB::ulong   ulong;
+    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::kkuint32  kkuint32;
+    typedef  KKB::kkint64 kkint64;
+    typedef  KKB::kkuint64  kkuint64;
 
 
     DataBaseUpdate (RunLog&  _log);

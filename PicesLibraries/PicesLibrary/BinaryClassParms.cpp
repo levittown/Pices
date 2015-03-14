@@ -9,10 +9,10 @@
 
 using namespace  std;
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 
 #include "BinaryClassParms.h"
@@ -145,9 +145,9 @@ BinaryClassParmsPtr  BinaryClassParms::CreateFromTabDelStr (const KKStr&  _str,
 
 
 
-int32  BinaryClassParms::MemoryConsumedEstimated ()  const
+kkint32  BinaryClassParms::MemoryConsumedEstimated ()  const
 {
-  int32  memoryConsumedEstimated =
+  kkint32  memoryConsumedEstimated =
     sizeof (MLClassConstPtr) * 2             + 
     param.MemoryConsumedEstimated ()            +
     selectedFeatures.MemoryConsumedEstimated () +
@@ -157,10 +157,8 @@ int32  BinaryClassParms::MemoryConsumedEstimated ()  const
 
 
 
-BinaryClassParmsList::BinaryClassParmsList (bool _owner,
-                                            int32  _size
-                                           ):
-        KKQueue<BinaryClassParms> (_owner, _size)
+BinaryClassParmsList::BinaryClassParmsList (bool _owner):
+        KKQueue<BinaryClassParms> (_owner)
 {
 }
 
@@ -188,9 +186,9 @@ BinaryClassParmsList::~BinaryClassParmsList ()
 
 
 
-int32  BinaryClassParmsList::MemoryConsumedEstimated ()  const
+kkint32  BinaryClassParmsList::MemoryConsumedEstimated ()  const
 {
-  int32  memoryConsumedEstimated = sizeof (BinaryClassParmsList);
+  kkint32  memoryConsumedEstimated = sizeof (BinaryClassParmsList);
   BinaryClassParmsList::const_iterator  idx;
   for  (idx = begin ();  idx != end ();  ++idx)
     memoryConsumedEstimated  += (*idx)->MemoryConsumedEstimated ();
@@ -204,7 +202,7 @@ BinaryClassParmsListPtr  BinaryClassParmsList::CreateFromXML (FILE*        i,
                                                               RunLog&      log
                                                              )
 {
-  BinaryClassParmsListPtr binaryClassParmsList = new BinaryClassParmsList (true, 10);
+  BinaryClassParmsListPtr binaryClassParmsList = new BinaryClassParmsList (true);
   binaryClassParmsList->ReadXML (i, fileDesc, log);
   return  binaryClassParmsList;
 }
@@ -216,7 +214,7 @@ BinaryClassParmsListPtr  BinaryClassParmsList::CreateFromXML (istream&     i,
                                                               RunLog&      log
                                                              )
 {
-  BinaryClassParmsListPtr binaryClassParmsList = new BinaryClassParmsList (true, 10);
+  BinaryClassParmsListPtr binaryClassParmsList = new BinaryClassParmsList (true);
   binaryClassParmsList->ReadXML (i, fileDesc, log);
   return  binaryClassParmsList;
 }
@@ -230,7 +228,7 @@ float  BinaryClassParmsList::FeatureCountNet ()  const
 
   const_iterator  idx;
 
-  int32  featureCountTotal = 0;
+  kkint32  featureCountTotal = 0;
 
   for  (idx = begin ();  idx != end ();  idx++)
   {
@@ -269,7 +267,7 @@ BinaryClassParmsPtr  BinaryClassParmsList::LookUp (MLClassConstPtr  _class1,
 
 BinaryClassParmsListPtr  BinaryClassParmsList::DuplicateListAndContents ()  const
 {
-  BinaryClassParmsListPtr  duplicatedQueue = new BinaryClassParmsList (true, QueueSize ());
+  BinaryClassParmsListPtr  duplicatedQueue = new BinaryClassParmsList (true);
 
   for  (const_iterator idx = begin ();  idx != end ();  idx++)
   {

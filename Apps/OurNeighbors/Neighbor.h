@@ -2,7 +2,7 @@
 #define  _NEIGHBOR_
 
 #include  "KKQueue.h"
-#include  "Str.h"
+#include  "KKStr.h"
 #include  "MLClass.h"
 #include  "ImageFeatures.h"
 
@@ -65,7 +65,7 @@ private:
   bool             distCalculated;
   KKStr            fileName;
   MLClassConstPtr  mlClass;
-  int32            largestDist;
+  kkint32          largestDist;
   Neighbor*        nearestNeighbor;
   double           row;
   double           size;
@@ -85,7 +85,7 @@ class  NeighborList: public KKQueue<Neighbor>
 {
 public:
   NeighborList (bool     _owner, 
-                int32      _size,
+                kkint32    _size,
                 RunLog&  _log
                );
 
@@ -107,8 +107,8 @@ public:
                               MLClassConstPtr  restrictedClass = NULL
                              );
 
-  VectorIntPtr  HistogramByDistance (int32  numOfBuckets,
-                                     int32  bucketSize
+  VectorIntPtr  HistogramByDistance (kkint32  numOfBuckets,
+                                     kkint32  bucketSize
                                     );
 
 

@@ -11,12 +11,12 @@
 using namespace std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "DateTime.h"
 #include "OSservices.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 
 #include "FeatureFileIO.h"
@@ -39,7 +39,7 @@ using namespace MLL;
 void  ReportError (RunLog&       log,
                    const KKStr&  fileName,
                    const KKStr&  funcName,
-                   int32         lineCount,
+                   kkint32       lineCount,
                    const KKStr&  errorDesc
                   )
 {
@@ -131,7 +131,7 @@ void  FeatureFileIO::FinalCleanUp ()
 
   featureFileIOGoalKeeper->EndBlock ();
 
-  delete  featureFileIOGoalKeeper;
+  GoalKeeper::Destroy (featureFileIOGoalKeeper);
   featureFileIOGoalKeeper = NULL;
 }  /* CleanUpFeatureFileIO */
 
@@ -336,7 +336,7 @@ void  FeatureFileIO::GetLine (istream&  _in,
     return;
   }
 
-  int32  ch = _in.peek ();
+  kkint32  ch = _in.peek ();
   while  ((ch != '\n')  &&  (ch != '\r')  &&  (!_in.eof ()))
   {
     ch = _in.get ();
@@ -386,7 +386,7 @@ void  FeatureFileIO::GetToken (istream&     _in,
     return;
   }
 
-  int32  ch;
+  kkint32  ch;
 
   // Skip past any leading white space.
   ch = _in.peek ();
@@ -459,7 +459,7 @@ FeatureVectorListPtr  FeatureFileIO::LoadFeatureFile
   
   _changesMade = false;
 
-  int32  estimatedNumOfDataItems = -1;
+  kkint32  estimatedNumOfDataItems = -1;
   
   _successful = true;
 
@@ -510,7 +510,7 @@ FeatureVectorListPtr  FeatureFileIO::LoadFeatureFile
 void   FeatureFileIO::AppendToFile (const KKStr&           _fileName,
                                     const FeatureNumList&  _selFeatures,
                                     FeatureVectorList&     _examples,
-                                    uint32&                _numExamplesWritten,
+                                    kkuint32&                _numExamplesWritten,
                                     VolConstBool&          _cancelFlag,
                                     bool&                  _successful,
                                     RunLog&                _log
@@ -554,7 +554,7 @@ void   FeatureFileIO::AppendToFile (const KKStr&           _fileName,
 void  FeatureFileIO::SaveFeatureFile (const KKStr&           _fileName, 
                                       const FeatureNumList&  _selFeatures,
                                       FeatureVectorList&     _examples,
-                                      uint32&                _numExamplesWritten,
+                                      kkuint32&                _numExamplesWritten,
                                       VolConstBool&          _cancelFlag,
                                       bool&                  _successful,
                                       RunLog&                _log
@@ -591,7 +591,7 @@ void  FeatureFileIO::SaveFeatureFileMultipleParts (const KKStr&           _fileN
                                                    RunLog&                _log
                                                   )
 {
-  uint32  numExamplesWritten = 0;
+  kkuint32  numExamplesWritten = 0;
   SaveFeatureFile (_fileName, _selFeatures, _examples, numExamplesWritten, _cancelFlag, _successful, _log);
 
   if  (_cancelFlag  ||  (!_successful))
@@ -599,18 +599,18 @@ void  FeatureFileIO::SaveFeatureFileMultipleParts (const KKStr&           _fileN
 
   if  (_examples.QueueSize () > 64000)
   {
-    int32  numPartsNeeded = (_examples.QueueSize () / 64000);
+    kkint32  numPartsNeeded = (_examples.QueueSize () / 64000);
     if  ((_examples.QueueSize () % 64000) > 0)
       numPartsNeeded++;
 
-    int32  maxPartSize = (_examples.QueueSize () / numPartsNeeded) + 1;
+    kkint32  maxPartSize = (_examples.QueueSize () / numPartsNeeded) + 1;
 
-    int32  partNum = 0;
+    kkint32  partNum = 0;
     FeatureVectorList::const_iterator idx = _examples.begin ();
 
     while  ((idx != _examples.end ())  &&  (_successful)  &&  (!_cancelFlag))
     {
-      FeatureVectorListPtr  part = new FeatureVectorList (_examples.FileDesc (), false, _log, 64000);
+      FeatureVectorListPtr  part = new FeatureVectorList (_examples.FileDesc (), false, _log);
 
       while  ((idx != _examples.end ())  &&  (part->QueueSize () < maxPartSize))
       {

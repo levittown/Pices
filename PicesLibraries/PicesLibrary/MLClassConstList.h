@@ -4,7 +4,7 @@
 
 #include "GoalKeeper.h"
 #include "RunLog.h"
-#include "Str.h"
+#include "KKStr.h"
 #include "KKQueueConst.h"
 
 
@@ -32,8 +32,8 @@ namespace MLL
   class  MLClassConstList:  public KKQueueConst<MLClass>
   {
   public:
-    typedef  KKU::int32   int32;
-    typedef  KKU::uint32  uint32;
+    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::kkuint32  kkuint32;
 
     typedef  MLClassConstList*  MLClassConstListPtr;
 
@@ -91,7 +91,7 @@ namespace MLL
     void  ExtractThreeTitleLines (KKStr&  titleLine1,
                                   KKStr&  titleLine2, 
                                   KKStr&  titleLine3,
-                                  int32   fieldWidth
+                                  kkint32 fieldWidth
                                  ) const;
 
     /**
@@ -102,7 +102,7 @@ namespace MLL
     KKStr   ExtractHTMLTableHeader () const;
 
 
-    MLClassConstListPtr  ExtractListOfClassesForAGivenHierarchialLevel (int32 level)  const;
+    MLClassConstListPtr  ExtractListOfClassesForAGivenHierarchialLevel (kkint32 level)  const;
 
 
     /** @brief  return pointer to instance with '_name'; if none exists, create one and add to list. */
@@ -130,14 +130,14 @@ namespace MLL
 
 
     virtual
-    MLClassConstPtr  LookUpByClassId (int32  _classId)  const;
+    MLClassConstPtr  LookUpByClassId (kkint32  _classId)  const;
 
 
     void           Load (const KKStr&  _fileName,
                          bool&         _successfull
                         );
 
-    int32          MemoryConsumedEstimated () const;
+    kkint32        MemoryConsumedEstimated () const;
       
     static
       MLClassConstListPtr  MergeClassList (const MLClassConstList&  list1,
@@ -145,7 +145,7 @@ namespace MLL
                                              );
 
 
-    KKU::uint16    NumHierarchialLevels ()  const;
+    KKB::kkuint16  NumHierarchialLevels ()  const;
 
 
     virtual

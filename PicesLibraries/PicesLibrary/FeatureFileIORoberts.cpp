@@ -15,12 +15,12 @@
 using namespace std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "DateTime.h"
 #include "OSservices.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 
 #include "FeatureFileIORoberts.h"
@@ -47,7 +47,7 @@ FeatureFileIORoberts::~FeatureFileIORoberts(void)
 FileDescPtr  FeatureFileIORoberts::GetFileDesc (const KKStr&            _fileName,
                                                 istream&                _in,
                                                 MLClassConstListPtr  _classes,
-                                                int32&                  _estSize,
+                                                kkint32&                  _estSize,
                                                 KKStr&                  _errorMessage,
                                                 RunLog&                 _log
                                                )
@@ -89,7 +89,7 @@ void   FeatureFileIORoberts::SaveFile (FeatureVectorList&     _data,
                                        const KKStr&           _fileName,
                                        const FeatureNumList&  _selFeatures,
                                        ostream&               _out,
-                                       uint32&                _numExamplesWritten,
+                                       kkuint32&                _numExamplesWritten,
                                        VolConstBool&          _cancelFlag,
                                        bool&                  _successful,
                                        KKStr&                 _errorMessage,
@@ -104,7 +104,7 @@ void   FeatureFileIORoberts::SaveFile (FeatureVectorList&     _data,
 
   const AttributePtr*  attrTable = fileDesc->CreateAAttributeTable ();
 
-  int32  x;
+  kkint32  x;
   {
     KKStr  namesFileName = _fileName + ".names";
     // Write _out names file
@@ -123,11 +123,11 @@ void   FeatureFileIORoberts::SaveFile (FeatureVectorList&     _data,
 
     for  (x = 0;  x < _selFeatures.NumOfFeatures ();  x++)
     {
-      int32  featureNum = _selFeatures[x];
+      kkint32  featureNum = _selFeatures[x];
       AttributePtr  attr = attrTable[featureNum];
       if  ((attr->Type () == NominalAttribute)  ||  (attr->Type () == SymbolicAttribute))
       {
-        int32 y;
+        kkint32 y;
         nf << "discrete"; 
         for  (y = 0;  y < attr->Cardinality ();  y++)
           nf << " " << attr->GetNominalValue (y);
@@ -144,18 +144,18 @@ void   FeatureFileIORoberts::SaveFile (FeatureVectorList&     _data,
 
   FeatureVectorPtr   example = NULL;
 
-  int32 idx;
+  kkint32 idx;
   for  (idx = 0;  (idx < _data.QueueSize ()) && (!_cancelFlag);  idx++)
   {
     example = _data.IdxToPtr (idx);
 
     for  (x = 0; x < _selFeatures.NumOfFeatures (); x++)
     {
-      int32  featureNum = _selFeatures[x];
+      kkint32  featureNum = _selFeatures[x];
       AttributePtr attr = attrTable[featureNum];
 
       if  ((attr->Type () == NominalAttribute)  ||  (attr->Type () == SymbolicAttribute))
-        _out << attr->GetNominalValue ((int32)(example->FeatureData (featureNum)));
+        _out << attr->GetNominalValue ((kkint32)(example->FeatureData (featureNum)));
       else
         _out << example->FeatureData (featureNum);
       _out << " ";

@@ -57,7 +57,7 @@ namespace MLL
     ~FeatureEncoder ();
 
 
-    int32  CodedNumOfFeatures () const  {return codedNumOfFeatures;}
+    kkint32  CodedNumOfFeatures () const  {return codedNumOfFeatures;}
 
 
     MLClassConstPtr  Class1 () const  {return class1;}
@@ -74,7 +74,7 @@ namespace MLL
     CompressionStats  Compress (FeatureVectorListPtr  src,
                                 ClassAssignments&     assignments,
                                 XSpacePtr&            xSpace,
-                                int32&                totalxSpaceUsed,
+                                kkint32&                totalxSpaceUsed,
                                 struct svm_problem&   prob
                                );
 
@@ -86,7 +86,7 @@ namespace MLL
 
     void              EncodeAImage (FeatureVectorPtr  image,
                                     svm_node*         xSpace,
-                                    int32&            xSpaceUsed
+                                    kkint32&            xSpaceUsed
                                    );
 
     FeatureVectorListPtr  EncodeAllExamples (const FeatureVectorListPtr  srcData);
@@ -96,9 +96,9 @@ namespace MLL
                                         FeatureVectorPtr  src
                                        );
 
-    int32               MemoryConsumedEstimated ()  const;
+    kkint32             MemoryConsumedEstimated ()  const;
 
-    int32               XSpaceNeededPerImage ()  {return xSpaceNeededPerImage;}
+    kkint32             XSpaceNeededPerImage ()  {return xSpaceNeededPerImage;}
 
 
 
@@ -115,29 +115,29 @@ namespace MLL
      * that have a value of '0' do not need a xSpace node allocated for
      * them.
      */
-    int32  DetermineNumberOfNeededXspaceNodes (FeatureVectorListPtr   src)  const;
+    kkint32  DetermineNumberOfNeededXspaceNodes (FeatureVectorListPtr   src)  const;
 
 
 
     MLL::AttributeTypeVector&  attributeTypes;     /**< Will not own, passed in by creator */
-    int32*                     cardinalityDest;
+    kkint32*                     cardinalityDest;
     VectorInt&                 cardinalityTable;   /**< Will not own, passed in by creator */
     MLClassConstPtr            class1;
     MLClassConstPtr            class2;
-    int32                      codedNumOfFeatures;
+    kkint32                    codedNumOfFeatures;
     SVM_CompressionMethod      compressionMethod;
-    int32*                     destFeatureNums;
+    kkint32*                     destFeatureNums;
     FileDescPtr                destFileDesc;
     FeWhatToDoPtr              destWhatToDo;
     SVM_EncodingMethod         encodingMethod;
     FileDescPtr                fileDesc;
     RunLog&                    log;
-    int32                      numEncodedFeatures;
-    int32                      numOfFeatures;
+    kkint32                    numEncodedFeatures;
+    kkint32                    numOfFeatures;
     FeatureNumList             selectedFeatures;
-    int32*                     srcFeatureNums;
+    kkint32*                     srcFeatureNums;
     const SVMparam&            svmParam;
-    int32                      xSpaceNeededPerImage;
+    kkint32                    xSpaceNeededPerImage;
   };  /* FeatureEncoder */
 
 

@@ -27,7 +27,7 @@ namespace PicesInterface
   {
   public:
     typedef  System::DateTime  SDateTime;
-    typedef  KKU::DateTime     KDateTime;
+    typedef  KKB::DateTime     KDateTime;
 
     PicesInstrumentData ();
     PicesInstrumentData (InstrumentDataPtr  _instrumentData);
@@ -54,7 +54,7 @@ namespace PicesInterface
     property  System::DateTime   CtdDate   {System::DateTime  get  ();   void  set (System::DateTime  _ctdDate);}
 
     property  int       ActiveBattery          {int       get ();}
-    property  uint64    ByteOffset             {uint64    get ();   void  set (uint64 _byteOffset   );}
+    property  kkuint64  ByteOffset             {kkuint64  get ();   void  set (kkuint64 _byteOffset   );}
     property  float     Bat1Level              {float     get ();}
     property  float     Bat2Level              {float     get ();}
     property  float     Bat3Level              {float     get ();}

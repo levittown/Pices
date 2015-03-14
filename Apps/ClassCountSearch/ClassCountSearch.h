@@ -3,7 +3,7 @@
 
 #include "Application.h"
 #include "HTMLReport.h"
-using namespace  KKU;
+using namespace  KKB;
 
 #include "ConfusionMatrix2.h"
 #include "MLClass.h"
@@ -15,7 +15,7 @@ using  namespace  MLL;
 class  ClassCountSearch: public PicesApplication
 {
 public:
-  typedef  KKU::uint  uint;
+  typedef  KKB::uint  uint;
 
   class  ClassStats;
   typedef  ClassStats*  ClassStatsPtr;
@@ -28,7 +28,7 @@ public:
   ~ClassCountSearch ();
 
   virtual
-  void  InitalizeApplication (int32   argc,
+  void  InitalizeApplication (kkint32 argc,
                               char**  argv
                              );
 
@@ -46,8 +46,8 @@ private:
   MLClassConstPtr  SelectNextClassToRemove (ConfusionMatrix2Ptr  cm);
 
   ConfusionMatrix2Ptr  GradeClassList (MLClassConstListPtr  classes,
-                                       int32&               numExamples, 
-                                       int32&               numIgnored
+                                       kkint32&               numExamples, 
+                                       kkint32&               numIgnored
                                       );
 
   ClassStatsListPtr  ComputeClassStatsList (ConfusionMatrix2Ptr  cm);

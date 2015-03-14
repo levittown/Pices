@@ -1,16 +1,16 @@
 /* XmlStream.h -- Class to XML Objects;  still in development.
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #ifndef  _XMLSTREAM_
 #define  _XMLSTREAM_
 #include  <map>
 
-#include "Str.h"
+#include "KKStr.h"
 #include "Tokenizer.h"
-using namespace KKU;
+using namespace KKB;
 
-namespace  KKU
+namespace  KKB
 {
   /**
    *@class  XmlStream  XmlStream.h
@@ -57,9 +57,9 @@ namespace  KKU
 
     const KKStr&  Name ()           const  {return  name;}
     TagTypes      TagType ()        const  {return  tagType;}
-    int32         AttributeCount () const  {return  (int32)attributes.size ();}
-    const KKStr&  AttributeName  (int32 _attributeNum)  const;
-    const KKStr&  AttributeValue (int32 _attributeNum)  const;
+    kkint32       AttributeCount () const  {return  (kkint32)attributes.size ();}
+    const KKStr&  AttributeName  (kkint32 _attributeNum)  const;
+    const KKStr&  AttributeValue (kkint32 _attributeNum)  const;
     const KKStr&  AttributeValue (const KKStr& attributeName)  const;
     const KKStr&  AttributeValue (const char*  attributeName)  const;
 

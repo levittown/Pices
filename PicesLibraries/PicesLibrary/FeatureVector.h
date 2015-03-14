@@ -18,7 +18,7 @@
  */
 
 
-#include "Str.h"
+#include "KKStr.h"
 #include "KKQueue.h"
 #include "RunLog.h"
 
@@ -37,7 +37,9 @@ namespace MLL
     class  FeatureFileIO;
     typedef  FeatureFileIO*  FeatureFileIOPtr;
   #endif
+    
 
+  typedef  float  FVFloat;
 
   /**
    *@class FeatureVector
@@ -55,12 +57,12 @@ namespace MLL
   class  FeatureVector 
   {
   public:
-    typedef  KKU::int32   int32;
-    typedef  KKU::uint32  uint32;
+    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::kkuint32  kkuint32;
 
     //FeatureVector (MLClassPtr  mlClass);
 
-    FeatureVector (int32  _numOfFeatures);
+    FeatureVector (kkint32  _numOfFeatures);
 
     FeatureVector (const FeatureVector&  _example);
 
@@ -70,9 +72,9 @@ namespace MLL
     void  MLClass          (MLClassConstPtr  _mlClass)        {mlClass        = _mlClass;}         /**< @brief Assign a class to this example. */
     void  ImageFileName    (const KKStr&     _imageFileName)  {imageFileName  = _imageFileName;}   /**< @brief Name of source of feature vectpr, ex: file name of image that the veature vector was computed from. */
     void  MissingData      (bool             _missingData)    {missingData    = _missingData;}     /**< @brief True indicates that not all the feature data was preseant when this example was loaded from a data file. */
-    void  OrigSize         (FFLOAT           _origSize)       {origSize       = _origSize;}        /**< @brief The value of Feature[0] before normalization. */
+    void  OrigSize         (FVFloat           _origSize)       {origSize       = _origSize;}        /**< @brief The value of Feature[0] before normalization. */
     void  PredictedClass   (MLClassConstPtr  _predictedClass) {predictedClass = _predictedClass;}
-    void  Probability      (FFLOAT           _probability)    {probability    = _probability;}     /**< @brief Assign a prediction probability to this example. */
+    void  Probability      (FVFloat           _probability)    {probability    = _probability;}     /**< @brief Assign a prediction probability to this example. */
 
     /**
      *@brief Assign a value to a specific feature number for the feature vector. 
@@ -81,8 +83,8 @@ namespace MLL
      *@param[in] _featureNum Feature Num to assign '_featureValue' to. 
      *@param[in] _featureValue Value to assign to feature '_featureNum'.
      */
-    void  FeatureData (int32    _featureNum,
-                       FFLOAT _featureValue
+    void  FeatureData (kkint32  _featureNum,
+                       FVFloat _featureValue
                       );
 
     /**
@@ -91,7 +93,7 @@ namespace MLL
     float  TotalOfFeatureData ()  const;
 
     virtual
-    int32   MemoryConsumedEstimated ()  const;
+    kkint32 MemoryConsumedEstimated ()  const;
 
     /**  
      *@brief  Assign a specific example a higher weight for training purposes. 
@@ -111,26 +113,26 @@ namespace MLL
     const KKStr&        MLClassName        () const;                           /**< @brief Name of class that this example is assigned to.                    */
     const KKStr&        ImageFileName      () const  {return imageFileName;}   /**< @brief Name of file that this FeatureVector was computed from.            */
     bool                MissingData        () const  {return missingData;}     /**< @brief True indicates that one or more features were missing.             */        
-    int32               NumOfFeatures      () const  {return numOfFeatures;}   /**< @brief Number of features in this FeatureVector.                          */
-    FFLOAT              OrigSize           () const  {return origSize;}        /**< @brief The value of Feature[0] before normalization.                      */
+    kkint32             NumOfFeatures      () const  {return numOfFeatures;}   /**< @brief Number of features in this FeatureVector.                          */
+    FVFloat             OrigSize           () const  {return origSize;}        /**< @brief The value of Feature[0] before normalization.                      */
     MLClassConstPtr     PredictedClass     () const  {return predictedClass;}
     const KKStr&        PredictedClassName () const;
-    FFLOAT              Probability        () const  {return probability;}     /**< @brief The probability assigned by classifer to the predicted class.      */
+    FVFloat             Probability        () const  {return probability;}     /**< @brief The probability assigned by classifer to the predicted class.      */
     float               TrainWeight        () const  {return trainWeight;}
     bool                Validated          () const  {return validated;}
 
 
-    FFLOAT         FeatureData      (int32 featureNum)  const;        /** @returns The value of 'featureNum'                           */
-    const FFLOAT*  FeatureData      () const  {return featureData;}   /** @brief Returns as a pointer to the feature data itself.      */
-    FFLOAT*        FeatureDataAlter ()        {return featureData;}   /** @brief ame as 'FeatureData() except you can modify the data. */
+    FVFloat         FeatureData      (kkint32 featureNum)  const;        /** @returns The value of 'featureNum'                           */
+    const FVFloat*  FeatureData      () const  {return featureData;}   /** @brief Returns as a pointer to the feature data itself.      */
+    FVFloat*        FeatureDataAlter ()        {return featureData;}   /** @brief ame as 'FeatureData() except you can modify the data. */
                                                                       
-    const FFLOAT*  FeatureDataConst () const  {return featureData;}
-    bool           FeatureDataValid ();
+    const FVFloat*  FeatureDataConst () const  {return featureData;}
+    bool            FeatureDataValid ();
 
-    void    ResetNumOfFeatures (int32  newNumOfFeatures);  /*!< Used to reallocate memory for feature data. */
+    void    ResetNumOfFeatures (kkint32  newNumOfFeatures);  /*!< Used to reallocate memory for feature data. */
 
-    void    AddFeatureData (int32   _featureNum,   /**< Indicates which feature number to update. */
-                            FFLOAT  _featureData   /**< New value to assign to '_featureNum'.     */
+    void    AddFeatureData (kkint32  _featureNum,   /**< Indicates which feature number to update. */
+                            FVFloat  _featureData   /**< New value to assign to '_featureNum'.     */
                            );
 
     bool  operator== (FeatureVector &other_example)  const;
@@ -143,8 +145,8 @@ namespace MLL
   protected:
     void  AllocateFeatureDataArray ();
 
-    FFLOAT*        featureData;
-    int32          numOfFeatures;
+    FVFloat*         featureData;
+    kkint32          numOfFeatures;
 
 
   private:
@@ -156,12 +158,12 @@ namespace MLL
     bool             missingData;    /**< @brief Indicates that some features were flagged as missing in 
                                       * data file. 
                                       */
-    FFLOAT           origSize;
+    FVFloat          origSize;
     MLClassConstPtr  predictedClass; /**< @brief Represents the class that the Classifier assigned to this 
                                       * image; added to aid in the grading function.2 
                                       */
 
-    FFLOAT           probability;    /**< @brief Probability assigned by classifier to predicted Class. */
+    FVFloat          probability;    /**< @brief Probability assigned by classifier to predicted Class. */
 
     float            trainWeight;    /**< @brief Weight to assign to this training image during Training.
                                       *@details  Added to help support Bit Reduction. Will default to 1.0.
@@ -196,8 +198,8 @@ namespace MLL
   public: 
     typedef  FeatureVectorList*  FeatureVectorListPtr;
 
-    typedef  KKU::int32   int32;
-    typedef  KKU::uint32  uint32;
+    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::kkuint32  kkuint32;
 
     /**
      *@brief Will create a new empty list of FeatureVector's.
@@ -209,8 +211,7 @@ namespace MLL
      */
     FeatureVectorList (FileDescPtr  _fileDesc,
                        bool         _owner,
-                       RunLog&      _log,
-                       int32        _size = 1000
+                       RunLog&      _log
                       );
 
   private:
@@ -243,9 +244,9 @@ namespace MLL
      *@param[in] _examples      Source of feature Vectors to extract from.
      *@param[out] _log          Log file to send messages to.
     */ 
-    FeatureVectorList (MLClassConstList&  _mlClasses,
-                       FeatureVectorList&    _examples,
-                       RunLog&               _log
+    FeatureVectorList (MLClassConstList&   _mlClasses,
+                       FeatureVectorList&  _examples,
+                       RunLog&             _log
                       );
 
     
@@ -288,8 +289,8 @@ namespace MLL
      */
     FeatureVectorPtr          BinarySearchByName (const KKStr&  _imageFileName)  const;
 
-    void                      CalcStatsForFeatureNum (int32   _featureNum,
-                                                      int32&  _count,
+    void                      CalcStatsForFeatureNum (kkint32 _featureNum,
+                                                      kkint32&  _count,
                                                       float&  _total,
                                                       float&  _mean,
                                                       float&  _var,
@@ -300,7 +301,7 @@ namespace MLL
 
     MLL::AttributeTypeVector  CreateAttributeTypeTable ()  const;
 
-    vector<int32>             CreateCardinalityTable ()  const;
+    vector<kkint32>           CreateCardinalityTable ()  const;
 
 
     /**
@@ -314,7 +315,7 @@ namespace MLL
      *     together under the class name 'gelatinous_hydromedusae'.
      *endcode
      */
-    FeatureVectorListPtr      CreateListForAGivenLevel (int32  level);
+    FeatureVectorListPtr      CreateListForAGivenLevel (kkint32  level);
 
     IFL_SortOrder             CurSortOrder ()  const  {return  curSortOrder;}
 
@@ -332,8 +333,8 @@ namespace MLL
 
 
     FeatureVectorListPtr      ExtractImagesForAGivenClass (MLClassConstPtr  _mlClass,
-                                                           int32               _maxToExtract = -1,
-                                                           FFLOAT              _minSize      = -1.0f
+                                                           kkint32             _maxToExtract = -1,
+                                                           FVFloat              _minSize      = -1.0f
                                                           )  const;
 
     VectorDouble              ExtractMeanFeatureValues ();
@@ -345,7 +346,7 @@ namespace MLL
      *@param[in] minClassCount The minimum per class to keep.
      */
     FeatureVectorListPtr      ExtractRandomSampling (float  percentage,    /**<  A percentage between 0.0 and 100.0 */
-                                                     int32    minClassCount
+                                                     kkint32  minClassCount
                                                     );
 
     /**
@@ -360,7 +361,7 @@ namespace MLL
      *@endcode
      *@bug  This method appears to be a suplicate of 'CreateListForAGivenLevel'; We should verify this and get rid of one of them.
      */
-    FeatureVectorListPtr      ExtractExamplesForHierarchyLevel (uint32 level);
+    FeatureVectorListPtr      ExtractExamplesForHierarchyLevel (kkuint32 level);
 
 
     //MLClassListPtr         ExtractListOfClasses ()  const;
@@ -371,17 +372,17 @@ namespace MLL
 
     // Attribute Type information of diff fields.
     bool                      AllFieldsAreNumeric ()  const;                    /**< @brief  Returns true if all fields are numeric, no nominal fields.              */
-    MLL::AttributeType        FeatureType        (int32 featureNum) const;      /**< @brief  Returns the type of attribute for specified 'featureNum'. @see FileDesc */
-    KKStr                     FeatureTypeStr     (int32 featureNum) const;
-    int32                     FeatureCardinality (int32 featureNum) const;      /**< @brief Returns the number of values defined for a Nommnal Field. @see FileDesc::Cardinality */
-    const KKStr&              FieldName          (int32 featureNum) const;      /**< @bnrie Returns name of Attribute Field.                                         */
+    MLL::AttributeType        FeatureType        (kkint32 featureNum) const;      /**< @brief  Returns the type of attribute for specified 'featureNum'. @see FileDesc */
+    KKStr                     FeatureTypeStr     (kkint32 featureNum) const;
+    kkint32                   FeatureCardinality (kkint32 featureNum) const;      /**< @brief Returns the number of values defined for a Nommnal Field. @see FileDesc::Cardinality */
+    const KKStr&              FieldName          (kkint32 featureNum) const;      /**< @bnrie Returns name of Attribute Field.                                         */
 
-    int32                     FeatureCount       ()  const  {return numOfFeatures;}
+    kkint32                   FeatureCount       ()  const  {return numOfFeatures;}
     const FileDescPtr         FileDesc           ()  const  {return fileDesc;}
 
     ClassStatisticListPtr     GetClassStatistics ()  const;                     /**< @brief Returns the number of FeatureVectors per class @see ClassStatisticList */
 
-    int32                     GetClassCount (MLClassConstPtr  c)  const;        /**< @brief Returns number of examples for a specific Class (MLClass).   */
+    kkint32                   GetClassCount (MLClassConstPtr  c)  const;        /**< @brief Returns number of examples for a specific Class (MLClass).   */
 
     RunLog&                   Log () {return  log;}
 
@@ -407,13 +408,13 @@ namespace MLL
     float                     MajorityClassFraction () const; /*!< Return's the fraction that the majority class makes up in this list. */
 
     virtual
-    int32                     MemoryConsumedEstimated ()  const;
+    kkint32                   MemoryConsumedEstimated ()  const;
 
     bool                      MissingData () const;  /*! Returns true if 1 or more entries have missing data. */
 
-    int32                     NumOfFeatures () const  {return  numOfFeatures;}
+    kkint32                   NumOfFeatures () const  {return  numOfFeatures;}
 
-    int32                     NumEntriesOfAGivenClass (MLClassConstPtr  mlClass) const  {return GetClassCount (mlClass);}
+    kkint32                   NumEntriesOfAGivenClass (MLClassConstPtr  mlClass) const  {return GetClassCount (mlClass);}
 
     /**
      *@brief  Using list of ImageFileNames in a file('fileName') create a new FeatureVectorList instance with examples in order based 
@@ -448,7 +449,7 @@ namespace MLL
 
     void                      PushOnFront (FeatureVectorPtr  image);  /**< @brief Overloading the PushOnFront function in KKQueue so we can monitor the Version and Sort Order. */
    
-    void                      ResetNumOfFeaturs (int32 newNumOfFeatures);
+    void                      ResetNumOfFeaturs (kkint32 newNumOfFeatures);
 
     void                      ResetFileDesc (FileDescPtr  newFileDesc);  /*!< You would use this if youRecalc all the data to a newer version of the file. */
 
@@ -458,11 +459,11 @@ namespace MLL
 
     bool                      SameExceptForSymbolicData (const FeatureVectorList&  otherData)  const;
 
-    FeatureVectorListPtr      StratifyAmoungstClasses (int32  numOfFolds);
+    FeatureVectorListPtr      StratifyAmoungstClasses (kkint32  numOfFolds);
 
     FeatureVectorListPtr      StratifyAmoungstClasses (MLClassConstListPtr  mlClasses,
-                                                       int32                   maxImagesPerClass,
-                                                       int32                   numOfFolds
+                                                       kkint32                 maxImagesPerClass,
+                                                       kkint32                 numOfFolds
                                                       );
    
     void                      SortByClass            (bool  reversedOrder = false);
@@ -502,7 +503,7 @@ namespace MLL
     class  RootNameComparrisonReversed;
 
 
-    void  ValidateFileDescAndFieldNum (int32          fieldNum, 
+    void  ValidateFileDescAndFieldNum (kkint32        fieldNum, 
                                        const char*  funcDesc
                                       )  const;
 
@@ -520,7 +521,7 @@ namespace MLL
 
     KKStr          fileName;
 
-    int32          numOfFeatures;
+    kkint32        numOfFeatures;
   };  /* FeatureVectorList */
 
 

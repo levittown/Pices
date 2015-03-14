@@ -23,10 +23,10 @@
 using namespace std;
 
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "OSservices.h"
 #include  "RunLog.h"
-using namespace KKU;
+using namespace KKB;
 
 
 
@@ -52,7 +52,7 @@ CrossValidationThreeWay::CrossValidationThreeWay (TrainingConfiguration2Ptr  _co
                                                   MLClassConstListPtr     _mlClasses,
                                                   MLClassConstPtr         _class1,
                                                   MLClassConstPtr         _class2,
-                                                  int32                      _numOfFolds,
+                                                  kkint32                    _numOfFolds,
                                                   bool                       _featuresAlreadyNormalized,
                                                   bool                       _stratify,
                                                   float                      _punishmentFactor,
@@ -159,19 +159,19 @@ void  CrossValidationThreeWay::BuildOurClasses ()
 
 void   CrossValidationThreeWay::RunValidation (void)
 {
-  int32  foldNum;
+  kkint32  foldNum;
 
-  int32  rowsPerFold = (int32)((float)(examples->QueueSize () / numOfFolds) + 0.5f);
-  int32  startingRowNum = 0;
-  int32  endingRowNum   = -1;
+  kkint32  rowsPerFold = (kkint32)((float)(examples->QueueSize () / numOfFolds) + 0.5f);
+  kkint32  startingRowNum = 0;
+  kkint32  endingRowNum   = -1;
 
   thirdClassTotalDecisiveCount = 0;
   thirdClassTotalDecisiveProb  = 0.0f;
 
   for  (foldNum = 0;  foldNum < numOfFolds;  foldNum++)
   {
-    FeatureVectorListPtr trainingImages = new FeatureVectorList (examples->FileDesc (), false, log, rowsPerFold + 1);
-    FeatureVectorListPtr testImages     = new FeatureVectorList (examples->FileDesc (), false, log, examples->QueueSize ());
+    FeatureVectorListPtr trainingImages = new FeatureVectorList (examples->FileDesc (), false, log);
+    FeatureVectorListPtr testImages     = new FeatureVectorList (examples->FileDesc (), false, log);
 
     startingRowNum = endingRowNum + 1;
     if  (foldNum < (numOfFolds - 1))
@@ -179,7 +179,7 @@ void   CrossValidationThreeWay::RunValidation (void)
     else
       endingRowNum = examples->QueueSize () - 1;
 
-    int32  row = 0;  
+    kkint32  row = 0;  
     FeatureVectorPtr  image = NULL;
     FeatureVectorList::iterator  iIDX = examples->begin ();
     for  (iIDX = examples->begin ();  iIDX != examples->end ();  iIDX++)
@@ -233,7 +233,7 @@ void  CrossValidationThreeWay::CalculateAccuracyAndGrade ()
 
 void  CrossValidationThreeWay::CrossValidate (FeatureVectorListPtr   testImages, 
                                               FeatureVectorListPtr   trainingImages,
-                                              int32                  foldNum,
+                                              kkint32                foldNum,
                                               bool*                  classedCorrectly
                                              )
 {
@@ -266,9 +266,9 @@ void  CrossValidationThreeWay::CrossValidate (FeatureVectorListPtr   testImages,
 
   double   probability;
 
-  int32  foldCorrect   = 0;
-  int32  foldCount     = 0;
-  int32  testItemCount = 0;
+  kkint32  foldCorrect   = 0;
+  kkint32  foldCount     = 0;
+  kkint32  testItemCount = 0;
 
   log.Level (20) << "CrossValidate   Classifying Test Images." << endl;
 
@@ -281,7 +281,7 @@ void  CrossValidationThreeWay::CrossValidate (FeatureVectorListPtr   testImages,
     image = *exampleIDX;
     MLClassConstPtr  knownClass = image->MLClass ();
 
-    int32   numOfWinners              = 0;
+    kkint32 numOfWinners              = 0;
     bool    knownClassOneOfTheWinners = false;
     double  breakTie                  = 0.0;
 
@@ -302,7 +302,7 @@ void  CrossValidationThreeWay::CrossValidate (FeatureVectorListPtr   testImages,
 
     confusionMatrix->Increment (knownClass, 
                                 ourPredictedClass, 
-                                (int32)(*exampleIDX)->OrigSize (), 
+                                (kkint32)(*exampleIDX)->OrigSize (), 
                                 probability,
                                 log
                                );
@@ -389,10 +389,10 @@ void  CrossValidationThreeWay::CreateDistanceReport (ostream&  r)
   r << "\t" << title2 << endl;
   r << "\t" << title3 << endl;
 
-  int32  x;
-  int32  largestClassList = -1;
+  kkint32  x;
+  kkint32  largestClassList = -1;
 
-  int32  numHistBuckets = 100;
+  kkint32  numHistBuckets = 100;
   float bucketSize = (float)(maxProb - minProb) / (float)numHistBuckets;
 
   double*               totalProbabilityByClass = new double[ourClasses->QueueSize ()];
@@ -402,12 +402,12 @@ void  CrossValidationThreeWay::CreateDistanceReport (ostream&  r)
   for  (x = 0;  x < ourClasses->QueueSize (); x++)
   {
     imagesByClass[x] = examples->ExtractImagesForAGivenClass (ourClasses->IdxToPtr (x));
-    largestClassList = Max (largestClassList, (int32)imagesByClass[x]->QueueSize ());
+    largestClassList = Max (largestClassList, (kkint32)imagesByClass[x]->QueueSize ());
     totalProbabilityByClass[x] = 0.0;
     histograms[x] = new Histogram ((float)minProb, numHistBuckets, bucketSize, false);
   }
 
-  int32  row = 0; 
+  kkint32  row = 0; 
   for  (row = 0;  row < largestClassList;  row++)
   {
     for  (x = 0;  x < ourClasses->QueueSize (); x++)
@@ -510,8 +510,8 @@ void  CrossValidationThreeWay::CreateProbabilityReport (ostream&  r)
   r << "\t" << title2 << endl;
   r << "\t" << title3 << endl;
 
-  int32  x;
-  int32  largestClassList = -1;
+  kkint32  x;
+  kkint32  largestClassList = -1;
 
 
   float*                totalProbabilitiesByClass = new float[ourClasses->QueueSize ()];
@@ -521,12 +521,12 @@ void  CrossValidationThreeWay::CreateProbabilityReport (ostream&  r)
   for  (x = 0;  x < ourClasses->QueueSize (); x++)
   {
     imagesByClass[x] = examples->ExtractImagesForAGivenClass (ourClasses->IdxToPtr (x));
-    largestClassList = Max (largestClassList, (int32)(imagesByClass[x]->QueueSize ()));
+    largestClassList = Max (largestClassList, (kkint32)(imagesByClass[x]->QueueSize ()));
     totalProbabilitiesByClass[x] = 0.0;
     histograms[x] = new Histogram (0.0f, 100, 0.01f, false);
   }
 
-  int32  row = 0; 
+  kkint32  row = 0; 
   for  (row = 0;  row < largestClassList;  row++)
   {
     for  (x = 0;  x < ourClasses->QueueSize (); x++)
@@ -630,7 +630,7 @@ void  CrossValidationThreeWay::CalculateThirdClassDecisiveProbability (float&  m
   FeatureVectorPtr  i = NULL;
 
   float  delta;
-  int32    count = 0;
+  kkint32  count = 0;
   float  totalSquared = 0.0f;
 
   if  (thirdClassTotalDecisiveCount < 1)
@@ -674,7 +674,7 @@ void  CrossValidationThreeWay::CalculateThirdClassDecisiveProbability (FeatureVe
   FeatureVectorPtr  i = NULL;
 
   float  delta;
-  int32    count = 0;
+  kkint32  count = 0;
   float  totalSquared = 0.0f;
 
   if  (thirdClassTotalDecisiveCount < 1)
@@ -720,7 +720,7 @@ void   CrossValidationThreeWay::RunValidationOnly (FeatureVectorListPtr  validat
   // We need to get a duplicate copy of each image data because the traininer and classofier
   // will normalize the data.
 
-  FeatureVectorListPtr  trainingImages = new FeatureVectorList (examples->FileDesc (), true, log, examples->QueueSize ());
+  FeatureVectorListPtr  trainingImages = new FeatureVectorList (examples->FileDesc (), true, log);
 
   {
     FeatureVectorListPtr class1Images     = examples->ExtractImagesForAGivenClass (class1);
@@ -753,7 +753,7 @@ void   CrossValidationThreeWay::RunValidationOnly (FeatureVectorListPtr  validat
 
 
 
-float  CrossValidationThreeWay::FoldAccuracy (int32 foldNum)
+float  CrossValidationThreeWay::FoldAccuracy (kkint32 foldNum)
 {
     if  (!foldAccuracies)
   {
@@ -789,7 +789,7 @@ KKStr  CrossValidationThreeWay::FoldStr ()  const
   if  ((numOfFolds <= 0)  ||  (!foldAccuracies))
     return  "";
 
-  int32  x;
+  kkint32  x;
 
   KKStr  result (numOfFolds + 10);
 

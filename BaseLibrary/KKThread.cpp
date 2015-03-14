@@ -18,11 +18,11 @@ using namespace std;
 #include <pthread.h>
 #endif
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "KKException.h"
 #include "MsgQueue.h"
 #include "KKThread.h"
-using namespace KKU;
+using namespace KKB;
 
 
 

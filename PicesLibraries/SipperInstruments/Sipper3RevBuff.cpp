@@ -11,11 +11,11 @@
 
 using namespace std;
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "OSservices.h"
 #include  "RunLog.h"
-#include  "Str.h"
-using namespace KKU;
+#include  "KKStr.h"
+using namespace KKB;
 
 
 #include  "Sipper3RevBuff.h"
@@ -77,7 +77,7 @@ Sipper3RevBuff::~Sipper3RevBuff ()
 
 
 
-void  Sipper3RevBuff::GetNextSipperRec (uint32&  spaceLeft,
+void  Sipper3RevBuff::GetNextSipperRec (kkuint32&  spaceLeft,
                                         uchar&   cameraNum,
                                         bool&    imageData,
                                         bool&    raw,
@@ -85,7 +85,7 @@ void  Sipper3RevBuff::GetNextSipperRec (uint32&  spaceLeft,
                                         bool&    grayScale,
                                         uchar*   pixels,       // Array of size 12
                                         uchar&   numPixels,    // num of pixels in pixels 
-                                        uint32&  numOfBlanks,
+                                        kkuint32&  numOfBlanks,
                                         bool&    moreRecs
                                        )
 {
@@ -160,7 +160,7 @@ void  Sipper3RevBuff::GetNextSipperRec (uint32&  spaceLeft,
 
       // Since this is B/W data,
       // lets convert to   "0 for white"  and  "7 fo black"
-      int32  x;
+      kkint32  x;
       for  (x = 0;  x < 12;  x++)
       {
         if  (pixels[x] > 0)
@@ -179,10 +179,10 @@ void  Sipper3RevBuff::GetNextSipperRec (uint32&  spaceLeft,
 
 
 void  Sipper3RevBuff::GetNextLine (uchar*  lineBuff,
-                                   uint32  lineBuffSize,
-                                   uint32& lineSize,
-                                   uint32  colCount[],
-                                   uint32& pixelsInRow,
+                                   kkuint32  lineBuffSize,
+                                   kkuint32& lineSize,
+                                   kkuint32  colCount[],
+                                   kkuint32& pixelsInRow,
                                    bool&   flow
                                   )
 {
@@ -190,9 +190,9 @@ void  Sipper3RevBuff::GetNextLine (uchar*  lineBuff,
   uchar   cameraNum;
   bool    eol;
   bool    moreRecs;
-  uint32  numOfBlanks;
+  kkuint32  numOfBlanks;
   bool    exceededBuffLen = false;
-  uint32  spaceLeft = lineBuffSize;
+  kkuint32  spaceLeft = lineBuffSize;
   bool    grayScale;
   bool    raw;
 
@@ -209,7 +209,7 @@ void  Sipper3RevBuff::GetNextLine (uchar*  lineBuff,
     // we want to return back a line with a special color indicating
     // the size of the overflow.  As per Bill Flanery
 
-    for  (uint32 x = 0;  x < overflowPixels; x++)
+    for  (kkuint32 x = 0;  x < overflowPixels; x++)
       lineBuff[x] = 253;
 
     lineSize = overflowPixels;
@@ -236,7 +236,7 @@ void  Sipper3RevBuff::GetNextLine (uchar*  lineBuff,
   {
     if  (raw)
     {
-      int32  x;
+      kkint32  x;
       for  (x = 0;  x < numPixels;  x++)
       {
         if  (spaceLeft > 0)
@@ -264,7 +264,7 @@ void  Sipper3RevBuff::GetNextLine (uchar*  lineBuff,
       {
         overflowPixels += (numOfBlanks - spaceLeft);
 
-        int32 z = numOfBlanks - spaceLeft;
+        kkint32 z = numOfBlanks - spaceLeft;
         if  ( z > 12)
         {
           // Something is very very wrong.
@@ -314,7 +314,7 @@ void  Sipper3RevBuff::GetNextLine (uchar*  lineBuff,
     // We have an underflow,  as per Bill Flanery, we want to fill
     // special color to act as an UnderFlow alarm.
 
-    int32 z = lineSize;
+    kkint32 z = lineSize;
     while  (z < 4096)
     {
       lineBuff[z] = 254;  // This will be flag to set pixel to red,
@@ -350,16 +350,16 @@ bool  Sipper3RevBuff::NextScanLineGood ()
   bool    eol;
   bool    imageData;
   bool    moreRecs;
-  uint32  numOfBlanks;
+  kkuint32  numOfBlanks;
   bool    grayScale;
   bool    raw;
 
   uchar  pixels[12];
   uchar  numPixels;
 
-  uint32  scanLineLen = 0;
+  kkuint32  scanLineLen = 0;
 
-  uint32  spaceLeft = 4096;
+  kkuint32  spaceLeft = 4096;
 
   bool  endOfLineFound = false;
 
@@ -412,7 +412,7 @@ bool  Sipper3RevBuff::NextScanLineGood ()
 
     else if  (scanLineLen >= 4096)
     {
-      // The scan line is already at least 4096 pixels int32,  
+      // The scan line is already at least 4096 pixels kkint32,  
       // this scan line must be invalid.
       return  false;
     }
@@ -451,9 +451,9 @@ bool  Sipper3RevBuff::FileFormatGood ()
 
   Reset ();
 
-  int32  numInARowThatAreGood = 0;
-  int32  numInARowThatAreBad  = 0;
-  int32  numRead             = 0;
+  kkint32  numInARowThatAreGood = 0;
+  kkint32  numInARowThatAreBad  = 0;
+  kkint32  numRead             = 0;
 
   do  {
     bool  isNextLineGood = NextScanLineGood ();

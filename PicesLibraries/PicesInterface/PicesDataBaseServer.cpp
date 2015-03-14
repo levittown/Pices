@@ -1,26 +1,26 @@
-#include  "StdAfx.h"
-#include  "FirstIncludes.h"
+#include "StdAfx.h"
+#include "FirstIncludes.h"
 
-#include  <stdio.h>
-#include  <math.h>
-#include  <ctype.h>
-#include  <time.h>
-#include  <fstream>
-#include  <iostream>
-#include  <map>
-#include  <ostream>
-#include  <string>
-#include  <vector>
+#include <stdio.h>
+#include <math.h>
+#include <ctype.h>
+#include <time.h>
+#include <fstream>
+#include <iostream>
+#include <map>
+#include <ostream>
+#include <string>
+#include <vector>
 using namespace std;
 
-#include  "MemoryDebug.h"
-#include  "BasicTypes.h"
-#include  "..\BaseLibrary\GoalKeeper.h"
+#include "MemoryDebug.h"
+#include "KKBaseTypes.h"
+#include "GoalKeeper.h"
 
-#include  "PicesKKStr.h"
-#include  "PicesSipperFile.h"
+#include "PicesKKStr.h"
+#include "PicesSipperFile.h"
 
-#include  "PicesDataBaseServer.h"
+#include "PicesDataBaseServer.h"
 
 using namespace  PicesInterface;
 
@@ -28,7 +28,7 @@ using namespace System;
 using namespace System::Collections::Generic;
 using namespace System::IO;
 using namespace System::Windows::Forms;
-using namespace KKU;
+using namespace KKB;
 
 
 
@@ -110,7 +110,7 @@ void  PicesDataBaseServer::HostName::set (String^ _hostName)
 
 
 
-uint32  PicesDataBaseServer::PortNum::get ()
+kkuint32  PicesDataBaseServer::PortNum::get ()
 {
   if  (server)
     return server->PortNum ();
@@ -119,7 +119,7 @@ uint32  PicesDataBaseServer::PortNum::get ()
 }
 
 
-void  PicesDataBaseServer::PortNum::set (uint32 _portNum)
+void  PicesDataBaseServer::PortNum::set (kkuint32 _portNum)
 {
   if  (!server)
     server = new DataBaseServer ();

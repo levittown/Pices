@@ -7,11 +7,11 @@
 #include <string>
 #include <vector>
 #include "MemoryDebug.h"
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 using namespace std;
 
 #include "OSservices.h"
-using namespace KKU;
+using namespace KKB;
 
 #include "SipperVariables.h"
 using namespace SipperHardware;
@@ -138,7 +138,7 @@ KKStr  DataBaseServer::ToParameterStr ()  const
 DataBaseServerList::DataBaseServerList (RunLog&  _log,
                                         bool     _loadFromConfigFile
                                        ):  
-  KKQueue<DataBaseServer> (true, 10),   // true = We will own contents,  10 = Initial capacity set to 10
+  KKQueue<DataBaseServer> (true),   // true = We will own contents
   defaultServerDescription ("Default"),
   log                      (_log)
 {
@@ -149,7 +149,7 @@ DataBaseServerList::DataBaseServerList (RunLog&  _log,
 
 
 DataBaseServerList::DataBaseServerList (const DataBaseServerList&  serverList):
-    KKQueue<DataBaseServer> (true, QueueSize ()),
+    KKQueue<DataBaseServer> (true),
     defaultServerDescription  (serverList.defaultServerDescription),
     log                       (serverList.log)
 {

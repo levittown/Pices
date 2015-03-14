@@ -10,13 +10,13 @@
 using namespace std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "ImageIO.h"
 #include "MsgQueue.h"
 #include "OSservices.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 
 #include "InstrumentData.h"
@@ -178,8 +178,8 @@ FrameExtractorThread::~FrameExtractorThread ()
 
 
 
-void  FrameExtractorThread::GetRunTimeStats (uint64&  _bytesRead,
-                                             uint32&  _framesRead
+void  FrameExtractorThread::GetRunTimeStats (kkuint64&  _bytesRead,
+                                             kkuint32&  _framesRead
                                             )
 {
   _bytesRead  = bytesRead;
@@ -199,15 +199,15 @@ void  FrameExtractorThread::AllocateFrame ()
   frameArea          = new uchar [totPixels];
 
   frame              = new uchar* [frameHeightMax];
-  frameRowByteOffset = new uint64 [frameHeightMax];
-  pixelsPerRow       = new uint32 [frameHeightMax];
-  colCount           = new uint32 [frameWidth];
+  frameRowByteOffset = new kkuint64 [frameHeightMax];
+  pixelsPerRow       = new kkuint32 [frameHeightMax];
+  colCount           = new kkuint32 [frameWidth];
 
   nextFrameStartRow = frameHeightMax;
 
   int  curPixel = 0;
 
-  for  (uint32  x = 0;  x < frameHeightMax;  x++)
+  for  (kkuint32  x = 0;  x < frameHeightMax;  x++)
   {
     frame[x] = &(frameArea[curPixel]);
     memset (frame[x], 0, frameWidth);
@@ -224,10 +224,10 @@ void  FrameExtractorThread::AllocateFrame ()
 void  FrameExtractorThread::GetNextFrame (bool&  moreFrames)
 {
   bool    flow     = false;
-  uint32  lineSize = 0;
-  uint32  rowCount = 0;
+  kkuint32  lineSize = 0;
+  kkuint32  rowCount = 0;
 
-  for  (uint32 x = 0;  x < frameWidth;  ++x)
+  for  (kkuint32 x = 0;  x < frameWidth;  ++x)
     colCount[x] = 0;
 
   frameSipperRow = sipperBuff->CurRow ();
@@ -245,10 +245,10 @@ void  FrameExtractorThread::GetNextFrame (bool&  moreFrames)
   else
   {
     // We have left over lines from previous GetNextFrame
-    uint32  tempPixsInRow     = 0;
-    uint64  tempRowByteOffset = 0;
+    kkuint32  tempPixsInRow     = 0;
+    kkuint64  tempRowByteOffset = 0;
 
-    for  (uint32 x = nextFrameStartRow;  x <= lastRowUsed;  ++x)
+    for  (kkuint32 x = nextFrameStartRow;  x <= lastRowUsed;  ++x)
     {
       uchar*  destRow = frame[rowCount];
 
@@ -256,7 +256,7 @@ void  FrameExtractorThread::GetNextFrame (bool&  moreFrames)
       frameRowByteOffset [rowCount] = frameRowByteOffset [x];
       pixelsPerRow       [rowCount] = pixelsPerRow       [x];
 
-      for  (uint32 col = 0;  col < frameWidth;  ++col)
+      for  (kkuint32 col = 0;  col < frameWidth;  ++col)
       {
         if  (destRow[col] > 0)
           colCount[col]++;
@@ -388,10 +388,10 @@ void  FrameExtractorThread::SearchForCleanBreak ()
     {
       // Since we could not find a seperation between images lets look
       // for were the row with least pixels.
-      uint32  rowWithLeastPixels = lastRowInFrame;
-      uint32  leastNumOfPixels   = 999999;
+      kkuint32  rowWithLeastPixels = lastRowInFrame;
+      kkuint32  leastNumOfPixels   = 999999;
 
-      for  (uint32  x = lastRowInFrame;  x < lastRowUsed;  ++x)
+      for  (kkuint32  x = lastRowInFrame;  x < lastRowUsed;  ++x)
       {
         if  (pixelsPerRow[x] < leastNumOfPixels )
         {
@@ -417,10 +417,10 @@ void  FrameExtractorThread::SearchForCleanBreak ()
 
 
 
-void  FrameExtractorThread::BuildColCount (uint32  colCount[])
+void  FrameExtractorThread::BuildColCount (kkuint32  colCount[])
 {
-  uint32  col;
-  uint32  row;
+  kkuint32  col;
+  kkuint32  row;
 
   for  (col = 0;  col < frameWidth;  ++col)
   {
@@ -443,18 +443,18 @@ void  FrameExtractorThread::BuildColCount (uint32  colCount[])
 
 
 
-void  FrameExtractorThread::EliminatePosibleLines (uint32  colCount[])
+void  FrameExtractorThread::EliminatePosibleLines (kkuint32  colCount[])
 {
-  uint32  endCol;
+  kkuint32  endCol;
   bool    endColFound;
-  uint32  col;
-  uint32  row;
-  uint32  startCol;
-  uint32  threshold = lastRowInFrame  / 6;
+  kkuint32  col;
+  kkuint32  row;
+  kkuint32  startCol;
+  kkuint32  threshold = lastRowInFrame  / 6;
   if  (threshold < 300)
     threshold = 300;
 
-  uint32  x = 0;
+  kkuint32  x = 0;
 
   BuildColCount (colCount);
 
@@ -515,8 +515,8 @@ void  FrameExtractorThread::EliminatePosibleLines (uint32  colCount[])
 
 void  FrameExtractorThread::SaveFrame (const KKStr& suffix)
 {
-  uint32  col = 0;
-  uint32  row = 0;
+  kkuint32  col = 0;
+  kkuint32  row = 0;
 
   RasterSipperPtr  frameImage = new RasterSipper (lastRowInFrame + 1, 4096, false);
   uchar**  grayArea = frameImage->Green ();

@@ -3,7 +3,7 @@
 
 #include  "FileDesc.h"
 #include  "FeatureFileIO.h"
-#include  "Str.h"
+#include  "KKStr.h"
 #include  "SVMparam.h"
 
 

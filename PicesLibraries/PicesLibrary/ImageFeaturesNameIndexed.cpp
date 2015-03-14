@@ -14,9 +14,9 @@
 using namespace std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "OSservices.h"
-using namespace  KKU;
+using namespace  KKB;
 
 
 #include "ImageFeaturesNameIndexed.h"

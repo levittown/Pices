@@ -1,12 +1,12 @@
 /* Tokenizer.h -- Class to Manage Token Parsing
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 
 #ifndef _TOKENIZER_
 #define _TOKENIZER_
 /**
- *@class  KKU::Tokenizer
+ *@class  KKB::Tokenizer
  *@brief  Class is meant to break down a stream into a set of logical tokens.
  *@author Kurt Kramer
  *@details  This class was originally created while taking Non Linear Systems. It breaks up a source
@@ -18,12 +18,12 @@
 #include  <vector>
 #include  "TokenBuffer.h"
 
-namespace  KKU
+namespace  KKB
 {
   class  Tokenizer
   {
   public:
-    typedef  KKU::uint32  uint32;
+    typedef  KKB::kkuint32  kkuint32;
 
     Tokenizer (TokenBufferPtr _in);
 
@@ -46,9 +46,9 @@ namespace  KKU
      */
     KKStrListPtr  GetNextTokens (const KKStr& delToken);  
 
-    KKStrConstPtr  Peek (uint32 idx);
+    KKStrConstPtr  Peek (kkuint32 idx);
 
-    KKStrConstPtr  operator[](uint32 idx);
+    KKStrConstPtr  operator[](kkuint32 idx);
 
 
   private:
@@ -66,7 +66,7 @@ namespace  KKU
     TokenBufferPtr   in;
     bool             secondCharAtEndOfFile;
 
-    int32            tokenListLen;
+    kkint32          tokenListLen;
     KKStrList        tokenList;      /**< @brief Will contain a fixed list of future tokens to read.
                                       * As end of stream is approached will fill with end of file
                                       * Tokens as a flag.

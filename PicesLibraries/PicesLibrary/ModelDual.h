@@ -11,7 +11,7 @@
  */
 
 #include "RunLog.h"
-#include "Str.h"
+#include "KKStr.h"
 
 #include "Model.h"
 
@@ -89,7 +89,7 @@ namespace  MLL
     ~ModelDual ();
 
     virtual
-    int32                 MemoryConsumedEstimated ()  const;
+    kkint32               MemoryConsumedEstimated ()  const;
 
     virtual
     KKStr                 Description ()  const;  /**< Return short user readable description of model. */
@@ -97,7 +97,7 @@ namespace  MLL
     virtual ModelTypes    ModelType () const  {return mtDual;}
 
     virtual
-    int32                 NumOfSupportVectors () const;
+    kkint32               NumOfSupportVectors () const;
 
     TrainingProcess2Ptr   Trainer1 ()  {return trainer1;}
 
@@ -116,13 +116,13 @@ namespace  MLL
                                    MLClassConstPtr   knownClass,
                                    MLClassConstPtr&  predClass1,
                                    MLClassConstPtr&  predClass2,
-                                   int32&            predClass1Votes,
-                                   int32&            predClass2Votes,
+                                   kkint32&            predClass1Votes,
+                                   kkint32&            predClass2Votes,
                                    double&           probOfKnownClass,
                                    double&           predClass1Prob,
                                    double&           predClass2Prob,
                                    double&           compact,
-                                   int32&            numOfWinners,
+                                   kkint32&            numOfWinners,
                                    bool&             knownClassOneOfTheWinners,
                                    double&           breakTie
                                   );
@@ -142,7 +142,7 @@ namespace  MLL
     virtual
     void  ProbabilitiesByClass (FeatureVectorPtr         example,
                                 const MLClassConstList&  _mlClasses,
-                                int32*                   _votes,
+                                kkint32*                   _votes,
                                 double*                  _probabilities
                                );
 
@@ -200,7 +200,7 @@ namespace  MLL
                                  MLClassConstPtr   predClass,
                                  FeatureVectorPtr  encodedExample,
                                  double&           predClassProb,
-                                 int32&            predClassVotes
+                                 kkint32&            predClassVotes
                                 );
 
     TrainingConfiguration2Ptr  config1;

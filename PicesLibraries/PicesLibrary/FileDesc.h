@@ -30,22 +30,13 @@
  @endcode
  */
 
-#ifdef  WIN32
-#include "..\\BaseLibrary\\GoalKeeper.h"
-#include "..\\BaseLibrary\\RunLog.h"
-#include "..\\BaseLibrary\\Str.h"
-#else
-#include "../BaseLibrary/GoalKeeper.h"
-#include "../BaseLibrary/RunLog.h"
-#include "../BaseLibrary/Str.h"
-#endif
+#include "GoalKeeper.h"
+#include "RunLog.h"
+#include "KKStr.h"
 
 #include "Attribute.h"
 #include "MLClass.h"
 #include "MLClassConstList.h"
-
-
-
 
 namespace MLL 
 {
@@ -90,9 +81,9 @@ namespace MLL
   public:
     typedef  FileDesc*  FileDescPtr;
 
-    typedef  KKU::ulong   ulong;
-    typedef  KKU::int32   int32;
-    typedef  KKU::uint32  uint32;
+    typedef  KKB::ulong   ulong;
+    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::kkuint32  kkuint32;
 
     /**
      @brief  Clean up function,  call just vefore exiting the application.
@@ -135,7 +126,7 @@ namespace MLL
     friend class KKQueue<FileDesc>;
 
   public:
-    void                      AddAAttribute (const KKU::KKStr&   _name,
+    void                      AddAAttribute (const KKB::KKStr&   _name,
                                              MLL::AttributeType  _type,
                                              bool&               alreadyExists
                                             );
@@ -152,7 +143,7 @@ namespace MLL
     const 
     AttributeTypeVector&      AttributeVector ()  const;
 
-    int32                     Cardinality (int32    fieldNum,
+    kkint32                   Cardinality (kkint32  fieldNum,
                                            RunLog&  log
                                           )  const;
 
@@ -168,24 +159,24 @@ namespace MLL
     
     VectorInt32               CreateCardinalityTable ()  const;
 
-    const KKStr&              FieldName (int32  fieldNum)  const;
+    const KKStr&              FieldName (kkint32  fieldNum)  const;
 
     const KKStr&              FileName ()   const {return  fileName;}
 
-    const MLL::Attribute&     GetAAttribute (int32 fieldNum) const;
+    const MLL::Attribute&     GetAAttribute (kkint32 fieldNum) const;
 
     const  
-    KKStr&                    GetNominalValue (int32  fieldNum, 
-                                               int32  code
+    KKStr&                    GetNominalValue (kkint32  fieldNum, 
+                                               kkint32  code
                                               ) const;
 
     MLClassConstPtr           GetMLClassPtr (const KKStr&  className);
 
-    int32                     GetFieldNumFromAttributeName (const KKStr&  attributeName)  const;
+    kkint32                   GetFieldNumFromAttributeName (const KKStr&  attributeName)  const;
 
     //RunLog&                   Log () const {return log;}
 
-    int32                     LookUpNominalCode (int32         fieldNum,
+    kkint32                   LookUpNominalCode (kkint32       fieldNum,
                                                  const KKStr&  nominalValue
                                                 )  const;
 
@@ -193,20 +184,20 @@ namespace MLL
 
     MLClassConstPtr           LookUpUnKnownMLClass ();
     
-    int32                     MemoryConsumedEstimated ()  const;
+    kkint32                   MemoryConsumedEstimated ()  const;
 
-    uint32                    NumOfFields () const  {return (uint32)attributes.size ();}
+    kkuint32                  NumOfFields () const  {return (kkuint32)attributes.size ();}
 
     bool                      SameExceptForSymbolicData (const FileDesc&  otherFd,
                                                          RunLog&          log
                                                         )  const;
 
-    void                      SparseMinFeatureNum (int32  _sparseMinFeatureNum)  {sparseMinFeatureNum = _sparseMinFeatureNum;}
-    int32                     SparseMinFeatureNum () const {return sparseMinFeatureNum;}
+    void                      SparseMinFeatureNum (kkint32  _sparseMinFeatureNum)  {sparseMinFeatureNum = _sparseMinFeatureNum;}
+    kkint32                   SparseMinFeatureNum () const {return sparseMinFeatureNum;}
 
-    MLL::AttributeType        Type (int32 fieldNum)  const;
+    MLL::AttributeType        Type (kkint32 fieldNum)  const;
 
-    KKStr                     TypeStr (int32 fieldNum)  const;
+    KKStr                     TypeStr (kkint32 fieldNum)  const;
 
     short                     Version ()     const  {return version;}
 
@@ -273,7 +264,7 @@ namespace MLL
                                              RunLog&          log
                                             );
   public:
-    void  AddANominalValue (int32         fieldNum,
+    void  AddANominalValue (kkint32       fieldNum,
                             const KKStr&  nominalValue,
                             bool&         alreadyExist,
                             RunLog&       log
@@ -295,10 +286,10 @@ namespace MLL
   private:
     static void  CreateBlocker ();
 
-    int32   NumOfAttributes ()  {return attributes.QueueSize ();}
+    kkint32 NumOfAttributes ()  {return attributes.QueueSize ();}
 
 
-    void  ValidateFieldNum (int32        fieldNum,
+    void  ValidateFieldNum (kkint32      fieldNum,
                             const char*  funcName
                            )  const;
 
@@ -310,11 +301,11 @@ namespace MLL
     MLL::AttributePtr     curAttribute;
     KKStr                 fileName;
     //RunLog&             log;
-    int32                 sparseMinFeatureNum;  /**< Used specifically for sparse files.  */
+    kkint32               sparseMinFeatureNum;  /**< Used specifically for sparse files.  */
     short                 version;
 
     static
-      KKU::GoalKeeperPtr  blocker;
+      KKB::GoalKeeperPtr  blocker;
 
     static
       FileDescListPtr     exisitingDescriptions;  /**< Will keep a list of all FileDesc instancs instatiated. */

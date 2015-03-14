@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 #include "MemoryDebug.h"
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 using namespace std;
 
 
@@ -18,8 +18,8 @@ using namespace std;
 #include "KKQueue.h"
 #include "OSservices.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 #include "Attribute.h"
 #include "MLLTypes.h"
@@ -32,7 +32,7 @@ using namespace MLL;
 
 Attribute::Attribute (const KKStr&   _name,
                       AttributeType  _type,
-                      int32          _fieldNum
+                      kkint32        _fieldNum
                      ):
     fieldNum           (_fieldNum),
     name               (_name),
@@ -74,9 +74,9 @@ Attribute::~Attribute ()
 }
 
 
-int32  Attribute::MemoryConsumedEstimated ()  const
+kkint32  Attribute::MemoryConsumedEstimated ()  const
 {
-  int32  memoryConsumedEstimated = sizeof (Attribute)  + 
+  kkint32  memoryConsumedEstimated = sizeof (Attribute)  + 
       name.MemoryConsumedEstimated ()                  +
       nameUpper.MemoryConsumedEstimated ();
 
@@ -108,7 +108,7 @@ void  Attribute::AddANominalValue (const KKStr&  nominalValue,
                                   )
 {
   ValidateNominalType ("AddANominalValue");
-  int32  code = GetNominalCode (nominalValue);
+  kkint32  code = GetNominalCode (nominalValue);
   if  (code >= 0)
   {
     alreadyExists = true;
@@ -123,7 +123,7 @@ void  Attribute::AddANominalValue (const KKStr&  nominalValue,
 
 
 const
-KKStr&  Attribute::GetNominalValue (int32 code)  const
+KKStr&  Attribute::GetNominalValue (kkint32 code)  const
 {
   ValidateNominalType ("GetNominalValue");
 
@@ -153,7 +153,7 @@ KKStr&  Attribute::GetNominalValue (int32 code)  const
 
 
 
-int32   Attribute::Cardinality ()
+kkint32 Attribute::Cardinality ()
 {
   if  ((type == NominalAttribute)  ||  (type == SymbolicAttribute))
     return  nominalValuesUpper->size ();
@@ -163,10 +163,10 @@ int32   Attribute::Cardinality ()
 
 
 
-int32  Attribute::GetNominalCode  (const KKStr&  nominalValue)  const
+kkint32  Attribute::GetNominalCode  (const KKStr&  nominalValue)  const
 {
   ValidateNominalType ("GetNominalCode");
-  int32  code = nominalValuesUpper->LookUp (nominalValue);
+  kkint32  code = nominalValuesUpper->LookUp (nominalValue);
   return code;
 }  /* GetNominalCode */
 
@@ -225,10 +225,8 @@ KKStr  Attribute::TypeStr () const
 
 
 
-AttributeList::AttributeList (bool   _owner,
-                              int32  _growthRate
-                             ):
-  KKQueue<Attribute> (_owner, _growthRate)
+AttributeList::AttributeList (bool _owner):
+  KKQueue<Attribute> (_owner)
 {
 }
 
@@ -239,9 +237,9 @@ AttributeList::~AttributeList ()
 }
 
 
-int32  AttributeList::MemoryConsumedEstimated ()  const
+kkint32  AttributeList::MemoryConsumedEstimated ()  const
 {
-  int32  memoryConsumedEstimated = sizeof (AttributeList) + nameIndex.size ();
+  kkint32  memoryConsumedEstimated = sizeof (AttributeList) + nameIndex.size ();
   
   {
     std::map<KKStr, AttributePtr>::const_iterator  idx;
@@ -276,7 +274,7 @@ AttributePtr  AttributeList::LookUpByName (const KKStr&  name)  const
 /*
 
   AttributePtr  attribute = NULL;
-  int32  idx = 0;
+  kkint32  idx = 0;
 
   KKStr  nameUpper = name.ToUpper ();
 

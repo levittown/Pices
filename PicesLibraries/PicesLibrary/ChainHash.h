@@ -25,8 +25,8 @@ namespace MLL
 
   struct svm_node_int
   {
-    KKU::int32 index;
-    KKU::int32 value;
+    KKB::kkint32 index;
+    KKB::kkint32 value;
   };
 
 
@@ -34,14 +34,14 @@ namespace MLL
   class ChainHash 
   {
   typedef  T* Tptr;
-  typedef  KKU::int32  int32;
-  typedef  KKU::uint32 uint32;
+  typedef  KKB::kkint32  kkint32;
+  typedef  KKB::kkuint32 kkuint32;
 
   typedef  std::list<T*>  Tlist;
 
   public:
     ChainHash (const T&  notFound, 
-               int32     size = 10007
+               kkint32   size = 10007
               );
 
     ChainHash (const T& notFound);
@@ -58,18 +58,18 @@ namespace MLL
 
     void  remove(const T &x);
 
-    vector<list<int32> >&  getBucketList ();
+    vector<list<kkint32> >&  getBucketList ();
 
     ChainHashNodePtr            GetNodeForExample (FeatureVectorPtr  example);
-    FeatureVectorPtr            GetImageForIndexNum (int32  indexNum);
+    FeatureVectorPtr            GetImageForIndexNum (kkint32  indexNum);
     vector< vector <KKStr > >*  GroupExamples ();
     
   private:
-    int32                 tableSize;
+    kkint32               tableSize;
     Tlist*                bucket;
     const T&              NOT_FOUND;
-    int32                 count;
-    vector<list<int32> >  bucketList;
+    kkint32               count;
+    vector<list<kkint32> >  bucketList;
     vector<T*>            nodeList;    /**< Where we keep a single list of all nodes inserted, this way we will be able to
                                         * clean up when being deleted.
                                         */
@@ -81,19 +81,19 @@ namespace MLL
   class ChainHashNode
   {
   public:
-    typedef  KKU::int32   int32;
-    typedef  KKU::uint32  uint32;
+    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::kkuint32  kkuint32;
 
     // this constructor is here for the notFound node - KNS
-    ChainHashNode ( int32        _example_index,
+    ChainHashNode ( kkint32      _example_index,
                     svm_node_int *example_features, 
-                    int32        _example_class_label
+                    kkint32      _example_class_label
                    );
 
     ChainHashNode (const ChainHashNode& right);
 
-    ChainHashNode ( int32             _example_index,
-                    int32             _example_class_label,
+    ChainHashNode ( kkint32           _example_index,
+                    kkint32           _example_class_label,
                     FeatureVectorPtr  _example,
                     bool&             _sucessfull
                   );
@@ -101,30 +101,30 @@ namespace MLL
     ~ChainHashNode ();
 
 
-    int32  hashKey() const;
+    kkint32  hashKey() const;
 
 
     // returns the prob.x array index (or in other words, the original index number of 
     // the example in the non-compressed list
-    inline int32 getIndex() const  {return index;}
+    inline kkint32 getIndex() const  {return index;}
 
 
     // The bucketList is a list lists containing integers that are indices into the original 
     // example list. The pos number is the new index for each example in the list at that position
     // This list may be redundant. - KNS
-    inline void setBucketListIndex (int32 pos)  {bucketListIndex = pos;}
+    inline void setBucketListIndex (kkint32 pos)  {bucketListIndex = pos;}
 
 
     // returns the position in the new example list of the the node in question
-    inline int32 getBucketListIndex () const  {return  bucketListIndex;}
+    inline kkint32 getBucketListIndex () const  {return  bucketListIndex;}
 
     FeatureVectorPtr  Image ()   {return example;}
 
     bool operator==(const ChainHashNode& right) const;
 
-    static void  setLength (int32 len);
+    static void  setLength (kkint32 len);
 
-    static void  setHashSize (int32 hs);
+    static void  setHashSize (kkint32 hs);
 
     static void  SetSelectedFeatures (const FeatureNumList&  _selectedFeatures);
 
@@ -136,20 +136,20 @@ namespace MLL
 
 
   private:
-    int32 index;
-    int32 label;
-    int32 bucketListIndex;
+    kkint32 index;
+    kkint32 label;
+    kkint32 bucketListIndex;
 
     FeatureVectorPtr  example;
-    int32*            int_x;        // Will only contain selected features.
+    kkint32*            int_x;        // Will only contain selected features.
     //bool              craponstick;
 
     static MLL::AttributeTypeVector  featureTypes;
-    static int32                     hashSize;
-    static int32                     length;
+    static kkint32                   hashSize;
+    static kkint32                   length;
 
-    static int32                     numSelectedFeatures;  // I know this is breaking some rules by
-    static int32*                    selectedFeatures;     // not using FeatureNumList, but I really
+    static kkint32                   numSelectedFeatures;  // I know this is breaking some rules by
+    static kkint32*                    selectedFeatures;     // not using FeatureNumList, but I really
                                                            // want some speed, speed, and speed.
 
     static VectorInt32               bitsToReduceByFeature;
@@ -164,7 +164,7 @@ namespace MLL
 
   template<class T>
   ChainHash<T>::ChainHash (const T&  notFound, 
-                           int32     size
+                           kkint32   size
                           )
     :
       tableSize (size), 
@@ -201,7 +201,7 @@ namespace MLL
   template<class T>
   T*   ChainHash<T>::find (const T &x) const
   {
-    int32 index = x.hashKey ();
+    kkint32 index = x.hashKey ();
 
     if  (bucket[index].size() == 0)
       return NOT_FOUND;
@@ -224,7 +224,7 @@ namespace MLL
   template<class T>
   void  ChainHash<T>::makeEmpty ()
   {
-    for  (int32 i = 0;  i < tableSize;  i++)
+    for  (kkint32 i = 0;  i < tableSize;  i++)
     {
       typename Tlist::iterator idx;
       for  (idx = bucket[i].begin ();  idx !=  bucket[i].end ();  idx++)
@@ -254,7 +254,7 @@ namespace MLL
 
     nodeList.push_back (x);
 
-    int32 index = x->hashKey();
+    kkint32 index = x->hashKey();
 
     if  (bucket[index].size() == 0)
     {
@@ -264,7 +264,7 @@ namespace MLL
       x->setBucketListIndex(count);   // This node must be unique so we are going
       count++;                        // to give it its own bucketList entry
       bucket[index].push_back(x);
-      list<int32> l;
+      list<kkint32> l;
       l.push_back (x->getIndex());
       bucketList.push_back(l);
     }
@@ -286,7 +286,7 @@ namespace MLL
 
       if (it != bucket[index].end())
       {
-        int32 pos = (**it).getBucketListIndex ();
+        kkint32 pos = (**it).getBucketListIndex ();
         bucketList[pos].push_back(x->getIndex());
         x->setBucketListIndex (pos);
       }
@@ -295,7 +295,7 @@ namespace MLL
         x->setBucketListIndex (count);
         count++;
         bucket[index].push_back (x);
-        list<int32> l;
+        list<kkint32> l;
         l.push_back(x->getIndex ());
         bucketList.push_back (l);
       }
@@ -307,16 +307,16 @@ namespace MLL
   template<class T>
   void  ChainHash<T>::DoSomeStats ()
   {
-    int32   c     = 0;
-    int32   total = 0;
-    int32   x;
+    kkint32 c     = 0;
+    kkint32 total = 0;
+    kkint32 x;
 
     for  (x = 0;  x < tableSize;  x++)
     {
       if  (bucket[x].size () > 0)
       {
         c++;
-        total += (int32)bucket[x].size ();
+        total += (kkint32)bucket[x].size ();
       }
     }
 
@@ -338,13 +338,13 @@ namespace MLL
 
 
     /*
-    int32 nodesInBucketList = 0;
+    kkint32 nodesInBucketList = 0;
     {
-      vector<list<int32> >::const_iterator  idx;
+      vector<list<kkint32> >::const_iterator  idx;
 
       for  (idx = bucketList.begin ();  idx != bucketList.end ();  idx++)
       {
-        list<int32>::const_iterator  idx2;
+        list<kkint32>::const_iterator  idx2;
 
         for (idx2 = (*idx).begin ();  idx2 != (*idx).end ();  idx2++)
         {
@@ -375,7 +375,7 @@ namespace MLL
   template<class T>
   void  ChainHash<T>::remove (const T &x)
   {
-    int32 index = x.hashKey();
+    kkint32 index = x.hashKey();
 
     typename Tlist::iterator  it;
 
@@ -393,7 +393,7 @@ namespace MLL
 
 
   template<class T>
-  vector<list<int32> >&  ChainHash<T>::getBucketList()
+  vector<list<kkint32> >&  ChainHash<T>::getBucketList()
   {
     return  bucketList;
   }
@@ -418,7 +418,7 @@ namespace MLL
 
 
   template<class T>
-  FeatureVectorPtr  ChainHash<T>::GetImageForIndexNum (int32  indexNum)
+  FeatureVectorPtr  ChainHash<T>::GetImageForIndexNum (kkint32  indexNum)
   {
     typename  vector<T*>::iterator  idx;
 
@@ -439,18 +439,18 @@ namespace MLL
   template<class T>
   vector< vector <KKStr > >*  ChainHash<T>::GroupExamples ()
   {
-    vector<list<int32> >::const_iterator  idx1;
+    vector<list<kkint32> >::const_iterator  idx1;
 
 
     vector< vector <KKStr > >*  allGroups = new vector< vector <KKStr > > ();
 
     for  (idx1 = bucketList.begin ();  idx1 != bucketList.end ();  idx1++)
     {
-      list<int32>   groupIndexes = *idx1;
+      list<kkint32>   groupIndexes = *idx1;
 
       vector<KKStr>  groupList;
 
-      list<int32>::const_iterator idx2;
+      list<kkint32>::const_iterator idx2;
 
       for  (idx2 = groupIndexes.begin ();  idx2 != groupIndexes.end ();  idx2++)
       {

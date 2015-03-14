@@ -11,14 +11,14 @@
 #include <vector>
 
 #include "MemoryDebug.h"
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 
 using namespace std;
 
 #include "ImageIO.h"
 #include "OSservices.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 #include "SipperCruise.h"
 #include "SipperDeployment.h"
@@ -97,7 +97,7 @@ FullSizeImagesInstall::~FullSizeImagesInstall ()
 
 
 
-void  FullSizeImagesInstall::InitalizeApplication (int32   argc,
+void  FullSizeImagesInstall::InitalizeApplication (kkint32 argc,
                                                    char**  argv
                                                   )
 {
@@ -168,14 +168,14 @@ void   FullSizeImagesInstall::DiagnoseImage (DataBaseImagePtr  image,
 
   KKStr  rootName = image->ImageFileName () + "_" + StrFormatInt (image->Height (), "0000") + "-" + StrFormatInt (image->Width (), "0000");
   KKStr  dirName = "C:\\Temp\\PicesImages\\";
-  KKU::osCreateDirectoryPath (dirName);
+  KKB::osCreateDirectoryPath (dirName);
 
   KKStr  fullRootName = osAddSlash (dirName) + rootName;
 
   if  (thumbNail)
-    KKU::SaveImageGrayscaleInverted8Bit (*thumbNail, fullRootName + "_0ThumbNail.bmp");
-  KKU::SaveImageGrayscaleInverted8Bit (*fullSizeImage, fullRootName   + "_1FullSize.bmp");
-  KKU::SaveImageGrayscaleInverted8Bit (*recoverd,      fullRootName   + "_2Recoverd.bmp");
+    KKB::SaveImageGrayscaleInverted8Bit (*thumbNail, fullRootName + "_0ThumbNail.bmp");
+  KKB::SaveImageGrayscaleInverted8Bit (*fullSizeImage, fullRootName   + "_1FullSize.bmp");
+  KKB::SaveImageGrayscaleInverted8Bit (*recoverd,      fullRootName   + "_2Recoverd.bmp");
 
   delete  thumbNail;  thumbNail = NULL;
   delete  recoverd;   recoverd  = NULL;
@@ -196,16 +196,16 @@ void   FullSizeImagesInstall::ProcessSipperFile (SipperFilePtr  sipperFile)
     << "Sipper File" << "\t" << sipperFile->SipperFileName () << endl
     << endl;
 
-  int32  sipperFileImageCount             = 0;
-  int32  sipperFileThumbNail              = 0;  // number of images where the ThumbNail is the true extracted image.
-  int32  sipperFileFullSize               = 0;  // number images that should be saved in ImagesFullSize table.
-  int32  sipperFileAlreadyInFullSizeTable = 0;
-  int32  sipperFileMissingFromFullSize    = 0;
-  int32  sipperFileWrong                  = 0;  // Number images nit saved correctly.
-  int32  sipperFileImagesLost             = 0;
-  int32  sipperFileImagesRecoverd         = 0;
+  kkint32  sipperFileImageCount             = 0;
+  kkint32  sipperFileThumbNail              = 0;  // number of images where the ThumbNail is the true extracted image.
+  kkint32  sipperFileFullSize               = 0;  // number images that should be saved in ImagesFullSize table.
+  kkint32  sipperFileAlreadyInFullSizeTable = 0;
+  kkint32  sipperFileMissingFromFullSize    = 0;
+  kkint32  sipperFileWrong                  = 0;  // Number images nit saved correctly.
+  kkint32  sipperFileImagesLost             = 0;
+  kkint32  sipperFileImagesRecoverd         = 0;
 
-  int32  totalNumSipperFiles = sipperFiles->size ();
+  kkint32  totalNumSipperFiles = sipperFiles->size ();
 
   //if  (sipperFilesProcessed > 267)
   {
@@ -246,7 +246,7 @@ void   FullSizeImagesInstall::ProcessSipperFile (SipperFilePtr  sipperFile)
 
         bool  deleteOldFulSizeImage = false;
 
-        int32  maxDim = Max (image->Height (), image->Width ());
+        kkint32  maxDim = Max (image->Height (), image->Width ());
         if  (maxDim <= 100)
         {
           // Since the maximum dimension is less that 100 then the ThumNail in the Images table is the True image as extracted form the sipper file.
@@ -265,7 +265,7 @@ void   FullSizeImagesInstall::ProcessSipperFile (SipperFilePtr  sipperFile)
           }
           else
           {
-            int32  tlRow,tlCol, brRow, brCol;
+            kkint32  tlRow,tlCol, brRow, brCol;
             i->FindBoundingBox (tlRow, tlCol, brRow, brCol);
 
             if  ((tlRow > 3)  ||
@@ -311,7 +311,7 @@ void   FullSizeImagesInstall::ProcessSipperFile (SipperFilePtr  sipperFile)
               ImageFeaturesPtr  existingFeatureData = DB ()->FeatureDataRecLoad (image->ImageFileName ());
 
               InstrumentDataPtr  id = NULL;
-              uint32  frameNum = image->TopLeftRow () / 4096;
+              kkuint32  frameNum = image->TopLeftRow () / 4096;
 
               id = DB ()->InstrumentDataGetByScanLine (image->SipperFileName (), 4096 * frameNum);
               if  (id != NULL)
@@ -435,7 +435,7 @@ void   FullSizeImagesInstall::Main ()
   SipperFileResults  totals ("Totals", 0, 0, 0, 0, 0, 0);
 
   SipperFileResults::PrintHeader (*report);
-  for  (uint32 x = 0;  x < results.size ();  ++x)
+  for  (kkuint32 x = 0;  x < results.size ();  ++x)
   {
     results[x].Print (*report);
     totals += results[x];

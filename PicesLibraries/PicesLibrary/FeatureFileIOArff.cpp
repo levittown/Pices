@@ -15,12 +15,12 @@
 using namespace  std;
 
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "DateTime.h"
 #include  "OSservices.h"
 #include  "RunLog.h"
-#include  "Str.h"
-using namespace  KKU;
+#include  "KKStr.h"
+using namespace  KKB;
 
 
 #include "FeatureFileIOArff.h"
@@ -50,7 +50,7 @@ FeatureFileIOArff::~FeatureFileIOArff(void)
 FileDescPtr  FeatureFileIOArff::GetFileDesc (const KKStr&         _fileName,
                                              istream&             _in,
                                              MLClassConstListPtr  _classes,
-                                             int32&               _estSize,
+                                             kkint32&               _estSize,
                                              KKStr&               _errorMessage,
                                              RunLog&              _log
                                             )
@@ -93,7 +93,7 @@ void   FeatureFileIOArff::SaveFile (FeatureVectorList&     _data,
                                     const KKStr&           _fileName,
                                     const FeatureNumList&  _selFeatures,
                                     ostream&               _out,
-                                    uint32&                _numExamplesWritten,
+                                    kkuint32&                _numExamplesWritten,
                                     VolConstBool&          _cancelFlag,
                                     bool&                  _successful,
                                     KKStr&                 _errorMessage,
@@ -107,7 +107,7 @@ void   FeatureFileIOArff::SaveFile (FeatureVectorList&     _data,
   FileDescPtr  fileDesc = _data.FileDesc ();
   const AttributePtr*  attrTable = fileDesc->CreateAAttributeTable ();
 
-  int32  x;
+  kkint32  x;
   {
     _out << "% ARFF Format Definition: http://www.cs.waikato.ac.nz/~ml/weka/arff.html"  << endl
          << "%"                                                             << endl
@@ -138,9 +138,9 @@ void   FeatureFileIOArff::SaveFile (FeatureVectorList&     _data,
          << "%"                                << endl;
 
     
-    for  (int32 fnIDX = 0;  fnIDX < _selFeatures.NumOfFeatures ();  fnIDX++)
+    for  (kkint32 fnIDX = 0;  fnIDX < _selFeatures.NumOfFeatures ();  fnIDX++)
     {
-      int32  featureNum = _selFeatures[fnIDX];
+      kkint32  featureNum = _selFeatures[fnIDX];
       AttributePtr attr = attrTable[featureNum];
       _out << "@attribute " 
            << attr->Name ()
@@ -178,24 +178,24 @@ void   FeatureFileIOArff::SaveFile (FeatureVectorList&     _data,
     delete  classStatistics;
   }
 
-  int32  numOfDigistsNeededInRowMask = Min ((int32)1, (int32) log10 (float (_data.QueueSize ()))) + 1;
+  kkint32  numOfDigistsNeededInRowMask = Min ((kkint32)1, (kkint32) log10 (float (_data.QueueSize ()))) + 1;
 
   KKStr rowMask = "0";
   rowMask.RightPad (numOfDigistsNeededInRowMask, '0');
 
   FeatureVectorPtr   example = NULL;
 
-  int32 idx;
+  kkint32 idx;
   for  (idx = 0; idx < _data.QueueSize (); idx++)
   {
     example = _data.IdxToPtr (idx);
 
     for  (x = 0;  x < _selFeatures.NumOfFeatures ();  x++)
     {
-      int32  featureNum = _selFeatures[x];
+      kkint32  featureNum = _selFeatures[x];
 
       if  ((attrTable[featureNum]->Type () == NominalAttribute)  ||  (attrTable[featureNum]->Type () == SymbolicAttribute))
-        _out << attrTable[featureNum]->GetNominalValue ((int32)(example->FeatureData (featureNum)));
+        _out << attrTable[featureNum]->GetNominalValue ((kkint32)(example->FeatureData (featureNum)));
       else
         _out << example->FeatureData (featureNum);
       _out << ",";

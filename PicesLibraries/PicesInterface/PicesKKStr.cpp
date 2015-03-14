@@ -3,26 +3,23 @@
 
 #include <stdio.h>
 #include <math.h>
-
-
-#include  <ctype.h>
-#include  <time.h>
-
-#include  <fstream>
-#include  <iostream>
-#include  <ostream>
-#include  <string>
-#include  <vector>
+#include <ctype.h>
+#include <time.h>
+#include <fstream>
+#include <iostream>
+#include <ostream>
+#include <string>
+#include <vector>
 using namespace std;
 
-#include  "MemoryDebug.h"
-#include  "BasicTypes.h"
+#include "MemoryDebug.h"
+#include "KKBaseTypes.h"
 
 using namespace System;
-using namespace KKU;
+using namespace KKB;
 
 
-#include "OSservices.h"
+#include "PicesOSservices.h"
 #include "PicesKKStr.h"
 
 using namespace  PicesInterface;
@@ -39,7 +36,7 @@ KKStr  PicesKKStr::SystemStringToKKStr (System::String^  s)
   if  (s == nullptr)
     return KKStr::EmptyStr ();
 
-  KKU::KKStr  kkStr (s->Length);
+  KKB::KKStr  kkStr (s->Length);
   for  (int x = 0;  x < s->Length;  x++)
     kkStr.Append ((char)s[x]);
   return  kkStr;
@@ -51,7 +48,7 @@ KKStrPtr  PicesKKStr::SystemStringToKKStrPtr (System::String^  s)
   if  (s == nullptr)
     return new KKStr ();
 
-  KKU::KKStrPtr  kkStr = new KKStr (s->Length);
+  KKB::KKStrPtr  kkStr = new KKStr (s->Length);
   for  (int x = 0;  x < s->Length;  x++)
     kkStr->Append ((char)s[x]);
   return  kkStr;
@@ -60,7 +57,7 @@ KKStrPtr  PicesKKStr::SystemStringToKKStrPtr (System::String^  s)
 
 
 
-KKU::KKStrListPtr  PicesKKStr::SystemStringArrayToKKStrListPtr (array<String^>^  list)
+KKB::KKStrListPtr  PicesKKStr::SystemStringArrayToKKStrListPtr (array<String^>^  list)
 {
   KKStrListPtr  kkStrList = new KKStrList (true);
   for each (String^ s in list)
@@ -70,7 +67,7 @@ KKU::KKStrListPtr  PicesKKStr::SystemStringArrayToKKStrListPtr (array<String^>^ 
 
 
 
-KKU::KKStrListPtr  PicesKKStr::SystemStringListToKKStrListPtr (List<String^>^  list)
+KKB::KKStrListPtr  PicesKKStr::SystemStringListToKKStrListPtr (List<String^>^  list)
 {
   KKStrListPtr  kkStrList = new KKStrList (true);
   for each (String^ s in list)
@@ -245,7 +242,7 @@ System::DateTime  PicesKKStr::StrToDateTime (String^ s)
   catch (Exception^)
   {
     KKStr  ds = PicesKKStr::SystemStringToKKStr (s);
-    KKU::DateTime  dt (ds);
+    KKB::DateTime  dt (ds);
     t = PicesInterface::OSservices::KKuDateTimeToSystemDateTime (dt);
   }
   return t;

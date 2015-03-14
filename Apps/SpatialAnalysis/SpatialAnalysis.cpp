@@ -11,15 +11,15 @@
 #include <vector>
 
 #include "MemoryDebug.h"
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 
 using namespace  std;
 
 
 #include "OSservices.h"
 #include "StatisticalFunctions.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 #include "InstrumentDataFileManager.h"
 #include "SipperVariables.h"
@@ -88,7 +88,7 @@ SpatialAnalysis::~SpatialAnalysis ()
 
 
 
-void  SpatialAnalysis::InitalizeApplication (int32   argc,
+void  SpatialAnalysis::InitalizeApplication (kkint32 argc,
                                              char**  argv
                                             )
 {

@@ -17,10 +17,10 @@
 using namespace std;
 
 #include  "MemoryDebug.h"
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 
 using namespace std;
-using namespace KKU;
+using namespace KKB;
 
 #include  "InstrumentDataFileManager.h"
 using  namespace SipperHardware;
@@ -71,23 +71,23 @@ String^  PicesMethods::SipperFileNameFromImageFileName (String^  imageFileName)
 
 
 
-System::DateTime   PicesMethods::DateKKUtoSystem (const  KKU::DateType&  date)
+System::DateTime   PicesMethods::DateKKUtoSystem (const  KKB::DateType&  date)
 {
   return  System::DateTime (date.Year (), date.Month (),  date.Day ());
 }
 
 
-KKU::DateType   PicesMethods::DateSystemToKKU (System::DateTime   dt)
+KKB::DateType   PicesMethods::DateSystemToKKU (System::DateTime   dt)
 {
   
-  return  KKU::DateType (dt.Year, dt.Month, dt.Day);
+  return  KKB::DateType (dt.Year, dt.Month, dt.Day);
 }
 
 
 
 
 
-System::DateTime   PicesMethods::DateTimeKKUtoSystem (const  KKU::DateTime&  date)
+System::DateTime   PicesMethods::DateTimeKKUtoSystem (const  KKB::DateTime&  date)
 {
   int  year  = date.Date ().Year  ();
   int  month = date.Date ().Month ();
@@ -120,14 +120,14 @@ System::DateTime   PicesMethods::DateTimeKKUtoSystem (const  KKU::DateTime&  dat
 
 
 
-KKU::DateTime   PicesMethods::DateTimeSystemToKKU (System::DateTime   dt)
+KKB::DateTime   PicesMethods::DateTimeSystemToKKU (System::DateTime   dt)
 {
   
-  return  KKU::DateTime (dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second);
+  return  KKB::DateTime (dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second);
 }
 
 
-System::TimeSpan   PicesMethods::TimeTypeKKUtoSystem (const KKU::TimeType&  t)
+System::TimeSpan   PicesMethods::TimeTypeKKUtoSystem (const KKB::TimeType&  t)
 {
   System::TimeSpan  td ((int)t.Hour (), (int)t.Minute (), (int)t.Second ());
   return  td;

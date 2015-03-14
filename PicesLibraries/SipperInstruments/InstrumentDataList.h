@@ -10,10 +10,10 @@
  *@author  Kurt Kramer
  */
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "KKQueue.h"
 #include  "RunLog.h"
-using namespace KKU;
+using namespace KKB;
 
 #include  "InstrumentData.h"
 
@@ -28,8 +28,8 @@ namespace  SipperHardware
   class InstrumentDataList :  public KKQueue<InstrumentData>
   {
   public:
-    typedef  KKU::int32   int32;
-    typedef  KKU::uint32  uint32;
+    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::kkuint32  kkuint32;
 
     InstrumentDataList (bool  _owner);
   
@@ -61,13 +61,13 @@ namespace  SipperHardware
      *         Data will be assumed to be in scan line order.  Flow-rate and Scan-rate will be used as
      *         part of the calculations.
      */
-    VectorDouble  FrameOffsetsInMeters (uint32 scanLinesPerFrame,
+    VectorDouble  FrameOffsetsInMeters (kkuint32 scanLinesPerFrame,
                                         float  scanRate,             // Scan lines per second.
                                         float  defaultFlowRate       // If a Instrument Data record has a Flowrte <= 0.0 the the default rate will be used.
                                        );
   
     
-    InstrumentDataPtr  SearchForNearestScanLine (uint32  scanLine);
+    InstrumentDataPtr  SearchForNearestScanLine (kkuint32  scanLine);
   
     
     void  SipperFileName  (const KKStr&  _sipperFileName)   {sipperFileName = _sipperFileName;}
@@ -108,7 +108,7 @@ namespace  SipperHardware
   
   
   
-    int32    fileVersion;      /**< Comes from the text data file stored in "%PicesHomeDir%\DataFiles\InstrumentData"
+    kkint32  fileVersion;      /**< Comes from the text data file stored in "%PicesHomeDir%\DataFiles\InstrumentData"
                                  * Allows us to determine if we have a current version of the file.
                                  */
          

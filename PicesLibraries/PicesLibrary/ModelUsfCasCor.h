@@ -9,7 +9,7 @@
 
 
 #include "RunLog.h"
-#include "Str.h"
+#include "KKStr.h"
 
 #include "Model.h"
 #include "ModelParam.h"
@@ -45,12 +45,12 @@ namespace  MLL
     ~ModelUsfCasCor ();
 
     virtual
-    int32                   MemoryConsumedEstimated ()  const;
+    kkint32                 MemoryConsumedEstimated ()  const;
 
     virtual ModelTypes      ModelType () const  {return mtUsfCasCor;}
 
     virtual
-    int32                   NumOfSupportVectors () const;
+    kkint32                 NumOfSupportVectors () const;
 
     virtual
     ModelUsfCasCorPtr       Duplicate ()  const;
@@ -65,13 +65,13 @@ namespace  MLL
                                      MLClassConstPtr   knownClass,
                                      MLClassConstPtr&  predClass1,
                                      MLClassConstPtr&  predClass2,
-                                     int32&            predClass1Votes,
-                                     int32&            predClass2Votes,
+                                     kkint32&            predClass1Votes,
+                                     kkint32&            predClass2Votes,
                                      double&           probOfKnownClass,
                                      double&           predClass1Prob,
                                      double&           predClass2Prob,
                                      double&           compact,
-                                     int32&            numOfWinners,
+                                     kkint32&            numOfWinners,
                                      bool&             knownClassOneOfTheWinners,
                                      double&           breakTie
                                     );
@@ -85,7 +85,7 @@ namespace  MLL
     virtual
     void  ProbabilitiesByClass (FeatureVectorPtr         example,
                                 const MLClassConstList&  _mlClasses,
-                                int32*                   _votes,
+                                kkint32*                   _votes,
                                 double*                  _probabilities
                                );
 

@@ -254,7 +254,7 @@ typedef enum {False, True} Boolean;
   #define max(X, Y) ((X > Y)?X:Y)
 #endif
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "RunLog.h"
 #include "XmlStream.h"
 
@@ -298,11 +298,11 @@ namespace MLL
     ~UsfCasCor ();
 
 
-    void  TrainNewClassifier (int32                  _in_limit,
-                              int32                  _out_limit,
-                              int32                  _number_of_rounds,
-                              int32                  _number_of_trials,
-                              int64                  _the_random_seed,
+    void  TrainNewClassifier (kkint32                _in_limit,
+                              kkint32                _out_limit,
+                              kkint32                _number_of_rounds,
+                              kkint32                _number_of_trials,
+                              kkint64                _the_random_seed,
                               bool                   _useCache,
                               FeatureVectorListPtr   _trainData,
                               const FeatureNumList&  _selectedFeatures
@@ -312,7 +312,7 @@ namespace MLL
                                   bool&     valid
                                  );
 
-    int32  MemoryConsumedEstimated ()  const;
+    kkint32  MemoryConsumedEstimated ()  const;
 
     MLClassConstPtr  PredictClass (FeatureVectorPtr  example);
 
@@ -337,7 +337,7 @@ namespace MLL
 
     template<typename T>
     void  Delete2DArray (T**     &A,    
-                         uint32  numRows
+                         kkuint32  numRows
                         );
 
 
@@ -589,7 +589,7 @@ namespace MLL
     int      line_length;
     int*     feature_type;
 
-    int64    the_random_seed;
+    kkint64  the_random_seed;
 
 
     /* Flags */

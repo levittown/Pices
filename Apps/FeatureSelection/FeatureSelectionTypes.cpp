@@ -25,10 +25,10 @@ using namespace std;
 #endif
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "StatisticalFunctions.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 #include "MLClass.h"
 using namespace MLL;
@@ -548,7 +548,7 @@ VectorDouble  ProcessorCycles::CyclesByProcId ()  const
 
 void  ProcessorCycles::Report (ostream&  r)
 {
-  uint32  z;
+  kkuint32  z;
 
   double        totalCycles = TotalCycles ();
   VectorInt     procIds     = ProcessorIds ();

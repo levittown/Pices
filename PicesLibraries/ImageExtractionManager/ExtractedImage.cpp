@@ -6,10 +6,10 @@
 using namespace  std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "RasterSipper.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 
 #include  "ExtractedImage.h"
@@ -17,10 +17,10 @@ using namespace  ImageExtractionManager;
 
 
 ExtractedImage::ExtractedImage (RasterSipperPtr _image,
-                                uint64          _byteOffsetFirstScanRow,
-                                uint32          _sipperFileScanRow,
-                                uint32          _sipperFileScanCol,
-                                uint32          _pixelCount,
+                                kkuint64        _byteOffsetFirstScanRow,
+                                kkuint32        _sipperFileScanRow,
+                                kkuint32        _sipperFileScanCol,
+                                kkuint32        _pixelCount,
                                 float           _depth,
                                 MLClassPtr      _predClass1,
                                 float           _predClass1Prob,
@@ -52,9 +52,9 @@ ExtractedImage::~ExtractedImage ()
 
 
 
-int32   ExtractedImage::MemoryConsumedEstimated ()  const
+kkint32 ExtractedImage::MemoryConsumedEstimated ()  const
 {
-  int32  m = sizeof (*this);
+  kkint32  m = sizeof (*this);
   if  (image)
     m += image->MemoryConsumedEstimated ();
 
@@ -131,10 +131,10 @@ ExtractedImageQueue::~ExtractedImageQueue ()
 
 
 
-int32  ExtractedImageQueue::MemoryConsumedEstimated ()  const
+kkint32  ExtractedImageQueue::MemoryConsumedEstimated ()  const
 {
   goalie->StartBlock ();
-  int32  memoryConsumedEstimated = sizeof (*this);
+  kkint32  memoryConsumedEstimated = sizeof (*this);
 
   std::deque<ExtractedImagePtr>:: const_iterator idx;
   for  (idx = begin ();  idx != end ();  ++idx)
@@ -200,9 +200,9 @@ ExtractedImagePtr  ExtractedImageQueue::GetNextExtractedImage ()
 
 
 
-uint32  ExtractedImageQueue::ImagesOnQueue ()
+kkuint32  ExtractedImageQueue::ImagesOnQueue ()
 {
-  uint32    imagesOnQueue = 0;
+  kkuint32  imagesOnQueue = 0;
   goalie->StartBlock ();
   imagesOnQueue = size ();
   goalie->EndBlock ();

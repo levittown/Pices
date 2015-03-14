@@ -4,7 +4,7 @@
 #include "PicesApplication.h"
 #include "DataBase.h"
 #include "RunLog.h"
-#include "Str.h"
+#include "KKStr.h"
 
 
 namespace  ImportGPSDataApp
@@ -26,7 +26,7 @@ namespace  ImportGPSDataApp
 
 
     virtual
-    void  InitalizeApplication (int32   argc,
+    void  InitalizeApplication (kkint32 argc,
                                 char**  argv
                                );
     

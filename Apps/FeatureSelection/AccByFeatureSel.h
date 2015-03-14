@@ -3,7 +3,7 @@
 
 #include  "KKQueue.h"
 #include  "RunLog.h"
-#include  "Str.h"
+#include  "KKStr.h"
 
 #include  "MLClass.h"
 

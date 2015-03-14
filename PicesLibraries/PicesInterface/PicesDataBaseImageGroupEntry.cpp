@@ -14,7 +14,7 @@
 using namespace std;
 
 #include  "MemoryDebug.h"
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 
 #include  "Raster.h"
 
@@ -27,7 +27,7 @@ using namespace  PicesInterface;
 
 using namespace System;
 using namespace System::Windows::Forms;
-using namespace KKU;
+using namespace KKB;
 
 
 PicesDataBaseImageGroupEntry::PicesDataBaseImageGroupEntry ()

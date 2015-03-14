@@ -76,7 +76,7 @@ namespace PicesInterface
 
     PicesImageSizeDistributionRow^   AllDepths ();
 
-    array<float>^  DepthProfileForSizeBin (uint32  _sizeBucketIdx);
+    array<float>^  DepthProfileForSizeBin (kkuint32  _sizeBucketIdx);
 
     PicesImageSizeDistributionRow^   GetDepthBin (uint  depthBinIdx);
 

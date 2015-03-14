@@ -17,7 +17,7 @@
 //*                                                                                                       *
 //*********************************************************************************************************
 #include "RunLog.h"
-#include "Str.h"
+#include "KKStr.h"
 
 #include "ConfusionMatrix2.h"
 #include "FeatureSelectionTypes.h"
@@ -31,7 +31,7 @@ namespace FeatureSelectionApp
   class  FinalResults
   {
   public:
-    typedef  KKU::uint  uint;
+    typedef  KKB::uint  uint;
 
     typedef  FinalResults*  FinalResultsPtr;
 

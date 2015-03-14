@@ -1,9 +1,9 @@
 #if  !defined(_IEM_DATABASEUPDATETHREAD_)
 #define  _IEM_DATABASEUPDATETHREAD_
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "RunLog.h"
-using namespace KKU;
+using namespace KKB;
 
 #include "DataBase.h"
 #include "DuplicateImages.h"
@@ -33,14 +33,14 @@ namespace  ImageExtractionManager
 
     virtual  ThreadTypes   ThreadType ()  {return ttDataBAseUpdater;}
 
-    void  GetRunTimeStats (uint32&  _imagesUpdated,
-                           uint32&  _duplicatesDetected,
-                           uint32&  _updateFailures
+    void  GetRunTimeStats (kkuint32&  _imagesUpdated,
+                           kkuint32&  _duplicatesDetected,
+                           kkuint32&  _updateFailures
                           );
     
     virtual  void  Run ();
 
-    uint32  DbUpdateFailures ()  const  {return updateFailures;}
+    kkuint32  DbUpdateFailures ()  const  {return updateFailures;}
 
   private:
     ExtractedImagePtr  GetNextImageToUpdate ();
@@ -49,9 +49,9 @@ namespace  ImageExtractionManager
                                 const KKStr&      sipperFileName, 
                                 RasterSipperPtr   raster, 
                                 ImageFeaturesPtr  featureVector,
-                                uint64            byteOffset,
-                                uint32            sipperTopRow,
-                                uint32            sipperTopCol
+                                kkuint64          byteOffset,
+                                kkuint32          sipperTopRow,
+                                kkuint32          sipperTopCol
                                );
 
     DataBasePtr                      dbConn;
@@ -60,14 +60,14 @@ namespace  ImageExtractionManager
     ImageFeaturesListPtr             duplicateImages;        /**< We keep track of these images, otherwise they will not get deleted 
                                                               * and hence cause memory leaks.
                                                               */
-    uint32                           duplicatesDetected;
+    kkuint32                         duplicatesDetected;
     FileDescPtr                      fileDesc;
     SipperExtractionImageManagerPtr  imageManager;
     ExtractedImageQueuePtr           imagesAwaitingUpdate;
-    uint32                           imagesUpdated;
+    kkuint32                         imagesUpdated;
     RunLog                           log;
     KKStr                            sipperRootName;
-    uint32                           updateFailures;         /**< The number of updates to the database that failed. */
+    kkuint32                         updateFailures;         /**< The number of updates to the database that failed. */
   };  /* DataBaseUpdateThread */
 
   typedef  DataBaseUpdateThread*  DataBaseUpdateThreadPtr;

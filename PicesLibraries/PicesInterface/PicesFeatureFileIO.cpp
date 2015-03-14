@@ -19,12 +19,12 @@ using namespace System;
 using namespace System::Threading;
 using namespace System::Windows::Forms;
 
-#include  "MemoryDebug.h"
-#include  "BasicTypes.h"
-#include  "..\\BaseLibrary\\GoalKeeper.h"
-#include  "OSservices.h"
+#include "MemoryDebug.h"
+#include "KKBaseTypes.h"
+#include "GoalKeeper.h"
+#include "OSservices.h"
 
-using namespace KKU;
+using namespace KKB;
 
 
 #include "FeatureFileIo.h"

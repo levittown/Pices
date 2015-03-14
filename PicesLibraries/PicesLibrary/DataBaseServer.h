@@ -12,8 +12,8 @@
 
 #include "KKQueue.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 namespace MLL 
 {

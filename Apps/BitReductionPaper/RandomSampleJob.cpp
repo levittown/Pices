@@ -17,10 +17,10 @@
 
 
 #include  "MemoryDebug.h"
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 
 using namespace std;
-using namespace KKU;
+using namespace KKB;
 
 
 #include  "RandomSampleJob.h"
@@ -33,7 +33,7 @@ using namespace KKU;
 #include  "KKQueue.h"
 #include  "RunLog.h"
 #include  "StatisticalFunctions.h"
-#include  "Str.h"
+#include  "KKStr.h"
 #include  "TrainingProcess.h"
 
 

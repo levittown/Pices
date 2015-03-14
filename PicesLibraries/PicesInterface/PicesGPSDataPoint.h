@@ -28,8 +28,8 @@ namespace PicesInterface
 
     property System::DateTime  CtdDateTime         {System::DateTime  get ()  {return  ctdDateTime;}}
     property System::TimeSpan  GPSStartTime        {System::TimeSpan  get ()  {return  gpsStartTime;}}
-    property int32             SipperFileId        {int32             get ()  {return  sipperFileId;}}
-    property uint32            AvgScanLine         {uint32            get ()  {return  avgScanLine;}}
+    property kkint32           SipperFileId        {kkint32           get ()  {return  sipperFileId;}}
+    property kkuint32          AvgScanLine         {kkuint32          get ()  {return  avgScanLine;}}
     property double            AvgLatitude         {double            get ()  {return  avgLatitude;}}
     property double            AvgLongitude        {double            get ()  {return  avgLongitude;}}
     property float             AvgFlowRate         {float             get ()  {return  avgFlowRate;}}
@@ -37,8 +37,8 @@ namespace PicesInterface
   private:
     System::DateTime  ctdDateTime;
     System::TimeSpan  gpsStartTime;   /**<  Time that this data point start covering from.  */
-    int32             sipperFileId;
-    uint32            avgScanLine;
+    kkint32           sipperFileId;
+    kkuint32          avgScanLine;
     double            avgLatitude;
     double            avgLongitude;
     float             avgFlowRate;

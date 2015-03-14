@@ -2,7 +2,7 @@
 #define  _MODELPARAMOLDSVM_
 
 #include "RunLog.h"
-#include "Str.h"
+#include "KKStr.h"
 
 #include "ModelParam.h"
 #include "svm.h"
@@ -80,7 +80,7 @@ namespace MLL
     const
     BinaryClassParmsListPtr        BinaryParmsList            () const;
     virtual float                  A_Param                    () const;
-    virtual int32                  BitsToReduceBy             () const;
+    virtual kkint32                BitsToReduceBy             () const;
     virtual double                 C_Param                    () const;
 
     virtual double                 C_Param   (MLClassConstPtr  class1,
@@ -90,13 +90,13 @@ namespace MLL
     virtual double                 Gamma                      () const;
     virtual SVM_KernalType         KernalType                 () const;
     virtual SVM_MachineType        MachineType                () const;
-    virtual int32                  NumOfFeaturesAfterEncoding () const;
+    virtual kkint32                NumOfFeaturesAfterEncoding () const;
     virtual const svm_parameter&   Param                      () const;
     virtual float                  SamplingRate               () const;
     virtual const FeatureNumList&  SelectedFeatures           () const;
     virtual SVM_SelectionMethod    SelectionMethod            () const;
     virtual SVMparamPtr            SvmParameters              () const;
-    virtual int32                  UnBalancedBits             () const;
+    virtual kkint32                UnBalancedBits             () const;
     virtual KKStr                  UnBalancedBitsStr          () const;
     virtual bool                   UseProbabilityToBreakTies  () const;
     virtual bool                   WeightBitReduction         () const;

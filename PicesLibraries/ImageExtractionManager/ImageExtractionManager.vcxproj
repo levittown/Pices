@@ -84,7 +84,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)\BaseLibrary;$(SolutionDir)\PicesLibraries\SipperInstruments;$(SolutionDir)\PicesLibraries\PicesLibrary;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(SolutionDir)\PicesLibraries\SipperInstruments;$(SolutionDir)\PicesLibraries\PicesLibrary;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -98,7 +98,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\BaseLibrary;$(SolutionDir)\PicesLibraries\SipperInstruments;$(SolutionDir)\PicesLibraries\PicesLibrary;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(SolutionDir)\PicesLibraries\SipperInstruments;$(SolutionDir)\PicesLibraries\PicesLibrary;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -110,7 +110,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedDebug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)\BaseLibrary;$(SolutionDir)\PicesLibraries\SipperInstruments;$(SolutionDir)\PicesLibraries\PicesLibrary;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(SolutionDir)\PicesLibraries\SipperInstruments;$(SolutionDir)\PicesLibraries\PicesLibrary;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -124,7 +124,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\BaseLibrary;$(SolutionDir)\PicesLibraries\SipperInstruments;$(SolutionDir)\PicesLibraries\PicesLibrary;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(SolutionDir)\PicesLibraries\SipperInstruments;$(SolutionDir)\PicesLibraries\PicesLibrary;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -134,10 +134,8 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\BaseLibrary\BaseLibrary.vcxproj">
-      <Project>{5a4b9b15-9745-4aba-b1a8-ffbc85d1d5df}</Project>
-      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
-      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+    <ProjectReference Include="..\..\..\KSquareLibraries\KKBase\KKBase.vcxproj">
+      <Project>{d9bb6d83-937e-40fd-bfc3-ff48d8a04d11}</Project>
     </ProjectReference>
     <ProjectReference Include="..\PicesLibrary\PicesLibrary.vcxproj">
       <Project>{fa9c865e-0227-4ebc-a291-ed0f2453afb3}</Project>

@@ -5,7 +5,7 @@
 
 
 
-namespace KKU 
+namespace KKB 
 {
   #if  !defined(_KKTHREADMANAGER_)
   class  KKThreadManager;

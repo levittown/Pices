@@ -14,8 +14,8 @@
 using namespace std;
 
 
-#include  "BasicTypes.h"
-using namespace KKU;
+#include  "KKBaseTypes.h"
+using namespace KKB;
 
 
 #include  "Instrument.h"
@@ -72,7 +72,7 @@ InstrumentPtr  Instrument::LookUpByShortName (const KKStr&  _shortName)
   //if  (instruments == NULL)
   //   BuildInstrumentList ();
 
-  int32  x = 0;
+  kkint32  x = 0;
 
   while  (instruments[x] != NULL)
   {
@@ -99,7 +99,7 @@ void  Instrument::FinalCleanUp ()
   if  (!needToRunFinalCleanUp)
     return;
 
-  int32 x = 0;
+  kkint32 x = 0;
   while (instruments[x] != NULL)
   {
     delete  instruments[x];  instruments[x] = NULL;
@@ -117,7 +117,7 @@ InstrumentCTD::~InstrumentCTD ()
 InstrumentDataReportPtr  InstrumentCTD::CreateInstrumentDataReporter 
                                         (InstrumentDataManagerPtr _manager,
                                          const KKStr&             _reportDir,
-                                         int32                    _instrumentId
+                                         kkint32                  _instrumentId
                                         )
 {
   return  new InstrumentDataCTDplus (_manager, _reportDir, false, _instrumentId);
@@ -133,7 +133,7 @@ InstrumentGPS::~InstrumentGPS ()
 InstrumentDataReportPtr  InstrumentGPS::CreateInstrumentDataReporter 
                                         (InstrumentDataManagerPtr _manager,
                                          const KKStr&             _reportDir,
-                                         int32                    _instrumentId
+                                         kkint32                  _instrumentId
                                         )
 {
   return  new InstrumentDataReport (_manager, _reportDir, false, _instrumentId, true);
@@ -150,7 +150,7 @@ InstrumentInclinationMeter::~InstrumentInclinationMeter ()
 InstrumentDataReportPtr  InstrumentInclinationMeter::CreateInstrumentDataReporter 
                                         (InstrumentDataManagerPtr _manager,
                                          const KKStr&             _reportDir,
-                                         int32                    _instrumentId
+                                         kkint32                  _instrumentId
                                         )
 {
   return  new InstrumentDataPitchAndRoll (_manager, _reportDir, false, _instrumentId);
@@ -168,7 +168,7 @@ InstrumentBatteryMeters::~InstrumentBatteryMeters ()
 InstrumentDataReportPtr  InstrumentBatteryMeters::CreateInstrumentDataReporter 
                                         (InstrumentDataManagerPtr _manager,
                                          const KKStr&             _reportDir,
-                                         int32                    _instrumentId
+                                         kkint32                  _instrumentId
                                         )
 {
   return  new InstrumentDataBatteryMeter (_manager, _reportDir, false, _instrumentId);
@@ -192,7 +192,7 @@ InstrumentOther::~InstrumentOther ()
 InstrumentDataReportPtr  InstrumentOther::CreateInstrumentDataReporter 
                                         (InstrumentDataManagerPtr _manager,
                                          const KKStr&             _reportDir,
-                                         int32                    _instrumentId
+                                         kkint32                  _instrumentId
                                         )
 {
   return  new InstrumentDataBatteryMeter (_manager, _reportDir, false, _instrumentId);

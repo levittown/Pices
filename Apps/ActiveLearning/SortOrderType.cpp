@@ -8,10 +8,10 @@
 
 
 #include  "MemoryDebug.h"
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 
 using namespace std;
-using namespace KKU;
+using namespace KKB;
 
 
 #include  "SortOrderType.h"

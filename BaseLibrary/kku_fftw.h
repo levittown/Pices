@@ -16,10 +16,10 @@
 #include <fftw3.h>
 #endif
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 
 
-namespace  KKU
+namespace  KKB
 {
   /*********************************************
    * Complex numbers and operations 
@@ -43,42 +43,42 @@ namespace  KKU
   class  fftw_plan_class
   {
   public:
-    fftw_plan_class (int32           _n,
+    fftw_plan_class (kkint32         _n,
                      fftw_direction  _dir,
-                     int32           _flags
+                     kkint32         _flags
                     );
 
     fftw_direction  Dir   ()  const  {return dir;}
-    int32           Flags ()  const  {return flags;}
-    int32           N     ()  const  {return n;}
+    kkint32         Flags ()  const  {return flags;}
+    kkint32         N     ()  const  {return n;}
 
 
   private:
-    int32             n;
+    kkint32           n;
     fftw_direction    dir;
-    int32             flags;
+    kkint32           flags;
   };  // fftw_plan_class
 
 
   class  fftwnd_plan_class
   {
   public:
-    fftwnd_plan_class (int32           nx,
-                       int32           ny, 
+    fftwnd_plan_class (kkint32         nx,
+                       kkint32         ny, 
                        fftw_direction  dir,
-                       int32           flags
+                       kkint32         flags
                       );
 
     fftw_direction  Dir   ()  const  {return dir;}
-    int32           Flags ()  const  {return flags;}
-    int32           NX    ()  const  {return nx;}
-    int32           NY    ()  const  {return ny;}
+    kkint32         Flags ()  const  {return flags;}
+    kkint32         NX    ()  const  {return nx;}
+    kkint32         NY    ()  const  {return ny;}
 
   private:
-    int32           nx;
-    int32           ny; 
+    kkint32         nx;
+    kkint32         ny; 
     fftw_direction  dir;
-		int32           flags;
+		kkint32         flags;
   }; // fftwnd_plan_class 
 
 
@@ -86,15 +86,15 @@ namespace  KKU
   typedef  fftwnd_plan_class*  fftwnd_plan;
 
 
-  fftw_plan    fftw_create_plan (int32           n, 
+  fftw_plan    fftw_create_plan (kkint32         n, 
                                  fftw_direction  dir, 
-                                 int32           flags
+                                 kkint32         flags
                                 );
  
-  fftwnd_plan  fftw2d_create_plan (int32           nx, 
-                                   int32           ny, 
+  fftwnd_plan  fftw2d_create_plan (kkint32         nx, 
+                                   kkint32         ny, 
                                    fftw_direction  dir,
-				                   int32           flags
+				                   kkint32         flags
                                   );
 
   void  fftw_destroy_plan (fftw_plan  plan);
@@ -116,8 +116,8 @@ namespace  KKU
 
 
   void  FFT (float  data[], 
-             uint32 number_of_complex_samples, 
-             int32  isign
+             kkuint32 number_of_complex_samples, 
+             kkint32  isign
             );
 
   float Log2 (float x);
@@ -142,7 +142,7 @@ namespace  KKU
                      DftComplexType*  dest
                     );
 
-    void  Transform (KKU::uchar*      src,
+    void  Transform (KKB::uchar*      src,
                      DftComplexType*  dest
                     );
 
@@ -168,7 +168,7 @@ namespace  KKU
     bool              forwardTransform;
     DftComplexType**  fourierMask;
     DftComplexType*   fourierMaskArea;
-    int32             size;
+    kkint32           size;
   };  /* KK_DFT1D */
 
   typedef  KK_DFT1D<float>   KK_DFT1D_Float;
@@ -182,8 +182,8 @@ namespace  KKU
   public:
     typedef  std::complex<DftType>  DftComplexType;
 
-    KK_DFT2D (int32 _height,
-              int32 _width,
+    KK_DFT2D (kkint32 _height,
+              kkint32 _width,
               bool  _forwardTransform
              );
 
@@ -193,11 +193,11 @@ namespace  KKU
                      DftComplexType**  dest
                     );
 
-    void  Transform (KKU::uchar**      src,
+    void  Transform (KKB::uchar**      src,
                      DftComplexType**  dest
                     );
 
-    void  Transform2 (KKU::uchar**      src,
+    void  Transform2 (KKB::uchar**      src,
                       DftComplexType**  dest
                      );
 
@@ -210,8 +210,8 @@ namespace  KKU
                        )  const;
 
   private:
-    int32  height;
-    int32  width;
+    kkint32  height;
+    kkint32  width;
     bool forwardTransform;
 
     DftComplexType    Zero;
@@ -229,7 +229,7 @@ namespace  KKU
 
 
   template<typename DftType>
-  KK_DFT1D<DftType>::KK_DFT1D (int32 _size,
+  KK_DFT1D<DftType>::KK_DFT1D (kkint32 _size,
                                bool  _forwardTransform
                               ):
       MinusOne         ((DftType)-1.0,          (DftType)0.0),
@@ -260,7 +260,7 @@ namespace  KKU
     DftComplexType  N((DftType)size, 0);
     DftComplexType  M((DftType)size, 0);
 
-    int32  x;
+    kkint32  x;
 
     DftComplexType direction;
     if  (forwardTransform)
@@ -280,11 +280,11 @@ namespace  KKU
     DftComplexType  j;
     j = sqrt (MinusOne);
 
-    for  (int32 m = 0;  m < size;  m++)
+    for  (kkint32 m = 0;  m < size;  m++)
     {
       DftComplexType  mc ((DftType)m, (DftType)0);
 
-      for  (int32 k = 0; k < size; k++)
+      for  (kkint32 k = 0; k < size; k++)
       {
         DftComplexType  kc ((DftType)k, (DftType)0);
         fourierMask[m][k] = exp (direction * j * Two * Pi * kc * mc / M);
@@ -313,12 +313,12 @@ namespace  KKU
     j = sqrt (MinusOne);
 
 
-    for  (int32  l = 0;  l < size;  l++)
+    for  (kkint32  l = 0;  l < size;  l++)
     {
       dest[l] = Zero;
 
       DftComplexType  lc ((DftType)l, (DftType)0);
-      for  (int32 k = 0;  k < size;  k++)
+      for  (kkint32 k = 0;  k < size;  k++)
       {
         //DftType  exponetPart = (DftType)2.0 * (DftType)3.14159265359 * (DftType)k * (DftType)l / (DftType)size;
         //DftType  realPart = cos (exponetPart);
@@ -336,7 +336,7 @@ namespace  KKU
     {
       // Performs a comparison with a alternatve result that performs much faster but is only good for 
       //  where size is = (n^2) for (n > 0)
-      int32  newSize = (int32)pow (2.0f, (float)ceil (Log2 ((float)size)));
+      kkint32  newSize = (kkint32)pow (2.0f, (float)ceil (Log2 ((float)size)));
 
       // Lets do a comparison
       int x, y;
@@ -381,18 +381,18 @@ namespace  KKU
 
 
   template<typename DftType>
-  void  KK_DFT1D<DftType>::Transform (KKU::uchar*      src,
+  void  KK_DFT1D<DftType>::Transform (KKB::uchar*      src,
                                       DftComplexType*  dest
                                      )
   {
     if  (!fourierMask)
       BuildMask ();
     
-    int32  firstK = 0;
+    kkint32  firstK = 0;
     bool   firstKFound = false;
-    int32  lastK  = 0;
+    kkint32  lastK  = 0;
 
-    for  (int32 k = 0;  k < size;  ++k)
+    for  (kkint32 k = 0;  k < size;  ++k)
     {
       if  (src[k] != 0)
       {
@@ -405,14 +405,14 @@ namespace  KKU
       }
     }
 
-    for  (int32  l = 0;  l < size;  l++)
+    for  (kkint32  l = 0;  l < size;  l++)
     {
       DftComplexType*  fourierMaskL = fourierMask[l];
 
       DftType  destReal = 0.0;
       DftType  destImag = 0.0;
 
-      for  (int32 k = firstK;  k <= lastK;  k++)
+      for  (kkint32 k = firstK;  k <= lastK;  k++)
       {
         destReal +=  src[k] * fourierMaskL[k].real ();
         destImag +=  src[k] * fourierMaskL[k].imag ();
@@ -429,13 +429,13 @@ namespace  KKU
   template<typename DftType>
   void  KK_DFT1D<DftType>::TransformNR (DftComplexType*  src)
   {
-    int32  n = 0;
-    int32  mmax = 0;
-    int32  m = 0;
-    int32  j = 0;
-    int32  istep = 0;
-    int32  i = 0;
-    int32  isign = (forwardTransform ? 1 : -1);
+    kkint32  n = 0;
+    kkint32  mmax = 0;
+    kkint32  m = 0;
+    kkint32  j = 0;
+    kkint32  istep = 0;
+    kkint32  i = 0;
+    kkint32  isign = (forwardTransform ? 1 : -1);
 
     DftType  wtemp = (DftType)0.0;
     DftType  wr    = (DftType)0.0;
@@ -446,7 +446,7 @@ namespace  KKU
     DftType  tempr = (DftType)0.0;
     DftType  tempi = (DftType)0.0;
 
-    int32  nn = this->size;
+    kkint32  nn = this->size;
     n = nn << 1;
     j = 1;
     for  (i = 1; i < nn;  ++i)
@@ -487,8 +487,8 @@ namespace  KKU
 
 
   template<typename DftType>
-  KK_DFT2D<DftType>::KK_DFT2D (int32 _height,
-                               int32 _width,
+  KK_DFT2D<DftType>::KK_DFT2D (kkint32 _height,
+                               kkint32 _width,
                                bool  _forwardTransform
                               ):
     height           (_height),
@@ -507,7 +507,7 @@ namespace  KKU
     workArrayArea = new DftComplexType[height * width];
     workArray     = new DftComplexType*[height];
     DftComplexType*  workArrayAreaPtr = workArrayArea;
-    for  (int32 row = 0;  row < height;  ++row)
+    for  (kkint32 row = 0;  row < height;  ++row)
     {
       workArray[row] = workArrayAreaPtr;
       workArrayAreaPtr += width;
@@ -533,17 +533,17 @@ namespace  KKU
                                       DftComplexType**  dest
                                      )
   {
-    for  (int32 row = 0;  row < height;  ++row)
+    for  (kkint32 row = 0;  row < height;  ++row)
       rowDFT->Transform (src[row], workArray[row]);
 
     DftComplexType**  colFourierMask = colDFT->FourierMask ();
 
-    for  (int32 col = 0;  col < width;  ++col)
+    for  (kkint32 col = 0;  col < width;  ++col)
     {
-      for  (int32  row = 0;  row < height;  row++)
+      for  (kkint32  row = 0;  row < height;  row++)
       {
         DftComplexType  v = Zero;
-        for  (int32 k = 0;  k < height;  k++)
+        for  (kkint32 k = 0;  k < height;  k++)
         {
           v = v  + workArray[k][col] * colFourierMask[row][k];
         }
@@ -556,22 +556,22 @@ namespace  KKU
 
 
   template<typename DftType>
-  void  KK_DFT2D<DftType>::Transform (KKU::uchar**      src,
+  void  KK_DFT2D<DftType>::Transform (KKB::uchar**      src,
                                       DftComplexType**  dest
                                      )
   {
-    for  (int32 row = 0;  row < height;  ++row)
+    for  (kkint32 row = 0;  row < height;  ++row)
       rowDFT->Transform (src[row], workArray[row]);
 
     DftComplexType**  colFourierMask = colDFT->FourierMask ();
 
-    for  (int32 col = 0;  col < width;  ++col)
+    for  (kkint32 col = 0;  col < width;  ++col)
     {
-      uint32  firstRow = 0;
+      kkuint32  firstRow = 0;
       bool    firstRowFound = false;
-      uint32  lastRow = 0;
+      kkuint32  lastRow = 0;
 
-      for  (int32 l = 0;  l < height;  ++l)
+      for  (kkint32 l = 0;  l < height;  ++l)
       {
         workCol[l] = workArray[l][col];
         bool  nonZero = (workCol[l].imag () != 0.0f)  ||  (workCol[l].real () != 0.0f);
@@ -586,12 +586,12 @@ namespace  KKU
         }
       }
 
-      for  (int32  row = 0;  row < height;  row++)
+      for  (kkint32  row = 0;  row < height;  row++)
       {
         DftComplexType*  colFourierMaskRow = colFourierMask[row];
 
         DftComplexType  v = Zero;
-        for  (uint32 k = firstRow;  k <= lastRow;  k++)
+        for  (kkuint32 k = firstRow;  k <= lastRow;  k++)
         {
           v = v  + workCol[k] * colFourierMaskRow[k];
         }
@@ -610,7 +610,7 @@ namespace  KKU
                                           DftComplexType**  &array
                                          )  const
   {
-    int32  total = height * width;
+    kkint32  total = height * width;
     array = NULL;
     arrayArea = new DftComplexType[total];
     if  (!arrayArea)
@@ -619,13 +619,13 @@ namespace  KKU
     array = new DftComplexType*[height];
     DftComplexType*  rowPtr = arrayArea;
 
-    for  (int32  row = 0;  row < height;  ++row)
+    for  (kkint32  row = 0;  row < height;  ++row)
     {
       array[row] = rowPtr;
       rowPtr = rowPtr + width;
     }
 
-    for  (int32  x = 0;  x < total;  ++x)
+    for  (kkint32  x = 0;  x < total;  ++x)
     {
       arrayArea[x].real ((DftType)0.0);
       arrayArea[x].imag ((DftType)0.0);
@@ -658,15 +658,15 @@ namespace  KKU
 
 
 #if  defined(FFTW_AVAILABLE)
-  fftwf_plan  fftwCreateTwoDPlan (int32           height,
-                                  int32           width,
+  fftwf_plan  fftwCreateTwoDPlan (kkint32         height,
+                                  kkint32         width,
                                   fftwf_complex*  src,
                                   fftwf_complex*  dest,
                                   int             sign,
                                   int             flag
                                  );
 
-  fftwf_plan  fftwCreateOneDPlan (int32           len,
+  fftwf_plan  fftwCreateOneDPlan (kkint32         len,
                                   fftwf_complex*  src,
                                   fftwf_complex*  dest,
                                   int             sign,
@@ -676,7 +676,7 @@ namespace  KKU
   void  fftwDestroyPlan (fftwf_plan&  plan);
 #endif
 
-}  /* KKU */
+}  /* KKB */
 
 
 

@@ -39,12 +39,12 @@
 using namespace std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "HTMLReport.h"
 #include "OSservices.h"
 #include "RunLog.h"
 #include "StatisticalFunctions.h"
-using namespace KKU;
+using namespace KKB;
 
 
 #include "BinaryClassParms.h"

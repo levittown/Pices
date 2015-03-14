@@ -16,15 +16,15 @@
 using namespace std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "OSservices.h"
 #include "StatisticalFunctions.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 
 #include "FeatureFileIO.h"
-using namespace KKU;
+using namespace KKB;
 
 #include "Neighbor.h"
 #include "RandomNND.h"
@@ -96,7 +96,7 @@ RandomNND::~RandomNND ()
 
 
 
-void  RandomNND::InitalizeApplication (int32   argc,
+void  RandomNND::InitalizeApplication (kkint32 argc,
                                        char**  argv
                                       )
 {
@@ -482,12 +482,12 @@ void	RandomNND::GenerateReport ()
 
 
 
-int  main (int32   argc,
+int  main (kkint32 argc,
            char**  argv
           )
 {
   time_t     long_time;
-  SRand48 ((KKU::uint)time (&long_time));
+  SRand48 ((KKB::uint)time (&long_time));
   RandomNND  neraestNeighborReport;
   neraestNeighborReport.InitalizeApplication (argc, argv);
   if  (!neraestNeighborReport.Abort ())

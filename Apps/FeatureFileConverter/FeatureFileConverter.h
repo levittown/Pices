@@ -2,7 +2,7 @@
 #define  _FEATUREFILECONVERTER_
 
 #include "RunLog.h"
-#include "Str.h"
+#include "KKStr.h"
 
 #include "FeatureNumList.h"
 #include "FileDesc.h"
@@ -15,7 +15,7 @@
 class  FeatureFileConverter: public PicesApplication
 {
 public:
-  typedef  KKU::uint  uint;
+  typedef  KKB::uint  uint;
 
 	FeatureFileConverter ();
 
@@ -24,7 +24,7 @@ public:
 	virtual const char* ApplicationName () const {return  "FeatureFileConverter";}
 
   virtual
-  void  InitalizeApplication (int32   argc,
+  void  InitalizeApplication (kkint32 argc,
                               char**  argv
                              );
 

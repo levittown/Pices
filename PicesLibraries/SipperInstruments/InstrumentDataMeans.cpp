@@ -11,9 +11,9 @@
 
 using namespace std;
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "DateTime.h"
-using namespace KKU;
+using namespace KKB;
 
 
 
@@ -43,9 +43,9 @@ InstrumentDataMeans::InstrumentDataMeans ():
 
 
 InstrumentDataMeans::InstrumentDataMeans (bool   _downCast,
-                                          int32  _depthBin,
+                                          kkint32  _depthBin,
                                           float  _binDepth,
-                                          int32  _scanLines,
+                                          kkint32  _scanLines,
                                           float  _volumeSampled,
                                           float  _temperatureMean,
                                           float  _salinityMean,

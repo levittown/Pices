@@ -1,7 +1,7 @@
-namespace  KKU
+namespace  KKB
 {
 /*! 
- \namespace  KKU  Kurt Kramer Utilities (KKU)  aka  BaseLibrary
+ \namespace  KKB  Kurt Kramer Utilities (KKB)  aka  BaseLibrary
 
  \section  Introduction   Introduction
   The BaseLibrary is my tool box of handy objects that I have been building since 1994.  
@@ -14,7 +14,7 @@ namespace  KKU
  \section  PlatformIndependence    Platform Independence
   All classes are meant to be Platform independent.  That is from the outside there should
   be no need to worry about which O/S platform you are building for.  All O/S specific
-  code will be internal to BaseLibrary (KKU) classes.  For the most part all functions that 
+  code will be internal to BaseLibrary (KKB) classes.  For the most part all functions that 
   require O/S specific knowledge are implemented in OSServices.h.  There are a couple of
   exceptions such as GoalKeeper and ImageIO.h.
   \n\n

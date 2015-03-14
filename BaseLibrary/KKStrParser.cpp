@@ -1,6 +1,6 @@
 /* KKStrParser.cpp -- Class used to parse string into tokens.
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 
 #include "FirstIncludes.h"
@@ -14,17 +14,17 @@
 #include <vector>
 
 #include "MemoryDebug.h"
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 
 
 using namespace std;
-using namespace KKU;
+using namespace KKB;
 
 
 //#define  KKDEBUG
 
 #include  "DateTime.h"
-#include  "Str.h"
+#include  "KKStr.h"
 
 
 #include "KKStrParser.h"
@@ -130,8 +130,8 @@ KKStr  KKStrParser::GetNextToken (const char* delStr)
   if (nextPos >= len)
     return KKStr::EmptyStr ();
 
-  uint32  startPos = nextPos;
-  uint32  endPos   = startPos;
+  kkuint32  startPos = nextPos;
+  kkuint32  endPos   = startPos;
 
   // scan until end of string or next delimiter
   while  ((endPos < len)  &&  (strchr (delStr, str[endPos]) == NULL))
@@ -164,14 +164,14 @@ char  KKStrParser::GetNextTokenChar (const char* delStr)
 }
 
 
-KKU::DateTime  KKStrParser::GetNextTokenDateTime (const char* delStr)
+KKB::DateTime  KKStrParser::GetNextTokenDateTime (const char* delStr)
 {
-  return  KKU::DateTime (GetNextToken (delStr));
+  return  KKB::DateTime (GetNextToken (delStr));
 }
 
 
 
-int32  KKStrParser::GetNextTokenInt (const char* delStr)
+kkint32  KKStrParser::GetNextTokenInt (const char* delStr)
 {
   return  GetNextToken (delStr).ToInt ();
 }
@@ -198,7 +198,7 @@ float  KKStrParser::GetNextTokenFloat  (const char* delStr)
 
 
 
-KKU::uint32  KKStrParser::GetNextTokenUint (const char* delStr)
+KKB::kkuint32  KKStrParser::GetNextTokenUint (const char* delStr)
 {
   return  GetNextToken (delStr).ToUint ();
 }
@@ -295,20 +295,20 @@ void  KKStrParser::Reset ()
 
 
 
-KKStr  KKStrParser::SubStrPart (uint32  firstChar,
-                                uint32  lastChar
+KKStr  KKStrParser::SubStrPart (kkuint32  firstChar,
+                                kkuint32  lastChar
                                )  const
 {
   if  (lastChar < firstChar)
     return KKStr::EmptyStr ();
 
-  uint32  subStrLen = (1 + lastChar - firstChar);
+  kkuint32  subStrLen = (1 + lastChar - firstChar);
   KKStr  result (subStrLen + 1);
 
   if  (lastChar >= len)
     lastChar = len - 1;
 
-  uint32  idx = 0;
+  kkuint32  idx = 0;
   for  (idx = firstChar;  idx <= lastChar;  idx++)
     result.Append (str[idx]);
 

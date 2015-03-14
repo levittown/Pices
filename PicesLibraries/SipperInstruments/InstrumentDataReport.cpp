@@ -10,10 +10,10 @@
 using namespace std;
 
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "OSservices.h"
-#include  "Str.h"
-using namespace KKU;
+#include  "KKStr.h"
+using namespace KKB;
 
 
 #include  "InstrumentDataBatteryMeter.h"
@@ -61,7 +61,7 @@ const char*  InstrumentDataReport::InstrumentNames[] =
 InstrumentDataReport::InstrumentDataReport (InstrumentDataManagerPtr _manager,
                                             const KKStr&             _reportDir,
                                             bool                     _text,
-                                            int32                    _instrumentId,
+                                            kkint32                  _instrumentId,
                                             bool                     _useReportWithLineNumbers
                                            ):
 
@@ -106,7 +106,7 @@ InstrumentDataReportPtr
     InstrumentDataReport::CreateInstrumentDataReport (InstrumentDataManagerPtr _manager,
                                                       const KKStr&             _reportDir,
                                                       bool                     _text,
-                                                      int32                    _instrumentId
+                                                      kkint32                  _instrumentId
                                                      )
 {
   InstrumentDataReportPtr  r = NULL;
@@ -117,7 +117,7 @@ InstrumentDataReportPtr
 
     if  (hr)
     {
-      uint32  serialPort = _instrumentId - 1;
+      kkuint32  serialPort = _instrumentId - 1;
  
       InstrumentPtr  instrument = hr->SerialPortAssignment (serialPort);
 
@@ -181,7 +181,7 @@ InstrumentDataReportPtr
 
 KKStr  InstrumentDataReport::InstrumentName ()
 {
-  int32  x = 0;
+  kkint32  x = 0;
   while  ((x != instrumentId)  &&  (InstrumentNames[x]))
     x++;
 
@@ -195,7 +195,7 @@ KKStr  InstrumentDataReport::InstrumentName ()
 
 
 
-void  InstrumentDataReport::ReportInstrumentData (uint32 curScanLine,
+void  InstrumentDataReport::ReportInstrumentData (kkuint32 curScanLine,
                                                   uchar  sensorData
                                                  )
 {
@@ -213,7 +213,7 @@ void  InstrumentDataReport::ReportInstrumentData (uint32 curScanLine,
     }
 
     if  (curScanLine >= 0)
-      reportWLN << (int32)sensorData << "\t" << (char)sensorData;
+      reportWLN << (kkint32)sensorData << "\t" << (char)sensorData;
   }
 
   if  (sensorData != 13)
@@ -235,7 +235,7 @@ void  InstrumentDataReport::ReportInstrumentData (uint32 curScanLine,
       {
         if  (curTextLine.Len () > 5000)
         {
-          // Text Lines Should not get this int32.  What ever is providing the data is not providing a End of Line Character ('\n')  
+          // Text Lines Should not get this kkint32.  What ever is providing the data is not providing a End of Line Character ('\n')  
           lastTextLine = curTextLine;
           curTextLine  = "";
           if  (report.is_open ())

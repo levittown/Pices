@@ -1,6 +1,6 @@
 /* Configuration.cpp -- Generic Configuration file manager.
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #include  "FirstIncludes.h"
 #include  <stdio.h>
@@ -21,18 +21,18 @@ using namespace std;
 #include  "Configuration.h"
 #include  "OSservices.h"
 #include  "RunLog.h"
-using namespace KKU;
+using namespace KKB;
 
 
 
-namespace  KKU
+namespace  KKB
 {
   class  Configuration::Setting
   {
   public:
     Setting (const KKStr&  _name,
              const KKStr&  _value,
-             int32         _lineNum
+             kkint32       _lineNum
             ):
       lineNum (_lineNum),
       name    (_name),
@@ -45,14 +45,14 @@ namespace  KKU
         value   (s.value)
     {}
 
-    int32          LineNum ()  const {return  lineNum;}
+    kkint32        LineNum ()  const {return  lineNum;}
     KKStrConstPtr  Name    ()  const {return  &name;}
     KKStrConstPtr  Value   ()  const {return  &value;}
 
-    int32 MemoryConsumedEstimated ()  const  {return  sizeof (Setting) + name.MemoryConsumedEstimated () + value.MemoryConsumedEstimated ();}
+    kkint32 MemoryConsumedEstimated ()  const  {return  sizeof (Setting) + name.MemoryConsumedEstimated () + value.MemoryConsumedEstimated ();}
 
   private:
-    int32  lineNum;
+    kkint32  lineNum;
     KKStr  name;
     KKStr  value;
   };  /* Setting */
@@ -67,7 +67,7 @@ namespace  KKU
     SettingList (const  SettingList&  sl):
         KKQueue<Setting> (true, sl.QueueSize ())
     {
-      int32 x;
+      kkint32 x;
       for  (x = 0;  x < sl.QueueSize ();  x++)
       {
         SettingPtr  setting = sl.IdxToPtr (x);
@@ -75,9 +75,9 @@ namespace  KKU
       }
     }
 
-    int32 MemoryConsumedEstimated ()  const
+    kkint32 MemoryConsumedEstimated ()  const
     {
-      int32  memoryConsumedEstimated = sizeof (SettingList);
+      kkint32  memoryConsumedEstimated = sizeof (SettingList);
       SettingList::const_iterator  idx;
       for  (idx = begin ();  idx != end ();  ++idx)
         memoryConsumedEstimated += (*idx)->MemoryConsumedEstimated ();
@@ -87,8 +87,8 @@ namespace  KKU
 
     SettingPtr  LookUp (const KKStr&  name)
     {
-      int32        idx;
-      int32        qSize = QueueSize ();
+      kkint32      idx;
+      kkint32      qSize = QueueSize ();
       SettingPtr   setting = NULL;
       SettingPtr   tempSetting;
   
@@ -104,7 +104,7 @@ namespace  KKU
 
 
 
-    int32  LookUpLineNum (const KKStr&  name)  const
+    kkint32  LookUpLineNum (const KKStr&  name)  const
     {
       const_iterator  idx;
       for  (idx = begin ();  idx != end ();  idx++)
@@ -125,7 +125,7 @@ namespace  KKU
 
     void  AddSetting (const KKStr&  _name,
                       const KKStr&  _value,
-                      int32         _lineNum
+                      kkint32       _lineNum
                      )
     {
       PushOnBack (new Setting (_name, _value, _lineNum));
@@ -139,7 +139,7 @@ namespace  KKU
   {
   public:
     ConfSection (const KKStr& _name,
-                 int32        _lineNum
+                 kkint32      _lineNum
                 ):
           lineNum  (_lineNum),
           name     (_name),
@@ -153,37 +153,37 @@ namespace  KKU
     {}
 
 
-    int32  LineNum ()  const {return lineNum;}
+    kkint32  LineNum ()  const {return lineNum;}
 
     KKStrConstPtr  Name ()  {return  &name;}
 
-    int32 MemoryConsumedEstimated ()  const
+    kkint32 MemoryConsumedEstimated ()  const
     {
       return sizeof (lineNum) + name.MemoryConsumedEstimated () + settings.MemoryConsumedEstimated ();
     }
 
-    int32 NumOfSettings ()  {return  settings.QueueSize ();}
+    kkint32 NumOfSettings ()  {return  settings.QueueSize ();}
 
 
-    KKStrConstPtr  SettingName (int32 settingNum)  const
+    KKStrConstPtr  SettingName (kkint32 settingNum)  const
     {
-      if  (settingNum >= (int32)settings.size ())
+      if  (settingNum >= (kkint32)settings.size ())
         return NULL;
       return  settings[settingNum].Name ();
     }
 
-    KKStrConstPtr  SettingValue (int32 settingNum, int32& lineNum)  const
+    KKStrConstPtr  SettingValue (kkint32 settingNum, kkint32& lineNum)  const
     {
-      if  (settingNum >= (int32)settings.size ())
+      if  (settingNum >= (kkint32)settings.size ())
         return NULL;
       lineNum = settings[settingNum].LineNum ();
       return  settings[settingNum].Value ();
     }
 
-    void  GetSettings (int32           settingNum,
+    void  GetSettings (kkint32         settingNum,
                        KKStrConstPtr&  name,
                        KKStrConstPtr&  value,
-                       int32&          lineNum
+                       kkint32&          lineNum
                       )
     {
       SettingPtr  setting = settings.IdxToPtr (settingNum);
@@ -204,14 +204,14 @@ namespace  KKU
 
     void  AddSetting (const KKStr&  _name,
                       const KKStr&  _value,
-                      int32         _lineNum
+                      kkint32       _lineNum
                      )
     {
       settings.AddSetting (_name, _value, _lineNum);
     }
 
 
-    KKStrConstPtr  LookUpValue (KKStr  _name, int32& lineNum)
+    KKStrConstPtr  LookUpValue (KKStr  _name, kkint32& lineNum)
     {
       SettingPtr  setting = settings.LookUp (_name);
       if  (setting)
@@ -224,7 +224,7 @@ namespace  KKU
     }
 
   private:
-    int32        lineNum;   // Text Line Number where section starts.
+    kkint32      lineNum;   // Text Line Number where section starts.
     KKStr        name;
     SettingList  settings;
   };  /* ConfSection */
@@ -237,9 +237,9 @@ namespace  KKU
     ConfSectionList (): KKQueue<ConfSection> (true, 5)  {}
 
 
-    int32 MemoryConsumedEstimated ()  const
+    kkint32 MemoryConsumedEstimated ()  const
     {
-      int32  memoryConsumedEstimated = sizeof (ConfSectionList);
+      kkint32  memoryConsumedEstimated = sizeof (ConfSectionList);
       ConfSectionList::const_iterator  idx;
       for  (idx = begin ();  idx != end ();  ++idx)
         memoryConsumedEstimated += (*idx)->MemoryConsumedEstimated ();
@@ -273,13 +273,13 @@ namespace  KKU
 
     
     void  AddConfSection (const KKStr&  _name,
-                          int32         _lineNum
+                          kkint32       _lineNum
                          )
     {
       PushOnBack (new ConfSection (_name, _lineNum));
     }
   };  /* ConfSectionList */
-}  /* KKU */
+}  /* KKB */
 
 
 
@@ -319,7 +319,7 @@ Configuration::Configuration (const Configuration&  c):
 {
   sections = new ConfSectionList ();
 
-  int32  x;
+  kkint32  x;
 
   for  (x = 0;  x < sections->QueueSize ();  x++)
   {
@@ -337,13 +337,13 @@ Configuration::~Configuration ()
 
 
 
-int32 Configuration::MemoryConsumedEstimated ()  const
+kkint32 Configuration::MemoryConsumedEstimated ()  const
 {
-  int32  memoryConsumedEstimated = sizeof (Configuration)
+  kkint32  memoryConsumedEstimated = sizeof (Configuration)
     + curSectionName.MemoryConsumedEstimated ()
     + fileName.MemoryConsumedEstimated ()
     + formatErrors.size () * 100
-    + formatErrorsLineNums.size () * sizeof (int32);
+    + formatErrorsLineNums.size () * sizeof (kkint32);
 
   if  (sections)
     memoryConsumedEstimated += sections->MemoryConsumedEstimated ();
@@ -356,8 +356,8 @@ int32 Configuration::MemoryConsumedEstimated ()  const
 void  StripOutAnyComments (KKStr&  line)
 {
   bool found = false;
-  int32  len   = line.Len ();
-  int32  x     = 0;
+  kkint32  len   = line.Len ();
+  kkint32  x     = 0;
  
 
   while  ((x < (len - 1))  &&  (!found))
@@ -385,7 +385,7 @@ void  Configuration::PrintFormatErrors (ostream& o)
   o << endl
     << "Num" << "\t" << "LineNum" << "\t" << "Description" << endl;
 
-  for  (uint32 idx = 0;  idx < formatErrors.size ();  ++idx)
+  for  (kkuint32 idx = 0;  idx < formatErrors.size ();  ++idx)
   {
     o << idx << "\t" << formatErrorsLineNums[idx]  << "\t"  << formatErrors[idx] << endl;
   }
@@ -397,7 +397,7 @@ void  Configuration::LoadFile ()
 {
   log.Level (10) << "Configuration::LoadFile[" << fileName << "]." << endl;
 
-  int32  lastLineNum = 0;
+  kkint32  lastLineNum = 0;
 
   if  (fileName == "")
   {
@@ -422,7 +422,7 @@ void  Configuration::LoadFile ()
   }
 
   char  buff[10240];
-  int32 lineCount = 0;
+  kkint32 lineCount = 0;
 
   curSectionName = "";
   ConfSectionPtr  curSection = NULL;
@@ -482,7 +482,7 @@ void  Configuration::LoadFile ()
         sections->AddConfSection (curSection);
       }
 
-      int32  equalIdx = line.LocateCharacter ('=');
+      kkint32  equalIdx = line.LocateCharacter ('=');
 
       if  (equalIdx < 0)
       {
@@ -521,14 +521,14 @@ void  Configuration::LoadFile ()
 
 
 
-int32  Configuration::NumOfSections ()
+kkint32  Configuration::NumOfSections ()
 {
   return  sections->QueueSize ();
 }
 
 
 
-int32  Configuration::NumOfSettings (const KKStr&  sectionName)
+kkint32  Configuration::NumOfSettings (const KKStr&  sectionName)
 {
   ConfSectionPtr  section = sections->LookUp (sectionName);
 
@@ -541,7 +541,7 @@ int32  Configuration::NumOfSettings (const KKStr&  sectionName)
 
 
 
-int32  Configuration::NumOfSettings (int32  sectionNum)  const
+kkint32  Configuration::NumOfSettings (kkint32  sectionNum)  const
 {
   if  ((sectionNum < 0)  ||  (sectionNum >= sections->QueueSize ()))
     return -1;
@@ -562,7 +562,7 @@ bool  Configuration::SectionDefined (const KKStr&  sectionName)  const
 
 
 
-KKStrConstPtr  Configuration::SectionName (int32 sectionNum)  const
+KKStrConstPtr  Configuration::SectionName (kkint32 sectionNum)  const
 {
   ConfSectionPtr  section = sections->IdxToPtr (sectionNum);
 
@@ -573,16 +573,16 @@ KKStrConstPtr  Configuration::SectionName (int32 sectionNum)  const
 }
 
 
-int32  Configuration::SectionNum (const KKStr&  sectionName)  const
+kkint32  Configuration::SectionNum (const KKStr&  sectionName)  const
 {
   if  (!sections)
     return -1;
 
-  uint32  idx = 0;
+  kkuint32  idx = 0;
   while  (idx < sections->size ())
   {
     if  (sections->IdxToPtr(idx)->Name ()->EqualIgnoreCase (sectionName))
-      return  (int32)idx;
+      return  (kkint32)idx;
     idx++;
   }
   return -1;
@@ -590,7 +590,7 @@ int32  Configuration::SectionNum (const KKStr&  sectionName)  const
 
 
 
-int32  Configuration::SectionLineNum (int32 sectionNum)  const
+kkint32  Configuration::SectionLineNum (kkint32 sectionNum)  const
 {
   ConfSectionPtr  section = sections->IdxToPtr (sectionNum);
 
@@ -603,7 +603,7 @@ int32  Configuration::SectionLineNum (int32 sectionNum)  const
 
 
 KKStrConstPtr  Configuration::SettingName (const KKStr&  sectionName,
-                                           int32         settingNum
+                                           kkint32       settingNum
                                           )  const
 {
   ConfSectionPtr  section = sections->LookUp (sectionName);
@@ -616,8 +616,8 @@ KKStrConstPtr  Configuration::SettingName (const KKStr&  sectionName,
 
 
 
-KKStrConstPtr  Configuration::SettingName (int32  sectionNum,
-                                           int32  settingNum
+KKStrConstPtr  Configuration::SettingName (kkint32  sectionNum,
+                                           kkint32  settingNum
                                           )  const
 {
   if  ((sectionNum < 0)  ||  (sectionNum >= sections->QueueSize ()))
@@ -632,9 +632,9 @@ KKStrConstPtr  Configuration::SettingName (int32  sectionNum,
 
 
 
-KKStrConstPtr  Configuration::SettingValue (int32         sectionNum,
+KKStrConstPtr  Configuration::SettingValue (kkint32       sectionNum,
                                             const KKStr&  settingName,
-                                            int32&        lineNum
+                                            kkint32&        lineNum
                                            )  const
 
 {
@@ -648,9 +648,9 @@ KKStrConstPtr  Configuration::SettingValue (int32         sectionNum,
 
 
 
-KKStrConstPtr  Configuration::SettingValue (int32   sectionNum,
-                                            int32   settingNum,
-                                            int32&  lineNum
+KKStrConstPtr  Configuration::SettingValue (kkint32 sectionNum,
+                                            kkint32 settingNum,
+                                            kkint32&  lineNum
                                            )  const
 {
   if  ((sectionNum < 0)  ||  (sectionNum >= sections->QueueSize ()))
@@ -666,12 +666,12 @@ KKStrConstPtr  Configuration::SettingValue (int32   sectionNum,
 
 
 
-KKStrConstPtr  Configuration::SettingValue (const KKU::KKStr&  sectionName,
-                                            const KKU::KKStr&  settingName,
-                                            int32&             lineNum
+KKStrConstPtr  Configuration::SettingValue (const KKB::KKStr&  sectionName,
+                                            const KKB::KKStr&  settingName,
+                                            kkint32&             lineNum
                                            )  const
 {
-  int32  sectionNum = SectionNum (sectionName);
+  kkint32  sectionNum = SectionNum (sectionName);
   if  (sectionNum < 0)
     return NULL;
 
@@ -684,10 +684,10 @@ KKStrConstPtr  Configuration::SettingValue (const KKU::KKStr&  sectionName,
 
 
 void  Configuration::GetSetting (const char*     sectionName,
-                                 int32           settingNum,
+                                 kkint32         settingNum,
                                  KKStrConstPtr&  name,
                                  KKStrConstPtr&  value,
-                                 int32&          lineNum
+                                 kkint32&          lineNum
                                 )
 {
   ConfSectionPtr  section = sections->LookUp (sectionName);
@@ -706,7 +706,7 @@ void  Configuration::GetSetting (const char*     sectionName,
 
 
 
-void  Configuration::FormatErrorsAdd (int32         lineNum,  
+void  Configuration::FormatErrorsAdd (kkint32       lineNum,  
                                       const KKStr&  error
                                      )
 {
@@ -728,7 +728,7 @@ void  Configuration::FormatErrorsClear ()  /**< Call this to clear all format er
 VectorKKStr  Configuration::FormatErrorsWithLineNumbers ()  const
 {
   VectorKKStr  errorMsgs;
-  for  (uint32 i = 0;  i < formatErrors.size ();  i++)
+  for  (kkuint32 i = 0;  i < formatErrors.size ();  i++)
   {
     KKStr  lineNumStr = "    ";
     if  (i < formatErrorsLineNums.size ())

@@ -1,6 +1,6 @@
 /* GoalKeeper.h -- Implements blocking routines to support thread synchronization.
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #ifndef  _KKU_GOALKEEPER_
 #define  _KKU_GOALKEEPER_
@@ -14,9 +14,9 @@
 #endif
 
 
-#include  "Str.h"
+#include  "KKStr.h"
 
-namespace  KKU
+namespace  KKB
 {
   /**
    *@brief  Used to deal with issues related to thread synchronization issues when sharing the same variables.  
@@ -56,7 +56,7 @@ namespace  KKU
     bool   BlockedByAnotherThread ();
   
 
-    int32  BlockerThreadId ();  /**< @brief  ThreadId of thread that currently holds the Block  -1 indicates no Block */
+    kkint32  BlockerThreadId ();  /**< @brief  ThreadId of thread that currently holds the Block  -1 indicates no Block */
 
     /**
      *@brief Ends the block and allows other threads to pass through StatBlock.
@@ -66,13 +66,13 @@ namespace  KKU
      */
     void   EndBlock ();
 
-    int32  MemoryConsumedEstimated ()  const;
+    kkint32  MemoryConsumedEstimated ()  const;
 
     const  KKStr&  Name ()  const  {return  name;}
 
 
     /** @brief  Returns the number of threads that are waiting to establish a lock on this instance. */
-    int32  NumBlockedThreads ();
+    kkint32  NumBlockedThreads ();
 
 
     /**
@@ -132,19 +132,19 @@ namespace  KKU
 
     volatile bool  blocked;    /**< 'true' = Currently Blocked. */
 
-    int32    blockerDepth;     /**< Indicates how many times the thread that currently holds the block has
+    kkint32  blockerDepth;     /**< Indicates how many times the thread that currently holds the block has
                                 * called  "StartBlock". For every time the thread that holds the Block calls
                                 * "StartBlock" it will have to call "EndBlock" before the block is actually
                                 * released.
                                 */
 
-    int32    blockerThreadId;  /**< ThreadId of thread that currently holds the Block -1 indicates no Block */
+    kkint32  blockerThreadId;  /**< ThreadId of thread that currently holds the Block -1 indicates no Block */
 
     KKStr    name;
 
-    int32    numBlockedThreads;       /**< The number of threads waiting in 'StartBlock' for the current block to end */
+    kkint32  numBlockedThreads;       /**< The number of threads waiting in 'StartBlock' for the current block to end */
 
-    int32    numOfBlockingInstances;  /**< The number of times that a thread was blocked. */
+    kkint32  numOfBlockingInstances;  /**< The number of times that a thread was blocked. */
 
 
 #if defined(WIN32)

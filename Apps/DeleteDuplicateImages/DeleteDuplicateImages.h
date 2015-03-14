@@ -16,7 +16,7 @@ public:
 
 
   virtual
-  void  InitalizeApplication (int32   argc,
+  void  InitalizeApplication (kkint32 argc,
                               char**  argv
                              );
 

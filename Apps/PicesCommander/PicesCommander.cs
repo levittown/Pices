@@ -1300,7 +1300,7 @@ namespace PicesCommander
 
             // kak 2010-05-08  Changed the save code to use the Save method in the Raster class which will
             // use the BaseLibrary::ImageIO Save routine.  Images eing saved by .net were not cmpatable
-            // with the KKU::BmpImage class which the Feature Extraction routines will want to use.
+            // with the KKB::BmpImage class which the Feature Extraction routines will want to use.
             try { raster.Save(fullFileName); }
             catch (Exception)
             {

@@ -18,10 +18,10 @@ typedef wchar_t WCHAR;
 
 #include "stdafx.h"
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "OSservices.h"
 #include "RunLog.h"
-using namespace  KKU;
+using namespace  KKB;
 
 #include "DataBase.h"
 #include "InstrumentDataFileManager.h"
@@ -70,7 +70,7 @@ CImageExtractionWindowsApp::CImageExtractionWindowsApp()
     _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF ); 
   #endif
 
-  uint32  zed = 0;
+  kkuint32  zed = 0;
 }
 
 

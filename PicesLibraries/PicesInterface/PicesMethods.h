@@ -19,15 +19,15 @@ namespace PicesInterface {
 
     static  String^            SipperFileNameFromImageFileName (String^  imageFileName);
 
-    static  System::DateTime   DateKKUtoSystem (const  KKU::DateType&  date);
+    static  System::DateTime   DateKKUtoSystem (const  KKB::DateType&  date);
 
-    static  KKU::DateType      DateSystemToKKU (System::DateTime   dt);
+    static  KKB::DateType      DateSystemToKKU (System::DateTime   dt);
 
-    static  System::DateTime   DateTimeKKUtoSystem (const  KKU::DateTime&  date);
+    static  System::DateTime   DateTimeKKUtoSystem (const  KKB::DateTime&  date);
 
-    static  KKU::DateTime      DateTimeSystemToKKU (System::DateTime   dt);
+    static  KKB::DateTime      DateTimeSystemToKKU (System::DateTime   dt);
 
-    static  System::TimeSpan   TimeTypeKKUtoSystem (const KKU::TimeType&  t);
+    static  System::TimeSpan   TimeTypeKKUtoSystem (const KKB::TimeType&  t);
 
     static  System::String^    LatitudeToString (double latitude,
                                                  int    minDecimals

@@ -1,32 +1,27 @@
 #include "StdAfx.h"
 
-#include  "FirstIncludes.h"
-
+#include "FirstIncludes.h"
 #include <stdio.h>
 #include <math.h>
-
-
-#include  <ctype.h>
-#include  <time.h>
-
-#include  <fstream>
-#include  <iostream>
-#include  <ostream>
-#include  <string>
-#include  <vector>
+#include <ctype.h>
+#include <time.h>
+#include <fstream>
+#include <iostream>
+#include <ostream>
+#include <string>
+#include <vector>
 using namespace std;
 
-#include  "MemoryDebug.h"
-#include  "BasicTypes.h"
+#include "MemoryDebug.h"
+#include "KKBaseTypes.h"
 
 using namespace  System::Diagnostics;
 
 
-#include  "OSservices.h"
-#include  "PicesKKStr.h"
-#include  "PicesSipperVariables.h"
-
-#include  "PicesRunLog.h"
+#include "PicesKKStr.h"
+#include "PicesOSservices.h"
+#include "PicesSipperVariables.h"
+#include "PicesRunLog.h"
 
 
 

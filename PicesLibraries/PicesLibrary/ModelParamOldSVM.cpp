@@ -11,11 +11,11 @@
 #include  "MemoryDebug.h"
 using namespace std;
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "KKException.h"
 #include "OSservices.h"
 #include "RunLog.h"
-using namespace KKU;
+using namespace KKB;
 
 
 #include "ModelParamOldSVM.h"
@@ -191,7 +191,7 @@ void  ModelParamOldSVM::KernalType (SVM_KernalType   _kernalType)
 
 
 
-int32   ModelParamOldSVM::NumOfFeaturesAfterEncoding () const
+kkint32 ModelParamOldSVM::NumOfFeaturesAfterEncoding () const
 {
   return  svmParameters->NumOfFeaturesAfterEncoding ();
 }
@@ -254,7 +254,7 @@ float  ModelParamOldSVM::A_Param ()  const
 
 
 
-int32  ModelParamOldSVM::BitsToReduceBy () const
+kkint32  ModelParamOldSVM::BitsToReduceBy () const
 {
   return svmParameters->BitsToReduceBy ();
 }
@@ -307,7 +307,7 @@ SVM_SelectionMethod ModelParamOldSVM::SelectionMethod () const
 }
 
 
-int32   ModelParamOldSVM::UnBalancedBits ()  const
+kkint32 ModelParamOldSVM::UnBalancedBits ()  const
 {
   return svmParameters->UnBalancedBits ();
 }

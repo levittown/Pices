@@ -15,10 +15,10 @@
 
 using namespace std;
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "OSservices.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 #include "SipperVariables.h"
 using namespace  SipperHardware;
@@ -82,7 +82,7 @@ ExtractAllSipperFiles::~ExtractAllSipperFiles ()
 
 
 
-void  ExtractAllSipperFiles::InitalizeApplication (int32   argc,
+void  ExtractAllSipperFiles::InitalizeApplication (kkint32 argc,
                                                    char**  argv
                                                   )
 {
@@ -272,7 +272,7 @@ void  ExtractAllSipperFiles::Run ()
     firstOneFound = false;
 
   if  (rootDir.Empty ())
-    rootDir = KKU::osGetCurrentDirectory ();
+    rootDir = KKB::osGetCurrentDirectory ();
 
   if  (configFileName.Empty ())
   {

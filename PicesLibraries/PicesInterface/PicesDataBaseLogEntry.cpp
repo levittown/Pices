@@ -14,8 +14,8 @@
 using namespace std;
 
 #include "MemoryDebug.h"
-#include "BasicTypes.h"
-using namespace KKU;
+#include "KKBaseTypes.h"
+using namespace KKB;
 
 
 #include "DataBaseLogEntry.h"
@@ -54,7 +54,7 @@ namespace  PicesInterface
                                                ):
     dataBaseLogEntry (NULL)
   {
-    KKU::DateTime dateTimeCompiled = PicesMethods::DateTimeSystemToKKU (_dateTimeCompiled);
+    KKB::DateTime dateTimeCompiled = PicesMethods::DateTimeSystemToKKU (_dateTimeCompiled);
     dataBaseLogEntry = 
       new DataBaseLogEntry (PicesKKStr::SystemStringToKKStr   (_progCode),
                             PicesKKStr::SystemStringToKKStr   (_progName),

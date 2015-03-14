@@ -12,11 +12,11 @@
 using namespace  std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "OSservices.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 
 
@@ -32,7 +32,7 @@ inline  int  LogicalFrame::Max (int x1,  int x2,  int x3,
                                 int x4,  int x5,  int x6
                                )
 {
-  int  r = KKU::Max (x1, x2);
+  int  r = KKB::Max (x1, x2);
 
   if  (x3 > r)  r = x3;
   if  (x4 > r)  r = x4;
@@ -105,7 +105,7 @@ int  LogicalFrame::CountPixs (int x1,  int x2,  int x3,
   sort (ids.begin (), ids.end ());
   int lastId = -1;
 
-  for  (KKU::uint32 x = 0;  x < ids.size ();  x++)
+  for  (KKB::kkuint32 x = 0;  x < ids.size ();  x++)
   {
     if  (ids[x] != lastId)
     {
@@ -122,8 +122,8 @@ int  LogicalFrame::CountPixs (int x1,  int x2,  int x3,
 
 
 LogicalFrame::LogicalFrame (const ExtractionParms&  _parms,
-                            uint32                  _frameHeightMax,
-                            uint32                  _frameWidth,
+                            kkuint32                _frameHeightMax,
+                            kkuint32                _frameWidth,
                             const bool&             _cancelFlag
                            ):
 
@@ -180,19 +180,19 @@ LogicalFrame::~LogicalFrame ()
 }
 
 
-int32  LogicalFrame::MemoryConsumedEstimated ()  const
+kkint32  LogicalFrame::MemoryConsumedEstimated ()  const
 {
-  uint32  frameTotalPixels = frameHeightMax * frameWidth;
+  kkuint32  frameTotalPixels = frameHeightMax * frameWidth;
 
-  int32  memoryConsumedEstimated = sizeof (*this) +
+  kkint32  memoryConsumedEstimated = sizeof (*this) +
          frameTotalPixels                       +  // uchar*          frameArea;
-         sizeof (uint64*) *  frameHeightMax     +  // uint64*         frameRowByteOffset;    
+         sizeof (kkuint64*) *  frameHeightMax     +  // kkuint64*         frameRowByteOffset;    
          sizeof (uchar*)  *  frameHeightMax     +  // uchar**         frame;
          sizeof (uchar*)  *  frameHeightMax     +  // uchar**         workFrame;
          frameTotalPixels                       +  // uchar*          workFrameArea;
          sizeof (LogicalFrameBlobPtr) * maxBlobsPerFrame +  // LogicalFrameBlobPtr*  blobs;
-         sizeof (int32)      * frameTotalPixels +  // int32*          blobIdsArea;
-         sizeof (int32*)     * frameHeightMax;     // int32**         blobIds;
+         sizeof (kkint32)      * frameTotalPixels +  // kkint32*          blobIdsArea;
+         sizeof (kkint32*)     * frameHeightMax;     // kkint32**         blobIds;
 
   if  (origFrame)
   {
@@ -208,19 +208,19 @@ int32  LogicalFrame::MemoryConsumedEstimated ()  const
 
 void  LogicalFrame::AllocateFrame ()
 {
-  uint32 x = 0;
+  kkuint32 x = 0;
 
   frameHeightMax = frameWidth;
 
   frameTotalPixels = frameHeightMax * frameWidth;
 
   frameArea   = new uchar [frameTotalPixels];
-  blobIdsArea = new int32 [frameTotalPixels];
+  blobIdsArea = new kkint32 [frameTotalPixels];
 
   frame              = new uchar* [frameHeightMax];
-  frameRowByteOffset = new uint64 [frameHeightMax];
-  blobIds            = new int32* [frameHeightMax];
-  pixelsPerRow       = new uint32 [frameHeightMax];
+  frameRowByteOffset = new kkuint64 [frameHeightMax];
+  blobIds            = new kkint32* [frameHeightMax];
+  pixelsPerRow       = new kkuint32 [frameHeightMax];
 
   if  (!parms.MorphOperations ().Empty ())
   {
@@ -275,7 +275,7 @@ void  LogicalFrame::DeAllocateFrame ()
 
   if  (blobs)
   {
-    for  (uint32 x = 0;  x < maxBlobsPerFrame;  x++)
+    for  (kkuint32 x = 0;  x < maxBlobsPerFrame;  x++)
     {
       delete  blobs[x];
       blobs[x] = NULL;
@@ -301,9 +301,9 @@ bool  LogicalFrame::ForegroundPixel (uchar  pixValue)
 
 
 
-void  LogicalFrame::CountAndTotal (KKU::uchar    c,
-                                   KKU::ushort&  count,
-                                   KKU::ushort&  total
+void  LogicalFrame::CountAndTotal (KKB::uchar    c,
+                                   KKB::ushort&  count,
+                                   KKB::ushort&  total
                                   )
 {
   if  (c > backgroundPixelTH)
@@ -317,7 +317,7 @@ void  LogicalFrame::CountAndTotal (KKU::uchar    c,
 
 void  LogicalFrame::PerformDialation ()
 {
-  uint32  row, col;
+  kkuint32  row, col;
 
   uchar*  curRow = NULL;
   uchar*  nextRow = NULL;
@@ -392,7 +392,7 @@ void  LogicalFrame::PerformDialation ()
 
 void  LogicalFrame::PerformErosion ()
 {
-  uint32  row, col;
+  kkuint32  row, col;
 
   uchar*  curRow = NULL;
   uchar*  nextRow = NULL;
@@ -495,8 +495,8 @@ void  LogicalFrame::PerformMorphOperations ()
 
 
 
-LogicalFrameBlobPtr  LogicalFrame::NewBlob (uint32  rowTop,
-                                            uint32  colLeft
+LogicalFrameBlobPtr  LogicalFrame::NewBlob (kkuint32  rowTop,
+                                            kkuint32  colLeft
                                            )
 {
   if  (numOfBlobsInFrame >= maxBlobsPerFrame)
@@ -504,7 +504,7 @@ LogicalFrameBlobPtr  LogicalFrame::NewBlob (uint32  rowTop,
     // This is some really crap code that I am adding here.  
     // the whole way that 'blobs' is being managed needs to be 
     // reworked.
-    uint32  x = 0;
+    kkuint32  x = 0;
 
     // Lets go and re-use an older smaller blob
 
@@ -537,13 +537,13 @@ LogicalFrameBlobPtr  LogicalFrame::NewBlob (uint32  rowTop,
 
     {
       // There are no empty slots in 'blobs'   we are going to have to expand it.
-      uint32  newMaxBlobsPerFrame  = maxBlobsPerFrame + 10000;
+      kkuint32  newMaxBlobsPerFrame  = maxBlobsPerFrame + 10000;
 
       cout << "LogicalFrame::NewBlob    maxBlobsPerFrame[" << maxBlobsPerFrame << "] Exceeded  New Size[" << newMaxBlobsPerFrame << "]." << endl;
       
       LogicalFrameBlobPtr*  newBlobs = new LogicalFrameBlobPtr[newMaxBlobsPerFrame];
 
-      uint32  blobIDX = 0;
+      kkuint32  blobIDX = 0;
       while  (blobIDX < maxBlobsPerFrame)
       {
         newBlobs[blobIDX] = blobs[blobIDX];
@@ -586,8 +586,8 @@ LogicalFrameBlobPtr  LogicalFrame::NewBlob (uint32  rowTop,
 
 void  LogicalFrame::InitailzieBlobIds ()
 {
-  uint32  totalPixels = frameHeightMax * frameWidth;
-  for  (uint32 x = 0;  x < totalPixels;  ++x)
+  kkuint32  totalPixels = frameHeightMax * frameWidth;
+  for  (kkuint32 x = 0;  x < totalPixels;  ++x)
     blobIdsArea[x] = -1;
 }  /* InitailzieBlobIds */
 
@@ -596,19 +596,19 @@ void  LogicalFrame::InitailzieBlobIds ()
 void  LogicalFrame::LocateBlobsUsingConnectedDistanceOf3 ()
 {
   uchar*         curRow           = NULL;
-  int32*         curRowBlobIds    = NULL;
-  int32*         prev1RowBlobIds  = NULL;
-  int32*         prev2RowBlobIds  = NULL;
-  int32*         prev3RowBlobIds  = NULL;
+  kkint32*         curRowBlobIds    = NULL;
+  kkint32*         prev1RowBlobIds  = NULL;
+  kkint32*         prev2RowBlobIds  = NULL;
+  kkint32*         prev3RowBlobIds  = NULL;
 
-  uint32         col = 3;
-  uint32         row = 3;
+  kkuint32       col = 3;
+  kkuint32       row = 3;
 
   LogicalFrameBlobPtr  curBlob    = NULL;
-  int32          curBlobId  = 0;
-  int32          nearBlobId = 0;
+  kkint32        curBlobId  = 0;
+  kkint32        nearBlobId = 0;
 
-  uint32         blankColsInARow = 0;
+  kkuint32       blankColsInARow = 0;
 
   for  (row = connectedPixelDist;  row < frameHeight;  row++)
   {
@@ -668,10 +668,10 @@ void  LogicalFrame::LocateBlobsUsingConnectedDistanceOf3 ()
             }
 
             curRowBlobIds[col] = curBlobId;
-            curBlob->colRight  = KKU::Max (curBlob->colRight, col);
-            curBlob->rowBot    = KKU::Max (curBlob->rowBot,   row);
-            curBlob->colLeft   = KKU::Min (curBlob->colLeft,  col);
-            curBlob->rowTop    = KKU::Min (curBlob->rowTop,   row);
+            curBlob->colRight  = KKB::Max (curBlob->colRight, col);
+            curBlob->rowBot    = KKB::Max (curBlob->rowBot,   row);
+            curBlob->colLeft   = KKB::Min (curBlob->colLeft,  col);
+            curBlob->rowTop    = KKB::Min (curBlob->rowTop,   row);
 
             curBlob->pixelCount++;
           }
@@ -690,11 +690,11 @@ void  LogicalFrame::LocateBlobsUsingConnectedDistanceOf3 ()
             }
 
             curRowBlobIds[col] = curBlobId;
-            curBlob->colRight  = KKU::Max (curBlob->colRight, col);
-            curBlob->rowBot    = KKU::Max (curBlob->rowBot,   row);
+            curBlob->colRight  = KKB::Max (curBlob->colRight, col);
+            curBlob->rowBot    = KKB::Max (curBlob->rowBot,   row);
 
-            curBlob->colLeft   = KKU::Min (curBlob->colLeft, col);
-            curBlob->rowTop    = KKU::Min (curBlob->rowTop,  row);
+            curBlob->colLeft   = KKB::Min (curBlob->colLeft, col);
+            curBlob->rowTop    = KKB::Min (curBlob->rowTop,  row);
 
             curBlob->pixelCount++;
           }
@@ -742,14 +742,14 @@ void  LogicalFrame::LocateBlobsUsingConnectedDistanceOf3 ()
 
 
 
-int  LogicalFrame::GetMaxBlobIdInUpperLeft (uint32 row,
-                                            uint32 col
+int  LogicalFrame::GetMaxBlobIdInUpperLeft (kkuint32 row,
+                                            kkuint32 col
                                            )
 {
   int  maxBlobId = -1;
-  uint32  c = 0;
-  uint32  r = 0;
-  uint32  startCol = 0;
+  kkuint32  c = 0;
+  kkuint32  r = 0;
+  kkuint32  startCol = 0;
 
   startCol = col - 1;
 
@@ -775,14 +775,14 @@ int  LogicalFrame::GetMaxBlobIdInUpperLeft (uint32 row,
 
 
 
-int  LogicalFrame::GetMaxBlobIdInUpperRight (uint32 row,
-                                             uint32 col
+int  LogicalFrame::GetMaxBlobIdInUpperRight (kkuint32 row,
+                                             kkuint32 col
                                             )
 {
-  int32  maxBlobId = -1;
-  uint32  r = 0;
-  uint32  c = 0;
-  uint32  endCol = 0;
+  kkint32  maxBlobId = -1;
+  kkuint32  r = 0;
+  kkuint32  c = 0;
+  kkuint32  endCol = 0;
 
   endCol = col + 1;
   for  (r = row - connectedPixelDist;  r < row;  r++)
@@ -811,16 +811,16 @@ int  LogicalFrame::GetMaxBlobIdInUpperRight (uint32 row,
 void  LogicalFrame::LocateBlobsUsingConnectedDistanceNotOf3 ()
 {
   uchar*         curRow           = NULL;
-  int32*         curRowBlobIds    = NULL;
+  kkint32*         curRowBlobIds    = NULL;
 
-  uint32         col              = 1;
-  uint32         row              = 1;
+  kkuint32       col              = 1;
+  kkuint32       row              = 1;
 
   LogicalFrameBlobPtr  curBlob          = NULL;
-  int32          curBlobId        = 0;
-  int32          nearBlobId       = 0;
+  kkint32        curBlobId        = 0;
+  kkint32        nearBlobId       = 0;
 
-  uint32         blankColsInARow = 0;
+  kkuint32       blankColsInARow = 0;
 
   for  (row = 1;  row < frameHeight;  row++)
   {
@@ -865,10 +865,10 @@ void  LogicalFrame::LocateBlobsUsingConnectedDistanceNotOf3 ()
             }
 
             curRowBlobIds[col] = curBlobId;
-            curBlob->colRight  = KKU::Max (curBlob->colRight, col);
-            curBlob->rowBot    = KKU::Max (curBlob->rowBot,   row);
-            curBlob->colLeft   = KKU::Min (curBlob->colLeft,  col);
-            curBlob->rowTop    = KKU::Min (curBlob->rowTop,   row);
+            curBlob->colRight  = KKB::Max (curBlob->colRight, col);
+            curBlob->rowBot    = KKB::Max (curBlob->rowBot,   row);
+            curBlob->colLeft   = KKB::Min (curBlob->colLeft,  col);
+            curBlob->rowTop    = KKB::Min (curBlob->rowTop,   row);
 
             curBlob->pixelCount++;
           }
@@ -887,11 +887,11 @@ void  LogicalFrame::LocateBlobsUsingConnectedDistanceNotOf3 ()
             }
 
             curRowBlobIds[col] = curBlobId;
-            curBlob->colRight  = KKU::Max (curBlob->colRight, col);
-            curBlob->rowBot    = KKU::Max (curBlob->rowBot,   row);
+            curBlob->colRight  = KKB::Max (curBlob->colRight, col);
+            curBlob->rowBot    = KKB::Max (curBlob->rowBot,   row);
 
-            curBlob->colLeft   = KKU::Min (curBlob->colLeft, col);
-            curBlob->rowTop    = KKU::Min (curBlob->rowTop,  row);
+            curBlob->colLeft   = KKB::Min (curBlob->colLeft, col);
+            curBlob->rowTop    = KKB::Min (curBlob->rowTop,  row);
 
             curBlob->pixelCount++;
           }
@@ -932,11 +932,11 @@ void  LogicalFrame::LocateBlobsUsingConnectedDistanceNotOf3 ()
 
 
 
-VectorSipperImagePtr  LogicalFrame::BuildListOfSipperImages (uint32&  imagesInFrame)
+VectorSipperImagePtr  LogicalFrame::BuildListOfSipperImages (kkuint32&  imagesInFrame)
 {
   VectorSipperImagePtr  sipperImages = new VectorSipperImage ();
 
-  for  (uint32 blobIDX = 0;  (blobIDX < numOfBlobsInFrame)  &&  (!cancelFlag);  ++blobIDX)
+  for  (kkuint32 blobIDX = 0;  (blobIDX < numOfBlobsInFrame)  &&  (!cancelFlag);  ++blobIDX)
   {
     LogicalFrameBlobPtr  blob = blobs[blobIDX];
     if  (!blob)
@@ -964,7 +964,7 @@ VectorSipperImagePtr  LogicalFrame::BuildListOfSipperImages (uint32&  imagesInFr
     {
       imagesInFrame++;
 
-      uint32  pixelsInImage = sipperImage->PixelCount ();
+      kkuint32  pixelsInImage = sipperImage->PixelCount ();
 
       // This is were we decide if a particular Sipper Image has met the user criteria 
       if  (pixelsInImage < parms.MinImageSize () || (parms.MaxImageSize() > parms.MinImageSize() && (pixelsInImage > parms.MaxImageSize())))
@@ -975,8 +975,8 @@ VectorSipperImagePtr  LogicalFrame::BuildListOfSipperImages (uint32&  imagesInFr
 
     if  ((!skipThisImage)  &&  (parms.PreProcess ()))
     {
-      uint32  h = sipperImage->Height ();
-      uint32  w = sipperImage->Width ();
+      kkuint32  h = sipperImage->Height ();
+      kkuint32  w = sipperImage->Width ();
 
       // Will Check to see if this is an obvious Vertical Artifact Line.
 
@@ -1030,9 +1030,9 @@ ExtractedImageListPtr  LogicalFrame::ProcessFrame ()
     // because of noise on left and right we are going to blank out the
     // offending columns.
 
-    for  (uint32  row = 0;  row < frameHeight;  row++)
+    for  (kkuint32  row = 0;  row < frameHeight;  row++)
     {
-      uint32  col = 0;
+      kkuint32  col = 0;
       uchar*  curRow = frame[row];
       for  (col = 0;  col < cropLeft;  ++col)
         curRow[col] = 0;
@@ -1067,8 +1067,8 @@ ExtractedImageListPtr  LogicalFrame::ProcessFrame ()
 
     if  ((sipperImage->ColLeft () < 350)  ||  (sipperImage->ColLeft () > 3700))
     {
-      uint32  width  = 1 + sipperImage->ColRight () - sipperImage->ColLeft ();
-      uint32  height = 1 + sipperImage->RowBot   () - sipperImage->RowTop  ();
+      kkuint32  width  = 1 + sipperImage->ColRight () - sipperImage->ColLeft ();
+      kkuint32  height = 1 + sipperImage->RowBot   () - sipperImage->RowTop  ();
 
       if  ((height > 90)  &&  (width < 30))
         noiseLine = true;
@@ -1096,8 +1096,8 @@ ExtractedImageListPtr  LogicalFrame::ProcessFrame ()
     // extractedImage will take ownership of 'raster'.
     // extractdImages will take ownership of 'extractedImage'.
     RasterSipperPtr raster = sipperImage->GetRaster (frame, blobIds, frameSipperRow, frameRowByteOffset);
-    uint32  sipperTopRow = sipperImage->RowTop () + frameSipperRow;
-    uint32  sipperTopCol = sipperImage->ColLeft ();
+    kkuint32  sipperTopRow = sipperImage->RowTop () + frameSipperRow;
+    kkuint32  sipperTopCol = sipperImage->ColLeft ();
     ExtractedImagePtr  extractedImage = new ExtractedImage (raster, 
                                                             sipperImage->ByteOffset (), 
                                                             sipperTopRow, 
@@ -1132,12 +1132,12 @@ ExtractedImageListPtr  LogicalFrame::ProcessFrame ()
 
 
 
-void  LogicalFrame::PopulateFrame (uint32   _frameNum,
-                                   uint32   _frameHeight,
+void  LogicalFrame::PopulateFrame (kkuint32 _frameNum,
+                                   kkuint32 _frameHeight,
                                    uchar*   _frameArea,
-                                   uint32   _frameSipperRow,
-                                   uint64*  _frameRowByteOffset,
-                                   uint32*  _pixelsPerRow
+                                   kkuint32 _frameSipperRow,
+                                   kkuint64*  _frameRowByteOffset,
+                                   kkuint32*  _pixelsPerRow
                                   )
 {
   frameNum       = _frameNum;
@@ -1152,10 +1152,10 @@ void  LogicalFrame::PopulateFrame (uint32   _frameNum,
     AllocateFrame ();
   }
 
-  uint32  totalPixels = frameHeight * frameWidth;
+  kkuint32  totalPixels = frameHeight * frameWidth;
   memcpy (frameArea, _frameArea, totalPixels);
 
-  for  (uint32 row = 0;  row < frameHeight;  ++row)
+  for  (kkuint32 row = 0;  row < frameHeight;  ++row)
   {
     frameRowByteOffset[row] = _frameRowByteOffset[row];
     pixelsPerRow      [row] = _pixelsPerRow[row];

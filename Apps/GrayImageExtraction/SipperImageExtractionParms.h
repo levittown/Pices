@@ -18,9 +18,9 @@
 //**************************************************************************
 
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "CmdLineExpander.h"
-#include  "Str.h"
+#include  "KKStr.h"
 
 #include  "SipperBuff.h"
 
@@ -98,7 +98,7 @@ public:
   const          
   KKStr&             ConfigFileNameSpecified () const {return configFileNameSpecified;}
                  
-  uint32             ConnectedPixelDist    () const  {return  connectedPixelDist;}
+  kkuint32           ConnectedPixelDist    () const  {return  connectedPixelDist;}
                  
   bool               CountOnly             () const  {return  countOnly;}
 
@@ -117,11 +117,11 @@ public:
 
   bool               FramesOnly            () const  {return  framesOnly;}
 
-  uint32             ImagesPerDirectory    () const  {return  imagesPerDirectory;}
+  kkuint32           ImagesPerDirectory    () const  {return  imagesPerDirectory;}
 
-  uint32             MinImageSize          () const  {return  minImageSize;}
+  kkuint32           MinImageSize          () const  {return  minImageSize;}
 
-  uint32             MaxImageSize          () const  {return  maxImageSize;}
+  kkuint32           MaxImageSize          () const  {return  maxImageSize;}
 
   const KKStr&       MorphOperations       () const  {return  morphOperations;}
 
@@ -140,9 +140,9 @@ public:
   const          
   KKStr&             SipperFileName        () const  {return  sipperFileName;}
 
-  uint32             ScanLineEnd           () const  {return  scanLineEnd;}
+  kkuint32           ScanLineEnd           () const  {return  scanLineEnd;}
 
-  uint32             ScanLineStart         () const  {return  scanLineStart;}
+  kkuint32           ScanLineStart         () const  {return  scanLineStart;}
 
   bool               SaveFrames            () const  {return  saveFrames;}
 
@@ -154,21 +154,21 @@ public:
   // Runtime Stats
   ClassStatisticListPtr  ClassStats        () const  {return  classStats;     }
 
-  uint64             BytesExtracted        () const  {return  bytesExtracted; }
+  kkuint64           BytesExtracted        () const  {return  bytesExtracted; }
 
-  uint32             LinesExtracted        () const  {return  linesExtracted; }
+  kkuint32           LinesExtracted        () const  {return  linesExtracted; }
 
-  uint32             ImagesExtracted       () const  {return  imagesExtracted;}
+  kkuint32           ImagesExtracted       () const  {return  imagesExtracted;}
 
-  uint32             ImagesWritten         () const  {return  imagesWritten;  }
+  kkuint32           ImagesWritten         () const  {return  imagesWritten;  }
 
-  uint32             PixelsRead            () const  {return  pixelsRead;     }
+  kkuint32           PixelsRead            () const  {return  pixelsRead;     }
 
-  uint32             PixelsWritten         () const  {return  pixelsWritten;  }
+  kkuint32           PixelsWritten         () const  {return  pixelsWritten;  }
 
   RunLog&            Log                   () const  {return   log;}
 
-  uint64             SipperFileSize        () const  {return  sipperFileSize;   }
+  kkuint64           SipperFileSize        () const  {return  sipperFileSize;   }
 
   const          
   KKStr&             StatusMessage         () const  {return  statusMessage;}
@@ -183,17 +183,17 @@ public:
 
   void             IncrementBytesExtracted  (uint _bytesExtracted)  {bytesExtracted  += _bytesExtracted;}
 
-  uint32           IncrementImagesExtracted () {return  (++imagesExtracted);}
+  kkuint32         IncrementImagesExtracted () {return  (++imagesExtracted);}
 
-  uint32           IncrementImagesWritten   () {return  (++imagesWritten);}
+  kkuint32         IncrementImagesWritten   () {return  (++imagesWritten);}
 
-  uint32           IncrementLinesExtracted  () {return  (++linesExtracted);}
+  kkuint32         IncrementLinesExtracted  () {return  (++linesExtracted);}
 
   void             IncrementPixelsRead      (uint _pixelsRead)      {pixelsRead      += _pixelsRead;}
 
   void             IncrementPixelsWritten   (uint _pixelsWritten)   {pixelsWritten   += _pixelsWritten;}
 
-  void             BytesExtracted  (uint64 _bytesExtracted)  {bytesExtracted  = _bytesExtracted;}
+  void             BytesExtracted  (kkuint64 _bytesExtracted)  {bytesExtracted  = _bytesExtracted;}
 
   void             LinesExtracted  (uint _linesExtracted)  {linesExtracted  = _linesExtracted;}
 
@@ -218,7 +218,7 @@ private:
   bool               colorize;
   KKStr              configFileName;
   KKStr              configFileNameSpecified;
-  uint32             connectedPixelDist;
+  kkuint32           connectedPixelDist;
   bool               countOnly;
   DataBaseServerPtr  dataBaseServer;
   bool               doneExecuting;
@@ -226,10 +226,10 @@ private:
   SipperFileFormat   fileFormat;
   KKStr              flowRateFileName;
   bool               framesOnly;
-  uint32             imagesPerDirectory;
+  kkuint32           imagesPerDirectory;
   RunLog&            log;
-  uint32             maxImageSize;
-  uint32             minImageSize;
+  kkuint32           maxImageSize;
+  kkuint32           minImageSize;
   KKStr              morphOperations;
   bool               multiThreaded;
   KKStr              outputRootDir;
@@ -240,22 +240,22 @@ private:
   bool               saveFrames;
   bool               saveFramesAfter;
   KKStr              sipperFileName;
-  uint32             scanLineStart;
-  uint32             scanLineEnd;
+  kkuint32           scanLineStart;
+  kkuint32           scanLineEnd;
   KKStr              statusMessage;
   bool               updateDataBase;
 
 
   // Runtime Stats
-  uint64                 bytesExtracted;
+  kkuint64               bytesExtracted;
   ClassStatisticListPtr  classStats;
   ClassStatisticListPtr  classStatsPrev;   // Used to help prevent issues with thread conflicts.
-  uint32                 imagesExtracted;
-  uint32                 imagesWritten;
-  uint32                 linesExtracted;
-  uint32                 pixelsRead;
-  uint32                 pixelsWritten;
-  uint64                 sipperFileSize;
+  kkuint32               imagesExtracted;
+  kkuint32               imagesWritten;
+  kkuint32               linesExtracted;
+  kkuint32               pixelsRead;
+  kkuint32               pixelsWritten;
+  kkuint64               sipperFileSize;
 };
 
 

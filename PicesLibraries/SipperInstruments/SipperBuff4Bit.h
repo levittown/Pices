@@ -148,13 +148,13 @@ namespace SipperHardware
 
     bool     FileFormatGood ();
 
-    uint32   PixelsPerScanLine ()  const  {return pixelsPerScanLine;}
+    kkuint32 PixelsPerScanLine ()  const  {return pixelsPerScanLine;}
 
     void     GetNextLine (uchar*   lineBuff,
-                          uint32   lineBuffSize,
-                          uint32&  lineSize,
-                          uint32   colCount[],
-                          uint32&  pixelsInRow,
+                          kkuint32 lineBuffSize,
+                          kkuint32&  lineSize,
+                          kkuint32 colCount[],
+                          kkuint32&  pixelsInRow,
                           bool&    flow
                          );
 
@@ -166,7 +166,7 @@ namespace SipperHardware
      */
 //    virtual
 //    void   WriteInstrumentDataWord (uchar             idNum,
-//                                    uint32            scanLineNum,
+//                                    kkuint32          scanLineNum,
 //                                    WordFormat32Bits  dataWord
 //                                   );
 
@@ -177,8 +177,8 @@ namespace SipperHardware
     static  void  ExitCleanUp ();
 
     void  GetNextScanLine (uchar*  lineBuff,
-                           uint32  lineBuffSize,
-                           uint32& lineLen
+                           kkuint32  lineBuffSize,
+                           kkuint32& lineLen
                           );
 
     /*  Methods and variables needed for both reading and writing scanner files. */
@@ -222,37 +222,37 @@ namespace SipperHardware
     /** Methods and variables that are required for reading a scanner file. */
     void  ProcessTextBlock (const OpRec&  rec);
     void  ProcessInstrumentDataWord (const OpRec&  rec);
-    void  AllocateRawPixelRecBuffer (uint32 size);
-    void  ProcessRawPixelRecs (uint16  numRawPixelRecs,
+    void  AllocateRawPixelRecBuffer (kkuint32 size);
+    void  ProcessRawPixelRecs (kkuint16  numRawPixelRecs,
                                uchar*  lineBuff,
-                               uint32  lineBuffSize,
-                               uint32& bufferLineLen
+                               kkuint32  lineBuffSize,
+                               kkuint32& bufferLineLen
                               );
 
     RawPixelRec*  rawPixelRecBuffer;
-    uint32        rawPixelRecBufferSize;
-    uint32        rawPixelRecBufferLen;
+    kkuint32      rawPixelRecBufferSize;
+    kkuint32      rawPixelRecBufferLen;
 
     /** Methods and variables that are required for writting a scanner file. */
 
-    void  AllocateRawStr (uint16  size);
-    void  ReSizeEncodedBuff (uint32  newSize);
+    void  AllocateRawStr (kkuint16  size);
+    void  ReSizeEncodedBuff (kkuint32  newSize);
 
     typedef  enum  {csNull, csRunLen, csRaw}  CompStatus;
 
     OpRecPtr  encodedBuff;           /**< This is where compressed data will be stored before writing to scanner file.  */
     OpRecPtr  encodedBuffNext;       /**< Pointer to next position in encodedBuff to write to.                          */
-    uint32    encodedBuffSize;       /**< Size of 'encodedBuff' allocated.                                              */
-    uint32    encodedBuffLen;        /**< Number of bytes used so far.                                                  */
+    kkuint32  encodedBuffSize;       /**< Size of 'encodedBuff' allocated.                                              */
+    kkuint32  encodedBuffLen;        /**< Number of bytes used so far.                                                  */
 
-    uint32    pixelsPerScanLine;
+    kkuint32  pixelsPerScanLine;
 
     uchar*    rawStr;
-    uint16    rawStrLen;
-    uint16    rawStrSize;
-    //uint16    rawStrNumSameInARow;
+    kkuint16  rawStrLen;
+    kkuint16  rawStrSize;
+    //kkuint16  rawStrNumSameInARow;
 
-    int32  runLen;
+    kkint32  runLen;
     uchar  runLenChar;
     CompStatus  curCompStatus;
   };  /* SipperBuff4Bit */

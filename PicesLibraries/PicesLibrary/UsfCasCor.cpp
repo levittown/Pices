@@ -23,10 +23,10 @@ using namespace std;
 #include "MemoryDebug.h"
 using namespace  std;
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "OSservices.h"
 #include "XmlStream.h"
-using namespace  KKU;
+using namespace  KKB;
 
 #include "MLClass.h"
 #include "FeatureVector.h"
@@ -217,7 +217,7 @@ using namespace  MLL;
 
 
 // Forward Declarations.
-KKU::int32   GetProcessId ();
+KKB::kkint32 GetProcessId ();
 long long    GetLocalDateTime ();
 char*        GetDsiplayableTime ();
 char* index (char* str, int c);
@@ -418,13 +418,13 @@ UsfCasCor::~UsfCasCor ()
 
 template<typename T>
 void  UsfCasCor::Delete2DArray (T**     &A,    
-                                uint32  numRows
+                                kkuint32  numRows
                                )
 {
   if  (!A)
     return;
 
-  for  (uint32 x = 0;  x < numRows;  ++x)
+  for  (kkuint32 x = 0;  x < numRows;  ++x)
   {
     delete  A[x];
     A[x] = NULL;
@@ -481,9 +481,9 @@ void  UsfCasCor::CleanUpMemory ()
 
 
 
-int32  UsfCasCor::MemoryConsumedEstimated ()  const
+kkint32  UsfCasCor::MemoryConsumedEstimated ()  const
 {
-  int32  memoryConsumedEstimated = sizeof (*this);
+  kkint32  memoryConsumedEstimated = sizeof (*this);
 
   if  (feature_type)     memoryConsumedEstimated += Ninputs  * sizeof (int);
   if  (SumErrors)        memoryConsumedEstimated += Noutputs * sizeof (float);
@@ -752,11 +752,11 @@ ClassProbListPtr  UsfCasCor::PredictClassConfidences (FeatureVectorPtr  example)
 
 
 
-void  UsfCasCor::TrainNewClassifier (int32                  _in_limit,
-                                     int32                  _out_limit,
-                                     int32                  _number_of_rounds,
-                                     int32                  _number_of_trials,
-                                     int64                  _the_random_seed,
+void  UsfCasCor::TrainNewClassifier (kkint32                _in_limit,
+                                     kkint32                _out_limit,
+                                     kkint32                _number_of_rounds,
+                                     kkint32                _number_of_trials,
+                                     kkint64                _the_random_seed,
                                      bool                   _useCache,
                                      FeatureVectorListPtr   _trainData,
                                      const FeatureNumList&  _selectedFeatures
@@ -814,17 +814,17 @@ FeatureVectorListPtr  UsfCasCor::FilterOutExtremeExamples (FeatureVectorListPtr 
 {
   // At this point the trainig data should be normalized.
 
-  int16          numSelFeatures = selectedFeatures->NumOfFeatures ();
-  const uint16*  selFeatures    = selectedFeatures->FeatureNums ();
+  kkint16        numSelFeatures = selectedFeatures->NumOfFeatures ();
+  const kkuint16*  selFeatures    = selectedFeatures->FeatureNums ();
  
-  FeatureVectorListPtr result = new FeatureVectorList (trainExamples->FileDesc (), false, log, -1);
+  FeatureVectorListPtr result = new FeatureVectorList (trainExamples->FileDesc (), false, log);
   FeatureVectorList::iterator  idx;
   for  (idx = trainExamples->begin ();  idx != trainExamples->end ();  ++idx)
   {
     bool extremeValuesFound = false;
     FeatureVectorPtr fv = *idx;
 
-    for  (int32 x = 0;  x < numSelFeatures;  ++x)
+    for  (kkint32 x = 0;  x < numSelFeatures;  ++x)
     {
       if  (fabs (fv->FeatureData (selFeatures[x])) > 1000.0)
       {
@@ -1900,7 +1900,7 @@ void  UsfCasCor::ReadXmlArrayFloat (XmlTagPtr  tag,
 
   const KKStr&  name = tag->AttributeValue ("Name");
 
-  int32  len = tag->AttributeValue ("Len").ToInt32 ();
+  kkint32  len = tag->AttributeValue ("Len").ToInt32 ();
   if  ((len < 1)  ||  (len > 100000000))
   {
     log.Level (-1) << endl
@@ -1941,8 +1941,8 @@ void  UsfCasCor::ReadXmlArrayFloat2D (XmlTagPtr  tag,
 {
   const KKStr&  name = tag->AttributeValue ("Name");
 
-  int32  height = tag->AttributeValue ("height").ToInt32 ();
-  int32  width  = tag->AttributeValue ("width").ToInt32 ();
+  kkint32  height = tag->AttributeValue ("height").ToInt32 ();
+  kkint32  width  = tag->AttributeValue ("width").ToInt32 ();
   if  ((height < 1)  ||  (height > 100000000))
   {
     log.Level (-1) << endl
@@ -2059,7 +2059,7 @@ void  UsfCasCor::ReadXmlArrayFloat2DVarying (XmlTagPtr  tag,
 {
   const KKStr&  name = tag->AttributeValue ("Name");
 
-  int32  height = tag->AttributeValue ("height").ToInt32 ();
+  kkint32  height = tag->AttributeValue ("height").ToInt32 ();
   if  ((height < 1)  ||  (height > 100000000))
   {
     log.Level (-1) << endl
@@ -2112,7 +2112,7 @@ void  UsfCasCor::ReadXmlArrayFloat2DVarying (XmlTagPtr  tag,
     }
     else
     {
-      int32  width  = rowTag->AttributeValue ("width").ToInt32 ();
+      kkint32  width  = rowTag->AttributeValue ("width").ToInt32 ();
       if  ((width < 0)  ||  (width > 100000000))
       {
         log.Level (-1) << endl
@@ -2165,7 +2165,7 @@ void  UsfCasCor::ReadXmlArrayInt (XmlTagPtr  tag,
   int*  A = NULL;
 
   const KKStr&  name = tag->AttributeValue ("Name");
-  int32  len = tag->AttributeValue ("Len").ToInt32 ();
+  kkint32  len = tag->AttributeValue ("Len").ToInt32 ();
   if  ((len < 1)  ||  (len > 100000000))
   {
     log.Level (-1) << endl
@@ -2203,7 +2203,7 @@ void  UsfCasCor::ReadXmlConnections (XmlTagPtr  tag,
   delete  Connections; Connections = NULL;
 
   const KKStr&  name = tag->AttributeValue ("Name");
-  int32  len = tag->AttributeValue ("Len").ToInt32 ();
+  kkint32  len = tag->AttributeValue ("Len").ToInt32 ();
   if  ((len < 1)  ||  (len > 100000000))
   {
     log.Level (-1) << endl
@@ -2454,7 +2454,7 @@ void  UsfCasCor::ReadXml (istream&  i,
        ValuesCache = new float*[MaxCases];     //(float **)CALLOC(MaxCases, sizeof(float *));
        ErrorsCache = new float*[MaxCases];
 
-       for  (int32 i = 0;  i < MaxCases;  i++)
+       for  (kkint32 i = 0;  i < MaxCases;  i++)
        {
          ValuesCache[i] = new float[MaxUnits];
          ErrorsCache[i] = new float[Noutputs];
@@ -2462,13 +2462,13 @@ void  UsfCasCor::ReadXml (istream&  i,
      }
 
 
-    for  (int32 i = 0;  i < NTrainingPatterns;  i++)
+    for  (kkint32 i = 0;  i < NTrainingPatterns;  i++)
     {
       Values = ValuesCache[i];
       
       /* Unit values must be calculated in order because the activations */
       /* cascade down through the hidden layers */
-      for  (int32 j = 1 + Ninputs;  j < Nunits;  j++) 
+      for  (kkint32 j = 1 + Ninputs;  j < Nunits;  j++) 
          COMPUTE_UNIT_VALUE(j);
     }
   }
@@ -2498,7 +2498,7 @@ void  UsfCasCor::load_namesfile (FeatureVectorListPtr  trainExamples,
 
   NTestPatterns = 1;  // We will be testing one example at a time.
 
-  int32 feature_count = selectedFeatures->NumOfFeatures ();
+  kkint32 feature_count = selectedFeatures->NumOfFeatures ();
 
   delete  feature_type;
   feature_type = new int[feature_count];
@@ -4100,7 +4100,7 @@ void  UsfCasCor::load_data (FeatureVectorListPtr  trainExamples)
 ******************************************************************/
 void  UsfCasCor::_load_training_data (FeatureVectorListPtr  trainExamples)
 {
-  for  (int32 i = 0;  i < NTrainingPatterns;  ++i) 
+  for  (kkint32 i = 0;  i < NTrainingPatterns;  ++i) 
     _load_training_example (trainExamples->IdxToPtr (i), i);
 }  /* _load_training_data */
 
@@ -4119,16 +4119,16 @@ void  UsfCasCor::_load_training_example (FeatureVectorPtr  example,
       << endl;
   }
 
-  int32  j = 0;
+  kkint32  j = 0;
 
   const float*   featureData = example->FeatureData ();
-  const uint16*  featureNums = selectedFeatures->FeatureNums ();
+  const kkuint16*  featureNums = selectedFeatures->FeatureNums ();
 
   // at this point   nInputs should equal selecedFeatures->NumSelFeatures ()
   for  (j = 0;  j < Ninputs;  ++j)
     TrainingInputs[i][j] = featureData[featureNums[j]];
 
-  int32  k =  classes->PtrToIdx (example->MLClass ());
+  kkint32  k =  classes->PtrToIdx (example->MLClass ());
 
   for  (j = 0;  j < Noutputs;  j++)
   {
@@ -4147,7 +4147,7 @@ void  UsfCasCor::_load_training_example (FeatureVectorPtr  example,
 void  UsfCasCor::_load_test_data (FeatureVectorPtr  example)
 {
   const float*   featureData = example->FeatureData ();
-  const uint16*  featureNums = selectedFeatures->FeatureNums ();
+  const kkuint16*  featureNums = selectedFeatures->FeatureNums ();
 
   // at this point   nInputs should equal selecedFeatures->NumSelFeatures ()
   for  (int j = 0;  j < Ninputs;  ++j)

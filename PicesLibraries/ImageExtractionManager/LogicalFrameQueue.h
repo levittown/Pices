@@ -22,15 +22,15 @@ namespace  ImageExtractionManager
   {
   public:
     LogicalFrameQueue (const ExtractionParms&  _parms,
-                       uint32                  _maxSize,
-                       uint32                  _frameHeightMax,
-                       uint32                  _frameWidth,
+                       kkuint32                _maxSize,
+                       kkuint32                _frameHeightMax,
+                       kkuint32                _frameWidth,
                        const bool&             _cancelFlag
                       );
 
     ~LogicalFrameQueue ();
 
-    int32  MemoryConsumedEstimated ()  const;
+    kkint32  MemoryConsumedEstimated ()  const;
 
     void  AddBackToAvailableFrames (LogicalFramePtr   availableFrame);
 
@@ -61,7 +61,7 @@ namespace  ImageExtractionManager
 
 
     /** @brief Returns the number frames awaiting processing. */
-    uint32  FramesOnQueue ();
+    kkuint32  FramesOnQueue ();
 
 
   private:
@@ -69,10 +69,10 @@ namespace  ImageExtractionManager
 
 
     const ExtractionParms&  parms;
-    uint32                  frameHeightMax;
-    uint32                  frameWidth;
-    uint32                  maxSize;
-    uint32                  totalFramesAllocated;
+    kkuint32                frameHeightMax;
+    kkuint32                frameWidth;
+    kkuint32                maxSize;
+    kkuint32                totalFramesAllocated;
 
     std::vector<LogicalFramePtr>   allFrames;                  /**<  Owns all 'LogicalFrame' instances.                                     */
     std::queue<LogicalFramePtr>    availableFrames;            /**<  Frames not in use.                                                     */

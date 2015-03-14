@@ -16,14 +16,14 @@
 using namespace std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "DateTime.h"
 #include "GlobalGoalKeeper.h"
 #include "ImageIO.h"
 #include "OSservices.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 #include "InstrumentDataFileManager.h"
 #include "SipperVariables.h"
@@ -72,9 +72,9 @@ FeatureFileIOPices::~FeatureFileIOPices ()
 
 
 void  FeatureFileIOPices::Parse_FEATURE_DATA_FILE_Line (KKStr&  line,
-                                                        int32&  version,
-                                                        int32&  numOfFields,
-                                                        int32&  numOfExamples
+                                                        kkint32&  version,
+                                                        kkint32&  numOfFields,
+                                                        kkint32&  numOfExamples
                                                        )
 {
   KKStr  field = line.ExtractToken (" ,\t\n\r");  // Skip past FEATURE_DATA_FILE field.
@@ -107,16 +107,16 @@ void  FeatureFileIOPices::Parse_FEATURE_DATA_FILE_Line (KKStr&  line,
 
 
 VectorInt  FeatureFileIOPices::CreateIndirectionTable (const VectorKKStr&  fields,
-                                                       int32               numOfFeatures
+                                                       kkint32             numOfFeatures
                                                       )
 {
   VectorInt   indirectionTable;
-  int32  fieldNum = 0;
+  kkint32  fieldNum = 0;
 
   for  (fieldNum = 0;  fieldNum < numOfFeatures;  fieldNum++)
     indirectionTable.push_back (rfFeatureData);
 
-  for  (fieldNum = numOfFeatures;  fieldNum < (int32)fields.size ();  fieldNum++)
+  for  (fieldNum = numOfFeatures;  fieldNum < (kkint32)fields.size ();  fieldNum++)
   {
     KKStr  fieldName = fields[fieldNum].ToLower ();
     if  (fieldName == "classname")
@@ -186,7 +186,7 @@ VectorInt  FeatureFileIOPices::CreateIndirectionTable (const VectorKKStr&  field
 FileDescPtr  FeatureFileIOPices::GetFileDesc (const KKStr&         _fileName,
                                               istream&             _in,
                                               MLClassConstListPtr  _classes,
-                                              int32&               _estSize,
+                                              kkint32&               _estSize,
                                               KKStr&               _errorMessage,
                                               RunLog&              _log
                                              )
@@ -199,7 +199,7 @@ FileDescPtr  FeatureFileIOPices::GetFileDesc (const KKStr&         _fileName,
   KKStr  firstLine (buff);
   firstLine.Upper ();
 
-  int32  numOfFields = 0;
+  kkint32  numOfFields = 0;
   if  (firstLine.SubStrPart (0, 16) != "FEATURE_DATA_FILE")
   {
     // We are looking at a very old RAW file,  need to scan for number of fields.
@@ -212,9 +212,9 @@ FileDescPtr  FeatureFileIOPices::GetFileDesc (const KKStr&         _fileName,
     return NULL;
   }
 
-  int32  version       = -1;
-  int32  numOfFeatures = -1;
-  int32  numOfExamples = -1;
+  kkint32  version       = -1;
+  kkint32  numOfFeatures = -1;
+  kkint32  numOfExamples = -1;
   Parse_FEATURE_DATA_FILE_Line (firstLine, version, numOfFeatures, numOfExamples);
    if  (version < 39)
   {
@@ -231,15 +231,15 @@ FileDescPtr  FeatureFileIOPices::GetFileDesc (const KKStr&         _fileName,
   _in.getline (buff, sizeof (buff) - 1);
   KKStr  fieldDescLn (buff);
   VectorKKStr  fields = fieldDescLn.Split ("\n\r\t");
-  if  (fields.size () < (uint32)numOfFeatures)
+  if  (fields.size () < (kkuint32)numOfFeatures)
   {
     _log.Level (-1) << endl << endl << endl
                     << "FeatureFileIOPices::GetFileDesc     **** Error ***"  << endl
                     << endl
-                    << "               Num fields[" << (uint32)fields.size () << "]  is less than the number specified." << endl
+                    << "               Num fields[" << (kkuint32)fields.size () << "]  is less than the number specified." << endl
                     << endl
                     << endl;
-    _errorMessage << "Num fields[" << (uint32)fields.size () << "]  is less than the number specified." << endl;
+    _errorMessage << "Num fields[" << (kkuint32)fields.size () << "]  is less than the number specified." << endl;
     return NULL;
   }
   
@@ -247,7 +247,7 @@ FileDescPtr  FeatureFileIOPices::GetFileDesc (const KKStr&         _fileName,
   fd->Version (version);
 
   bool  alreadyExists;
-  int32  featureNum = 0;
+  kkint32  featureNum = 0;
   for  (featureNum = 0;  featureNum < numOfFeatures;  featureNum++)
   {
     KKStr&  fieldName = fields[featureNum];
@@ -309,9 +309,9 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&       _fileName
     return  NULL;
   }
 
-  int32  version         = -1;
-  int32  numOfFeatures   = -1;
-  int32  numOfExamples   = -1;
+  kkint32  version         = -1;
+  kkint32  numOfFeatures   = -1;
+  kkint32  numOfExamples   = -1;
   Parse_FEATURE_DATA_FILE_Line (firstLine, version, numOfFeatures, numOfExamples);
   if  (version < 38)
   {
@@ -329,15 +329,15 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&       _fileName
   _in.getline (buff, sizeof (buff) - 1);
   KKStr  fieldDescLine (buff);
   VectorKKStr  fields = fieldDescLine.Parse ("\n\r\t");
-  if  ((int32)fields.size () < numOfFeatures)
+  if  ((kkint32)fields.size () < numOfFeatures)
   {
     _log.Level (-1) << endl << endl << endl
                    << "FeatureFileIOPices::LoadFile     **** Error ***"  << endl
                    << endl
-                   << "               Num fields[" << (uint32)fields.size () << "]  is less than the number specified." << endl
+                   << "               Num fields[" << (kkuint32)fields.size () << "]  is less than the number specified." << endl
                    << endl
                    << endl;
-    _errorMessage << "Num fields[" << (uint32)fields.size () << "]  is less than the number specified." << endl;
+    _errorMessage << "Num fields[" << (kkuint32)fields.size () << "]  is less than the number specified." << endl;
     return  NULL;
   }
 
@@ -351,18 +351,18 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&       _fileName
 
   examples->Version (version);
 
-  int32  fieldNum = 0;
+  kkint32  fieldNum = 0;
 
   bool  eof = false;
   bool  eol = false;
 
   KKStr  className;
   char   firstChar;
-  int32    lineCount = 0;
+  kkint32  lineCount = 0;
 
-  FFLOAT  value;
+  FVFloat  value;
 
-  int32  lineNum = 0;
+  kkint32  lineNum = 0;
 
   eof = false;
   eol = false;
@@ -370,7 +370,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&       _fileName
   KKStr field (128);
 
   GetToken (_in, ",\t", field, eof, eol);
-  while  ((!eof)   &&  (!_cancelFlag)   &&  (((int32)examples->size () < _maxCount)  ||  (_maxCount < 0)))
+  while  ((!eof)   &&  (!_cancelFlag)   &&  (((kkint32)examples->size () < _maxCount)  ||  (_maxCount < 0)))
   {
     if  (eol)
     {
@@ -394,7 +394,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&       _fileName
       {
         field.TrimRight ();
 
-        if  (fieldNum >= (int32)indirectionTable.size ())
+        if  (fieldNum >= (kkint32)indirectionTable.size ())
         {
           _log.Level (-1) << endl << endl << endl
                           << "FeatureFileIOPices::LoadFile     **** Error ***"  << endl
@@ -417,7 +417,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&       _fileName
             KKStr  temp = field.ToUpper ();
             if  ((temp == "INFINITY")  || (temp == "NAN"))
             {
-              example->AddFeatureData (fieldNum,  FFLOAT_MAX);
+              example->AddFeatureData (fieldNum, FloatMax);
             }
             else
             {
@@ -436,7 +436,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&       _fileName
 
           else
           {
-            value = (FFLOAT)atof (field.Str ());
+            value = (FVFloat)atof (field.Str ());
             example->AddFeatureData (fieldNum,  value);
           }
           break;
@@ -457,7 +457,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&       _fileName
           break;
 
         case rfOrigSize: 
-          example->OrigSize ((FFLOAT)atof (field.Str ()));
+          example->OrigSize ((FVFloat)atof (field.Str ()));
           break;
 
         case rfNumOfEdgePixels: 
@@ -469,11 +469,11 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&       _fileName
           break;
 
         case rfCentroidRow: 
-          example->CentroidRow((FFLOAT)atof (field.Str ()));
+          example->CentroidRow((FVFloat)atof (field.Str ()));
           break;
 
         case rfCentroidCol: 
-          example->CentroidCol ((FFLOAT)atof (field.Str ()));
+          example->CentroidCol ((FVFloat)atof (field.Str ()));
           break;
 
         case rfPredictedClass: 
@@ -581,7 +581,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&       _fileName
 
   InstrumentDataFileManager::InitializePop ();
 
-  _log.Level (10) << "LoadFile - Loaded [" << (int32)examples->size () << "] images from file[" << _fileName << "]." << endl;
+  _log.Level (10) << "LoadFile - Loaded [" << (kkint32)examples->size () << "] images from file[" << _fileName << "]." << endl;
 
   return  examples;
 }  /* LoadFile */
@@ -595,7 +595,7 @@ void   FeatureFileIOPices::SaveFile (FeatureVectorList&     _data,
                                      const KKStr&           _fileName,
                                      const FeatureNumList&  _selFeatures,
                                      ostream&               _out,
-                                     uint32&                _numExamplesWritten,
+                                     kkuint32&                _numExamplesWritten,
                                      VolConstBool&          _cancelFlag,
                                      bool&                  _successful,
                                      KKStr&                 _errorMessage,
@@ -622,7 +622,7 @@ void   FeatureFileIOPices::SaveFile (FeatureVectorList&     _data,
 
   ClassStatisticListPtr  classStatistics = examples->GetClassStatistics ();
 
-  int32  fileVersionNum = examples->Version ();
+  kkint32  fileVersionNum = examples->Version ();
   if  (fileVersionNum < 1)
   {
     fileVersionNum = CurrentFeatureFileVersionNum;
@@ -639,10 +639,10 @@ void   FeatureFileIOPices::SaveFile (FeatureVectorList&     _data,
        << endl;
 
   {
-    int32  idx;
+    kkint32  idx;
     for  (idx = 0;  idx < _selFeatures.NumOfFeatures ();  idx++)
     { 
-      int32  featureNum = _selFeatures[idx];
+      kkint32  featureNum = _selFeatures[idx];
       _out << fileDesc->FieldName (featureNum) << "\t";
     }
  
@@ -666,7 +666,7 @@ void   FeatureFileIOPices::SaveFile (FeatureVectorList&     _data,
 
   {
     // Write out Class Statistics
-    int32  seqNum = 0;
+    kkint32  seqNum = 0;
     ClassStatisticList::iterator  idx;
     for  (idx = classStatistics->begin ();  idx != classStatistics->end ();  idx++)
     {
@@ -685,21 +685,21 @@ void   FeatureFileIOPices::SaveFile (FeatureVectorList&     _data,
   {
     // Write out the actual examples.
     ImageFeaturesPtr   example = NULL;
-    for  (int32 idx = 0; idx < (int32)examples->size (); idx++)
+    for  (kkint32 idx = 0; idx < (kkint32)examples->size (); idx++)
     {
       example = examples->IdxToPtr (idx);
 
-      int32  x;  
+      kkint32  x;  
       for  (x = 0; x < _selFeatures.NumOfFeatures (); x++)
       {
-        int32  featureNum = _selFeatures[x];
+        kkint32  featureNum = _selFeatures[x];
         _out << example->FeatureData (featureNum) << "\t";
       }
 
       {
-        int32  mlClassIdx = classIdx.GetClassIndex (example->MLClass        ());
-        int32  predClassIdx  = classIdx.GetClassIndex (example->PredictedClass ());
-        int32  p = (int32)_out.precision ();
+        kkint32  mlClassIdx = classIdx.GetClassIndex (example->MLClass        ());
+        kkint32  predClassIdx  = classIdx.GetClassIndex (example->PredictedClass ());
+        kkint32  p = (kkint32)_out.precision ();
         _out.precision (11);
         _out << example->ClassName          () << "\t" 
              << mlClassIdx                     << "\t"
@@ -739,7 +739,7 @@ void   FeatureFileIOPices::SaveFile (FeatureVectorList&     _data,
 
 
 
-int32 FeatureFileIOPices::MaxNumPlanktonRawFields = 88;
+kkint32 FeatureFileIOPices::MaxNumPlanktonRawFields = 88;
 const  char*  FeatureFileIOPices::PlanktonRawFeatureDecriptions[] =
 {
   "Size",                    //  0
@@ -850,7 +850,7 @@ const  char*  FeatureFileIOPices::PlanktonRawFeatureDecriptions[] =
 
 
 
-KKStr   FeatureFileIOPices::PlanktonFieldName (int32  fieldNum)
+KKStr   FeatureFileIOPices::PlanktonFieldName (kkint32  fieldNum)
 {
   if  ((fieldNum < 0)  ||  (fieldNum >= MaxNumPlanktonRawFields))
   {
@@ -872,7 +872,7 @@ KKStr   FeatureFileIOPices::PlanktonFieldName (int32  fieldNum)
 
 
 
-int32   FeatureFileIOPices::PlanktonMaxNumOfFields ()
+kkint32 FeatureFileIOPices::PlanktonMaxNumOfFields ()
 {
   return  MaxNumPlanktonRawFields;
 }
@@ -949,7 +949,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadInSubDirectoryTree
       if  (changesMade)
       {
         KKStr  fullFileName = osAddSlash (_rootDir) + featureFileName;
-        uint32  numExamplesWritten = 0;
+        kkuint32  numExamplesWritten = 0;
         bool  cancel     = false;
         bool  successful = false;
         driver.SaveFeatureFile (fullFileName,
@@ -1218,8 +1218,8 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
 
   KKStrPtr  imageFileName;
 
-  int32  numImagesFoundInOrigFeatureData = 0;
-  int32  numOfNewFeatureExtractions = 0;
+  kkint32  numImagesFoundInOrigFeatureData = 0;
+  kkint32  numOfNewFeatureExtractions = 0;
 
   for  (fnIDX = fileNameList->begin ();  (fnIDX != fileNameList->end ())  &&  (!_cancelFlag);  ++fnIDX)
   {
@@ -1375,7 +1375,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
   {
     //extractedFeatures->WriteImageFeaturesToFile (fullFeatureFileName, RawFormat, FeatureNumList::AllFeatures (extractedFeatures->FileDesc ()));
 
-    uint32  numExamplesWritten = 0;
+    kkuint32  numExamplesWritten = 0;
 
     driver.SaveFeatureFile (fullFeatureFileName,
                             FeatureNumList::AllFeatures (extractedFeatures->FileDesc ()),
@@ -1415,7 +1415,7 @@ FileDescPtr  FeatureFileIOPices::NewPlanktonFile (RunLog&  _log)
   {
     bool  alreadyExists = false;
     planktonFileDesc = new FileDesc ();
-    for  (int32 fieldNum = 0;  fieldNum < MaxNumPlanktonRawFields;  fieldNum++)
+    for  (kkint32 fieldNum = 0;  fieldNum < MaxNumPlanktonRawFields;  fieldNum++)
       planktonFileDesc->AddAAttribute (PlanktonFieldName (fieldNum), NumericAttribute, alreadyExists);
 
     // Lets make sure that one was already created by opening up a data file.

@@ -1,13 +1,13 @@
-/* BasicTypes.h -- Fundemental types used throught the KKU  namespace.  
+/* KKBaseTypes.h -- Fundemental types used throught the KKB  namespace.  
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 
 #ifndef  _BASICTYPES_
 #define  _BASICTYPES_
 
  /*-------------------------------------------------------------------------------------------------------------------
-  File        : BasicTypes.h
+  File        : KKBaseTypes.h
   Description : Contains definitions that are common to all classes in BaseLibrary.
   Author      : Kurt Kramer
   Institution : The Kramer Family.
@@ -17,12 +17,12 @@
 
 
 /**  
- *@file BasicTypes.h
+ *@file KKBaseTypes.h
  *@brief  This include file contains common definitions that are used by all classes in BaseLibrary.
  *
  *@par Description
- *This is the reference page for the BaseLibrary BasicTypes.h include file.\n
- *This reference page describes the types and definitions defined in the file \p BasicTypes.h.
+ *This is the reference page for the BaseLibrary KKBaseTypes.h include file.\n
+ *This reference page describes the types and definitions defined in the file \p KKBaseTypes.h.
  *It is not very detailed.
  *
  *@par Author 
@@ -61,17 +61,17 @@
 #define  ENCLOSE_IN_QUOTES(x) #x
 
 /*---------------------------------------------------------------------------
-  Definition of the namespace "KKU"  which stands for Kurt Kramer Utilities.
+  Definition of the namespace "KKB"  which stands for Kurt Kramer Utilities.
   ---------------------------------------------------------------------------*/
 
 /**
- *@namespace KKU  Kurt Kramer Utilities
+ *@namespace KKB  Kurt Kramer Utilities
  *This namespace is intended to gather BaseLibrary Classes together.
  *@par Author 
  *<a href="http://figment.cse.usf.edu/~kkramer/">Kurt Kramer.</a><br>
  *( mail : <a href="mailto:kurtkramer@gmail.com">kurtkramer@gmail.com</a> )<br>
  */
-namespace KKU
+namespace KKB
 {
   typedef  unsigned  char   uchar;    /**< @brief  Unsigned character. */
   typedef  unsigned  int    uint;     /**< @brief  Unsigned integer.   */
@@ -84,16 +84,16 @@ namespace KKU
     typedef  unsigned __int8   uint8;
     typedef  unsigned __int8   kkuint8;
     typedef  __int16           int16;     /**<@brief  16 bit signed integer. */
-    typedef  unsigned __int16  uint16;    /**<@brief  16 bit unsigned integer. */
+    typedef  unsigned __int16  kkuint16;    /**<@brief  16 bit unsigned integer. */
     typedef  unsigned __int16  kkuint16;  /**<@brief  16 bit unsigned integer. */
     //typedef  wchar_t          WCHAR;
-    typedef  __int32           int32;
     typedef  __int32           kkint32;
-    typedef  unsigned __int32  uint32;
+    typedef  __int32           kkint32;
     typedef  unsigned __int32  kkuint32;
-    typedef  __int64           int64;
+    typedef  unsigned __int32  kkuint32;
     typedef  __int64           kkint64;
-    typedef  unsigned __int64  uint64;
+    typedef  __int64           kkint64;
+    typedef  unsigned __int64  kkuint64;
     typedef  unsigned __int64  kkuint64;
   #else
   #if  defined(__GNUG__)
@@ -102,16 +102,16 @@ namespace KKU
     typedef  uint8_t           uint8;    /**<@brief  8  bit unsigned integer. */
     typedef  uint8_t           kkuint8;  /**<@brief  8  bit unsigned integer. */
     typedef  int16_t           int16;    /**<@brief  16 bit signed integer. */
-    typedef  uint16_t          uint16;   /**<@brief  16 bit unsigned integer. */
+    typedef  uint16_t          kkuint16;   /**<@brief  16 bit unsigned integer. */
     typedef  uint16_t          kkuint16;
     typedef  unsigned short    WCHAR;
-    typedef  int32_t           int32;
     typedef  int32_t           kkint32;
-    typedef  uint32_t          uint32;
+    typedef  int32_t           kkint32;
     typedef  uint32_t          kkuint32;
-    typedef  int64_t           int64;
+    typedef  uint32_t          kkuint32;
     typedef  int64_t           kkint64;
-    typedef  uint64_t          uint64;
+    typedef  int64_t           kkint64;
+    typedef  uint64_t          kkuint64;
     typedef  uint64_t          kkuint64;
 #else
     typedef  __INT8_TYPE__     int8;
@@ -119,16 +119,16 @@ namespace KKU
     typedef  __UINT8_TYPE__    uint8;
     typedef  __UINT8_TYPE__    kkuint8;
     typedef  __INT16_TYPE__    int16;    /**<@brief  16 bit signed integer. */
-    typedef  __UINT16_TYPE__   uint16;   /**<@brief  16 bit unsigned integer. */
+    typedef  __UINT16_TYPE__   kkuint16;   /**<@brief  16 bit unsigned integer. */
     typedef  __UINT16_TYPE__   kkuint16;
     typedef  unsigned short    WCHAR;
-    typedef  __INT32_TYPE__    int32;
     typedef  __INT32_TYPE__    kkint32;
-    typedef  __UINT32_TYPE__   uint32;
+    typedef  __INT32_TYPE__    kkint32;
     typedef  __UINT32_TYPE__   kkuint32;
-    typedef  __INT64_TYPE__    int64;
+    typedef  __UINT32_TYPE__   kkuint32;
     typedef  __INT64_TYPE__    kkint64;
-    typedef  __UINT64_TYPE__   uint64;
+    typedef  __INT64_TYPE__    kkint64;
+    typedef  __UINT64_TYPE__   kkuint64;
     typedef  __UINT64_TYPE__   kkuint64;
   #endif
   #endif
@@ -150,11 +150,11 @@ namespace KKU
   typedef  std::vector<int>    VectorInt;
   typedef  std::vector<uint>   VectorUint;
   typedef  std::vector<int16>  VectorInt16;   /**< @brief  Vector of signed 16 bit integers.   */
-  typedef  std::vector<uint16> VectorUint16;  /**< @brief  Vector of unsigned 16 bit integers. */
+  typedef  std::vector<kkuint16> VectorUint16;  /**< @brief  Vector of unsigned 16 bit integers. */
   typedef  std::vector<short>  VectorShort;
   typedef  std::vector<ulong>  VectorUlong;
-  typedef  std::vector<int32>  VectorInt32;   /**< @brief  Vector of signed 16 bit integers.   */
-  typedef  std::vector<uint32> VectorUint32;  /**< @brief  Vector of unsigned 16 bit integers. */
+  typedef  std::vector<kkint32>  VectorInt32;   /**< @brief  Vector of signed 16 bit integers.   */
+  typedef  std::vector<kkuint32> VectorUint32;  /**< @brief  Vector of unsigned 16 bit integers. */
   typedef  std::vector<double> VectorDouble;  /**< @brief  Vector of doubles.                 */
   typedef  std::vector<float>  VectorFloat;
 
@@ -267,11 +267,11 @@ namespace KKU
   //* of the Unix functions lrand48 and srand48 in a windows     *
   //* environment.                                               *
   //**************************************************************
-  /** @brief Returns a long int32 random value. Can be called without first calling the SRand48 function, however, this is not recommended. */
-  int32  LRand48 ();
+  /** @brief Returns a long kkint32 random value. Can be called without first calling the SRand48 function, however, this is not recommended. */
+  kkint32  LRand48 ();
 
   /** @brief Seeds the lrand48 functions with the parameters passed to it. */
-  void  SRand48 (int64 _seed);
+  void  SRand48 (kkint64 _seed);
 
   bool  IsNaN (const float&  f);
 
@@ -289,8 +289,8 @@ namespace KKU
   union  WordFormat32Bits
   {
     WordFormat32Bits ();
-    WordFormat32Bits (uint32  d);
-    WordFormat32Bits (int32   d);
+    WordFormat32Bits (kkuint32  d);
+    WordFormat32Bits (kkint32 d);
     WordFormat32Bits (uchar b0, uchar b1,  uchar b2,  uchar b3);
 
     struct
@@ -301,12 +301,12 @@ namespace KKU
       uchar   byte3;
     }  fourBytes;
 
-    uint32  unsigned32BitInt;
-    uint32  signed32BitInt;
+    kkuint32  unsigned32BitInt;
+    kkuint32  signed32BitInt;
   };
   #pragma pack(pop)
 
-}  /* namespace KKU */
+}  /* namespace KKB */
 
 
 #endif

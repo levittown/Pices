@@ -1,20 +1,20 @@
-#include  "FirstIncludes.h"
+#include "FirstIncludes.h"
 
-#include  <ctype.h>
-#include  <math.h>
-#include  <stdio.h>
+#include <ctype.h>
+#include <math.h>
+#include <stdio.h>
 
-#include  <iostream>
-#include  <string>
-#include  <vector>
+#include <iostream>
+#include <string>
+#include <vector>
 
-#include  "MemoryDebug.h"
+#include "MemoryDebug.h"
 
 using namespace std;
 
 
-#include  "BasicTypes.h"
-using namespace KKU;
+#include "KKBaseTypes.h"
+using namespace KKB;
 
 
 
@@ -68,11 +68,11 @@ float  ToFloat (KKStr  s,
   bool  negNum = false;
   bool  decimalDetected = false;
 
-  int32  intPart   = 0;
-  int32  fractPart = 0;
-  int32  fractPartDivisor = 1;
+  kkint32  intPart   = 0;
+  kkint32  fractPart = 0;
+  kkint32  fractPartDivisor = 1;
   
-  int32  x = 0;
+  kkint32  x = 0;
   if  ((s[x] == '-')  &&  (s.Len () > 0))
   {
     negNum = true;
@@ -163,17 +163,17 @@ CTD_Plus_Data::CTD_Plus_Data (const KKStr&  _txt,
 {
   valid = true;
 
-  int32  expNumExtVoltages = (ext0CCode.Empty () ? 0:1) + (ext1CCode.Empty () ? 0:1) + (ext2CCode.Empty () ? 0:1) + (ext3CCode.Empty () ? 0:1);
+  kkint32  expNumExtVoltages = (ext0CCode.Empty () ? 0:1) + (ext1CCode.Empty () ? 0:1) + (ext2CCode.Empty () ? 0:1) + (ext3CCode.Empty () ? 0:1);
 
   VectorKKStr  fields = _txt.Split (",");
-  int32  numExternalVoltages = (int32)fields.size () - 9;  // Ther are 9 fixed fields and then up to four external voltages.
+  kkint32  numExternalVoltages = (kkint32)fields.size () - 9;  // Ther are 9 fixed fields and then up to four external voltages.
   if  (numExternalVoltages != expNumExtVoltages)
   {
     valid = false;
     return;
   }
 
-  int32  fieldNum = 0;
+  kkint32  fieldNum = 0;
 
   temperature  = ToFloat (fields[fieldNum], valid);  fieldNum++;
   if  (!valid)
@@ -188,7 +188,7 @@ CTD_Plus_Data::CTD_Plus_Data (const KKStr&  _txt,
     return;
 
 
-  int32 numExtenalVoltsProcessed = 0;
+  kkint32 numExtenalVoltsProcessed = 0;
   if  (numExtenalVoltsProcessed < numExternalVoltages)
   {
     UpdateExternalVoldtageField (ext0CCode, fields[fieldNum], numExtenalVoltsProcessed, fieldNum, valid);
@@ -309,8 +309,8 @@ CTD_Plus_Data::CTD_Plus_Data (const KKStr&  _txt,
 
   void   CTD_Plus_Data::UpdateExternalVoldtageField (const KKStr&  extCode,
                                                      const KKStr&  amtField,
-                                                     int32&        numExtenalVoltsProcessed,
-                                                     int32&        fieldNum,
+                                                     kkint32&        numExtenalVoltsProcessed,
+                                                     kkint32&        fieldNum,
                                                      bool&         valid
                                                     )
   {

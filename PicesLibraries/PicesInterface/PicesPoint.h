@@ -29,7 +29,7 @@ namespace PicesInterface
 
     PicesPoint (Drawing::Point^  p);
 
-    PicesPoint (const KKU::Point&  p);
+    PicesPoint (const KKB::Point&  p);
 
 
 
@@ -92,7 +92,7 @@ namespace PicesInterface
                                float  widthFactor
                               );
 
-    KKU::PointListPtr  ToUnmanaged ();
+    KKB::PointListPtr  ToUnmanaged ();
 
     bool  Equal (PicesPointList^  right);
     bool  NotEqual (PicesPointList^  right);

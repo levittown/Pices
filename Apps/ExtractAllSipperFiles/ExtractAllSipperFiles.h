@@ -20,7 +20,7 @@ public:
   const char*  ApplicationName () const {return  "ExtractAllSipperFiles";}
 
   virtual
-  void  InitalizeApplication (int32   argc,
+  void  InitalizeApplication (kkint32 argc,
                               char**  argv
                              );
   void  Run ();

@@ -12,7 +12,7 @@
 #include  "ImageFeatures.h"
 #include  "Orderings.h"
 #include  "RunLog.h"
-#include  "Str.h"
+#include  "KKStr.h"
 #include  "TrainingConfiguration.h"
 
 #include  "DataSetParameters.h"

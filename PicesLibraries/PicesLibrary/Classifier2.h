@@ -79,24 +79,24 @@ typedef  TrainingProcess2*  TrainingProcess2Ptr;
     void  ClassifyAImage (FeatureVector&    xample,
                           MLClassConstPtr&  redClass1,
                           MLClassConstPtr&  redClass2,
-                          int32&            redClass1Votes,
-                          int32&            redClass2Votes,
+                          kkint32&            redClass1Votes,
+                          kkint32&            redClass2Votes,
                           double&           nownClassProb,
                           double&           redClass1Prob,
                           double&           redClass2Prob,
-                          int32&            umOfWinners,
+                          kkint32&            umOfWinners,
                           double&           reakTie,
                           double&           ompact
                          );
  
     MLClassConstPtr   ClassifyAImage (FeatureVector&  example,
-                                      int32&          numOfWinners,
+                                      kkint32&          numOfWinners,
                                       bool&           knownClassOneOfTheWinners
                                      );
 
     MLClassConstPtr   ClassifyAImage (FeatureVector&  example,
                                       double&         probability,
-                                      int32&          numOfWinners,
+                                      kkint32&          numOfWinners,
                                       bool&           knownClassOneOfTheWinners,
                                       double&         breakTie
                                      );
@@ -113,7 +113,7 @@ typedef  TrainingProcess2*  TrainingProcess2Ptr;
      *@param[in]  c2  Class that it was classified as.
      */
     vector<ProbNamePair>  FindWorstSupportVectors (FeatureVectorPtr example,
-                                                   int32            numToFind,
+                                                   kkint32          numToFind,
                                                    MLClassConstPtr  c1,
                                                    MLClassConstPtr  c2
                                                   );
@@ -130,14 +130,14 @@ typedef  TrainingProcess2*  TrainingProcess2Ptr;
      *@param[in]  c2  Class that it was classified as.
      */
     vector<ProbNamePair>  FindWorstSupportVectors2 (FeatureVectorPtr example,
-                                                    int32            numToFind,
+                                                    kkint32          numToFind,
                                                     MLClassConstPtr  c1,
                                                     MLClassConstPtr  c2
                                                    );
 
 
     virtual
-    int32   MemoryConsumedEstimated ()  const;
+    kkint32 MemoryConsumedEstimated ()  const;
 
     /**
      *@brief  For a given feature vector return back the probabilities and votes for each class.
@@ -149,7 +149,7 @@ typedef  TrainingProcess2*  TrainingProcess2Ptr;
      */
     void                 ProbabilitiesByClass (const MLClassConstList&  classes,
                                                FeatureVectorPtr         example,
-                                               int32*                   votes,
+                                               kkint32*                   votes,
                                                double*                  probabilities
                                               );
 
@@ -180,14 +180,14 @@ typedef  TrainingProcess2*  TrainingProcess2Ptr;
     MLClassConstPtr  ClassifyAImageOneLevel (FeatureVector&  example);
  
     MLClassConstPtr  ClassifyAImageOneLevel (FeatureVector&  example,
-                                             int32&          numOfWinners,
+                                             kkint32&          numOfWinners,
                                              bool&           knownClassOneOfTheWinners
                                             );
 
 
     MLClassConstPtr  ClassifyAImageOneLevel (FeatureVector&  example,
                                              double&         probability,
-                                             int32&          numOfWinners,
+                                             kkint32&          numOfWinners,
                                              bool&           knownClassOneOfTheWinners,
                                              double&         breakTie
                                             );

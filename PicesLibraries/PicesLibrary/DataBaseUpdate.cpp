@@ -24,9 +24,9 @@ using namespace std;
 
 
 // Base Library
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "OSservices.h"
-using namespace KKU;
+using namespace KKB;
 
 #include "DataBase.h"
 #include "DataBaseUpdate.h"
@@ -61,7 +61,7 @@ void  DataBaseUpdate::LoadSourceFile (const KKStr&  fileName,
                                      )
 {
   successful = true;
-  int32  fileSize = (int32)osGetFileSize (fileName);
+  kkint32  fileSize = (kkint32)osGetFileSize (fileName);
   if  (fileSize < 0)
   {
     KKStr errorMsg = "File[" + fileName + "] Not Found";
@@ -72,7 +72,7 @@ void  DataBaseUpdate::LoadSourceFile (const KKStr&  fileName,
     return;
   }
 
-  int32  maxLen = fileSize + 500;
+  kkint32  maxLen = fileSize + 500;
 
   char*  sqlStr = new char[maxLen + 1];   // "+ 1" added to account for terminating 0 if whil estring is used.
 
@@ -96,7 +96,7 @@ void  DataBaseUpdate::LoadSourceFile (const KKStr&  fileName,
 
 
   VectorKKStr  columnNames;
-  int32  sqlStrLen = fread (sqlStr, 1, maxLen, f);
+  kkint32  sqlStrLen = fread (sqlStr, 1, maxLen, f);
   sqlStr[sqlStrLen] = 0;
   KKStrMatrixPtr results = dbConn->QueryStatementReturnAllColumns (sqlStr, sqlStrLen, columnNames);
   if  (!results)

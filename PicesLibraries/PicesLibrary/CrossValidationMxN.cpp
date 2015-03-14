@@ -10,10 +10,10 @@
 using namespace std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "OSservices.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 
 
@@ -30,8 +30,8 @@ using namespace MLL;
 
 
 CrossValidationMxN::CrossValidationMxN (TrainingConfiguration2Ptr _config,
-                                        uint32                    _numOfOrderings,
-                                        uint32                    _numOfFolds,
+                                        kkuint32                  _numOfOrderings,
+                                        kkuint32                  _numOfFolds,
                                         FeatureVectorListPtr      _data,
                                         bool&                     _cancelFlag
                                        ):
@@ -147,7 +147,7 @@ void  CrossValidationMxN::RunValidations ()
 
   meanConfusionMatrix = new ConfusionMatrix2 (*(orderings->MLClasses ()));
 
-  uint32  cvIDX = 0;
+  kkuint32  cvIDX = 0;
 
   MLClassConstListPtr  mlClasses = orderings->MLClasses ();
 
@@ -203,13 +203,13 @@ void  CrossValidationMxN::RunValidations ()
  *            that are to be used for training, teh remainding examples will be 
  *            used as test data.
  */
-void  CrossValidationMxN::RunTrainAndTest (int32  numExamplsToUseForTraining)
+void  CrossValidationMxN::RunTrainAndTest (kkint32  numExamplsToUseForTraining)
 { 
   CleanUpMemory ();
 
   meanConfusionMatrix = new ConfusionMatrix2 (*(orderings->MLClasses ()));
 
-  uint32  cvIDX = 0;
+  kkuint32  cvIDX = 0;
 
   MLClassConstListPtr  mlClasses = orderings->MLClasses ();
 
@@ -275,7 +275,7 @@ void  CrossValidationMxN::RunTrainAndTest (int32  numExamplsToUseForTraining)
 
 
 void  CrossValidationMxN::ValidateOrderingIDX (const char*  desc,  
-                                               uint32       idx
+                                               kkuint32     idx
                                               )  const
 {
   if  (!orderings)

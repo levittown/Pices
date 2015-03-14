@@ -1,16 +1,16 @@
 #ifndef  _HASHTABLE_
 #define  _HASHTABLE_
 
-#include  "BasicTypes.h"
-#include  "Str.h"
+#include  "KKBaseTypes.h"
+#include  "KKStr.h"
 
 
 
 #ifndef  _KKSTR_
-Error,   You must include  "Str.h"  before  "HashTable.h"
+Error,   You must include  "KKStr.h"  before  "HashTable.h"
 #endif
 
-namespace  KKU
+namespace  KKB
 {
   class    HashEntry;
   typedef  HashEntry*  HashEntryPtr;
@@ -43,23 +43,23 @@ namespace  KKU
     HashEntryPtr*  table;
 
     bool           owner;
-    uint32         tableSize;
-    uint32         numOfEntries;
-    uint32         keyLen;
+    kkuint32       tableSize;
+    kkuint32       numOfEntries;
+    kkuint32       keyLen;
 
-    int32*           hashFactors;
+    kkint32*           hashFactors;
 
   public:
     HashTable (bool    _owner,  
-               uint32  _tableSize,  
-               uint32  _keyLen
+               kkuint32  _tableSize,  
+               kkuint32  _keyLen
               );
     
     ~HashTable ();
 
     void      AddEntry (EntryPtr  entry);
 
-    uint32    HashValue (const KKStr&  str);
+    kkuint32  HashValue (const KKStr&  str);
 
     bool      DeleteEntry (EntryPtr  _entry);
 
@@ -67,11 +67,11 @@ namespace  KKU
 
     void      Save (const KKStr&  fileName);
 
-    uint32         NumOfEntries ()  {return  numOfEntries;}
+    kkuint32       NumOfEntries ()  {return  numOfEntries;}
 
     HashEntryPtr*  Table ()         {return  table;}
 
-    uint32         TableSize ()     {return  tableSize;}
+    kkuint32       TableSize ()     {return  tableSize;}
   };  /* HashTable */
 
 
@@ -84,8 +84,8 @@ namespace  KKU
    */
   template <class Entry>
   HashTable<Entry>::HashTable (bool    _owner,
-                               uint32  _tableSize,  
-                               uint32  _keyLen
+                               kkuint32  _tableSize,  
+                               kkuint32  _keyLen
                               ):
       owner        (_owner),
       numOfEntries (0),
@@ -93,16 +93,16 @@ namespace  KKU
       keyLen       (_keyLen)
   {
     table = new HashEntryPtr[tableSize];
-    uint32  x;
+    kkuint32  x;
     for  (x = 0; x < tableSize; x++)
       table[x] = NULL;
 
-    hashFactors = new int32[keyLen];
+    hashFactors = new kkint32[keyLen];
 
-    int32  fact = 53;
-    int32  hashVal = 1;
+    kkint32  fact = 53;
+    kkint32  hashVal = 1;
 
-    int32  maxHashVal = _tableSize * 10; 
+    kkint32  maxHashVal = _tableSize * 10; 
 
     for  (x = 0; x < keyLen; x++)
     {
@@ -119,7 +119,7 @@ namespace  KKU
   HashTable<Entry>::~HashTable ()
   {
     HashEntryPtr  cur;
-    uint32        idx;
+    kkuint32      idx;
     HashEntryPtr  next;
 
     for  (idx = 0; idx < tableSize; idx++)
@@ -145,10 +145,10 @@ namespace  KKU
   template <class Entry>
   typename HashTable<Entry>::EntryPtr  HashTable<Entry>::LocateEntry (const KKStr&  key)
   {
-    uint32  hashValue = HashValue (key);
+    kkuint32  hashValue = HashValue (key);
 
-    // uint32  idx = CalcIndex (hashValue);
-    uint32  idx =  hashValue;
+    // kkuint32  idx = CalcIndex (hashValue);
+    kkuint32  idx =  hashValue;
 
     EntryPtr entry     = NULL;
 
@@ -173,7 +173,7 @@ namespace  KKU
   template <class Entry>
   void  HashTable<Entry>::AddEntry (EntryPtr  entry)
   {
-    uint32  hashValue = HashValue (entry->Key ());
+    kkuint32  hashValue = HashValue (entry->Key ());
 
     HashEntryPtr  next = table[hashValue];
 
@@ -191,7 +191,7 @@ namespace  KKU
   template <class Entry>
   bool  HashTable<Entry>::DeleteEntry (EntryPtr  entry)
   {
-    uint32  hashValue = HashValue (entry->Key ());
+    kkuint32  hashValue = HashValue (entry->Key ());
 
     HashEntryPtr next = table[hashValue];
     HashEntryPtr last = NULL;
@@ -228,12 +228,12 @@ namespace  KKU
 
 
   template <class Entry>
-  uint32  HashTable<Entry>::HashValue (const KKStr&  str)
+  kkuint32  HashTable<Entry>::HashValue (const KKStr&  str)
   {
     const char*  s = str.Str ();
-    int32  len = strlen (s);
-    int32 x = len;
-    uint32  y = 0;
+    kkint32  len = strlen (s);
+    kkint32 x = len;
+    kkuint32  y = 0;
     long  hashVal = 0;
 
     while  ((x > 0)  &&  (y < keyLen))
@@ -262,7 +262,7 @@ namespace  KKU
     }
 
     HashEntryPtr  next = NULL;
-    uint32  idx = 0;
+    kkuint32  idx = 0;
 
     while  (idx < TableSize ())
     {
@@ -279,7 +279,7 @@ namespace  KKU
 
     f.close ();
   }  /* Save */
-}  /* KKU */
+}  /* KKB */
 
 
 

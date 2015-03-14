@@ -13,10 +13,10 @@
 using namespace std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "OSservices.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 #include "InstrumentData.h"
 #include "InstrumentDataFileManager.h"
@@ -170,12 +170,12 @@ void  DataBaseImage::SizeCoordinates  (const KKStr  _sizeCoordinatesStr)
 
   sizeCoordinates = new PointList (true);
   VectorKKStr fields = _sizeCoordinatesStr.Split (',');
-  uint32 x = 0;
+  kkuint32 x = 0;
   while  ((x + 1) < fields.size ())
   {
-    int16 row = fields[x].ToInt16 ();
+    kkint16 row = fields[x].ToInt16 ();
     ++x;
-    int16 col = fields[x].ToInt16 ();
+    kkint16 col = fields[x].ToInt16 ();
     ++x;
     sizeCoordinates->PushOnBack (new Point (row, col));
   }
@@ -386,7 +386,7 @@ VectorFloat  DataBaseImageList::CalculateDensitesByQuadrat (float        scanRat
       id = InstrumentDataFileManager::GetClosestInstrumentData (i->ImageFileName (), cancelFlag, log);
       DateTime  deltaTime = id->CtdDate () - lastId->CtdDate ();
       float  avgFlowRate = (id->FlowRate1 () + lastId->FlowRate1 ()) / 2;
-      uint64  deltaSecs = deltaTime.Seconds ();
+      kkuint64  deltaSecs = deltaTime.Seconds ();
       float  deltaDist = avgFlowRate * deltaSecs;
       long  deltaScanLines = (long)((float)scanRate * deltaDist + 0.5f);
       scanLineLastImage = i->TopLeftRow () - deltaScanLines;
@@ -407,7 +407,7 @@ VectorFloat  DataBaseImageList::CalculateDensitesByQuadrat (float        scanRat
 
     float  newDist = distLastImage + deltaDist;
 
-    uint32  quadratIdx = (int32)(newDist / quadratSize);
+    kkuint32  quadratIdx = (kkint32)(newDist / quadratSize);
     while  (imagesPerQuadrat.size () <= quadratIdx)
       imagesPerQuadrat.push_back (0);
     imagesPerQuadrat[quadratIdx]++;
@@ -419,7 +419,7 @@ VectorFloat  DataBaseImageList::CalculateDensitesByQuadrat (float        scanRat
 
   float  areaPerQuatdrat = quadratSize * 0.098f;
   VectorFloat  density (imagesPerQuadrat.size (), 0.0f);
-  for  (uint32 x = 0;  x < imagesPerQuadrat.size ();  x++)
+  for  (kkuint32 x = 0;  x < imagesPerQuadrat.size ();  x++)
     density[x] = imagesPerQuadrat[x] / areaPerQuatdrat;
 
   InstrumentDataFileManager::InitializePop ();

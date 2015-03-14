@@ -15,12 +15,12 @@
 using namespace std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "DateTime.h"
 #include "OSservices.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 
 #include "FeatureFileIODstWeb.h"
@@ -104,7 +104,7 @@ FeatureFileIODstWeb::~FeatureFileIODstWeb ()
 FileDescPtr  FeatureFileIODstWeb::GetFileDesc (const KKStr&            _fileName,
                                                istream&                _in,
                                                MLClassConstListPtr  _classes,
-                                               int32&                  _estSize,
+                                               kkint32&                  _estSize,
                                                KKStr&                  _errorMessage,
                                                RunLog&                 _log
                                               )
@@ -139,7 +139,7 @@ FileDescPtr  FeatureFileIODstWeb::GetFileDesc (const KKStr&            _fileName
     line.TrimLeft ();
     line.TrimRight ();
 
-    int32  equalLoc = line.LocateCharacter ('=');
+    kkint32  equalLoc = line.LocateCharacter ('=');
     if  (equalLoc < 0)
     {
       _log.Level (-1) << endl << endl
@@ -199,7 +199,7 @@ FileDescPtr  FeatureFileIODstWeb::GetFileDesc (const KKStr&            _fileName
   AttrDescLineComparator  c;
   sort (attributes.begin (), attributes.end (), c);
 
-  uint32  x;
+  kkuint32  x;
   for  (x = 0;  x < attributes.size ();  x++)
   {
     bool  alreadyExists = false;
@@ -250,9 +250,9 @@ FeatureVectorListPtr  FeatureFileIODstWeb::LoadFile (const KKStr&       _fileNam
   MLClassConstPtr  trueClass  = _classes.GetMLClassPtr ("TRUE");
   MLClassConstPtr  falseClass = _classes.GetMLClassPtr ("FALSE");
 
-  int32  lineCount = 0;
+  kkint32  lineCount = 0;
 
-  int32  numOfFeatures = _fileDesc->NumOfFields ();
+  kkint32  numOfFeatures = _fileDesc->NumOfFields ();
 
   KKStr fileRootName = osGetRootName (_fileName);
 
@@ -278,7 +278,7 @@ FeatureVectorListPtr  FeatureFileIODstWeb::LoadFile (const KKStr&       _fileNam
     return  NULL;
   }
 
-  FeatureVectorListPtr  examples = new FeatureVectorList (_fileDesc, true, _log, 100);
+  FeatureVectorListPtr  examples = new FeatureVectorList (_fileDesc, true, _log);
 
   KKStr  classNameAttributeUpper (_fileDesc->ClassNameAttribute ());
   classNameAttributeUpper.Upper ();
@@ -299,10 +299,10 @@ FeatureVectorListPtr  FeatureFileIODstWeb::LoadFile (const KKStr&       _fileNam
     example->ImageFileName (idStr);
     {
       // Set all fields to False
-      int32  x;
+      kkint32  x;
       for  (x = 0;  x < numOfFeatures;  x++)
       {
-        int32 code = attributeTable[x]->GetNominalCode ("F");
+        kkint32 code = attributeTable[x]->GetNominalCode ("F");
         example->AddFeatureData (x, (float)code);
       }
     }
@@ -320,7 +320,7 @@ FeatureVectorListPtr  FeatureFileIODstWeb::LoadFile (const KKStr&       _fileNam
       }
       else
       {
-        int32  fieldNum = _fileDesc->GetFieldNumFromAttributeName (idStr);
+        kkint32  fieldNum = _fileDesc->GetFieldNumFromAttributeName (idStr);
         if  (fieldNum < 0)
         {
           _errorMessage << "Invalid Attribute[" << idStr + "]  Line[" << lineCount << "]";
@@ -334,7 +334,7 @@ FeatureVectorListPtr  FeatureFileIODstWeb::LoadFile (const KKStr&       _fileNam
           return  NULL;
         }
 
-        int32 code = attributeTable[fieldNum]->GetNominalCode ("T");
+        kkint32 code = attributeTable[fieldNum]->GetNominalCode ("T");
         example->AddFeatureData (fieldNum, (float)code);
       }
 
@@ -357,7 +357,7 @@ void   FeatureFileIODstWeb::SaveFile (FeatureVectorList&     _data,
                                       const KKStr&           _fileName,
                                       const FeatureNumList&  _selFeatures,
                                       ostream&               _out,
-                                      uint32&                _numExamplesWritten,
+                                      kkuint32&                _numExamplesWritten,
                                       VolConstBool&          _cancelFlag,
                                       bool&                  _successful,
                                       KKStr&                 _errorMessage,

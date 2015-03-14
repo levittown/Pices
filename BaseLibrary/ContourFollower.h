@@ -1,15 +1,15 @@
 /* ContourFollower.h -- Used to find the contour of image in a Raster object.
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #ifndef _CONTOURFOLLOWER_
 #define _CONTOURFOLLOWER_
 
 #include  <complex>
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "RunLog.h"
 
-namespace KKU
+namespace KKB
 {
   #ifndef  _POINT_
   class  Point;
@@ -34,60 +34,60 @@ namespace KKU
 
     PointListPtr  GenerateContourList ();
 
-    int32  FollowContour (float*  countourFreq,
+    kkint32  FollowContour (float*  countourFreq,
                           float   fourierDescriptors[15],
-                          int32   totalPixels,
+                          kkint32 totalPixels,
                           bool&   successful
                          );
 
-    int32  FollowContour2 (float*  countourFreq,
+    kkint32  FollowContour2 (float*  countourFreq,
                            bool&   successful
                           );
 
-    int32  CreateFourierDescriptorBySampling (int32    numOfBuckets,
+    kkint32  CreateFourierDescriptorBySampling (kkint32  numOfBuckets,
                                               float*  countourFreq,
                                               bool&    successful
                                              );
 
     void  HistogramDistanceFromAPointOfEdge (float     pointRow,
                                              float     pointCol,
-                                             int32     numOfBuckets,
-                                             int32*    buckets,
+                                             kkint32   numOfBuckets,
+                                             kkint32*    buckets,
                                              float&    minDistance,
                                              float&    maxDistance,
-                                             int32&    numOfEdgePixels
+                                             kkint32&    numOfEdgePixels
                                             );
 
 
   private:
 
-    void  GetFirstPixel (int32&  row,
-                         int32&  col
+    void  GetFirstPixel (kkint32&  row,
+                         kkint32&  col
                         );
 
-    void  GetNextPixel (int32&  row,
-                        int32&  col
+    void  GetNextPixel (kkint32&  row,
+                        kkint32&  col
                        );
 
-    int32  PixelCountIn9PixelNeighborhood (int32  row, 
-                                           int32  col
+    kkint32  PixelCountIn9PixelNeighborhood (kkint32  row, 
+                                           kkint32  col
                                           );
 
-    uchar  PixelValue (int32 row,
-                       int32 col
+    uchar  PixelValue (kkint32 row,
+                       kkint32 col
                       );
 
-    int32    curCol;
-    int32    curRow;
-    int32    fromDir;
-    int32    height;
-    int32    lastDir;
+    kkint32  curCol;
+    kkint32  curRow;
+    kkint32  fromDir;
+    kkint32  height;
+    kkint32  lastDir;
     RunLog&  log;
     Raster&  raster;
     uchar**  rows;
-    int32    width;
+    kkint32  width;
   }; /* ContourFollower*/
 
-} /* namespace KKU; */
+} /* namespace KKB; */
 
 #endif

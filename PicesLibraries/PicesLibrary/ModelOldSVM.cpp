@@ -11,15 +11,15 @@
 #include <set>
 #include <vector>
 #include "MemoryDebug.h"
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 using namespace  std;
 
 
 #include "KKException.h"
 #include "OSservices.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 
 #include "ModelOldSVM.h"
@@ -102,9 +102,9 @@ ModelOldSVM::~ModelOldSVM ()
 }
 
 
-KKU::int32  ModelOldSVM::MemoryConsumedEstimated ()  const
+KKB::kkint32  ModelOldSVM::MemoryConsumedEstimated ()  const
 {
-  KKU::int32  memoryConsumedEstimated = Model::MemoryConsumedEstimated () +
+  KKB::kkint32  memoryConsumedEstimated = Model::MemoryConsumedEstimated () +
                                         sizeof (ClassAssignmentsPtr) +
                                         sizeof (SVMModelPtr);
 
@@ -159,15 +159,15 @@ const FeatureNumList&   ModelOldSVM::GetFeatureNums ()  const
 
 
 
-int32  ModelOldSVM::NumOfSupportVectors () const
+kkint32  ModelOldSVM::NumOfSupportVectors () const
 {
   return svmModel->NumOfSupportVectors ();
 }
 
 
 
-void  ModelOldSVM::SupportVectorStatistics (int32&  numSVs,
-                                            int32&  totalNumSVs
+void  ModelOldSVM::SupportVectorStatistics (kkint32&  numSVs,
+                                            kkint32&  totalNumSVs
                                            )
 {
   return  svmModel->SupportVectorStatistics (numSVs, totalNumSVs);
@@ -285,13 +285,13 @@ void   ModelOldSVM::Predict (FeatureVectorPtr  example,
                              MLClassConstPtr   knownClass,
                              MLClassConstPtr&  predClass,
                              MLClassConstPtr&  predClass2,
-                             int32&            predClass1Votes,
-                             int32&            predClass2Votes,
+                             kkint32&            predClass1Votes,
+                             kkint32&            predClass2Votes,
                              double&           probOfKnownClass,
                              double&           predClassProb,
                              double&           predClass2Prob,
                              double&           compact,
-                             int32&            numOfWinners,
+                             kkint32&            numOfWinners,
                              bool&             knownClassOneOfTheWinners,
                              double&           breakTie
                             )
@@ -358,7 +358,7 @@ ClassProbListPtr  ModelOldSVM::ProbabilitiesByClass (FeatureVectorPtr  example)
   }
   
   ClassProbListPtr  results = new ClassProbList ();
-  int32  idx = 0;
+  kkint32  idx = 0;
   for  (idx = 0;  idx < numOfClasses;  idx++)
   {
     MLClassConstPtr  ic = classes->IdxToPtr (idx);
@@ -421,7 +421,7 @@ void  ModelOldSVM::ProbabilitiesByClass (FeatureVectorPtr         _example,
   */
  void  ModelOldSVM::ProbabilitiesByClass (FeatureVectorPtr         example,
                                           const MLClassConstList&  _mlClasses,
-                                          int32*                   _votes,
+                                          kkint32*                   _votes,
                                           double*                  _probabilities
                                          )
 {
@@ -476,7 +476,7 @@ vector<KKStr>  ModelOldSVM::SupportVectorNames () const
  *@param[in]  c2  Class that it was classified as.
  */
 vector<ProbNamePair>  ModelOldSVM::FindWorstSupportVectors (FeatureVectorPtr  example,
-                                                            int32             numToFind,
+                                                            kkint32           numToFind,
                                                             MLClassConstPtr   c1,
                                                             MLClassConstPtr   c2
                                                            )
@@ -496,7 +496,7 @@ vector<ProbNamePair>  ModelOldSVM::FindWorstSupportVectors (FeatureVectorPtr  ex
  *@param[in]  c2  Class that it was classified as.
  */
 vector<ProbNamePair>  ModelOldSVM::FindWorstSupportVectors2 (FeatureVectorPtr  example,
-                                                             int32             numToFind,
+                                                             kkint32           numToFind,
                                                              MLClassConstPtr   c1,
                                                              MLClassConstPtr   c2
                                                             )

@@ -1,8 +1,8 @@
 #ifndef  _INSTRUMENTDATAFLOWMETER1_
 #define  _INSTRUMENTDATAFLOWMETER1_
 
-#include  "Str.h"
-using namespace KKU;
+#include  "KKStr.h"
+using namespace KKB;
 
 #include  "InstrumentDataReport.h"
 
@@ -21,23 +21,23 @@ namespace SipperHardware
     InstrumentDataFlowMeter1 (InstrumentDataManagerPtr _manager,
                               const KKStr&            _reportDir,
                               bool                     _text,
-                              int32                    _instrumentId
+                              kkint32                  _instrumentId
                              );
   
     virtual
       ~InstrumentDataFlowMeter1 ();
   
     virtual  
-      void  ReportInstrumentData (uint32 curScanLine,
+      void  ReportInstrumentData (kkuint32 curScanLine,
                                   uchar  sensorData
                                  );
   
   private:
-    int32  flowMeterCurSlot;        // Indicates the slot last used.
+    kkint32  flowMeterCurSlot;        // Indicates the slot last used.
   
-    int32  flowMeterTrailingSlot;   // Indicates the slot that is behind current slot.
+    kkint32  flowMeterTrailingSlot;   // Indicates the slot that is behind current slot.
   
-    uint32*  flowMeterTurnScanLines;  // A circular buffer that will keep track of scan lines.
+    kkuint32*  flowMeterTurnScanLines;  // A circular buffer that will keep track of scan lines.
   
    };
   

@@ -11,11 +11,11 @@
 using namespace std;
 
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "OSservices.h"
 #include  "RunLog.h"
-#include  "Str.h"
-using namespace KKU;
+#include  "KKStr.h"
+using namespace KKB;
 
 
 #include  "SipperBuffBinary.h"
@@ -56,15 +56,15 @@ SipperBuffBinary::~SipperBuffBinary ()
 
 typedef  struct
 {
-  KKU::uchar  b1;
-  KKU::uchar  b2;
+  KKB::uchar  b1;
+  KKB::uchar  b2;
 }  SplitRec;
 
 typedef  SplitRec*  SplitRecPtr;
 
 
 
-void  SipperBuffBinary::GetNextSipperRec (int32&   spaceLeft,
+void  SipperBuffBinary::GetNextSipperRec (kkint32&   spaceLeft,
                                           uchar&   cameraNum,
                                           bool&    raw,
                                           bool&    eol,
@@ -81,17 +81,17 @@ void  SipperBuffBinary::GetNextSipperRec (int32&   spaceLeft,
                                           uchar&   pix9,
                                           uchar&   pix10,
                                           uchar&   pix11,
-                                          int32&   numOfBlanks,
+                                          kkint32&   numOfBlanks,
                                           bool&    moreRecs)
 {
   SipperBinaryRec  sipperRec;
 
-  int32 recsRead;
+  kkint32 recsRead;
 
   curRowByteOffset = byteOffset;
 
   do  {
-    recsRead =  (int32)fread (&sipperRec, sizeof (sipperRec), 1, inFile);
+    recsRead =  (kkint32)fread (&sipperRec, sizeof (sipperRec), 1, inFile);
     if  (recsRead < 1)
     {
       eof = true;
@@ -142,7 +142,7 @@ void  SipperBuffBinary::GetNextSipperRec (int32&   spaceLeft,
 
       tsr->b1 = tsr->b2;
 
-      recsRead = (int32)fread (&(tsr->b2), 1, 1, inFile);
+      recsRead = (kkint32)fread (&(tsr->b2), 1, 1, inFile);
       if  (recsRead == 0)
       {
         moreRecs = false;
@@ -168,15 +168,15 @@ void  SipperBuffBinary::GetNextSipperRec (int32&   spaceLeft,
 
 
 
-int32  linesInRowThatExceededBuffLen = 0;
+kkint32  linesInRowThatExceededBuffLen = 0;
 
 
 
 void  SipperBuffBinary::GetNextLine (uchar*  lineBuff,
-                                     uint32  lineBuffSize,
-                                     uint32& lineSize,
-                                     uint32  colCount[],
-                                     uint32& pixelsInRow,
+                                     kkuint32  lineBuffSize,
+                                     kkuint32& lineSize,
+                                     kkuint32  colCount[],
+                                     kkuint32& pixelsInRow,
                                      bool&   flow
                                     )
 {
@@ -188,7 +188,7 @@ void  SipperBuffBinary::GetNextLine (uchar*  lineBuff,
 
   bool     moreRecs;
 
-  int32    numOfBlanks;
+  kkint32  numOfBlanks;
 
   uchar    pix1,  pix2,  pix3,  pix4,
            pix5,  pix6,  pix7,  pix8,
@@ -196,7 +196,7 @@ void  SipperBuffBinary::GetNextLine (uchar*  lineBuff,
 
   bool     raw;
 
-  int32    spaceLeft = lineBuffSize;
+  kkint32  spaceLeft = lineBuffSize;
 
 
   memset (lineBuff, 0, lineBuffSize);

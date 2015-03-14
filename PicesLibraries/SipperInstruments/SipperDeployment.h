@@ -4,7 +4,7 @@
 #include  "DateTime.h"
 #include  "KKQueue.h"
 #include  "RunLog.h"
-using  namespace  KKU;
+using  namespace  KKB;
 
 namespace  SipperHardware
 {
@@ -22,13 +22,13 @@ namespace  SipperHardware
     const   KKStr&           Description         () const  {return description;}
     double                   Latitude            () const  {return latitude;}
     double                   Longitude           () const  {return longitude;}
-    const   KKU::DateTime&   DateTimeStart       () const  {return dateTimeStart;}
-    const   KKU::DateTime&   DateTimeEnd         () const  {return dateTimeEnd;}
-    const   KKU::DateTime&   SyncTimeStampActual () const  {return syncTimeStampActual;}
-    const   KKU::DateTime&   SyncTimeStampCTD    () const  {return syncTimeStampCTD;}
-    const   KKU::DateTime&   SyncTimeStampGPS    () const  {return syncTimeStampGPS;}
-    KKU::uint32              CropLeft            () const  {return cropLeft;}
-    KKU::uint32              CropRight           () const  {return cropRight;}
+    const   KKB::DateTime&   DateTimeStart       () const  {return dateTimeStart;}
+    const   KKB::DateTime&   DateTimeEnd         () const  {return dateTimeEnd;}
+    const   KKB::DateTime&   SyncTimeStampActual () const  {return syncTimeStampActual;}
+    const   KKB::DateTime&   SyncTimeStampCTD    () const  {return syncTimeStampCTD;}
+    const   KKB::DateTime&   SyncTimeStampGPS    () const  {return syncTimeStampGPS;}
+    KKB::kkuint32            CropLeft            () const  {return cropLeft;}
+    KKB::kkuint32            CropRight           () const  {return cropRight;}
     float                    ChamberWidth        () const  {return chamberWidth;}           /**< Width of sampling caber in Mili-Meters.  */
   
     void   CruiseName          (const KKStr&          _cruiseName)          {cruiseName          = _cruiseName;}
@@ -37,13 +37,13 @@ namespace  SipperHardware
     void   Description         (const KKStr&          _description)         {description         = _description;}
     void   Latitude            (double                _latitude)            {latitude            = _latitude;}
     void   Longitude           (double                _longitude)           {longitude           = _longitude;}
-    void   DateTimeStart       (const KKU::DateTime&  _dateTimeStart)       {dateTimeStart       = _dateTimeStart;}
-    void   DateTimeEnd         (const KKU::DateTime&  _dateTimeEnd)         {dateTimeEnd         = _dateTimeEnd;}
-    void   SyncTimeStampActual (const KKU::DateTime&  _syncTimeStampActual) {syncTimeStampActual = _syncTimeStampActual;}
-    void   SyncTimeStampCTD    (const KKU::DateTime&  _syncTimeStampCTD)    {syncTimeStampCTD    = _syncTimeStampCTD;}
-    void   SyncTimeStampGPS    (const KKU::DateTime&  _syncTimeStampGPS)    {syncTimeStampGPS    = _syncTimeStampGPS;}
-    void   CropLeft            (KKU::uint32           _cropLeft)            {cropLeft            = _cropLeft;}
-    void   CropRight           (KKU::uint32           _cropRight)           {cropRight           = _cropRight;}
+    void   DateTimeStart       (const KKB::DateTime&  _dateTimeStart)       {dateTimeStart       = _dateTimeStart;}
+    void   DateTimeEnd         (const KKB::DateTime&  _dateTimeEnd)         {dateTimeEnd         = _dateTimeEnd;}
+    void   SyncTimeStampActual (const KKB::DateTime&  _syncTimeStampActual) {syncTimeStampActual = _syncTimeStampActual;}
+    void   SyncTimeStampCTD    (const KKB::DateTime&  _syncTimeStampCTD)    {syncTimeStampCTD    = _syncTimeStampCTD;}
+    void   SyncTimeStampGPS    (const KKB::DateTime&  _syncTimeStampGPS)    {syncTimeStampGPS    = _syncTimeStampGPS;}
+    void   CropLeft            (KKB::kkuint32         _cropLeft)            {cropLeft            = _cropLeft;}
+    void   CropRight           (KKB::kkuint32         _cropRight)           {cropRight           = _cropRight;}
     void   ChamberWidth        (float                 _chamberWidth)        {chamberWidth        = _chamberWidth;}
 
   private:
@@ -51,15 +51,15 @@ namespace  SipperHardware
     KKStr          stationName;
     KKStr          deploymentNum;
     KKStr          description;
-    KKU::DateTime  dateTimeStart;
-    KKU::DateTime  dateTimeEnd;
+    KKB::DateTime  dateTimeStart;
+    KKB::DateTime  dateTimeEnd;
     double         latitude;
     double         longitude;
-    KKU::DateTime  syncTimeStampActual;
-    KKU::DateTime  syncTimeStampCTD;
-    KKU::DateTime  syncTimeStampGPS;
-    KKU::uint32    cropLeft;
-    KKU::uint32    cropRight;
+    KKB::DateTime  syncTimeStampActual;
+    KKB::DateTime  syncTimeStampCTD;
+    KKB::DateTime  syncTimeStampGPS;
+    KKB::kkuint32  cropLeft;
+    KKB::kkuint32  cropRight;
     float          chamberWidth;   /**< Width of sampling caber in Mili-Meters.  */
   };  /* SipperDeployment */
 

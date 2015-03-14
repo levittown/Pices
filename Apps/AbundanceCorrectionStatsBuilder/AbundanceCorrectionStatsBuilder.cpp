@@ -12,11 +12,11 @@
 #include "MemoryDebug.h"
 using namespace std;
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "Compressor.h"
 #include "OSservices.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 #include "InstrumentDataFileManager.h"
 #include "SipperVariables.h"
@@ -87,7 +87,7 @@ AbundanceCorrectionStatsBuilder::~AbundanceCorrectionStatsBuilder ()
 
 
 
-void  AbundanceCorrectionStatsBuilder::InitalizeApplication (int32   argc,
+void  AbundanceCorrectionStatsBuilder::InitalizeApplication (kkint32 argc,
                                                              char**  argv
                                                             )
 {
@@ -281,7 +281,7 @@ void   AbundanceCorrectionStatsBuilder::TerminateThreads ()
 
 void   AbundanceCorrectionStatsBuilder::ManageThreads ()
 {
-  uint32  loopCount = 0;
+  kkuint32  loopCount = 0;
   bool  terminate = false;
   while  (!terminate)
   {
@@ -368,18 +368,18 @@ void   AbundanceCorrectionStatsBuilder::CreateInitialThreadInstaces ()
   FeatureVectorListPtr  stratifiedTrainData = trainLibData->StratifyAmoungstClasses (numOfFolds);
   FeatureVectorListPtr  stratifiedOtherData = otherClassData->StratifyAmoungstClasses (numOfFolds);
 
-  int32  numTrainExamples = stratifiedTrainData->QueueSize ();
-  int32  numOtherExamples = stratifiedOtherData->QueueSize ();
+  kkint32  numTrainExamples = stratifiedTrainData->QueueSize ();
+  kkint32  numOtherExamples = stratifiedOtherData->QueueSize ();
 
   msgQueue = new MsgQueue ("AbundanceCorrectionStatsBuilder");
 
-  int32  lastFvInFold = -1;
-  int32  firstFvInFold = 0;
+  kkint32  lastFvInFold = -1;
+  kkint32  firstFvInFold = 0;
 
-  int32  firstOtherFvInFold = 0;
-  int32  lastOtherFvInFold = -1;
+  kkint32  firstOtherFvInFold = 0;
+  kkint32  lastOtherFvInFold = -1;
 
-  for  (int32  foldNum = 0;  foldNum < numOfFolds;  ++foldNum)
+  for  (kkint32  foldNum = 0;  foldNum < numOfFolds;  ++foldNum)
   {
     firstFvInFold = lastFvInFold + 1;
     lastFvInFold  = (numTrainExamples * (foldNum + 1) / numOfFolds) - 1;
@@ -390,7 +390,7 @@ void   AbundanceCorrectionStatsBuilder::CreateInitialThreadInstaces ()
     FeatureVectorListPtr  trainData = new FeatureVectorList (fileDesc, false, log);
     FeatureVectorListPtr  testData  = new FeatureVectorList (fileDesc, false, log);
 
-    for  (int32 idx = 0;  idx < numTrainExamples;  ++idx)
+    for  (kkint32 idx = 0;  idx < numTrainExamples;  ++idx)
     {
       FeatureVectorPtr fv = stratifiedTrainData->IdxToPtr (idx);
       if  ((idx >= firstFvInFold)  &&  (idx <= lastFvInFold))
@@ -400,7 +400,7 @@ void   AbundanceCorrectionStatsBuilder::CreateInitialThreadInstaces ()
     }
 
     // Add OtherClass exampes to test data.
-    for  (int32 idx = firstOtherFvInFold;  idx <= lastOtherFvInFold;  ++idx)
+    for  (kkint32 idx = firstOtherFvInFold;  idx <= lastOtherFvInFold;  ++idx)
     {
       FeatureVectorPtr fv = stratifiedOtherData->IdxToPtr (idx);
       testData->PushOnBack (fv);

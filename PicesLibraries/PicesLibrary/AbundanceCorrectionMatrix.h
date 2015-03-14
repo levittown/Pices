@@ -1,7 +1,7 @@
 #if  !defined(_ABUNDANCECORRECTIONMATRIX_)
 #define  _ABUNDANCECORRECTIONMATRIX_
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "DateTime.h"
 #include "RunLog.h"
 #include "MLClass.h"
@@ -48,7 +48,7 @@ namespace MLL
     ~AbundanceCorrectionMatrix ();
 
 
-    const KKU::DateTime&  DateTimeComputed () const {return dateTimeComputed;}
+    const KKB::DateTime&  DateTimeComputed () const {return dateTimeComputed;}
     const VectorFloat&    ProbOfDetection  () const {return probOfDetection;}
     const VectorFloat&    ProbOfFalseAlarm () const {return probOfFalseAlarm;} 
     bool                  Valid            () const {return valid;}
@@ -99,13 +99,13 @@ namespace MLL
     void  AllocatePredictionsTable ();
 
     template<typename T>
-    void   AllocateVector (vector<T>&  v,  uint32 len);
+    void   AllocateVector (vector<T>&  v,  kkuint32 len);
 
-    uint32*   AllocateUint32Array (uint32 len);
+    kkuint32*   AllocateUint32Array (kkuint32 len);
 
     void  CleanUp ();
     
-    int32  LookUpClassIdx (MLClassConstPtr c);
+    kkint32  LookUpClassIdx (MLClassConstPtr c);
 
     void  ReadForConfigFileName (const KKStr&  configFileName,
                                  RunLog&       log
@@ -120,24 +120,24 @@ namespace MLL
     KKStr  VectorToStr (vector<T>&  v);
 
     template<typename T>
-    KKStr  ArrayToStr (T* a,  uint32 len);
+    KKStr  ArrayToStr (T* a,  kkuint32 len);
 
 
     template<typename T>
-    void  ReadArray (uint32    len,
+    void  ReadArray (kkuint32  len,
                      T*&       a,
                      istream&  i
                     );
 
 
     MLClassConstList  classes;
-    KKU::DateTime     dateTimeComputed;
-    uint32*           knownByClass;
-    uint32            numClasses;    /**< Number of classes in 'classes' plus one for 'otherClass'. */
-    uint32            numCorrect;
-    uint32            numPredictions;
+    KKB::DateTime     dateTimeComputed;
+    kkuint32*           knownByClass;
+    kkuint32          numClasses;    /**< Number of classes in 'classes' plus one for 'otherClass'. */
+    kkuint32          numCorrect;
+    kkuint32          numPredictions;
     MLClassConstPtr   otherClass;
-    int32             otherClassIdx; /**< Index into 'classes' for 'otherClass'.                    */
+    kkint32           otherClassIdx; /**< Index into 'classes' for 'otherClass'.                    */
 
     /**
      * A two dimensional matrix where each column will represent known class.  The predictions of the known class
@@ -146,8 +146,8 @@ namespace MLL
      * will be trained on the classes specified in "classes"  but the test data will come from all classes; 
      * that is the classes listed in "classes" and "otherClass".
      */
-    uint32**         predictions;
-    uint32*          predByClass;
+    kkuint32**         predictions;
+    kkuint32*          predByClass;
 
     VectorFloat      probOfDetection;
     VectorFloat      probOfFalseAlarm;

@@ -27,12 +27,12 @@ using namespace std;
 #endif
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "KKQueue.h"
 #include "OSservices.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 
 
@@ -274,7 +274,7 @@ void   JobManager::EndBlock ()
        if  (!DeleteFile (lockFileName.Str ()))
        {
          DWORD  lastErrorNum = GetLastError ();
-         log.Level (-1) << "JobManager::EndBlock - Error["  << (uint32)lastErrorNum << "] deleting Lock File." << endl;
+         log.Level (-1) << "JobManager::EndBlock - Error["  << (kkuint32)lastErrorNum << "] deleting Lock File." << endl;
        }
      }
   }
@@ -385,7 +385,7 @@ void  JobManager::StatusFileProcessLine (const KKStr&  ln,
 
   else if  (fieldName.EqualIgnoreCase ("CURRENTDATETIME"))
   {
-    KKU::DateTime  dateTime = KKU::DateTime (statusStr);
+    KKB::DateTime  dateTime = KKB::DateTime (statusStr);
     if  (!dateTimeFirstOneFound)
     {
       dateTimeFirstOneFound = true;

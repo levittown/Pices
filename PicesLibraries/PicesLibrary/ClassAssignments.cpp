@@ -9,9 +9,9 @@
 using namespace  std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "OSservices.h"
-using namespace  KKU;
+using namespace  KKB;
 
 
 #include "ClassAssignments.h"
@@ -24,7 +24,7 @@ using namespace  MLL;
 
 
 ClassAssignments::ClassAssignments (RunLog&  _log):
-    multimap<int16, MLClassConstPtr> (),
+    multimap<kkint16, MLClassConstPtr> (),
     log (_log)
 {
 }
@@ -32,16 +32,16 @@ ClassAssignments::ClassAssignments (RunLog&  _log):
 
 
 ClassAssignments::ClassAssignments (const MLClassConstList&  classes,
-                                    RunLog&                     _log
+                                    RunLog&                  _log
                                    ):
-    multimap<int16, MLClassConstPtr> (),
+    multimap<kkint16, MLClassConstPtr> (),
     log (_log)
 {
-  int32  x = 0;
+  kkint32  x = 0;
   for  (MLClassConstList::const_iterator idx = classes.begin ();  idx != classes.end ();  idx++)
   {
-   insert (pair<int16, MLClassConstPtr> (x, *idx));
-   classLookUp.insert (pair<MLClassConstPtr, int16> (*idx, x));
+   insert (pair<kkint16, MLClassConstPtr> (x, *idx));
+   classLookUp.insert (pair<MLClassConstPtr, kkint16> (*idx, x));
    x++;
   }
 }
@@ -50,10 +50,10 @@ ClassAssignments::ClassAssignments (const MLClassConstList&  classes,
 
 
 
-int32  ClassAssignments::MemoryConsumedEstimated ()  const
+kkint32  ClassAssignments::MemoryConsumedEstimated ()  const
 {
-  int32  memoryConsumedEstimated = sizeof (ClassAssignments) 
-    +  (classLookUp.size () * (sizeof (MLClassConstPtr) + sizeof (int16)));
+  kkint32  memoryConsumedEstimated = sizeof (ClassAssignments) 
+    +  (classLookUp.size () * (sizeof (MLClassConstPtr) + sizeof (kkint16)));
   return  memoryConsumedEstimated;
 }
 
@@ -61,7 +61,7 @@ int32  ClassAssignments::MemoryConsumedEstimated ()  const
 
 
 void  ClassAssignments::AddMLClass (MLClassConstPtr  mlClass,
-                                       int16               num
+                                       kkint16             num
                                       )
 {
   ClassLookUpIterator  idx;
@@ -76,17 +76,17 @@ void  ClassAssignments::AddMLClass (MLClassConstPtr  mlClass,
     return;
   }
 
-  insert (pair<int16, MLClassConstPtr> (num, mlClass));
-  classLookUp.insert (pair<MLClassConstPtr, int16> (mlClass, num));
+  insert (pair<kkint16, MLClassConstPtr> (num, mlClass));
+  classLookUp.insert (pair<MLClassConstPtr, kkint16> (mlClass, num));
 }  /* AddMLClass */
 
 
 
 
 
-MLClassConstPtr  ClassAssignments::GetMLClass (int16 num)  const
+MLClassConstPtr  ClassAssignments::GetMLClass (kkint16 num)  const
 {
-  multimap<int16, MLClassConstPtr>::const_iterator p;
+  multimap<kkint16, MLClassConstPtr>::const_iterator p;
   p = find (num);
   if (p == end ())
     return NULL;
@@ -97,7 +97,7 @@ MLClassConstPtr  ClassAssignments::GetMLClass (int16 num)  const
 
 
 
-MLClassList  ClassAssignments::GetMLClasses (int16 num)  const
+MLClassList  ClassAssignments::GetMLClasses (kkint16 num)  const
 {
   ClassAssignments::const_iterator  idx;
 
@@ -129,7 +129,7 @@ VectorShort   ClassAssignments::GetUniqueListOfAssignments ()  const
 
   VectorShort  results;
 
-  int16  lastNum = -999;
+  kkint16  lastNum = -999;
   VectorShort::const_iterator  idx2;
   for  (idx2 = nums.begin (); idx2 != nums.end ();  idx2++)
   {
@@ -171,7 +171,7 @@ MLClassConstPtr  ClassAssignments::GetMLClassByIndex (size_t idx)
 
 
 
-int16  ClassAssignments::GetNumForClass (MLClassConstPtr  mlClass)  const
+kkint16  ClassAssignments::GetNumForClass (MLClassConstPtr  mlClass)  const
 {
   ClassLookUp::const_iterator  idx;
   idx = classLookUp.find (mlClass);
@@ -214,10 +214,10 @@ void  ClassAssignments::Load (const KKStr&  fileName,
     dataRow.TrimLeft ();
 
     KKStr  className = dataRow.ExtractToken2 ("\n\r\t,");
-    int16   classNum  = (int16)dataRow.ExtractTokenInt ("\n\r\t,");
+    kkint16 classNum  = (kkint16)dataRow.ExtractTokenInt ("\n\r\t,");
 
     MLClassConstPtr  mlClass = MLClass::CreateNewMLClass (className);
-    int32  existingAssignmentNum = GetNumForClass (mlClass);
+    kkint32  existingAssignmentNum = GetNumForClass (mlClass);
     if  (existingAssignmentNum >= 0)
     {
       // We already have this class Loaded,  for now i am obly going to
@@ -263,9 +263,9 @@ void  ClassAssignments::Save (const KKStr&  fileName,
 
 KKStr  ClassAssignments::ToString ()  const
 {
-  KKStr  result ((int32)(size () * 20));
+  KKStr  result ((kkint32)(size () * 20));
 
-  result << int32 (size ());
+  result << kkint32 (size ());
 
   ClassAssignments::const_iterator idx;
   for (idx = begin ();  idx != end ();  idx++)
@@ -296,7 +296,7 @@ void   ClassAssignments::ParseToString (const KKStr&  _toString)
 
   while  (!toString.Empty ())
   {
-    int32 assignmentNum = toString.ExtractTokenInt ("\t\n\r");
+    kkint32 assignmentNum = toString.ExtractTokenInt ("\t\n\r");
     KKStr  className = toString.ExtractToken ("\t\n\r");
 
     if  (!className.Empty ())

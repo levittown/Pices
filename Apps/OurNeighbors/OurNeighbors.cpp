@@ -10,14 +10,14 @@
 #include <vector>
 
 #include "MemoryDebug.h"
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 
 using namespace std;
 
 #include "OSservices.h"
-#include "Str.h"
+#include "KKStr.h"
 #include "StatisticalFunctions.h"
-using namespace KKU;
+using namespace KKB;
 
 
 // From PICL
@@ -116,7 +116,7 @@ OurNeighbors::~OurNeighbors ()
 
 
 
-void  OurNeighbors::InitalizeApplication (int32   argc,
+void  OurNeighbors::InitalizeApplication (kkint32 argc,
                                           char**  argv
                                          )
 {
@@ -371,7 +371,7 @@ void   OurNeighbors::DisplayCommandLineParameters ()
  ****************************************************************************************/
 MLClassConstPtr  OurNeighbors::DetermineClassFromFileName (const  KKStr&  fileName)
 {
-	int32  x;
+	kkint32  x;
 	KKStr filename_copy = fileName;
 
 	// If there are no path seperator characters('\'  or  '/')  charaters in name
@@ -396,7 +396,7 @@ MLClassConstPtr  OurNeighbors::DetermineClassFromFileName (const  KKStr&  fileNa
     // So if there is an underscore character,  and all the characters to the right of it are
     // numeric charcters,  then we will remove teh underscore and the following numbers.
 
-    int32  y = x + 1;
+    kkint32  y = x + 1;
 
     bool  allFollowingCharsAreNumeric = true;
     while  ((y < className.Len ()) &&  (allFollowingCharsAreNumeric))
@@ -424,15 +424,15 @@ MLClassConstPtr  OurNeighbors::DetermineClassFromFileName (const  KKStr&  fileNa
 
 
 
-int32  OurNeighbors::LastScanLine (const ImageFeaturesList&  images)  const
+kkint32  OurNeighbors::LastScanLine (const ImageFeaturesList&  images)  const
 {
-  int32  lastScanLine = 0;
+  kkint32  lastScanLine = 0;
   ImageFeaturesList::const_iterator  idx;
   for  (idx = images.begin ();  idx != images.end ();  idx++)
   {
     const ImageFeaturesPtr image = *idx;
     if  (image->SfCentroidRow () > lastScanLine)
-      lastScanLine = (int32)(image->SfCentroidRow () + 0.5f);
+      lastScanLine = (kkint32)(image->SfCentroidRow () + 0.5f);
   }
 
   return  lastScanLine;
@@ -443,7 +443,7 @@ int32  OurNeighbors::LastScanLine (const ImageFeaturesList&  images)  const
 double  Z_Score (double  sampleMeanNND, 
                  double  randomMeanNND,
                  double  randomStdDevNND,
-                 int32     N
+                 kkint32   N
                 )
 
 {
@@ -648,7 +648,7 @@ void	OurNeighbors::RandomReport (ImageFeaturesList&  images)
 
   {
     // Z-Score Summary Report
-    KKU::uint32  x;
+    KKB::kkuint32  x;
 
     *report << std::endl << std::endl
       << "Z-Score Summary By Class" << std::endl
@@ -819,8 +819,8 @@ void	OurNeighbors::RemoveExcludedClasses (ImageFeaturesListPtr&  examples)
 
 LLoydsEntryListPtr   OurNeighbors::DeriveAllLLoydsBins (const ImageFeaturesList&  examples)
 {
-  int32  lloydsBinSize = baseLLoydsBinSize;
-  int32  maxLLoydsBinSize = lastScanLine / 4;
+  kkint32  lloydsBinSize = baseLLoydsBinSize;
+  kkint32  maxLLoydsBinSize = lastScanLine / 4;
 
   LLoydsEntryListPtr  lloydsEntries = new LLoydsEntryList (log);
 
@@ -839,12 +839,12 @@ LLoydsEntryListPtr   OurNeighbors::DeriveAllLLoydsBins (const ImageFeaturesList&
 
 
 LLoydsEntryPtr  OurNeighbors::DeriveLLoydsBins (const ImageFeaturesList&  examples,
-                                                int32                     lloydsBinSize
+                                                kkint32                   lloydsBinSize
                                                )
 {
   double  lloydsIndex = 0.0;
 
-  int32  numLLoydsBins = int32 (lastScanLine + lloydsBinSize - 1)  / int32 (lloydsBinSize);
+  kkint32  numLLoydsBins = kkint32 (lastScanLine + lloydsBinSize - 1)  / kkint32 (lloydsBinSize);
 
   VectorIntPtr  lloydsBins = new VectorInt (numLLoydsBins, 0);
 
@@ -852,7 +852,7 @@ LLoydsEntryPtr  OurNeighbors::DeriveLLoydsBins (const ImageFeaturesList&  exampl
   for  (idx = examples.begin ();  idx != examples.end ();  idx++)
   {
     const ImageFeaturesPtr i = *idx;
-    int32 lloydsBin =  int32 (i->SfCentroidRow () / double (lloydsBinSize));
+    kkint32 lloydsBin =  kkint32 (i->SfCentroidRow () / double (lloydsBinSize));
     if  (lloydsBin >= numLLoydsBins)
     {
       // This can not happen;  but if it does; then I must of screwed uo the programming.
@@ -878,7 +878,7 @@ LLoydsEntryPtr  OurNeighbors::DeriveLLoydsBins (const ImageFeaturesList&  exampl
 
 
 
-int32  main (int32     argc,
+kkint32  main (kkint32   argc,
              char**  argv
             )
 {

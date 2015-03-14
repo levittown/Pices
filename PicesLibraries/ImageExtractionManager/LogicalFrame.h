@@ -21,25 +21,25 @@ namespace  ImageExtractionManager
   {
   public:
     LogicalFrame (const ExtractionParms&  _parms,
-                  uint32                  _frameHeightMax,
-                  uint32                  _frameWidth,
+                  kkuint32                _frameHeightMax,
+                  kkuint32                _frameWidth,
                   const bool&             _cancelFlag
                  );
 
     ~LogicalFrame ();
 
-    int32   MemoryConsumedEstimated ()  const;
+    kkint32 MemoryConsumedEstimated ()  const;
 
-    uint32  FrameHeight   ()  const  {return frameHeight;}
-    uint32  FrameNum      ()  const  {return frameNum;}
-    uint32  ImagesInFrame ()  const  {return imagesInFrame;}
+    kkuint32  FrameHeight   ()  const  {return frameHeight;}
+    kkuint32  FrameNum      ()  const  {return frameNum;}
+    kkuint32  ImagesInFrame ()  const  {return imagesInFrame;}
 
-    void  PopulateFrame (uint32   _frameNum,
-                         uint32   _frameHeight,
+    void  PopulateFrame (kkuint32 _frameNum,
+                         kkuint32 _frameHeight,
                          uchar*   _frameArea,
-                         uint32   _frameSipperRow,
-                         uint64*  _frameRowByteOffset,
-                         uint32*  _pixelsPerRow
+                         kkuint32 _frameSipperRow,
+                         kkuint64*  _frameRowByteOffset,
+                         kkuint32*  _pixelsPerRow
                         );
 
     ExtractedImageListPtr  ProcessFrame ();
@@ -57,25 +57,25 @@ namespace  ImageExtractionManager
     void  LocateBlobsUsingConnectedDistanceOf3 ();
     void  LocateBlobsUsingConnectedDistanceNotOf3 ();
     
-    VectorSipperImagePtr  BuildListOfSipperImages (uint32&  imagesInFrame);
+    VectorSipperImagePtr  BuildListOfSipperImages (kkuint32&  imagesInFrame);
     
-    int  GetMaxBlobIdInUpperLeft (uint32 row,
-                                  uint32 col
+    int  GetMaxBlobIdInUpperLeft (kkuint32 row,
+                                  kkuint32 col
                                  );
 
-    int  GetMaxBlobIdInUpperRight (uint32 row,
-                                   uint32 col
+    int  GetMaxBlobIdInUpperRight (kkuint32 row,
+                                   kkuint32 col
                                   );
 
-    LogicalFrameBlobPtr  NewBlob (uint32  rowTop,
-                                  uint32  colLeft
+    LogicalFrameBlobPtr  NewBlob (kkuint32  rowTop,
+                                  kkuint32  colLeft
                                  );
 
     bool  ForegroundPixel (uchar  pixValue);
 
-    void  CountAndTotal (KKU::uchar    c,
-                         KKU::ushort&  count,
-                         KKU::ushort&  total
+    void  CountAndTotal (KKB::uchar    c,
+                         KKB::ushort&  count,
+                         KKB::ushort&  total
                         );
 
     static
@@ -96,15 +96,15 @@ namespace  ImageExtractionManager
              );
 
 
-    uint32          frameHeight;            /**< Number of rows in current frame.                         */
-    uint32          frameHeightMax;         /**< Number of scan lines that have been actually allocated.  */
+    kkuint32        frameHeight;            /**< Number of rows in current frame.                         */
+    kkuint32        frameHeightMax;         /**< Number of scan lines that have been actually allocated.  */
     uchar**         frame;                  /**< Row pointers into 'frameArea'.                           */
-    uint32          frameWidth;             /**< Number of pixels per row in frame.                      */
+    kkuint32        frameWidth;             /**< Number of pixels per row in frame.                      */
     uchar*          frameArea;              /**< Pointer to block of memory that will contain frame       */
-    uint32          frameSipperRow;         /**< Row within the Sipper File That Frame starts at.         */
-    uint64*         frameRowByteOffset;
-    uint32          frameTotalPixels;       /**< Total number of pixels that frame could contain.         */
-    uint32*         pixelsPerRow;           /**< Number of foreground pixels in each row.                  */
+    kkuint32        frameSipperRow;         /**< Row within the Sipper File That Frame starts at.         */
+    kkuint64*         frameRowByteOffset;
+    kkuint32        frameTotalPixels;       /**< Total number of pixels that frame could contain.         */
+    kkuint32*         pixelsPerRow;           /**< Number of foreground pixels in each row.                  */
 
     uchar**         origFrame;              /**< 'origFrame' and 'origFrameArea' are only used when       */
     uchar*          origFrameArea;          /**<  morphological operations are performed.                 */
@@ -112,26 +112,26 @@ namespace  ImageExtractionManager
     uchar**         workFrame;              /**< 'workFrame' & 'workFrameArea' are used to perform        */
     uchar*          workFrameArea;          /**< morphological operations with.                           */
 
-    uint32          frameNum;               /**< Sequential number assigned to each frame.                */
-    uint32          imagesInFrame;          /**< Number of discreet images located by the connected component analysis. */
+    kkuint32        frameNum;               /**< Sequential number assigned to each frame.                */
+    kkuint32        imagesInFrame;          /**< Number of discreet images located by the connected component analysis. */
 
     // Sgructures to support Blob Processing.
     LogicalFrameBlobPtr*  blobs;
-    int32*          blobIdsArea;            /**< Continuous chunk of memory that was allocated to hold 'blobIds' in.   */
-    int32**         blobIds;                /**< Two dimensional array that will work with frame.  For each pixel that is 
+    kkint32*          blobIdsArea;            /**< Continuous chunk of memory that was allocated to hold 'blobIds' in.   */
+    kkint32**         blobIds;                /**< Two dimensional array that will work with frame.  For each pixel that is 
                                              *   determined to belong to an image, the ID of that image that it is part of
                                              *   will be kept here.
                                              */
-    uint32          connectedPixelDist;     /**< Distance that two foreground pixels have to be to be considered part of same connected image. */
-    uint32          maxBlobsPerFrame;       /**< Maximum number of blobs that can be tracked; 'blobs' will be allocated to this size.          */
-    uint32          numOfBlobsInFrame;      /**< Number of blobs located in current frame so far.                                              */
+    kkuint32        connectedPixelDist;     /**< Distance that two foreground pixels have to be to be considered part of same connected image. */
+    kkuint32        maxBlobsPerFrame;       /**< Maximum number of blobs that can be tracked; 'blobs' will be allocated to this size.          */
+    kkuint32        numOfBlobsInFrame;      /**< Number of blobs located in current frame so far.                                              */
 
     const
     ExtractionParms&  parms;
 
     uchar           backgroundPixelTH;
-    uint32          cropLeft;
-    uint32          cropRight;
+    kkuint32        cropLeft;
+    kkuint32        cropRight;
                             
     volatile
     const bool&     cancelFlag;

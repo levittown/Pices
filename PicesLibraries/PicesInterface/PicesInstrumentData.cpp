@@ -17,16 +17,17 @@ using namespace System::Threading;
 using namespace System::Windows::Forms;
 
 #include "MemoryDebug.h"
-#include "BasicTypes.h"
-#include "..\\BaseLibrary\\GoalKeeper.h"
+#include "KKBaseTypes.h"
+#include "GoalKeeper.h"
 #include "OSservices.h"
-using namespace KKU;
+using namespace KKB;
 
 
 #include "FileDesc.h"
 using namespace MLL;
 
 #include "PicesKKStr.h"
+#include "PicesOSservices.h"
 #include "PicesRunLog.h"
 
 
@@ -129,7 +130,7 @@ namespace  PicesInterface
   }
 
   int       PicesInstrumentData::ActiveBattery::get          () {return instrumentData->ActiveBattery       ();}
-  uint64    PicesInstrumentData::ByteOffset::get             () {return instrumentData->ByteOffset          ();}
+  kkuint64  PicesInstrumentData::ByteOffset::get             () {return instrumentData->ByteOffset          ();}
   float     PicesInstrumentData::Bat1Level::get              () {return instrumentData->Bat1Level           ();}
   float     PicesInstrumentData::Bat2Level::get              () {return instrumentData->Bat2Level           ();}
   float     PicesInstrumentData::Bat3Level::get              () {return instrumentData->Bat3Level           ();}
@@ -170,7 +171,7 @@ namespace  PicesInterface
   UInt16    PicesInstrumentData::ActiveColumns::get ()  {return instrumentData->ActiveColumns ();}
 
 
-  void   PicesInstrumentData::ByteOffset::set   (uint64 _byteOffset)   {instrumentData->ByteOffset   (_byteOffset);}
+  void   PicesInstrumentData::ByteOffset::set   (kkuint64 _byteOffset)   {instrumentData->ByteOffset   (_byteOffset);}
   void   PicesInstrumentData::Conductivity::set (float  _conductivity) {instrumentData->Conductivity (_conductivity);}
   void   PicesInstrumentData::Density::set      (float  _density)      {instrumentData->Density      (_density);}
   void   PicesInstrumentData::Depth::set        (float  _depth)        {instrumentData->Depth        (_depth);}

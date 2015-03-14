@@ -416,9 +416,9 @@ UsfCasCor::~UsfCasCor ()
 }
 
 
-UsfCasCor::int32  UsfCasCor::MemoryConsumedEstimated ()  const
+UsfCasCor::kkint32  UsfCasCor::MemoryConsumedEstimated ()  const
 {
-  int32  memoryConsumedEstimated = sizeof (*this);
+  kkint32  memoryConsumedEstimated = sizeof (*this);
 
 
 /*
@@ -690,11 +690,11 @@ int  UsfCasCor::main (int argc, char *argv[])
 
 
 
-void  UsfCasCor::Initialize (int32  _in_limit,
-                             int32  _out_limit,
-                             int32  _number_of_rounds,
-                             int32  _number_of_trials,
-                             int64  _the_random_seed
+void  UsfCasCor::Initialize (kkint32  _in_limit,
+                             kkint32  _out_limit,
+                             kkint32  _number_of_rounds,
+                             kkint32  _number_of_trials,
+                             kkint64  _the_random_seed
                             )
 {
   progname = strdup ("UsfCasCor");

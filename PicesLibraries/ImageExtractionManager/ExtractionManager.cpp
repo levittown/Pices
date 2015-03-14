@@ -11,7 +11,7 @@ using namespace std;
 
 #include "KKThread.h"
 #include "MsgQueue.h"
-using namespace KKU;
+using namespace KKB;
 
 #include "SipperVariables.h"
 using namespace  SipperHardware;
@@ -56,7 +56,7 @@ using  namespace  ImageExtractionManager;
 
 ExtractionManager::ExtractionManager (const KKStr&      _applicationName,
                                       ExtractionParms&  _parms,
-                                      uint32            _maxNumThreads,
+                                      kkuint32          _maxNumThreads,
                                       RunLog&           _log
                                      ):
   allThreads             (NULL),
@@ -137,7 +137,7 @@ void  ExtractionManager::ShutdownProcessing (ImageExtractionThreadListPtr  threa
 
 
 
-void  ExtractionManager::TerminateProcessing (int32 miliSecsToWait)
+void  ExtractionManager::TerminateProcessing (kkint32 miliSecsToWait)
 {
   cancelFlag = true;
   if  (allThreads)
@@ -155,10 +155,10 @@ void  ExtractionManager::TerminateProcessing (int32 miliSecsToWait)
     return;
 
   bool     allThreadsStopped      = true;
-  uint32   numThreadsStopped      = 0;
-  uint32   numThreadsStillRunning = 0;
+  kkuint32 numThreadsStopped      = 0;
+  kkuint32 numThreadsStillRunning = 0;
 
-  int32   numMiliSecsSoFar = 0;
+  kkint32 numMiliSecsSoFar = 0;
 
   while  (true)
   {
@@ -555,7 +555,7 @@ void  ExtractionManager::Initialize (bool&  _successful)
 
   msgQueue = new MsgQueue ("ExtractionManager");
 
-  uint32  maxNumOfFrames = KKU::Max ((uint32)3, (uint32)(maxNumThreads + 1));
+  kkuint32  maxNumOfFrames = KKB::Max ((kkuint32)3, (kkuint32)(maxNumThreads + 1));
 
   framePool = new LogicalFrameQueue (parms, 
                                      maxNumOfFrames,    // Maximum number of frames
@@ -574,7 +574,7 @@ void  ExtractionManager::Initialize (bool&  _successful)
 
 void  ExtractionManager::StartFrameProcessor (bool&  threadStartedSuccessfully)
 {
-  uint32 x = frameProcessors->size ();
+  kkuint32 x = frameProcessors->size ();
 
   KKStr  threadName = "FrameProcessor_" + StrFormatInt (x, "00");
 
@@ -674,7 +674,7 @@ void  ExtractionManager::StartThreads (bool&  threadsStartedSuccessfully)
 
   delete  frameProcessors;
   frameProcessors = new ImageExtractionThreadList (false);
-  uint32  numFrameProcessors = Max ((uint32)1, (uint32)(maxNumThreads - 1));
+  kkuint32  numFrameProcessors = Max ((kkuint32)1, (kkuint32)(maxNumThreads - 1));
 
   if  (!CancelFlag ())
   {
@@ -697,7 +697,7 @@ void  ExtractionManager::StartThreads (bool&  threadsStartedSuccessfully)
       }
 
       // Lets get the rest o the FrameProcessor threads running.
-      for  (uint32 x = 1;  ((x < numFrameProcessors)  &&  threadsStartedSuccessfully &&  (!CancelFlag ()));  ++x)
+      for  (kkuint32 x = 1;  ((x < numFrameProcessors)  &&  threadsStartedSuccessfully &&  (!CancelFlag ()));  ++x)
         StartFrameProcessor (threadsStartedSuccessfully);
     }
   }
@@ -722,10 +722,10 @@ void  ExtractionManager::GetRunTimeStats (ExtractionManagerStats&  stats)
 
   if  (frameProcessors)
   {
-    uint32  framesProcessed     = 0;
-    uint32  scanLinesProcessed  = 0;
-    uint32  imagesFound         = 0;
-    uint32  imagesClassified    = 0;
+    kkuint32  framesProcessed     = 0;
+    kkuint32  scanLinesProcessed  = 0;
+    kkuint32  imagesFound         = 0;
+    kkuint32  imagesClassified    = 0;
 
     ImageExtractionThreadList::iterator  idx;
     for  (idx = frameProcessors->begin ();  idx != frameProcessors->end ();  ++idx)
@@ -752,17 +752,17 @@ void  ExtractionManager::GetRunTimeStats (ExtractionManagerStats&  stats)
 
 
 
-void  ExtractionManager::GetRunTimeStats (uint64&  _bytesRead,
-                                          uint32&  _framesRead,
-                                          uint32&  _framesProcessed,
-                                          uint32&  _scanLinesProcessed,
-                                          uint32&  _imagesFound,
-                                          uint32&  _imagesClassified,
-                                          uint32&  _imagesUpdated,
-                                          uint32&  _duplicatesDetected,
-                                          uint32&  _updateFailures,
-                                          uint32&  _framesOnQueue,
-                                          uint32&  _imagesOnQueue
+void  ExtractionManager::GetRunTimeStats (kkuint64&  _bytesRead,
+                                          kkuint32&  _framesRead,
+                                          kkuint32&  _framesProcessed,
+                                          kkuint32&  _scanLinesProcessed,
+                                          kkuint32&  _imagesFound,
+                                          kkuint32&  _imagesClassified,
+                                          kkuint32&  _imagesUpdated,
+                                          kkuint32&  _duplicatesDetected,
+                                          kkuint32&  _updateFailures,
+                                          kkuint32&  _framesOnQueue,
+                                          kkuint32&  _imagesOnQueue
                                          )
 {
   _bytesRead           = 0;
@@ -782,10 +782,10 @@ void  ExtractionManager::GetRunTimeStats (uint64&  _bytesRead,
 
   if  (frameProcessors)
   {
-    uint32  framesProcessed     = 0;
-    uint32  scanLinesProcessed  = 0;
-    uint32  imagesFound         = 0;
-    uint32  imagesClassified    = 0;
+    kkuint32  framesProcessed     = 0;
+    kkuint32  scanLinesProcessed  = 0;
+    kkuint32  imagesFound         = 0;
+    kkuint32  imagesClassified    = 0;
 
     ImageExtractionThreadList::iterator  idx;
     for  (idx = frameProcessors->begin ();  idx != frameProcessors->end ();  ++idx)
@@ -874,7 +874,7 @@ bool  ExtractionManager::AllProcessorsTerminated (ImageExtractionThreadListPtr  
 
 
 void  ExtractionManager::MonitorUntilDone (ImageExtractionThreadListPtr  threadsToMonitor,
-                                           uint32&                       loopCount,
+                                           kkuint32&                       loopCount,
                                            bool&                         successful
                                           )
 {
@@ -952,7 +952,7 @@ void  ExtractionManager::ManageTheExtraction (bool&  successful)
     // Image Extraction can not be done until all frames have been extracted; so for this reason we only
     // monitor the 'frameExtractorThread' thread. After the 'frameExtractorThread' has processed all available
     // sipper data we will then no longer need to monitor this thread.
-    uint32  loopCount = 0;
+    kkuint32  loopCount = 0;
     ImageExtractionThreadList  frameExtractionThreads (false);
     frameExtractionThreads.PushOnBack (frameExtractorThread);
     MonitorUntilDone (&frameExtractionThreads, loopCount, successful);
@@ -1041,14 +1041,14 @@ void  ExtractionManager::ManageTheExtraction (bool&  successful)
 
 
 
-void  ExtractionManager::DisplayRunTimeStats (uint32  loopCount)
+void  ExtractionManager::DisplayRunTimeStats (kkuint32  loopCount)
 {
     // Report Current results.
-  uint64  bytesRead          = 0;
-  uint32  framesRead         = 0,  framesProcessed  = 0,  scanLinesProcessed = 0;
-  uint32  imagesFound        = 0,  imagesClassified = 0,  imagesUpdated      = 0;
-  uint32  duplicatesDetected = 0,  updateFailures   = 0,  framesOnQueue      = 0;
-  uint32  imagesOnQueue      = 0;
+  kkuint64  bytesRead          = 0;
+  kkuint32  framesRead         = 0,  framesProcessed  = 0,  scanLinesProcessed = 0;
+  kkuint32  imagesFound        = 0,  imagesClassified = 0,  imagesUpdated      = 0;
+  kkuint32  duplicatesDetected = 0,  updateFailures   = 0,  framesOnQueue      = 0;
+  kkuint32  imagesOnQueue      = 0;
 
   GetRunTimeStats (bytesRead,        framesRead,    
                    framesProcessed,  scanLinesProcessed, imagesFound,    imagesClassified,
@@ -1139,9 +1139,9 @@ void  ExtractionManager::ReportHeader (ostream&  r)
   double  totalCpuSecs = endCPUsecs - startCPUsecs;
   double  cpuSecs = totalCpuSecs;
 
-  uint32  cpuHours =  (uint32)floor (cpuSecs / 3600.0);
+  kkuint32  cpuHours =  (kkuint32)floor (cpuSecs / 3600.0);
   cpuSecs = cpuSecs - (cpuHours * 3600.0);
-  uint32  cpuMins = (uint32)floor (cpuSecs / 60.0);
+  kkuint32  cpuMins = (kkuint32)floor (cpuSecs / 60.0);
   cpuSecs = cpuSecs - (cpuMins * 60.0);
 
   DateTime  elapsedTime = endTime - startTime;
@@ -1194,11 +1194,11 @@ void  ExtractionManager::GenerateReport ()
                << endl;
   }
 
-  uint64  bytesRead          = 0;
-  uint32  framesRead         = 0,  framesProcessed  = 0,  scanLinesProcessed = 0;
-  uint32  imagesFound        = 0,  imagesClassified = 0,  imagesUpdated      = 0;
-  uint32  duplicatesDetected = 0,  updateFailures   = 0,  framesOnQueue      = 0;
-  uint32  imagesOnQueue      = 0;
+  kkuint64  bytesRead          = 0;
+  kkuint32  framesRead         = 0,  framesProcessed  = 0,  scanLinesProcessed = 0;
+  kkuint32  imagesFound        = 0,  imagesClassified = 0,  imagesUpdated      = 0;
+  kkuint32  duplicatesDetected = 0,  updateFailures   = 0,  framesOnQueue      = 0;
+  kkuint32  imagesOnQueue      = 0;
 
   GetRunTimeStats (bytesRead,        framesRead,    
                    framesProcessed,  scanLinesProcessed, imagesFound,    imagesClassified,

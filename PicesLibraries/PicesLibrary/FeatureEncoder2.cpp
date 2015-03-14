@@ -14,10 +14,10 @@
 using namespace  std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "OSservices.h"
 #include "RunLog.h"
-using namespace  KKU;
+using namespace  KKB;
 
 
 #include "FeatureEncoder2.h"
@@ -68,18 +68,18 @@ FeatureEncoder2::FeatureEncoder2 (const ModelParam&  _param,
   compressionMethod = param.CompressionMethod ();
   encodingMethod    = param.EncodingMethod ();
 
-  srcFeatureNums   = new int32[numOfFeatures];
-  cardinalityDest  = new int32[numOfFeatures];
-  destFeatureNums  = new int32[numOfFeatures];
+  srcFeatureNums   = new kkint32[numOfFeatures];
+  cardinalityDest  = new kkint32[numOfFeatures];
+  destFeatureNums  = new kkint32[numOfFeatures];
   destWhatToDo     = new FeWhatToDo[numOfFeatures];
 
   VectorKKStr   destFieldNames;
 
-  int32  x;
+  kkint32  x;
 
   for  (x = 0;  x < numOfFeatures;  x++)
   {
-    int32  srcFeatureNum = param.SelectedFeatures ()[x];
+    kkint32  srcFeatureNum = param.SelectedFeatures ()[x];
     srcFeatureNums   [x] = srcFeatureNum;
     destFeatureNums  [x] = codedNumOfFeatures;
     cardinalityDest  [x] = 1;
@@ -95,7 +95,7 @@ FeatureEncoder2::FeatureEncoder2 (const ModelParam&  _param,
           destWhatToDo    [x] = FeBinary;
           cardinalityDest [x] = cardinalityVector[srcFeatureNums [x]];
           codedNumOfFeatures   += cardinalityDest[x];
-          for  (int32 zed = 0;  zed < cardinalityDest[x];  zed++)
+          for  (kkint32 zed = 0;  zed < cardinalityDest[x];  zed++)
           {
             KKStr  fieldName = srcAttribute.Name () + "_" + srcAttribute.GetNominalValue (zed);
             destFieldNames.push_back (fieldName);
@@ -157,15 +157,15 @@ FeatureEncoder2::FeatureEncoder2 (const FeatureEncoder2&  _encoder):
 {
   log.Level (30) << "FeatureEncoder2::FeatureEncoder2" << endl;
 
-  cardinalityDest  = new int32[numOfFeatures];
-  destFeatureNums  = new int32[numOfFeatures];
+  cardinalityDest  = new kkint32[numOfFeatures];
+  destFeatureNums  = new kkint32[numOfFeatures];
   destWhatToDo     = new FeWhatToDo[numOfFeatures];
-  srcFeatureNums   = new int32[numOfFeatures];
+  srcFeatureNums   = new kkint32[numOfFeatures];
 
-  int32  x;
+  kkint32  x;
   for  (x = 0;  x < numOfFeatures;  x++)
   {
-    int32  srcFeatureNum = param.SelectedFeatures () [x];
+    kkint32  srcFeatureNum = param.SelectedFeatures () [x];
     srcFeatureNums   [x] = _encoder.srcFeatureNums [x];
     destFeatureNums  [x] = _encoder.destFeatureNums[x];
     cardinalityDest  [x] = _encoder.cardinalityDest[x];
@@ -193,24 +193,24 @@ FeatureEncoder2::~FeatureEncoder2 ()
 }
 
 
-int32  FeatureEncoder2::MemoryConsumedEstimated ()  const
+kkint32  FeatureEncoder2::MemoryConsumedEstimated ()  const
 {
-  int32  memoryConsumedEstimated = sizeof (FeatureEncoder2)
+  kkint32  memoryConsumedEstimated = sizeof (FeatureEncoder2)
     +  attributeVector.size ()   * sizeof (AttributeType)
-    +  cardinalityVector.size () * sizeof (int32)
-    +  nominalCountersSize  * sizeof (int32);
+    +  cardinalityVector.size () * sizeof (kkint32)
+    +  nominalCountersSize  * sizeof (kkint32);
 
-  if  (cardinalityDest)   memoryConsumedEstimated += 3 * numOfFeatures * sizeof (int32);  // For 'cardinalityDest', 'destFeatureNums', and 'srcFeatureNums'
-  if  (destFeatureNums)   memoryConsumedEstimated += numOfFeatures * sizeof (int32);
+  if  (cardinalityDest)   memoryConsumedEstimated += 3 * numOfFeatures * sizeof (kkint32);  // For 'cardinalityDest', 'destFeatureNums', and 'srcFeatureNums'
+  if  (destFeatureNums)   memoryConsumedEstimated += numOfFeatures * sizeof (kkint32);
   if  (destWhatToDo)      memoryConsumedEstimated += numOfFeatures * sizeof (FeWhatToDo);
-  if  (nominal_counters)  memoryConsumedEstimated += sizeof (int32*) * fileDesc->NumOfFields ();
+  if  (nominal_counters)  memoryConsumedEstimated += sizeof (kkint32*) * fileDesc->NumOfFields ();
 
   return  memoryConsumedEstimated;
 }
 
 
 
-int32  FeatureEncoder2::NumEncodedFeatures ()  const
+kkint32  FeatureEncoder2::NumEncodedFeatures ()  const
 {
   return  encodedFileDesc->NumOfFields ();
 }
@@ -230,14 +230,14 @@ FileDescPtr  FeatureEncoder2::CreateEncodedFileDesc (ostream*  o)  const
     *o << "FieldNum" << "\t" << "FieldName" << "\t" << "Type"  << "\t" << "FieldNum" << "\t" << "FieldName" << endl;
   }
 
-  int32  x;
+  kkint32  x;
 
   bool  alreadyExist;
   
   for  (x = 0;  x < numOfFeatures; x++)
   {
-    int32  srcFeatureNum = srcFeatureNums[x];
-    int32  y = destFeatureNums[x];
+    kkint32  srcFeatureNum = srcFeatureNums[x];
+    kkint32  y = destFeatureNums[x];
 
     if  (y >= codedNumOfFeatures)
     {
@@ -275,7 +275,7 @@ FileDescPtr  FeatureEncoder2::CreateEncodedFileDesc (ostream*  o)  const
 
     case  FeBinary:
       {
-        for  (int32 z = 0;  z < cardinalityDest[x];  z++)
+        for  (kkint32 z = 0;  z < cardinalityDest[x];  z++)
         {
           KKStr  nominalValue = fileDesc->GetNominalValue (srcFeatureNums[x], z);
           KKStr  encodedName  = fileDesc->FieldName (x) + "_" + nominalValue;
@@ -325,13 +325,13 @@ FeatureVectorPtr  FeatureEncoder2::EncodeAExample (FeatureVectorPtr  src)  const
   encodedImage->PredictedClass (src->PredictedClass ());
   encodedImage->TrainWeight    (src->TrainWeight    ());
 
-  const FFLOAT*  featureData = src->FeatureData ();
-  int32  x;
+  const FVFloat*  featureData = src->FeatureData ();
+  kkint32  x;
 
   for  (x = 0;  x < numOfFeatures; x++)
   {
-    FFLOAT  featureVal = featureData [srcFeatureNums[x]];
-    int32  y = destFeatureNums[x];
+    FVFloat  featureVal = featureData [srcFeatureNums[x]];
+    kkint32  y = destFeatureNums[x];
 
     switch (destWhatToDo[x])
     {
@@ -343,9 +343,9 @@ FeatureVectorPtr  FeatureEncoder2::EncodeAExample (FeatureVectorPtr  src)  const
 
     case  FeBinary:
       {
-        for  (int32 z = 0; z < cardinalityDest[x]; z++)
+        for  (kkint32 z = 0; z < cardinalityDest[x]; z++)
         {
-          FFLOAT  bVal = ((int32)featureVal == z);
+          FVFloat  bVal = ((kkint32)featureVal == z);
           encodedImage->AddFeatureData (y, bVal);
           y++;
         }
@@ -355,7 +355,7 @@ FeatureVectorPtr  FeatureEncoder2::EncodeAExample (FeatureVectorPtr  src)  const
 
     case  FeScale:
       {
-        encodedImage->AddFeatureData (y, (featureVal / (FFLOAT)cardinalityDest[x]));
+        encodedImage->AddFeatureData (y, (featureVal / (FVFloat)cardinalityDest[x]));
       }
       break;
     }
@@ -372,8 +372,7 @@ FeatureVectorListPtr  FeatureEncoder2::EncodeAllExamples (const FeatureVectorLis
 {
   FeatureVectorListPtr  encodedExamples = new FeatureVectorList (encodedFileDesc, 
                                                                  true,                  // Will own the contents 
-                                                                 log,  
-                                                                 srcData->QueueSize ()
+                                                                 log
                                                                 );
 
   FeatureVectorList::const_iterator  idx;
@@ -456,7 +455,7 @@ FeatureVectorListPtr  FeatureEncoder2::EncodedFeatureVectorList (const FeatureVe
   if  (srcData.AllFieldsAreNumeric ())
     return  srcData.DuplicateListAndContents ();
 
-  FeatureVectorListPtr  encodedFeatureVectorList = new FeatureVectorList (encodedFileDesc, true, log, srcData.QueueSize ());
+  FeatureVectorListPtr  encodedFeatureVectorList = new FeatureVectorList (encodedFileDesc, true, log);
 
   FeatureVectorList::const_iterator  idx;
   for  (idx = srcData.begin ();   idx != srcData.end ();  idx++)
@@ -489,8 +488,8 @@ CompressionStats  FeatureEncoder2::compress (const FeatureVectorList&  examples,
 
   FileDescPtr file_desc = examples.FileDesc ();
 
-  int32  numSelFeatures    = param.SelectedFeatures ().NumOfFeatures ();
-  int32  featursPerExample = file_desc->NumOfFields ();
+  kkint32  numSelFeatures    = param.SelectedFeatures ().NumOfFeatures ();
+  kkint32  featursPerExample = file_desc->NumOfFields ();
 
   time_before = osGetSystemTimeUsed();
 
@@ -498,8 +497,8 @@ CompressionStats  FeatureEncoder2::compress (const FeatureVectorList&  examples,
 
   CompressionStats stats;
 
-  int32 nodeLength     = numSelFeatures;
-  int32 hashSize       = int32(examples.QueueSize() * 1.5);
+  kkint32 nodeLength     = numSelFeatures;
+  kkint32 hashSize       = kkint32(examples.QueueSize() * 1.5);
 
   ChainHashNode::setLength           (nodeLength);
   ChainHashNode::setHashSize         (hashSize);
@@ -528,13 +527,13 @@ CompressionStats  FeatureEncoder2::compress (const FeatureVectorList&  examples,
   ChainHash<ChainHashNode> ch (notFound, hashSize);
   FeatureVectorList::const_iterator  i;
   FeatureVectorPtr example;
-  int32 example_index = 0;
+  kkint32 example_index = 0;
   bool success = false;  // indicates if example was successfully inserted into hash table
 
   example_index = 0;
 
   MLClassConstPtr  lastMLClass = NULL;
-  int32               lastClassNum   = -1;
+  kkint32             lastClassNum   = -1;
 
   for (i = examples.begin ();  i != examples.end ();  ++i)
   {
@@ -562,12 +561,12 @@ CompressionStats  FeatureEncoder2::compress (const FeatureVectorList&  examples,
   SetupNominalCounters ();
 
   // walk the hash table and build the newly compressed example list
-  vector< list<int32> >&                  bucketList  = ch.getBucketList();
-  vector< list<int32> >::const_iterator   it; 
-  list<int32>::const_iterator             it2;
+  vector< list<kkint32> >&                  bucketList  = ch.getBucketList();
+  vector< list<kkint32> >::const_iterator   it; 
+  list<kkint32>::const_iterator             it2;
 
-  //int32  num_buckets = bucketList.size();
-  int32  size        = 1;
+  //kkint32  num_buckets = bucketList.size();
+  kkint32  size        = 1;
 
   // each entry in the bucketList contains a list of examples that need to be merged
   for  (it = bucketList.begin(); it != bucketList.end(); it++)
@@ -575,7 +574,7 @@ CompressionStats  FeatureEncoder2::compress (const FeatureVectorList&  examples,
     // create a new example using the feature values from the first example in the current bucket
     size = 1;
     it2 = it->begin();
-    //FFLOAT *crap = (*features_list)[*it2].FeatureData ( );
+    //FVFloat *crap = (*features_list)[*it2].FeatureData ( );
     FeatureVectorPtr example = new FeatureVector (featursPerExample);
     
     
@@ -628,7 +627,7 @@ KKStr  FeatureEncoder2::BitReductionByFeature (VectorInt&  bitsToReduceByFeature
 {
   KKStr  o (100);
 
-  int32  x;
+  kkint32  x;
 
   for  (x = 0;  x < param.SelectedFeatures ().NumOfFeatures ();  x++)
   {
@@ -645,16 +644,16 @@ KKStr  FeatureEncoder2::BitReductionByFeature (VectorInt&  bitsToReduceByFeature
 //effects: divided each feature of example by t
 void FeatureEncoder2::divide (FeatureVectorPtr example, double t)
 {
-  FFLOAT*  feature_data = example->FeatureDataAlter ();
-  for (int32 i = 0;  i < example->NumOfFeatures ();  i++)
+  FVFloat*  feature_data = example->FeatureDataAlter ();
+  for (kkint32 i = 0;  i < example->NumOfFeatures ();  i++)
   {
     if (((attributeVector[i] == NominalAttribute) || (attributeVector[i] == SymbolicAttribute))  &&  (encodingMethod != ModelParam::NoEncoding))
     {
-      feature_data[i] = (FFLOAT)NominalFeatureAverage (i);
+      feature_data[i] = (FVFloat)NominalFeatureAverage (i);
     }
     else 
     {
-      feature_data[i] /= (FFLOAT)t;
+      feature_data[i] /= (FVFloat)t;
     }
   }
 }  /* divide */
@@ -667,10 +666,10 @@ void  FeatureEncoder2::add (      FeatureVectorPtr a,
                             const FeatureVectorPtr b
                            )
 {
-  FFLOAT*        feature_data_a = a->FeatureDataAlter ();
-  const FFLOAT*  feature_data_b = b->FeatureData      ();
+  FVFloat*        feature_data_a = a->FeatureDataAlter ();
+  const FVFloat*  feature_data_b = b->FeatureData      ();
   
-  for (int32 i = 0;  i < a->NumOfFeatures();  i++)
+  for (kkint32 i = 0;  i < a->NumOfFeatures();  i++)
   {
     if ((
           (attributeVector[i] == NominalAttribute)  ||  (attributeVector[i] == SymbolicAttribute)
@@ -678,7 +677,7 @@ void  FeatureEncoder2::add (      FeatureVectorPtr a,
         (encodingMethod != ModelParam::NoEncoding)
        )
     {
-      IncrementNominalCounters (i, (int32)feature_data_b[i]);
+      IncrementNominalCounters (i, (kkint32)feature_data_b[i]);
     }
     else
     {
@@ -696,12 +695,12 @@ void  FeatureEncoder2::ZeroNominalCounters ()
   if  (!nominal_counters)
     return;
 
-  for  (uint32 i = 0;  i < fileDesc->NumOfFields ();  i++)
+  for  (kkuint32 i = 0;  i < fileDesc->NumOfFields ();  i++)
   {
     if  ((attributeVector[i] != NominalAttribute)  &&  (attributeVector[i] != SymbolicAttribute))
       continue;
 
-    for (int32 j = 0;  j < cardinalityVector[i];  j++)
+    for (kkint32 j = 0;  j < cardinalityVector[i];  j++)
     {
       nominal_counters[i][j] = 0;
     }
@@ -716,7 +715,7 @@ void FeatureEncoder2::DestroyNominalCounters ()
   if (!nominal_counters)
     return;
 
-  for (uint32 i = 0;  i < fileDesc->NumOfFields ();  i++)
+  for (kkuint32 i = 0;  i < fileDesc->NumOfFields ();  i++)
   {
     if ((attributeVector[i] == NominalAttribute)  ||  (attributeVector[i] == SymbolicAttribute))
     {
@@ -738,12 +737,12 @@ void FeatureEncoder2::SetupNominalCounters ()
   DestroyNominalCounters ();
 
   // create the new counters
-  nominal_counters = new int32 *[fileDesc->NumOfFields ()];
-  for (uint32 i = 0;  i < fileDesc->NumOfFields ();  i++)
+  nominal_counters = new kkint32 *[fileDesc->NumOfFields ()];
+  for (kkuint32 i = 0;  i < fileDesc->NumOfFields ();  i++)
   {
     if  ((attributeVector[i] == NominalAttribute)  ||  (attributeVector[i] == SymbolicAttribute))
     {
-      nominal_counters[i] = new int32[cardinalityVector[i]];
+      nominal_counters[i] = new kkint32[cardinalityVector[i]];
       nominalCountersSize += cardinalityVector[i];
     }
     else
@@ -756,8 +755,8 @@ void FeatureEncoder2::SetupNominalCounters ()
 
 
 
-void  FeatureEncoder2::IncrementNominalCounters (uint32 feature_num, 
-                                                 int32  value
+void  FeatureEncoder2::IncrementNominalCounters (kkuint32 feature_num, 
+                                                 kkint32  value
                                                 )
 {
   if (feature_num >= fileDesc->NumOfFields ())
@@ -778,17 +777,17 @@ void  FeatureEncoder2::IncrementNominalCounters (uint32 feature_num,
 
 
 
-int32  FeatureEncoder2::NominalFeatureAverage (uint32  feature_num)
+kkint32  FeatureEncoder2::NominalFeatureAverage (kkuint32  feature_num)
 {
-  int32 max = -1;
-  int32 max_index = -1;
+  kkint32 max = -1;
+  kkint32 max_index = -1;
 
   if (feature_num >= fileDesc->NumOfFields () || (feature_num < 0))
   {
     return max;
   }
 
-  for (int32 j = 0;  j < fileDesc->Cardinality (feature_num, log);  j++)
+  for (kkint32 j = 0;  j < fileDesc->Cardinality (feature_num, log);  j++)
   {
     if (nominal_counters[feature_num][j] > max)
     {
@@ -808,9 +807,9 @@ int32  FeatureEncoder2::NominalFeatureAverage (uint32  feature_num)
 
 struct  FeatureEncoder2::FeatureVar2
 {
-  FeatureVar2 (int32          _featureNum,  
+  FeatureVar2 (kkint32        _featureNum,  
               AttributeType  _attributeType,
-              int32          _idx,  
+              kkint32        _idx,  
               double         _var
              ):
           attributeType (_attributeType),
@@ -820,8 +819,8 @@ struct  FeatureEncoder2::FeatureVar2
         {}
 
     MLL::AttributeType  attributeType;
-    int32               featureNum;
-    int32               idx;
+    kkint32             featureNum;
+    kkint32             idx;
     double              var;
 };
 
@@ -848,7 +847,7 @@ class  FeatureEncoder2::FeatureVarComparrison2
 public:
   FeatureVarComparrison2 ()  {};
 
-  int32  AttributeValue (AttributeType  attributeType)
+  kkint32  AttributeValue (AttributeType  attributeType)
   {
     if  (attributeType == NumericAttribute)
       return 0;
@@ -871,8 +870,8 @@ public:
                      FeatureVar2Ptr  p2
                     )
   {
-    int32 p1AttrVal = AttributeValue (p1->attributeType);
-    int32 p2AttrVal = AttributeValue (p2->attributeType);
+    kkint32 p1AttrVal = AttributeValue (p1->attributeType);
+    kkint32 p2AttrVal = AttributeValue (p2->attributeType);
 
     if  (p1AttrVal < p2AttrVal)
       return true;
@@ -894,7 +893,7 @@ public:
  */
 VectorInt  FeatureEncoder2::DeriveBitReductionPlain (const FeatureVectorList&  examples)
 {
-  int32 numOfFeatures = param.SelectedFeatures ().NumOfFeatures ();
+  kkint32 numOfFeatures = param.SelectedFeatures ().NumOfFeatures ();
   VectorInt  bitsToReduceBy (numOfFeatures, param.BitsToReduceBy ());
   return  bitsToReduceBy;
 }
@@ -903,14 +902,14 @@ VectorInt  FeatureEncoder2::DeriveBitReductionPlain (const FeatureVectorList&  e
 
 VectorInt  FeatureEncoder2::DeriveBitReductionForEachFeatureFromSpecifoedParameter ()
 {
-  int32 numSelFeatures = param.SelectedFeatures ().NumOfFeatures ();
+  kkint32 numSelFeatures = param.SelectedFeatures ().NumOfFeatures ();
   VectorInt  bitsToReduceByFeature (numSelFeatures, param.BitsToReduceBy ());
 
   KKStr  s = param.UnBalancedBitsStr ();
 
   while  (!s.Empty ())
   {
-    int32  featureNum = s.ExtractTokenInt (",");
+    kkint32  featureNum = s.ExtractTokenInt (",");
     if  ((featureNum < 0)  ||  (featureNum >= numSelFeatures))
     {
       cerr << endl << endl
@@ -946,30 +945,30 @@ VectorInt  FeatureEncoder2::DeriveBitReductionForEachFeatureByVariance (const Fe
                                                                        )
                                                      
 {
-  int32 idx;
-  int32 numSelFeatures = param.SelectedFeatures ().NumOfFeatures ();
+  kkint32 idx;
+  kkint32 numSelFeatures = param.SelectedFeatures ().NumOfFeatures ();
 
   FeatureVar2List  featureVariances (true);
 
-  vector<int32>     totals    (numSelFeatures, 0);
+  vector<kkint32>     totals    (numSelFeatures, 0);
   vector<double>  means     (numSelFeatures, 0.0);
   vector<double>  sqrTotals (numSelFeatures, 0.0);
 
-  int32  numBitsToReduceBy = param.BitsToReduceBy ();
-  //int32  numBitsToReduceBy = 8;
+  kkint32  numBitsToReduceBy = param.BitsToReduceBy ();
+  //kkint32  numBitsToReduceBy = 8;
 
   FeatureVectorList::const_iterator imageIDX;
   for  (imageIDX = examples.begin ();  imageIDX != examples.end ();  imageIDX++)
   {
     FeatureVectorPtr  example = *imageIDX;
 
-    const FFLOAT*  featureData = example->FeatureData ();
+    const FVFloat*  featureData = example->FeatureData ();
 
     for  (idx = 0;  idx < numSelFeatures;  idx++)
     {
-      int32  featureNum = param.SelectedFeatures ()[idx];
+      kkint32  featureNum = param.SelectedFeatures ()[idx];
     
-      int32 featureDataInt = int32 (featureData[featureNum] * 100000.0);
+      kkint32 featureDataInt = kkint32 (featureData[featureNum] * 100000.0);
       if  (featureDataInt > 0)
         featureDataInt = featureDataInt >> numBitsToReduceBy;
       else
@@ -989,13 +988,13 @@ VectorInt  FeatureEncoder2::DeriveBitReductionForEachFeatureByVariance (const Fe
   {
     FeatureVectorPtr  example = *imageIDX;
 
-    const FFLOAT*  featureData = example->FeatureData ();
+    const FVFloat*  featureData = example->FeatureData ();
 
     for  (idx = 0;  idx < numSelFeatures;  idx++)
     {
-      int32  featureNum = param.SelectedFeatures ()[idx];
+      kkint32  featureNum = param.SelectedFeatures ()[idx];
 
-      int32 featureDataInt = int32 (featureData[featureNum] * 100000.0);
+      kkint32 featureDataInt = kkint32 (featureData[featureNum] * 100000.0);
       if  (featureDataInt > 0)
         featureDataInt = featureDataInt >> numBitsToReduceBy;
       else
@@ -1010,7 +1009,7 @@ VectorInt  FeatureEncoder2::DeriveBitReductionForEachFeatureByVariance (const Fe
   cout << endl << "Variances:";
   for  (idx = 0;  idx < numSelFeatures;  idx++)
   {
-    int32  featureNum = param.SelectedFeatures ()[idx];
+    kkint32  featureNum = param.SelectedFeatures ()[idx];
     double  var = sqrTotals[idx] / double (examples.QueueSize ());
     featureVariances.PushOnBack (new FeatureVar2 (featureNum, attributeVector[featureNum], idx, var));
     cout << ", " << var;
@@ -1022,15 +1021,15 @@ VectorInt  FeatureEncoder2::DeriveBitReductionForEachFeatureByVariance (const Fe
   sort (featureVariances.begin (),  featureVariances.end (), comp);
 
   VectorInt  bitsToReduceByFeature (numSelFeatures, param.BitsToReduceBy ());
-  int32  numToReduceByOneMore = int32 (param.UnBalancedBits ());
+  kkint32  numToReduceByOneMore = kkint32 (param.UnBalancedBits ());
 
   unBalFeatures = "";
 
   cout << endl << endl << "UnBAl Bit Order:";
-  for (int32 x = 0;  x < numToReduceByOneMore; x++)
+  for (kkint32 x = 0;  x < numToReduceByOneMore; x++)
   {
-    //int32 z = numSelFeatures - (x + 1);
-    int32 z = x;  // reduce features that have smallest var by 1 extra bit.
+    //kkint32 z = numSelFeatures - (x + 1);
+    kkint32 z = x;  // reduce features that have smallest var by 1 extra bit.
     idx = featureVariances[z].idx;
     bitsToReduceByFeature[idx]++;
     cout << ", " << idx;

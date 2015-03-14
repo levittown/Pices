@@ -14,17 +14,17 @@
 using namespace std;
 
 #include  "MemoryDebug.h"
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 
 using namespace System;
 using namespace System::Collections::Generic;
 using namespace System::IO;
 
-#include  "..\BaseLibrary\GoalKeeper.h"
-#include  "Matrix.h"
-using namespace KKU;
+#include "GoalKeeper.h"
+#include "Matrix.h"
+using namespace KKB;
 
-#include "OSservices.h"
+#include "PicesOSservices.h"
 #include "PicesKKStr.h"
 
 #include "ClassificationBiasMatrix.h"

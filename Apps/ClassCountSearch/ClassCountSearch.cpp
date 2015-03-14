@@ -17,13 +17,13 @@
 using namespace  std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "BMPImage.h"
 #include "HTMLReport.h"
 #include "OSservices.h"
 #include "Raster.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 #include "SipperVariables.h"
 using namespace SipperHardware;
@@ -365,7 +365,7 @@ ClassCountSearch::~ClassCountSearch ()
 }
 
 
-void  ClassCountSearch::InitalizeApplication (int32   argc,
+void  ClassCountSearch::InitalizeApplication (kkint32 argc,
                                               char**  argv
                                              )
 {
@@ -415,14 +415,14 @@ void  ClassCountSearch::InitalizeApplication (int32   argc,
   if  (reportFileName.Empty ())
   {
     KKStr  reportDir = osAddSlash (SipperVariables::PicesReportDir ()) + "ClassCountSearch";
-    KKU::osCreateDirectoryPath (reportDir);
+    KKB::osCreateDirectoryPath (reportDir);
     reportFileName = osAddSlash (reportDir) + osGetRootNameOfDirectory (configFileName) + "_ClassCountSearch.txt";
   }
 
   reportFileName  = osCreateUniqueFileName (reportFileName);
   report = new ofstream (reportFileName.Str ());
 
-  KKStr  type1ErrorReportName = KKU::osRemoveExtension (reportFileName) + "_Sensitivity.txt";
+  KKStr  type1ErrorReportName = KKB::osRemoveExtension (reportFileName) + "_Sensitivity.txt";
   report1Type1Errors = new ofstream (type1ErrorReportName.Str ());
   
   *report << endl;
@@ -551,7 +551,7 @@ void  ClassCountSearch::Main ()
   bool      changesMadeToTrainingLibraries = false;
 
   {
-    KKU::DateTime  latestImageTimeStamp;
+    KKB::DateTime  latestImageTimeStamp;
     trainExamples = config->LoadFeatureDataFromTrainingLibraries (latestImageTimeStamp, changesMadeToTrainingLibraries, cancelFlag);
     if  (!trainExamples)
     {
@@ -629,8 +629,8 @@ void  ClassCountSearch::ProcessClassCombo (MLClassConstListPtr  classes)
   *report << "ClassCount" << "\t" << classes->QueueSize ()         << endl;
   *report << "Classes"    << "\t" << classes->ToTabDelimitedStr () << endl;
 
-  int32 numExamples = 0;
-  int32 numIgnored  = 0;
+  kkint32 numExamples = 0;
+  kkint32 numIgnored  = 0;
 
   ConfusionMatrix2Ptr cm = GradeClassList (classes, numExamples, numIgnored);
   cm->PrintConfusionMatrixTabDelimited (*report);
@@ -714,8 +714,8 @@ void  ClassCountSearch::ProcessClassCombo (MLClassConstListPtr  classes)
 
 
 ConfusionMatrix2Ptr  ClassCountSearch::GradeClassList (MLClassConstListPtr  classes,
-                                                       int32&             numExamples, 
-                                                       int32&             numIgnored
+                                                       kkint32&             numExamples, 
+                                                       kkint32&             numIgnored
                                                        )
 {
   log.Level (10) << "ClassCountSearch::GradeClassList" << endl;

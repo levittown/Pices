@@ -6,7 +6,7 @@
 
 #include "MsgQueue.h"
 #include "RunLog.h"
-using namespace  KKU;
+using namespace  KKB;
 
 #include "SipperFile.h"
 using namespace  SipperHardware;
@@ -34,7 +34,7 @@ namespace  ImageExtractionManager
   public:
     ExtractionManager (const KKStr&      _applicationName,
                        ExtractionParms&  _parms,
-                       uint32            _maxNumThreads,
+                       kkuint32          _maxNumThreads,
                        RunLog&           _log
                       );
 
@@ -44,27 +44,27 @@ namespace  ImageExtractionManager
     const bool&  Crashed       ()  const  {return crashed;}
     const bool&  DoneExecuting ()  const  {return doneExecuting;}
     RunLog&      Log           ()  const  {return log;}
-    uint32       LogEntryId    ()  const  {return logEntryId;}
+    kkuint32     LogEntryId    ()  const  {return logEntryId;}
 
     bool  AllProcessorsTerminated (ImageExtractionThreadListPtr  threads);
 
     bool  AnyProcessorsCrashed ();
 
-    void  TerminateProcessing (int32 miliSecsToWait);
+    void  TerminateProcessing (kkint32 miliSecsToWait);
 
     void  GetRunTimeStats (ExtractionManagerStats&  stats);
 
-    void  GetRunTimeStats (uint64&  _bytesRead,
-                           uint32&  _framesRead,
-                           uint32&  _framesProcessed,
-                           uint32&  _scanLinesProcessed,
-                           uint32&  _imagesFound,
-                           uint32&  _imagesClassified,
-                           uint32&  _imagesUpdated,
-                           uint32&  _duplicatesDetected,
-                           uint32&  _updateFailures,
-                           uint32&  _framesOnQueue,
-                           uint32&  _imagesOnQueue
+    void  GetRunTimeStats (kkuint64&  _bytesRead,
+                           kkuint32&  _framesRead,
+                           kkuint32&  _framesProcessed,
+                           kkuint32&  _scanLinesProcessed,
+                           kkuint32&  _imagesFound,
+                           kkuint32&  _imagesClassified,
+                           kkuint32&  _imagesUpdated,
+                           kkuint32&  _duplicatesDetected,
+                           kkuint32&  _updateFailures,
+                           kkuint32&  _framesOnQueue,
+                           kkuint32&  _imagesOnQueue
                           );
 
     /** 
@@ -79,7 +79,7 @@ namespace  ImageExtractionManager
     void  ShutdownProcessing (ImageExtractionThreadListPtr  threads);
 
   private:
-    void  DisplayRunTimeStats (uint32  loopCount);
+    void  DisplayRunTimeStats (kkuint32  loopCount);
 
     void  GenerateReport ();
 
@@ -94,7 +94,7 @@ namespace  ImageExtractionManager
     SipperFilePtr  MakeSureSipperSipperFileExists (const KKStr&  sipperFileName);
 
     void  MonitorUntilDone (ImageExtractionThreadListPtr  threadsToMonitor,
-                            uint32&                       loopCount,
+                            kkuint32&                       loopCount,
                             bool&                         successful
                            );
 
@@ -125,13 +125,13 @@ namespace  ImageExtractionManager
     FrameExtractorThreadPtr             frameExtractorThread;
     LogicalFrameQueuePtr                framePool;              /**< Frames that will be used by 'FrameExtractorThread' and 'FrameProcessorThread'. */
     ImageExtractionThreadListPtr        frameProcessors;   /**< List of threads that are specifically instances of 'FrameProcessorThread'.     */
-    uint32                              frameWidth;
+    kkuint32                            frameWidth;
     SipperExtractionImageManagerPtr     imageManager;
     ExtractedImageQueuePtr              imagesAwaitingUpdate;   /**< These are images that are queued to be inserted into database.                 */
     RunLog&                             log;
     DataBaseLogEntryPtr                 logEntry;
-    uint32                              logEntryId;
-    uint32                              maxNumThreads;
+    kkuint32                            logEntryId;
+    kkuint32                            maxNumThreads;
     MsgQueuePtr                         msgQueue;               /**< Messages from all the different threads will be sent through this instance.    */
     ExtractionParms&                    parms;
     std::ofstream                       reportFile;
@@ -143,7 +143,7 @@ namespace  ImageExtractionManager
     DataBaseImageValidatedEntryListPtr  validationInfo;         /**< Holds Images Validation info to be re-applied to images after extraction.       */
     KKStr                               validationInfoFileName;
     KKStr                               validationInfoFileNameHistory;
-    uint32                              veryLargeImageSize;     /**< Threshold for putting Images into Very Large Directory.                       */
+    kkuint32                            veryLargeImageSize;     /**< Threshold for putting Images into Very Large Directory.                       */
   };  /* ExtractionManager */
 
   typedef  ExtractionManager*  ExtractionManagerPtr;

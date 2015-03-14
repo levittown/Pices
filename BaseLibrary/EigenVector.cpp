@@ -12,14 +12,14 @@
 
 #include  "MemoryDebug.h"
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 
 using namespace std;
 
 #include "EigenVector.h"
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "OSservices.h"
-using namespace KKU;
+using namespace KKB;
 
 
 //void  Tred2 (Mat_IO_DP &a,
@@ -27,13 +27,13 @@ using namespace KKU;
 //             Vec_0_DP, &e
 //            )
 
-void  KKU::Tred2 (int32     n,
+void  KKB::Tred2 (kkint32   n,
                   double    a[2][2],
                   double*   d,
                   double*   e
                  )
 {
-  int32  i, j, k, l;
+  kkint32  i, j, k, l;
 
   double  scale, hh, h, g, f;
 
@@ -187,13 +187,13 @@ double  pythag (const double a,
 
 
 
-void  KKU::tqli (int32     n,
+void  KKB::tqli (kkint32   n,
                  double*   d,
                  double*   e,
                  double    z[2][2]
                 )
 {
-  int32  m, l, iter, i, k;
+  kkint32  m, l, iter, i, k;
   double  s, r, p,g, f, dd, c, b;
 
   for  (i = 1;  i < n;  i++)

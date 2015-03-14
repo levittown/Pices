@@ -24,7 +24,7 @@
 */
 #include  <map>
 
-#include  "Str.h"
+#include  "KKStr.h"
 
 
 namespace MLL 
@@ -50,12 +50,12 @@ namespace MLL
   class  Attribute
   {
   public:
-    typedef  KKU::int32   int32;
-    typedef  KKU::uint32  uint32;
+    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::kkuint32  kkuint32;
 
     Attribute (const KKStr&   _name,
                AttributeType  _type,
-               int32          _fieldNum
+               kkint32        _fieldNum
               );
 
     Attribute (const Attribute&  a);
@@ -78,11 +78,11 @@ namespace MLL
      *@details Only  attributes with type NominalAttribute or SymbolicAttribute have a fixed number
      *         of possible values all others will return 999999999.
      */
-    int32          Cardinality ();
+    kkint32        Cardinality ();
 
-    int32          FieldNum ()  const  {return  fieldNum;}
+    kkint32        FieldNum ()  const  {return  fieldNum;}
 
-    int32          GetNominalCode  (const KKStr&  nominalValue)  const;  // -1 means not found.
+    kkint32        GetNominalCode  (const KKStr&  nominalValue)  const;  // -1 means not found.
 
     /**
      *@brief  Returns the nominal value for the given ordinal value.
@@ -91,9 +91,9 @@ namespace MLL
      *  to this method where 'code' == 3 would return "Wed".
      */
     const  
-    KKStr&         GetNominalValue (int32 code) const;
+    KKStr&         GetNominalValue (kkint32 code) const;
 
-    int32          MemoryConsumedEstimated ()  const;
+    kkint32        MemoryConsumedEstimated ()  const;
 
     const
     KKStr&         Name () const {return name;}
@@ -113,7 +113,7 @@ namespace MLL
   private:
     void    ValidateNominalType (const KKStr&  funcName)  const;
 
-    int32              fieldNum;
+    kkint32            fieldNum;
     KKStr              name;
     KKStr              nameUpper;
     KKStrListIndexed*  nominalValuesUpper;
@@ -126,12 +126,10 @@ namespace MLL
   class  AttributeList: public KKQueue<Attribute>
   {
   public:
-    typedef  KKU::int32   int32;
-    typedef  KKU::uint32  uint32;
+    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::kkuint32  kkuint32;
 
-    AttributeList (bool  owner,
-                   int32 growthRate
-                  );
+    AttributeList (bool  owner);
 
     ~AttributeList ();
 
@@ -140,7 +138,7 @@ namespace MLL
     const
     AttributePtr  LookUpByName (const KKStr&  attributeName)  const;
 
-    int32   MemoryConsumedEstimated ()  const;
+    kkint32 MemoryConsumedEstimated ()  const;
 
     void  PushOnBack   (AttributePtr  attribute);
 

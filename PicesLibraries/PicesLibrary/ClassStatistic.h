@@ -1,7 +1,7 @@
 #if !defined(_CLASSSTATISTIC_)
 
-#include "BasicTypes.h"
-#include "Str.h"
+#include "KKBaseTypes.h"
+#include "KKStr.h"
 
 #include "MLClass.h"
 
@@ -14,15 +14,15 @@ namespace MLL
   class  ClassStatistic 
   {
   public:
-    typedef  KKU::uint32  uint32;
+    typedef  KKB::kkuint32  kkuint32;
 
     ClassStatistic (const ClassStatistic&  right);
 
     ClassStatistic (MLClassConstPtr  _mlClass,
-                    uint32           _count
+                    kkuint32         _count
                    );
 
-    uint32              Count      ()  const {return  count;}
+    kkuint32            Count      ()  const {return  count;}
     MLClassConstPtr     MLClass    ()  const {return  mlClass;}
 
     void                Increment  ()        {count++;}
@@ -34,7 +34,7 @@ namespace MLL
   private:
     MLClassConstPtr     mlClass;      /**< Does not own the mlClass object.                 */
 
-    uint32              count;        /**< Represents the number of imageFeatures objects in a a FeatureVectorList that point to MLClass */
+    kkuint32            count;        /**< Represents the number of imageFeatures objects in a a FeatureVectorList that point to MLClass */
   };
 
   typedef  ClassStatistic*  ClassStatisticPtr;
@@ -45,8 +45,8 @@ namespace MLL
   public:
     ClassStatisticList (bool  _owner);
 
-    typedef  KKU::int32   int32;
-    typedef  KKU::uint32  uint32;
+    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::kkuint32  kkuint32;
 
     ClassStatisticPtr  LookUpByImageClass (MLClassConstPtr  mlClass)  const;
 
@@ -58,7 +58,7 @@ namespace MLL
 
     void  PrintReport (ostream& r);
 
-    int32 operator[]  (MLClassConstPtr  mlClass);
+    kkint32 operator[]  (MLClassConstPtr  mlClass);
     const  ClassStatisticList&  operator+= (const ClassStatisticList&  right);
 
   private:

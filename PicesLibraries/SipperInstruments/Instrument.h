@@ -1,8 +1,8 @@
 #ifndef  _INSTRUMENT_
 #define  _INSTRUMENT_
 
-#include  "Str.h"
-using namespace KKU;
+#include  "KKStr.h"
+using namespace KKB;
 
 
 
@@ -24,10 +24,10 @@ namespace  SipperHardware
   class Instrument
   {
   public:
-    typedef  KKU::int32   int32;
-    typedef  KKU::uint32  uint32;
-    typedef  KKU::int64   int64;
-    typedef  KKU::uint64  uint64;
+    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::kkuint32  kkuint32;
+    typedef  KKB::kkint64 kkint64;
+    typedef  KKB::kkuint64  kkuint64;
   
     typedef  Instrument*  InstrumentPtr;
 
@@ -48,7 +48,7 @@ namespace  SipperHardware
   
     virtual  InstrumentDataReportPtr  CreateInstrumentDataReporter (InstrumentDataManagerPtr _manager,
                                                                     const KKStr&             _reportDir,
-                                                                    int32                    _instrumentId
+                                                                    kkint32                  _instrumentId
                                                                    ) = 0;
     
     static  void  FinalCleanUp (); /**< Deletes objects pointed to by 'instruments[]';
@@ -82,7 +82,7 @@ namespace  SipperHardware
     
     virtual  InstrumentDataReportPtr  CreateInstrumentDataReporter (InstrumentDataManagerPtr _manager,
                                                                     const KKStr&            _reportDir,
-                                                                    int32                    _instrumentId
+                                                                    kkint32                  _instrumentId
                                                                    );
   
   };  /* InstrumentCTD */
@@ -100,7 +100,7 @@ namespace  SipperHardware
   
     virtual  InstrumentDataReportPtr  CreateInstrumentDataReporter (InstrumentDataManagerPtr _manager,
                                                                     const KKStr&            _reportDir,
-                                                                    int32                    _instrumentId
+                                                                    kkint32                  _instrumentId
                                                                    );
   };  /* InstrumentGPS */
   
@@ -117,7 +117,7 @@ namespace  SipperHardware
   
     virtual  InstrumentDataReportPtr  CreateInstrumentDataReporter (InstrumentDataManagerPtr _manager,
                                                                     const KKStr&            _reportDir,
-                                                                    int32                    _instrumentId
+                                                                    kkint32                  _instrumentId
                                                                    );
   };  /* InstrumentOther */
   
@@ -135,7 +135,7 @@ namespace  SipperHardware
   
     virtual  InstrumentDataReportPtr  CreateInstrumentDataReporter (InstrumentDataManagerPtr _manager,
                                                                     const KKStr&            _reportDir,
-                                                                    int32                    _instrumentId
+                                                                    kkint32                  _instrumentId
                                                                    );
   
   };  /* InstrumentOther */
@@ -156,7 +156,7 @@ namespace  SipperHardware
   
     virtual  InstrumentDataReportPtr  CreateInstrumentDataReporter (InstrumentDataManagerPtr _manager,
                                                                     const KKStr&            _reportDir,
-                                                                    int32                    _instrumentId
+                                                                    kkint32                  _instrumentId
                                                                    );
   
   };  /* InstrumentOther */

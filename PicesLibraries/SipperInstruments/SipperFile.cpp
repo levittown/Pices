@@ -14,12 +14,12 @@
 using namespace std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "GlobalGoalKeeper.h"
 #include "KKStrParser.h"
 #include "OSservices.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 
 #include "SipperFile.h"
@@ -181,11 +181,11 @@ KKStr  SipperFile::ToTabDelStr ()  const
 
 
 
-int32  SearchFieldIdx (const KKStr  searchField, 
+kkint32  SearchFieldIdx (const KKStr  searchField, 
                        const char*  fieldNames[]
                       )
 {
-  int32 idx = 0;
+  kkint32 idx = 0;
 
   for  (idx = 0;  fieldNames[idx] != NULL;  idx++)
   {
@@ -218,7 +218,7 @@ void  SipperFile::ParseTabDelStr (KKStrParser&  parser)
   while  (parser.MoreTokens ())
   {
     KKStr  fieldName = parser.GetNextToken ("\t");
-    int32  fieldIdx = SearchFieldIdx (fieldName, fieldNames);
+    kkint32  fieldIdx = SearchFieldIdx (fieldName, fieldNames);
     if  (fieldName.EqualIgnoreCase ("SipperFileId"))
       sipperFileId = parser.GetNextTokenInt ();
 

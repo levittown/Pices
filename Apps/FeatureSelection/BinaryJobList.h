@@ -4,7 +4,7 @@
 #include  "KKQueue.h"
 #include  "OSservices.h"
 #include  "RunLog.h"
-#include  "Str.h"
+#include  "KKStr.h"
 
 #include  "BinaryJob.h"
 
@@ -21,7 +21,7 @@ namespace FeatureSelectionApp
   class  BinaryJobList: public KKQueue<BinaryJob>
   {
   public:
-    typedef  KKU::uint  uint;
+    typedef  KKB::uint  uint;
 
     typedef  BinaryJobList*  BinaryJobListPtr;
 
@@ -130,7 +130,7 @@ namespace FeatureSelectionApp
                                          );
 
     BinaryJobPtr      LookUpByParameters (const FeatureNumList&  features,
-                                          int32                  numOfRounds,
+                                          kkint32                numOfRounds,
                                           double                 cParm,
                                           double                 gamma,
                                           float                  aParm,

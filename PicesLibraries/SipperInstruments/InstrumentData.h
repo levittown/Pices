@@ -3,11 +3,11 @@
 
 #include <map>
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "DateTime.h"
 #include "GoalKeeper.h"
 #include "KKStrParser.h"
-using namespace KKU;
+using namespace KKB;
 
 #include "CTD_Plus_Data.h"
 
@@ -17,10 +17,10 @@ namespace SipperHardware
   class InstrumentData
   {
   public:
-    typedef  KKU::int32  int32;
-    typedef  KKU::uint32 uint32;
-    typedef  KKU::int64  int64;
-    typedef  KKU::uint64 uint64;
+    typedef  KKB::kkint32  kkint32;
+    typedef  KKB::kkuint32 kkuint32;
+    typedef  KKB::kkint64  kkint64;
+    typedef  KKB::kkuint64 kkuint64;
 
 
     InstrumentData ();
@@ -31,9 +31,9 @@ namespace SipperHardware
                     const VectorInt&    fieldIndirections
                    );
 
-    InstrumentData (uint32                _scanLine,
-                    uint32                _byteOffset,
-                    const KKU::DateTime&  _ctdDate,
+    InstrumentData (kkuint32              _scanLine,
+                    kkuint32              _byteOffset,
+                    const KKB::DateTime&  _ctdDate,
                     char                  _activeBattery,
                     double                _latitude,
                     double                _longitude,
@@ -74,27 +74,27 @@ namespace SipperHardware
 
     static  VectorIntPtr  CreateFieldIndirectionVectorFromTabDelStr (KKStrParser& s);
     static  VectorIntPtr  CreateDefaultFieldIndirectionList ();
-    static  const KKStr&  FieldName                (int32 fieldIndex);
-    static  const KKStr&  ShortFieldName           (int32 fieldIndex);
-    static  const KKStr&  FieldUnitOfMeasure       (int32 fieldIndex);
-    static  float         FieldMinValue            (int32 fieldIndex);
-    static  const KKStr&  FieldFormatStr           (int32 fieldIndex);
+    static  const KKStr&  FieldName                (kkint32 fieldIndex);
+    static  const KKStr&  ShortFieldName           (kkint32 fieldIndex);
+    static  const KKStr&  FieldUnitOfMeasure       (kkint32 fieldIndex);
+    static  float         FieldMinValue            (kkint32 fieldIndex);
+    static  const KKStr&  FieldFormatStr           (kkint32 fieldIndex);
 
-    static  int32         GetFieldNum              (const KKStr& s);
-    static  int32         GetFieldNumFromShortName (const KKStr&  s);
-    static  int32         NumFields   ();
+    static  kkint32       GetFieldNum              (const KKStr& s);
+    static  kkint32       GetFieldNumFromShortName (const KKStr&  s);
+    static  kkint32       NumFields   ();
 
 
 
-    static  int32   CurrentFileVersion ()  {return 13;}
+    static  kkint32 CurrentFileVersion ()  {return 13;}
 
-    KKStr   FieldToStr (int32  fieldIndex)  const;  // 'fieldIndex' = Same number returned by 'GetFieldNum'
+    KKStr   FieldToStr (kkint32  fieldIndex)  const;  // 'fieldIndex' = Same number returned by 'GetFieldNum'
 
-    KKU::uint64  ByteOffset  ()  const  {return  byteOffset;}
+    KKB::kkuint64  ByteOffset  ()  const  {return  byteOffset;}
 
-    const KKU::DateTime&  CtdDate ()  const  {return  ctdDate;}
+    const KKB::DateTime&  CtdDate ()  const  {return  ctdDate;}
  
-    int32    ActiveBattery         ()  const  {return  activeBattery;                 }
+    kkint32  ActiveBattery         ()  const  {return  activeBattery;                 }
     kkuint16 ActiveColumns         ()  const  {return  activeColumns;                 }
     float    Bat1Level             ()  const  {return  data[bat1LevelIndex          ];}
     float    Bat2Level             ()  const  {return  data[bat2LevelIndex          ];}
@@ -120,7 +120,7 @@ namespace SipperHardware
     float    Pressure              ()  const  {return  data[pressureIndex           ];}
     float    RecordRate            ()  const  {return  data[recordRateIndex         ];}
     float    Salinity              ()  const  {return  data[salinityIndex           ];}
-    uint32   ScanLine              ()  const  {return  scanLine;                      }
+    kkuint32 ScanLine              ()  const  {return  scanLine;                      }
     float    SoundVelocity         ()  const  {return  data[soundVelocityIndex      ];}
     float    Temperature           ()  const  {return  data[temperatureIndex        ];}
     float    Transmisivity         ()  const  {return  data[transmisivityIndex      ];}
@@ -143,12 +143,12 @@ namespace SipperHardware
     KKStr   ToTabDelStr   ()  const;
 
 
-    void   CtdDate  (const KKU::DateTime&  _ctdDate)  {ctdDate = _ctdDate;}
+    void   CtdDate  (const KKB::DateTime&  _ctdDate)  {ctdDate = _ctdDate;}
 
-    void   ByteOffset    (uint64   _byteOffset)    {byteOffset    = _byteOffset;}
+    void   ByteOffset    (kkuint64 _byteOffset)    {byteOffset    = _byteOffset;}
     void   Latitude      (double   _latitude)      {latitude      = _latitude;}
     void   Longitude     (double   _longitude)     {longitude     = _longitude;}
-    void   ScanLine      (uint32   _scanLine)      {scanLine      = _scanLine;}
+    void   ScanLine      (kkuint32 _scanLine)      {scanLine      = _scanLine;}
 
     void   ActiveColumns (kkuint16 _activeColumns) {activeColumns = _activeColumns;}
     void   CropLeft      (kkuint16 _cropLeft)      {cropLeft      = _cropLeft;}
@@ -207,7 +207,7 @@ namespace SipperHardware
 
     void    ParseTabDelString (const KKStr& s);
 
-    void    UpdateFromStr (int32         fieldIndex,
+    void    UpdateFromStr (kkint32       fieldIndex,
                            const KKStr&  s
                           );
   
@@ -218,61 +218,61 @@ namespace SipperHardware
     static bool  needToRunFinalCleanUp;
 
     static GoalKeeperPtr       blocker;
-    static map<KKStr,uint32>*  fieldNamesUpperIdx;
-    static map<KKStr,uint32>*  shortFieldNamesIdx;
+    static map<KKStr,kkuint32>*  fieldNamesUpperIdx;
+    static map<KKStr,kkuint32>*  shortFieldNamesIdx;
 
-    static int32         numFields;
-    static int32         numDataFields;    /**< The first fields will be float fields that will be in a array.
+    static kkint32       numFields;
+    static kkint32       numDataFields;    /**< The first fields will be float fields that will be in a array.
                                             * the rest will have there own individule fields.
                                             */
 
-    static int32  scanLineIndex;
-    static int32  byteOffsetIndex;
-    static int32  ctdDateIndex;;
-    static int32  activeBatteryIndex;
-    static int32  latitudeIndex;
-    static int32  longitudeIndex;
+    static kkint32  scanLineIndex;
+    static kkint32  byteOffsetIndex;
+    static kkint32  ctdDateIndex;;
+    static kkint32  activeBatteryIndex;
+    static kkint32  latitudeIndex;
+    static kkint32  longitudeIndex;
 
-    static int32  cropLeftIndex;
-    static int32  cropRightIndex;
-    static int32  activeColumnsIndex;
+    static kkint32  cropLeftIndex;
+    static kkint32  cropRightIndex;
+    static kkint32  activeColumnsIndex;
 
-    static int32  ctdBatteryIndex;    // This is the first field that will be stored in the array 'data'
-    static int32  ConductivityIndex;
-    static int32  densityIndex;
-    static int32  depthIndex;
-    static int32  flowRate1Index;
-    static int32  flowRate2Index;
-    static int32  fluorescenceIndex;
-    static int32  fluorescenceSensorIndex;
-    static int32  cdomFluorescenceIndex;
-    static int32  cdomFluorescenceSensorIndex;
-    static int32  illuminationIndex;
-    static int32  oxygenIndex;
-    static int32  oxygenSensorIndex;
-    static int32  pressureIndex;
-    static int32  recordRateIndex;
-    static int32  salinityIndex;
-    static int32  soundVelocityIndex;
-    static int32  temperatureIndex;
-    static int32  transmisivityIndex;
-    static int32  transmisivitySensorIndex;
-    static int32  turbidityIndex;
-    static int32  turbiditySensorIndex;
-    static int32  pitchIndex;
-    static int32  rollIndex;
-    static int32  bat1LevelIndex;
-    static int32  bat2LevelIndex;
-    static int32  bat3LevelIndex;
-    static int32  bat4LevelIndex;
+    static kkint32  ctdBatteryIndex;    // This is the first field that will be stored in the array 'data'
+    static kkint32  ConductivityIndex;
+    static kkint32  densityIndex;
+    static kkint32  depthIndex;
+    static kkint32  flowRate1Index;
+    static kkint32  flowRate2Index;
+    static kkint32  fluorescenceIndex;
+    static kkint32  fluorescenceSensorIndex;
+    static kkint32  cdomFluorescenceIndex;
+    static kkint32  cdomFluorescenceSensorIndex;
+    static kkint32  illuminationIndex;
+    static kkint32  oxygenIndex;
+    static kkint32  oxygenSensorIndex;
+    static kkint32  pressureIndex;
+    static kkint32  recordRateIndex;
+    static kkint32  salinityIndex;
+    static kkint32  soundVelocityIndex;
+    static kkint32  temperatureIndex;
+    static kkint32  transmisivityIndex;
+    static kkint32  transmisivitySensorIndex;
+    static kkint32  turbidityIndex;
+    static kkint32  turbiditySensorIndex;
+    static kkint32  pitchIndex;
+    static kkint32  rollIndex;
+    static kkint32  bat1LevelIndex;
+    static kkint32  bat2LevelIndex;
+    static kkint32  bat3LevelIndex;
+    static kkint32  bat4LevelIndex;
   
     char             activeBattery;
-    uint64           byteOffset;
-    KKU::DateTime    ctdDate;
+    kkuint64         byteOffset;
+    KKB::DateTime    ctdDate;
     float*           data;
     double           latitude;
     double           longitude;
-    uint32           scanLine;
+    kkuint32         scanLine;
 
     kkuint16         cropLeft;       /**< Left  column that contains imaged data;  any columns to the left  are ocluded by imaging chamber or Frame. */
     kkuint16         cropRight;      /**< Right column that contains imaged data;  any columns to the Right are ocluded by imaging chamber or Frame. */

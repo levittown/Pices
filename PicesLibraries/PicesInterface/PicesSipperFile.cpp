@@ -1,33 +1,32 @@
-#include  "StdAfx.h"
-#include  "FirstIncludes.h"
-
-#include  <stdio.h>
-#include  <math.h>
-#include  <ctype.h>
-#include  <time.h>
-#include  <fstream>
-#include  <iostream>
-#include  <map>
-#include  <ostream>
-#include  <string>
-#include  <vector>
+#include "StdAfx.h"
+#include "FirstIncludes.h"
+#include <stdio.h>
+#include <math.h>
+#include <ctype.h>
+#include <time.h>
+#include <fstream>
+#include <iostream>
+#include <map>
+#include <ostream>
+#include <string>
+#include <vector>
 using namespace std;
 
-#include  "MemoryDebug.h"
-#include  "BasicTypes.h"
-#include  "..\\BaseLibrary\\GoalKeeper.h"
-#include  "OSservices.h"
+#include "MemoryDebug.h"
+#include "KKBaseTypes.h"
+#include "GoalKeeper.h"
+#include "OSservices.h"
 
-using namespace KKU;
+using namespace KKB;
 
-#include  "SipperFile.h"
+#include "SipperFile.h"
 using namespace  SipperHardware;
 
-#include  "PicesKKStr.h"
-#include  "PicesMethods.h"
-#include  "PicesSipperFile.h"
+#include "PicesKKStr.h"
+#include "PicesMethods.h"
+#include "PicesSipperFile.h"
 
-#include  "Instrument.h"
+#include "Instrument.h"
 using namespace  PicesInterface;
 
 using namespace System;

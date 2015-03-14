@@ -18,7 +18,7 @@ namespace FeatureSelectionApp
                     int                    _parentId,
                     const FeatureNumList&  _features,
                     int                    _chgFeatureNum,
-                    int32                  _numOfRounds,
+                    kkint32                _numOfRounds,
                     double                 _cParm,
                     double                 _gammaParm,
                     float                  _aParm,

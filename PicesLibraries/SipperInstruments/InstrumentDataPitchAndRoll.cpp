@@ -10,9 +10,9 @@
 using namespace std;
 
 
-#include  "BasicTypes.h"
-#include  "Str.h"
-using namespace KKU;
+#include  "KKBaseTypes.h"
+#include  "KKStr.h"
+using namespace KKB;
 
 
 
@@ -25,7 +25,7 @@ using  namespace SipperHardware;
 InstrumentDataPitchAndRoll::InstrumentDataPitchAndRoll (InstrumentDataManagerPtr _manager,
                                                         const KKStr&            _reportDir,
                                                         bool                     _text,
-                                                        int32                    _instrumentId
+                                                        kkint32                  _instrumentId
                                                        ):
 
     InstrumentDataReport (_manager, _reportDir, _text, _instrumentId, false),
@@ -57,7 +57,7 @@ void  InstrumentDataPitchAndRoll::ProcessData (const KKStr&  txt)
 
   KKStr  fieldName  = "";
   KKStr  fieldValue = "";
-  uint32   fieldNum   = 0;
+  kkuint32 fieldNum   = 0;
 
   while  (fieldNum < fields.size ())
   {
@@ -91,7 +91,7 @@ void  InstrumentDataPitchAndRoll::ProcessData (const KKStr&  txt)
 
 
 
-void  InstrumentDataPitchAndRoll::ReportInstrumentData (uint32 curScanLine,
+void  InstrumentDataPitchAndRoll::ReportInstrumentData (kkuint32 curScanLine,
                                                         uchar  sensorData
                                                        )
 {

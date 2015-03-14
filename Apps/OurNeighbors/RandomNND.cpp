@@ -16,11 +16,11 @@
 
 using namespace std;
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "OSservices.h"
 #include  "StatisticalFunctions.h"
-#include  "Str.h"
-using namespace  KKU;
+#include  "KKStr.h"
+using namespace  KKB;
 
 #include  "FeatureFileIO.h"
 #include  "Neighbor.h"
@@ -36,18 +36,18 @@ using namespace  MLL;
 
 
 
-uint32  BigRandomNumber ()
+kkuint32  BigRandomNumber ()
 {
-  return  (uint32)LRand48 ();
+  return  (kkuint32)LRand48 ();
 }
 
 
 
-RandomNND::RandomNND (int32                 _scanLines,
+RandomNND::RandomNND (kkint32               _scanLines,
                       ImageFeaturesList&  _images,
-                      int32                 _numIterations,
-                      int32                 _numOfBuckets,
-                      int32                 _bucketSize,
+                      kkint32               _numIterations,
+                      kkint32               _numOfBuckets,
+                      kkint32               _bucketSize,
                       ostream&            _report,
                       RunLog&             _log
                      ):
@@ -119,7 +119,7 @@ VectorIntPtr  RandomNND::GetHistogramForARandomDistribution (VectorDouble&  allD
     double radius = (double)sqrt ((image->OrigSize ()) / 3.1415926);
     double width  = widthMax - (2 * radius);
     double colLeft = radius;
-    double col = LRand48 () % (int32)(width + 0.5f) + colLeft;
+    double col = LRand48 () % (kkint32)(width + 0.5f) + colLeft;
     double row = (double)(LRand48 () % scanLines);
 
     randomDistribution->PushOnBack (new Neighbor (row, col, "", NULL, image->OrigSize ()));
@@ -153,13 +153,13 @@ void	RandomNND::GenerateReport ()
 
   DeleteData ();
 
-  int32 bucket;
-  int32 iteration;
-  // int32 particle;
+  kkint32 bucket;
+  kkint32 iteration;
+  // kkint32 particle;
 
   double distAvgTotal = 0.0f;
 
-  int32  realDataDistTotal = 0;
+  kkint32  realDataDistTotal = 0;
 
   VectorDouble  allDists;
 
@@ -187,10 +187,10 @@ void	RandomNND::GenerateReport ()
      numOfBuckets = 100;
 
   if  (numOfBuckets < 1)
-    numOfBuckets = (int32)(largestDist / (double)bucketSize);
+    numOfBuckets = (kkint32)(largestDist / (double)bucketSize);
 
   else if  (bucketSize < 1)
-    bucketSize = (int32)(largestDist / (double)numOfBuckets);
+    bucketSize = (kkint32)(largestDist / (double)numOfBuckets);
 
   VectorIntPtr   realDataHistogram = realData->HistogramByDistance (numOfBuckets, bucketSize);
 
@@ -234,15 +234,15 @@ void	RandomNND::GenerateReport ()
 
   for  (bucket = 0;  bucket < numOfBuckets;  bucket++)
   {
-    int32  distMin   = INT_MAX;
-    int32  distMax   = INT_MIN;
-    int32  distTotal = 0;
+    kkint32  distMin   = INT_MAX;
+    kkint32  distMax   = INT_MIN;
+    kkint32  distTotal = 0;
 
     double  distMinFP = FLT_MAX;
     double  distMaxFP = -9999.99f;
 
-    int32  bucketValStart = bucket * bucketSize;
-    int32  bucketValEnd   = bucketValStart + bucketSize - 1;
+    kkint32  bucketValStart = bucket * bucketSize;
+    kkint32  bucketValEnd   = bucketValStart + bucketSize - 1;
 
     if  (bucket == (numOfBuckets - 1))
       report << ">=" << bucketValStart;
@@ -251,7 +251,7 @@ void	RandomNND::GenerateReport ()
 
     for  (iteration = 0;  iteration < numIterations;  iteration++)
     {
-      int32  dist = (*(distHistograms[iteration]))[bucket];
+      kkint32  dist = (*(distHistograms[iteration]))[bucket];
 
       distMin   =  Min (distMin, dist);
       distMax   =  Max (distMax, dist);
@@ -265,7 +265,7 @@ void	RandomNND::GenerateReport ()
       distMaxFP = Max (distMaxFP, distFP);
     }
 
-    int32 realDataDist = (*realDataHistogram)[bucket];
+    kkint32 realDataDist = (*realDataHistogram)[bucket];
 
     double distAvg = (double)distTotal / (double)numIterations;
     distAvgTotal += distAvg;
@@ -275,7 +275,7 @@ void	RandomNND::GenerateReport ()
     {
       for  (iteration = 0;  iteration < numIterations;  iteration++)
       {
-        int32  dist = (*(distHistograms[iteration]))[bucket];
+        kkint32  dist = (*(distHistograms[iteration]))[bucket];
 
         double  delta = (double)dist - distAvg;
         double  u2Val = delta * delta / distAvg;
@@ -293,7 +293,7 @@ void	RandomNND::GenerateReport ()
     double  deltaSquareTotal = 0.0f;
     for  (iteration = 0;  iteration < numIterations;  iteration++)
     {
-      int32  dist = (*(distHistograms[iteration]))[bucket];
+      kkint32  dist = (*(distHistograms[iteration]))[bucket];
       double  delta = (double)dist - distAvg;
       deltaSquareTotal += delta * delta;
     }
@@ -326,7 +326,7 @@ void	RandomNND::GenerateReport ()
          << "Real_Data_U2_stat" << "\t" << realDataU2Stat << endl
          << endl;
 
-  int32  numTimesRealGreaterThanRandom = 0;
+  kkint32  numTimesRealGreaterThanRandom = 0;
   for  (iteration = 0;  iteration < numIterations;  iteration++)
   {
     report << iteration << "\t" << u2Stats[iteration];
@@ -350,7 +350,7 @@ void	RandomNND::GenerateReport ()
     report << endl << endl
            << "Iteration" << "\t" << "Mean"  << "\t" << "StdDev" << "\t" << "Min" << "\t" << "Max" << endl;
 
-    int32  origPrecision = report.precision ();
+    kkint32  origPrecision = report.precision ();
 
     for  (iteration = 0;  iteration < numIterations;  iteration++)
     {

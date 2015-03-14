@@ -1,7 +1,7 @@
 #pragma once
 
 #include "DateTime.h"
-#include "Str.h"
+#include "KKStr.h"
 #include "Matrix.h"
 #include "RunLog.h"
 
@@ -45,11 +45,11 @@ namespace MLL
   public:
     typedef  ClassificationBiasMatrix*  ClassificationBiasMatrixPtr;
 
-    typedef  KKU::RunLog      RunLog;
-    typedef  KKU::KKStr       KKStr;
-    typedef  KKU::DateTime    DateTime;
-    typedef  KKU::Matrix      Matrix;
-    typedef  KKU::MatrixPtr   MatrixPtr;
+    typedef  KKB::RunLog      RunLog;
+    typedef  KKB::KKStr       KKStr;
+    typedef  KKB::DateTime    DateTime;
+    typedef  KKB::Matrix      Matrix;
+    typedef  KKB::MatrixPtr   MatrixPtr;
 
 
     /**
@@ -138,7 +138,7 @@ namespace MLL
     DateTime             configDateTime;       /**< TimeStamp of Config file when this BiasMatrix was written */
     DateTime             dateTimeFileWritten;
     VectorKKStr          errMsgs;
-    int32                numClasses;
+    kkint32              numClasses;
     MatrixPtr            probabilities;
     RunLog&              runLog;
     bool                 valid;

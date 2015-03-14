@@ -11,10 +11,10 @@
 
 using namespace std;
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "OSservices.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 
 #include  "Neighbor.h"
@@ -212,7 +212,7 @@ void  Neighbor::CompareDist (NeighborPtr  n)
 
 
 NeighborList::NeighborList (bool     _owner, 
-                            int32    _size,
+                            kkint32  _size,
                             RunLog&  _log
                            ):
   KKQueue<Neighbor>  (_owner, _size),
@@ -383,13 +383,13 @@ void  NeighborList::FindNearestNeighbors (NeighborType     neighborType,
 {
   SortByRow ();
 
-  int32  x;
+  kkint32  x;
 
   for  (x = 0;  x < QueueSize ();  x++)
   {
     // First lets look back to see if something closer
     
-    int32 z = x + 1;
+    kkint32 z = x + 1;
 
     NeighborPtr  curNeighbor = IdxToPtr (x);
 
@@ -452,17 +452,17 @@ void  NeighborList::ReportClassNeighbor (MLClassConstListPtr  mlClasses,
 
   mlClasses->SortByName ();
 
-  int32     numOfClasses   = mlClasses->QueueSize ();
-  int32*    classCounts    = new int32   [numOfClasses];
-  int32**   neighborCounts = new int32*  [numOfClasses];
+  kkint32   numOfClasses   = mlClasses->QueueSize ();
+  kkint32*    classCounts    = new kkint32 [numOfClasses];
+  kkint32**   neighborCounts = new kkint32*  [numOfClasses];
   double**  neighborDists  = new double* [numOfClasses];
   double**  neighborSizes  = new double* [numOfClasses];
 
-  int32  x,y;
+  kkint32  x,y;
   for  (x = 0;  x < numOfClasses;  x++)
   {
     classCounts[x] = 0;
-    neighborCounts[x] = new int32    [numOfClasses];
+    neighborCounts[x] = new kkint32  [numOfClasses];
     neighborDists [x] = new double [numOfClasses];
     neighborSizes [x] = new double [numOfClasses];
     for  (y = 0;  y < numOfClasses;  y++)
@@ -487,14 +487,14 @@ void  NeighborList::ReportClassNeighbor (MLClassConstListPtr  mlClasses,
   while  (n)
   {
     MLClassConstPtr  fromClass = n->MLClass ();
-    int32               fromClassIdx = mlClasses->PtrToIdx (fromClass);
+    kkint32             fromClassIdx = mlClasses->PtrToIdx (fromClass);
 
     while  (n  &&  (n->MLClass () == fromClass))
     {
       // Start doing stuff for from class Totals
 
       MLClassConstPtr  toClass    = n->NearestNeighborClass ();
-      int32               toClassIdx = -1;
+      kkint32             toClassIdx = -1;
       if  (toClass)
         toClassIdx = mlClasses->PtrToIdx (toClass);
 
@@ -504,7 +504,7 @@ void  NeighborList::ReportClassNeighbor (MLClassConstListPtr  mlClasses,
       //  << "======"           << "\t" << "====" << "\t" << "======"         << "\t" << "====" << "\t" << "====" << endl;
 
       double  distTotal = 0.0f;
-      int32     numInThisGroup = 0;
+      kkint32   numInThisGroup = 0;
       double  distMin = FLT_MAX;
       double  distMax = FLT_MIN;
 
@@ -578,7 +578,7 @@ void  NeighborList::ReportClassNeighbor (MLClassConstListPtr  mlClasses,
 
 
   // Lets make Summary Reports
-  int32  idx1, idx2;
+  kkint32  idx1, idx2;
   KKStr  title1, title2, title3;
 
   mlClasses->ExtractThreeTitleLines (title1, title2, title3);
@@ -726,8 +726,8 @@ void  NeighborList::ReportClassRow (MLClassConstListPtr  mlClasses,
   }
 
 
-  int32    numOfClasses   = mlClasses->QueueSize ();
-  int32*   classCounts    = new int32  [numOfClasses];
+  kkint32  numOfClasses   = mlClasses->QueueSize ();
+  kkint32*   classCounts    = new kkint32  [numOfClasses];
   double*  distsMean      = new double[numOfClasses];
   double*  distsStdDev    = new double[numOfClasses];
   double*  distsMin       = new double[numOfClasses];
@@ -737,7 +737,7 @@ void  NeighborList::ReportClassRow (MLClassConstListPtr  mlClasses,
   double*  sizesMin       = new double[numOfClasses];
   double*  sizesMax       = new double[numOfClasses];
 
-  int32  x;
+  kkint32  x;
   for  (x = 0;  x < numOfClasses;  x++)
   {
     classCounts[x] = 0;
@@ -756,9 +756,9 @@ void  NeighborList::ReportClassRow (MLClassConstListPtr  mlClasses,
   while  (n)
   {
     MLClassConstPtr  fromClass = n->MLClass ();
-    int32            fromClassIdx = mlClasses->PtrToIdx (fromClass);
+    kkint32          fromClassIdx = mlClasses->PtrToIdx (fromClass);
 
-    int32    numInThisGroup = 0;
+    kkint32  numInThisGroup = 0;
 
     double  distTotal = 0.0f;
     double  distMin = FLT_MAX;
@@ -891,7 +891,7 @@ void  NeighborList::ReportClassRow (MLClassConstListPtr  mlClasses,
 
     << endl;
 
-  int32  idx1;
+  kkint32  idx1;
   for  (idx1 = 0;  idx1 < numOfClasses;  idx1++)
   {
     MLClassConstPtr  class1 = mlClasses->IdxToPtr (idx1);
@@ -943,8 +943,8 @@ void  NeighborList::ReportClassRowRestricted (MLClassConstListPtr  mlClasses,
     return;
   }
 
-  int32   numOfClasses   = mlClasses->QueueSize ();
-  int32   classCounts    = 0;
+  kkint32 numOfClasses   = mlClasses->QueueSize ();
+  kkint32 classCounts    = 0;
   double  distsMean      = 0.0;
   double  distsStdDev    = 0.0;
   double  distsMin       = 0.0;
@@ -981,7 +981,7 @@ void  NeighborList::ReportClassRowRestricted (MLClassConstListPtr  mlClasses,
   {
     MLClassConstPtr  fromClass = n->MLClass ();
 
-    int32    numInThisGroup = 0;
+    kkint32  numInThisGroup = 0;
 
     double  distTotal = 0.0f;
     double  distMin = FLT_MAX;
@@ -1131,8 +1131,8 @@ void  NeighborList::ReportClassRowRestricted (MLClassConstListPtr  mlClasses,
 
 
 
-VectorIntPtr  NeighborList::HistogramByDistance (int32  numOfBuckets,
-                                                 int32  bucketSize
+VectorIntPtr  NeighborList::HistogramByDistance (kkint32  numOfBuckets,
+                                                 kkint32  bucketSize
                                                 )
 {
 
@@ -1150,13 +1150,13 @@ VectorIntPtr  NeighborList::HistogramByDistance (int32  numOfBuckets,
   }
 
 
-  VectorIntPtr  buckets = new vector<int32> (numOfBuckets, 0);
+  VectorIntPtr  buckets = new vector<kkint32> (numOfBuckets, 0);
 
   iterator  idx;
   for  (idx = begin ();  idx != end ();  idx++)
   {
     NeighborPtr  n = *idx;
-    int32  bucketMum = (int32)((double)(n->Dist ()) / (double)bucketSize);
+    kkint32  bucketMum = (kkint32)((double)(n->Dist ()) / (double)bucketSize);
     if  (bucketMum >= numOfBuckets)
       bucketMum = numOfBuckets - 1;
     

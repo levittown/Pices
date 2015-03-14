@@ -4,7 +4,7 @@
 
 #include  "RunLog.h"
 
-using  namespace  KKU;
+using  namespace  KKB;
 
 #include  "SipperBuff.h"
 #include  "SipperHeaderRec.h"
@@ -126,25 +126,25 @@ public:
   const 
   KKStr&   FileName ()  {return  fileName;}
 
-  uint32   CurRow   ()  {return  curRow;} 
+  kkuint32 CurRow   ()  {return  curRow;} 
 
   bool     Eof ()       {return  eof;}
 
   bool     Opened ()    {return  opened;}
 
-  uint32   RecCount ()  {return  recCount;}
+  kkuint32 RecCount ()  {return  recCount;}
 
   bool     FileFormatGood ();
 
   void     GetNextLine (uchar*   lineBuff,
-                        uint32   lineBuffSize,
-                        uint32&  lineSize,
-                        uint32   colCount[],
-                        uint32&  pixelsInRow,
+                        kkuint32 lineBuffSize,
+                        kkuint32&  lineSize,
+                        kkuint32 colCount[],
+                        kkuint32&  pixelsInRow,
                         bool&  flow
                        );
 
-  void  SkipToScanLine (uint32  scanLine);
+  void  SkipToScanLine (kkuint32  scanLine);
 
 
 private:
@@ -160,7 +160,7 @@ private:
 
 
   inline
-  void  GetNextSipperRec (uint32&  spaceLeft,
+  void  GetNextSipperRec (kkuint32&  spaceLeft,
                           uchar&   cameraNum,
                           bool&    imageData,
                           bool&    raw,
@@ -168,14 +168,14 @@ private:
                           bool&    grayScale,
                           uchar*   pixels,      /**< Array of size 12           */
                           uchar&   numPixels,   /**< Number of pixels in pixels */
-                          uint32&  numOfBlanks,
+                          kkuint32&  numOfBlanks,
                           bool&    moreRecs
                          );
 
 
   bool  NextScanLineGood ();  /**< Used by SipperBuff to try and guess if this is a Sipper3  file. */
 
-  uint32  overflowPixels;     /** if > 0, indicates that the last scan line read had an overflow by that many pixels. */
+  kkuint32  overflowPixels;     /** if > 0, indicates that the last scan line read had an overflow by that many pixels. */
 
   SipperHeaderRec  sipperHeaderRec;
 

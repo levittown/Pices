@@ -1,9 +1,9 @@
 #if  !defined(_IEM_FRAMEPROCESSORTHREAD_)
 #define  _IEM_FRAMEPROCESSORTHREAD_
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "RunLog.h"
-using namespace KKU;
+using namespace KKB;
 
 
 #include "InstrumentDataManager.h"
@@ -44,10 +44,10 @@ namespace  ImageExtractionManager
 
     virtual  ThreadTypes   ThreadType ()  {return ttFrameProcessor;}
 
-    void  GetRunTimeStats (uint32&  _framesProcessed,
-                           uint32&  _scanLinesProcessed,
-                           uint32&  _imagesFound,
-                           uint32&  _imagesClassified
+    void  GetRunTimeStats (kkuint32&  _framesProcessed,
+                           kkuint32&  _scanLinesProcessed,
+                           kkuint32&  _imagesFound,
+                           kkuint32&  _imagesClassified
                           );
 
     virtual  void  Run ();
@@ -61,12 +61,12 @@ namespace  ImageExtractionManager
     Classifier2Ptr          classifier;
     FileDescPtr             fileDesc;
     LogicalFrameQueuePtr    framePool;
-    uint32                  framesProcessed;
+    kkuint32                framesProcessed;
     ExtractedImageQueuePtr  imagesAwaitingUpdate;
-    uint32                  imagesClassified;
-    uint32                  imagesFound;
+    kkuint32                imagesClassified;
+    kkuint32                imagesFound;
     RunLog                  log;
-    uint32                  scanLinesProcessed;
+    kkuint32                scanLinesProcessed;
     KKStr                   sipperRootName;
     TrainingProcess2Ptr     trainer;
     MLClassPtr              unKnownMLClass;

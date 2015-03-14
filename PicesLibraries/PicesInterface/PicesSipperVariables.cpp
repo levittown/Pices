@@ -18,9 +18,9 @@
 #include "MemoryDebug.h"
 using namespace std;
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "KKQueue.h"
-using namespace  KKU;
+using namespace  KKB;
 
 
 
@@ -38,7 +38,7 @@ using namespace  PicesInterface;
 using namespace System;
 using namespace System::IO;
 using namespace System::Windows::Forms;
-using namespace KKU;
+using namespace KKB;
 using namespace System::Windows::Forms;
 
 

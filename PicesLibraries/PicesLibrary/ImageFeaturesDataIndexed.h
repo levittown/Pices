@@ -3,7 +3,7 @@
 
 
 #include  "RBTree.h"
-#include  "Str.h"
+#include  "KKStr.h"
 
 
 
@@ -59,7 +59,7 @@ public:
   bool  operator<  (const ImageFeaturesNodeKey& rightNode)  const;
   bool  operator>  (const ImageFeaturesNodeKey& rightNode)  const;
 
-  int32  CompareTwoImages (const FeatureVectorPtr i1,
+  kkint32  CompareTwoImages (const FeatureVectorPtr i1,
                          const FeatureVectorPtr i2
                         )  const;
 

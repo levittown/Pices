@@ -34,7 +34,7 @@ namespace PicesInterface
 
   public:
     property  float            BreakTie             {float            get () {return  image->BreakTie ();}}
-    property  uint64           ByteOffset           {uint64           get () {return  image->ByteOffset ();}}
+    property  kkuint64         ByteOffset           {kkuint64         get () {return  image->ByteOffset ();}}
     property  PicesClass^      Class1               {PicesClass^      get () {return  PicesClassList::GetUniqueClass (image->Class1 ());}}
     property  String^          Class1Name           {String^          get ();}
     property  float            Class1Prob           {float            get () {return  image->Class1Prob ();}}

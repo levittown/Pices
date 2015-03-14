@@ -1,6 +1,6 @@
 /* Point.cpp -- Represents the coordinates in a Raster image.
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #include "FirstIncludes.h"
 #include <math.h>
@@ -12,7 +12,7 @@ using namespace std;
 
 
 #include  "Point.h"
-using namespace KKU;
+using namespace KKB;
 
 
 Point::Point ():
@@ -40,8 +40,8 @@ Point::Point  (int16  _row,
 
 
 
-Point::Point  (int32  _row,
-               int32  _col
+Point::Point  (kkint32  _row,
+               kkint32  _col
               ):
   row (_row),
   col (_col)
@@ -52,8 +52,8 @@ Point::Point  (int32  _row,
 Point::Point  (float  _row,
                float  _col
               ):
-   row ((int32)(_row + 0.5)),
-   col ((int32)(_col + 0.5))
+   row ((kkint32)(_row + 0.5)),
+   col ((kkint32)(_col + 0.5))
 {}
 
 
@@ -110,10 +110,10 @@ PointList::PointList (bool _owner):
 
 
 
-void  PointList::BoxCoordinites (int32&  minRow,
-                                 int32&  minCol,
-                                 int32&  maxRow,
-                                 int32&  maxCol
+void  PointList::BoxCoordinites (kkint32&  minRow,
+                                 kkint32&  minCol,
+                                 kkint32&  maxRow,
+                                 kkint32&  maxCol
                                 )
 {
   minRow = minCol = 999999;
@@ -139,8 +139,8 @@ void  PointList::BoxCoordinites (int32&  minRow,
 
 Point  PointList::CalculateCenterPoint ()
 {
-  int32  totalRow = 0;
-  int32  totalCol = 0;
+  kkint32  totalRow = 0;
+  kkint32  totalCol = 0;
   for  (iterator x = begin ();  x != end ();  x++)
   {
     PointPtr p = *x;
@@ -148,8 +148,8 @@ Point  PointList::CalculateCenterPoint ()
     totalCol += p->Col ();
   }
 
-  int32 centerRow = (int32)((double)totalRow / (double)size () + 0.5);
-  int32 centerCol = (int32)((double)totalCol / (double)size () + 0.5);
+  kkint32 centerRow = (kkint32)((double)totalRow / (double)size () + 0.5);
+  kkint32 centerCol = (kkint32)((double)totalCol / (double)size () + 0.5);
   return  Point (centerRow, centerCol);
 }
 
@@ -204,7 +204,7 @@ PointListPtr  PointList::FromDelStr (const KKStr&  _s)
     if  (endPairChar != 0)
     {
       KKStr pairStr = "";
-      int32  idx = s.Find (endPairChar);
+      kkint32  idx = s.Find (endPairChar);
       if  (idx >= 0)
       {
         pairStr = s.SubStrPart (0, idx - 1);
@@ -267,7 +267,7 @@ float  PointList::ComputeSegmentLens (float  heightFactor,
 
 
 
-KKStr&  KKU::operator<< (KKStr&       left,
+KKStr&  KKB::operator<< (KKStr&       left,
                          const Point&  right
                         )
 {
@@ -277,7 +277,7 @@ KKStr&  KKU::operator<< (KKStr&       left,
 
 
 
-ostream&  KKU::operator<< (ostream&      left,
+ostream&  KKB::operator<< (ostream&      left,
                            const Point&  right
                           )
 {

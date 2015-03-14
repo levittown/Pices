@@ -9,13 +9,13 @@
 #include  <map>
 
 #include  "MemoryDebug.h"
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 
 using namespace std;
 
 #include  "OSservices.h"
-#include  "Str.h"
-using namespace KKU;
+#include  "KKStr.h"
+using namespace KKB;
 
 
 #include "SipperStation.h"

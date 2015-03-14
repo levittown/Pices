@@ -14,19 +14,19 @@
 #endif
 
 #include "MemoryDebug.h"
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 
 using namespace  std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "BMPImage.h"
 #include "ImageIO.h"
 #include "OSservices.h"
 #include "RunLog.h"
-#include "Str.h"
+#include "KKStr.h"
 #include "StatisticalFunctions.h"
-using namespace  KKU;
+using namespace  KKB;
 
 
 #include "InstrumentData.h"
@@ -286,7 +286,7 @@ int  CountPixs (int x1,  int x2,  int x3,
   sort (ids.begin (), ids.end ());
   int lastId = -1;
 
-  for  (KKU::uint x = 0;  x < ids.size ();  x++)
+  for  (KKB::uint x = 0;  x < ids.size ();  x++)
   {
     if  (ids[x] != lastId)
     {
@@ -318,8 +318,8 @@ void  UpdateInstrumentData (DataBasePtr  dbConn,
 
   cout << "Sipper File [" << sf->SipperFileName () << "]" << std::endl;
 
-  KKU::uint  lastScanLine = 0;
-  KKU::uint  nextScanLine = 0;
+  KKB::uint  lastScanLine = 0;
+  KKB::uint  nextScanLine = 0;
 
   InstrumentDataListPtr  id = InstrumentDataFileManager::ReExtractInstrumentDataForSipperFile (sipperFileName, sf, cancelFlag, log);;
   if  (id != NULL)
@@ -892,7 +892,7 @@ void  SipperImageExtraction::AllocateFrame ()
   blobIdsArea = new int   [totPixels];
 
   frame              = new uchar* [maxFrameHeight];
-  frameRowByteOffset = new uint64 [maxFrameHeight];
+  frameRowByteOffset = new kkuint64 [maxFrameHeight];
   blobIds            = new int*   [maxFrameHeight];
   pixsInRows         = new uint   [maxFrameHeight];
 
@@ -979,7 +979,7 @@ void  SipperImageExtraction::GetNextFrame (bool&  moreFrames)
 
     uchar*  tempRow;
     uint    tempPixsInRow;
-    uint64  tempRowByteOffset;
+    kkuint64  tempRowByteOffset;
 
     for  (x = nextFrameStartRow; x <= lastRowUsed; x++)
     {
@@ -1350,9 +1350,9 @@ void  SipperImageExtraction::PerformErosion ()
 
 
 
-void  CountAndTotal (KKU::uchar    c,
-                     KKU::ushort&  count,
-                     KKU::ushort&  total
+void  CountAndTotal (KKB::uchar    c,
+                     KKB::ushort&  count,
+                     KKB::ushort&  total
                     )
 {
   if  (c > 0)
@@ -2575,7 +2575,7 @@ void  SipperImageExtraction::ReFreshDataBaseImage (const KKStr&      imageFileNa
                                                    const KKStr&      sipperFileName, 
                                                    RasterSipperPtr   raster, 
                                                    ImageFeaturesPtr  featureVector,
-                                                   uint64            byteOffset,
+                                                   kkuint64          byteOffset,
                                                    uint              sipperTopRow,
                                                    uint              sipperTopCol
                                                   )

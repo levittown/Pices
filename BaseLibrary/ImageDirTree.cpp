@@ -1,6 +1,6 @@
 /* ImageDirTree.cpp -- Builds list of Image Files in a Sub Directory Tree.
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #include  "FirstIncludes.h"
 
@@ -19,8 +19,8 @@ using namespace std;
 #include  "ImageDirTree.h"
 #include  "ImageIO.h"
 #include  "OSservices.h"
-#include  "Str.h"
-using namespace KKU;
+#include  "KKStr.h"
+using namespace KKB;
 
 
 
@@ -35,7 +35,7 @@ ImageDirTree::ImageDirTree (KKStr  _subDir):
 
 ImageDirTree::~ImageDirTree ()
 {
-  uint32  x;
+  kkuint32  x;
   for  (x = 0;  x < directories.size ();  x++)
     delete  directories[x];
 }
@@ -77,7 +77,7 @@ void  ImageDirTree::Load (const KKStr&  _subDir)
         {
           dupIdx = duplicates.find (fileName);
           if  (dupIdx == duplicates.end ())
-            duplicates.insert (pair<KKStr, int32> (*fileName, 2));
+            duplicates.insert (pair<KKStr, kkint32> (*fileName, 2));
           else
             (dupIdx->second)++;
         }

@@ -1,6 +1,6 @@
 /* CmdLineExpander.cpp -- Pre-process Command Line parameters.
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #include  "FirstIncludes.h"
 
@@ -29,14 +29,14 @@ using namespace std;
 
 #include "CmdLineExpander.h"
 #include "OSservices.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 
 
 CmdLineExpander::CmdLineExpander (const KKStr&  _applicationName,
                                   RunLog&        _log,
-                                  int32          argc,
+                                  kkint32        argc,
                                   char**         argv
                                  ):
 
@@ -88,7 +88,7 @@ CmdLineExpander::~CmdLineExpander ()
 
 
 
-void  CmdLineExpander::ExpandCmdLine (int32   argc, 
+void  CmdLineExpander::ExpandCmdLine (kkint32 argc, 
                                       char**  argv
                                      )
 {
@@ -96,7 +96,7 @@ void  CmdLineExpander::ExpandCmdLine (int32   argc,
   
   VectorKKStr  initialParameters;
   {
-    int32 y;
+    kkint32 y;
     for  (y = 1; y < argc;  y++)
       initialParameters.push_back (argv[y]);
   }
@@ -129,7 +129,7 @@ bool  FileInStack (const KKStr&       cmdFileName,
 
 void  CmdLineExpander::BuildCmdLineParameters (const VectorKKStr&  argv)
 {
-  uint32  x = 0;
+  kkuint32  x = 0;
 
   while  (x < argv.size ())
   {

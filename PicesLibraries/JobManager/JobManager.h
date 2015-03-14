@@ -174,8 +174,8 @@ namespace  JobManagment
 
     double          cpuTimeLastReported;
     double          cpuTimeTotalUsed;
-    KKU::DateTime   dateTimeStarted;
-    KKU::DateTime   dateTimeEnded;
+    KKB::DateTime   dateTimeStarted;
+    KKB::DateTime   dateTimeEnded;
     bool            dateTimeFirstOneFound;  /**< Flag that indicates weather we have read the first 
                                              * instance of a 'CurrentDateTime' in the Status file.
                                              */

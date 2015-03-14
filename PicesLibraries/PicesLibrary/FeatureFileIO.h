@@ -20,7 +20,7 @@
 #include  "MLClassConstList.h"
 #include  "OSservices.h"
 #include  "RunLog.h"
-#include  "Str.h"
+#include  "KKStr.h"
 
 namespace MLL 
 {
@@ -47,8 +47,8 @@ namespace MLL
   public:
     typedef  FeatureFileIO*  FeatureFileIOPtr;
 
-    typedef  KKU::int32    int32;
-    typedef  KKU::uint32   uint32;
+    typedef  KKB::kkint32  kkint32;
+    typedef  KKB::kkuint32 kkuint32;
 
     FeatureFileIO (const KKStr&  _driverName,
                    bool          _canRead,
@@ -64,7 +64,7 @@ namespace MLL
     void   AppendToFile (const KKStr&           _fileName,
                          const FeatureNumList&  _selFeatures,
                          FeatureVectorList&     _examples,
-                         uint32&                _numExamplesWritten,
+                         kkuint32&                _numExamplesWritten,
                          VolConstBool&          _cancelFlag,
                          bool&                  _successful,
                          RunLog&                log
@@ -108,7 +108,7 @@ namespace MLL
       void  SaveFeatureFile (const KKStr&           _fileName, 
                              const FeatureNumList&  _selFeatures,
                              FeatureVectorList&     _examples,
-                             uint32&                _numExamplesWritten,  // caller will be able to manitor this variable.
+                             kkuint32&                _numExamplesWritten,  // caller will be able to manitor this variable.
                              VolConstBool&          _cancelFlag,
                              bool&                  _successful,
                              RunLog&                _log
@@ -159,7 +159,7 @@ namespace MLL
     virtual  FileDescPtr  GetFileDesc (const KKStr&            _fileName,
                                        std::istream&           _in,
                                        MLClassConstListPtr  _classes,
-                                       int32&                  _estSize,
+                                       kkint32&                  _estSize,
                                        KKStr&                  _errorMessage,
                                        RunLog&                 _log
                                       ) = 0;
@@ -207,7 +207,7 @@ namespace MLL
                               const KKStr&           _fileName,
                               const FeatureNumList&  _selFeatures,
                               std::ostream&          _out,
-                              uint32&                _numExamplesWritten,
+                              kkuint32&                _numExamplesWritten,
                               VolConstBool&          _cancelFlag,
                               bool&                  _successful,
                               KKStr&                 _errorMessage,

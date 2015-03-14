@@ -11,9 +11,9 @@
 using namespace  std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "OSservices.h"
-using namespace  KKU;
+using namespace  KKB;
 
 
 #include "Orderings.h"
@@ -25,8 +25,8 @@ using namespace  MLL;
 
 
 Orderings::Orderings (FeatureVectorListPtr  _data,
-                      uint32                _numOfOrderings,
-                      uint32                _numOfFolds
+                      kkuint32              _numOfOrderings,
+                      kkuint32              _numOfFolds
                      ):
   
   data           (new FeatureVectorList (*_data, false)),
@@ -50,8 +50,8 @@ Orderings::Orderings (FeatureVectorListPtr  _data,
 
 Orderings::Orderings (const FeatureVectorListPtr  _data,
                       const KKStr&                _indexFileName,
-                      uint32                      _numOfOrderings,
-                      uint32                      _numOfFolds
+                      kkuint32                    _numOfOrderings,
+                      kkuint32                    _numOfFolds
                      ):
   
   data           (new FeatureVectorList (*_data, false)),
@@ -193,8 +193,8 @@ Orderings::~Orderings ()
 
 
 OrderingsPtr  Orderings::CreateOrderingsObjFromFileIfAvaliable (const FeatureVectorListPtr  _data,
-                                                                uint32                      _numOfOrderings,
-                                                                uint32                      _numOfFolds
+                                                                kkuint32                    _numOfOrderings,
+                                                                kkuint32                    _numOfFolds
                                                                )
 {
   RunLog& log = _data->Log ();
@@ -386,13 +386,13 @@ void  Orderings::Load (const KKStr&  _indexFileName,
   log.Level (10) << "Orderings::Load  numOfOrderings [" << numOfOrderings << "]" << endl;
   log.Level (10) << "Orderings::Load  numOfFolds     [" << numOfFolds << "]" << endl;
 
-  uint32  orderingIDX = 0;
+  kkuint32  orderingIDX = 0;
 
   for  (orderingIDX = 0;  orderingIDX < numOfOrderings;  orderingIDX++)
   {
     vector<bool>  indexLoaded (data->QueueSize (), false);
 
-    int32  imagesInOrdering = 0;
+    kkint32  imagesInOrdering = 0;
 
     FeatureVectorListPtr  ordering = new FeatureVectorList (fileDesc, false, log);
     orderings.push_back (ordering);
@@ -413,10 +413,10 @@ void  Orderings::Load (const KKStr&  _indexFileName,
         return;
       }
 
-      int32  orderingNum;
+      kkint32  orderingNum;
       i >> orderingNum;
 
-      if  (orderingNum != int32 (orderingIDX))
+      if  (orderingNum != kkint32 (orderingIDX))
       {
         log.Level (-1) << endl << endl
                        << "Orderings::Load  *** ERROR ***  Orderings out of sequence." << endl
@@ -452,7 +452,7 @@ void  Orderings::Load (const KKStr&  _indexFileName,
 
     while  ((field != "//ENDOFORDERING") &&  (!i.eof ()))
     {
-      int32  imageIdx = atoi (field.Str ());
+      kkint32  imageIdx = atoi (field.Str ());
 
       if  ((imageIdx < 0)  ||  (imageIdx >= data->QueueSize ()))
       {
@@ -502,7 +502,7 @@ void  Orderings::Load (const KKStr&  _indexFileName,
 
     if  (field == "//ENDOFORDERING")
     {
-      int32  endOfOrderingNum;
+      kkint32  endOfOrderingNum;
       i >> endOfOrderingNum;
     }
 
@@ -514,7 +514,7 @@ void  Orderings::Load (const KKStr&  _indexFileName,
     log.Level (-1) << endl << endl
                    << "Orderings::Load  *** ERROR ***  Not orderings were loaded." << endl
                    << "                 Expected  [" << numOfOrderings            << "]" << endl
-                   << "                 Num Found [" << (uint32)orderings.size () << "]" << endl
+                   << "                 Num Found [" << (kkuint32)orderings.size () << "]" << endl
                    << endl;
     successful = false;
     valid      = false;
@@ -555,19 +555,19 @@ void  Orderings::Save ()
 
   // Build an index by relative location in master list data, so that we can 
   // quickly determine index for other orderings.
-  map<FeatureVectorPtr,int32> index;
-  int32  idx = 0;
+  map<FeatureVectorPtr,kkint32> index;
+  kkint32  idx = 0;
   for  (idx = 0;  idx < data->QueueSize ();  idx++)
   {
     FeatureVectorPtr  example = data->IdxToPtr (idx);
-    index.insert (pair<FeatureVectorPtr,int32>(example, idx));
+    index.insert (pair<FeatureVectorPtr,kkint32>(example, idx));
   }
 
   KKStr  tempName = featureFileName;
   if  (tempName.Empty ())
     tempName = indexFileName;
 
-  map<FeatureVectorPtr,int32>::const_iterator  indexIDX;
+  map<FeatureVectorPtr,kkint32>::const_iterator  indexIDX;
 
   ofstream  o (indexFileName.Str ());
 
@@ -578,7 +578,7 @@ void  Orderings::Save ()
   o << "//DateCreated"     << "\t" << osGetLocalDateTime () << endl;
   o << "//EndOfHeader"                                      << endl;
 
-  uint32  orderingIDX;
+  kkuint32  orderingIDX;
 
   for  (orderingIDX = 0;  orderingIDX < orderings.size ();  orderingIDX++)
   {
@@ -616,14 +616,14 @@ void  Orderings::Save ()
 
 
 const
-FeatureVectorListPtr  Orderings::Ordering (uint32  orderingIdx)  const
+FeatureVectorListPtr  Orderings::Ordering (kkuint32  orderingIdx)  const
 {
   if  ((orderingIdx >= orderings.size ()))
   {
     log.Level (-1) << endl << endl << endl
                    << "Orderings::Ordering  *** ERROR ***    Index Out Of Range." << endl
-                   << "                 Num Of Orderings [" << (uint32)orderings.size ()  << "]" << endl
-                   << "                 OrderingIdx      [" << (uint32)orderingIdx        << "]" << endl
+                   << "                 Num Of Orderings [" << (kkuint32)orderings.size ()  << "]" << endl
+                   << "                 OrderingIdx      [" << (kkuint32)orderingIdx        << "]" << endl
                    << endl;
     osWaitForEnter ();
     exit (-1);

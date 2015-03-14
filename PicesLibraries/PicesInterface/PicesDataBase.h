@@ -145,17 +145,17 @@ namespace PicesInterface
     void  ImageInsert (PicesRaster^    image,
                        String^         imageFileName,
                        String^         supperFileName,
-                       uint64          byteOffset,     /**< byteOffset of SipperRow containing TopLeftRow */
-                       uint32          topLeftRow,
-                       uint32          topLeftCol,
-                       uint32          height,
-                       uint32          width,
-                       uint32          pixelCount,
+                       kkuint64        byteOffset,     /**< byteOffset of SipperRow containing TopLeftRow */
+                       kkuint32        topLeftRow,
+                       kkuint32        topLeftCol,
+                       kkuint32        height,
+                       kkuint32        width,
+                       kkuint32        pixelCount,
                        uchar           connectedPixelDist,
-                       uint32          extractionLogEntryId,
-                       uint32          classLogEntryId,
-                       uint32          centroidRow,
-                       uint32          centroidCol,
+                       kkuint32        extractionLogEntryId,
+                       kkuint32        classLogEntryId,
+                       kkuint32        centroidRow,
+                       kkuint32        centroidCol,
                        PicesClass^     class1,
                        float           class1Prob,
                        PicesClass^     class2,
@@ -164,7 +164,7 @@ namespace PicesInterface
                        float           depth,
                        float           imageSize,
                        PicesPointList^ sizeCoordinates,
-                       int32%          imageId,
+                       kkint32%          imageId,
                        bool%           successful
                       );
 
@@ -522,7 +522,7 @@ namespace PicesInterface
     PicesGPSDataPointList^  InstrumentDataRetrieveGPSInfo (String^  cruiseName,
                                                            String^  stationName,
                                                            String^  deploymentNum,
-                                                           int32    timeInterval   /**< Interval in seconds */
+                                                           kkint32  timeInterval   /**< Interval in seconds */
                                                           );
 
 

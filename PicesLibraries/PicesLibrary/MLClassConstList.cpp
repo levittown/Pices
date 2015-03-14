@@ -12,10 +12,10 @@
 using namespace  std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "OSservices.h"
 #include "RunLog.h"
-using namespace  KKU;
+using namespace  KKB;
 
 
 #include "MLClass.h"
@@ -87,7 +87,7 @@ MLClassConstList::~MLClassConstList ()
 
 
 
-int32  MLClassConstList::MemoryConsumedEstimated ()  const
+kkint32  MLClassConstList::MemoryConsumedEstimated ()  const
 {
   return  sizeof (MLClassConstList) + sizeof (MLClassConstPtr) * size ();
 }
@@ -103,9 +103,9 @@ void  MLClassConstList::Clear ()
 
 
 
-uint16   MLClassConstList::NumHierarchialLevels ()  const
+kkuint16 MLClassConstList::NumHierarchialLevels ()  const
 {
-  uint16  numHierarchialLevels = 0;
+  kkuint16  numHierarchialLevels = 0;
   MLClassConstList::const_iterator  idx;
   for  (idx = begin ();  idx != end ();  idx++)
     numHierarchialLevels = Max (numHierarchialLevels, (*idx)->NumHierarchialLevels ());
@@ -121,7 +121,7 @@ void  MLClassConstList::Load (const KKStr&  _fileName,
                                 )
 {
   char   buff[20480];
-  int32    lineCount = 0;
+  kkint32  lineCount = 0;
 
   FILE*  inputFile = osFOPEN (_fileName.Str (), "r");
   if  (!inputFile)
@@ -275,7 +275,7 @@ MLClassConstPtr  MLClassConstList::LookUpByName (const KKStr&  _name)  const
 
 
 
-MLClassConstPtr  MLClassConstList::LookUpByClassId (int32  _classId)  const
+MLClassConstPtr  MLClassConstList::LookUpByClassId (kkint32  _classId)  const
 {
   MLClassConstList::const_iterator  idx;
   MLClassConstPtr  mlClass;
@@ -340,10 +340,10 @@ MLClassConstPtr  MLClassConstList::GetUnKnownClass ()
 
 
 
-class  MLClassConstList::mlClassNameComparison: public  QueueComparison<MLClassConst>
+class  MLClassConstList::mlClassNameComparison
 {
 public:
-   mlClassNameComparison ():  QueueComparison<MLClassConst> () {} 
+   mlClassNameComparison () {} 
 
    bool  operator () (MLClassConstPtr  p1,
                       MLClassConstPtr  p2
@@ -373,7 +373,7 @@ KKStr  MLClassConstList::ToString ()  const
 {
   KKStr s (10 * QueueSize ());
 
-  for (int32 i = 0;  i < QueueSize ();  i++)
+  for (kkint32 i = 0;  i < QueueSize ();  i++)
   {
     if  (i > 0)
       s << "\t";
@@ -390,7 +390,7 @@ KKStr  MLClassConstList::ToString ()  const
 KKStr  MLClassConstList::ToTabDelimitedStr ()  const
 {
   KKStr s (10 * QueueSize ());
-  for (int32 i = 0;  i < QueueSize ();  i++)
+  for (kkint32 i = 0;  i < QueueSize ();  i++)
   {
     if  (i > 0)  s << "\t";
     s << IdxToPtr (i)->Name ();
@@ -405,7 +405,7 @@ KKStr  MLClassConstList::ToTabDelimitedStr ()  const
 KKStr  MLClassConstList::ToCommaDelimitedStr ()  const
 {
   KKStr s (10 * QueueSize ());
-  for (int32 i = 0;  i < QueueSize ();  i++)
+  for (kkint32 i = 0;  i < QueueSize ();  i++)
   {
     if  (i > 0)  s << ",";
     s << IdxToPtr (i)->Name ();
@@ -440,7 +440,7 @@ void  MLClassConstList::ExtractTwoTitleLines (KKStr&  titleLine1,
   titleLine1 = "";
   titleLine2 = "";
 
-  int32 x;
+  kkint32 x;
   for  (x = 0;  x < QueueSize ();  x++)
   {
     if  (x > 0)
@@ -450,7 +450,7 @@ void  MLClassConstList::ExtractTwoTitleLines (KKStr&  titleLine1,
     }
 
     KKStr  className = IdxToPtr (x)->Name ();
-    int32  y = className.LocateCharacter ('_');
+    kkint32  y = className.LocateCharacter ('_');
     if  (y < 0)
     {
       titleLine2 << className;
@@ -475,7 +475,7 @@ void  MLClassConstList::ExtractThreeTitleLines (KKStr&  titleLine1,
   titleLine2 = "";
   titleLine3 = "";
 
-  int32 x;
+  kkint32 x;
   for  (x = 0;  x < QueueSize ();  x++)
   {
     if  (x > 0)
@@ -487,7 +487,7 @@ void  MLClassConstList::ExtractThreeTitleLines (KKStr&  titleLine1,
 
     KKStr  part1, part2, part3;
     part1 = part2 = part3 = "";
-    int32  numOfParts = 0;
+    kkint32  numOfParts = 0;
 
     KKStr  className = IdxToPtr (x)->Name ();
     className.TrimLeft ();
@@ -531,7 +531,7 @@ void  MLClassConstList::ExtractThreeTitleLines (KKStr&  titleLine1,
 void  MLClassConstList::ExtractThreeTitleLines (KKStr&  titleLine1,
                                               KKStr&  titleLine2, 
                                               KKStr&  titleLine3,
-                                              int32     fieldWidth
+                                              kkint32   fieldWidth
                                              ) const
 {
   titleLine1 = "";
@@ -541,12 +541,12 @@ void  MLClassConstList::ExtractThreeTitleLines (KKStr&  titleLine1,
   KKStr blankField;
   blankField.RightPad (fieldWidth);
 
-  int32 x;
+  kkint32 x;
   for  (x = 0;  x < QueueSize ();  x++)
   {
     KKStr  part1, part2, part3;
     part1 = part2 = part3 = "";
-    int32  numOfParts = 0;
+    kkint32  numOfParts = 0;
 
     KKStr  className = IdxToPtr (x)->Name ();
     className.TrimLeft ();
@@ -597,7 +597,7 @@ KKStr   MLClassConstList::ExtractHTMLTableHeader () const
 {
   KKStr  header (QueueSize () * 50);
 
-  uint16 x;
+  kkuint16 x;
 
   MLClassConstList::const_iterator  idx;
   for  (idx = begin ();  idx != end ();  idx++)
@@ -621,7 +621,7 @@ KKStr   MLClassConstList::ExtractHTMLTableHeader () const
 
 
 
-MLClassConstListPtr  MLClassConstList::ExtractListOfClassesForAGivenHierarchialLevel (int32 level)  const
+MLClassConstListPtr  MLClassConstList::ExtractListOfClassesForAGivenHierarchialLevel (kkint32 level)  const
 {
   MLClassConstListPtr  newList = new MLClassConstList ();
 
@@ -704,7 +704,7 @@ bool  MLClassConstList::operator== (const MLClassConstList&  right)  const
   if  (QueueSize () != right.QueueSize ())
     return  false;
 
-  for  (int32 i = 0;  i < QueueSize ();  i++)
+  for  (kkint32 i = 0;  i < QueueSize ();  i++)
   {
     MLClassConstPtr  mlClass = IdxToPtr (i);
 

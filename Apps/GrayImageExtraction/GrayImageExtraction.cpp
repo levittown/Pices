@@ -19,10 +19,10 @@
 using namespace  std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "OSservices.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 #include "InstrumentDataFileManager.h"
 using namespace SipperHardware;
@@ -112,7 +112,7 @@ void  MakeASipperWithDupImages ()
   FILE* out = osFOPEN ("C:\\TrainingApp\\SipperFiles\\HRS020705_Dup.spr", "wb");
 
   int  buffSize = 1000000;
-  KKU::uchar*  buff = new KKU::uchar[buffSize];
+  KKB::uchar*  buff = new KKB::uchar[buffSize];
 
   int recsRead  =  (int)fread (buff, buffSize, 1, in);
   if  (recsRead <= 0)
@@ -214,11 +214,11 @@ void  TestKKFFTW ()
     float* f1 =  ft1->FourierMagArea ();
     float* f2 =  ft2->FourierMagArea ();
 
-    uint32  numPixels = r->Height () * r->Width ();
+    kkuint32  numPixels = r->Height () * r->Width ();
 
     float  largestDelta = 0.0f;
 
-    for  (uint32 x = 0;  x < numPixels;  ++x)
+    for  (kkuint32 x = 0;  x < numPixels;  ++x)
     {
       float  delta = f1[x] - f2[x];
       if  (delta != 0.0f)
@@ -254,13 +254,13 @@ void  CointToScanLine71787452 ()
                                                    );
 
   uchar   lineBuff[10000];
-  uint32  lineBuffSize = 4096;
-  uint32  lineSize = 0;
-  uint32  colCount[4096];
-  uint32  pixelsInRow = 0;
+  kkuint32  lineBuffSize = 4096;
+  kkuint32  lineSize = 0;
+  kkuint32  colCount[4096];
+  kkuint32  pixelsInRow = 0;
   bool  flow = false;
 
-  uint32  lineCount = 0;
+  kkuint32  lineCount = 0;
   sf->GetNextLine (lineBuff, lineBuffSize, lineSize, colCount, pixelsInRow, flow);
   while  (!sf->Eof ())
   {
@@ -276,7 +276,7 @@ void  CointToScanLine71787452 ()
     sf->GetNextLine (lineBuff, lineBuffSize, lineSize, colCount, pixelsInRow, flow);
   }
 
-  int64  byteOffset = sf->ByteOffset ();
+  kkint64  byteOffset = sf->ByteOffset ();
 
   delete  sf;
   sf = NULL;
@@ -287,16 +287,16 @@ void  CopyOverSipperFileXXX ()
 {
   uchar  buff[10240];
 
-  FILE*  i = KKU::osFOPEN ("C:\\Pices\\SipperFiles\\WB0813\\WB0813DSH09_05.spr", "rb");
-  FILE*  o = KKU::osFOPEN ("C:\\Pices\\SipperFiles\\WB0813\\WB0813DSH09_05a.spr", "wb");
+  FILE*  i = KKB::osFOPEN ("C:\\Pices\\SipperFiles\\WB0813\\WB0813DSH09_05.spr", "rb");
+  FILE*  o = KKB::osFOPEN ("C:\\Pices\\SipperFiles\\WB0813\\WB0813DSH09_05a.spr", "wb");
 
-  int64  bytesToWrite = 1408806768;
-  int64  bytesCopied = 0;
-  int64  bytesLeft = bytesToWrite;
+  kkint64  bytesToWrite = 1408806768;
+  kkint64  bytesCopied = 0;
+  kkint64  bytesLeft = bytesToWrite;
 
   while  (bytesLeft > 0)
   {
-    int32  bytesThisLoop = sizeof (buff);
+    kkint32  bytesThisLoop = sizeof (buff);
     if  (bytesLeft < bytesThisLoop)
       bytesThisLoop = bytesLeft;
 
@@ -371,7 +371,7 @@ int  main (int  argc,  char** argv)
       ExtractionParms emParms (argc, argv, false, errorMessage, parmsGood, log);
       if  (parmsGood)
       {
-        int32  numberOfProcessors = osGetNumberOfProcessors ();
+        kkint32  numberOfProcessors = osGetNumberOfProcessors ();
         if  (numberOfProcessors < 1)
           numberOfProcessors = 1;
 

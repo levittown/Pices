@@ -43,7 +43,7 @@ namespace MLL
   public:
     typedef  FeatureFileIOPices*  FeatureFileIOPicesPtr;
 
-    typedef  KKU::uint32   uint32;
+    typedef  KKB::kkuint32 kkuint32;
 
     FeatureFileIOPices ();
     virtual ~FeatureFileIOPices ();
@@ -51,7 +51,7 @@ namespace MLL
     virtual  FileDescPtr  GetFileDesc (const KKStr&         _fileName,
                                        std::istream&        _in,
                                        MLClassConstListPtr  _classes,
-                                       int32&               _estSize,
+                                       kkint32&               _estSize,
                                        KKStr&               _errorMessage,
                                        RunLog&              _runLog
                                       );
@@ -73,7 +73,7 @@ namespace MLL
                               const KKStr&           _fileName,
                               const FeatureNumList&  _selFeatures,
                               std::ostream&          _out,
-                              uint32&                _numExamplesWritten,
+                              kkuint32&                _numExamplesWritten,
                               VolConstBool&          _cancelFlag,
                               bool&                  _successful,
                               KKStr&                 _errorMessage,
@@ -83,8 +83,8 @@ namespace MLL
 
     static  FeatureFileIOPicesPtr  Driver                 ()                  {return &driver;}
     static  FileDescPtr            NewPlanktonFile        (RunLog&  _log);
-    static  KKStr                  PlanktonFieldName      (int32  fieldNum);
-    static  int32                  PlanktonMaxNumOfFields ();
+    static  KKStr                  PlanktonFieldName      (kkint32  fieldNum);
+    static  kkint32                PlanktonMaxNumOfFields ();
 
 
     /**                       FeatureDataReSink
@@ -122,7 +122,7 @@ namespace MLL
                                              MLClassConstList&  _mlClasses,
                                              VolConstBool&      _cancelFlag,    // will be monitored,  if set to True  Load will terminate.
                                              bool&              _changesMade,
-                                             KKU::DateTime&     _timeStamp,
+                                             KKB::DateTime&     _timeStamp,
                                              RunLog&            _log
                                             );
 
@@ -164,7 +164,7 @@ namespace MLL
   private:
     static FeatureFileIOPices  driver;
     static FileDescPtr         planktonFileDesc;
-    static int32               MaxNumPlanktonRawFields;
+    static kkint32             MaxNumPlanktonRawFields;
     static const char*         PlanktonRawFeatureDecriptions[];
 
 
@@ -213,14 +213,14 @@ namespace MLL
 
 
     void  Parse_FEATURE_DATA_FILE_Line (KKStr&  line,
-                                        int32&  version,
-                                        int32&  numOfFields,
-                                        int32&  numOfExamples
+                                        kkint32&  version,
+                                        kkint32&  numOfFields,
+                                        kkint32&  numOfExamples
                                        );
 
 
     VectorInt  CreateIndirectionTable (const VectorKKStr&  fields,
-                                       int32                 numOfFeatures
+                                       kkint32               numOfFeatures
                                       );
 
   };

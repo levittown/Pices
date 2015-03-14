@@ -3,7 +3,7 @@
 
 #include "MsgQueue.h"
 #include "RunLog.h"
-#include "Str.h"
+#include "KKStr.h"
 
 #include "AbundanceCorrectionMatrix.h"
 #include "FeatureFileIO.h"
@@ -28,10 +28,10 @@ namespace  AbundanceCorrectionApplication
   class  AbundanceCorrectionStatsBuilder: public PicesApplication
   {
   public:
-    typedef  KKU::uchar  uchar;
-    typedef  KKU::uint   uint;
-    typedef  KKU::ulong  ulong;
-    typedef  KKU::ushort ushort;
+    typedef  KKB::uchar  uchar;
+    typedef  KKB::uint   uint;
+    typedef  KKB::ulong  ulong;
+    typedef  KKB::ushort ushort;
 
     AbundanceCorrectionStatsBuilder ();
 
@@ -40,7 +40,7 @@ namespace  AbundanceCorrectionApplication
     const char*  ApplicationName () const  {return "AbundanceCorrectionStatsBuilder";}
 
     virtual
-    void  InitalizeApplication (int32   argc,
+    void  InitalizeApplication (kkint32 argc,
                                 char**  argv
                                );
 

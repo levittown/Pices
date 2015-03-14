@@ -1,18 +1,18 @@
 /* CmdLineExpander.h -- Pre-process Command Line parameters.
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 
 #ifndef  _CMDLINEEXPANDER_
 #define  _CMDLINEEXPANDER_
 
 #include "RunLog.h"
-#include "Str.h"
+#include "KKStr.h"
 
 // Disable "assignment operator could not be generated" warning.
 #pragma warning(disable : 4512) 
 
-namespace  KKU
+namespace  KKB
 {
   /**
    *@brief  Expands command line parameters, by parsing for special parameters and expanding them to their full value.
@@ -32,7 +32,7 @@ namespace  KKU
      */
     CmdLineExpander (const KKStr&  _applicationName,
                      RunLog&       _log,
-                     int32         argc,
+                     kkint32       argc,
                      char**        argv
                     );
 
@@ -47,7 +47,7 @@ namespace  KKU
 
     ~CmdLineExpander ();
 
-    void   ExpandCmdLine (int32   argc, 
+    void   ExpandCmdLine (kkint32 argc, 
                           char**  argv
                          );
 
@@ -80,7 +80,7 @@ namespace  KKU
 
   typedef  CmdLineExpander*  CmdLineExpanderPtr;
 
-}  /* namespace  KKU */
+}  /* namespace  KKB */
 
 
 #endif

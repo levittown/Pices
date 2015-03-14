@@ -17,12 +17,12 @@
 using namespace std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "KKException.h"
 #include "OSservices.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 
 #include "ModelUsfCasCor.h"
@@ -88,9 +88,9 @@ ModelUsfCasCor::~ModelUsfCasCor ()
 }
 
 
-int32  ModelUsfCasCor::MemoryConsumedEstimated ()  const
+kkint32  ModelUsfCasCor::MemoryConsumedEstimated ()  const
 {
-  int32  memoryConsumedEstimated = Model::MemoryConsumedEstimated () + 
+  kkint32  memoryConsumedEstimated = Model::MemoryConsumedEstimated () + 
                                    sizeof (usfCasCorClassifier);
 
   if  (usfCasCorClassifier)
@@ -216,13 +216,13 @@ void  ModelUsfCasCor::Predict (FeatureVectorPtr     example,
                                MLClassConstPtr   knownClass,
                                MLClassConstPtr&  predClass1,
                                MLClassConstPtr&  predClass2,
-                               int32&               predClass1Votes,
-                               int32&               predClass2Votes,
+                               kkint32&               predClass1Votes,
+                               kkint32&               predClass2Votes,
                                double&              probOfKnownClass,
                                double&              predClass1Prob,
                                double&              predClass2Prob,
                                double&              compact,
-                               int32&               numOfWinners,
+                               kkint32&               numOfWinners,
                                bool&                knownClassOneOfTheWinners,
                                double&              breakTie
                               )
@@ -306,7 +306,7 @@ ClassProbListPtr  ModelUsfCasCor::ProbabilitiesByClass (FeatureVectorPtr  exampl
 
 void  ModelUsfCasCor::ProbabilitiesByClass (FeatureVectorPtr         example,
                                             const MLClassConstList&  _mlClasses,
-                                            int32*                   _votes,
+                                            kkint32*                   _votes,
                                             double*                  _probabilities
                                            )
 {
@@ -358,7 +358,7 @@ void  ModelUsfCasCor::ProbabilitiesByClass (FeatureVectorPtr         example,
   {
     float  highProb = -9999.99f;
     int   highProbIdx = -1;
-    for  (uint32 x = 0;  x < probabilities.size ();  ++x)
+    for  (kkuint32 x = 0;  x < probabilities.size ();  ++x)
     {
       float  p = probabilities[x];
       _votes[x] = 0;
@@ -430,7 +430,7 @@ void   ModelUsfCasCor::ProbabilitiesByClass (FeatureVectorPtr         _example,
   }
   else
   {
-    for  (uint32 x = 0;  x < probabilities.size ();  ++x)
+    for  (kkuint32 x = 0;  x < probabilities.size ();  ++x)
       _probabilities[x] = probabilities[x];
   }
 
@@ -460,7 +460,7 @@ void  ModelUsfCasCor::ReadSpecificImplementationXML (istream&  i,
 
   KKStr  modelFileName;
 
-  int32  numOfModels = 0;
+  kkint32  numOfModels = 0;
 
   while  (i.getline (buff, sizeof (buff)))
   {
@@ -519,7 +519,7 @@ void  ModelUsfCasCor::WriteSpecificImplementationXML (ostream&  o)
 
 
 
-int32  ModelUsfCasCor::NumOfSupportVectors ()  const
+kkint32  ModelUsfCasCor::NumOfSupportVectors ()  const
 {
   return  0;
 }  /* NumOfSupportVectors */

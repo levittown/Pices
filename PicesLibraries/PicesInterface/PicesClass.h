@@ -12,7 +12,7 @@ using namespace System::Diagnostics;
 #include  "MLClass.h"
 #include  "ImageFeatures.h"
 #include  "PicesRunLog.h"
-using namespace  KKU;
+using namespace  KKB;
 using namespace  MLL;
 
 
@@ -56,7 +56,7 @@ namespace PicesInterface
     property  String^             Name                 {String^      get () {return name;}}
     property  String^             NameUpper            {String^      get () {return nameUpper;}}
     property  bool                NoiseClass           {bool         get ();}
-    property  uint16              NumHierarchialLevels {uint16       get ();}
+    property  kkuint16            NumHierarchialLevels {kkuint16     get ();}
     property  PicesClass^         Parent               {PicesClass^  get () {return parent;}        void set (PicesClass^ _parent);}
     property  String^             ParentName           {String^      get ();}
     property  List<PicesClass^>^  Children             {List<PicesClass^>^ get ();}

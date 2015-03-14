@@ -13,10 +13,10 @@
 using namespace std;
 
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 
 
-using namespace KKU;
+using namespace KKB;
 
 
 
@@ -41,7 +41,7 @@ VolumeSampledStat::VolumeSampledStat (const VolumeSampledStat&  _stat):
 }
 
 
-VolumeSampledStat::VolumeSampledStat (int32   _binId,
+VolumeSampledStat::VolumeSampledStat (kkint32 _binId,
                                       float   _binDepth,
                                       float   _volumeSampled
                                      ):
@@ -70,7 +70,7 @@ void  VolumeSampledStat::AddToVolumeSampled (float _volumeSampled)
 
 
 VolumeSampledStatList::VolumeSampledStatList ():
-  map<int32, VolumeSampledStatPtr> ()
+  map<kkint32, VolumeSampledStatPtr> ()
 {
 }
 

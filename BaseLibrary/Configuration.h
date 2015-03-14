@@ -1,15 +1,15 @@
 /* Configuration.h -- Generic Configuration file manager.
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #ifndef  _CONFIGURATION_
 #define  _CONFIGURATION_
 
-#include "Str.h"
+#include "KKStr.h"
 #include "RunLog.h"
 
 
-namespace KKU 
+namespace KKB 
 {
   /**
    *@brief  General purpose Configuration File manager class.
@@ -44,7 +44,7 @@ namespace KKU
   class  Configuration
   {
   public:
-    Configuration (const KKU::KKStr&  _fileName,
+    Configuration (const KKB::KKStr&  _fileName,
                    RunLog&            _log
                   );
 
@@ -62,7 +62,7 @@ namespace KKU
 
     VectorKKStr   FormatErrorsWithLineNumbers ()  const;
 
-    void  FormatErrorsAdd (int32         lineNum, 
+    void  FormatErrorsAdd (kkint32       lineNum, 
                            const KKStr&  error
                           );
 
@@ -70,60 +70,60 @@ namespace KKU
 
     void  LoadFile ();
 
-    int32 MemoryConsumedEstimated ()  const;
+    kkint32 MemoryConsumedEstimated ()  const;
 
-    int32 NumOfSections ();
+    kkint32 NumOfSections ();
   
-    int32 NumOfSettings (const KKU::KKStr&  sectionName);
+    kkint32 NumOfSettings (const KKB::KKStr&  sectionName);
 
-    int32 NumOfSettings (int32  sectionNum)  const;                 /**< @brief Returns number of settings for the specified section, */
+    kkint32 NumOfSettings (kkint32  sectionNum)  const;                 /**< @brief Returns number of settings for the specified section, */
    
     void  PrintFormatErrors (ostream& o);
 
-    bool  SectionDefined (const KKU::KKStr&  sectionName)  const;   /**< @brief Returns true if the section is defined. */
+    bool  SectionDefined (const KKB::KKStr&  sectionName)  const;   /**< @brief Returns true if the section is defined. */
 
 
     // Access Methods.
-    const KKU::KKStr&  FileName () const  {return  fileName;}
+    const KKB::KKStr&  FileName () const  {return  fileName;}
 
-    KKStrConstPtr      SectionName (int32 sectionNum)  const;       /**< @brief Returns the name of the section for specified index, if index not defined will return NULL. */
+    KKStrConstPtr      SectionName (kkint32 sectionNum)  const;       /**< @brief Returns the name of the section for specified index, if index not defined will return NULL. */
 
-    int32              SectionNum (const KKU::KKStr&  sectionName)  const;
+    kkint32            SectionNum (const KKB::KKStr&  sectionName)  const;
 
-    int32              SectionLineNum (int32 sectionNum)  const;
+    kkint32            SectionLineNum (kkint32 sectionNum)  const;
 
-    KKStrConstPtr      SettingName (const KKU::KKStr&  sectionName, 
-                                    int32              settingNum
+    KKStrConstPtr      SettingName (const KKB::KKStr&  sectionName, 
+                                    kkint32            settingNum
                                    )  const;
   
-    KKStrConstPtr      SettingName (int32  sectionNum,
-                                    int32  settingNum
+    KKStrConstPtr      SettingName (kkint32  sectionNum,
+                                    kkint32  settingNum
                                    )  const;
 
 
-    KKStrConstPtr      SettingValue (const KKU::KKStr&  sectionName,
-                                     const KKU::KKStr&  settingName,
-                                     int32&             lineNum
+    KKStrConstPtr      SettingValue (const KKB::KKStr&  sectionName,
+                                     const KKB::KKStr&  settingName,
+                                     kkint32&             lineNum
                                     )  const;
 
 
-    KKStrConstPtr      SettingValue (int32              sectionNum,
-                                     const KKU::KKStr&  settingName,
-                                     int32&             lineNum
+    KKStrConstPtr      SettingValue (kkint32            sectionNum,
+                                     const KKB::KKStr&  settingName,
+                                     kkint32&             lineNum
                                     )  const;
 
 
-    KKStrConstPtr      SettingValue (int32   sectionNum,
-                                     int32   settingNum,
-                                     int32&  lineNum
+    KKStrConstPtr      SettingValue (kkint32 sectionNum,
+                                     kkint32 settingNum,
+                                     kkint32&  lineNum
                                     )  const;
 
 
     void  GetSetting (const char*     sectiopnName,
-                      int32           settingNum,
+                      kkint32         settingNum,
                       KKStrConstPtr&  name,
                       KKStrConstPtr&  value,
-                      int32&          lineNum
+                      kkint32&          lineNum
                      );
 
   private:
@@ -135,8 +135,8 @@ namespace KKU
     typedef  ConfSection*      ConfSectionPtr;
     typedef  ConfSectionList*  ConfSectionListPtr;
 
-    KKU::KKStr          curSectionName;
-    KKU::KKStr          fileName;
+    KKB::KKStr          curSectionName;
+    KKB::KKStr          fileName;
     bool                formatGood;
     VectorKKStr         formatErrors;   /**< Configuration Format Errors will be recorder here. */
     VectorInt           formatErrorsLineNums;

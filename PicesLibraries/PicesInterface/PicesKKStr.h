@@ -6,7 +6,7 @@ using namespace System::Collections;
 using namespace System::Collections::Generic;
 
 #include  "DateTime.h"
-#include  "Str.h"
+#include  "KKStr.h"
 
 
 namespace PicesInterface 
@@ -17,19 +17,19 @@ namespace PicesInterface
     PicesKKStr ();
 
     static
-      KKU::KKStr  SystemStringToKKStr (System::String^  s);
+      KKB::KKStr  SystemStringToKKStr (System::String^  s);
 
     static
-      KKU::KKStrPtr  SystemStringToKKStrPtr (System::String^  s);
+      KKB::KKStrPtr  SystemStringToKKStrPtr (System::String^  s);
 
     static
-      KKU::KKStrListPtr  SystemStringArrayToKKStrListPtr (array<String^>^  list);
+      KKB::KKStrListPtr  SystemStringArrayToKKStrListPtr (array<String^>^  list);
 
     static
-      KKU::KKStrListPtr  SystemStringListToKKStrListPtr (List<String^>^  list);
+      KKB::KKStrListPtr  SystemStringListToKKStrListPtr (List<String^>^  list);
 
     static
-      System::String^  KKStrToSystenStr (const KKU::KKStr&  s);
+      System::String^  KKStrToSystenStr (const KKB::KKStr&  s);
 
     static System::Byte      StrToByte      (String^ s);
     static bool              StrToBool      (String^ s);
@@ -41,7 +41,7 @@ namespace PicesInterface
     static double            StrToLatitude  (String^ s);
     static long              StrToLong      (String^ s);
     static double            StrToLongitude (String^ s);
-    static KKU::uint         StrToUint      (String^ s);
+    static KKB::uint         StrToUint      (String^ s);
 
     static System::Int64     StrToInt64     (String^ s);
     static System::UInt64    StrToUInt64    (String^ s);
@@ -51,11 +51,11 @@ namespace PicesInterface
   };
 
 
-  KKU::KKStr&  operator<< (KKU::KKStr&      left,
+  KKB::KKStr&  operator<< (KKB::KKStr&      left,
                            System::String^  right
                           );
 
   String^ operator<< (String^      left,
-                      KKU::KKStr&  right
+                      KKB::KKStr&  right
                      );
 }  /* PicesInterface */

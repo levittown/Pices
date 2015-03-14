@@ -2,7 +2,7 @@
 #define  _SIPPERBUFFBINARY_
 
 #include  "RunLog.h"
-using namespace KKU;
+using namespace KKB;
 
 
 #include  "SipperBuff.h"
@@ -99,28 +99,28 @@ namespace  SipperHardware
 
 
     uchar    SelCameraNum () {return  selCameraNum;}
-    uint32   CurRow       () {return  curRow;} 
+    kkuint32 CurRow       () {return  curRow;} 
     bool     Eof          () {return  eof;}
     KKStr&   FileName     () {return  fileName;}
     bool     Opened       () {return  opened;} 
-    uint32   RecCount     () {return  recCount;}
+    kkuint32 RecCount     () {return  recCount;}
 
     void  SelCameraNum (uchar _selCameraNum)  {selCameraNum = _selCameraNum;}
 
 
     void  GetNextLine  (uchar*   lineBuff,
-                        uint32   lineBuffSize,
-                        uint32&  lineSize,
-                        uint32   colCount[],
-                        uint32&  pixelsInRow,
+                        kkuint32 lineBuffSize,
+                        kkuint32&  lineSize,
+                        kkuint32 colCount[],
+                        kkuint32&  pixelsInRow,
                         bool&    flow);
 
-    void  SkipToScanLine (uint32  scanLine);
+    void  SkipToScanLine (kkuint32  scanLine);
 
   private:
 
     inline
-    void  GetNextSipperRec (int32&   spaceLeft,
+    void  GetNextSipperRec (kkint32&   spaceLeft,
                             uchar&   cameraNum,
                             bool&    raw,
                             bool&    eol,
@@ -137,7 +137,7 @@ namespace  SipperHardware
                             uchar&   pix9,
                             uchar&   pix10,
                             uchar&   pix11,
-                            int32&   numOfBlanks,
+                            kkint32&   numOfBlanks,
                             bool&    moreRecs);
 
 

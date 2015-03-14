@@ -14,10 +14,10 @@
 using namespace  std;
 
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "OSservices.h"
-#include  "Str.h"
-using namespace  KKU;
+#include  "KKStr.h"
+using namespace  KKB;
 
 
 #include  "FeatureFileIO.h"
@@ -76,7 +76,7 @@ RipOutClass::~RipOutClass ()
 }
 
 
-void  RipOutClass::InitalizeApplication (int32   argc,
+void  RipOutClass::InitalizeApplication (kkint32 argc,
                                          char**  argv
                                         )
 {
@@ -424,7 +424,7 @@ void  RipOutClass::ExtractSpecifiedClass ()
   }
 
 
-  KKU::uint  numExamplesWritten = 0;
+  KKB::uint  numExamplesWritten = 0;
   outFileFormat->SaveFeatureFile (destFileName, 
                                   resultList->AllFeatures (),
                                   *resultList,
@@ -445,7 +445,7 @@ void  MakeEightClassDataSet (const KKStr&  srcFileName,
                             )
 {
   RunLog  log;
-  KKU::uint  numExamplesWritten = 0;
+  KKB::uint  numExamplesWritten = 0;
   bool  cancelFlag  = false;
   bool  successful  = false;
   bool  changesMade = false;

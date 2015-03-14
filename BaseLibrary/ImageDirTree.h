@@ -1,14 +1,14 @@
 /* ImageDirTree.h -- Builds list of Image Files in a Sub Directory Tree.
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #ifndef  _IMAGEDIRTREE_
 #define  _IMAGEDIRTREE_
 
-#include  "Str.h"
+#include  "KKStr.h"
 
 
-namespace  KKU
+namespace  KKB
 {
   /**
    *@brief  Creates an index of all images in a specified sub-directory structure that can be quickly
@@ -38,7 +38,7 @@ namespace  KKU
 
 
     /** @brief returns the number of image files found the sub-directory tree. */
-    uint32  Size ()  {return  (uint32)entries.size ();}
+    kkuint32  Size ()  {return  (kkuint32)entries.size ();}
 
 
     /**
@@ -52,7 +52,7 @@ namespace  KKU
     KKStrListPtr  Directories (const KKStr& fileName)  const;
 
   private:
-    typedef  map<KKStr,int32>          DuplicateTable;
+    typedef  map<KKStr,kkint32>          DuplicateTable;
     typedef  multimap<KKStr,KKStrPtr>  EntryTable;
   
     void    Load (const KKStr&  _subDir);
@@ -64,7 +64,7 @@ namespace  KKU
 
     KKStr  subDir;
   };
-}  /* namespace KKU */
+}  /* namespace KKB */
 
 #endif
 

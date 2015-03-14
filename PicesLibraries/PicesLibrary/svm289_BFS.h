@@ -5,7 +5,7 @@
 
 #include  "FeatureNumList.h"
 #include  "FeatureVector.h"
-#include  "Str.h"
+#include  "KKStr.h"
 
 using namespace MLL;
 
@@ -24,7 +24,7 @@ namespace  SVM289_BFS
   //extern "C" {
   //#endif
 
-  extern int32 libsvm_version;
+  extern kkint32 libsvm_version;
 
 
   struct svm_problem 
@@ -48,7 +48,7 @@ namespace  SVM289_BFS
 
     const FeatureNumList&   SelFeatures ()  const  {return selFeatures;}
 
-    int32                 l;
+    kkint32               l;
     FeatureNumList      selFeatures;
     FeatureVectorList   x;
     double*             y;
@@ -99,7 +99,7 @@ namespace  SVM289_BFS
 
     SVM_Type     svm_type;
     Kernel_Type  kernel_type;
-    int32        degree;         /* for poly              */
+    kkint32      degree;         /* for poly              */
     double       gamma;          /* for poly/rbf/sigmoid  */
     double       coef0;          /* for poly/sigmoid      */
 
@@ -107,13 +107,13 @@ namespace  SVM289_BFS
     double       cache_size;     /* in MB                             */
     double       eps;            /* stopping criteria                 */
     double       C;              /* for C_SVC, EPSILON_SVR and NU_SVR */
-    int32        nr_weight;      /* for C_SVC                         */
-    int32*       weight_label;   /* for C_SVC                         */
+    kkint32      nr_weight;      /* for C_SVC                         */
+    kkint32*       weight_label;   /* for C_SVC                         */
     double*      weight;         /* for C_SVC                         */
     double       nu;             /* for NU_SVC, ONE_CLASS, and NU_SVR */
     double       p;              /* for EPSILON_SVR                   */
-    int32        shrinking;      /* use the shrinking heuristics      */
-    int32        probability;    /* do probability estimates          */
+    kkint32      shrinking;      /* use the shrinking heuristics      */
+    kkint32      probability;    /* do probability estimates          */
 
     double       probParam;      /*  probability parameter as done using USF multi class prob calc */
 
@@ -180,8 +180,8 @@ namespace  SVM289_BFS
 
 
     svm_parameter      param;      // parameter
-    int32              nr_class;   // number of classes, = 2 in regression/one class svm
-    int32              l;          // total #SV
+    kkint32            nr_class;   // number of classes, = 2 in regression/one class svm
+    kkint32            l;          // total #SV
     FeatureVectorList  SV;         // SVs (SV[l])
     double**           sv_coef;    // coefficients for SVs in decision functions (sv_coef[k-1][l])
     double*            rho;        // constants in decision functions (rho[k*(k-1)/2])
@@ -191,8 +191,8 @@ namespace  SVM289_BFS
 
     // for classification only
 
-    int32*    label;   // label of each class (label[k])
-    int32*    nSV;     // number of SVs for each class (nSV[k])
+    kkint32*    label;   // label of each class (label[k])
+    kkint32*    nSV;     // number of SVs for each class (nSV[k])
     // nSV[0] + nSV[1] + ... + nSV[k-1] = l
     // XXX
     bool  weOwnSupportVectors;    // 1 if svm_model is created by svm_load_model
@@ -211,7 +211,7 @@ namespace  SVM289_BFS
                           RunLog&                log
                          );
 
-  int32  svm_save_model (const char*              model_file_name, 
+  kkint32  svm_save_model (const char*              model_file_name, 
                          const struct svm_model*  model
                         );
 
@@ -226,12 +226,12 @@ namespace  SVM289_BFS
                                   RunLog&      log
                                  );
 
-  int32  svm_get_svm_type (const struct svm_model *model);
+  kkint32  svm_get_svm_type (const struct svm_model *model);
 
-  int32  svm_get_nr_class (const struct svm_model *model);
+  kkint32  svm_get_nr_class (const struct svm_model *model);
 
   void  svm_get_labels  (const struct svm_model*  model, 
-                         int32*                   label
+                         kkint32*                   label
                         );
 
   double  svm_get_svr_probability (const struct svm_model *model);
@@ -251,7 +251,7 @@ namespace  SVM289_BFS
   double svm_predict_probability (      svm_model*      model, 
                                   const FeatureVector&  x, 
                                   double*               prob_estimates,
-                                  int32*                votes
+                                  kkint32*                votes
                                  );
 
   void svm_destroy_model (struct svm_model*&  model);
@@ -265,7 +265,7 @@ namespace  SVM289_BFS
                                   );
 
 
-  int32 svm_check_probability_model(const struct svm_model *model);
+  kkint32 svm_check_probability_model(const struct svm_model *model);
 
   extern void (*svm_print_string) (const char *);
 
@@ -284,13 +284,13 @@ namespace  SVM289_BFS
   typedef signed char schar;
 
  
-  template <class S, class T> inline void clone(T*& dst, S* src, int32 n)
+  template <class S, class T> inline void clone(T*& dst, S* src, kkint32 n)
   {
     dst = new T[n];
     memcpy((void *)dst,(void *)src,sizeof(T)*n);
   }
 
-  inline double powi (double base, int32 times);
+  inline double powi (double base, kkint32 times);
 
   class  QMatrix;
   class  Cache;

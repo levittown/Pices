@@ -3,7 +3,7 @@
 
 #include "RasterSipper.h"
 #include "SipperBlob.h"
-using namespace  KKU;
+using namespace  KKB;
 using namespace  MLL;
 
 
@@ -20,7 +20,7 @@ public:
   void  AddBlob (SipperBlobPtr  _blob);
   void  Explore (SipperBlobPtr  _blob);
 
-  uint64 ByteOffset () const  {return byteOffset;}
+  kkuint64 ByteOffset () const  {return byteOffset;}
   uint   ColLeft    () const  {return colLeft;}
   uint   ColRight   () const  {return colRight;}
   uint   PixelCount () const  {return pixelCount;}
@@ -40,13 +40,13 @@ public:
   RasterSipperPtr  GetRaster (uchar** frame,
                               int**   blobIds,     
                               uint    firstFrameRowScanLine,
-                              uint64*  frameRowByteOffsets
+                              kkuint64*  frameRowByteOffsets
                              );
 
 
 
 private:
-  uint64  byteOffset;  // Sipper File ByteOffset of scanline that contains the 1st row in this image.
+  kkuint64  byteOffset;  // Sipper File ByteOffset of scanline that contains the 1st row in this image.
   uint    colLeft;
   uint    colRight;
   uint    pixelCount;

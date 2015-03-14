@@ -3,7 +3,7 @@
 
 
 #include "RunLog.h"
-#include "Str.h"
+#include "KKStr.h"
 
 #include "FeatureNumList.h"
 
@@ -76,7 +76,7 @@ namespace MLL
 
 
     virtual
-    int32     MemoryConsumedEstimated ()  const;
+    kkint32   MemoryConsumedEstimated ()  const;
 
 
     virtual
@@ -123,17 +123,17 @@ namespace MLL
     virtual KKStr                    ModelParamTypeStr          () const {return ModelParamTypeToStr (ModelParamType ());}
 
     virtual float                    AvgMumOfFeatures           () const {return (float)selectedFeatures.NumOfFeatures ();}
-    virtual int32                    BitsToReduceBy             () const {return bitsToReduceBy;}
+    virtual kkint32                  BitsToReduceBy             () const {return bitsToReduceBy;}
     virtual CompressionMethodType    CompressionMethod          () const {return compressionMethod;}
     virtual KKStr                    CompressionMethodStr       () const {return CompressionMethodToStr (compressionMethod);}
     virtual EncodingMethodType       EncodingMethod             () const {return encodingMethod;}
     virtual KKStr                    EncodingMethodStr          () const {return EncodingMethodToStr (encodingMethod);}
-    virtual int32                    ExamplesPerClass           () const {return examplesPerClass;}
+    virtual kkint32                  ExamplesPerClass           () const {return examplesPerClass;}
     virtual const KKStr&             FileName                   () const {return fileName;}
     virtual bool                     NormalizeNominalFeatures   () const {return normalizeNominalFeatures;}
-    virtual int32                    NumOfFeaturesAfterEncoding () const;
+    virtual kkint32                  NumOfFeaturesAfterEncoding () const;
     virtual const FeatureNumList&    SelectedFeatures           () const {return selectedFeatures;}
-    virtual int32                    UnBalancedBits             () const {return unBalancedBits;}
+    virtual kkint32                  UnBalancedBits             () const {return unBalancedBits;}
     virtual KKStr                    UnBalancedBitsStr          () const {return unBalancedBitsStr;}
     virtual bool                     ValidParam                 () const {return validParam;}
     virtual bool                     WeightBitReduction         () const {return weightBitReduction;}
@@ -147,13 +147,13 @@ namespace MLL
 
 
     // Member update methods
-    virtual void  BitsToReduceBy     (int32                  _bitsToReduceBy)     {bitsToReduceBy     = _bitsToReduceBy;}
+    virtual void  BitsToReduceBy     (kkint32                _bitsToReduceBy)     {bitsToReduceBy     = _bitsToReduceBy;}
     virtual void  CompressionMethod  (CompressionMethodType  _compMethod)         {compressionMethod  = _compMethod;}
     virtual void  EncodingMethod     (EncodingMethodType     _encodingMethod)     {encodingMethod     = _encodingMethod;}
-    virtual void  ExamplesPerClass   (int32                  _examplesPerClass)   {examplesPerClass   = _examplesPerClass;}
+    virtual void  ExamplesPerClass   (kkint32                _examplesPerClass)   {examplesPerClass   = _examplesPerClass;}
     virtual void  FileName           (const KKStr&           _fileName)           {fileName           = _fileName;}
     virtual void  SelectedFeatures   (const FeatureNumList&  _selectedFeatures)   {selectedFeatures   = _selectedFeatures;}
-    virtual void  UnBalancedBits     (int32                  _unBalancedBits)     {unBalancedBits     = _unBalancedBits;}
+    virtual void  UnBalancedBits     (kkint32                _unBalancedBits)     {unBalancedBits     = _unBalancedBits;}
     virtual void  UnBalancedBitsStr  (const KKStr&           _unBalancedBitsStr)  {unBalancedBitsStr  = _unBalancedBitsStr;}
     virtual void  ValidParam         (bool                   _validParam)         {validParam         = _validParam;}
     virtual void  WeightBitReduction (bool                   _weightBitReduction) {weightBitReduction = _weightBitReduction;}
@@ -189,13 +189,13 @@ namespace MLL
                                 ) = 0;
 
 
-    int32                    bitsToReduceBy;
+    kkint32                  bitsToReduceBy;
 
     CompressionMethodType    compressionMethod;
 
     EncodingMethodType       encodingMethod;
 
-    int32                    examplesPerClass;
+    kkint32                  examplesPerClass;
 
     KKStr                    fileName;
 
@@ -203,7 +203,7 @@ namespace MLL
 
     FeatureNumList           selectedFeatures;    /**< Feature Number to use. */
 
-    int32                    unBalancedBits;      /**< Works with BitReduction compression when UnBalnced Bit reduction
+    kkint32                  unBalancedBits;      /**< Works with BitReduction compression when UnBalnced Bit reduction
                                                    * is specified, ex: when (compressionMethod == BRunBalancedVariance)
                                                    */
 

@@ -172,10 +172,6 @@
     <ClCompile Include="SipperImageExtractionParms.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\BaseLibrary\BaseLibrary.vcxproj">
-      <Project>{5a4b9b15-9745-4aba-b1a8-ffbc85d1d5df}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
     <ProjectReference Include="..\..\OutsidePackages\zlib123\projects\visualc6\zlib.vcxproj">
       <Project>{7c37d3e1-52ba-4dc0-9c7b-49375bf46b37}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>

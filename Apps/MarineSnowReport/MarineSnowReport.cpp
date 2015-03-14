@@ -30,9 +30,9 @@
 using namespace  std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "CmdLineExpander.h"
-using namespace  KKU;
+using namespace  KKB;
 
 #include "Instrument.h"
 #include "InstrumentDataFileManager.h"
@@ -115,7 +115,7 @@ void  CreateThresholdHeaders (VectorFloat&  sizeThresholds,
 {
   h1 = "";
   h2 = "";
-  for  (uint32 c = 0;  c < sizeThresholds.size ();  ++c)
+  for  (kkuint32 c = 0;  c < sizeThresholds.size ();  ++c)
   {
     KKStr  mStr = "";
     KKStr  sStr = "";
@@ -230,9 +230,9 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
     return NULL;
   }
   
-  int32  numRows = totalDownCast->NumDepthBins ();         // numRows = results->NumRows ();
-  //int32  numCols =                                       // numCols = results->NumCols ();
-  int32  numCountCols = totalDownCast->NumSizeBuckets ();  // numCountCols = numCols - 6;
+  kkint32  numRows = totalDownCast->NumDepthBins ();         // numRows = results->NumRows ();
+  //kkint32  numCols =                                       // numCols = results->NumCols ();
+  kkint32  numCountCols = totalDownCast->NumSizeBuckets ();  // numCountCols = numCols - 6;
 
   if  (numRows == 0)
   {
@@ -302,7 +302,7 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
      << h1 << endl
      << h2 << endl;
 
-  for  (int32 rowIdx = 0;  rowIdx < numRows;  ++rowIdx)
+  for  (kkint32 rowIdx = 0;  rowIdx < numRows;  ++rowIdx)
   {
 
     ImageSizeDistributionRowPtr  row = totalDownCast->GetDepthBin ((kkuint32)rowIdx);
@@ -310,11 +310,11 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
       continue;
 
     bool   downCast    = true;
-    int32  bucketIdx   = rowIdx;
+    kkint32  bucketIdx   = rowIdx;
     float  bucketDepth = row->Depth ();
-    int32  imageCount  = (kkint32)row->ImageCount ();
-    int32  pixelCount  = row->TotalPixels ();
-    int32  filledArea  = row->TotalFilledArea ();
+    kkint32  imageCount  = (kkint32)row->ImageCount ();
+    kkint32  pixelCount  = row->TotalPixels ();
+    kkint32  filledArea  = row->TotalFilledArea ();
 
     const VectorUint32&  counts = row->Distribution ();
 
@@ -330,7 +330,7 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
 
     r1 << begOfLine;
 
-    for  (int32 x = 0;  x < numCountCols;  ++x)
+    for  (kkint32 x = 0;  x < numCountCols;  ++x)
     {
       float  density = 0.0f;
       if  (volumeSampled != 0.0)
@@ -363,14 +363,14 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
   r1 << endl;
 
   r1 << "" << "\t" << "" << "\t" << "" << "\t" << "" << "\t" << "Integrated Abundance" << "\t" << "";
-  for  (uint32 x = 0;  x < integratedAbundance.size ();  ++x)
+  for  (kkuint32 x = 0;  x < integratedAbundance.size ();  ++x)
   {
     r1 << "\t" << integratedAbundance[x];
   }
   r1 << endl;
 
   r1 << "" << "\t" << "" << "\t" << "" << "\t" << "" << "\t" << "Integrated log10(Abundance)" << "\t" << "";
-  for  (uint32 x = 0;  x < integratedAbundance.size ();  ++x)
+  for  (kkuint32 x = 0;  x < integratedAbundance.size ();  ++x)
   {
     double  zed = integratedAbundance[x] + 1.0;
     double  zed2 = 0.0;
@@ -388,18 +388,18 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
   r1 << h1 << endl;
   r1 << h2 << endl;
 
-  for  (int32 rowIdx = 0;  rowIdx < numRows;  ++rowIdx)
+  for  (kkint32 rowIdx = 0;  rowIdx < numRows;  ++rowIdx)
   {
     ImageSizeDistributionRowPtr  row = totalDownCast->GetDepthBin ((kkuint32)rowIdx);
     if  (!row)
       continue;
 
     bool   downCast    = true;
-    int32  bucketIdx   = rowIdx;
+    kkint32  bucketIdx   = rowIdx;
     float  bucketDepth = row->Depth ();
-    int32  imageCount  = (kkint32)row->ImageCount ();
-    int32  pixelCount  = row->TotalPixels ();
-    int32  filledArea  = row->TotalFilledArea ();
+    kkint32  imageCount  = (kkint32)row->ImageCount ();
+    kkint32  pixelCount  = row->TotalPixels ();
+    kkint32  filledArea  = row->TotalFilledArea ();
 
     const VectorUint32&  counts = row->Distribution ();
 
@@ -413,7 +413,7 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
 
     r1 << begOfLine;
 
-    for  (int32 x = 0;  x < numCountCols;  ++x)
+    for  (kkint32 x = 0;  x < numCountCols;  ++x)
       r1 << "\t" << counts[x];
 
     if  (idm)
@@ -437,7 +437,7 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
   }
 
   r1 << "" << "\t" << "" << "\t" << "" << "\t" << "" << "\t" << "Integrated Counts" << "\t" << "";
-  for  (uint32 x = 0;  x < integratedCounts.size ();  ++x)
+  for  (kkuint32 x = 0;  x < integratedCounts.size ();  ++x)
     r1 << "\t" << integratedCounts[x];
 
   delete  instData;        instData = NULL;
@@ -475,7 +475,7 @@ void  PrintSummaryReports (DataBasePtr                  db,
                            const KKStr&                 statisticStr
                           )
 {
-  uint32  x = 0;
+  kkuint32  x = 0;
 
   ComparereDeploymentSummaryByStation  comparer;
 
@@ -604,9 +604,9 @@ void  MarineSnowReport (const KKStr&  statistic)
     statisticStr = "Volume";
 
 
-  marineSnowReportDirectory = osAddSlash (osAddSlash (SipperVariables::PicesReportDir ()) + "MarineSnowReports") + KKU::osGetLocalDateTime ().Date ().YYYYMMDD () + "_" + statisticStr;
-  //marineSnowReportDirectory = "D:\\Users\\kkramer\\DropBox\\Dropbox\\USF_OilSpillGroup\\MarineSnow_" + KKU::osGetLocalDateTime ().Date ().YYYYMMDD ();
-  KKU::osCreateDirectoryPath (marineSnowReportDirectory);
+  marineSnowReportDirectory = osAddSlash (osAddSlash (SipperVariables::PicesReportDir ()) + "MarineSnowReports") + KKB::osGetLocalDateTime ().Date ().YYYYMMDD () + "_" + statisticStr;
+  //marineSnowReportDirectory = "D:\\Users\\kkramer\\DropBox\\Dropbox\\USF_OilSpillGroup\\MarineSnow_" + KKB::osGetLocalDateTime ().Date ().YYYYMMDD ();
+  KKB::osCreateDirectoryPath (marineSnowReportDirectory);
 
   vector<DeploymentSummary*>  summaries;
 

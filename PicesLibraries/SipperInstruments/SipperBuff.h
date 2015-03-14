@@ -24,8 +24,8 @@
 //**************************************************************************
 
 #include  "RunLog.h"
-#include  "Str.h"
-using namespace KKU;
+#include  "KKStr.h"
+using namespace KKB;
 
 #include  "SipperHeaderRec.h"
 
@@ -67,8 +67,8 @@ namespace SipperHardware
   {
   public:
     typedef  SipperBuff*  SipperBuffPtr;
-    typedef  KKU::int32   int32;
-    typedef  KKU::uint32  uint32;
+    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::kkuint32  kkuint32;
 
     SipperBuff (InstrumentDataManagerPtr  _instrumentDataManager,
                 RunLog&                   _log);
@@ -88,65 +88,65 @@ namespace SipperHardware
     void    Open (const KKStr&  _fileName);
   
 
-    uint32  BytesDropped     ()  const {return  bytesDropped;}
-    uint64  ByteOffset       ()  const {return  byteOffset;}
+    kkuint32  BytesDropped     ()  const {return  bytesDropped;}
+    kkuint64  ByteOffset       ()  const {return  byteOffset;}
   
-    uint32  CurRow           ()  const {return  curRow;} 
-    uint64  CurRowByteOffset ()  const {return  curRowByteOffset;}
+    kkuint32  CurRow           ()  const {return  curRow;} 
+    kkuint64  CurRowByteOffset ()  const {return  curRowByteOffset;}
     bool    Eof              ()  const {return  eof;}
     bool    InvalidLine      ()  const {return  invalidLine;}
     bool    Opened           ()  const {return  opened;}
-    uint32  RecCount         ()  const {return  recCount;}
-    int32   ScanRate         ()  const {return  25000;}
+    kkuint32  RecCount         ()  const {return  recCount;}
+    kkint32 ScanRate         ()  const {return  25000;}
   
     virtual
-    int32   LineWidth        ()  const {return (int32)MAXLINELEN;}  /**< Returns the width in pixles of the associated scanner file. */
+    kkint32 LineWidth        ()  const {return (kkint32)MAXLINELEN;}  /**< Returns the width in pixles of the associated scanner file. */
 
     virtual 
     void  GetNextLine (uchar*   lineBuff,
-                       uint32   lineBuffSize,
-                       uint32&  lineSize,
-                       uint32   colCount[],
-                       uint32&  pixelsInRow,
+                       kkuint32 lineBuffSize,
+                       kkuint32&  lineSize,
+                       kkuint32 colCount[],
+                       kkuint32&  pixelsInRow,
                        bool&    flow
                       ) = 0;
   
-    void  SkipToScanLine (uint32  scanLine);
+    void  SkipToScanLine (kkuint32  scanLine);
   
-    void  SkipToScanLine (uint32  _scanLine,
-                          uint64  _byteOffset
+    void  SkipToScanLine (kkuint32  _scanLine,
+                          kkuint64  _byteOffset
                          );
   
   
     static
     SipperFileFormat  GuessFormatOfFile (const KKStr&  _fileName,
-                                         int32         _cameraNum,
+                                         kkint32       _cameraNum,
                                          RunLog&       _log
                                         );
   
     static
     SipperBuffPtr  CreateSipperBuff (SipperFileFormat          _format,
                                      KKStr                     _fileName,
-                                     int32                     _cameraNum,
+                                     kkint32                   _cameraNum,
                                      InstrumentDataManagerPtr  _instrumentDataManager,
                                      RunLog&                   _log
                                     );
   
     static
     SipperBuffPtr  CreateSipperBuff (KKStr                     _fileName,
-                                     int32                     _cameraNum,
+                                     kkint32                   _cameraNum,
                                      InstrumentDataManagerPtr  _instrumentDataManager,
                                      RunLog&                   _log
                                     );
   
-    void  DetermineCropSettings  (uint32&  cropLeft,
-                                  uint32&  cropRght
+    void  DetermineCropSettings  (kkuint32&  cropLeft,
+                                  kkuint32&  cropRght
                                  );
 
 
     void  Reset ();
   
-    void  ResetByteOffset (uint32  _byteOffset);
+    void  ResetByteOffset (kkuint32  _byteOffset);
   
     void  ReportInstrumentData (uchar  sensorId,
                                 bool   text,
@@ -163,14 +163,14 @@ namespace SipperHardware
   
     static
     SipperFileFormat  GuessFormatOfNextLine (FILE*    in,
-                                             int32    _cameraNum,
+                                             kkint32  _cameraNum,
                                              RunLog&  _log
                                             );
   
-    uint32                    bytesDropped;
-    uint64                    byteOffset;
-    uint32                    curRow;
-    uint64                    curRowByteOffset;
+    kkuint32                  bytesDropped;
+    kkuint64                  byteOffset;
+    kkuint32                  curRow;
+    kkuint64                  curRowByteOffset;
     bool                      eof;
     KKStr                     fileName;
     bool                      iOwnInstrumentDataManager;
@@ -181,7 +181,7 @@ namespace SipperHardware
                                               */
     RunLog&                   log;
     bool                      opened;
-    uint32                    recCount;
+    kkuint32                  recCount;
 
     struct  SipperRec;
     static  void  DisplaySipperRec (SipperBuff::SipperRec&  sr);

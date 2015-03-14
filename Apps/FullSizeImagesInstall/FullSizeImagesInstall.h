@@ -4,7 +4,7 @@
 #include "PicesApplication.h"
 #include "DataBase.h"
 #include "RunLog.h"
-#include "Str.h"
+#include "KKStr.h"
 
 
 namespace  FullSizeImagesInstall_DataNameSpace
@@ -24,7 +24,7 @@ namespace  FullSizeImagesInstall_DataNameSpace
     const char*  ApplicationName () const  {return  "FullSizeImagesInstall";}
 
     virtual
-    void  InitalizeApplication (int32   argc,
+    void  InitalizeApplication (kkint32 argc,
                                 char**  argv
                                );
 
@@ -35,12 +35,12 @@ namespace  FullSizeImagesInstall_DataNameSpace
    {
    public:
      SipperFileResults (KKStr  _sipperFileName,
-                        int32  _sipperFileImageCount,
-                        int32  _sipperFileThumbNail,
-                        int32  _sipperFileAlreadyInFullSizeTable,
-                        int32  _sipperFileMissingFromFullSize,
-                        int32  _sipperFileImagesLost,
-                        int32  _sipperFileImagesRecoverd
+                        kkint32  _sipperFileImageCount,
+                        kkint32  _sipperFileThumbNail,
+                        kkint32  _sipperFileAlreadyInFullSizeTable,
+                        kkint32  _sipperFileMissingFromFullSize,
+                        kkint32  _sipperFileImagesLost,
+                        kkint32  _sipperFileImagesRecoverd
                        ):
          sipperFileName                   (_sipperFileName),
          sipperFileImageCount             (_sipperFileImageCount),
@@ -59,12 +59,12 @@ namespace  FullSizeImagesInstall_DataNameSpace
 
 
      KKStr  sipperFileName;
-     int32  sipperFileImageCount;
-     int32  sipperFileThumbNail;              // number of images where the ThumbNail is the true extracted image.
-     int32  sipperFileAlreadyInFullSizeTable;
-     int32  sipperFileMissingFromFullSize;
-     int32  sipperFileImagesLost;
-     int32  sipperFileImagesRecoverd;
+     kkint32  sipperFileImageCount;
+     kkint32  sipperFileThumbNail;              // number of images where the ThumbNail is the true extracted image.
+     kkint32  sipperFileAlreadyInFullSizeTable;
+     kkint32  sipperFileMissingFromFullSize;
+     kkint32  sipperFileImagesLost;
+     kkint32  sipperFileImagesRecoverd;
    };
 
 
@@ -87,7 +87,7 @@ namespace  FullSizeImagesInstall_DataNameSpace
     KKStr                       reportFileName;
     ostream*                    report;
     SipperFileListPtr           sipperFiles;
-    int32                       sipperFilesProcessed;
+    kkint32                     sipperFilesProcessed;
   };  /* FullSizeImagesInstall */
 }  /* FullSizeImagesInstall_DataNameSpace */
 

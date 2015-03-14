@@ -62,9 +62,9 @@ namespace MLL
   public:
     typedef  TrainingProcess2*  TrainingProcess2Ptr;
 
-    typedef  KKU::int32   int32;
-    typedef  KKU::uint32  uint32;
-    typedef  KKU::ulong   ulong;
+    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::kkuint32  kkuint32;
+    typedef  KKB::ulong   ulong;
 
     /**
      *@brief  Constructor that is driven by contents of configuration file.
@@ -155,7 +155,7 @@ namespace MLL
                        FeatureVectorListPtr _excludeList,
                        FileDescPtr          _fileDesc,
                        RunLog&              _log,
-                       uint32               _level,            // Class hierarchy level to train at.
+                       kkuint32             _level,            // Class hierarchy level to train at.
                        VolConstBool&        _cancelFlag, 
                        KKStr&               _statusMessage
                       );
@@ -259,7 +259,7 @@ namespace MLL
                                             );
 
     void    ExtractTrainingClassFeatures (DataBasePtr     dataBase,                         /**< If not NULL gete data from Database. */
-                                          KKU::DateTime&  latestImageTimeStamp,
+                                          KKB::DateTime&  latestImageTimeStamp,
                                           bool&           changesMadeToTrainingLibraries
                                          );
 
@@ -273,7 +273,7 @@ namespace MLL
     // Access Members
     bool                      Abort              () const  {return abort;}
 
-    const KKU::DateTime&      BuildDateTime      () const  {return  buildDateTime;}
+    const KKB::DateTime&      BuildDateTime      () const  {return  buildDateTime;}
 
     const CompressionStats&   CompStats          () const;
 
@@ -283,7 +283,7 @@ namespace MLL
 
     VectorKKStr               ConfigFileFormatErrors ()  const;
 
-    int32                     DuplicateDataCount () const;
+    kkint32                   DuplicateDataCount () const;
 
     bool                      FeaturesAlreadyNormalized ()  
                                                    {return  featuresAlreadyNormalized;}
@@ -295,7 +295,7 @@ namespace MLL
 
     RunLog&                   Log                () {return log;}
 
-    int32                     MemoryConsumedEstimated ()  const;
+    kkint32                   MemoryConsumedEstimated ()  const;
 
     Model::ModelTypes         ModelType          ()  const;
 
@@ -315,8 +315,8 @@ namespace MLL
 
     const KKStr&              BitReductionByFeature     () const;
     double                    ReductionTime             () const;
-    int32                     ReductionPreExampleCount  () const;
-    int32                     ReductionPostExampleCount () const;
+    kkint32                   ReductionPreExampleCount  () const;
+    kkint32                   ReductionPostExampleCount () const;
     float                     ReductionRatio            () const;
 
     ModelParamPtr             Parameters                () const;
@@ -325,10 +325,10 @@ namespace MLL
 
     double                    TrainingTime              () const;   // Comes from SVMModel
 
-    int32                     NumOfSupportVectors       () const;
+    kkint32                   NumOfSupportVectors       () const;
 
-    void                      SupportVectorStatistics (int32&  numSVs,
-                                                       int32&  totalNumSVs
+    void                      SupportVectorStatistics (kkint32&  numSVs,
+                                                       kkint32&  totalNumSVs
                                                       );
 
     void                      Abort (bool _abort)  {abort = _abort;}
@@ -368,7 +368,7 @@ namespace MLL
     //************************************************************
     void  ExtractFeatures (const TrainingClassPtr  trainingClass,
                            DataBasePtr             dataBase,      /**<  If not NULL will retrieve missing Instrumentdat afrom database. */
-                           KKU::DateTime&          latestTimeStamp,
+                           KKB::DateTime&          latestTimeStamp,
                            bool&                   changesMade
                           );
 
@@ -376,13 +376,13 @@ namespace MLL
     //************************************************************
     //       Routines for validating Configuration File.         *
     //************************************************************
-    FeatureNumListPtr  DeriveFeaturesSelected (int32  sectionNum);
+    FeatureNumListPtr  DeriveFeaturesSelected (kkint32  sectionNum);
 
-    TrainingClassPtr   ValidateClassConfig (int32  sectionNum);
+    TrainingClassPtr   ValidateClassConfig (kkint32  sectionNum);
 
-    void               ValidateTrainingClassConfig (int32  sectionNum);
+    void               ValidateTrainingClassConfig (kkint32  sectionNum);
 
-    void               ValidateModel3Section (int32 sectionNum);
+    void               ValidateModel3Section (kkint32 sectionNum);
    
 
 
@@ -408,9 +408,9 @@ namespace MLL
                                                             * directory ath is added for actual location of config file.
                                                             */
 
-    KKU::DateTime                buildDateTime;
+    KKB::DateTime                buildDateTime;
 
-    int32                        duplicateCount;
+    kkint32                      duplicateCount;
 
     FeatureVectorListPtr         excludeList;  /** If != NULL then list of trainingExamples that 
                                                 * need to be eliminated from training data.

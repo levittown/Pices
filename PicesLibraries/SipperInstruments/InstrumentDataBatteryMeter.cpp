@@ -11,10 +11,10 @@
 using namespace std;
 
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "OSservices.h"
-#include  "Str.h"
-using namespace KKU;
+#include  "KKStr.h"
+using namespace KKB;
 
 
 #include  "InstrumentDataBatteryMeter.h"
@@ -28,7 +28,7 @@ using  namespace SipperHardware;
 InstrumentDataBatteryMeter::InstrumentDataBatteryMeter (InstrumentDataManagerPtr _manager,
                                                         const KKStr&            _reportDir,
                                                         bool                     _text,
-                                                        int32                    _instrumentId
+                                                        kkint32                  _instrumentId
                                                        ):
 
     InstrumentDataReport (_manager, _reportDir, _text, _instrumentId, false),
@@ -65,11 +65,11 @@ void  InstrumentDataBatteryMeter::ProcessBatteryData (const KKStr&  txt)
       
   // activeBattery is '1' based  that is batteries '1' - '4';  so 
   // batteryLevels[0] = battery level for battery 1.
-  int32  activeBattery = fields[0].ToInt ();
-  if  ((activeBattery < 1)  ||  ((uint32)activeBattery > numOfBatteries))
+  kkint32  activeBattery = fields[0].ToInt ();
+  if  ((activeBattery < 1)  ||  ((kkuint32)activeBattery > numOfBatteries))
     return;
 
-  uint32  x;
+  kkuint32  x;
   for  (x = 0;  x < numOfBatteries;  x++)
     batteryLevels[x] = fields[x + 1].ToFloat ();
 
@@ -79,7 +79,7 @@ void  InstrumentDataBatteryMeter::ProcessBatteryData (const KKStr&  txt)
 
 
 
-void  InstrumentDataBatteryMeter::ReportInstrumentData (uint32 curScanLine,
+void  InstrumentDataBatteryMeter::ReportInstrumentData (kkuint32 curScanLine,
                                                         uchar  sensorData
                                                        )
 {

@@ -1,13 +1,13 @@
 /* TokenBuffer.h -- Class to Manage Token Parsing
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #ifndef _TOKENBUFFER_
 #define _TOKENBUFFER_
 
-#include  "Str.h"
+#include  "KKStr.h"
 
-namespace  KKU
+namespace  KKB
 {
   class  TokenBuffer
   {
@@ -48,7 +48,7 @@ namespace  KKU
   private:
     KKStr  buff;
 
-    int32  nextCharPos;
+    kkint32  nextCharPos;
   };
 
 
@@ -78,7 +78,7 @@ namespace  KKU
   
   typedef  TokenBufferStream*  TokenBufferStreamPtr;
 
-}  /* KKU */
+}  /* KKB */
 
 
 #endif

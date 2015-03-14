@@ -63,12 +63,12 @@
 
 using namespace std;
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "CmdLineExpander.h"
 #include "OSservices.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 #include "InstrumentData.h"
 
@@ -426,7 +426,7 @@ void  ShuffleData (FeatureVectorListPtr  examples)
         << endl;
 
 
-  KKU::uint  numExamplesWritten = 0;
+  KKB::uint  numExamplesWritten = 0;
   outputFormat->SaveFeatureFile (outFileName, *selectedFeatures, *shuffledData, numExamplesWritten, cancelFlag, successful, runLog);
 
   stats.close ();
@@ -512,7 +512,7 @@ void  SplitExamples (FeatureVectorList*  examples)
   stats << "Output File[" << outFileName1.Str () << "]  Records[" << file1Shuffeled->QueueSize () << "]" << endl;
   stats << "Output File[" << outFileName2.Str () << "]  Records[" << file2Shuffeled->QueueSize () << "]" << endl;
   
-  KKU::uint  numExamplesWritten = 0;
+  KKB::uint  numExamplesWritten = 0;
   outputFormat->SaveFeatureFile (outFileName1, file1Shuffeled->AllFeatures (), *file1Shuffeled, numExamplesWritten, cancelFlag, successful, runLog); 
   outputFormat->SaveFeatureFile (outFileName2, file2Shuffeled->AllFeatures (), *file2Shuffeled, numExamplesWritten, cancelFlag, successful, runLog); 
 
@@ -584,7 +584,7 @@ void  CreateTrainAndTestDataSets (FeatureVectorListPtr  examples)
     {
       image = *iIDX;
 
-      if  (trainingExamples.size () < (KKU::uint)maxNumOfTrainExamples)
+      if  (trainingExamples.size () < (KKB::uint)maxNumOfTrainExamples)
         trainingExamples.PushOnBack (image);
       else
         testExamples.PushOnBack (image);
@@ -601,18 +601,18 @@ void  CreateTrainAndTestDataSets (FeatureVectorListPtr  examples)
     if  (numOfFolds > 1)
     {
       FeatureVectorListPtr  testExamplesStratified = trainingExamples.StratifyAmoungstClasses (mlClasses, -1, numOfFolds);
-      KKU::uint  numExamplesWritten = 0;
+      KKB::uint  numExamplesWritten = 0;
       outputFormat->SaveFeatureFile (rootName + "_Train.data",  *selectedFeatures, *testExamplesStratified, numExamplesWritten, cancelFlag, successful, runLog);
       delete  testExamplesStratified;  testExamplesStratified = NULL;
     }
     else
     {
-      KKU::uint  numExamplesWritten = 0;
+      KKB::uint  numExamplesWritten = 0;
       outputFormat->SaveFeatureFile (rootName + "_Train.data",  *selectedFeatures, trainingExamples, numExamplesWritten, cancelFlag, successful, runLog);
     }
   }
   {
-    KKU::uint  numExamplesWritten = 0;
+    KKB::uint  numExamplesWritten = 0;
     outputFormat->SaveFeatureFile (rootName + "_Test.data", *selectedFeatures, testExamples, numExamplesWritten, cancelFlag, successful, runLog);
   }
 }  /* CreateTrainAndTestDataSets */
@@ -650,7 +650,7 @@ void  ProcessParms (int    argcXXX,
                     char** argvXXX
                    )
 {
-  KKU::uint x = 0;
+  KKB::uint x = 0;
 
   CmdLineExpander  cmdLineExpander (KKStr ("RandomizeData"),  runLog,  argcXXX, argvXXX);
 
@@ -940,7 +940,7 @@ void  ConvertData (FeatureVectorListPtr  examples)
 
   cout << "Writting out [" << newFileName << "]." << endl;
 
-  KKU::uint  numExamplesWritten = 0;
+  KKB::uint  numExamplesWritten = 0;
   outputFormat->SaveFeatureFile (newFileName, *selectedFeatures, *examples, numExamplesWritten, cancelFlag, successful, runLog);
 }  /* ConvertData */
 
@@ -991,7 +991,7 @@ void   TrimClasses (FeatureVectorListPtr  examples)
 
   FeatureVectorListPtr  straifiedList = trimedList.StratifyAmoungstClasses (&newClassList, lopOff, numOfFolds);
 
-  KKU::uint  numExamplesWritten = 0;
+  KKB::uint  numExamplesWritten = 0;
   outputFormat->SaveFeatureFile (outputFileName, *selectedFeatures, *straifiedList, numExamplesWritten, cancelFlag, successful, runLog);
   delete  straifiedList;
 }  /* TrimClassesAction */
@@ -1154,7 +1154,7 @@ void  ForestCover ()
   FeatureVectorListPtr allData =  new FeatureVectorList (*trainData, false);
   allData->AddQueue (*testData);
 
-  KKU::uint  numExamplesWritten = 0;
+  KKB::uint  numExamplesWritten = 0;
   FeatureFileIOC45::Driver ()->SaveFeatureFile 
                   ("K:\\Plankton\\Papers\\BitReduction\\DataSets\\ForestCover\\CovType_TwoClass.all", 
                    allData->AllFeatures (), *allData, 
@@ -1215,7 +1215,7 @@ void  CheckWebData ()
   FeatureVectorListPtr allData =  new FeatureVectorList (*trainData, false);
   allData->AddQueue (*testData);
 
-  KKU::uint  numExamplesWritten = 0;
+  KKB::uint  numExamplesWritten = 0;
   FeatureFileIOC45::Driver ()->SaveFeatureFile 
                   ("K:\\Plankton\\Papers\\BitReduction\\DataSets\\WEB_Data\\anonymous-msweb_All-C45.data", 
                    allData->AllFeatures (), *allData, 
@@ -1354,7 +1354,7 @@ void  CreateFolds (int  numOfFolds)
 
 	KKStr trainFileName = osAddSlash (foldDirName) + "Oil_Fold_" + StrFormatInt (foldNum, "@@") + "_Train.data";
 	KKStr testFileName  = osAddSlash (foldDirName) + "Oil_Fold_" + StrFormatInt (foldNum, "@@") + "_Test.data";
-  KKU::uint  numExampleWritten = 0;
+  KKB::uint  numExampleWritten = 0;
 	inputFormat->SaveFeatureFile (trainFileName, 
 		                          trainStratified->AllFeatures (), 
 								  *trainStratified, 
@@ -1469,7 +1469,7 @@ void  FilterLessThan10 ()
 
 	///
 	KKStr filterLess10 = osAddSlash (outputRootDir) + "34_35_37_lessThan10.data";
-	KKU::uint  numExampleWritten = 0;
+	KKB::uint  numExampleWritten = 0;
 	inputFormat->SaveFeatureFile (filterLess10, 
 		                          examplesTrimmed->AllFeatures (), 
 								  *examplesTrimmed, 

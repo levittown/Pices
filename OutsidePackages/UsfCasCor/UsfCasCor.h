@@ -93,20 +93,20 @@ public:
 
   #if  defined(WIN32) 
     typedef  __int16           int16;    /**<@brief  16 bit signed integer. */
-    typedef  unsigned __int16  uint16;   /**<@brief  16 bit unsigned integer. */
+    typedef  unsigned __int16  kkuint16;   /**<@brief  16 bit unsigned integer. */
     //typedef  wchar_t          WCHAR;
-    typedef  __int32           int32;
-    typedef  unsigned __int32  uint32;
-    typedef  __int64           int64;
-    typedef  unsigned __int64  uint64;
+    typedef  __int32           kkint32;
+    typedef  unsigned __int32  kkuint32;
+    typedef  __int64           kkint64;
+    typedef  unsigned __int64  kkuint64;
   #else
     typedef  int16_t           int16;    /**<@brief  16 bit signed integer. */
-    typedef  uint16_t          uint16;   /**<@brief  16 bit unsigned integer. */
+    typedef  uint16_t          kkuint16;   /**<@brief  16 bit unsigned integer. */
     typedef  unsigned short    WCHAR;
-    typedef  int32_t           int32;
-    typedef  uint32_t          uint32;
-    typedef  int64_t           int64;
-    typedef  uint64_t          uint64;
+    typedef  int32_t           kkint32;
+    typedef  uint32_t          kkuint32;
+    typedef  int64_t           kkint64;
+    typedef  uint64_t          kkuint64;
   #endif
 
 
@@ -160,13 +160,13 @@ public:
 
   typedef parmentry PARMS;
 
-  int32  MemoryConsumedEstimated ()  const;
+  kkint32  MemoryConsumedEstimated ()  const;
 
-  void  Initialize (int32  _In_limit,
-                    int32  _Out_limit,
-                    int32  _Number_of_rounds,
-                    int32  _Number_of_trials,
-                    int64  _The_Random_seed
+  void  Initialize (kkint32  _In_limit,
+                    kkint32  _Out_limit,
+                    kkint32  _Number_of_rounds,
+                    kkint32  _Number_of_trials,
+                    kkint64  _The_Random_seed
                    );
 
   /* Global variables */
@@ -484,7 +484,7 @@ public:
   int      line_length;
   int*     feature_type;
 
-  int64    the_random_seed;
+  kkint64  the_random_seed;
 
 
   /* Flags */

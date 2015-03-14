@@ -14,10 +14,10 @@
 
 using namespace std;
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "OSservices.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 #include "InstrumentDataFileManager.h"
 #include "SipperVariables.h"
@@ -142,7 +142,7 @@ ExtractFeatures::~ExtractFeatures ()
 
 
 
-void  ExtractFeatures::InitalizeApplication (int32   argc,
+void  ExtractFeatures::InitalizeApplication (kkint32 argc,
                                              char**  argv
                                             )
 {

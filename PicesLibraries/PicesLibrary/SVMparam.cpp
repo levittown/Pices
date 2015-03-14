@@ -12,10 +12,10 @@
 #include "MemoryDebug.h"
 using namespace std;
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "MLLTypes.h"
 
-using namespace KKU;
+using namespace KKB;
 using namespace MLL;
 
 
@@ -147,9 +147,9 @@ SVMparam::~SVMparam  ()
 }
 
 
-int32  SVMparam::MemoryConsumedEstimated () const
+kkint32  SVMparam::MemoryConsumedEstimated () const
 {
-  int32  memoryConsumedEstimated = sizeof (SVMparam) 
+  kkint32  memoryConsumedEstimated = sizeof (SVMparam) 
     + fileName.MemoryConsumedEstimated ()
     + selectedFeatures.MemoryConsumedEstimated ()
     + unBalancedBitsStr.MemoryConsumedEstimated ();
@@ -598,7 +598,7 @@ BinaryClassParmsPtr   SVMparam::GetParamtersToUseFor2ClassCombo (MLClassConstPtr
 
   if  (binaryParmsList == NULL)
   {
-    binaryParmsList = new BinaryClassParmsList (true, 20);
+    binaryParmsList = new BinaryClassParmsList (true);
     twoClassComboParms = NULL;
   }
   else
@@ -664,7 +664,7 @@ const FeatureNumList&  SVMparam::GetFeatureNums (MLClassConstPtr  class1,
 void    SVMparam::AddBinaryClassParms (BinaryClassParmsPtr  binaryClassParms)
 {
   if  (!binaryParmsList)
-    binaryParmsList = new BinaryClassParmsList (true, 20);
+    binaryParmsList = new BinaryClassParmsList (true);
 
   binaryParmsList->PushOnBack (binaryClassParms);
 }  /* AddBinaryClassParms */
@@ -678,7 +678,7 @@ float   SVMparam::AvgMumOfFeatures ()
 
   if  ((machineType == BinaryCombos)  &&  (binaryParmsList))
   {
-    int32  totalNumOfFeatures = 0;
+    kkint32  totalNumOfFeatures = 0;
     BinaryClassParmsList::iterator  idx;
     for  (idx = binaryParmsList->begin ();  idx != binaryParmsList->end ();  idx++)
     {
@@ -718,23 +718,23 @@ float  SVMparam::AvgNumOfFeatures (FeatureVectorListPtr  trainExamples)  const
     if  (!stats)
       return (float)selectedFeatures.NumOfFeatures ();
 
-    uint32  idx1 = 0;
-    uint32  idx2 = 0;
+    kkuint32  idx1 = 0;
+    kkuint32  idx2 = 0;
 
     for  (idx1 = 0;  idx1 < (stats->size() - 1);  idx1++)
     {
       ClassStatisticPtr   class1Stats = stats->IdxToPtr (idx1);
       MLClassConstPtr  class1      = class1Stats->MLClass ();
-      uint32              class1Qty   = class1Stats->Count ();
+      kkuint32            class1Qty   = class1Stats->Count ();
 
       for  (idx2 = idx1 + 1;  idx2 < (stats->size());  idx2++)
       {
         ClassStatisticPtr   class2Stats = stats->IdxToPtr (idx2);
         MLClassConstPtr  class2      = class2Stats->MLClass ();
-        uint32              class2Qty   = class2Stats->Count ();
+        kkuint32            class2Qty   = class2Stats->Count ();
 
-        int32  numFeaturesThisCombo = GetFeatureNums (class1, class2).NumSelFeatures ();
-        int32  numExamplesThisCombo = class1Qty + class2Qty;
+        kkint32  numFeaturesThisCombo = GetFeatureNums (class1, class2).NumSelFeatures ();
+        kkint32  numExamplesThisCombo = class1Qty + class2Qty;
 
         totalNumFeaturesUsed += numFeaturesThisCombo * numExamplesThisCombo;
         toatlNumExamples     += numExamplesThisCombo;
@@ -759,18 +759,18 @@ float  SVMparam::AvgNumOfFeatures (FeatureVectorListPtr  trainExamples)  const
 
 
 
-int32  SVMparam::NumOfFeaturesAfterEncoding ()  const
+kkint32  SVMparam::NumOfFeaturesAfterEncoding ()  const
 {
-  int32 z;
-  int32 numFeaturesAfterEncoding = 0;
-  int32 numOfFeaturesSelected = selectedFeatures.NumOfFeatures ();
+  kkint32 z;
+  kkint32 numFeaturesAfterEncoding = 0;
+  kkint32 numOfFeaturesSelected = selectedFeatures.NumOfFeatures ();
 
   switch (EncodingMethod ())
   {
   case BinaryEncoding:
     for  (z = 0; z < numOfFeaturesSelected; z++)
     {
-      int32  fieldNum = selectedFeatures[z];
+      kkint32  fieldNum = selectedFeatures[z];
       if  ((fileDesc->Type (fieldNum) == NominalAttribute)  ||  (fileDesc->Type (fieldNum) == SymbolicAttribute))
         numFeaturesAfterEncoding += fileDesc->Cardinality (fieldNum, log);
       else

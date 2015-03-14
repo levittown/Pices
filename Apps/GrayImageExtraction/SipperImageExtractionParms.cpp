@@ -15,11 +15,11 @@ using namespace std;
 
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "CmdLineExpander.h"
-#include "Str.h"
+#include "KKStr.h"
 #include "OSservices.h"
-using namespace KKU;
+using namespace KKB;
 
 #include "SipperBuff.h"
 using namespace SipperHardware;

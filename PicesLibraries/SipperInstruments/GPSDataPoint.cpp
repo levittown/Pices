@@ -13,8 +13,8 @@ using namespace std;
 
 
 
-#include "BasicTypes.h"
-using namespace KKU;
+#include "KKBaseTypes.h"
+using namespace KKB;
 
 
 #include "GPSDataPoint.h"
@@ -47,8 +47,8 @@ GPSDataPoint::GPSDataPoint (const GPSDataPoint&  _dataPoint):
 
 GPSDataPoint::GPSDataPoint (DateTime _ctdDateTime,
                             TimeType _gpsStartTime,
-                            int32    _sipperFileId,
-                            uint32   _avgScanLine,
+                            kkint32  _sipperFileId,
+                            kkuint32 _avgScanLine,
                             double   _avgLatitude,
                             double   _avgLongitude,
                             float    _avgFlowRate

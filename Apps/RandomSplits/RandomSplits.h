@@ -8,7 +8,7 @@
 #include "JobManager.h"
 
 
-using namespace  KKU;
+using namespace  KKB;
 
 class RandomSplits:  public PicesApplication
 {
@@ -22,7 +22,7 @@ public:
   ~RandomSplits ();
 
   virtual
-  void  InitalizeApplication (int32   argc,
+  void  InitalizeApplication (kkint32 argc,
                               char**  argv
                              );
 

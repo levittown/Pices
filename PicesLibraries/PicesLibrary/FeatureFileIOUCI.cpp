@@ -14,12 +14,12 @@
 
 using namespace std;
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "DateTime.h"
 #include  "OSservices.h"
 #include  "RunLog.h"
-#include  "Str.h"
-using namespace  KKU;
+#include  "KKStr.h"
+using namespace  KKB;
 
 
 #include "FeatureFileIOUCI.h"
@@ -48,7 +48,7 @@ FeatureFileIOUCI::~FeatureFileIOUCI ()
 FileDescPtr  FeatureFileIOUCI::GetFileDesc (const KKStr&         _fileName,
                                             istream&             _in,
                                             MLClassConstListPtr  _classes,
-                                            int32&               _estSize,
+                                            kkint32&               _estSize,
                                             KKStr&               _errorMessage,
                                             RunLog&              _log
                                            )
@@ -58,8 +58,8 @@ FileDescPtr  FeatureFileIOUCI::GetFileDesc (const KKStr&         _fileName,
 
   // We are just going to read the first few lines to determine number of fields, etc
  
-  int32  numOfFields       = 0;
-  int32  numFieldsThisLine = 0;
+  kkint32  numOfFields       = 0;
+  kkint32  numFieldsThisLine = 0;
 
 
   KKStr  ln;
@@ -94,7 +94,7 @@ FileDescPtr  FeatureFileIOUCI::GetFileDesc (const KKStr&         _fileName,
   }
 
   bool  alreadyExists = false;
-  int32  fieldNum = 0;
+  kkint32  fieldNum = 0;
 
   FileDescPtr  fileDesc = new FileDesc ();
 
@@ -128,13 +128,13 @@ FeatureVectorListPtr  FeatureFileIOUCI::LoadFile (const KKStr&       _fileName,
   KKStr  rootName = osGetRootName (_fileName);
 
 
-  int32  numOfFeatures = _fileDesc->NumOfFields ();
-  int32  lineCount = 0;
+  kkint32  numOfFeatures = _fileDesc->NumOfFields ();
+  kkint32  lineCount = 0;
 
   KKStr  ln (256);
   bool  eof;
 
-  FeatureVectorListPtr  examples = new FeatureVectorList (_fileDesc, true, _log, 100);
+  FeatureVectorListPtr  examples = new FeatureVectorList (_fileDesc, true, _log);
 
   GetLine (_in, ln, eof);
   while  (!eof)
@@ -145,13 +145,13 @@ FeatureVectorListPtr  FeatureFileIOUCI::LoadFile (const KKStr&       _fileName,
     if  ((ln.SubStrPart (0, 1) != "//")  &&  (!ln.Empty ()))
     {
 
-      int32  featureNum = 0;
+      kkint32  featureNum = 0;
       FeatureVectorPtr  example = new FeatureVector (numOfFeatures);
   
       for  (featureNum = 0;  featureNum < numOfFeatures;  featureNum++)
       {
         KKStr  featureStr = ln.ExtractToken (" ,\n\r\t");
-        example->AddFeatureData (featureNum, (FFLOAT)atof (featureStr.Str ()));
+        example->AddFeatureData (featureNum, (FVFloat)atof (featureStr.Str ()));
       }
 
       KKStr  className = ln.ExtractToken (" ,\n\r\t");
@@ -180,7 +180,7 @@ void   FeatureFileIOUCI::SaveFile (FeatureVectorList&     _data,
                                    const KKStr&           _fileName,
                                    const FeatureNumList&  _selFeatures,
                                    ostream&               _out,
-                                   uint32&                _numExamplesWritten,
+                                   kkuint32&                _numExamplesWritten,
                                    VolConstBool&          _cancelFlag,
                                    bool&                  _successful,
                                    KKStr&                 _errorMessage,
@@ -192,15 +192,15 @@ void   FeatureFileIOUCI::SaveFile (FeatureVectorList&     _data,
 
   _numExamplesWritten = 0;
 
-  int32  idx;
-  int32  x;
+  kkint32  idx;
+  kkint32  x;
 
   FileDescPtr  fileDesc = _selFeatures.FileDesc ();
 
   _out << "ImageFileName";
   for  (x = 0; x < _selFeatures.NumOfFeatures (); x++)
   {
-    int32  featureNum = _selFeatures[x];
+    kkint32  featureNum = _selFeatures[x];
     _out << "," << fileDesc->FieldName (featureNum);
   }
   _out << "," << "ClassLabel" << endl;
@@ -209,11 +209,11 @@ void   FeatureFileIOUCI::SaveFile (FeatureVectorList&     _data,
   {
     example = _data.IdxToPtr (idx);
 
-    _out << ("Train_" + KKU::osGetRootName (example->ImageFileName ())) << ",";
+    _out << ("Train_" + KKB::osGetRootName (example->ImageFileName ())) << ",";
 
     for  (x = 0; x < _selFeatures.NumOfFeatures (); x++)
     {
-      int32  featureNum = _selFeatures[x];
+      kkint32  featureNum = _selFeatures[x];
       _out << example->FeatureData (featureNum) << ",";
     }
     _out << example->ClassName ();

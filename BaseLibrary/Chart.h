@@ -1,16 +1,16 @@
 /* Chart.h -- Used to build Charts from data-series.
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #ifndef _CHART_
 #define  _CHART_
 
-#include  "BasicTypes.h"
-#include  "Str.h"
+#include  "KKBaseTypes.h"
+#include  "KKStr.h"
 #include  "Raster.h"
 #include  "Point.h"
 
-namespace  KKU
+namespace  KKB
 {
   /**
    *@brief Used to Create chart's from defined series of data.
@@ -35,9 +35,9 @@ namespace  KKU
   
     ~Chart ();
 
-    int32      NumOfSeries ()  {return  (int32)series.size ();}
+    kkint32    NumOfSeries ()  {return  (kkint32)series.size ();}
   
-    void       AddAValue (uint32  _seriesIDX,
+    void       AddAValue (kkuint32  _seriesIDX,
                           FFLOAT  _xVal,
                           FFLOAT  _yVal
                          );
@@ -60,9 +60,9 @@ namespace  KKU
     void       SaveAsImage (KKStr  _fileName);
   
   private:
-    int32  LookUpXLableIDX (double  xVal);
+    kkint32  LookUpXLableIDX (double  xVal);
   
-    PlotPointPtr  LookUpPoint (int32   seriesIDX,
+    PlotPointPtr  LookUpPoint (kkint32 seriesIDX,
                                double  yVal
                               );
   
@@ -80,16 +80,16 @@ namespace  KKU
     FFLOAT             minYValue;
     FFLOAT             maxYValue;
   
-    int32              maxPointsPlotedInASeries;
+    kkint32            maxPointsPlotedInASeries;
   
   
-    int32              numOfDefaultColorsUsed;
+    kkint32            numOfDefaultColorsUsed;
   
     // Used when creating Raster of Chart.
-    int32   chartWidth;
-    int32   chartHeight;
-    int32   xOffset;
-    int32   yOffset;
+    kkint32 chartWidth;
+    kkint32 chartHeight;
+    kkint32 xOffset;
+    kkint32 yOffset;
     double  yRange;
     double  xRange;
     double  yScale;
@@ -101,6 +101,6 @@ namespace  KKU
     double  yIncrement;
   }; /* Chart */
 
-}  /* KKU */
+}  /* KKB */
 
 #endif

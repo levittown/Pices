@@ -2,8 +2,8 @@
 #define  _CTD_PLUS_DATA_
 
 #include  "DateTime.h"
-#include  "Str.h"
-using  namespace  KKU;
+#include  "KKStr.h"
+using  namespace  KKB;
 
 
 namespace SipperHardware
@@ -11,11 +11,6 @@ namespace SipperHardware
   class CTD_Plus_Data
   {
   public:
-    typedef  KKU::int32   int32;
-    typedef  KKU::uint32  uint32;
-    typedef  KKU::int64   int64;
-    typedef  KKU::uint64  uint64;
-
     CTD_Plus_Data (bool  _checkCDOM);
    
     CTD_Plus_Data (const KKStr&   _txt,
@@ -33,7 +28,7 @@ namespace SipperHardware
     float            BatteryVoltage ()  const  {return  batteryVoltage;}
     float            Conductivity   ()  const  {return  conductivity;}
     const 
-      KKU::DateTime& Date                   ()  const  {return  date;}
+      KKB::DateTime& Date                   ()  const  {return  date;}
     float            Density                ()  const  {return  density;}
     float            Depth                  ()  const  {return  depthMeters;}
     float            Fluorescence           ()  const  {return  fluorescence;}
@@ -71,15 +66,15 @@ namespace SipperHardware
   
     void  UpdateExternalVoldtageField (const KKStr&  extCode,
                                        const KKStr&  amtField,
-                                       int32&        numExtenalVoltsProcessed,
-                                       int32&        fieldNum,
+                                       kkint32&        numExtenalVoltsProcessed,
+                                       kkint32&        fieldNum,
                                        bool&         valid
                                       );
   
     float           batteryVoltage;
     bool            checkCDOM;    /**< Indicates if CDOM is one of the external instruments. */
     float           conductivity;
-    KKU::DateTime   date;
+    KKB::DateTime   date;
     float           density;
     float           depthMeters;
     float           fluorescence;

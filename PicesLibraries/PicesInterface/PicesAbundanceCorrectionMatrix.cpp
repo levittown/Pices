@@ -15,22 +15,22 @@
 using namespace std;
 
 #include "MemoryDebug.h"
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 
 using namespace System;
 using namespace System::Collections::Generic;
 using namespace System::IO;
 
-#include "..\BaseLibrary\GoalKeeper.h"
+#include "GoalKeeper.h"
 #include "Matrix.h"
-using namespace KKU;
+using namespace KKB;
 
 #include "AbundanceCorrectionMatrix.h"
 #include "ClassStatistic.h"
 #include "MLClass.h"
 using namespace MLL;
 
-#include "OSservices.h"
+#include "PicesOSservices.h"
 #include "PicesKKStr.h"
 #include "PicesClass.h"
 #include "PicesClassList.h"
@@ -89,7 +89,7 @@ array<float>^  PicesAbundanceCorrectionMatrix::ProbOfDetection ()
 {
   const vector<float>&  v = abundanceMatrix->ProbOfDetection ();
   array<float>^  result = gcnew array<float> (v.size ());
-  for  (uint32 x = 0;  x < v.size ();  ++x)
+  for  (kkuint32 x = 0;  x < v.size ();  ++x)
     result[x] = v[x];
 
   return  result;
@@ -101,7 +101,7 @@ array<float>^     PicesAbundanceCorrectionMatrix::ProbOfFalseAlarm ()
 {
   const vector<float>&  v = abundanceMatrix->ProbOfFalseAlarm ();
   array<float>^  result = gcnew array<float> (v.size ());
-  for  (uint32 x = 0;  x < v.size ();  ++x)
+  for  (kkuint32 x = 0;  x < v.size ();  ++x)
     result[x] = v[x];
 
   return  result;

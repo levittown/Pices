@@ -7,7 +7,7 @@ using namespace System::Collections::Generic;
 using namespace System::Diagnostics;
 
 #include  "DateTime.h"
-using namespace KKU;
+using namespace KKB;
 
 #include  "SipperDeployment.h"
 using namespace SipperHardware;
@@ -44,8 +44,8 @@ namespace PicesInterface
 
     property  double  Latitude     {double  get ()  {return  deployment->Latitude     ();}    void  set (double _latitude)     {deployment->Latitude     (_latitude);}}
     property  double  Longitude    {double  get ()  {return  deployment->Longitude    ();}    void  set (double _longitude)    {deployment->Longitude    (_longitude);}}
-    property  uint32  CropLeft     {uint32  get ()  {return  deployment->CropLeft     ();}    void  set (uint32 _cropLeft)     {deployment->CropLeft     (_cropLeft);}}      
-    property  uint32  CropRight    {uint32  get ()  {return  deployment->CropRight    ();}    void  set (uint32 _cropRight)    {deployment->CropRight    (_cropRight);}}      
+    property  kkuint32  CropLeft     {kkuint32  get ()  {return  deployment->CropLeft     ();}    void  set (kkuint32 _cropLeft)     {deployment->CropLeft     (_cropLeft);}}      
+    property  kkuint32  CropRight    {kkuint32  get ()  {return  deployment->CropRight    ();}    void  set (kkuint32 _cropRight)    {deployment->CropRight    (_cropRight);}}      
     property  float   ChamberWidth {float   get ()  {return  deployment->ChamberWidth ();}    void  set (float  _chamberWidth) {deployment->ChamberWidth (_chamberWidth);}}
 
     property  System::DateTime   SyncTimeStampActual {System::DateTime   get ();   void  set (System::DateTime _syncTimeStampActual);}

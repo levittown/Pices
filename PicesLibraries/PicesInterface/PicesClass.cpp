@@ -1,32 +1,32 @@
-#include  "StdAfx.h"
-#include  "FirstIncludes.h"
+#include "StdAfx.h"
+#include "FirstIncludes.h"
 
-#include  <stdio.h>
-#include  <math.h>
-#include  <ctype.h>
-#include  <time.h>
-#include  <fstream>
-#include  <iostream>
-#include  <map>
-#include  <ostream>
-#include  <string>
-#include  <vector>
+#include<stdio.h>
+#include<math.h>
+#include<ctype.h>
+#include<time.h>
+#include<fstream>
+#include<iostream>
+#include<map>
+#include<ostream>
+#include<string>
+#include<vector>
 using namespace std;
 
-#include  "MemoryDebug.h"
-#include  "BasicTypes.h"
+#include "MemoryDebug.h"
+#include "KKBaseTypes.h"
 
-#include  "..\BaseLibrary\GoalKeeper.h"
-using namespace KKU;
+#include "GoalKeeper.h"
+using namespace KKB;
 
 #include "MLClass.h"
 
 //#include "PicesKKStr.h"
-#include  "OSservices.h"
+#include "PicesOSservices.h"
 
-#include  "PicesClass.h"
-#include  "PicesClassList.h"
-#include  "PicesKKStr.h"
+#include "PicesClass.h"
+#include "PicesClassList.h"
+#include "PicesKKStr.h"
 
 
 using namespace  PicesInterface;
@@ -172,7 +172,7 @@ namespace  PicesInterface
 
 
 
-  uint16  PicesClass::NumHierarchialLevels::get ()
+  kkuint16  PicesClass::NumHierarchialLevels::get ()
   {
     if  (unmanagedMLClass)
       return unmanagedMLClass->NumHierarchialLevels ();

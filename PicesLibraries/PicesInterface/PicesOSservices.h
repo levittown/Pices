@@ -10,8 +10,8 @@ using namespace System::Diagnostics;
 //using namespace PicesCSharpClasses;
 
 
-#include  "..\\BaseLibrary\\OSservices.h"
-#include  "PicesRunLog.h"
+#include "OSservices.h"
+#include "PicesRunLog.h"
 
 
 namespace PicesInterface 
@@ -71,9 +71,9 @@ namespace PicesInterface
 
     static String^   GetRootNameWithExtension (String^  fullFileName);
 
-    static KKU::DateTime     SystemDateTimeToKKuDateTime (System::DateTime  sytemDateTime);
+    static KKB::DateTime     SystemDateTimeToKKuDateTime (System::DateTime  sytemDateTime);
 
-    static System::DateTime  KKuDateTimeToSystemDateTime (const KKU::DateTime&  dateTime);
+    static System::DateTime  KKuDateTimeToSystemDateTime (const KKB::DateTime&  dateTime);
 
   };  /* OSservices */
 

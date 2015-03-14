@@ -3,10 +3,10 @@
 
 #include <map>
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "DateTime.h"
 #include "KKQueue.h"
-using namespace KKU;
+using namespace KKB;
 
 
 namespace  SipperHardware
@@ -22,10 +22,10 @@ namespace  SipperHardware
   class GPSDataPoint
   {
   public:
-    typedef  KKU::int32     int32;
-    typedef  KKU::uint32    uint32;
-    typedef  KKU::DateTime  DateTime;
-    typedef  KKU::TimeType  TimeType;
+    typedef  KKB::kkint32   kkint32;
+    typedef  KKB::kkuint32  kkuint32;
+    typedef  KKB::DateTime  DateTime;
+    typedef  KKB::TimeType  TimeType;
     typedef  GPSDataPoint*  GPSDataPointPtr;
 
     GPSDataPoint ();
@@ -34,8 +34,8 @@ namespace  SipperHardware
 
     GPSDataPoint (DateTime _ctdDateTime,
                   TimeType _gpsStartTime,
-                  int32    _sipperFileId,
-                  uint32   _avgScanLine,
+                  kkint32  _sipperFileId,
+                  kkuint32 _avgScanLine,
                   double   _avgLatitude,
                   double   _avgLongitude,
                   float    _avgFlowRate
@@ -45,8 +45,8 @@ namespace  SipperHardware
 
     DateTime  CtdDateTime  () const {return ctdDateTime;}
     TimeType  GPSStartTime () const {return gpsStartTime;}
-    int32     SipperFileId () const {return sipperFileId;}
-    uint32    AvgScanLine  () const {return avgScanLine;}
+    kkint32   SipperFileId () const {return sipperFileId;}
+    kkuint32  AvgScanLine  () const {return avgScanLine;}
     double    AvgLatitude  () const {return avgLatitude;}
     double    AvgLongitude () const {return avgLongitude;}
     float     AvgFlowRate  () const {return avgFlowRate;}
@@ -54,8 +54,8 @@ namespace  SipperHardware
   private:
     DateTime  ctdDateTime;
     TimeType  gpsStartTime;   /**<  Time that this data point start covering from. */
-    int32     sipperFileId;
-    uint32    avgScanLine;
+    kkint32   sipperFileId;
+    kkuint32  avgScanLine;
     double    avgLatitude;
     double    avgLongitude;
     float     avgFlowRate;
@@ -69,7 +69,7 @@ namespace  SipperHardware
   class GPSDataPointList:  public KKQueue<GPSDataPoint>  
   {
   public:
-    typedef  KKU::int32   int32;
+    typedef  KKB::kkint32 kkint32;
     typedef  GPSDataPointList*  GPSDataPointListPtr;
 
     GPSDataPointList (bool _owner);

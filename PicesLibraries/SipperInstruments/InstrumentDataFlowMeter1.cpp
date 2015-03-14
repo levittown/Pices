@@ -9,9 +9,9 @@
 using namespace std;
 
 
-#include  "BasicTypes.h"
-#include  "Str.h"
-using namespace KKU;
+#include  "KKBaseTypes.h"
+#include  "KKStr.h"
+using namespace KKB;
 
 
 #include  "InstrumentDataFlowMeter1.h"
@@ -24,7 +24,7 @@ using namespace SipperHardware;
 InstrumentDataFlowMeter1::InstrumentDataFlowMeter1 (InstrumentDataManagerPtr _manager,
                                                     const KKStr&            _reportDir,
                                                     bool                     _text,
-                                                    int32                    _instrumentId
+                                                    kkint32                  _instrumentId
                                                   ):
 
     InstrumentDataReport (_manager, _reportDir, _text, _instrumentId, false),
@@ -34,8 +34,8 @@ InstrumentDataFlowMeter1::InstrumentDataFlowMeter1 (InstrumentDataManagerPtr _ma
 {
   if  (text)
   {
-    int32 x;
-    flowMeterTurnScanLines = new uint32[NumTurnSignalsToTrack];
+    kkint32 x;
+    flowMeterTurnScanLines = new kkuint32[NumTurnSignalsToTrack];
     for (x = 0;  x < NumTurnSignalsToTrack;  x++)
       flowMeterTurnScanLines[x] = 0;
 
@@ -55,7 +55,7 @@ InstrumentDataFlowMeter1::~InstrumentDataFlowMeter1 ()
 
 
 
-void  InstrumentDataFlowMeter1::ReportInstrumentData (uint32 curScanLine,
+void  InstrumentDataFlowMeter1::ReportInstrumentData (kkuint32 curScanLine,
                                                       uchar  sensorData
                                                      )
 {

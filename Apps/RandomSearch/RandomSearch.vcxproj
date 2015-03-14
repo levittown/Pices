@@ -189,12 +189,6 @@
     <ClInclude Include="RandomSearch.h" />
     <ClInclude Include="ResultLine.h" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\BaseLibrary\BaseLibrary.vcxproj">
-      <Project>{5a4b9b15-9745-4aba-b1a8-ffbc85d1d5df}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

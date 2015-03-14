@@ -1,6 +1,6 @@
 /* Application.cpp -- Generic Application class.  
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #include  "FirstIncludes.h"
 
@@ -19,7 +19,7 @@ using  namespace  std;
 #include  "CmdLineExpander.h"
 #include  "DateTime.h"
 #include  "OSservices.h"
-using  namespace  KKU;
+using  namespace  KKB;
 
 
 
@@ -64,7 +64,7 @@ Application::~Application ()
 
 
 
-void  Application::InitalizeApplication (int32   argc,
+void  Application::InitalizeApplication (kkint32 argc,
                                          char**  argv
                                         )
 {
@@ -89,11 +89,11 @@ void  Application::AssignLog (RunLog&  _log)
 
 
 
-void  Application::ProcessCmdLineParameters (int32   argc, 
+void  Application::ProcessCmdLineParameters (kkint32 argc, 
                                              char**  argv
                                             )
 {
-  uint32  x = 0;
+  kkuint32  x = 0;
 
   bool  allParmsGood = true;
 

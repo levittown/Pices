@@ -17,10 +17,10 @@
  @endcode
 */
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "KKQueue.h"
 #include  "RasterSipper.h"
-#include  "Str.h"
+#include  "KKStr.h"
 
 
 namespace  ImageExtractionManager  
@@ -33,59 +33,59 @@ namespace  ImageExtractionManager
     typedef  LogicalFrameBlob*               LogicalFrameBlobPtr;
     typedef  vector<LogicalFrameBlobPtr>     VectorLogicalFrameBlob;
 
-    typedef  map<int32, LogicalFrameBlobPtr>  NeighborsList;
+    typedef  map<kkint32, LogicalFrameBlobPtr>  NeighborsList;
 
 
-    LogicalFrameBlob (uint32  _maxFrameHeight,
-                      uint32  _maxFrameWidth
+    LogicalFrameBlob (kkuint32  _maxFrameHeight,
+                      kkuint32  _maxFrameWidth
                      );
 
     ~LogicalFrameBlob ();
 
-    int32  Id ()  {return  id;}
+    kkint32  Id ()  {return  id;}
 
-    uint32  ColLeft ()     {return colLeft;}
-    uint32  ColRight ()    {return colRight;}
+    kkuint32  ColLeft ()     {return colLeft;}
+    kkuint32  ColRight ()    {return colRight;}
 
 
     void  AddNeighbor (LogicalFrameBlobPtr  _neighbor);
 
     void  DialateBlob (uchar**  frame,
-                       int32**  blobIds,
-                       int32    size
+                       kkint32**  blobIds,
+                       kkint32  size
                       );
 
     bool  Explored ()  const  {return explored;}
 
     void  Explored (bool _explored)  {explored = _explored;}
 
-    uint32  Height ()      {return  abs ((1 + (int32)rowBot - (int32)rowTop));}
+    kkuint32  Height ()      {return  abs ((1 + (kkint32)rowBot - (kkint32)rowTop));}
 
     NeighborsList&  Neighbors ()  {return  neighbors;}
 
-    uint32  RowBot ()      {return rowBot;}
-    uint32  RowTop ()      {return rowTop;}
+    kkuint32  RowBot ()      {return rowBot;}
+    kkuint32  RowTop ()      {return rowTop;}
 
-    uint32  Width ()       {return  abs ((1 + (int32)colLeft - (int32)colRight));}
+    kkuint32  Width ()       {return  abs ((1 + (kkint32)colLeft - (kkint32)colRight));}
 
-    uint32  PixelCount ()  {return pixelCount;}
+    kkuint32  PixelCount ()  {return pixelCount;}
 
-    int32   id;
+    kkint32 id;
 
     bool  explored;
 
-    uint32  rowBot;
-    uint32  rowTop;
-    uint32  colLeft;
-    uint32  colRight;
+    kkuint32  rowBot;
+    kkuint32  rowTop;
+    kkuint32  colLeft;
+    kkuint32  colRight;
 
-    int32          neighborIdLastAdded;
+    kkint32        neighborIdLastAdded;
     NeighborsList  neighbors;
 
-    uint32  maxFrameHeight;
-    uint32  maxFrameWidth;
+    kkuint32  maxFrameHeight;
+    kkuint32  maxFrameWidth;
 
-    uint32  pixelCount;
+    kkuint32  pixelCount;
 
   };  /* LogicalFrameBlob */
 

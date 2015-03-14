@@ -6,9 +6,9 @@
 #define  _KKU_GLOBALGOALKEEPER_
 
 
-#include  "Str.h"
+#include  "KKStr.h"
 
-namespace  KKU
+namespace  KKB
 {
   #if  !defined(_KKU_GOALKEEPER_)
   class  GoalKeeper;

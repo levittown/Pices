@@ -13,7 +13,7 @@ using namespace std;
 #include "KKThread.h"
 #include "OSservices.h"
 #include "KKThreadManager.h"
-using namespace KKU;
+using namespace KKB;
 
 
 
@@ -21,7 +21,7 @@ using namespace KKU;
 
 
 KKThreadManager::KKThreadManager (const KKStr&   _managerName,
-                                  uint32         _maxNumThreads,
+                                  kkuint32       _maxNumThreads,
                                   MsgQueuePtr    _msgQueue
                                  ):
   KKThread (_managerName, NULL, _msgQueue),
@@ -91,26 +91,26 @@ void  KKThreadManager::TerminateProcessing ()
 
 
 
-void  KKThreadManager::ShutdownProcessing (int32  miliSecsToWait)
+void  KKThreadManager::ShutdownProcessing (kkint32  miliSecsToWait)
 {
   shutdownFlag = true;
 
   if  (!threads)
     return;
 
-  int32  numMiliSecsWaited = 0;
+  kkint32  numMiliSecsWaited = 0;
   shutdownFlag = true;
 
-  int32  lastNumThreadsRunning = 0;
-  int32  lastNumThreadsStopped = 0;
+  kkint32  lastNumThreadsRunning = 0;
+  kkint32  lastNumThreadsStopped = 0;
 
   bool  allTreadsAreShutdown = false;
 
   while  (!allTreadsAreShutdown)
   {
     allTreadsAreShutdown = true;
-    int32  numThreadsRunning = 0;
-    int32  numThreadsStopped = 0;
+    kkint32  numThreadsRunning = 0;
+    kkint32  numThreadsStopped = 0;
 
     KKThreadList::iterator  idx;
     for  (idx = threads->begin ();  idx != threads->end ();  ++idx)

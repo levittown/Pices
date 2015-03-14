@@ -6,7 +6,7 @@
 #include "FeatureSelection.h"
 #include "KKStrParser.h"
 #include "RunLog.h"
-#include "Str.h"
+#include "KKStr.h"
 
 #include "MLClassConstList.h"
 #include "TrainingConfiguration2.h"
@@ -85,7 +85,7 @@ namespace FeatureSelectionApp
     float                     BestA                  () const  {return  bestA;}
     double                    BestC                  () const  {return  bestC;}
     double                    BestGamma              () const  {return  bestGamma;}
-    int32                     BestNumOfRounds        () const  {return  bestNumOfRounds;}
+    kkint32                   BestNumOfRounds        () const  {return  bestNumOfRounds;}
     bool                      ByBinaryClasses        () const  {return  byBinaryClasses;}
     MLClassConstPtr        Class1                 () const  {return  class1;}
     MLClassConstPtr        Class2                 () const  {return  class2;}
@@ -199,8 +199,8 @@ namespace FeatureSelectionApp
                                 );
 
     void  CreateParameterJobsUsfCasCor (ofstream*  statusFile, 
-                                        int32      minNumberOfRoumds,
-                                        int32      maxNumOfRounds
+                                        kkint32    minNumberOfRoumds,
+                                        kkint32    maxNumOfRounds
                                        );
 
     void    CreateRandomSplitsJobs (ostream*  statusFile);
@@ -343,8 +343,8 @@ namespace FeatureSelectionApp
 
     double                    lastCpuTimeReported;
     double                    totalCpuTimeUsed;
-    KKU::DateTime             dateTimeStarted;
-    KKU::DateTime             dateTimeEnded;
+    KKB::DateTime             dateTimeStarted;
+    KKB::DateTime             dateTimeEnded;
     bool                      dateTimeFirstOneFound;  // Flag that indicates weather we have read the first 
                                                       // instance of a 'CurrentDateTime' in the Status file.
 
@@ -397,7 +397,7 @@ namespace FeatureSelectionApp
     float                bestA;       // Used by the Parameter Search;  when we decide on a Gamma and "C"
     double               bestC;       // these variables will be set;  and after that point we will only be
     double               bestGamma;   // interested in searching for "A".
-    int32                bestNumOfRounds;
+    kkint32              bestNumOfRounds;
   };
 
   typedef  Processor*  ProcessorPtr;

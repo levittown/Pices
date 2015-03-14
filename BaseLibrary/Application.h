@@ -1,17 +1,17 @@
 /* Application.h -- Generic Application class.  
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 
 #ifndef  _APPLICATION_
 #define  _APPLICATION_
 
-#include "Str.h"
+#include "KKStr.h"
 #include "RunLog.h"
 
 /** 
- *@namespace  KKU
- *@brief KKU is a the namespace where all objects that belong to BaseLibrary are stored.
+ *@namespace  KKB
+ *@brief KKB is a the namespace where all objects that belong to BaseLibrary are stored.
  *@details The idea is that any objects and functions that are not specific to any particular end
  *         application are placed in this namespace.  Such as Raster for image processing, KKStr for 
  *         string management, OSservices for operating specific function calls.
@@ -27,7 +27,7 @@
  */
 
 
-namespace KKU 
+namespace KKB 
 {
   /** 
    *@class Application
@@ -102,7 +102,7 @@ namespace KKU
      *@param[in]  argv  List of asciiz strings; one string for each argument.
      */
     virtual
-    void     InitalizeApplication (int32   argc,
+    void     InitalizeApplication (kkint32 argc,
                                    char**  argv
                                   );
 
@@ -142,7 +142,7 @@ namespace KKU
      *@param[in] argc   Number of parameters.
      *@param[in] argv   The actual parameters.
      */
-    void        ProcessCmdLineParameters (int32   argc,
+    void        ProcessCmdLineParameters (kkint32 argc,
                                           char**  argv
                                          );
 
@@ -157,6 +157,6 @@ namespace KKU
     KKStr              logFileName;
     RunLogPtr          ourLog;  // We use this Log file if one is not provided,
   };  /* Application */
-}  /* NameSpace KKU */
+}  /* NameSpace KKB */
 
 #endif

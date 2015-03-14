@@ -23,7 +23,7 @@ namespace MLL {
 typedef enum {NORMAL, BAGGING, BOOSTING, SUBSPACE, SAMPLESV} Learn_Type;
 
 
-typedef  std::vector<int32>    Ivector;
+typedef  std::vector<kkint32>    Ivector;
 typedef  std::vector<float>  Fvector;
 typedef  std::vector<double> Dvector;
 
@@ -87,13 +87,13 @@ void  EncodeProblem (const struct svm_paramater&  param,
 void   SvmPredictClass (SVMparam&               svmParam,
                         struct svm_model**      subModel,
                         const struct svm_node*  unknownClassFeatureData, 
-                        int32*                  votes,
+                        kkint32*                  votes,
                         double*                 probabilities,
-                        int32                   knownClass,
-                        int32&                  predClass1,
-                        int32&                  predClass2,
-                        int32&                  predClass1Votes,
-                        int32&                  predClass2Votes,
+                        kkint32                 knownClass,
+                        kkint32&                  predClass1,
+                        kkint32&                  predClass2,
+                        kkint32&                  predClass1Votes,
+                        kkint32&                  predClass2Votes,
                         double&                 predClass1Prob,
                         double&                 predClass2Prob,
                         double&                 probOfKnownClass,
@@ -105,13 +105,13 @@ void   SvmPredictClass (SVMparam&               svmParam,
 
 
 
-int32  SvmPredictTwoClass (const struct svm_parameter&   param,
+kkint32  SvmPredictTwoClass (const struct svm_parameter&   param,
                            svm_model**                   submodel, 
                            const svm_node*               unKnownData, 
-                           int32                         desired, 
+                           kkint32                       desired, 
                            double&                       dist,
                            double&                       probability,
-                           int32                         excludeSupportVectorIDX
+                           kkint32                       excludeSupportVectorIDX
                           );
 
 void   SvmDestroyModel (struct svm_model**  subModel);

@@ -12,9 +12,9 @@
  */
 #include  <map>
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "KKQueue.h"
-using namespace KKU;
+using namespace KKB;
 
 
 namespace  SipperHardware
@@ -22,32 +22,32 @@ namespace  SipperHardware
   class VolumeSampledStat
   {
   public:
-    typedef  KKU::int32   int32;
+    typedef  KKB::kkint32 kkint32;
     typedef  VolumeSampledStat*  VolumeSampledStatPtr;
 
     VolumeSampledStat ();
 
     VolumeSampledStat (const VolumeSampledStat&  _stat);
 
-    VolumeSampledStat (int32   _binId,
+    VolumeSampledStat (kkint32 _binId,
                        float   _binDepth,
                        float   _volumeSampled
                       );
 
     ~VolumeSampledStat ();
 
-    int32   BinId         () const {return binId;}
+    kkint32 BinId         () const {return binId;}
     float   BinDepth      () const {return binDepth;}
     float   VolumeSampled () const {return volumeSampled;}
 
-    void  BinId         (int32 _binId)         {binId         = _binId;}
+    void  BinId         (kkint32 _binId)         {binId         = _binId;}
     void  BinDepth      (float _binDepth)      {binDepth      = _binDepth;}
     void  VolumeSampled (float _volumeSampled) {volumeSampled = _volumeSampled;}
 
     void  AddToVolumeSampled (float _volumeSampled);
 
   private:
-    int32   binId;
+    kkint32 binId;
     float   binDepth;
     float   volumeSampled;
   };
@@ -55,10 +55,10 @@ namespace  SipperHardware
 
 
 
-  class VolumeSampledStatList:  public std::map<KKU::int32, VolumeSampledStatPtr>
+  class VolumeSampledStatList:  public std::map<KKB::kkint32, VolumeSampledStatPtr>
   {
   public:
-    typedef  KKU::int32   int32;
+    typedef  KKB::kkint32 kkint32;
     typedef  VolumeSampledStatList*  VolumeSampledStatListPtr;
 
     VolumeSampledStatList ();
@@ -77,7 +77,7 @@ namespace  SipperHardware
     VolumeSampledStatList&  operator+= (const VolumeSampledStatList&  right);
 
  private:
-   typedef  std::pair<int32, VolumeSampledStatPtr>  Pair;
+   typedef  std::pair<kkint32, VolumeSampledStatPtr>  Pair;
   };
   
   typedef  VolumeSampledStatList::VolumeSampledStatListPtr  VolumeSampledStatListPtr;

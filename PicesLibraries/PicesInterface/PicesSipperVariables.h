@@ -9,8 +9,8 @@ using namespace System::Diagnostics;
 //using namespace PicesCSharpClasses;
 
 
-#include  "..\\BaseLibrary\\OSservices.h"
-#include  "PicesRunLog.h"
+#include "OSservices.h"
+#include "PicesRunLog.h"
 
 
 namespace PicesInterface 

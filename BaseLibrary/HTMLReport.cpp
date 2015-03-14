@@ -12,7 +12,7 @@
 #include  <vector>
 
 #include  "MemoryDebug.h"
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 
 
 #include <sys/types.h>
@@ -26,7 +26,7 @@
 
 
 using namespace std;
-using namespace KKU;
+using namespace KKB;
 
 #include "HTMLReport.h"
 
@@ -103,8 +103,8 @@ void  HTMLReport::Close ()
 
 
 
-HTMLReport&  KKU::operator<< (HTMLReport&  htmlReport,
-                              int32        right
+HTMLReport&  KKB::operator<< (HTMLReport&  htmlReport,
+                              kkint32      right
                              )
 {
   KKStr  s (30);
@@ -115,8 +115,8 @@ HTMLReport&  KKU::operator<< (HTMLReport&  htmlReport,
 
 
 
-HTMLReport&  KKU::operator<< (HTMLReport&  htmlReport,
-                              uint32       right
+HTMLReport&  KKB::operator<< (HTMLReport&  htmlReport,
+                              kkuint32     right
                              )
 {
   KKStr  s (30);
@@ -127,8 +127,8 @@ HTMLReport&  KKU::operator<< (HTMLReport&  htmlReport,
 
 
 
-HTMLReport&  KKU::operator<< (HTMLReport&  htmlReport,
-                              int64        right
+HTMLReport&  KKB::operator<< (HTMLReport&  htmlReport,
+                              kkint64      right
                              )
 {
   KKStr  s (30);
@@ -139,8 +139,8 @@ HTMLReport&  KKU::operator<< (HTMLReport&  htmlReport,
 
 
 
-HTMLReport&  KKU::operator<< (HTMLReport&  htmlReport,
-                              uint64       right
+HTMLReport&  KKB::operator<< (HTMLReport&  htmlReport,
+                              kkuint64     right
                              )
 {
   KKStr  s (30);
@@ -151,7 +151,7 @@ HTMLReport&  KKU::operator<< (HTMLReport&  htmlReport,
 
 
 
-HTMLReport&  KKU::operator<< (HTMLReport&  htmlReport,
+HTMLReport&  KKB::operator<< (HTMLReport&  htmlReport,
                               double       right
                              )
 {
@@ -163,7 +163,7 @@ HTMLReport&  KKU::operator<< (HTMLReport&  htmlReport,
 
 
 
-HTMLReport&  KKU::operator<< (HTMLReport&  htmlReport,
+HTMLReport&  KKB::operator<< (HTMLReport&  htmlReport,
                               char         right
                              )
 {
@@ -176,7 +176,7 @@ HTMLReport&  KKU::operator<< (HTMLReport&  htmlReport,
 
 
 
-HTMLReport&  KKU::operator<< (HTMLReport&  htmlReport,
+HTMLReport&  KKB::operator<< (HTMLReport&  htmlReport,
                               const char*  right
                              )
 {
@@ -187,7 +187,7 @@ HTMLReport&  KKU::operator<< (HTMLReport&  htmlReport,
 
 
 
-HTMLReport&  KKU::operator<< (HTMLReport&   htmlReport,
+HTMLReport&  KKB::operator<< (HTMLReport&   htmlReport,
                               const KKStr&  right
                              )
 {
@@ -198,7 +198,7 @@ HTMLReport&  KKU::operator<< (HTMLReport&   htmlReport,
 
 
 
-HTMLReport&  KKU::operator<< (HTMLReport&    htmlReport,
+HTMLReport&  KKB::operator<< (HTMLReport&    htmlReport,
                               KKStrConstPtr  right
                              )
 {
@@ -209,7 +209,7 @@ HTMLReport&  KKU::operator<< (HTMLReport&    htmlReport,
 
 
 
-HTMLReport&  KKU::operator<< (HTMLReport&      htmlReport,  
+HTMLReport&  KKB::operator<< (HTMLReport&      htmlReport,  
                               const DateTime&  right
                              )
 {
@@ -222,7 +222,7 @@ HTMLReport&  KKU::operator<< (HTMLReport&      htmlReport,
 
 
 
-HTMLReport& __cdecl KKU::operator<< (HTMLReport&   htmlReport,
+HTMLReport& __cdecl KKB::operator<< (HTMLReport&   htmlReport,
                                      HTMLReport&   (__cdecl* mf)(HTMLReport &)
                                     )
 {
@@ -232,7 +232,7 @@ HTMLReport& __cdecl KKU::operator<< (HTMLReport&   htmlReport,
 
 
 
-HTMLReport& __cdecl  KKU::endl (HTMLReport &  htmlReport)
+HTMLReport& __cdecl  KKB::endl (HTMLReport &  htmlReport)
 {
   htmlReport.Append ("\n");
   return htmlReport;

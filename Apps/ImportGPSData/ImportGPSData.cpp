@@ -10,13 +10,13 @@
 #include <vector>
 
 #include "MemoryDebug.h"
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 
 using namespace std;
 
 #include "OSservices.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 #include "SipperCruise.h"
 #include "SipperDeployment.h"
@@ -44,7 +44,7 @@ public:
   SipperFileEntry (SipperFilePtr    _sipperFile,
                    const DateTime&  _ctdStartTime,
                    const DateTime&  _ctdEndTime,
-                   const int32&     _gpsAdjSecs
+                   const kkint32&     _gpsAdjSecs
                   ):
       sipperFile    (_sipperFile),
       ctdStartTime  (_ctdStartTime),
@@ -60,7 +60,7 @@ public:
   SipperFilePtr  sipperFile;   // We will not own this entry.
   DateTime       ctdStartTime;
   DateTime       ctdEndTime;
-  int32          gpsAdjSecs;    // Time that needs to be subtracted from 'GPS' time to get CTD time.
+  kkint32        gpsAdjSecs;    // Time that needs to be subtracted from 'GPS' time to get CTD time.
   DateTime       gpsStartTime;
   DateTime       gpsEndTime;
 };
@@ -99,16 +99,16 @@ public:
         deployment = dbConn->SipperDeploymentLoad (sf->CruiseName (), sf->StationName (), sf->DeploymentNum ());
       }
 
-      int32 gpsAdjSecs = 0;
+      kkint32 gpsAdjSecs = 0;
       if  (deployment)
       {
         DateTime  validDateTimeThreshold (2001, 1, 1, 0, 0 ,0);
         if  ((deployment->SyncTimeStampGPS () > validDateTimeThreshold)  &&  (deployment->SyncTimeStampCTD () > validDateTimeThreshold))
-          gpsAdjSecs = (int32)(deployment->SyncTimeStampGPS ().ToSeconds () - deployment->SyncTimeStampCTD ().Seconds ());
+          gpsAdjSecs = (kkint32)(deployment->SyncTimeStampGPS ().ToSeconds () - deployment->SyncTimeStampCTD ().Seconds ());
       }
       
-      int32     sipperFileId = -1;
-      uint32    numScanLines = 0;
+      kkint32   sipperFileId = -1;
+      kkuint32  numScanLines = 0;
       DateTime  ctdStartTime;
       DateTime  ctdEndTime;
 
@@ -226,7 +226,7 @@ ImportGPSData::~ImportGPSData ()
 
 
 
-void  ImportGPSData::InitalizeApplication (int32   argc,
+void  ImportGPSData::InitalizeApplication (kkint32 argc,
                                             char**  argv
                                            )
 {
@@ -424,7 +424,7 @@ void  ImportGPSData::UpdateInstrumentData (const DateTime&  gpsTimeStamp,
 
   {
     DateTime  delta = startDT - lastEndDate;
-    int64  deltaSecs = delta.Seconds ();
+    kkint64  deltaSecs = delta.Seconds ();
     if  (deltaSecs <= 0)
     {
     }
@@ -441,7 +441,7 @@ void  ImportGPSData::UpdateInstrumentData (const DateTime&  gpsTimeStamp,
   }
 
   {
-    int64  deltaTime = (endDT - startDT).ToSeconds ();
+    kkint64  deltaTime = (endDT - startDT).ToSeconds ();
     if  (deltaTime > 500)
     {
       log.Level (-1) << endl

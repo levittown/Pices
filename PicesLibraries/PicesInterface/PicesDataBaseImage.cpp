@@ -14,12 +14,12 @@
 using namespace std;
 
 #include "MemoryDebug.h"
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 
-#include "..\BaseLibrary\GoalKeeper.h"
+#include "GoalKeeper.h"
 #include "Raster.h"
 #include "OSservices.h"
-using namespace KKU;
+using namespace KKB;
 
 
 #include "PicesClassList.h"

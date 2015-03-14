@@ -9,7 +9,7 @@
 #include "RandomNumGenerator.h"
 #include "RunLog.h"
 #include "SipperFile.h"
-#include "Str.h"
+#include "KKStr.h"
 
 
 
@@ -25,7 +25,7 @@ public:
   const char*  ApplicationName () const  {return  "ReFreshInstrumentData";}
 
   virtual
-  void  InitalizeApplication (int32   argc,
+  void  InitalizeApplication (kkint32 argc,
                               char**  argv
                              );
   void  Main ();

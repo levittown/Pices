@@ -2,7 +2,7 @@
 #define  _TRAININGCONFIGURATION2_
 
 #include "DateTime.h"
-#include "Str.h"
+#include "KKStr.h"
 
 
 #include "Configuration.h"
@@ -91,15 +91,15 @@ namespace MLL
 
     float                    A_Param                 () const;
     float                    AvgNumOfFeatures        () const;
-    int32                    BitsToReduceBy          () const;
+    kkint32                  BitsToReduceBy          () const;
     double                   C_Param                 () const;
     SVM_CompressionMethod    CompressionMethod       () const;
     const KKStr&             ConfigFileNameSpecified () const  {return configFileNameSpecified;}
     SVM_EncodingMethod       EncodingMethod          () const;
-    int32                    ExamplesPerClass        () const;
+    kkint32                  ExamplesPerClass        () const;
     FileDescPtr              FileDesc                () const {return  fileDesc;}
     double                   Gamma                   () const;
-    int32                    ImagesPerClass          () const {return  ExamplesPerClass ();};
+    kkint32                  ImagesPerClass          () const {return  ExamplesPerClass ();};
     SVM_KernalType           KernalType              () const;
     SVM_MachineType          MachineType             () const;
     Model::ModelTypes        ModelingMethod          () const {return  modelingMethod;}
@@ -107,18 +107,18 @@ namespace MLL
     KKStr                    ModelTypeStr            () const {return  Model::ModelTypeToStr (modelingMethod);}
     MLClassConstPtr          NoiseMLClass            () const {return  noiseMLClass;}
     const TrainingClassPtr   NoiseTrainingClass      () const {return  noiseTrainingClass;}
-    int32                    NoiseGuaranteedSize     () const {return  noiseGuaranteedSize;}
-    int32                    NumOfRounds             () const {return  Number_of_rounds ();}
-    int32                    Number_of_rounds        () const;
+    kkint32                  NoiseGuaranteedSize     () const {return  noiseGuaranteedSize;}
+    kkint32                  NumOfRounds             () const {return  Number_of_rounds ();}
+    kkint32                  Number_of_rounds        () const;
     MLClassConstPtr          OtherClass              () const {return  otherClass;}
     const KKStr&             RootDir                 () const {return  rootDir;}
     const TrainingClassList& TrainingClasses         () const {return  trainingClasses;}
     ModelParamPtr            ModelParameters         () const {return  modelParameters;}
     KKStr                    ModelParameterCmdLine   () const;
-    uint32                   NumHierarchialLevels    () const;  /**<  returns back the number of hierarchail levels there are in the trainingClass that has the most. */
+    kkuint32                 NumHierarchialLevels    () const;  /**<  returns back the number of hierarchail levels there are in the trainingClass that has the most. */
     SVM_SelectionMethod      SelectionMethod         () const;
     const SVMparam&          SVMparamREF             () const;
-    int32                    UnBalancedBits          () const;
+    kkint32                  UnBalancedBits          () const;
     KKStr                    UnBalancedBitsStr       () const;
     bool                     WeightBitReduction      () const;
 
@@ -139,21 +139,21 @@ namespace MLL
 
 
     void   A_Param             (float                  _aParam);
-    void   BitsToReduceBy      (int32                  bitReduction);
+    void   BitsToReduceBy      (kkint32                bitReduction);
     void   C_Param             (double                 _CCC);
     void   CompressionMethod   (SVM_CompressionMethod  _compMethod);
     void   EncodingMethod      (SVM_EncodingMethod     _encodingMethod);
-    void   ExamplesPerClass    (int32                  _examplesPerClass);
+    void   ExamplesPerClass    (kkint32                _examplesPerClass);
     void   Gamma               (double                 _gamma);
-    void   ImagesPerClass      (int32                  _imagesPerClass)  {ExamplesPerClass (_imagesPerClass);}
+    void   ImagesPerClass      (kkint32                _imagesPerClass)  {ExamplesPerClass (_imagesPerClass);}
     void   KernalType          (SVM_KernalType         _kernalType);
     void   MachineType         (SVM_MachineType        _machineType);
-    void   Number_of_rounds    (int32                  _number_of_rounds);
-    void   NumOfRounds         (int32                  _numOfRounds)     {Number_of_rounds  (_numOfRounds);}
+    void   Number_of_rounds    (kkint32                _number_of_rounds);
+    void   NumOfRounds         (kkint32                _numOfRounds)     {Number_of_rounds  (_numOfRounds);}
     void   RootDir             (const KKStr&           _rootDir);
     void   ModelParameters     (ModelParamPtr          _modelParameters);
     void   SelectionMethod     (SVM_SelectionMethod    _selectionMethod);
-    void   UnBalancedBits      (int32                  _unBalancedBits);
+    void   UnBalancedBits      (kkint32                _unBalancedBits);
     void   UnBalancedBitsStr   (const KKStr&           _unBalancedBitsStr);
     void   WeightBitReduction  (bool                   _weightBitReduction);
 
@@ -180,9 +180,9 @@ namespace MLL
 
     MLClassConstListPtr    ExtractClassList ()  const;             /**< Constructs new list of classes that caller will own. */
 
-    MLClassConstListPtr    ExtractListOfClassesForAGivenHierarchialLevel (uint32 level)   const;
+    MLClassConstListPtr    ExtractListOfClassesForAGivenHierarchialLevel (kkuint32 level)   const;
 
-    TrainingConfiguration2Ptr  GenerateAConfiguraionForAHierarchialLevel (uint32 level);
+    TrainingConfiguration2Ptr  GenerateAConfiguraionForAHierarchialLevel (kkuint32 level);
 
     static  KKStr          GetEffectiveConfigFileName (const  KKStr&  configFileName);
 
@@ -193,7 +193,7 @@ namespace MLL
                                            MLClassConstPtr  class2
                                           );
 
-    FeatureVectorListPtr   LoadFeatureDataFromTrainingLibraries (KKU::DateTime&  latestImageTimeStamp,
+    FeatureVectorListPtr   LoadFeatureDataFromTrainingLibraries (KKB::DateTime&  latestImageTimeStamp,
                                                                  bool&           changesMadeToTrainingLibraries,
                                                                  bool&           cancelFlag
                                                                 );
@@ -204,7 +204,7 @@ namespace MLL
 
     bool                   NormalizeNominalFeatures ();
 
-    int32                  NumOfFeaturesAfterEncoding ()  const;
+    kkint32                NumOfFeaturesAfterEncoding ()  const;
 
     static
       TrainingConfiguration2Ptr
@@ -221,7 +221,7 @@ namespace MLL
                                           );
 
     void                   SetModelParameters (ModelParamPtr  _svmParanters,
-                                               int32          _examplesPerClass
+                                               kkint32        _examplesPerClass
                                               );
 
 
@@ -245,18 +245,18 @@ namespace MLL
 
     void                   CreateModelParameters (const KKStr&           _parameterStr,
                                                   const FeatureNumList&  _selFeatures,
-                                                  int32                  _sectionLineNum,
-                                                  int32                  _parametersLineNum, 
-                                                  int32                  _featuresIncludedLineNum
+                                                  kkint32                _sectionLineNum,
+                                                  kkint32                _parametersLineNum, 
+                                                  kkint32                _featuresIncludedLineNum
                                                  );
 
 
-    FeatureNumListPtr      DeriveFeaturesSelected (int32  sectionNum);
+    FeatureNumListPtr      DeriveFeaturesSelected (kkint32  sectionNum);
 
     void                   DetermineWhatTheRootDirectoryIs ();
 
     FeatureVectorListPtr   ExtractFeatures (const TrainingClassPtr  trainingClass,
-                                            KKU::DateTime&          latestTimeStamp,
+                                            KKB::DateTime&          latestTimeStamp,
                                             bool&                   changesMade,
                                             bool&                   cancelFlag
                                            );
@@ -265,19 +265,19 @@ namespace MLL
 
     void                   SyncronizeMLClassListWithTrainingClassList ();
 
-    TrainingClassPtr       ValidateClassConfig    (int32  sectionNum);
+    TrainingClassPtr       ValidateClassConfig    (kkint32  sectionNum);
 
     void                   ValidateConfiguration ();
     
-    void                   ValidateGlobalSection (int32  sectionNum);
+    void                   ValidateGlobalSection (kkint32  sectionNum);
 
     void                   ValidateOtherClass (MLClassConstPtr  otherClass,
-                                               int32            otherClassLineNum
+                                               kkint32          otherClassLineNum
                                               );
 
-    void                   ValidateTrainingClassConfig (int32  sectionNum);
+    void                   ValidateTrainingClassConfig (kkint32  sectionNum);
 
-    void                   ValidateTwoClassParameters (int32  sectionNum);
+    void                   ValidateTwoClassParameters (kkint32  sectionNum);
 
 
     ModelParamOldSVMPtr    OldSvmParameters ()  const;
@@ -287,7 +287,7 @@ namespace MLL
                                                        * directory path was added by 'GetEffectiveConfigFileName'.
                                                        */
 
-    int32                  examplesPerClass;
+    kkint32                examplesPerClass;
     FileDescPtr            fileDesc;
     MLClassConstListPtr    mlClasses;
     bool                   mlClassesWeOwnIt;      /**< If we own it we will delete it in the destructor. */
@@ -295,7 +295,7 @@ namespace MLL
     ModelTypes             modelingMethod;
     ModelParamPtr          modelParameters;
 
-    int32                  noiseGuaranteedSize;   /**< Images smaller than this size will be classified as noise and will 
+    kkint32                noiseGuaranteedSize;   /**< Images smaller than this size will be classified as noise and will 
                                                    * not be used for training purposes.
                                                    */
 
@@ -312,7 +312,7 @@ namespace MLL
                                                    * a clas can not be determined.
                                                    */
 
-    int32                  otherClassLineNum;     /**< Line where OtherClass in configuratyon was defined. */
+    kkint32                otherClassLineNum;     /**< Line where OtherClass in configuratyon was defined. */
 
     KKStr                  rootDir;               /**< Common directory that all images for this training
                                                    * library come from. This is determined by iterating 

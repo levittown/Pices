@@ -1,7 +1,7 @@
 #ifndef  _FEATURESELECTIONTYPES_
 #define  _FEATURESELECTIONTYPES_
 
-#include  "Str.h"
+#include  "KKStr.h"
 
 
 

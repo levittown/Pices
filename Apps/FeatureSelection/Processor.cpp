@@ -28,12 +28,12 @@ using namespace std;
 #define  MaxCParmValue 20
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "KKQueue.h"
 #include "OSservices.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 
 #include "MLClass.h"
@@ -681,7 +681,7 @@ void   Processor::EndBlock ()
        if  (!DeleteFile (lockFileName.Str ()))
        {
          DWORD  lastErrorNum = GetLastError ();
-         log.Level (-1) << "Processor::EndBlock - Error["  << (int32)lastErrorNum << "] deleting Lock File." << endl;
+         log.Level (-1) << "Processor::EndBlock - Error["  << (kkint32)lastErrorNum << "] deleting Lock File." << endl;
        }
      }
   }
@@ -909,7 +909,7 @@ void  Processor::ProcessStatusFileLine (KKStrParser&  statusStr)
 
   else if  (fieldName == "CURRENTDATETIME")
   {
-    KKU::DateTime  dateTime = statusStr.GetNextTokenDateTime ();
+    KKB::DateTime  dateTime = statusStr.GetNextTokenDateTime ();
     if  (!dateTimeFirstOneFound)
     {
       dateTimeFirstOneFound = true;
@@ -1383,8 +1383,8 @@ void  Processor::FlagJobsForTesting (ofstream*         statusFile,
 
 
 void  Processor::CreateParameterJobsUsfCasCor (ofstream*  statusFile, 
-                                               int32      minNumOfRounds,
-                                               int32      maxNumOfRounds
+                                               kkint32    minNumOfRounds,
+                                               kkint32    maxNumOfRounds
                                               )
 {
   log.Level (10) << "Processor::CreateParameterJobsUsfCasCor" << endl;
@@ -1405,7 +1405,7 @@ void  Processor::CreateParameterJobsUsfCasCor (ofstream*  statusFile,
     featureNums = config->GetFeatureNums ();
 
 
-  int32  numOfRounds =  minNumOfRounds;
+  kkint32  numOfRounds =  minNumOfRounds;
   while  (numOfRounds < maxNumOfRounds)
   {
     BinaryJobPtr existingJob = binaryJobs->LookUpByParameters (featureNums, 

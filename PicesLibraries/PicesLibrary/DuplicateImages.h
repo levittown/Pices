@@ -86,9 +86,9 @@ namespace MLL
 
     DuplicateImageListPtr  DupImages () const {return dupExamples;}
 
-    int32                  DuplicateCount     ()  const {return duplicateCount;}
-    int32                  DuplicateDataCount ()  const {return duplicateDataCount;}
-    int32                  DuplicateNameCount ()  const {return duplicateNameCount;}
+    kkint32                DuplicateCount     ()  const {return duplicateCount;}
+    kkint32                DuplicateDataCount ()  const {return duplicateDataCount;}
+    kkint32                DuplicateNameCount ()  const {return duplicateNameCount;}
 
     bool                   DuplicatesFound ()  const;
 
@@ -106,9 +106,9 @@ namespace MLL
   private:
     void  FindDuplicates (FeatureVectorListPtr  examples);  /**< Used to build duplicate list from current contents of examples. */
 
-    int32                        duplicateCount;
-    int32                        duplicateDataCount;
-    int32                        duplicateNameCount;
+    kkint32                      duplicateCount;
+    kkint32                      duplicateDataCount;
+    kkint32                      duplicateNameCount;
     DuplicateImageListPtr        dupExamples;
     ImageFeaturesDataIndexedPtr  featureDataTree;
     FileDescPtr                  fileDesc;
@@ -165,7 +165,7 @@ namespace MLL
   {
   public:
     DuplicateImageList (bool _owner = true, 
-                        int32  _size  = 100
+                        kkint32  _size  = 100
                        );
     ~DuplicateImageList ();
 

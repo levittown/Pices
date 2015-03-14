@@ -66,7 +66,7 @@
 //*                                                                                                       *
 //*********************************************************************************************************
 #include "RunLog.h"
-#include "Str.h"
+#include "KKStr.h"
 
 #include "FeatureFileIO.h"
 #include "FeatureVector.h"
@@ -98,7 +98,7 @@ namespace FeatureSelectionApp
   class  FeatureSelection
   {
   public:
-    typedef  KKU::uint  uint;
+    typedef  KKB::uint  uint;
 
     FeatureSelection (int     argc,
                       char**  argv

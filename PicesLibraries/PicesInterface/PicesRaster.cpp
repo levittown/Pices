@@ -1,19 +1,16 @@
 #include "StdAfx.h"
-#include  "FirstIncludes.h"
-
+#include "FirstIncludes.h"
 #include <stdio.h>
 #include <math.h>
-
-
-#include  <ctype.h>
-#include  <time.h>
-#include  <fstream>
-#include  <iostream>
-#include  <istream>
-#include  <map>
-#include  <ostream>
-#include  <string>
-#include  <vector>
+#include <ctype.h>
+#include <time.h>
+#include <fstream>
+#include <iostream>
+#include <istream>
+#include <map>
+#include <ostream>
+#include <string>
+#include <vector>
 using namespace std;
 
 
@@ -21,34 +18,32 @@ using namespace System;
 using namespace System::Threading;
 using namespace System::Windows::Forms;
 
-#include  "MemoryDebug.h"
-#include  "BasicTypes.h"
-#include  "..\\BaseLibrary\\GoalKeeper.h"
-#include  "OSservices.h"
+#include "MemoryDebug.h"
+#include "KKBaseTypes.h"
+#include "GoalKeeper.h"
+#include "OSservices.h"
+using namespace KKB;
 
-using namespace KKU;
-
-
-#include  "Blob.h"
-#include  "ContourFollower.h"
-#include  "ConvexHull.h"
-#include  "ImageIO.h"
-#include  "OSservices.h"
-
-#include  "InstrumentDataFileManager.h"
-#include  "RasterSipper.h"
-
-#include  "FeatureFileIO.h"
-#include  "FeatureFileIOPices.h"
-#include  "ImageFeatures.h"
-
-#include  "PicesKKStr.h"
-#include  "PicesRunLog.h"
-#include  "PicesRaster.h"
-#include  "TrainingModel2.h"
+#include "Blob.h"
+#include "ContourFollower.h"
+#include "ConvexHull.h"
+#include "ImageIO.h"
+#include "OSservices.h"
+#include "InstrumentDataFileManager.h"
+#include "RasterSipper.h"
+#include "FeatureFileIO.h"
+#include "FeatureFileIOPices.h"
+#include "ImageFeatures.h"
 
 
+
+#include "PicesKKStr.h"
+#include "PicesOSservices.h"
+#include "PicesRunLog.h"
+#include "PicesRaster.h"
+#include "TrainingModel2.h"
 using namespace  PicesInterface;
+
 
 namespace  PicesInterface
 {
@@ -444,10 +439,11 @@ namespace  PicesInterface
 
 
   PicesRaster^   PicesRaster::BandPass (float  lowerFreqBound,
-                                        float  upperFreqBound
+                                        float  upperFreqBound,
+                                        bool   retainBackground
                                        )
   {
-    return  gcnew PicesRaster (raster->BandPass (lowerFreqBound, upperFreqBound));
+    return  gcnew PicesRaster (raster->BandPass (lowerFreqBound, upperFreqBound, retainBackground));
   }  /* BandPass */
 
 
@@ -474,7 +470,7 @@ namespace  PicesInterface
 
   PicesRaster^   PicesRaster::ErodeImage (MaskType  mt)
   {
-    RasterSipperPtr  erodedRaster = raster->CreateErodedImage ((KKU::MaskTypes)mt);
+    RasterSipperPtr  erodedRaster = raster->CreateErodedImage ((KKB::MaskTypes)mt);
 
     return  gcnew PicesRaster (erodedRaster);
   }  /* ErodeImage */
@@ -483,7 +479,7 @@ namespace  PicesInterface
 
   PicesPointList^  PicesRaster::DeriveImageLength ()
   {
-    KKU::PointListPtr  points = raster->DeriveImageLength ();
+    KKB::PointListPtr  points = raster->DeriveImageLength ();
     if  (points == NULL)
       return nullptr;
 
@@ -494,7 +490,7 @@ namespace  PicesInterface
 
   PicesRaster^   PicesRaster::DialateImage (MaskType  mt)
   {
-    RasterSipperPtr  dialatedRaster = raster->CreateDialatedRaster ((KKU::MaskTypes)mt);
+    RasterSipperPtr  dialatedRaster = raster->CreateDialatedRaster ((KKB::MaskTypes)mt);
 
     return  gcnew PicesRaster (dialatedRaster);
   }   /* DialateImage */
@@ -503,15 +499,15 @@ namespace  PicesInterface
 
   PicesRaster^   PicesRaster::OpenImage (MaskType  mt)
   {
-    RasterSipperPtr  erodedImage = raster->CreateErodedImage         ((KKU::MaskTypes)mt);
-    RasterSipperPtr  opendImage  = erodedImage->CreateDialatedRaster ((KKU::MaskTypes)mt);
+    RasterSipperPtr  erodedImage = raster->CreateErodedImage         ((KKB::MaskTypes)mt);
+    RasterSipperPtr  opendImage  = erodedImage->CreateDialatedRaster ((KKB::MaskTypes)mt);
     delete  erodedImage;  erodedImage = NULL;
     return  gcnew PicesRaster (opendImage);
   }  /* OpenImage */
 
 
 
-  PicesRaster^   PicesRaster::Padded (int32 padding)
+  PicesRaster^   PicesRaster::Padded (kkint32 padding)
   {
     RasterSipperPtr  paddedImage = raster->Padded (padding);
     return gcnew PicesRaster (paddedImage);
@@ -538,7 +534,7 @@ namespace  PicesInterface
       if  (raster->Color ())
         SaveImage (*raster, PicesKKStr::SystemStringToKKStr (fileName));
       else
-        KKU::SaveImageGrayscaleInverted4Bit (*raster, PicesKKStr::SystemStringToKKStr (fileName));
+        KKB::SaveImageGrayscaleInverted4Bit (*raster, PicesKKStr::SystemStringToKKStr (fileName));
     }
     else
     {
@@ -553,8 +549,8 @@ namespace  PicesInterface
 
   PicesRaster^   PicesRaster::CloseImage (MaskType  mt)
   {
-    RasterSipperPtr  dialatedImage = raster->CreateDialatedRaster     ((KKU::MaskTypes)mt);
-    RasterSipperPtr  closedImage   = dialatedImage->CreateErodedImage ((KKU::MaskTypes)mt);
+    RasterSipperPtr  dialatedImage = raster->CreateDialatedRaster     ((KKB::MaskTypes)mt);
+    RasterSipperPtr  closedImage   = dialatedImage->CreateErodedImage ((KKB::MaskTypes)mt);
     delete  dialatedImage;  dialatedImage = NULL;
     return  gcnew PicesRaster (closedImage);
   }  /* CloseImage */
@@ -564,7 +560,7 @@ namespace  PicesInterface
 
   PicesRaster^   PicesRaster::ConvexHull ()
   {
-    KKU::ConvexHullPtr  ch = new KKU::ConvexHull ();
+    KKB::ConvexHullPtr  ch = new KKB::ConvexHull ();
     RasterPtr  convexImage = ch->Filter (*raster);
     delete  ch; ch = NULL;
     return  gcnew PicesRaster (RasterSipper::TurnIntoSipperRasterPtr (convexImage));
@@ -772,7 +768,7 @@ namespace  PicesInterface
 
 
   PicesRaster^  PicesRaster::GetOrigSipperImage (String^       sipperFileRootName,
-                                                 uint64        byteOffset,
+                                                 kkuint64      byteOffset,
                                                  uint          topLeftRow,
                                                  uint          topLeftCol,
                                                  uint          height,

@@ -1,17 +1,17 @@
-#include  "StdAfx.h"
-#include  "FirstIncludes.h"
+#include "StdAfx.h"
+#include "FirstIncludes.h"
 
 #include <stdio.h>
 #include <math.h>
 
-#include  <ctype.h>
-#include  <time.h>
+#include <ctype.h>
+#include <time.h>
 
-#include  <fstream>
-#include  <iostream>
-#include  <ostream>
-#include  <string>
-#include  <vector>
+#include <fstream>
+#include <iostream>
+#include <ostream>
+#include <string>
+#include <vector>
 using namespace std;
 
 
@@ -19,12 +19,11 @@ using namespace System;
 using namespace System::Threading;
 using namespace System::Windows::Forms;
 
-#include  "MemoryDebug.h"
-#include  "BasicTypes.h"
-#include  "..\\BaseLibrary\\GoalKeeper.h"
-#include  "OSservices.h"
-
-using namespace KKU;
+#include "MemoryDebug.h"
+#include "KKBaseTypes.h"
+#include "GoalKeeper.h"
+#include "OSservices.h"
+using namespace KKB;
 
 
 #include "FeatureFileIo.h"
@@ -35,6 +34,7 @@ using namespace KKU;
 #include "Raster.h"
 
 #include "PicesKKStr.h"
+#include "PicesOSservices.h"
 #include "PicesRaster.h"
 #include "PicesRunLog.h"
 #include "PicesFeatureVector.h"
@@ -392,7 +392,7 @@ namespace  PicesInterface
   // Creates an unmanaged list of feature vectors.
   FeatureVectorListPtr  PicesFeatureVectorList::ToFeatureVectorList (PicesRunLog^  runLog)
   {
-    FeatureVectorListPtr  fvl = new FeatureVectorList (FeatureFileIOPices::NewPlanktonFile (runLog->Log ()), false, runLog->Log (), Count);
+    FeatureVectorListPtr  fvl = new FeatureVectorList (FeatureFileIOPices::NewPlanktonFile (runLog->Log ()), false, runLog->Log ());
 
     for each (PicesFeatureVector^ fv in *this)
       fvl->PushOnBack (fv->UnManagedClass ());

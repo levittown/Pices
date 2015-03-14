@@ -21,14 +21,14 @@
 using namespace  std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "KKQueue.h"
 #include "Matrix.h"
 #include "OSservices.h"
 #include "RunLog.h"
 #include "StatisticalFunctions.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 
 #include "MLClass.h"
@@ -190,7 +190,7 @@ BinaryJobPtr  BinaryJobList::LookUpByFeatureNums (const FeatureNumList&  _featur
 
 
 BinaryJobPtr  BinaryJobList::LookUpByParameters (const  FeatureNumList&  features,
-                                                 int32                   numOfRounds,
+                                                 kkint32                 numOfRounds,
                                                  double                  cParm,
                                                  double                  gamma,
                                                  float                   aParm,

@@ -44,7 +44,7 @@ namespace PicesInterface
   public  ref  class  PicesClassStatisticList:  public  List<PicesClassStatistic^>
   {
   public:
-    typedef  KKU::uint  uint;
+    typedef  KKB::uint  uint;
 
     PicesClassStatisticList ();
 

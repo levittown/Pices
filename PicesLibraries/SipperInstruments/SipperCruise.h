@@ -3,7 +3,7 @@
 
 #include  "DateTime.h"
 #include  "RunLog.h"
-using namespace KKU;
+using namespace KKB;
 
 #include  "Instrument.h"
 #include  "InstrumentDataFileManager.h"
@@ -35,8 +35,8 @@ public:
   void  CruiseName   (const KKStr&          _cruiseName)    {cruiseName  = _cruiseName;}
   void  ShipName     (const KKStr&          _shipName)      {shipName    = _shipName;}
   void  Description  (const KKStr&          _description)   {description = _description;}
-  void  DateStart    (const KKU::DateType&  _dateStart)     {dateStart   = _dateStart;}
-  void  DateEnd      (const KKU::DateType&  _dateEnd)       {dateEnd     = _dateEnd;}
+  void  DateStart    (const KKB::DateType&  _dateStart)     {dateStart   = _dateStart;}
+  void  DateEnd      (const KKB::DateType&  _dateEnd)       {dateEnd     = _dateEnd;}
   void  Location     (const KKStr&          _location)      {location    = _location;}
   void  Objective    (const KKStr&          _objective)     {objective   = _objective;}
   void  Principal    (const KKStr&          _principal)     {principal   = _principal;}
@@ -48,8 +48,8 @@ private:
 	KKStr           cruiseName;
   KKStr           shipName;
 	KKStr           description;
-  KKU::DateType   dateStart;
-  KKU::DateType   dateEnd;
+  KKB::DateType   dateStart;
+  KKB::DateType   dateEnd;
 	KKStr           location;
 	KKStr           objective;
 	KKStr           principal;

@@ -11,14 +11,14 @@
 #include <vector>
 
 #include "MemoryDebug.h"
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 
 using namespace std;
 
 #include "Compressor.h"
 #include "OSservices.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 #include "InstrumentDataFileManager.h"
 using namespace  SipperHardware;
@@ -299,7 +299,7 @@ void  RandomSplitJob::GetClassCounts (VectorFloat&   classAccs,
   predDelta.clear ();
   adjDelta.clear ();
   
-  for  (KKU::uint x = 0;  x < knownCounts.size ();  x++)
+  for  (KKB::uint x = 0;  x < knownCounts.size ();  x++)
   {
     predDelta.push_back (predCounts[x] - knownCounts[x]);
     adjDelta.push_back  (adjCounts[x]  - knownCounts[x]);
@@ -318,7 +318,7 @@ void  RandomSplitJob::PrintClassCounts (ostream&  o)
   VectorDouble  predDelta;       
   VectorDouble  adjDelta;
   VectorFloat   accuracies;
-  KKU::uint  x = 0;
+  KKB::uint  x = 0;
 
   GetClassCounts (accuracies, knownCounts, predCounts, adjCounts, adjCountsStdError, predDelta, adjDelta);
 

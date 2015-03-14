@@ -1,27 +1,27 @@
-#include  "StdAfx.h"
-#include  "FirstIncludes.h"
+#include "StdAfx.h"
+#include "FirstIncludes.h"
 
-#include  <stdio.h>
-#include  <math.h>
-#include  <ctype.h>
-#include  <time.h>
-#include  <fstream>
-#include  <iostream>
-#include  <map>
-#include  <ostream>
-#include  <string>
-#include  <vector>
+#include <stdio.h>
+#include <math.h>
+#include <ctype.h>
+#include <time.h>
+#include <fstream>
+#include <iostream>
+#include <map>
+#include <ostream>
+#include <string>
+#include <vector>
 using namespace std;
 
-#include  "MemoryDebug.h"
-#include  "BasicTypes.h"
+#include "MemoryDebug.h"
+#include "KKBaseTypes.h"
 
-#include  "..\BaseLibrary\GoalKeeper.h"
-using namespace KKU;
+#include "GoalKeeper.h"
+using namespace KKB;
 
-#include  "PicesClass.h"
-#include  "PicesClassList.h"
-#include  "PicesClassStatistic.h"
+#include "PicesClass.h"
+#include "PicesClassList.h"
+#include "PicesClassStatistic.h"
 using namespace PicesInterface;
 
 using namespace System;
@@ -136,7 +136,7 @@ namespace  PicesInterface
 
 
 
-  KKU::uint  PicesClassStatisticList::ImageCountTotal::get ()  
+  KKB::uint  PicesClassStatisticList::ImageCountTotal::get ()  
   {
     uint  imageCountTotal = 0;
     for each  (PicesClassStatistic^ stat in (*this))
@@ -146,7 +146,7 @@ namespace  PicesInterface
 
 
 
-  KKU::uint  PicesClassStatisticList::CountTotal::get ()  
+  KKB::uint  PicesClassStatisticList::CountTotal::get ()  
   {
     uint  countTotal = 0;
     for each  (PicesClassStatistic^ stat in (*this))
@@ -206,7 +206,7 @@ namespace  PicesInterface
     for each  (PicesClassStatistic^  pcs in *this)
     {
       PicesClass^ pc = pcs->MLClass;
-      uint32 count = pcs->Count;
+      kkuint32 count = pcs->Count;
       results->PushOnBack (new ClassStatistic (pc->UnmanagedMLClass (), count));
     }
     return  results;

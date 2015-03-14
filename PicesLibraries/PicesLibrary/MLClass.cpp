@@ -12,10 +12,10 @@
 using namespace  std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "OSservices.h"
 #include "RunLog.h"
-using namespace  KKU;
+using namespace  KKB;
 
 
 #include "MLClass.h"
@@ -104,7 +104,7 @@ void  MLClass::DeleteImageClassList (MLClassListPtr  list)
 
 
 MLClassPtr  MLClass::CreateNewMLClass (const KKStr&  _name,
-                                       int32         _classId
+                                       kkint32       _classId
                                       )
 {
   KKStr  upperName = _name.ToUpper ();
@@ -140,7 +140,7 @@ MLClassPtr  MLClass::CreateNewMLClass (const KKStr&  _name,
 
 
 
-MLClassConstPtr  MLClass::GetByClassId (int32  _classId)
+MLClassConstPtr  MLClass::GetByClassId (kkint32  _classId)
 {
   return  GlobalClassList ()->LookUpByClassId (_classId);
 }  /* GetByClassId */
@@ -219,7 +219,7 @@ void  MLClass::ChangeNameOfClass (MLClassPtr  mlClass,
     for  (idx = existingClassLists.begin ();  idx != existingClassLists.end ();  ++idx)
     {
       MLClassListPtr  list = idx->first;
-      uint32  classInList = list->PtrToIdx (mlClass);
+      kkuint32  classInList = list->PtrToIdx (mlClass);
       if  (classInList >= 0)
       {
         bool  nameChangedInList = false;
@@ -297,7 +297,7 @@ void  MLClass::FinalCleanUp ()
   }
   blocker->EndBlock ();
 
-  delete  blocker;
+  GoalKeeper::Destroy (blocker);
   blocker = NULL;
 }  /* FinalCleanUp */
 
@@ -323,7 +323,7 @@ MLClass::MLClass (const KKStr&  _name):
 
   upperName = name.ToUpper ();
   KKStr  topLevel = upperName;
-  uint32 x = upperName.LocateCharacter ('_');
+  kkuint32 x = upperName.LocateCharacter ('_');
   if  (x >= 0)
     topLevel = upperName.SubStrPart (0, x - 1);
 
@@ -398,7 +398,7 @@ void  MLClass::ProcessRawData (KKStr&  _data)
 KKStr  MLClass::GetClassNameFromDirName (const KKStr&  subDir)
 {
   KKStr  className = osGetRootNameOfDirectory (subDir);
-  int32 x = className.LocateLastOccurrence ('_');
+  kkint32 x = className.LocateLastOccurrence ('_');
   if  (x > 0)
   {
     // Now lets eliminate any sequence number in name
@@ -406,7 +406,7 @@ KKStr  MLClass::GetClassNameFromDirName (const KKStr&  subDir)
     // So if there is an underscore character,  and all the characters to the right of it are
     // numeric characters,  then we will remove the underscore and the following numbers.
 
-    int32  y = x + 1;
+    kkint32  y = x + 1;
 
     bool  allFollowingCharsAreNumeric = true;
     while  ((y < className.Len ()) &&  (allFollowingCharsAreNumeric))
@@ -442,9 +442,9 @@ bool  MLClass::IsAnAncestor (MLClassConstPtr  c)   const
 
 
 
-uint16   MLClass::NumHierarchialLevels ()  const
+kkuint16 MLClass::NumHierarchialLevels ()  const
 {
-  return  (uint16)name.InstancesOfChar ('_') + 1;
+  return  (kkuint16)name.InstancesOfChar ('_') + 1;
 }
 
 
@@ -469,12 +469,12 @@ void  MLClass::WriteXML (ostream& o)  const
 
 
 
-MLClassPtr   MLClass::MLClassForGivenHierarchialLevel (uint16 level)  const
+MLClassPtr   MLClass::MLClassForGivenHierarchialLevel (kkuint16 level)  const
 {
   VectorKKStr  levelNames = name.Split ('_');
   KKStr fullLevelName = "";
 
-  uint16  curLevel = 0;
+  kkuint16  curLevel = 0;
   while  ((curLevel < level)  &&  (curLevel < levelNames.size ()))
   {
     if  (curLevel < 1)
@@ -492,7 +492,7 @@ MLClassPtr   MLClass::MLClassForGivenHierarchialLevel (uint16 level)  const
 
 
 MLClassList::MLClassList ():
-     KKQueue<MLClass> (false, 10),
+     KKQueue<MLClass> (false),
      undefinedLoaded (false)
 {
   MLClass::AddImageClassList (this);
@@ -502,12 +502,12 @@ MLClassList::MLClassList ():
 
 
 MLClassList::MLClassList (const MLClassList&  _mlClasses):
-  KKQueue<MLClass> (false, _mlClasses.QueueSize ())
+  KKQueue<MLClass> (false)
 {
   MLClass::AddImageClassList (this);
 
-  uint32  numOfClasses = _mlClasses.QueueSize ();
-  uint32  x;
+  kkuint32  numOfClasses = _mlClasses.QueueSize ();
+  kkuint32  x;
   
   for  (x = 0; x < numOfClasses; x++)
   {
@@ -520,9 +520,9 @@ MLClassList::MLClassList (const MLClassList&  _mlClasses):
 
 
 MLClassList::MLClassList (const KKStr&  _fileName,
-                                bool&         _successfull
-                               ):
-     KKQueue<MLClass> (false, 10),
+                          bool&         _successfull
+                         ):
+     KKQueue<MLClass> (false),
      undefinedLoaded (false)
 {
   MLClass::AddImageClassList (this);
@@ -547,7 +547,7 @@ MLClassList::~MLClassList ()
 
 
 
-int32  MLClassList::MemoryConsumedEstimated ()  const
+kkint32  MLClassList::MemoryConsumedEstimated ()  const
 {
   return  sizeof (MLClassList) + sizeof (MLClassPtr) * size ();
 }
@@ -599,9 +599,9 @@ void  MLClassList::ChangeNameOfClass (MLClassPtr    mlClass,
 
 
 
-uint16   MLClassList::NumHierarchialLevels ()  const
+kkuint16 MLClassList::NumHierarchialLevels ()  const
 {
-  uint16  numHierarchialLevels = 0;
+  kkuint16  numHierarchialLevels = 0;
   MLClassList::const_iterator  idx;
   for  (idx = begin ();  idx != end ();  idx++)
     numHierarchialLevels = Max (numHierarchialLevels, (*idx)->NumHierarchialLevels ());
@@ -617,7 +617,7 @@ void  MLClassList::Load (const KKStr&  _fileName,
                            )
 {
   char   buff[20480];
-  int32    lineCount = 0;
+  kkint32  lineCount = 0;
 
   FILE*  inputFile = osFOPEN (_fileName.Str (), "r");
   if  (!inputFile)
@@ -657,8 +657,8 @@ void  MLClassList::Save (KKStr   _fileName,
 {
   ofstream outFile (_fileName.Str ());
 
-  int32        idx;
-  int32        qSize = QueueSize ();
+  kkint32      idx;
+  kkint32      qSize = QueueSize ();
   MLClassPtr   mlClass = NULL;
 
   for  (idx = 0; idx < qSize; idx++)
@@ -772,7 +772,7 @@ MLClassPtr  MLClassList::LookUpByName (const KKStr&  _name)  const
 
 
 
-MLClassPtr  MLClassList::LookUpByClassId (int32  _classId)  const
+MLClassPtr  MLClassList::LookUpByClassId (kkint32  _classId)  const
 {
   MLClassList::const_iterator  idx;
   MLClassPtr  mlClass;
@@ -808,9 +808,9 @@ MLClassPtr  MLClassList::GetMLClassPtr (const KKStr& _name)
 
 MLClassPtr  MLClassList::GetNoiseClass ()  const
 {
-  int32          count      = QueueSize ();
+  kkint32        count      = QueueSize ();
   MLClassPtr  noiseClass = NULL;
-  int32          x;
+  kkint32        x;
 
   for  (x = 0; ((x < count)  &&  (!noiseClass)); x++)
   {
@@ -842,10 +842,10 @@ MLClassPtr  MLClassList::GetUnKnownClass ()
 
 
 
-class  MLClassList::mlClassNameComparison: public  QueueComparison<MLClass>
+class  MLClassList::mlClassNameComparison
 {
 public:
-   mlClassNameComparison ():  QueueComparison<MLClass> () {} 
+   mlClassNameComparison () {} 
 
    bool  operator () (MLClassPtr  p1,
                       MLClassPtr  p2
@@ -875,7 +875,7 @@ KKStr  MLClassList::ToString ()  const
 {
   KKStr s (10 * QueueSize ());
 
-  for (int32 i = 0;  i < QueueSize ();  i++)
+  for (kkint32 i = 0;  i < QueueSize ();  i++)
   {
     if  (i > 0)
       s << "\t";
@@ -892,7 +892,7 @@ KKStr  MLClassList::ToString ()  const
 KKStr  MLClassList::ToTabDelimitedStr ()  const
 {
   KKStr s (10 * QueueSize ());
-  for (int32 i = 0;  i < QueueSize ();  i++)
+  for (kkint32 i = 0;  i < QueueSize ();  i++)
   {
     if  (i > 0)  s << "\t";
     s << IdxToPtr (i)->Name ();
@@ -907,7 +907,7 @@ KKStr  MLClassList::ToTabDelimitedStr ()  const
 KKStr  MLClassList::ToCommaDelimitedStr ()  const
 {
   KKStr s (10 * QueueSize ());
-  for (int32 i = 0;  i < QueueSize ();  i++)
+  for (kkint32 i = 0;  i < QueueSize ();  i++)
   {
     if  (i > 0)  s << ",";
     s << IdxToPtr (i)->Name ();
@@ -959,7 +959,7 @@ void  MLClassList::ExtractTwoTitleLines (KKStr&  titleLine1,
   titleLine1 = "";
   titleLine2 = "";
 
-  int32 x;
+  kkint32 x;
   for  (x = 0;  x < QueueSize ();  x++)
   {
     if  (x > 0)
@@ -969,7 +969,7 @@ void  MLClassList::ExtractTwoTitleLines (KKStr&  titleLine1,
     }
 
     KKStr  className = IdxToPtr (x)->Name ();
-    int32  y = className.LocateCharacter ('_');
+    kkint32  y = className.LocateCharacter ('_');
     if  (y < 0)
     {
       titleLine2 << className;
@@ -994,7 +994,7 @@ void  MLClassList::ExtractThreeTitleLines (KKStr&  titleLine1,
   titleLine2 = "";
   titleLine3 = "";
 
-  int32 x;
+  kkint32 x;
   for  (x = 0;  x < QueueSize ();  x++)
   {
     if  (x > 0)
@@ -1006,7 +1006,7 @@ void  MLClassList::ExtractThreeTitleLines (KKStr&  titleLine1,
 
     KKStr  part1, part2, part3;
     part1 = part2 = part3 = "";
-    int32  numOfParts = 0;
+    kkint32  numOfParts = 0;
 
     KKStr  className = IdxToPtr (x)->Name ();
     className.TrimLeft ();
@@ -1050,7 +1050,7 @@ void  MLClassList::ExtractThreeTitleLines (KKStr&  titleLine1,
 void  MLClassList::ExtractThreeTitleLines (KKStr&  titleLine1,
                                            KKStr&  titleLine2, 
                                            KKStr&  titleLine3,
-                                           int32     fieldWidth
+                                           kkint32   fieldWidth
                                           ) const
 {
   titleLine1 = "";
@@ -1060,12 +1060,12 @@ void  MLClassList::ExtractThreeTitleLines (KKStr&  titleLine1,
   KKStr blankField;
   blankField.RightPad (fieldWidth);
 
-  int32 x;
+  kkint32 x;
   for  (x = 0;  x < QueueSize ();  x++)
   {
     KKStr  part1, part2, part3;
     part1 = part2 = part3 = "";
-    int32  numOfParts = 0;
+    kkint32  numOfParts = 0;
 
     KKStr  className = IdxToPtr (x)->Name ();
     className.TrimLeft ();
@@ -1116,7 +1116,7 @@ KKStr   MLClassList::ExtractHTMLTableHeader () const
 {
   KKStr  header (QueueSize () * 50);
 
-  uint16 x;
+  kkuint16 x;
 
   MLClassList::const_iterator  idx;
   for  (idx = begin ();  idx != end ();  idx++)
@@ -1140,7 +1140,7 @@ KKStr   MLClassList::ExtractHTMLTableHeader () const
 
 
 
-MLClassListPtr  MLClassList::ExtractListOfClassesForAGivenHierarchialLevel (int32 level)
+MLClassListPtr  MLClassList::ExtractListOfClassesForAGivenHierarchialLevel (kkint32 level)
 {
   MLClassListPtr  newList = new MLClassList ();
 
@@ -1223,7 +1223,7 @@ bool  MLClassList::operator== (const MLClassList&  right)  const
   if  (QueueSize () != right.QueueSize ())
     return  false;
 
-  for  (int32 i = 0;  i < QueueSize ();  i++)
+  for  (kkint32 i = 0;  i < QueueSize ();  i++)
   {
     MLClassPtr  mlClass = IdxToPtr (i);
 
@@ -1405,7 +1405,7 @@ void  ClassIndexList::Clear ()
 
 
 
-int32  ClassIndexList::MemoryConsumedEstimated ()  const
+kkint32  ClassIndexList::MemoryConsumedEstimated ()  const
 {
   return sizeof (ClassIndexList) + (shortIdx.size () * (sizeof (short) + sizeof (MLClassConstPtr) + 10));  // added 10- bytes per entry for overhead.
 }
@@ -1425,7 +1425,7 @@ void  ClassIndexList::AddClass (MLClassConstPtr  _ic,
     return;
   }
 
-  int32  index = largestIndex + 1;
+  kkint32  index = largestIndex + 1;
   largestIndex = index;
 
   insert (pair<MLClassConstPtr, short> (_ic, index));
@@ -1459,7 +1459,7 @@ void  ClassIndexList::AddClassIndexAssignment (MLClassConstPtr  _ic,
 
 short  ClassIndexList::GetClassIndex (MLClassConstPtr  c)
 {
-  int32  index = -1;
+  kkint32  index = -1;
   map<MLClassConstPtr, short>::iterator p;
   p = find (c);
   if  (p == end ())
@@ -1490,11 +1490,11 @@ void  ClassIndexList::ParseClassIndexList (const KKStr&  s)
   largestIndex = 0;
 
   bool   duplicate = false;
-  int32    index  = 0;
+  kkint32  index  = 0;
   KKStr  name   = "";
 
   VectorKKStr  pairs = s.Split (",");
-  for  (uint16 x = 0;  x < pairs.size ();  x++)
+  for  (kkuint16 x = 0;  x < pairs.size ();  x++)
   {
     KKStr  pair = pairs[x];
     name  = pair.ExtractToken2 (":");

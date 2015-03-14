@@ -46,7 +46,7 @@ namespace MLL
     ~FeatureEncoder2 ();
 
 
-    int32  CodedNumOfFeatures () const  {return codedNumOfFeatures;}
+    kkint32  CodedNumOfFeatures () const  {return codedNumOfFeatures;}
 
     CompressionStats  CompressExamples (const FeatureVectorListPtr  srcImages,
                                         FeatureVectorListPtr&       dest
@@ -60,9 +60,9 @@ namespace MLL
 
     FeatureVectorPtr  EncodeAExample (FeatureVectorPtr  src)  const;
 
-    int32             MemoryConsumedEstimated ()  const;
+    kkint32           MemoryConsumedEstimated ()  const;
 
-    int32             NumEncodedFeatures ()  const;
+    kkint32           NumEncodedFeatures ()  const;
 
     void              ReadXML (istream&  i);
 
@@ -80,32 +80,32 @@ namespace MLL
     void   ZeroNominalCounters ();
     void   DestroyNominalCounters ();
 
-    void   IncrementNominalCounters (uint32 feature_num, 
-                                     int32  value
+    void   IncrementNominalCounters (kkuint32 feature_num, 
+                                     kkint32  value
                                     );
 
     KKStr      BitReductionByFeature (VectorInt&  bitsToReduceByFeature);
     VectorInt  DeriveBitReductionPlain (const FeatureVectorList&  examples);
     VectorInt  DeriveBitReductionForEachFeatureFromSpecifoedParameter ();
     VectorInt  DeriveBitReductionForEachFeatureByVariance (const FeatureVectorList&  examples,  KKStr&  unBalFeatures);
-    int32      NominalFeatureAverage (uint32 feature_num);
+    kkint32    NominalFeatureAverage (kkuint32 feature_num);
 
 
     const AttributeTypeVector&        attributeVector;
-    int32*                            cardinalityDest;
+    kkint32*                            cardinalityDest;
     const VectorInt&                  cardinalityVector;   /**< Will not own, passed in by creator. */
-    int32                             codedNumOfFeatures;
+    kkint32                           codedNumOfFeatures;
     ModelParam::CompressionMethodType compressionMethod;
-    int32*                            destFeatureNums;
+    kkint32*                            destFeatureNums;
     FeWhatToDoPtr                     destWhatToDo;
     FileDescPtr                       encodedFileDesc;
     ModelParam::EncodingMethodType    encodingMethod;
     FileDescPtr                       fileDesc;
     RunLog&                           log;
-    int32**                           nominal_counters;
-    int32                             nominalCountersSize;
-    int32                             numOfFeatures;
-    int32*                            srcFeatureNums;
+    kkint32**                           nominal_counters;
+    kkint32                           nominalCountersSize;
+    kkint32                           numOfFeatures;
+    kkint32*                            srcFeatureNums;
     const ModelParam&                 param;
 
     struct  FeatureVar2;

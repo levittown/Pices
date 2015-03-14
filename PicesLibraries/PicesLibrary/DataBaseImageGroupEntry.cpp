@@ -11,9 +11,9 @@
 
 using namespace std;
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "RunLog.h"
-using namespace KKU;
+using namespace KKB;
 
 #include "DataBaseImageGroupEntry.h"
 #include "DataBaseImage.h"
@@ -28,7 +28,7 @@ DataBaseImageGroupEntry::DataBaseImageGroupEntry (const DataBaseImageGroupEntry&
 }
 
 
-DataBaseImageGroupEntry::DataBaseImageGroupEntry (int32           _imageGroupId,
+DataBaseImageGroupEntry::DataBaseImageGroupEntry (kkint32         _imageGroupId,
                                                   const KKStr&  _imageFileName
                                                  ):
   imageGroupId  (_imageGroupId),
@@ -57,7 +57,7 @@ DataBaseImageGroupEntryList::DataBaseImageGroupEntryList (const  DataBaseImageGr
 
 
 
-DataBaseImageGroupEntryList::DataBaseImageGroupEntryList (int32                         groupId,
+DataBaseImageGroupEntryList::DataBaseImageGroupEntryList (kkint32                       groupId,
                                                           const DataBaseImageListPtr  images
                                                          ):
   KKQueue<DataBaseImageGroupEntry> (true)

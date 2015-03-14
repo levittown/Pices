@@ -8,10 +8,10 @@
 #include  "MemoryDebug.h"
 
 using namespace std;
-#include  "BasicTypes.h"
-#include  "Str.h"
+#include  "KKBaseTypes.h"
+#include  "KKStr.h"
 
-using namespace KKU;
+using namespace KKB;
 
 
 
@@ -25,7 +25,7 @@ using namespace  SipperHardware;
 InstrumentDataGPS::InstrumentDataGPS (InstrumentDataManagerPtr _manager,
                                       const KKStr&            _reportDir,
                                       bool                     _text,
-                                      int32                    _instrumentId
+                                      kkint32                  _instrumentId
                                      ):
 
     InstrumentDataReport (_manager, _reportDir, _text, _instrumentId, false),
@@ -54,7 +54,7 @@ void  InstrumentDataGPS::ParseDegreeMinutesStr (const KKStr&  str,
   degrees = 0.0;
   minutes = 0.0;
 
-  int32 x = str.LocateCharacter ('.');
+  kkint32 x = str.LocateCharacter ('.');
   if  (x < 0)
     return;
 
@@ -113,7 +113,7 @@ void  InstrumentDataGPS::ProcessNMEAInfo (const KKStr& _str)
 
 
 
-void  InstrumentDataGPS::ReportInstrumentData (uint32 curScanLine,
+void  InstrumentDataGPS::ReportInstrumentData (kkuint32 curScanLine,
                                                uchar  sensorData
                                               )
 {
@@ -129,7 +129,7 @@ void  InstrumentDataGPS::ReportInstrumentData (uint32 curScanLine,
 
   if  (curTextLine.Len () > 5000)
   {
-    // This line is way too int32;  Something has gone wrong.
+    // This line is way too kkint32;  Something has gone wrong.
     // we will break it hear for now.
     report << curTextLineStartScanLine << "\t" << curTextLine << endl;
     lastTextLine = curTextLine;

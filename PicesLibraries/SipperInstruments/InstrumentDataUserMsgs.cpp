@@ -10,9 +10,9 @@
 
 using namespace std;
 
-#include  "BasicTypes.h"
-#include  "Str.h"
-using namespace KKU;
+#include  "KKBaseTypes.h"
+#include  "KKStr.h"
+using namespace KKB;
 
 
 #include  "InstrumentDataUserMsgs.h"
@@ -22,7 +22,7 @@ using namespace SipperHardware;
 InstrumentDataUserMsgs::InstrumentDataUserMsgs (InstrumentDataManagerPtr _manager,
                                                 const KKStr&            _reportDir,
                                                 bool                     _text,
-                                                int32                    _instrumentId
+                                                kkint32                  _instrumentId
                                                ):
 
     InstrumentDataReport     (_manager, _reportDir, _text, _instrumentId, false),
@@ -45,7 +45,7 @@ InstrumentDataUserMsgs::~InstrumentDataUserMsgs ()
 
 
 
-void  InstrumentDataUserMsgs::ReportInstrumentData (uint32 curScanLine,
+void  InstrumentDataUserMsgs::ReportInstrumentData (kkuint32 curScanLine,
                                                     uchar  sensorData
                                                    )
 {

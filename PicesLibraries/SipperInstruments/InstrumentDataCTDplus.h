@@ -1,8 +1,8 @@
 #ifndef  _INSTRUMENTDATACTDPLUS_
 #define  _INSTRUMENTDATACTDPLUS_
 
-#include  "Str.h"
-using namespace KKU;
+#include  "KKStr.h"
+using namespace KKB;
 
 #include  "InstrumentDataReport.h"
 
@@ -18,7 +18,7 @@ namespace  SipperHardware
     InstrumentDataCTDplus (InstrumentDataManagerPtr _manager,
                            const KKStr&             _reportDir,
                            bool                     _text,
-                           int32                    _instrumentId
+                           kkint32                  _instrumentId
                           );
 
     virtual
@@ -26,14 +26,14 @@ namespace  SipperHardware
 
 
     virtual  
-      void  ReportInstrumentData (uint32 curScanLine,
+      void  ReportInstrumentData (kkuint32 curScanLine,
                                   uchar  sensorData
                                  );
   
   private:
     void  AssignCtdExternalInstruments ();
   
-    int32 LocateAMonthNameStr (const KKStr& str);
+    kkint32 LocateAMonthNameStr (const KKStr& str);
   
     void  ParseTxtBlock (KKStr&  block);
   
@@ -45,7 +45,7 @@ namespace  SipperHardware
     KKStr   ctdExt3Code;
   
     KKStr   curTextLine;
-    int32   curTextLineStartScanLine;
+    kkint32 curTextLineStartScanLine;
     KKStr   lastTextLine;
     char    prevEolChar;
   };

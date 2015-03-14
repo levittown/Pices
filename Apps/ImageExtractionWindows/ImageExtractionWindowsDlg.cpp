@@ -14,12 +14,12 @@
 #include  <string>
 
 #include  "MemoryDebug.h"
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 
 typedef wchar_t WCHAR;
 
 using namespace  std;
-using namespace  KKU;
+using namespace  KKB;
 
 #include "ClassStatistic.h"
 #include "OSservices.h"
@@ -440,9 +440,9 @@ void  CImageExtractionWindowsDlg::OnTimerUpdateClassStats (const ClassStatisticL
     ClassStatisticPtr  stat = *idx;
 
     const char*  name = stat->MLClass ()->Name ().Str ();
-    KKU::uint  count = stat->Count ();
+    KKB::uint  count = stat->Count ();
 
-    KKU::KKStr countStr = StrFormatInt (count, "ZZZ,ZZZ,ZZ0");
+    KKB::KKStr countStr = StrFormatInt (count, "ZZZ,ZZZ,ZZ0");
     const char*  countCstr = countStr.c_str ();
 
     switch  (classIDX)
@@ -522,7 +522,7 @@ void  CImageExtractionWindowsDlg::OnTimerSingleThreaded ()
     DateTime now = osGetLocalDateTime ();
     DateTime elaspedTime = now - cancelRequestStartTime;
 
-    uint64  secsWeHaveBeenWaitingForCancel = elaspedTime.Seconds ();
+    kkuint64  secsWeHaveBeenWaitingForCancel = elaspedTime.Seconds ();
     if  (secsWeHaveBeenWaitingForCancel > 120)
     {
       // We have waited long enough;  we are just going to kill the thread.
@@ -576,7 +576,7 @@ void  CImageExtractionWindowsDlg::OnTimerMultiThreaded ()
     DateTime now = osGetLocalDateTime ();
     DateTime elaspedTime = now - cancelRequestStartTime;
 
-    uint64  secsWeHaveBeenWaitingForCancel = elaspedTime.Seconds ();
+    kkuint64  secsWeHaveBeenWaitingForCancel = elaspedTime.Seconds ();
     if  (secsWeHaveBeenWaitingForCancel > 300)
     {
       // We have waited long enough;  we are just going to kill the thread.
@@ -637,7 +637,7 @@ void  CImageExtractionWindowsDlg::ManageImageExtractionMultiThreaded ()
   bool  successful = true;
   {
     successful = true;
-    int32  numberOfProcessors = osGetNumberOfProcessors ();
+    kkint32  numberOfProcessors = osGetNumberOfProcessors ();
     if  (numberOfProcessors < 1)
       numberOfProcessors = 1;
 

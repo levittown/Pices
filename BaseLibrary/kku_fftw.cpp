@@ -15,16 +15,16 @@ using namespace std;
 #if  defined(FFTW_AVAILABLE)
 #endif
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "GoalKeeper.h"
 #include "kku_fftw.h"
-using namespace KKU;
+using namespace KKB;
 
 
 /*
-fftw_plan_class::fftw_plan_class (int32           _n,
+fftw_plan_class::fftw_plan_class (kkint32         _n,
                                   fftw_direction  _dir,
-                                  int32           _flags
+                                  kkint32         _flags
                                  ):
    n     (_n),
    dir   (_dir),
@@ -34,10 +34,10 @@ fftw_plan_class::fftw_plan_class (int32           _n,
 
 
 
-fftwnd_plan_class::fftwnd_plan_class (int32           _nx,
-                                      int32           _ny, 
+fftwnd_plan_class::fftwnd_plan_class (kkint32         _nx,
+                                      kkint32         _ny, 
                                       fftw_direction  _dir,
-		                                  int32           _flags
+		                                  kkint32         _flags
                                      ):
    nx    (_nx),
    ny    (_ny),
@@ -48,9 +48,9 @@ fftwnd_plan_class::fftwnd_plan_class (int32           _nx,
 
 
 
-fftw_plan  KKU::fftw_create_plan (int32           n, 
+fftw_plan  KKB::fftw_create_plan (kkint32         n, 
                                   fftw_direction  dir, 
-                                  int32           flags
+                                  kkint32         flags
                                  )
 {
   return  new fftw_plan_class (n, dir, flags);
@@ -58,7 +58,7 @@ fftw_plan  KKU::fftw_create_plan (int32           n,
 
 
 
-void  KKU::fftw_destroy_plan (fftw_plan  plan)
+void  KKB::fftw_destroy_plan (fftw_plan  plan)
 {
   delete  plan;
   plan = NULL;
@@ -66,10 +66,10 @@ void  KKU::fftw_destroy_plan (fftw_plan  plan)
 
 
 
-fftwnd_plan  KKU::fftw2d_create_plan (int32           nx, 
-                                      int32           ny, 
+fftwnd_plan  KKB::fftw2d_create_plan (kkint32         nx, 
+                                      kkint32         ny, 
                                       fftw_direction  dir,
-				                              int32           flags
+				                              kkint32         flags
                                      )
 {
   return new fftwnd_plan_class (nx, ny, dir, flags);
@@ -77,14 +77,14 @@ fftwnd_plan  KKU::fftw2d_create_plan (int32           nx,
 
 
 
-void  KKU::fftwnd_destroy_plan (fftwnd_plan  plan)
+void  KKB::fftwnd_destroy_plan (fftwnd_plan  plan)
 {
   delete  plan;
 }
 
 
 
-void  KKU::fftw_one (fftw_plan      plan, 
+void  KKB::fftw_one (fftw_plan      plan, 
                      fftw_complex*  in, 
                      fftw_complex*  out
                     )
@@ -93,7 +93,7 @@ void  KKU::fftw_one (fftw_plan      plan,
     << "fftw_one    ****ERROR***    This function is not implemented."  << endl
     << endl;
 
-  for  (int32  x = 0;  x < plan->N ();  ++x)
+  for  (kkint32  x = 0;  x < plan->N ();  ++x)
   {
     out[x].im = 0.0;
     out[x].re = 0.0;
@@ -103,7 +103,7 @@ void  KKU::fftw_one (fftw_plan      plan,
 
 
 
-void  KKU::fftwnd_one (fftwnd_plan    p, 
+void  KKB::fftwnd_one (fftwnd_plan    p, 
                        fftw_complex*  in, 
                        fftw_complex*  out
                       )
@@ -112,9 +112,9 @@ void  KKU::fftwnd_one (fftwnd_plan    p,
     << "fftw_one    ****ERROR***    This function is not implemented."  << endl
     << endl;
 
-  int32  totCells = p->NX () * p->NY ();
+  kkint32  totCells = p->NX () * p->NY ();
 
-  for  (int32  x = 0;  x < totCells;  ++x)
+  for  (kkint32  x = 0;  x < totCells;  ++x)
   {
     out[x].im = 0.0;
     out[x].re = 0.0;
@@ -140,18 +140,18 @@ void  SWAP (float& a,  float& b)
 //data -> float array that represent the array of complex samples
 //number_of_complex_samples -> number of samples (N^2 order number) 
 //isign -> 1 to calculate FFT and -1 to calculate Reverse FFT
-void  KKU::FFT (float  data[], 
-                uint32 number_of_complex_samples, 
-                int32  isign
+void  KKB::FFT (float  data[], 
+                kkuint32 number_of_complex_samples, 
+                kkint32  isign
                )
 {
   //variables for trigonometric recurrences
-  uint32  n = 0;
-  uint32  mmax = 0;
-  uint32  m = 0;
-  uint32  j = 0;
-  uint32  istep = 0; 
-  uint32  i = 0;
+  kkuint32  n = 0;
+  kkuint32  mmax = 0;
+  kkuint32  m = 0;
+  kkuint32  j = 0;
+  kkuint32  istep = 0; 
+  kkuint32  i = 0;
 
   float  wtemp  = 0.0;
   float  wr     = 0.0;
@@ -247,7 +247,7 @@ void  KKU::FFT (float  data[],
 }  /* FFT */
 
 
-float  KKU::Log2 (float x)
+float  KKB::Log2 (float x)
 {
   return  log10 (x) / log10 (2.0f);
 }
@@ -256,11 +256,11 @@ float  KKU::Log2 (float x)
 
 
 
-volatile KKU::GoalKeeperPtr   fftwGoalKeeper = NULL;
+volatile KKB::GoalKeeperPtr   fftwGoalKeeper = NULL;
 
 #if  defined(FFTW_AVAILABLE)
-fftwf_plan  KKU::fftwCreateTwoDPlan (int32           height,
-                                     int32           width,
+fftwf_plan  KKB::fftwCreateTwoDPlan (kkint32         height,
+                                     kkint32         width,
                                      fftwf_complex*  src,
                                      fftwf_complex*  dest,
                                      int             sign,
@@ -280,7 +280,7 @@ fftwf_plan  KKU::fftwCreateTwoDPlan (int32           height,
 
 
 
-void  KKU::fftwDestroyPlan (fftwf_plan&  plan)
+void  KKB::fftwDestroyPlan (fftwf_plan&  plan)
 {
   if  (!fftwGoalKeeper)
     GoalKeeper::Create ("fftwGoalKeeper", fftwGoalKeeper);
@@ -293,7 +293,7 @@ void  KKU::fftwDestroyPlan (fftwf_plan&  plan)
 
 
 
-fftwf_plan  KKU::fftwCreateOneDPlan (int32           len,
+fftwf_plan  KKB::fftwCreateOneDPlan (kkint32         len,
                                      fftwf_complex*  src,
                                      fftwf_complex*  dest,
                                      int             sign,

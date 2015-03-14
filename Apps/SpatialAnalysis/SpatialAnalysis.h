@@ -6,7 +6,7 @@
 #include "RandomNumGenerator.h"
 #include "RunLog.h"
 #include "SipperFile.h"
-#include "Str.h"
+#include "KKStr.h"
 
 
 
@@ -29,7 +29,7 @@ typedef  MLClassConstList*  MLClassConstListPtr;
 class  SpatialAnalysis:  public PicesApplication
 {
 public:
-  typedef  KKU::uint  uint;
+  typedef  KKB::uint  uint;
 
   typedef  enum  {NullStat, BQVStat, Davis92Stat, PQVStat, TTLQCStat}  StatType;
 
@@ -40,7 +40,7 @@ public:
 	virtual const char* ApplicationName ()  const  {return  "SpatialAnalysis";}
 
   virtual
-  void  InitalizeApplication (int32   argc,
+  void  InitalizeApplication (kkint32 argc,
                               char**  argv
                              );
 

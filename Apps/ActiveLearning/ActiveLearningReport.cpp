@@ -8,15 +8,15 @@
 
 
 #include  "MemoryDebug.h"
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 
 using namespace std;
-using namespace KKU;
+using namespace KKB;
 
 #include <sys/types.h>
 
 #include  "KKQueue.h"
-#include  "Str.h"
+#include  "KKStr.h"
 
 
 #include  "ActiveLearningReport.h"

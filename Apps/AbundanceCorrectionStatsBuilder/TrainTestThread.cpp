@@ -16,7 +16,7 @@ using namespace std;
 #include <windows.h>
 
 #include "MsgQueue.h"
-using namespace KKU;
+using namespace KKB;
 
 #include "Classifier2.h"
 #include "ConfusionMatrix2.h"
@@ -304,12 +304,12 @@ void  TrainTestThread::Run ()
 
     MLClassConstPtr  predClass1      = NULL;
     MLClassConstPtr  predClass2      = NULL;
-    int32               predClass1Votes = 0;
-    int32               predClass2Votes = 0;
+    kkint32             predClass1Votes = 0;
+    kkint32             predClass2Votes = 0;
     double              knownClassProb  = 0.0;
     double              predClass1Prob  = 0.0; 
     double              predClass2Prob  = 0.0;
-    int32               numOfWinners    = 0;
+    kkint32             numOfWinners    = 0;
     double              breakTie        = 0.0;
     double              compact         = 0.0;
 

@@ -9,7 +9,7 @@
 #include "RandomNumGenerator.h"
 #include "RunLog.h"
 #include "SipperFile.h"
-#include "Str.h"
+#include "KKStr.h"
 
 
 
@@ -17,10 +17,10 @@
 class  MergeFeatureFiles:  public PicesApplication
 {
 public:
-  typedef  KKU::uchar  uchar;
-  typedef  KKU::uint   uint;
-  typedef  KKU::ulong  ulong;
-  typedef  KKU::ushort ushort;
+  typedef  KKB::uchar  uchar;
+  typedef  KKB::uint   uint;
+  typedef  KKB::ulong  ulong;
+  typedef  KKB::ushort ushort;
 
   MergeFeatureFiles ();
 
@@ -30,7 +30,7 @@ public:
   const char*  ApplicationName () const  {return  "MergeFeatureFiles";}
 
   virtual
-  void  InitalizeApplication (int32   argc,
+  void  InitalizeApplication (kkint32 argc,
                               char**  argv
                              );
 

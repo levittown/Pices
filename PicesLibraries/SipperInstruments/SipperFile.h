@@ -14,10 +14,10 @@ namespace  SipperHardware
   public:
     typedef  SipperFile*  SipperFilePtr;
 
-    typedef  KKU::int32   int32;
-    typedef  KKU::uint32  uint32;
-    typedef  KKU::int64   int64;
-    typedef  KKU::uint64  uint64;
+    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::kkuint32  kkuint32;
+    typedef  KKB::kkint64 kkint64;
+    typedef  KKB::kkuint64  kkuint64;
 
     SipperFile (const KKStr&  _sipperFileName);
 
@@ -28,7 +28,7 @@ namespace  SipperHardware
     void   AssignCtdExternalInstruments (const KKStr&   rootName);
   
     // Access Methods
-    int32             SipperFileId   () const  {return sipperFileId;}
+    kkint32           SipperFileId   () const  {return sipperFileId;}
   
     const KKStr&      SipperFileName () const  {return  sipperFileName;}
     const KKStr&      CruiseName     () const  {return  cruiseName;}
@@ -38,7 +38,7 @@ namespace  SipperHardware
     double            Latitude       () const  {return  latitude;}
     double            Longitude      () const  {return  longitude;}
   
-    const KKU::DateTime&   DateTimeStart  () const  {return  dateTimeStart;}
+    const KKB::DateTime&   DateTimeStart  () const  {return  dateTimeStart;}
      
     const InstrumentPtr  Sp0         () const {return  sp0;}
     const InstrumentPtr  Sp1         () const {return  sp1;}
@@ -50,23 +50,23 @@ namespace  SipperHardware
     const KKStr&      CtdExt2        () const  {return  ctdExt2;}
     const KKStr&      CtdExt3        () const  {return  ctdExt3;}
      
-    int64             SizeInBytes    () const  {return  sizeInBytes;}
-    uint32            NumScanLines   () const  {return  numScanLines;}
+    kkint64           SizeInBytes    () const  {return  sizeInBytes;}
+    kkuint32          NumScanLines   () const  {return  numScanLines;}
   
     float             ScanRate       () const  {return  scanRate;}
   
     float             Depth          () const  {return  depth;}
   
     char    ExtractionStatus        ()  const  {return  extractionStatus;}
-    uint32  ExtractionScanLineStart ()  const  {return  extractionScanLineStart;}
-    uint32  ExtractionScanLineEnd   ()  const  {return  extractionScanLineEnd;}
+    kkuint32  ExtractionScanLineStart ()  const  {return  extractionScanLineStart;}
+    kkuint32  ExtractionScanLineEnd   ()  const  {return  extractionScanLineEnd;}
 
     KKStr  Sp0ShortName  () const;
     KKStr  Sp1ShortName  () const;
     KKStr  Sp2ShortName  () const;
     KKStr  Sp3ShortName  () const;
   
-    void  SipperFileId   (int32            _sipperFileId)       {sipperFileId   = _sipperFileId;}
+    void  SipperFileId   (kkint32          _sipperFileId)       {sipperFileId   = _sipperFileId;}
     void  SipperFileName (const KKStr&     _sipperFileName)     {sipperFileName = _sipperFileName;}
     void  CruiseName     (const KKStr&     _cruiseName)         {cruiseName     = _cruiseName;}
     void  StationName    (const KKStr&     _stationName)        {stationName    = _stationName;}
@@ -74,7 +74,7 @@ namespace  SipperHardware
     void  Description    (const KKStr&     _description)        {description    = _description;}
     void  Latitude       (double           _latitude)           {latitude       = _latitude;}
     void  Longitude      (double           _longitde)          {longitude       = _longitde;}
-    void  DateTimeStart  (const KKU::DateTime&  _dateTimeStart) {dateTimeStart  = _dateTimeStart;}
+    void  DateTimeStart  (const KKB::DateTime&  _dateTimeStart) {dateTimeStart  = _dateTimeStart;}
      
     void  Sp0            (const InstrumentPtr  _sp0)          {sp0            = _sp0;}
     void  Sp1            (const InstrumentPtr  _sp1)          {sp1            = _sp1;}
@@ -86,16 +86,16 @@ namespace  SipperHardware
     void  CtdExt2        (const KKStr&     _ctdExt2)          {ctdExt2        = _ctdExt2;}
     void  CtdExt3        (const KKStr&     _ctdExt3)          {ctdExt3        = _ctdExt3;}
      
-    void  SizeInBytes    (int64            _sizeInBytes)      {sizeInBytes    = _sizeInBytes;}
-    void  NumScanLines   (uint32           _numScanLines)     {numScanLines   = _numScanLines;}
+    void  SizeInBytes    (kkint64          _sizeInBytes)      {sizeInBytes    = _sizeInBytes;}
+    void  NumScanLines   (kkuint32         _numScanLines)     {numScanLines   = _numScanLines;}
   
     void  ScanRate       (float            _scanRate)         {scanRate       = _scanRate;}
   
     void  Depth          (float            _depth)            {depth          = _depth;}
   
     void  ExtractionStatus        (char   _extractionStatus)        {extractionStatus        = _extractionStatus;}
-    void  ExtractionScanLineStart (uint32 _extractionScanLineStart) {extractionScanLineStart = _extractionScanLineStart;}
-    void  ExtractionScanLineEnd   (uint32 _extractionScanLineEnd)   {extractionScanLineEnd   = _extractionScanLineEnd;}
+    void  ExtractionScanLineStart (kkuint32 _extractionScanLineStart) {extractionScanLineStart = _extractionScanLineStart;}
+    void  ExtractionScanLineEnd   (kkuint32 _extractionScanLineEnd)   {extractionScanLineEnd   = _extractionScanLineEnd;}
 
     KKStr   ToTabDelStr ()  const;
     void    ParseTabDelStr (KKStrParser&  parser);
@@ -105,7 +105,7 @@ namespace  SipperHardware
      void   AssignCtdExternalInstrumentsETP2007 (const KKStr&   rootName);
      void   AssignCtdExternalInstrumentsETP2008 (const KKStr&   rootName);
 
-     int32          sipperFileId;
+     kkint32        sipperFileId;
      KKStr          sipperFileName;
      KKStr          cruiseName;
      KKStr          stationName;
@@ -113,7 +113,7 @@ namespace  SipperHardware
      KKStr          description;
      double         latitude;
      double         longitude;
-     KKU::DateTime  dateTimeStart;
+     KKB::DateTime  dateTimeStart;
    
      InstrumentPtr  sp0;
      InstrumentPtr  sp1;
@@ -125,14 +125,14 @@ namespace  SipperHardware
      KKStr          ctdExt2;
      KKStr          ctdExt3;
      
-     int64          sizeInBytes;
-     int32          numScanLines;
+     kkint64        sizeInBytes;
+     kkint32        numScanLines;
   
      float          scanRate;                //  Cammera Scan Rate  Lines/Sec
      float          depth;                   //  Meters
      char           extractionStatus;        //  '0=Not Extracted, 1=Extract, 2=Extracting, 3=Extracted'
-     uint32         extractionScanLineStart;
-     uint32         extractionScanLineEnd;
+     kkuint32       extractionScanLineStart;
+     kkuint32       extractionScanLineEnd;
     };
 
 

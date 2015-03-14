@@ -13,7 +13,7 @@
 //*********************************************************************
 
 //#include  "svm.h"
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "SVMparam.h"
 #include "ChainHash.h"
 #include "FeatureVector.h"
@@ -27,8 +27,8 @@ namespace MLL
     KKStr   bitReductionByFeature;
     float   compression_ratio;
     double  elapsed_cpu_time;
-    int32   num_images_after;
-    int32   num_images_before;
+    kkint32 num_images_after;
+    kkint32 num_images_before;
     KKStr   unBalFeatures;
 
     CompressionStats ();
@@ -36,7 +36,7 @@ namespace MLL
     CompressionStats (KKStr  s);
     CompressionStats&  operator=  (const CompressionStats& right);
     CompressionStats&  operator+= (const CompressionStats& right);
-    CompressionStats&  operator/= (int32 divisor);
+    CompressionStats&  operator/= (kkint32 divisor);
     KKStr  ToTabDelString ()  const;
     void    UpdateFromTabDelStr (const KKStr&  _str);
 
@@ -57,8 +57,8 @@ namespace MLL
   class  BitReduction
   {
   public:
-    typedef  KKU::uint32  uint32;
-    typedef  KKU::ulong   ulong;
+    typedef  KKB::kkuint32  kkuint32;
+    typedef  KKB::ulong   ulong;
 
     BitReduction (const SVMparam&        _param,
                   FileDescPtr            _fileDesc,
@@ -70,7 +70,7 @@ namespace MLL
     ~BitReduction ();
 
     float  CompressOneFeature (VectorInt32&  featureData,
-                               int32         bits
+                               kkint32       bits
                               );
 
     /**
@@ -136,24 +136,24 @@ namespace MLL
     void  DestroyNominalCounters   ();
     void  HistogramFeatures        (const FeatureVectorList&  examples);
     void  HistogramSave            (const KKStr&  fileName);
-    void  IncrementNominalCounters (int32 feature_num, int32 value);
-    int32 NominalFeatureAverage    (int32 feature_num);
+    void  IncrementNominalCounters (kkint32 feature_num, kkint32 value);
+    kkint32 NominalFeatureAverage    (kkint32 feature_num);
     void  SetupNominalCounters     ();
     void  ZeroNominalCounters      ();
 
-    int32                       bitsToReduceBy;
+    kkint32                     bitsToReduceBy;
     VectorInt32                 bitsToReduceByFeature;
     VectorInt32                 cardinality_table;
     SVM_EncodingMethod          encodingMethod;
     const FileDescPtr           fileDesc;
-    int32                       hashSize;
-    int32**                     histogram;
-    int32*                      histogramBucketStart;
-    int32                       histogramNumOfBuckets;
-    int32                       histogramZeroIdx;
+    kkint32                     hashSize;
+    kkint32**                     histogram;
+    kkint32*                      histogramBucketStart;
+    kkint32                     histogramNumOfBuckets;
+    kkint32                     histogramZeroIdx;
     vector< vector <KKStr > >*  exampleGroups;
-    int32                       nodeLength;
-    int32**                     nominal_counters;
+    kkint32                     nodeLength;
+    kkint32**                     nominal_counters;
     SVMparam                    param;
     RunLog&                     log;
     FeatureNumList              selectedFeatures;

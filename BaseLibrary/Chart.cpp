@@ -1,6 +1,6 @@
 /* Chart.cpp -- Used to build Charts from data-series.
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #include  "FirstIncludes.h"
 
@@ -24,7 +24,7 @@ using namespace std;
 #include  "ImageIO.h"
 
 
-namespace  KKU
+namespace  KKB
 {
   class  Chart::PlotPoint
   {
@@ -37,8 +37,8 @@ namespace  KKU
     {}
 
 
-    PlotPoint (int32 _xVal,
-               int32 _yVal
+    PlotPoint (kkint32 _xVal,
+               kkint32 _yVal
               ):
       xVal (double (_xVal)),
       yVal (double (_yVal))
@@ -68,7 +68,7 @@ namespace  KKU
                      FFLOAT  _yVal
                     );
 
-    int32 Size ()  {return  (int32)points.size ();}
+    kkint32 Size ()  {return  (kkint32)points.size ();}
 
 
   private:
@@ -109,11 +109,11 @@ namespace  KKU
     KKStr  name;
     double  xVal;
   };
-}  /* KKU */
+}  /* KKB */
 
 
 
-using namespace KKU;
+using namespace KKB;
 
 
 
@@ -139,7 +139,7 @@ void  Chart::Series::AddAValue (FFLOAT  _xVal,
 
 
 
-KKU::Chart::Chart (KKStr  _title):
+KKB::Chart::Chart (KKStr  _title):
   title      (_title),
   minXValue  (FFLOAT_MAX),
   maxXValue  (FFLOAT_MIN),
@@ -152,9 +152,9 @@ KKU::Chart::Chart (KKStr  _title):
 }
 
 
-KKU::Chart::~Chart ()
+KKB::Chart::~Chart ()
 {
-  for  (uint32 x = 0;  x < series.size ();  x++)
+  for  (kkuint32 x = 0;  x < series.size ();  x++)
   {
     delete  series[x];
     series[x] = NULL;
@@ -164,7 +164,7 @@ KKU::Chart::~Chart ()
 
 
 
-void  KKU::Chart::AddAValue (uint32  _seriesIDX,
+void  KKB::Chart::AddAValue (kkuint32  _seriesIDX,
                              FFLOAT  _xVal,
                              FFLOAT  _yVal
                             )
@@ -221,11 +221,11 @@ PixelValue  defaultColors[] = {PixelValue (255,   0,   0),  // Red
 
 static
 const
-int32  numOfDefinedDefaultColors = 14;
+kkint32  numOfDefinedDefaultColors = 14;
 
 
 
-void  KKU::Chart::DefineASeries (KKStr  _name)
+void  KKB::Chart::DefineASeries (KKStr  _name)
 {
   series.push_back (new Series (_name, defaultColors[numOfDefaultColorsUsed % numOfDefinedDefaultColors]));
   numOfDefaultColorsUsed++;
@@ -233,7 +233,7 @@ void  KKU::Chart::DefineASeries (KKStr  _name)
 
 
 
-void  KKU::Chart::DefineASeries (KKStr      _name,
+void  KKB::Chart::DefineASeries (KKStr      _name,
                                  PixelValue  _color
                                  )
 {
@@ -243,7 +243,7 @@ void  KKU::Chart::DefineASeries (KKStr      _name,
 
 
 
-void  KKU::Chart::DefineAXLabel (FFLOAT  _xVal,
+void  KKB::Chart::DefineAXLabel (FFLOAT  _xVal,
                                  KKStr  _name
                                 )
 {
@@ -257,8 +257,8 @@ void  KKU::Chart::DefineAXLabel (FFLOAT  _xVal,
 
 Point  Chart::RasterCoordinates (const PlotPoint&  plotPoint)
 {
-  int32  x = (int32)(((double)plotPoint.XVal () - xMin) * xScale + (double)xOffset + 0.5);
-  int32  y = (int32)(((double)plotPoint.YVal () - yMin) * yScale + (double)yOffset + 0.5);
+  kkint32  x = (kkint32)(((double)plotPoint.XVal () - xMin) * xScale + (double)xOffset + 0.5);
+  kkint32  y = (kkint32)(((double)plotPoint.YVal () - yMin) * yScale + (double)yOffset + 0.5);
   return  Point (y, x);
 }    /* ConvertToRasterCoordinates */                                    
       
@@ -309,7 +309,7 @@ RasterPtr  Chart::CreateRaster ()
 
     yIncrement = floor (yRange / sigTensPlace) * sigTensPlace;
 
-    int32  numOfYIncremets = (int32)((yRange / yIncrement) + 0.5);
+    kkint32  numOfYIncremets = (kkint32)((yRange / yIncrement) + 0.5);
 
     if  (numOfYIncremets < 2)
     {
@@ -336,8 +336,8 @@ RasterPtr  Chart::CreateRaster ()
   }
 
 
-  int32  height = chartHeight + 2 * yOffset;
-  int32  width  = chartWidth  + 2 * xOffset;
+  kkint32  height = chartHeight + 2 * yOffset;
+  kkint32  width  = chartWidth  + 2 * xOffset;
 
   RasterPtr  chart = new Raster (height, width, true);
 
@@ -367,8 +367,8 @@ RasterPtr  Chart::CreateRaster ()
   if  ((yMin < 0.0)  &&  (yMax > 0.0))
   {
     // Draw a line for y=0.0
-    chart->DrawLine (RasterCoordinates (PlotPoint (double ((int32)(xMin + 0.5)),  0.0)),
-                     RasterCoordinates (PlotPoint (double ((int32)(xMax + 0.5)),  0.0)),
+    chart->DrawLine (RasterCoordinates (PlotPoint (double ((kkint32)(xMin + 0.5)),  0.0)),
+                     RasterCoordinates (PlotPoint (double ((kkint32)(xMax + 0.5)),  0.0)),
                      zeroAxisColor
                     );
 
@@ -379,8 +379,8 @@ RasterPtr  Chart::CreateRaster ()
   if  ((xMin < 0.0)  &&  (xMax > 0.0))
   {
     // Draw a line for x=0.0
-    chart->DrawLine (RasterCoordinates (PlotPoint (0.0,  double ((int32)(yMin + 0.5)))),
-                     RasterCoordinates (PlotPoint (0.0,  double ((int32)(yMax + 0.5)))),
+    chart->DrawLine (RasterCoordinates (PlotPoint (0.0,  double ((kkint32)(yMin + 0.5)))),
+                     RasterCoordinates (PlotPoint (0.0,  double ((kkint32)(yMax + 0.5)))),
                      zeroAxisColor
                     );
 
@@ -391,7 +391,7 @@ RasterPtr  Chart::CreateRaster ()
   {
     // Lets plot the individule series
 
-    for  (uint32 seriesIDX = 0;  seriesIDX < series.size ();  seriesIDX++)
+    for  (kkuint32 seriesIDX = 0;  seriesIDX < series.size ();  seriesIDX++)
     {
       SeriesPtr  s = series[seriesIDX];
 
@@ -402,7 +402,7 @@ RasterPtr  Chart::CreateRaster ()
       
       chart->DrawDot (RasterCoordinates (lastPoint), s->color, 3);
 
-      for  (uint32 plotIDX = 1;  plotIDX < s->points.size ();  plotIDX++)
+      for  (kkuint32 plotIDX = 1;  plotIDX < s->points.size ();  plotIDX++)
       {
         PlotPoint  point (s->points[plotIDX]);
 
@@ -434,9 +434,9 @@ void  Chart::SaveAsImage (KKStr  _fileName)
 
 
 
-int32  Chart::LookUpXLableIDX (double  xVal)
+kkint32  Chart::LookUpXLableIDX (double  xVal)
 {
-  for  (uint32 x = 0;  x < xLabels.size ();  x++)
+  for  (kkuint32 x = 0;  x < xLabels.size ();  x++)
   {
     if  (xLabels[x].XVal () == xVal)
       return  x;
@@ -448,13 +448,13 @@ int32  Chart::LookUpXLableIDX (double  xVal)
 
 
 
-Chart::PlotPointPtr  Chart::LookUpPoint (int32   seriesIDX,
+Chart::PlotPointPtr  Chart::LookUpPoint (kkint32 seriesIDX,
                                          double  xVal
                                         )
 {
   Series&  s = *(series[seriesIDX]);
 
-  uint32  pIDX;
+  kkuint32  pIDX;
   for  (pIDX = 0;  pIDX <= s.points.size ();  pIDX++)
   {
     if  (s.points[pIDX].XVal () == xVal)
@@ -481,10 +481,10 @@ void  Chart::Save (KKStr  _fileName)
 
   {
     // Make sure we have a XLabel for all Points Plotted
-    for  (uint32 seriesIDX = 0;  seriesIDX < series.size ();  seriesIDX++)
+    for  (kkuint32 seriesIDX = 0;  seriesIDX < series.size ();  seriesIDX++)
     {
       SeriesPtr s = series[seriesIDX];
-      for  (uint32  plotIDX = 0;  plotIDX < s->points.size ();  plotIDX++)
+      for  (kkuint32  plotIDX = 0;  plotIDX < s->points.size ();  plotIDX++)
       {
         PlotPoint& p = s->points[plotIDX];
         if  (LookUpXLableIDX (p.XVal ()) < 0)
@@ -525,7 +525,7 @@ void  Chart::Save (KKStr  _fileName)
   {
     // Collumn Headers 
     o << "XLabel" << "\t" << "XValue"; 
-    for  (int32 seriesIDX = 0;  seriesIDX < NumOfSeries ();  seriesIDX++)
+    for  (kkint32 seriesIDX = 0;  seriesIDX < NumOfSeries ();  seriesIDX++)
     {
       o << "\t" << series[seriesIDX]->name;
     }
@@ -535,7 +535,7 @@ void  Chart::Save (KKStr  _fileName)
 
 
   {
-    uint32  x;
+    kkuint32  x;
 
     for  (x = 0;  x < xLabels.size (); x++)
     {
@@ -546,7 +546,7 @@ void  Chart::Save (KKStr  _fileName)
 
       o << xLabel.Name () << "\t" << xVal;
 
-      int32  seriesIDX = 0;
+      kkint32  seriesIDX = 0;
 
       for  (seriesIDX = 0;  seriesIDX < NumOfSeries ();  seriesIDX++)
       {

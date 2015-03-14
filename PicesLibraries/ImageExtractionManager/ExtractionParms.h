@@ -1,11 +1,11 @@
 #if  !defined(_IEM_EXTRACTIONPARMS_)
 #define  _IEM_EXTRACTIONPARMS_
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "CmdLineExpander.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 #include "SipperBuff.h"
 using namespace  SipperHardware;
@@ -32,7 +32,7 @@ namespace  ImageExtractionManager
   public:
     typedef  SipperHardware::SipperFileFormat  SipperFileFormat;
 
-    ExtractionParms (int32    argc,
+    ExtractionParms (kkint32  argc,
                      char**   argv,
                      bool     _runningAsAWindowsApp,
                      KKStr&   errorMessage,
@@ -70,7 +70,7 @@ namespace  ImageExtractionManager
     bool               Colorize                 () const  {return  colorize;}
     const KKStr&       ConfigFileName           () const  {return  configFileName;}
     const KKStr&       ConfigFileNameSpecified  () const  {return  configFileNameSpecified;}
-    uint32             ConnectedPixelDist       () const  {return  connectedPixelDist;}
+    kkuint32           ConnectedPixelDist       () const  {return  connectedPixelDist;}
     bool               CountOnly                () const  {return  countOnly;}
     DataBaseServerPtr  DataBaseServer           () const  {return  dataBaseServer;}
     KKStr              DataBaseServerDesc       () const;
@@ -79,9 +79,9 @@ namespace  ImageExtractionManager
     SipperFileFormat   FileFormat               () const  {return  fileFormat;}
     const KKStr&       FlowRateFileName         () const  {return  flowRateFileName;}
     bool               FramesOnly               () const  {return  framesOnly;}
-    uint32             ImagesPerDirectory       () const  {return  imagesPerDirectory;}
-    uint32             MinImageSize             () const  {return  minImageSize;}
-    uint32             MaxImageSize             () const  {return  maxImageSize;}
+    kkuint32           ImagesPerDirectory       () const  {return  imagesPerDirectory;}
+    kkuint32           MinImageSize             () const  {return  minImageSize;}
+    kkuint32           MaxImageSize             () const  {return  maxImageSize;}
     const KKStr&       MorphOperations          () const  {return  morphOperations;}
     bool               MultiThreaded            () const  {return  multiThreaded;}
     const KKStr&       OutputRootDir            () const  {return  outputRootDir;}
@@ -90,8 +90,8 @@ namespace  ImageExtractionManager
     bool               RefreshDataBaseImages    () const  {return  refreshDataBaseImages;}
     bool               SaveFrames               () const  {return  saveFrames;}
     bool               SaveFramesAfter          () const  {return  saveFramesAfter;}
-    uint32             ScanLineEnd              () const  {return  scanLineEnd;}
-    uint32             ScanLineStart            () const  {return  scanLineStart;}
+    kkuint32           ScanLineEnd              () const  {return  scanLineEnd;}
+    kkuint32           ScanLineStart            () const  {return  scanLineStart;}
     const KKStr&       SipperFileName           () const  {return  sipperFileName;}
     bool               UpdateDataBase           () const  {return  updateDataBase;}
 
@@ -99,13 +99,13 @@ namespace  ImageExtractionManager
     // Runtime Stats
     ClassStatisticListPtr  ClassStats      () const  {return  classStats;     }
 
-    uint64            BytesExtracted       () const  {return  bytesExtracted; }
-    uint32            LinesExtracted       () const  {return  linesExtracted; }
-    uint32            ImagesExtracted      () const  {return  imagesExtracted;}
-    uint32            ImagesWritten        () const  {return  imagesWritten;  }
-    uint32            PixelsRead           () const  {return  pixelsRead;     }
-    uint32            PixelsWritten        () const  {return  pixelsWritten;  }
-    uint64            SipperFileSize       () const  {return  sipperFileSize; }
+    kkuint64          BytesExtracted       () const  {return  bytesExtracted; }
+    kkuint32          LinesExtracted       () const  {return  linesExtracted; }
+    kkuint32          ImagesExtracted      () const  {return  imagesExtracted;}
+    kkuint32          ImagesWritten        () const  {return  imagesWritten;  }
+    kkuint32          PixelsRead           () const  {return  pixelsRead;     }
+    kkuint32          PixelsWritten        () const  {return  pixelsWritten;  }
+    kkuint64          SipperFileSize       () const  {return  sipperFileSize; }
     const KKStr&      StatusMessage        () const  {return  statusMessage;}
     KKStr&            StatusMessageField   ()        {return  statusMessage;}
 
@@ -113,20 +113,20 @@ namespace  ImageExtractionManager
 
     //  Update RunTime Stats
     void             ClassStats      (ClassStatisticListPtr  _classStats);  // Will take ownership of '_classStats'
-    uint32           IncrementImagesExtracted () {return  (++imagesExtracted);}
-    uint32           IncrementImagesWritten   () {return  (++imagesWritten);}
-    uint32           IncrementLinesExtracted  () {return  (++linesExtracted);}
+    kkuint32         IncrementImagesExtracted () {return  (++imagesExtracted);}
+    kkuint32         IncrementImagesWritten   () {return  (++imagesWritten);}
+    kkuint32         IncrementLinesExtracted  () {return  (++linesExtracted);}
 
-    void             ImagesPerDirectory       (uint32 _imagesPerDirectory)     {imagesPerDirectory = _imagesPerDirectory;}
-    void             IncrementBytesExtracted  (uint32 _bytesExtracted)         {bytesExtracted  += _bytesExtracted;}
-    void             IncrementPixelsRead      (uint32 _pixelsRead)             {pixelsRead      += _pixelsRead;}
-    void             IncrementPixelsWritten   (uint32 _pixelsWritten)          {pixelsWritten   += _pixelsWritten;}
-    void             BytesExtracted           (uint64 _bytesExtracted)         {bytesExtracted  = _bytesExtracted;}
-    void             LinesExtracted           (uint32 _linesExtracted)         {linesExtracted  = _linesExtracted;}
-    void             ImagesExtracted          (uint32 _imagesExtracted)        {imagesExtracted = _imagesExtracted;}
-    void             ImagesWritten            (uint32 _imagesWritten)          {imagesWritten   = _imagesWritten;}
-    void             PixelsRead               (uint32 _pixelsRead)             {pixelsRead      = _pixelsRead;}
-    void             PixelsWritten            (uint32 _pixelsWritten)          {pixelsWritten   = _pixelsWritten;}
+    void             ImagesPerDirectory       (kkuint32 _imagesPerDirectory)     {imagesPerDirectory = _imagesPerDirectory;}
+    void             IncrementBytesExtracted  (kkuint32 _bytesExtracted)         {bytesExtracted  += _bytesExtracted;}
+    void             IncrementPixelsRead      (kkuint32 _pixelsRead)             {pixelsRead      += _pixelsRead;}
+    void             IncrementPixelsWritten   (kkuint32 _pixelsWritten)          {pixelsWritten   += _pixelsWritten;}
+    void             BytesExtracted           (kkuint64 _bytesExtracted)         {bytesExtracted  = _bytesExtracted;}
+    void             LinesExtracted           (kkuint32 _linesExtracted)         {linesExtracted  = _linesExtracted;}
+    void             ImagesExtracted          (kkuint32 _imagesExtracted)        {imagesExtracted = _imagesExtracted;}
+    void             ImagesWritten            (kkuint32 _imagesWritten)          {imagesWritten   = _imagesWritten;}
+    void             PixelsRead               (kkuint32 _pixelsRead)             {pixelsRead      = _pixelsRead;}
+    void             PixelsWritten            (kkuint32 _pixelsWritten)          {pixelsWritten   = _pixelsWritten;}
     void             StatusMessage            (const KKStr& _statusMessage)    {statusMessage   = _statusMessage;}
 
 
@@ -137,7 +137,7 @@ namespace  ImageExtractionManager
     bool               colorize;
     KKStr              configFileName;
     KKStr              configFileNameSpecified;
-    uint32             connectedPixelDist;
+    kkuint32           connectedPixelDist;
     bool               countOnly;
     DataBaseServerPtr  dataBaseServer;
     bool               doneExecuting;
@@ -145,9 +145,9 @@ namespace  ImageExtractionManager
     SipperFileFormat   fileFormat;
     KKStr              flowRateFileName;
     bool               framesOnly;
-    uint32             imagesPerDirectory;
-    uint32             maxImageSize;
-    uint32             minImageSize;
+    kkuint32           imagesPerDirectory;
+    kkuint32           maxImageSize;
+    kkuint32           minImageSize;
     KKStr              morphOperations;
     bool               multiThreaded;
     KKStr              outputRootDir;
@@ -158,22 +158,22 @@ namespace  ImageExtractionManager
     bool               saveFrames;
     bool               saveFramesAfter;
     KKStr              sipperFileName;
-    uint32             scanLineEnd;
-    uint32             scanLineStart;
+    kkuint32           scanLineEnd;
+    kkuint32           scanLineStart;
     KKStr              statusMessage;
     bool               updateDataBase;
 
 
     // Runtime Stats
-    uint64                 bytesExtracted;
+    kkuint64               bytesExtracted;
     ClassStatisticListPtr  classStats;
     ClassStatisticListPtr  classStatsPrev;   // Used to help prevent issues with thread conflicts.
-    uint32                 imagesExtracted;
-    uint32                 imagesWritten;
-    uint32                 linesExtracted;
-    uint32                 pixelsRead;
-    uint32                 pixelsWritten;
-    uint64                 sipperFileSize;
+    kkuint32               imagesExtracted;
+    kkuint32               imagesWritten;
+    kkuint32               linesExtracted;
+    kkuint32               pixelsRead;
+    kkuint32               pixelsWritten;
+    kkuint64               sipperFileSize;
   };  /* ExtractionParms*/
  
   typedef  ExtractionParms*  ExtractionParmsPtr;

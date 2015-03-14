@@ -1,6 +1,6 @@
 /* XmlStream.cpp -- Class to XML Objects;  still in development.
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #include "FirstIncludes.h"
 
@@ -17,10 +17,10 @@ using namespace std;
 
 
 #include "BitString.h"
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "KKException.h"
 #include "Tokenizer.h"
-using namespace KKU;
+using namespace KKB;
 
 
 #include "XmlStream.h"
@@ -63,8 +63,8 @@ void  ExtractAttribute (KKStr&  tagStr,
                         KKStr&  attributeValue
                        )
 {
-  int32  startIdx = 0;
-  int32  len = tagStr.Len ();
+  kkint32  startIdx = 0;
+  kkint32  len = tagStr.Len ();
   attributeName  = "";
   attributeValue = "";
 
@@ -82,7 +82,7 @@ void  ExtractAttribute (KKStr&  tagStr,
     return;
   }
 
-  int32 idx = startIdx;
+  kkint32 idx = startIdx;
 
   // Skip until we find the '=' character.
   while  (idx < len)
@@ -251,7 +251,7 @@ XmlTag::XmlTag (TokenizerPtr  tokenStream):
 
 
   // At this point the only thing in tokens should be Attribute Pairs.
-  int32  idx = 0;
+  kkint32  idx = 0;
   name = (*tokens)[idx];
   idx++;
 

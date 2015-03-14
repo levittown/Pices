@@ -24,12 +24,12 @@
 using namespace  std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "KKException.h"
 #include "OSservices.h"
 #include "RBTree.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 
 #include "TrainingProcess2.h"
@@ -179,7 +179,7 @@ TrainingProcess2::TrainingProcess2 (const KKStr&         _configFileName,
   {
     useExistingSavedModel = false;
 
-    int32  origSizeOfExamples = trainingExamples->QueueSize ();
+    kkint32  origSizeOfExamples = trainingExamples->QueueSize ();
     RemoveExcludeListFromTrainingData ();
     if  (origSizeOfExamples != trainingExamples->QueueSize ())
        useExistingSavedModel = false;
@@ -304,7 +304,7 @@ TrainingProcess2::TrainingProcess2 (const KKStr&          _configFileName,
                                     FeatureVectorListPtr  _excludeList,
                                     FileDescPtr           _fileDesc,
                                     RunLog&               _log,
-                                    uint32                _level,
+                                    kkuint32              _level,
                                     VolConstBool&         _cancelFlag,
                                     KKStr&                _statusMessage
                                    ):
@@ -445,7 +445,7 @@ TrainingProcess2::TrainingProcess2 (const KKStr&   _configFileName,
 
   savedModelName = osRemoveExtension (configFileName) + ".Save";
   
-  KKU::DateTime  savedModelTimeStamp  = osGetFileDateTime (savedModelName);
+  KKB::DateTime  savedModelTimeStamp  = osGetFileDateTime (savedModelName);
 
 
   ifstream  in (savedModelName.Str ());
@@ -517,7 +517,7 @@ TrainingProcess2::TrainingProcess2 (istream&       _in,
 {
   log.Level (20) << "TrainingProcess2::TrainingProcess2     Loading an existing trained model" << endl;
 
-  KKU::DateTime  savedModelTimeStamp  = osGetFileDateTime (savedModelName);
+  KKB::DateTime  savedModelTimeStamp  = osGetFileDateTime (savedModelName);
 
   bool  successful = false;
 
@@ -635,9 +635,9 @@ TrainingProcess2::~TrainingProcess2 ()
 
 
 
-int32  TrainingProcess2::MemoryConsumedEstimated ()  const
+kkint32  TrainingProcess2::MemoryConsumedEstimated ()  const
 {
-  int32  memoryConsumedEstimated = sizeof (TrainingProcess2)
+  kkint32  memoryConsumedEstimated = sizeof (TrainingProcess2)
     +  configFileName.MemoryConsumedEstimated ()
     +  configFileNameSpecified.MemoryConsumedEstimated ()
     +  savedModelName.MemoryConsumedEstimated ();
@@ -872,8 +872,7 @@ void  TrainingProcess2::RemoveExcludeListFromTrainingData ()
   FeatureVectorList  trainingExamplesToDelete 
     (fileDesc, 
      false,    /* owner = false */
-     log, 
-     100       /* estimated size */
+     log
     );
 
   FeatureVectorList::iterator idx;
@@ -1092,9 +1091,9 @@ void  TrainingProcess2::AddImagesToTrainingLibray (FeatureVectorList&  trainingI
                                                    FeatureVectorList&  imagesToAdd
                                                   )
 {
-  int32   idx        = 0;
+  kkint32 idx        = 0;
 
-  int32  numOfImages = imagesToAdd.QueueSize ();
+  kkint32  numOfImages = imagesToAdd.QueueSize ();
 
   FeatureVectorPtr  image = NULL;
 
@@ -1220,7 +1219,7 @@ ModelParamPtr  TrainingProcess2::Parameters () const
 
 
 
-int32  TrainingProcess2::NumOfSupportVectors ()  const
+kkint32  TrainingProcess2::NumOfSupportVectors ()  const
 {
   ModelOldSVMPtr  oldSvmModel = OldSVMModel ();
   if  (oldSvmModel)
@@ -1231,8 +1230,8 @@ int32  TrainingProcess2::NumOfSupportVectors ()  const
 
 
 
-void  TrainingProcess2::SupportVectorStatistics (int32&  numSVs,
-                                                 int32&  totalNumSVs
+void  TrainingProcess2::SupportVectorStatistics (kkint32&  numSVs,
+                                                 kkint32&  totalNumSVs
                                                 )
 {
   numSVs = 0;
@@ -1292,7 +1291,7 @@ const CompressionStats&  TrainingProcess2::CompStats ()  const
 
 
 
-int32 TrainingProcess2::ReductionPreExampleCount()  const
+kkint32 TrainingProcess2::ReductionPreExampleCount()  const
 {
   if (model)
     return model->ReductionPreExampleCount();
@@ -1302,7 +1301,7 @@ int32 TrainingProcess2::ReductionPreExampleCount()  const
 
 
 
-int32 TrainingProcess2::ReductionPostExampleCount()  const
+kkint32 TrainingProcess2::ReductionPostExampleCount()  const
 {
   if  (model)
     return model->ReductionPostExampleCount();
@@ -1332,7 +1331,7 @@ double   TrainingProcess2::TrainingTime ()  const
 
 
 
-int32  TrainingProcess2::DuplicateDataCount () const
+kkint32  TrainingProcess2::DuplicateDataCount () const
 {
   return  duplicateCount;
 }

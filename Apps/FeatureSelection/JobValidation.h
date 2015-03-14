@@ -9,7 +9,7 @@ namespace FeatureSelectionApp
   {
   public:
     typedef  JobValidation*  JobValidationPtr;
-    typedef  KKU::uint  uint;
+    typedef  KKB::uint  uint;
 
     JobValidation (const JobValidation&  j);
 

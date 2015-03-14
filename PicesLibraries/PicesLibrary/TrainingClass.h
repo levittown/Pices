@@ -32,7 +32,7 @@
 
 
 
-#include  "Str.h"
+#include  "KKStr.h"
 #include  "KKQueue.h"
 
 namespace MLL {
@@ -115,8 +115,7 @@ class  TrainingClassList:  public KKQueue<TrainingClass>
 {
 public:
   TrainingClassList (const KKStr&  rootDir,
-                     bool          owner    = true,
-                     int32         initSize = 5
+                     bool          owner
                     );
 
 private:

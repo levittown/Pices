@@ -17,11 +17,11 @@ using namespace std;
 
 #include "MemoryDebug.h"
 
-#include  "BasicTypes.h"
-#include  "..\\BaseLibrary\\GoalKeeper.h"
+#include "KKBaseTypes.h"
+#include "GoalKeeper.h"
 
 #include "OSservices.h"
-using namespace  KKU;
+using namespace  KKB;
 
 #include "TrainingClass.h"
 using namespace  MLL;

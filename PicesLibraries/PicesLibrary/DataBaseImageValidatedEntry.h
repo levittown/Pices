@@ -2,7 +2,7 @@
 #define  _DATABASEIMAGEVALIDATEDENTRY_
 
 #include "Point.h"
-#include "Str.h"
+#include "KKStr.h"
 
 //*********************************************************************************************************
 //*  Keeps track of Validated Images;  used by ImageExtraction to save ValidationInfo for a specific      *
@@ -86,7 +86,7 @@ namespace MLL
                );
 
   private:
-    KKU::DateTime  dateWritten;
+    KKB::DateTime  dateWritten;
     KKStr          fileName;
     KKStr          hostName;
     PointListPtr   sizeCoordinates;

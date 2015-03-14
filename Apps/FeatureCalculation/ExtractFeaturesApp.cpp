@@ -13,12 +13,12 @@
 using namespace  std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "BMPImage.h"
 #include "OSservices.h"
 #include "Raster.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 #include "SipperVariables.h"
 using namespace  SipperHardware;
@@ -110,7 +110,7 @@ void  SetUpEmbeddedServer ()
 
 void  RandomlySelectImagesByClass (const KKStr&  srcRootDir,
                                    const KKStr&  destRootDir,
-                                   int32         imagesPerClass
+                                   kkint32       imagesPerClass
                                   )
 {
   RunLog  log;
@@ -148,7 +148,7 @@ void  RandomlySelectImagesByClass (const KKStr&  srcRootDir,
 
     ImageFeaturesListPtr  featureDataForThisClass = new ImageFeaturesList (imagesThisClass->FileDesc (), false, log);
     int  zed = Min (imagesPerClass, imagesThisClass->QueueSize ());
-    int32  x = 0;
+    kkint32  x = 0;
     ImageFeaturesList::iterator  idx2;
     for  (idx2 = imagesThisClass->begin (), x = 0;  ((idx2 != imagesThisClass->end ())  &&  (x < zed));  idx2++, ++x)
     {
@@ -159,7 +159,7 @@ void  RandomlySelectImagesByClass (const KKStr&  srcRootDir,
       featureDataForThisClass->PushOnBack (i);
     }
 
-    uint32  numWritten = 0;
+    kkuint32  numWritten = 0;
     bool  cancelFlag = false;
     bool  successful = false;
     KKStr  errMsg;
@@ -202,8 +202,8 @@ SipperFileListPtr  GetListOfSipperFiles (DataBasePtr           dbConn,
     ImageFeaturesPtr  i = *idx;
     KKStr  imageFileName =  i->ImageFileName ();
     KKStr   sipperFileName;
-    uint32  scanLineNum = 0;
-    uint32  scanCol     = 0;
+    kkuint32  scanLineNum = 0;
+    kkuint32  scanCol     = 0;
 
     SipperVariables::ParseImageFileName (imageFileName, sipperFileName, scanLineNum, scanCol);
     sipperFilesIdx = sipperFiles.find (sipperFileName);
@@ -296,8 +296,8 @@ void  ImportImagesIntoDataBase (const KKStr&  rootDir)
   SipperFileListPtr  sipperFiles = GetListOfSipperFiles (dbConn, data, runLog);
   UpdateInstrumentDataTables (dbConn, sipperFiles, runLog);
   
-  int32  count = 0;
-  int32  totalImages = data->QueueSize ();
+  kkint32  count = 0;
+  kkint32  totalImages = data->QueueSize ();
   ImageFeaturesList::iterator  idx;
   for  (idx = data->begin ();  idx != data->end ();  idx++)
   {
@@ -315,20 +315,20 @@ void  ImportImagesIntoDataBase (const KKStr&  rootDir)
     else
     {
       KKStr   sipperFileName;
-      uint32  scanLineNum = 0;
-      uint32  scanCol     = 0;
+      kkuint32  scanLineNum = 0;
+      kkuint32  scanCol     = 0;
 
       SipperVariables::ParseImageFileName (imageFileName, sipperFileName, scanLineNum, scanCol);
 
-      //int32  size;
-      //int32  weight;
+      //kkint32  size;
+      //kkint32  weight;
       //float  rowCenter = 0.0f;
       //float  colCenter = 0.0f;
       //float  rowCenterWeighted;
       //float  colCenterWeighted;
 
-      int64  byteOffset = 0;
-      int32  imageId = -1;
+      kkint64  byteOffset = 0;
+      kkint32  imageId = -1;
       bool  successful = false;
       bool  cancelFlag = false;
 
@@ -345,14 +345,14 @@ void  ImportImagesIntoDataBase (const KKStr&  rootDir)
                            byteOffset,
                            scanLineNum, 
                            scanCol,
-                           (uint32)i->Length (),
-                           (uint32)i->Width (),
-                           (uint32)i->OrigSize (),
+                           (kkuint32)i->Length (),
+                           (kkuint32)i->Width (),
+                           (kkuint32)i->OrigSize (),
                            3     ,  // connectedPixelDist
                            0     ,  // extraction Log-Id
                            0     , // classification Log-Id
-                           (uint32)i->SfCentroidRow (),
-                           (uint32)i->SfCentroidCol (),
+                           (kkuint32)i->SfCentroidRow (),
+                           (kkuint32)i->SfCentroidCol (),
                            i->MLClass (),
                            1.0f,
                            NULL,
@@ -420,7 +420,7 @@ void  FilterETP2008 ()
                                "1,9,16,18-23,25,26,28,29,31,38-42,44-47,50,51,53,54,56,58-71,73-87",
                                valid
                               );
-  uint32  numWritten = 0;
+  kkuint32  numWritten = 0;
 
   FeatureFileIOC45::Driver ()->SaveFeatureFile
      ("C:\\Pices\\Reports\\FeatureDataFiles\\ETP2008_Filtered.data",

@@ -82,7 +82,7 @@ namespace MLL
 
     KKStr   Class1Name ()  const;
     KKStr   Class2Name ()  const;
-    int32   MemoryConsumedEstimated ()  const;
+    kkint32 MemoryConsumedEstimated ()  const;
     KKStr   ToTabDelString ()  const;
 
 
@@ -107,9 +107,7 @@ namespace MLL
   public:
     typedef  BinaryClassParmsList*  BinaryClassParmsListPtr;
 
-    BinaryClassParmsList (bool _owner,
-                          int32  _size
-                         );
+    BinaryClassParmsList (bool _owner);
     
 
   private:
@@ -143,7 +141,7 @@ namespace MLL
 
     BinaryClassParmsList*  DuplicateListAndContents ()  const;
 
-    int32   MemoryConsumedEstimated ()  const;
+    kkint32 MemoryConsumedEstimated ()  const;
 
     void  PushOnBack  (BinaryClassParmsPtr  binaryParms);
 

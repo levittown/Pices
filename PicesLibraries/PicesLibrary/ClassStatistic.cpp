@@ -8,9 +8,9 @@
 using namespace  std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "KKQueue.h"
-using namespace  KKU;
+using namespace  KKB;
 
 
 #include "ClassStatistic.h"
@@ -26,7 +26,7 @@ ClassStatistic::ClassStatistic (const ClassStatistic&  right):
 
 
 ClassStatistic::ClassStatistic (MLClassConstPtr  _mlClass,
-                                uint32              _count
+                                kkuint32            _count
                                ):
    mlClass (_mlClass),
    count      (_count)
@@ -121,10 +121,10 @@ ClassStatisticPtr  ClassStatisticList::LookUpByImageClass (MLClassConstPtr  mlCl
 
 
 
-class  ClassStatisticList::ClassStatisticSortComparrison: public QueueComparison<ClassStatistic>
+class  ClassStatisticList::ClassStatisticSortComparrison
 {
 public:
-   ClassStatisticSortComparrison ():  QueueComparison<ClassStatistic> () {} 
+   ClassStatisticSortComparrison () {} 
 
    bool  operator() (ClassStatisticPtr  p1,
                      ClassStatisticPtr  p2
@@ -197,7 +197,7 @@ void  ClassStatisticList::PrintReport (ostream& r)
 }
 
 
-int32  ClassStatisticList::operator[]  (MLClassConstPtr  mlClass)
+kkint32  ClassStatisticList::operator[]  (MLClassConstPtr  mlClass)
 {
   std::map<MLClassConstPtr, ClassStatisticPtr>::const_iterator idx;
   idx = imageClassIndex.find (mlClass);

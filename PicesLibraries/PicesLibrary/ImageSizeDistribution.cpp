@@ -7,9 +7,9 @@
 using namespace std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "KKException.h"
-using namespace  KKU;
+using namespace  KKB;
 
 
 #include "ImageSizeDistribution.h"

@@ -14,8 +14,8 @@
 using namespace std;
 
 #include "MemoryDebug.h"
-#include "BasicTypes.h"
-using namespace KKU;
+#include "KKBaseTypes.h"
+using namespace KKB;
 
 
 #include "ImageSizeDistribution.h"
@@ -189,7 +189,7 @@ namespace  PicesInterface
   }
 
   
-  array<float>^   PicesImageSizeDistribution::DepthProfileForSizeBin (uint32  _sizeBucketIdx)
+  array<float>^   PicesImageSizeDistribution::DepthProfileForSizeBin (kkuint32  _sizeBucketIdx)
   {
     VectorFloat  depthDistribution = imageSizeDistribution->DepthProfileForSizeBin (_sizeBucketIdx);
     if  (depthDistribution.size () < 1)

@@ -6,7 +6,7 @@ using namespace System::Collections;
 using namespace System::Diagnostics;
 
 #include "RunLog.h"
-using namespace  KKU;
+using namespace  KKB;
 
 #include "PicesMsgQueue.h"
 
@@ -24,7 +24,7 @@ namespace PicesInterface
     ~PicesRunLog ();
 
     void  AttachFile (String^       runLogFileName);
-    void  AttachFile (const KKU::KKStr&  runLogFileName);
+    void  AttachFile (const KKB::KKStr&  runLogFileName);
 
     void          Close ();
 

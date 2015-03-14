@@ -12,9 +12,9 @@
 using namespace std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "RunLog.h"
-using namespace KKU;
+using namespace KKB;
 
 
 #include "LLoydsEntry.h"
@@ -23,7 +23,7 @@ using namespace KKU;
 
 
 
-LLoydsEntry::LLoydsEntry (int32         _lloydsBinSize,
+LLoydsEntry::LLoydsEntry (kkint32       _lloydsBinSize,
                           VectorIntPtr  _lloydsBins,
                           double        _lloydsIndex
                          )
@@ -34,8 +34,8 @@ LLoydsEntry::LLoydsEntry (int32         _lloydsBinSize,
 
   if  (lloydsBins)
   {
-    int32  total = 0;
-    uint32  x;
+    kkint32  total = 0;
+    kkuint32  x;
     for  (x = 0;  x < lloydsBins->size ();  x++)
       total += (*lloydsBins)[x];
     
@@ -58,7 +58,7 @@ LLoydsEntry::~LLoydsEntry ()
 
 
 
-int32  LLoydsEntry::LLoydsBin (size_t idx) const
+kkint32  LLoydsEntry::LLoydsBin (size_t idx) const
 {
   if  (!lloydsBins)
     return 0;
@@ -81,7 +81,7 @@ LLoydsEntryList::LLoydsEntryList (RunLog&  _log):
 
 void  LLoydsEntryList::PushOnBack (LLoydsEntryPtr  _lloydsEntry)
 {
-  int32  binSize = _lloydsEntry->LLoydsBinSize ();
+  kkint32  binSize = _lloydsEntry->LLoydsBinSize ();
   LLoydsBinEntryMap::iterator  idx;
   idx = binEntryMap.find (binSize);
   if  (idx != binEntryMap.end ())
@@ -107,7 +107,7 @@ void  LLoydsEntryList::PushOnBack (LLoydsEntryPtr  _lloydsEntry)
 
 
 
-LLoydsEntryPtr  LLoydsEntryList::LLoydsEntryByBinSize (int32 binSize)  const
+LLoydsEntryPtr  LLoydsEntryList::LLoydsEntryByBinSize (kkint32 binSize)  const
 {
   LLoydsBinEntryMap::const_iterator  idx;
   idx = binEntryMap.find (binSize);

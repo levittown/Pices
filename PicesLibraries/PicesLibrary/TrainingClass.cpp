@@ -10,9 +10,9 @@
 using namespace  std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "OSservices.h"
-using namespace  KKU;
+using namespace  KKB;
 
 #include "SipperVariables.h"
 using namespace  SipperHardware;;
@@ -85,10 +85,9 @@ KKStr   TrainingClass::ExpandedDirectory (const KKStr&  rootDir)
 
 
 TrainingClassList::TrainingClassList (const KKStr&  _rootDir,
-                                      bool          owner,
-                                      int32           initSize
+                                      bool          owner
                                      ):
-             KKQueue<TrainingClass> (owner, initSize),
+             KKQueue<TrainingClass> (owner),
              rootDir                (_rootDir)
 {
 }
@@ -140,9 +139,9 @@ TrainingClassPtr  TrainingClassList::LocateByMLClass (MLClassConstPtr  _mlClass)
 
 TrainingClassPtr  TrainingClassList::LocateByMLClassName (const KKStr&  className)
 {
-  int32  size = QueueSize ();
+  kkint32  size = QueueSize ();
 
-  int32  idx;
+  kkint32  idx;
 
   TrainingClassPtr  traningClass = NULL;
 
@@ -177,7 +176,7 @@ TrainingClassPtr  TrainingClassList::LocateByDirectory (const KKStr&  directory)
 
 TrainingClassListPtr   TrainingClassList::DuplicateListAndContents ()  const
 {
-  TrainingClassListPtr dupList = new TrainingClassList (rootDir, true, QueueSize ());
+  TrainingClassListPtr dupList = new TrainingClassList (rootDir, true);
 
   for  (const_iterator  idx = begin ();  idx != end ();  idx++)
   {

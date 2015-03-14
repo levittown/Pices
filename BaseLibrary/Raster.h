@@ -1,21 +1,21 @@
 /* Raster.h -- Class that one raster image.
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #if  !defined(_RASTER_)
 #define _RASTER_
 
 #include <map>
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "KKQueue.h"
 #include "MorphOp.h"
-#include "Str.h"
+#include "KKStr.h"
 #include "PixelValue.h"
 #include "Point.h"
 
 
-namespace KKU
+namespace KKB
 {
   /**
    *@file  Raster.h
@@ -230,15 +230,15 @@ namespace KKU
      *@brief  Sets an existing instance to specific Raster data of a grayscale image. 
      *@details  This instance of 'raster' will take ownership of '_grayScaleData' and '_grayScaleRows'.
      */
-    void  Initialize (int32    _height,
-                      int32    _width,
+    void  Initialize (kkint32  _height,
+                      kkint32  _width,
                       uchar*   _grayScaleData,
                       uchar**  _grayScaleRows,
                       bool     _takeOwnership
                      );
 
-    void  Initialize (int32    _height,
-                      int32    _width,
+    void  Initialize (kkint32  _height,
+                      kkint32  _width,
                       uchar*   _redArea,
                       uchar**  _red,
                       uchar*   _greenArea,
@@ -256,13 +256,13 @@ namespace KKU
     const
     KKStr&   FileName ()     const  {return fileName;}
 
-    int32    ForegroundPixelCount () const {return foregroundPixelCount;}
+    kkint32  ForegroundPixelCount () const {return foregroundPixelCount;}
 
-    int32    Height    ()    const  {return  height;}
+    kkint32  Height    ()    const  {return  height;}
     uchar    MaxPixVal ()    const  {return  maxPixVal;}
     uchar**  Rows      ()    const  {return  green;}
-    int32    TotPixels ()    const  {return  totPixels;}
-    int32    Width     ()    const  {return  width;}
+    kkint32  TotPixels ()    const  {return  totPixels;}
+    kkint32  Width     ()    const  {return  width;}
 
     uchar**  Red   ()        const  {return  red;}       /**< returns a pointer to two dimensional array for 'Red' color channel. */
     uchar**  Green ()        const  {return  green;}     /**< returns a pointer to two dimensional array for 'Green' color channel. */
@@ -278,36 +278,36 @@ namespace KKU
     uchar    BackgroundPixelValue () const {return backgroundPixelValue;}
     uchar    ForegroundPixelValue () const {return foregroundPixelValue;}
 
-    int32    TotalBackgroundPixels () const;
+    kkint32  TotalBackgroundPixels () const;
 
     void     BackgroundPixelTH    (uchar          _backgroundPixelTH)    {backgroundPixelTH    = _backgroundPixelTH;}
     void     BackgroundPixelValue (uchar          _backgroundPixelValue) {backgroundPixelValue = _backgroundPixelValue;}
-    void     ForegroundPixelCount (int32          _foregroundPixelCount) {foregroundPixelCount = _foregroundPixelCount;}
+    void     ForegroundPixelCount (kkint32        _foregroundPixelCount) {foregroundPixelCount = _foregroundPixelCount;}
     void     ForegroundPixelValue (uchar          _foregroundPixelValue) {foregroundPixelValue = _foregroundPixelValue;}
     void     FileName             (const KKStr&   _fileName)             {fileName             = _fileName;}
     void     MaxPixVal            (uchar          _maxPixVal)            {maxPixVal            = _maxPixVal;}
     void     WeOwnRasterData      (bool           _weOwnRasterData)      {weOwnRasterData      = _weOwnRasterData;}
 
-    uchar         GetPixelValue (int32 row,  int32 col)  const;
+    uchar         GetPixelValue (kkint32 row,  kkint32 col)  const;
 
 
-    void          GetPixelValue (int32   row,
-                                 int32   col,
+    void          GetPixelValue (kkint32 row,
+                                 kkint32 col,
                                  uchar&  r,
                                  uchar&  g,
                                  uchar&  b
                                 )  const;
 
 
-    void          GetPixelValue (int32       row,
-                                 int32       col,
+    void          GetPixelValue (kkint32     row,
+                                 kkint32     col,
                                  PixelValue& p
                                 )  const;
 
 
     uchar         GetPixelValue (ColorChannels  channel,
-                                 int32          row,
-                                 int32          col
+                                 kkint32        row,
+                                 kkint32        col
                                 )  const;
 
 
@@ -316,20 +316,20 @@ namespace KKU
                                 );
 
 
-    void          SetPixelValue (int32  row,
-                                 int32  col,
+    void          SetPixelValue (kkint32  row,
+                                 kkint32  col,
                                  uchar  pixVal
                                 );
 
 
-    void          SetPixelValue (int32              row,
-                                 int32              col,
+    void          SetPixelValue (kkint32            row,
+                                 kkint32            col,
                                  const PixelValue&  pixVal
                                 );
 
 
-    void          SetPixelValue (int32  row,
-                                 int32  col,
+    void          SetPixelValue (kkint32  row,
+                                 kkint32  col,
                                  uchar  r,
                                  uchar  g,
                                  uchar  b
@@ -337,8 +337,8 @@ namespace KKU
 
 
     void          SetPixelValue (ColorChannels  channel,
-                                 int32          row,
-                                 int32          col,
+                                 kkint32        row,
+                                 kkint32        col,
                                  uchar          pixVal
                                 );
 
@@ -346,7 +346,7 @@ namespace KKU
     /**
      *@brief returns true if there are any forground pixels within 'edgeWidth' pixels of the top, bottom, left, or right edges of the image.
      */
-    bool          AreThereEdgePixels (int32 edgeWidth);
+    bool          AreThereEdgePixels (kkint32 edgeWidth);
 
 
     /**
@@ -377,7 +377,7 @@ namespace KKU
      *@returns BlobID of pixel location or -1 of does not belong to a blob.
      *@see ExtractBlobs
      */
-    int32         BlobId (int32  row,  int32  col)  const;
+    kkint32       BlobId (kkint32  row,  kkint32  col)  const;
 
 
     /**
@@ -392,7 +392,7 @@ namespace KKU
     MatrixPtr     BuildGaussian2dKernel (float  sigma);
 
 
-    int32         CalcArea ();
+    kkint32       CalcArea ();
 
     
     /**
@@ -402,8 +402,8 @@ namespace KKU
      *@param[out]  area Total number of foreground pixels in the image.
      *@param[out]  intensityHistBuckets  An array of 8 buckets where each bucket represents an intensity range.
      */
-    void          CalcAreaAndIntensityHistogram (int32&  area,
-                                                 uint32  intensityHistBuckets[8]
+    void          CalcAreaAndIntensityHistogram (kkint32&  area,
+                                                 kkuint32  intensityHistBuckets[8]
                                                 );
 
     /**
@@ -412,15 +412,15 @@ namespace KKU
      *         by building a mask on the original image then performing a FillHole operation. This mask is then
      *         used to select pixels for inclusion in the histogram.
      */
-    void          CalcAreaAndIntensityHistogramWhite (int32&  area,
-                                                      uint32  intensityHistBuckets[8]
+    void          CalcAreaAndIntensityHistogramWhite (kkint32&  area,
+                                                      kkuint32  intensityHistBuckets[8]
                                                      );
     
 
 
-    void          CalcAreaAndIntensityFeatures16 (int32&  area,
+    void          CalcAreaAndIntensityFeatures16 (kkint32&  area,
                                                   float&  weighedSize,
-                                                  uint32  intensityHistBuckets[16]
+                                                  kkuint32  intensityHistBuckets[16]
                                                  );
 
 
@@ -446,11 +446,11 @@ namespace KKU
      *@param[out]  intensityHistBucketsWhiteSpace  A 8 element array containing a histogram by intensity range,
      *             with enclosed whitespace pixels included.
      */
-    void          CalcAreaAndIntensityFeatures (int32&   area,
+    void          CalcAreaAndIntensityFeatures (kkint32&   area,
                                                 float&   weighedSize,
-                                                uint32   intensityHistBuckets[8],
-                                                int32&   areaWithWhiteSpace,
-                                                uint32   intensityHistBucketsWhiteSpace[8]
+                                                kkuint32 intensityHistBuckets[8],
+                                                kkint32&   areaWithWhiteSpace,
+                                                kkuint32 intensityHistBucketsWhiteSpace[8]
                                                );
 
 
@@ -473,14 +473,14 @@ namespace KKU
      *@param[out]  weightedSize  Area that reflects intensity; the largest pixel will have a value of 1.0.
      *@param[out]  intensityHistBuckets A 8 element array containing a histogram by intensity range.
      */
-    void          CalcAreaAndIntensityFeatures (int32&  area,
+    void          CalcAreaAndIntensityFeatures (kkint32&  area,
                                                 float&  weighedSize,
-                                                uint32  intensityHistBuckets[8]
+                                                kkuint32  intensityHistBuckets[8]
                                                );
 
 
-    void          CalcCentroid (int32&    size,
-                                int32&    weight,
+    void          CalcCentroid (kkint32&    size,
+                                kkint32&    weight,
                                 float&  rowCenter,  
                                 float&  colCenter,
                                 float&  rowCenterWeighted,
@@ -495,16 +495,16 @@ namespace KKU
     float         CalcWeightedArea ()  const;
 
 
-    float         CenMoment (int32  p, 
-                             int32  q, 
+    float         CenMoment (kkint32  p, 
+                             kkint32  q, 
                              float  ew, 
                              float  eh
                             )  const;
 
     void          CentralMoments (float  features[9])  const;
 
-    float         CenMomentWeighted (int32   p, 
-                                     int32   q, 
+    float         CenMomentWeighted (kkint32 p, 
+                                     kkint32 q, 
                                      float   ew, 
                                      float   eh
                                     ) const;
@@ -550,12 +550,12 @@ namespace KKU
 
     static
     RasterPtr     CreatePaddedRaster (BmpImage&  image,
-                                      int32      padding
+                                      kkint32    padding
                                      );
 
-    RasterPtr     CreateSmoothImage (int32  maskSize = 3)  const;
+    RasterPtr     CreateSmoothImage (kkint32  maskSize = 3)  const;
     
-    RasterPtr     CreateSmoothedMediumImage (int32 maskSize)  const;
+    RasterPtr     CreateSmoothedMediumImage (kkint32 maskSize)  const;
 
     RasterPtr     CreateGaussianSmoothedImage (float sigma)  const;
 
@@ -600,7 +600,7 @@ namespace KKU
 
     /** @brief Draw a circle who's center is at 'point' and radius in pixels is 'radius'using color 'color'. */
     void          DrawCircle (const Point&       point,
-                              int32              radius,
+                              kkint32            radius,
                               const PixelValue&  color
                              );
 
@@ -623,24 +623,24 @@ namespace KKU
 
     void          DrawDot (const Point&       point, 
                            const PixelValue&  color,
-                           int32              size
+                           kkint32            size
                           );
 
 
     void          DrawGrid (float              pixelsPerMinor,
-                            uint32             minorsPerMajor,
+                            kkuint32           minorsPerMajor,
                             const PixelValue&  hashColor,
                             const PixelValue&  gridColor
                            );
 
 
-    void          DrawLine (int32 bpRow,  int32 bpCol,
-                            int32 epRow,  int32 epCol
+    void          DrawLine (kkint32 bpRow,  kkint32 bpCol,
+                            kkint32 epRow,  kkint32 epCol
                            );
 
 
-    void          DrawLine (int32 bpRow,    int32 bpCol,
-                            int32 epRow,    int32 epCol,
+    void          DrawLine (kkint32 bpRow,    kkint32 bpCol,
+                            kkint32 epRow,    kkint32 epCol,
                             uchar pixelVal
                            );
 
@@ -656,16 +656,16 @@ namespace KKU
                            );
 
 
-    void          DrawLine (int32 bpRow,    int32 bpCol,
-                            int32 epRow,    int32 epCol,
+    void          DrawLine (kkint32 bpRow,    kkint32 bpCol,
+                            kkint32 epRow,    kkint32 epCol,
                             uchar  r,
                             uchar  g,
                             uchar  b
                            );
 
 
-    void          DrawLine (int32 bpRow,    int32 bpCol,
-                            int32 epRow,    int32 epCol,
+    void          DrawLine (kkint32 bpRow,    kkint32 bpCol,
+                            kkint32 epRow,    kkint32 epCol,
                             uchar  r,
                             uchar  g,
                             uchar  b,
@@ -673,13 +673,13 @@ namespace KKU
                            );
 
 
-    void          DrawLine (int32  bpRow,    int32 bpCol,
-                            int32  epRow,    int32 epCol,
+    void          DrawLine (kkint32  bpRow,    kkint32 bpCol,
+                            kkint32  epRow,    kkint32 epCol,
                             PixelValue  pixelVal
                            );
 
-    void          DrawLine (int32  bpRow,    int32 bpCol,
-                            int32  epRow,    int32 epCol,
+    void          DrawLine (kkint32  bpRow,    kkint32 bpCol,
+                            kkint32  epRow,    kkint32 epCol,
                             PixelValue  pixelVal,
                             float       alpha
                            );
@@ -724,9 +724,9 @@ namespace KKU
     void          Erosion ();
 
     void          Erosion (MaskTypes  mask);
-    void          ErosionChanged (MaskTypes  mask, int32 row, int32 col);
-    void          ErosionChanged1 (MaskTypes  mask, int32 row, int32 col);
-    void          ErosionBoundary (MaskTypes  mask, int32 blobrowstart, int32 blobrowend, int32 blobcolstart, int32 blobcolend);
+    void          ErosionChanged (MaskTypes  mask, kkint32 row, kkint32 col);
+    void          ErosionChanged1 (MaskTypes  mask, kkint32 row, kkint32 col);
+    void          ErosionBoundary (MaskTypes  mask, kkint32 blobrowstart, kkint32 blobrowend, kkint32 blobcolstart, kkint32 blobcolend);
 
     /**
      *@brief  Extracts a specified blob from this image; useful to extract individual detected blobs.
@@ -762,7 +762,7 @@ namespace KKU
      *        to contain the specified blob with the specified number of padded row and columns.
      */
     RasterPtr     ExtractABlobTightly (const BlobPtr  blob,
-                                       int32          padding
+                                       kkint32        padding
                                        ) const;
 
 
@@ -780,7 +780,7 @@ namespace KKU
      *@returns A list of Blob descriptor instances.
      *@see  ExtractABlob, ExtractABlobTightly, Blob
      */
-    BlobListPtr   ExtractBlobs (int32  dist);
+    BlobListPtr   ExtractBlobs (kkint32  dist);
 
     
     /**
@@ -816,31 +816,31 @@ namespace KKU
                             PixelValue  color
                            );
 
-    void          FillRectangle (int32              tlRow,
-                                 int32              tlCol,
-                                 int32              brRow,
-                                 int32              brCol,
+    void          FillRectangle (kkint32            tlRow,
+                                 kkint32            tlCol,
+                                 kkint32            brRow,
+                                 kkint32            brCol,
                                  const PixelValue&  fillColor
                                 );
 
-    void          FindBoundingBox (int32&  tlRow,
-                                   int32&  tlCol,
-                                   int32&  brRow,
-                                   int32&  brCol
+    void          FindBoundingBox (kkint32&  tlRow,
+                                   kkint32&  tlCol,
+                                   kkint32&  brRow,
+                                   kkint32&  brCol
                                   )  const;
 
     void          FourierExtractFeatures (float  fourierFeatures[5])  const;
 
-    bool          ForegroundPixel (int32  row,  
-                                   int32  col
+    bool          ForegroundPixel (kkint32  row,  
+                                   kkint32  col
                                   )  const;
 
 
     uchar**       GetSubSet (uchar** _src,
-                             int32   _row,
-                             int32   _col,
-                             int32   _height,
-                             int32   _width
+                             kkint32 _row,
+                             kkint32 _col,
+                             kkint32 _height,
+                             kkint32 _width
                             )  const;
 
     RasterPtr     HalfSize ();
@@ -857,18 +857,18 @@ namespace KKU
 
     RasterPtr     HistogramGrayscaleImage ()  const;
 
-    int32         MemoryConsumedEstimated ()  const;
+    kkint32       MemoryConsumedEstimated ()  const;
 
     void          Opening ();
 
     void          Opening (MaskTypes mask);
 
-    RasterPtr     Padded (int32 padding);  // Creates a Padded raster object.
+    RasterPtr     Padded (kkint32 padding);  // Creates a Padded raster object.
 
     RasterPtr     ReversedImage ();
 
     void          ReverseImage ();   // Reverse the image Foreground and Background.
-    RasterPtr     ReduceByEvenMultiple (int32  multiple)  const;
+    RasterPtr     ReduceByEvenMultiple (kkint32  multiple)  const;
 
     RasterPtr     ReduceByFactor (float factor)  const;  //  0 < factor <= 1.0  ex: 0.5 = Make raster half size
 
@@ -884,8 +884,8 @@ namespace KKU
 
     RasterPtr     SobelEdgeDetector ();
 
-    RasterListPtr SplitImageIntoEqualParts (int32 numColSplits,
-                                            int32 numRowSplits
+    RasterListPtr SplitImageIntoEqualParts (kkint32 numColSplits,
+                                            kkint32 numRowSplits
                                            )  const;
 
     RasterPtr     SwapQuadrants ()  const;
@@ -913,7 +913,7 @@ namespace KKU
 
     RasterPtr     ThinContour ();
 
-    RasterPtr     TightlyBounded (uint32 borderPixels)  const;
+    RasterPtr     TightlyBounded (kkuint32 borderPixels)  const;
 
     RasterPtr     ToColor ()  const;
 
@@ -938,12 +938,12 @@ namespace KKU
      *@param[out]  compressedBuffLen Length of the compressed buffer returned.
      *@return pointer to compressed data.
      */
-    uchar*        ToCompressor (uint32&  compressedBuffLen)  const;
+    uchar*        ToCompressor (kkuint32&  compressedBuffLen)  const;
 
 
     virtual
-      RasterPtr  AllocateARasterInstance (int32  height,
-                                          int32  width,
+      RasterPtr  AllocateARasterInstance (kkint32  height,
+                                          kkint32  width,
                                           bool   color
                                          )  const;
 
@@ -952,10 +952,10 @@ namespace KKU
 
     virtual
       RasterPtr  AllocateARasterInstance (const Raster& _raster,  /**<  Source Raster                             */
-                                          int32         _row,     /**<  Starting Row in '_raster' to copy from.             */
-                                          int32         _col,     /**<  Starting Col in '_raster' to copy from.             */
-                                          int32         _height,  /**<  Height of resultant raster. Will start from '_row'  */
-                                          int32         _width    /**<  Width of resultant raster.                          */
+                                          kkint32       _row,     /**<  Starting Row in '_raster' to copy from.             */
+                                          kkint32       _col,     /**<  Starting Col in '_raster' to copy from.             */
+                                          kkint32       _height,  /**<  Height of resultant raster. Will start from '_row'  */
+                                          kkint32       _width    /**<  Width of resultant raster.                          */
                                          )  const;
 
   private:
@@ -972,42 +972,42 @@ namespace KKU
 
 
     inline
-    bool   BackgroundPixel (int32  row,
-                            int32  col
+    bool   BackgroundPixel (kkint32  row,
+                            kkint32  col
                            )  const;
 
 
     // Used by the Gaussian Smoothing algorithm.
     void   BuildGaussian2dKernel (float     sigma,
-                                  int32&    len,
+                                  kkint32&    len,
                                   float**&  kernel
                                  )  const;
 
 
     inline
-    void   CalcDialatedValue (int32   row,
-                              int32   col,
-                              int32&  totVal,
+    void   CalcDialatedValue (kkint32 row,
+                              kkint32 col,
+                              kkint32&  totVal,
                               uchar&  numNeighbors
                              )  const;
 
 
     inline
-    bool   CompletlyFilled3By3 (int32  row, 
-                                int32  col
+    bool   CompletlyFilled3By3 (kkint32  row, 
+                                kkint32  col
                                )  const;
 
 
     void  DeleteExistingBlobIds ();
 
 
-    void   FillHoleGrow (int32  _row, 
-                         int32  _col
+    void   FillHoleGrow (kkint32  _row, 
+                         kkint32  _col
                         );
 
     bool     Fit (MaskTypes  mask,
-                  int32     row, 
-                  int32     col
+                  kkint32   row, 
+                  kkint32   col
                  )  const;
 
     
@@ -1015,36 +1015,36 @@ namespace KKU
 
 
     uchar    Hit (MaskTypes  mask,
-                  int32      row, 
-                  int32      col
+                  kkint32    row, 
+                  kkint32    col
                  )  const;
 
-    float    Moment (int32 p, 
-                     int32 q
+    float    Moment (kkint32 p, 
+                     kkint32 q
                     )  const;
 
 
-    float   MomentWeighted (int32 p, 
-                            int32 q
+    float   MomentWeighted (kkint32 p, 
+                            kkint32 q
                            )  const;
 
 
     inline
-    int32    NearestNeighborUpperLeft (int32  centRow,
-                                       int32  centCol,
-                                       int32  dist
+    kkint32  NearestNeighborUpperLeft (kkint32  centRow,
+                                       kkint32  centCol,
+                                       kkint32  dist
                                       );
 
     inline
-    int32    NearestNeighborUpperRight (int32  centRow,
-                                        int32  centCol,
-                                        int32  dist
+    kkint32  NearestNeighborUpperRight (kkint32  centRow,
+                                        kkint32  centCol,
+                                        kkint32  dist
                                        );
 
 
     void     SmoothImageChannel (uchar**  src,
                                  uchar**  dest,
-                                 int32    maskSize
+                                 kkint32  maskSize
                                 )  const;
 
     void     SmoothUsingKernel (Matrix&  kernel,
@@ -1057,20 +1057,20 @@ namespace KKU
   protected:
     uchar    backgroundPixelValue;
     uchar    backgroundPixelTH;
-    int32**  blobIds;              // Used when searching for connected components
+    kkint32**  blobIds;              // Used when searching for connected components
     float    centroidCol;
     float    centroidRow;
     bool     color;
     KKStr    fileName;
-    int32    foregroundPixelCount;
+    kkint32  foregroundPixelCount;
     uchar    foregroundPixelValue;
     float**  fourierMag;           /**< Only used if image is result of a Fourier Transform   */
     float*   fourierMagArea;       /**< Only used if image is result of a Fourier Transform   */
-    int32    height;
+    kkint32  height;
     uchar    maxPixVal;
-    int32    totPixels;
+    kkint32  totPixels;
     bool     weOwnRasterData;
-    int32    width;
+    kkint32  width;
 
     uchar*   redArea;              // Each color channel is allocated as a single block
     uchar*   greenArea;            // for 2 dimensional access use corresponding 2d variables
@@ -1108,8 +1108,8 @@ namespace KKU
 
   typedef  struct  
   {
-    int32  row;
-    int32  col;
+    kkint32  row;
+    kkint32  col;
   }  MovDir;
 
 
@@ -1119,7 +1119,7 @@ namespace KKU
   {
   public:
     RasterList (bool  owner, 
-                int32 growthRate = 10
+                kkint32 growthRate = 10
                ):
         KKQueue<Raster> (owner, growthRate)
         {}
@@ -1145,5 +1145,5 @@ namespace KKU
 #define  _RasterList_Defined_
 
 
-}  /* namespace KKU; */
+}  /* namespace KKB; */
 #endif

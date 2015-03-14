@@ -14,12 +14,12 @@
 using namespace std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "KKException.h"
 #include "OSservices.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 
 #include "ModelDual.h"
@@ -104,9 +104,9 @@ ModelDual::~ModelDual ()
 }
 
 
-int32  ModelDual::MemoryConsumedEstimated ()  const
+kkint32  ModelDual::MemoryConsumedEstimated ()  const
 {
-  int32  memoryConsumedEstimated = Model::MemoryConsumedEstimated ();
+  kkint32  memoryConsumedEstimated = Model::MemoryConsumedEstimated ();
   if  (trainer1)    memoryConsumedEstimated += trainer1->MemoryConsumedEstimated ();
   if  (trainer2)    memoryConsumedEstimated += trainer2->MemoryConsumedEstimated ();
   if  (classifier1) memoryConsumedEstimated += classifier1->MemoryConsumedEstimated ();
@@ -371,7 +371,7 @@ MLClassConstPtr  ModelDual::ReconcilePredictions (MLClassConstPtr  pred1,
   // We need to find the common part of the predictions.
   KKStr  name1 = pred1->Name ();
   KKStr  name2 = pred2->Name ();
-  int32  maxLen = Min (name1.Len (), name2.Len ());
+  kkint32  maxLen = Min (name1.Len (), name2.Len ());
   KKStr  commonPart (maxLen + 1);
 
   while  ((!name1.Empty ())  &&  (!name2.Empty ()))
@@ -410,18 +410,18 @@ void  ModelDual::ReconcileProbAndVotes (Classifier2Ptr    classifier,
                                         MLClassConstPtr   predClass,
                                         FeatureVectorPtr  encodedExample,
                                         double&           predClassProb,
-                                        int32&            predClassVotes
+                                        kkint32&            predClassVotes
                                        )
 {
-  int32  numClasses = classes->QueueSize ();
-  int32*   votes = new int32 [numClasses];
+  kkint32  numClasses = classes->QueueSize ();
+  kkint32*   votes = new kkint32 [numClasses];
   double*  probs = new double[numClasses];
 
   const KKStr&  name = predClass->Name ();
 
   predClassProb = 0.0;
   predClassVotes = 0;
-  int32  x = 0;
+  kkint32  x = 0;
 
   classifier->ProbabilitiesByClass (*classes, encodedExample, votes, probs);
   MLClassConstList::iterator  idx;
@@ -479,13 +479,13 @@ void  ModelDual::Predict (FeatureVectorPtr  example,
                           MLClassConstPtr   knownClass,
                           MLClassConstPtr&  predClass1,
                           MLClassConstPtr&  predClass2,
-                          int32&            predClass1Votes,
-                          int32&            predClass2Votes,
+                          kkint32&            predClass1Votes,
+                          kkint32&            predClass2Votes,
                           double&           probOfKnownClass,
                           double&           predClass1Prob,
                           double&           predClass2Prob,
                           double&           compact,
-                          int32&            numOfWinners,
+                          kkint32&            numOfWinners,
                           bool&             knownClassOneOfTheWinners,
                           double&           breakTie
                          )
@@ -499,25 +499,25 @@ void  ModelDual::Predict (FeatureVectorPtr  example,
 
   MLClassConstPtr  predClass1C1       = NULL;
   MLClassConstPtr  predClass2C1       = NULL;
-  int32            predClass1VotesC1  = 0;
-  int32            predClass2VotesC1  = 0;
+  kkint32          predClass1VotesC1  = 0;
+  kkint32          predClass2VotesC1  = 0;
   double           probOfKnownClassC1 = 0.0;
   double           predClass1ProbC1   = 0.0;
   double           predClass2ProbC1   = 0.0;
   double           compactC1          = 0;
-  int32            numOfWinnersC1     = 0;
+  kkint32          numOfWinnersC1     = 0;
   bool             knownClassOneOfTheWinnersC1 = false;
   double           breakTieC1         = 0.0;
 
   MLClassConstPtr  predClass1C2       = NULL;
   MLClassConstPtr  predClass2C2       = NULL;
-  int32            predClass1VotesC2  = 0;
-  int32            predClass2VotesC2  = 0;
+  kkint32          predClass1VotesC2  = 0;
+  kkint32          predClass2VotesC2  = 0;
   double           probOfKnownClassC2 = 0.0;
   double           predClass1ProbC2   = 0.0;
   double           predClass2ProbC2   = 0.0;
   double           compactC2          = 0;
-  int32            numOfWinnersC2     = 0;
+  kkint32          numOfWinnersC2     = 0;
   bool             knownClassOneOfTheWinnersC2 = false;
   double           breakTieC2         = 0.0;
 
@@ -586,8 +586,8 @@ void  ModelDual::Predict (FeatureVectorPtr  example,
 
   predClass1Prob  = (predClass1ProbC1 + predClass1ProbC2) / 2.0;
   predClass2Prob  = (predClass2ProbC1 + predClass2ProbC2) / 2.0;
-  predClass1Votes   = (int32)((0.5f + predClass1VotesC1 + predClass1VotesC2) / 2.0f);
-  predClass2Votes   = (int32)((0.5f + predClass2VotesC1 + predClass2VotesC2) / 2.0f);
+  predClass1Votes   = (kkint32)((0.5f + predClass1VotesC1 + predClass1VotesC2) / 2.0f);
+  predClass2Votes   = (kkint32)((0.5f + predClass2VotesC1 + predClass2VotesC2) / 2.0f);
   
 
   probOfKnownClass  = (probOfKnownClassC1 + probOfKnownClassC2) / 2.0;
@@ -617,9 +617,9 @@ ClassProbListPtr  ModelDual::ProbabilitiesByClass (FeatureVectorPtr  example)
     return NULL;
   }
 
-  int32    numClasses = classes->QueueSize ();
-  int32*   votesC1         = new int32[numClasses];
-  int32*   votesC2         = new int32[numClasses];
+  kkint32  numClasses = classes->QueueSize ();
+  kkint32*   votesC1         = new kkint32[numClasses];
+  kkint32*   votesC2         = new kkint32[numClasses];
   double*  probabilitiesC1 = new double[numClasses];
   double*  probabilitiesC2 = new double[numClasses];
 
@@ -636,7 +636,7 @@ ClassProbListPtr  ModelDual::ProbabilitiesByClass (FeatureVectorPtr  example)
   }
 
   ClassProbListPtr  results = new ClassProbList (true);
-  int32  idx;
+  kkint32  idx;
   for  (idx = 0;  idx < numClasses;  idx++)
   {
     MLClassConstPtr  ic = classes->IdxToPtr (idx);
@@ -711,7 +711,7 @@ void  ModelDual::ProbabilitiesByClassDual (FeatureVectorPtr   example,
 
 void  ModelDual::ProbabilitiesByClass (FeatureVectorPtr         example,
                                        const MLClassConstList&  _mlClasses,
-                                       int32*                   _votes,
+                                       kkint32*                   _votes,
                                        double*                  _probabilities
                                       )
 {
@@ -721,10 +721,10 @@ void  ModelDual::ProbabilitiesByClass (FeatureVectorPtr         example,
     return;
   }
 
-  int32    numClasses = _mlClasses.QueueSize ();
+  kkint32  numClasses = _mlClasses.QueueSize ();
 
-  int32*   votesC1         = new int32[numClasses];
-  int32*   votesC2         = new int32[numClasses];
+  kkint32*   votesC1         = new kkint32[numClasses];
+  kkint32*   votesC2         = new kkint32[numClasses];
   double*  probabilitiesC1 = new double[numClasses];
   double*  probabilitiesC2 = new double[numClasses];
 
@@ -740,7 +740,7 @@ void  ModelDual::ProbabilitiesByClass (FeatureVectorPtr         example,
     encodedExample = NULL;
   }
 
-  for  (int32 idx = 0;  idx < numClasses;  idx++)
+  for  (kkint32 idx = 0;  idx < numClasses;  idx++)
   {
     _probabilities[idx] = (probabilitiesC1[idx]  + probabilitiesC2[idx]) / 2.0;
     _votes        [idx] = (int)((0.5f + (float)votesC1[idx] + (float)votesC2[idx]) / 2);
@@ -769,10 +769,10 @@ void   ModelDual::ProbabilitiesByClass (FeatureVectorPtr         _example,
     return;
   }
 
-  int32    numClasses = _mlClasses.QueueSize ();
+  kkint32  numClasses = _mlClasses.QueueSize ();
 
-  int32*   votesC1         = new int32[numClasses];
-  int32*   votesC2         = new int32[numClasses];
+  kkint32*   votesC1         = new kkint32[numClasses];
+  kkint32*   votesC2         = new kkint32[numClasses];
   double*  probabilitiesC1 = new double[numClasses];
   double*  probabilitiesC2 = new double[numClasses];
 
@@ -788,7 +788,7 @@ void   ModelDual::ProbabilitiesByClass (FeatureVectorPtr         _example,
     encodedExample = NULL;
   }
 
-  for  (int32 idx = 0;  idx < numClasses;  idx++)
+  for  (kkint32 idx = 0;  idx < numClasses;  idx++)
   {
     _probabilities[idx] = (probabilitiesC1[idx]  + probabilitiesC2[idx]) / 2.0;
   }
@@ -814,9 +814,9 @@ void  ModelDual::RetrieveCrossProbTable (MLClassConstList&  _classes,
     return;
   }
 
-  int32 x = 0, y = 0;
+  kkint32 x = 0, y = 0;
 
-  int32  numClasses = _classes.QueueSize ();
+  kkint32  numClasses = _classes.QueueSize ();
 
   double**  crossProbTableC1 = new double*[numClasses];
   double**  crossProbTableC2 = new double*[numClasses];
@@ -867,7 +867,7 @@ void  ModelDual::ReadSpecificImplementationXML (istream&  i,
 
   KKStr  modelFileName;
 
-  int32  numOfModels = 0;
+  kkint32  numOfModels = 0;
 
   delete  classifier1;  classifier1 = NULL;
   delete  classifier2;  classifier2 = NULL;
@@ -1018,10 +1018,10 @@ void  ModelDual::WriteSpecificImplementationXML (ostream&  o)
 
 
 
-int32  ModelDual::NumOfSupportVectors ()  const
+kkint32  ModelDual::NumOfSupportVectors ()  const
 {
   float  totalSVs = 0.0;
-  uint32  count = 0;
+  kkuint32  count = 0;
 
   if  (trainer1)
   {
@@ -1036,7 +1036,7 @@ int32  ModelDual::NumOfSupportVectors ()  const
   }
 
   if  (count > 0)
-    return  (int32)(0.5f + totalSVs / (float)count);
+    return  (kkint32)(0.5f + totalSVs / (float)count);
   else
     return 0;
 

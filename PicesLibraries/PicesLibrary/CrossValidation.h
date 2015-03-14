@@ -33,7 +33,7 @@
  */
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "RunLog.h"
 
 #include "BitReduction.h"
@@ -86,7 +86,7 @@ namespace  MLL
     CrossValidation (TrainingConfiguration2Ptr _config,
                      FeatureVectorListPtr      _examples,
                      MLClassConstListPtr    _mlClasses,
-                     int32                     _numOfFolds,
+                     kkint32                   _numOfFolds,
                      bool                      _featuresAreAlreadyNormalized,
                      FileDescPtr               _fileDesc,
                      RunLog&                   _log,
@@ -106,10 +106,10 @@ namespace  MLL
 
     float         Accuracy     ();
     float         AccuracyNorm ();
-    int32         DuplicateTrainDataCount () const {return  duplicateTrainDataCount;}
-    float         FoldAccuracy (int32 foldNum) const;
+    kkint32       DuplicateTrainDataCount () const {return  duplicateTrainDataCount;}
+    float         FoldAccuracy (kkint32 foldNum) const;
 
-    void          NumOfFolds (int32 _numOfFolds)  {numOfFolds = _numOfFolds;}
+    void          NumOfFolds (kkint32 _numOfFolds)  {numOfFolds = _numOfFolds;}
 
     const
     VectorFloat&  FoldAccuracies          () const {return  foldAccuracies;}
@@ -118,14 +118,14 @@ namespace  MLL
 
     ConfusionMatrix2Ptr  GiveMeOwnershipOfConfusionMatrix ();
 
-    int32         NumOfSupportVectors       () const {return  numSVs;}
-    int32         NumSVs                    () const {return  numSVs;}
-    int32         TotalNumSVs               () const {return  totalNumSVs;}
+    kkint32       NumOfSupportVectors       () const {return  numSVs;}
+    kkint32       NumSVs                    () const {return  numSVs;}
+    kkint32       TotalNumSVs               () const {return  totalNumSVs;}
 
-    int32         ReductionPreExampleCount  () const {return  reductionPreImageCount;}
-    int32         ReductionPostExampleCount () const {return  reductionPostImageCount;}
+    kkint32       ReductionPreExampleCount  () const {return  reductionPreImageCount;}
+    kkint32       ReductionPostExampleCount () const {return  reductionPostImageCount;}
     float         ReductionRatio            () const;
-    int32         SupportPointsTotal        () const {return  numSVs;}
+    kkint32       SupportPointsTotal        () const {return  numSVs;}
     
     const CompressionStats&  CompStats    ()  const  {return  compStats;}
 
@@ -163,7 +163,7 @@ namespace  MLL
 
     void  CrossValidate (FeatureVectorListPtr   testImages, 
                          FeatureVectorListPtr   trainingImages,
-                         int32                    foldNum,
+                         kkint32                  foldNum,
                          bool*                  classedCorrectly = NULL
                         );
 
@@ -174,7 +174,7 @@ namespace  MLL
 
     bool                      cancelFlag;
     TrainingConfiguration2Ptr config;
-    int32                     duplicateTrainDataCount;
+    kkint32                   duplicateTrainDataCount;
     bool                      featuresAreAlreadyNormalized;
     FileDescPtr               fileDesc;
     VectorFloat               foldAccuracies;
@@ -183,27 +183,27 @@ namespace  MLL
     ConfusionMatrix2Ptr*      cmByNumOfConflicts;
     FeatureVectorListPtr      examples;
     MLClassConstListPtr       mlClasses;
-    int32                     imagesPerClass;
+    kkint32                   imagesPerClass;
     RunLog&                   log;
-    int32                     maxNumOfConflicts;  // Will indicate the number confusionMatrices created in
+    kkint32                   maxNumOfConflicts;  // Will indicate the number confusionMatrices created in
                                                   // table in cmByNumOfConflicts;
-    int32                     numOfFolds;
+    kkint32                   numOfFolds;
 
-    int32                     numSVs;             /**< Total Support Vectors Detected. */
+    kkint32                   numSVs;             /**< Total Support Vectors Detected. */
 
-    int32                     totalNumSVs;        /**< This is different from 'numOfSupportVectors' it will reflect all the Support Vectors
+    kkint32                   totalNumSVs;        /**< This is different from 'numOfSupportVectors' it will reflect all the Support Vectors
                                                    * that are created in a Multi Class SVM. That is if a given example is used in three
                                                    * different binary classifiers it will be counted three times.
                                                    */
 
-    int32*                    numOfWinnersCounts;
-    int32*                    numOfWinnersCorrects;
-    int32*                    numOfWinnersOneOfTheWinners;
+    kkint32*                    numOfWinnersCounts;
+    kkint32*                    numOfWinnersCorrects;
+    kkint32*                    numOfWinnersOneOfTheWinners;
 
     double                    testTime;
     double                    reductionTime;
-    int32                     reductionPreImageCount;
-    int32                     reductionPostImageCount;
+    kkint32                   reductionPreImageCount;
+    kkint32                   reductionPostImageCount;
     double                    trainingTime;
 
 

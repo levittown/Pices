@@ -12,11 +12,11 @@
 using namespace  std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "KKException.h"
 #include "OSservices.h"
 #include "RunLog.h"
-using namespace  KKU;
+using namespace  KKB;
 
 #include "InstrumentDataFileManager.h"
 #include "SipperVariables.h"
@@ -46,9 +46,9 @@ using namespace  MLL;
 
 void  TrainingConfiguration2::CreateModelParameters (const KKStr&           _parameterStr,
                                                      const FeatureNumList&  _selFeatures,
-                                                     int32                  _sectionLineNum,
-                                                     int32                  _parametersLineNum, 
-                                                     int32                  _featuresIncludedLineNum
+                                                     kkint32                _sectionLineNum,
+                                                     kkint32                _parametersLineNum, 
+                                                     kkint32                _featuresIncludedLineNum
                                                     )
 {
   delete  modelParameters;
@@ -126,20 +126,20 @@ TrainingConfiguration2::TrainingConfiguration2 (FileDescPtr   _fileDesc,
 
   configFileNameSpecified   (_configFileName),
   fileDesc                  (_fileDesc),
-  mlClasses              (NULL),
-  mlClassesWeOwnIt       (false),
+  mlClasses                 (NULL),
+  mlClassesWeOwnIt          (false),
   log                       (_log),
   modelingMethod            (Model::mtNULL),
   examplesPerClass          (0),
   modelParameters           (NULL),
   noiseGuaranteedSize       (0),
-  noiseMLClass           (NULL),
+  noiseMLClass              (NULL),
   noiseTrainingClass        (NULL),
   normalizationParms        (NULL),
   otherClass                (NULL),
   otherClassLineNum         (-1),
   rootDir                   (),
-  trainingClasses           ("", true, 10),
+  trainingClasses           ("", true),
   validateDirectories       (_validateDirectories)
 
 {
@@ -177,28 +177,28 @@ TrainingConfiguration2::TrainingConfiguration2 (FileDescPtr   _fileDesc,
 
 
 
-TrainingConfiguration2::TrainingConfiguration2 (FileDescPtr             _fileDesc,       // Use this one if you want to
+TrainingConfiguration2::TrainingConfiguration2 (FileDescPtr          _fileDesc,       // Use this one if you want to
                                                 MLClassConstListPtr  _mlClasses,   // create a default Configuration 
-                                                KKStr                   _parameterStr,   // object.
-                                                RunLog&                 _log
+                                                KKStr                _parameterStr,   // object.
+                                                RunLog&              _log
                                                ):
   Configuration             (_log),
 
   configFileNameSpecified   (""),
   fileDesc                  (_fileDesc),
-  mlClasses              (NULL),
-  mlClassesWeOwnIt       (false),
+  mlClasses                 (NULL),
+  mlClassesWeOwnIt          (false),
   log                       (_log),
   modelingMethod            (Model::mtNULL),
   examplesPerClass          (0),
   modelParameters           (NULL),
   noiseGuaranteedSize       (0),
-  noiseMLClass           (NULL),
+  noiseMLClass              (NULL),
   noiseTrainingClass        (NULL),
   normalizationParms        (NULL),
   otherClass                (NULL),
   otherClassLineNum         (-1),
-  trainingClasses           ("", true, 10),
+  trainingClasses           ("", true),
   validateDirectories       (false)
 
 {
@@ -247,29 +247,29 @@ TrainingConfiguration2::TrainingConfiguration2 (FileDescPtr             _fileDes
 
   
   
-TrainingConfiguration2::TrainingConfiguration2 (FileDescPtr             _fileDesc,          // Use this one if you want to
+TrainingConfiguration2::TrainingConfiguration2 (FileDescPtr          _fileDesc,          // Use this one if you want to
                                                 MLClassConstListPtr  _mlClasses,      // create a default Configuration 
-                                                ModelParamPtr           _modelParameters,   /**< Will take ownership of this instance. */
-                                                RunLog&                 _log
+                                                ModelParamPtr        _modelParameters,   /**< Will take ownership of this instance. */
+                                                RunLog&              _log
                                                ):
-  Configuration             (_log),
+  Configuration           (_log),
 
-  configFileNameSpecified   (""),
-  fileDesc                  (_fileDesc),
-  mlClasses              (NULL),
-  mlClassesWeOwnIt       (false),
-  log                       (_log),
-  modelingMethod            (Model::mtNULL),
-  examplesPerClass          (0),
-  modelParameters           (_modelParameters),
-  noiseGuaranteedSize       (0),
-  noiseMLClass           (NULL),
-  noiseTrainingClass        (NULL),
-  normalizationParms        (NULL),
-  otherClass                (NULL),
-  otherClassLineNum         (-1),
-  trainingClasses           ("", true, 10),
-  validateDirectories       (false)
+  configFileNameSpecified (""),
+  fileDesc                (_fileDesc),
+  mlClasses               (NULL),
+  mlClassesWeOwnIt        (false),
+  log                     (_log),
+  modelingMethod          (Model::mtNULL),
+  examplesPerClass        (0),
+  modelParameters         (_modelParameters),
+  noiseGuaranteedSize     (0),
+  noiseMLClass            (NULL),
+  noiseTrainingClass      (NULL),
+  normalizationParms      (NULL),
+  otherClass              (NULL),
+  otherClassLineNum       (-1),
+  trainingClasses         ("", true),
+  validateDirectories     (false)
 
 {
   if  (!fileDesc)
@@ -320,29 +320,29 @@ TrainingConfiguration2::TrainingConfiguration2 (FileDescPtr             _fileDes
   
   
 TrainingConfiguration2::TrainingConfiguration2 (const TrainingConfiguration2&  tc):
-  Configuration             (tc),
+  Configuration            (tc),
 
-  configFileNameSpecified   (tc.configFileNameSpecified),
-  fileDesc                  (tc.fileDesc),
-  mlClasses              (NULL),
-  mlClassesWeOwnIt       (false),
-  log                       (tc.log),
-  modelingMethod            (tc.modelingMethod),
-  examplesPerClass          (tc.examplesPerClass),
-  modelParameters           (NULL),
-  noiseGuaranteedSize       (tc.noiseGuaranteedSize),
-  noiseMLClass           (tc.noiseMLClass),
-  noiseTrainingClass        (tc.noiseTrainingClass),
-  normalizationParms        (NULL),
-  otherClass                (tc.otherClass),
-  otherClassLineNum         (tc.otherClassLineNum),
-  rootDir                   (tc.rootDir),
-  trainingClasses           (tc.rootDir, true, tc.trainingClasses.QueueSize ()),
-  validateDirectories       (tc.validateDirectories)
+  configFileNameSpecified  (tc.configFileNameSpecified),
+  fileDesc                 (tc.fileDesc),
+  mlClasses                (NULL),
+  mlClassesWeOwnIt         (false),
+  log                      (tc.log),
+  modelingMethod           (tc.modelingMethod),
+  examplesPerClass         (tc.examplesPerClass),
+  modelParameters          (NULL),
+  noiseGuaranteedSize      (tc.noiseGuaranteedSize),
+  noiseMLClass             (tc.noiseMLClass),
+  noiseTrainingClass       (tc.noiseTrainingClass),
+  normalizationParms       (NULL),
+  otherClass               (tc.otherClass),
+  otherClassLineNum        (tc.otherClassLineNum),
+  rootDir                  (tc.rootDir),
+  trainingClasses          (tc.rootDir, true),
+  validateDirectories      (tc.validateDirectories)
 
 {
   {
-    int32  x;
+    kkint32  x;
 
     for  (x = 0;  x < tc.trainingClasses.QueueSize ();  x++)
     {
@@ -393,11 +393,11 @@ KKStr  TrainingConfiguration2::DirectoryPathForClass (MLClassConstPtr  mlClass) 
 
 
 
-uint32  TrainingConfiguration2::NumHierarchialLevels ()  const
+kkuint32  TrainingConfiguration2::NumHierarchialLevels ()  const
 {
   TrainingClassList::const_iterator  idx;
 
-  uint16  numHierarchialLevels = 0;
+  kkuint16  numHierarchialLevels = 0;
 
   for  (idx = trainingClasses.begin ();  idx !=  trainingClasses.end ();  idx++)
   {
@@ -434,7 +434,7 @@ void  TrainingConfiguration2::SyncronizeMLClassListWithTrainingClassList ()
 
 
 
-MLClassConstListPtr   TrainingConfiguration2::ExtractListOfClassesForAGivenHierarchialLevel (uint32 level)   const
+MLClassConstListPtr   TrainingConfiguration2::ExtractListOfClassesForAGivenHierarchialLevel (kkuint32 level)   const
 {
   MLClassConstListPtr  classes = new MLClassConstList ();
   TrainingClassList::const_iterator  idx;
@@ -453,7 +453,7 @@ MLClassConstListPtr   TrainingConfiguration2::ExtractListOfClassesForAGivenHiera
 
 
 
-TrainingConfiguration2Ptr  TrainingConfiguration2::GenerateAConfiguraionForAHierarchialLevel (uint32 level)
+TrainingConfiguration2Ptr  TrainingConfiguration2::GenerateAConfiguraionForAHierarchialLevel (kkuint32 level)
 {
   log.Level (10) << "TrainingConfiguration2::GenerateAConfiguraionForAHierarchialLevel  level[" << level << "]" << endl;
   TrainingConfiguration2Ptr  hierarchialConfig = new TrainingConfiguration2 (*this);
@@ -927,7 +927,7 @@ void  TrainingConfiguration2::A_Param (float  _aParam)
 
 
 
-int32  TrainingConfiguration2::BitsToReduceBy () const
+kkint32  TrainingConfiguration2::BitsToReduceBy () const
 {
   if  (modelParameters)
     return modelParameters->BitsToReduceBy ();
@@ -937,7 +937,7 @@ int32  TrainingConfiguration2::BitsToReduceBy () const
 
 
 
-void  TrainingConfiguration2::BitsToReduceBy (int32  bitReduction)
+void  TrainingConfiguration2::BitsToReduceBy (kkint32  bitReduction)
 {
   if  (modelParameters)
     modelParameters->BitsToReduceBy (bitReduction);
@@ -983,7 +983,7 @@ void  TrainingConfiguration2::C_Param (double _CCC)
 
 
 
-int32  TrainingConfiguration2::Number_of_rounds ()  const
+kkint32  TrainingConfiguration2::Number_of_rounds ()  const
 {
   if  (modelParameters  &&  (modelParameters->ModelParamType () == ModelParam::mptUsfCasCor))
   {
@@ -997,7 +997,7 @@ int32  TrainingConfiguration2::Number_of_rounds ()  const
 
 
 
-void   TrainingConfiguration2::Number_of_rounds (int32  _number_of_rounds)
+void   TrainingConfiguration2::Number_of_rounds (kkint32  _number_of_rounds)
 {
   if  (modelParameters  &&  (modelParameters->ModelParamType () == ModelParam::mptUsfCasCor))
   {
@@ -1007,7 +1007,7 @@ void   TrainingConfiguration2::Number_of_rounds (int32  _number_of_rounds)
 
 
 
-void  TrainingConfiguration2::UnBalancedBits  (int32 _unBalancedBits)
+void  TrainingConfiguration2::UnBalancedBits  (kkint32 _unBalancedBits)
 {
   if  (modelParameters)
     modelParameters->UnBalancedBits (_unBalancedBits);
@@ -1266,7 +1266,7 @@ void   TrainingConfiguration2::KernalType (SVM_KernalType _kernalType)
 
 
 
-int32  TrainingConfiguration2::UnBalancedBits  ()  const
+kkint32  TrainingConfiguration2::UnBalancedBits  ()  const
 {
   if  (modelParameters)
     return  modelParameters->UnBalancedBits ();
@@ -1301,7 +1301,7 @@ FeatureNumList  TrainingConfiguration2::GetFeatureNums ()  const
 
 
 
-int32  TrainingConfiguration2::NumOfFeaturesAfterEncoding ()  const
+kkint32  TrainingConfiguration2::NumOfFeaturesAfterEncoding ()  const
 {
   if  (modelParameters)
     return modelParameters->NumOfFeaturesAfterEncoding ();
@@ -1311,14 +1311,14 @@ int32  TrainingConfiguration2::NumOfFeaturesAfterEncoding ()  const
 
 
 
-void   TrainingConfiguration2::ExamplesPerClass (int32 _examplesPerClass)
+void   TrainingConfiguration2::ExamplesPerClass (kkint32 _examplesPerClass)
 {
   examplesPerClass = _examplesPerClass;
 }
 
 
 
-int32  TrainingConfiguration2::ExamplesPerClass ()  const
+kkint32  TrainingConfiguration2::ExamplesPerClass ()  const
 {
   return examplesPerClass;
 }  /* ImagesPerClass */
@@ -1343,7 +1343,7 @@ FeatureNumList   TrainingConfiguration2::GetFeatureNums (MLClassConstPtr  class1
 
 
 void  TrainingConfiguration2::SetModelParameters (ModelParamPtr  _svmParanters,
-                                                  int32            _examplesPerClass
+                                                  kkint32          _examplesPerClass
                                                  )
 {
   delete  modelParameters;
@@ -1354,14 +1354,14 @@ void  TrainingConfiguration2::SetModelParameters (ModelParamPtr  _svmParanters,
 
 
 
-TrainingClassPtr  TrainingConfiguration2::ValidateClassConfig (int32  sectionNum)
+TrainingClassPtr  TrainingConfiguration2::ValidateClassConfig (kkint32  sectionNum)
 {
-  int32  classNameLineNum = 0;
-  int32  dirLineNum       = 0;
-  int32  forgroundLineNum = 0;
-  int32  weightLineNum    = 0;
+  kkint32  classNameLineNum = 0;
+  kkint32  dirLineNum       = 0;
+  kkint32  forgroundLineNum = 0;
+  kkint32  weightLineNum    = 0;
 
-  int32  sectionLineNum = SectionLineNum (sectionNum);
+  kkint32  sectionLineNum = SectionLineNum (sectionNum);
 
   KKStrConstPtr  classDir  = SettingValue (sectionNum, "DIR",        dirLineNum);
   KKStrConstPtr  className = SettingValue (sectionNum, "CLASS_NAME", classNameLineNum);
@@ -1447,7 +1447,7 @@ TrainingClassPtr  TrainingConfiguration2::ValidateClassConfig (int32  sectionNum
 
 
 void TrainingConfiguration2::ValidateOtherClass (MLClassConstPtr  otherClass,
-                                                 int32               otherClassLineNum
+                                                 kkint32             otherClassLineNum
                                                 )
 {
   KKStr  classDirToUse = osAddSlash (rootDir) + otherClass->Name ();
@@ -1463,7 +1463,7 @@ void TrainingConfiguration2::ValidateOtherClass (MLClassConstPtr  otherClass,
 
 
 
-void  TrainingConfiguration2::ValidateTrainingClassConfig (int32  sectionNum)
+void  TrainingConfiguration2::ValidateTrainingClassConfig (kkint32  sectionNum)
 {
   TrainingClassPtr  trainingClass = ValidateClassConfig (sectionNum);
   if  (trainingClass)
@@ -1475,12 +1475,12 @@ void  TrainingConfiguration2::ValidateTrainingClassConfig (int32  sectionNum)
 
 
 
-FeatureNumListPtr  TrainingConfiguration2::DeriveFeaturesSelected (int32  sectionNum)
+FeatureNumListPtr  TrainingConfiguration2::DeriveFeaturesSelected (kkint32  sectionNum)
 {
-  int32  sectionLineNum = SectionLineNum (sectionNum);
+  kkint32  sectionLineNum = SectionLineNum (sectionNum);
 
-  int32  featuresIncludedLineNum = 0;
-  int32  featuresExcludedLineNum = 0;
+  kkint32  featuresIncludedLineNum = 0;
+  kkint32  featuresExcludedLineNum = 0;
 
   KKStr  includedFeaturesStr (SettingValue (sectionNum, "FEATURES_INCLUDED", featuresIncludedLineNum));
   KKStr  excludedFeaturesStr (SettingValue (sectionNum, "FEATURES_EXCLUDED", featuresExcludedLineNum));
@@ -1532,11 +1532,11 @@ FeatureNumListPtr  TrainingConfiguration2::DeriveFeaturesSelected (int32  sectio
 //*                                                              *
 //*  Added next method to support Multiple Modeling Methods.     *
 //****************************************************************
-void   TrainingConfiguration2::ValidateGlobalSection (int32  sectionNum)
+void   TrainingConfiguration2::ValidateGlobalSection (kkint32  sectionNum)
 {
-  int32  methodLineNum     = 0;
-  int32  rootDirLineNum    = 0;
-  int32  sectionLineNum    = SectionLineNum (sectionNum);
+  kkint32  methodLineNum     = 0;
+  kkint32  rootDirLineNum    = 0;
+  kkint32  sectionLineNum    = SectionLineNum (sectionNum);
 
   KKStr  modelingMethodStr  (SettingValue (sectionNum, "MODELING_METHOD", methodLineNum));
   modelingMethodStr.Upper ();
@@ -1583,9 +1583,9 @@ void   TrainingConfiguration2::ValidateGlobalSection (int32  sectionNum)
     }
   }
 
-  int32  parametersLineNum        = -1;
-  int32  featuresIncludedLineNum  = -1;
-  int32  examplesPerClassLineNum  = -1;
+  kkint32  parametersLineNum        = -1;
+  kkint32  featuresIncludedLineNum  = -1;
+  kkint32  examplesPerClassLineNum  = -1;
 
   KKStr  modelParametersStr  = SettingValue (sectionNum, "Parameters",        parametersLineNum);
   KKStr  featuresIncludedStr = SettingValue (sectionNum, "Features_Included", featuresIncludedLineNum);
@@ -1674,7 +1674,7 @@ void   TrainingConfiguration2::ValidateGlobalSection (int32  sectionNum)
 
 
 
-void   TrainingConfiguration2::ValidateTwoClassParameters (int32  sectionNum)
+void   TrainingConfiguration2::ValidateTwoClassParameters (kkint32  sectionNum)
 {
   if  (!modelParameters)
   {
@@ -1683,12 +1683,12 @@ void   TrainingConfiguration2::ValidateTwoClassParameters (int32  sectionNum)
     FormatGood (false);
   }
 
-  int32  class1NameLineNum = -1;
-  int32  class2NameLineNum = -1;
-  int32  parameterLinenum  = -1;
-  int32  weightLineNum     = -1;
+  kkint32  class1NameLineNum = -1;
+  kkint32  class2NameLineNum = -1;
+  kkint32  parameterLinenum  = -1;
+  kkint32  weightLineNum     = -1;
 
-  int32  sectionLineNum = SectionLineNum (sectionNum);
+  kkint32  sectionLineNum = SectionLineNum (sectionNum);
 
   KKStr  class1Name   (SettingValue (sectionNum, "CLASS1",     class1NameLineNum));
   KKStr  class2Name   (SettingValue (sectionNum, "CLASS2",     class2NameLineNum));
@@ -1784,9 +1784,9 @@ void   TrainingConfiguration2::ValidateConfiguration ()
   
   this->FormatErrorsClear ();
 
-  int32 numOfSections = NumOfSections ();
+  kkint32 numOfSections = NumOfSections ();
 
-  for  (int32  sectionNum = 0; sectionNum < numOfSections; sectionNum++)
+  for  (kkint32  sectionNum = 0; sectionNum < numOfSections; sectionNum++)
   {
     KKStr  sectionName (SectionName (sectionNum));
     sectionName.Upper ();
@@ -1801,7 +1801,7 @@ void   TrainingConfiguration2::ValidateConfiguration ()
        noiseTrainingClass = ValidateClassConfig (sectionNum);
        if  (noiseTrainingClass)
        {
-         int32  noiseGuaranteedSizeLineNum = -1;
+         kkint32  noiseGuaranteedSizeLineNum = -1;
          noiseMLClass = noiseTrainingClass->MLClass ();
          ((MLClassPtr)noiseMLClass)->UnDefined (true);
          KKStr   noiseGuaranteedSizeStr (SettingValue ((int)sectionNum, "GUARANTEED_SIZE", noiseGuaranteedSizeLineNum));
@@ -2212,8 +2212,8 @@ TrainingConfiguration2Ptr  TrainingConfiguration2::PromptForConfigurationFile (R
 
   KKStr  configFileSpec = osAddSlash (SipperVariables::TrainingModelsConfigurationDir ()) + "*.cfg";
   KKStrListPtr   configFileList = osGetListOfFiles (configFileSpec);
-  int32  numFiles = 0;
-  int32 x;
+  kkint32  numFiles = 0;
+  kkint32 x;
   if  (configFileList != NULL)
     numFiles = configFileList->QueueSize ();
   if  (numFiles == 0)
@@ -2229,7 +2229,7 @@ TrainingConfiguration2Ptr  TrainingConfiguration2::PromptForConfigurationFile (R
 
   TrainingConfiguration2Ptr  selectedConfig = NULL;
 
-  int32  fileNum = 0;
+  kkint32  fileNum = 0;
 
   while  (!selectedConfig)
   {
@@ -2290,7 +2290,7 @@ void   TrainingConfiguration2::DetermineWhatTheRootDirectoryIs ()
   if  (trainingClasses.QueueSize () < 0)
     return;
 
-  uint32 zed = 0;
+  kkuint32 zed = 0;
 
   VectorKKStr  rootDirParts = osSplitDirectoryPathIntoParts (trainingClasses[0].ExpandedDirectory (rootDir));
   for  (idx = trainingClasses.begin ();  idx != trainingClasses.end ();  idx++)
@@ -2325,7 +2325,7 @@ void   TrainingConfiguration2::DetermineWhatTheRootDirectoryIs ()
     VectorKKStr  parts = osSplitDirectoryPathIntoParts (tc->ExpandedDirectory (rootDir));
 
     KKStr newTrainClassSubDir = "";
-    for (zed = (uint32)rootDirParts.size ();  zed < (uint32)parts.size ();  zed++)
+    for (zed = (kkuint32)rootDirParts.size ();  zed < (kkuint32)parts.size ();  zed++)
       newTrainClassSubDir << parts[zed];
 
     tc->Directory (newTrainClassSubDir);

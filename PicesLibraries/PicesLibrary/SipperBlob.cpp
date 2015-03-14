@@ -9,11 +9,11 @@
 using namespace  std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "BMPImage.h"
 #include "Raster.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 
 #include "SipperBlob.h"
@@ -24,8 +24,8 @@ using namespace  MLL;
 
 namespace  MLL
 {
-uint32  SipperBlob::maxFrameHeight = 0;
-uint32  SipperBlob::maxFrameWidth  = 0;
+kkuint32  SipperBlob::maxFrameHeight = 0;
+kkuint32  SipperBlob::maxFrameWidth  = 0;
 
 
 SipperBlob::SipperBlob ():
@@ -53,25 +53,25 @@ SipperBlob::~SipperBlob ()
 
 
 ImageFeaturesPtr  SipperBlob::Save (uchar**     frame,
-                                    int32**     blobIds,
+                                    kkint32**     blobIds,
                                     KKStr       fileName,
                                     bool        createImageFeaturesObject,
                                     MLClassPtr  mlClass,
-                                    uint32      firstFrameRowScanLine,
+                                    kkuint32    firstFrameRowScanLine,
                                     bool        save,     /**< If set to false will not save, just calc features. */
                                     bool        colorize  /**< Set to true if you wish to save the 7 grayscale values as colors.*/
                                    )
 
 {
-  uint32   col;
-  uint32   row;
+  kkuint32 col;
+  kkuint32 row;
 
-  uint32   numOfRows = rowBot - rowTop  + 1;
-  uint32   numOfCols;
+  kkuint32 numOfRows = rowBot - rowTop  + 1;
+  kkuint32 numOfCols;
 
-  int32  colOffset;
-  int32  bmpRow;
-  int32  bmpCol;
+  kkint32  colOffset;
+  kkint32  bmpRow;
+  kkint32  bmpCol;
 
   ImageFeaturesPtr  image = NULL;
 
@@ -91,7 +91,7 @@ ImageFeaturesPtr  SipperBlob::Save (uchar**     frame,
 
     bmpRow = 8;
 
-    int32 padding = 16;
+    kkint32 padding = 16;
 
     colOffset = padding / 2;
 
@@ -153,20 +153,20 @@ ImageFeaturesPtr  SipperBlob::Save (uchar**     frame,
 
 
 RasterPtr  SipperBlob::GetRaster (uchar** frame,
-                                  int32**   blobIds,     
-                                  uint32    firstFrameRowScanLine
+                                  kkint32**   blobIds,     
+                                  kkuint32  firstFrameRowScanLine
                                  )  const
 
 {
-  uint32   col;
-  uint32   row;
+  kkuint32 col;
+  kkuint32 row;
 
-  uint32   numOfRows;
-  uint32   numOfCols;
+  kkuint32 numOfRows;
+  kkuint32 numOfCols;
 
-  int32  colOffset;
-  int32  bmpRow;
-  int32  bmpCol;
+  kkint32  colOffset;
+  kkint32  bmpRow;
+  kkint32  bmpCol;
 
   {
     numOfRows = rowBot   - rowTop  + 17;
@@ -174,7 +174,7 @@ RasterPtr  SipperBlob::GetRaster (uchar** frame,
 
     bmpRow = 8;
 
-    int32 padding = 16;
+    kkint32 padding = 16;
 
     colOffset = padding / 2;
 
@@ -207,32 +207,32 @@ RasterPtr  SipperBlob::GetRaster (uchar** frame,
 
 
 void  SipperBlob::DialateBlob (uchar** frame,
-                               int32**   blobIds,
-                               int32     size
+                               kkint32**   blobIds,
+                               kkint32   size
                               )
 {
-  rowTop   = Max (0, int32 (rowTop) - size);
+  rowTop   = Max (0, kkint32 (rowTop) - size);
   rowBot   = Min (maxFrameHeight - 1, rowBot + size);
-  colLeft  = Max (0, int32 (colLeft) - size);
+  colLeft  = Max (0, kkint32 (colLeft) - size);
   colRight = Min (maxFrameWidth - 1, colRight + size);
 
-  uint32  height = 1 + rowBot   - rowTop;
-  uint32  width  = 1 + colRight - colLeft;
+  kkuint32  height = 1 + rowBot   - rowTop;
+  kkuint32  width  = 1 + colRight - colLeft;
 
-  uint32  totPixels = height * width;
+  kkuint32  totPixels = height * width;
 
-  int32*  workArea = new int32[totPixels];
-  int32** workRows = new int32*[height];
+  kkint32*  workArea = new kkint32[totPixels];
+  kkint32** workRows = new kkint32*[height];
 
-  uint32 row, col;
-  uint32 workRow = 0;
-  uint32 workCol = 0;
-  int32  curWorkPixel = 0;
-  int32* curWorkRow = NULL;
+  kkuint32 row, col;
+  kkuint32 workRow = 0;
+  kkuint32 workCol = 0;
+  kkint32  curWorkPixel = 0;
+  kkint32* curWorkRow = NULL;
 
-  int32* curRow = NULL;
+  kkint32* curRow = NULL;
 
-  uint32  windowRow, windowCol;
+  kkuint32  windowRow, windowCol;
 
   for  (row = rowTop;  row <= rowBot;  row++)
   {
@@ -275,12 +275,12 @@ void  SipperBlob::DialateBlob (uchar** frame,
 
       // Next lets determine if this pixel will be the recipient of dilation.
       bool  dialatePixel = false;
-      for  (windowRow = Max ((int32 (workRow) - size), 0);  (windowRow < (workRow + size))  &&  (!dialatePixel);  windowRow++)
+      for  (windowRow = Max ((kkint32 (workRow) - size), 0);  (windowRow < (workRow + size))  &&  (!dialatePixel);  windowRow++)
       {
         if  (windowRow >= height)
           break;
 
-        for  (windowCol = Max (0, (int32 (workCol) - size));  windowCol < (workCol + size);  windowCol++)
+        for  (windowCol = Max (0, (kkint32 (workCol) - size));  windowCol < (workCol + size);  windowCol++)
         {
           if  (windowCol >= width)
             break;
@@ -310,11 +310,11 @@ void  SipperBlob::DialateBlob (uchar** frame,
 
 void  SipperBlob::AddNeighbor (SipperBlobPtr  _neighbor)
 {
-  int32  neighborId = _neighbor->Id ();
+  kkint32  neighborId = _neighbor->Id ();
   if  (neighborId == neighborIdLastAdded)
     return;
 
-  neighbors.insert (pair<int32, SipperBlobPtr> (neighborId, _neighbor));
+  neighbors.insert (pair<kkint32, SipperBlobPtr> (neighborId, _neighbor));
   neighborIdLastAdded = neighborId;
 }  /* AddNeighbor */
 

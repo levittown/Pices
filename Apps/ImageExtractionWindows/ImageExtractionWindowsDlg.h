@@ -3,8 +3,8 @@
 #include "afxwin.h"
 
 #include "DateTime.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 #include "SipperImageExtractionParms.h"
 

@@ -1,8 +1,8 @@
 #ifndef  _LLOYDSENTRY_
 #define _LLOYDSENTRY_
 
-#include  "BasicTypes.h"
-using namespace KKU;
+#include  "KKBaseTypes.h"
+using namespace KKB;
 
 #include  "MLClass.h"
 using namespace  MLL;
@@ -11,28 +11,28 @@ using namespace  MLL;
 class  LLoydsEntry 
 {
 public:
-  typedef  KKU::uchar   uchar;
-  typedef  KKU::uint32    uint32;
-  typedef  KKU::uint32  uint32;
-  typedef  KKU::ushort  ushort;
+  typedef  KKB::uchar   uchar;
+  typedef  KKB::kkuint32  kkuint32;
+  typedef  KKB::kkuint32  kkuint32;
+  typedef  KKB::ushort  ushort;
 
-  LLoydsEntry  (int32           _lloydsBinSize,
+  LLoydsEntry  (kkint32         _lloydsBinSize,
                 VectorIntPtr  _lloydsBins,
                 double        _lloydsIndex
                );
 
   ~LLoydsEntry ();
 
-  int32     LLoydsBin (size_t idx) const;
+  kkint32   LLoydsBin (size_t idx) const;
 
-  int32     LLoydsBinSize  ()  const  {return lloydsBinSize;}
+  kkint32   LLoydsBinSize  ()  const  {return lloydsBinSize;}
 
   double  LLoydsIndex    ()  const  {return lloydsIndex;}
 
-  uint32    NumOfLLoydsBins () const  {return  ((lloydsBins == NULL) ? 0 : (uint32)lloydsBins->size ());}
+  kkuint32  NumOfLLoydsBins () const  {return  ((lloydsBins == NULL) ? 0 : (kkuint32)lloydsBins->size ());}
 
 private:
-  int32            lloydsBinSize;
+  kkint32          lloydsBinSize;
   double         lloydsIndex;
   double         lloydsBinsMean;
   VectorIntPtr   lloydsBins;
@@ -47,14 +47,14 @@ class  LLoydsEntryList: public  KKQueue<LLoydsEntry>
 public:
   LLoydsEntryList (RunLog&  _log);
 
-  LLoydsEntryPtr  LLoydsEntryByBinSize (int32 binSize)  const;
+  LLoydsEntryPtr  LLoydsEntryByBinSize (kkint32 binSize)  const;
 
   void  PushOnBack (LLoydsEntryPtr  _lloydsEntry);
 
 
 private:
-  typedef  map<int32, LLoydsEntryPtr>  LLoydsBinEntryMap;
-  typedef  pair<int32, LLoydsEntryPtr> LLoydsBinEntryPair;
+  typedef  map<kkint32, LLoydsEntryPtr>  LLoydsBinEntryMap;
+  typedef  pair<kkint32, LLoydsEntryPtr> LLoydsBinEntryPair;
 
 
 

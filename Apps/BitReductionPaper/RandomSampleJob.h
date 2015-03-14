@@ -18,7 +18,7 @@ typedef  Orderings* OrderingsPtr;
 #include  "ImageFeatures.h"
 #include  "KKQueue.h"
 #include  "RunLog.h"
-#include  "Str.h"
+#include  "KKStr.h"
 #include  "SVMparam.h"
 #include  "TrainingConfiguration.h"
 

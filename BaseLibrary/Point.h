@@ -1,15 +1,15 @@
 /* Point.h -- Represents the coordinates in a Raster image.
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #ifndef  _POINT_
 #define  _POINT_
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "KKQueue.h"
-#include  "Str.h"
+#include  "KKStr.h"
 
-namespace KKU
+namespace KKB
 {
   /**
    *@class  Point  Point.h
@@ -27,19 +27,19 @@ namespace KKU
             int16  _col
            );
 
-    Point  (int32  _row,
-            int32  _col
+    Point  (kkint32  _row,
+            kkint32  _col
            );
 
     Point  (float  _row,
             float  _col
            );
 
-    inline int32  Row () const {return row;}
-    inline int32  Col () const {return col;}
+    inline kkint32  Row () const {return row;}
+    inline kkint32  Col () const {return col;}
 
-    void   Row (int32 _row)  {row = _row;}
-    void   Col (int32 _col)  {col = _col;}
+    void   Row (kkint32 _row)  {row = _row;}
+    void   Col (kkint32 _col)  {col = _col;}
 
     Point  UpOne    ()  const  {return Point (row - 1, col    );}
     Point  DownOne  ()  const  {return Point (row + 1, col    );}
@@ -57,8 +57,8 @@ namespace KKU
     Point&  operator= (const Point&  r);
 
   private:
-    int32  row;
-    int32  col;
+    kkint32  row;
+    kkint32  col;
   }; /* Point */
 
 
@@ -81,10 +81,10 @@ namespace KKU
 
     PointList (bool _owner);
 
-    void  BoxCoordinites (int32&  minRow,
-                          int32&  minCol,
-                          int32&  maxRow,
-                          int32&  maxCol
+    void  BoxCoordinites (kkint32&  minRow,
+                          kkint32&  minCol,
+                          kkint32&  maxRow,
+                          kkint32&  maxCol
                          );
 
     Point  CalculateCenterPoint ();
@@ -113,6 +113,6 @@ namespace KKU
   std::ostream&  operator<< (std::ostream&      left,
                              const Point&       right
                             );
-} /* namespace KKU; */
+} /* namespace KKB; */
 
 #endif

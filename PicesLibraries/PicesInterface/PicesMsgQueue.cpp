@@ -18,9 +18,9 @@ using namespace std;
 
 #include "MemoryDebug.h"
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "MsgQueue.h"
-using namespace  KKU;
+using namespace  KKB;
 
 using namespace  System::Diagnostics;
 
@@ -36,7 +36,7 @@ using namespace PicesInterface;
 
 PicesMsgQueue::PicesMsgQueue (String^  name)
 {
-  msgQueue = new KKU::MsgQueue (PicesKKStr::SystemStringToKKStr (name));
+  msgQueue = new KKB::MsgQueue (PicesKKStr::SystemStringToKKStr (name));
 }
 
 

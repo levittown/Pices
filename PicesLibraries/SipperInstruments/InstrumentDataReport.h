@@ -1,8 +1,8 @@
 #ifndef  _INSTRUMENTDATAREPORT_
 #define  _INSTRUMENTDATAREPORT_
 
-#include  "Str.h"
-using namespace KKU;
+#include  "KKStr.h"
+using namespace KKB;
 
 namespace SipperHardware
 {
@@ -16,13 +16,13 @@ namespace SipperHardware
   {
   public:
     typedef  InstrumentDataReport*  InstrumentDataReportPtr;
-    typedef  KKU::int32   int32;
-    typedef  KKU::uint32  uint32;
+    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::kkuint32  kkuint32;
 
     InstrumentDataReport (InstrumentDataManagerPtr  _manager,
                           const KKStr&              _reportDir,
                           bool                      _text,
-                          int32                     _instrumentId,
+                          kkint32                   _instrumentId,
                           bool                      _useReportWithLineNumbers
                          );
     virtual
@@ -47,11 +47,11 @@ namespace SipperHardware
       InstrumentDataReportPtr  CreateInstrumentDataReport (InstrumentDataManagerPtr _manager,
                                                            const KKStr&             _reportDir,
                                                            bool                     _text,
-                                                           int32                    _instrumentId
+                                                           kkint32                  _instrumentId
                                                           );
 
     virtual  
-      void  ReportInstrumentData (uint32 curScanLine,
+      void  ReportInstrumentData (kkuint32 curScanLine,
                                   uchar  sensorData
                                  );
 
@@ -65,9 +65,9 @@ namespace SipperHardware
                                 * end of string.  When a '\n' is processed will move
                                 * to 'lastTextLine' and then set to empty.
                                 */
-    int32    instrumentId;
+    kkint32  instrumentId;
     
-    uint32   lastScanLineReported;
+    kkuint32 lastScanLineReported;
   
     KKStr    lastTextLine;    /**< Used where "text == true",  will keep an instance of last complete text line 
                                * read.  Will come from curText line when 

@@ -23,9 +23,9 @@ using namespace System::Threading;
 using namespace System::Windows::Forms;
 
 #include "MemoryDebug.h"
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "Point.h"
-using namespace KKU;
+using namespace KKB;
 
 
 #include "PicesKKStr.h"
@@ -74,7 +74,7 @@ namespace  PicesInterface
 
 
 
-  PicesPoint::PicesPoint (const KKU::Point&  p):
+  PicesPoint::PicesPoint (const KKB::Point&  p):
     row (p.Row ()), col (p.Col ())
   {
   }
@@ -199,12 +199,12 @@ namespace  PicesInterface
 
 
 
-  KKU::PointListPtr  PicesPointList::ToUnmanaged ()
+  KKB::PointListPtr  PicesPointList::ToUnmanaged ()
   {
-    KKU::PointListPtr  unmanagedList = new KKU::PointList (true);
+    KKB::PointListPtr  unmanagedList = new KKB::PointList (true);
     for each  (PicesPoint^ p in *this)
     {
-      unmanagedList->PushOnBack (new KKU::Point (p->Row, p->Col));
+      unmanagedList->PushOnBack (new KKB::Point (p->Row, p->Col));
     }
     return  unmanagedList;
   }

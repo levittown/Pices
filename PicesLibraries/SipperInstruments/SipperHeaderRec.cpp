@@ -12,9 +12,9 @@
 using namespace std;
 
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "OSservices.h"
-using  namespace  KKU;
+using  namespace  KKB;
 
 
 #include  "SipperHeaderRec.h"
@@ -129,7 +129,7 @@ SipperHeaderRec::SipperHeaderRec (const SipperHeaderRec&  _headerRec):
     portAssignments   ()
 
 {
-  uint32 x;
+  kkuint32 x;
   for  (x = 0;  x < _headerRec.portAssignments.size ();  x++)
   {
     if  (_headerRec.portAssignments[x])
@@ -194,7 +194,7 @@ void  SipperHeaderRec::InitFields ()
 // with the sfd command.
 KKStr  SipperHeaderRec::HeaderStr ()
 {
-  uint32  x = 0;
+  kkuint32  x = 0;
   KKStr  s (500);
 
   s << "fn" << "\t" << sipperFileName                   + "\t" 
@@ -235,7 +235,7 @@ void  SipperHeaderRec::ParseHeaderStr (const KKStr&  s)
 
   VectorKKStr  fields = s.Split ('\t');
 
-  uint32  x = 0;
+  kkuint32  x = 0;
   bool  found = true;
 
   while  (x < fields.size ())
@@ -245,7 +245,7 @@ void  SipperHeaderRec::ParseHeaderStr (const KKStr&  s)
 
     KKStr  fieldValue = "";
 
-    int32 commaIdx = fieldName.LocateCharacter (',');
+    kkint32 commaIdx = fieldName.LocateCharacter (',');
     if  (commaIdx < 0)
     {
       if  (x < fields.size ())
@@ -326,7 +326,7 @@ void  SipperHeaderRec::ProcessNameAndDataStrings (const KKStr&   _fieldName,
     ClearOutExistingPortAssignments ();
     VectorKKStr  subFields = fieldValue.Split (',');
     
-    int32  serialPortNum = subFields[0].ToInt ();
+    kkint32  serialPortNum = subFields[0].ToInt ();
     if  ((serialPortNum >= 0) && (serialPortNum < 6))
     {
       PortAssignmentPtr  portAssignment = NULL;
@@ -383,7 +383,7 @@ void  SipperHeaderRec::Save (ostream&  w)
    w << "SeaConditions        = " << seaConditions       << endl;
    w << "ScanRate             = " << StrFormatInt (scanRate, "zzzzzz0") << endl;
 
-   for  (uint32 x = 0;  x < portAssignments.size ();  x++)
+   for  (kkuint32 x = 0;  x < portAssignments.size ();  x++)
    {
      PortAssignmentPtr  portAssignment = portAssignments[x];
 
@@ -411,7 +411,7 @@ void  SipperHeaderRec::Save (ostream&  w)
 
 
 
-const KKStr&  SipperHeaderRec::SerialPortShortName (uint32  serialPortNum)  const
+const KKStr&  SipperHeaderRec::SerialPortShortName (kkuint32  serialPortNum)  const
  {
    if  ((serialPortNum < 0)  ||  (serialPortNum >= portAssignments.size ()))
      return KKStr::EmptyStr ();
@@ -425,7 +425,7 @@ const KKStr&  SipperHeaderRec::SerialPortShortName (uint32  serialPortNum)  cons
 
 
 
-const KKStr&  SipperHeaderRec::SerialPortDesc (uint32  serialPortNum)  const
+const KKStr&  SipperHeaderRec::SerialPortDesc (kkuint32  serialPortNum)  const
 {
    if  ((serialPortNum < 0)  ||  (serialPortNum >= portAssignments.size ()))
      return KKStr::EmptyStr ();
@@ -438,7 +438,7 @@ const KKStr&  SipperHeaderRec::SerialPortDesc (uint32  serialPortNum)  const
 
 
 
-InstrumentPtr  SipperHeaderRec::SerialPortAssignment (uint32 serialPort)  const
+InstrumentPtr  SipperHeaderRec::SerialPortAssignment (kkuint32 serialPort)  const
 {
   if  (serialPort >= portAssignments.size ())
     return NULL;
@@ -453,10 +453,10 @@ InstrumentPtr  SipperHeaderRec::SerialPortAssignment (uint32 serialPort)  const
 
 
 
-InstrumentPtr  SipperHeaderRec::InclinationMeter (uint32  inclinationSerailPort)  const
+InstrumentPtr  SipperHeaderRec::InclinationMeter (kkuint32  inclinationSerailPort)  const
 {
   inclinationSerailPort = 0;
-  uint32  x;
+  kkuint32  x;
   for  (x = 0;  x < portAssignments.size ();  x++)
   {
     if  (portAssignments[x] != NULL)

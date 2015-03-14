@@ -14,10 +14,10 @@
 #include  <functional>
 
 #include  "MemoryDebug.h"
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 
 using namespace std;
-using namespace KKU;
+using namespace KKB;
 
 
 
@@ -471,7 +471,7 @@ void  ActiveLearning::EndBlock ()
        if  (!DeleteFile (lockFileName))
        {
          DWORD  lastErrorNum = GetLastError ();
-         log.Level (-1) << "ActiveLearning::EndBlock - Error["  << (int64)lastErrorNum << "] deleting Lock File." << endl;
+         log.Level (-1) << "ActiveLearning::EndBlock - Error["  << (kkint64)lastErrorNum << "] deleting Lock File." << endl;
        }
      }
   }

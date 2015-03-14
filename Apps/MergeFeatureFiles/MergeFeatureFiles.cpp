@@ -11,14 +11,14 @@
 #include <vector>
 
 #include "MemoryDebug.h"
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 
 using namespace std;
 
 #include "Compressor.h"
 #include "OSservices.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 #include "InstrumentDataFileManager.h"
 using namespace SipperHardware;
@@ -77,7 +77,7 @@ MergeFeatureFiles::~MergeFeatureFiles ()
 
 
 
-void  MergeFeatureFiles::InitalizeApplication (int32   argc,
+void  MergeFeatureFiles::InitalizeApplication (kkint32 argc,
                                                char**  argv
                                               )
 {
@@ -416,10 +416,10 @@ void  TestCompressClass ()
   char* inBuff = "This is a test of the Compressing rountine to see how well it will work";
   int   inBuffLen = strlen (inBuff) + 1;
 
-  KKU::uint  compressedLen = 0;
-  void*  compressedData = Compressor::CreateCompressedBuffer ((KKU::uchar*)inBuff, inBuffLen, compressedLen);
+  KKB::uint  compressedLen = 0;
+  void*  compressedData = Compressor::CreateCompressedBuffer ((KKB::uchar*)inBuff, inBuffLen, compressedLen);
 
-  KKU::uint  unCompressedLen = 0;
+  KKB::uint  unCompressedLen = 0;
   char*  decompressedStr = (char*)Compressor::Decompress (compressedData, compressedLen, unCompressedLen);
 
   cout << decompressedStr << endl;
@@ -551,7 +551,7 @@ map<KKStr, KKStr>*  GetImagesAlreadyInImagesFullSize (const KKStr&  sipperFileNa
   if  (!results)
     return  alreadyInFullSize;
 
-  for  (KKU::uint row = 0;  row < results->NumRows ();  row++)
+  for  (KKB::uint row = 0;  row < results->NumRows ();  row++)
   {
     KKStr  imageFileName = (*results)[row][1];
     alreadyInFullSize->insert (pair<KKStr, KKStr> (imageFileName, imageFileName));
@@ -580,8 +580,8 @@ void  UpdateFullSizeImages ()
   bool   cancelFlag = false;
 
 
-  KKU::uint  numImages = 0;
-  KKU::uint  numImagesSaved = 0;
+  KKB::uint  numImages = 0;
+  KKB::uint  numImagesSaved = 0;
 
   for  (idx = sipperFiles->begin ();  idx != sipperFiles->end ();  idx++)
   {
@@ -612,7 +612,7 @@ void  UpdateFullSizeImages ()
       numImages++;
 
       DataBaseImagePtr  i = *idx;
-      KKU::uint  maxDim = Max (i->Height (), i->Width ());
+      KKB::uint  maxDim = Max (i->Height (), i->Width ());
       if  (maxDim > 100)
       {
         fullSizeIdx = imagesAlreadtInFullSize->find (i->ImageFileName ());
@@ -1047,7 +1047,7 @@ void  Strip ()
   }
 
 
-  uint32  numExamplesWritten = 90;
+  kkuint32  numExamplesWritten = 90;
   driver->SaveFeatureFile ("D:\\Pices\\Reports\\FeatureDataFiles\\AllValidatedImages_ForJonathon\\AllValidatedData1209.data",
                            data->AllFeatures (), 
                            *stripped, 

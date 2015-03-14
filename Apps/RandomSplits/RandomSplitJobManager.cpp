@@ -11,14 +11,14 @@
 #include  <vector>
 
 #include  "MemoryDebug.h"
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 
 using namespace std;
 
 #include "HTMLReport.h"
 #include "OSservices.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 #include "InstrumentDataFileManager.h"
 
@@ -198,7 +198,7 @@ void  RandomSplitJobManager::GenerateFinalResultsReport ()
   JobList::const_iterator  idx;
 
   ConfusionMatrix2  avgResults (*(this->MLClasses ()));
-  KKU::uint  x = 0;
+  KKB::uint  x = 0;
 
   for  (idx = Jobs ()->begin ();  idx != Jobs ()->end ();  idx++)
   {
@@ -228,7 +228,7 @@ void  RandomSplitJobManager::GenerateFinalResultsReport ()
     << "Class Counts" << endl
     << endl;
 
-  KKU::uint  numClasses = mlClasses->size ();
+  KKB::uint  numClasses = mlClasses->size ();
 
   VectorFloat   classAccs;
   VectorDouble  knownCounts;

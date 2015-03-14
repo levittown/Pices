@@ -12,10 +12,10 @@
 #include  "MemoryDebug.h"
 using namespace std;
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "MLLTypes.h"
 
-using namespace KKU;
+using namespace KKB;
 using namespace MLL;
 
 

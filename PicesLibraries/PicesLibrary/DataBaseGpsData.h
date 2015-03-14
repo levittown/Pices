@@ -1,7 +1,7 @@
 #if  !defined(_DATABASEGPSDATA_)
 #define  _DATABASEGPSDATA_
 
-#include  "Str.h"
+#include  "KKStr.h"
 
 
 
@@ -18,7 +18,7 @@ namespace MLL
 
 
     DataBaseGpsData (const KKStr&          _cruiseName,
-                     const KKU::DateTime&  _utcDateTime,
+                     const KKB::DateTime&  _utcDateTime,
                      double                _latitude,
                      double                _longitude,
                      float                 _courseOverGround,
@@ -28,7 +28,7 @@ namespace MLL
     ~DataBaseGpsData ();
 
     const KKStr&   CruiseName        ()  const  {return cruiseName;}
-    KKU::DateTime  UtcDateTime       ()  const  {return utcDateTime;}
+    KKB::DateTime  UtcDateTime       ()  const  {return utcDateTime;}
     double         Latitude          ()  const  {return latitude;}
     double         Longitude         ()  const  {return longitude;}
     float          CourseOverGround  ()  const  {return courseOverGround;}
@@ -40,7 +40,7 @@ namespace MLL
 
   private:
     KKStr          cruiseName;
-    KKU::DateTime  utcDateTime;
+    KKB::DateTime  utcDateTime;
     double         latitude;
     double         longitude;
     float          courseOverGround;

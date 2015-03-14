@@ -24,10 +24,10 @@
 using namespace  std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "KKException.h"
 #include "RunLog.h"
-using namespace  KKU;
+using namespace  KKB;
 
 
 #include "Classifier2.h"
@@ -108,9 +108,9 @@ Classifier2::~Classifier2 ()
 }
 
 
-int32  Classifier2::MemoryConsumedEstimated ()  const
+kkint32  Classifier2::MemoryConsumedEstimated ()  const
 {
-  int32  memoryConsumedEstimated = sizeof (*this);
+  kkint32  memoryConsumedEstimated = sizeof (*this);
   if  (mlClasses)  memoryConsumedEstimated += mlClasses->MemoryConsumedEstimated ();
   return  memoryConsumedEstimated;
 }  /* MemoryConsumedEstimated */
@@ -131,7 +131,7 @@ SVM_SelectionMethod   Classifier2::SelectionMethod ()  const
 
 MLClassConstPtr  Classifier2::ClassifyAImageOneLevel (FeatureVector&  example,
                                                          double&         probability,
-                                                         int32&          numOfWinners, 
+                                                         kkint32&          numOfWinners, 
                                                          bool&           knownClassOneOfTheWinners,
                                                          double&         breakTie
                                                         )
@@ -147,8 +147,8 @@ MLClassConstPtr  Classifier2::ClassifyAImageOneLevel (FeatureVector&  example,
   MLClassConstPtr  predictedClass  = NULL;
   MLClassConstPtr  predictedClass2 = NULL;
 
-  int32            class1Votes = -1;
-  int32            class2Votes = -1;
+  kkint32          class1Votes = -1;
+  kkint32          class2Votes = -1;
 
   double         predictedClass2Prob = 0.0f;
 
@@ -196,7 +196,7 @@ MLClassConstPtr  Classifier2::ClassifyAImageOneLevel (FeatureVector&  example)
 {
   double  probability;
   bool    knownClassOneOfTheWinners;
-  int32     numOfWinners;
+  kkint32   numOfWinners;
   double  breakTie;
 
   return  ClassifyAImageOneLevel (example, 
@@ -211,7 +211,7 @@ MLClassConstPtr  Classifier2::ClassifyAImageOneLevel (FeatureVector&  example)
 
 
 MLClassConstPtr  Classifier2::ClassifyAImageOneLevel (FeatureVector&  example,
-                                                         int32&          numOfWinners,
+                                                         kkint32&          numOfWinners,
                                                          bool&           knownClassOneOfTheWinners
                                                         )
 {
@@ -235,12 +235,12 @@ MLClassConstPtr  Classifier2::ClassifyAImageOneLevel (FeatureVector&  example,
 void  Classifier2::ClassifyAImage (FeatureVector&    example,
                                    MLClassConstPtr&  predClass1,
                                    MLClassConstPtr&  predClass2,
-                                   int32&            predClass1Votes,
-                                   int32&            predClass2Votes,
+                                   kkint32&            predClass1Votes,
+                                   kkint32&            predClass2Votes,
                                    double&           knownClassProb,
                                    double&           predClass1Prob,
                                    double&           predClass2Prob,
-                                   int32&            numOfWinners,
+                                   kkint32&            numOfWinners,
                                    double&           breakTie,
                                    double&           compact
                                   )
@@ -291,7 +291,7 @@ void  Classifier2::ClassifyAImage (FeatureVector&    example,
 
 MLClassConstPtr  Classifier2::ClassifyAImage (FeatureVector&  example,
                                                  double&         probability,
-                                                 int32&          numOfWinners,
+                                                 kkint32&          numOfWinners,
                                                  bool&           knownClassOneOfTheWinners,
                                                  double&         breakTie
                                                 )
@@ -313,7 +313,7 @@ MLClassConstPtr  Classifier2::ClassifyAImage (FeatureVector&  example,
 
 
 MLClassConstPtr  Classifier2::ClassifyAImage (FeatureVector&  example,
-                                                 int32&          numOfWinners,
+                                                 kkint32&          numOfWinners,
                                                  bool&           knownClassOneOfTheWinners
                                                 )
 {
@@ -331,7 +331,7 @@ MLClassConstPtr  Classifier2::ClassifyAImage (FeatureVector&  example,
 
 MLClassConstPtr  Classifier2::ClassifyAImage (FeatureVector&  example)
 {
-  int32   numOfWinners;
+  kkint32 numOfWinners;
   bool  knownClassOneOfTheWinners;
   return  ClassifyAImage (example, numOfWinners, knownClassOneOfTheWinners);
 }
@@ -359,7 +359,7 @@ vector<KKStr>  Classifier2::SupportVectorNames (MLClassConstPtr  c1,
 
 
 vector<ProbNamePair>  Classifier2::FindWorstSupportVectors (FeatureVectorPtr    example,
-                                                            int32               numToFind,
+                                                            kkint32             numToFind,
                                                             MLClassConstPtr  c1,
                                                             MLClassConstPtr  c2
                                                            )
@@ -377,7 +377,7 @@ vector<ProbNamePair>  Classifier2::FindWorstSupportVectors (FeatureVectorPtr    
 
 
 vector<ProbNamePair>  Classifier2::FindWorstSupportVectors2 (FeatureVectorPtr   example,
-                                                             int32               numToFind,
+                                                             kkint32             numToFind,
                                                              MLClassConstPtr  c1,
                                                              MLClassConstPtr  c2
                                                             )
@@ -396,7 +396,7 @@ vector<ProbNamePair>  Classifier2::FindWorstSupportVectors2 (FeatureVectorPtr   
 
 void  Classifier2::ProbabilitiesByClass (const MLClassConstList& classes,
                                          FeatureVectorPtr           example,
-                                         int32*                     votes,
+                                         kkint32*                     votes,
                                          double*                    probabilities
                                         )
 {

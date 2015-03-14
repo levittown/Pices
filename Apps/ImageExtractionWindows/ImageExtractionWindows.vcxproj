@@ -182,10 +182,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\BaseLibrary\BaseLibrary.vcxproj">
-      <Project>{5a4b9b15-9745-4aba-b1a8-ffbc85d1d5df}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
     <ProjectReference Include="..\..\PicesLibraries\ImageExtractionManager\ImageExtractionManager.vcxproj">
       <Project>{66ef90f3-d4ac-4750-b715-4ad9599bd012}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>

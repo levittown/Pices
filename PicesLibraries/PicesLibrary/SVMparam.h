@@ -7,7 +7,7 @@
 #include  "MLClass.h"
 #include  "FileDesc.h"
 #include  "RunLog.h"
-#include  "Str.h"
+#include  "KKStr.h"
 #include  "svm.h"
 using namespace SVM233;
 
@@ -137,7 +137,7 @@ namespace MLL
     const
     BinaryClassParmsListPtr  BinaryParmsList            () const {return binaryParmsList;}
 
-    int32                    BitsToReduceBy             () const {return bitsToReduceBy;}
+    kkint32                  BitsToReduceBy             () const {return bitsToReduceBy;}
 
     double                   C_Param                    () const {return param.C;}
 
@@ -157,9 +157,9 @@ namespace MLL
 
     SVM_MachineType          MachineType                () const {return machineType;}
 
-    int32                    MemoryConsumedEstimated    () const;
+    kkint32                  MemoryConsumedEstimated    () const;
 
-    int32                    NumOfFeaturesAfterEncoding () const;
+    kkint32                  NumOfFeaturesAfterEncoding () const;
 
     const svm_parameter&     Param                      () const {return param;}
 
@@ -171,7 +171,7 @@ namespace MLL
 
     bool                     UseProbabilityToBreakTies  () const {return useProbabilityToBreakTies;}
 
-    int32                    UnBalancedBits             () const {return unBalancedBits;}
+    kkint32                  UnBalancedBits             () const {return unBalancedBits;}
 
 
     KKStr                    UnBalancedBitsStr          () const {return unBalancedBitsStr;}
@@ -183,7 +183,7 @@ namespace MLL
 
     // Member update methods
     void  A_Param            (float                  _A);
-    void  BitsToReduceBy     (int32                  _bitsToReduceBy)     {bitsToReduceBy    = _bitsToReduceBy;}
+    void  BitsToReduceBy     (kkint32                _bitsToReduceBy)     {bitsToReduceBy    = _bitsToReduceBy;}
     void  C_Param            (double                 _CC);
 
     void  C_Param            (MLClassConstPtr  class1,
@@ -200,7 +200,7 @@ namespace MLL
     void  MachineType        (SVM_MachineType        _machineType)        {machineType        = _machineType;}
     void  SamplingRate       (float                  _samplingRate)       {samplingRate       = _samplingRate;}
     void  SelectedFeatures   (const FeatureNumList&  _selectedFeatures)   {selectedFeatures   = _selectedFeatures;}
-    void  UnBalancedBits     (int32                  _unBalancedBits)     {unBalancedBits     = _unBalancedBits;}
+    void  UnBalancedBits     (kkint32                _unBalancedBits)     {unBalancedBits     = _unBalancedBits;}
     void  UnBalancedBitsStr  (const KKStr&           _unBalancedBitsStr)  {unBalancedBitsStr  = _unBalancedBitsStr;}
     void  WeightBitReduction (bool                   _weightBitReduction) {weightBitReduction = _weightBitReduction;}
 
@@ -246,7 +246,7 @@ namespace MLL
 
     BinaryClassParmsListPtr  binaryParmsList;
 
-    int32                    bitsToReduceBy;  // kak  Moved here from svm_parameter
+    kkint32                  bitsToReduceBy;  // kak  Moved here from svm_parameter
 
     SVM_CompressionMethod    compressionMethod;
 
@@ -268,7 +268,7 @@ namespace MLL
 
     SVM_SelectionMethod      selectionMethod;
 
-    int32                    unBalancedBits;  // Works with BitReduction compression when UnBalnced Bit reduction
+    kkint32                  unBalancedBits;  // Works with BitReduction compression when UnBalnced Bit reduction
                                               // is choosed, ex when (compressionMethod == BRunBalancedVariance)
 
 

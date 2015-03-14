@@ -9,20 +9,20 @@
 
 
 #include "MemoryDebug.h"
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 
 using namespace std;
 
 
 #include "OSservices.h"
-using namespace KKU;
+using namespace KKB;
 
 #include "SipperVariables.h"
 using namespace  SipperHardware;
 
 
-KKU::KKStrPtr       SipperVariables::picesHomeDir = NULL;
-KKU::GoalKeeperPtr  SipperVariables::blocker      = NULL;
+KKB::KKStrPtr       SipperVariables::picesHomeDir = NULL;
+KKB::GoalKeeperPtr  SipperVariables::blocker      = NULL;
 
 
 
@@ -40,8 +40,8 @@ SipperVariables::~SipperVariables ()
 
 void  SipperVariables::FinalCleanUp ()
 {
-  delete  picesHomeDir;  picesHomeDir = NULL;
-  delete  blocker;       blocker = NULL;
+  delete  picesHomeDir;          picesHomeDir = NULL;
+  GoalKeeper::Destroy(blocker);  blocker      = NULL;
 }
 
 
@@ -269,11 +269,11 @@ KKStr  SipperVariables::PicesTempDirectory ()
 
 
 
-int32  SipperVariables::LocateEnvStrStart (const KKStr&  str)
+kkint32  SipperVariables::LocateEnvStrStart (const KKStr&  str)
 {
-  int32  x = 0;
-  int32  y = 1;
-  int32  len = str.Len ();
+  kkint32  x = 0;
+  kkint32  y = 1;
+  kkint32  len = str.Len ();
   const char*  s = str.Str ();
 
   while  (y < len)
@@ -299,7 +299,7 @@ int32  SipperVariables::LocateEnvStrStart (const KKStr&  str)
 
 KKStr  SipperVariables::SubstituteInEvironmentVariables (const KKStr&  src)
 {
-  int32  x = LocateEnvStrStart (src);
+  kkint32  x = LocateEnvStrStart (src);
   if  (x < 0)
     return  src;
 
@@ -427,7 +427,7 @@ void  SipperVariables::ParseImageFileName (const KKStr&  fullFileName,
   if  (rootName.Empty ())
     return;
   
-  int32  x = rootName.LocateLastOccurrence ('_');
+  kkint32  x = rootName.LocateLastOccurrence ('_');
   if  (x > 0)
   {
     KKStr  colStr = rootName.SubStrPart (x + 1);

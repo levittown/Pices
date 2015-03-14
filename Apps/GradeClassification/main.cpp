@@ -13,9 +13,9 @@ using namespace std;
 #include "MemoryDebug.h"
 
 
-#include "BasicTypes.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKBaseTypes.h"
+#include "KKStr.h"
+using namespace KKB;
 
 #include  "GradeClassification.h"
 

@@ -11,11 +11,11 @@
 using namespace std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "OSservices.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 
 
@@ -141,7 +141,7 @@ void  SipperBuff::Open (const KKStr&  _fileName)
 
 
 
-void  SipperBuff::ResetByteOffset (uint32  _byteOffset)
+void  SipperBuff::ResetByteOffset (kkuint32  _byteOffset)
 {
   if  (!inFile)
   {
@@ -154,7 +154,7 @@ void  SipperBuff::ResetByteOffset (uint32  _byteOffset)
 #if defined(_MSC_VER)
   _fseeki64 (inFile, _byteOffset, SEEK_SET);
 #else
-  fseek (inFile, (int32)_byteOffset, SEEK_SET);
+  fseek (inFile, (kkint32)_byteOffset, SEEK_SET);
 #endif
 
   byteOffset = _byteOffset;
@@ -180,12 +180,12 @@ void  SipperBuff::SkipOneByte ()
 
 
 
-void  SipperBuff::SkipToScanLine (uint32  scanLine)
+void  SipperBuff::SkipToScanLine (kkuint32  scanLine)
 {
   uchar*  lineBuff = new uchar[5000];
-  uint32  lineSize;
-  uint32  colCount[5000];
-  uint32  pixelsInRow;
+  kkuint32  lineSize;
+  kkuint32  colCount[5000];
+  kkuint32  pixelsInRow;
   bool    flow;
   
   lineSize = 1;
@@ -203,21 +203,21 @@ void  SipperBuff::SkipToScanLine (uint32  scanLine)
 
 
 
-void  SipperBuff::SkipToScanLine (uint32  _scanLine,
-                                  uint64  _byteOffset
+void  SipperBuff::SkipToScanLine (kkuint32  _scanLine,
+                                  kkuint64  _byteOffset
                                  )
 {
 #if defined(_MSC_VER)
-  int32  returnCd = _fseeki64 (inFile, _byteOffset, SEEK_SET);
+  kkint32  returnCd = _fseeki64 (inFile, _byteOffset, SEEK_SET);
 #else
-  int32  returnCd = fseek (inFile, _byteOffset, SEEK_SET);
+  kkint32  returnCd = fseek (inFile, _byteOffset, SEEK_SET);
 #endif
 
 
-//int32 _fseeki64( 
+//kkint32 _fseeki64( 
 //   FILE *stream,
 //   __int64 offset,
-//   int32 origin 
+//   kkint32 origin 
 //);
 
   if  (returnCd != 0)
@@ -299,7 +299,7 @@ void  SipperBuff::DisplaySipperRec (SipperBuff::SipperRec&  sr)
 {
   char  bs[30];
 
-  int32  numOfBlanks;
+  kkint32  numOfBlanks;
 
   bs[7] = sr.cameraNum ? 'c' : '-';
   bs[6] = sr.eol       ? 'e' : '-';
@@ -335,7 +335,7 @@ void  SipperBuff::DisplaySipperRec (SipperBuff::SipperRec&  sr)
 
 
 SipperFileFormat  SipperBuff::GuessFormatOfNextLine (FILE*    in,
-                                                     int32    _cameraNum,
+                                                     kkint32  _cameraNum,
                                                      RunLog&  _log
                                                     )
 {
@@ -345,11 +345,11 @@ SipperFileFormat  SipperBuff::GuessFormatOfNextLine (FILE*    in,
 
   SipperRec   sipperRec;
 
-  int32  oneBitLen   = 0;   // Count for Binary Sipper
-  int32  fourBitLen  = 0;   // Count for GrayScale sipper  or Sipper II
-  int32  numOfBlanks = 0;
+  kkint32  oneBitLen   = 0;   // Count for Binary Sipper
+  kkint32  fourBitLen  = 0;   // Count for GrayScale sipper  or Sipper II
+  kkint32  numOfBlanks = 0;
 
-  int32  sipperRecsRead = 0;
+  kkint32  sipperRecsRead = 0;
 
   do  {
     do {
@@ -413,7 +413,7 @@ SipperFileFormat  SipperBuff::GuessFormatOfNextLine (FILE*    in,
 
 
 SipperFileFormat  SipperBuff::GuessFormatOfFile (const KKStr&  _fileName,
-                                                 int32         _cameraNum,
+                                                 kkint32       _cameraNum,
                                                  RunLog&       _log
                                                 )
 {
@@ -463,7 +463,7 @@ SipperFileFormat  SipperBuff::GuessFormatOfFile (const KKStr&  _fileName,
 
   if  (!in)
   {
-    int32  errorCode = errno;
+    kkint32  errorCode = errno;
 
     cerr << "***ERROR[" << errorCode << "]***, SipperBuff::GuessFormatOfFile  Can not open file[" << _fileName << "]." 
          << endl;
@@ -471,15 +471,15 @@ SipperFileFormat  SipperBuff::GuessFormatOfFile (const KKStr&  _fileName,
     return  sfUnKnown;
   }
 
-  int32  numInARow = 0;
+  kkint32  numInARow = 0;
 
   fileFormat = sfUnKnown;
 
-  int32  outerTries = 0;
+  kkint32  outerTries = 0;
 
   while  ((numInARow < 3)  &&  (outerTries < 2))
   {
-    int32  numOfTries = 0;
+    kkint32  numOfTries = 0;
     rewind (in);
     if  (outerTries > 0)
     {
@@ -515,7 +515,7 @@ SipperFileFormat  SipperBuff::GuessFormatOfFile (const KKStr&  _fileName,
 
 
 SipperBuffPtr  SipperBuff::CreateSipperBuff (KKStr                     _fileName,
-                                             int32                     _cameraNum,
+                                             kkint32                   _cameraNum,
                                              InstrumentDataManagerPtr  _instrumentDataManager,
                                              RunLog&                   _log
                                             )
@@ -530,7 +530,7 @@ SipperBuffPtr  SipperBuff::CreateSipperBuff (KKStr                     _fileName
 
 SipperBuffPtr  SipperBuff::CreateSipperBuff (SipperFileFormat          _format,
                                              KKStr                     _fileName,
-                                             int32                     _cameraNum,
+                                             kkint32                   _cameraNum,
                                              InstrumentDataManagerPtr  _instrumentDataManager,
                                              RunLog&                   _log
                                             )
@@ -573,24 +573,24 @@ SipperBuffPtr  SipperBuff::CreateSipperBuff (SipperFileFormat          _format,
 
 
 
-void  SipperBuff::DetermineCropSettings  (uint32&  cropLeft,
-                                          uint32&  cropRight
+void  SipperBuff::DetermineCropSettings  (kkuint32&  cropLeft,
+                                          kkuint32&  cropRight
                                          )
 {
   int  maxLineSize = 5000;
   uchar*  lineBuff         = new uchar[maxLineSize];
   uchar*  lineBuffSmoothed = new uchar[maxLineSize];
-  uint32  lineSize;
-  uint32  colCount[5000];
-  uint32  pixelsInRow;
+  kkuint32  lineSize;
+  kkuint32  colCount[5000];
+  kkuint32  pixelsInRow;
   bool    flow;
   
   lineSize = 1;
 
-  int32  x = 0;
+  kkint32  x = 0;
 
   uchar  maxVals[4096];
-  uint32 totVals[4096];
+  kkuint32 totVals[4096];
 
   for  (x = 0;  x < 4096;  ++x)
   {
@@ -614,7 +614,7 @@ void  SipperBuff::DetermineCropSettings  (uint32&  cropLeft,
   {
     ++count;
 
-    uint32  y = 0;
+    kkuint32  y = 0;
 
     // Medium Smooth Line
     for  (y = 1;  y <  (4096 - 1);  ++y)
@@ -646,7 +646,7 @@ void  SipperBuff::DetermineCropSettings  (uint32&  cropLeft,
     GetNextLine (lineBuff, maxLineSize, lineSize, colCount, pixelsInRow, flow);
   }
 
-  //vector<uint32>  avgVals (4096, 0);
+  //vector<kkuint32>  avgVals (4096, 0);
   //for  (x = 0;  x < 4096;  ++x)
   //  avgVals[x] = totVals[x] / count;
 

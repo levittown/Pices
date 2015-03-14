@@ -5,9 +5,9 @@
  *@brief Used for retirning results of call to "ImagesSizeSizeHistogramByDepth".
  */
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "RunLog.h"
-#include "Str.h"
+#include "KKStr.h"
 
 
 namespace MLL

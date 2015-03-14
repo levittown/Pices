@@ -54,7 +54,7 @@ namespace MLL
 
     KKStr                    fileName;
 
-    int32                    k;                 // The number of nearest neighbors to process.
+    kkint32                  k;                 // The number of nearest neighbors to process.
 
     bool                     validParam;
   };  /* ModelParamKnn */

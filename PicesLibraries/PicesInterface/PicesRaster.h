@@ -46,7 +46,7 @@ namespace PicesInterface
     // Will go back to the original SIPPER file and recover the 
     // source image.
     static  PicesRaster^  GetOrigSipperImage (String^       sipperFileRootName,
-                                              uint64        byteOffset,
+                                              kkuint64      byteOffset,
                                               uint          topLeftRow,
                                               uint          topLeftCol,
                                               uint          height,
@@ -110,7 +110,8 @@ namespace PicesInterface
 
 
      PicesRaster^     BandPass (float  lowerFreqBound,
-                                float  upperFreqBound
+                                float  upperFreqBound,
+                                bool   retainBackground
                                );
      PicesRaster^     Binarize ();
 
@@ -148,7 +149,7 @@ namespace PicesInterface
 
      PicesRaster^     OpenImage (MaskType  mt);
 
-     PicesRaster^     Padded (int32 padding);  /**< Duplicates image with extrac padding on all four sides. */
+     PicesRaster^     Padded (kkint32 padding);  /**< Duplicates image with extrac padding on all four sides. */
 
      PicesRaster^     ReversedImage ();
 

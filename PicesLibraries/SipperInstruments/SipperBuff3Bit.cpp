@@ -13,11 +13,11 @@
 using namespace std;
 
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "OSservices.h"
 #include  "RunLog.h"
-#include  "Str.h"
-using namespace KKU;
+#include  "KKStr.h"
+using namespace KKB;
 
 
 #include  "SipperBuff3Bit.h"
@@ -66,7 +66,7 @@ typedef  SplitRec*  SplitRecPtr;
 
 
 
-void  SipperBuff3Bit::GetNextSipperRec (uint32&  spaceLeft,
+void  SipperBuff3Bit::GetNextSipperRec (kkuint32&  spaceLeft,
                                         uchar&   cameraNum,
                                         bool&    raw,
                                         bool&    eol,
@@ -75,7 +75,7 @@ void  SipperBuff3Bit::GetNextSipperRec (uint32&  spaceLeft,
                                         uchar&   pixel1,
                                         uchar&   pixel2,
                                         uchar&   pixel3,
-                                        uint32&  numOfBlanks,
+                                        kkuint32&  numOfBlanks,
                                         bool&    moreRecs
                                        )
 {
@@ -169,10 +169,10 @@ void  SipperBuff3Bit::GetNextSipperRec (uint32&  spaceLeft,
 
 
 void  SipperBuff3Bit::GetNextLine (uchar*  lineBuff,
-                                   uint32  lineBuffSize,
-                                   uint32& lineSize,
-                                   uint32  colCount[],
-                                   uint32& pixelsInRow,
+                                   kkuint32  lineBuffSize,
+                                   kkuint32& lineSize,
+                                   kkuint32  colCount[],
+                                   kkuint32& pixelsInRow,
                                    bool&   flow
                                   )
 {
@@ -182,13 +182,13 @@ void  SipperBuff3Bit::GetNextLine (uchar*  lineBuff,
 
   bool    moreRecs;
 
-  uint32  numOfBlanks;
+  kkuint32  numOfBlanks;
 
   uchar   pixel0, pixel1, pixel2, pixel3;
 
   bool    exceededBuffLen = false;
 
-  uint32  spaceLeft = lineBuffSize;
+  kkuint32  spaceLeft = lineBuffSize;
 
   bool    raw;
 

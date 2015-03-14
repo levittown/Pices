@@ -10,9 +10,9 @@
    supplied labeled examples(List of FeatureVector objects), Prediction of an unlabeled example.
  */
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "RunLog.h"
-#include "Str.h"
+#include "KKStr.h"
 
 #include "BitReduction.h"
 #include "ModelParam.h"
@@ -157,13 +157,13 @@ namespace MLL
 
     bool                     AlreadyNormalized () const {return alreadyNormalized;}
 
-    int32                    BitsToReduceBy    () const;
+    kkint32                  BitsToReduceBy    () const;
 
     const CompressionStats&  Compression_Stats         () const {return compression_stats;}
     const KKStr&             BitReductionByFeature     () const {return compression_stats.bitReductionByFeature;}
     double                   ReductionTime             () const {return compression_stats.elapsed_cpu_time;  }
-    int32                    ReductionPreExampleCount  () const {return compression_stats.num_images_before; }
-    int32                    ReductionPostExampleCount () const {return compression_stats.num_images_after;  }
+    kkint32                  ReductionPreExampleCount  () const {return compression_stats.num_images_before; }
+    kkint32                  ReductionPostExampleCount () const {return compression_stats.num_images_after;  }
     float                    ReductionRatio            () const {return compression_stats.compression_ratio; }
 
     virtual
@@ -175,7 +175,7 @@ namespace MLL
     const FeatureNumList&    GetFeatureNums    () const;
 
     virtual
-    KKU::int32               MemoryConsumedEstimated ()  const;
+    KKB::kkint32             MemoryConsumedEstimated ()  const;
 
     virtual ModelTypes       ModelType ()  const = 0;
   
@@ -194,7 +194,7 @@ namespace MLL
 
     const KKStr&             RootFileName            () const {return rootFileName;}
 
-    const KKU::DateTime&     TimeSaved               () const {return timeSaved;}
+    const KKB::DateTime&     TimeSaved               () const {return timeSaved;}
 
     double                   TrainingTime            () const {return trainingTime;}
 
@@ -270,13 +270,13 @@ namespace MLL
                      MLClassConstPtr   knownClass,
                      MLClassConstPtr&  predClass1,
                      MLClassConstPtr&  predClass2,
-                     int32&            predClass1Votes,
-                     int32&            predClass2Votes,
+                     kkint32&            predClass1Votes,
+                     kkint32&            predClass2Votes,
                      double&           probOfKnownClass,
                      double&           predClass1Prob,
                      double&           predClass2Prob,
                      double&           compact,
-                     int32&            numOfWinners,
+                     kkint32&            numOfWinners,
                      bool&             knownClassOneOfTheWinners,
                      double&           breakTie
                     ) = 0;
@@ -299,7 +299,7 @@ namespace MLL
     virtual
     void  ProbabilitiesByClass (FeatureVectorPtr         example,
                                 const MLClassConstList&  _mlClasses,
-                                int32*                   _votes,
+                                kkint32*                   _votes,
                                 double*                  _probabilities
                                ) = 0;
 
@@ -352,7 +352,7 @@ namespace MLL
 
     void  DeAllocateSpace ();
 
-    void  Model::NormalizeProbabilitiesWithAMinumum (int32    numClasses,
+    void  Model::NormalizeProbabilitiesWithAMinumum (kkint32  numClasses,
                                                      double*  probabilities,
                                                      double   minProbability
                                                     );
@@ -383,7 +383,7 @@ namespace MLL
 
     double**               crossClassProbTable;   /*!< Probabilities  between Binary Classes From last Prediction */
 
-    int32                  crossClassProbTableSize;
+    kkint32                crossClassProbTableSize;
 
     FeatureEncoder2Ptr     encoder;
 
@@ -393,7 +393,7 @@ namespace MLL
 
     NormalizationParmsPtr  normParms;
 
-    int32                  numOfClasses;   /**< Number of Classes defined in crossClassProbTable. */
+    kkint32                numOfClasses;   /**< Number of Classes defined in crossClassProbTable. */
 
     ModelParamPtr          param;          /**< Will own this instance,                           */
 
@@ -409,7 +409,7 @@ namespace MLL
 
     FeatureVectorListPtr   trainExamples;
 
-    int32*                 votes;
+    kkint32*                 votes;
 
     bool                   validModel;
 
@@ -423,7 +423,7 @@ namespace MLL
     double                 trainingTime;
     double                 trainingTimeStart;   /**<  Time that the clock for TraininTime was started. */
     KKStr                  name;
-    KKU::DateTime          timeSaved;           /**<  Date and Time that this model was saved. */
+    KKB::DateTime          timeSaved;           /**<  Date and Time that this model was saved. */
   };
   
   typedef  Model::ModelPtr  ModelPtr;

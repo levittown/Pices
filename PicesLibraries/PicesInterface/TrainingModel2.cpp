@@ -3,11 +3,8 @@
 
 #include <stdio.h>
 #include <math.h>
-
-
 #include <ctype.h>
 #include <time.h>
-
 #include <fstream>
 #include <iostream>
 #include <map>
@@ -16,34 +13,35 @@
 #include <vector>
 using namespace std;
 
+
 #include "MemoryDebug.h"
-#include "BasicTypes.h"
-#include "..\\BaseLibrary\\GoalKeeper.h"
+#include "KKBaseTypes.h"
+#include "GoalKeeper.h"
 #include "ImageIO.h"
 #include "KKException.h"
 #include "Raster.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
-
-#include "InstrumentDataFileManager.h"
 
 #include "Classifier2.h"
 #include "ClassProb.h"
 #include "FeatureFileIOPices.h"
+#include "InstrumentDataFileManager.h"
+#include "SipperVariables.h"
 #include "TrainingConfiguration2.h"
+using namespace  MLL;
+
 
 #include "PicesFeatureVector.h"
 #include "PicesFeatureVectorList.h"
+#include "PicesOSservices.h"
 #include "PicesSipperVariables.h"
 #include "PicesTrainingConfiguration.h"
 #include "PicesKKStr.h"
 #include "PicesRaster.h"
-#include "SipperVariables.h"
-
 #include "TrainingModel2.h"
-
 using namespace PicesInterface;
 
 
@@ -667,7 +665,7 @@ void  TrainingModel2::LoadTrainingModelForGivenLevel (uint            level,
 
   FileDescPtr fd = FeatureFileIOPices::NewPlanktonFile (*runLog);
 
-  KKU::KKStr  configFileName = PicesKKStr::SystemStringToKKStr (modelName);
+  KKB::KKStr  configFileName = PicesKKStr::SystemStringToKKStr (modelName);
 
   *cancelFlag = false;
 
@@ -733,7 +731,7 @@ void  TrainingModel2::LoadExistingTrainedModel ()
 
   FileDescPtr fd = FeatureFileIOPices::NewPlanktonFile (*runLog);
 
-  KKU::KKStr  configFileName = PicesKKStr::SystemStringToKKStr (modelName);
+  KKB::KKStr  configFileName = PicesKKStr::SystemStringToKKStr (modelName);
 
   *cancelFlag = false;
 
@@ -815,7 +813,7 @@ void  TrainingModel2::LoadTrainigLibrary (bool  forceRebuild)
 
   FileDescPtr fd = FeatureFileIOPices::NewPlanktonFile (*runLog);
 
-  KKU::KKStr  configFileName = PicesKKStr::SystemStringToKKStr (modelName);
+  KKB::KKStr  configFileName = PicesKKStr::SystemStringToKKStr (modelName);
 
   trainerWeOwn = true;
 
@@ -919,10 +917,10 @@ void  TrainingModel2::BuildTrainingModel (PicesFeatureVectorList^  picesTraining
 
   FileDescPtr fd = FeatureFileIOPices::NewPlanktonFile (*runLog);
 
-  KKU::KKStr  configFileName = PicesKKStr::SystemStringToKKStr (modelName);
+  KKB::KKStr  configFileName = PicesKKStr::SystemStringToKKStr (modelName);
   *cancelFlag = false;
 
-  FeatureVectorListPtr  trainingData = new FeatureVectorList (fd, false, *runLog, 1000);
+  FeatureVectorListPtr  trainingData = new FeatureVectorList (fd, false, *runLog);
   for each (PicesFeatureVector^ pfv in picesTrainingData)
     trainingData->PushOnBack (pfv->Features ());
 

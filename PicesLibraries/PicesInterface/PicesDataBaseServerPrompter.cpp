@@ -14,13 +14,13 @@
 using namespace std;
 
 #include  "MemoryDebug.h"
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 
 //using namespace System;
 //using namespace System::Collections::Generic;
 //using namespace System::IO;
 //using namespace System::Windows::Forms;
-//using namespace KKU;
+//using namespace KKB;
 
 #include "PicesDataBaseServerPrompter.h"
 

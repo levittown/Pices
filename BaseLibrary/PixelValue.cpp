@@ -1,6 +1,6 @@
 /* PixelValue.cpp -- Class that represents one pixel;  works in conjunction with the Raster class.
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #include <memory>
 #include <math.h>
@@ -14,7 +14,7 @@ using namespace std;
 
 
 #include  "PixelValue.h"
-using namespace KKU;
+using namespace KKB;
 
 
 
@@ -142,7 +142,7 @@ PixelValue  PixelValue::FromHSI (float  hue,
   if  (sat == 0.0f) 
   {
     // grayscale image
-    int32  greyValue = (int32)(0.5f + intensity * 255.0f);
+    kkint32  greyValue = (kkint32)(0.5f + intensity * 255.0f);
     uchar  gv = (uchar)greyValue;
     return  PixelValue (gv, gv, gv);
   }

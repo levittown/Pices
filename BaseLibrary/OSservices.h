@@ -1,6 +1,6 @@
 /* OSservices.h -- O/S related functions,  meant to be O/S neutral
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #ifndef  _OSSERVICES_
 #define  _OSSERVICES_
@@ -14,9 +14,9 @@
  */
 
 #include  "DateTime.h"
-#include  "Str.h"
+#include  "KKStr.h"
 
-namespace KKU 
+namespace KKB 
 {
   typedef  long long  osFilePos;
 
@@ -76,6 +76,8 @@ namespace KKU
   //*  file specification.                                                    *
   //***************************************************************************
 
+  KKStr          osGetCurrentDirectory ();
+
   /**
    *@brief  Extracts the final sub-directory name of the fill directory specification.
    *@code
@@ -89,6 +91,9 @@ namespace KKU
    *@param[in]  dirPath Directory path to get dir name from .
    */
   KKStr          osGetDirNameFromPath (KKStr  dirPath);
+
+
+  KKStr          osGetErrorNoDesc (kkint32  errorNo);
 
 
   /**
@@ -109,6 +114,11 @@ namespace KKU
 
   KKStr          osGetFileExtension (KKStr  fullFileName);
   
+
+  /** @brief  returns the name and path of th ecurrent running application. */
+  KKStr          osGetFullPathOfApplication ();
+
+
   /**
    *@brief  Returns the Parent directory path to 'dirPath'.
    *@details
@@ -125,15 +135,6 @@ namespace KKU
 
 
 
-
-  /** @brief  returns the name and path of th ecurrent running application. */
-  KKStr          osGetFullPathOfApplication ();
-
-
-  KKStr          osGetErrorNoDesc (int32  errorNo);
-
-  KKStr          osGetCurrentDirectory ();
-
   KKStr          osGetHostName ();
 
   KKStr          osGetUserName ();
@@ -148,9 +149,9 @@ namespace KKU
 
   KKStrPtr       osGetEnvVariable (KKStr  _varName);
 
-  KKU::DateTime  osGetFileDateTime (const KKStr& fileName);
+  KKB::DateTime  osGetFileDateTime (const KKStr& fileName);
 
-  int64          osGetFileSize (const KKStr&  fileName);
+  kkint64        osGetFileSize (const KKStr&  fileName);
 
   double         osGetKernalTimeUsed ();
 
@@ -176,7 +177,7 @@ namespace KKU
   /**
    *@brief Returned the current local date and time.
    */
-  KKU::DateTime  osGetLocalDateTime ();
+  KKB::DateTime  osGetLocalDateTime ();
 
   KKStr          osGetParentDirectoryOfDirPath (KKStr  path);
 
@@ -196,10 +197,10 @@ namespace KKU
    */
   KKStr          osGetPathPartOfFile (KKStr  fullFileName);   
 
-  int32          osGetProcessId ();
+  kkint32        osGetProcessId ();
 
   /** @brief returns the number of CPU's or number of simultaneous threads that you can have. */
-  int32          osGetNumberOfProcessors ();
+  kkint32        osGetNumberOfProcessors ();
 
   KKStr          osGetProgName ();
 
@@ -216,13 +217,13 @@ namespace KKU
    */
   double         osGetSystemTimeUsed ();
 
-  int32          osGetThreadId ();
+  kkint32        osGetThreadId ();
 
   double         osGetUserTimeUsed   ();
 
-  int32          osLocateFirstSlashChar (const KKStr&  fileSpec);
+  kkint32        osLocateFirstSlashChar (const KKStr&  fileSpec);
 
-  int32          osLocateLastSlashChar (const KKStr&  fileSpec);
+  kkint32        osLocateLastSlashChar (const KKStr&  fileSpec);
 
 
   /** 
@@ -427,11 +428,11 @@ namespace KKU
   
   template<class T> 
       inline T* osGrowAllocation (T*   src, 
-                                  int32  origSize,
-                                  int32  newSize
+                                  kkint32  origSize,
+                                  kkint32  newSize
                                  )
   {
-    int32  zed = 0;
+    kkint32  zed = 0;
     T*  dest = new T[newSize];
     while  (zed < origSize)    {dest[zed] = src[zed];  zed++;}
     while  (zed < newSize)     {dest[zed] = (T)0;      zed++;}
@@ -449,7 +450,7 @@ namespace KKU
   #define  DSchar '/'
   #endif
   
-}  /* namespace KKU */
+}  /* namespace KKB */
 
 #endif
 

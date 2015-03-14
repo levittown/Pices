@@ -2,10 +2,9 @@
 #define  _NORMALIZATIONPARMS_
 
 #include  "Attribute.h"
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "FeatureNumList.h"
-#include  "Str.h"
-
+#include  "KKStr.h"
 
 
 namespace MLL 
@@ -20,6 +19,7 @@ namespace MLL
   #ifndef  _FeatureVectorDefined_
   class  FeatureVector;
   typedef  FeatureVector*  FeatureVectorPtr;
+  typedef  float  FVFloat;
   #endif
 
 
@@ -91,7 +91,7 @@ namespace MLL
 
     ~NormalizationParms ();
 
-    int32   MemoryConsumedEstimated ()  const;
+    kkint32 MemoryConsumedEstimated ()  const;
 
     void  NormalizeImages (FeatureVectorListPtr  images);
 
@@ -99,7 +99,7 @@ namespace MLL
 
     FeatureVectorPtr  ToNormalized (FeatureVectorPtr  example)  const;
 
-    int32   NumOfFeatures ()  {return numOfFeatures;}
+    kkint32 NumOfFeatures ()  {return numOfFeatures;}
 
 
     void  Read (FILE*  i,
@@ -118,8 +118,8 @@ namespace MLL
 
     void  Write (std::ostream&  o);
 
-    double  Mean (int32 i);
-    double  Sigma (int32 i);
+    double  Mean (kkint32 i);
+    double  Sigma (kkint32 i);
 
     const double*  Mean ()  {return  mean;}
     const double*  Sigma () {return  sigma;}
@@ -137,8 +137,8 @@ namespace MLL
     double*                   mean;
     bool*                     normalizeFeature;
     bool                      normalizeNominalFeatures;
-    int32                     numOfFeatures;
-    FFLOAT                    numOfExamples;
+    kkint32                   numOfFeatures;
+    FVFloat                   numOfExamples;
     double*                   sigma;
   };  /* NormalizationParms */
 

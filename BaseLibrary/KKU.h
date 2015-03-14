@@ -24,12 +24,12 @@
 /*
 
 /**
- @namespace KKU  Kurt Kramer Utilities
+ @namespace KKB  Kurt Kramer Utilities
  This namespace is intended to gather BaseBibrary Classes together.
  @par Author 
  <a href="http://figment.cse.usf.edu/~kkramer/">Kurt Kramer.</a><br>
  ( mail : <a href="mailto:kurtkramer@gmail.com">kurtkramer@gmail.com</a> )<br>
 */
-namespace  KKU
+namespace  KKB
 {
 }

@@ -12,10 +12,10 @@
 #include  "MemoryDebug.h"
 using namespace std;
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "OSservices.h"
 #include  "RunLog.h"
-using namespace KKU;
+using namespace KKB;
 
 
 
@@ -51,7 +51,7 @@ ModelParamUsfCasCor::ModelParamUsfCasCor  (FileDescPtr  _fileDesc,
                                            int          _out_limit,
                                            int          _number_of_rounds,
                                            int          _number_of_trials,
-                                           int64        _random_seed,
+                                           kkint64      _random_seed,
                                            bool         _useCache,
                                            RunLog&      _log
                                           ):

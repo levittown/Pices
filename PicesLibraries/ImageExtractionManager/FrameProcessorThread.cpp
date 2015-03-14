@@ -10,13 +10,13 @@
 using namespace std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "ImageIO.h"
 #include "MsgQueue.h"
 #include "OSservices.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 
 #include "InstrumentData.h"
@@ -110,10 +110,10 @@ FrameProcessorThread::~FrameProcessorThread ()
 
 
 
-void  FrameProcessorThread::GetRunTimeStats (uint32&  _framesProcessed,
-                                             uint32&  _scanLinesProcessed,
-                                             uint32&  _imagesFound,
-                                             uint32&  _imagesClassified
+void  FrameProcessorThread::GetRunTimeStats (kkuint32&  _framesProcessed,
+                                             kkuint32&  _scanLinesProcessed,
+                                             kkuint32&  _imagesFound,
+                                             kkuint32&  _imagesClassified
                                             )
 {
   _framesProcessed     = framesProcessed;
@@ -147,8 +147,8 @@ void  FrameProcessorThread::ProcessFrame (LogicalFramePtr  frame)
   {
     ExtractedImagePtr  extractedImage = extractedImages->PopFromBack ();
 
-    uint32  sipperTopRow = extractedImage->SipperFileScanRow ();
-    uint32  sipperTopCol = extractedImage->SipperFileScanCol ();
+    kkuint32  sipperTopRow = extractedImage->SipperFileScanRow ();
+    kkuint32  sipperTopCol = extractedImage->SipperFileScanCol ();
 
     KKStr  imageFileName (64);
     imageFileName << sipperRootName
@@ -165,8 +165,8 @@ void  FrameProcessorThread::ProcessFrame (LogicalFramePtr  frame)
     float            depth            = 0.0f;
     MLClassConstPtr  predClass1       = unKnownMLClass;
     MLClassConstPtr  predClass2       = NULL;
-    int32            predClass1Votes  = 0;
-    int32            predClass2Votes  = 0;
+    kkint32          predClass1Votes  = 0;
+    kkint32          predClass2Votes  = 0;
     double           knownClassProb   = 0.0;
     double           predClass1Prob   = 0.0;
     double           predClass2Prob   = 0.0;

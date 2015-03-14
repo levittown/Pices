@@ -2,7 +2,7 @@
 #define  _IEM_SIPPERIMAGE_
 
 #include "RasterSipper.h"
-using namespace  KKU;
+using namespace  KKB;
 
 #include "LogicalFrameBlob.h"
 
@@ -22,15 +22,15 @@ namespace  ImageExtractionManager
     void  AddBlob (LogicalFrameBlobPtr  _blob);
     void  Explore (LogicalFrameBlobPtr  _blob);
 
-    uint64  ByteOffset () const  {return byteOffset;}
-    uint32  ColLeft    () const  {return colLeft;}
-    uint32  ColRight   () const  {return colRight;}
-    uint32  PixelCount () const  {return pixelCount;}
-    uint32  RowBot     () const  {return rowBot;}
-    uint32  RowTop     () const  {return rowTop;}
+    kkuint64  ByteOffset () const  {return byteOffset;}
+    kkuint32  ColLeft    () const  {return colLeft;}
+    kkuint32  ColRight   () const  {return colRight;}
+    kkuint32  PixelCount () const  {return pixelCount;}
+    kkuint32  RowBot     () const  {return rowBot;}
+    kkuint32  RowTop     () const  {return rowTop;}
 
-    uint32  Width      () const  {return (1 + colRight - colLeft);}
-    uint32  Height     () const  {return (1 + rowBot   - rowTop);}
+    kkuint32  Width      () const  {return (1 + colRight - colLeft);}
+    kkuint32  Height     () const  {return (1 + rowBot   - rowTop);}
 
 
     void  Dialate (uchar** frame,
@@ -40,20 +40,20 @@ namespace  ImageExtractionManager
 
     RasterSipperPtr  GetRaster (uchar**  frame,
                                 int**    blobIds,     
-                                uint32   firstFrameRowScanLine,
-                                uint64*  frameRowByteOffsets
+                                kkuint32 firstFrameRowScanLine,
+                                kkuint64*  frameRowByteOffsets
                                );
 
 
 
   private:
     vector<LogicalFrameBlobPtr>   blobList;
-    uint64                        byteOffset;  /**< Sipper File ByteOffset of scan-line that contains the 1st row in this image.  */
-    uint32                        colLeft;
-    uint32                        colRight;
-    uint32                        pixelCount;
-    uint32                        rowBot;
-    uint32                        rowTop;
+    kkuint64                      byteOffset;  /**< Sipper File ByteOffset of scan-line that contains the 1st row in this image.  */
+    kkuint32                      colLeft;
+    kkuint32                      colRight;
+    kkuint32                      pixelCount;
+    kkuint32                      rowBot;
+    kkuint32                      rowTop;
 
   };
 

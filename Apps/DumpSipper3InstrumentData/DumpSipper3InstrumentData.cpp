@@ -13,11 +13,11 @@
 using namespace  std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "OSservices.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 #include  "FileDesc.h"
 using namespace  MLL;
@@ -89,7 +89,7 @@ DumpSipper3InstrumentData::~DumpSipper3InstrumentData ()
 
 
 
-void  DumpSipper3InstrumentData::InitalizeApplication (int32   argc,
+void  DumpSipper3InstrumentData::InitalizeApplication (kkint32 argc,
                                                        char**  argv
                                                       )
 {

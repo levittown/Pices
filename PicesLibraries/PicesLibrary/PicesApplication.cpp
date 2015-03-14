@@ -1,6 +1,6 @@
 /* PicesApplication.cpp -- Generic PicesApplication class.  
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #include "FirstIncludes.h"
 
@@ -15,7 +15,7 @@
 using  namespace  std;
 
 #include "OSservices.h"
-using  namespace  KKU;
+using  namespace  KKB;
 
 
 #include "PicesApplication.h"
@@ -94,7 +94,7 @@ PicesApplication::~PicesApplication ()
 
 
 
-void  PicesApplication::InitalizeApplication (int32   argc,
+void  PicesApplication::InitalizeApplication (kkint32 argc,
                                               char**  argv
                                              )
 {

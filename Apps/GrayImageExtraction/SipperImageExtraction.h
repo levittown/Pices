@@ -46,9 +46,9 @@
  */
 
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "RunLog.h"
-using namespace KKU;
+using namespace KKB;
 
 
 #include  "SipperBuff.h"
@@ -158,7 +158,7 @@ private:
                                 const KKStr&      sipperFileName, 
                                 RasterSipperPtr   raster, 
                                 ImageFeaturesPtr  featureVector,
-                                uint64            byteOffset,
+                                kkuint64          byteOffset,
                                 uint              sipperTopRow,
                                 uint              sipperTopCol
                                );
@@ -182,7 +182,7 @@ private:
   //  Variables used for processing a single frame.
   uchar**     frame;
   uchar*      frameArea;
-  uint64*     frameRowByteOffset;
+  kkuint64*     frameRowByteOffset;
 
   uchar**     origFrame;       // 'origFrame' and 'origFrameArea' are only used when
   uchar*      origFrameArea;   // morphalogical operations are performed.
@@ -254,8 +254,8 @@ private:
 
   RunLog&     log;
 
-  uint32         scanLineEnd;     /**< Will cme from command line or database if not specified in command line. */
-  uint32         scanLineStart;   /**< Will cme from command line or database if not specified in command line. */
+  kkuint32       scanLineEnd;     /**< Will cme from command line or database if not specified in command line. */
+  kkuint32       scanLineStart;   /**< Will cme from command line or database if not specified in command line. */
 
   DataBasePtr    dbConn;
   SipperFilePtr  sipperFileRec;

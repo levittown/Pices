@@ -11,11 +11,11 @@
 #include "MemoryDebug.h"
 using namespace std;
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "Compressor.h"
 #include "OSservices.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 #include "SipperFile.h"
 #include "SipperVariables.h"
@@ -50,7 +50,7 @@ ReFreshInstrumentData::~ReFreshInstrumentData ()
 
 
 
-void  ReFreshInstrumentData::InitalizeApplication (int32   argc,
+void  ReFreshInstrumentData::InitalizeApplication (kkint32 argc,
                                                    char**  argv
                                                   )
 {
@@ -172,8 +172,8 @@ void   ReFreshInstrumentData::Main ()
     return;
   }
 
-  KKU::uint  numSipperFiles = sipperFiles->size ();
-  KKU::uint  sipperFileNum = 0;
+  KKB::uint  numSipperFiles = sipperFiles->size ();
+  KKB::uint  sipperFileNum = 0;
 
   log.Level (10) << "Number Of Sipper Files[" << numSipperFiles << "]." << endl;
   r << "Number Of Sipper Files" << "\t" << numSipperFiles << endl;

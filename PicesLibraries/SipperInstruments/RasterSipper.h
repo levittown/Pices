@@ -1,6 +1,6 @@
 /* RasterSipper.h -- A specialized RasterSipper object for Sipper Images.
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #ifndef _RASTERSIPPER_
 #define _RASTERSIPPER_
@@ -12,7 +12,7 @@
 #include "RunLog.h"
 
 
-namespace KKU
+namespace KKB
 {
   /**
    *@file  RasterSipper.h
@@ -67,8 +67,8 @@ namespace KKU
      *          value of (255, 255, 255) and  pixel value 255 will point to the color value of (0, 0, 0).
      *          This way when displaying the image background will appear as white.
      */
-    RasterSipper (int32  _height,
-                  int32  _width
+    RasterSipper (kkint32  _height,
+                  kkint32  _width
                  );
 
 
@@ -78,8 +78,8 @@ namespace KKU
      *          image then all three color channel will be set to = 255 which stands for white.  If
      *          Grayscale the green channel will be set to 0.
      */
-    RasterSipper (int32 _height,
-                  int32 _width,
+    RasterSipper (kkint32 _height,
+                  kkint32 _width,
                   bool  _color
                  );
 
@@ -96,10 +96,10 @@ namespace KKU
      *      dimensions of the resultant raster will be '_height', and '_width'
      */
     RasterSipper (const RasterSipper& _raster,  /**<  Source RasterSipper                             */
-                  int32               _row,     /**<  Starting Row in '_raster' to copy from.             */
-                  int32               _col,     /**<  Starting Col in '_raster' to copy from.             */
-                  int32               _height,  /**<  Height of resultant raster. Will start from '_row'  */
-                  int32               _width    /**<  Width of resultant raster.                          */
+                  kkint32             _row,     /**<  Starting Row in '_raster' to copy from.             */
+                  kkint32             _col,     /**<  Starting Col in '_raster' to copy from.             */
+                  kkint32             _height,  /**<  Height of resultant raster. Will start from '_row'  */
+                  kkint32             _width    /**<  Width of resultant raster.                          */
                  );
 
     /**
@@ -109,8 +109,8 @@ namespace KKU
      */
     RasterSipper (const RasterSipper&   _raster,
                   MaskTypes             _mask,    /*!< \see MaskTyps  Generated 'RasterSipper' with be the of the mask.   */
-                  int32                 _row,
-                  int32                 _col
+                  kkint32               _row,
+                  kkint32               _col
                  );
 
     /**
@@ -129,8 +129,8 @@ namespace KKU
      *@brief  Construct a raster object that will utilize a image already in memory.
      *@details  This instance will not own the raster data.  It will only point to it.
      */
-    RasterSipper (int32    _height,
-                  int32    _width,
+    RasterSipper (kkint32  _height,
+                  kkint32  _width,
                   uchar*   _grayScaleData,
                   uchar**  _grayScaleRows
                  );
@@ -139,16 +139,16 @@ namespace KKU
     /**
      *@brief  Construct a Grayscale RasterSipper object using provided raw data,
      */
-    RasterSipper (int32         _height,
-                  int32         _width,
+    RasterSipper (kkint32       _height,
+                  kkint32       _width,
                   const uchar*  _grayScaleData
                  );
 
     /**
      *@brief  Construct a Color RasterSipper object using provided raw data,
      */
-    RasterSipper (int32         _height,
-                  int32         _width,
+    RasterSipper (kkint32       _height,
+                  kkint32       _width,
                   const uchar*  _redChannel,
                   const uchar*  _greenChannel,
                   const uchar*  _blueChannel
@@ -159,11 +159,13 @@ namespace KKU
     ~RasterSipper ();
 
 
-    int32   MemoryConsumedEstimated ()  const;
+    kkint32 MemoryConsumedEstimated ()  const;
 
     /**
      *@brief  Turn an instance of 'Raster' into 'RasterSipper'.
-     *@details Will utilize the dynamically allocated raster data of the 'Raster' instance 'r' to build a new instance of a 'SipperRaster'.
+     *@details Will utilize the dynamically allocated raster data of the 'Raster' instance 'r' to build a new instance of a 'SipperRaster'.If the 
+     * underlying type of 'r' is a instance of 'RasterSipper' will then return a dynamic_cast<> of the pointer;  otherwise will create a new
+     * instance of a 'RasterSipper' class and give it ownershoip of ALL dynanily allocated members of 'r'.
      *@param[in,out] r The raster data of 'r' will be given to the new instance of 'RasterSipper' and 'r' will then be deleted and set to NULL.
      */
     static
@@ -179,10 +181,12 @@ namespace KKU
      * 0.0.  A reverse transform is then performed and the resultant image is returned.
      *@param[in] lowerFreqBound  Lower range of frequencies to retain; between 0.0 and 1.0.
      *@param[in] upperFreqBound  Upper range of frequencies to retain; between 0.0 and 1.0.
+     *@param[in] retainBackground  
      *@return The result image.
      */
     RasterSipperPtr     BandPass (float  lowerFreqBound,    /**< Number's between 0.0 and 1.0  */
-                                  float  upperFreqBound     /**< Represent fraction.           */
+                                  float  upperFreqBound,    /**< Represent fraction.           */
+                                  bool   retainBackground
                                  );
 
 
@@ -225,12 +229,12 @@ namespace KKU
 
     static
     RasterSipperPtr     CreatePaddedRaster (BmpImage&  image,
-                                            int32      padding
+                                            kkint32    padding
                                            );
 
-    RasterSipperPtr     CreateSmoothImage (int32  maskSize = 3)  const;
+    RasterSipperPtr     CreateSmoothImage (kkint32  maskSize = 3)  const;
     
-    RasterSipperPtr     CreateSmoothedMediumImage (int32 maskSize)  const;
+    RasterSipperPtr     CreateSmoothedMediumImage (kkint32 maskSize)  const;
 
     RasterSipperPtr     CreateGaussianSmoothedImage (float sigma)  const;
 
@@ -294,7 +298,7 @@ namespace KKU
      *        to contain the specified blob with the specified number of padded row and columns.
      */
     RasterSipperPtr     ExtractABlobTightly (const BlobPtr  blob,
-                                             int32          padding
+                                             kkint32        padding
                                             ) const;
 
 
@@ -312,7 +316,7 @@ namespace KKU
      */
     static
     RasterSipperPtr     FromSimpleCompression (const uchar*  compressedBuff,
-                                               uint32        compressedBuffLen
+                                               kkuint32      compressedBuffLen
                                               ); 
 
     /**
@@ -325,7 +329,7 @@ namespace KKU
      */
     static
     RasterSipperPtr     FromCompressor (const uchar*  compressedBuff,
-                                        uint32        compressedBuffLen
+                                        kkuint32      compressedBuffLen
                                        ); 
 
     RasterSipperPtr     HalfSize ();
@@ -338,11 +342,11 @@ namespace KKU
 
     RasterSipperPtr     HistogramGrayscaleImage ()  const;
 
-    RasterSipperPtr     Padded (int32 padding);  // Creates a Padded raster object.
+    RasterSipperPtr     Padded (kkint32 padding);  // Creates a Padded raster object.
 
     RasterSipperPtr     ReversedImage ();
 
-    RasterSipperPtr     ReduceByEvenMultiple (int32  multiple)  const;
+    RasterSipperPtr     ReduceByEvenMultiple (kkint32  multiple)  const;
 
     RasterSipperPtr     ReduceByFactor (float factor)  const;  //  0 < factor <= 1.0  ex: 0.5 = Make raster half size
 
@@ -350,12 +354,12 @@ namespace KKU
 
     RasterSipperPtr     SegmentImage (bool  save = false);
 
-    uchar*              SimpleCompression (uint32&  buffLen) const; // Will create a compress image using 'SimpleCompression'
+    uchar*              SimpleCompression (kkuint32&  buffLen) const; // Will create a compress image using 'SimpleCompression'
 
     RasterSipperPtr     SobelEdgeDetector ();
 
-    RasterSipperListPtr SplitImageIntoEqualParts (int32 numColSplits,
-                                                  int32 numRowSplits
+    RasterSipperListPtr SplitImageIntoEqualParts (kkint32 numColSplits,
+                                                  kkint32 numRowSplits
                                                  )  const;
 
     RasterSipperPtr     SwapQuadrants ()  const;
@@ -383,13 +387,13 @@ namespace KKU
 
     RasterSipperPtr     ThinContour ();
 
-    RasterSipperPtr     TightlyBounded (uint32 borderPixels)  const;
+    RasterSipperPtr     TightlyBounded (kkuint32 borderPixels)  const;
 
     RasterSipperPtr     ToColor ()  const;
 
     virtual
-    RasterPtr  AllocateARasterInstance (int32  height,
-                                        int32  width,
+    RasterPtr  AllocateARasterInstance (kkint32  height,
+                                        kkint32  width,
                                         bool   color
                                        )  const;
 
@@ -399,10 +403,10 @@ namespace KKU
 
     virtual
       RasterPtr  AllocateARasterInstance (const Raster& _raster,  /**<  Source Raster                             */
-                                          int32         _row,     /**<  Starting Row in '_raster' to copy from.             */
-                                          int32         _col,     /**<  Starting Col in '_raster' to copy from.             */
-                                          int32         _height,  /**<  Height of resultant raster. Will start from '_row'  */
-                                          int32         _width    /**<  Width of resultant raster.                          */
+                                          kkint32       _row,     /**<  Starting Row in '_raster' to copy from.             */
+                                          kkint32       _col,     /**<  Starting Col in '_raster' to copy from.             */
+                                          kkint32       _height,  /**<  Height of resultant raster. Will start from '_row'  */
+                                          kkint32       _width    /**<  Width of resultant raster.                          */
                                          );  private:
 
   };  /* RasterSipper */
@@ -444,5 +448,5 @@ namespace KKU
   typedef  RasterSipperList*  RasterSipperListPtr;
 
 
-}  /* namespace KKU; */
+}  /* namespace KKB; */
 #endif

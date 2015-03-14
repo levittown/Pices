@@ -3,8 +3,8 @@
 
 #include "Application.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 #include "MLClass.h"
 #include "ImageFeatures.h"
@@ -20,11 +20,11 @@ class  RandomNND
 {
 public:
 
-	RandomNND (int32               _scanLines,
+	RandomNND (kkint32             _scanLines,
              ImageFeaturesList&  _images,
-             int32               _numIterations,
-             int32               _numOfBuckets,
-             int32               _bucketSize,
+             kkint32             _numIterations,
+             kkint32             _numOfBuckets,
+             kkint32             _bucketSize,
              ostream&            _report,
              RunLog&             _log
             );
@@ -51,18 +51,18 @@ private:
                                                    );
 
 
-  int32               bucketSize;
+  kkint32             bucketSize;
   ImageFeaturesList&  images;
   RunLog&             log;
   double              nnd_Mean;       /**< mean 'nnd' of all iterations combined.             */
   double              nnd_StdDev;     /**< std deviation of 'nnd' of all iterations combined. */
-  int32               numOfBuckets;
-  int32               numOfParticles;
-  int32               numIterations;
+  kkint32             numOfBuckets;
+  kkint32             numOfParticles;
+  kkint32             numIterations;
   NeighborListPtr     realData;
   double              realDataU2Stat;
 	ostream&            report;
-  int32               scanLines;
+  kkint32             scanLines;
   double              widthMax;
 };
 

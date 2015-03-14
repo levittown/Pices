@@ -12,13 +12,13 @@
 using namespace  std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "BMPImage.h"
 #include "HTMLReport.h"
 #include "OSservices.h"
 #include "Raster.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 
 #include "Classifier2.h"
@@ -113,7 +113,7 @@ GradeClassification::~GradeClassification ()
 
 
 
-void  GradeClassification::InitalizeApplication (int32   argc,
+void  GradeClassification::InitalizeApplication (kkint32 argc,
                                                  char**  argv
                                                 )
 {
@@ -417,7 +417,7 @@ void  GradeClassification::GradeUsingTrainingConfiguration ()
 
   bool  changesMadeToTrainingLibraries = false;
 
-  KKU::DateTime  latestImageTimeStamp;
+  KKB::DateTime  latestImageTimeStamp;
 
   log.Level (10) << "GradeUsingTrainingConfiguration  Loading Training Data." << endl;
 
@@ -636,7 +636,7 @@ void  GradeClassification::GradeExamplesAgainstGroundTruth (FeatureVectorListPtr
     delete  groundTruthClasses;
   }
 
-  uint16  maxHierarchialLevel = 0;
+  kkuint16  maxHierarchialLevel = 0;
   {
     MLClassConstList::iterator  idx;
     for  (idx = classes->begin ();  idx != classes->end ();  idx++)

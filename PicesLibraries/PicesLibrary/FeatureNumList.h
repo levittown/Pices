@@ -37,10 +37,10 @@
  */
 
 #include  "Attribute.h"
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "BitString.h"
 #include  "RunLog.h"
-#include  "Str.h"
+#include  "KKStr.h"
 
 
 namespace MLL 
@@ -59,9 +59,9 @@ namespace MLL
   public:
     typedef  FeatureNumList*  FeatureNumListPtr;
 
-    typedef  KKU::uint16  uint16;
-    typedef  KKU::int32   int32;
-    typedef  KKU::uint32  uint32;
+    typedef  KKB::kkuint16  kkuint16;
+    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::kkuint32  kkuint32;
 
     typedef enum {IncludeFeatureNums, ExcludeFeatureNums}  FeatureSelectionType;
 
@@ -148,25 +148,25 @@ namespace MLL
     ~FeatureNumList ();   
 
     /**@brief Adds 'featureNum' to the list of selected features; if it is  already selected nothing happens. */
-    void    AddFeature (uint16  featureNum);
+    void    AddFeature (kkuint16  featureNum);
 
     /** @brief Returns true if all features are selected. */
     bool    AllFeaturesSelected ()  const;
 
-    MLL::AttributeType  FeatureAttributeType (int32 idx)  const;
+    MLL::AttributeType  FeatureAttributeType (kkint32 idx)  const;
 
     static  
     FeatureNumList   AllFeatures (FileDescPtr  fileDesc);        /**< @brief Create a FeatureNumList with all features selected, except ones flagged as IgnoreAttribute in 'fileDesc'. */
 
-    int32  Compare (const FeatureNumList&  _features)  const;      /**< @brief Compare with another featureNumList returning -1, 0, and 1 indicating less-than, equal, or greater-than.  */
+    kkint32  Compare (const FeatureNumList&  _features)  const;      /**< @brief Compare with another featureNumList returning -1, 0, and 1 indicating less-than, equal, or greater-than.  */
 
     FeatureNumList  Complement ()  const;                        /**< @brief Perform a complement of selected features. */
 
     /**
-     *@brief Allocates a array of int32's that is a copy  of FeatureNums.  The caller will own the array and is responsible for deleting it.
+     *@brief Allocates a array of kkint32's that is a copy  of FeatureNums.  The caller will own the array and is responsible for deleting it.
      *@returns A dynamically allocated array that will consist of a list of selected features.
      */
-    uint16*         CreateFeatureNumArray ()  const;
+    kkuint16*         CreateFeatureNumArray ()  const;
 
     /**
      *@brief   Will select the features specified in "featureListStr".
@@ -185,31 +185,31 @@ namespace MLL
                                                bool&   valid
                                               );
 
-    const uint16*   FeatureNums () const {return  featureNums;}
+    const kkuint16*   FeatureNums () const {return  featureNums;}
 
     FileDescPtr     FileDesc () const  {return fileDesc;} 
     
     bool            IsSubSet (const FeatureNumList&  z);  /**< @brief  Returns true if 'z' is a subset of this instance. */
 
-    bool            InList (uint16 featureNum)  const;    /**< @brief Indicates whether '_featureNum' is selected. */
+    bool            InList (kkuint16 featureNum)  const;    /**< @brief Indicates whether '_featureNum' is selected. */
 
     void            Load (const KKStr&  _fileName,
                           bool&         _successful,
                           RunLog&       _log
                          );
 
-    int32             MemoryConsumedEstimated ()  const;
+    kkint32           MemoryConsumedEstimated ()  const;
 
-    int32             NumOfFeatures  () const   {return  numOfFeatures;}
+    kkint32           NumOfFeatures  () const   {return  numOfFeatures;}
 
-    int32             NumSelFeatures () const   {return  numOfFeatures;}
+    kkint32           NumSelFeatures () const   {return  numOfFeatures;}
 
     /**
      *@brief Generates a new FeatureNumList object that will select at random 'numToKeep' features from this instance.
      *@param[in] numToKeep Number of features to select randomly from existing instance.
      *@return Dynamically allocated instance of a ImageFeaturesList with randomly selected features.
      */
-    FeatureNumListPtr  RandomlySelectFeatures (int32  numToKeep)  const;
+    FeatureNumListPtr  RandomlySelectFeatures (kkint32  numToKeep)  const;
 
     void        Save (const KKStr&  _fileName,
                       bool&         _successful,
@@ -220,7 +220,7 @@ namespace MLL
 
     void        SetAllFeatures ();                 /**< @brief  Selects all features except those flagged as 'IgnoreAttribute' in the associated FileDesc. */
 
-    bool        Test (uint16 _featureNum)  const;  /**< @brief Indicates whether feature '_featureNum' is selected. */
+    bool        Test (kkuint16 _featureNum)  const;  /**< @brief Indicates whether feature '_featureNum' is selected. */
 
     void        ToBitString (BitString&  bitStr)  const;
 
@@ -232,24 +232,24 @@ namespace MLL
 
     void        UnSet ();                          /**< @brief Turns off all features so that no feature is selected.      */
 
-    void        UnSet (uint16  featureNum);        /**< @brief Turns off specified feature 'featureNum'.  If 'featureNum' is not turned on then nothing happens. */
+    void        UnSet (kkuint16  featureNum);        /**< @brief Turns off specified feature 'featureNum'.  If 'featureNum' is not turned on then nothing happens. */
 
     /**
      *@brief  Allows you to access list of selected features like an array.
      *@param[in]  _idx  The position in this instance that you want to return.
      *@return  Selected feature at position '_idx'.
      */
-    uint16      operator[] (int32  idx)  const;
+    kkuint16    operator[] (kkint32  idx)  const;
 
     FeatureNumList&  operator=  (const FeatureNumList&  _features);
     FeatureNumList&  operator=  (const FeatureNumListPtr  _features);
     FeatureNumList   operator+  (const FeatureNumList&  rightSide)  const;  /**< @brief Returns new FeatureNumList that is a union of this instance and 'rightSide'.  */
-    FeatureNumList   operator+  (uint16  rightSide)  const;                 /**< @brief Returns new FeatureNumList that is a union of this instance and 'rightSide'.  */
+    FeatureNumList   operator+  (kkuint16  rightSide)  const;                 /**< @brief Returns new FeatureNumList that is a union of this instance and 'rightSide'.  */
     FeatureNumList&  operator+= (const FeatureNumList&  rightSide);         /**< @brief Returns this FeatureNumList that is a union of this instance and 'rightSide'. */
-    FeatureNumList&  operator+= (uint16  featureNum);                       /**< @brief Returns this FeatureNumList that is a union of this instance and 'rightSide'. */
+    FeatureNumList&  operator+= (kkuint16  featureNum);                       /**< @brief Returns this FeatureNumList that is a union of this instance and 'rightSide'. */
     FeatureNumList   operator-  (const FeatureNumList&  rightSide)  const;  /**< Removes features that are selected in 'rightSide' from this instance and returns the result. */
-    FeatureNumList   operator-  (uint16  rightSide)  const;                 /**< Returns this instance with the feature specified by 'rightSide'  removed.                    */
-    FeatureNumList&  operator-= (uint16  rightSide);                        /**< Remove the feature specified by 'rightSide' from this instance.                              */
+    FeatureNumList   operator-  (kkuint16  rightSide)  const;                 /**< Returns this instance with the feature specified by 'rightSide'  removed.                    */
+    FeatureNumList&  operator-= (kkuint16  rightSide);                        /**< Remove the feature specified by 'rightSide' from this instance.                              */
     FeatureNumList   operator*  (const FeatureNumList&  rightSide)  const;  /**<*@brief  Returns new instance that is the intersection of features.                      */
     bool             operator== (const FeatureNumList&  _features)  const;  /**< @brief  Indicates if the two FeatureNumLiost instances have the same features selected. */
     bool             operator>  (const FeatureNumList&  _features)  const;  /**< @brief  Indicates if the Left FeatureNumList instances is greater than the right one.   */
@@ -258,16 +258,16 @@ namespace MLL
   private:
     FeatureNumList ();
 
-    void   AllocateArraySize (int32 size);   /**< @brief  Make sure that FeatureNums is allocated to at least this size. */
+    void   AllocateArraySize (kkint32 size);   /**< @brief  Make sure that FeatureNums is allocated to at least this size. */
 
-    uint16*      featureNums;              /**< @brief The feature nums in this array are always kept in ascending order.  
+    kkuint16*      featureNums;              /**< @brief The feature nums in this array are always kept in ascending order.  
                                             * @details There will be 'numOfFeatures' in this array.  'featureNumsAllocatedSize' 
                                             * indicates the size allocated, if more space is needed you need to call 
                                             * 'AllocateArraySize' to increase it.
                                             */
-    int32          featureNumsAllocatedSize;
+    kkint32        featureNumsAllocatedSize;
     FileDescPtr  fileDesc;
-    int32          numOfFeatures;
+    kkint32        numOfFeatures;
   };  /* FeatureNumList */
 
 

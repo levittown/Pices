@@ -18,7 +18,7 @@ using namespace std;
 
 
 #include "KKException.h"
-using namespace KKU;
+using namespace KKB;
 
 
 

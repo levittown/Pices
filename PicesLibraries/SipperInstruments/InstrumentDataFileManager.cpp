@@ -14,11 +14,11 @@
 using namespace std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "GoalKeeper.h"
 #include "ImageIO.h"
 #include "OSservices.h"
-using namespace KKU;
+using namespace KKB;
 
 
  
@@ -80,7 +80,7 @@ InstrumentDataFileManager::~InstrumentDataFileManager ()
 
 
 
-int32 InstrumentDataFileManager::initializedStackSize = 0;
+kkint32 InstrumentDataFileManager::initializedStackSize = 0;
 
 
 GoalKeeperPtr   InstrumentDataFileManager::blocker = NULL;
@@ -110,9 +110,9 @@ void  InstrumentDataFileManager::FinalCleanUp ()
 {
   while  (initializedStackSize > 0)
     InitializePop ();
-  delete  knownSipperFiles;   knownSipperFiles  = NULL;
-  delete  sipperDirectories;  sipperDirectories = NULL;
-  delete  blocker;            blocker           = NULL;
+  delete  knownSipperFiles;      knownSipperFiles  = NULL;
+  delete  sipperDirectories;     sipperDirectories = NULL;
+  GoalKeeper::Destroy(blocker);  blocker           = NULL;
 }  /* CleanUp */
 
 
@@ -222,7 +222,7 @@ VectorKKStr  InstrumentDataFileManager::GetListOfSipperFiles (RunLog&  log)
 KKStr  InstrumentDataFileManager::SipperFileRootNameFromSipperImageFileName (const KKStr&  sipperFileName)
 {
   KKStr rootFileName = osGetRootName (sipperFileName);
-  int32  x = rootFileName.LocateLastOccurrence ('_');
+  kkint32  x = rootFileName.LocateLastOccurrence ('_');
 
   if  (x < 1)
     return  "";
@@ -623,11 +623,11 @@ VectorUlong  InstrumentDataFileManager::GetScanLinesPerMeterProfile (const KKStr
 
 
 RasterSipperPtr  InstrumentDataFileManager::GetOrigSipperImage (const KKStr&  sipperFileRootName,
-                                                                uint64        byteOffset,
-                                                                uint32        topLeftRow,
-                                                                uint32        topLeftCol,
-                                                                uint32        height,
-                                                                uint32        width,
+                                                                kkuint64      byteOffset,
+                                                                kkuint32      topLeftRow,
+                                                                kkuint32      topLeftCol,
+                                                                kkuint32      height,
+                                                                kkuint32      width,
                                                                 uchar         connectedComponentDist,
                                                                 RunLog&       log
                                                                )
@@ -653,28 +653,28 @@ RasterSipperPtr  InstrumentDataFileManager::GetOrigSipperImage (const KKStr&  si
   // becase we are passing raster with 3 pixels on all sides we need separate variables that contain the 
   // adjusted raster Height and Width to determine when we have read enough columns and rows from the 
   // Sipper file.
-  uint32  heightAdj = height + 3;
-  uint32  widthAdj  = width  + 3;
+  kkuint32  heightAdj = height + 3;
+  kkuint32  widthAdj  = width  + 3;
 
   RasterSipperPtr  r = new RasterSipper (height + 6, width + 6);  //   Going 2 pad the edges with at least one blank row and column.
 
-  uint32 lineBuffSize = 4096;
+  kkuint32 lineBuffSize = 4096;
 
-  uint32  endSipperRow =  topLeftRow + height - 1;
-  uint32  endSipperCol =  topLeftCol + width  - 1;
+  kkuint32  endSipperRow =  topLeftRow + height - 1;
+  kkuint32  endSipperCol =  topLeftCol + width  - 1;
 
 
   uchar*  lineBuff  = new uchar[lineBuffSize + 1];
-  uint32* colCount  = new uint32 [lineBuffSize + 1];
-  uint32  lineSize  = 0;
-  uint32  pixelsInRow;
+  kkuint32* colCount  = new kkuint32 [lineBuffSize + 1];
+  kkuint32  lineSize  = 0;
+  kkuint32  pixelsInRow;
   bool    flow;
 
-  uint32  rasterRow = 3;   // Starting row and collumn off with 1 so as to have one
-  uint32  rasterCol = 3;   // padded rows and collumn n top and left side.
+  kkuint32  rasterRow = 3;   // Starting row and collumn off with 1 so as to have one
+  kkuint32  rasterCol = 3;   // padded rows and collumn n top and left side.
                            // will also pad bottom row and right collumn.
    
-  uint32  sipperCol = 0;
+  kkuint32  sipperCol = 0;
 
   for  (sipperCol = 0;  sipperCol < lineBuffSize;  sipperCol++)
     colCount[sipperCol] = 0;

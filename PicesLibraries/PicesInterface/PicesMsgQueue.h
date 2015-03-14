@@ -6,7 +6,7 @@ using namespace System::Collections;
 using namespace System::Diagnostics;
 
 #include "MsgQueue.h"
-using namespace  KKU;
+using namespace  KKB;
 
 
 namespace PicesInterface 

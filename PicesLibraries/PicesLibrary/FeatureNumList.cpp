@@ -11,11 +11,11 @@
 using namespace std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "KKException.h"
 #include "OSservices.h"
 #include "RunLog.h"
-using namespace  KKU;
+using namespace  KKB;
 
 
 #include "FeatureNumList.h"
@@ -62,7 +62,7 @@ FeatureNumList::FeatureNumList (FileDescPtr       _fileDesc,
     exit (-1);
   }
 
-  if  (fileDesc->NumOfFields () != int32 (bitString.BitLen ()))
+  if  (fileDesc->NumOfFields () != kkint32 (bitString.BitLen ()))
   {
     cerr << endl << endl
          << "FeatureNumList    *** ERROR ***"  << endl
@@ -76,10 +76,10 @@ FeatureNumList::FeatureNumList (FileDescPtr       _fileDesc,
   VectorUint16  listOfBits;
   bitString.ListOfSetBits16 (listOfBits);
 
-  if  (uint32 (featureNumsAllocatedSize) < listOfBits.size ())
-    AllocateArraySize ((int32)listOfBits.size ());
+  if  (kkuint32 (featureNumsAllocatedSize) < listOfBits.size ())
+    AllocateArraySize ((kkint32)listOfBits.size ());
 
-  for  (uint32 x = 0;  x < listOfBits.size ();  x++)
+  for  (kkuint32 x = 0;  x < listOfBits.size ();  x++)
     AddFeature (listOfBits[x]);
 }
 
@@ -101,7 +101,7 @@ FeatureNumList::FeatureNumList (const FeatureNumList&  _featureNumList):
     exit (-1);
   }
 
-  if  ((numOfFeatures < 0)  ||  (numOfFeatures > (int32)fileDesc->NumOfFields ()))
+  if  ((numOfFeatures < 0)  ||  (numOfFeatures > (kkint32)fileDesc->NumOfFields ()))
   {
     cerr << endl
          << "FeatureNumList::FeatureNumList (const FeatureNumList&  _featureNumList)" << endl
@@ -111,9 +111,9 @@ FeatureNumList::FeatureNumList (const FeatureNumList&  _featureNumList):
     exit (-1);
   }
 
-  featureNums = new uint16[numOfFeatures + 1];
+  featureNums = new kkuint16[numOfFeatures + 1];
   featureNumsAllocatedSize = numOfFeatures + 1;
-  for  (int32 x = 0; x < numOfFeatures; x++)
+  for  (kkint32 x = 0; x < numOfFeatures; x++)
     featureNums[x] = _featureNumList[x];
 }
 
@@ -179,11 +179,11 @@ FeatureNumList::FeatureNumList (FileDescPtr           _fileDesc,
        FeatureNumList  excludedFeatures (fileDesc, _featureListStr, _valid);
 
        numOfFeatures = fileDesc->NumOfFields () - excludedFeatures.NumOfFeatures ();
-       featureNums = new uint16[numOfFeatures];
+       featureNums = new kkuint16[numOfFeatures];
        featureNumsAllocatedSize = numOfFeatures;
 
-       int32  y = 0;
-       for  (uint16 x = 0; x < fileDesc->NumOfFields (); x++)
+       kkint32  y = 0;
+       for  (kkuint16 x = 0; x < fileDesc->NumOfFields (); x++)
        {
          if  (!excludedFeatures.InList (x))
          {
@@ -215,18 +215,18 @@ FeatureNumList::~FeatureNumList ()
 
 
 
-int32  FeatureNumList::MemoryConsumedEstimated ()  const
+kkint32  FeatureNumList::MemoryConsumedEstimated ()  const
 {
-  int32  memoryConsumedEstimated = sizeof (FeatureNumList);
+  kkint32  memoryConsumedEstimated = sizeof (FeatureNumList);
   if  (featureNums)
-    memoryConsumedEstimated += sizeof (uint16) * featureNumsAllocatedSize;
+    memoryConsumedEstimated += sizeof (kkuint16) * featureNumsAllocatedSize;
 
   return  memoryConsumedEstimated;
 }  /* MemoryConsumedEstimated */
 
 
 
-void  FeatureNumList::AllocateArraySize (int32 size)
+void  FeatureNumList::AllocateArraySize (kkint32 size)
 {
   if  (featureNumsAllocatedSize >= size)
   {
@@ -236,17 +236,17 @@ void  FeatureNumList::AllocateArraySize (int32 size)
 
   if  (!featureNums)
   {
-    featureNums = new uint16[size];
+    featureNums = new kkuint16[size];
     featureNumsAllocatedSize = size;
-    for  (int32 x = 0;  x < size;  x++)
+    for  (kkint32 x = 0;  x < size;  x++)
       featureNums[x] = 0;
   }
 
   else
   {
-    uint16*  newFeatureNums = new uint16[size];
+    kkuint16*  newFeatureNums = new kkuint16[size];
 
-    int32  x;
+    kkint32  x;
 
     for  (x = 0;  x < numOfFeatures; x++)
       newFeatureNums[x] = featureNums[x];
@@ -266,7 +266,7 @@ void  FeatureNumList::AllocateArraySize (int32 size)
 void   FeatureNumList::ToBitString (BitString&  bitStr)  const
 {
   bitStr.ReSet ();
-  int32  x;
+  kkint32  x;
 
   for  (x = 0;  x < NumOfFeatures ();  x++)
     bitStr.Set (featureNums[x]);
@@ -274,10 +274,10 @@ void   FeatureNumList::ToBitString (BitString&  bitStr)  const
 
 
 
-uint16*  FeatureNumList::CreateFeatureNumArray ()  const
+kkuint16*  FeatureNumList::CreateFeatureNumArray ()  const
 {
-  uint16*  newList = new uint16[numOfFeatures];
-  for  (int32 x = 0;  x < numOfFeatures;  x++)
+  kkuint16*  newList = new kkuint16[numOfFeatures];
+  for  (kkint32 x = 0;  x < numOfFeatures;  x++)
     newList[x] = featureNums[x];
   return  newList;
 }  /* CreateFeatureNumArray */
@@ -286,7 +286,7 @@ uint16*  FeatureNumList::CreateFeatureNumArray ()  const
 
 bool    FeatureNumList::AllFeaturesSelected ()  const
 {
-  if  (numOfFeatures >= (int32)fileDesc->NumOfFields ())
+  if  (numOfFeatures >= (kkint32)fileDesc->NumOfFields ())
     return true;
   return false;
 }  /* AllFeaturesSelected */
@@ -297,7 +297,7 @@ void  FeatureNumList::UnSet ()
 {
   if  (featureNums)
   {
-    int32 x;
+    kkint32 x;
     for  (x = 0;  x < featureNumsAllocatedSize;  x++)
       featureNums[x] = 0;
     numOfFeatures = 0;
@@ -307,12 +307,12 @@ void  FeatureNumList::UnSet ()
 
 
 
-void  FeatureNumList::UnSet (uint16  featureNum)
+void  FeatureNumList::UnSet (kkuint16  featureNum)
 {
   if  (!featureNums)
     return;
 
-  int32  indexToDel = numOfFeatures - 1;  // Starting with last index
+  kkint32  indexToDel = numOfFeatures - 1;  // Starting with last index
 
   while  ((indexToDel >= 0)  &&  (featureNums[indexToDel] > featureNum))
     indexToDel--;
@@ -322,7 +322,7 @@ void  FeatureNumList::UnSet (uint16  featureNum)
     if  (featureNums[indexToDel] == featureNum)
     {
       // We found the index to delete.
-      int32  x;
+      kkint32  x;
       for  (x = indexToDel;  x < (numOfFeatures - 1);  x++)
         featureNums[x] = featureNums[x + 1];
     }
@@ -334,11 +334,11 @@ void  FeatureNumList::UnSet (uint16  featureNum)
 
 
 
-void  FeatureNumList::AddFeature (uint16  featureNum)
+void  FeatureNumList::AddFeature (kkuint16  featureNum)
 {
   if  (!featureNums)
   {
-    featureNums = new uint16[10];
+    featureNums = new kkuint16[10];
     featureNumsAllocatedSize = 10;
   }
 
@@ -355,10 +355,10 @@ void  FeatureNumList::AddFeature (uint16  featureNum)
   else if  (numOfFeatures >= featureNumsAllocatedSize)
   {
     // Expand the featureNums array
-    int32   newNumOfFeatures = numOfFeatures + 10;
-    uint16*  newFeatureNums = new uint16[newNumOfFeatures];
+    kkint32 newNumOfFeatures = numOfFeatures + 10;
+    kkuint16*  newFeatureNums = new kkuint16[newNumOfFeatures];
 
-    for  (int32 x = 0;  x < numOfFeatures; x++)
+    for  (kkint32 x = 0;  x < numOfFeatures; x++)
       newFeatureNums[x] = featureNums[x];
 
     delete  [] featureNums;
@@ -374,7 +374,7 @@ void  FeatureNumList::AddFeature (uint16  featureNum)
 
   else
   {
-    int32  x = numOfFeatures - 1; // Setting x to end of list
+    kkint32  x = numOfFeatures - 1; // Setting x to end of list
     if  (featureNums[x] < featureNum)
     {
       // Adding feature to end of list.
@@ -411,10 +411,10 @@ FeatureNumList   FeatureNumList::AllFeatures (FileDescPtr  _fileDesc)
 
 void   FeatureNumList::SetAllFeatures ()
 {
-  for  (uint16 x = 0; x < fileDesc->NumOfFields (); x++)
+  for  (kkuint16 x = 0; x < fileDesc->NumOfFields (); x++)
   {
     if  (fileDesc->Type (x) != IgnoreAttribute)
-      AddFeature (uint16 (x));
+      AddFeature (kkuint16 (x));
   }
   return;
 }  /* SetAllFeatures */
@@ -425,10 +425,10 @@ bool  FeatureNumList::IsSubSet (const FeatureNumList&  z)
 {
   bool  isSubSet = true;
 
-  int32  idx = 0;
+  kkint32  idx = 0;
   while  ((idx < z.NumSelFeatures ())  &&  isSubSet)
   {
-    int32 fn = z[idx];
+    kkint32 fn = z[idx];
     isSubSet = InList (fn);
     idx++;
   }
@@ -437,10 +437,10 @@ bool  FeatureNumList::IsSubSet (const FeatureNumList&  z)
 
 
 
-bool  FeatureNumList::InList (uint16 _featureNum)  const
+bool  FeatureNumList::InList (kkuint16 _featureNum)  const
 {
   bool  found = false;
-  int32  x = 0;
+  kkint32  x = 0;
 
   while  ((x < numOfFeatures)  && (!found))
   {
@@ -454,7 +454,7 @@ bool  FeatureNumList::InList (uint16 _featureNum)  const
 
 
 
-bool  FeatureNumList::Test (uint16 _featureNum)  const
+bool  FeatureNumList::Test (kkuint16 _featureNum)  const
 {
   return InList (_featureNum);
 }  /* Test */
@@ -472,7 +472,7 @@ bool  FeatureNumList::Test (uint16 _featureNum)  const
  *  void  PrintSelectedFeatures (const FeatureNumList&  goodFeatures)
  *  {
  *    cout << "Selected Features: ";
- *    for  (int32 x = 0;  x < goodFeatures.NumOfFeatures ();
+ *    for  (kkint32 x = 0;  x < goodFeatures.NumOfFeatures ();
  *    {
  *      if  (x > 0)  cout << ",";
  *      cout << goodFeatures[x];
@@ -483,7 +483,7 @@ bool  FeatureNumList::Test (uint16 _featureNum)  const
  *@param[in]  _idx  The position in this inatnce that you want to return.
  *@return  Selected feature at position '_idx'.
  */
-uint16  FeatureNumList::operator[] (int32  _idx)  const
+kkuint16  FeatureNumList::operator[] (kkint32  _idx)  const
 {
   if  (_idx >= numOfFeatures)
   {
@@ -508,12 +508,12 @@ KKStr  FeatureNumList::ToString ()  const
   if  (numOfFeatures <= 0)
     return featureNumStr;
 
-  int32  nextIdx = 0;
+  kkint32  nextIdx = 0;
 
   while  (nextIdx < numOfFeatures)
   {
-    int32  startOfGroup = nextIdx;
-    int32  endOfGroup   = nextIdx;
+    kkint32  startOfGroup = nextIdx;
+    kkint32  endOfGroup   = nextIdx;
 
     while  ((endOfGroup < (numOfFeatures - 1))  &&  
             (featureNums[endOfGroup] == (featureNums[endOfGroup + 1] - 1))
@@ -524,7 +524,7 @@ KKStr  FeatureNumList::ToString ()  const
 
     if  ((endOfGroup - startOfGroup) < 3)
     {
-      int32  x;
+      kkint32  x;
       for  (x = startOfGroup;  x <= endOfGroup; x++)
       {
         if  (!featureNumStr.Empty ())
@@ -570,7 +570,7 @@ void  FeatureNumList::ExtractFeatureNumsFromStr (KKStr  _featureListStr,
   _valid = true;
 
   KKStr  field;
-  uint16  featureNum;
+  kkuint16  featureNum;
 
   _featureListStr.Upper ();
 
@@ -591,12 +591,12 @@ void  FeatureNumList::ExtractFeatureNumsFromStr (KKStr  _featureListStr,
   {
     _featureListStr.TrimLeft ();
    
-    int32 dashPos = field.LocateCharacter ('-');
+    kkint32 dashPos = field.LocateCharacter ('-');
     if  (dashPos < 0)
     {
       // This is not a range
 
-      featureNum = uint16 (atoi (field.Str ()));
+      featureNum = kkuint16 (atoi (field.Str ()));
       //if  (field.ValidInt (featureNum))
       {
         if  (featureNum >= fileDesc->NumOfFields ())
@@ -615,8 +615,8 @@ void  FeatureNumList::ExtractFeatureNumsFromStr (KKStr  _featureListStr,
     else
     {
       // We are looking at a range
-      uint16 startFeatureNum = uint16 (field.ExtractTokenInt (" -"));
-      uint16 endFeatureNum   = uint16 (field.ExtractTokenInt (" -"));
+      kkuint16 startFeatureNum = kkuint16 (field.ExtractTokenInt (" -"));
+      kkuint16 endFeatureNum   = kkuint16 (field.ExtractTokenInt (" -"));
 
       if  ((startFeatureNum >= fileDesc->NumOfFields ())  ||
            (endFeatureNum   >= fileDesc->NumOfFields ())  ||
@@ -663,7 +663,7 @@ void  FeatureNumList::Load (const KKStr&  _fileName,
   if  (fgets (buff, sizeof (buff), inputFile))
   {
     KKStr  firstLine (buff);
-    int32 fileDescNumOfFields = atoi (firstLine.Str ());
+    kkint32 fileDescNumOfFields = atoi (firstLine.Str ());
     if  (fileDesc->NumOfFields () != fileDescNumOfFields)
     {
       _log.Level (-1) << endl
@@ -749,10 +749,10 @@ FeatureNumList&  FeatureNumList::operator= (const FeatureNumList&  _features)
   fileDesc      = _features.fileDesc;
   numOfFeatures = _features.NumOfFeatures ();
 
-  featureNums = new uint16[numOfFeatures];
+  featureNums = new kkuint16[numOfFeatures];
   featureNumsAllocatedSize = numOfFeatures;
 
-  for  (int32 fn = 0;  fn < numOfFeatures;  fn++)
+  for  (kkint32 fn = 0;  fn < numOfFeatures;  fn++)
     featureNums[fn] = _features[fn];
 
   return  *this;
@@ -770,9 +770,9 @@ FeatureNumList&  FeatureNumList::operator=  (const FeatureNumListPtr  _features)
 
 
 
-int32  FeatureNumList::Compare (const FeatureNumList&  _features)  const
+kkint32  FeatureNumList::Compare (const FeatureNumList&  _features)  const
 {
-  int32  x = 0;
+  kkint32  x = 0;
 
   while  ((x < numOfFeatures)  &&  (x < _features.NumOfFeatures ()))
   {
@@ -858,8 +858,8 @@ FeatureNumList  FeatureNumList::operator*  (const FeatureNumList&  rightSide)  c
   FeatureNumList  result (fileDesc);
   result.AllocateArraySize (numOfFeatures);
 
-  int32  l = 0;
-  int32  r = 0;
+  kkint32  l = 0;
+  kkint32  r = 0;
 
   while  ((l < numOfFeatures)  &&  (r < rightSide.numOfFeatures))
   {
@@ -891,7 +891,7 @@ FeatureNumList  FeatureNumList::operator+ (const FeatureNumList&  rightSide) con
 {
   FeatureNumList  result (rightSide);
 
-  int32  l = 0;
+  kkint32  l = 0;
   for  (l = 0;  l < numOfFeatures; l++)
     result.AddFeature (featureNums[l]);
 
@@ -903,17 +903,17 @@ FeatureNumList  FeatureNumList::operator+ (const FeatureNumList&  rightSide) con
 /** @details Both FeatureNumList objects must be referening the same FileDesc instance otherwise an exception will be thrown. */
 FeatureNumList&  FeatureNumList::operator+= (const FeatureNumList&  rightSide)
 {
-  int32      newFeatureNumsAllocatedSize = Min (numOfFeatures + rightSide.numOfFeatures, (int32)fileDesc->NumOfFields ());
-  uint16*  newFeatureNums = new uint16[newFeatureNumsAllocatedSize];
-  int32      newNumOfFeatures = 0;
+  kkint32    newFeatureNumsAllocatedSize = Min (numOfFeatures + rightSide.numOfFeatures, (kkint32)fileDesc->NumOfFields ());
+  kkuint16*  newFeatureNums = new kkuint16[newFeatureNumsAllocatedSize];
+  kkint32    newNumOfFeatures = 0;
 
-  uint16* leftFeatureNums  = featureNums;
-  int32     leftNumOfFeatures = numOfFeatures;
-  uint16* rightFeatureNums = rightSide.featureNums;
-  int32     rightNumOfFeatures = rightSide.numOfFeatures;
+  kkuint16* leftFeatureNums  = featureNums;
+  kkint32   leftNumOfFeatures = numOfFeatures;
+  kkuint16* rightFeatureNums = rightSide.featureNums;
+  kkint32   rightNumOfFeatures = rightSide.numOfFeatures;
 
-  int32  l = 0;
-  int32  r = 0;
+  kkint32  l = 0;
+  kkint32  r = 0;
 
   while  ((l < leftNumOfFeatures)  &&  (r < rightNumOfFeatures))
   {
@@ -966,7 +966,7 @@ FeatureNumList&  FeatureNumList::operator+= (const FeatureNumList&  rightSide)
 
 
 /** @details Both FeatureNumList objects must be referening the same FileDesc instance otherwise an exception will be thrown. */
-FeatureNumList&  FeatureNumList::operator+= (uint16  featureNum)
+FeatureNumList&  FeatureNumList::operator+= (kkuint16  featureNum)
 {
   AddFeature (featureNum);
   return *this;
@@ -977,9 +977,9 @@ FeatureNumList&  FeatureNumList::operator+= (uint16  featureNum)
 
 
 /** @details Both FeatureNumList objects must be referening the same FileDesc instance otherwise an exception will be thrown. */
-FeatureNumList  FeatureNumList::operator+ (uint16  rightSide) const
+FeatureNumList  FeatureNumList::operator+ (kkuint16  rightSide) const
 {
-  if  (int32 (rightSide) >= fileDesc->NumOfFields ())
+  if  (kkint32 (rightSide) >= fileDesc->NumOfFields ())
   {
     KKStr errMsg = "FeatureNumList::operator+  ***ERROR***";
     errMsg <<" Feature[" << rightSide << "]  is too large.";
@@ -995,7 +995,7 @@ FeatureNumList  FeatureNumList::operator+ (uint16  rightSide) const
 
 
 /** @details Both FeatureNumList objects must be referening the same FileDesc instance otherwise an exception will be thrown. */
-FeatureNumList  FeatureNumList::operator-  (uint16  rightSide) const
+FeatureNumList  FeatureNumList::operator-  (kkuint16  rightSide) const
 {
   if  (rightSide >= fileDesc->NumOfFields ())
   {
@@ -1029,7 +1029,7 @@ FeatureNumList  FeatureNumList::operator- (const FeatureNumList&  rightSide) con
   }
 
   FeatureNumList  result (*this);
-  int32  x;
+  kkint32  x;
   for  (x = 0;  x < rightSide.NumOfFeatures ();  x++)
     result.UnSet (rightSide[x]);
 
@@ -1041,7 +1041,7 @@ FeatureNumList  FeatureNumList::operator- (const FeatureNumList&  rightSide) con
 /**
  *@details Both FeatureNumList objects must be referening the same FileDesc instance otherwise an exception will be thrown.
  */
-FeatureNumList&  FeatureNumList::operator-= (uint16  rightSide)
+FeatureNumList&  FeatureNumList::operator-= (kkuint16  rightSide)
 {
   UnSet (rightSide);
   return  *this;
@@ -1049,7 +1049,7 @@ FeatureNumList&  FeatureNumList::operator-= (uint16  rightSide)
 
 
 
-FeatureNumListPtr   FeatureNumList::RandomlySelectFeatures (int32  numToKeep)  const
+FeatureNumListPtr   FeatureNumList::RandomlySelectFeatures (kkint32  numToKeep)  const
 {
   if  (numToKeep > numOfFeatures)
   {
@@ -1065,10 +1065,10 @@ FeatureNumListPtr   FeatureNumList::RandomlySelectFeatures (int32  numToKeep)  c
 
   FeatureNumListPtr  randomlySelectedFeatures = new FeatureNumList (fileDesc);
 
-  int32 x, y, z;
+  kkint32 x, y, z;
 
   // Initialize Selected Featurs to the currently selected features in featureNums
-  uint16*  selectedFeatures = new uint16[numOfFeatures];
+  kkuint16*  selectedFeatures = new kkuint16[numOfFeatures];
   for  (x = 0; x < numOfFeatures; x++)
     selectedFeatures[x] = featureNums[x];
 
@@ -1094,7 +1094,7 @@ FeatureNumListPtr   FeatureNumList::RandomlySelectFeatures (int32  numToKeep)  c
 
 
 
-AttributeType  FeatureNumList::FeatureAttributeType (int32 idx)  const
+AttributeType  FeatureNumList::FeatureAttributeType (kkint32 idx)  const
 {
   if  ((idx < 0)  ||  (idx >= numOfFeatures))
   {
@@ -1121,11 +1121,11 @@ AttributeType  FeatureNumList::FeatureAttributeType (int32 idx)  const
 
 FeatureNumList  FeatureNumList::Complement ()  const
 {
-  uint16  x;
+  kkuint16  x;
 
   FeatureNumList  result;
 
-  for  (x = 0;  x < uint16 (fileDesc->NumOfFields ());  x++)
+  for  (x = 0;  x < kkuint16 (fileDesc->NumOfFields ());  x++)
   {
     if  (!InList (x))
       result.AddFeature (x);

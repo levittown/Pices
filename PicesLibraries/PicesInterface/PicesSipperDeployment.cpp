@@ -14,8 +14,8 @@
 using namespace std;
 
 #include "MemoryDebug.h"
-#include "BasicTypes.h"
-using namespace KKU;
+#include "KKBaseTypes.h"
+using namespace KKB;
 
 #include "OSservices.h"
 #include "PicesKKStr.h"

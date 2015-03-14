@@ -8,7 +8,7 @@ using namespace System::Diagnostics;
 
 
 #include "TrainingClass.h"
-using namespace KKU;
+using namespace KKB;
 using namespace MLL;
 
 #include "PicesClass.h"

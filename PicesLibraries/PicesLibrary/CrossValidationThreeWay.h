@@ -73,7 +73,7 @@ namespace MLL
                              MLClassConstListPtr        _mlClasses,
                              MLClassConstPtr            _class1,
                              MLClassConstPtr            _class2,
-                             int32                      _numOfFolds,
+                             kkint32                    _numOfFolds,
                              bool                       _featuresAlreadyNormalized,
                              bool                       _stratify,
                              float                      _punishmentFactor,
@@ -106,7 +106,7 @@ namespace MLL
 
     void       CreateProbabilityReport (ostream&  r);
 
-    float      FoldAccuracy       (int32 foldNum);
+    float      FoldAccuracy       (kkint32 foldNum);
 
     KKStr     FoldStr ()  const;
 
@@ -127,7 +127,7 @@ namespace MLL
 
     void  CrossValidate (FeatureVectorListPtr   testImages, 
                          FeatureVectorListPtr   trainingImages,
-                         int32                    foldNum,
+                         kkint32                  foldNum,
                          bool*                  classedCorrectly
                         );
 
@@ -145,14 +145,14 @@ namespace MLL
     RunLog                    log;
     double                    maxProb;
     double                    minProb;
-    int32                     numClassedCorrectly;
-    int32                     numInTwoClasses;
-    int32                     numOfFolds;
+    kkint32                   numClassedCorrectly;
+    kkint32                   numInTwoClasses;
+    kkint32                   numOfFolds;
     float                     numOfSupportVectors;
     MLClassConstListPtr    ourClasses;                   // Class list where class1, class2 are in front
     float                     punishmentFactor;
     bool                      stratify;
-    int32                     thirdClassTotalDecisiveCount;
+    kkint32                   thirdClassTotalDecisiveCount;
     float                     thirdClassTotalDecisiveProb;  // sum(0.5 - Imagefeatures.Probability ())
     double                    trainingTime;
     TrainingConfiguration2Ptr twoClassConfig;

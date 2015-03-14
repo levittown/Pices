@@ -1,7 +1,7 @@
 #ifndef  _CLASSSUMMARY_
 #define _CLASSSUMMARY_
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 
 #include  "MLClass.h"
 #include  "LLoydsEntry.h"
@@ -13,10 +13,10 @@ using namespace  MLL;
 class  ClassSummary
 {
 public:
-  typedef  KKU::uchar   uchar;
-  typedef  KKU::uint32    uint32;
-  typedef  KKU::uint32  uint32;
-  typedef  KKU::ushort  ushort;
+  typedef  KKB::uchar   uchar;
+  typedef  KKB::kkuint32  kkuint32;
+  typedef  KKB::kkuint32  kkuint32;
+  typedef  KKB::ushort  ushort;
 
   typedef  ClassSummary*   ClassSummaryPtr;
 
@@ -34,17 +34,17 @@ public:
 
   const  MLClassConstPtr  MLClass ()  const  {return mlClass;}
 
-  int32                      LLoydsBin (uint32 binNum) const;
+  kkint32                    LLoydsBin (kkuint32 binNum) const;
 
-  int32                      LLoydsBinSize (uint32 lloydsEntryIDX) const;
+  kkint32                    LLoydsBinSize (kkuint32 lloydsEntryIDX) const;
 
-  LLoydsEntryPtr             LLoydsEntryByIndex (uint32 idx);
+  LLoydsEntryPtr             LLoydsEntryByIndex (kkuint32 idx);
 
-  LLoydsEntryPtr             LLoydsEntryByBinSize (int32 binSize);
+  LLoydsEntryPtr             LLoydsEntryByBinSize (kkint32 binSize);
 
-  uint32                     NumOfLLoydsEntries ()  const;
+  kkuint32                   NumOfLLoydsEntries ()  const;
 
-  uint32                     NumOfLLoydsBins () const; // Returns the largest number of lloydsBins in 'lloydsEntries'
+  kkuint32                   NumOfLLoydsBins () const; // Returns the largest number of lloydsBins in 'lloydsEntries'
 
 
   float                      U2Stat ()  const  {return realDataU2Stat;}
@@ -69,10 +69,10 @@ typedef  ClassSummary::ClassSummaryPtr  ClassSummaryPtr;
 class  ClassSummaryList:  public  KKQueue<ClassSummary>
 {
 public:
-  typedef  KKU::uchar   uchar;
-  typedef  KKU::uint32    uint32;
-  typedef  KKU::uint32  uint32;
-  typedef  KKU::ushort  ushort;
+  typedef  KKB::uchar   uchar;
+  typedef  KKB::kkuint32  kkuint32;
+  typedef  KKB::kkuint32  kkuint32;
+  typedef  KKB::ushort  ushort;
 
   ClassSummaryList (RunLog&  _log);
 
@@ -83,8 +83,8 @@ public:
 
   void  SaveLLoydsBinsData (const KKStr&  fileName,
                             const KKStr&  srcDirName,
-                            int32         lastScanLine,
-                            int32           baseLLoydsBinSize
+                            kkint32       lastScanLine,
+                            kkint32         baseLLoydsBinSize
                            );
 
 
@@ -94,10 +94,10 @@ public:
 
 
 private:
-  uint32  NumOfLLoydsBins ()  const;
+  kkuint32  NumOfLLoydsBins ()  const;
 
 
-  float SpatialOverlapIndex (int32              binSize,
+  float SpatialOverlapIndex (kkint32            binSize,
                              ClassSummaryPtr  c1,
                              ClassSummaryPtr  c2
                             )  const;

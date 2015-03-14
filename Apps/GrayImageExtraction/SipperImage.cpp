@@ -20,8 +20,8 @@
 using namespace std;
 
 
-#include  "BasicTypes.h"
-using namespace KKU;
+#include  "KKBaseTypes.h"
+using namespace KKB;
 
 
 
@@ -147,7 +147,7 @@ void  SipperImage::Dialate (uchar** frame,
 RasterSipperPtr  SipperImage::GetRaster (uchar**  frame,
                                          int**    blobIds,     
                                          uint     firstFrameRowScanLine,
-                                         uint64*  frameRowByteOffsets
+                                         kkuint64*  frameRowByteOffsets
                                         )
 
 {

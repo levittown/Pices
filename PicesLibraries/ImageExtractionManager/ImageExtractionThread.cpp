@@ -14,7 +14,7 @@ using namespace std;
 
 
 #include "MsgQueue.h"
-using namespace KKU;
+using namespace KKB;
 
 
 #include "ImageExtractionThread.h"

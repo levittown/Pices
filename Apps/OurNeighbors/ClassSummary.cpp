@@ -8,10 +8,10 @@
 
 
 #include  "MemoryDebug.h"
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 
 using namespace std;
-using namespace KKU;
+using namespace KKB;
 
 #include "OSservices.h"
 
@@ -73,22 +73,22 @@ const KKStr&  ClassSummary::ClassName ()  const
 
 
 
-uint32   ClassSummary::NumOfLLoydsEntries ()  const
+kkuint32 ClassSummary::NumOfLLoydsEntries ()  const
 {
   if  (lloydsEntries)
-    return uint32 (lloydsEntries->size ());
+    return kkuint32 (lloydsEntries->size ());
   else
     return 0;
 }
 
 
 
-uint32  ClassSummary::NumOfLLoydsBins () const /**< Returns the largest number of lloydsBins in 'lloydsEntries' */
+kkuint32  ClassSummary::NumOfLLoydsBins () const /**< Returns the largest number of lloydsBins in 'lloydsEntries' */
 {
   if  (!lloydsEntries)
     return 0;
 
-  uint32  numOfLLoydsBins = 0;
+  kkuint32  numOfLLoydsBins = 0;
 
   LLoydsEntryList::const_iterator  idx;
   for  (idx = lloydsEntries->begin ();  idx != lloydsEntries->end ();  idx++)
@@ -102,12 +102,12 @@ uint32  ClassSummary::NumOfLLoydsBins () const /**< Returns the largest number o
 
 
 
-LLoydsEntryPtr  ClassSummary::LLoydsEntryByIndex (uint32 idx)
+LLoydsEntryPtr  ClassSummary::LLoydsEntryByIndex (kkuint32 idx)
 {
   if  (!lloydsEntries)
     return NULL;
 
-  if  (idx >= uint32 (lloydsEntries->QueueSize ()))
+  if  (idx >= kkuint32 (lloydsEntries->QueueSize ()))
     return NULL;
 
   return  lloydsEntries->IdxToPtr (idx);
@@ -115,7 +115,7 @@ LLoydsEntryPtr  ClassSummary::LLoydsEntryByIndex (uint32 idx)
 
 
 
-LLoydsEntryPtr  ClassSummary::LLoydsEntryByBinSize (int32 binSize)
+LLoydsEntryPtr  ClassSummary::LLoydsEntryByBinSize (kkint32 binSize)
 {
   if  (!lloydsEntries)
     return NULL;
@@ -127,12 +127,12 @@ LLoydsEntryPtr  ClassSummary::LLoydsEntryByBinSize (int32 binSize)
 
 
 
-int32  ClassSummary::LLoydsBinSize (uint32 lloydsEntryIDX) const
+kkint32  ClassSummary::LLoydsBinSize (kkuint32 lloydsEntryIDX) const
 {
   if  (!lloydsEntries)
     return NULL;
 
-  if  (lloydsEntryIDX >= uint32 (lloydsEntries->QueueSize ()))
+  if  (lloydsEntryIDX >= kkuint32 (lloydsEntries->QueueSize ()))
     return NULL;
 
   return  lloydsEntries->IdxToPtr (lloydsEntryIDX)->LLoydsBinSize ();
@@ -148,9 +148,9 @@ ClassSummaryList::ClassSummaryList (RunLog&  _log):
 
 
 
-uint32  ClassSummaryList::NumOfLLoydsBins ()  const
+kkuint32  ClassSummaryList::NumOfLLoydsBins ()  const
 {
-  uint32  numOfBins = 0;
+  kkuint32  numOfBins = 0;
   ClassSummaryList::const_iterator  idx;
 
   for  (idx = begin ();  idx != end ();  idx++)
@@ -164,8 +164,8 @@ uint32  ClassSummaryList::NumOfLLoydsBins ()  const
 
 void  ClassSummaryList::SaveLLoydsBinsData (const KKStr&  fileName,
                                             const KKStr&  srcDirName,
-                                            int32         lastScanLine,
-                                            int32           baseLLoydsBinSize
+                                            kkint32       lastScanLine,
+                                            kkint32         baseLLoydsBinSize
                                            )
 {
   ofstream o (fileName.Str (), ios::out);
@@ -188,7 +188,7 @@ void  ClassSummaryList::SaveLLoydsBinsData (const KKStr&  fileName,
     << "//"                                                 << endl;
 
   o << "BinSize" << "\t" << "BinNum" << "\t" << "ScanLines";
-  uint32  numOfBins = NumOfLLoydsBins ();
+  kkuint32  numOfBins = NumOfLLoydsBins ();
   for  (idx = begin ();  idx != end ();  idx++)
   {
     ClassSummaryPtr  cs = *idx;
@@ -200,19 +200,19 @@ void  ClassSummaryList::SaveLLoydsBinsData (const KKStr&  fileName,
   size_t  binSizeIndex = 0;
   for  (binSizeIndex = 0;  binSizeIndex < binSizes.size ();  binSizeIndex++)
   {
-    int32  binSize = binSizes[binSizeIndex];
+    kkint32  binSize = binSizes[binSizeIndex];
 
-    int32   startScanLinNum = 0;
-    int32   endScanLineNum  = startScanLinNum + binSize - 1;
+    kkint32 startScanLinNum = 0;
+    kkint32 endScanLineNum  = startScanLinNum + binSize - 1;
 
-    uint32  binNum = 0;
+    kkuint32  binNum = 0;
     for  (binNum = 0;  binNum < numOfBins;  binNum++)
     {
       o << binSize << "\t" << binNum <<"\t" << startScanLinNum << "-" << endScanLineNum;
 
       for  (idx = begin ();  idx != end ();  idx++)
       {
-        int32  lloydsBin = 0;
+        kkint32  lloydsBin = 0;
         ClassSummaryPtr  cs = *idx;
         LLoydsEntryPtr  lloydsEntry = cs->LLoydsEntryByBinSize (binSize);
         if  (lloydsEntry != NULL)
@@ -241,7 +241,7 @@ void  ClassSummaryList::SaveLLoydsBinsData (const KKStr&  fileName,
  * by Alex De Robertis, Scripps Institution Of Oceanography, La Jolla Ca 92093–0208,  alex.derobertis@noaa.gov
  * http://plankt.oxfordjournals.org/cgi/reprint/24/11/1207
  */
-float  ClassSummaryList::SpatialOverlapIndex (int32            binSize,
+float  ClassSummaryList::SpatialOverlapIndex (kkint32          binSize,
                                               ClassSummaryPtr  c1,
                                               ClassSummaryPtr  c2
                                              )  const
@@ -252,13 +252,13 @@ float  ClassSummaryList::SpatialOverlapIndex (int32            binSize,
   if  ((class1LLoydsEntry == NULL)  ||  (class2LLoydsEntry == NULL))
     return 0.0f;
 
-  uint32 N = Min (class1LLoydsEntry->NumOfLLoydsBins (), class2LLoydsEntry->NumOfLLoydsBins ());
+  kkuint32 N = Min (class1LLoydsEntry->NumOfLLoydsBins (), class2LLoydsEntry->NumOfLLoydsBins ());
 
-  uint32  x;
+  kkuint32  x;
 
-  int32  Xtotal  = 0;
-  int32  Ytotal  = 0;
-  int32  XYtotal = 0;
+  kkint32  Xtotal  = 0;
+  kkint32  Ytotal  = 0;
+  kkint32  XYtotal = 0;
   for  (x = 0;  x < N;  x++)
   {
     XYtotal += class1LLoydsEntry->LLoydsBin (x) * class2LLoydsEntry->LLoydsBin (x);
@@ -288,9 +288,9 @@ void  ClassSummaryList::SpatialOverlapReport (ostream&  o)  const
 
 
   VectorInt binSizes = LLoydsBinSizes ();
-  for  (uint32 binSizeIdx = 0;  binSizeIdx < uint32 (binSizes.size ());  binSizeIdx++)
+  for  (kkuint32 binSizeIdx = 0;  binSizeIdx < kkuint32 (binSizes.size ());  binSizeIdx++)
   {
-    int32  binSize = binSizes[binSizeIdx];
+    kkint32  binSize = binSizes[binSizeIdx];
 
  
     o << endl 
@@ -340,15 +340,15 @@ VectorInt  ClassSummaryList::LLoydsBinSizes ()  const
   for  (idx = begin ();  idx != end ();  idx++)
   {
     const ClassSummaryPtr  cs = *idx;
-    for  (uint32 lloydsEntryIdx = 0;  lloydsEntryIdx < cs->NumOfLLoydsEntries ();  lloydsEntryIdx++)
+    for  (kkuint32 lloydsEntryIdx = 0;  lloydsEntryIdx < cs->NumOfLLoydsEntries ();  lloydsEntryIdx++)
     {
       LLoydsEntryPtr  lloydsEntry = cs->LLoydsEntryByIndex (lloydsEntryIdx);
       if  (lloydsEntry)
       {
-        uint32 zed = 0;
-        int32 binSize = lloydsEntry->LLoydsBinSize ();
+        kkuint32 zed = 0;
+        kkint32 binSize = lloydsEntry->LLoydsBinSize ();
         // if 'binSize' not in 'binSizes'  then add
-        for  (zed = 0;  zed < uint32 (binSizes.size ());  zed++)
+        for  (zed = 0;  zed < kkuint32 (binSizes.size ());  zed++)
         {
           if  (binSizes[zed] == binSize)
             break;
@@ -386,7 +386,7 @@ MLClassConstListPtr  ClassSummaryList::GetListOfClasses ()  const
 
 void  ClassSummaryList::SummaryReport (ostream&  r)  const
 {
-  uint32  binSizeIDX = 0;
+  kkuint32  binSizeIDX = 0;
 
 
   r << "Statistic Summary by Class" << endl
@@ -411,7 +411,7 @@ void  ClassSummaryList::SummaryReport (ostream&  r)  const
 
     for  (binSizeIDX = 0;  binSizeIDX < binSizes.size ();  binSizeIDX++)
     {
-      int32 binSize = binSizes[binSizeIDX];
+      kkint32 binSize = binSizes[binSizeIDX];
 
       LLoydsEntryPtr  lloydsEntry = cs->LLoydsEntryByBinSize (binSize);
       if  (lloydsEntry == NULL)

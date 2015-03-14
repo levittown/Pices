@@ -4,10 +4,11 @@
 
 #include "DateTime.h"
 #include "GoalKeeper.h"
+#include "KKStrMatrix.h"
 #include "RasterSipper.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 
 #include "GPSDataPoint.h"
@@ -76,12 +77,12 @@ namespace MLL
     typedef  DataBase*  DataBasePtr;
     typedef  DataBase const *  DataBaseConstPtr;
 
-    typedef  KKU::uchar   uchar;
-    typedef  KKU::ulong   ulong;
-    typedef  KKU::int32   int32;
-    typedef  KKU::uint32  uint32;
-    typedef  KKU::int64   int64;
-    typedef  KKU::uint64  uint64;
+    typedef  KKB::uchar   uchar;
+    typedef  KKB::ulong   ulong;
+    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::kkuint32  kkuint32;
+    typedef  KKB::kkint64 kkint64;
+    typedef  KKB::kkuint64  kkuint64;
 
     static  void  Initialization ();
     static  void  FinalCleanUp ();
@@ -124,11 +125,11 @@ namespace MLL
 
 
 
-    int32  QueryStatement (const char* queryStr,
-                           int32       queryStrLen
+    kkint32  QueryStatement (const char* queryStr,
+                           kkint32     queryStrLen
                           );
 
-    int32  QueryStatement (const KKStr&  statement);
+    kkint32  QueryStatement (const KKStr&  statement);
 
 
 
@@ -140,12 +141,12 @@ namespace MLL
 
     /// Will make SQL Query call; if there is a disconnect from the database;  it will not try to
     /// Reconnect like the other 'QueryStatement2' calls.
-    int32  QueryStatement2 (const char*  queryStr,
-                            int32        queryStrLen
-                           );
+    kkint32  QueryStatement2 (const char*  queryStr,
+                              kkint32      queryStrLen
+                             );
 
     KKStrMatrixPtr  QueryStatementReturnAllColumns (const char*   statement,
-                                                    int32         statementLen,
+                                                    kkint32       statementLen,
                                                     VectorKKStr&  columnsReturned
                                                    );
 
@@ -212,13 +213,13 @@ namespace MLL
     void    GpsDataInsert (const DataBaseGpsData&  gpsData);
 
     DataBaseGpsDataListPtr   GpsDataQuery (const KKStr&          cruiseName,
-                                           const KKU::DateTime&  utcDateTimeStart,
-                                           const KKU::DateTime&  utcDateTimeEnd
+                                           const KKB::DateTime&  utcDateTimeStart,
+                                           const KKB::DateTime&  utcDateTimeEnd
                                           );
 
     void  GpsDataDelete (const KKStr&          cruiseName,
-                         const KKU::DateTime&  utcDateTimeStart,
-                         const KKU::DateTime&  utcDateTimeEnd
+                         const KKB::DateTime&  utcDateTimeStart,
+                         const KKB::DateTime&  utcDateTimeEnd
                         );
 
 
@@ -234,17 +235,17 @@ namespace MLL
     void  ImageInsert (const RasterSipper&    image,
                        const KKStr&           imageFileName,
                        const KKStr&           sipperFileName,
-                             uint64           byteOffset,     // byteOffset of SipperRow containing TopLeftRow
-                             uint32           topLeftRow,
-                             uint32           topLeftCol,
-                             uint32           height,
-                             uint32           width,
-                             uint32           pixelCount,
+                             kkuint64         byteOffset,     // byteOffset of SipperRow containing TopLeftRow
+                             kkuint32         topLeftRow,
+                             kkuint32         topLeftCol,
+                             kkuint32         height,
+                             kkuint32         width,
+                             kkuint32         pixelCount,
                              uchar            connectedPixelDist,
-                             uint32           extractionLogEntryId,
-                             uint32           classLogEntryId,
-                             uint32           centroidRow,
-                             uint32           centroidCol,
+                             kkuint32         extractionLogEntryId,
+                             kkuint32         classLogEntryId,
+                             kkuint32         centroidRow,
+                             kkuint32         centroidCol,
                              MLClassConstPtr  class1,
                              float            class1Prob,
                              MLClassConstPtr  class2,
@@ -253,7 +254,7 @@ namespace MLL
                              float            depth,
                              float            imageSize,
                              PointListPtr     sizeCoordinates,
-                             int32&           imageId,
+                             kkint32&           imageId,
                              bool&            successful
                        );
 
@@ -267,19 +268,19 @@ namespace MLL
     void  ImagesEraseSipperFile (const KKStr&  _sipperFileName);
 
     void  ImagesEraseSipperFileSizeRange (const KKStr&  _sipperFileName,
-                                          uint32        _minSize,
-                                          uint32        _maxSize
+                                          kkuint32      _minSize,
+                                          kkuint32      _maxSize
                                          );
 
-    DataBaseImagePtr      ImageLoad (uint32  imageId);  
+    DataBaseImagePtr      ImageLoad (kkuint32  imageId);  
 
     DataBaseImagePtr      ImageLoad (const KKStr&   imageFileName);  // Root name of image.
 
     DataBaseImagePtr      ImagesLocateClosestImage (const KKStr&  imageFileName);
 
     DataBaseImagePtr      ImagesLocateClosestImage (const KKStr&  sipperFileName,
-                                                    uint32        scanLine,
-                                                    uint32        scanCol
+                                                    kkuint32      scanLine,
+                                                    kkuint32      scanCol
                                                    );
 
 
@@ -295,12 +296,12 @@ namespace MLL
                                        char                   classKeyToUse,   /**< 'P' - Use Predicted Class Key,  'V' - Validated Class */
                                        float                  probMin,
                                        float                  probMax,
-                                       int32                  sizeMin,
-                                       int32                  sizeMax,
+                                       kkint32                sizeMin,
+                                       kkint32                sizeMax,
                                        float                  depthMin,
                                        float                  depthMax,
-                                       uint32                 restartImageId,
-                                       int32                  limit,            // Max # of rows to return.  -1 indicates no limit.
+                                       kkuint32               restartImageId,
+                                       kkint32                limit,            // Max # of rows to return.  -1 indicates no limit.
                                        bool                   includeThumbnail,
                                        const bool&            cancelFlag
                                       );
@@ -315,12 +316,12 @@ namespace MLL
                                        char                  classKeyToUse,
                                        float                 probMin,
                                        float                 probMax,
-                                       int32                 sizeMin,
-                                       int32                 sizeMax,
+                                       kkint32               sizeMin,
+                                       kkint32               sizeMax,
                                        float                 depthMin,
                                        float                 depthMax,
-                                       uint32                restartImageId,
-                                       int32                 limit,            // Max # of rows to return.  -1 indicates no limit.
+                                       kkuint32              restartImageId,
+                                       kkint32               limit,            // Max # of rows to return.  -1 indicates no limit.
                                        bool                  includeThumbnail,
                                        const bool&           cancelFlag
                                       );
@@ -342,8 +343,8 @@ namespace MLL
                                        const KKStr&    dataField3Name,
                                        float           dataField3Min,
                                        float           dataField3Max,
-                                       uint32          restartImageId,
-                                       int32           limit            // Max # of rows 2 return.  -1 idicates no limit.
+                                       kkuint32        restartImageId,
+                                       kkint32         limit            // Max # of rows 2 return.  -1 idicates no limit.
                                       );
 
 
@@ -357,19 +358,19 @@ namespace MLL
                                      char                   classKeyToUse,
                                      float                  probMin,
                                      float                  probMax,
-                                     int32                  sizeMin,
-                                     int32                  sizeMax,
+                                     kkint32                sizeMin,
+                                     kkint32                sizeMax,
                                      float                  depthMin,
                                      float                  depthMax,
-                                     uint32                 restartImageId,
-                                     int32                  limit,            // Max # of rows to return.  -1 indicates no limit.,
+                                     kkuint32               restartImageId,
+                                     kkint32                limit,            // Max # of rows to return.  -1 indicates no limit.,
                                      bool                   includeThumbnail
                                     );
     
 
     DataBaseImageListPtr  ImagesQueryForScanLineRange (const KKStr&  sipperFileName,
-                                                       uint32        scanLineStart,
-                                                       uint32        scanLineEnd
+                                                       kkuint32      scanLineStart,
+                                                       kkuint32      scanLineEnd
                                                       );
 
     
@@ -390,8 +391,8 @@ namespace MLL
 
 
     VectorKKStr*          ImageListOfImageFileNamesByScanLineRange (const KKStr&  sipperFileName,
-                                                                    uint32        scanLineStart,
-                                                                    uint32        scanLineEnd
+                                                                    kkuint32      scanLineStart,
+                                                                    kkuint32      scanLineEnd
                                                                    );
 
 
@@ -401,8 +402,8 @@ namespace MLL
     // sipper files and scan range specified.
     void  ImageUpdateInstrumentDataFields (InstrumentDataPtr  instumentData,
                                            const KKStr&       sipperFileName,
-                                           uint32             scanLineStart,
-                                           uint32             scanLineEnd
+                                           kkuint32           scanLineStart,
+                                           kkuint32           scanLineEnd
                                           );
 
 
@@ -411,7 +412,7 @@ namespace MLL
                                    float           class1Prob,
                                    MLClassConstPtr class2Pred,
                                    float           class2Prob,
-                                   uint32          logEntryId
+                                   kkuint32        logEntryId
                                   );
 
 
@@ -423,7 +424,7 @@ namespace MLL
      *   separated by 'tabs'('\t'). So if there are two images with predictions the string will look like
      *   "<ImageFileRootName><\t><Class1Name><\t><Class1Prob><\t><Class2Name><\t><Class2Prob><\n><ImageFileRootName><\t><Class1Name><\t><Class1Prob><\t><Class2Name><\t><Class2Prob>"
      */
-    void  ImagesUpdatePredictionsList (uint32        _logEntryId,
+    void  ImagesUpdatePredictionsList (kkuint32      _logEntryId,
                                        const KKStr&  _predictionList
                                       );
 
@@ -479,8 +480,8 @@ namespace MLL
                                                     char                   classKeyToUse,
                                                     float                  minProb,
                                                     float                  maxProb,
-                                                    int32                  minSize,
-                                                    int32                  maxSize,
+                                                    kkint32                minSize,
+                                                    kkint32                maxSize,
                                                     float                  minDepth,
                                                     float                  maxDepth
                                                    );
@@ -494,8 +495,8 @@ namespace MLL
                                                     char                   classKeyToUse,
                                                     float                  minProb,
                                                     float                  maxProb,
-                                                    int32                  minSize,
-                                                    int32                  maxSize,
+                                                    kkint32                minSize,
+                                                    kkint32                maxSize,
                                                     float                  minDepth,
                                                     float                  maxDepth
                                                    );
@@ -503,7 +504,7 @@ namespace MLL
 
 
     /**
-     * Will return a pointer to a vector<int32> instance that will contain counts of images
+     * Will return a pointer to a vector<kkint32> instance that will contain counts of images
      * by depth.  Each element in the vector will represent a depth range such that
      * index 0 will be for depth range (0 <= images.Depth < depthIncrements)
      * index 1 will ""     ""      ""  (depthIncrements <= images.Depth < (2 * depthIncrements))
@@ -515,8 +516,8 @@ namespace MLL
                                           char                   classKeyToUse,
                                           float                  minProb,
                                           float                  maxProb,
-                                          int32                  minSize,
-                                          int32                  maxSize
+                                          kkint32                minSize,
+                                          kkint32                maxSize
                                          );
 
 
@@ -529,8 +530,8 @@ namespace MLL
                                           char                   classKeyToUse,
                                           float                  minProb,
                                           float                  maxProb,
-                                          int32                  minSize,
-                                          int32                  maxSize,
+                                          kkint32                minSize,
+                                          kkint32                maxSize,
                                           bool&                  cancelFlag
                                          );
 
@@ -539,7 +540,7 @@ namespace MLL
     //***********************************************************************************
     RasterSipperPtr  ImageFullSizeLoad (const KKStr&  imageFileName);
 
-    RasterSipperPtr  ImageFullSizeLoad (int32  imageId);
+    RasterSipperPtr  ImageFullSizeLoad (kkint32  imageId);
 
 
     void       ImageFullSizeDelete (const KKStr&  imageFileName);
@@ -598,7 +599,7 @@ namespace MLL
 
     DataBaseImageGroupPtr      ImageGroupLoad (const KKStr&  name);  
 
-    void  ImageGroupDelete (int32 imageGroupId);
+    void  ImageGroupDelete (kkint32 imageGroupId);
 
 
 
@@ -620,11 +621,11 @@ namespace MLL
      * Since there is a limitation on the length of the MySQL parameter of 64K  we need to make sure that the
      * length of all the imageFileNames will be less than 64K that is sum_i (ImageFileNamess[i].Len ()) + imageFileNams.size () < 64000.
      */
-    KKStrMatrixPtr  ImageGroupEntriesInsert (int32               groupId,         // Will insert a list of images into the same
+    KKStrMatrixPtr  ImageGroupEntriesInsert (kkint32             groupId,         // Will insert a list of images into the same
                                              const VectorKKStr&  imageFileNames   // group
                                             );
 
-    DataBaseImageGroupEntryListPtr  ImageGroupEntriesLoad (int32 groupId);
+    DataBaseImageGroupEntryListPtr  ImageGroupEntriesLoad (kkint32 groupId);
 
 
 
@@ -637,7 +638,7 @@ namespace MLL
      * not more that 8192 scan-lines before.
      */
     InstrumentDataPtr  InstrumentDataGetByScanLine (const KKStr&  sipperFileName,
-                                                    uint32        scanLine
+                                                    kkuint32      scanLine
                                                    );
 
 
@@ -714,7 +715,7 @@ namespace MLL
     void  InstrumentDataReFreshSipperFile (const KKStr&  sipperFileName,
                                            const bool&   cancelFlag,
                                            char*         msgBuff,
-                                           int32         msgBuffLen
+                                           kkint32       msgBuffLen
                                           );
 
     /**
@@ -748,8 +749,8 @@ namespace MLL
     /**
      *@brief  Update all InstrumentData entries tht fall within the dateTime range with the specified Latitude and Longitude.
      */
-    void  InstrumentDataUpdateLatitudeAndLongitude (const KKU::DateTime&  dateTimeStart,
-                                                    const KKU::DateTime&  dateTimeEnd,
+    void  InstrumentDataUpdateLatitudeAndLongitude (const KKB::DateTime&  dateTimeStart,
+                                                    const KKB::DateTime&  dateTimeEnd,
                                                     double                latitude,
                                                     double                longitude
                                                    );
@@ -763,8 +764,8 @@ namespace MLL
      */
     vector<vector<float> >*  InstrumentDataGetSpecificFields (const KKStr&          sipperFileName,
                                                               const KKStrListPtr    fieldNames,
-                                                              const KKU::DateTime&  dateTimeStart,
-                                                              const KKU::DateTime&  dateTimeEnd
+                                                              const KKB::DateTime&  dateTimeStart,
+                                                              const KKB::DateTime&  dateTimeEnd
                                                              );
 
 
@@ -772,15 +773,15 @@ namespace MLL
                                                                const KKStr&          stationName,
                                                                const KKStr&          deploymentNum,
                                                                const KKStrListPtr    fieldNames,
-                                                               const KKU::DateTime&  dateTimeStart,
-                                                               const KKU::DateTime&  dateTimeEnd
+                                                               const KKB::DateTime&  dateTimeStart,
+                                                               const KKB::DateTime&  dateTimeEnd
                                                               );
 
 
     GPSDataPointListPtr InstrumentDataRetrieveGPSInfo (const KKStr&  cruiseName,
                                                        const KKStr&  stationName,
                                                        const KKStr&  deploymentNum,
-                                                       int32         timeInterval   /**< Interval in seconds */
+                                                       kkint32       timeInterval   /**< Interval in seconds */
                                                       );
 
 
@@ -796,7 +797,7 @@ namespace MLL
     //***********************************************************************************
     DataBaseLogEntryPtr  LogEntriesProcessStart (const KKStr&          progCode,
                                                  const KKStr&          progName,
-                                                 const KKU::DateTime&  dateTimeCompiled,
+                                                 const KKB::DateTime&  dateTimeCompiled,
                                                  const KKStr&          cmdLine,
                                                  const KKStr&          sipperFileName   /**< Root name of Sipper file; only if specific to a single Sipper File */
                                                 );
@@ -808,7 +809,7 @@ namespace MLL
                                );
 
 
-    DataBaseLogEntryPtr  LogEntriesSelect (uint32 _logEntryId);
+    DataBaseLogEntryPtr  LogEntriesSelect (kkuint32 _logEntryId);
 
 
 
@@ -907,18 +908,18 @@ namespace MLL
                                                        );
 
     void                  SipperFileUpdateFileSizeStats (const KKStr&  _sipperFileName, 
-                                                         int64         _sizeInBytes,
-                                                         uint32        _numScanLines
+                                                         kkint64       _sizeInBytes,
+                                                         kkuint32      _numScanLines
                                                         );
 
     void                  SipperFilesDelete (const KKStr&  _sipperFileName);  /**< Delete a Sipper File and all its related data from all tables in database. */
 
 
     void                  SipperFilesGetCTDDateTime (const KKStr&    _sipperFileName,
-                                                     int32&          _sipperFileId, 
-                                                     uint32&         _numScanLines, 
-                                                     KKU::DateTime&  _CTDDateTimeStart, 
-                                                     KKU::DateTime&  _CTDDateTimeEnd
+                                                     kkint32&          _sipperFileId, 
+                                                     kkuint32&         _numScanLines, 
+                                                     KKB::DateTime&  _CTDDateTimeStart, 
+                                                     KKB::DateTime&  _CTDDateTimeEnd
                                                     );
 
 
@@ -942,7 +943,7 @@ namespace MLL
   private:
     static  GoalKeeperPtr  blocker;   /*!< used to handle multi-threading issues. */
 
-    static volatile int32  numDataBaseInstances;  /**< Will be incremented when the constructor is called and
+    static volatile kkint32  numDataBaseInstances;  /**< Will be incremented when the constructor is called and
                                                    * decremented when the destructor is called.  This way the
                                                    * Constructor and Destructor's will know if they should call
                                                    * "mysql_library_init" and "mysql_library_end" respectively.
@@ -980,15 +981,15 @@ namespace MLL
     DataBaseServerPtr  GetDefaultMySqlParameters ();
 
 
-    int32  Connect ();
+    kkint32  Connect ();
 
-    int32  ConnectEmbedded ();
+    kkint32  ConnectEmbedded ();
 
-    int32  ConnectServer ();
+    kkint32  ConnectServer ();
 
-    int32  ReConnect (const KKStr&  funcCall,
+    kkint32  ReConnect (const KKStr&  funcCall,
                       const KKStr&  queryStrMsg,
-                      int32         numReTries
+                      kkint32       numReTries
                      );
 
     void  ValidateConnection (const char*  funcCall);
@@ -996,13 +997,13 @@ namespace MLL
 
 
     // Routines to format MySql datastat types.
-    KKU::DateTime  DateTimeFromMySqlDateTimeField (KKStr  field);
+    KKB::DateTime  DateTimeFromMySqlDateTimeField (KKStr  field);
 
-    KKU::TimeType  TimeFromMySqlDateTimeField (KKStr field);
+    KKB::TimeType  TimeFromMySqlDateTimeField (KKStr field);
 
-    KKU::DateType  DateFromMySqlDateTimeField (KKStr  field);
+    KKB::DateType  DateFromMySqlDateTimeField (KKStr  field);
 
-    KKStr   DateTimeToQuotedStr (const KKU::DateTime&  dt);
+    KKStr   DateTimeToQuotedStr (const KKB::DateTime&  dt);
 
     KKStr    FloatToStr (float f);
 
@@ -1018,8 +1019,8 @@ namespace MLL
 
 
     uchar*  EncodeARasterImageIntoAThumbNail (const RasterSipper&  image,
-                                              uint32               maxDimSizeAllowed,
-                                              uint32&              buffLen
+                                              kkuint32             maxDimSizeAllowed,
+                                              kkuint32&              buffLen
                                              );
 
     MLClassListPtr  MLClassProcessResults ();
@@ -1040,7 +1041,7 @@ namespace MLL
 
     /** Copies String from src to dest making sure that it does not exceed 'destSize'. */
     void  WriteBuff (char*        dest,
-                     KKU::int32   destSize,
+                     KKB::kkint32 destSize,
                      const char*  src
                     );
 
@@ -1055,7 +1056,7 @@ namespace MLL
     DataBaseServerPtr  server;              /**< We will own this instance and be responsible for deleting.    */
     bool               duplicateKey;        /**< Is set to true during insert if a duplicate key error occurs. */
     bool               valid;               /**< Will be set to false if connection is bad.                    */
-    uint32             lastMySqlErrorNo;
+    kkuint32           lastMySqlErrorNo;
     KKStr              lastMySqlErrorDesc;
     KKStr              prevQueryStatement;
 
@@ -1064,8 +1065,8 @@ namespace MLL
 
     MYSQL_FIELD*       resultSetFieldDefs;
     MYSQL_RES*         resultSet;
-    uint32             resultSetNumFields;
-    uint32             resultSetNumRows;
+    kkuint32           resultSetNumFields;
+    kkuint32           resultSetNumRows;
     bool               resultSetMore;   
     MYSQL_ROW          resultSetNextRow;
     VectorInt          resultSetFieldIndex;
@@ -1080,22 +1081,22 @@ namespace MLL
     void   ResulSetFree ();
 
     
-    bool             ResultSetGetBool          (uint32 fieldIdx);
-    char             ResultSetGetCharField     (uint32 fieldIdx);
-    const char*      ResultSetGetField         (uint32 fieldIdx);
-    ulong            ResultSetGetFieldLen      (uint32 fieldIdx);
-    KKStr            ResultSetGetKKStrField    (uint32 fieldIdx);
-    KKU::DateTime    ResultSetGetDateTimeField (uint32 fieldIdx);
-    KKU::TimeType    ResultSetGetTimeField     (uint32 fieldIdx);
-    double           ResultSetGetDoubleField   (uint32 fieldIdx);
-    float            ResultSetGetFloatField    (uint32 fieldIdx);
-    int32            ResultSetGetIntField      (uint32 fieldIdx);
-    KKU::int64       ResultSetGetInt64Field    (uint32 fieldIdx);
-    RasterSipperPtr  ResultSetGetRasterField   (uint32 fieldIdx);
-    kkuint16         ResultSetGetUint16Field   (uint32 fieldIdx);
-    uint32           ResultSetGetUintField     (uint32 fieldIdx);
-    KKU::ulong       ResultSetGetUlongField    (uint32 fieldIdx);
-    KKU::uint64      ResultSetGetUint64Field   (uint32 fieldIdx);
+    bool             ResultSetGetBool          (kkuint32 fieldIdx);
+    char             ResultSetGetCharField     (kkuint32 fieldIdx);
+    const char*      ResultSetGetField         (kkuint32 fieldIdx);
+    ulong            ResultSetGetFieldLen      (kkuint32 fieldIdx);
+    KKStr            ResultSetGetKKStrField    (kkuint32 fieldIdx);
+    KKB::DateTime    ResultSetGetDateTimeField (kkuint32 fieldIdx);
+    KKB::TimeType    ResultSetGetTimeField     (kkuint32 fieldIdx);
+    double           ResultSetGetDoubleField   (kkuint32 fieldIdx);
+    float            ResultSetGetFloatField    (kkuint32 fieldIdx);
+    kkint32          ResultSetGetIntField      (kkuint32 fieldIdx);
+    KKB::kkint64     ResultSetGetInt64Field    (kkuint32 fieldIdx);
+    RasterSipperPtr  ResultSetGetRasterField   (kkuint32 fieldIdx);
+    kkuint16         ResultSetGetUint16Field   (kkuint32 fieldIdx);
+    kkuint32         ResultSetGetUintField     (kkuint32 fieldIdx);
+    KKB::ulong       ResultSetGetUlongField    (kkuint32 fieldIdx);
+    KKB::kkuint64    ResultSetGetUint64Field   (kkuint32 fieldIdx);
   };  /* DataBase */
 
   typedef  DataBase::DataBasePtr  DataBasePtr;

@@ -1,6 +1,6 @@
 /* Compressor.cpp -- Compresses and de-compresses data using zLib Library
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #include "FirstIncludes.h"
 #include <iostream>
@@ -16,22 +16,22 @@ using namespace std;
 #include "Compressor.h"
 #include "GlobalGoalKeeper.h"
 #include "OSservices.h"
-using namespace KKU;
+using namespace KKB;
 
 void*  Compressor::CreateCompressedBuffer (void*  source,
-                                           uint32 sourceLen,
-                                           uint32&  compressedBuffLen
+                                           kkuint32 sourceLen,
+                                           kkuint32&  compressedBuffLen
                                           )
 {
 #ifdef ZLIB_H
 
   // following code was lifted from example provided by zlib  "zpipe.c"
-  int32     ret;
+  kkint32   ret;
   z_stream  strm;
 
 
   Bytef*  outputBuffer = NULL;
-  uint32  outputBufferSize = sourceLen * 2;
+  kkuint32  outputBufferSize = sourceLen * 2;
 
   outputBuffer = new Bytef[outputBufferSize];
 
@@ -117,7 +117,7 @@ void*  Compressor::CreateCompressedBuffer (void*  source,
       }
       
       // Now we compute how much output deflate() provided on the last call, which is the difference between how much space was provided before the call, and how much output space is still available after the call. Then that data, if any, is written to the output file. We can then reuse the output buffer for the next call of deflate(). Again if there is a file i/o error, we call deflateEnd() before returning to avoid a memory leak. 
-      int32 have = outputBufferSize - strm.avail_out;
+      kkint32 have = outputBufferSize - strm.avail_out;
       {
         if  (compressedBuff == NULL)
         {
@@ -127,7 +127,7 @@ void*  Compressor::CreateCompressedBuffer (void*  source,
         }
         else
         {
-          uint32  newCompressedBuffLen = compressedBuffLen + have;
+          kkuint32  newCompressedBuffLen = compressedBuffLen + have;
           uchar*  newCompressedBuff = new uchar[newCompressedBuffLen];
           memcpy (newCompressedBuff, compressedBuff, compressedBuffLen);
           memcpy (newCompressedBuff + compressedBuffLen, outputBuffer, have);
@@ -168,8 +168,8 @@ void*  Compressor::CreateCompressedBuffer (void*  source,
 
 
 void*   Compressor::Decompress (const void*  compressedBuff,
-                                uint32       compressedBuffLen,
-                                uint32&      unCompressedLen
+                                kkuint32     compressedBuffLen,
+                                kkuint32&      unCompressedLen
                                )
 {
 #ifdef ZLIB_H
@@ -178,13 +178,13 @@ void*   Compressor::Decompress (const void*  compressedBuff,
 
   GlobalGoalKeeper::StartBlock ();
 
-  uint32     have              = 0;
+  kkuint32   have              = 0;
   uchar*     unCompressedBuff  = NULL;
 
   Bytef*     outBuffer    = NULL;
-  int32      outBufferLen = 0;
+  kkint32    outBufferLen = 0;
 
-  int32      ret;
+  kkint32    ret;
   z_stream   strm;
 
   /* allocate inflate state */
@@ -253,7 +253,7 @@ void*   Compressor::Decompress (const void*  compressedBuff,
     }
     else
     {
-      int32  newUnCompressedLen   = unCompressedLen + have;
+      kkint32  newUnCompressedLen   = unCompressedLen + have;
       uchar* newUnCompressedBuff  = new uchar[newUnCompressedLen];
       memcpy (newUnCompressedBuff, unCompressedBuff, unCompressedLen);
       memcpy (newUnCompressedBuff + unCompressedLen, outBuffer, have);

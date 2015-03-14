@@ -14,13 +14,14 @@
 using namespace std;
 
 #include "MemoryDebug.h"
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "KKException.h"
-#include "..\BaseLibrary\GoalKeeper.h"
-using namespace KKU;
+#include "GoalKeeper.h"
+using namespace KKB;
 
 #include "PicesKKStr.h"
 #include "PicesMethods.h"
+#include "PicesOSservices.h"
 #include "PicesSipperFile.h"
 #include "PicesDataBaseServer.h"
 #include "PicesDataBaseServerPrompter.h"
@@ -75,7 +76,7 @@ namespace  PicesInterface
     {
       String^ startTrace = Environment::StackTrace;
       DataBase::ErrorLogMsg ("PicesDataBase::PicesDataBase    _server == nullptr\n\n" + PicesKKStr::SystemStringToKKStr (startTrace));
-      KKU::RunLog  runLog;
+      KKB::RunLog  runLog;
       _server = gcnew PicesDataBaseServer (DataBase::GetDefaultServer (runLog));
     }
 
@@ -457,17 +458,17 @@ namespace  PicesInterface
 void   PicesDataBase::ImageInsert (PicesRaster^    image,
                                    String^         imageFileName,
                                    String^         supperFileName,
-                                   uint64          byteOffset,     /**< byteOffset of SipperRow containing TopLeftRow */
-                                   uint32          topLeftRow,
-                                   uint32          topLeftCol,
-                                   uint32          height,
-                                   uint32          width,
-                                   uint32          pixelCount,
+                                   kkuint64        byteOffset,     /**< byteOffset of SipperRow containing TopLeftRow */
+                                   kkuint32        topLeftRow,
+                                   kkuint32        topLeftCol,
+                                   kkuint32        height,
+                                   kkuint32        width,
+                                   kkuint32        pixelCount,
                                    uchar           connectedPixelDist,
-                                   uint32          extractionLogEntryId,
-                                   uint32          classLogEntryId,
-                                   uint32          centroidRow,
-                                   uint32          centroidCol,
+                                   kkuint32        extractionLogEntryId,
+                                   kkuint32        classLogEntryId,
+                                   kkuint32        centroidRow,
+                                   kkuint32        centroidCol,
                                    PicesClass^     class1,
                                    float           class1Prob,
                                    PicesClass^     class2,
@@ -476,7 +477,7 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
                                    float           depth,
                                    float           imageSize,
                                    PicesPointList^ sizeCoordinates,
-                                   int32%          imageId,
+                                   kkint32%          imageId,
                                    bool%           successful
                                   )
 {
@@ -499,10 +500,10 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
   {
     umSizeCoordinates = new PointList (true);
     for each  (PicesPoint^ pp in sizeCoordinates)
-      umSizeCoordinates->PushOnBack (new KKU::Point (pp->Row, pp->Col));
+      umSizeCoordinates->PushOnBack (new KKB::Point (pp->Row, pp->Col));
   }
 
-  int32  umImageId    = 0;
+  kkint32  umImageId    = 0;
   bool   umSuccessful = false;
 
   dbConn->ImageInsert (*(image->UnmanagedClass ()),
@@ -1108,7 +1109,7 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
                                               float            imageSize
                                              )
   {
-    KKU::PointListPtr  unmangedPoints = sizeCoordinates->ToUnmanaged ();
+    KKB::PointListPtr  unmangedPoints = sizeCoordinates->ToUnmanaged ();
     dbConn->ImagesUpdateImageSize (PicesKKStr::SystemStringToKKStr (imageFileName), unmangedPoints, imageSize);
     lastOpSuccessful = dbConn->Valid ();
     delete  unmangedPoints;
@@ -1849,7 +1850,7 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
   PicesGPSDataPointList^  PicesDataBase::InstrumentDataRetrieveGPSInfo (String^  cruiseName,
                                                                         String^  stationName,
                                                                         String^  deploymentNum,
-                                                                        int32    timeInterval   /**< Interval in seconds */
+                                                                        kkint32  timeInterval   /**< Interval in seconds */
                                                                        )
   {
     PicesGPSDataPointList^  results = nullptr;

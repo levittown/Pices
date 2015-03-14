@@ -13,12 +13,12 @@
 using namespace std;
 
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "KKStrParser.h"
 
 
 #include  "OSservices.h"
-using namespace KKU;
+using namespace KKB;
 
 
 
@@ -98,12 +98,12 @@ InstrumentDataListPtr  InstrumentDataList::CreateFromSipperFile (const KKStr&   
   }
 
   uchar*  lineBuff = new uchar[4096];
-  uint32  lineSize = 0;
-  uint32*   colCount = new uint32[4096];
-  uint32  pixelsInRow;
+  kkuint32  lineSize = 0;
+  kkuint32*   colCount = new kkuint32[4096];
+  kkuint32  pixelsInRow;
   bool    flow;
 
-  int32 RecordingRateNumSamplingFrames = 2;
+  kkint32 RecordingRateNumSamplingFrames = 2;
 
   InstrumentDataListPtr  data = new InstrumentDataList (true);
   data->SipperFileName (sipperFileName);
@@ -139,19 +139,19 @@ InstrumentDataListPtr  InstrumentDataList::CreateFromSipperFile (const KKStr&   
 
       if  (data->QueueSize () > 0)
       {
-        int32  frameNumPrev  = data->QueueSize () - 1 - RecordingRateNumSamplingFrames;
+        kkint32  frameNumPrev  = data->QueueSize () - 1 - RecordingRateNumSamplingFrames;
         if  (frameNumPrev < 0)
           frameNumPrev = 0;
 
         InstrumentDataPtr  prevID = data->IdxToPtr (frameNumPrev);
 
-        uint32 scanLineRow     = sipperBuff->CurRow ();
-        uint32 scanLineRowPrev = prevID->ScanLine ();
-        uint32 scanLinesDelta  = scanLineRow - scanLineRowPrev;
+        kkuint32 scanLineRow     = sipperBuff->CurRow ();
+        kkuint32 scanLineRowPrev = prevID->ScanLine ();
+        kkuint32 scanLinesDelta  = scanLineRow - scanLineRowPrev;
 
-        uint64  byteOffset      = sipperBuff->ByteOffset ();
-        uint64  byteOffsetPrev  = prevID->ByteOffset ();
-        uint64  byteOffsetDelta = byteOffset - byteOffsetPrev;
+        kkuint64  byteOffset      = sipperBuff->ByteOffset ();
+        kkuint64  byteOffsetPrev  = prevID->ByteOffset ();
+        kkuint64  byteOffsetDelta = byteOffset - byteOffsetPrev;
 
         double  secsDelta = (double)scanLinesDelta / (double)scanRate;
 
@@ -267,7 +267,7 @@ void  InstrumentDataList::Load (const KKStr&  fileName,
     return;
   }
 
-  int32  expectedCount = -1;
+  kkint32  expectedCount = -1;
 
   VectorIntPtr  fieldIndirections = InstrumentData::CreateDefaultFieldIndirectionList ();
 
@@ -389,7 +389,7 @@ void  InstrumentDataList::Save (const KKStr&  fileName,
                                )  const
 {
   log.Level (10) << "InstrumentDataList::Save  [" << fileName << "]" << endl;
-  int32  x;
+  kkint32  x;
   ofstream  o (fileName.Str ());
   if  (!o.is_open ())
   {
@@ -430,7 +430,7 @@ void  InstrumentDataList::Save (const KKStr&  fileName,
 
 
 
-VectorDouble  InstrumentDataList::FrameOffsetsInMeters (uint32 scanLinesPerFrame,
+VectorDouble  InstrumentDataList::FrameOffsetsInMeters (kkuint32 scanLinesPerFrame,
                                                         float  scanRate,             // Scan lines per second.
                                                         float  defaultFlowRate
                                                        )
@@ -438,12 +438,12 @@ VectorDouble  InstrumentDataList::FrameOffsetsInMeters (uint32 scanLinesPerFrame
   const_iterator  idx;
 
   VectorDouble  frameOffsets;
-  uint32  lastFrameScanLine = 0;
-  uint32  nextFrameScanLine = lastFrameScanLine + scanLinesPerFrame;
+  kkuint32  lastFrameScanLine = 0;
+  kkuint32  nextFrameScanLine = lastFrameScanLine + scanLinesPerFrame;
   double  distTransversedCurFrame = 0.0;
   double  totalDist               = 0.0;
   frameOffsets.push_back (0.0);
-  uint32  lastScanLineCalced = 0;
+  kkuint32  lastScanLineCalced = 0;
 
   idx = begin ();
   while  (idx != end ())
@@ -453,7 +453,7 @@ VectorDouble  InstrumentDataList::FrameOffsetsInMeters (uint32 scanLinesPerFrame
     {
       // This Istrumentdata record 'id' is beyond the end of th ecurrent frame.  In this case
       // we want to calc the distance traveled in this frame and add to 'frameOffsets'.
-      uint32  scanLines = nextFrameScanLine - lastScanLineCalced;
+      kkuint32  scanLines = nextFrameScanLine - lastScanLineCalced;
       double  deltaTime = scanLines / scanRate;   // (ScanLines / ScanLines per Sec)
 
       float  flowRate = id->FlowRate1 ();
@@ -474,7 +474,7 @@ VectorDouble  InstrumentDataList::FrameOffsetsInMeters (uint32 scanLinesPerFrame
     {
       // We now want to add scan lines that were not just added to frames in previous loop to 
       // 'distTransversedCurFrame'.
-      uint32  scanLines = id->ScanLine () - lastScanLineCalced;
+      kkuint32  scanLines = id->ScanLine () - lastScanLineCalced;
       double  deltaTime = scanLines / scanRate;   // (ScanLines / ScanLines per Sec)
 
       float  flowRate = id->FlowRate1 ();
@@ -495,19 +495,19 @@ VectorDouble  InstrumentDataList::FrameOffsetsInMeters (uint32 scanLinesPerFrame
 
 
 
-InstrumentDataPtr  InstrumentDataList::SearchForNearestScanLine (uint32  scanLine)
+InstrumentDataPtr  InstrumentDataList::SearchForNearestScanLine (kkuint32  scanLine)
 {
   if  (QueueSize () < 1)
     return  NULL;
 
   InstrumentDataPtr  id = NULL;
-  uint32  lowerBound = 0;
-  uint32  upperBound = (uint32)QueueSize () - 1;
-  uint32  mid  = 0;
+  kkuint32  lowerBound = 0;
+  kkuint32  upperBound = (kkuint32)QueueSize () - 1;
+  kkuint32  mid  = 0;
 
-  uint32  lowerScanLine = 0;
-  uint32  upperScanLine = 999999999;
-  uint32  midScanLine   = 0;
+  kkuint32  lowerScanLine = 0;
+  kkuint32  upperScanLine = 999999999;
+  kkuint32  midScanLine   = 0;
 
   id = IdxToPtr (0);
   lowerScanLine = id->ScanLine ();
@@ -544,8 +544,8 @@ InstrumentDataPtr  InstrumentDataList::SearchForNearestScanLine (uint32  scanLin
   if  (scanLine > midScanLine)
   {
     InstrumentDataPtr  midPlusOne = IdxToPtr (mid + 1);
-    uint32  deltaMid        = (scanLine - midScanLine);
-    uint32  deltaMidPlusOne = (midPlusOne->ScanLine () - scanLine);
+    kkuint32  deltaMid        = (scanLine - midScanLine);
+    kkuint32  deltaMidPlusOne = (midPlusOne->ScanLine () - scanLine);
 
     if  (deltaMid < deltaMidPlusOne)
       return  id;
@@ -556,8 +556,8 @@ InstrumentDataPtr  InstrumentDataList::SearchForNearestScanLine (uint32  scanLin
   else if  (scanLine < midScanLine)
   {
     InstrumentDataPtr  midLessOne = IdxToPtr (mid - 1);
-    uint32  deltaMid        = (midScanLine - scanLine);
-    uint32  deltaMidLessOne = (scanLine - midLessOne->ScanLine ());
+    kkuint32  deltaMid        = (midScanLine - scanLine);
+    kkuint32  deltaMidLessOne = (scanLine - midLessOne->ScanLine ());
 
     if  (deltaMid < deltaMidLessOne)
       return  id;
@@ -587,7 +587,7 @@ VectorFloat  InstrumentDataList::GetVolumePerMeterProfile (SipperFilePtr  sipper
   }
 
   float  lastDepth = 0.0f;
-  uint32  lastScanLine = 0;
+  kkuint32  lastScanLine = 0;
 
   const_iterator  idx;
 
@@ -604,12 +604,12 @@ VectorFloat  InstrumentDataList::GetVolumePerMeterProfile (SipperFilePtr  sipper
   {
     const InstrumentDataPtr  id = *idx;
     float  depth = id->Depth ();
-    uint32  scanLine = id->ScanLine ();
+    kkuint32  scanLine = id->ScanLine ();
 
-    uint32  deltaScanLines = scanLine - lastScanLine;
+    kkuint32  deltaScanLines = scanLine - lastScanLine;
     float  flowRate = id->FlowRate1 ();
 
-    uint32 depthIndex = (int32)lastDepth;
+    kkuint32 depthIndex = (kkint32)lastDepth;
 
     while  (volumePerMeter.size () <= depthIndex)
       volumePerMeter.push_back (0.0f);
@@ -634,7 +634,7 @@ VectorUlong  InstrumentDataList::GetScanLinesPerMeterProfile ()  const
   VectorUlong   scanLinesPerMeter;
 
   float  lastDepth = 0.0f;
-  uint32  lastScanLine = 0;
+  kkuint32  lastScanLine = 0;
 
   const_iterator  idx;
 
@@ -642,11 +642,11 @@ VectorUlong  InstrumentDataList::GetScanLinesPerMeterProfile ()  const
   {
     const InstrumentDataPtr  id = *idx;
     float  depth = id->Depth ();
-    uint32  scanLine = id->ScanLine ();
+    kkuint32  scanLine = id->ScanLine ();
 
-    uint32  deltaScanLines = scanLine - lastScanLine;
+    kkuint32  deltaScanLines = scanLine - lastScanLine;
 
-    uint32 depthIndex = (int32)lastDepth;
+    kkuint32 depthIndex = (kkint32)lastDepth;
 
     while  (scanLinesPerMeter.size () <= depthIndex)
       scanLinesPerMeter.push_back (0);

@@ -21,13 +21,13 @@
 using namespace std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "KKQueue.h"
 #include "OSservices.h"
 #include "RunLog.h"
 #include "StatisticalFunctions.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 
 #include "MLClass.h"

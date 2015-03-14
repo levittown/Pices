@@ -40,12 +40,12 @@
 using namespace std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "HTMLReport.h"
 #include "OSservices.h"
 #include "RunLog.h"
 #include "StatisticalFunctions.h"
-using namespace KKU;
+using namespace KKB;
 
 
 #include "Instrument.h"
@@ -514,7 +514,7 @@ void  FeatureSelection::EndBlock ()
        if  (!DeleteFile (lockFileName.Str ()))
        {
          DWORD  lastErrorNum = GetLastError ();
-         log.Level (-1) << "FeatureSelection::EndBlock - Error["  << (int32)lastErrorNum << "] deleting Lock File." << endl;
+         log.Level (-1) << "FeatureSelection::EndBlock - Error["  << (kkint32)lastErrorNum << "] deleting Lock File." << endl;
        }
      }
   }
@@ -1841,7 +1841,7 @@ void  CalcClassPairWeighted (VectorDouble& counts,
 {
   double  grandTotal = 0.0;
   double  countsTotal = 0.0;
-  for  (KKU::uint x = 0;  x < counts.size ();  x++)
+  for  (KKB::uint x = 0;  x < counts.size ();  x++)
   {
     grandTotal = exampleCountPerClassPair[x] * counts[x];
     countsTotal += counts[x];

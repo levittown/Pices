@@ -13,8 +13,8 @@
 using namespace std;
 
 
-#include  "BasicTypes.h"
-using namespace KKU;
+#include  "KKBaseTypes.h"
+using namespace KKB;
 
 
 #include "CrossValidation.h"

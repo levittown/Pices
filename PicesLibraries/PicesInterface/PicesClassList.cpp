@@ -13,10 +13,10 @@
 using namespace std;
 
 #include  "MemoryDebug.h"
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 
-#include  "..\BaseLibrary\GoalKeeper.h"
-using namespace KKU;
+#include  "GoalKeeper.h"
+using namespace KKB;
 
 #include "MLClass.h"
 

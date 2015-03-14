@@ -3,40 +3,38 @@
 
 #include <stdio.h>
 #include <math.h>
-
-
-#include  <ctype.h>
-#include  <time.h>
-
-#include  <fstream>
-#include  <iostream>
-#include  <ostream>
-#include  <string>
-#include  <strstream>
-#include  <vector>
+#include <ctype.h>
+#include <time.h>
+#include <fstream>
+#include <iostream>
+#include <ostream>
+#include <string>
+#include <strstream>
+#include <vector>
 using namespace std;
 
-#include  "BasicTypes.h"
-#include  "..\\BaseLibrary\\GoalKeeper.h"
-#include  "MemoryDebug.h"
 
-#include  "OSservices.h"
-#include  "Str.h"
-using namespace KKU;
+#include "KKBaseTypes.h"
+#include "GoalKeeper.h"
+#include "MemoryDebug.h"
+#include "OSservices.h"
+#include "KKStr.h"
+using namespace KKB;
 
-#include  "DuplicateImages.h"
-#include  "FileDesc.h"
-#include  "FeatureFileIOPices.h"
-#include  "SipperVariables.h"
-#include  "TrainingConfiguration2.h"
+
+#include "DuplicateImages.h"
+#include "FileDesc.h"
+#include "FeatureFileIOPices.h"
+#include "SipperVariables.h"
+#include "TrainingConfiguration2.h"
 using namespace  MLL;
 
 
-#include  "PicesTrainingConfiguration.h"
-
-#include  "PicesKKStr.h"
-#include  "PicesRunLog.h"
+#include "PicesTrainingConfiguration.h"
+#include "PicesKKStr.h"
+#include "PicesRunLog.h"
 using namespace PicesInterface;
+
 
 using namespace System;
 using namespace System::Threading;
@@ -258,7 +256,7 @@ PicesFeatureVectorList^  PicesTrainingConfiguration::LoadFeatureDataFromTraining
 
   bool  changesMadeToTrainingLibraries = false;
 
-  KKU::DateTime  latestImageTimeStamp;
+  KKB::DateTime  latestImageTimeStamp;
 
   FeatureVectorListPtr  data = config->LoadFeatureDataFromTrainingLibraries 
          (latestImageTimeStamp,

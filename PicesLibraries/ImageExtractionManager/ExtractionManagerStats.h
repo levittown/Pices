@@ -12,30 +12,30 @@ namespace  ImageExtractionManager
     ExtractionManagerStats (const ExtractionManagerStats&  stats);
     ~ExtractionManagerStats ();
 
-    uint64  BytesRead          () const  {return bytesRead;}
-    uint32  FramesRead         () const  {return framesRead;}
-    uint32  FramesProcessed    () const  {return framesProcessed;}
-    uint32  ScanLinesProcessed () const  {return scanLinesProcessed;}
-    uint32  ImagesFound        () const  {return imagesFound;}
-    uint32  ImagesClassified   () const  {return imagesClassified;}
-    uint32  ImagesUpdated      () const  {return imagesUpdated;}
-    uint32  DuplicatesDetected () const  {return duplicatesDetected;}
-    uint32  UpdateFailures     () const  {return updateFailures;}
-    uint32  FramesOnQueue      () const  {return framesOnQueue;}
-    uint32  ImagesOnQueue      () const  {return imagesOnQueue;}
+    kkuint64  BytesRead          () const  {return bytesRead;}
+    kkuint32  FramesRead         () const  {return framesRead;}
+    kkuint32  FramesProcessed    () const  {return framesProcessed;}
+    kkuint32  ScanLinesProcessed () const  {return scanLinesProcessed;}
+    kkuint32  ImagesFound        () const  {return imagesFound;}
+    kkuint32  ImagesClassified   () const  {return imagesClassified;}
+    kkuint32  ImagesUpdated      () const  {return imagesUpdated;}
+    kkuint32  DuplicatesDetected () const  {return duplicatesDetected;}
+    kkuint32  UpdateFailures     () const  {return updateFailures;}
+    kkuint32  FramesOnQueue      () const  {return framesOnQueue;}
+    kkuint32  ImagesOnQueue      () const  {return imagesOnQueue;}
 
   private:
-    uint64  bytesRead;
-    uint32  framesRead;
-    uint32  framesProcessed;
-    uint32  scanLinesProcessed;
-    uint32  imagesFound;
-    uint32  imagesClassified;
-    uint32  imagesUpdated;
-    uint32  duplicatesDetected;
-    uint32  updateFailures;
-    uint32  framesOnQueue;
-    uint32  imagesOnQueue;
+    kkuint64  bytesRead;
+    kkuint32  framesRead;
+    kkuint32  framesProcessed;
+    kkuint32  scanLinesProcessed;
+    kkuint32  imagesFound;
+    kkuint32  imagesClassified;
+    kkuint32  imagesUpdated;
+    kkuint32  duplicatesDetected;
+    kkuint32  updateFailures;
+    kkuint32  framesOnQueue;
+    kkuint32  imagesOnQueue;
   };  /* ExtractionManagerStats */
 }
 

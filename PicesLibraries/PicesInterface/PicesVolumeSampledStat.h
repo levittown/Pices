@@ -32,7 +32,7 @@ namespace PicesInterface
     property float  VolumeSampled {float get ()  {return  volumeSampled;}  void  set (float  _volumeSampled)  {volumeSampled = _volumeSampled;}}
        
   private:
-    int32   binId;
+    kkint32 binId;
     float   binDepth;
     float   volumeSampled;
   };  /* PicesVolumeSampledStat */

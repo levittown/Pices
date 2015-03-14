@@ -3,7 +3,7 @@
 
 #include  "KKQueue.h"
 #include  "RunLog.h"
-#include  "Str.h"
+#include  "KKStr.h"
 
 
 #if  !defined(_ACCBYFEATURESEL_)
@@ -20,7 +20,7 @@ namespace FeatureSelectionApp
   class FeatureImpact
   {
   public:
-    typedef  KKU::uint  uint;
+    typedef  KKB::uint  uint;
     typedef  FeatureImpact*  FeatureImpactPtr;
 
     FeatureImpact (BinaryJobList&  jobs);

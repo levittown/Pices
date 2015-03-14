@@ -1,6 +1,6 @@
 /* ImageIO.cpp -- O/S Independent routines to load and save Raster Images.
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #include "FirstIncludes.h"
 #include <iostream>
@@ -53,16 +53,16 @@ using namespace std;
 #endif
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "Histogram.h"
 #include "ImageIO.h"
 #include "KKException.h"
 #include "OSservices.h"
 #include "Raster.h"
-using namespace KKU;
+using namespace KKB;
 
 
-namespace KKU
+namespace KKB
 {
 
 
@@ -97,7 +97,7 @@ bool  imageIoAtExitDefined = false;
 
 RasterPtr  ReadImage (const KKStr& imageFileName)
 {
-  int32 row, col;
+  kkint32 row, col;
 
   CImg<short> img = imageFileName.Str ();
 
@@ -110,8 +110,8 @@ RasterPtr  ReadImage (const KKStr& imageFileName)
   
   RasterPtr  image = new Raster (img.dimy (), img.dimx ());
 
-  int32  grayValue;
-  int32  r, g, b;
+  kkint32  grayValue;
+  kkint32  r, g, b;
 
   for  (row = 0;  row < img.dimy(); row++)
   {
@@ -123,7 +123,7 @@ RasterPtr  ReadImage (const KKStr& imageFileName)
         g = *img.ptr (col, row, 0, 1);
         b = *img.ptr (col, row, 0, 2);
 
-        grayValue = (int32)((FFLOAT)r * (FFLOAT)0.30 + 
+        grayValue = (kkint32)((FFLOAT)r * (FFLOAT)0.30 + 
                           (FFLOAT)g * (FFLOAT)0.59 + 
                           (FFLOAT)b * (FFLOAT)0.11 +
                           (FFLOAT)(0.50)
@@ -149,7 +149,7 @@ void  SaveImage  (const Raster&  image,
                   const KKStr&  imageFileName
                  )
 {
-  int32 row, col;
+  kkint32 row, col;
 
   CImg<short> img (image.Width (), image.Height (), 1, 1);
 
@@ -168,7 +168,7 @@ void  SaveImage  (const Raster&  image,
 
 void  DisplayImage  (const Raster& image)
 {
-  int32  col, row;
+  kkint32  col, row;
 
   for  (row = 0;  row < image.Height (); row++)
   {
@@ -217,11 +217,11 @@ RasterPtr  ReadImage (const KKStr&  imageFileName)
   if  (i.GetLastStatus () != Gdiplus::Ok)
     return NULL;
 
-  int32  height = i.GetHeight ();
-  int32  width  = i.GetWidth ();
+  kkint32  height = i.GetHeight ();
+  kkint32  width  = i.GetWidth ();
 
-  int32  row;
-  int32  col;
+  kkint32  row;
+  kkint32  col;
   Gdiplus::Color   color;
   Gdiplus::Status  status;
 
@@ -271,7 +271,7 @@ void  SaveImage  (const Raster&  image,
 
 void  DisplayImage  (const Raster& image)
 {
-  int32  col, row;
+  kkint32  col, row;
 
   for  (row = 0;  row < image.Height (); row++)
   {
@@ -338,7 +338,7 @@ bool                gdiStarted            = false;
 GdiplusStartupInput gdiplusStartupInput;
 ULONG_PTR           gdiplusToken;
 
-RasterPtr  KKU::ReadImageUsingGDI (const KKStr&  imageFileName)
+RasterPtr  KKB::ReadImageUsingGDI (const KKStr&  imageFileName)
 {
   if  (!gdiStarted)
   {
@@ -481,9 +481,9 @@ RasterPtr  ReadImagePGM (const KKStr& imageFileName)
   if  (!i)
     return NULL;
 
-  int32  height    = -1;
-  int32  pixelSize = -1;
-  int32  width     = -1;
+  kkint32  height    = -1;
+  kkint32  pixelSize = -1;
+  kkint32  width     = -1;
 
   {
     // We are going to read in header part of file.
@@ -497,7 +497,7 @@ RasterPtr  ReadImagePGM (const KKStr& imageFileName)
     }
 
     bool  eol = false;
-    int32  headerFieldsRead = 0;
+    kkint32  headerFieldsRead = 0;
     while  (headerFieldsRead < 3)
     {
       KKStr  nextField = osReadNextToken (i, " \t\n\r", eof, eol);
@@ -531,7 +531,7 @@ RasterPtr  ReadImagePGM (const KKStr& imageFileName)
 
   RasterPtr  image = new Raster (height, width, false);
 
-  int32  row, col;
+  kkint32  row, col;
 
   uchar* colBuff = new uchar[width + 10];
 
@@ -560,8 +560,8 @@ RasterPtr  ReadImagePNG (const KKStr&  imageFileName)
 {
   RasterPtr  result = NULL;
   bool  color = false;
-  //int32 row = 0;
-  //int32 col = 0;
+  //kkint32 row = 0;
+  //kkint32 col = 0;
   bool  eof = false;
   bool  eol = false;
 
@@ -578,11 +578,11 @@ RasterPtr  ReadImagePNG (const KKStr&  imageFileName)
   }
 
   KKStr  dimensions = osReadNextToken (i, "\n", eof, eol);
-  int32  width  = dimensions.ExtractTokenInt (" \n\r\t");
-  int32  height = dimensions.ExtractTokenInt (" \n\r\t");
+  kkint32  width  = dimensions.ExtractTokenInt (" \n\r\t");
+  kkint32  height = dimensions.ExtractTokenInt (" \n\r\t");
 
   KKStr  pixelDepthStr = osReadNextToken (i, "\n", eof, eol);
-  int32  pixelDepth = pixelDepthStr.ToInt ();
+  kkint32  pixelDepth = pixelDepthStr.ToInt ();
 
   if  ((width < 0)  ||  (height < 0)  ||  (pixelDepth != 255))
   {
@@ -606,7 +606,7 @@ RasterPtr  ReadImagePNG (const KKStr&  imageFileName)
     return NULL;
   }
 
-  int32  totalPixels = width * height;
+  kkint32  totalPixels = width * height;
 
   result = new Raster (height, width, color);
 
@@ -616,9 +616,9 @@ RasterPtr  ReadImagePNG (const KKStr&  imageFileName)
     uchar* green = result->GreenArea ();
     uchar* blue  = result->BlueArea  ();
 
-    int32  buffSize = totalPixels * 3;
+    kkint32  buffSize = totalPixels * 3;
     uchar*  buffer = new uchar[buffSize];
-    int32  charsRead = fread (buffer, 1, buffSize, i);
+    kkint32  charsRead = fread (buffer, 1, buffSize, i);
     if  (charsRead < buffSize)
     {
       fclose (i);
@@ -626,7 +626,7 @@ RasterPtr  ReadImagePNG (const KKStr&  imageFileName)
     }
 
     uchar*  buffPtr = buffer;
-    for  (int32 x = 0;  (x < totalPixels);  x++)
+    for  (kkint32 x = 0;  (x < totalPixels);  x++)
     {
       red   [x] = *buffPtr;  ++buffPtr;
       green [x] = *buffPtr;  ++buffPtr;
@@ -644,7 +644,7 @@ RasterPtr  ReadImagePNG (const KKStr&  imageFileName)
 
     //  Grayscale images are presumed to be saved with foreground = white (255, 255, 255).
     // When loading into memory we need to invert so that foreground = 0.
-    for  (int32 x = 0;  x < totalPixels;  x++)
+    for  (kkint32 x = 0;  x < totalPixels;  x++)
       green[x] = 255 - green[x];
   }
 
@@ -732,7 +732,7 @@ void  SaveImagePGM (const Raster&  image,
     fwrite (h, 1, headerStr.Len (), o);
   }
 
-  int32  totalPixels = image.Height () * image.Width ();
+  kkint32  totalPixels = image.Height () * image.Width ();
 
   if  (image.Color ())
   {
@@ -776,7 +776,7 @@ void  SaveImagePNG (const Raster&  image,
     fwrite (h, 1, headerStr.Len (), o);
   }
 
-  int32  totalPixels = image.Height () * image.Width ();
+  kkint32  totalPixels = image.Height () * image.Width ();
 
   if  (image.Color ())
   {
@@ -784,7 +784,7 @@ void  SaveImagePNG (const Raster&  image,
     const uchar*  green = image.GreenArea ();
     const uchar*  blue  = image.BlueArea  ();
 
-    for  (int32 x = 0;  x < totalPixels;  x++)
+    for  (kkint32 x = 0;  x < totalPixels;  x++)
     {
       fwrite (red,   1, 1, o);  ++red;
       fwrite (green, 1, 1, o);  ++green;
@@ -796,7 +796,7 @@ void  SaveImagePNG (const Raster&  image,
     uchar*  green = image.GreenArea ();
     uchar  buff3[3];
 
-    for  (int32 x = 0;  x < totalPixels;  x++)
+    for  (kkint32 x = 0;  x < totalPixels;  x++)
     {
       uchar  intensity = 255 - (*green);
       buff3[0] = intensity;
@@ -819,7 +819,7 @@ void  SaveImagePNG (const Raster&  image,
 
 
 
-void  KKU::DefineImageIoAtExit ()
+void  KKB::DefineImageIoAtExit ()
 {
   if  (!imageIoAtExitDefined)
   {
@@ -829,7 +829,7 @@ void  KKU::DefineImageIoAtExit ()
 }
 
 
-void  KKU::ImageIoFinaleCleanUp ()
+void  KKB::ImageIoFinaleCleanUp ()
 {
   if  (gdiStarted)
   {
@@ -842,7 +842,7 @@ void  KKU::ImageIoFinaleCleanUp ()
 
 void  DisplayImage  (const Raster& image)
 {
-  int32  col = 0, row = 0;
+  kkint32  col = 0, row = 0;
 
   for  (row = 0;  row < image.Height (); row++)
   {
@@ -880,8 +880,8 @@ IplImage*  CreateIplImage (const Raster&  raster);
 
 
 inline  
-void  UpdateLowHighBucket (int32&   lowBucket,
-                           int32&   highBucket,
+void  UpdateLowHighBucket (kkint32&   lowBucket,
+                           kkint32&   highBucket,
                            uchar  pixelValue
                           )
 {
@@ -909,11 +909,11 @@ RasterPtr  ReadImage (const KKStr&  imageFileName)
   if  (!image)
     return NULL;
 
-  int32 col;
+  kkint32 col;
   bool  color;
-  int32 height;
-  int32 row;
-  int32 width;
+  kkint32 height;
+  kkint32 row;
+  kkint32 width;
 
   if  (image->nChannels == 1)
     color = false;
@@ -929,13 +929,13 @@ RasterPtr  ReadImage (const KKStr&  imageFileName)
   if  (color)
   {
     // Need to assign Channel Idexes to appropriate index.
-    int32  bIDX = 0;
-    int32  gIDX = 1;
-    int32  rIDX = 2;
+    kkint32  bIDX = 0;
+    kkint32  gIDX = 1;
+    kkint32  rIDX = 2;
 
     bool  rgbAlwaysEqual = true;
 
-    for  (int32 x = 0; x < 3; x++)
+    for  (kkint32 x = 0; x < 3; x++)
     {
       switch  (toupper (image->channelSeq[x]))
       {
@@ -945,7 +945,7 @@ RasterPtr  ReadImage (const KKStr&  imageFileName)
       }
     }
 
-    int32 r, g, b;
+    kkint32 r, g, b;
 
     for  (row = 0;  row < height;  row++)
     {
@@ -953,9 +953,9 @@ RasterPtr  ReadImage (const KKStr&  imageFileName)
       {
         CvScalar all3 = cvGet2D (image,  row, col);
 
-        r = (int32)all3.val[rIDX];
-        g = (int32)all3.val[gIDX];
-        b = (int32)all3.val[bIDX];
+        r = (kkint32)all3.val[rIDX];
+        g = (kkint32)all3.val[gIDX];
+        b = (kkint32)all3.val[bIDX];
 
         if  ((r != g)  ||  (r != b))
           rgbAlwaysEqual = false;
@@ -981,7 +981,7 @@ RasterPtr  ReadImage (const KKStr&  imageFileName)
       for  (col = 0;  col < width;  col++)
       {
         CvScalar g = cvGet2D (image, row, col);
-        raster->SetPixelValue (row, col, (int32)g.val[0]);
+        raster->SetPixelValue (row, col, (kkint32)g.val[0]);
       }
     }
   }
@@ -989,11 +989,11 @@ RasterPtr  ReadImage (const KKStr&  imageFileName)
 
   cvReleaseImage (&image);
 
-  int32  numSmallPixelVales = 0;
-  int32  numLargePixelVales = 0;
+  kkint32  numSmallPixelVales = 0;
+  kkint32  numLargePixelVales = 0;
 
-  int32 lastRow = height - 1;
-  int32 lastCol = width - 1;
+  kkint32 lastRow = height - 1;
+  kkint32 lastCol = width - 1;
 
   if  (!color)
   {
@@ -1039,7 +1039,7 @@ void  SaveImage (const Raster&  raster,
 
   IplImage*  image = CreateIplImage (raster);
 
-  int32  returnCd = cvSaveImage (imageFileName.Str (), image);
+  kkint32  returnCd = cvSaveImage (imageFileName.Str (), image);
 
   cvReleaseImage (&image);
 
@@ -1059,7 +1059,7 @@ IplImage*  CreateIplImage (const Raster&  raster)
   #endif
 
 
-  int32  numOfChannels;
+  kkint32  numOfChannels;
   if  (raster.Color ())
     numOfChannels = 3;
   else
@@ -1073,9 +1073,9 @@ IplImage*  CreateIplImage (const Raster&  raster)
 
   IplImage*  image = cvCreateImage (imageSize, IPL_DEPTH_8U, numOfChannels);
 
-  int32     col;
+  kkint32   col;
   CvScalar  pix;
-  int32     row;
+  kkint32   row;
 
 
   if  (raster.Color ())
@@ -1156,7 +1156,7 @@ void  SaveImageInverted (Raster&       raster,
 {
   RasterPtr  invertedImage = new Raster (raster);
 
-  int32  r, c;
+  kkint32  r, c;
 
   uchar**  g    = invertedImage->Green ();
   uchar**  red  = invertedImage->Red   ();
@@ -1304,4 +1304,4 @@ RasterPtr  SegmentPolutionImage (RasterPtr  r,
 }  /* SegmentPolutionImage */
 
 
-} /* namespace KKU; */
+} /* namespace KKB; */

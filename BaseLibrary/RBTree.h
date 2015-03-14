@@ -1,6 +1,6 @@
 /* RBTree.h -- Implementation of Red-Black binary tree.
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #ifndef  _RBTREE_
 #define  _RBTREE_
@@ -23,9 +23,9 @@
 #include <stdlib.h>
 #include <memory>
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 
-namespace  KKU
+namespace  KKB
 {
   typedef  enum  {Red, Black}  RBcolor;
 
@@ -123,8 +123,8 @@ namespace  KKU
       typedef  RBnode<Entry>   Node;
       typedef  Node*           NodePtr;
 
-      typedef  KKU::int32      int32;
-      typedef  KKU::uint32     uint32;
+      typedef  KKB::kkint32    kkint32;
+      typedef  KKB::kkuint32   kkuint32;
 
       typedef  RBTree<Entry,CompareNodes,KeyType>  Tree;
 
@@ -140,7 +140,7 @@ namespace  KKU
 
       ~RBTree ();
 
-      uint32  Size ()  {return  size;}
+      kkuint32  Size ()  {return  size;}
 
       void      WalkTree ()  {WalkTree (root);}
 
@@ -180,12 +180,12 @@ namespace  KKU
 
   private:
       void     CheckNodeStats (NodePtr  n,
-                               int32&     numOfNodes,
-                               int32&     numOfLeafs,
-                               int32*     leafPaths,
-                               int32&     shortestPath,
-                               int32&     longestPath,
-                               int32      curDeapth
+                               kkint32&     numOfNodes,
+                               kkint32&     numOfLeafs,
+                               kkint32*     leafPaths,
+                               kkint32&     shortestPath,
+                               kkint32&     longestPath,
+                               kkint32    curDeapth
                               );
 
       NodePtr  CloneSubTree (NodePtr  s,
@@ -199,7 +199,7 @@ namespace  KKU
                                    NodePtr  n2NIL
                                   );
 
-      int32      CountNodesInSubTree (NodePtr  subTree);
+      kkint32    CountNodesInSubTree (NodePtr  subTree);
 
       NodePtr  Delete (NodePtr  node2Delete);
 
@@ -249,11 +249,11 @@ namespace  KKU
 
       NodePtr  Successor (NodePtr  n);
 
-      int32    ValidateSubTree (NodePtr      subTree,
+      kkint32  ValidateSubTree (NodePtr      subTree,
                                 NodePtr      theParent,
                                 const char*  linkDescription,
-                                int32        blackNodeCount,
-                                int32&       blackNodeHeight
+                                kkint32      blackNodeCount,
+                                kkint32&       blackNodeHeight
                                );
 
       void     WalkTree (NodePtr  n);
@@ -268,18 +268,18 @@ namespace  KKU
 
       Node*          root;
 
-      uint32         size;
+      kkuint32       size;
 
 
-      int32          numOfIterators;
+      kkint32        numOfIterators;
       IteratorPtr*   iterators;
   };  /* RBTree */
-}  /* KKU */
+}  /* KKB */
 
 
 
 template <class Entry>
-KKU::RBnode<Entry>::RBnode (RBnodePtr  _parent,
+KKB::RBnode<Entry>::RBnode (RBnodePtr  _parent,
                             RBnodePtr  _left,
                             RBnodePtr  _right,
                             RBcolor    _color,
@@ -296,7 +296,7 @@ KKU::RBnode<Entry>::RBnode (RBnodePtr  _parent,
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-KKU::RBTree<Entry,CompareNodes,KeyType>::RBTree (CompareNodes&  _comparator,
+KKB::RBTree<Entry,CompareNodes,KeyType>::RBTree (CompareNodes&  _comparator,
                                                  bool           _owner
                                                 ):
    comparator    (_comparator),
@@ -317,7 +317,7 @@ KKU::RBTree<Entry,CompareNodes,KeyType>::RBTree (CompareNodes&  _comparator,
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-KKU::RBTree<Entry,CompareNodes,KeyType>::RBTree (RBTree&  tree):
+KKB::RBTree<Entry,CompareNodes,KeyType>::RBTree (RBTree&  tree):
 
    comparator    (tree.comparator),
    size          (tree.size),
@@ -330,7 +330,7 @@ KKU::RBTree<Entry,CompareNodes,KeyType>::RBTree (RBTree&  tree):
   nil = new RBnode<Entry> (NULL, NULL, NULL, Black, NULL);
   root = CloneSubTree (tree.root, tree.nil, nil);
  
-  int32  x = CountNodesInSubTree (root);
+  kkint32  x = CountNodesInSubTree (root);
 
   curNode = nil;
 }
@@ -339,7 +339,7 @@ KKU::RBTree<Entry,CompareNodes,KeyType>::RBTree (RBTree&  tree):
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-KKU::RBnode<Entry>*  KKU::RBTree<Entry,CompareNodes,KeyType>::CloneSubTree (NodePtr  s,
+KKB::RBnode<Entry>*  KKB::RBTree<Entry,CompareNodes,KeyType>::CloneSubTree (NodePtr  s,
                                                                             NodePtr  sNil,
                                                                             NodePtr  dParent
                                                                            )
@@ -368,13 +368,13 @@ KKU::RBnode<Entry>*  KKU::RBTree<Entry,CompareNodes,KeyType>::CloneSubTree (Node
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-KKU::RBTree<Entry,CompareNodes,KeyType>::~RBTree ()
+KKB::RBTree<Entry,CompareNodes,KeyType>::~RBTree ()
 {
   if  (root != nil)
     DeleteSubTree (root);
 
 
-  for  (int32 i = 0;  i < numOfIterators;  i++)
+  for  (kkint32 i = 0;  i < numOfIterators;  i++)
   {
      iterators[i]->TreeHasBeenDeleted ();
   }
@@ -386,7 +386,7 @@ KKU::RBTree<Entry,CompareNodes,KeyType>::~RBTree ()
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-void  KKU::RBTree<Entry,CompareNodes,KeyType>::DeleteSubTree (NodePtr  treeRoot)
+void  KKB::RBTree<Entry,CompareNodes,KeyType>::DeleteSubTree (NodePtr  treeRoot)
 {
   if  (treeRoot == nil)
     return;
@@ -407,7 +407,7 @@ void  KKU::RBTree<Entry,CompareNodes,KeyType>::DeleteSubTree (NodePtr  treeRoot)
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-bool  KKU::RBTree<Entry,CompareNodes,KeyType>::CompareToTree (TreePtr  tree)
+bool  KKB::RBTree<Entry,CompareNodes,KeyType>::CompareToTree (TreePtr  tree)
 {
  return  AreSubTreesTheSame (root, nil, tree->root, tree->nil);
 }  /* CompareToTree */
@@ -416,7 +416,7 @@ bool  KKU::RBTree<Entry,CompareNodes,KeyType>::CompareToTree (TreePtr  tree)
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-bool  KKU::RBTree<Entry,CompareNodes,KeyType>::AreSubTreesTheSame (NodePtr  n1,
+bool  KKB::RBTree<Entry,CompareNodes,KeyType>::AreSubTreesTheSame (NodePtr  n1,
                                                                    NodePtr  n1NIL,
                                                                    NodePtr  n2,
                                                                    NodePtr  n2NIL
@@ -449,7 +449,7 @@ bool  KKU::RBTree<Entry,CompareNodes,KeyType>::AreSubTreesTheSame (NodePtr  n1,
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-KKU::RBnode<Entry>*   KKU::RBTree<Entry,CompareNodes,KeyType>::GetEqual (NodePtr         subTree,
+KKB::RBnode<Entry>*   KKB::RBTree<Entry,CompareNodes,KeyType>::GetEqual (NodePtr         subTree,
                                                                          const KeyType&  key
                                                                         )
 {
@@ -491,7 +491,7 @@ KKU::RBnode<Entry>*   KKU::RBTree<Entry,CompareNodes,KeyType>::GetEqual (NodePtr
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-Entry*  KKU::RBTree<Entry,CompareNodes,KeyType>::GetEqual (const KeyType&  key)
+Entry*  KKB::RBTree<Entry,CompareNodes,KeyType>::GetEqual (const KeyType&  key)
 {
   curNode = GetEqual (root, key);
 
@@ -506,7 +506,7 @@ Entry*  KKU::RBTree<Entry,CompareNodes,KeyType>::GetEqual (const KeyType&  key)
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-KKU::RBnode<Entry>*   KKU::RBTree<Entry,CompareNodes,KeyType>::GetGreater (NodePtr         subTree,
+KKB::RBnode<Entry>*   KKB::RBTree<Entry,CompareNodes,KeyType>::GetGreater (NodePtr         subTree,
                                                                            const KeyType&  key
                                                                           )
 {
@@ -550,7 +550,7 @@ KKU::RBnode<Entry>*   KKU::RBTree<Entry,CompareNodes,KeyType>::GetGreater (NodeP
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-KKU::RBnode<Entry>*   KKU::RBTree<Entry,CompareNodes,KeyType>::GetGreaterOrEqual (NodePtr         subTree,
+KKB::RBnode<Entry>*   KKB::RBTree<Entry,CompareNodes,KeyType>::GetGreaterOrEqual (NodePtr         subTree,
                                                                                   const KeyType&  key
                                                                                  )
 {
@@ -596,7 +596,7 @@ KKU::RBnode<Entry>*   KKU::RBTree<Entry,CompareNodes,KeyType>::GetGreaterOrEqual
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-Entry*  KKU::RBTree<Entry,CompareNodes,KeyType>::GetGreater (const KeyType&  key)
+Entry*  KKB::RBTree<Entry,CompareNodes,KeyType>::GetGreater (const KeyType&  key)
 {
   curNode = GetGreater (root, key);
   return curNode->Data ();
@@ -606,7 +606,7 @@ Entry*  KKU::RBTree<Entry,CompareNodes,KeyType>::GetGreater (const KeyType&  key
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-Entry*  KKU::RBTree<Entry,CompareNodes,KeyType>::GetGreaterOrEqual (const KeyType&  key)
+Entry*  KKB::RBTree<Entry,CompareNodes,KeyType>::GetGreaterOrEqual (const KeyType&  key)
 {
   curNode = GetGreaterOrEqual (root, key);
   return curNode->Data ();
@@ -616,7 +616,7 @@ Entry*  KKU::RBTree<Entry,CompareNodes,KeyType>::GetGreaterOrEqual (const KeyTyp
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-KKU::RBnode<Entry>*   KKU::RBTree<Entry,CompareNodes,KeyType>::GetLess (NodePtr         subTree,
+KKB::RBnode<Entry>*   KKB::RBTree<Entry,CompareNodes,KeyType>::GetLess (NodePtr         subTree,
                                                                         const KeyType&  key
                                                                        )
 {
@@ -667,7 +667,7 @@ KKU::RBnode<Entry>*   KKU::RBTree<Entry,CompareNodes,KeyType>::GetLess (NodePtr 
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-Entry*  KKU::RBTree<Entry,CompareNodes,KeyType>::GetLess (const KeyType&  key)
+Entry*  KKB::RBTree<Entry,CompareNodes,KeyType>::GetLess (const KeyType&  key)
 {
   curNode = GetLess (root, key);
   return curNode->Data ();
@@ -680,7 +680,7 @@ Entry*  KKU::RBTree<Entry,CompareNodes,KeyType>::GetLess (const KeyType&  key)
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-Entry*  KKU::RBTree<Entry,CompareNodes,KeyType>::Predeccessor ()
+Entry*  KKB::RBTree<Entry,CompareNodes,KeyType>::Predeccessor ()
 {
   if  ((curNode == nil)   ||  (curNode == NULL))
     return NULL;
@@ -698,7 +698,7 @@ Entry*  KKU::RBTree<Entry,CompareNodes,KeyType>::Predeccessor ()
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-Entry*  KKU::RBTree<Entry,CompareNodes,KeyType>::Successor ()
+Entry*  KKB::RBTree<Entry,CompareNodes,KeyType>::Successor ()
 {
   if  ((curNode == nil)   ||  (curNode == NULL))
     return NULL;
@@ -716,7 +716,7 @@ Entry*  KKU::RBTree<Entry,CompareNodes,KeyType>::Successor ()
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-void  KKU::RBTree<Entry,CompareNodes,KeyType>::DeleteCurrentNode ()
+void  KKB::RBTree<Entry,CompareNodes,KeyType>::DeleteCurrentNode ()
 {
   if  ((curNode == nil)   ||  (curNode == NULL))
   {
@@ -761,7 +761,7 @@ void  KKU::RBTree<Entry,CompareNodes,KeyType>::DeleteCurrentNode ()
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-Entry*  KKU::RBTree<Entry,CompareNodes,KeyType>::GetFirst ()
+Entry*  KKB::RBTree<Entry,CompareNodes,KeyType>::GetFirst ()
 {
   if  (root == nil)
     return NULL;
@@ -774,7 +774,7 @@ Entry*  KKU::RBTree<Entry,CompareNodes,KeyType>::GetFirst ()
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-Entry*  KKU::RBTree<Entry,CompareNodes,KeyType>::GetLast ()
+Entry*  KKB::RBTree<Entry,CompareNodes,KeyType>::GetLast ()
 {
   if  (root == nil)
     return NULL;
@@ -788,7 +788,7 @@ Entry*  KKU::RBTree<Entry,CompareNodes,KeyType>::GetLast ()
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-KKU::RBnode<Entry>*  KKU::RBTree<Entry,CompareNodes,KeyType>::Insert (EntryPtr  _entry)
+KKB::RBnode<Entry>*  KKB::RBTree<Entry,CompareNodes,KeyType>::Insert (EntryPtr  _entry)
 {
   NodePtr  newNode = NULL;
 
@@ -804,7 +804,7 @@ KKU::RBnode<Entry>*  KKU::RBTree<Entry,CompareNodes,KeyType>::Insert (EntryPtr  
     NodePtr  next = root;
     NodePtr  last = root;
 
-    int32  lastBranch = 0;
+    kkint32  lastBranch = 0;
     
     while (next != nil)
     {
@@ -848,7 +848,7 @@ KKU::RBnode<Entry>*  KKU::RBTree<Entry,CompareNodes,KeyType>::Insert (EntryPtr  
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-KKU::RBnode<Entry>*  KKU::RBTree<Entry,CompareNodes,KeyType>::Minimum (NodePtr  n)
+KKB::RBnode<Entry>*  KKB::RBTree<Entry,CompareNodes,KeyType>::Minimum (NodePtr  n)
 {
   while  (n->Left () != nil)
     n = n->Left ();
@@ -861,7 +861,7 @@ KKU::RBnode<Entry>*  KKU::RBTree<Entry,CompareNodes,KeyType>::Minimum (NodePtr  
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-KKU::RBnode<Entry>*  KKU::RBTree<Entry,CompareNodes,KeyType>::Maximum (NodePtr  n)
+KKB::RBnode<Entry>*  KKB::RBTree<Entry,CompareNodes,KeyType>::Maximum (NodePtr  n)
 {
   while  (n->Right () != nil)
     n = n->Right ();
@@ -875,7 +875,7 @@ KKU::RBnode<Entry>*  KKU::RBTree<Entry,CompareNodes,KeyType>::Maximum (NodePtr  
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-KKU::RBnode<Entry>*  KKU::RBTree<Entry,CompareNodes,KeyType>::Successor (NodePtr  n)
+KKB::RBnode<Entry>*  KKB::RBTree<Entry,CompareNodes,KeyType>::Successor (NodePtr  n)
 {
   if  ((n == nil)  ||  (n == NULL))
     return nil;
@@ -902,7 +902,7 @@ KKU::RBnode<Entry>*  KKU::RBTree<Entry,CompareNodes,KeyType>::Successor (NodePtr
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-KKU::RBnode<Entry>*  KKU::RBTree<Entry,CompareNodes,KeyType>::Predeccessor (NodePtr  n)
+KKB::RBnode<Entry>*  KKB::RBTree<Entry,CompareNodes,KeyType>::Predeccessor (NodePtr  n)
 {
   if  ((n == nil)  ||  (n == NULL))
     return  nil;
@@ -929,7 +929,7 @@ KKU::RBnode<Entry>*  KKU::RBTree<Entry,CompareNodes,KeyType>::Predeccessor (Node
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-KKU::RBnode<Entry>*  KKU::RBTree<Entry,CompareNodes,KeyType>::Delete (NodePtr  z)
+KKB::RBnode<Entry>*  KKB::RBTree<Entry,CompareNodes,KeyType>::Delete (NodePtr  z)
 {
   NodePtr  y;
   NodePtr  x;
@@ -990,7 +990,7 @@ KKU::RBnode<Entry>*  KKU::RBTree<Entry,CompareNodes,KeyType>::Delete (NodePtr  z
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-KKU::RBnode<Entry>*  KKU::RBTree<Entry,CompareNodes,KeyType>::LeftRotate (NodePtr  x)
+KKB::RBnode<Entry>*  KKB::RBTree<Entry,CompareNodes,KeyType>::LeftRotate (NodePtr  x)
 {  
   if  ((x == nil)  ||  (x == NULL))
   {
@@ -1050,7 +1050,7 @@ KKU::RBnode<Entry>*  KKU::RBTree<Entry,CompareNodes,KeyType>::LeftRotate (NodePt
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-KKU::RBnode<Entry>*  KKU::RBTree<Entry,CompareNodes,KeyType>::RightRotate (NodePtr  x)
+KKB::RBnode<Entry>*  KKB::RBTree<Entry,CompareNodes,KeyType>::RightRotate (NodePtr  x)
 {
   if  ((x == nil)  ||  (x == NULL))
   {
@@ -1109,7 +1109,7 @@ KKU::RBnode<Entry>*  KKU::RBTree<Entry,CompareNodes,KeyType>::RightRotate (NodeP
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-KKU::RBnode<Entry>*    KKU::RBTree<Entry,CompareNodes,KeyType>::RBInsert (EntryPtr  e)
+KKB::RBnode<Entry>*    KKB::RBTree<Entry,CompareNodes,KeyType>::RBInsert (EntryPtr  e)
 {
   NodePtr  newNode = Insert (e);
 
@@ -1184,7 +1184,7 @@ KKU::RBnode<Entry>*    KKU::RBTree<Entry,CompareNodes,KeyType>::RBInsert (EntryP
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-KKU::RBnode<Entry>*  KKU::RBTree<Entry,CompareNodes,KeyType>::RBDelete (NodePtr z)
+KKB::RBnode<Entry>*  KKB::RBTree<Entry,CompareNodes,KeyType>::RBDelete (NodePtr z)
 {
   if  ((z == nil) ||  (z == NULL))
   {
@@ -1247,7 +1247,7 @@ KKU::RBnode<Entry>*  KKU::RBTree<Entry,CompareNodes,KeyType>::RBDelete (NodePtr 
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-void  KKU::RBTree<Entry,CompareNodes,KeyType>::RBDeleteFixUp (NodePtr x)
+void  KKB::RBTree<Entry,CompareNodes,KeyType>::RBDeleteFixUp (NodePtr x)
 {
   NodePtr  w           = NULL;
   NodePtr  deletedNode = x;
@@ -1341,7 +1341,7 @@ void  KKU::RBTree<Entry,CompareNodes,KeyType>::RBDeleteFixUp (NodePtr x)
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-void  KKU::RBTree<Entry,CompareNodes,KeyType>::WalkTree (NodePtr  n)
+void  KKB::RBTree<Entry,CompareNodes,KeyType>::WalkTree (NodePtr  n)
 {
   if  (n == nil)
     return;
@@ -1355,7 +1355,7 @@ void  KKU::RBTree<Entry,CompareNodes,KeyType>::WalkTree (NodePtr  n)
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-KKU::RBnode<Entry>*   KKU::RBTree<Entry,CompareNodes,KeyType>::SearchForEntry (NodePtr  n,
+KKB::RBnode<Entry>*   KKB::RBTree<Entry,CompareNodes,KeyType>::SearchForEntry (NodePtr  n,
                                                                                Entry*   e
                                                                               )
 {
@@ -1380,7 +1380,7 @@ KKU::RBnode<Entry>*   KKU::RBTree<Entry,CompareNodes,KeyType>::SearchForEntry (N
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-void   KKU::RBTree<Entry,CompareNodes,KeyType>::DeleteEntry (Entry*  e)
+void   KKB::RBTree<Entry,CompareNodes,KeyType>::DeleteEntry (Entry*  e)
 {
   RBnode<Entry>* node2Delete = SearchForEntry (root, e);
   if  (node2Delete)
@@ -1391,20 +1391,20 @@ void   KKU::RBTree<Entry,CompareNodes,KeyType>::DeleteEntry (Entry*  e)
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-void  KKU::RBTree<Entry,CompareNodes,KeyType>::CalcTreeStats ()
+void  KKB::RBTree<Entry,CompareNodes,KeyType>::CalcTreeStats ()
 {
-  int32  numOfLeafs = 0;
-  int32  numOfNodes = 0;
-  int32* leafPaths  = new int32[size];
+  kkint32  numOfLeafs = 0;
+  kkint32  numOfNodes = 0;
+  kkint32* leafPaths  = new kkint32[size];
 
-  int32  shortestPath = INT_MAX;
-  int32  longestPath  = INT_MIN;
+  kkint32  shortestPath = INT_MAX;
+  kkint32  longestPath  = INT_MIN;
 
   CheckNodeStats (root, numOfNodes, numOfLeafs, leafPaths, shortestPath, longestPath, 0);
 
-  int32  totalLen = 0;
+  kkint32  totalLen = 0;
 
-  for  (int32 x = 0; x < numOfLeafs; x++)
+  for  (kkint32 x = 0; x < numOfLeafs; x++)
     totalLen += leafPaths[x];
 
   double  avgLen = (double)totalLen / (double)numOfLeafs;
@@ -1421,13 +1421,13 @@ void  KKU::RBTree<Entry,CompareNodes,KeyType>::CalcTreeStats ()
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-void  KKU::RBTree<Entry,CompareNodes,KeyType>::CheckNodeStats (NodePtr  n,
-                                                               int32&     numOfNodes,
-                                                               int32&     numOfLeafs,
-                                                               int32*     leafPaths,
-                                                               int32&     shortestPath,
-                                                               int32&     longestPath,
-                                                               int32      curDeapth
+void  KKB::RBTree<Entry,CompareNodes,KeyType>::CheckNodeStats (NodePtr  n,
+                                                               kkint32&     numOfNodes,
+                                                               kkint32&     numOfLeafs,
+                                                               kkint32*     leafPaths,
+                                                               kkint32&     shortestPath,
+                                                               kkint32&     longestPath,
+                                                               kkint32    curDeapth
                                                               )
 
 {
@@ -1481,11 +1481,11 @@ void  KKU::RBTree<Entry,CompareNodes,KeyType>::CheckNodeStats (NodePtr  n,
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-bool  KKU::RBTree<Entry,CompareNodes,KeyType>::Validate ()
+bool  KKB::RBTree<Entry,CompareNodes,KeyType>::Validate ()
 {
-  int32  blackNodeHeight = -1;
+  kkint32  blackNodeHeight = -1;
 
-  int32  numOfNodes = ValidateSubTree (root, nil, "Root", 0, blackNodeHeight);
+  kkint32  numOfNodes = ValidateSubTree (root, nil, "Root", 0, blackNodeHeight);
 
   if  (numOfNodes != size)
   {
@@ -1499,14 +1499,14 @@ bool  KKU::RBTree<Entry,CompareNodes,KeyType>::Validate ()
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-KKU::int32  KKU::RBTree<Entry,CompareNodes,KeyType>::ValidateSubTree (NodePtr      subTree,
+KKB::kkint32  KKB::RBTree<Entry,CompareNodes,KeyType>::ValidateSubTree (NodePtr      subTree,
                                                                       NodePtr      theParent,
                                                                       const char*  linkDescription,
-                                                                      KKU::int32   blackNodeCount,
-                                                                      KKU::int32&  blackNodeHeight
+                                                                      KKB::kkint32 blackNodeCount,
+                                                                      KKB::kkint32&  blackNodeHeight
                                                                      )
 {
-  int32  numOfNodes = 0;
+  kkint32  numOfNodes = 0;
 
 
   if  (subTree->Color () == Black)
@@ -1565,7 +1565,7 @@ KKU::int32  KKU::RBTree<Entry,CompareNodes,KeyType>::ValidateSubTree (NodePtr   
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-KKU::int32  KKU::RBTree<Entry,CompareNodes,KeyType>::CountNodesInSubTree (NodePtr  subTree)
+KKB::kkint32  KKB::RBTree<Entry,CompareNodes,KeyType>::CountNodesInSubTree (NodePtr  subTree)
 {
   if  (subTree == nil)
     return 0;
@@ -1579,7 +1579,7 @@ KKU::int32  KKU::RBTree<Entry,CompareNodes,KeyType>::CountNodesInSubTree (NodePt
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-void  KKU::RBTree<Entry,CompareNodes,KeyType>::IteratorDelete (IteratorPtr  deletedIterator)
+void  KKB::RBTree<Entry,CompareNodes,KeyType>::IteratorDelete (IteratorPtr  deletedIterator)
 {
   if  (numOfIterators < 1)
     return;
@@ -1597,8 +1597,8 @@ void  KKU::RBTree<Entry,CompareNodes,KeyType>::IteratorDelete (IteratorPtr  dele
   numOfIterators--;
   IteratorPtr*  newIterators = new IteratorPtr[numOfIterators];
 
-  int32  j = 0;
-  for  (int32 i = 0;  i <= numOfIterators;  i++)
+  kkint32  j = 0;
+  for  (kkint32 i = 0;  i <= numOfIterators;  i++)
   {
     if  (iterators[i] != deletedIterator)
     {
@@ -1616,11 +1616,11 @@ void  KKU::RBTree<Entry,CompareNodes,KeyType>::IteratorDelete (IteratorPtr  dele
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-void  KKU::RBTree<Entry,CompareNodes,KeyType>::IteratorAdd  (IteratorPtr  newIterator)
+void  KKB::RBTree<Entry,CompareNodes,KeyType>::IteratorAdd  (IteratorPtr  newIterator)
 {
   IteratorPtr*  newIterators = new IteratorPtr[numOfIterators + 1];
 
-  for (int32  i = 0;  i < numOfIterators; i++)
+  for (kkint32  i = 0;  i < numOfIterators; i++)
   {
     newIterators[i] = iterators[i];
   }
@@ -1639,7 +1639,7 @@ void  KKU::RBTree<Entry,CompareNodes,KeyType>::IteratorAdd  (IteratorPtr  newIte
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-KKU::Iterator<Entry,CompareNodes,KeyType>::Iterator (TreePtr  _tree)
+KKB::Iterator<Entry,CompareNodes,KeyType>::Iterator (TreePtr  _tree)
 {
   tree = _tree;
 
@@ -1653,7 +1653,7 @@ KKU::Iterator<Entry,CompareNodes,KeyType>::Iterator (TreePtr  _tree)
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-KKU::Iterator<Entry,CompareNodes,KeyType>::~Iterator ()
+KKB::Iterator<Entry,CompareNodes,KeyType>::~Iterator ()
 {
   if  (tree)
     tree->IteratorDelete (this);
@@ -1663,7 +1663,7 @@ KKU::Iterator<Entry,CompareNodes,KeyType>::~Iterator ()
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-void  KKU::Iterator<Entry,CompareNodes,KeyType>::IsTreeStillThere ()
+void  KKB::Iterator<Entry,CompareNodes,KeyType>::IsTreeStillThere ()
 {
   if  (tree == NULL)
   {
@@ -1682,7 +1682,7 @@ void  KKU::Iterator<Entry,CompareNodes,KeyType>::IsTreeStillThere ()
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-Entry*  KKU::Iterator<Entry,CompareNodes,KeyType>::GetEqual (const KeyType&  key)
+Entry*  KKB::Iterator<Entry,CompareNodes,KeyType>::GetEqual (const KeyType&  key)
 {
   IsTreeStillThere ();
 
@@ -1711,7 +1711,7 @@ Entry*  KKU::Iterator<Entry,CompareNodes,KeyType>::GetEqual (const KeyType&  key
  
   
 template <class Entry,class CompareNodes,typename KeyType>
-Entry*  KKU::Iterator<Entry,CompareNodes,KeyType>::GetGreater (const KeyType&  key)
+Entry*  KKB::Iterator<Entry,CompareNodes,KeyType>::GetGreater (const KeyType&  key)
 {
   IsTreeStillThere ();
 
@@ -1736,7 +1736,7 @@ Entry*  KKU::Iterator<Entry,CompareNodes,KeyType>::GetGreater (const KeyType&  k
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-Entry*  KKU::Iterator<Entry,CompareNodes,KeyType>::GetGreaterOrEqual (const KeyType&  key)
+Entry*  KKB::Iterator<Entry,CompareNodes,KeyType>::GetGreaterOrEqual (const KeyType&  key)
 {
   IsTreeStillThere ();
 
@@ -1763,7 +1763,7 @@ Entry*  KKU::Iterator<Entry,CompareNodes,KeyType>::GetGreaterOrEqual (const KeyT
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-Entry*  KKU::Iterator<Entry,CompareNodes,KeyType>::GetFirst ()
+Entry*  KKB::Iterator<Entry,CompareNodes,KeyType>::GetFirst ()
 {
   IsTreeStillThere ();
 
@@ -1778,7 +1778,7 @@ Entry*  KKU::Iterator<Entry,CompareNodes,KeyType>::GetFirst ()
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-Entry*  KKU::Iterator<Entry,CompareNodes,KeyType>::GetLast ()
+Entry*  KKB::Iterator<Entry,CompareNodes,KeyType>::GetLast ()
 {
   IsTreeStillThere ();
   
@@ -1793,7 +1793,7 @@ Entry*  KKU::Iterator<Entry,CompareNodes,KeyType>::GetLast ()
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-Entry*  KKU::Iterator<Entry,CompareNodes,KeyType>::GetNext ()
+Entry*  KKB::Iterator<Entry,CompareNodes,KeyType>::GetNext ()
 {
   IsTreeStillThere ();
 
@@ -1820,7 +1820,7 @@ Entry*  KKU::Iterator<Entry,CompareNodes,KeyType>::GetNext ()
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-Entry*  KKU::Iterator<Entry,CompareNodes,KeyType>::GetPrev ()
+Entry*  KKB::Iterator<Entry,CompareNodes,KeyType>::GetPrev ()
 {
   IsTreeStillThere ();
 
@@ -1846,7 +1846,7 @@ Entry*  KKU::Iterator<Entry,CompareNodes,KeyType>::GetPrev ()
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-void  KKU::Iterator<Entry,CompareNodes,KeyType>::TreeHasBeenDeleted ()
+void  KKB::Iterator<Entry,CompareNodes,KeyType>::TreeHasBeenDeleted ()
 {
   // Called by RBTree object to let iterators know that the tree they are
   // Iterating is been deleted.
@@ -1859,7 +1859,7 @@ void  KKU::Iterator<Entry,CompareNodes,KeyType>::TreeHasBeenDeleted ()
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-void  KKU::Iterator<Entry,CompareNodes,KeyType>::DeletionOfNode (NodePtr  n)
+void  KKB::Iterator<Entry,CompareNodes,KeyType>::DeletionOfNode (NodePtr  n)
 {
   // Called by RBTree object to let iterators know that a k=node has been deleted 
   // and this way they can make the appropriate adjustments to the next, prev, and
@@ -1888,7 +1888,7 @@ void  KKU::Iterator<Entry,CompareNodes,KeyType>::DeletionOfNode (NodePtr  n)
 
 
 template <class Entry,class CompareNodes,typename KeyType>
-void  KKU::Iterator<Entry,CompareNodes,KeyType>::InsertionOfNode (NodePtr  n)
+void  KKB::Iterator<Entry,CompareNodes,KeyType>::InsertionOfNode (NodePtr  n)
 {
 }
 

@@ -8,10 +8,10 @@
 #include <vector>
 
 #include "MemoryDebug.h"
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 
 using namespace std;
-using namespace KKU;
+using namespace KKB;
 
 
 #include "ChainHash.h"
@@ -21,9 +21,9 @@ using namespace MLL;
 
 
 // this constructor is here for the notFound node - KNS
-ChainHashNode::ChainHashNode (int32          _example_index,
+ChainHashNode::ChainHashNode (kkint32        _example_index,
                               svm_node_int*  example_features,
-                              int32          _example_class_label
+                              kkint32        _example_class_label
                              )
   :
     index               (_example_index),
@@ -44,14 +44,14 @@ ChainHashNode::ChainHashNode (const ChainHashNode& right):
     int_x               (NULL)
 
 {
-  int_x = new int32[length];
-  memcpy (int_x, right.int_x, sizeof(int32)*length);
+  int_x = new kkint32[length];
+  memcpy (int_x, right.int_x, sizeof(kkint32)*length);
 }
 
 
 
-ChainHashNode::ChainHashNode (int32            _example_index,
-                              int32            _example_class_label,
+ChainHashNode::ChainHashNode (kkint32          _example_index,
+                              kkint32          _example_class_label,
                               FeatureVectorPtr _example,
                               bool&            _sucessfull
                              )
@@ -68,23 +68,23 @@ ChainHashNode::ChainHashNode (int32            _example_index,
     return;
   }
 
-  int_x = new int32[length];
+  int_x = new kkint32[length];
   if (!int_x)
   {
     _sucessfull = false;
     return;
   }
 
-  int32 temp;
+  kkint32 temp;
 
-  const FFLOAT*  feature_data = example->FeatureData();
-  for (int32 i=0; i < numSelectedFeatures; i++)
+  const FVFloat*  feature_data = example->FeatureData();
+  for (kkint32 i=0; i < numSelectedFeatures; i++)
   {
-    int32  feature_num = selectedFeatures[i];
+    kkint32  feature_num = selectedFeatures[i];
 
     if  ((featureTypes[feature_num] != NominalAttribute)  &&  (featureTypes[feature_num] != SymbolicAttribute))
     {
-      temp = int32 (1000 * feature_data[feature_num]);
+      temp = kkint32 (1000 * feature_data[feature_num]);
       if (temp > 0)
         int_x[i] = temp >> bitsToReduceByFeature[i];
       else
@@ -92,7 +92,7 @@ ChainHashNode::ChainHashNode (int32            _example_index,
     }
     else
     {
-      int_x[i] = (int32)feature_data[feature_num];
+      int_x[i] = (kkint32)feature_data[feature_num];
     }
   }
 
@@ -110,11 +110,11 @@ ChainHashNode::~ChainHashNode ( )
 }
 
 
-int32  ChainHashNode::hashKey ()  const
+kkint32  ChainHashNode::hashKey ()  const
 {
-  int32 sum = 0;
+  kkint32 sum = 0;
 
-  for (int32 i=0; i < numSelectedFeatures; i++)
+  for (kkint32 i=0; i < numSelectedFeatures; i++)
   {
     //sum += int_x[i];
     //sum = sum % hashSize;
@@ -143,7 +143,7 @@ bool  ChainHashNode::operator==(const ChainHashNode& right) const
   }
 
 
-  for (int32 i=0; i < numSelectedFeatures; i++)
+  for (kkint32 i=0; i < numSelectedFeatures; i++)
   {
     if  (int_x[i] != right.int_x[i])
       return false;
@@ -155,14 +155,14 @@ bool  ChainHashNode::operator==(const ChainHashNode& right) const
 
 
 
-void  ChainHashNode::setLength (int32 len)
+void  ChainHashNode::setLength (kkint32 len)
 {
   length = len;
 }
 
 
 
-void  ChainHashNode::setHashSize (int32 hs)
+void  ChainHashNode::setHashSize (kkint32 hs)
 {
   hashSize = hs;
 }
@@ -175,8 +175,8 @@ void  ChainHashNode::SetSelectedFeatures (const FeatureNumList&  _selectedFeatur
     delete  selectedFeatures;
 
   numSelectedFeatures = _selectedFeatures.NumOfFeatures ();
-  selectedFeatures    = new int32[_selectedFeatures.NumOfFeatures ()];
-  for  (int32 x = 0;  x < numSelectedFeatures;  x++)
+  selectedFeatures    = new kkint32[_selectedFeatures.NumOfFeatures ()];
+  for  (kkint32 x = 0;  x < numSelectedFeatures;  x++)
     selectedFeatures[x] = _selectedFeatures[x];
 }
 
@@ -201,10 +201,10 @@ void  ChainHashNode::SetBitsToReduceByFeature (const VectorInt32&  _bitsToReduce
 // initialize static variables. Visual Studios freaks out if you try to do this initialization
 // in the header file, thus we have a 3 line implementation file
 AttributeTypeVector ChainHashNode::featureTypes;
-int32               ChainHashNode::hashSize = 0;
-int32               ChainHashNode::length = 0;
-int32               ChainHashNode::numSelectedFeatures  = 0;
-int32*              ChainHashNode::selectedFeatures = NULL;
+kkint32             ChainHashNode::hashSize = 0;
+kkint32             ChainHashNode::length = 0;
+kkint32             ChainHashNode::numSelectedFeatures  = 0;
+kkint32*              ChainHashNode::selectedFeatures = NULL;
 VectorInt32         ChainHashNode::bitsToReduceByFeature;
 
 
@@ -231,13 +231,13 @@ vector<KKStr>  GetGroupForExample (vector< vector <KKStr > >&  groups,
 
 
 
-int32  LookUpExampleInGroup (vector<KKStr>&   g,
+kkint32  LookUpExampleInGroup (vector<KKStr>&   g,
                              KKStr            i
                           )
 {
-  int32  idx;
+  kkint32  idx;
 
-  for  (idx = 0;  idx < int32 (g.size ());  idx++)
+  for  (idx = 0;  idx < kkint32 (g.size ());  idx++)
   {
     if  (i == g[idx])
       return idx;
@@ -265,7 +265,7 @@ void  CompareTwoGroups (vector<KKStr>&  g1,
   for  (idx = g1.begin ();  idx != g1.end ();  idx++)
   {
     KKStr i = *idx;
-    int32  group2Idx = LookUpExampleInGroup (g2, i);
+    kkint32  group2Idx = LookUpExampleInGroup (g2, i);
     if  (group2Idx < 0)
     {
       r << "Example[" << i << "] is in group1 but not in group2" << endl;
@@ -276,7 +276,7 @@ void  CompareTwoGroups (vector<KKStr>&  g1,
   for  (idx = g2.begin ();  idx != g2.end ();  idx++)
   {
     KKStr i = *idx;
-    int32  group1Idx = LookUpExampleInGroup (g1, i);
+    kkint32  group1Idx = LookUpExampleInGroup (g1, i);
     if  (group1Idx < 0)
     {
       r << "Example[" << i << "] is in group2 but not in group1" << endl;

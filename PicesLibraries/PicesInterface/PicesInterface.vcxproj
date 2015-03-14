@@ -199,6 +199,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <OutputManifestFile>$(IntDir)$(TargetFileName).embed.manifest</OutputManifestFile>
@@ -219,6 +220,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedDebug|Win32'">
@@ -239,6 +241,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <OutputManifestFile>$(IntDir)$(TargetFileName).embed.manifest</OutputManifestFile>
@@ -259,6 +262,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -287,7 +291,6 @@
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="ClassificationBiasMatrix.cpp" />
     <ClCompile Include="FeatureFileNamePrompter.cpp" />
-    <ClCompile Include="OSservices.cpp" />
     <ClCompile Include="PicesAbundanceCorrectionMatrix.cpp" />
     <ClCompile Include="PicesClass.cpp" />
     <ClCompile Include="PicesClassList.cpp" />
@@ -311,6 +314,7 @@
     <ClCompile Include="PicesKKStr.cpp" />
     <ClCompile Include="PicesMethods.cpp" />
     <ClCompile Include="PicesMsgQueue.cpp" />
+    <ClCompile Include="PicesOSservices.cpp" />
     <ClCompile Include="PicesPoint.cpp" />
     <ClCompile Include="PicesPrediction.cpp" />
     <ClCompile Include="PicesPredictionList.cpp" />
@@ -337,7 +341,6 @@
     <ClInclude Include="FeatureFileNamePrompter.h">
       <FileType>CppForm</FileType>
     </ClInclude>
-    <ClInclude Include="OSservices.h" />
     <ClInclude Include="PicesAbundanceCorrectionMatrix.h" />
     <ClInclude Include="PicesClass.h" />
     <ClInclude Include="PicesClassList.h" />
@@ -363,6 +366,7 @@
     <ClInclude Include="PicesKKStr.h" />
     <ClInclude Include="PicesMethods.h" />
     <ClInclude Include="PicesMsgQueue.h" />
+    <ClInclude Include="PicesOSservices.h" />
     <ClInclude Include="PicesPoint.h" />
     <ClInclude Include="PicesPrediction.h" />
     <ClInclude Include="PicesPredictionList.h" />
@@ -400,8 +404,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\BaseLibrary\BaseLibrary.vcxproj">
-      <Project>{5a4b9b15-9745-4aba-b1a8-ffbc85d1d5df}</Project>
+    <ProjectReference Include="..\..\..\KSquareLibraries\KKBase\KKBase.vcxproj">
+      <Project>{d9bb6d83-937e-40fd-bfc3-ff48d8a04d11}</Project>
     </ProjectReference>
     <ProjectReference Include="..\PicesLibrary\PicesLibrary.vcxproj">
       <Project>{fa9c865e-0227-4ebc-a291-ed0f2453afb3}</Project>

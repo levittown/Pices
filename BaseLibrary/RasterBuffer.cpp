@@ -1,7 +1,7 @@
 /* RasterBuffer.h -- Implements RasterBuffering allowing multiple threads to add and remove Raster 
  *                   instances without corrupting memory.
  * Copyright (C) 2011-2011  Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #include "FirstIncludes.h"
 #if  defined(WIN32)
@@ -21,17 +21,17 @@ using namespace std;
 
 
 #include "RasterBuffer.h"
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "GoalKeeper.h"
 #include "KKException.h"
 #include "OSservices.h"
 #include "Raster.h"
-using  namespace  KKU;
+using  namespace  KKB;
 
 
 
 RasterBuffer::RasterBuffer (const KKStr&  _name,        /* Name of buffer, must be unique */
-                            int32         _maxNumOfBuffers
+                            kkint32       _maxNumOfBuffers
                            ):
   
     buffer               (),
@@ -83,13 +83,13 @@ void  RasterBuffer::ThrowOutOldestOccupiedBuffer ()
 
 
 
-int32  RasterBuffer::NumAvailable () const 
+kkint32  RasterBuffer::NumAvailable () const 
 {
   return  maxNumOfBuffers - buffer.size ();
 }
 
 
-int32  RasterBuffer::NumPopulated () const
+kkint32  RasterBuffer::NumPopulated () const
 {
   return  buffer.size ();
 }
@@ -107,7 +107,7 @@ void  RasterBuffer::AddRaster (RasterPtr  raster)
 
   gateKeeper->StartBlock ();
 
-  while  (buffer.size () >= (uint32)maxNumOfBuffers)
+  while  (buffer.size () >= (kkuint32)maxNumOfBuffers)
     ThrowOutOldestOccupiedBuffer ();
 
   buffer.push (raster);
@@ -137,9 +137,9 @@ RasterPtr  RasterBuffer::GetNextRaster ()
 
 
 
-int32  RasterBuffer::MemoryConsumedEstimated ()
+kkint32  RasterBuffer::MemoryConsumedEstimated ()
 {
-  int32  result = 0;
+  kkint32  result = 0;
   gateKeeper->StartBlock ();
   result = memoryConsumed;
   gateKeeper->EndBlock ();

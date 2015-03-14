@@ -23,12 +23,12 @@ using namespace std;
 
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "KKQueue.h"
 #include "OSservices.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 
 
@@ -352,7 +352,7 @@ JobList::JobList (JobManagerPtr  _manager):
 
 
 JobList::JobList (const JobList&  jobs):
-     KKQueue<Job>        (jobs.Owner (), jobs.QueueSize ()),
+     KKQueue<Job>        (jobs.Owner ()),
      jobIdLookUpTable    (),
      jobIdLookUpTableIdx (),
      log                 (jobs.log),

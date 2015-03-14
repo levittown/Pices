@@ -9,10 +9,10 @@
 using namespace  std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "RasterSipper.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 
 
@@ -21,8 +21,8 @@ using namespace  ImageExtractionManager;
 
 
 
-LogicalFrameBlob::LogicalFrameBlob (uint32  _maxFrameHeight,
-                                    uint32  _maxFrameWidth
+LogicalFrameBlob::LogicalFrameBlob (kkuint32  _maxFrameHeight,
+                                    kkuint32  _maxFrameWidth
                                    ):
   id (-1),
   explored            (false),
@@ -48,32 +48,32 @@ LogicalFrameBlob::~LogicalFrameBlob ()
 
 
 void  LogicalFrameBlob::DialateBlob (uchar**   frame,
-                                     int32**   blobIds,
-                                     int32     size
+                                     kkint32**   blobIds,
+                                     kkint32   size
                                     )
 {
-  rowTop   = Max (0, int32 (rowTop) - size);
+  rowTop   = Max (0, kkint32 (rowTop) - size);
   rowBot   = Min (maxFrameHeight - 1, rowBot + size);
-  colLeft  = Max (0, int32 (colLeft) - size);
+  colLeft  = Max (0, kkint32 (colLeft) - size);
   colRight = Min (maxFrameWidth - 1, colRight + size);
 
-  uint32  height = 1 + rowBot   - rowTop;
-  uint32  width  = 1 + colRight - colLeft;
+  kkuint32  height = 1 + rowBot   - rowTop;
+  kkuint32  width  = 1 + colRight - colLeft;
 
-  uint32  totPixels = height * width;
+  kkuint32  totPixels = height * width;
 
-  int32*  workArea = new int32[totPixels];
-  int32** workRows = new int32*[height];
+  kkint32*  workArea = new kkint32[totPixels];
+  kkint32** workRows = new kkint32*[height];
 
-  uint32 row, col;
-  uint32 workRow = 0;
-  uint32 workCol = 0;
-  int32  curWorkPixel = 0;
-  int32* curWorkRow = NULL;
+  kkuint32 row, col;
+  kkuint32 workRow = 0;
+  kkuint32 workCol = 0;
+  kkint32  curWorkPixel = 0;
+  kkint32* curWorkRow = NULL;
 
-  int32* curRow = NULL;
+  kkint32* curRow = NULL;
 
-  uint32  windowRow, windowCol;
+  kkuint32  windowRow, windowCol;
 
   for  (row = rowTop;  row <= rowBot;  row++)
   {
@@ -116,12 +116,12 @@ void  LogicalFrameBlob::DialateBlob (uchar**   frame,
 
       // Next lets determine if this pixel will be the recipient of dilation.
       bool  dialatePixel = false;
-      for  (windowRow = Max ((int32 (workRow) - size), 0);  (windowRow < (workRow + size))  &&  (!dialatePixel);  windowRow++)
+      for  (windowRow = Max ((kkint32 (workRow) - size), 0);  (windowRow < (workRow + size))  &&  (!dialatePixel);  windowRow++)
       {
         if  (windowRow >= height)
           break;
 
-        for  (windowCol = Max (0, (int32 (workCol) - size));  windowCol < (workCol + size);  windowCol++)
+        for  (windowCol = Max (0, (kkint32 (workCol) - size));  windowCol < (workCol + size);  windowCol++)
         {
           if  (windowCol >= width)
             break;
@@ -151,11 +151,11 @@ void  LogicalFrameBlob::DialateBlob (uchar**   frame,
 
 void  LogicalFrameBlob::AddNeighbor (LogicalFrameBlobPtr  _neighbor)
 {
-  int32  neighborId = _neighbor->Id ();
+  kkint32  neighborId = _neighbor->Id ();
   if  (neighborId == neighborIdLastAdded)
     return;
 
-  neighbors.insert (pair<int32, LogicalFrameBlobPtr> (neighborId, _neighbor));
+  neighbors.insert (pair<kkint32, LogicalFrameBlobPtr> (neighborId, _neighbor));
   neighborIdLastAdded = neighborId;
 }  /* AddNeighbor */
 

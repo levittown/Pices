@@ -14,7 +14,7 @@
 using namespace  std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "BMPImage.h"
 #include "ContourFollower.h"
 #include "ConvexHull.h"
@@ -24,8 +24,8 @@ using namespace  std;
 #include "OSservices.h"
 #include "RasterSipper.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 
 #include "InstrumentData.h"
@@ -45,10 +45,10 @@ using namespace  MLL;
 
 
 
-const int32  ImageFeatures::SizeThreshold = 100000;  // Size of image in num of pixels before we decide to reduce the
+const kkint32  ImageFeatures::SizeThreshold = 100000;  // Size of image in num of pixels before we decide to reduce the
                                                      // image to improve feature calculation.
 
-int32  ImageFeatures::FirstInstrumentDataField = 84;  // see 'NumSeperateInstrumentDataFields' below.
+kkint32  ImageFeatures::FirstInstrumentDataField = 84;  // see 'NumSeperateInstrumentDataFields' below.
 
 /**
  @code
@@ -61,7 +61,7 @@ int32  ImageFeatures::FirstInstrumentDataField = 84;  // see 'NumSeperateInstrum
  **                                                                                          *
  *********************************************************************************************
  */
-int32  ImageFeatures::NumSeperateInstrumentDataFields = 4;  
+kkint32  ImageFeatures::NumSeperateInstrumentDataFields = 4;  
 
               
 short  ImageFeatures::SizeIndex             = 0;
@@ -175,7 +175,7 @@ short  ImageFeatures::FluorescenceIndex     = 87;
 
 
 
-ImageFeatures::ImageFeatures (int32  _numOfFeatures):
+ImageFeatures::ImageFeatures (kkint32  _numOfFeatures):
        FeatureVector (_numOfFeatures),
         areaMMSquare     (0.0f),
         centroidCol      (-1),
@@ -330,7 +330,7 @@ FeatureVector (FeatureFileIOPices::PlanktonMaxNumOfFields ()),
   }
   else
   {
-    int32  x;
+    kkint32  x;
     _successfull = false;
 
     for  (x = 0; x < this->NumOfFeatures (); x++)
@@ -381,12 +381,12 @@ ImageFeatures::~ImageFeatures ()
 }
 
 
-int32  ImageFeatures::MemoryConsumedEstimated ()  const
+kkint32  ImageFeatures::MemoryConsumedEstimated ()  const
 {
-  int32  memoryConsumedEstimated = FeatureVector::MemoryConsumedEstimated () 
+  kkint32  memoryConsumedEstimated = FeatureVector::MemoryConsumedEstimated () 
     +  sizeof (float)   * 3
     +  sizeof (double)  * 3
-    +  sizeof (int32)   * 1
+    +  sizeof (kkint32)   * 1
     +  sizeof (short)   * 1;
 
   return  memoryConsumedEstimated;
@@ -421,14 +421,14 @@ void  ImageFeatures::Save (RasterSipper&        raster,
 
   RasterSipperPtr  newRaster = NULL;
 
-  int32  largestDim = Max (raster.Height (), raster.Width ());
+  kkint32  largestDim = Max (raster.Height (), raster.Width ());
   if  (largestDim < 300)
   {
     newRaster = new RasterSipper (raster);
   }
   else
   {
-    int32  reductionMultiple = 2;
+    kkint32  reductionMultiple = 2;
     while  ((largestDim / reductionMultiple) > 300)
      reductionMultiple++;
     newRaster = raster.ReduceByEvenMultiple (reductionMultiple);
@@ -474,8 +474,8 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
   #endif
 
   version = CurrentFeatureFileVersionNum;
-  uint32  intensityHistBuckets[8];
-  uint32  intensityHistBucketsB[8];  // These buckets will include white space
+  kkuint32  intensityHistBuckets[8];
+  kkuint32  intensityHistBucketsB[8];  // These buckets will include white space
 
   bool  weOwnRaster = false;
   RasterSipperPtr  reversedImage = NULL;
@@ -488,9 +488,9 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
 
   RasterSipperPtr raster = (weOwnRaster ? reversedImage : &srcRaster);
 
-  int32 areaBeforeReduction;
-  int32 areaWithWhiteSpace = 0;
-  FFLOAT  weighedSizeBeforeReduction    = 0.0f;
+  kkint32 areaBeforeReduction;
+  kkint32 areaWithWhiteSpace = 0;
+  FVFloat  weighedSizeBeforeReduction    = 0.0f;
  
   raster->CalcAreaAndIntensityFeatures (areaBeforeReduction, 
                                         weighedSizeBeforeReduction,
@@ -504,14 +504,14 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
   cout << "CalcFeatures   After 'CalcAreaAndIntensityFeatures'" << std::endl;
   #endif
 
-  int32  reductionFactor = 1;
-  int32  reductionFactorSquared = 1;
+  kkint32  reductionFactor = 1;
+  kkint32  reductionFactorSquared = 1;
 
   if  (areaBeforeReduction > SizeThreshold)
   {
-    int32  reducedMinDim = Min (raster->Height (), raster->Width ());
+    kkint32  reducedMinDim = Min (raster->Height (), raster->Width ());
 
-    int32  reducedSize = areaBeforeReduction;
+    kkint32  reducedSize = areaBeforeReduction;
     reductionFactor = 1;
     while  ((reducedSize > SizeThreshold)  &&  (reducedMinDim > 20))
     {
@@ -539,7 +539,7 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
 
   if  (areaBeforeReduction < 20)
   {
-    for  (int32 tp = 0; tp < numOfFeatures; tp++)
+    for  (kkint32 tp = 0; tp < numOfFeatures; tp++)
       featureData[tp] = 9999999;
     
     if  (weOwnRaster)
@@ -552,9 +552,9 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
   
   KKStr  driveLetter, path, root, extension;
 
-  FFLOAT  fourierFeatures[5];
+  FVFloat  fourierFeatures[5];
 
-  FFLOAT  convexf = 0.0;
+  FVFloat  convexf = 0.0;
 
   osParseFileSpec (ImageFileName (), driveLetter, path, root, extension);
   KKStr  baseName = "c:\\Temp\\TestImages2\\" + root + "\\" + root;
@@ -573,7 +573,7 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
   float  momentf[9];
   raster->CentralMoments (momentf);
 
-  FFLOAT  momentfWeighted[9];
+  FVFloat  momentfWeighted[9];
   raster->CentralMomentsWeighted (momentfWeighted);
 
   #if defined (DEBUB_CalcFeatures)
@@ -587,59 +587,59 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
   edgeImage->Dialation ();
   //if  (saveImages)
   //{
-  //  int32  a = (int32)edgeImage->CalcArea ();
+  //  kkint32  a = (kkint32)edgeImage->CalcArea ();
   //  Save (*edgeImage, "Edge_Dialation_1_" + StrFormatInt (a, "ZZZZZZ0"), saveImages);
   //}
 
   edgeImage->Dialation ();
   //if  (saveImages)
   //{
-  //  int32  a = (int32)edgeImage->CalcArea ();
+  //  kkint32  a = (kkint32)edgeImage->CalcArea ();
   //  Save (*edgeImage, "Edge_Dialation_2_" + StrFormatInt (a, "ZZZZZZ0"), saveImages);
   //}
 
   edgeImage->FillHole ();
   //if  (saveImages)
   //{
-  //  int32  a = (int32)edgeImage->CalcArea ();
+  //  kkint32  a = (kkint32)edgeImage->CalcArea ();
   //  Save (*edgeImage, "Edge_FillHole_" + StrFormatInt (a, "ZZZZZZ0"), saveImages);
   //}
 
   edgeImage->Erosion ();
   //if  (saveImages)
   //{
-  //  int32  a = (int32)edgeImage->CalcArea ();
+  //  kkint32  a = (kkint32)edgeImage->CalcArea ();
   //  Save (*edgeImage, "Edge_Erosion_1_" + StrFormatInt (a, "ZZZZZZ0"), saveImages);
   //}
 
   edgeImage->Erosion ();
   if  (saveImages)
   {
-    int32  a = (int32)edgeImage->CalcArea ();
+    kkint32  a = (kkint32)edgeImage->CalcArea ();
     Save (*edgeImage, "Edge_JustBefore" + StrFormatInt (a, "ZZZZZZ0"), saveImages);
   }
 
   edgeImage->Edge ();
-  int32  numEdgePixelsFound = (int32)edgeImage->CalcArea ();
+  kkint32  numEdgePixelsFound = (kkint32)edgeImage->CalcArea ();
   Save (*edgeImage, "Edge_Image_" + StrFormatInt (numEdgePixelsFound, "ZZZZ0"), saveImages);
 
   float  edgeMomentf[9];
   edgeImage->CentralMoments (edgeMomentf);
   delete  edgeImage;  edgeImage = NULL;
 
-  int32 area = (int32)(momentf[0] + 0.5f);  // Moment-0 is the same as the number of forground pixels in image.
+  kkint32 area = (kkint32)(momentf[0] + 0.5f);  // Moment-0 is the same as the number of forground pixels in image.
   {
     ConvexHullPtr  ch = new ConvexHull();
     RasterPtr  convexImage = ch->Filter (*raster);
     RasterSipperPtr  convexImageSipper = RasterSipper::TurnIntoSipperRasterPtr (convexImage);
     convexImage = NULL;
 
-    convexf = (FFLOAT)ch->ConvexArea ();
+    convexf = (FVFloat)ch->ConvexArea ();
 
     if  (saveImages)
     {
       KKStr convexImageFileName = "ConvexHull_" +
-                                   StrFormatInt ((int32)convexf, "ZZZZZ0");
+                                   StrFormatInt ((kkint32)convexf, "ZZZZZ0");
       Save (*convexImageSipper, convexImageFileName, saveImages);
     }
 
@@ -651,64 +651,64 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
 
   RasterSipperPtr open3Raster = new RasterSipper (*raster);
   open3Raster->Opening ();
-  FFLOAT  areaOpen3 = FFLOAT (open3Raster->ForegroundPixelCount ());
+  FVFloat  areaOpen3 = FVFloat (open3Raster->ForegroundPixelCount ());
   if  (saveImages)
-    Save (*open3Raster, "Opening3_" + StrFormatInt ((int32)areaOpen3, "ZZZZZZ0"), saveImages);
+    Save (*open3Raster, "Opening3_" + StrFormatInt ((kkint32)areaOpen3, "ZZZZZZ0"), saveImages);
   delete  open3Raster;
   open3Raster = NULL;
   
 
   RasterSipperPtr open5Raster = new RasterSipper (*raster);
   open5Raster->Opening (MorphOp::SQUARE5);
-  FFLOAT  areaOpen5 = FFLOAT (open5Raster->ForegroundPixelCount ());
+  FVFloat  areaOpen5 = FVFloat (open5Raster->ForegroundPixelCount ());
   if  (saveImages)
-    Save (*open5Raster, "Opening5_" + StrFormatInt ((int32)areaOpen5, "ZZZZZZ0"), saveImages);
+    Save (*open5Raster, "Opening5_" + StrFormatInt ((kkint32)areaOpen5, "ZZZZZZ0"), saveImages);
   delete  open5Raster;
   open5Raster = NULL;
   
 
   RasterSipperPtr open7Raster = new RasterSipper (*raster);
   open7Raster->Opening (MorphOp::SQUARE7);
-  FFLOAT  areaOpen7 = FFLOAT (open7Raster->ForegroundPixelCount ());
+  FVFloat  areaOpen7 = FVFloat (open7Raster->ForegroundPixelCount ());
   if  (saveImages)
-    Save (*open7Raster, "Opening7_" + StrFormatInt ((int32)areaOpen7, "ZZZZZZ0"), saveImages);
+    Save (*open7Raster, "Opening7_" + StrFormatInt ((kkint32)areaOpen7, "ZZZZZZ0"), saveImages);
   delete  open7Raster;
   open7Raster = NULL;
   
   RasterSipperPtr open9Raster = new RasterSipper (*raster);
   open9Raster->Opening (MorphOp::SQUARE9);
-  FFLOAT  areaOpen9 = (FFLOAT)open9Raster->ForegroundPixelCount ();
+  FVFloat  areaOpen9 = (FVFloat)open9Raster->ForegroundPixelCount ();
   if  (saveImages)
-    Save (*open9Raster, "Opening9_" + StrFormatInt ((int32)areaOpen9, "ZZZZZZ0"), saveImages);
+    Save (*open9Raster, "Opening9_" + StrFormatInt ((kkint32)areaOpen9, "ZZZZZZ0"), saveImages);
   delete  open9Raster;
   open9Raster = NULL;
 
   RasterSipperPtr close3Raster = new RasterSipper (*raster);
   close3Raster->Closing ();
-  FFLOAT  areaClose3 = FFLOAT (close3Raster->ForegroundPixelCount ());
+  FVFloat  areaClose3 = FVFloat (close3Raster->ForegroundPixelCount ());
   if  (saveImages)
-    Save (*close3Raster, "Close3_" + StrFormatInt ((int32)areaClose3, "ZZZZZZ0"), saveImages);
+    Save (*close3Raster, "Close3_" + StrFormatInt ((kkint32)areaClose3, "ZZZZZZ0"), saveImages);
 
   close3Raster->FillHole ();
-  FFLOAT  tranf = (FFLOAT)close3Raster->CalcArea ();
+  FVFloat  tranf = (FVFloat)close3Raster->CalcArea ();
   if  (saveImages)
-    Save (*close3Raster, "FillHole_" + StrFormatInt ((int32)tranf, "ZZZZZZ0"), saveImages);
+    Save (*close3Raster, "FillHole_" + StrFormatInt ((kkint32)tranf, "ZZZZZZ0"), saveImages);
   delete  close3Raster;
   close3Raster = NULL;
   
   RasterSipperPtr close5Raster = new RasterSipper (*raster);
   close5Raster->Closing (MorphOp::SQUARE5);
-  FFLOAT  areaClose5 = FFLOAT (close5Raster->ForegroundPixelCount ());
+  FVFloat  areaClose5 = FVFloat (close5Raster->ForegroundPixelCount ());
   if  (saveImages)
-    Save (*close5Raster, "Close5_" + StrFormatInt ((int32)areaClose5, "ZZZZZZ0"), saveImages);
+    Save (*close5Raster, "Close5_" + StrFormatInt ((kkint32)areaClose5, "ZZZZZZ0"), saveImages);
   delete  close5Raster;
   close5Raster = NULL;
   
   RasterSipperPtr close7Raster = new RasterSipper (*raster);
   close7Raster->Closing (MorphOp::SQUARE7);
-  FFLOAT  areaClose7 = FFLOAT (close7Raster->ForegroundPixelCount ());
+  FVFloat  areaClose7 = FVFloat (close7Raster->ForegroundPixelCount ());
   if  (saveImages)
-    Save (*close7Raster, "Close7_" + StrFormatInt ((int32)areaClose7, "ZZZZZZ0"), saveImages);
+    Save (*close7Raster, "Close7_" + StrFormatInt ((kkint32)areaClose7, "ZZZZZZ0"), saveImages);
   delete  close7Raster;
   close7Raster = NULL;
 
@@ -718,14 +718,14 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
   #endif
 
   {
-    featureData[SizeIndex]    = FFLOAT (momentf[0]);
-    featureData[Moment1Index] = FFLOAT (momentf[1]);
-    featureData[Moment2Index] = FFLOAT (momentf[2]);
-    featureData[Moment3Index] = FFLOAT (momentf[3]);
-    featureData[Moment4Index] = FFLOAT (momentf[4]);
-    featureData[Moment5Index] = FFLOAT (momentf[5]);
-    featureData[Moment6Index] = FFLOAT (momentf[6]);
-    featureData[Moment7Index] = FFLOAT (momentf[7]);
+    featureData[SizeIndex]    = FVFloat (momentf[0]);
+    featureData[Moment1Index] = FVFloat (momentf[1]);
+    featureData[Moment2Index] = FVFloat (momentf[2]);
+    featureData[Moment3Index] = FVFloat (momentf[3]);
+    featureData[Moment4Index] = FVFloat (momentf[4]);
+    featureData[Moment5Index] = FVFloat (momentf[5]);
+    featureData[Moment6Index] = FVFloat (momentf[6]);
+    featureData[Moment7Index] = FVFloat (momentf[7]);
 
     featureData[WeighedMoment0Index] = momentfWeighted[0];
     featureData[WeighedMoment1Index] = momentfWeighted[1];
@@ -746,24 +746,24 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
     featureData[EdgeMoment7Index] = (float)edgeMomentf[7];
 
     // Need to adjust for any reduction in Image Size
-    featureData[SizeIndex]           = FFLOAT (areaBeforeReduction);
-    featureData[EdgeSizeIndex]       = FFLOAT (edgeMomentf[0] * (FFLOAT)reductionFactor);
+    featureData[SizeIndex]           = FVFloat (areaBeforeReduction);
+    featureData[EdgeSizeIndex]       = FVFloat (edgeMomentf[0] * (FVFloat)reductionFactor);
     featureData[WeighedMoment0Index] = weighedSizeBeforeReduction;
   }
 
   if ((area > convexf)  &&  (convexf > 0))
      featureData[TransparancyConvexHullIndex] = 1.0;
   else 
-     featureData[TransparancyConvexHullIndex] = (FFLOAT)area / (FFLOAT)convexf;
+     featureData[TransparancyConvexHullIndex] = (FVFloat)area / (FVFloat)convexf;
 
-  featureData[TransparancyPixelCountIndex] = (FFLOAT)area / (FFLOAT)tranf;
-  featureData[TransparancyOpen3Index]      = (FFLOAT)(area - areaOpen3)  / (FFLOAT)area;
-  featureData[TransparancyOpen5Index]      = (FFLOAT)(area - areaOpen5)  / (FFLOAT)area;
-  featureData[TransparancyOpen7Index]      = (FFLOAT)(area - areaOpen7)  / (FFLOAT)area;                
-  featureData[TransparancyOpen9Index]      = (FFLOAT)(area - areaOpen9)  / (FFLOAT)area;
-  featureData[TransparancyClose3Index]     = (FFLOAT)(area - areaClose3) / (FFLOAT)area;
-  featureData[TransparancyClose5Index]     = (FFLOAT)(area - areaClose5) / (FFLOAT)area;
-  featureData[TransparancyClose7Index]     = (FFLOAT)(area - areaClose7) / (FFLOAT)area;
+  featureData[TransparancyPixelCountIndex] = (FVFloat)area / (FVFloat)tranf;
+  featureData[TransparancyOpen3Index]      = (FVFloat)(area - areaOpen3)  / (FVFloat)area;
+  featureData[TransparancyOpen5Index]      = (FVFloat)(area - areaOpen5)  / (FVFloat)area;
+  featureData[TransparancyOpen7Index]      = (FVFloat)(area - areaOpen7)  / (FVFloat)area;                
+  featureData[TransparancyOpen9Index]      = (FVFloat)(area - areaOpen9)  / (FVFloat)area;
+  featureData[TransparancyClose3Index]     = (FVFloat)(area - areaClose3) / (FVFloat)area;
+  featureData[TransparancyClose5Index]     = (FVFloat)(area - areaClose5) / (FVFloat)area;
+  featureData[TransparancyClose7Index]     = (FVFloat)(area - areaClose7) / (FVFloat)area;
        
   {
     float  eigenRatio;
@@ -787,10 +787,10 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
 
     RasterSipperPtr rotatedImage = raster->Rotate (orientationAngle);
 
-    int32  tlRow;
-    int32  tlCol;
-    int32  brRow;
-    int32  brCol;
+    kkint32  tlRow;
+    kkint32  tlCol;
+    kkint32  brRow;
+    kkint32  brCol;
 
      rotatedImage->FindBoundingBox (tlRow, tlCol, brRow, brCol);
     if  (tlRow < 0)
@@ -801,22 +801,22 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
     }
     else
     {
-      int32 firstQtrWeight = 0;
-      int32 forthQtrWeight = 0;
+      kkint32 firstQtrWeight = 0;
+      kkint32 forthQtrWeight = 0;
 
-      int32 boundingLength = brCol - tlCol + 1;
-      int32 boundingWidth  = brRow - tlRow + 1;
+      kkint32 boundingLength = brCol - tlCol + 1;
+      kkint32 boundingWidth  = brRow - tlRow + 1;
 
-      featureData[LengthVsWidthIndex] = (FFLOAT)boundingWidth / (FFLOAT)boundingLength;  // Prior 2 Format 18
-      featureData[LengthIndex]        = (FFLOAT)boundingLength * reductionFactor;
-      featureData[WidthIndex]         = (FFLOAT)boundingWidth  * reductionFactor;
-      featureData[FilledAreaIndex]    = (FFLOAT)areaWithWhiteSpace;  // Same as holeFilledArea
+      featureData[LengthVsWidthIndex] = (FVFloat)boundingWidth / (FVFloat)boundingLength;  // Prior 2 Format 18
+      featureData[LengthIndex]        = (FVFloat)boundingLength * reductionFactor;
+      featureData[WidthIndex]         = (FVFloat)boundingWidth  * reductionFactor;
+      featureData[FilledAreaIndex]    = (FVFloat)areaWithWhiteSpace;  // Same as holeFilledArea
       
-      int32 firstQtr = tlCol +  (boundingLength / 4);
-      int32 thirdQtr = tlCol + ((boundingLength * 3) / 4);
+      kkint32 firstQtr = tlCol +  (boundingLength / 4);
+      kkint32 thirdQtr = tlCol + ((boundingLength * 3) / 4);
 
-      int32  row;
-      int32  col;
+      kkint32  row;
+      kkint32  col;
       
       uchar** grey = rotatedImage->Green ();
 
@@ -858,11 +858,11 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
       {
         if  (firstQtrWeight > forthQtrWeight)
         {
-          featureData[EigenHeadIndex] = (FFLOAT)firstQtrWeight / (FFLOAT)forthQtrWeight;
+          featureData[EigenHeadIndex] = (FVFloat)firstQtrWeight / (FVFloat)forthQtrWeight;
         }
         else
         {
-          featureData[EigenHeadIndex] = (FFLOAT)forthQtrWeight / (FFLOAT)firstQtrWeight;
+          featureData[EigenHeadIndex] = (FVFloat)forthQtrWeight / (FVFloat)firstQtrWeight;
         }
       }
     }
@@ -884,8 +884,8 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
     if  (!ImageFileName ().Empty ())
     {
       KKStr  sipperFileName (30);
-      uint32 scanLineNum = 0;
-      uint32 scanColNum  = 0;
+      kkuint32 scanLineNum = 0;
+      kkuint32 scanColNum  = 0;
 
       SipperVariables::ParseImageFileName (ImageFileName (), sipperFileName, scanLineNum, scanColNum);
 
@@ -926,25 +926,25 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
 
   {
     bool  successful;
-    FFLOAT  countourFreq[5];
-    FFLOAT  fourierDescriptors[15];
+    FVFloat  countourFreq[5];
+    FVFloat  fourierDescriptors[15];
 
     {
       RasterSipper  countourImage (*raster);
       //countourImage.Dialation (SQUARE5);  
 
 
-      int32  minExpectedLen = (int32)(float (numEdgePixelsFound) * 0.5f);
+      kkint32  minExpectedLen = (kkint32)(float (numEdgePixelsFound) * 0.5f);
 
       successful = false;
-      int32  numOfTries = 0;
+      kkint32  numOfTries = 0;
       while  (!successful)
       {
         countourImage.Dialation (); // We want the image to be completly connected.
         {
           Save  (countourImage, "_JustBeforeContour", saveImages);
           ContourFollower contourFollower (countourImage, log);
-          numOfEdgePixels = contourFollower.FollowContour (countourFreq, fourierDescriptors, (int32)featureData[SizeIndex], successful) * reductionFactor;
+          numOfEdgePixels = contourFollower.FollowContour (countourFreq, fourierDescriptors, (kkint32)featureData[SizeIndex], successful) * reductionFactor;
 
           if  (successful)
           {
@@ -1014,25 +1014,25 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
   #endif
 
 
-  FFLOAT  areaD = FFLOAT (areaBeforeReduction);
-  FFLOAT  areaWithWhiteSpaceD = FFLOAT (areaWithWhiteSpace);
+  FVFloat  areaD = FVFloat (areaBeforeReduction);
+  FVFloat  areaWithWhiteSpaceD = FVFloat (areaWithWhiteSpace);
 
-  featureData[IntensityHist1Index] = ((FFLOAT)intensityHistBuckets[1] / areaD);
-  featureData[IntensityHist2Index] = ((FFLOAT)intensityHistBuckets[2] / areaD);
-  featureData[IntensityHist3Index] = ((FFLOAT)intensityHistBuckets[3] / areaD);
-  featureData[IntensityHist4Index] = ((FFLOAT)intensityHistBuckets[4] / areaD);
-  featureData[IntensityHist5Index] = ((FFLOAT)intensityHistBuckets[5] / areaD);
-  featureData[IntensityHist6Index] = ((FFLOAT)intensityHistBuckets[6] / areaD);
-  featureData[IntensityHist7Index] = ((FFLOAT)intensityHistBuckets[7] / areaD);
+  featureData[IntensityHist1Index] = ((FVFloat)intensityHistBuckets[1] / areaD);
+  featureData[IntensityHist2Index] = ((FVFloat)intensityHistBuckets[2] / areaD);
+  featureData[IntensityHist3Index] = ((FVFloat)intensityHistBuckets[3] / areaD);
+  featureData[IntensityHist4Index] = ((FVFloat)intensityHistBuckets[4] / areaD);
+  featureData[IntensityHist5Index] = ((FVFloat)intensityHistBuckets[5] / areaD);
+  featureData[IntensityHist6Index] = ((FVFloat)intensityHistBuckets[6] / areaD);
+  featureData[IntensityHist7Index] = ((FVFloat)intensityHistBuckets[7] / areaD);
 
-  featureData[IntensityHistWS0Index] = ((FFLOAT)intensityHistBucketsB[0] / areaWithWhiteSpaceD);
-  featureData[IntensityHistWS1Index] = ((FFLOAT)intensityHistBucketsB[1] / areaWithWhiteSpaceD);
-  featureData[IntensityHistWS2Index] = ((FFLOAT)intensityHistBucketsB[2] / areaWithWhiteSpaceD);
-  featureData[IntensityHistWS3Index] = ((FFLOAT)intensityHistBucketsB[3] / areaWithWhiteSpaceD);
-  featureData[IntensityHistWS4Index] = ((FFLOAT)intensityHistBucketsB[4] / areaWithWhiteSpaceD);
-  featureData[IntensityHistWS5Index] = ((FFLOAT)intensityHistBucketsB[5] / areaWithWhiteSpaceD);
-  featureData[IntensityHistWS6Index] = ((FFLOAT)intensityHistBucketsB[6] / areaWithWhiteSpaceD);
-  featureData[IntensityHistWS7Index] = ((FFLOAT)intensityHistBucketsB[7] / areaWithWhiteSpaceD);
+  featureData[IntensityHistWS0Index] = ((FVFloat)intensityHistBucketsB[0] / areaWithWhiteSpaceD);
+  featureData[IntensityHistWS1Index] = ((FVFloat)intensityHistBucketsB[1] / areaWithWhiteSpaceD);
+  featureData[IntensityHistWS2Index] = ((FVFloat)intensityHistBucketsB[2] / areaWithWhiteSpaceD);
+  featureData[IntensityHistWS3Index] = ((FVFloat)intensityHistBucketsB[3] / areaWithWhiteSpaceD);
+  featureData[IntensityHistWS4Index] = ((FVFloat)intensityHistBucketsB[4] / areaWithWhiteSpaceD);
+  featureData[IntensityHistWS5Index] = ((FVFloat)intensityHistBucketsB[5] / areaWithWhiteSpaceD);
+  featureData[IntensityHistWS6Index] = ((FVFloat)intensityHistBucketsB[6] / areaWithWhiteSpaceD);
+  featureData[IntensityHistWS7Index] = ((FVFloat)intensityHistBucketsB[7] / areaWithWhiteSpaceD);
 
   if  (saveImages)
   {
@@ -1075,10 +1075,10 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
 ImageFeaturesList::ImageFeaturesList (FileDescPtr  _fileDesc,
                                       bool         _owner,
                                       RunLog&      _log,
-                                      int32        _size
+                                      kkint32      _size
                                      ):
 
-    FeatureVectorList (_fileDesc, _owner, _log, _size),
+    FeatureVectorList (_fileDesc, _owner, _log),
     version           (0)
 {
 
@@ -1093,7 +1093,7 @@ ImageFeaturesList::ImageFeaturesList (RunLog&             _log,
                                       const KKStr&        _fileName
                                      ):
 
-  FeatureVectorList (FeatureFileIOPices::NewPlanktonFile (_log), true, _log, 1000),
+  FeatureVectorList (FeatureFileIOPices::NewPlanktonFile (_log), true, _log),
   version       (0)
 
 {
@@ -1105,7 +1105,7 @@ ImageFeaturesList::ImageFeaturesList (RunLog&             _log,
 
 ImageFeaturesList::ImageFeaturesList (const ImageFeaturesList&  images):
 
-   FeatureVectorList (images.FileDesc (), images.Owner (), images.log, images.QueueSize ()),
+   FeatureVectorList (images.FileDesc (), images.Owner (), images.log),
    version           (images.version)
 {
   const_iterator  idx;
@@ -1126,7 +1126,7 @@ ImageFeaturesList::ImageFeaturesList (const ImageFeaturesList&  images,
                                       bool                      _owner
                                      ):
 
-   FeatureVectorList (images.FileDesc (), _owner, images.log, images.QueueSize ()),
+   FeatureVectorList (images.FileDesc (), _owner, images.log),
    version           (images.version)
 {
   const_iterator  idx;
@@ -1147,8 +1147,7 @@ ImageFeaturesList::ImageFeaturesList (const FeatureVectorList&  featureVectorLis
 
   FeatureVectorList (featureVectorList.FileDesc (),
                      _owner, 
-                     featureVectorList.log, 
-                     featureVectorList.QueueSize ()
+                     featureVectorList.log
                     ),
   version (0)
 
@@ -1234,8 +1233,7 @@ ImageFeaturesList::ImageFeaturesList (MLClassConstList&  _mlClasses,
 ImageFeaturesList::ImageFeaturesList (const FeatureVectorList&  featureVectorList):
   FeatureVectorList (featureVectorList.FileDesc (),
                      featureVectorList.Owner (), 
-                     featureVectorList.log, 
-                     featureVectorList.QueueSize ()
+                     featureVectorList.log
                     ),
   version (0)
 
@@ -1306,7 +1304,7 @@ ImageFeaturesList::~ImageFeaturesList ()
 
 
 
-ImageFeaturesPtr  ImageFeaturesList::IdxToPtr (int32 idx)  const
+ImageFeaturesPtr  ImageFeaturesList::IdxToPtr (kkint32 idx)  const
 {
   return  (ImageFeaturesPtr)FeatureVectorList::IdxToPtr (idx);
 }  /* IdxToPtr */
@@ -1452,8 +1450,8 @@ void   ImageFeaturesList::FeatureExtraction (const KKStr&        _dirName,
 
   bool  successfull;
 
-  int32  numOfImages = fileNameList->QueueSize ();
-  int32  count = 0;
+  kkint32  numOfImages = fileNameList->QueueSize ();
+  kkint32  count = 0;
 
   KKStrList::const_iterator  fnIDX;
   for  (fnIDX = fileNameList->begin ();  fnIDX != fileNameList->end ();  ++fnIDX)
@@ -1496,7 +1494,7 @@ void   ImageFeaturesList::FeatureExtraction (const KKStr&        _dirName,
 
   Version (CurrentFeatureFileVersionNum);
 
-  uint32  numExamplesWritten = 0;
+  kkuint32  numExamplesWritten = 0;
 
   // WriteImageFeaturesToFile (fullFeatureFileName, RawFormat, FeatureNumList::AllFeatures (fileDesc));
   FeatureFileIOPices::Driver ()->SaveFeatureFile (fullFeatureFileName, 
@@ -1529,7 +1527,7 @@ VectorDouble  ImageFeaturesList::ExtractPositionsByMeter (InstrumentDataListPtr 
   if  (defaultFlowRate <= 0.0f)
     defaultFlowRate = 1.0f;
 
-  uint32  frameSize = 4096;
+  kkuint32  frameSize = 4096;
 
   VectorDouble  frameOffsets;
   if  (instrumentData != NULL)
@@ -1547,15 +1545,15 @@ VectorDouble  ImageFeaturesList::ExtractPositionsByMeter (InstrumentDataListPtr 
   {
     ImageFeaturesPtr  example = *idx;
     position = 0.0;
-    uint32  frameIdx = (uint32)(example->SfCentroidRow () / frameSize);
-    uint32  scanLineToCalcFrom = 0;
+    kkuint32  frameIdx = (kkuint32)(example->SfCentroidRow () / frameSize);
+    kkuint32  scanLineToCalcFrom = 0;
     float lastFlowRate = defaultFlowRate;
     if  (frameIdx < frameOffsets.size ())
     {
       position = frameOffsets[frameIdx];
       scanLineToCalcFrom = frameIdx * frameSize;
 
-      InstrumentDataPtr  id = instrumentData->SearchForNearestScanLine ((uint32)example->SfCentroidRow ());
+      InstrumentDataPtr  id = instrumentData->SearchForNearestScanLine ((kkuint32)example->SfCentroidRow ());
       if  (!id)
         flowRate = defaultFlowRate;
       else
@@ -1593,12 +1591,12 @@ VectorInt   ImageFeaturesList::CreateSpatialDistributionHistogram (InstrumentDat
   VectorDouble  positions = ExtractPositionsByMeter (instrumentData, defaultScanRate, defaultFlowRate);
 
   VectorInt     histogram;
-  uint32        bucketIdx = 0;
+  kkuint32      bucketIdx = 0;
 
   VectorDouble::iterator  idx;
   for  (idx = positions.begin ();  idx != positions.end ();  idx++)
   {
-    bucketIdx = (int32)floor (*idx / bucketSize);
+    bucketIdx = (kkint32)floor (*idx / bucketSize);
 
     if  (bucketIdx < 0)
       bucketIdx= 0;
@@ -1630,7 +1628,7 @@ void  ImageFeaturesList::PrintSpatialHistogramReport (ostream&               r,
   MLClassConstListPtr  classes = ExtractMLClassConstList ();
   classes->SortByName ();
 
-  uint32  maxHistogramSize = (uint32)allClassesHistogram.size ();
+  kkuint32  maxHistogramSize = (kkuint32)allClassesHistogram.size ();
 
 
   MLClassConstList::iterator  idx;
@@ -1641,7 +1639,7 @@ void  ImageFeaturesList::PrintSpatialHistogramReport (ostream&               r,
     ImageFeaturesListPtr  imagesThisClass = ExtractImagesForAGivenClass (ic);
 
     VectorInt  histogramThisClass = imagesThisClass->CreateSpatialDistributionHistogram (instrumentData, defaultScanRate, defaultFlowRate, bucketSize);
-    maxHistogramSize = Max (maxHistogramSize, (uint32)histogramThisClass.size ());
+    maxHistogramSize = Max (maxHistogramSize, (kkuint32)histogramThisClass.size ());
 
     histogramsByClass.push_back (histogramThisClass);
 
@@ -1655,22 +1653,22 @@ void  ImageFeaturesList::PrintSpatialHistogramReport (ostream&               r,
   r << ""        << "\t" << "All"     << "\t" << h2 << endl;
   r << "Bucket"  << "\t" << "Classes" << "\t" << h3 << endl;
 
-  uint32  bucketIdx = 0;
+  kkuint32  bucketIdx = 0;
   for  (bucketIdx = 0;  bucketIdx < maxHistogramSize;  bucketIdx++)
   {
     r << bucketSize * (float)bucketIdx;
 
     r << "\t";
-    if  (bucketIdx < (uint32)allClassesHistogram.size ())
+    if  (bucketIdx < (kkuint32)allClassesHistogram.size ())
       r << allClassesHistogram[bucketIdx];
     else
       r << "";
 
-    uint32  classIdx = 0;
-    for  (classIdx = 0;  classIdx < (uint32)histogramsByClass.size ();  classIdx++)
+    kkuint32  classIdx = 0;
+    for  (classIdx = 0;  classIdx < (kkuint32)histogramsByClass.size ();  classIdx++)
     {
       r << "\t";
-      if  ((bucketIdx < (uint32)histogramsByClass[classIdx].size ()))
+      if  ((bucketIdx < (kkuint32)histogramsByClass[classIdx].size ()))
         r << histogramsByClass[classIdx][bucketIdx];
       else
         r << "";
@@ -1695,7 +1693,7 @@ ImageFeaturesListPtr  ImageFeaturesList::DuplicateListAndContents ()  const
 {
   ImageFeaturesListPtr  copyiedList = new ImageFeaturesList (FileDesc (), true, log, QueueSize ());
 
-  for  (int32 idx = 0;  idx < QueueSize ();  idx++)
+  for  (kkint32 idx = 0;  idx < QueueSize ();  idx++)
   {
     ImageFeaturesPtr  curImage = (ImageFeaturesPtr)IdxToPtr (idx);
     copyiedList->AddSingleImageFeatures (new ImageFeatures (*curImage));
@@ -1783,8 +1781,8 @@ ImageFeaturesListPtr  ImageFeaturesList::ExtractDuplicatesByRootImageFileName ()
 
 
 ImageFeaturesListPtr   ImageFeaturesList::ExtractImagesForAGivenClass (MLClassConstPtr  _mlClass,
-                                                                       int32               _maxToExtract,
-                                                                       FFLOAT              _minSize
+                                                                       kkint32             _maxToExtract,
+                                                                       FVFloat              _minSize
                                                                       )  const
 {
   FeatureVectorListPtr  featureVectorList = FeatureVectorList::ExtractImagesForAGivenClass (_mlClass, _maxToExtract, _minSize);
@@ -1799,8 +1797,8 @@ ImageFeaturesListPtr   ImageFeaturesList::ExtractImagesForAGivenClass (MLClassCo
 
 
 ImageFeaturesListPtr  ImageFeaturesList::StratifyAmoungstClasses (MLClassConstListPtr  mlClasses,
-                                                                  int32                   maxImagesPerClass,
-                                                                  int32                   numOfFolds
+                                                                  kkint32                 maxImagesPerClass,
+                                                                  kkint32                 numOfFolds
                                                                  )
 {
   FeatureVectorListPtr  stratifiedFeatureVectors = FeatureVectorList::StratifyAmoungstClasses (mlClasses, maxImagesPerClass, numOfFolds);
@@ -1813,7 +1811,7 @@ ImageFeaturesListPtr  ImageFeaturesList::StratifyAmoungstClasses (MLClassConstLi
 
 
 
-ImageFeaturesListPtr  ImageFeaturesList::StratifyAmoungstClasses (int32  numOfFolds)
+ImageFeaturesListPtr  ImageFeaturesList::StratifyAmoungstClasses (kkint32  numOfFolds)
 {
   MLClassConstListPtr  classes = ExtractMLClassConstList ();
 
@@ -1847,7 +1845,7 @@ void  ImageFeaturesList::FixSipperFileScanLineAndColFields ()
     ImageFeaturesPtr  i = *idx;
 
     KKStr  rootName = osGetRootName (i->ImageFileName ());
-    int32 x = rootName.LocateLastOccurrence ('_');
+    kkint32 x = rootName.LocateLastOccurrence ('_');
     if  (x > 0)
     {
       KKStr  colStr = rootName.SubStrPart (x + 1);
@@ -1931,7 +1929,7 @@ VectorFloat   ImageFeaturesList::CalculateDensitesByQuadrat (float        scanRa
 
     float  newDist = distLastImage + deltaDist;
 
-    uint32  quadratIdx = (int32)(newDist / quadratSize);
+    kkuint32  quadratIdx = (kkint32)(newDist / quadratSize);
     while  (imagesPerQuadrat.size () <= quadratIdx)
       imagesPerQuadrat.push_back (0);
     imagesPerQuadrat[quadratIdx]++;
@@ -1945,11 +1943,11 @@ VectorFloat   ImageFeaturesList::CalculateDensitesByQuadrat (float        scanRa
   float  volPerQuatdrat = quadratSize * 0.098f * 0.098f;
 
   VectorFloat  density (imagesPerQuadrat.size (), 0.0f);
-  for  (uint32 x = 0;  x < imagesPerQuadrat.size ();  x++)
+  for  (kkuint32 x = 0;  x < imagesPerQuadrat.size ();  x++)
     density[x] = imagesPerQuadrat[x] / volPerQuatdrat;
 
   {
-    uint32  i = 0;
+    kkuint32  i = 0;
     ofstream r ("c:\\Temp\\CalculateDensitesByQuadrat.txt");
     for  (i = 0; i < imagesPerQuadrat.size ();  i++)
       r << "i = " << i << "\t" << imagesPerQuadrat[i] << "\t" << "Density = " << "\t" << density[i] << endl;

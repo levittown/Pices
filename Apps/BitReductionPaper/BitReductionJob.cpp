@@ -15,10 +15,10 @@
 #endif
 
 #include  "MemoryDebug.h"
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 
 using namespace std;
-using namespace KKU;
+using namespace KKB;
 
 #include  "BitReductionJob.h"
 
@@ -35,7 +35,7 @@ using namespace KKU;
 #include  "RandomSampleJob.h"
 #include  "RunLog.h"
 #include  "StatisticalFunctions.h"
-#include  "Str.h"
+#include  "KKStr.h"
 #include  "SVMparam.h"
 #include  "TrainingProcess.h"
 #include  "TrainingConfiguration.h"

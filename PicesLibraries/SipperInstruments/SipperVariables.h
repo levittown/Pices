@@ -3,7 +3,7 @@
 
 
 #include "GoalKeeper.h"
-#include "Str.h"
+#include "KKStr.h"
 
 
 
@@ -23,39 +23,39 @@ namespace  SipperHardware
   class  SipperVariables
   {
   public:
-    typedef  KKU::int32   int32;
-    typedef  KKU::uint32  uint32;
-    typedef  KKU::int64   int64;
-    typedef  KKU::uint64  uint64;
+    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::kkuint32  kkuint32;
+    typedef  KKB::kkint64 kkint64;
+    typedef  KKB::kkuint64  kkuint64;
 
     SipperVariables ();
     ~SipperVariables ();
 
-    static  KKU::KKStrPtr       picesHomeDir;
-    static  KKU::GoalKeeperPtr  blocker;
+    static  KKB::KKStrPtr       picesHomeDir;
+    static  KKB::GoalKeeperPtr  blocker;
 
-    static  void  SetPicesHomeDir (const KKU::KKStr&  _picesHomeDir);
+    static  void  SetPicesHomeDir (const KKB::KKStr&  _picesHomeDir);
     static  void  FinalCleanUp ();
 
     static  bool        AllowUpdates                   ();  /**< 'True' indicates that user is allowed to peofrom updates.                           */
-    static  KKU::KKStr  InstrumentDataFilesDir         ();  /**< @brief Directory where Instrument Data files are stored.                            */
-    static  KKU::KKStr  InstrumentDataReportDir        ();  /**< @brief Directory where Instrument Data Reports are written to.                      */
-    static  KKU::KKStr  PicesHomeDir                   ();  /**< @brief Pices Home Directory.  All other directories will be off this directory.     */
-    static  KKU::KKStr  PicesConfigurationDirectory    ();  /**< @brief Where application configuration files go;  NOT training models.              */
-    static  KKU::KKStr  PicesCmdLineProgDir            ();  /**< @brief Directory where you can Command Line programs such as "CrossValidation.exe"  */
-    static  KKU::KKStr  PicesDataFilesDirectory        ();
-    static  KKU::KKStr  PicesTempDirectory             ();
-    static  KKU::KKStr  SipperConfigrationFileName     ();
-    static  KKU::KKStr  PicesReportDir                 ();
-    static  KKU::KKStr  PicesDataFileDirectory         ();
-    static  KKU::KKStr  SipperDirectoryListFileName    ();  /**< @brief Specifies the file where we can list directories that containing Sipper Files. */
-    static  KKU::KKStr  SipperFilesDefaultDir          ();
-    static  KKU::KKStr  SipperInterfaceDir             ();
-    static  KKU::KKStr  SipperInterfaceLogDir          ();  /**< @brief Where the SipperInterface program will write its log files to.               */
-    static  KKU::KKStr  TrainingModelsConfigurationDir ();  /**< @brief Directory where all Training Model Configuration files are stored.           */
-    static  KKU::KKStr  TrainingModelsSaveFilesDir     ();  /**< @brief Directory where all built trained models are stored.                         */
-    static  KKU::KKStr  TrainingLibrariesDir           ();  /**< @brief Directory where training library directories will be under                   */
-    static  KKU::KKStr  ValidationInfoDir              ();  /**< @brief Directory where Validated Image File Names are stored during image extraction. */
+    static  KKB::KKStr  InstrumentDataFilesDir         ();  /**< @brief Directory where Instrument Data files are stored.                            */
+    static  KKB::KKStr  InstrumentDataReportDir        ();  /**< @brief Directory where Instrument Data Reports are written to.                      */
+    static  KKB::KKStr  PicesHomeDir                   ();  /**< @brief Pices Home Directory.  All other directories will be off this directory.     */
+    static  KKB::KKStr  PicesConfigurationDirectory    ();  /**< @brief Where application configuration files go;  NOT training models.              */
+    static  KKB::KKStr  PicesCmdLineProgDir            ();  /**< @brief Directory where you can Command Line programs such as "CrossValidation.exe"  */
+    static  KKB::KKStr  PicesDataFilesDirectory        ();
+    static  KKB::KKStr  PicesTempDirectory             ();
+    static  KKB::KKStr  SipperConfigrationFileName     ();
+    static  KKB::KKStr  PicesReportDir                 ();
+    static  KKB::KKStr  PicesDataFileDirectory         ();
+    static  KKB::KKStr  SipperDirectoryListFileName    ();  /**< @brief Specifies the file where we can list directories that containing Sipper Files. */
+    static  KKB::KKStr  SipperFilesDefaultDir          ();
+    static  KKB::KKStr  SipperInterfaceDir             ();
+    static  KKB::KKStr  SipperInterfaceLogDir          ();  /**< @brief Where the SipperInterface program will write its log files to.               */
+    static  KKB::KKStr  TrainingModelsConfigurationDir ();  /**< @brief Directory where all Training Model Configuration files are stored.           */
+    static  KKB::KKStr  TrainingModelsSaveFilesDir     ();  /**< @brief Directory where all built trained models are stored.                         */
+    static  KKB::KKStr  TrainingLibrariesDir           ();  /**< @brief Directory where training library directories will be under                   */
+    static  KKB::KKStr  ValidationInfoDir              ();  /**< @brief Directory where Validated Image File Names are stored during image extraction. */
 
 
 
@@ -69,11 +69,11 @@ namespace  SipperHardware
      *@param[in]  src  String that is to be search for environment variables and expanded.
      *@return  The expanded string.
      */
-    static  KKU::KKStr  SubstituteInEvironmentVariables (const KKU::KKStr&  src);
+    static  KKB::KKStr  SubstituteInEvironmentVariables (const KKB::KKStr&  src);
 
-    static  KKU::KKStr  LatitudeToStr  (double latitude);
+    static  KKB::KKStr  LatitudeToStr  (double latitude);
 
-    static  KKU::KKStr  LongitudeToStr (double longitude);
+    static  KKB::KKStr  LongitudeToStr (double longitude);
 
 
     /**
@@ -84,18 +84,18 @@ namespace  SipperHardware
      *@param[in] scanLineNum The scan line with respect to the SIPPER file where the first row in the mage was extracted.
      *@param[in] scanCol The left most column in the original SIPPER file that this image  was extracted.
      */
-    static  void  ParseImageFileName (const KKU::KKStr&  fullFileName,
-                                      KKU::KKStr&        sipperFileName, 
-                                      KKU::kkuint32&     scanLineNum,
-                                      KKU::kkuint32&     scanCol
+    static  void  ParseImageFileName (const KKB::KKStr&  fullFileName,
+                                      KKB::KKStr&        sipperFileName, 
+                                      KKB::kkuint32&     scanLineNum,
+                                      KKB::kkuint32&     scanCol
                                      );
 
 
   private:
     static  void   ReadPermissions ();
 
-    static  int32  LocateEnvStrStart (const KKU::KKStr&  str);
-    static  bool   ValidPicesHomeDir (const KKU::KKStr&  dir);
+    static  kkint32  LocateEnvStrStart (const KKB::KKStr&  str);
+    static  bool   ValidPicesHomeDir (const KKB::KKStr&  dir);
 
     static  bool   allowUpdates;
     static  bool   picesHomeDirInitialized;

@@ -14,10 +14,10 @@ using namespace  std;
 
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "OSservices.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 
 #include "FeatureFileIO.h"
@@ -83,7 +83,7 @@ FeatureFileStats::~FeatureFileStats ()
 
 
 
-void  FeatureFileStats::InitalizeApplication (int32   argc,
+void  FeatureFileStats::InitalizeApplication (kkint32 argc,
                                               char**  argv
                                              )
 {

@@ -4,8 +4,8 @@
 
 #include "DateTime.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 #include "ConfusionMatrix2.h"
 #include "FeatureNumList.h"
@@ -25,7 +25,7 @@ typedef  CrossValidationRun*  CrossValidationRunPtr;
 class  CrossValidationApp
 {
 public:
-  typedef  KKU::uint  uint;
+  typedef  KKB::uint  uint;
 
   CrossValidationApp ();
 
@@ -63,7 +63,7 @@ public:
 
   KKStr                      loadFileName;
 
-  int32                      logLossCount;
+  kkint32                    logLossCount;
   double                     logLossTotal;
   double                     logLossMax;
   double                     logLossMin;

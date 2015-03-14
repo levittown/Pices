@@ -8,10 +8,10 @@
 
 using namespace std;
 
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 #include  "OSservices.h"
 #include  "RunLog.h"
-using namespace KKU;
+using namespace KKB;
 
 
 #include  "CTD_Plus_Data.h"
@@ -56,7 +56,7 @@ InstrumentDataManager::InstrumentDataManager (const KKStr&   _sipperFileName,
      lastScanLine           (0),
      scanLinesPerMeterDepth (NULL)
 {
-  int32  x; 
+  kkint32  x; 
 
   if  (!reportDir.Empty ())
     osCreateDirectoryPath (reportDir);
@@ -87,7 +87,7 @@ InstrumentDataManager::InstrumentDataManager (const KKStr&   _sipperFileName,
     *compReport << std::endl;
   }
 
-  scanLinesPerMeterDepth = new uint32[depthMax];
+  scanLinesPerMeterDepth = new kkuint32[depthMax];
   for (x = 0;  x < depthMax;  x++)
     scanLinesPerMeterDepth[x] = 0;
 
@@ -129,7 +129,7 @@ InstrumentDataManager::InstrumentDataManager (const KKStr&   _sipperFileName,
      scanLinesPerMeterDepth (NULL)
 
 {
-  int32  x; 
+  kkint32  x; 
 
   dataReports = new InstrumentDataReportPtr[MaxNumOfInstruments];
   textReports = new InstrumentDataReportPtr[MaxNumOfInstruments];
@@ -139,7 +139,7 @@ InstrumentDataManager::InstrumentDataManager (const KKStr&   _sipperFileName,
     textReports[x] = NULL;
   }
 
-  scanLinesPerMeterDepth = new uint32[depthMax];
+  scanLinesPerMeterDepth = new kkuint32[depthMax];
   for (x = 0;  x < depthMax;  x++)
     scanLinesPerMeterDepth[x] = 0;
 
@@ -152,14 +152,14 @@ InstrumentDataManager::~InstrumentDataManager ()
 {
   if  (dataReports)
   {
-    for  (int32 x = 0;  x < MaxNumOfInstruments;  x++)
+    for  (kkint32 x = 0;  x < MaxNumOfInstruments;  x++)
       if  (dataReports[x])
         delete  dataReports[x];
   }
 
   if  (textReports)
   {
-    for  (int32 x = 0;  x < MaxNumOfInstruments;  x++)
+    for  (kkint32 x = 0;  x < MaxNumOfInstruments;  x++)
       if  (textReports[x])
         delete  textReports[x];
   }
@@ -289,7 +289,7 @@ void  InstrumentDataManager::AssignSerialPorts (const SipperHeaderRecPtr  _sippe
 VectorUlong*  InstrumentDataManager::ScanLinesPerMeterDepth ()  const
 {
   VectorUlong*  _scanLinesPerMeterDepth = new VectorUlong (depthMax, 0);
-  for  (int32 x = 0;  x < depthMax;  x++)
+  for  (kkint32 x = 0;  x < depthMax;  x++)
      (*_scanLinesPerMeterDepth)[x] = scanLinesPerMeterDepth[x];
 
   return  _scanLinesPerMeterDepth;
@@ -299,15 +299,15 @@ VectorUlong*  InstrumentDataManager::ScanLinesPerMeterDepth ()  const
 
 
 
-void  InstrumentDataManager::CompReportLine (int32  scanLine)
+void  InstrumentDataManager::CompReportLine (kkint32  scanLine)
 {
-  uint32  x;
+  kkuint32  x;
 
-  int32  depthInt = (int32)ctdData.Depth ();
+  kkint32  depthInt = (kkint32)ctdData.Depth ();
   if  (depthInt != depthLastReported)
   {
-    uint32  deltaScanLines = scanLine - lastScanLine;
-    int32  x = Min (depthLastReported, depthMax - 1);
+    kkuint32  deltaScanLines = scanLine - lastScanLine;
+    kkint32  x = Min (depthLastReported, depthMax - 1);
     scanLinesPerMeterDepth[x] += deltaScanLines;
     depthLastReported = depthInt;
     lastScanLine = scanLine;
@@ -316,7 +316,7 @@ void  InstrumentDataManager::CompReportLine (int32  scanLine)
 
   if  (compReport)
   {
-    uint64  numCTDsecs = ctdData.Date ().Seconds ();
+    kkuint64  numCTDsecs = ctdData.Date ().Seconds ();
 
     if  (((numCTDsecs - compReportLastCTDSecs) > 1)  ||
          ((scanLine   - compReportLastScanLine) > 25000)
@@ -349,7 +349,7 @@ void  InstrumentDataManager::CompReportLine (int32  scanLine)
 
 
 
-void   InstrumentDataManager::CTDdataPlus  (int32                 _scanLine,
+void   InstrumentDataManager::CTDdataPlus  (kkint32               _scanLine,
                                             const CTD_Plus_Data&  _ctdData
                                            )
 {
@@ -369,8 +369,8 @@ void   InstrumentDataManager::CTDdataPlus  (int32                 _scanLine,
 
 
 
-void   InstrumentDataManager::BatteryData (int32               _scanLine,
-                                           int32               _activeBattery, 
+void   InstrumentDataManager::BatteryData (kkint32             _scanLine,
+                                           kkint32             _activeBattery, 
                                            const VectorFloat&  _batteryLevels
                                           )
 {
@@ -384,7 +384,7 @@ void   InstrumentDataManager::BatteryData (int32               _scanLine,
 
 
 
-void   InstrumentDataManager::PitchAndRollData (int32  _scanLine,
+void   InstrumentDataManager::PitchAndRollData (kkint32  _scanLine,
                                                 float  _pitch,
                                                 float  _roll
                                                )
@@ -400,7 +400,7 @@ void   InstrumentDataManager::PitchAndRollData (int32  _scanLine,
 
 
 
-void   InstrumentDataManager::Location (int32            _scanLine,
+void   InstrumentDataManager::Location (kkint32          _scanLine,
                                         double           _latitude,
                                         double           _longitude,
                                         const TimeType&  _gpsTime
@@ -419,7 +419,7 @@ void   InstrumentDataManager::Location (int32            _scanLine,
 
 
 
-void   InstrumentDataManager::Meter1FlowRate (int32  _scanLine, 
+void   InstrumentDataManager::Meter1FlowRate (kkint32  _scanLine, 
                                               float  _meter1FlowRate
                                              )
 {
@@ -432,7 +432,7 @@ void   InstrumentDataManager::Meter1FlowRate (int32  _scanLine,
 
 
 
-void   InstrumentDataManager::Meter2FlowRate (int32  _scanLine, 
+void   InstrumentDataManager::Meter2FlowRate (kkint32  _scanLine, 
                                               float  _meter2FlowRate
                                              )
 {
@@ -446,7 +446,7 @@ void   InstrumentDataManager::Meter2FlowRate (int32  _scanLine,
 
 
 
-void   InstrumentDataManager::FlowRates (int32 _scanLine,
+void   InstrumentDataManager::FlowRates (kkint32 _scanLine,
                                          float _meter1FlowRate,
                                          float _meter2FlowRate
                                         )
@@ -462,7 +462,7 @@ void   InstrumentDataManager::FlowRates (int32 _scanLine,
 
 
 
-void  InstrumentDataManager::ReportInstrumentData (uint32 curScanLine,
+void  InstrumentDataManager::ReportInstrumentData (kkuint32 curScanLine,
                                                    uchar  instrumentId,
                                                    bool   text,
                                                    uchar  data
@@ -472,7 +472,7 @@ void  InstrumentDataManager::ReportInstrumentData (uint32 curScanLine,
   {
     log.Level (-1) << endl
                    << "InstrumentDataManager::ReportInstrumentData   *** ERROR ***" << std::endl
-                   << "                        instrumentId[" << (int32)instrumentId << "]  Exceeds maximum InstrumentId." << std::endl
+                   << "                        instrumentId[" << (kkint32)instrumentId << "]  Exceeds maximum InstrumentId." << std::endl
                    << std::endl;
     //osWaitForEnter ();
     //exit (-1);
@@ -481,13 +481,13 @@ void  InstrumentDataManager::ReportInstrumentData (uint32 curScanLine,
   if  (text)
   {
     if  (!textReports[instrumentId])
-      textReports[instrumentId] = InstrumentDataReport::CreateInstrumentDataReport (this, reportDir, text, (int32)instrumentId);
+      textReports[instrumentId] = InstrumentDataReport::CreateInstrumentDataReport (this, reportDir, text, (kkint32)instrumentId);
     textReports[instrumentId]->ReportInstrumentData (curScanLine, data);
   }
   else
   {
     if  (!dataReports[instrumentId])
-      dataReports[instrumentId] = InstrumentDataReport::CreateInstrumentDataReport (this, reportDir, text, (int32)instrumentId);
+      dataReports[instrumentId] = InstrumentDataReport::CreateInstrumentDataReport (this, reportDir, text, (kkint32)instrumentId);
     dataReports[instrumentId]->ReportInstrumentData (curScanLine, data);
   }
 

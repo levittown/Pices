@@ -2,7 +2,7 @@
 #define  _RANDOMSEARCH_
 
 #include "RunLog.h"
-#include "Str.h"
+#include "KKStr.h"
 
 #include  "Application.h"
 #include  "MLClass.h"

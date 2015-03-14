@@ -17,12 +17,12 @@
 using namespace  std;
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "ImageIO.h"
 #include "OSservices.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace  KKU;
+#include "KKStr.h"
+using namespace  KKB;
 
 
 #include "DataBase.h"
@@ -87,9 +87,9 @@ DataBaseUpdateThread::~DataBaseUpdateThread ()
 
 
 
-void  DataBaseUpdateThread::GetRunTimeStats (uint32&  _imagesUpdated,
-                                             uint32&  _duplicatesDetected,
-                                             uint32&  _updateFailures
+void  DataBaseUpdateThread::GetRunTimeStats (kkuint32&  _imagesUpdated,
+                                             kkuint32&  _duplicatesDetected,
+                                             kkuint32&  _updateFailures
                                             )
 {
   _imagesUpdated      =  imagesUpdated;
@@ -231,7 +231,7 @@ void  DataBaseUpdateThread::Run ()
 
         else if  ((parms.ExtractFeatureData ())  &&  (dbConn != NULL))
         {
-          int32  imageId = 0;
+          kkint32  imageId = 0;
           dbConn->ImageInsert (*raster,
                                osGetRootName (imageFileName),
                                sipperRootName,
@@ -244,8 +244,8 @@ void  DataBaseUpdateThread::Run ()
                                parms.ConnectedPixelDist (),
                                extractionManager->LogEntryId (),
                                extractionManager->LogEntryId (),         // Classification Update LogEntryID
-                               (int32)(featureVector->CentroidRow () + 0.5f),
-                               (int32)(featureVector->CentroidCol () + 0.5f),
+                               (kkint32)(featureVector->CentroidRow () + 0.5f),
+                               (kkint32)(featureVector->CentroidCol () + 0.5f),
                                extractedImage->PredClass1 (),
                                extractedImage->PredClass1Prob (),
                                extractedImage->PredClass2 (),
@@ -332,9 +332,9 @@ void  DataBaseUpdateThread::ReFreshDataBaseImage (const KKStr&      imageFileNam
                                                   const KKStr&      sipperFileName, 
                                                   RasterSipperPtr   raster, 
                                                   ImageFeaturesPtr  featureVector,
-                                                  uint64            byteOffset,
-                                                  uint32            sipperTopRow,
-                                                  uint32            sipperTopCol
+                                                  kkuint64          byteOffset,
+                                                  kkuint32          sipperTopRow,
+                                                  kkuint32          sipperTopCol
                                                  )
 {
   if  (!dbConn)

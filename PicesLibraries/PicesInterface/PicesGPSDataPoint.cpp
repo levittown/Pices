@@ -23,9 +23,9 @@ using namespace System::Threading;
 using namespace System::Windows::Forms;
 
 #include "MemoryDebug.h"
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "Point.h"
-using namespace KKU;
+using namespace KKB;
 
 
 #include "PicesKKStr.h"

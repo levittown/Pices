@@ -1,16 +1,16 @@
 /* PixelValue.h -- Class that represents one pixel;  works in conjunction with the Raster class.
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 
 #ifndef _PIXELVALUE_
 #define _PIXELVALUE_
 
-#include  "BasicTypes.h"
-#include  "Str.h"
+#include  "KKBaseTypes.h"
+#include  "KKStr.h"
 
 
-namespace KKU
+namespace KKB
 {
   /**
    *@class  PixelValue  PixelValue.h
@@ -88,6 +88,6 @@ namespace KKU
     bool         operator== (const PixelValue& right)  const;
     bool         operator!= (const PixelValue& right)  const;
   };
-}  /* KKU */
+}  /* KKB */
 
 #endif

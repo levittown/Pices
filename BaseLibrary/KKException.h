@@ -22,15 +22,15 @@
 #define  __cdecl  
 #endif
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "KKQueue.h"
-#include "Str.h"
+#include "KKStr.h"
 
 #define  EnterChar   13
 #define  EscapeChar  27
 
 
-namespace KKU
+namespace KKB
 {
 
   class  KKException: public std::exception

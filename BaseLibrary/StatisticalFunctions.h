@@ -1,14 +1,14 @@
 /* StatisticalFunctions.h -- Basic Statitical Functions
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 
 #ifndef  _KKU_STATISTICALFUNCTIONS_
 #define  _KKU_STATISTICALFUNCTIONS_
 #include  <math.h>
-#include  "BasicTypes.h"
+#include  "KKBaseTypes.h"
 
-namespace  KKU
+namespace  KKB
 {
   template<typename T >
   void  CalcMeanAndStdDev (const vector<T>&  v,
@@ -25,7 +25,7 @@ namespace  KKU
       return;
     }
 
-    KKU::uint32  idx;
+    KKB::kkuint32  idx;
     T  total = T(0);
 
     for  (idx = 0;  idx < v.size ();  idx++)
@@ -76,7 +76,7 @@ namespace  KKU
       return;
     }
 
-    KKU::uint32  idx;
+    KKB::kkuint32  idx;
     total = T(0);
 
     min = max = v[0];
@@ -117,19 +117,19 @@ namespace  KKU
   //  Quadrat-Valance Methods,  page 44
   template<typename T >
   T  CalcBQV (const vector<T>&  v,
-              int32             blockSize
+              kkint32           blockSize
              )
   {
     typedef long double  uld;
 
-    int32 zed = 0;
-    int32 x   = 0;
+    kkint32 zed = 0;
+    kkint32 x   = 0;
 
     double  totalSquare = (T)0.0;
 
     double  divisorFactor = 1.0 / pow(2.0, blockSize);
 
-    while  (zed < (int32)(v.size () - 2 * blockSize))
+    while  (zed < (kkint32)(v.size () - 2 * blockSize))
     {
       T  plusSide  = (T)0.0;
       T  minusSide = (T)0.0;
@@ -167,17 +167,17 @@ namespace  KKU
   //  Quadrat-Valance Methods,  page 44
   template<typename T >
   T  CalcPQV (const vector<T>&  v,
-              int32             distance
+              kkint32           distance
              )
   {
     typedef long double  uld;
 
-    int32 x = 0;
-    int32 y = x + distance;
+    kkint32 x = 0;
+    kkint32 y = x + distance;
 
     double  totalDeltaSquared = 0.0;
 
-    while  (y < (int32)v.size ())
+    while  (y < (kkint32)v.size ())
     {
       T delta = v[x] - v[y];
       double deltaSquared = delta * delta;
@@ -199,11 +199,11 @@ namespace  KKU
   //  Quadrat-Valance Methods,  page 113
   template<typename T >
   T  CalcTTLQC (const vector<T>&  v,
-                int32             b
+                kkint32           b
                )
   {
-    int32  i = 0;
-    int32  n = (int32)v.size ();
+    kkint32  i = 0;
+    kkint32  n = (kkint32)v.size ();
     
     double  squareSun = 0.0;
 
@@ -212,7 +212,7 @@ namespace  KKU
     for  (i = 1;  i < n;  i++)
       sumArray[i] = sumArray[i - 1] + v[i];
 
-    int32  end = n + 1 - (2 * b);
+    kkint32  end = n + 1 - (2 * b);
 
     for  (i = 0;  i < end;  i++)
     {
@@ -238,11 +238,11 @@ namespace  KKU
   //  Quadrat-Valance Methods,  page 113
   template<typename T >
   T  Calc3TTLQC (const vector<T>&  v,
-                 int32             b
+                 kkint32           b
                 )
   {
-    int32  i = 0;
-    int32  n = (int32)v.size ();
+    kkint32  i = 0;
+    kkint32  n = (kkint32)v.size ();
     
     double  squareSun = 0.0;
 
@@ -251,7 +251,7 @@ namespace  KKU
     for  (i = 1;  i < n;  i++)
       sumArray[i] = sumArray[i - 1] + v[i];
 
-    int32  end = n + 1 - (3 * b);
+    kkint32  end = n + 1 - (3 * b);
 
     for  (i = 0;  i < end;  i++)
     {
@@ -275,20 +275,20 @@ namespace  KKU
 
   // As defined by andrew Remsen 
   // also look at http://www.pmel.noaa.gov/pubs/outstand/stab1646/statistics.shtml
-  float   LLoydsIndexOfPatchiness (const KKU::VectorInt& bins);
+  float   LLoydsIndexOfPatchiness (const KKB::VectorInt& bins);
 
 
 
 
 
-  float  McNemarsTest (int32        size,
+  float  McNemarsTest (kkint32      size,
                        const bool*  classedCorrectly1,
                        const bool*  classedCorrectly2
                       );
 
 
-  float  PairedTTest (const KKU::VectorFloat&  set1,
-                      const KKU::VectorFloat&  set2
+  float  PairedTTest (const KKB::VectorFloat&  set1,
+                      const KKB::VectorFloat&  set2
                      );
 
 }

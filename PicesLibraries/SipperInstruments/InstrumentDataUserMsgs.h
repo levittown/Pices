@@ -1,8 +1,8 @@
 #ifndef  _INSTRUMENTDATAUSERMSGS_
 #define  _INSTRUMENTDATAUSERMSGS_
 
-#include  "Str.h"
-using namespace  KKU;
+#include  "KKStr.h"
+using namespace  KKB;
 
 
 #include  "InstrumentDataReport.h"
@@ -18,7 +18,7 @@ namespace  SipperHardware
     InstrumentDataUserMsgs (InstrumentDataManagerPtr _manager,
                                 const KKStr&            _reportDir,
                                 bool                     _text,
-                                int32                    _instrumentId
+                                kkint32                  _instrumentId
                                );
 
     virtual
@@ -26,13 +26,13 @@ namespace  SipperHardware
 
 
     virtual  
-      void  ReportInstrumentData (uint32 curScanLine,
+      void  ReportInstrumentData (kkuint32 curScanLine,
                                   uchar  sensorData
                                  );
 
   private:
     KKStr  curTextLine;
-    int32   curTextLineStartScanLine;
+    kkint32 curTextLineStartScanLine;
     KKStr  lastTextLine;
     char    prevEolChar;
   };

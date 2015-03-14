@@ -1,8 +1,8 @@
 #ifndef  _INSTRUMENTDATABATTERYMETER_
 #define  _INSTRUMENTDATABATTERYMETER_
 
-#include  "Str.h"
-using namespace  KKU;
+#include  "KKStr.h"
+using namespace  KKB;
 
 
 #include  "InstrumentDataReport.h"
@@ -17,14 +17,14 @@ public:
   InstrumentDataBatteryMeter (InstrumentDataManagerPtr _manager,
                               const KKStr&            _reportDir,
                               bool                     _text,
-                              int32                    _instrumentId
+                              kkint32                  _instrumentId
                              );
   virtual
     ~InstrumentDataBatteryMeter ();
 
 
   virtual  
-    void  ReportInstrumentData (uint32 curScanLine,
+    void  ReportInstrumentData (kkuint32 curScanLine,
                                 uchar  sensorData
                                );
 
@@ -33,9 +33,9 @@ protected:
 
   VectorFloat  batteryLevels;
   KKStr        curTextLine;
-  int32        curTextLineStartScanLine;
+  kkint32      curTextLineStartScanLine;
   KKStr        lastTextLine;
-  uint32       numOfBatteries;
+  kkuint32     numOfBatteries;
   char         prevEolChar;
 };
 

@@ -29,11 +29,11 @@ namespace  ImageExtractionManager
 
     virtual  ThreadTypes   ThreadType ()  {return ttFrameExtractor;}
 
-    uint32        FrameWidth         ()  const  {return frameWidth;}
+    kkuint32      FrameWidth         ()  const  {return frameWidth;}
     const KKStr&  SipperBuffFileName ()  const  {return sipperBuffFileName;}
 
-    void     GetRunTimeStats (uint64&  _bytesRead,
-                              uint32&  _framesRead
+    void     GetRunTimeStats (kkuint64&  _bytesRead,
+                              kkuint32&  _framesRead
                              );
 
     InstrumentDataManagerPtr  DataManager ()  const  {return instrumentDataManager;}
@@ -65,39 +65,39 @@ namespace  ImageExtractionManager
     //  Variables used for processing a single frame.
     uchar**     frame;
     uchar*      frameArea;
-    uint64*     frameRowByteOffset;
+    kkuint64*     frameRowByteOffset;
 
-    uint32      totPixels;
+    kkuint32    totPixels;
 
-    uint32      frameNum;
-    uint32      frameSipperRow;     /**< Row within the Sipper File That Frame starts at.  */
+    kkuint32    frameNum;
+    kkuint32    frameSipperRow;     /**< Row within the Sipper File That Frame starts at.  */
     bool        endOfFileReachedInLastCall;
    
 
-    uint32      lastRowInFrame;     /**< Indicates the last row in frame that is being used for the current 
+    kkuint32    lastRowInFrame;     /**< Indicates the last row in frame that is being used for the current 
                                      * frame.  This value may be less than lastRowUsed.  It should be pointing
                                      * to a row that has no pixels that belong to any image. 
                                      */
                                
-    uint32      lastRowUsed;        /**< Last row in frame that is being used.  If the prev had lastRowInFrame 
+    kkuint32    lastRowUsed;        /**< Last row in frame that is being used.  If the prev had lastRowInFrame 
                                      * that was less than lastRowUsed then the extra rows will be moved to 
                                      * beginning of frame when the next frame is retrieved.
                                      */
                                
-    uint32      frameHeightMax;     /**< Max number of rows in a frame.  */
-    uint32      frameWidth;
+    kkuint32    frameHeightMax;     /**< Max number of rows in a frame.  */
+    kkuint32    frameWidth;
 
-    uint32      nextFrameStartRow;  /**< If lastRowInFrame is less than lastRowUsed then this variable will 
+    kkuint32    nextFrameStartRow;  /**< If lastRowInFrame is less than lastRowUsed then this variable will 
                                      * point to the start of the next frame.
                                      */
   
-    uint32*     colCount;
+    kkuint32*     colCount;
 
-    uint32*     pixelsPerRow;       /**< Keeps a count of number of pixels in the corresponding rows in frame.
+    kkuint32*     pixelsPerRow;       /**< Keeps a count of number of pixels in the corresponding rows in frame.
                                      * Assists in speeding up processing of frames.
                                      */
 
-    uint32      scanLineEnd;        /**< Last scan-line in Sipper file that we will process; comes from command line.
+    kkuint32    scanLineEnd;        /**< Last scan-line in Sipper file that we will process; comes from command line.
                                      * If = 0, will read all lines in sipper file bye setting to max-uint.
                                      */
  
@@ -112,8 +112,8 @@ namespace  ImageExtractionManager
     DateTime                         endTime;
     DateTime                         startTime;
 
-    int64                            bytesRead;
-    uint32                           framesRead;
+    kkint64                          bytesRead;
+    kkuint32                         framesRead;
 
     SipperFilePtr  sipperFileRec;
 

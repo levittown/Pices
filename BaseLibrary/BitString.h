@@ -1,15 +1,15 @@
 /* BitString.h -- Bit String management Class
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 
 #ifndef  _BITSTRING_
 #define  _BITSTRING_
 
-#include  "BasicTypes.h"
-#include  "Str.h"
+#include  "KKBaseTypes.h"
+#include  "KKStr.h"
 
-namespace  KKU
+namespace  KKB
 {
   /**
   *@class  BitString
@@ -34,7 +34,7 @@ namespace  KKU
      *@brief Construct a bit string of length _binLen with all bits set to '0'.
      *@param[in]  _bitLen Length of bit string to allocate.
      */
-    BitString (uint32  _bitLen);
+    BitString (kkuint32  _bitLen);
   
 
     /** @brief Copy constructor */
@@ -47,16 +47,16 @@ namespace  KKU
      *@param[in]  _bitNums     List if bit positions to set to '1'.
      *@param[in]  _bitNumsLen  Size of '_bitNums' array.
      */
-    BitString (uint32   _bitLen,
-               uint16*  _bitNums,
-               uint32   _bitNumsLen
+    BitString (kkuint32 _bitLen,
+               kkuint16*  _bitNums,
+               kkuint32 _bitNumsLen
               );
 
 
     ~BitString ();
 
     /**@brief Returns the length of the bit-string */
-    uint32  BitLen ()  const  {return bitLen;}
+    kkuint32  BitLen ()  const  {return bitLen;}
 
     /**
      *@brief  Create a bit-string from a Hex String.
@@ -72,11 +72,11 @@ namespace  KKU
                             );
 
     /**@brief  Returns number of bits set to '1'. */
-    uint32  Count  ()  const;
+    kkuint32  Count  ()  const;
 
 
     /**@brief Returns true if bit indicated by 'bitNum' is set to '1'. */
-    bool  Test (uint32  bitNum)  const;
+    bool  Test (kkuint32  bitNum)  const;
 
 
     /**
@@ -106,9 +106,9 @@ namespace  KKU
     void  PopulateVectorBool (VectorBool&  boolVector)  const;
 
     void  ReSet ();                 /**< @brief Set all bits to '0'.                      */
-    void  ReSet (uint32 bitNum);    /**< @brief Set the bit indicated by 'bitNum' to '0'. */
+    void  ReSet (kkuint32 bitNum);    /**< @brief Set the bit indicated by 'bitNum' to '0'. */
     void  Set   ();                 /**< @brief Set all bits to '1'.                      */
-    void  Set   (uint32 bitNum);    /**< @brief Set the bit indicated by 'bitNum' to '1'. */
+    void  Set   (kkuint32 bitNum);    /**< @brief Set the bit indicated by 'bitNum' to '1'. */
 
 
     /**
@@ -134,23 +134,23 @@ namespace  KKU
 
   private:
     inline
-    void  CalcByteAndBitOffsets (uint32  bitNum,
-                                 int32&  byteOffset,
+    void  CalcByteAndBitOffsets (kkuint32  bitNum,
+                                 kkint32&  byteOffset,
                                  uchar&  bitOffset
                                 )  
                                 const;
 
-    int32  Compare (const BitString&  right)  const;
+    kkint32  Compare (const BitString&  right)  const;
 
     static uchar   bitMasks [8]; 
     static uchar   bitMasksRev [8]; 
     static uchar*  bitCounts;
 
     static  void   BuildBitCounts ();
-    static  int32  HexCharToInt (uchar hexChar);
+    static  kkint32  HexCharToInt (uchar hexChar);
 
-    uint32   bitLen;     /**< Number of bits to manage;  (0 .. bitLen - )                   */
-    uint32   byteLen;    /**< Number of bytes required to manage 'bitLen' bits.             */
+    kkuint32 bitLen;     /**< Number of bits to manage;  (0 .. bitLen - )                   */
+    kkuint32 byteLen;    /**< Number of bytes required to manage 'bitLen' bits.             */
     uchar*   str;        /**< Where the bits will be stored; will be 'byteLen' bytes long.  
                               str[0] will contain bits 0 - 7.
                           */
@@ -158,7 +158,7 @@ namespace  KKU
 
   typedef  BitString*  BitStringPtr;
 
-} /* namespace  KKU */
+} /* namespace  KKB */
 
 #endif
 

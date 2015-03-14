@@ -8,7 +8,7 @@
 #include "Orderings.h"
 #include "TrainingConfiguration2.h"
 
-using namespace  KKU;
+using namespace  KKB;
 
 using namespace  JobManagment;
 

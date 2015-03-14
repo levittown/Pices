@@ -23,12 +23,12 @@ using namespace std;
 
 
 
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "KKQueue.h"
 #include "OSservices.h"
 #include "RunLog.h"
-#include "Str.h"
-using namespace KKU;
+#include "KKStr.h"
+using namespace KKB;
 
 
 
@@ -69,7 +69,7 @@ JobValidation::JobValidation (ProcessorPtr            _processor,
                               int                     _parentId,
                               const FeatureNumList&   _features,
                               int                     _chgFeatureNum,
-                              int32                   _numOfRounds,
+                              kkint32                 _numOfRounds,
                               double                  _cParm,
                               double                  _gammaParm,
                               float                   _aParm,

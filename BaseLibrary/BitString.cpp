@@ -1,6 +1,6 @@
 /* BitString.cpp -- Bit String management Class
  * Copyright (C) 1994-2011 Kurt Kramer
- * For conditions of distribution and use, see copyright notice in KKU.h
+ * For conditions of distribution and use, see copyright notice in KKB.h
  */
 
 #include "FirstIncludes.h"
@@ -18,9 +18,9 @@ using namespace std;
 
 
 #include "BitString.h"
-#include "BasicTypes.h"
+#include "KKBaseTypes.h"
 #include "KKException.h"
-using namespace KKU;
+using namespace KKB;
 
 
 // Bit                                  0      1      2      3       4       5       6        7
@@ -336,11 +336,11 @@ void  BitString::BuildBitCounts ()
 
   bitCounts = new uchar[256];
 
-  int32  byte = 0;
+  kkint32  byte = 0;
   for  (byte = 0;  byte < 256;  byte++)
   {
     bitCounts[byte] = 0;
-    int32  x = byte;
+    kkint32  x = byte;
     while  (x > 0)
     {
       if  ((x % 2) == 1)
@@ -354,7 +354,7 @@ void  BitString::BuildBitCounts ()
 
 
 
-BitString::BitString (uint32  _bitLen):
+BitString::BitString (kkuint32  _bitLen):
   bitLen  (_bitLen),
   byteLen (0)
 
@@ -373,7 +373,7 @@ BitString::BitString (const BitString&  b):
     str     (new uchar[b.byteLen])
 
 {
-  uint32  x;
+  kkuint32  x;
   for  (x = 0;  x < byteLen;  x++)
   {
     str[x] = b.str[x];
@@ -381,9 +381,9 @@ BitString::BitString (const BitString&  b):
 }
 
 
-BitString::BitString (uint32   _bitLen,
-                      uint16*  bitNums,
-                      uint32   bitNumsLen
+BitString::BitString (kkuint32 _bitLen,
+                      kkuint16*  bitNums,
+                      kkuint32 bitNumsLen
                      ):
     bitLen  (_bitLen),
     byteLen (0),
@@ -394,7 +394,7 @@ BitString::BitString (uint32   _bitLen,
   str = new uchar[byteLen];
   memset (str, 0, byteLen);
 
-  uint32  x;
+  kkuint32  x;
 
   for  (x = 0;  x < bitNumsLen;  x++)
   {
@@ -422,8 +422,8 @@ BitString::~BitString ()
 }
 
 
-void  BitString::CalcByteAndBitOffsets (uint32  bitNum,
-                                        int32&    byteOffset,
+void  BitString::CalcByteAndBitOffsets (kkuint32  bitNum,
+                                        kkint32&    byteOffset,
                                         uchar&  bitOffset
                                        )  const
 {
@@ -433,12 +433,12 @@ void  BitString::CalcByteAndBitOffsets (uint32  bitNum,
 
 
 
-KKU::uint32  BitString::Count  ()  const
+KKB::kkuint32  BitString::Count  ()  const
 {
   BuildBitCounts ();
 
-  uint32  count = 0;
-  uint32  byteOffset = 0;
+  kkuint32  count = 0;
+  kkuint32  byteOffset = 0;
 
   for  (byteOffset = 0;  byteOffset < byteLen;  byteOffset++)
     count += bitCounts[str[byteOffset]];
@@ -449,9 +449,9 @@ KKU::uint32  BitString::Count  ()  const
 
 
 
-bool  BitString::Test (uint32  bitNum) const
+bool  BitString::Test (kkuint32  bitNum) const
 {
-  int32 byteOffset;
+  kkint32 byteOffset;
   uchar bitOffset;
 
   CalcByteAndBitOffsets (bitNum, byteOffset, bitOffset);
@@ -473,7 +473,7 @@ void  BitString::Set ()
 
 
 
-void BitString::Set (uint32  bitNum)
+void BitString::Set (kkuint32  bitNum)
 {
   if  (bitNum >= bitLen)
   {
@@ -484,7 +484,7 @@ void BitString::Set (uint32  bitNum)
     exit (-1);
   }
 
-  int32 byteOffset;
+  kkint32 byteOffset;
   uchar bitOffset;
 
   CalcByteAndBitOffsets (bitNum, byteOffset, bitOffset);
@@ -506,7 +506,7 @@ void  BitString::ReSet ()
 
 
 
-void  BitString::ReSet (uint32 bitNum)
+void  BitString::ReSet (kkuint32 bitNum)
 {
   if  (bitNum >= bitLen)
   {
@@ -517,7 +517,7 @@ void  BitString::ReSet (uint32 bitNum)
     exit (-1);
   }
 
-  int32 byteOffset;
+  kkint32 byteOffset;
   uchar bitOffset;
 
   CalcByteAndBitOffsets (bitNum, byteOffset, bitOffset);
@@ -534,9 +534,9 @@ void  BitString::PopulateVectorBool (VectorBool&  boolVector)  const
 {
   boolVector.erase (boolVector.begin (), boolVector.end ());
 
-  uint32  byteOffset = 0;
-  uint32  numOfBits  = 0;
-  uint32  x;
+  kkuint32  byteOffset = 0;
+  kkuint32  numOfBits  = 0;
+  kkuint32  x;
 
   for  (byteOffset = 0;  byteOffset < byteLen;  byteOffset++)
   {
@@ -569,9 +569,9 @@ void  BitString::ListOfSetBits16 (VectorUint16&  setBits)  const
 
   setBits.clear ();
 
-  uint32  byteOffset = 0;
-  uint32  numOfBits  = 0;
-  uint32  bitNum     = 0;
+  kkuint32  byteOffset = 0;
+  kkuint32  numOfBits  = 0;
+  kkuint32  bitNum     = 0;
 
   for  (byteOffset = 0;  byteOffset < byteLen;  byteOffset++)
   {
@@ -592,12 +592,12 @@ void  BitString::ListOfSetBits16 (VectorUint16&  setBits)  const
           numOfBits = 8;
       }
 
-      uint32 x;
+      kkuint32 x;
       for  (x = 0;  x < numOfBits;  x++)
       {
         if  ((br % 2) == 1)
         {
-          setBits.push_back ((uint16)bitNum);
+          setBits.push_back ((kkuint16)bitNum);
         }
 
         br = br / 2;
@@ -612,9 +612,9 @@ void  BitString::ListOfSetBits32 (VectorUint32&  setBits)  const
 {
   setBits.clear ();
 
-  uint32  byteOffset = 0;
-  uint32  numOfBits  = 0;
-  uint32  bitNum     = 0;
+  kkuint32  byteOffset = 0;
+  kkuint32  numOfBits  = 0;
+  kkuint32  bitNum     = 0;
 
   for  (byteOffset = 0;  byteOffset < byteLen;  byteOffset++)
   {
@@ -635,7 +635,7 @@ void  BitString::ListOfSetBits32 (VectorUint32&  setBits)  const
           numOfBits = 8;
       }
 
-      uint32 x;
+      kkuint32 x;
       for  (x = 0;  x < numOfBits;  x++)
       {
         if  ((br % 2) == 1)
@@ -658,9 +658,9 @@ KKStr  BitString::HexStr ()  const
 
   static char  hexChars[] = {'0', '1', '2', '3', '4', '5', '6', '7','8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
-  uint32  byteOffset = 0;
-  int32 high4Bits;
-  int32 low4Bits;
+  kkuint32  byteOffset = 0;
+  kkint32 high4Bits;
+  kkint32 low4Bits;
 
   for  (byteOffset = 0;  byteOffset < byteLen;  byteOffset++)
   {
@@ -676,16 +676,16 @@ KKStr  BitString::HexStr ()  const
 
 
 
-int32  BitString::HexCharToInt (uchar hexChar)
+kkint32  BitString::HexCharToInt (uchar hexChar)
 {
   if  ((hexChar >= '0')  &&  (hexChar <= '9'))
-    return  (int32 (hexChar) - int32 ('0'));
+    return  (kkint32 (hexChar) - kkint32 ('0'));
 
   hexChar = (char)toupper (hexChar);
   if  ((hexChar < 'A')  ||  (hexChar > 'F'))
     return -1;
 
-  return  (10 + (int32 (hexChar) - int32 ('A')));
+  return  (10 + (kkint32 (hexChar) - kkint32 ('A')));
 }  /* HexCharToInt */
 
 
@@ -695,11 +695,11 @@ BitString  BitString::FromHexStr (const KKStr&  hexStr,
                                  )
 {
   BitString  bs (hexStr.Len () * 4);
-  int32  byteNum = 0;
-  int32  hexStrLen = hexStr.Len ();
-  int32  high4Bits = 0;
-  int32  low4Bits  = 0;
-  int32  x = 0;
+  kkint32  byteNum = 0;
+  kkint32  hexStrLen = hexStr.Len ();
+  kkint32  high4Bits = 0;
+  kkint32  low4Bits  = 0;
+  kkint32  x = 0;
 
   validHexStr = true;
 
@@ -740,7 +740,7 @@ BitString&  BitString::operator=  (const BitString&  right)
   byteLen = right.byteLen;
   str = new uchar[byteLen];
 
-  uint32  x;
+  kkuint32  x;
   for  (x = 0;  x < byteLen;  x++)
     str[x] = right.str[x];
 
@@ -752,9 +752,9 @@ BitString&  BitString::operator=  (const BitString&  right)
 
 BitString&  BitString::operator|=  (const BitString&  right)
 {
-  uint32 shortestByteLen = Min (byteLen, right.byteLen);
+  kkuint32 shortestByteLen = Min (byteLen, right.byteLen);
 
-  uint32  x;
+  kkuint32  x;
 
   for  (x = 0;  x < shortestByteLen;  x++)
   {
@@ -777,9 +777,9 @@ BitString&  BitString::operator+=  (const BitString&  right)
 
 BitString&  BitString::operator&=  (const BitString&  right)
 {
-  uint32 shortestByteLen = Min (byteLen, right.byteLen);
+  kkuint32 shortestByteLen = Min (byteLen, right.byteLen);
 
-  uint32  x;
+  kkuint32  x;
 
   for  (x = 0;  x < shortestByteLen;  x++)
   {
@@ -803,11 +803,11 @@ BitString&  BitString::operator*=  (const BitString&  right)
 
 
 
-int32  BitString::Compare (const BitString&  right)  const 
+kkint32  BitString::Compare (const BitString&  right)  const 
 {
-  uint32 shortestByteLen = Min (byteLen, right.byteLen);
+  kkuint32 shortestByteLen = Min (byteLen, right.byteLen);
 
-  uint32  x = 0;
+  kkuint32  x = 0;
 
   while  (x < shortestByteLen)
   {
@@ -873,10 +873,10 @@ bool  BitString::operator< (const BitString&  right)  const
 
 BitString&   BitString::operator^= (const BitString&  right)
 {
-  uint32 shortestByteLen = Min (byteLen, right.byteLen);
-  uint32 longestByteLen  = Max (byteLen, right.byteLen);
+  kkuint32 shortestByteLen = Min (byteLen, right.byteLen);
+  kkuint32 longestByteLen  = Max (byteLen, right.byteLen);
 
-  uint32  x;
+  kkuint32  x;
 
   for  (x = 0;  x < shortestByteLen;  x++)
     str[x] = str[x] ^ right.str[x];
@@ -891,10 +891,10 @@ BitString&   BitString::operator^= (const BitString&  right)
 
 BitString   BitString::operator^  (const BitString&  right)  /* bitwise exclusive-or */
 {
-  uint32 shortestByteLen = Min (byteLen, right.byteLen);
-  uint32 longestByteLen  = Max (byteLen, right.byteLen);
+  kkuint32 shortestByteLen = Min (byteLen, right.byteLen);
+  kkuint32 longestByteLen  = Max (byteLen, right.byteLen);
 
-  uint32  x;
+  kkuint32  x;
 
   BitString result (Max (bitLen, right.bitLen));
 

@@ -162,11 +162,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\BaseLibrary\BaseLibrary.vcxproj">
-      <Project>{5a4b9b15-9745-4aba-b1a8-ffbc85d1d5df}</Project>
-      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
-      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
-    </ProjectReference>
     <ProjectReference Include="..\..\PicesLibraries\PicesLibrary\PicesLibrary.vcxproj">
       <Project>{fa9c865e-0227-4ebc-a291-ed0f2453afb3}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
