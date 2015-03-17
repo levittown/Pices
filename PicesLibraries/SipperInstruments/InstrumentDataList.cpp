@@ -191,13 +191,11 @@ InstrumentDataListPtr  InstrumentDataList::CreateFromSipperFile (const KKStr&   
     for  (idx = data->begin ();  (idx != data->end ()) &&  (!firstValidRow);  idx++)
     {
       id = *idx;
-      if  ((id->CtdDate ().Year () > 2005)  &&
-           (id->Temperature () > 0.0f)      && 
-           (id->Temperature () < 40.0f)     &&
-           (id->Depth       () > 0.0f)      &&
-           (id->Depth       () < 1000.0f)   &&
-           (id->Salinity    () >= -2.0f)    &&
-           (id->Salinity    () <= 40.0f)
+      if  ((id->CtdDate ().Year () > 2005)  &&  (id->CtdDate ().Year () < 2020)  &&
+           (id->Temperature () > 0.0f)      &&  (id->Temperature () < 40.0f)     &&
+           (id->Depth       () > -1.0f)     &&  (id->Depth       () < 1000.0f)   &&
+           (id->Salinity    () >= -2.0f)    &&  (id->Salinity    () <= 40.0f)    &&
+           (id->CTDBattery  () > 5.0f)      &&  (id->CTDBattery  () < 14.0f)
           )
          firstValidRow = id;
     }

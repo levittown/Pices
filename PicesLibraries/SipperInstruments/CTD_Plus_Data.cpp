@@ -676,8 +676,11 @@ KKStr  CTD_Plus_Data::ToStrNoLabels ()  const
 
 bool  CTD_Plus_Data::ValidData ()  const
 {
-  if  (date.Year () < 2005)
+  if  ((date.Year () < 2000)  || (date.Year () > 2020))
     return  false;
+  
+  if  ((batteryVoltage < 5.5)  ||  (batteryVoltage >= 14.0f))
+    return false;
 
   if  ((temperature <= 0.0f)  ||  (temperature > 40.0f))
     return  false;
@@ -688,19 +691,19 @@ bool  CTD_Plus_Data::ValidData ()  const
   if  ((salinity < -2.0f)  ||  (salinity > 40.0f))
     return  false;
 
-  // 2010-11-17 
-  // Andrew was having problem with a lot of instruiment data data not updating for ETP2007-1-E.
-  // Seems that teh Florencses was out of bounds.  Wil change to let it go through.
-  //if  ((fluorescence < -2.0f)  ||  (fluorescence >= 7.0f))
-  //  return  false;
-  if  (fluorescence < -2.0f)
+  // Kurt  2015-03-16   Density will be negative when on deck of ship.
+  //if  ((density <= 13.0f)  ||  (density >= 40.0f))
+  if  (density >= 40.0f)
     return  false;
 
-  //if  ((cdomFluorescence < -2.0f)  ||  (cdomFluorescence >= 7.0f))
-  //  return  false;
+  if  ((fluorescence <= -2.0f)  ||  (fluorescence >= 80.0f))
+    return  false;
+
 
   if  ((oxygen < -3.0f)  ||  (oxygen >= 10.0f))
     return  false;
 
   return  true;
 }  /* ValidData */
+
+
