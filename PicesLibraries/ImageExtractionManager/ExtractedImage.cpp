@@ -108,7 +108,7 @@ ExtractedImageQueue::ExtractedImageQueue ():
    goalie       (NULL),
    maxQueueSize (200)
 {
-  goalie = new GoalKeeper ("ExtractedImageQueue");
+  GoalKeeper::Create ("ExtractedImageQueue", goalie);
 }
 
 
@@ -125,7 +125,7 @@ ExtractedImageQueue::~ExtractedImageQueue ()
     i = NULL;
   }
   goalie->EndBlock ();
-  delete  goalie;
+  GoalKeeper::Destroy (goalie);
   goalie = NULL;
 }
 

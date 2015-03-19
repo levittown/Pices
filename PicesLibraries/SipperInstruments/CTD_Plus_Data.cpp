@@ -699,9 +699,11 @@ bool  CTD_Plus_Data::ValidData ()  const
   if  ((fluorescence <= -2.0f)  ||  (fluorescence >= 80.0f))
     return  false;
 
-
   if  ((oxygen < -3.0f)  ||  (oxygen >= 10.0f))
     return  false;
+
+  if  ((soundVelocity < 1300)  ||  (soundVelocity > 1600))
+    return false;
 
   return  true;
 }  /* ValidData */

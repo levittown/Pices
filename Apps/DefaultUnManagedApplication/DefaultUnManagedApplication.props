@@ -13,7 +13,7 @@
       <PreprocessorDefinitions>ZLIB_AVAILABLE;FFTW_AVAILABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>KKBase.lib;SipperInstruments.lib;PicesLibrary.lib;libfftw3-3.lib;libfftw3f-3.lib;libmysql.lib;USER32.LIB;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>KKBase.lib;SipperInstruments.lib;PicesLibrary.lib;libfftw3-3.lib;libfftw3f-3.lib;libmysql.lib;USER32.LIB;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\Libraries\$(Configuration);$(SolutionDir)\OutsidePackages\fftw-3.3.2;$(SolutionDir)\OutsidePackages\MySqlWin32\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>

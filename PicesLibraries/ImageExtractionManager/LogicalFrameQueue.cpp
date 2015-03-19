@@ -36,7 +36,7 @@ LogicalFrameQueue::LogicalFrameQueue (const ExtractionParms&  _parms,
     goalie               (NULL),
     cancelFlag           (_cancelFlag)
 {
-  goalie = new GoalKeeper ("LogicalFrameQueue");
+  GoalKeeper::Create ("LogicalFrameQueue", goalie);
 }
 
 
@@ -51,7 +51,7 @@ LogicalFrameQueue::~LogicalFrameQueue ()
     frame = NULL;
   }
 
-  delete  goalie;
+  GoalKeeper::Destroy (goalie);
   goalie = NULL;
 }
 

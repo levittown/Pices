@@ -346,8 +346,8 @@ void CImageExtractionWindowsDlg::OnCancel()
  
   m_cancel.EnableWindow (false);
  
-  int returnCd = MessageBox ("Do you want to Cancel Image Extraction ?",
-                             "Cancel Image Extraction",
+  int returnCd = MessageBox (L"Do you want to Cancel Image Extraction ?",
+                             L"Cancel Image Extraction",
                              MB_YESNO
                             );
 
@@ -401,16 +401,16 @@ void  CImageExtractionWindowsDlg::OnTimerExtractionStopped ()
     
   if  (extractionCanceled)
   {
-    MessageBox ("Image Extraction has been Canceled",
-                "Image Extraction",
+    MessageBox (L"Image Extraction has been Canceled",
+                L"Image Extraction",
                 MB_OK
                );
   }
   
   else if  (extractionCrashed)
   {
-    MessageBox ("Image Extraction      *** CRASHED ***",
-                "Image Extraction",
+    MessageBox (L"Image Extraction      *** CRASHED ***",
+                L"Image Extraction",
                 MB_OK
                );
   }
@@ -418,8 +418,8 @@ void  CImageExtractionWindowsDlg::OnTimerExtractionStopped ()
   else
   {
     if  (!osIsBackGroundProcess ())
-      int returnCd = MessageBox ("Image Extraction has Completed",
-                                 "Image Extraction",
+      int returnCd = MessageBox (L"Image Extraction has Completed",
+                                 L"Image Extraction",
                                  MB_OK
                                 );
   }
@@ -556,8 +556,8 @@ void  CImageExtractionWindowsDlg::OnTimerSingleThreaded ()
 
     this->KillTimer (ImageExtractionTimerID);
     
-    int returnCd = MessageBox ("Image Extraction cancelation was forced.",
-                               "Image Extraction",
+    int returnCd = MessageBox (L"Image Extraction cancelation was forced.",
+                               L"Image Extraction",
                                MB_OK
                               );
     CDialog::OnCancel();
@@ -620,8 +620,8 @@ void  CImageExtractionWindowsDlg::OnTimerMultiThreaded ()
 
     this->KillTimer (ImageExtractionTimerID);
     
-    int returnCd = MessageBox ("Image Extraction cancelation was forced.",
-                               "Image Extraction",
+    int returnCd = MessageBox (L"Image Extraction cancelation was forced.",
+                               L"Image Extraction",
                                MB_OK
                               );
     CDialog::OnCancel();

@@ -709,7 +709,7 @@ void  ExtractionManager::StartThreads (bool&  threadsStartedSuccessfully)
 void  ExtractionManager::StartThread (ImageExtractionThreadPtr  threadInstance)
 {
   bool  successful = false;
-  threadInstance->Start (successful);
+  threadInstance->Start (KKThread::tpNormal, successful);
 }  /* StartThread */
 
 

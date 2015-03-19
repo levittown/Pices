@@ -372,8 +372,6 @@ delimiter ;
 
 
 
-
-
 /**********************************************************************************************************************/
 drop procedure if exists  InstrumentDataGetMidPointOfDeployment2;
 

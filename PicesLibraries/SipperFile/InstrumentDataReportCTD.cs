@@ -238,11 +238,35 @@ namespace SipperFile
 18.4751,  4.58572,   39.869, 0.8255, 0.2352, 4.3305,  34.5468, 1517.317, 30 Oct 2007, 17:55:36,  24.8071, 11.5
 18.4683,  4.58524,   39.879, 0.8242, 0.2290, 4.3316,  34.5485, 1517.299, 30 Oct 2007, 17:55:36,  24.8102, 11.5
 18.4623,  4.58499,   39.911, 0.8234, 0.2366, 4.3254,  34.5514, 1517.286, 30 Oct 2007, 17:55:37,  24.8138, 11.5
-*/    
-  
+*/
+
+    private void  InitialzieDataFields()
+    {
+      batteryVoltage         = 0.0f;
+      conductivity           = 0.0f;
+      density                = 0.0f;
+      depth                  = 0.0f;
+      fluorescence           = 0.0f;
+      fluorescenceSensor     = 0.0f;
+      cdomFluorescence       = 0.0f;
+      cdomFluorescenceSensor = 0.0f;
+      oxygen                 = 0.0f;
+      oxygenSensor           = 0.0f;
+      pressure               = 0.0f;
+      salinity               = 0.0f;
+      soundVelocity          = 0.0f;
+      temperature            = 0.0f;
+      transmisivity          = 0.0f;
+      transmisivitySensor    = 0.0f;
+      turbidity              = 0.0f;
+      turbiditySensor        = 0.0f;
+      dateTime = new DateTime (1, 1, 1, 0, 0, 0);
+    }
+
 
     override public void  ParseTxtLine (string  txtLine)
     {
+      InitialzieDataFields ();
       switch  (outFormat)
       {
         case OutPutFormat.RawFreqAndVoltsInHex:     ParseRawFreqAndVoltsInHex    (txtLine);  break;
@@ -254,12 +278,24 @@ namespace SipperFile
 
       if  (ctdStream != null)
         ctdStream.WriteLine (fluorescence.ToString ("#,##0.000") + "\t" + txtLine);
-      
-      if  ((temperature    <= 0.0f)    ||  (temperature    >= 50.0f)   ||
+
+      /*
+       if  ((temperature    <= 0.0f)    ||  (temperature    >= 50.0f)   ||
            (density        <  -6.0f)   ||  
            (soundVelocity  <  100.0f)  ||  (soundVelocity  >  2000.0f) ||  
            (depth          <  -10)     ||  (depth          > 600)      ||
            (batteryVoltage <  6.0f)    ||  (batteryVoltage > 14.9f)
+      */
+        
+      if  ((dateTime.Year     < 2000)    ||  (dateTime.Year  > 2020)        ||
+           (batteryVoltage    < 5.5f)    ||  (batteryVoltage > 14.0f)       ||
+           (temperature       <= 0.0f)   ||  (temperature    > 40.0f)       ||
+           (depth             <= 0.0f)   ||  (depth          > 1000.0f)     ||
+           (salinity          < -2.0f)   ||  (salinity       > 40.0f)       ||
+                                             (density        >= 40.0f)      ||
+           (fluorescence      < -2.0f)   ||  (fluorescence   >= 80.0f)      ||
+           (oxygen            < -3.0f)   ||  (oxygen         >= 10.0F)      ||
+           (soundVelocity     < 1300.0f) ||  (soundVelocity  > 1600.0f)
           )
       {
         return;

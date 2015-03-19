@@ -317,9 +317,9 @@ def  ProcessCruise(cruiseName, dir):
 #ProcessSumaryGPSFile ("F:\\Pices\\SipperFiles\\WB0512\\GPS-Data\\Daly May 2012 ship log.txt", "WB0512")
 #ProcessCruise("WB0511", "F:\\Pices\\SipperFiles\\WB0511\\GPS-Data")
 #ProcessCruise("WB0213", "F:\\Pices\\SipperFiles\\WB0213\\GPS-Data")
-#ProcessCruise("WB0212", "F:\\Pices\\SipperFiles\\WB0212\\GPS-Data")
+ProcessCruise("WB0212", "F:\\Pices\\SipperFiles\\WB0212\\GPS-Data")
 #ProcessCruise("WB0211", "F:\\Pices\\SipperFiles\\WB0211\\GPS-Data")
-ProcessCruise("WB0111", "F:\\Pices\\SipperFiles\\WB0111\\GPS-Data")
+#ProcessCruise("WB0111", "F:\\Pices\\SipperFiles\\WB0111\\GPS-Data")
 
 #ProcessCruise("", "")
 #ProcessCruise("", "")

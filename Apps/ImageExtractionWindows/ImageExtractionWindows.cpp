@@ -106,16 +106,23 @@ BOOL CImageExtractionWindowsApp::InitInstance()
 #endif
 
 
-  bool    cmdLineGood = false;
+  bool   cmdLineGood = false;
   KKStr  errorMessage;
 
   osRunAsABackGroundProcess ();
   RunLog  log;
 
   ExtractionParmsPtr  multiThreadedExtractionParms = NULL;
+  
+  KKStr  progName = "ImageExtractionWindows";
+  char  buff[10240];
+  size_t pReturnValue;
+  wcstombs_s (&pReturnValue, buff, sizeof (buff), m_lpCmdLine,  (size_t)sizeof (buff));
+  KKStr  cmdLine = buff;
+
   SipperImageExtractionParmsPtr  imageExtractionParms = 
-               new SipperImageExtractionParms ("ImageExtraction", 
-                                               m_lpCmdLine, 
+               new SipperImageExtractionParms (progName, 
+                                               cmdLine, 
                                                true,               // Running as Windows App
                                                errorMessage, 
                                                cmdLineGood,
@@ -125,8 +132,8 @@ BOOL CImageExtractionWindowsApp::InitInstance()
   if  (imageExtractionParms->MultiThreaded ())
   {
     multiThreadedExtractionParms 
-      = new ExtractionParms ("ImageExtraction", 
-                              m_lpCmdLine, 
+       = new ExtractionParms (progName, 
+                              cmdLine, 
                               true,               // Running as Windows App
                               errorMessage, 
                               cmdLineGood,
@@ -138,9 +145,12 @@ BOOL CImageExtractionWindowsApp::InitInstance()
 
   if  (!errorMessage.Empty ())
   {
+    size_t  errReturnValue;
+    wchar_t buff[4096];
+    errno_t errNum = mbstowcs_s (&errReturnValue, buff, 4096,   errorMessage.Str (), _TRUNCATE);
     int returnCd = MessageBox (NULL,
-                               errorMessage.Str (),
-                               "Invalid Parameters",
+                               buff,
+                               L"Invalid Parameters",
                                MB_OK
                               );
     imageExtractionParms->DisplayExampleCmdLine ();
