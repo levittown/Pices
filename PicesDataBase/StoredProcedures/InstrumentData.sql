@@ -1125,8 +1125,6 @@ delimiter ;
 
 
 
-
-
 drop procedure  if exists InstrumentDataRetrieveGpsInfo;
 delimiter //
 
@@ -1256,10 +1254,10 @@ DELIMITER $$
 
 create  procedure InstrumentUpdateFromGpsData(in  _cruiseName  char(10))
 begin
-  declare _sipperFileId    int default 0;
-  declare _ctdDataTime     datetime;
+  declare  _sipperFileId    int default 0;
+  declare  _ctdDataTime     datetime;
   
-  declare _lastSipperFileId  int default 0;
+  declare  _lastSipperFileId  int default 0;
   
   declare  _syncGpsDataTime   datetime;
   declare  _syncCtdDateTime   datetime;
@@ -1313,11 +1311,15 @@ begin
         if  ExitLoop  then
          select "ExitLoop true afer selecting from Deployments";
         end if;
+        
+        
+        /* select  _stationName, _deploymentNum, _sipperFileName, _syncCtdDateTime, _syncGpsDataTime; */
+        
 
         set _deltaGpsCtdSecs = to_seconds(_syncGpsDataTime) - to_seconds(_syncCtdDateTime);
 
         if  (_deltaGpsCtdSecs = 0) then
-            select "_deltaGpsCtdSecs = 0", _cruiseName, _stationName, _deploymentNum, _sipperFileId;
+            select "_deltaGpsCtdSecs = 0", _cruiseName, _stationName, _deploymentNum, _sipperFileId, _sipperFileName, _syncCtdDateTime, _syncGpsDataTime;
         end if;
 
         /* select   _sipperFileId, _stationName, _deploymentNum, _sipperFileName, _syncCtdDateTime, _syncGpsDataTime, _deltaGpsCtdSecs; */
@@ -1328,7 +1330,7 @@ begin
     
     call  GpsDataGetEstimate (_cruiseName, _adjCtdDateTime, @latitude, @longitude);
     if  ExitLoop  then
-      select "ExitLoop true afer Calling    GpsDataGetEstimate", _cruiseName, _sipperFileName, _adjCtdDateTime, @latitude, @longitude;
+      select "ExitLoop true afer Calling    GpsDataGetEstimate", _cruiseName,  _stationName, _deploymentNum, _sipperFileName,  _syncCtdDateTime, _syncGpsDataTime, _adjCtdDateTime, @latitude, @longitude;
       set ExitLoop = False;
     end if;
 
@@ -1345,5 +1347,9 @@ begin
 end
 $$
 delimiter ;
+
+
+
+
 
 

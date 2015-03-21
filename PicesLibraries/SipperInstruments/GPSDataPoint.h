@@ -43,13 +43,13 @@ namespace  SipperHardware
 
     ~GPSDataPoint ();
 
-    DateTime  CtdDateTime  () const {return ctdDateTime;}
-    TimeType  GPSStartTime () const {return gpsStartTime;}
-    kkint32   SipperFileId () const {return sipperFileId;}
-    kkuint32  AvgScanLine  () const {return avgScanLine;}
-    double    AvgLatitude  () const {return avgLatitude;}
-    double    AvgLongitude () const {return avgLongitude;}
-    float     AvgFlowRate  () const {return avgFlowRate;}
+    DateTime  CtdDateTime         () const {return ctdDateTime;}
+    TimeType  GPSStartTime        () const {return gpsStartTime;}
+    kkint32   SipperFileId        () const {return sipperFileId;}
+    kkuint32  AvgScanLine         () const {return avgScanLine;}
+    double    AvgLatitude         () const {return avgLatitude;}
+    double    AvgLongitude        () const {return avgLongitude;}
+    float     AvgFlowRate         () const {return avgFlowRate;}
 
   private:
     DateTime  ctdDateTime;

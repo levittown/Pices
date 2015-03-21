@@ -509,7 +509,6 @@ namespace PicesCommander
 
 
 
-
     private  void  AddSeriesToChart (DataSeriesToPlot  dataSeries)
     {
       PicesGPSDataPointList  gpsData    = dataSeries.data;
@@ -951,6 +950,32 @@ namespace PicesCommander
     }
 
 
+    private void  GetCogSogInfo (PicesSipperDeployment deployment,
+                                 DateTime              ctdDateTime,
+                                 ref float             cog,
+                                 ref float             sog
+                                )
+    {
+      String  sqlStr = "call GpsDataGetEstimateByCTDDateTime2 (\"" + deployment.CruiseName    + "\", \""  + 
+                                                                     deployment.StationName   + "\", \""  +
+                                                                     deployment.DeploymentNum + "\", \""  +
+                                                                     ctdDateTime.ToString ("yyyy-MM-dd HH:mm:dd") + "\"" +
+                                                              ")";
+      String[]  cols = {"CourseOverGround","SpeedOverGround"};
+      String[][] results = mainWinConn.QueryStatement (sqlStr, cols);
+      if  ((results == null)  ||  (results.Length < 1)  ||  (results[0].Length < 2))
+      {
+        cog = 0.0f;
+        sog = 0.0f;
+      }
+      else
+      {
+        cog = PicesKKStr.StrToFloat (results[0][0]);
+        sog = PicesKKStr.StrToFloat (results[0][1]);
+      }
+      return;
+    }
+
 
 
     private void ProfileChart_MouseClick (object sender, MouseEventArgs e)
@@ -977,6 +1002,7 @@ namespace PicesCommander
       int                closestPointSeriesIndex = -1;
       int                seriesIndex = 0;
       double             closestPointDistSquare = double.MaxValue;
+      PicesSipperDeployment  closestDeployment = null;
       foreach  (DataSeriesToPlot  dstp in series)
       {
         if  (dstp.WithInThreshold (longitude, longTH, latitude, latTH))
@@ -992,6 +1018,7 @@ namespace PicesCommander
               closestPointSeriesIndex = seriesIndex;
               closestPointDistSquare  = distSquare;
               closestPoint            = closestPointInSeries;
+              closestDeployment       = dstp.deployment;
             }
           }
         }
@@ -999,11 +1026,20 @@ namespace PicesCommander
       }
 
       if  (closestPoint != null)
+      { 
         HighLightClosestPoint (closestPointSeriesIndex, closestPointIndex, closestPoint);
+        String  gpsStr = PicesMethods.LatitudeLongitudeToString (closestPoint.AvgLatitude, closestPoint.AvgLongitude);
+        CurGPSLocation.Text = gpsStr;
 
-      String  gpsStr = PicesMethods.LatitudeLongitudeToString (latitude, longitude);
-
-      CurGPSLocation.Text = gpsStr;
+        if  (closestDeployment != null)
+        {
+          float   cog = 0.0f;
+          float   sog = 0.0f;
+          GetCogSogInfo (closestDeployment, closestPoint.CtdDateTime, ref cog, ref sog);
+          COGField.Text = cog.ToString ("##0.0") + "deg's";
+          SOGField.Text = sog.ToString ("#0.0") + " kts";
+        }
+      }
     }
 
 
