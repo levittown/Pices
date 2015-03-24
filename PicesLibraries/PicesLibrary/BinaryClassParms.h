@@ -24,6 +24,7 @@
  @endcode
  @see  MLL::SVMparam, MLL::ModelParamOldSVM, MLL::SVM233
  */
+
 #include "KKQueue.h"
 
 #include "svm.h"
@@ -87,12 +88,12 @@ namespace MLL
 
 
   private:
-    MLClassConstPtr  class1;
-    MLClassConstPtr  class2;
+    MLClassConstPtr class1;
+    MLClassConstPtr class2;
 
-    svm_parameter    param;             // From SVMlib
-    FeatureNumList   selectedFeatures;  // Feature Number to use.
-    float            weight;
+    svm_parameter   param;             /**< From SVMlib            */
+    FeatureNumList  selectedFeatures;  /**< Feature Number to use. */
+    float           weight;
   };  /* BinaryClassParms */
 
 
@@ -143,8 +144,10 @@ namespace MLL
 
     kkint32 MemoryConsumedEstimated ()  const;
 
+    virtual
     void  PushOnBack  (BinaryClassParmsPtr  binaryParms);
 
+    virtual
     void  PushOnFront (BinaryClassParmsPtr  binaryParms);
 
     void  ReadXML (FILE*        i,

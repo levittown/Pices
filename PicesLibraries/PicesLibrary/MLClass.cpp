@@ -102,7 +102,6 @@ void  MLClass::DeleteImageClassList (MLClassListPtr  list)
 
 
 
-
 MLClassPtr  MLClass::CreateNewMLClass (const KKStr&  _name,
                                        kkint32       _classId
                                       )
@@ -186,10 +185,10 @@ MLClassConstListPtr  MLClass::BuildListOfDecendents (MLClassConstPtr  parent)
 
 
 
-void  MLClass::ChangeNameOfClass (MLClassPtr  mlClass, 
-                                     const KKStr&   newName,
-                                     bool&          successful
-                                    )
+void  MLClass::ChangeNameOfClass (MLClassPtr    mlClass, 
+                                  const KKStr&  newName,
+                                  bool&         successful
+                                 )
 {
   successful = true;
   KKStr  oldName = mlClass->Name();
@@ -306,6 +305,7 @@ void  MLClass::FinalCleanUp ()
 
 MLClass::MLClass (const KKStr&  _name):
     classId          (-1),
+    countFactor      (0.0f),
     description      (),
     mandatory        (false),
     name             (_name),
@@ -459,6 +459,7 @@ void  MLClass::WriteXML (ostream& o)  const
     <<   "Paremt="           << ((parent == NULL) ? "\"\"" : parent->Name ()) << ","
     <<   "StoredOnDataBase=" << (storedOnDataBase ? "Y" : "N")                << ","
     <<   "Description="      << description.QuotedStr ()                      << ","
+    <<   "CountFactor="      << countFactor                                   << ","
     <<   "Mandatory="        << (mandatory  ? "Y" :"N")                       << ","
     <<   "Summarize="        << (summarize  ? "Y" :"N")
     << " />"
@@ -613,8 +614,8 @@ kkuint16 MLClassList::NumHierarchialLevels ()  const
 
 
 void  MLClassList::Load (const KKStr&  _fileName,
-                            bool&         _successfull
-                           )
+                         bool&         _successfull
+                        )
 {
   char   buff[20480];
   kkint32  lineCount = 0;
@@ -651,8 +652,8 @@ void  MLClassList::Load (const KKStr&  _fileName,
 
 
 
-void  MLClassList::Save (KKStr   _fileName,
-                         bool&    _successfull
+void  MLClassList::Save (KKStr  _fileName,
+                         bool&  _successfull
                         )
 {
   ofstream outFile (_fileName.Str ());
@@ -808,9 +809,9 @@ MLClassPtr  MLClassList::GetMLClassPtr (const KKStr& _name)
 
 MLClassPtr  MLClassList::GetNoiseClass ()  const
 {
-  kkint32        count      = QueueSize ();
+  kkint32     count      = QueueSize ();
   MLClassPtr  noiseClass = NULL;
-  kkint32        x;
+  kkint32     x;
 
   for  (x = 0; ((x < count)  &&  (!noiseClass)); x++)
   {
@@ -845,15 +846,14 @@ MLClassPtr  MLClassList::GetUnKnownClass ()
 class  MLClassList::mlClassNameComparison
 {
 public:
-   mlClassNameComparison () {} 
+  mlClassNameComparison () {} 
 
-   bool  operator () (MLClassPtr  p1,
-                      MLClassPtr  p2
-                     )
-   {
-     return  (p1->UpperName () < p2->UpperName ());
-   }
-
+  bool  operator () (MLClassPtr  p1,
+                     MLClassPtr  p2
+                    )
+  {
+    return  (p1->UpperName () < p2->UpperName ());
+  }
 };  /* mlClassNameComparison */
 
 
@@ -1370,8 +1370,8 @@ ClassIndexList::ClassIndexList (const MLClassList&  classes):
   for  (idx = classes.begin ();  idx != classes.end ();  idx++)
   {
     largestIndex++;
-    insert   (pair<MLClassConstPtr, short> (*idx, largestIndex));
-    shortIdx.insert (pair<short, MLClassConstPtr> (largestIndex, *idx));
+    insert   (pair<MLClassConstPtr, kkint16> (*idx, largestIndex));
+    shortIdx.insert (pair<kkint16, MLClassConstPtr> (largestIndex, *idx));
   }
 }
 
@@ -1384,8 +1384,8 @@ ClassIndexList::ClassIndexList (const MLClassConstList&  classes):
   for  (idx = classes.begin ();  idx != classes.end ();  idx++)
   {
     largestIndex++;
-    insert   (pair<MLClassConstPtr, short> (*idx, largestIndex));
-    shortIdx.insert (pair<short, MLClassConstPtr> (largestIndex, *idx));
+    insert   (pair<MLClassConstPtr, kkint16> (*idx, largestIndex));
+    shortIdx.insert (pair<kkint16, MLClassConstPtr> (largestIndex, *idx));
   }
 }
 
@@ -1407,7 +1407,7 @@ void  ClassIndexList::Clear ()
 
 kkint32  ClassIndexList::MemoryConsumedEstimated ()  const
 {
-  return sizeof (ClassIndexList) + (shortIdx.size () * (sizeof (short) + sizeof (MLClassConstPtr) + 10));  // added 10- bytes per entry for overhead.
+  return sizeof (ClassIndexList) + (shortIdx.size () * (sizeof (kkint16) + sizeof (MLClassConstPtr) + 10));  // added 10- bytes per entry for overhead.
 }
 
 
@@ -1417,7 +1417,7 @@ void  ClassIndexList::AddClass (MLClassConstPtr  _ic,
                                )
 {
   _dupEntry = false;
-  map<MLClassConstPtr, short>::iterator p;
+  map<MLClassConstPtr, kkint16>::iterator p;
   p = find (_ic);
   if  (p != end ())
   {
@@ -1428,19 +1428,19 @@ void  ClassIndexList::AddClass (MLClassConstPtr  _ic,
   kkint32  index = largestIndex + 1;
   largestIndex = index;
 
-  insert (pair<MLClassConstPtr, short> (_ic, index));
-  shortIdx.insert (pair<short, MLClassConstPtr> (index, _ic));
+  insert (pair<MLClassConstPtr, kkint16> (_ic, index));
+  shortIdx.insert (pair<kkint16, MLClassConstPtr> (index, _ic));
 }  /* AddClass */
 
 
 
 void  ClassIndexList::AddClassIndexAssignment (MLClassConstPtr  _ic,
-                                               short            _classIndex,
+                                               kkint16          _classIndex,
                                                bool&            _dupEntry
                                               )
 {
   _dupEntry = false;
-  map<MLClassConstPtr, short>::iterator p;
+  map<MLClassConstPtr, kkint16>::iterator p;
   p = find (_ic);
   if  (p != end ())
   {
@@ -1448,8 +1448,8 @@ void  ClassIndexList::AddClassIndexAssignment (MLClassConstPtr  _ic,
     return;
   }
 
-  insert (pair<MLClassConstPtr, short> (_ic, _classIndex));
-  shortIdx.insert (pair<short, MLClassConstPtr> (_classIndex, _ic));
+  insert (pair<MLClassConstPtr, kkint16> (_ic, _classIndex));
+  shortIdx.insert (pair<kkint16, MLClassConstPtr> (_classIndex, _ic));
 
   if  (_classIndex > largestIndex)
     largestIndex = _classIndex;
@@ -1457,10 +1457,10 @@ void  ClassIndexList::AddClassIndexAssignment (MLClassConstPtr  _ic,
 
 
 
-short  ClassIndexList::GetClassIndex (MLClassConstPtr  c)
+kkint16  ClassIndexList::GetClassIndex (MLClassConstPtr  c)
 {
   kkint32  index = -1;
-  map<MLClassConstPtr, short>::iterator p;
+  map<MLClassConstPtr, kkint16>::iterator p;
   p = find (c);
   if  (p == end ())
     index = -1;
@@ -1472,9 +1472,9 @@ short  ClassIndexList::GetClassIndex (MLClassConstPtr  c)
 
 
 
-MLClassConstPtr  ClassIndexList::GetMLClass (short  classIndex)
+MLClassConstPtr  ClassIndexList::GetMLClass (kkint16  classIndex)
 {
-  map<short, MLClassConstPtr>::iterator p;
+  map<kkint16, MLClassConstPtr>::iterator p;
   p = shortIdx.find (classIndex);
   if  (p == shortIdx.end ())
     return NULL;
@@ -1508,7 +1508,7 @@ void  ClassIndexList::ParseClassIndexList (const KKStr&  s)
 KKStr  ClassIndexList::ToCommaDelString ()
 {
   KKStr  delStr (255);
-  map<short, MLClassConstPtr>::const_iterator  idx;
+  map<kkint16, MLClassConstPtr>::const_iterator  idx;
   for  (idx = shortIdx.begin ();  idx != shortIdx.end ();  idx++)
   {
     if  (!delStr.Empty ())

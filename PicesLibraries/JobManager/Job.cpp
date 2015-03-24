@@ -342,7 +342,7 @@ void  Job::CompletedJobDataRead (istream& i)
 
 JobList::JobList (JobManagerPtr  _manager):
 
-   KKQueue<Job> (true, 500),
+   KKQueue<Job> (true),
    log          (_manager->Log ()),
    manager      (_manager)
 

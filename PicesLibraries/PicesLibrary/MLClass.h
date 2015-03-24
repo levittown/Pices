@@ -181,86 +181,89 @@ namespace MLL
     static MLClassConstListPtr  BuildListOfDecendents (MLClassConstPtr  parent);
    
 
-    kkint32             ClassId ()  const  {return classId;}  /**< From MySQL table  Classes, '-1' indicates that not loaded from mydsql table. */
-    void                ClassId (kkint32 _classId)  {classId = _classId;}
+    kkint32         ClassId ()  const  {return classId;}  /**< From MySQL table  Classes, '-1' indicates that not loaded from mydsql table. */
+    void            ClassId (kkint32 _classId)  {classId = _classId;}
 
-    const KKStr&        Description ()  const {return description;}
-    void                Description (const KKStr&  _description)  {description = _description;}
+    float           CountFactor () const  {return countFactor;}
+    void            CountFactor (float _countFactor)  {countFactor = _countFactor;}
 
-    bool                IsAnAncestor (MLClassConstPtr  c)  const;    /**< Returns true if 'c' is an ancestor */
+    const KKStr&    Description ()  const {return description;}
+    void            Description (const KKStr&  _description)  {description = _description;}
 
-    MLClassPtr          MLClassForGivenHierarchialLevel (KKB::kkuint16 level)  const;
+    bool            IsAnAncestor (MLClassConstPtr  c)  const;    /**< Returns true if 'c' is an ancestor */
 
-    bool                Mandatory () const {return mandatory;}
-    void                Mandatory (bool _mandatory)  {mandatory = _mandatory;}
+    MLClassPtr      MLClassForGivenHierarchialLevel (KKB::kkuint16 level)  const;
 
-    KKB::kkuint16       NumHierarchialLevels ()  const;
+    bool            Mandatory () const {return mandatory;}
+    void            Mandatory (bool _mandatory)  {mandatory = _mandatory;}
 
-    const  KKStr&       Name ()      const {return  name;}
-    const  KKStr&       UpperName () const {return  upperName;}  /**< Returns name capitalized. */
+    kkuint16        NumHierarchialLevels ()  const;
 
-    MLClassConstPtr     Parent () const {return parent;}
-    void                Parent (MLClassConstPtr  _parent)  {parent = _parent;}
-    const KKStr&        ParentName ()  const;
+    const  KKStr&   Name ()      const {return  name;}
+    const  KKStr&   UpperName () const {return  upperName;}  /**< Returns name capitalized. */
 
-//    void                ProcessRawData (KKStr&  data);  /**< Parses 'data' and populates this instance.
+    MLClassConstPtr Parent () const {return parent;}
+    void            Parent (MLClassConstPtr  _parent)  {parent = _parent;}
+    const KKStr&    ParentName ()  const;
+
+//    void          ProcessRawData (KKStr&  data);  /**< Parses 'data' and populates this instance.
 //                                                         *   @details Extracts name of class from first field in 'data' using whitespace
 //                                                         *   ',', ' ', '\n', '\r', or '\t' as delimiter.  Data will have this name removed from
 //                                                         *   the beginning of it.
 //                                                         */
 
-    bool                StoredOnDataBase () const  {return  storedOnDataBase;}
+    bool            StoredOnDataBase () const  {return  storedOnDataBase;}
 
-    void                StoredOnDataBase (bool _storedOnDataBase)  {storedOnDataBase = _storedOnDataBase;}
+    void            StoredOnDataBase (bool _storedOnDataBase)  {storedOnDataBase = _storedOnDataBase;}
 
-    bool                Summarize () const {return summarize;}   /**< Indicates that Classification report should produce a summary 
-                                                                  * collumn for the family of classes decendent from this class. 
-                                                                  * Example classes that would set ths field true are 'Protist',
-                                                                  * 'Phyto',  'Crustacean', etc....
-                                                                  */
+    bool            Summarize () const {return summarize;}   /**< Indicates that Classification report should produce a summary 
+                                                              * collumn for the family of classes decendent from this class. 
+                                                              * Example classes that would set ths field true are 'Protist',
+                                                              * 'Phyto',  'Crustacean', etc....
+                                                               */
 
-    void                Summarize (bool _summarize)  {summarize = _summarize;}
+    void            Summarize (bool _summarize)  {summarize = _summarize;}
 
-    KKStr               ToString ()  const;  /**< Returns a KKStr representing this instance.
-                                              *   @details This string will later be written to a file.
-                                              */
-                    
-    bool                UnDefined ()  const  {return  unDefined;}
-    void                UnDefined (bool _unDefined)  {unDefined = _unDefined;}
+    KKStr           ToString ()  const;  /**< Returns a KKStr representing this instance.
+                                          *   @details This string will later be written to a file.
+                                          */
 
-    void                WriteXML (std::ostream& o)  const;
+    bool            UnDefined ()  const  {return  unDefined;}
+    void            UnDefined (bool _unDefined)  {unDefined = _unDefined;}
+
+    void            WriteXML (std::ostream& o)  const;
     
-private:
-    kkint32             classId;      /**< From MySQL table  Classes, '-1' indicates that not loaded from mydsql table. */
+  private:
+    kkint32         classId;      /**< From MySQL table  Classes, '-1' indicates that not loaded from mydsql table. */
+    float           countFactor;  /**< Specifies number to increment count when this class picked;  ex:  Shrinmp_02 would have 2.0. */
+    KKStr           description;
 
-    KKStr               description;
+    bool            mandatory;    /**< Class nees to be included in Classification Status even if none occured. */
 
-    bool                mandatory;    /**< Class nees to be included in Classification Status even if none occured. */
+    KKStr           name;         /**< Name of Class.                                                                               */
 
-    KKStr               name;         /**< Name of Class.                                                              */
+    MLClassConstPtr parent;       /**< Supports the concept of Parent/Child classes as part of a hierarchy.
+                                   * Adding this field to help support the PicesInterface version of this class.
+                                   */
 
+    bool            storedOnDataBase;
+                                  /**< Because we have no control over classes that users unilaterally create
+                                   * it would be useful to know which ones are stored in the PICES database
+                                   * table "Classes".
+                                   */
 
-    MLClassConstPtr     parent;       /**< Supports the concept of Parent/Child classes as part of a hierarchy.
-                                       * Adding this field to help support the PicesInterface version of this class.
-                                       */
+    bool            summarize;    /**< Indicates that Classification report should produce a summary collumn 
+                                   * for the family of classes decendent from this class. Example classes that
+                                   * would set ths field true are 'Protist',  'Phyto',  'Crustacean', etc....
+                                   */
 
-    bool                storedOnDataBase;   
-                                      /**< Because we have no control over classes that users unilaterally create
-                                       * it would be useful to know which ones are stored in the PICES database
-                                       * table "Classes".
-                                       */
+    KKStr           upperName;    /**< Upper case version of name;  Used by LookUpByName to assist in performance. */
 
-    bool                summarize;    /**< Indicates that Classification report should produce a summary collumn 
-                                       * for the family of classes decendent from this class. Example classes that
-                                       * would set ths field true are 'Protist',  'Phyto',  'Crustacean', etc....
-                                       */
-
-    KKStr               upperName;    /**< Upper case version of name;  Used by LookUpByName to assist in performance. */
-
-    bool                unDefined;    /**< A class who's name is "", "UnKnown", "UnDefined", or starts with "Noise_" */
+    bool            unDefined;    /**< A class who's name is "", "UnKnown", "UnDefined", or starts with "Noise_" */
 
   };  /* MLClass */
 
+  #define  _MLClass_Defined_
 
 
 #define  _MLClassDefined_
@@ -424,9 +427,9 @@ private:
                                                                        
     MLClassList& operator=  (const MLClassList&  right);
 
-    MLClassList& operator-= (const MLClassList&  right);         /**< remove all classes that in the 'right' parameter  */
+    MLClassList& operator-= (const MLClassList&  right);         /**< remove all classes that in the 'right' parameter */
     
-    MLClassList  operator-  (const MLClassList&  right)  const;  /**< remove all classes that in the 'right' parameter  */
+    MLClassList  operator-  (const MLClassList&  right)  const;  /**< remove all classes that in the 'right' parameter */
 
     MLClassList& operator+= (const MLClassList&  right);         /**< add all classes that are in the 'right' parameter */
 
@@ -468,7 +471,7 @@ private:
 
 
 
-  std::ostream&  operator<< (      std::ostream&    os, 
+  std::ostream&  operator<< (      std::ostream&    os,
                              const MLClassList&  classList
                             );
 
@@ -496,7 +499,7 @@ private:
    *@see MLL::Model
    *@see MLL::FeatureEncoder2::compress
    */
-  class  ClassIndexList: public  map<MLClassConstPtr, short>
+  class  ClassIndexList: public  map<MLClassConstPtr, kkint16>
   {
   public:
     typedef  ClassIndexList*  ClassIndexListPtr;
@@ -505,7 +508,7 @@ private:
     typedef  KKB::kkuint32  kkuint32;
 
     ClassIndexList ();
-    ClassIndexList (const ClassIndexList&       _list);
+    ClassIndexList (const ClassIndexList&    _list);
     ClassIndexList (const MLClassList&       _classes);
     ClassIndexList (const MLClassConstList&  _classes);
 
@@ -513,13 +516,13 @@ private:
       void  Clear ();
 
     void  AddClass (MLClassConstPtr  _ic,
-                    bool&               _dupEntry
+                    bool&            _dupEntry
                    );
 
 
-    void  AddClassIndexAssignment (MLClassConstPtr  _ic,
-                                   short               _classIndex,
-                                   bool&               _dupEntry
+    void  AddClassIndexAssignment (MLClassConstPtr _ic,
+                                   kkint16         _classIndex,
+                                   bool&           _dupEntry
                                   );
 
     /** @brief  Returns the corresponding index to the class 'c';  if not in list will return -1. */
@@ -530,7 +533,7 @@ private:
      *@brief  Locates the MLClass that was assigned classIndex.
      *@details If not found then returns NULL.  If more than one class has the same classIndex will return the first one added.
      */
-    MLClassConstPtr  GetMLClass (short classIndex);
+    MLClassConstPtr  GetMLClass (kkint16 classIndex);
 
     kkint32  MemoryConsumedEstimated ()  const;
 
@@ -540,8 +543,8 @@ private:
 
 
   private:
-    map<short, MLClassConstPtr>  shortIdx;
-    short                           largestIndex;   // largest index used so far.
+    map<kkint16, MLClassConstPtr>  shortIdx;
+    kkint16                        largestIndex;   /**< largest index used so far. */
   };  /* ClassIndexList */
 
 #define  _ClassIndexListDefined_

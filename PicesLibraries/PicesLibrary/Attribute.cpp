@@ -8,12 +8,11 @@
 #include <string>
 #include <vector>
 #include "MemoryDebug.h"
-#include "KKBaseTypes.h"
 using namespace std;
 
 
-
 #include "DateTime.h"
+#include "KKBaseTypes.h"
 #include "KKException.h"
 #include "KKQueue.h"
 #include "OSservices.h"
@@ -25,7 +24,6 @@ using namespace KKB;
 #include "MLLTypes.h"
 #include "FeatureNumList.h"
 #include "MLClass.h"
-//#include  "ImageFeatures.h"
 using namespace MLL;
 
 
@@ -77,8 +75,8 @@ Attribute::~Attribute ()
 kkint32  Attribute::MemoryConsumedEstimated ()  const
 {
   kkint32  memoryConsumedEstimated = sizeof (Attribute)  + 
-      name.MemoryConsumedEstimated ()                  +
-      nameUpper.MemoryConsumedEstimated ();
+           name.MemoryConsumedEstimated ()               +
+           nameUpper.MemoryConsumedEstimated ();
 
   if  (nominalValuesUpper)
     memoryConsumedEstimated += nominalValuesUpper->MemoryConsumedEstimated ();
@@ -347,7 +345,6 @@ KKStr  MLL::AttributeTypeToStr (AttributeType  type)
 
   return AttributeTypeStrings[type];
 }  /* TypeStr */
-
 
 
 

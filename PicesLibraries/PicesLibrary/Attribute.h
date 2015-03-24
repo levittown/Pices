@@ -22,9 +22,12 @@
  *@endcode
  *@see  MLL::FeatureEncoder, MLL::FeatureVector, MLL::FeatureFileIO
 */
-#include  <map>
 
-#include  "KKStr.h"
+#include <map>
+#include <vector>
+#include "KKStr.h"
+#include "KKQueue.h"
+using namespace  KKB;
 
 
 namespace MLL 
@@ -144,10 +147,16 @@ namespace MLL
 
     void  PushOnFront  (AttributePtr  attribute);
 
-    /** @brief  Determines if two different attribute lists are the same by comparing each respective attribute, name and type.   */
+    /**
+     *@brief  Determines if two different attribute lists are the same. Compares 
+     *        each respective attribute, name and type.                                                
+     */
     bool  operator== (const AttributeList&  right)  const;
-
-    /**  @brief  Determines if two different attribute lists are different by comparing each respective attribute, name and type. */
+  
+    /**
+     *@brief  Determines if two different attribute lists are different. Compares 
+     *        each respective attribute, name and type.                                                
+     */
     bool  operator!= (const AttributeList&  right)  const;
 
   private:

@@ -184,8 +184,6 @@ BinaryClassParmsList::~BinaryClassParmsList ()
 }
 
 
-
-
 kkint32  BinaryClassParmsList::MemoryConsumedEstimated ()  const
 {
   kkint32  memoryConsumedEstimated = sizeof (BinaryClassParmsList);
@@ -194,6 +192,7 @@ kkint32  BinaryClassParmsList::MemoryConsumedEstimated ()  const
     memoryConsumedEstimated  += (*idx)->MemoryConsumedEstimated ();
   return  memoryConsumedEstimated;
 }
+
 
 
 
@@ -219,8 +218,9 @@ BinaryClassParmsListPtr  BinaryClassParmsList::CreateFromXML (istream&     i,
   return  binaryClassParmsList;
 }
 
-
-/**  @brief  Returns the Average number of selected features. */
+/**
+ @brief  Returns the Average number of selected features.
+ */
 float  BinaryClassParmsList::FeatureCountNet ()  const
 {
   if  (size () < 1)
