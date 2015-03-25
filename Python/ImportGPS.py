@@ -133,7 +133,8 @@ def  ToInt(s):
 
 
 def  ProcessSumaryGPSFile (fileName,
-                           cruiseName
+                           cruiseName,
+                           startTime
                           ):
   try:
        db = mysql.connector.Connect(user='root',
@@ -152,34 +153,38 @@ def  ProcessSumaryGPSFile (fileName,
 
   gpsDataFile=open(fileName)
 
+  #startTime = datetime.datetime.strptime('2012-05-13 23:56:55', "%Y-%m-%d %H:%M:%S")
+
   for line in gpsDataFile:
      fields=line.split('\t')
      if  len(fields)>3  and  len(fields[0])>19:
           dateTime=DateTimeFromStr(fields[0])
-          dateTimeStr=dateTime.strftime("%Y/%m/%d %H:%M:%S")
-          latitude=LatitudeFromStr(fields[1])
-          longitude=LongitudeFromStr(fields[2])
-          courseOverGround=0.0
-          courseOverGroundStr=fields[3]
-          if  len(courseOverGroundStr)>3:
-            idx=courseOverGroundStr.index('°')
-            if  idx>2:
-              courseOverGround=float(courseOverGroundStr[0:idx])
-          speedOverGround=0.0
-          speedOverGround=ToFloat(fields[4])
-          sqlStr="call GpsDataInsert(" + "\"" + cruiseName  + "\"" + "," + \
-                                         "\"" + dateTimeStr + "\"" + "," + \
-                                         repr(latitude)            + "," + \
-                                         repr(longitude)           + "," + \
-                                         repr(courseOverGround)    + "," + \
-                                         repr(speedOverGround)           + \
-                                   ")"
-          print(sqlStr)
-          try:
-            c.execute(sqlStr)
-            db.commit()
-          except  mysql.connector.Error  as err:
-            print(err)
+          dateTime = dateTime + datetime.timedelta(hours=4)
+          if  (dateTime > startTime):
+            dateTimeStr=dateTime.strftime("%Y/%m/%d %H:%M:%S")
+            latitude=LatitudeFromStr(fields[1])
+            longitude=LongitudeFromStr(fields[2])
+            courseOverGround=0.0
+            courseOverGroundStr=fields[3]
+            if  len(courseOverGroundStr)>3:
+              idx=courseOverGroundStr.index('°')
+              if  idx>2:
+                courseOverGround=float(courseOverGroundStr[0:idx])
+            speedOverGround=0.0
+            speedOverGround=ToFloat(fields[4])
+            sqlStr="call GpsDataInsert(" + "\"" + cruiseName  + "\"" + "," + \
+                                           "\"" + dateTimeStr + "\"" + "," + \
+                                           repr(latitude)            + "," + \
+                                           repr(longitude)           + "," + \
+                                           repr(courseOverGround)    + "," + \
+                                           repr(speedOverGround)           + \
+                                     ")"
+            print(sqlStr)
+            try:
+              c.execute(sqlStr)
+              db.commit()
+            except  mysql.connector.Error  as err:
+              print(err)
   gpsDataFile.close()
   db.close()
 
@@ -310,14 +315,24 @@ def  ProcessCruise(cruiseName, dir):
 #ProcessCruise("WB1012", "F:\\Pices\\SipperFiles\\WB1012\\GPS-Data")
 #ProcessCruise("WB1008", "F:\\Pices\\SipperFiles\\WB1008\\GPS-Data")
 #ProcessCruise("WB0911", "F:\\Pices\\SipperFiles\\WB0911\\GPS-Data")
-#ProcessCruise("WB0814", "F:\\Pices\\SipperFiles\\WB0814\\GPS-Data")
+ProcessCruise("WB0814", "F:\\Pices\\SipperFiles\\WB0814\\GPS-Data")
 #ProcessCruise("WB0813", "F:\\Pices\\SipperFiles\\WB0813\\GpsData\\Daly Aug 2013 Met")
-#ProcessCruise("WB0812", "F:\\Pices\\SipperFiles\\WB0812\\GPS-Data")
 #ProcessCruise("WB0611", "F:\\Pices\\SipperFiles\\WB0611\\GPS-Data")
-#ProcessSumaryGPSFile ("F:\\Pices\\SipperFiles\\WB0512\\GPS-Data\\Daly May 2012 ship log.txt", "WB0512")
+
+#We only hat Met files thru GMT 2012-05-13  23:56:55  So we need to get th elast two days from shjip log file
+#ProcessCruise("WB0512", "F:\\Pices\\SipperFiles\\WB0512\\GPS-Data")
+#startTime = datetime.datetime.strptime('2012-05-13 23:56:55', "%Y-%m-%d %H:%M:%S")
+#ProcessSumaryGPSFile ("F:\\Pices\\SipperFiles\\WB0512\\GPS-Data\\Daly May 2012 ship log.txt", "WB0512", startTime)
+
+#We only have met data thru 2012-08-08 20:59:38(GMT)  So will us Sjip Log for further data.
+#ProcessCruise("WB0812", "F:\\Pices\\SipperFiles\\WB0812\\GPS-Data")
+#startTime = datetime.datetime.strptime('2012-08-08 20:59:38', "%Y-%m-%d %H:%M:%S")
+#ProcessSumaryGPSFile ("F:\\Pices\\SipperFiles\\WB0812\\GPS-Data\\Daly Aug 2012 ship log.txt", "WB0812", startTime)
+
+
 #ProcessCruise("WB0511", "F:\\Pices\\SipperFiles\\WB0511\\GPS-Data")
 #ProcessCruise("WB0213", "F:\\Pices\\SipperFiles\\WB0213\\GPS-Data")
-ProcessCruise("WB0212", "F:\\Pices\\SipperFiles\\WB0212\\GPS-Data")
+#ProcessCruise("WB0212", "F:\\Pices\\SipperFiles\\WB0212\\GPS-Data")
 #ProcessCruise("WB0211", "F:\\Pices\\SipperFiles\\WB0211\\GPS-Data")
 #ProcessCruise("WB0111", "F:\\Pices\\SipperFiles\\WB0111\\GPS-Data")
 

@@ -45,6 +45,9 @@ namespace PicesCommander
     private  String  configFileName = "";
     private  bool    formIsMaximized = false;
 
+    private  double  degToRad = Math.PI / 180.0;
+    private  double  radToDeg = 180.0   / Math.PI;
+
     private  class  PlotRequest
     {
       public  PlotRequest (PicesSipperDeployment  _deployment, 
@@ -89,7 +92,7 @@ namespace PicesCommander
         }
       }
 
-      /** Returns true if this series Min/Max place it with in the threshold area odf the specified point. */
+      /** Returns true if this series Min/Max place it with in the threshold area of the specified point. */
       public  bool  WithInThreshold (double  longitude,  double longTh,
                                      double  latitude,   double latTh
                                     )
@@ -385,7 +388,7 @@ namespace PicesCommander
       if  ((gpsData == null)  ||  cancelRequested)
         return;
 
-      // Filter out noisey GPS data.
+      // Filter out noisy GPS data.
 
       PicesGPSDataPointList  fliteredGPSData = new PicesGPSDataPointList ();
       double  lastLat = 0.0;
@@ -459,7 +462,7 @@ namespace PicesCommander
 
 
     /// <summary>
-    /// This next methid will be ran as a separate thread; it is respnable for collecting all the data needed to generate the plot.
+    /// This next method will be ran as a separate thread; it is responsible for collecting all the data needed to generate the plot.
     /// </summary>
     private  void  BuildPlotData ()
     {
@@ -509,7 +512,12 @@ namespace PicesCommander
 
 
 
-    private  void  AddSeriesToChart (DataSeriesToPlot  dataSeries)
+    private  void  AddSeriesToChart (DataSeriesToPlot  dataSeries,
+                                     ref double        minX,
+                                     ref double        maxX,
+                                     ref double        minY,
+                                     ref double        maxY
+                                    )
     {
       PicesGPSDataPointList  gpsData    = dataSeries.data;
       PicesSipperDeployment  deployment = dataSeries.deployment;
@@ -551,6 +559,10 @@ namespace PicesCommander
       s.Points.Clear ();
       foreach  (PicesGPSDataPoint  dp in gpsData)
       {
+        if  (dp.AvgLatitude  < minY)   minY = dp.AvgLatitude;
+        if  (dp.AvgLatitude  > maxY)   maxY = dp.AvgLatitude;
+        if  (dp.AvgLongitude < minX)   minX = dp.AvgLongitude;
+        if  (dp.AvgLongitude > maxX)   maxX = dp.AvgLongitude;
         DataPoint dataPoint = new DataPoint (dp.AvgLongitude, dp.AvgLatitude);
         //dataPoint.AxisLabel = PicesMethods.LongitudeToString (dp.AvgLongitude, 2);
         //= PicesMethods.LatitudeToString (dp.AvgLatitude, 3);
@@ -563,7 +575,6 @@ namespace PicesCommander
       if  (s.Points.Count > 10)
         s.Points[s.Points.Count - 1].Label = endTimeStr;
 
-
       ProfileChart.Series.Add (s);
     }
 
@@ -571,6 +582,11 @@ namespace PicesCommander
     private  void  UpdateChartAreas ()
     {
       goalie.StartBlock ();
+
+      double  minX = double.MaxValue;
+      double  maxX = double.MinValue;
+      double  minY = double.MaxValue;
+      double  maxY = double.MinValue;
 
       timeInterval = (int)TimeInterval.Value;
       //String  plotAction = PlotAction.SelectedText;
@@ -604,12 +620,40 @@ namespace PicesCommander
 
       // First we will plot class counts on CharArea1
       foreach  (DataSeriesToPlot dstp in series)
-        AddSeriesToChart (dstp);
+        AddSeriesToChart (dstp, ref minX, ref maxX, ref minY, ref maxY);
 
-      ca.AxisX.Minimum = Double.NaN;
-      ca.AxisX.Maximum = Double.NaN;
-      ca.AxisY.Minimum = Double.NaN;
-      ca.AxisY.Maximum = Double.NaN;
+      double  latitudeMid = (maxY + minY) / 2.0;
+
+      float  plotAreaHeight = ProfileChart.Height;
+      float  plotAreaWidth  = ProfileChart.Width;
+      
+      double  xRange = maxX - minX;
+      double  yRange = maxY - minY;
+      double  xRangeAdj = xRange * Math.Cos(latitudeMid * degToRad);
+
+      double  yDensity = yRange     / plotAreaHeight;
+      double  xDenisty = xRangeAdj  / plotAreaWidth;
+
+      if  (xDenisty > yDensity)
+      {
+        yRange = xDenisty * plotAreaHeight;
+        double  leftOver = yRange - (maxY - minY);
+        minY = minY - leftOver / 2.0;
+        maxY = maxY + leftOver / 2.0;
+      }
+      else
+      {
+        xRangeAdj = yDensity * plotAreaWidth;
+        xRange = xRangeAdj / Math.Cos(latitudeMid * degToRad);
+        double  leftOver = xRange - (maxX - minX);
+        minX = minX - leftOver / 2.0;
+        maxX = maxX + leftOver / 2.0;
+      }
+
+      ca.AxisX.Minimum = minX;
+      ca.AxisX.Maximum = maxX;
+      ca.AxisY.Minimum = minY;
+      ca.AxisY.Maximum = maxY;
 
       ProfileChart.ChartAreas[0].RecalculateAxesScale ();
 
@@ -632,7 +676,6 @@ namespace PicesCommander
       {
         plotRequests.Add (new PlotRequest (deployment, Color.Black));
       }
-         
     }  /* SchedulePlotRequests */
 
 
@@ -709,6 +752,8 @@ namespace PicesCommander
 
       heightLast = Height;
       widthLast  = Width;
+
+      UpdateChartAreas ();
     }
 
 
@@ -718,7 +763,7 @@ namespace PicesCommander
       if  (WindowState == FormWindowState.Maximized)
       {
         // Looks like user has pressed the Maximized button.  We have to trap it here because
-        // the ResizeEnd envent does not trap when form is Maximized.
+        // the ResizeEnd event does not trap when form is Maximized.
         //PicesCommanderFormResized ();
         ChartGPS_Resize (sender, e);
         formIsMaximized = true;
@@ -728,7 +773,7 @@ namespace PicesCommander
         if  (formIsMaximized)
         {
           // We normally trap the ResizeEnd event;  but when the form was already maximized and the user
-          // presses the button to unmaximize.  the ResizeEnd does not trap that.  So we check to 
+          // presses the button to un-maximize.  the ResizeEnd does not trap that.  So we check to 
           // see if the form was already maximize.  If so then we resized the form.
           //PicesCommanderFormResized ();
           ChartGPS_Resize (sender, e);
