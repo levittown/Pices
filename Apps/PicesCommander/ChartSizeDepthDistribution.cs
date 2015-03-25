@@ -168,10 +168,10 @@ namespace PicesCommander
       String  t1 = "Abundance by Size";
       switch  (statistic)
       {
-      case '0': t1 = "Abundance by Size";                      break;
-      case '1': t1 = "Abundance by Diamter (ESD)";             break;
-      case '2': t1 = "Abundance by Volume (EBv";               break;
-      case '3': t1 = "Abundance by Estimated Elipsoid Volume"; break;
+      case '0': t1 = "Abundance by Size";                       break;
+      case '1': t1 = "Abundance by Diameter (ESD)";             break;
+      case '2': t1 = "Abundance by Volume (EBv";                break;
+      case '3': t1 = "Abundance by Estimated Ellipsoid Volume"; break;
       }
 
       String  t2 = cruise + "-" + station;
@@ -195,7 +195,7 @@ namespace PicesCommander
       s.ChartArea = "ChartArea1";
       s.ChartType = SeriesChartType.Line;
 
-      Series s2 = new Series ("Volumne Sampled");
+      Series s2 = new Series ("Volume Sampled");
       s2.ChartArea = "ChartArea2";
       s2.ChartType = SeriesChartType.Line;
 
@@ -308,7 +308,7 @@ namespace PicesCommander
       if  (WindowState == FormWindowState.Maximized)
       {
         // Looks like user has pressed the Maximized button.  We have to trap it here because
-        // the ResizeEnd envent does not trap when form is Maximized.
+        // the ResizeEnd event does not trap when form is Maximized.
         //PicesCommanderFormResized ();
         ChartAbundanceByDeployment_Resize (sender, e);
         formIsMaximized = true;
@@ -318,7 +318,7 @@ namespace PicesCommander
         if  (formIsMaximized)
         {
           // We normally trap the ResizeEnd event;  but when the form was already maximized and the user
-          // presses the button to unmaximize.  the ResizeEnd does not trap that.  So we check to 
+          // presses the button to maximize.  the ResizeEnd does not trap that.  So we check to 
           // see if the form was already maximize.  If so then we resized the form.
           //PicesCommanderFormResized ();
           ChartAbundanceByDeployment_Resize (sender, e);

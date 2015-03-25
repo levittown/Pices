@@ -46,8 +46,9 @@ namespace PicesCommander
 
     // Harvesting Thread Related Variables.
     private  bool                   cancelHarvesting = false;
-    private  bool                   harvestingStarted = false;  // Will be set to 'true' after the start button is pressed
-                                                                // and allvalidations are passed.
+    private  bool                   harvestingStarted = false;  /**< Will be set to 'true' after the start button is pressed
+                                                                 * and all validations are passed.
+                                                                 */
     private  bool                   harvestingRunning   = false;
     private  bool                   harvestingCompleted = false;
     private Thread                  harvsterThread      = null;
@@ -55,7 +56,7 @@ namespace PicesCommander
     // 
     private bool                    validationErrorFound = false;
 
-    private PicesMsgQueue           runLogMsgQueue = null;  // List of messages that can be added to 'RunLog'.
+    private PicesMsgQueue           runLogMsgQueue = null;  /**< List of messages that can be added to 'RunLog'. */
 
     public  bool                    CancelHarvesting  {get {return cancelHarvesting;}   set  {cancelHarvesting = value;}}
     public  String                  GroupNameSelected {get {return groupName;}}
@@ -260,7 +261,7 @@ namespace PicesCommander
         errorProvider1.SetError (this, "");
       }
 
-      //// Next 5 lines set up to help speed up debugging by reducing the number of images lioaded.
+      //// Next 5 lines set up to help speed up debugging by reducing the number of images loaded.
       //String[]  temp = new String[2];
       //temp[0] = sipperFileNames[1];
       //temp[1] = sipperFileNames[2];
@@ -275,7 +276,7 @@ namespace PicesCommander
       float temp = PicesKKStr.StrToFloat (MinimumDepth.Text);
       if  (temp < 0.0f)
       {
-        errorProvider1.SetError (MinimumDepth, "Minimum Depth can not be lessthan 0.0");
+        errorProvider1.SetError (MinimumDepth, "Minimum Depth can not be less than 0.0");
         validationErrorFound = true;
         return;
       }
@@ -319,7 +320,7 @@ namespace PicesCommander
         DialogResult dr = MessageBox.Show 
                         (this, 
                          "Group[" + groupName + "] already exists" + "\n\n" +
-                         "Do you want to yepleace it ?",
+                         "Do you want to replace it ?",
                          "Group Already Exists", 
                          MessageBoxButtons.YesNo
                         );
@@ -427,7 +428,7 @@ namespace PicesCommander
             harvestedImages = GetDatabaseImageRecords (threadConn, randDistByDepth);
             UpdateImageGroupTables (threadConn, harvestedImages);
 
-            RunLogAddMsg  ("\n" + "Harvesting Completed Sucessfully." + "\n");
+            RunLogAddMsg  ("\n" + "Harvesting Completed Successfully." + "\n");
           }
         }
         else
@@ -520,7 +521,7 @@ namespace PicesCommander
     /*
      * 2013-03-14  Kurt Kramer,  as per email from A. Remsen
      * Commenting out this procedure because the database only consists of Oil cruises
-     * It was originally created when there were obnly a few deployments that had images 
+     * It was originally created when there were only a few deployments that had images 
      * identified as oil.
      * 
      * 
@@ -616,7 +617,7 @@ namespace PicesCommander
         }
         else
         {
-          RunLogAddMsg ("Loading InstrumentData   Sipper File[" + sipperFileName + "]  [" + data.Count.ToString ("###,##0") + "] Enries loaded" + "\n");
+          RunLogAddMsg ("Loading InstrumentData   Sipper File[" + sipperFileName + "]  [" + data.Count.ToString ("###,##0") + "] Entries loaded" + "\n");
           uint  lastScanLine = data[0].ScanLine;
           for  (int idx = 1;  idx < data.Count;  idx++)
           {
@@ -644,7 +645,7 @@ namespace PicesCommander
     /// <summary>
     /// Bins all 'allImages' by depth increments.
     /// </summary>
-    /// <param name="allImages">Images that are to be bined.</param>
+    /// <param name="allImages">Images that are to be binned.</param>
     /// <param name="numIncrements">Total number of bins.</param>
     /// <returns>An array of lists where each element of the array represents the images in that depth bin.</returns>
     private  List<ImageEntry>[]   DeriveImagesByDepth (List<ImageEntry> allImages, 
@@ -821,7 +822,7 @@ namespace PicesCommander
         threadConn.ImageGroupDelete (existingGroup.ImageGroupId);
       }
 
-      String  description = "Created by Harvestor" + "\n" +
+      String  description = "Created by Harvester" + "\n" +
                             "DateTime"  + "\t" + DateTime.Now.ToLongDateString () + "\n" +
                             "NumImages" + "\t" + harvestedImages.Count.ToString ("#,###,##0") + "\n";
 

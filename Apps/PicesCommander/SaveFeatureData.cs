@@ -498,7 +498,7 @@ namespace PicesCommander
 
       SaveFileDialog sfd = new SaveFileDialog ();
       sfd.InitialDirectory = pathName;
-      sfd.Title = "Featuire Data File Name";
+      sfd.Title = "Feature Data File Name";
       sfd.FileName = rootName;
       if  (sfd.ShowDialog() == DialogResult.OK)
       {

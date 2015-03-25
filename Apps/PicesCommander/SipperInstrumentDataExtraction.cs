@@ -202,7 +202,7 @@ namespace PicesCommander
 
       if  (data == null)
       {
-        RunLogAddMsg ("\n\n ***ERROR***  Sipper File[" + sfn + "] retuned no Instrument Data.\n\n");
+        RunLogAddMsg ("\n\n ***ERROR***  Sipper File[" + sfn + "] returned no Instrument Data.\n\n");
         return;
       }
 
@@ -289,7 +289,7 @@ namespace PicesCommander
       if  (!processingThreadRunning)
         this.Close ();
 
-      DialogResult  dr = MessageBox.Show (this, "Cancel Insrument Data Extraction ?", "Cancel", MessageBoxButtons.YesNo);
+      DialogResult  dr = MessageBox.Show (this, "Cancel Instrument Data Extraction ?", "Cancel", MessageBoxButtons.YesNo);
       if  (dr == DialogResult.Yes)
       {
         CancelRequested ();

@@ -27,7 +27,7 @@ namespace SipperInterface
     
     public  CameraParameters (string parameterStr)
     {
-      // parameterStr = String that is returned from a 'gcp' command to the camaera.
+      // parameterStr = String that is returned from a 'gcp' command to the camera.
       ParseParameterStr (parameterStr);
     }
 

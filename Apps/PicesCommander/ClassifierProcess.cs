@@ -147,7 +147,7 @@ namespace PicesCommander
 
     private  PicesDataBase  DbConn ()
     {
-      // I am locking errorMsgs because it is shared bv all the classifier threads.
+      // I am locking errorMsgs because it is shared by all the classifier threads.
       lock (errorMsgs)
       {
         if  (dbConn == null)
@@ -355,7 +355,7 @@ namespace PicesCommander
 
     private  PicesClass  UpdateClassId (PicesClass mlClass)
     {
-      // We lock 'predictionUpdateQueue' because all other classification processs refer to it.
+      // We lock 'predictionUpdateQueue' because all other classification processes refer to it.
       // 
       lock  (predictionUpdateQueue)
       {
@@ -395,7 +395,7 @@ namespace PicesCommander
             }
           }
 
-          // I do not know what the impact of opening and closing a lot of conections 
+          // I do not know what the impact of opening and closing a lot of connections 
           // to the MySQL data base will be, and since this method should only get called
           // when a new MLClass is introduced I want to sleep a little to make
           // sure that we do not over stress resources that I am not aware of.
@@ -425,7 +425,7 @@ namespace PicesCommander
       {
         fvToUse = null;
 
-        // Feature data is missing.  we need to compute from originbal image.
+        // Feature data is missing.  we need to compute from original image.
         PicesDataBaseImage pdbi = DbConn ().ImageLoad (imageFileRootName);
         if  (pdbi != null)
         {
@@ -475,7 +475,7 @@ namespace PicesCommander
       if  (classesInClassifier.LookUpIndex (validatedClass) >= 0)
         return  validatedClass;
       
-      // Lets see if the Validated Class is a decendent of one of the classes in the Classifier.
+      // Lets see if the Validated Class is a decedent of one of the classes in the Classifier.
       PicesClass  candidate = null;
       int         numGenerations = 99999;
 

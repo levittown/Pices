@@ -392,7 +392,7 @@ namespace PicesCommander
 
     
     /// <summary>
-    /// This method will be ran as a separate thread; it is respnable for collecting all the data needed to generate the plot.
+    /// This method will be ran as a separate thread; it is responsible for collecting all the data needed to generate the plot.
     /// </summary>
     private  void  BuildPlotData ()
     {
@@ -494,10 +494,10 @@ namespace PicesCommander
       String  t1 = "Abundance by Size";
       switch  (statistic)
       {
-      case '0': t1 = "Abundance by Size";                      break;
-      case '1': t1 = "Abundance by Estimated Diamter";         break;
-      case '2': t1 = "Abundance by Estimated Spheroid Volume"; break;
-      case '3': t1 = "Abundance by Estimated Elipsoid Volume"; break;
+      case '0': t1 = "Abundance by Size";                       break;
+      case '1': t1 = "Abundance by Estimated Diameter";         break;
+      case '2': t1 = "Abundance by Estimated Spheroid Volume";  break;
+      case '3': t1 = "Abundance by Estimated Ellipsoid Volume"; break;
       }
 
       String  t2 = "Cruise: " + cruise + "  Station: " + station;
@@ -718,7 +718,7 @@ namespace PicesCommander
       if  (WindowState == FormWindowState.Maximized)
       {
         // Looks like user has pressed the Maximized button.  We have to trap it here because
-        // the ResizeEnd envent does not trap when form is Maximized.
+        // the ResizeEnd event does not trap when form is Maximized.
         //PicesCommanderFormResized ();
         ChartAbundanceByDeployment_Resize (sender, e);
         formIsMaximized = true;
@@ -728,7 +728,7 @@ namespace PicesCommander
         if  (formIsMaximized)
         {
           // We normally trap the ResizeEnd event;  but when the form was already maximized and the user
-          // presses the button to unmaximize.  the ResizeEnd does not trap that.  So we check to 
+          // presses the button to maximize.  the ResizeEnd does not trap that.  So we check to 
           // see if the form was already maximize.  If so then we resized the form.
           //PicesCommanderFormResized ();
           ChartAbundanceByDeployment_Resize (sender, e);
@@ -1051,7 +1051,7 @@ namespace PicesCommander
       MenuItem  i3 = new MenuItem ("Copy Data Tab-Delimited to Clipboard", SaveTabDelToClipBoard);
       MenuItem  i4 = new MenuItem ("Save Data Tab-Delimited to Disk",      SaveTabDelToDisk);
       MenuItem  i5 = new MenuItem ("Display Images for Size Range",        DisplayImagesForASizeBucket);
-      MenuItem  i6 = new MenuItem ("Chart Verticle Distribution",          ChartVerticleDistributionForASizeBucket);
+      MenuItem  i6 = new MenuItem ("Chart Vertical Distribution",          ChartVerticleDistributionForASizeBucket);
       MenuItem[] menuItems = null;
       if  (sizeBucket >= 0)
         menuItems = new MenuItem[]{i1, i2, i3, i4, i5, i6};
@@ -1107,7 +1107,7 @@ namespace PicesCommander
       double yValue = ca.AxisY.PixelPositionToValue ((double)p.Y);
       double xValue = ca.AxisX.PixelPositionToValue ((double)p.X);
 
-      // Because the x-axis is Log10 of the actiual value we need to raise 10 to the power of xValue to get the actual size.
+      // Because the x-axis is Log10 of the actual value we need to raise 10 to the power of xValue to get the actual size.
       xValue = Math.Pow (10, xValue);
 
       int  sizeBucket = -1;

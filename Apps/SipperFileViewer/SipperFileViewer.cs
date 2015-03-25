@@ -240,7 +240,7 @@ namespace SipperFileViewer
     {
       if  (dbConn == null)
       {
-        Text = "Sipper File Viewer    (not conected)";
+        Text = "Sipper File Viewer    (not connected)";
       }
       else
       {
@@ -1196,7 +1196,7 @@ namespace SipperFileViewer
 
     //*********************************************************************************************
     //
-    //  Folowing code was lifted from web site below
+    //  Following code was lifted from web site below
     // http://groups.google.com/group/microsoft.public.dotnet.languages.csharp/browse_thread/thread/4c541e081043cf4b/99e885ef8f09cc78?lnk=st&q=c%23++MouseWheel++Event++Panel&rnum=2&hl=en#99e885ef8f09cc78
     //
     //  It intercepts the Wheel mouse movements and forces them to generate an
@@ -1325,7 +1325,7 @@ namespace SipperFileViewer
       
       if  (selectedBlob != null)
       {
-        // User has selected region to work on seperatly.
+        // User has selected region to work on separately.
         
         long  startScanLine = 0;
         int   startCol      = 0;
@@ -1507,7 +1507,7 @@ namespace SipperFileViewer
           
         if  (dataFieldIdxs[x] == fieldIdxNew)
         {
-          // Another data label button has the same field selected as the one we just selced for thos button.
+          // Another data label button has the same field selected as the one we just selected for this button.
           // we will change it to the one that this button used to use.
           dataFieldIdxs[x] = fieldIdxOrig;
           dataFieldLabels[x].Text = InstrumentData.FieldName (fieldIdxOrig);
@@ -1606,7 +1606,7 @@ namespace SipperFileViewer
     {
       if  (ActiveTrainingLibraries.ModelsAreLoading ())
       {
-        MessageBox.Show (this, "Training Models are being loaded, can not change parametres until completed.",
+        MessageBox.Show (this, "Training Models are being loaded, can not change parameters until completed.",
                          "Training Models are Loading", 
                          MessageBoxButtons.OK
                         );

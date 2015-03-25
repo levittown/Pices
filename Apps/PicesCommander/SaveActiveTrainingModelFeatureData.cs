@@ -145,7 +145,7 @@ namespace PicesCommander
       try  {fi = new FileInfo (DestinationFileName.Text);}  catch (Exception)  {fi = null;}
       if  (fi.Exists)
       {
-        errorProvider1.SetError (DestinationFileName, "Destinaion File already exists.");
+        errorProvider1.SetError (DestinationFileName, "Destination File already exists.");
         errorsFound = true;
       }
       else
@@ -187,7 +187,7 @@ namespace PicesCommander
       if  (errorsFound)
         return;
 
-      DialogResult  dr = MessageBox.Show (this, "Do you want to create the Feature Data files", "Save Active Training Model Deature Data", MessageBoxButtons.YesNo);
+      DialogResult  dr = MessageBox.Show (this, "Do you want to create the Feature Data files", "Save Active Training Model Feature Data", MessageBoxButtons.YesNo);
       if  (dr == DialogResult.No)
         return;
 
@@ -254,7 +254,7 @@ namespace PicesCommander
       if  (data == null)
       {
         AddMsgToDialogMsgQueue ("\n\n");
-        AddMsgToDialogMsgQueue ("Model[" +  modelName + "]  Cound not load Feature Data.");
+        AddMsgToDialogMsgQueue ("Model[" +  modelName + "]  Count not load Feature Data.");
         savingThreadFailed = true;
         savingThreadDone   = true;
         savingThreadRunning = false;
@@ -275,7 +275,7 @@ namespace PicesCommander
       AddMsgToDialogMsgQueue (DateTime.Now.ToShortTimeString () + " Checking that Depth Data Exists.");
       MakeSureDepthFieldIsIncluded (data);
 
-      AddMsgToDialogMsgQueue (DateTime.Now.ToShortTimeString () + " Spliting into seperate files.");
+      AddMsgToDialogMsgQueue (DateTime.Now.ToShortTimeString () + " Splitting into separate files.");
 
       if  (!savingThreadCancelReq)
       {

@@ -298,7 +298,7 @@ namespace SipperInterface
       { 
         logFile.WriteLine ("//");
         logFile.WriteLine ("//");
-        logFile.WriteLine ("// ReBootBattery    Curent Time[" + DateTime.Now.ToString () + "]");
+        logFile.WriteLine ("// ReBootBattery    Current Time[" + DateTime.Now.ToString () + "]");
         logFile.WriteLine ("//");
         logFile.Flush ();
       }

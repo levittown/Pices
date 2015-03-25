@@ -65,7 +65,7 @@ namespace PicesCommander
 
 
     //********************************************************************************************************
-    //*                        Code to support the vreating of a single thumbnail image.                     *
+    //*                        Code to support the creating of a single thumbnail image.                     *
     //********************************************************************************************************
     static Font   thumbNailFont            = new Font (FontFamily.GenericSansSerif, 8.25f, FontStyle.Regular, GraphicsUnit.Point);
     static Brush  thumbNailLabelBrush      = new SolidBrush  (Color.Gray);

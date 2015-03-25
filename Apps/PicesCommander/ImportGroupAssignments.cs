@@ -29,7 +29,7 @@ namespace PicesCommander
     // Importing Thread Related Variables.
     private  bool                    cancelBackGround   = false;
     private  bool                    backGroundStarted  = false;  // Will be set to 'true' after the start button is pressed
-                                                                 // and allvalidations are passed.
+                                                                 // and all validations are passed.
     private  bool                    backGroundRunning   = false;
     private  bool                    backGroundCompleted = false;
     private  Thread                  backGroundThread    = null;
@@ -48,7 +48,7 @@ namespace PicesCommander
     public  bool                     BackGroundRunning    {get {return backGroundRunning;}}
     public  PicesDataBaseImageGroup  Group                {get {return group;}}
 
-    private List<String>             imageFileErrorList = null;  // Will contain alistof Image File Names that could not be insertd.
+    private List<String>             imageFileErrorList = null;  // Will contain a list of Image File Names that could not be inserted.
 
 
 
@@ -131,7 +131,7 @@ namespace PicesCommander
         DialogResult dr = MessageBox.Show 
                         (this, 
                          "Group[" + groupName + "] already exists" + "\n\n" +
-                         "Do you want to repleace it ?",
+                         "Do you want to replace it ?",
                          "Group Already Exists", 
                          MessageBoxButtons.YesNo
                         );
@@ -218,13 +218,13 @@ namespace PicesCommander
       ImportAssignmentsImportDir (sourceDirectory);
       if  (cancelBackGround)
       {
-        RunLogAddMsg ("\n" + "Importing Assignemnst has benen Canceled." + "\n");
+        RunLogAddMsg ("\n" + "Importing Assignmenst has been Canceled." + "\n");
       }
       else
       {
         RunLogAddMsg ("\n\n" + "Total Images[" + importedFileNames.Count.ToString ("###,##0") + "\n");
 
-        RunLogAddMsg ("Wrinting to DataBase Now" + "\n");
+        RunLogAddMsg ("Writing to DataBase Now" + "\n");
 
         imageFileErrorList = new List<string>();
 

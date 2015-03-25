@@ -41,7 +41,7 @@ namespace PicesCommander
 
       if  (selImages == null)
       {
-        MessageBox.Show (this, "Assign Group to Selected Images", "There are no images curently selected.", MessageBoxButtons.OK);
+        MessageBox.Show (this, "Assign Group to Selected Images", "There are no images currently selected.", MessageBoxButtons.OK);
         Close ();
       }
     }

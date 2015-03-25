@@ -298,7 +298,7 @@ namespace PicesCommander
       String  cmdLine = "";
 
       if  (classifier != null)
-        cmdLine += ("-Classfier " + OSservices.GetRootName (classifier.ConfigFileName));
+        cmdLine += ("-Classifier " + OSservices.GetRootName (classifier.ConfigFileName));
 
       if  (mainWinConn == null)
         cmdLine += " -NoDatabase ";
@@ -435,7 +435,7 @@ namespace PicesCommander
     {
       while  (!classifiersInitialized)
       {
-        // Wait until teClassification poesses are done with the StartUp cycle.
+        // Wait until the Classification processes are done with the StartUp cycle.
         Thread.Sleep (200);
       }
 
@@ -787,7 +787,7 @@ namespace PicesCommander
     private  void  ProcessByImageGroup (PicesDataBase  threadConn)
     {
       // Since we are not retrieving data by Sipper files there will be no scanLinesPer meter to work with  
-      // so we will create a one that will be be updated with images;  assuming that there are 4096 scan 
+      // so we will create a one that will be updated with images;  assuming that there are 4096 scan 
       // lines per image at what ever depth that image was at.
 
       numSipperFiles = 1;
@@ -855,7 +855,7 @@ namespace PicesCommander
       if  (classesInClassifier.LookUpIndex (validatedClass) >= 0)
         return  validatedClass;
       
-      // Lets see if the Validated Class is a decendent of one of the classes in the Classifier.
+      // Lets see if the Validated Class is a decedent of one of the classes in the Classifier.
       PicesClass  candidate = null;
       int         numGenerations = 99999;
 
@@ -881,7 +881,7 @@ namespace PicesCommander
 
 
 
-    /// <summary>Clasifies the contents of the supplied FeatureVectorList;</summary>
+    /// <summary>Classifies the contents of the supplied FeatureVectorList;</summary>
     /// <param name="desc"></param>
     /// <param name="examples">Feature vectors to be classified.</param>
     private  void  ClassifyFeatureVectorList (String                  desc,
@@ -1017,7 +1017,7 @@ namespace PicesCommander
       numImagesClassified     = 0;
 
       {
-        // Make sure that Mandatory classes are incluided in the report.
+        // Make sure that Mandatory classes are included in the report.
         PicesClassList allClasses = threadConn.MLClassLoadList ();
         PicesClassList mandatoryClasses = allClasses.ExtractMandatoryClasses ();
         foreach  (PicesClass  pc in mandatoryClasses)
@@ -1346,7 +1346,7 @@ namespace PicesCommander
       catch  (Exception  e2)
       {
         sw.WriteLine ();
-        sw.WriteLine ("**** Exception performing abundance adjusment *****");
+        sw.WriteLine ("**** Exception performing abundance adjustment *****");
         sw.WriteLine ();
         sw.WriteLine (e2.ToString ());
         sw.WriteLine ();
@@ -1413,7 +1413,7 @@ namespace PicesCommander
         sw.WriteLine ();
         sw.WriteLine ("***** NO VALID BIAS MATRIX *****");
         sw.WriteLine ();
-        sw.WriteLine ("Exception Buiolding Bias Matrix[" + e2.ToString () + "]");
+        sw.WriteLine ("Exception Building Bias Matrix[" + e2.ToString () + "]");
         sw.WriteLine ();
       }
     }  /* PrintBiasAdjustedResults */
@@ -1426,7 +1426,7 @@ namespace PicesCommander
     /// </summary>
     /// <returns>
     /// Array where each element represents the number of scan lines for the depth; ex the
-    /// array index '1' would be the number of scan lines that ccured at greater or equal 1.0
+    /// array index '1' would be the number of scan lines that occurred at greater or equal 1.0
     /// and less than 2.0.
     /// </returns>
     private List<uint>   GetScanLinesPerMeterProfile (PicesDataBase   threadConn,       
@@ -1693,7 +1693,7 @@ namespace PicesCommander
         if  (ReClassify.Checked)
         {
           DialogResult dr = MessageBox.Show (this,
-                                             "You have choosen to Re-Classify images before tabulating,  is this correct ?", 
+                                             "You have chosen to Re-Classify images before tabulating, is this correct ?", 
                                              "Start Classification Report", 
                                              MessageBoxButtons.YesNo
                                             );
@@ -1703,7 +1703,7 @@ namespace PicesCommander
         else
         {
           DialogResult dr = MessageBox.Show (this, 
-                                             "You have choosen NOT to Classify images before tabulating,  is this correct ?", 
+                                             "You have chosen NOT to Classify images before tabulating, is this correct ?", 
                                              "Start Classification Report", 
                                              MessageBoxButtons.YesNo
                                             );

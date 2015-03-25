@@ -276,7 +276,7 @@ namespace PicesCommander
     {
       cancelRequested = true;
 
-      // Will wait up till 4 seconds for savingprocess to pause.
+      // Will wait up till 4 seconds for saving process to pause.
       int x = 0;
       while  ((savingThreadRunning) && (x < 40))
       {

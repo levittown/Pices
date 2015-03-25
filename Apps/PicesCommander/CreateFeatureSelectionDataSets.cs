@@ -221,7 +221,7 @@ namespace PicesCommander
       try  {di = new DirectoryInfo (DestinationDirectory.Text);}  catch (Exception)  {di = null;}
       if  (!di.Exists)
       {
-        errorProvider1.SetError (DestinationDirectory, "Destinaion Directory does not exist.");
+        errorProvider1.SetError (DestinationDirectory, "Destination Directory does not exist.");
         errorsFound = true;
       }
     }  /* ValidateDestinationDirectory*/
@@ -346,7 +346,7 @@ namespace PicesCommander
       if  (data == null)
       {
         AddMsgToDialogMsgQueue ("\n\n");
-        AddMsgToDialogMsgQueue ("Model[" +  modelName + "]  Cound not load Feature Data.");
+        AddMsgToDialogMsgQueue ("Model[" +  modelName + "]  Could not load Feature Data.");
         tuningThreadFailed = true;
         tuningThreadDone   = true;
         tuningThreadRunning = false;
@@ -367,7 +367,7 @@ namespace PicesCommander
       AddMsgToDialogMsgQueue (DateTime.Now.ToShortTimeString () + " Checking that Depth Data Exists.");
       MakeSureDepthFieldIsIncluded (data);
 
-      AddMsgToDialogMsgQueue (DateTime.Now.ToShortTimeString () + " Spliting into seperate files.");
+      AddMsgToDialogMsgQueue (DateTime.Now.ToShortTimeString () + " Splitting into separate files.");
 
       PicesFeatureVectorList  trainData      = new PicesFeatureVectorList ();
       PicesFeatureVectorList  testData       = new PicesFeatureVectorList ();
@@ -377,7 +377,7 @@ namespace PicesCommander
       if  (classes == null)
       {
         AddMsgToDialogMsgQueue ("\n\n");
-        AddMsgToDialogMsgQueue ("Could not extract list of classses from data.");
+        AddMsgToDialogMsgQueue ("Could not extract list of classes from data.");
         tuningThreadFailed  = true;
         tuningThreadDone    = true;
         tuningThreadRunning = false;

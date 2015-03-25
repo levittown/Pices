@@ -12,11 +12,11 @@ using  PicesInterface;
 //* Developer: Kurt Kramer                                                                                  *
 //* Date:      2010-01-09                                                                                   *
 //*                                                                                                         *
-//* Will creaste two plots of instrument data, one for he down-cast of SIPPER and the other for the up-cast.*
+//* Will creates two plots of instrument data, one for he down-cast of SIPPER and the other for the up-cast.*
 //*                                                                                                         *
 //* Used by PicesCommander to display a Plot of Instrument Data by depth. Will load instrument data for     *
-//* given criteria and then seperate into Up and Down casts.  It does this by sorting into Temporal order   *
-//* and then locating the entry that is at the deapest depth.  Data that ocurs before this point will be    *
+//* given criteria and then separate into Up and Down casts.  It does this by sorting into Temporal order   *
+//* and then locating the entry that is at the deepest depth.  Data that occurs before this point will be   *
 //* considered down-cast and data after up-cast.                                                            *
 //*                                                                                                         *
 //*                                                                                                         *
@@ -119,7 +119,7 @@ namespace PicesCommander
       }
 
 
-      // Will now locate the InstrumentData record that seperates the DownCast from the UpCast
+      // Will now locate the InstrumentData record that separates the DownCast from the UpCast
       data.Sort (DatePicesInstrumentComparer);
       int  idx;
       float  maxDepth = -9999.9f;

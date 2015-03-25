@@ -20,9 +20,8 @@ namespace PicesCommander
     private  String                  sourceDirectory = null;
 
     // Importing Thread Related Variables.
-    private  bool                    cancelImporting   = false;
-    private  bool                    importingStarted  = false;  // Will be set to 'true' after the start button is pressed
-                                                                 // and allvalidations are passed.
+    private  bool                    cancelImporting    = false;
+    private  bool                    importingStarted   = false;  /** Will be set to 'true' after the start button is pressed and all validations are passed. */
     private  bool                    importingRunning   = false;
     private  bool                    importingCompleted = false;
     private  Thread                  importingThread    = null;
@@ -206,7 +205,7 @@ namespace PicesCommander
       ImportValidatedClassAssignmentsDir (threadConn, sourceDirectory);
       if  (cancelImporting)
       {
-        RunLogAddMsg ("\n" + "Importing Assignemnst has benen Canceled." + "\n\n");
+        RunLogAddMsg ("\n" + "Importing Assignmenst has been Canceled." + "\n\n");
       }
       else
       {

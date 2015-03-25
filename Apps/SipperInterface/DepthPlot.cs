@@ -36,7 +36,7 @@ namespace SipperInterface
     private TextBox data8;
     private TextBox data9;
     private TextBox data10;  // Will be owned by "Form1",  we will only
-    // have a refrence to it.
+    // have a reference to it.
     private TextBox data11;
     private TextBox data12;
     private ComboBox data0Label;
@@ -982,7 +982,7 @@ namespace SipperInterface
       
       if  (fieldIdxs[plottingAxisIdx, dataLabelIdx] == dataFieldIdx)
       {
-        //  Still pointiing to same label,  there is nothing to do.
+        //  Still pointing to same label,  there is nothing to do.
         return;
       }
       
@@ -1058,7 +1058,7 @@ namespace SipperInterface
       w.WriteLine ("//");
       w.WriteLine ("// Ruler Values");
       w.WriteLine ("//");
-      w.WriteLine ("//  The following rows conatin the MinMax values and plot flag specified by the user.");
+      w.WriteLine ("//  The following rows contain the MinMax values and plot flag specified by the user.");
       w.WriteLine ("//  Each line consists 5 fields ['MinMax' '\t'  <FieldName>  '\t'  <MinValue>  '\t'  <MaxValue> '\t' <True/False>");
       w.WriteLine ("//");
       
@@ -1073,7 +1073,7 @@ namespace SipperInterface
       }
 
 
-      w.WriteLine ("plottingaxis" + "\t" + plottingAxis.SelectedOption);
+      w.WriteLine ("plotting axis" + "\t" + plottingAxis.SelectedOption);
 
       w.Close();
       
@@ -1182,7 +1182,7 @@ namespace SipperInterface
               }
             }
             
-            else if  (rowType == "plottingaxis")
+            else if  (rowType == "plotting axis")
             {
               if  (fields.Length == 2)
               {
@@ -1253,7 +1253,7 @@ namespace SipperInterface
       
       if  (currentDataRow == null)
       {
-        // We have not collected any data yet.  We need a blank one to work with in the meen time.
+        // We have not collected any data yet.  We need a blank one to work with in the mean time.
         currentDataRow = new InstrumentData ();
       }
 
@@ -1606,8 +1606,8 @@ namespace SipperInterface
 
 
     
-    // Ths method will be called from other modules/Threads.  
-    // Becuase it is being called from another thread it will not beable 
+    // This method will be called from other modules/Threads.  
+    // Because it is being called from another thread it will not be able 
     // to access "sipperBatteryPack" directly;  it will have to set a 
     // flag that the timer loop will monitor. As a result it will be the 
     // timer loop that will actually re-enable the sipperBatteryPack

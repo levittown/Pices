@@ -567,7 +567,7 @@ namespace SipperInterface
       Font  font = new Font ("Arial", 24);
       Brush  b = new SolidBrush (Color.Red);
       
-      string  msg = "Error Retreiving Cammera Line Data";
+      string  msg = "Error Retrieving Camera Line Data";
       Size  spaceNeeded = TextRenderer.MeasureText (msg, font);
       
       int  h = cameraLineWindow.Height;

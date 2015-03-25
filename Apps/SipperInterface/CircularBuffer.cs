@@ -20,7 +20,7 @@ using SipperFile;
 namespace SipperInterface
 {
   /// <summary>
-  /// Summary description for Bufer.
+  /// Summary description for Buffer.
   /// </summary>
   public class CircularBuffer
   {
@@ -38,7 +38,7 @@ namespace SipperInterface
     private bool                   statusConnected         = false;
 
 
-    private bool                   blockIsSet              = false;   // Used to insure thread syncronization
+    private bool                   blockIsSet              = false;   // Used to insure thread synchronization
                                                                       // access to socket; since more than one
                                                                       // thread will be using it.
     private int                    buffSize;
@@ -75,8 +75,7 @@ namespace SipperInterface
 
 
     private  InstrumentData        currentDataRow           = null;
-    private  InstrumentDataList    history                  = null;   // We will not own this;  bit will be only
-                                                                      // process adding data to it.
+    private  InstrumentDataList    history                  = null;   /**< We will not own this; but will be only process adding data to it. */
     private  InstrumentData        lastDataRow              = null;
     private  RecordingRate         recordingRate            = null;
 
@@ -524,8 +523,8 @@ namespace SipperInterface
          break;
        }
 
-       // But sometimes after sending the camera comand you have to send a blank line to
-       // get th eprompt to display.
+       // But sometimes after sending the camera command you have to send a blank line to
+       // get the prompt to display.
        SendText ("");
          
        if  (receiveThreadTerminate)
@@ -726,7 +725,7 @@ namespace SipperInterface
         if  ((!firstField.EndsWith (":"))  ||  (firstField.Length > 5))
           continue;
 
-        int byteOffset = StrToInt (firstField.Substring (0, firstField.Length - 1)) - 1;  // Retuned data is 1 based so need to subtract 1.
+        int byteOffset = StrToInt (firstField.Substring (0, firstField.Length - 1)) - 1;  // Returned data is 1 based so need to subtract 1.
         
         if  ((byteOffset < 0)  ||  (byteOffset > 4088))
           continue;
@@ -1145,7 +1144,7 @@ namespace SipperInterface
       {
         if  (dataLoopRunning)
         {
-          logFile.WriteLine ("//  'StartDataLoop'  sucessfully started  CurTime[" + System.DateTime.Now.ToString () + "]");
+          logFile.WriteLine ("//  'StartDataLoop'  successfully started  CurTime[" + System.DateTime.Now.ToString () + "]");
         }
         else
         {
@@ -1267,7 +1266,7 @@ namespace SipperInterface
         loopCount++;
 
         // KAK 2013-08-09  Changed sleep from 100 to 25 mili secs.
-        //wait 1 milisecond for Sipper to record more data
+        //wait 1 mili-second for Sipper to record more data
         if (!dataLoopTerminate)
           Thread.Sleep (25);
 //          Thread.Sleep (100);
@@ -1440,7 +1439,7 @@ namespace SipperInterface
           lock  (logFile)
           {
             logFile.WriteLine ("//");
-            logFile.WriteLine ("//  'dataLoopThread'    *** STILL ALIVE/RUNNING ***;     timed out waiting for it to terminate;  will fource.");
+            logFile.WriteLine ("//  'dataLoopThread'    *** STILL ALIVE/RUNNING ***;     timed out waiting for it to terminate;  will force.");
             logFile.WriteLine ("//");
             logFile.Flush ();
           
@@ -1464,7 +1463,7 @@ namespace SipperInterface
           lock  (logFile)
           {
             logFile.WriteLine ("//");
-            logFile.WriteLine ("//  'receiveThread'    *** STILL ALIVE/RUNNING ***;     timed out waiting for it to terminate;  will fource.");
+            logFile.WriteLine ("//  'receiveThread'    *** STILL ALIVE/RUNNING ***;     timed out waiting for it to terminate;  will force.");
             logFile.WriteLine ("//");
             logFile.Flush ();
           
@@ -1640,7 +1639,7 @@ namespace SipperInterface
         
       string  resultStr = SubmitCommandAndReturnResults ("sipper_record", 7000);
 
-      if  (resultStr.Contains ("Opening "))    //   Need to make sure of sucesfull Start Record String. 
+      if  (resultStr.Contains ("Opening "))    //   Need to make sure of successful Start Record String. 
       {
         // Opening Test10_01.  StartLBA= 002CF3FC, EndLBA= 04A8143F
         int  idx = resultStr.IndexOf ("Opening ");

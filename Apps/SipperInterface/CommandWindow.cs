@@ -18,7 +18,7 @@ using PicesInterface;
 using SipperFile;
 using SipperFileViewer;
 
-// TODO When the GUI starts up, the STOP button is not grayed-out.  If I click it, then I get an error message as shown in the attached screenshot.
+// TODO When the GUI starts up, the STOP button is not grayed-out.  If I click it, then I get an error message as shown in the attached screen-shot.
 
 
 
@@ -214,7 +214,7 @@ namespace SipperInterface
         }
         catch  (Exception e)
         {
-          MessageBox.Show ("Error Clossing DepthPlot window" + "\n\n" + e.ToString ());
+          MessageBox.Show ("Error Closing DepthPlot window" + "\n\n" + e.ToString ());
         }
         depthPlot = null;
       }
@@ -228,7 +228,7 @@ namespace SipperInterface
         }
         catch  (Exception e2)
         {
-          MessageBox.Show ("Error Clossing TimePlot window" + "\n\n" + e2.ToString ());
+          MessageBox.Show ("Error Closing TimePlot window" + "\n\n" + e2.ToString ());
         }
         timePlot = null;
       }
@@ -1012,7 +1012,7 @@ namespace SipperInterface
       }
       catch  (Exception e2)
       {
-        MessageBox.Show (e2.ToString (), "Error Opening conection to SIPPER");
+        MessageBox.Show (e2.ToString (), "Error Opening connection to SIPPER");
         if  (circularBuff != null)
         {
           circularBuff.Dispose ();
@@ -1102,7 +1102,7 @@ namespace SipperInterface
           }
           catch (Exception e)
           {
-            MessageBox.Show("Error Writting to text box [" + e.ToString() + "].");
+            MessageBox.Show("Error Writing to text box [" + e.ToString() + "].");
           }
           x++;
         }
@@ -1158,8 +1158,8 @@ namespace SipperInterface
         circularBuff = null;
       }
       
-      // By turningoff all button we will force the timer to set the appropriate 
-      // butons based off the current recording status.
+      // By turning off all button we will force the timer to set the appropriate 
+      // buttons based off the current recording status.
       TurnOffAllButtons ();
 
     }  /* CloseSipperConnection */
@@ -1533,7 +1533,7 @@ namespace SipperInterface
 
     
 
-    //before the form closes, closing all threads and getting rid of resourses 
+    //before the form closes, closing all threads and getting rid of resources 
     private void Form1_Closing (object sender, System.ComponentModel.CancelEventArgs e)
     {
       lock  (logFile)
@@ -1695,7 +1695,7 @@ namespace SipperInterface
 
       if  (cmd.PreviewData () == null)
       {
-        MessageBox.Show ("Sipper did not return any daya to Preview.", "Sipper Preview Command", MessageBoxButtons.OK);
+        MessageBox.Show ("Sipper did not return any data to Preview.", "Sipper Preview Command", MessageBoxButtons.OK);
         return;
       }
       
@@ -1729,7 +1729,7 @@ namespace SipperInterface
         try { fs = new FileStream (previwFileName, FileMode.Create);  bw = new BinaryWriter (fs);} 
         catch (Exception e)
         {
-          MessageBox.Show ("Error Loging PreviewFile" + "\n\n" + e.ToString ());
+          MessageBox.Show ("Error Logging PreviewFile" + "\n\n" + e.ToString ());
           bw = null;
         }
 
@@ -1867,7 +1867,7 @@ namespace SipperInterface
         lock  (logFile)
         {
           logFile.WriteLine ("//");
-          logFile.WriteLine ("//stopButton_Click    recording succesfully stopped    CurTime[" + System.DateTime.Now.ToString () + "]");
+          logFile.WriteLine ("//stopButton_Click    recording successfully stopped    CurTime[" + System.DateTime.Now.ToString () + "]");
           logFile.WriteLine ("//");
           logFile.Flush ();
         }
@@ -1884,7 +1884,7 @@ namespace SipperInterface
           logFile.WriteLine ("//");
           logFile.Flush ();
         }
-        MessageBox.Show ("Error Occured when sending stop command.");
+        MessageBox.Show ("Error Occurred when sending stop command.");
       }
       
     } /* CompleteStopRecordingCmd */
@@ -1922,7 +1922,7 @@ namespace SipperInterface
     {
       if  ((ticCount % 100) == 0)
       {
-        // Lets see if there are any preview screens that we can dispoe of.
+        // Lets see if there are any preview screens that we can dispose of.
         if  (sipperPreviews != null)
         {
           SipperFileViewer.SipperFileViewer  previewerThatIsDisposed = null;
@@ -2038,7 +2038,7 @@ namespace SipperInterface
         logFile.Flush ();
       }
 
-      awaitingChangeBatteryCmd = true;  // When the the change Battery Command is completed this
+      awaitingChangeBatteryCmd = true;  // When the change Battery Command is completed this
                                         // flag will be set to false.  While it is true the
                                         // 'sipperBatteryPack' will be disabled.
       
@@ -2200,7 +2200,7 @@ namespace SipperInterface
       {
         logFile.WriteLine ("//");
         logFile.WriteLine ("//");
-        logFile.WriteLine ("// reBootXportButton_Click    Curent Time[" + DateTime.Now.ToString () + "]");
+        logFile.WriteLine ("// reBootXportButton_Click    Current Time[" + DateTime.Now.ToString () + "]");
         logFile.WriteLine ("//");
         logFile.Flush ();
       }
@@ -2229,7 +2229,7 @@ namespace SipperInterface
         {
           DialogResult sr = MessageBox.Show 
                 ("SIPPER is Recording,  still want to reboot (Yes/No) ?",
-                 "SIPPER is still recordring",
+                 "SIPPER is still recording",
                  MessageBoxButtons.YesNo
                 );
 
@@ -2267,7 +2267,7 @@ namespace SipperInterface
       {
         logFile.WriteLine ("//");
         logFile.WriteLine ("//");
-        logFile.WriteLine ("// reBootBatteryButton_Click    Curent Time[" + DateTime.Now.ToString () + "]");
+        logFile.WriteLine ("// reBootBatteryButton_Click    Current Time[" + DateTime.Now.ToString () + "]");
         logFile.WriteLine ("//");
         logFile.Flush ();
       }
@@ -2296,7 +2296,7 @@ namespace SipperInterface
         {
           DialogResult sr = MessageBox.Show
                 ("SIPPER is Recording,  still want to reboot (Yes/No) ?",
-                 "SIPPER is still recordring",
+                 "SIPPER is still recording",
                  MessageBoxButtons.YesNo
                 );
 

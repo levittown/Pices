@@ -15,9 +15,9 @@ using  SipperFile;
 /**
  *@namespace  PicesCommander
  *@brief  Namespace for the PicesCommander Program.
- *@details The PicesCommansder application consists of several modules.  This program is meant to be the frontend to the
- * image database, provide a GUI front-end to several application ssuch as ClassificatioStatus, ImportgroupAssignments, 
- * SameImagesToDisk, Harvestor and others.
+ *@details The PicesCommansder application consists of several modules. This program is meant to be the front end to the
+ * image database, provide a GUI front-end to several application such as ClassificatioStatus, ImportgroupAssignments, 
+ * SameImagesToDisk, Harvester and others.
  */
 namespace PicesCommander
 {
@@ -66,8 +66,8 @@ namespace PicesCommander
     
 
     // Variables that specify the criteria last used to load "SipperFile.Items".  This way when the
-    // user selects the dropdwon box we can reload the "SipperFile.Items" only if ther have been 
-    // changes to the crieria fields.
+    // user selects the drop-down box we can reload the "SipperFile.Items" only if their have been 
+    // changes to the criteria fields.
     private  String                   SipperFileCruiseName    = "";
     private  String                   SipperFileStationName   = "";
     private  String                   SipperFileDeploymentNum = "";
@@ -77,7 +77,7 @@ namespace PicesCommander
     private  bool                                   reverseSort = false;
 
     
-    //*    Variables needed for DataBase acess
+    //*    Variables needed for DataBase access
     private  PicesDataBase  dbConn = null;
 
     private  PicesRunLog    runLog = PicesRunLog.CreateRunLog ("PicesCommander");
@@ -90,7 +90,7 @@ namespace PicesCommander
                                                         * by "ThumbNailPanelTimer"  to update ThmbNailPanel
                                                         * Will get created when user double clicks on a 
                                                         * class.  If one already exists then will cancel that
-                                                        * instance and create a new one for the nex class selected.
+                                                        * instance and create a new one for the next class selected.
                                                         */
 
     private  PicesDataBaseImageList  curSelImages = null;
@@ -124,7 +124,7 @@ namespace PicesCommander
 
       allowUpdates = PicesSipperVariables.AllowUpdates ();
 
-      // Initializing variables to deel with resizing.
+      // Initializing variables to deal with resizing.
       lastHeight = Height;
       lastWidth  = Width;
 
@@ -196,9 +196,9 @@ namespace PicesCommander
 
 
     private  void  UpdateNavigationList (PicesClassStatisticList  stats)
-    //  This function isused to refresh  the NavigationList with more up-to-date stats 
-    //  on classes for current selection of critera.  
-    //  'NavigaionList' and 'stats'  are assumed to have there contens in alphabetical order.
+    //  This function issued to refresh  the NavigationList with more up-to-date stats 
+    //  on classes for current selection of criteria.  
+    //  'NavigaionList' and 'stats'  are assumed to have there contents in alphabetical order.
     {
       if  (stats == null)
         return;
@@ -1299,7 +1299,7 @@ namespace PicesCommander
             String  fullFileName = destDir + i.ImageFileName + ".bmp";
 
             // kak 2010-05-08  Changed the save code to use the Save method in the Raster class which will
-            // use the BaseLibrary::ImageIO Save routine.  Images eing saved by .net were not cmpatable
+            // use the BaseLibrary::ImageIO Save routine. Images being saved by .net were not compatible
             // with the KKB::BmpImage class which the Feature Extraction routines will want to use.
             try { raster.Save(fullFileName); }
             catch (Exception)
@@ -1310,7 +1310,7 @@ namespace PicesCommander
         }
         
         if  (!String.IsNullOrEmpty (errors))
-          MessageBox.Show (this, "Following erros occured:" + "\n\n" + errors, "Save Images", MessageBoxButtons.OK);
+          MessageBox.Show (this, "Following errors occurred:" + "\n\n" + errors, "Save Images", MessageBoxButtons.OK);
       }
     }  /* SaveImage */
 
@@ -1324,7 +1324,7 @@ namespace PicesCommander
 
       if  (images.Count != 1)
       {
-        MessageBox.Show (this, "Only one image can be coppied to clipboard.");
+        MessageBox.Show (this, "Only one image can be copied to clipboard.");
         return;
       }
       
@@ -1350,7 +1350,7 @@ namespace PicesCommander
 
       if  (images.Count != 1)
       {
-        MessageBox.Show (this, "Only one image can be coppied to clipboard.");
+        MessageBox.Show (this, "Only one image can be copied to clipboard.");
         return;
       }
       
@@ -1414,7 +1414,7 @@ namespace PicesCommander
         try {dbConn.ImagesUpdateValidatedClass (i.ImageFileName, validatedClass);}
         catch  (Exception e)
         {
-          MessageBox.Show (this, "Exception occured calling dbConn.ImagesUpdateValidatedClass for image [" + i.ImageFileName + "]\n\n" + 
+          MessageBox.Show (this, "Exception occurred calling dbConn.ImagesUpdateValidatedClass for image [" + i.ImageFileName + "]\n\n" + 
                            e.ToString () + "\n\n" +
                            e.StackTrace, 
                            "ValidateSelectedImagesWithThisClass");
@@ -1489,7 +1489,7 @@ namespace PicesCommander
         }
         if  (errorMsgs.Count > 0)
         {
-          MessageBox.Show (this, "Errors occured removing validation from images", "Remove Validation");
+          MessageBox.Show (this, "Errors occurred removing validation from images", "Remove Validation");
         }
       }
     }  /* RemoveValidation */
@@ -1540,7 +1540,7 @@ namespace PicesCommander
       try  {pr = dbConn.ImageFullSizeFind (i.ImageFileName);}
       catch  (Exception e)
       {
-        MessageBox.Show (this, "Exception occured attempting to call 'ImageFullSizeFind'\n\nException Text is:" + 
+        MessageBox.Show (this, "Exception occurred attempting to call 'ImageFullSizeFind'\n\nException Text is:" + 
                          e.ToString () + "\n\n" +
                          e.StackTrace, 
                          "DisplayTheOriginalSipperImage");
@@ -1987,7 +1987,7 @@ namespace PicesCommander
       {
         if  (imageLoader.LoaderThreadRuning)
         {
-          imageLoader.CancelLoadWait (6000);  // Cancel current loaded;  wait ut to 6 seconds for gracefull cancelation
+          imageLoader.CancelLoadWait (6000);  // Cancel current load; wait up to 6 seconds for graceful cancellation
         }
 
         imageLoader = null;
@@ -2018,7 +2018,7 @@ namespace PicesCommander
       UpdateCriteria (classToUse);
       thumbnailClass = classToUse;
 
-      // A timer object "ThumbNailPanelTimer_Tick"  will poll "imageLoader" periodicly to add images to the display.
+      // A timer object "ThumbNailPanelTimer_Tick"  will poll "imageLoader" periodically to add images to the display.
       imageLoader = new PlanktonImageLoader (selecetedImageGroup,
                                              cruiseName, stationName, deploymentNum, sipperFileName,
                                              classToUse, classKeyToUse,
@@ -2053,7 +2053,7 @@ namespace PicesCommander
 
     private void NavigationList_MouseDoubleClick (object sender, MouseEventArgs e)
     {
-      // User has requested to display contents for a goven class.
+      // User has requested to display contents for a given class.
       ListView  lv = (ListView)sender;
       ListView.SelectedIndexCollection  indexes =   lv.SelectedIndices;
 
@@ -2157,7 +2157,7 @@ namespace PicesCommander
 
       // We need to check if the LoaderThread is still running before we get anymore images from
       // the object "imageLoader".  If it is no longer running we can then get rid of it after 
-      // we retrieve what ever images it still has  otherwise we we retrieve what imeages it has
+      // we retrieve what ever images it still has  otherwise we retrieve what images it has
       // and then leave it alone.
       bool  loaderThreadRuning = imageLoader.LoaderThreadRuning;
 
@@ -2219,14 +2219,14 @@ namespace PicesCommander
     {
       String newTrainingLibraryName = TrainingLibrary1.Text;
       if (newTrainingLibraryName != ActiveTrainingLibraries.Model1Name)
-        LoadTrainingModel1 (newTrainingLibraryName, false);  // false = Dont Force Rebuild of Model.
+        LoadTrainingModel1 (newTrainingLibraryName, false);  // false = Don't Force Rebuild of Model.
     }
 
 
     private void RebuildTrainLibrary1Button_Click(object sender, EventArgs e)
     {
       if  (!String.IsNullOrEmpty (TrainingLibrary1.Text))
-        LoadTrainingModel1 (TrainingLibrary1.Text, true);  // true = Force Rebuild of Traning Model.
+        LoadTrainingModel1 (TrainingLibrary1.Text, true);  // true = Force Rebuild of Training Model.
     }
 
     private void TrainingLibrary2_SelectedIndexChanged(object sender, EventArgs e)
@@ -2305,7 +2305,7 @@ namespace PicesCommander
       if  (WindowState == FormWindowState.Maximized)
       {
         // Looks like user has pressed the Maximized button.  We have to trap it here because
-        // the ResizeEnd envent does not trap when form is Maximized.
+        // the ResizeEnd event does not trap when form is Maximized.
         PicesCommanderFormResized ();
         formIsMaximized = true;
       }
@@ -2314,7 +2314,7 @@ namespace PicesCommander
         if  (formIsMaximized)
         {
           // We normally trap the ResizeEnd event;  but when the form was already maximized and the user
-          // presses the button to unmaximize.  the ResizeEnd does not trap that.  So we check to 
+          // presses the button to maximize.  the ResizeEnd does not trap that.  So we check to 
           // see if the form was already maximize.  If so then we resized the form.
           PicesCommanderFormResized ();
           formIsMaximized = false;
@@ -2397,8 +2397,8 @@ namespace PicesCommander
       }
 
       /** I need to call "PicesDataBase.FinalCleanUp" at the same level that "PicesDataBase.Initialization" gets called.
-       * The first time a "PicesDataBase" instance is created it will call the MySQL initailzation code.  And since in this 
-       * application it is occuring in "PicesCommander" we need to call "PicesDataBase.FinalCleanUp" before we exit.
+       * The first time a "PicesDataBase" instance is created it will call the MySQL initialization code.  And since in this 
+       * application it is occurring in "PicesCommander" we need to call "PicesDataBase.FinalCleanUp" before we exit.
        */
       PicesDataBase.FinalCleanUp ();
     }
@@ -2677,7 +2677,7 @@ namespace PicesCommander
       PicesTrainingConfiguration  config = new PicesTrainingConfiguration (tm.ModelName, runLog);
       if  (!config.Valid ())
       {
-        MessageBox.Show (this, "Invalid Taining Model[" + tm.ModelName + "]  can not retrieve feature data.", "Extract Training Model Feature Data", MessageBoxButtons.OK);
+        MessageBox.Show (this, "Invalid Training Model[" + tm.ModelName + "]  can not retrieve feature data.", "Extract Training Model Feature Data", MessageBoxButtons.OK);
         return;
       }
 
@@ -2754,7 +2754,7 @@ namespace PicesCommander
         return;
       }
 
-      DialogResult  dr = MessageBox.Show (this, "Run a 10 Fold Crosss Validation for '" + modelName + "' ?", "Cross Validation", MessageBoxButtons.YesNo);
+      DialogResult  dr = MessageBox.Show (this, "Run a 10 Fold CrossValidation for '" + modelName + "' ?", "Cross Validation", MessageBoxButtons.YesNo);
       if  (dr == DialogResult.No)
         return;
         
@@ -2889,7 +2889,7 @@ namespace PicesCommander
         return;
       }
 
-      DialogResult  dr = MessageBox.Show (this, "Run Abundance Adjustment Parameter computation (10 Fold Crosss Validation) for '" + modelName + "' ?", "Cross Validation", MessageBoxButtons.YesNo);
+      DialogResult  dr = MessageBox.Show (this, "Run Abundance Adjustment Parameter computation (10 Fold CrossValidation) for '" + modelName + "' ?", "Cross Validation", MessageBoxButtons.YesNo);
       if  (dr == DialogResult.No)
         return;
         
@@ -2930,7 +2930,7 @@ namespace PicesCommander
 
       if  (curSelImages == null)
       {
-        MessageBox.Show (this, "Assign Group to Selected Images", "There are no images curently selected.", MessageBoxButtons.OK);
+        MessageBox.Show (this, "Assign Group to Selected Images", "There are no images currently selected.", MessageBoxButtons.OK);
         return;
       }
 

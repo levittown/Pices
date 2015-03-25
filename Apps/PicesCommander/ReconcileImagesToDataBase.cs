@@ -112,7 +112,7 @@ namespace PicesCommander
       String  logFileName =  OSservices.AddSlash (PicesSipperVariables.PicesTempDirectory ()) + rootName + "_ReconcileImageNames_" +
                              d.ToString ("yyyyMMdd-HHmmss") + ".txt";
 
-      // Any images thnatare not in the Database thataretobe removed will be moved to the subdirectory structure below.
+      // Any images that are not in the Database that are to be removed will be moved to the subdirectory structure below.
       removalDestRootDir = "c:\\Temp\\PicesDatabaseImageReconciliationRemovedImages\\" + rootName;
       OSservices.CreateDirectoryPath (removalDestRootDir);
 
@@ -254,7 +254,7 @@ namespace PicesCommander
 
       if  (String.IsNullOrEmpty (sipperFileName)  ||  (scanLine < 1))
       {
-        // We are not going to beable to locate this image in the Database.
+        // We are not going to be able to locate this image in the Database.
         runStatsImagesNotInDataBase++;
         reconcilingRunLog.Writeln (fullImageFileName + "\t" + "Name format will not let me derive needed info.");
         return;
@@ -414,7 +414,7 @@ namespace PicesCommander
       {
         if  (e.CloseReason == CloseReason.UserClosing)
         {
-          DialogResult dr = MessageBox.Show (this, "Reconciliation Process is still runnning!   Cancel Process Yes/No ?", "Cancel Reconciliation", MessageBoxButtons.YesNo);
+          DialogResult dr = MessageBox.Show (this, "Reconciliation Process is still running!   Cancel Process Yes/No ?", "Cancel Reconciliation", MessageBoxButtons.YesNo);
           if  (dr == DialogResult.No)
           {
             e.Cancel = true;

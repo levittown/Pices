@@ -51,9 +51,10 @@ namespace PicesCommander
 
     PicesDataBaseImageList  planktonData = null;  // Feature Vectors that are going to be written to disk
     
-    PicesFeatureFileIO      driver      = null;  // The Driver that will be used to write the Feature Data to disk.
-                                                 // The 'BackGroundTimer' will pole this variable to
-                                                 // keep track of number of records written to disk.
+    PicesFeatureFileIO      driver       = null;  /**< The Driver that will be used to write the Feature Data to disk.
+                                                   * The 'BackGroundTimer' will pole this variable to
+                                                   * keep track of number of records written to disk.
+                                                   */
     
     String  backGroundStatus           = "";
 
@@ -527,7 +528,7 @@ namespace PicesCommander
                                                                  sizeMin,  sizeMax,
                                                                  depthMin, depthMax,
                                                                  0,         // Restart Image Id
-                                                                 -1,        // limit (Max num Images to load.
+                                                                 -1,        // limit (Max number Images to load.
                                                                  false      // false = Do not include Thumbnail
                                                                 );
       if  (data != null)
@@ -555,7 +556,7 @@ namespace PicesCommander
 
       SaveFileDialog sfd = new SaveFileDialog ();
       sfd.InitialDirectory = pathName;
-      sfd.Title = "Featuire Data File Name";
+      sfd.Title = "Feature Data File Name";
       sfd.FileName = rootName;
       if  (sfd.ShowDialog() == DialogResult.OK)
       {

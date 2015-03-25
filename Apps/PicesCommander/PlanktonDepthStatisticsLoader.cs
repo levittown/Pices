@@ -5,11 +5,11 @@ using System.Threading;
 
 using  PicesInterface;
 // I started by cloning PlanktonImageLoader;  meant to make the loading of 
-// stats for thenavigation panel much smoother.
+// stats for the navigation panel much smoother.
 
 
 //*****************************************************************************************
-//  Loads images from the Pices database as a seperate thread.  Images will be loaded in  *
+//  Loads images from the Pices database as a separate thread.  Images will be loaded in  *
 //  blocks so that this instance can be queried periodically for what is already loaded.  *
 //*****************************************************************************************
 
@@ -25,7 +25,7 @@ namespace PicesCommander
   
     private  bool           allSipperFiles    = false;
     private  bool           cancelRequested   = false;
-    private  String[]       sipperFileNames   = null;   // List of siper files that we will have to load from.
+    private  String[]       sipperFileNames   = null;   // List of sipper files that we will have to load from.
     private  String         curSipperFileName = null;
     private  int            curSipperFileIdx  = -1;     // Index into "sipperFileNames"  that s currently being loaded.
     private  PicesRunLog    runLog            = null;
@@ -39,7 +39,7 @@ namespace PicesCommander
     private  String                      deploymentNum          = "";
     private  String                      sipperFileName         = "";
     private  float                       depthIncrements        = 0.0f;
-    private  PicesClass                  mlClass             = null;
+    private  PicesClass                  mlClass                = null;
     private  char                        classKeyToUse          = 'P';
     private  float                       probMin                = 0.0f;
     private  float                       probMax                = 1.0f;
@@ -47,14 +47,14 @@ namespace PicesCommander
     private  int                         sizeMax                = 0;
 
     private  PicesGoalKeeper             blocker                = null;
-    private  bool                        doneLoading            = false;  // Set to true when succesfully loaded all data.  
-    private  uint[]                      loadedStats            = null;   // Statistics will acumulate in this list
+    private  bool                        doneLoading            = false;  // Set to true when successfully loaded all data.  
+    private  uint[]                      loadedStats            = null;   // Statistics will accumulate in this list
     private  Thread                      loaderThread           = null;
     private  bool                        loaderThreadRuning     = false;
     private  uint                        imageCountTotal        = 0;
-    private  bool                        newStatsAvailable      = false;   // Indicates if there have been any update to teh stats
-                                                                        // that will be returned since the last time a call to
-                                                                        // 'GetStatsAlreadyLoadedIfNew' was made.
+    private  bool                        newStatsAvailable      = false;   // Indicates if there have been any update to the stats
+                                                                           // that will be returned since the last time a call to
+                                                                           // 'GetStatsAlreadyLoadedIfNew' was made.
     private  int                         sipperFilesCount       = 0;
 
     private  PicesVolumeSampledStatList  volumeWaterSampled     = null;
@@ -121,14 +121,14 @@ namespace PicesCommander
 
 
 
-    public  void  CancelLoad ()   // Will set "cancelRequested" flag to true and return imediately.
+    public  void  CancelLoad ()   // Will set "cancelRequested" flag to true and return immediately.
     {
       cancelRequested = true;
     }
     
 
 
-    public  void  CancelLoadWait (int maxMilliSecsToWait)  // Will wait upto "maxMilliSecsToWait" for loadThread to terminate before returning.  Then it will force terminatiom of thread.
+    public  void  CancelLoadWait (int maxMilliSecsToWait)  // Will wait until "maxMilliSecsToWait" for loadThread to terminate before returning.  Then it will force termination of thread.
     {
       CancelLoad ();
       int  milliSecsWaitedSoFar = 0;
@@ -180,7 +180,7 @@ namespace PicesCommander
 
 
 
-    //  return to the caller current acumulated statistics
+    //  return to the caller current accumulated statistics
     //  then remove from my own internal list 'loadedStats'.
     public  uint[]  GetStatsAlreadyLoaded ()
     {
@@ -198,7 +198,7 @@ namespace PicesCommander
 
 
 
-    //  return to the caller current acumulated statistics
+    //  return to the caller current accumulated statistics
     //  then remove from my own internal list 'loadedStats'.
     public  uint[]  GetStatsAlreadyLoadedIfNew ()
     {

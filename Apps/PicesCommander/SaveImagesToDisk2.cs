@@ -392,7 +392,7 @@ namespace PicesCommander
                        depthMin,    depthMax, 
                        lastImageId, 
                        limit,
-                       false      // false = Dont't load Thumbnail images.
+                       false      // false = Don't load Thumbnail images.
                       );
 
         if  ((nextBunch == null)  ||  (nextBunch.Count < 1))
@@ -441,7 +441,7 @@ namespace PicesCommander
                        depthMin,    depthMax, 
                        lastImageId, 
                        limit,
-                       false      // false = Dont't load Thumbnail images.
+                       false      // false = Don't load Thumbnail images.
                       );
 
         if  ((nextBunch == null)  ||  (nextBunch.Count < 1))
@@ -494,7 +494,7 @@ namespace PicesCommander
           break;
         }
 
-        // Get the 'lastImagId'  before calling 'SaveOneBatchOfImages' which will sort it into a diff order.
+        // Get the 'lastImagId'  before calling 'SaveOneBatchOfImages' which will sort it into a different order.
         if  (nextBunch.Count > 0)
           lastImageId = nextBunch[nextBunch.Count - 1].ImageId;
         SaveOneBatchOfImages (nextBunch);
@@ -517,9 +517,9 @@ namespace PicesCommander
 
     
     
-    private  void  SaveOneBatchOfImages (String                    dirPath, 
-                                         Dictionary<String, int>   imagesPerClass, 
-                                         PicesDataBaseImageList    batch
+    private  void  SaveOneBatchOfImages (String                   dirPath, 
+                                         Dictionary<String, int>  imagesPerClass, 
+                                         PicesDataBaseImageList   batch
                                        )
     {
       if  (classKeyToUse == 'V')
@@ -719,7 +719,7 @@ namespace PicesCommander
     {
       cancelRequested = true;
 
-      // Will wait up till 4 seconds for savingprocess to pause.
+      // Will wait up till 4 seconds for saving process to pause.
       int x = 0;
       while  ((savingThreadRunning) && (x < 40))
       {
@@ -805,7 +805,7 @@ namespace PicesCommander
     private void savingTimer_Tick(object sender, EventArgs e)
     {
       // Because 'imagesSaved' is being updated by another thread we want 
-      // to get a picture of it to use so thatit does not change while
+      // to get a picture of it to use so that it does not change while
       // we process.
       uint xxx = imagesSaved;
       if  (xxx > imageCount)

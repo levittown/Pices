@@ -102,7 +102,7 @@ namespace PicesCommander
       else
       {
         float  countF = (float)count;
-        //  Since  'scanLines'  and  'volumeSampled'  are total and NOT means we do not need to difide them by count.
+        //  Since  'scanLines'  and  'volumeSampled'  are total and NOT means we do not need to divide them by count.
         //scanLines            /= count;
         //volumeSampled        /= count;
         temperatureMean        /= countF;

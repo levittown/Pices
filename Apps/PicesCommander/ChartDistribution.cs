@@ -1144,7 +1144,7 @@ namespace PicesCommander
       PicesDataBase.ThreadEnd ();
 
       if  (cancelRequested)
-        statusMsgs.AddMsg ("Plottingof data CANCELLED!!!");
+        statusMsgs.AddMsg ("Plotting of data CANCELLED!!!");
       else
         statusMsgs.AddMsg ("Building of plot data completed !!!");
 
@@ -1342,7 +1342,7 @@ namespace PicesCommander
 
       String  title2 = "";
       if  (filterProb)
-        AddToTitleLine (ref title2, "Probility: " + ProbRange.Text);
+        AddToTitleLine (ref title2, "Probability: " + ProbRange.Text);
 
       if  (filterSize)
         AddToTitleLine (ref title2, "Size: " + SizeRange.Text);
@@ -1611,8 +1611,8 @@ namespace PicesCommander
     {
       if  (WindowState == FormWindowState.Maximized)
       {
-        // Looks like user has pressed the Maximized button.  We have to trap it here because
-        // the ResizeEnd envent does not trap when form is Maximized.
+        // Looks like user has pressed the Maximized button. We have to trap it here because
+        // the ResizeEnd event does not trap when form is Maximized.
         //PicesCommanderFormResized ();
         ChartDistribution_Resize (sender, e);
         formIsMaximized = true;
@@ -1622,7 +1622,7 @@ namespace PicesCommander
         if  (formIsMaximized)
         {
           // We normally trap the ResizeEnd event;  but when the form was already maximized and the user
-          // presses the button to unmaximize.  the ResizeEnd does not trap that.  So we check to 
+          // presses the button to maximize.  the ResizeEnd does not trap that. So we check to 
           // see if the form was already maximize.  If so then we resized the form.
           //PicesCommanderFormResized ();
           ChartDistribution_Resize (sender, e);

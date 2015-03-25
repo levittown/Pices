@@ -24,7 +24,7 @@ namespace PicesCommander
     private  PicesDataBase   mainDbConn     = null;
     private  PicesClassList  classes        = null;
     private  PicesClass      selectedClass  = null;
-    private  PicesClass      mergeClass     = null;  // if Merging of two classes is seleceted this will point to the class to merge to.
+    private  PicesClass      mergeClass     = null;  // if Merging of two classes is selected this will point to the class to merge to.
     private  bool            addingNewClass = false;
     private  bool            deletingExistingClass = false;
 
@@ -119,7 +119,7 @@ namespace PicesCommander
           }
           catch  (Exception eee5)
           {
-            MessageBox.Show (this, "'AddSubTreeToClassTree' caused an exception while procesing class[" + pc.Name + "]\n",
+            MessageBox.Show (this, "'AddSubTreeToClassTree' caused an exception while processing class[" + pc.Name + "]\n",
                              eee5.ToString (), MessageBoxButtons.OK
                             );
           }
@@ -139,7 +139,7 @@ namespace PicesCommander
     {
       if  (depth > 10)
       {
-        // This is just too deep something has gone wriong.
+        // This is just too deep something has gone wrong.
         return;
       }
 
@@ -199,7 +199,7 @@ namespace PicesCommander
         return "Class Name can not be blank";
 
       if  ((name[0] == '_')  ||  (name[name.Length - 1] == '_'))
-        return "Underscore(_) can not be the frst or last character.";
+        return "Underscore(_) can not be the first or last character.";
       
       if  (name.Contains ("__"))
       {
@@ -656,7 +656,7 @@ namespace PicesCommander
     private  void  UpdateProcessDelete (PicesDataBase  updDbConn)
     {
       RunLogAddMsg ("Deleting Class[" + selectedClass.Name + "]" + "\n");
-      // Go through each sipper file and change the class name in there related Imaeges table entries.
+      // Go through each sipper file and change the class name in there related Images table entries.
 
       TimeSpan  startProcessTime = System.Diagnostics.Process.GetCurrentProcess ().TotalProcessorTime;
 
@@ -723,7 +723,7 @@ namespace PicesCommander
         RunLogAddMsg ("  *** Name Change Failed ***" + "\n");
       else
       {
-        // This call will also update the ParentName in other classes that point to teh old name.
+        // This call will also update the ParentName in other classes that point to the old name.
         updDbConn.MLClassUpdate (origClassName, selectedClass);
       }
     }  /* UpdateProcessNameChange */
@@ -780,7 +780,7 @@ namespace PicesCommander
 
       if  (MergeCheckBox.Checked)
       {
-        DialogResult dr = MessageBox.Show ("Merging two classes will take a lot of time.  Is this what you want to do ?", "Merge Classses", MessageBoxButtons.YesNo);
+        DialogResult dr = MessageBox.Show ("Merging two classes will take a lot of time.  Is this what you want to do ?", "Merge Classes", MessageBoxButtons.YesNo);
         if  (dr == DialogResult.No)
           return;
       }

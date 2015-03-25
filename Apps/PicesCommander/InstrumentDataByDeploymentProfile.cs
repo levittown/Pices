@@ -26,11 +26,12 @@ namespace PicesCommander
   {
     // Importing Thread Related Variables.
     private  bool                    cancelBackGround   = false;
-    private  bool                    backGroundStarted  = false;  // Will be set to 'true' after the start button is pressed
-                                                                 // and allvalidations are passed.
-    private  bool                    backGroundRunning   = false;
-    private  Thread                  backGroundThread    = null;
-    private  PicesRunLog             backGroundLog       = null;
+    private  bool                    backGroundStarted  = false;  /**< Will be set to 'true' after the start button is pressed 
+                                                                   * and all validations are passed.
+                                                                   */
+    private  bool                    backGroundRunning  = false;
+    private  Thread                  backGroundThread   = null;
+    private  PicesRunLog             backGroundLog      = null;
 
 
     private  PicesGoalKeeper         runLogGoalie   = null;
@@ -244,8 +245,8 @@ namespace PicesCommander
                                   ref float      scanRateMax
                                  )  
     {
-      // Because Scan Rates are stored with each individule SIPPER File we will need to 
-      // peruse though all of them for this deployment.  Idealy they will all have the 
+      // Because Scan Rates are stored with each individual SIPPER File we will need to 
+      // peruse though all of them for this deployment. Ideally they will all have the 
       // same scan rate.
       scanRateMin = scanRateMax = 24950.0f;
       PicesSipperFileList  sipperFiles = threadConn.SipperFileLoad (cruiseName, stationName, deploymentNum);
@@ -392,7 +393,7 @@ namespace PicesCommander
         return;
       }
 
-      RunLogAddMsg ("Num Entries Loaded[" + data.Count.ToString () + "]");
+      RunLogAddMsg ("Number Entries Loaded[" + data.Count.ToString () + "]");
       
       data.Sort (DatePicesInstrumentComparer);
 
@@ -522,9 +523,9 @@ namespace PicesCommander
                    "OxygenSensor"          + "\t" + "\t" +
                    "Salinity"              + "\t" + "\t" +
                    "Density"               + "\t" + "\t" +
-                   "Fluorensce"            + "\t" + "\t" +
+                   "Fluoresce"             + "\t" + "\t" +
                    "FluorensceSensor"      + "\t" + "\t" +
-                   "Transmissivity"        + "\t" + "\t" +
+                   "Transitivity"          + "\t" + "\t" +
                    "TransmissivitySensor"  + "\t" + "\t" +
                    "Turbidity"             + "\t" + "\t" +
                    "TurbiditySensor"       + "\t" + "\t" +
@@ -816,7 +817,7 @@ namespace PicesCommander
         this.Close ();
       }
 
-      DialogResult dr = MessageBox.Show (this, "Cancel 'Instrument Data Summary Report' ?", "Inatrument Data Summary report", MessageBoxButtons.YesNo);
+      DialogResult dr = MessageBox.Show (this, "Cancel 'Instrument Data Summary Report' ?", "Instrument Data Summary report", MessageBoxButtons.YesNo);
       if  (dr == DialogResult.Yes)
       {
         CancelBackGroundProcess ();

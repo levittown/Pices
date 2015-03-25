@@ -6,7 +6,7 @@ using  PicesInterface;
 
 
 /**
- *@brief  Cloned from "SizeDistribution2" with the intent to use for Image Size in mm^2  a floating pont number.
+ *@brief  Cloned from "SizeDistribution2" with the intent to use for Image Size in mm^2  a floating point number.
  *@details The sizing will range by a factor with a starting value and growth rate.
  */
 
@@ -210,7 +210,7 @@ namespace PicesCommander
       sizeEndRange     = _sizeEndRange;
 
       {
-        // Compute num number of uckets needed.
+        // Compute number of buckets needed.
         bucketCount = 0;
         ++bucketCount; // For images less than "sizeInitial".
 
@@ -260,7 +260,7 @@ namespace PicesCommander
 
 
     /// <summary>
-    /// Returns an instance of 'ClassTotals' that contains a summary of the classes that are decendent of 'ancestor'.
+    /// Returns an instance of 'ClassTotals' that contains a summary of the classes that are decedent of 'ancestor'.
     /// </summary>
     /// <param name="ancestor"></param>
     /// <returns></returns>
@@ -337,7 +337,7 @@ namespace PicesCommander
     /// <summary>
     /// Will add in the contents of another SizeDistribution2 instance into this instance.
     /// </summary>
-    /// <param name="x">The other 'SizeDistribution2' instance to be acumulated to this instance.</param>
+    /// <param name="x">The other 'SizeDistribution2' instance to be accumulated to this instance.</param>
     public  void  Add (SizeDistribution2  x)
     {
       if  ((x.bucketCount       != this.bucketCount)      ||
@@ -386,7 +386,7 @@ namespace PicesCommander
            (x.SizeEndRange      != this.sizeEndRange)
           )
       {
-        throw new Exception ("'SizeDistribution2.Add   ***ERROR***   Dimensions are not Compatable" + "\n" +
+        throw new Exception ("'SizeDistribution2.Add   ***ERROR***   Dimensions are not Compatible" + "\n" +
                              "Left.sizeInitial      [" + sizeInitial.ToString      () + "]  Right [" + x.SizeInitial.ToString      () + "]" + "\n" +
                              "Left.sizeGrowthFactor [" + sizeGrowthFactor.ToString () + "]  Right [" + x.SizeGrowthFactor.ToString () + "]" + "\n" +
                              "Left.sizeEndRange     [" + sizeEndRange.ToString     () + "]  Right [" + x.SizeEndRange.ToString     () + "]"
@@ -405,7 +405,7 @@ namespace PicesCommander
 
 
     /// <summary>
-    /// Method used to gurantee that the specified class is included; even if none occur.
+    /// Method used to guarantee that the specified class is included; even if none occur.
     /// </summary>
     /// <param name="mlClass">Class to add </param>
     public void   InitiateClass (PicesClass  mlClass)

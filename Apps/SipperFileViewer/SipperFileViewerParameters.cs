@@ -28,7 +28,7 @@ namespace SipperFileViewer
     private  long        displayRowTop = 0;
     private  long        displayRowBot = 4096;
                       
-    private  int         numPixelsOnEachRow = 0;  // will be width or smaller that allows a proper mutiple of ratio
+    private  int         numPixelsOnEachRow = 0;  // will be width or smaller that allows a proper multiple of ratio
     
     private  byte[]      displayRow   = null;
     private  byte[][]    raster       = null;
@@ -41,11 +41,10 @@ namespace SipperFileViewer
     private  SipperFileBuffered  sipperFile   = null;
     private  PicesSipperFile     dbSipperFile = null;
 
-    private  Pen[]               colorValues = null;   // Pen color to use for each pixel value;  normaly 
-                                                       // each value is set to the appropriate grayscale value.
-                                                       // except when (colorize == true) selectd then Colors
-                                                       // are used for the 7 levels of grayscale that sipper
-                                                       // produce.
+    private  Pen[]               colorValues = null;   /**< Pen color to use for each pixel value;  normally each value is set
+                                                        * to the appropriate gray-scale value except when (colorize == true) selected
+                                                        * then Colors are used for the 7 levels of gray-scale that sipper produce.
+                                                        */
 
     private  BlobList            blobs = null;
     private  bool                extractBlobs = false;

@@ -630,7 +630,7 @@ namespace PicesCommander
 
 
     /// <summary>
-    /// This method will be ran as a separate thread; it is respnable for collecting all the data needed to generate the plot.
+    /// This method will be ran as a separate thread; it is responsible for collecting all the data needed to generate the plot.
     /// </summary>
     private  void  BuildPlotData ()
     {
@@ -1054,7 +1054,7 @@ namespace PicesCommander
       if  (WindowState == FormWindowState.Maximized)
       {
         // Looks like user has pressed the Maximized button.  We have to trap it here because
-        // the ResizeEnd envent does not trap when form is Maximized.
+        // the ResizeEnd event does not trap when form is Maximized.
         //PicesCommanderFormResized ();
         ChartAbundanceByDeployment_Resize (sender, e);
         formIsMaximized = true;
@@ -1064,7 +1064,7 @@ namespace PicesCommander
         if  (formIsMaximized)
         {
           // We normally trap the ResizeEnd event;  but when the form was already maximized and the user
-          // presses the button to unmaximize.  the ResizeEnd does not trap that.  So we check to 
+          // presses the button to maximize.  the ResizeEnd does not trap that.  So we check to 
           // see if the form was already maximize.  If so then we resized the form.
           //PicesCommanderFormResized ();
           ChartAbundanceByDeployment_Resize (sender, e);

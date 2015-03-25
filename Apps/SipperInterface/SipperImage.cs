@@ -9,7 +9,7 @@ using System.Windows.Forms;
 namespace SipperInterface
 {
 	/// <summary>
-	/// SipperImage was taked from Carmen Neustaedter's code and modified to suit the need of this program
+	/// SipperImage was taken from Carmen Neustaedter's code and modified to suit the need of this program
 	/// http://pages.cpsc.ucalgary.ca/~carman/481/examples/csharp/radaroverview.html
 	/// </summary>
 	public class SipperImage : System.Windows.Forms.Form
@@ -148,7 +148,7 @@ namespace SipperInterface
 				catch (Exception loadException)
 				{
 					msg = loadException.Message;
-					MessageBox.Show ("Exception occured loading image[" + msg + "]");
+					MessageBox.Show ("Exception occurred loading image[" + msg + "]");
 					this.Close ();
 				}
 

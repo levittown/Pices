@@ -9,7 +9,7 @@ using  PicesInterface;
 //* Developer:  Kurt Kramer                                                               *
 //* Date        2009-03-21                                                                *
 //*                                                                                       *
-//* Loads images from the Pices database as a seperate thread.  Images will be loaded in  *
+//* Loads images from the Pices database as a separate thread.  Images will be loaded in  *
 //* blocks so that this instance can be queried periodically for what is already loaded.  *
 //*****************************************************************************************
 
@@ -25,7 +25,7 @@ namespace PicesCommander
   
     private  bool           allSipperFiles    = false;
     private  bool           cancelRequested   = false;
-    private  String[]       sipperFileNames   = null;   // List of siper files that we will have to load from.
+    private  String[]       sipperFileNames   = null;   // List of sipper files that we will have to load from.
     private  String         curSipperFileName = null;
     private  int            curSipperFileIdx  = -1;     // Index into "sipperFileNames"  thats currently being loaded.
     private  PicesRunLog    runLog            = null;
@@ -68,7 +68,7 @@ namespace PicesCommander
     
 
 
-    int  LoadedImagesCount    // Number images that have ben loaded so far but not retrieved by "GetImagesAlreadyLoaded"
+    int  LoadedImagesCount    // Number images that have been loaded so far but not retrieved by "GetImagesAlreadyLoaded"
     {
       get  
       {
@@ -135,13 +135,13 @@ namespace PicesCommander
 
 
 
-    public  void  CancelLoad ()   // Will set "cancelRequested" flag to true and return imediately.
+    public  void  CancelLoad ()   // Will set "cancelRequested" flag to true and return immediately.
     {
       cancelRequested = true;
     }
 
 
-    public  void  CancelLoadWait (int maxMilliSecsToWait)  // Will wait upto "maxMilliSecsToWait" for loadThread to terminate before returning.  Then it will force terminatiom of thread.
+    public  void  CancelLoadWait (int maxMilliSecsToWait)  // Will wait until "maxMilliSecsToWait" for loadThread to terminate before returning.  Then it will force termination of thread.
     {
       CancelLoad ();
       int  milliSecsWaitedSoFar = 0;

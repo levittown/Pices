@@ -217,7 +217,7 @@ namespace PicesCommander
   
 
     /// <summary>
-    /// Returns an instance of 'ClassTotals' that contains a summary of the classes that are decendent of 'ancestor'.
+    /// Returns an instance of 'ClassTotals' that contains a summary of the classes that are decedent of 'ancestor'.
     /// The newly instantiated instance will point to the same instances of 'ClassTotals'  that this instance points to.
     /// As a result you should only call this method after you are done accumulating data.
     /// </summary>
@@ -245,7 +245,7 @@ namespace PicesCommander
     
 
     /// <summary>
-    /// Returns an instance of 'ClassTotals' that contains a summary of the classes that are decendent of 'ancestor'.
+    /// Returns an instance of 'ClassTotals' that contains a summary of the classes that are decedent of 'ancestor'.
     /// The newly instantiated instance will point to the same instances of 'ClassTotals'  that this instance points to.
     /// As a result you should only call this method after you are done accumulating data.
     /// </summary>
@@ -284,7 +284,7 @@ namespace PicesCommander
     /// <summary>
     /// Will add in the contents of another SizeDistribution instance into this instance.
     /// </summary>
-    /// <param name="x">The other 'SizeDistribution' instance to be acumulated to this instance.</param>
+    /// <param name="x">The other 'SizeDistribution' instance to be accumulated to this instance.</param>
     public  void  Add (SizeDistribution  x)
     {
       if  ((x.bucketCount != this.bucketCount)  ||  (x.bucketSize != this.bucketSize))
@@ -310,7 +310,7 @@ namespace PicesCommander
 
 
     /// <summary>
-    /// Method used to giurantee that the specified class is included; even if none occur.
+    /// Method used to guarantee that the specified class is included; even if none occur.
     /// </summary>
     /// <param name="mlClass">Class to add </param>
     public void   InitiateClass (PicesClass  mlClass)
@@ -525,7 +525,7 @@ namespace PicesCommander
 
       o.WriteLine (""         + "\t" + ""      + "\t" + ""         + "\t" + s1);
       o.WriteLine (""         + "\t" + ""      + "\t" + "Volume"   + "\t" + headLines[0] + "\t" + "" + "\t" + ""        + "\t" + "" + "\t" + summaryHeadLines[0] + "\t" + "" + "\t" + s1);
-      o.WriteLine (""         + "\t" + "Scan"  + "\t" + "filtered" + "\t" + headLines[1] + "\t" + "" + "\t" + "All"     + "\t" + "" + "\t" + summaryHeadLines[1] + "\t" + "" + "\t" + "Temperature"   + "\t" + "Salinity"  + "\t" + "Density"   + "\t" + "Fluorescence"  + "\t" + "FluorescenceSensor"  + "\t" + "Oxygen"  + "\t" + "Oxygen"   + "\t" + "Transmisivity"   + "\t" + "Turbidity"  + "\t" + "CdomFluorescence");
+      o.WriteLine (""         + "\t" + "Scan"  + "\t" + "filtered" + "\t" + headLines[1] + "\t" + "" + "\t" + "All"     + "\t" + "" + "\t" + summaryHeadLines[1] + "\t" + "" + "\t" + "Temperature"   + "\t" + "Salinity"  + "\t" + "Density"   + "\t" + "Fluorescence"  + "\t" + "FluorescenceSensor"  + "\t" + "Oxygen"  + "\t" + "Oxygen"   + "\t" + "Transitivity"    + "\t" + "Turbidity"  + "\t" + "CdomFluorescence");
       o.WriteLine ("Depth(m)" + "\t" + "Lines" + "\t" + "m-3"      + "\t" + headLines[2] + "\t" + "" + "\t" + "Classes" + "\t" + "" + "\t" + summaryHeadLines[2] + "\t" + "" + "\t" + temperatureUOM  + "\t" + salinityUOM + "\t" + densityUOM  + "\t" + fluorescenceUOM + "\t" + "Volts"               + "\t" + oxygenUOM + "\t" + "umol/kg"  + "\t" + transmisivityUMO  + "\t" + turbidityUMO + "\t" + cdomFluorescenceUMO);
 
       ulong  totalScanLines = 0;
