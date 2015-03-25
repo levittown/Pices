@@ -99,8 +99,8 @@ namespace MLL
 
 
   public:
-    typedef  KKB::kkint32 kkint32;
-    typedef  KKB::kkuint32  kkuint32;
+    //typedef  KKB::kkint32 kkint32;
+    //typedef  KKB::kkuint32  kkuint32;
 
     static  MLClassListPtr  GlobalClassList ();
 
@@ -279,8 +279,8 @@ namespace MLL
   class  MLClassList:  public KKQueue<MLClass>
   {
   public:
-    typedef  KKB::kkint32 kkint32;
-    typedef  KKB::kkuint32  kkuint32;
+    //typedef  KKB::kkint32 kkint32;
+    //typedef  KKB::kkuint32  kkuint32;
 
     MLClassList ();
 

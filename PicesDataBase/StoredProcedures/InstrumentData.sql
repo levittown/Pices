@@ -1328,7 +1328,8 @@ begin
        
     set  _adjCtdDateTime = timestampadd(second, _deltaGpsCtdSecs, _ctdDataTime);
     
-    call  GpsDataGetEstimate (_cruiseName, _adjCtdDateTime, @latitude, @longitude);
+    call  GpsDataGetEstimate (_cruiseName, _adjCtdDateTime, @latitude, @longitude, @cog, @sog);
+
     if  ExitLoop  then
       select "ExitLoop true afer Calling    GpsDataGetEstimate", _cruiseName,  _stationName, _deploymentNum, _sipperFileName,  _syncCtdDateTime, _syncGpsDataTime, _adjCtdDateTime, @latitude, @longitude;
       set ExitLoop = False;
