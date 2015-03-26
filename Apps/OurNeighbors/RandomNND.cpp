@@ -350,7 +350,7 @@ void	RandomNND::GenerateReport ()
     report << endl << endl
            << "Iteration" << "\t" << "Mean"  << "\t" << "StdDev" << "\t" << "Min" << "\t" << "Max" << endl;
 
-    kkint32  origPrecision = report.precision ();
+    kkint32  origPrecision = (kkint32)report.precision ();
 
     for  (iteration = 0;  iteration < numIterations;  iteration++)
     {

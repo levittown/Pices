@@ -390,7 +390,7 @@ void  ExtractFeatures::ClassifyImage (ImageFeaturesPtr  image)
   if  (mlClass)
   {
     image->MLClass (ourClass);
-    image->Probability ((FFLOAT)probability);
+    image->Probability ((float)probability);
   }
 }  /* ClassifyImage */
 

@@ -73,7 +73,7 @@ kkint32  LLoydsEntry::LLoydsBin (size_t idx) const
 
 
 LLoydsEntryList::LLoydsEntryList (RunLog&  _log):
-  KKQueue<LLoydsEntry>  (true, 20),
+  KKQueue<LLoydsEntry>  (true),
   log                   (_log)
 {
 }

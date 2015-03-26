@@ -562,8 +562,8 @@ void  CreateTrainAndTestDataSets (FeatureVectorListPtr  examples)
   if  (lopOff < 1)
     lopOff = INT_MAX;
 
-  FeatureVectorList  trainingExamples (fileDesc, false, runLog, lopOff);
-  FeatureVectorList  testExamples     (fileDesc, false, runLog, lopOff);
+  FeatureVectorList  trainingExamples (fileDesc, false, runLog);
+  FeatureVectorList  testExamples     (fileDesc, false, runLog);
 
   for  (int cIDX = 0;  cIDX < numOfClasses;  cIDX++)
   {
@@ -958,7 +958,7 @@ void   TrimClasses (FeatureVectorListPtr  examples)
   KKStr  configFileName = osRemoveExtension (inputFileName) + "_Trimmed.cfg";
   ofstream  configFile (configFileName.Str ());
 
-  FeatureVectorList  trimedList (examples->FileDesc (), false, runLog, examples->QueueSize ());
+  FeatureVectorList  trimedList (examples->FileDesc (), false, runLog);
 
   MLClassConstList  newClassList;
 

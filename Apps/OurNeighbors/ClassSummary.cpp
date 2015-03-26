@@ -142,8 +142,8 @@ kkint32  ClassSummary::LLoydsBinSize (kkuint32 lloydsEntryIDX) const
 
 
 ClassSummaryList::ClassSummaryList (RunLog&  _log):
-  KKQueue<ClassSummary>  (true, 20),
-  log                  (_log)
+  KKQueue<ClassSummary>  (true),
+  log                    (_log)
 {}
 
 

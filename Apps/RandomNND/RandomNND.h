@@ -2,7 +2,7 @@
 #define  _RANDOMNND_
 
 #include "RunLog.h"
-#include "Str.h"
+#include "KKStr.h"
 
 #include "PicesApplication.h"
 
@@ -38,8 +38,8 @@ public:
 	~RandomNND();
 
   virtual
-  void  InitalizeApplication (int32   argc,
-                              char**  argv
+  void  InitalizeApplication (kkint32  argc,
+                              char**   argv
                              );
 
 	virtual const char* ApplicationName ()  const  {return  "RandomNND";}
