@@ -133,9 +133,8 @@ void  SipperBuff3Bit::GetNextSipperRec (kkuint32&  spaceLeft,
 
     if  (((!raw) && (numOfBlanks > (spaceLeft + 100)))  ||  (cameraNum == 1))
     {
-      // Looks like we are a byte out of sequence,  Maybe Byte was dropped 
-      // by sipper.  We will read one byte only to seee if we can get back 
-      // into sync,
+      // Looks like we are a byte out of sequence, maybe Byte was dropped by sipper. We 
+      // will read one byte only to see if we can get back into sync,
 
       exitLoop = false;
 

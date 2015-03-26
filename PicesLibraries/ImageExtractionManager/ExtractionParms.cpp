@@ -338,7 +338,7 @@ void  ExtractionParms::DisplayExampleCmdLine ()
   cout <<                                                                        endl;
   cout <<                                                                        endl;
   cout << "  -Morph <operations>   operations are 'o'-Opening, 'c'-Closing"   << endl;
-  cout << "        'e'-Erosion, 'd'-Dialation."                               << endl;
+  cout << "        'e'-Erosion, 'd'-Dilation."                               << endl;
   cout << "        example string  'O,O,D' = Two Openings followed by a"      << endl;
   cout << "        followed by a Dialaton operation."                         << endl;
   cout <<                                                                        endl;

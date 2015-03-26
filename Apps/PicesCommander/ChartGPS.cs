@@ -66,6 +66,10 @@ namespace PicesCommander
     List<PlotRequest>  plotRequests = null;
 
 
+    /// <summary>
+    /// Data for one series that will be plotted will be maintained in a single instance of this class.
+    /// There will be one instance for each series.
+    /// </summary>
     private  class  DataSeriesToPlot
     {
       public  DataSeriesToPlot (PicesSipperDeployment  _deployment,
@@ -142,7 +146,7 @@ namespace PicesCommander
         }
 
         return  closestPoint;
-      }
+      }  /* ClosestPoint */
 
       public  PicesSipperDeployment  deployment     = null;
       public  PicesGPSDataPointList  data           = null;
@@ -150,7 +154,7 @@ namespace PicesCommander
       public  double                 latitudeMax    = double.MinValue;
       public  double                 longitudeMin   = double.MaxValue;
       public  double                 longitudeMax   = double.MinValue;
-    }
+    }  /* DataSeriesToPlot */
 
     
     private  List<DataSeriesToPlot>  series = new List<DataSeriesToPlot> ();

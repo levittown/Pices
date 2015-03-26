@@ -50,7 +50,7 @@ struct  SipperBuff4Bit::OpRecTextBlock1
 
 struct  SipperBuff4Bit::OpRecTextBlock2
 {
-  uchar lenLowBits: 8;     /**< Add this value to the prev rec 'lenHighBits' field to get the length of the text block. */
+  uchar lenLowBits: 8;     /**< Add this value to the previous rec 'lenHighBits' field to get the length of the text block. */
 };
 
 
@@ -97,7 +97,7 @@ struct  SipperBuff4Bit::OpRecRunLen
 
 struct  SipperBuff4Bit::OpRecRun256Len1
 {
-  /** For one or two raw pixles */
+  /** For one or two raw pixels */
   uchar  opCode     :4;      /**< 10 = up to 256 run-len  */
   uchar  pixelValue :4;
 };  /* OpRecRun256Len1 */
@@ -140,7 +140,7 @@ struct  SipperBuff4Bit::OpRecRaw513Pixels1
 
 struct  SipperBuff4Bit::OpRecRaw513Pixels2
 {
-  /** For one or two raw pixles */
+  /** For one or two raw pixels */
   uchar  lenLow :4;      /**< 13 = Odd number of pixes, up to 513 pixels.    */
   uchar  pix0   :4;      /**< 1st Raw pixel  */
 

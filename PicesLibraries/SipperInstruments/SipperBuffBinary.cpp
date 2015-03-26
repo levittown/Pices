@@ -435,7 +435,7 @@ void  SipperBuffBinary::GetNextLine (uchar*  lineBuff,
   if  (linesInRowThatExceededBuffLen > 1)
   {
     linesInRowThatExceededBuffLen = 0;
-    cout << "Resinking Buffer" << endl;
+    cout << "ReSinking Buffer" << endl;
     // WaitForEnter ();
   }
 

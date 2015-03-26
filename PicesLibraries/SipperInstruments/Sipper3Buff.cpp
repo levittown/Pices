@@ -1,28 +1,24 @@
-#include  "FirstIncludes.h"
+#include "FirstIncludes.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-
-
-#include  <iostream>
-#include  <fstream>
-#include  <vector>
-
-#include  "MemoryDebug.h"
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include "MemoryDebug.h"
 using namespace std;
 
 
-#include  "KKBaseTypes.h"
-#include  "OSservices.h"
-#include  "KKStr.h"
+#include "KKBaseTypes.h"
+#include "OSservices.h"
+#include "KKStr.h"
 using namespace KKB;
 
 
-
-#include  "Sipper3Buff.h"
-#include  "InstrumentDataManager.h"
-#include  "SipperHeaderRec.h"
+#include "Sipper3Buff.h"
+#include "InstrumentDataManager.h"
+#include "SipperHeaderRec.h"
 using namespace SipperHardware;
 
 
@@ -173,7 +169,7 @@ void  Sipper3Buff::GetNextSipperRec (kkuint32&  spaceLeft,
       pixels[11] = sipperRec.pix0;
 
       // Since this is B/W data,
-      // lets convert to   "0 for white"  and  "7 fo black"
+      // lets convert to   "0 for white"  and  "7 for black"
       kkint32  x;
       for  (x = 0;  x < 12;  x++)
       {
@@ -292,7 +288,7 @@ void  Sipper3Buff::GetNextLine (uchar*  lineBuff,
         kkint32 z = numOfBlanks - spaceLeft;
         if  ( z > 12)
         {
-          // Something is very very wrong.
+          // Something is very wrong.
           if  (!exceededLineMsgPrinted)
           {
             cerr << "GetNextLine  ***ERROR***  "  << osGetRootName (FileName ()) << ":" << CurRow () << "  Length by more than 12 bytes." << endl;
@@ -536,7 +532,7 @@ void  Sipper3Buff::ExtractSipperHeaderInfo ()
 
   rewind (inFile);
 
-  KKStr  headerStr (500);  // Pre Allocated 500 characters.
+  KKStr  headerStr (500);  // PreAllocated 500 characters.
 
 
   // The header info should be the first bytes written to the file.  These bytes are written

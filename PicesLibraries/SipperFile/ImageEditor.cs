@@ -98,7 +98,7 @@ namespace SipperFile
         switch  (operation)
         {
           case  PicesRaster.OperationType.Closing:  
-          case  PicesRaster.OperationType.Dialation:
+          case  PicesRaster.OperationType.Dilation:
           case  PicesRaster.OperationType.Erosion:
           case  PicesRaster.OperationType.Opening:
             {
@@ -148,7 +148,7 @@ namespace SipperFile
           case  PicesRaster.OperationType.Closing:            result = r.CloseImage          (mask);              break;
           case  PicesRaster.OperationType.ConnectedComponent: result = r.ConnectedComponent  ((byte)maskSize);    break;
           case  PicesRaster.OperationType.ConvexHull:         result = r.ConvexHull          ();                  break;
-          case  PicesRaster.OperationType.Dialation:          result = r.DialateImage        (mask);              break;
+          case  PicesRaster.OperationType.Dilation:          result = r.DialateImage        (mask);              break;
           case  PicesRaster.OperationType.Edge:               result = r.EdgeImage           ();                  break;
           case  PicesRaster.OperationType.Erosion:            result = r.ErodeImage          (mask);              break;
           case  PicesRaster.OperationType.FillHoles:          result = r.FillHoles           ();                  break;
@@ -824,7 +824,7 @@ namespace SipperFile
 
     private void DialationButton_Click(object sender, EventArgs e)
     {
-      AddOperation (PicesRaster.OperationType.Dialation);
+      AddOperation (PicesRaster.OperationType.Dilation);
     }
 
     private void SmoothingButton_Click(object sender, EventArgs e)

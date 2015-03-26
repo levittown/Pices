@@ -217,7 +217,7 @@ namespace  PicesInterface
     case  OperationType::Closing:             result = "Closing";             break;
     case  OperationType::ConnectedComponent:  result = "ConnectedComponent";  break;
     case  OperationType::ConvexHull:          result = "ConvexHull";          break;
-    case  OperationType::Dialation:           result = "Dialation";           break;
+    case  OperationType::Dilation:           result = "Dilation";           break;
     case  OperationType::Edge:                result = "Edge";                break;
     case  OperationType::Erosion:             result = "Erosion";             break;
     case  OperationType::FillHoles:           result = "FillHoles";           break;
@@ -258,7 +258,7 @@ namespace  PicesInterface
       return  OperationType::ConvexHull;
 
     if  (otStr == "DIALATION")
-      return  OperationType::Dialation;
+      return  OperationType::Dilation;
 
     if  (otStr == "EDGE")
       return  OperationType::Edge;
@@ -490,7 +490,7 @@ namespace  PicesInterface
 
   PicesRaster^   PicesRaster::DialateImage (MaskType  mt)
   {
-    RasterSipperPtr  dialatedRaster = raster->CreateDialatedRaster ((KKB::MaskTypes)mt);
+    RasterSipperPtr  dialatedRaster = raster->CreateDilatedRaster ((KKB::MaskTypes)mt);
 
     return  gcnew PicesRaster (dialatedRaster);
   }   /* DialateImage */
@@ -500,7 +500,7 @@ namespace  PicesInterface
   PicesRaster^   PicesRaster::OpenImage (MaskType  mt)
   {
     RasterSipperPtr  erodedImage = raster->CreateErodedImage         ((KKB::MaskTypes)mt);
-    RasterSipperPtr  opendImage  = erodedImage->CreateDialatedRaster ((KKB::MaskTypes)mt);
+    RasterSipperPtr  opendImage  = erodedImage->CreateDilatedRaster ((KKB::MaskTypes)mt);
     delete  erodedImage;  erodedImage = NULL;
     return  gcnew PicesRaster (opendImage);
   }  /* OpenImage */
@@ -549,7 +549,7 @@ namespace  PicesInterface
 
   PicesRaster^   PicesRaster::CloseImage (MaskType  mt)
   {
-    RasterSipperPtr  dialatedImage = raster->CreateDialatedRaster     ((KKB::MaskTypes)mt);
+    RasterSipperPtr  dialatedImage = raster->CreateDilatedRaster     ((KKB::MaskTypes)mt);
     RasterSipperPtr  closedImage   = dialatedImage->CreateErodedImage ((KKB::MaskTypes)mt);
     delete  dialatedImage;  dialatedImage = NULL;
     return  gcnew PicesRaster (closedImage);
