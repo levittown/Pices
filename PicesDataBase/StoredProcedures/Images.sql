@@ -1053,7 +1053,7 @@ drop procedure  if exists ImagesUpdatePredictionsList;
 
 delimiter //
 create procedure  ImagesUpdatePredictionsList (in  _logEntryId       int unsigned,
-                                               in  _predictionList   varChar(64000)
+                                               in  _predictionList   varChar(21845)
                                               )
 begin
   declare  _idx             int default 0;
