@@ -178,12 +178,12 @@ void  Sipper3RevBuff::GetNextSipperRec (kkuint32&  spaceLeft,
 
 
 
-void  Sipper3RevBuff::GetNextLine (uchar*  lineBuff,
+void  Sipper3RevBuff::GetNextLine (uchar*    lineBuff,
                                    kkuint32  lineBuffSize,
                                    kkuint32& lineSize,
                                    kkuint32  colCount[],
                                    kkuint32& pixelsInRow,
-                                   bool&   flow
+                                   bool&     flow
                                   )
 {
   bool    imageData;
@@ -267,7 +267,7 @@ void  Sipper3RevBuff::GetNextLine (uchar*  lineBuff,
         kkint32 z = numOfBlanks - spaceLeft;
         if  ( z > 12)
         {
-          // Something is very very wrong.
+          // Something is very wrong.
           cerr << endl
                << endl
                << "Sipper3RevBuff::GetNextLine     *** ERROR ***" << endl

@@ -584,14 +584,14 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
 
   RasterSipperPtr  edgeImage = new RasterSipper (*raster);
 
-  edgeImage->Dialation ();
+  edgeImage->Dilation ();
   //if  (saveImages)
   //{
   //  kkint32  a = (kkint32)edgeImage->CalcArea ();
   //  Save (*edgeImage, "Edge_Dialation_1_" + StrFormatInt (a, "ZZZZZZ0"), saveImages);
   //}
 
-  edgeImage->Dialation ();
+  edgeImage->Dilation ();
   //if  (saveImages)
   //{
   //  kkint32  a = (kkint32)edgeImage->CalcArea ();
@@ -931,7 +931,7 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
 
     {
       RasterSipper  countourImage (*raster);
-      //countourImage.Dialation (SQUARE5);  
+      //countourImage.Dilation (SQUARE5);  
 
 
       kkint32  minExpectedLen = (kkint32)(float (numEdgePixelsFound) * 0.5f);
@@ -940,7 +940,7 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
       kkint32  numOfTries = 0;
       while  (!successful)
       {
-        countourImage.Dialation (); // We want the image to be completly connected.
+        countourImage.Dilation (); // We want the image to be completly connected.
         {
           Save  (countourImage, "_JustBeforeContour", saveImages);
           ContourFollower contourFollower (countourImage, log);

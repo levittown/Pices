@@ -60,6 +60,9 @@
       this.COGField = new System.Windows.Forms.TextBox();
       this.SOGLabel = new System.Windows.Forms.Label();
       this.SOGField = new System.Windows.Forms.TextBox();
+      this.DeploymentHighlightedLabel = new System.Windows.Forms.Label();
+      this.DeploymentHighlighted = new System.Windows.Forms.TextBox();
+      this.PlotCruiseField = new System.Windows.Forms.CheckBox();
       this.SelectionCriteriaPanel.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.ProfileChart)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.TimeInterval)).BeginInit();
@@ -140,7 +143,7 @@
       // PlotButton
       // 
       this.PlotButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.PlotButton.Location = new System.Drawing.Point(15, 502);
+      this.PlotButton.Location = new System.Drawing.Point(14, 501);
       this.PlotButton.Name = "PlotButton";
       this.PlotButton.Size = new System.Drawing.Size(75, 23);
       this.PlotButton.TabIndex = 28;
@@ -151,7 +154,7 @@
       // CancelPlotButton
       // 
       this.CancelPlotButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.CancelPlotButton.Location = new System.Drawing.Point(285, 502);
+      this.CancelPlotButton.Location = new System.Drawing.Point(284, 501);
       this.CancelPlotButton.Name = "CancelPlotButton";
       this.CancelPlotButton.Size = new System.Drawing.Size(75, 23);
       this.CancelPlotButton.TabIndex = 29;
@@ -218,7 +221,7 @@
       // TimeInterval
       // 
       this.TimeInterval.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.TimeInterval.Location = new System.Drawing.Point(15, 377);
+      this.TimeInterval.Location = new System.Drawing.Point(13, 377);
       this.TimeInterval.Minimum = new decimal(new int[] {
             5,
             0,
@@ -241,7 +244,7 @@
       // TimeIntervalLabel
       // 
       this.TimeIntervalLabel.AutoSize = true;
-      this.TimeIntervalLabel.Location = new System.Drawing.Point(12, 361);
+      this.TimeIntervalLabel.Location = new System.Drawing.Point(10, 361);
       this.TimeIntervalLabel.Name = "TimeIntervalLabel";
       this.TimeIntervalLabel.Size = new System.Drawing.Size(68, 13);
       this.TimeIntervalLabel.TabIndex = 32;
@@ -250,7 +253,7 @@
       // Status
       // 
       this.Status.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.Status.Location = new System.Drawing.Point(12, 473);
+      this.Status.Location = new System.Drawing.Point(11, 472);
       this.Status.Name = "Status";
       this.Status.ReadOnly = true;
       this.Status.Size = new System.Drawing.Size(345, 23);
@@ -347,11 +350,43 @@
       this.SOGField.TabIndex = 54;
       this.SOGField.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       // 
+      // DeploymentHighlightedLabel
+      // 
+      this.DeploymentHighlightedLabel.AutoSize = true;
+      this.DeploymentHighlightedLabel.Location = new System.Drawing.Point(13, 404);
+      this.DeploymentHighlightedLabel.Name = "DeploymentHighlightedLabel";
+      this.DeploymentHighlightedLabel.Size = new System.Drawing.Size(119, 13);
+      this.DeploymentHighlightedLabel.TabIndex = 57;
+      this.DeploymentHighlightedLabel.Text = "Deployment Highlighted";
+      // 
+      // DeploymentHighlighted
+      // 
+      this.DeploymentHighlighted.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+      this.DeploymentHighlighted.Location = new System.Drawing.Point(14, 420);
+      this.DeploymentHighlighted.Name = "DeploymentHighlighted";
+      this.DeploymentHighlighted.ReadOnly = true;
+      this.DeploymentHighlighted.Size = new System.Drawing.Size(118, 23);
+      this.DeploymentHighlighted.TabIndex = 56;
+      this.DeploymentHighlighted.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+      // 
+      // PlotCruiseField
+      // 
+      this.PlotCruiseField.AutoSize = true;
+      this.PlotCruiseField.Location = new System.Drawing.Point(277, 97);
+      this.PlotCruiseField.Name = "PlotCruiseField";
+      this.PlotCruiseField.Size = new System.Drawing.Size(76, 17);
+      this.PlotCruiseField.TabIndex = 58;
+      this.PlotCruiseField.Text = "Plot Cruise";
+      this.PlotCruiseField.UseVisualStyleBackColor = true;
+      // 
       // ChartGPS
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(967, 534);
+      this.ClientSize = new System.Drawing.Size(967, 599);
+      this.Controls.Add(this.PlotCruiseField);
+      this.Controls.Add(this.DeploymentHighlightedLabel);
+      this.Controls.Add(this.DeploymentHighlighted);
       this.Controls.Add(this.SOGLabel);
       this.Controls.Add(this.SOGField);
       this.Controls.Add(this.COGLabel);
@@ -409,6 +444,9 @@
     private System.Windows.Forms.TextBox COGField;
     private System.Windows.Forms.Label SOGLabel;
     private System.Windows.Forms.TextBox SOGField;
+    private System.Windows.Forms.Label DeploymentHighlightedLabel;
+    private System.Windows.Forms.TextBox DeploymentHighlighted;
+    private System.Windows.Forms.CheckBox PlotCruiseField;
 
 
   }

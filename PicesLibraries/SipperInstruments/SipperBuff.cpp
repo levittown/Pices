@@ -539,7 +539,7 @@ SipperBuffPtr  SipperBuff::CreateSipperBuff (SipperFileFormat          _format,
 
   if  (_format == sfUnKnown)
   {
-    // We are going to have to figre out the format 
+    // We are going to have to figure out the format 
     _format = GuessFormatOfFile (_fileName, _cameraNum, _log);
   }
 
@@ -600,7 +600,7 @@ void  SipperBuff::DetermineCropSettings  (kkuint32&  cropLeft,
 
   vector<uchar>  smoothWindow(3, 0);
 
-  // Skip fisr 50K lines
+  // Skip first 50K lines
   for  (x = 0;  (x < 50000)  &&  (!eof);  ++x)
   {
     pixelsInRow = 0;

@@ -200,10 +200,10 @@ namespace KKB
                                             float               widthFactor
                                            );
 
-    RasterSipperPtr     CreateDialatedRaster ()  const;
+    RasterSipperPtr     CreateDilatedRaster ()  const;
 
 
-    RasterSipperPtr     CreateDialatedRaster (MaskTypes  mask)  const;
+    RasterSipperPtr     CreateDilatedRaster (MaskTypes  mask)  const;
 
     RasterSipperPtr     CreateErodedImage (MaskTypes  mask)  const;
 

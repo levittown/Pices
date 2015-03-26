@@ -69,7 +69,7 @@ namespace PicesInterface
        Closing,
        ConnectedComponent,
        ConvexHull,
-       Dialation, 
+       Dilation, 
        Edge,
        Erosion,
        FillHoles,

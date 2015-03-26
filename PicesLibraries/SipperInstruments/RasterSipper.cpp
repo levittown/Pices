@@ -250,20 +250,20 @@ RasterSipperPtr   RasterSipper::ReversedImage ()
 
 
 
-RasterSipperPtr  RasterSipper::CreateDialatedRaster ()  const
+RasterSipperPtr  RasterSipper::CreateDilatedRaster ()  const
 {
-  RasterPtr  r = Raster::CreateDialatedRaster ();
+  RasterPtr  r = Raster::CreateDilatedRaster ();
   return  RasterSipper::TurnIntoSipperRasterPtr (r);
-}  /* CreateDialatedRaster */
+}  /* CreateDilatedRaster */
 
 
 
 
-RasterSipperPtr  RasterSipper::CreateDialatedRaster (MaskTypes  mask)  const
+RasterSipperPtr  RasterSipper::CreateDilatedRaster (MaskTypes  mask)  const
 {
-  RasterPtr  r = Raster::CreateDialatedRaster (mask);
+  RasterPtr  r = Raster::CreateDilatedRaster (mask);
   return  RasterSipper::TurnIntoSipperRasterPtr (r);
-}  /* CreateDialatedRaster */
+}  /* CreateDilatedRaster */
 
 
 

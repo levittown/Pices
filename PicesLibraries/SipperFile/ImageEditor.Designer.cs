@@ -255,7 +255,7 @@ namespace SipperFile
       this.DialationButton.Name = "DialationButton";
       this.DialationButton.Size = new System.Drawing.Size (76, 22);
       this.DialationButton.TabIndex = 21;
-      this.DialationButton.Text = "Dialation";
+      this.DialationButton.Text = "Dilation";
       this.DialationButton.UseVisualStyleBackColor = true;
       this.DialationButton.Click += new System.EventHandler (this.DialationButton_Click);
       // 
