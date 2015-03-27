@@ -6,11 +6,11 @@
  @details 
  @code
  ************************************************************************************************
- **  Used for Maintaing LogEntries; specificaly is is used to indicate when Processes started   *
+ **  Used for Maintaining LogEntries; specifically is used to indicate when Processes started   *
  **  and ended along with the command line used.  Each entry will be assigned a unique ID that  *
  **  other elements can refer to.  For example each entry in the Images table can refer to the  *
  **  log entry that generated the image.  Programs such as "GrayImageExtraction" and            *
- **  "ImageClassification" wil generate entries into this table.                                *
+ **  "ImageClassification" will generate entries into this table.                               *
  ************************************************************************************************
  @endcode
  */
@@ -85,7 +85,7 @@ namespace MLL
   private:
     kkuint32          logEntryId;
     KKStr             progCode;          /**< "IE"=Image Extraction, "CL"=Classification.    */
-    KKStr             progName;          /**< Name of applicationperforming process.         */
+    KKStr             progName;          /**< Name of application performing process.        */
     KKB::DateTime     dateTimeCompiled;  /**< DateTime program was compiled.                 */
     KKStr             cmdLine;           /**< Command line used to run program.              */
     KKStr             compName;          /**< Name of computer that program ran on.          */
@@ -94,7 +94,7 @@ namespace MLL
     KKB::DateTime     dateTimeStart;     /**< DateTime process started.                      */
     KKB::DateTime     dateTimeStartUtc;  /**< UTC DateTime process started.                  */
     KKB::DateTime     dateTimeEnd;
-    float             cpuTimeUsed;       /**< Number of CPU seconds used surimng process.    */
+    float             cpuTimeUsed;       /**< Number of CPU seconds used during process.     */
     KKStr             completionStatus;  /**< Indicates status of process when completed.    */
     KKStr             sipperFileName;    /**< Root Name of Sipper file; if processed against one SIPPER file. */
   };  /* DataBaseLogEntry */

@@ -33,20 +33,20 @@ typedef  ClassTotalsList*  ClassTotalsListPtr;
 
 namespace  MLL
 {
-class  SizeDistribution
-{
+  class  SizeDistribution
+  {
   public:
     SizeDistribution (kkint32  _bucketCount,
                       kkint32  _bucketSize,
                       RunLog&  _log
-                     );
+                      );
   
     ~SizeDistribution ();
 
 
     void     Increment (MLClassConstPtr  mlClass,
                         kkint32             size
-                       );
+                        );
 
 
     void     PrintFormatedDistributionMatrix (ostream&  _outFile)  const;
@@ -59,7 +59,7 @@ class  SizeDistribution
 
 
     void     PrintByClassCollumns (ostream&      o,
-                                   VectorUlong*  scanLinesPerMeter 
+                                    VectorUlong*  scanLinesPerMeter 
                                   )  const;
 
 

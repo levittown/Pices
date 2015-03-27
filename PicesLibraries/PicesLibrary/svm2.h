@@ -18,12 +18,12 @@ using namespace  MLL;
 
 /**
  *@namespace  SVM289_MFS
- *@brief   This is a vesion 2.89 of "Chih-Chung Chang" and "Chih-Jen Lin"  libSVM (Support Vector Machine) that selects different features per pair of classes.
+ *@brief   This is a version 2.89 of "Chih-Chung Chang" and "Chih-Jen Lin"  libSVM (Support Vector Machine) that selects different features per pair of classes.
  *@details 
  *@code
  *   Downloaded from "http://www.csie.ntu.edu.tw/~cjlin/libsvm/"
  *@endcode
- *@details For each pair of classes a 'FeatureNumList" instance specifies which features are to be used during kernal computations.
+ *@details For each pair of classes a 'FeatureNumList" instance specifies which features are to be used during kernel computations.
  */
 namespace  SVM289_MFS
 {
@@ -56,7 +56,7 @@ namespace  SVM289_MFS
 
     const FeatureNumList&   SelFeatures ()  const  {return selFeatures;}
 
-    kkint32               l;
+    kkint32             l;
     FeatureNumList      selFeatures;
     FeatureVectorList   x;
     double*             y;
@@ -117,14 +117,14 @@ namespace  SVM289_MFS
     double       eps;            /* stopping criteria                 */
     double       C;              /* for C_SVC, EPSILON_SVR and NU_SVR */
     kkint32      nr_weight;      /* for C_SVC                         */
-    kkint32*       weight_label;   /* for C_SVC                         */
+    kkint32*       weight_label; /* for C_SVC                         */
     double*      weight;         /* for C_SVC                         */
     double       nu;             /* for NU_SVC, ONE_CLASS, and NU_SVR */
     double       p;              /* for EPSILON_SVR                   */
     kkint32      shrinking;      /* use the shrinking heuristics      */
     kkint32      probability;    /* do probability estimates          */
 
-    double       probParam;      /*  probability parameter as done using USF multi class prob calc */
+    double       probParam;      /*  probability parameter as done using USF multi class prob calculation */
 
     static  const char*  svm_type_table[];
 
@@ -190,30 +190,29 @@ namespace  SVM289_MFS
 
 
     svm_parameter      param;      // parameter
-    kkint32            nr_class;   // number of classes, = 2 in regression/one class svm
-    kkint32            l;          // total #SV
-    FeatureVectorList  SV;         // SVs (SV[l])
-    double**           sv_coef;    // coefficients for SVs in decision functions (sv_coef[k-1][l])
-    double*            rho;        // constants in decision functions (rho[k*(k-1)/2])
-    double*            probA;      // pariwise probability information
+    kkint32            nr_class;   /**< Number of classes, = 2 in regression/one class svm            */
+    kkint32            l;          /**< total number of Support Vectors (SV)                          */
+    FeatureVectorList  SV;         /**< SVs (SV[l])                                                   */
+    double**           sv_coef;    /**< coefficients for SVs in decision functions (sv_coef[k-1][l])  */
+    double*            rho;        /**< constants in decision functions (rho[k*(k-1)/2])              */
+    double*            probA;      /**< pairwise probability information                              */
     double*            probB;
     FeatureNumList     selFeatures;
 
     // for classification only
 
-    kkint32*    label;   // label of each class (label[k])
-    kkint32*    nSV;     // number of SVs for each class (nSV[k])
+    kkint32*    label;   /**< label of each class (label[k])             */
+    kkint32*    nSV;     /**< The number of SVs for each class (nSV[k])  */
     // nSV[0] + nSV[1] + ... + nSV[k-1] = l
     // XXX
     bool  weOwnSupportVectors;    // 1 if svm_model is created by svm_load_model
     // 0 if svm_model is created by svm_train
 
 
-    // Support Prediction Calcs
+    // Support Prediction Calculations
     double*    dec_values;
     double**   pairwise_prob;
     double*    prob_estimates;
-
   };
 
 
@@ -223,8 +222,8 @@ namespace  SVM289_MFS
                          );
 
   kkint32  svm_save_model (const char*              model_file_name, 
-                         const struct svm_model*  model
-                        );
+                           const struct svm_model*  model
+                          );
 
   void  svm_save_model_XML (ostream&          o, 
                             const svm_model&  model
@@ -242,7 +241,7 @@ namespace  SVM289_MFS
   kkint32  svm_get_nr_class (const struct svm_model *model);
 
   void  svm_get_labels  (const struct svm_model*  model, 
-                         kkint32*                   label
+                         kkint32*                 label
                         );
 
   double  svm_get_svr_probability (const struct svm_model *model);
@@ -262,7 +261,7 @@ namespace  SVM289_MFS
   double svm_predict_probability (      svm_model*      model, 
                                   const FeatureVector&  x, 
                                   double*               prob_estimates,
-                                  kkint32*                votes
+                                  kkint32*              votes
                                  );
 
   void svm_destroy_model (struct svm_model*&  model);

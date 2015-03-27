@@ -6,7 +6,7 @@
 #include "RunLog.h"
 #include "KKStr.h"
 #include "KKQueueConst.h"
-
+using namespace KKB;
 
 namespace MLL
 {
@@ -46,8 +46,8 @@ namespace MLL
 
     /** @brief Construct a MLClassList object from the contents of a file. */
     MLClassConstList (const KKStr&  fileName,
-                         bool&         successfull
-                        );
+                      bool&         successfull
+                     );
 
     virtual
       ~MLClassConstList ();
@@ -59,8 +59,8 @@ namespace MLL
 
     static
     MLClassConstListPtr  BuildListFromDelimtedStr (const KKStr&  s,
-                                                      char          delimiter
-                                                     );
+                                                   char          delimiter
+                                                  );
 
 
     /** @brief  Clears the contents of this list and updates nameIndex structure. */
@@ -141,8 +141,8 @@ namespace MLL
       
     static
       MLClassConstListPtr  MergeClassList (const MLClassConstList&  list1,
-                                              const MLClassConstList&  list2
-                                             );
+                                           const MLClassConstList&  list2
+                                          );
 
 
     KKB::kkuint16  NumHierarchialLevels ()  const;
@@ -196,7 +196,7 @@ namespace MLL
     typedef  map<KKStr,MLClassConstPtr>   NameIndex;
     NameIndex     nameIndex;
 
-    bool      undefinedLoaded;  /**< Indicates if the class that represents examples that have not beed 
+    bool      undefinedLoaded;  /**< Indicates if the class that represents examples that have not need 
                                  *   classified yet has been loaded.
                                  */
 
@@ -209,12 +209,12 @@ namespace MLL
 
 
 
-  std::ostream&  operator<< (      std::ostream&         os, 
+  std::ostream&  operator<< (      std::ostream&      os, 
                              const MLClassConstList&  classList
                             );
 
 
-  KKStr&  operator<< (      KKStr&                str, 
+  KKStr&  operator<< (      KKStr&             str, 
                       const MLClassConstList&  classList
                      );
 

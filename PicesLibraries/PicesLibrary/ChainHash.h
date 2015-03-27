@@ -77,7 +77,7 @@ namespace MLL
 
 
 
-  /* set hashSize, length and init first before hashing */
+  /* set hashSize, length and initialize first before hashing */
   class ChainHashNode
   {
   public:
@@ -109,13 +109,13 @@ namespace MLL
     inline kkint32 getIndex() const  {return index;}
 
 
-    // The bucketList is a list lists containing integers that are indices into the original 
-    // example list. The pos number is the new index for each example in the list at that position
+    // The bucketList is a list lists containing integers that are indexes into the original 
+    // example list. The 'pos' number is the new index for each example in the list at that position
     // This list may be redundant. - KNS
     inline void setBucketListIndex (kkint32 pos)  {bucketListIndex = pos;}
 
 
-    // returns the position in the new example list of the the node in question
+    // returns the position in the new example list of the node in question
     inline kkint32 getBucketListIndex () const  {return  bucketListIndex;}
 
     FeatureVectorPtr  Image ()   {return example;}
@@ -258,7 +258,7 @@ namespace MLL
 
     if  (bucket[index].size() == 0)
     {
-      // There are no nodes tha have this hash key.
+      // There are no nodes that have this hash key.
 
       //update the position of x in bucketList
       x->setBucketListIndex(count);   // This node must be unique so we are going
@@ -357,7 +357,7 @@ namespace MLL
 
     cout << endl
          << "Buckets Used     [" << c << "]" << endl
-         << "Ussage           [" << StrFormatDouble (ussage * 100.0f, "ZZ0.00000") << "%]" << endl
+         << "Usage            [" << StrFormatDouble (ussage * 100.0f, "ZZ0.00000") << "%]" << endl
          << "Mean             [" << StrFormatDouble (mean,   "ZZ0.00000")          << "]"  << endl
          << "Var              [" << StrFormatDouble (var,    "ZZZ,ZZ0.00000")      << "]"  << endl
          << "StdDev           [" << StrFormatDouble (stdDev, "ZZZ,ZZ0.00000")      << "]"  << endl

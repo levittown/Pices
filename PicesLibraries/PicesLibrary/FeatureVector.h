@@ -4,7 +4,7 @@
 
 /**
  *@class  MLL::FeatureVector
- *@brief  Represents a Feature Vector of a single example, labeled or unlabele
+ *@brief  Represents a Feature Vector of a single example, labeled or unlabeled
  *@author  Kurt Kramer
  *@details Used for the representation of a Single example. You create an instance of 
  *        this object for each single feature vector. You can subclass from this Class
@@ -43,7 +43,7 @@ namespace MLL
 
   /**
    *@class FeatureVector
-   *@brief  Represents a Feature Vector of a single example, labeled or unlabele
+   *@brief  Represents a Feature Vector of a single example, labeled or unlabeled
    *@details Used for the representation of a Single example. You create an instance of 
    *         this object for each single feature vector. You can subclass from this Class
    *         to make a specialized FeatureVector as in the ImageFeatures class. Besides 
@@ -70,17 +70,17 @@ namespace MLL
 
     void  BreakTie         (float            _breakTie)       {breakTie       = _breakTie;}        /**< @brief Update the BreatTie value. */
     void  MLClass          (MLClassConstPtr  _mlClass)        {mlClass        = _mlClass;}         /**< @brief Assign a class to this example. */
-    void  ImageFileName    (const KKStr&     _imageFileName)  {imageFileName  = _imageFileName;}   /**< @brief Name of source of feature vectpr, ex: file name of image that the veature vector was computed from. */
-    void  MissingData      (bool             _missingData)    {missingData    = _missingData;}     /**< @brief True indicates that not all the feature data was preseant when this example was loaded from a data file. */
-    void  OrigSize         (FVFloat           _origSize)       {origSize       = _origSize;}        /**< @brief The value of Feature[0] before normalization. */
+    void  ImageFileName    (const KKStr&     _imageFileName)  {imageFileName  = _imageFileName;}   /**< @brief Name of source of feature vector, ex: file name of image that the feature vector was computed from. */
+    void  MissingData      (bool             _missingData)    {missingData    = _missingData;}     /**< @brief True indicates that not all the feature data was present when this example was loaded from a data file. */
+    void  OrigSize         (FVFloat           _origSize)       {origSize       = _origSize;}       /**< @brief The value of Feature[0] before normalization. */
     void  PredictedClass   (MLClassConstPtr  _predictedClass) {predictedClass = _predictedClass;}
-    void  Probability      (FVFloat           _probability)    {probability    = _probability;}     /**< @brief Assign a prediction probability to this example. */
+    void  Probability      (FVFloat           _probability)    {probability    = _probability;}    /**< @brief Assign a prediction probability to this example. */
 
     /**
      *@brief Assign a value to a specific feature number for the feature vector. 
      *@details This method will validate that '_featureNum' is not out of range (0 - 'numOfFeatures').
      * This will prevent the caller from corrupting memory.
-     *@param[in] _featureNum Feature Num to assign '_featureValue' to. 
+     *@param[in] _featureNum Feature Number to assign '_featureValue' to. 
      *@param[in] _featureValue Value to assign to feature '_featureNum'.
      */
     void  FeatureData (kkint32  _featureNum,
@@ -103,12 +103,12 @@ namespace MLL
     void  TrainWeight      (float  _trainWeight)   {trainWeight  = _trainWeight;}  
 
 
-    /** @brief  Indicated wheather an expert has validated the class assignment. */
+    /** @brief  Indicated whether an expert has validated the class assignment. */
     void  Validated        (bool   _validated)     {validated    = _validated;}
 
 
     float               BreakTie           () const  {return breakTie;}        /**< @brief The difference in probability between the two most likely classes. */
-    const KKStr&        ClassName          () const;                           /**< @brief Name of class that this example is assigne to.                     */
+    const KKStr&        ClassName          () const;                           /**< @brief Name of class that this example is assigned to.                    */
     MLClassConstPtr     MLClass            () const  {return mlClass;}         /**< @brief Class that is example is assigned to.                              */
     const KKStr&        MLClassName        () const;                           /**< @brief Name of class that this example is assigned to.                    */
     const KKStr&        ImageFileName      () const  {return imageFileName;}   /**< @brief Name of file that this FeatureVector was computed from.            */
@@ -117,14 +117,14 @@ namespace MLL
     FVFloat             OrigSize           () const  {return origSize;}        /**< @brief The value of Feature[0] before normalization.                      */
     MLClassConstPtr     PredictedClass     () const  {return predictedClass;}
     const KKStr&        PredictedClassName () const;
-    FVFloat             Probability        () const  {return probability;}     /**< @brief The probability assigned by classifer to the predicted class.      */
+    FVFloat             Probability        () const  {return probability;}     /**< @brief The probability assigned by classifier to the predicted class.     */
     float               TrainWeight        () const  {return trainWeight;}
     bool                Validated          () const  {return validated;}
 
 
-    FVFloat         FeatureData      (kkint32 featureNum)  const;        /** @returns The value of 'featureNum'                           */
+    FVFloat         FeatureData      (kkint32 featureNum)  const;      /** @returns The value of 'featureNum'                           */
     const FVFloat*  FeatureData      () const  {return featureData;}   /** @brief Returns as a pointer to the feature data itself.      */
-    FVFloat*        FeatureDataAlter ()        {return featureData;}   /** @brief ame as 'FeatureData() except you can modify the data. */
+    FVFloat*        FeatureDataAlter ()        {return featureData;}   /** @brief same as 'FeatureData() except you can modify the data. */
                                                                       
     const FVFloat*  FeatureDataConst () const  {return featureData;}
     bool            FeatureDataValid ();
@@ -138,7 +138,7 @@ namespace MLL
     bool  operator== (FeatureVector &other_example)  const;
 
 
-    /** @brief Used by container classes such as 'FeatureVectorList'. This way they can determine real underlyimg class. */
+    /** @brief Used by container classes such as 'FeatureVectorList'. This way they can determine real underlying class. */
     virtual  const char*  UnderlyingClass ()  const  {return  "FeatureVector";}
 
 
@@ -150,30 +150,22 @@ namespace MLL
 
 
   private:
-    float            breakTie;       /**< @brief The diference in probability between the two most liklist 
-                                      * classes as per the classifier. 
-                                      */
+    float            breakTie;       /**< @brief The difference in probability between the two most likely classes as per the classifier. */
     MLClassConstPtr  mlClass;
     KKStr            imageFileName;
-    bool             missingData;    /**< @brief Indicates that some features were flagged as missing in 
-                                      * data file. 
-                                      */
+    bool             missingData;    /**< @brief Indicates that some features were flagged as missing in data file.  */
     FVFloat          origSize;
-    MLClassConstPtr  predictedClass; /**< @brief Represents the class that the Classifier assigned to this 
-                                      * image; added to aid in the grading function.2 
-                                      */
+    MLClassConstPtr  predictedClass; /**< @brief Represents the class that the Classifier assigned to this image; added to aid in the grading function.2 */
 
     FVFloat          probability;    /**< @brief Probability assigned by classifier to predicted Class. */
 
     float            trainWeight;    /**< @brief Weight to assign to this training image during Training.
-                                      *@details  Added to help support Bit Reduction. Will default to 1.0.
-                                      * during the SVM training process the Cost parameter will be multiplied 
-                                      * by this amount.
+                                      *@details  Added to help support Bit Reduction. Will default to 1.0 during the SVM training process the Cost parameter 
+                                      * will be multiplied by this amount.
                                       */
 
-    bool             validated;      /**< @brief  If true then the 'mlClass' entry has been validated by 
-                                      * an expert; was introduced when the DataBase was implemeneted.
-                                      */
+    bool             validated;      /**< @brief  If true then the 'mlClass' entry has been validated by an expert; was introduced when the DataBase 
+                                      * was implemented. */
   };  /* FeatureVector */
 
 
@@ -189,7 +181,7 @@ namespace MLL
   /**
    *@class FeatureVectorList
    *@brief   Container class for FeatureVector derived objects. 
-   *@details Supports various functions with respect to maintaing a list of FeatureVector's. These 
+   *@details Supports various functions with respect to maintaining a list of FeatureVector's. These 
    *         include randomizing there order creating a stratified list by class, extracting a list 
    *         of classes,  sorting by various criteria.
    */
@@ -204,8 +196,8 @@ namespace MLL
     /**
      *@brief Will create a new empty list of FeatureVector's.
      *@param[in] _fileDesc Describes the feature data such as number of features and their attributes.
-     *@param[in] _owner True indicates that this list willown its contents and when this list is deleted it 
-     *           will call the destrctor for all its contents.
+     *@param[in] _owner True indicates that this list will own its contents and when this list is deleted it 
+     *           will call the destructor for all its contents.
      *@param[out] _log Log file to send messages to.
      *@param[in] _size No longer used;  used to cause the preallocation of space.
      */
@@ -217,7 +209,7 @@ namespace MLL
   private:
     /**
      *@brief  Will create a duplicate List of examples, in the same order.
-     *@details If the source 'examples' ownes its entries, then new duplicate entries will be created, and the 
+     *@details If the source 'examples' owns its entries, then new duplicate entries will be created, and the 
      *  new 'FeatureVectorList' will own them, otherwise will only get pointers to existing instances in 'examples'.
      */
     FeatureVectorList (FeatureVectorList&  examples); 
@@ -226,7 +218,7 @@ namespace MLL
   public:
     /** 
      *@brief  Create a duplicate list, depending on the '_owner' parameter may also duplicate the contents.
-     *@details If '_owner' = true will create new instancs of contents and own them. If 'owner' = false, will 
+     *@details If '_owner' = true will create new instances of contents and own them. If 'owner' = false, will 
      *         copy over pointers to existing instances.
      *@param[in]  examples  Existing list of examples that we are going to copy.
      *@param[in]  _owner  If set to true will make a duplicate of the FeatureVectors in 'examples' and own then 
@@ -279,10 +271,10 @@ namespace MLL
                                            );
 
     /**
-     *@brief Will search forthe example with the same nam as '_imageFileName'.
-     *@details  If the list is  already sorted in name order will use a Binary Search otherwis a 
+     *@brief Will search for the example with the same name as '_imageFileName'.
+     *@details  If the list is  already sorted in name order will use a Binary Search otherwise a 
      *  linear search. The method 'SortByImageFileName' will set a flag 'curSortOrder' indicating
-     *  if the examples are sorted. The idea is that if you know that will will be doing many 
+     *  if the examples are sorted. The idea is that if you know that will be doing many 
      *  searches then for performance reasons you should call 'SortByImageFileName' first. The
      *  methods 'PushOnBack', 'PushOnFront', and 'AddSingleExample' will reset 'curSortOrder' to 
      *  unsorted.
@@ -305,7 +297,7 @@ namespace MLL
 
 
     /**
-     *@brief Will create a list of FeatureVectors where the class assignment will refect the specified Hierarhy level specified by 'level'.
+     *@brief Will create a list of FeatureVectors where the class assignment will reflect the specified Hierarchy level specified by 'level'.
      *@details The hierarchy of a given class will be indicated by underscore characters in the class name.
      *@code
      *     ex:   Level 1:  gelatinous
@@ -341,8 +333,8 @@ namespace MLL
 
 
     /**
-     *@brief  Will return a random sampling by class of our FeatureVector's; with a minumum per class of 'minClassCount'.
-     *@param[in] percentage  Percentage between 0.0 and 100.0 of each class to randomly sample.
+     *@brief  Will return a random sampling by class of our FeatureVector's; with a minimum per class of 'minClassCount'.
+     *@param[in] percentage  The percentage between 0.0 and 100.0 of each class to randomly sample.
      *@param[in] minClassCount The minimum per class to keep.
      */
     FeatureVectorListPtr      ExtractRandomSampling (float  percentage,    /**<  A percentage between 0.0 and 100.0 */
@@ -350,16 +342,16 @@ namespace MLL
                                                     );
 
     /**
-     *@brief Will create a list of FeatureVectors where the class assignment will refect the specified Hierarhy level specified by 'level'.
+     *@brief Will create a list of FeatureVectors where the class assignment will reflect the specified Hierarchy level specified by 'level'.
      *@details The hierarchy of a given class will be indicated by underscore characters in the class name.
      *@code
      *     ex:   Level 1:  gelatinous
      *           Level 2:  gelatinous_hydromedusae
      *           Level 3:  gelatinous_hydromedusae_solmundella
-     *     If the 'level' parameter is set to 1 then all FeatureVectors whow's class name starts with 'gelatinous' will be 
+     *     If the 'level' parameter is set to 1 then all FeatureVectors who's class name starts with 'gelatinous' will be 
      *     grouped together under the class name 'gelatinous_hydromedusae'.
      *@endcode
-     *@bug  This method appears to be a suplicate of 'CreateListForAGivenLevel'; We should verify this and get rid of one of them.
+     *@bug  This method appears to be a duplicate of 'CreateListForAGivenLevel'; We should verify this and get rid of one of them.
      */
     FeatureVectorListPtr      ExtractExamplesForHierarchyLevel (kkuint32 level);
 
@@ -370,19 +362,19 @@ namespace MLL
 
     void                      FixSipperFileScanLineAndColFields ();
 
-    // Attribute Type information of diff fields.
-    bool                      AllFieldsAreNumeric ()  const;                    /**< @brief  Returns true if all fields are numeric, no nominal fields.              */
+    // Attribute Type information of different fields.
+    bool                      AllFieldsAreNumeric ()  const;                      /**< @brief  Returns true if all fields are numeric, no nominal fields.              */
     MLL::AttributeType        FeatureType        (kkint32 featureNum) const;      /**< @brief  Returns the type of attribute for specified 'featureNum'. @see FileDesc */
     KKStr                     FeatureTypeStr     (kkint32 featureNum) const;
-    kkint32                   FeatureCardinality (kkint32 featureNum) const;      /**< @brief Returns the number of values defined for a Nommnal Field. @see FileDesc::Cardinality */
+    kkint32                   FeatureCardinality (kkint32 featureNum) const;      /**< @brief Returns the number of values defined for a Nominal Field. @see FileDesc::Cardinality */
     const KKStr&              FieldName          (kkint32 featureNum) const;      /**< @bnrie Returns name of Attribute Field.                                         */
 
     kkint32                   FeatureCount       ()  const  {return numOfFeatures;}
     const FileDescPtr         FileDesc           ()  const  {return fileDesc;}
 
-    ClassStatisticListPtr     GetClassStatistics ()  const;                     /**< @brief Returns the number of FeatureVectors per class @see ClassStatisticList */
+    ClassStatisticListPtr     GetClassStatistics ()  const;                       /**< @brief Returns the number of FeatureVectors per class @see ClassStatisticList */
 
-    kkint32                   GetClassCount (MLClassConstPtr  c)  const;        /**< @brief Returns number of examples for a specific Class (MLClass).   */
+    kkint32                   GetClassCount (MLClassConstPtr  c)  const;          /**< @brief Returns number of examples for a specific Class (MLClass).   */
 
     RunLog&                   Log () {return  log;}
 
@@ -396,7 +388,7 @@ namespace MLL
 
 
     /** 
-     *@brief   Returns a pointer to the FeatureVector who's ImageFileName rootname = _rootName *\
+     *@brief   Returns a pointer to the FeatureVector who's ImageFileName RootName = _rootName *\
      *@details If the list is currently sorted by ImageFileName  (curSortOrder == IFL_ByRootName)  then a Binary Search is performed
      *         otherwise a sequential search is performed. The parameter _rootName is assumed to be just the root name of the file.
      *         that is you used osGetRootName  to et the root part.
@@ -420,7 +412,7 @@ namespace MLL
      *@brief  Using list of ImageFileNames in a file('fileName') create a new FeatureVectorList instance with examples in order based 
      *       off contents of file. If error occurs will return NULL.
      *@param[in]  fileName  Name of file that contains a list of ImageFileName's  with one entry per line.
-     *@returns  A new list of FeatureVector instancs in the order dictated by 'fileName'.
+     *@returns  A new list of FeatureVector instances in the order dictated by 'fileName'.
      */
     FeatureVectorListPtr      OrderUsingNamesFromAFile (const KKStr&  fileName);
 
@@ -428,10 +420,10 @@ namespace MLL
 
     /**
      *@brief  Will save into a file the current ordering of FeatureVector instances in list.
-     *@details This file can then be used at a later time to reproduce the exact same ordereing of FeatureVector objects from a file.
+     *@details This file can then be used at a later time to reproduce the exact same ordering of FeatureVector objects from a file.
      *@see OrderUsingNamesFromAFile
-     *@param[in]  fileName  Name of file where ImagFileNames will be writen to.
-     *@param[out] successful Wll indicate of list is successfuly written.
+     *@param[in]  fileName  Name of file where ImagFileNames will be written to.
+     *@param[out] successful Will indicate if list is successfully written.
     */
     void                      SaveOrderingOfImages (const KKStr&  fileName,
                                                     bool&         successful
@@ -512,7 +504,7 @@ namespace MLL
     /** 
      *@brief  Keeps track of the current order of FeatureVector entries in the list.
      *@details This helps functions such as LookUpByImageFileName to work more efficiently. If in ImageFileName order 
-     *          it can then perform a binary search rather than a seq. scan. This field is updated by the diff sort 
+     *          it can then perform a binary search rather than a seq. scan. This field is updated by the different sort 
      *          routines, and by the methods that allow you to add an entry.
      */
     IFL_SortOrder  curSortOrder;   

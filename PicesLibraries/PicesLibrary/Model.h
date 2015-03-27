@@ -198,7 +198,7 @@ namespace MLL
 
     double                   TrainingTime            () const {return trainingTime;}
 
-    double                   TrianingPrepTime        () const {return trianingPrepTime;}  //*< Time ins secs spent preparining training data in Model::TrainModel */
+    double                   TrianingPrepTime        () const {return trianingPrepTime;}  //*< Time ins secs spent preparing training data in Model::TrainModel */
   
     bool                     ValidModel              () const {return validModel;}
 

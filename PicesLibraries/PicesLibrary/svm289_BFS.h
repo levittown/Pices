@@ -11,12 +11,12 @@ using namespace MLL;
 
 /**
  *@namespace  SVM289_BFS
- *@brief   This is a vesion 2.89 of "Chih-Chung Chang" and "Chih-Jen Lin"  libSVM (Support Vector Machine) that selects different features per pair of classes.
+ *@brief   This is Version 2.89 of "Chih-Chung Chang" and "Chih-Jen Lin"  libSVM (Support Vector Machine) that selects different features per pair of classes.
  *@details 
  *@code
  *   Downloaded from "http://www.csie.ntu.edu.tw/~cjlin/libsvm/"
  *@endcode
- *@details For each pair of classes a 'FeatureNumList" instance specifies which features are to be used during kernal computations.
+ *@details For each pair of classes a 'FeatureNumList" instance specifies which features are to be used during kernel computations.
  */
 namespace  SVM289_BFS
 {
@@ -231,7 +231,7 @@ namespace  SVM289_BFS
   kkint32  svm_get_nr_class (const struct svm_model *model);
 
   void  svm_get_labels  (const struct svm_model*  model, 
-                         kkint32*                   label
+                         kkint32*                 label
                         );
 
   double  svm_get_svr_probability (const struct svm_model *model);
@@ -251,7 +251,7 @@ namespace  SVM289_BFS
   double svm_predict_probability (      svm_model*      model, 
                                   const FeatureVector&  x, 
                                   double*               prob_estimates,
-                                  kkint32*                votes
+                                  kkint32*              votes
                                  );
 
   void svm_destroy_model (struct svm_model*&  model);

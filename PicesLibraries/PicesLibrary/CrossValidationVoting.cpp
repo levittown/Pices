@@ -34,7 +34,7 @@ using namespace  MLL;
 
 CrossValidationVoting::CrossValidationVoting (TrainingConfigurationList2Ptr  _configs,
                                               FeatureVectorListPtr           _examples,
-                                              MLClassConstListPtr         _mlClasses,
+                                              MLClassConstListPtr            _mlClasses,
                                               kkint32                        _numOfFolds,
                                               bool                           _featuresAreAlreadyNormalized,
                                               FileDescPtr                    _fileDesc,
@@ -247,7 +247,7 @@ void  CrossValidationVoting::RunValidationOnly (FeatureVectorListPtr validationD
   AllocateMemory ();
 
 
-  // We need to get a duplicate copy of each image data because the traininer and classofier
+  // We need to get a duplicate copy of each image data because the trainer and classifier
   // will nor,alize the data.
   FeatureVectorListPtr  trainingImages = examples->DuplicateListAndContents ();
   FeatureVectorListPtr  testImages     = validationData->DuplicateListAndContents ();
@@ -508,7 +508,7 @@ float  CrossValidationVoting::Accuracy ()
 
 KKStr  CrossValidationVoting::FoldAccuracysToStr ()  const
 {
-  KKStr  foldAccuracyStr (9 * numOfFolds);  // Pre Reserving enough space for all Accuracies.
+  KKStr  foldAccuracyStr (9 * numOfFolds);  // Reserving enough space for all Accuracies.
 
   for  (kkint32 foldNum = 0;  foldNum < numOfFolds;  foldNum++)
   {

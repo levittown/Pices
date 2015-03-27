@@ -5,7 +5,7 @@
 /**
  *@class MLL::DataBaseServer
  *@brief  Represents the parameters for a single Database Server.  
- *@details  Things like username, hostname, etc.   The "DataBase"  class will use one instance
+ *@details  Things like UserName, HostName, etc.   The "DataBase"  class will use one instance
  *          of this object to use as connection parameters.
  */
 

@@ -15,7 +15,7 @@
  * Nominal  - Feature must be one of a specified possible values.  The Attribute class will
  *            maintain a list of possible values.  This will be saved as a integer value from
  *            in the FeatureVector object.  When training a classifier it would be best to
- *            bit encode these features.  See the FeatureEncoder class.
+ *            bit encode these features. See the FeatureEncoder class.
  * Ordinal  - Similar to Nominal except there is a definite ordering of value.
  * Symbolic - Similar to Nominal except you do not know all the possible values this attribute
  *            can take on.

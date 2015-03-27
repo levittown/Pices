@@ -2,7 +2,7 @@
 #define  _ImageSizeDistribution_
 /**
  *@class  MLL::ImageSizeDistribution
- *@brief Used for retirning results of call to "ImagesSizeSizeHistogramByDepth".
+ *@brief Used for returning results of call to "ImagesSizeSizeHistogramByDepth".
  */
 
 #include "KKBaseTypes.h"

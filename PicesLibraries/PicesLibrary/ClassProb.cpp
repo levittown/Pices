@@ -17,8 +17,8 @@ using namespace  MLL;
 
 
 ClassProb::ClassProb (MLClassConstPtr _classLabel,
-                      double             _probability,
-                      float              _votes
+                      double          _probability,
+                      float           _votes
                      ):
   classLabel  (_classLabel),
   probability (_probability),
@@ -57,8 +57,8 @@ ClassProbList::ClassProbList (const ClassProbList&  pairList):
 
 
 bool  ClassProbList::CompairByClassName (const ClassProbPtr left, 
-                                                    const ClassProbPtr right
-                                                   )
+                                         const ClassProbPtr right
+                                        )
 {
   return  left->classLabel->UpperName () < right->classLabel->UpperName ();
 }

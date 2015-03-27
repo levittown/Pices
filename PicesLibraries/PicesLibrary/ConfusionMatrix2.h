@@ -47,10 +47,10 @@ namespace  MLL
      *@param[in]  _classes  Will make local copy of this instance; this way we know the ordering which represents the numbering can not change behind our back.
      *@param[in]  f   File to write report to.
      *@param[in]  _bucketSize  Will keep statistics by size of particles.
-     *@param[in]  _numOfBuckets Number of Size buckes that will be maintained.
+     *@param[in]  _numOfBuckets Number of Size buckets that will be maintained.
      *@param[in]  _numOfProbBuckets  Maximum number of probability buckets to keep track of, 
      *@param[in]  _probBucketSize  Size of each probability bucket.
-     *@param[in]  _log  Logger where messages are writen to.
+     *@param[in]  _log  Logger where messages are written to.
      */
     ConfusionMatrix2 (const MLClassConstList&  _classes,  // Will make its own copy of '_classes'
                       istream&                 f,

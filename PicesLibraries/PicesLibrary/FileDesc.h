@@ -1,35 +1,6 @@
 #if  !defined(_FILEDESC_)
 #define  _FILEDESC_
 
-/**
- @file  FileDesc.h
- @author  Kurt Kramer
- @details
- @code
- **************************************************************************************
- **                                                                                  *
- **  Kurt Kramer                                                                     *
- **                                                                                  *
- **  Describes the different fields of a dataset. There will be one instance of this *
- **  class for each tyope of Dataset that you have in an application.  From this     *
- **  object you can get information such as number of attributes, Attribute types,   *
- **  weather they are nomainal, continuous.  If nomainal what are the accepted       *
- **  values.                                                                         *
- **                                                                                  *
- **                                                                                  *
- **  Never delete an instance of a FileDesc object.                                  *
- **                                                                                  *
- **  Only one FileDesc object can exist for any Dataset.  Example the Forest Cover   *
- **  dataset.  You can split the data into many files and manage them seperately but *
- **  you will only have one instance of a FileDesc object tha they will all refer    *
- **  to.  See "GetExistingFileDesc" method below.  You would initially create an     *
- **  instance of FileDesc abd then use "GetExistingFileDesc" to make sure that it is *
- **  unique. This typically happens in the FeatureFileIO derived classes.            *
- **                                                                                  *
- *************************************************************************************
- @endcode
- */
-
 #include "GoalKeeper.h"
 #include "RunLog.h"
 #include "KKStr.h"
@@ -57,15 +28,14 @@ namespace MLL
     *@code
     * ***********************************************************************************
     * * Describes the different fields of a dataset. There will be one instance of this *
-    * * class for each tyope of Dataset that you have in an application.  From this     *
+    * * class for each type of Dataset that you have in an application.  From this      *
     * * object you can get information such as number of attributes, Attribute types,   *
-    * * weather they are nomainal, continuous.  If nomainal what are the accepted       *
-    * * values.                                                                         *
+    * * weather they are nominal, continuous.  If nominal what are the accepted values. *
     * *                                                                                 *
     * *  Never delete an instance of a FileDesc object.                                 *
     * *                                                                                 *
     * * Only one FileDesc object can exist for any Dataset.  Example the Forest Cover   *
-    * * dataset.  You can split the data into many files and manage them seperately but *
+    * * dataset.  You can split the data into many files and manage them separately but *
     * * you will only have one instance of a FileDesc object that they will all refer   *
     * * to.  See "GetExistingFileDesc" method below.  You would initially create an     *
     * * instance of FileDesc and then use "GetExistingFileDesc" to make sure that it is *
@@ -86,7 +56,7 @@ namespace MLL
     typedef  KKB::kkuint32  kkuint32;
 
     /**
-     @brief  Clean up function,  call just vefore exiting the application.
+     @brief  Clean up function,  call just before exiting the application.
      @details
      @code
      * *******************************************************************************
@@ -106,10 +76,10 @@ namespace MLL
      @code
      * ***************************************************************************
      * * Creates a file description that will consist of continuous fields only. *
-     * * The vector '_fieldNames' will provide the list of ffield names.         *
+     * * The vector '_fieldNames' will provide the list of field names.          *
      * ***************************************************************************
      @endcode
-     @param[in]  _log   Logging fille to use.
+     @param[in]  _log   Logging file to use.
      @param[in]  _fieldNames Name of fields;  one entry for each field.
      */
     static
@@ -153,7 +123,7 @@ namespace MLL
     const KKStr&              ClassNameAttribute ()  const   {return classNameAttribute;}
 
     const 
-      MLL::AttributePtr*      CreateAAttributeTable ()  const;  /**< Caller will be responsable for deleteing  */
+      MLL::AttributePtr*      CreateAAttributeTable ()  const;  /**< Caller will be responsible for deleting  */
 
     MLL::AttributeTypeVector  CreateAttributeTypeTable ()  const;
     
@@ -213,7 +183,7 @@ namespace MLL
      * *  passed in.                                                                    *
      * *  if  one is found   them                                                       *
      * *    fileDesc is deleted                                                         *
-     * *    exiting one will be retuned.                                                *
+     * *    exiting one will be returned.                                               *
      * *  else                                                                          *
      * *    fileDesc will be added to existinList (exisitingDescriptions) and returned. *
      * *    and returned.                                                               *
@@ -232,29 +202,29 @@ namespace MLL
     void  DisplayAttributeMappings ();
 
     /** 
-     *@brief Returns true if file description on the right size is identicle. 
+     *@brief Returns true if file description on the right size is identical. 
      *@details Both FileDesc instances must have the same number of fields, the fields
-     *  must have the same names(NOT case sensative), and the fields must have 
-     *  matching types(ex numericle, ordinal, etc).
+     *  must have the same names(NOT case sensitive), and the fields must have 
+     *  matching types(ex numerical, ordinal, etc).
      */
     bool  operator== (const FileDesc&  rightSize)  const;
 
 
     /** 
-     *@brief Returns true if file description on the right size is NOT identicle.
-     *@details If both FileDesc instances have differnet number of fields, or any one 
-     *  of the fields has a different name(NOT case sensative), or one of the fields
+     *@brief Returns true if file description on the right size is NOT identical.
+     *@details If both FileDesc instances have different number of fields, or any one 
+     *  of the fields has a different name(NOT case sensitive), or one of the fields
      *  is of a different type.
      */
     bool  operator!= (const FileDesc&  rightSize)  const;
 
 
     /**
-     *@brief  Mergs the Symbolic fields of two different 'FileDesc' instances
+     *@brief  Merges the Symbolic fields of two different 'FileDesc' instances
      * producing a new instance of a 'FileDesc'.  This method will only work
      * if both instances have the same number of fields, their names must be
-     * the same(NOT case sensative), and each field in both instances must be
-     * the same type.  If all these constions are not 'true' will retirn NULL.
+     * the same(NOT case sensitive), and each field in both instances must be
+     * the same type.  If all these constraints are not 'true' will return NULL.
      * The fields that are of 'SymbolicAttribute' will have their values merged 
      * together.  
      *@see MLL:Attribute
@@ -308,7 +278,7 @@ namespace MLL
       KKB::GoalKeeperPtr  blocker;
 
     static
-      FileDescListPtr     exisitingDescriptions;  /**< Will keep a list of all FileDesc instancs instatiated. */
+      FileDescListPtr     exisitingDescriptions;  /**< Will keep a list of all FileDesc instances instantiated. */
 
     static
       bool                finalCleanUpRanAlready;

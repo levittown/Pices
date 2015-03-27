@@ -67,13 +67,13 @@ namespace  MLL
                                    MLClassConstPtr   knownClass,
                                    MLClassConstPtr&  predClass1,
                                    MLClassConstPtr&  predClass2,
-                                   kkint32&            predClass1Votes,
-                                   kkint32&            predClass2Votes,
+                                   kkint32&          predClass1Votes,
+                                   kkint32&          predClass2Votes,
                                    double&           probOfKnownClass,
                                    double&           predClass1Prob,
                                    double&           predClass2Prob,
                                    double&           compact,
-                                   kkint32&            numOfWinners,
+                                   kkint32&          numOfWinners,
                                    bool&             knownClassOneOfTheWinners,
                                    double&           breakTie
                                   );
@@ -97,7 +97,7 @@ namespace  MLL
      *         '_mlClasses' parameter dictates the order of the classes. That is the 
      *         probabilities for any given index in '_probabilities' will be for the class
      *         Specified in the same index in '_mlClasses'.
-     *@param[in]  _example       FeatureVector object to calculate predicted probabilities for.
+     *@param[in]  _example    FeatureVector instance to calculate predicted probabilities for.
      *@param[in]  _mlClasses  List image classes that caller is aware of.  This should be the
      *            same list that was used when constructing this Model object.  The list must
      *            be the same but not necessarily in the same order as when Model was 1st

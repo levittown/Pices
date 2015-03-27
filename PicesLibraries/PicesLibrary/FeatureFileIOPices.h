@@ -17,24 +17,24 @@ namespace MLL
 
   /**
     @class  FeatureFileIOPices
-    @brief  Supports the reading and writting of feature data from and to Pices feature data files.
+    @brief  Supports the reading and writing of feature data from and to Pices feature data files.
     @details
     @code
     * *************************************************************************************************
-    * *  The PICES feature data file is a very simple format whre the first few rows contain a        *
+    * *  The PICES feature data file is a very simple format where the first few rows contain a       *
     * *  description of the rest of the data file.  Any row that starts with "//" will be treated as  *
     * *  comment line.                                                                                *
-    * *  First Row:  Identifies the file as a feature Data File.  An example on th enbext line.       *
-    * *              "FEATURE_DATA_FILE Version  51  NumOfFeatures  88  NumOfImages  258"                *
-    * *              Each field will be seperated by a tab character.  This line says that the        *
+    * *  First Row:  Identifies the file as a feature Data File.  An example on the next line.        *
+    * *              "FEATURE_DATA_FILE Version  51  NumOfFeatures  88  NumOfImages  258"             *
+    * *              Each field will be separated by a tab character.  This line says that the        *
     * *              version number is 51. There are 88 features and 258 examples or feature vectors. *
     * *              The version number gets incremented when ever there is a change in the way       *
-    * *              tha feature data is computed.                                                    *
+    * *              that feature data is computed.                                                   *
     * *                                                                                               *
-    * *  Second Row: List all the fields in the feature data file.  The first fields are featuire     *
+    * *  Second Row: List all the fields in the feature data file.  The first fields are feature      *
     * *              data.  The first non feature field will be: "ClassName".  There are several no   *
     * *              feature data fields.  See the SipperSoftware documentation for details.          *
-    * ************************************************************************************************
+    * *************************************************************************************************
     @endcode
     @see  FeatureFileIO
     */
@@ -73,7 +73,7 @@ namespace MLL
                               const KKStr&           _fileName,
                               const FeatureNumList&  _selFeatures,
                               std::ostream&          _out,
-                              kkuint32&                _numExamplesWritten,
+                              kkuint32&              _numExamplesWritten,
                               VolConstBool&          _cancelFlag,
                               bool&                  _successful,
                               KKStr&                 _errorMessage,
@@ -88,25 +88,25 @@ namespace MLL
 
 
     /**                       FeatureDataReSink
-     *@brief Syncronuzes the contents of a feature data file with a directory of images.
+     *@brief Synchronizes the contents of a feature data file with a directory of images.
      *@details Used with plankton applications to verify that feature file is up-to-date.
      * Was specifically meant to work with training libraries, to account for
      * images being added and deleted from training library.  If there are no 
      * changes, then function will run very quickly.
      *
-     * A change in featuer file version number would also cause all entries in the feature 
+     * A change in feature file version number would also cause all entries in the feature 
      * file to be recomputed.  The feature file version number gets incremented whenever we change
      * the feature file computation routine.
      *
-     *@param[in] _dirName,      Directory where source images are loccated.
-     *@param[in] _fileName,     Feature file that is being syncronized.
+     *@param[in] _dirName,      Directory where source images are located.
+     *@param[in] _fileName,     Feature file that is being synchronized.
      *@param[in] _unknownClass, Class to be used when class is unknown
      *@param[in] _useDirectoryNameForClassName, if true then class name of each entry
      *           will be set to directory name.
-     *@param[in] _database If not NULL retriefe Instrument data from the PICES database table InstrumentData.
+     *@param[in] _database If not NULL retrieves Instrument data from the PICES database table InstrumentData.
      *@param[in] _mlClasses  List of classes
      *@param[in] _cancelFlag  Boolean variable that will be monitored; if it goes True then will terminate 
-     * prorcessing right away and return to caller.
+     * processing right away and return to caller.
      *@param[out] _changesMade, If returns as true then there were changes made to the 
      *            feature file 'fileName'.  If set to false, then no changes were made.
      *@param[out] _timeStamp Timestamp of feature file.
@@ -134,14 +134,14 @@ namespace MLL
      *       Meant to work with SIPPER plankton images, it starts at a specified subdirectory and 
      *       transverses all subdirectories.  It makes use of FeatureDataReSink for each specific
      *       sub-directory.
-     *@param[in] _rootDir,   Strating directory.
+     *@param[in] _rootDir,   Starting directory.
      *@param[in,out] _mlClasses, List of classes, any new classes in fileName will be added.
      *@param[in] _useDirectoryNameForClassName, if true set class names to sub-directory name.
-     *           This happens because the user may manually move images between dorectories using
+     *           This happens because the user may manually move images between directories using
      *           the sub-directory name as the class name.
      *@param[in] _dataBase  If not null retrieve Instrument data from the Instruments database table.
      *@param[in] _cancelFlag  Will be monitored; if set to True Load will terminate.
-     *@param[in] _rewiteRootFeatureFile, If true rewite the feature file in the specified 'rootDir'.  This
+     *@param[in] _rewiteRootFeatureFile, If true rewrite the feature file in the specified 'rootDir'.  This
      *           feature file will contain all entries from all sub-directories below it.
      *@param[in,out] _log  Logger where messages are to be written to.
      *@returns - A ImageFeaturesList container object.  This object will own all the examples loaded.
@@ -191,7 +191,7 @@ namespace MLL
 
 
     /**
-     *@brief Will refresh the Instruemnt Data fields of the FeatureVector instance.
+     *@brief Will refresh the Instrument Data fields of the FeatureVector instance.
      *@details  If 'dataBase' if provided will first try to retrieve from there otherwise
      * will retrieve from the InstrumentDataFileManager::GetClosestInstrumentData method.
      *@param[in] _imageFileName  Name of Plankton image that featureVector represents.

@@ -10,11 +10,12 @@
 #include "KKException.h"
 #include "KKStr.h"
 #include "RunLog.h"
+using namespace KKB;
 
 /**
  *@namespace  SVM233
- *@brief   This is version 2.33 of "Chih-Chung Chang" and "Chih-Jen Lin"  Support vector Machine; the class "ModelOldSVM" calls ths version.
- *@brief   This is a vesion 2.33 of "Chih-Chung Chang" and "Chih-Jen Lin"  libSVM (Support Vector Machine); the class "ModelOldSVM" calls ths version.
+ *@brief   This is version 2.33 of "Chih-Chung Chang" and "Chih-Jen Lin"  Support vector Machine; the class "ModelOldSVM" calls this version.
+ *@brief   This is a version 2.33 of "Chih-Chung Chang" and "Chih-Jen Lin"  libSVM (Support Vector Machine); the class "ModelOldSVM" calls this version.
  *@details 
  *@code
  *   Downloaded from "http://www.csie.ntu.edu.tw/~cjlin/libsvm/"
@@ -47,7 +48,7 @@ namespace  SVM233
     kkint32            l;
     double*            y;
     VectorKKStr        exampleNames;    /*!< allows the user to provide names to the labels  */
-    kkint32*             index; //luo add
+    kkint32*           index; //luo add
     struct svm_node**  x;
     double*            W;
 
@@ -290,12 +291,12 @@ kkint32 svm_get_nr_class  (const struct svm_model*  model);
 
 
 void    svm_get_labels    (const struct svm_model*  model, 
-                           kkint32*                     label
+                           kkint32*                 label
                           );
 
 void    svm_GetSupportVectorStatistics (const struct svm_model*  model,
-                                        kkint32&                   numSVs,         // The number of training examp
-                                        kkint32&                   totalNumSVs
+                                        kkint32&                 numSVs,         /**< The number of training examples. */
+                                        kkint32&                 totalNumSVs
                                        );
 
 
@@ -306,14 +307,14 @@ double  svm_predict  (const struct svm_model*  model,
 
 
 /**
- *@brief Predics a class for the specifoied training example.
- *@param[in]  model   A previously trainied model.
- *@param[in]  x       Exmaple that we want to make prediction on.
+ *@brief Predicts a class for the specified training example.
+ *@param[in]  model   A previously trained model.
+ *@param[in]  x       Example that we want to make prediction on.
  *@param[out] dist    Entry for each class-pair indicating the distance from the decision boundary.
  *@param[out] winners A list of one or more classes that won the highest number of votes; that is for each pair of classes 
  *                    there is a vote and it is possible for there t be a tie for winner.
  *@excludeSupportVectorIDX[in]  Index of training example that should be excluded from computation; if less than zero will 
- *                    be ignored; this would be the same index specified when trainig the model to ignore.
+ *                    be ignored; this would be the same index specified when training the model to ignore.
  *@returns The predicted class; the won that won the most amount of votes; if there is a tie the 1st one will be returned.
  */
 double  svm_predict  (const struct svm_model*  model, 
@@ -325,8 +326,8 @@ double  svm_predict  (const struct svm_model*  model,
 
 
 /**
- *@param[in]  model   A previously trainied model.
- *@param[in]  x       Exmaple that we want to make prediction on.
+ *@param[in]  model   A previously trained model.
+ *@param[in]  x       Example that we want to make prediction on.
  *@param[out] dist    Distance from decision boundary.
  *@excludeSupportVectorIDX[in]  Index of support vector that should be excluded form computation; if less than zero will be ignored.
  *@returns The predicted class; Zero(0) or One(1);  if (dist <= 0)  the class Zero otherwise class One.

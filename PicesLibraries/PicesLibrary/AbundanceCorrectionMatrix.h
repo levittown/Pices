@@ -38,7 +38,7 @@ namespace MLL
      */
     AbundanceCorrectionMatrix (MLClassConstList&  _classes,
                                MLClassConstPtr    _otherClass,
-                               RunLog&               _log
+                               RunLog&            _log
                               );
     
     AbundanceCorrectionMatrix (const KKStr&  configFileName,
@@ -132,7 +132,7 @@ namespace MLL
 
     MLClassConstList  classes;
     KKB::DateTime     dateTimeComputed;
-    kkuint32*           knownByClass;
+    kkuint32*         knownByClass;
     kkuint32          numClasses;    /**< Number of classes in 'classes' plus one for 'otherClass'. */
     kkuint32          numCorrect;
     kkuint32          numPredictions;
@@ -146,13 +146,13 @@ namespace MLL
      * will be trained on the classes specified in "classes"  but the test data will come from all classes; 
      * that is the classes listed in "classes" and "otherClass".
      */
-    kkuint32**         predictions;
-    kkuint32*          predByClass;
+    kkuint32**        predictions;
+    kkuint32*         predByClass;
 
-    VectorFloat      probOfDetection;
-    VectorFloat      probOfFalseAlarm;
+    VectorFloat       probOfDetection;
+    VectorFloat       probOfFalseAlarm;
 
-    bool             valid;
+    bool              valid;
   };  /* AbundanceCorrectionMatrix */
 
   typedef  AbundanceCorrectionMatrix*  AbundanceCorrectionMatrixPtr;

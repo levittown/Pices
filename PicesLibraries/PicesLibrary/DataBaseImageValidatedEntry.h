@@ -8,9 +8,9 @@
 //*  Keeps track of Validated Images;  used by ImageExtraction to save ValidationInfo for a specific      *
 //*  Sipper file.  Image Extraction will:                                                                 *
 //*   1) Load existing list of validated class info from text file.                                       *
-//*   2) Retrieve from Images table current Validated calsses and append to end of list.                  *
+//*   2) Retrieve from Images table current Validated classes and append to end of list.                  *
 //*   3) Erase existing Images for Sipper File.                                                           *
-//*   4) After extraction foir the sipper file is completed it will update the Validation Info from the   *
+//*   4) After extraction for the sipper file is completed it will update the Validation Info from the    *
 //*      previously saved file.                                                                           *
 //*********************************************************************************************************
 

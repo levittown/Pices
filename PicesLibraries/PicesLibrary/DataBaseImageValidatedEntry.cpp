@@ -24,8 +24,8 @@ using namespace KKB;
 using namespace  MLL;
 
 
-DataBaseImageValidatedEntry::DataBaseImageValidatedEntry (const KKStr&        _imageFileName,
-                                                          PointListPtr        _sizeCoordinates,
+DataBaseImageValidatedEntry::DataBaseImageValidatedEntry (const KKStr&     _imageFileName,
+                                                          PointListPtr     _sizeCoordinates,
                                                           MLClassConstPtr  _validatedClass
                                                          ):
     imageFileName   (_imageFileName),
@@ -36,8 +36,8 @@ DataBaseImageValidatedEntry::DataBaseImageValidatedEntry (const KKStr&        _i
 
 
 
-DataBaseImageValidatedEntry::DataBaseImageValidatedEntry (const KKStr&        _imageFileName,
-                                                          const KKStr&        _sizeCoordinatesDelStr,
+DataBaseImageValidatedEntry::DataBaseImageValidatedEntry (const KKStr&     _imageFileName,
+                                                          const KKStr&     _sizeCoordinatesDelStr,
                                                           MLClassConstPtr  _validatedClass
                                                          ):
     imageFileName   (_imageFileName),

@@ -10,9 +10,10 @@
 #include "KKQueue.h"
 #include "Raster.h"
 #include "RunLog.h"
+using namespace  KKB;
 
 
-namespace KKB
+namespace SipperHardware
 {
   /**
    *@file  RasterSipper.h
@@ -51,6 +52,7 @@ namespace KKB
   {
   public:
     typedef  RasterSipper*  RasterSipperPtr;
+    typedef  KKB::uchar  uchar;
 
     RasterSipper ();
 
@@ -61,8 +63,8 @@ namespace KKB
 
     /**
      *@brief Constructs a blank GrayScale image with given dimensions; all pixels will be initialized to 0.  
-     *@details  When working with Grayscale images pixel value of '0' = Background and '255'= foreground.
-     *          The green channel will be used to represent the grayscale value.  When these raster images
+     *@details  When working with Gray-scale images pixel value of '0' = Background and '255'= foreground.
+     *          The green channel will be used to represent the gray-scale value.  When these raster images
      *          are saved to a image file such as a BMP file the pixel value of 0 will point to the color
      *          value of (255, 255, 255) and  pixel value 255 will point to the color value of (0, 0, 0).
      *          This way when displaying the image background will appear as white.
@@ -74,19 +76,19 @@ namespace KKB
 
     /**
      *@brief  Constructs a blank image with given dimensions.  
-     *@details  The third parameter determines whether it will be a color or grayscale image,  If a Color
+     *@details  The third parameter determines whether it will be a color or gray-scale image, if a Color
      *          image then all three color channel will be set to = 255 which stands for white.  If
-     *          Grayscale the green channel will be set to 0.
+     *          Gray-scale the green channel will be set to 0.
      */
     RasterSipper (kkint32 _height,
                   kkint32 _width,
-                  bool  _color
+                  bool    _color
                  );
 
     /**
      *@brief  Constructs a RasterSipper from a BMP image loaded from disk.
-     *@details If BMP Image is a grayscale value pixel values will be reversed.  See description of
-     *        grayscale constructor.
+     *@details If BMP Image is a gray-scale value pixel values will be reversed. See description of
+     *        gray-scale constructor.
      */
     RasterSipper (const BmpImage&  _bmpImage);
 
@@ -95,7 +97,7 @@ namespace KKB
      *@brief Constructs a new RasterSipper using a subset of the specified RasterSipper as its source.  The
      *      dimensions of the resultant raster will be '_height', and '_width'
      */
-    RasterSipper (const RasterSipper& _raster,  /**<  Source RasterSipper                             */
+    RasterSipper (const RasterSipper& _raster,  /**<  Source RasterSipper                                 */
                   kkint32             _row,     /**<  Starting Row in '_raster' to copy from.             */
                   kkint32             _col,     /**<  Starting Col in '_raster' to copy from.             */
                   kkint32             _height,  /**<  Height of resultant raster. Will start from '_row'  */
@@ -107,10 +109,10 @@ namespace KKB
      * specified by '_row' and '_col'.
      * \see MaskTypes
      */
-    RasterSipper (const RasterSipper&   _raster,
-                  MaskTypes             _mask,    /*!< \see MaskTyps  Generated 'RasterSipper' with be the of the mask.   */
-                  kkint32               _row,
-                  kkint32               _col
+    RasterSipper (const RasterSipper&  _raster,
+                  MaskTypes            _mask,    /*!< \see MaskTyps  Generated 'RasterSipper' with be the of the mask.   */
+                  kkint32              _row,
+                  kkint32              _col
                  );
 
     /**
@@ -137,7 +139,7 @@ namespace KKB
 
 
     /**
-     *@brief  Construct a Grayscale RasterSipper object using provided raw data,
+     *@brief  Construct a Gray-scale RasterSipper object using provided raw data,
      */
     RasterSipper (kkint32       _height,
                   kkint32       _width,
@@ -165,7 +167,7 @@ namespace KKB
      *@brief  Turn an instance of 'Raster' into 'RasterSipper'.
      *@details Will utilize the dynamically allocated raster data of the 'Raster' instance 'r' to build a new instance of a 'SipperRaster'.If the 
      * underlying type of 'r' is a instance of 'RasterSipper' will then return a dynamic_cast<> of the pointer;  otherwise will create a new
-     * instance of a 'RasterSipper' class and give it ownershoip of ALL dynanily allocated members of 'r'.
+     * instance of a 'RasterSipper' class and give it ownership of ALL dynamically allocated members of 'r'.
      *@param[in,out] r The raster data of 'r' will be given to the new instance of 'RasterSipper' and 'r' will then be deleted and set to NULL.
      */
     static
@@ -211,12 +213,12 @@ namespace KKB
     RasterSipperPtr     CreateGrayScale ()  const;
 
     /**
-     *@brief Creates a grayscale image using a KLT Transform with the goal of weighting in favor the color
+     *@brief Creates a gray-scale image using a KLT Transform with the goal of weighting in favor the color
      * channels with greatest amount of variance.
      *@details The idea is to weight each color channel by the amount of variance.  This is accomplished by
      *  producing a covariance matrix of the three color channels and then taking the Eigen vector with the
      *  largest Eigen value and using its components to derive weights for each channel for the conversion
-     *  from RGB to grayscale.
+     *  from RGB to gray-scale.
      */
     RasterSipperPtr     CreateGrayScaleKLT ()  const;
 

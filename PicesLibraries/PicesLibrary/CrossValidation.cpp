@@ -35,7 +35,7 @@ using namespace  MLL;
 
 CrossValidation::CrossValidation (TrainingConfiguration2Ptr _config,
                                   FeatureVectorListPtr      _examples,
-                                  MLClassConstListPtr    _mlClasses,
+                                  MLClassConstListPtr       _mlClasses,
                                   kkint32                   _numOfFolds,
                                   bool                      _featuresAreAlreadyNormalized,
                                   FileDescPtr               _fileDesc,
@@ -296,7 +296,7 @@ void  CrossValidation::RunValidationOnly (FeatureVectorListPtr validationData,
 
   totalPredProb = 0.0;
 
-  // We need to get a duplicate copy of each image data because the traininer and classofier
+  // We need to get a duplicate copy of each image data because the trainer and classifier
   // will nor,alize the data.
   FeatureVectorListPtr  trainingImages = examples->DuplicateListAndContents ();
   FeatureVectorListPtr  testImages     = validationData->DuplicateListAndContents ();
@@ -353,7 +353,7 @@ void  CrossValidation::CrossValidate (FeatureVectorListPtr   testImages,
   catch  (const std::exception  e)
   {
     log.Level (-1) << endl << endl
-      << "CrossValidation::CrossValidat  ***ERROR***  Exception Occured in 'CreateModelsFromTrainingData'"  << endl
+      << "CrossValidation::CrossValidat  ***ERROR***  Exception Occurred in 'CreateModelsFromTrainingData'"  << endl
       << "            Exception[" << e.what () << "]" << endl
       << endl;
     trainer.Abort (true);
@@ -361,7 +361,7 @@ void  CrossValidation::CrossValidate (FeatureVectorListPtr   testImages,
   catch (...)
   {
     log.Level (-1) << endl << endl
-      << "CrossValidation::CrossValidat  ***ERROR***  Exception Occured in 'CreateModelsFromTrainingData'"  << endl
+      << "CrossValidation::CrossValidat  ***ERROR***  Exception Occurred in 'CreateModelsFromTrainingData'"  << endl
       << endl;
     trainer.Abort (true);
   }
@@ -396,25 +396,25 @@ void  CrossValidation::CrossValidate (FeatureVectorListPtr   testImages,
   log.Level (20) << "CrossValidate   Classifying Test Images." << endl;
 
 
-  double              breakTie                   = 0.0f;
-  FeatureVectorPtr    example                    = NULL;
+  double           breakTie                   = 0.0f;
+  FeatureVectorPtr example                    = NULL;
   MLClassConstPtr  knownClass                 = NULL;
-  bool                knownClassOneOfTheWinners  = false;
-  kkint32             numOfWinners               = 0;
+  bool             knownClassOneOfTheWinners  = false;
+  kkint32          numOfWinners               = 0;
   MLClassConstPtr  predictedClass             = NULL;
-  double              probability                = 0.0f;
+  double           probability                = 0.0f;
 
   kkint32  numTestExamples = testImages->QueueSize ();
 
   kkint32  foldCorrect = 0;
   kkint32  foldCount   = 0;
 
-  vector<FeatureVectorPtr>    exampleHist                   (numTestExamples);
-  vector<MLClassConstPtr>  knownClassHist                (numTestExamples);
-  vector<bool>                knownClassOneOfTheWinnersHist (numTestExamples, false);
-  vector<kkint32>               numOfWinersHist               (numTestExamples, 0);
-  vector<MLClassConstPtr>  predictedClassHist            (numTestExamples);
-  vector<double>              probabilityHist               (numTestExamples, 0.0f);
+  vector<FeatureVectorPtr>  exampleHist                   (numTestExamples);
+  vector<MLClassConstPtr>   knownClassHist                (numTestExamples);
+  vector<bool>              knownClassOneOfTheWinnersHist (numTestExamples, false);
+  vector<kkint32>           numOfWinersHist               (numTestExamples, 0);
+  vector<MLClassConstPtr>   predictedClassHist            (numTestExamples);
+  vector<double>            probabilityHist               (numTestExamples, 0.0f);
 
   FeatureVectorList::iterator  exampleIDX;
 

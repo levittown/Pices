@@ -1043,7 +1043,7 @@ ExtractedImageListPtr  LogicalFrame::ProcessFrame ()
   }
 
 
-  ExtractedImageListPtr  extractdImages = new ExtractedImageList (true, 100);
+  ExtractedImageListPtr  extractdImages = new ExtractedImageList (true);
 
   //if  (connectedPixelDist == 3)
   //  LocateBlobsUsingConnectedDistanceOf3 ();

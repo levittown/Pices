@@ -27,15 +27,13 @@ using namespace  MLL;
 
 TrainingClass::TrainingClass (KKStr                 _directory,
                               KKStr                 _name,
-                              KKStr                 _foreground,
                               float                 _weight,
                               MLClassConstList&  mlClasses
                              ):
                 directory       (_directory),
                 featureFileName (_name),
-                foreground      (_foreground),
                 weight          (_weight),
-                mlClass      (NULL)
+                mlClass         (NULL)
 {
   featureFileName << ".data";   // Will be equal to ClassName + ".data".
                                 // ex:  "Copepods.data"
@@ -48,8 +46,7 @@ TrainingClass::TrainingClass (KKStr                 _directory,
 TrainingClass::TrainingClass (const TrainingClass&  tc): 
     directory       (tc.directory),
     featureFileName (tc.featureFileName),
-    foreground      (tc.foreground),
-    mlClass      (tc.mlClass),
+    mlClass         (tc.mlClass),
     weight          (tc.weight)
 {
 }

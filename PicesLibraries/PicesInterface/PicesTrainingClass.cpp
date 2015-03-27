@@ -47,7 +47,6 @@ PicesTrainingClass::PicesTrainingClass (PicesClass^  _class,
 
   trainingClass = new TrainingClass (PicesKKStr::SystemStringToKKStr (_directory), 
                                      PicesKKStr::SystemStringToKKStr (_class->Name),
-                                     "W",
                                      1.0f,
                                      classes
                                     );

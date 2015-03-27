@@ -39,7 +39,7 @@ namespace MLL
                   BRcompressionPost, 
                   BRcompressionPre, 
                   BRunBalancedVariance,
-                  BRunBalancedSpecified    // Meaning we will tell you wich features are unbalanced.
+                  BRunBalancedSpecified    // Meaning we will tell you which features are unbalanced.
                  }       
                     SVM_CompressionMethod;
 
@@ -54,7 +54,7 @@ namespace MLL
 
   /**
     ************************************************************************************************
-    * this class encapsulates are the information neccesary to build a SVMModel class.             *
+    * this class encapsulates are the information necessary to build a SVMModel class.             *
     ************************************************************************************************
     * @see  SVMModel
     * @see  SVM233
@@ -98,8 +98,8 @@ namespace MLL
 
     void    AddBinaryClassParms (BinaryClassParmsPtr  binaryClassParms);
 
-    void    AddBinaryClassParms (MLClassConstPtr     class1,
-                                 MLClassConstPtr     class2,
+    void    AddBinaryClassParms (MLClassConstPtr        class1,
+                                 MLClassConstPtr        class2,
                                  const svm_parameter&   _param,
                                  const FeatureNumList&  _selectedFeatures,
                                  float                  _weight
@@ -216,7 +216,7 @@ namespace MLL
     void  SetFeatureNums    (MLClassConstPtr        class1,
                              MLClassConstPtr        class2,
                              const FeatureNumList&  _features,
-                             float                  _weight = -1  // -1 Indicats use existing value, 
+                             float                  _weight = -1  // -1 Indicates use existing value, 
                             );
 
     void  SelectionMethod   (SVM_SelectionMethod    _selectionMethod)  {selectionMethod  = _selectionMethod;}
@@ -268,20 +268,19 @@ namespace MLL
 
     SVM_SelectionMethod      selectionMethod;
 
-    kkint32                  unBalancedBits;  // Works with BitReduction compression when UnBalnced Bit reduction
-                                              // is choosed, ex when (compressionMethod == BRunBalancedVariance)
+    kkint32                  unBalancedBits;    /**< Works with BitReduction compression when UnBalnced Bit reduction
+                                                 * is chosen; ex when (compressionMethod == BRunBalancedVariance)
+                                                 */
 
+    KKStr                    unBalancedBitsStr; /**< Works with 'BRunBalancedSpecified'  Comma delimited String that
+                                                 * Specifies which features to reduce one extra bit.
+                                                 */
 
-    KKStr                    unBalancedBitsStr;   // Works with 'BRunBalancedSpecified'  Comma delimited String that
-                                                  // Specifies which features to reduce one extra bit.
-
-    bool                     useProbabilityToBreakTies;  //  When true use the probability function to break
-                                                         //  voting ties.
+    bool                     useProbabilityToBreakTies;  /**< When true use the probability function to break voting ties. */
 
     bool                     validParam;
 
-    bool                     weightBitReduction;  // kak, if false will not perform weighting
-                                                  // of examples from BitReduction aggregate.
+    bool                     weightBitReduction;  /**< if false will not perform weighting of examples from BitReduction aggregate. */
   };  /* SVMparam */
 
 

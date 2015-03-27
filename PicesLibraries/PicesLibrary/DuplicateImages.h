@@ -11,8 +11,8 @@
  *          or FeatureData.
  *         
  *          The simplest way to use this object is to create an instance with a FeatureVectorList 
- *          object that you are concerend with.  Then call the method DupImages (), which will 
- *          return the list of dupliactes found via a structure called DuplicateImageList.
+ *          object that you are concerned with.  Then call the method DupImages (), which will 
+ *          return the list of duplicates found via a structure called DuplicateImageList.
  */
 
 

@@ -1,22 +1,6 @@
 #ifndef  _SIPPEREXTRACTIONIMAGEMANAGER_
 #define  _SIPPEREXTRACTIONIMAGEMANAGER_
 
-//******************************************************************************
-//*                         SipperExtractionImageManager                       *
-//*                                                                            *
-//* <p>Copyright: Copyright (c) 2006</p>                                       *
-//* <p>author     Kurt Kramer                                                  * 
-//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *
-//* To be used by SipperImageExtraction to manage the disposition of extracted *
-//* images.                                                                    *
-//*                                                                            *
-//*                                                                            *
-//*                                                                            *
-//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *
-//*                                                                            *
-//*  2006-July-08 Original development.                                        *   
-//******************************************************************************
-
 #include "Raster.h"
 #include "KKStr.h"
 #include "MLLTypes.h"
@@ -81,8 +65,8 @@ namespace  MLL
 
     ImageFeaturesListPtr  allExamples;
     bool                  countOnly;
-    SizeDistribution      depthDistribution_1;     // using a SizeDistribution structure to implement counts by depth
-    SizeDistribution      depthDistribution_10;    // using a SizeDistribution structure to implement counts by depth
+    SizeDistribution      depthDistribution_1;     /**< using a SizeDistribution structure to implement counts by depth by 1 meter increments.  */
+    SizeDistribution      depthDistribution_10;    /**< using a SizeDistribution structure to implement counts by depth by 10 meter increments. */
     FileDescPtr           fileDesc;
     bool                  imagesAreClassified;
     kkuint32              imagesPerDirectory;

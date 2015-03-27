@@ -344,7 +344,7 @@ namespace MLL
                                        float           dataField3Min,
                                        float           dataField3Max,
                                        kkuint32        restartImageId,
-                                       kkint32         limit            // Max # of rows 2 return.  -1 idicates no limit.
+                                       kkint32         limit            // Max # of rows 2 return.  -1 indicates no limit.
                                       );
 
 
@@ -613,7 +613,7 @@ namespace MLL
      *@details
      * Will insert a list of images into the same group in ImageGroupEntries. A list of ImageFileNames
      * that failed to be inserted with a description of the error will be returned. If NULL is returned
-     * the the insertion failed completely. A 2 x n matrix will be returned, One row for each image that
+     * the insertion failed completely. A 2 x n matrix will be returned, One row for each image that
      * failed insertion:
      *  - [0,0] = ImageFileName for row '0' that failed insertion
      *  - [0,1] = Description of error that caused insertion to fail.
@@ -668,7 +668,7 @@ namespace MLL
 
     /**
      *@brief  Will extract Instrument Data from "ALL" known Sipper files and update the database tables.
-     *@details  For each known SIPPER file;  will load instrument data from from Sipper file and save
+     *@details  For each known SIPPER file;  will load instrument data from Sipper file and save
      * into 'InstrumentData' table. useful in populating 'InstrumentData' table.  Make sure that
      * the Instrument assignments are correct in 'SipperFiles'.<br />
      *
@@ -747,7 +747,7 @@ namespace MLL
 
 
     /**
-     *@brief  Update all InstrumentData entries tht fall within the dateTime range with the specified Latitude and Longitude.
+     *@brief  Update all InstrumentData entries that fall within the dateTime range with the specified Latitude and Longitude.
      */
     void  InstrumentDataUpdateLatitudeAndLongitude (const KKB::DateTime&  dateTimeStart,
                                                     const KKB::DateTime&  dateTimeEnd,
@@ -893,7 +893,7 @@ namespace MLL
      *@param[in]  sipperFileName
      *@param[in]  extractionStatusExpected  Status of existing SipperFiles table entry;  if not existing extractionStatus
      *            this value then no update will take place.
-     *@param[in]  extractionStatusNew  The new ExtractionStatus the specified SipperFile will take on if currect 
+     *@param[in]  extractionStatusNew  The new ExtractionStatus the specified SipperFile will take on if current 
      *            value equal extractionStatusExpected.
      *@param[out] ExtractionStatusBeforeUpdate  Status found in table entry before update.
      *@param[out] extractionStatusResult  The new value of ExtractedStatus.

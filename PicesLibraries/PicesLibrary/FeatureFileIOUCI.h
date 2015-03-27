@@ -1,11 +1,6 @@
 #ifndef  _FEATUREFILEIOUCI_
 #define  _FEATUREFILEIOUCI
-/**
-  ************************************************************************************************
-  *  @author  Kurt Krame                                                                         *
-  *  Date:  2009-04-16                                                                           *
-  ************************************************************************************************
-  */
+
 
 #include  "FeatureFileIO.h"
 
@@ -13,15 +8,15 @@ namespace MLL
 {
   /**
     @class FeatureFileIOUCI
-    @brief  Supports the reading and writting of Feature data from a file format commonly used by many datasets in the UCI repository.
+    @brief  Supports the reading and writing of Feature data from a file format commonly used by many datasets in the UCI repository.
     @details
     @code
     * ************************************************************************************************
-    * *  FeatureFileIOUCI  Sub-classed from FeatureFileIO.  It supports the reading and writting     *
+    * *  FeatureFileIOUCI  Sub-classed from FeatureFileIO.  It supports the reading and writing      *
     * *  of many of the files found in the UCI repository.                                           *
     * *                                                                                              *
     * *  1) One example per row.                                                                     *
-    * *  2) Each field is seperated by comma.                                                        *
+    * *  2) Each field is separated by comma.                                                        *
     * *  3) Each row has the same number of fields.                                                  *
     * *  4) The last field is the ClassName.                                                         *
     * *  5) Each field is numeric except the last one which is the ClassName                         *
@@ -65,7 +60,7 @@ namespace MLL
                               const KKStr&           _fileName,
                               const FeatureNumList&  _selFeatures,
                               ostream&               _out,
-                              kkuint32&                _numExamplesWritten,
+                              kkuint32&              _numExamplesWritten,
                               VolConstBool&          _cancelFlag,
                               bool&                  _successful,
                               KKStr&                 _errorMessage,

@@ -15,10 +15,10 @@ namespace  MLL
     typedef  KKB::kkint32 kkint32;
     typedef  KKB::kkuint32  kkuint32;
 
-    DataBaseImageGroup (kkint32         _imageGroupId,
+    DataBaseImageGroup (kkint32       _imageGroupId,
                         const KKStr&  _name,
                         const KKStr&  _description,
-                        kkuint32        _count
+                        kkuint32      _count
                        );
 
     DataBaseImageGroup (const DataBaseImageGroup&  _dataBaseImageGroup);
@@ -42,7 +42,7 @@ namespace  MLL
     static  void  ValidName (KKStr&  _name,
                              KKStr&  _errorDesc,
                              bool&   _valid
-                            );  // Returns back true if 'name' is formatted ok.
+                            );  // Returns back true if 'name' is formatted okay.
 
   private:
     kkint32 imageGroupId;

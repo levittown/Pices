@@ -19,10 +19,12 @@ struct  MSQL_STRUCT;
 typedef  MSQL_STRUCT* MYSQL_ROW;
 #endif
 
-#include  "OSservices.h"
-#include  "RasterSipper.h"
-#include  "RunLog.h"
+#include "OSservices.h"
+#include "RunLog.h"
 using namespace KKB;
+
+#include "RasterSipper.h"
+using namespace  SipperHardware;
 
 namespace MLL 
 {

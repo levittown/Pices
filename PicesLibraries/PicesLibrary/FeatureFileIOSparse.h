@@ -1,12 +1,5 @@
 #ifndef  _FEATUREFILEIOSPARSE_
 #define  _FEATUREFILEIOSPARSE_
-/**
-  @file  FeatureFileIOSparse.cpp
-  ************************************************************************************************
-  *  @author  Kurt Kramer                                                                        *
-  *  Date:  2009-04-16                                                                           *
-  ************************************************************************************************
-  */
 
 #include  "FeatureFileIO.h"
 
@@ -15,21 +8,21 @@ namespace MLL
 {
 
   /**
-    @brief  Supports the reading and writting of Sparse feature files similar to the ones libSVM use.
+    @brief  Supports the reading and writing of Sparse feature files similar to the ones libSVM use.
     @details
     @code
     * ************************************************************************************************
-    * *  FeatureFileIOSparse  Sub-classed from FeatureFileIO.  It supports the reading and writting  *
+    * *  FeatureFileIOSparse  Sub-classed from FeatureFileIO.  It supports the reading and writing   *
     * *  of Sparse Files as used by the libSVM.                                                      *
     * *                                                                                              *
     * *  One example per row.                                                                        *
     * *  any row that starts with '//' is ignored.                                                   *
-    * *  On each row there will be several fields seperated by the space(' ') character. The first   *
+    * *  On each row there will be several fields separated by the space(' ') character. The first   *
     * *  field will be the class name followed by the attribute data.                                *
     * *                                                                                              *
-    * *   - First Field is the Class Name.  This differes from libSVM which assumes that class-names *
+    * *   - First Field is the Class Name.  This differs from libSVM which assumes that class-names  *
     * *     are integers.  We support alpha numeric class names.                                     *
-    * *   - Attribute Fields will will be of the following format.  <FeatureNum>:<Feature value>.    *
+    * *   - Attribute Fields will be of the following format.  <FeatureNum>:<Feature value>.         *
     * *                                                                                              *
     * *  ex:                                                                                         *
     * *     "0 0:12.12 4:87.1242 12:-65.63 15:0.872"                                                 *
@@ -64,7 +57,7 @@ namespace MLL
                                              const FileDescPtr  _fileDesc,
                                              MLClassConstList&  _classes, 
                                              istream&           _in,
-                                             long               _maxCount,    // Maximum # images to load.
+                                             long               _maxCount,    /**< Maximum # images to load. */
                                              VolConstBool&      _cancelFlag,
                                              bool&              _changesMade,
                                              KKStr&             _errorMessage,

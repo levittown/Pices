@@ -5,31 +5,6 @@
  @class  MLL::CrossValidation
  @brief  A class that is meant to manage a n-Fold Cross Validation.
  @author  Kurt Kramer
- @details
- @code
- *********************************************************************
- *                           CrossValidation                         *
- *                                                                   *
- *                                                                   *
- *                                                                   *
- *-------------------------------------------------------------------*
- *  History                                                          *
- *                                                                   *
- *    Date     Programmer   Description                              *
- *  ---------- -----------  -----------------------------------------*
- *  2004       Kurt Kramer  Origanol Development.                    *
- *                                                                   *
- *                                                                   *
- *  2005-01-07 Kurt Kramer  Added classedCorrectly parameter to      *
- *                          CrossValidate. If not null it should     *
- *                          point to an array of bool that has as    *
- *                          many elemenst as there are in the        *
- *                          testImages list. Each element reprsents  *
- *                          weather the coresponding element in      *
- *                          testImages was classified correctly.     *
- *                                                                   *
- *********************************************************************
- @endcode
  */
 
 
@@ -163,7 +138,7 @@ namespace  MLL
 
     void  CrossValidate (FeatureVectorListPtr   testImages, 
                          FeatureVectorListPtr   trainingImages,
-                         kkint32                  foldNum,
+                         kkint32                foldNum,
                          bool*                  classedCorrectly = NULL
                         );
 

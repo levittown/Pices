@@ -24,14 +24,14 @@
 
 #include "BMPImage.h"
 #include "KKQueue.h"
-#include "RasterSipper.h"
 #include "RunLog.h"
 #include "KKStr.h"
 using namespace KKB;
 
 #include "InstrumentData.h"
 #include "InstrumentDataList.h"
-               
+#include "RasterSipper.h"
+using namespace SipperHardware;               
 
 #include "Attribute.h"
 #include "ClassStatistic.h"

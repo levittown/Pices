@@ -9,7 +9,7 @@ create procedure  InstrumentDataInsert
        in _ScanLine             int       unsigned, 
        in _ByteOffset           bigint    unsigned,
        in _CTDDateTime          datetime, 
-       in _Latitde              double, 
+       in _Latitude             double, 
        in _Longitude            double,
        in _CTDBattery           float,
        in _Conductivity         float,
@@ -44,7 +44,7 @@ begin
   
   insert into  InstrumentData  
               (SipperFileId,     ScanLine,            ByteOffset, 
-               CTDDateTime,      Latitde,             Longitude,
+               CTDDateTime,      Latitude,            Longitude,
                CTDBattery,       Conductivity,        Density, 
                Depth,            FlowRate1,           FlowRate2,
                Fluorescence,     FluorescenceSensor,  Oxygen,         
@@ -60,7 +60,7 @@ begin
                _ScanLine,         
                _ByteOffset, 
                _CTDDateTime,
-               _Latitde,
+               _Latitude,
                _Longitude,
                _CTDBattery,
                _Conductivity,
@@ -101,7 +101,7 @@ create procedure  InstrumentDataInsert2
        in _ScanLine             int       unsigned, 
        in _ByteOffset           bigint    unsigned,
        in _CTDDateTime          datetime, 
-       in _Latitde              double, 
+       in _Latitude             double, 
        in _Longitude            double,
        in _CTDBattery           float,
        in _Conductivity         float,
@@ -138,7 +138,7 @@ begin
   
   insert into  InstrumentData  
               (SipperFileId,     ScanLine,            ByteOffset, 
-               CTDDateTime,      Latitde,             Longitude,
+               CTDDateTime,      Latitude,            Longitude,
                CTDBattery,       Conductivity,        Density, 
                Depth,            FlowRate1,           FlowRate2,
                Fluorescence,     FluorescenceSensor,  
@@ -156,7 +156,7 @@ begin
                _ScanLine,         
                _ByteOffset, 
                _CTDDateTime,
-               _Latitde,
+               _Latitude,
                _Longitude,
                _CTDBattery,
                _Conductivity,
@@ -956,7 +956,7 @@ create procedure  InstrumentDataUpdateLatitudeAndLongitude
 
 begin
   update  InstrumentData id
-    set  id.Latitde   = _latitude,
+    set  id.Latitude   = _latitude,
          id.Longitude = _longitude
          
     where  (CTDDateTime >= _dateTimeStart)  and  (CTDDateTime <= _dateTimeEnd);
@@ -1138,7 +1138,7 @@ begin
           Sec_To_Time(_timeInterval * Floor(Time_To_Sec(Time(id.CTDDateTime)) / _timeInterval))  as  GpsStartTime,
           sf.SipperFileId                                                                        as  SipperFileId,
           avg(id.ScanLine)                                                                       as  AvgScanLine,
-          avg(id.Latitde)                                                                        as  AvgLatitude,
+          avg(id.Latitude)                                                                        as  AvgLatitude,
           avg(id.Longitude)                                                                      as  AvgLongitude,
           avg(FlowRate1)                                                                         as  AvgFlowRate
      from InstrumentData id
@@ -1338,7 +1338,7 @@ begin
 
     if  (@latitude is not null)  and  (@latitude <> 0.0)  then
        update  InstrumentData id
-               set  id.Latitde   = @latitude,
+               set  id.Latitude   = @latitude,
                     id.Longitude = @longitude
        where  (id.SipperFileId = _sipperFileId)  and  (id.CTDDateTime = _ctdDataTime);
     end if;

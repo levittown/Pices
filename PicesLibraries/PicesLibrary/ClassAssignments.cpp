@@ -220,7 +220,7 @@ void  ClassAssignments::Load (const KKStr&  fileName,
     kkint32  existingAssignmentNum = GetNumForClass (mlClass);
     if  (existingAssignmentNum >= 0)
     {
-      // We already have this class Loaded,  for now i am obly going to
+      // We already have this class Loaded,  for now I am only going to
       // display a warning.
       log.Level (-1) << endl
                      << endl

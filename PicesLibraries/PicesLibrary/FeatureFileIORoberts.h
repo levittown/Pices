@@ -14,11 +14,11 @@ namespace MLL
 {
   /**
     @class  FeatureFileIORoberts
-    @brief  Supports the writting of Feature Data to a file that can then be read by OpenDT.
+    @brief  Supports the writing of Feature Data to a file that can then be read by OpenDT.
     @details
     @code
     * ************************************************************************************************
-    * *  FeatureFileIOSRoberts  Sub-classed from FeatureFileIO.  It supports thwe writting of a file *
+    * *  FeatureFileIOSRoberts  Sub-classed from FeatureFileIO.  It supports the writing of a file   *
     * *  that can be read by OpenDT. http://opendt.sourceforge.net/.  This file format is similar to *    
     * *  C45 except the contents of the names file are included in the data file.                    *
     * ************************************************************************************************
@@ -38,7 +38,7 @@ namespace MLL
     virtual  FileDescPtr  GetFileDesc (const KKStr&         _fileName,
                                        istream&             _in,
                                        MLClassConstListPtr  _classList,
-                                       kkint32&               _estSize,
+                                       kkint32&             _estSize,
                                        KKStr&               _errorMessage,
                                        RunLog&              _log
                                       );
@@ -60,7 +60,7 @@ namespace MLL
                               const KKStr&           _fileName,
                               const FeatureNumList&  _selFeatures,
                               ostream&               _out,
-                              kkuint32&                _numExamplesWritten,
+                              kkuint32&              _numExamplesWritten,
                               VolConstBool&          _cancelFlag,
                               bool&                  _successful,
                               KKStr&                 _errorMessage,

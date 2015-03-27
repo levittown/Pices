@@ -6,11 +6,11 @@
  *@class  MLL::FeatureFileIO
  *@brief  Base class for all FeatureFileIO classes.
  *@details  This is a abstract class.  For each type of FeatureFile you will need to implement
- *          a separate class derivd from this class that supports the specific file format.
- *          You only bneed to implementthe puir virtual functions.
+ *          a separate class derived from this class that supports the specific file format.
+ *          You only need to implement the pure virtual functions.
  *
  *          If you create a new FeatureFileIO class you will need to modify 'RegisterAllDrivers'
- *          methiod in FeatureFileIO.cpp.
+ *          method in FeatureFileIO.cpp.
  */
 
 #include  "FeatureNumList.h"
@@ -99,7 +99,7 @@ namespace MLL
      *@param[in]  _fileName  Name of file top same examples/images to.
      *@param[in]  _selFeatures Specify specific features to save, typically all features.
      *@param[in]  _examples Examples that are to be saved.
-     *@param[in]  _numExamplesWritten Will reflect the num examples written, caller will be able to monitor.
+     *@param[in]  _numExamplesWritten Will reflect the number of examples written, caller will be able to monitor.
      *@param[in]  _cancelFlag If this flag turns true the writing of data will terminate and return to caller.
      *@param[out] _successful False will be returned if the save failed.
      *@param[in]  _log log file to send messages to.
@@ -108,7 +108,7 @@ namespace MLL
       void  SaveFeatureFile (const KKStr&           _fileName, 
                              const FeatureNumList&  _selFeatures,
                              FeatureVectorList&     _examples,
-                             kkuint32&                _numExamplesWritten,  // caller will be able to manitor this variable.
+                             kkuint32&              _numExamplesWritten,  // caller will be able to monitor this variable.
                              VolConstBool&          _cancelFlag,
                              bool&                  _successful,
                              RunLog&                _log
@@ -119,7 +119,7 @@ namespace MLL
      *@brief Saves the feature file in multiple parts with no one single part larger that 64k examples.
      *@details Same as 'SaveFeatureFile', if more than 64k examples will break into multiple files.
      *         If there are more than 64k examples, will save all images into 'fileName', but also
-     *         a second copy of them into files with same name pluss seq num with max of 64k examples
+     *         a second copy of them into files with same name plus seq number with max of 64k examples
      *         in each one.
      *
      *@param[in]  _fileName  Name of file top same examples/images to.
@@ -156,12 +156,12 @@ namespace MLL
      *@param[out] _errorMessage  If a error in processing occurs; place a description of the error in this parameter.
      *@param      _log
      */
-    virtual  FileDescPtr  GetFileDesc (const KKStr&            _fileName,
-                                       std::istream&           _in,
+    virtual  FileDescPtr  GetFileDesc (const KKStr&         _fileName,
+                                       std::istream&        _in,
                                        MLClassConstListPtr  _classes,
-                                       kkint32&                  _estSize,
-                                       KKStr&                  _errorMessage,
-                                       RunLog&                 _log
+                                       kkint32&             _estSize,
+                                       KKStr&               _errorMessage,
+                                       RunLog&              _log
                                       ) = 0;
 
 
@@ -173,9 +173,9 @@ namespace MLL
      *@param[in]  _in  input stream that feature data is to be loaded/read from.
      *@param[in]  _maxCount Maximum number of examples to load, -1 = load all
      *@param[in]  _cancelFlag If this flag turns true the load will terminate and return to caller.
-     *@param[out] _changesMade If the routine had loaded the feature data determined that it neeeded to make
+     *@param[out] _changesMade If the routine had loaded the feature data determined that it needed to make
      *            changes this flag will be set 'true'.
-     *@param[out] _errorMessage If an error occurs during the loading a description iof this error will be placed here.
+     *@param[out] _errorMessage If an error occurs during the loading a description of this error will be placed here.
      *@param[in]  _log Where to send diagnostic messages to.
      *@return  A ImageFeaturesList container object; this object will own all the examples loaded;  if an error occurs NULL will be returned.
      */
@@ -197,7 +197,7 @@ namespace MLL
      *@param[in]  _fileName  Name of file top same examples/images to.
      *@param[in]  _selFeatures Specify specific features to save, typically all features.
      *@param[out] _out  Output stream to save feature data to.
-     *@param[out] _numExamplesWritten Will reflect the num examples written, caller will be able to monitor.
+     *@param[out] _numExamplesWritten Will reflect the number of examples written, caller will be able to monitor.
      *@param[in]  _cancelFlag If this flag turns true the writing of data will terminate and return to caller.
      *@param[out] _successful False will be returned if the save failed.
      *@param[out] _errorMessage If the save fails (_successful == false)  then a description of the error will be placed here.
@@ -207,7 +207,7 @@ namespace MLL
                               const KKStr&           _fileName,
                               const FeatureNumList&  _selFeatures,
                               std::ostream&          _out,
-                              kkuint32&                _numExamplesWritten,
+                              kkuint32&              _numExamplesWritten,
                               VolConstBool&          _cancelFlag,
                               bool&                  _successful,
                               KKStr&                 _errorMessage,

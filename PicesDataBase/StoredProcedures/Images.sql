@@ -2718,7 +2718,7 @@ begin
       select Date(id.CTDDateTime),
              TIME_TO_SEC(Time(id.CTDDateTime)) div _timeSlotLen,
 
-             avg(id.Latitde),
+             avg(id.Latitude),
              avg(id.Longitude),
 
              count(*),

@@ -197,8 +197,8 @@ namespace SipperFile
 
           if (fields[0].ToLower () == "fieldsnamelist")
           {
-            // Next Text line will be list of fild names that are used to determine the order
-            // of the collumns is following rows.
+            // Next Text line will be list of field names that are used to determine the order
+            // of the columns is following rows.
             txtLine = f.ReadLine ();
             if (f.EndOfStream)
               break;

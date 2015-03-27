@@ -19,12 +19,12 @@
  */
 
 
-#include  "RunLog.h"
-#include  "KKStr.h"
+#include "RunLog.h"
+#include "KKStr.h"
 
-#include  "svm.h"
-#include  "Model.h"
-#include  "SVMModel.h"
+#include "svm.h"
+#include "Model.h"
+#include "SVMModel.h"
 
 
 namespace MLL
@@ -105,13 +105,13 @@ namespace MLL
                                 MLClassConstPtr   knownClass,
                                 MLClassConstPtr&  predClass1,
                                 MLClassConstPtr&  predClass2,
-                                kkint32&            predClass1Votes,
-                                kkint32&            predClass2Votes,
+                                kkint32&          predClass1Votes,
+                                kkint32&          predClass2Votes,
                                 double&           probOfKnownClass,
                                 double&           predClass1Prob,
                                 double&           predClass2Prob,
                                 double&           compact,
-                                kkint32&            numOfWinners,
+                                kkint32&          numOfWinners,
                                 bool&             knownClassOneOfTheWinners,
                                 double&           breakTie
                                );
@@ -124,7 +124,7 @@ namespace MLL
     virtual
     void  ProbabilitiesByClass (FeatureVectorPtr         example,
                                 const MLClassConstList&  _mlClasses,
-                                kkint32*                   _votes,
+                                kkint32*                 _votes,
                                 double*                  _probabilities
                                );
 

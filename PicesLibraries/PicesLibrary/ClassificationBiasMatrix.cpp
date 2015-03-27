@@ -286,7 +286,7 @@ void  ClassificationBiasMatrix::TestPaperResults (ostream&   sw)
 
   sw << endl << endl;
 
-  sw << "Desc";
+  sw << "Description";
   for  (x = 0;  x < 7;  x++)
     sw << "\t" << StrFormatInt (x, "ZZ0");
   sw << endl;
@@ -392,7 +392,7 @@ void  ClassificationBiasMatrix::ReadXML (istream&  sr)
 
 
 
-void  ClassificationBiasMatrix::ReadSimpleConfusionMatrix (istream&           sr,
+void  ClassificationBiasMatrix::ReadSimpleConfusionMatrix (istream&        sr,
                                                            MLClassListPtr  fileClasses
                                                           )
 {
@@ -576,9 +576,9 @@ void   ClassificationBiasMatrix::PerformAdjustmnts (const VectorDouble&  classif
   // For description of calc's see the paper:
   //    "Estimating the Taxonomic composition of a sample when individuals are classified with error"
   //     by Andrew Solow, Cabll Davis, Qiao Hu
-  //     Woods Hole Ocanographic Institution, Woods Hole Massachusetts
+  //     Woods Hole Oceanographic Institution, Woods Hole Massachusetts
   //     Marine Ecology Progress Series
-  //     published 2006-july-06;  vol 216:309-311
+  //     published 2006-July-06;  vol 216:309-311
 
   if  (classifiedCounts.size () != numClasses)
   {

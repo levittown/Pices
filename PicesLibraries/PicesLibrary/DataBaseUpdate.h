@@ -3,7 +3,7 @@
 
 /**
  *@class  MLL::DataBaseUpdate
- *@brief  Routines used to update the MySql database to the curent version.
+ *@brief  Routines used to update the MySql database to the current version.
  *
  */
 

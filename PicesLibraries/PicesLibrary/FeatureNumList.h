@@ -260,7 +260,7 @@ namespace MLL
 
     void   AllocateArraySize (kkint32 size);   /**< @brief  Make sure that FeatureNums is allocated to at least this size. */
 
-    kkuint16*      featureNums;              /**< @brief The feature nums in this array are always kept in ascending order.  
+    kkuint16*      featureNums;              /**< @brief The feature numbers in this array are always kept in ascending order.  
                                             * @details There will be 'numOfFeatures' in this array.  'featureNumsAllocatedSize' 
                                             * indicates the size allocated, if more space is needed you need to call 
                                             * 'AllocateArraySize' to increase it.

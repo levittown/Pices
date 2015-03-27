@@ -1,18 +1,7 @@
 #ifndef  _FEATUREENCODER_
 #define  _FEATUREENCODER_
-//***********************************************************************
-//*                           FeatureEncoder                            *
-//*                                                                     *
-//*                                                                     *
-//*---------------------------------------------------------------------*
-//*  History                                                            *
-//*                                                                     *
-//*    Date      Programmer   Description                               *
-//*                                                                     *
-//*  2005-09-10  Kurt Kramer  Removing Feature compression and encoding *
-//*                           code from FeatureEncoder                  *
-//*                                                                     *
-//***********************************************************************
+
+
 #include  "RunLog.h"
 
 #include  "Attribute.h"
@@ -74,7 +63,7 @@ namespace MLL
     CompressionStats  Compress (FeatureVectorListPtr  src,
                                 ClassAssignments&     assignments,
                                 XSpacePtr&            xSpace,
-                                kkint32&                totalxSpaceUsed,
+                                kkint32&              totalxSpaceUsed,
                                 struct svm_problem&   prob
                                );
 

@@ -19,8 +19,6 @@
 using namespace std;
 
 
-#include "RasterSipper.h"
-
 #include "KKBaseTypes.h"
 #include "Blob.h"
 #include "BMPImage.h"
@@ -34,6 +32,10 @@ using namespace std;
 #include "SimpleCompressor.h"
 #include "Sobel.h"
 using namespace KKB;
+
+
+#include "RasterSipper.h"
+using namespace SipperHardware;
 
 
 RasterSipper::RasterSipper (): Raster ()

@@ -31,7 +31,7 @@ namespace MLL
    *    by Andrew Solow, Cabll Davis, Qiao Hu
    *    Woods Hole Oceanographic Institution, Woods Hole Massachusetts
    *    Marine Ecology Progress Series
-   *    published 2006-july-06;  vol 216:309-311
+   *    published 2006-July-06;  vol 216:309-311
    *@endcode
    *This class uses the results of a previous 10 fold cross validation confusion matrix to adjust the results of a
    *classification run. The application CrossValidation will create a parameter file in the directory
@@ -59,9 +59,9 @@ namespace MLL
      *@param[in,out]  log      Logging File.
      */
     static
-    ClassificationBiasMatrixPtr  BuildFromIstreamXML (istream&              f,
+    ClassificationBiasMatrixPtr  BuildFromIstreamXML (istream&           f,
                                                       MLClassConstList&  classes,
-                                                      RunLog&               log
+                                                      RunLog&            log
                                                      );
 
 
@@ -74,20 +74,20 @@ namespace MLL
     ClassificationBiasMatrix (const ClassificationBiasMatrix &  cbm);
 
     ClassificationBiasMatrix (MLClassConstList&  classes,
-                              RunLog&               _runLog
+                              RunLog&            _runLog
                              );
 
 
     /**
-     *@brief  Construct a ClassificationBiasMatrix instance from from the parameter file for '_configFileName'.
+     *@brief  Construct a ClassificationBiasMatrix instance from the parameter file for '_configFileName'.
      *@param[in]     _configFileName The name of the BiasMatrix file will be derived from the configuration 
      *                               file name.  the term '_BiasMatrix.txt' will be appended onto the end.
      *@param[in]     _classes        List of classes that you are expecting to be in the 'BiasMatrix' file.
      *@param[in,out] _runLog         Logging file to use.
      */
-    ClassificationBiasMatrix (const KKStr&          _configFileName,
+    ClassificationBiasMatrix (const KKStr&       _configFileName,
                               MLClassConstList&  _classes,          // List of classes you expect to find in BiasMatrix file.
-                              RunLog&               _runLog
+                              RunLog&            _runLog
                              );
 
     /**

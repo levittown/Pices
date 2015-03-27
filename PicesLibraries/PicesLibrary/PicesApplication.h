@@ -10,6 +10,7 @@
 #include "KKBaseTypes.h"
 #include "RunLog.h"
 #include "KKStr.h"
+using namespace KKB;
 
 
 namespace MLL

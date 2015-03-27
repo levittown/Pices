@@ -247,7 +247,7 @@ void   DataBase::ErrorLogMsg (const KKStr&  msg)
 
 void   DataBase::UpdatesNotAllowed (const KKStr&  methodName)
 {
-  ErrorLogMsg ("Attemp to perform Update:" + methodName);
+  ErrorLogMsg ("Attempt to perform Update:" + methodName);
 }
 
 
@@ -356,13 +356,13 @@ void  DataBase::InitializeMySqlLibraryEmbedded ()
   if  (retval != 0)
   {
     KKStr  errMsg = mysql_error (NULL);
-    KKStr  errMsgStr = "Call to \"mysql_library_init\"  Failed with retval[" + StrFormatInt (retval, "##0") + "]";
+    KKStr  errMsgStr = "Call to \"mysql_library_init\"  Failed with RetVal[" + StrFormatInt (retval, "##0") + "]";
     ErrorLogMsg (errMsgStr);
     ErrorLogMsg ("Error Description = " + errMsg);
   }
 
   cout  << " DataBase::InitializeMySqlLibraryEmbedded   num_elements" << "\t" << num_elements << endl
-        << "                                            retval"       << "\t" << retval       << endl;
+        << "                                            RetVal"       << "\t" << retval       << endl;
 
 
   if  (retval == 0)
@@ -428,22 +428,22 @@ void  DataBase::InitializeMySqlLibraryEmbedded ()
 
 
 /**
- *@details  When using Embeded server oinside a ".net" application you need to call the "FinalCleanUp" method at the same level
- *  that the Initialization method gets called.  If you wait until the "atexitt functon in "DateBase" gets called al the threads 
- *  that the MySQL sderver create will be terminated and "mysql_library_end"  will hang.
+ *@details  When using Embedded server inside a ".net" application you need to call the "FinalCleanUp" method at the same level
+ *  that the Initialization method gets called.  If you wait until the "atexit function in "DateBase" gets called all the threads 
+ *  that the MySQL server create will be terminated and "mysql_library_end"  will hang.
  */
 void  DataBase::FinalCleanUp ()
 {
   if  (!staticVariablesInialized)
   {
-    // No need to run 'FinalCleanUp';  Either static variabls were never initialized or 'FinalCleanUp'
+    // No need to run 'FinalCleanUp';  Either static variables were never initialized or 'FinalCleanUp'
     // was not ran yet.
     return;
   }
 
   if  (!blocker)
   {
-    // If the GoalKeeper instance 'blocker' is not defined then eithe the DataBase inistialization code never 
+    // If the GoalKeeper instance 'blocker' is not defined then either the DataBase initialization code never 
     // completed or some other thread had already deleted 'blocker'.  In either case we can not perform
     // the clean up code safely.
     return;
@@ -456,7 +456,7 @@ void  DataBase::FinalCleanUp ()
     return;
   }
 
-  // If you made it this far;  then you are thhe thread that has to clean up the 'DataBase' static variables.
+  // If you made it this far; then you are the thread that has to clean up the 'DataBase' static variables.
   staticVariablesInialized = false;
   DataBaseIndex::iterator  idx;
   for  (idx = existingInstances.begin ();  idx != existingInstances.end ();  ++idx)
@@ -476,7 +476,7 @@ void  DataBase::FinalCleanUp ()
     {
       KKStr errMsg (128);
       errMsg << "DataBase::FinalCleanUp    Wrong thread is calling 'mysql_library_end'" << endl
-             << "   Initializatiob ThreadId[" << initializeMySqlLibraryEmbeddedThreadId << "]  CurrentThreadId[" << curThreadId << "]" << endl;
+             << "   Initialization ThreadId[" << initializeMySqlLibraryEmbeddedThreadId << "]  CurrentThreadId[" << curThreadId << "]" << endl;
 
       ErrorLogMsg (errMsg);
     }
@@ -641,7 +641,7 @@ bool  DataBase::ThreadInit ()
   //my_init ();
   if (!mysql_thread_safe ())
   {
-    ErrorLogMsg ("DataBase::ThreadInit   \"mysql_thread_safe\"  returned 'false';        Major problem: libmysqlcompiled ThreadSafe?");
+    ErrorLogMsg ("DataBase::ThreadInit   \"mysql_thread_safe\"  returned 'false';        Major problem: libmysql compiled ThreadSafe?");
     return  false;
   }
 
@@ -724,7 +724,7 @@ DataBaseServerPtr  DataBase::GetServer (const KKStr&  description,
 KKStr  DataBase::ServerDescription ()  const
 {
   if  (server == NULL)
-    return  "*** no server paranmeters selected ***";
+    return  "*** no server parameters selected ***";
 
   KKStr  description = server->ServerDescription ();
   if  (!Valid ())
@@ -951,7 +951,7 @@ bool  DataBase::ResultSetLoad (ConstCharStarArray    fieldNames)
     lastMySqlErrorNo   = mysql_errno (conn);
 
     log.Level (-1) << endl << endl 
-                   << "DataBase::ResultSetLoad    ***ERROR***     occured when retrieving result set." << endl
+                   << "DataBase::ResultSetLoad    ***ERROR***     occurred when retrieving result set." << endl
                    << endl
                    << "ErrorDesc[" << lastMySqlErrorDesc << "]"  << endl
                    << endl;
@@ -980,7 +980,7 @@ bool  DataBase::ResultSetLoad (ConstCharStarArray    fieldNames)
 
 
 
-/** @brief   Use instead of 'ResultSetLoad'; returns all fields plust their names. */
+/** @brief   Use instead of 'ResultSetLoad'; returns all fields plus their names. */
 bool  DataBase::ResultSetLoadFieldNames (VectorKKStr&  fieldNames)
 {
   resultSetFieldDefs  = NULL;
@@ -1000,7 +1000,7 @@ bool  DataBase::ResultSetLoadFieldNames (VectorKKStr&  fieldNames)
     lastMySqlErrorNo   = mysql_errno (conn);
 
     log.Level (-1) << endl << endl 
-                   << "DataBase::ResultSetLoad    ***ERROR***     occured when retrieving result set." << endl
+                   << "DataBase::ResultSetLoad    ***ERROR***     occurred when retrieving result set." << endl
                    << endl
                    << "ErrorDesc[" << lastMySqlErrorDesc << "]"  << endl
                    << endl;
@@ -1063,7 +1063,7 @@ void DataBase::ResulSetFree ()
 
 
 /**
- *@brief  Call this method after you are done proessing the results of the last query.  If you do not 
+ *@brief  Call this method after you are done processing the results of the last query.  If you do not 
  *      do this the next call may fail.
  */
 void  DataBase::ResultSetsClear ()
@@ -1096,7 +1096,7 @@ void  DataBase::ResultSetsClear ()
  * Will return an array that has the indirection index for each field in fieldNames.
  * ex   results[2]  specifies which entry in the results row contains the value for 
  * the field name in 'fieldNames[2]'.
- *@param[in]  fieldNames  List of field names to get indirection matrix.  The last enry should be NULL to mark end of list.
+ *@param[in]  fieldNames  List of field names to populate indirection matrix with; the last entry needs to contain a NULL pointer to mark end of list.
  */
 void  DataBase::ResultSetBuildFieldIndexTable (ConstCharStarArray   fieldNames)
 {
@@ -1138,7 +1138,7 @@ bool  DataBase::ResultSetFetchNextRow ()
   {
     KKStr  errMsg (256);
     errMsg << "DataBase::ResultSetFetchNextRow   'resultSet' == NULL   ***ERROR***" << endl
-           << "             Prev SQL Cmd :" << prevQueryStatement << endl
+           << "             Previous SQL Command :" << prevQueryStatement << endl
            << "           LastMySQLError :" << lastMySqlErrorNo   << "\t" << lastMySqlErrorDesc << endl;
 
     log.Level (-1) << endl << endl << errMsg << endl << endl;
@@ -1443,24 +1443,24 @@ void  DataBase::ValidateConnection (const char*  funcCall)
 {
   if  (resultSet != NULL)
   {
-    // This should not happen,  We will add warning to Sql ERROR File.
+    // This should not happen; we will add warning to SQL ERROR File.
 
     KKStr  msg (256);
-    msg << "DataBase::ValidateConnection   ***ERROR*** Func[" << funcCall << "]  'resultSet != NULL'   This should never happen." << endl
-        << "     Prev Statement[" << prevQueryStatement << "]";
+    msg << "DataBase::ValidateConnection   ***ERROR*** Function[" << funcCall << "]  'resultSet != NULL'   This should never happen." << endl
+        << "     Previous Statement[" << prevQueryStatement << "]";
 
     log.Level (-1) << endl << msg << endl << endl;
 
     ErrorLogMsg (msg);
 
-    // Since we do not know the status of the Prebvious ResultSet we will set it to NULL.
+    // Since we do not know the status of the Previous ResultSet we will set it to NULL.
     resultSet = NULL;
   }
 
   if  (!conn)
   {
     KKStr  msg (256);
-    msg << "DataBase::ValidateConnection   Func[" << funcCall << "]  Connection was closed.";
+    msg << "DataBase::ValidateConnection   Function[" << funcCall << "]  Connection was closed.";
     log.Level (-1) << endl << msg << endl << endl;
     ErrorLogMsg (msg);
     Connect ();
@@ -1470,8 +1470,8 @@ void  DataBase::ValidateConnection (const char*  funcCall)
 
 
 KKB::kkint32  DataBase::QueryStatement (const char* queryStr,
-                                      kkint32     queryStrLen
-                                     )
+                                        kkint32     queryStrLen
+                                       )
 {
   ValidateConnection ("QueryStatement");
 
@@ -1641,10 +1641,10 @@ KKB::kkint32  DataBase::QueryStatement (const KKStr& statement)
     {
       // Calls are out of sequence;  
       KKStr l(512);
-      l << "MySQL Calls out of sequience" << "\t" << lastMySqlErrorNo << "\t" << lastMySqlErrorDesc << endl
-        << "Prev Statement" << "\t" << prevQueryStatement << endl 
-        << "Cur  Statement" << "\t" << statement          << endl 
-        << "Loop Count"     << "\t" << outOfSeqLoopCount  << endl;
+      l << "MySQL Calls out of sequence" << "\t" << lastMySqlErrorNo << "\t" << lastMySqlErrorDesc << endl
+        << "Previous Statement" << "\t" << prevQueryStatement << endl 
+        << "Current  Statement" << "\t" << statement          << endl 
+        << "Loop Count"         << "\t" << outOfSeqLoopCount  << endl;
       log.Level (-1) << endl << l << endl;
       ErrorLogMsg (l);
 
@@ -1674,10 +1674,10 @@ KKB::kkint32  DataBase::QueryStatement (const KKStr& statement)
       valid = false;
       KKStr  l (512);
       l << "DataBase::QueryStatement" << "\t"
-        << "lastMySqlErrorNo" << "\t" << lastMySqlErrorNo << "\t" 
-        << "mysql_error"      << "\t" << lastMySqlErrorDesc << endl
-        << "Cur  Statement"   << "\t" << statement          << endl
-        << "Prev Statement"   << "\t" << prevQueryStatement << endl;
+        << "lastMySqlErrorNo"    << "\t" << lastMySqlErrorNo << "\t" 
+        << "mysql_error"         << "\t" << lastMySqlErrorDesc << endl
+        << "Current Statement"   << "\t" << statement          << endl
+        << "Previous Statement"  << "\t" << prevQueryStatement << endl;
       ErrorLogMsg (l);
 
       return  lastMySqlErrorNo;
@@ -1799,7 +1799,7 @@ void  DataBase::FeatureDataCreateTable ()
     log.Level (-1) << endl << endl
                    << "DataBase::CreateFeatureDataTable    ***ERROR***" << endl
                    << endl
-                   << "         Error[" << lastMySqlErrorDesc << "] occured trying to create FeatureData table." << endl
+                   << "         Error[" << lastMySqlErrorDesc << "] occurred trying to create FeatureData table." << endl
                    << endl;
     valid = false;
     return;
@@ -2018,7 +2018,7 @@ ImageFeaturesPtr    DataBase::FeatureDataRecLoad (const KKStr&  imageFileName)
     return NULL;
   }
 
-  ImageFeaturesListPtr  results = FeatureDataProcessResults ();  // true = Refresh Insrument Data from Sipper Files.
+  ImageFeaturesListPtr  results = FeatureDataProcessResults ();  // true = Refresh Instrument Data from Sipper Files.
   ResultSetsClear ();
   if  (results == NULL)  
     return NULL;
@@ -2089,7 +2089,7 @@ ImageFeaturesPtr   DataBase::FeatureDataRecLoad (DataBaseImagePtr  image)
     return NULL;
   }
 
-  ImageFeaturesListPtr  results = FeatureDataProcessResults ();  // true = Refresh Insrument Data from Sipper Files.
+  ImageFeaturesListPtr  results = FeatureDataProcessResults ();  // true = Refresh Instrument Data from Sipper Files.
   ResultSetsClear ();
   if  (results == NULL)  
     return NULL;
@@ -2146,10 +2146,10 @@ ImageFeaturesPtr   DataBase::FeatureDataRecLoad (DataBaseImagePtr  image)
 /**
  *@brief  Loads all Images with related Feature data for the specified 'SipperFile'
  *@param[in] sipperFileName            Sipper file to retrieve feature data for.
- *@param[in] mlClass                   You are only interested in feature data for a specific class;  whether predicted or va;idated class depends on 'classKeyToUse'.
+ *@param[in] mlClass                   You are only interested in feature data for a specific class;  whether predicted or validated class depends on 'classKeyToUse'.
  *@param[in] classKeyToUse             Indicates which ClassId field to use for selecting feature data by class;  'V' = 'Images.ClassValidatedId' otherwise 'Images.Class1Id'.
- *@param[in] reExtractInstrumentData:  True indicates to reextract feature data from the original SipperFile and update InmstrumentData tables.
- *@param[in] cancelFlag                Flag will be monitored;  if turbs true it the methid will return at 1st chance.
+ *@param[in] reExtractInstrumentData:  True indicates to re-extract feature data from the original SipperFile and update InmstrumentData tables.
+ *@param[in] cancelFlag                Flag will be monitored;  if turns true the method will return at 1st chance.
  */
 ImageFeaturesListPtr  DataBase::FeatureDataGetOneSipperFile (const KKStr&     sipperFileName,
                                                              MLClassConstPtr  mlClass,
@@ -2600,9 +2600,9 @@ MLClassConstListPtr  DataBase::MLClassLoadList ()
   if  (!resultSetMore)
     return  NULL;
 
-  // Since we are reloading ALL classes we will re-intialize the paremts of all classes to 'NULL'.  The
+  // Since we are reloading ALL classes we will initialize the parents of all classes to 'NULL'.  The
   // relationship will be re-established as they are reloaded from the database. This will help prevent
-  // coruptions when we switch between MySQL servers.
+  // corruptions when we switch between MySQL servers.
 
   
   MLClass::ResetAllParentsToAllClasses ();
@@ -2648,7 +2648,7 @@ MLClassConstListPtr  DataBase::MLClassLoadList ()
     {
       if  (parent->IsAnAncestor (classesWithParents[x]))
       {
-        log.Level (-1) << endl << endl << "DataBase::LoadSipperFileRec    ***ERROR***     occured when retrieving result set." << endl << endl
+        log.Level (-1) << endl << endl << "DataBase::LoadSipperFileRec    ***ERROR***     occurred when retrieving result set." << endl << endl
                        << "    There is a Circular Parent Assignment" << endl 
                        << "    Class[" << classesWithParents[x]->Name () << "]   Parent[" << parent->Name () << "]" << endl
                        << endl;
@@ -2725,7 +2725,7 @@ void  DataBase::MLClassInsert (MLClass&  mlClass,
   if  (successful)
   {
     // We perform the 'MLClassLoad' so that the classId field is populated with correct value.  Also note
-    // that there is only one instance in memory of any goven class(See MLClass.h).
+    // that there is only one instance in memory of any given class(See MLClass.h).
     KKStr  className = mlClass.Name ();
     MLClassLoad (className);
   }
@@ -3170,7 +3170,7 @@ ClassStatisticListPtr  DataBase::ImageGetClassStatistics (DataBaseImageGroupPtr 
 {
   if  (cruiseName.Empty ()  &&  stationName.Empty ()  &&  deploymentNum.Empty ())
   {
-    // We do not care about individule SipperFiles
+    // We do not care about individual SipperFiles
     return  ImageGetClassStatistics (imageGroup, "", mlClass, classKeyToUse, minProb, maxProb, minSize, maxSize, minDepth, maxDepth);
   }
 
@@ -3749,7 +3749,7 @@ DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  imageGroup,
                                              float                  depthMin,
                                              float                  depthMax,
                                              kkuint32               restartImageId,
-                                             kkint32                limit,            // Max # of rows 2 return.  -1 idicates no limit.
+                                             kkint32                limit,            // Max # of rows 2 return.  -1 indicates no limit.
                                              bool                   includeThumbnail,
                                              const bool&            cancelFlag
                                             )
@@ -4287,7 +4287,7 @@ void  DataBase::ImageUpdate (DataBaseImage&  dbImage,
   }
   else
   {
-    // In a worst case situation the esape string could be twoce as long as the source string plus 5 bytes overhead.
+    // In a worst case situation the escape string could be twice as long as the source string plus 5 bytes overhead.
     mySqlImageCompressedBuff = new uchar[imageCompressedBuffLen * 2 + 5];
     mySqlImageCompressedBuffLen = mysql_real_escape_string (conn, (char*)mySqlImageCompressedBuff, (char*)imageCompressedBuff, imageCompressedBuffLen);
   }
@@ -4411,7 +4411,7 @@ void  DataBase::ImageUpdateInstrumentDataFields (InstrumentDataPtr  instumentDat
   if  (returnCd != 0)
   {
     log.Level (-1) << endl << endl 
-                   << "DataBase::ImageUpdateInstrumentDataFields    ***ERROR***     occured performing update." << endl
+                   << "DataBase::ImageUpdateInstrumentDataFields    ***ERROR***     occurred performing update." << endl
                    << endl
                    << "ErrorDesc[" << lastMySqlErrorDesc << "]"  << endl
                    << endl;
@@ -4838,7 +4838,7 @@ void  DataBase::ImageGroupInsert (DataBaseImageGroup&  imageGroup)
 
   if  (resultSetNumFields < 1)
   {
-    lastMySqlErrorDesc = "ImageGroupId was not returnd.";
+    lastMySqlErrorDesc = "ImageGroupId was not returned.";
     lastMySqlErrorNo   = -1;
   }
   else
@@ -5087,7 +5087,7 @@ DataBaseImageGroupEntryListPtr  DataBase::ImageGroupEntriesLoad (kkint32 groupId
     lastMySqlErrorNo   = mysql_errno (conn);
 
     log.Level (-1) << endl << endl 
-                   << "DataBase::ImageGroupEntriesLoad    ***ERROR***     occured when retrieving result set." << endl
+                   << "DataBase::ImageGroupEntriesLoad    ***ERROR***     occurred when retrieving result set." << endl
                    << endl
                    << "ErrorDesc[" << lastMySqlErrorDesc << "]"  << endl
                    << endl;
@@ -5102,7 +5102,7 @@ DataBaseImageGroupEntryListPtr  DataBase::ImageGroupEntriesLoad (kkint32 groupId
     lastMySqlErrorNo   = mysql_errno (conn);
 
     log.Level (-1) << endl << endl 
-                   << "DataBase::ImageGroupEntriesLoad    ***ERROR***     Not enough cllumns ." << endl
+                   << "DataBase::ImageGroupEntriesLoad    ***ERROR***     Not enough columns ." << endl
                    << endl
                    << "ErrorDesc[" << lastMySqlErrorDesc << "]"  << endl
                    << endl;
@@ -5128,7 +5128,7 @@ DataBaseImageGroupEntryListPtr  DataBase::ImageGroupEntriesLoad (kkint32 groupId
 
 
 //*************************************************************************************
-//*                           Sipper Deloyment Routines                               *
+//*                           Sipper Deployment Routines                              *
 //*************************************************************************************
 
 
@@ -5530,7 +5530,7 @@ VectorKKStr*  DataBase::SipperFileGetList (const KKStr& cruiseName,
     lastMySqlErrorNo   = mysql_errno (conn);
 
     log.Level (-1) << endl << endl 
-                   << "DataBase::SipperFileGetList    ***ERROR***     occured when retrieving result set." << endl
+                   << "DataBase::SipperFileGetList    ***ERROR***     occurred when retrieving result set." << endl
                    << endl
                    << "ErrorDesc[" << lastMySqlErrorDesc << "]"  << endl
                    << endl;
@@ -5770,7 +5770,7 @@ void   DataBase::SipperFilesDelete (const KKStr&  _sipperFileName)
 
 
 //*******************************************************************************************
-//*                              SipperStation  Rotines                                     *
+//*                            SipperStation  Routines                                      *
 //*******************************************************************************************
 SipperStationListPtr  DataBase::SipperStationProcessResults ()
 {
@@ -5932,7 +5932,7 @@ InstrumentDataListPtr  DataBase::InstrumentDataProcessResults (const bool&  canc
                                        "ByteOffset",          // 3
                                        "FlowRate1",           // 4
                                        "FlowRate2",           // 5
-                                       "Latitde",             // 6
+                                       "Latitude",            // 6
                                        "Longitude",           // 7
                                        "CTDBattery",          // 8
                                        "Conductivity",        // 9
@@ -6053,37 +6053,37 @@ void  DataBase::InstrumentDataInsert (const KKStr&            _sipperFileName,
 
   KKStr  insertStr (2500);
   insertStr << "call  InstrumentDataInsert2("
-            << sipperFileName.QuotedStr  ()            << ", "
-            << id.ScanLine               ()            << ", "
-            << id.ByteOffset             ()            << ", "
-            << DateTimeToQuotedStr (id.CtdDate ())     << ", "
-            << id.Latitude               ()            << ", "
-            << id.Longitude              ()            << ", "
-            << id.CTDBattery             ()            << ", "
-            << id.Conductivity           ()            << ", "
-            << id.Density                ()            << ", "
-            << id.Depth                  ()            << ", "
-            << id.FlowRate1              ()            << ", "
-            << id.FlowRate2              ()            << ", "
-            << id.Fluorescence           ()            << ", "
-            << id.FluorescenceSensor     ()            << ", "
-            << id.CdomFluorescence       ()            << ", "
-            << id.CdomFluorescenceSensor ()            << ", "
-            << id.Oxygen                 ()            << ", "
-            << id.OxygenSensor           ()            << ", "
-            << id.Pressure               ()            << ", "
-            << id.RecordRate             ()            << ", "
-            << id.Salinity               ()            << ", "
-            << id.SoundVelocity          ()            << ", "
-            << id.Temperature            ()            << ", "
-            << id.Transmisivity          ()            << ", "
-            << id.TransmisivitySensor    ()            << ", "
-            << id.Turbidity              ()            << ", "
-            << id.TurbiditySensor        ()            << ", "
-            << id.Pitch                  ()            << ", "
-            << id.Roll                   ()            << ", "
-            << id.CropLeft               ()            << ", "
-            << id.CropRight              ()            << ", "
+            << sipperFileName.QuotedStr  ()         << ", "
+            << id.ScanLine               ()         << ", "
+            << id.ByteOffset             ()         << ", "
+            << DateTimeToQuotedStr (id.CtdDate ())  << ", "
+            << id.Latitude               ()         << ", "
+            << id.Longitude              ()         << ", "
+            << id.CTDBattery             ()         << ", "
+            << id.Conductivity           ()         << ", "
+            << id.Density                ()         << ", "
+            << id.Depth                  ()         << ", "
+            << id.FlowRate1              ()         << ", "
+            << id.FlowRate2              ()         << ", "
+            << id.Fluorescence           ()         << ", "
+            << id.FluorescenceSensor     ()         << ", "
+            << id.CdomFluorescence       ()         << ", "
+            << id.CdomFluorescenceSensor ()         << ", "
+            << id.Oxygen                 ()         << ", "
+            << id.OxygenSensor           ()         << ", "
+            << id.Pressure               ()         << ", "
+            << id.RecordRate             ()         << ", "
+            << id.Salinity               ()         << ", "
+            << id.SoundVelocity          ()         << ", "
+            << id.Temperature            ()         << ", "
+            << id.Transmisivity          ()         << ", "
+            << id.TransmisivitySensor    ()         << ", "
+            << id.Turbidity              ()         << ", "
+            << id.TurbiditySensor        ()         << ", "
+            << id.Pitch                  ()         << ", "
+            << id.Roll                   ()         << ", "
+            << id.CropLeft               ()         << ", "
+            << id.CropRight              ()         << ", "
             << id.ActiveColumns          ()
             << ")";
 
@@ -6140,7 +6140,7 @@ void  DataBase::InstrumentDataSaveListForOneSipperFile (const KKStr&            
 
   KKStr  sipperFileName = osGetRootName (_sipperFileName);
 
-  // Lets first make sure thata record exists for this SipperFile
+  // Lets first make sure that a record exists for this SipperFile
 
   SipperFilePtr  sf = SipperFileRecLoad (sipperFileName);
   if  (sf == NULL)
@@ -6267,9 +6267,9 @@ InstrumentDataListPtr  DataBase::InstrumentDataLoad (const KKStr&  cruiseName,
                                                      const bool&   cancelFlag
                                                     )
 {
-  // Will acomplish in two parts.
+  // Will accomplish in two parts.
   // 1) Get list of sipper files that meet the criteria passed in,
-  // 2) For each sipper file we will call "InstrumentDataLoad" by SipperFileName as defined in prev method.
+  // 2) For each sipper file we will call "InstrumentDataLoad" by SipperFileName as defined in previous method.
 
   VectorKKStr*  sipperFileNames = SipperFileGetList (cruiseName, stationName, deploymentNum);
   if  (sipperFileNames == NULL)
@@ -6300,7 +6300,7 @@ InstrumentDataListPtr  DataBase::InstrumentDataLoad (const KKStr&  cruiseName,
 
 
 /**
- @brief  Will update all InstrumentData entries tht fall within the dateTime range with the Latitude and longitude.
+ @brief  Will update all InstrumentData entries that fall within the dateTime range with the Latitude and longitude.
  */
 void  DataBase::InstrumentDataUpdateLatitudeAndLongitude (const DateTime&  dateTimeStart,
                                                           const DateTime&  dateTimeEnd,
@@ -6488,7 +6488,7 @@ void  DataBase::InstrumentDataReFreshSipperFile (const KKStr&   sipperFileName,
   SipperFilePtr  sf = SipperFileRecLoad (sipperFileName);
   if  (!sf) 
   {
-    WriteBuff (msgBuff, msgBuffLen, "No sunch SIPPER file.");
+    WriteBuff (msgBuff, msgBuffLen, "No such SIPPER file.");
     return;
   }
 
@@ -6805,7 +6805,7 @@ GPSDataPointListPtr DataBase::InstrumentDataRetrieveGPSInfo (const KKStr&  cruis
 
 
 //*********************************************************************************************
-//*                                  LogEntries  Rotines                                      *
+//*                               LogEntries  Routines                                        *
 //*********************************************************************************************
 DataBaseLogEntryPtr  DataBase::LogEntriesProcessStart 
                                        (const KKStr&     progCode,
@@ -6965,7 +6965,7 @@ DataBaseLogEntryPtr  DataBase::LogEntriesSelect (kkuint32 _logEntryId)
 
 
 //*********************************************************************************************
-//*                                 SipperCruise  Rotines                                     *
+//*                               SipperCruise  Routines                                      *
 //*********************************************************************************************
 
 void  DataBase::InsertCruise (const KKStr&     shipName, 

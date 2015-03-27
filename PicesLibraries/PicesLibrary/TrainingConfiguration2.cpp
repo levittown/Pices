@@ -220,7 +220,7 @@ TrainingConfiguration2::TrainingConfiguration2 (FileDescPtr          _fileDesc, 
     for  (idx = mlClasses->begin ();  idx != mlClasses->end ();  idx++)
     {
       MLClassConstPtr mlClass = *idx;
-      TrainingClassPtr  tc = new TrainingClass ("", mlClass->Name (), "W", 1.0f, *mlClasses);
+      TrainingClassPtr  tc = new TrainingClass ("", mlClass->Name (), 1.0f, *mlClasses);
       trainingClasses.PushOnBack (tc);
     }
   }
@@ -290,7 +290,7 @@ TrainingConfiguration2::TrainingConfiguration2 (FileDescPtr          _fileDesc, 
     for  (idx = mlClasses->begin ();  idx != mlClasses->end ();  idx++)
     {
       MLClassConstPtr mlClass = *idx;
-      TrainingClassPtr  tc = new TrainingClass ("", mlClass->Name (), "W", 1.0f, *mlClasses);
+      TrainingClassPtr  tc = new TrainingClass ("", mlClass->Name (), 1.0f, *mlClasses);
       trainingClasses.PushOnBack (tc);
     }
   }
@@ -467,7 +467,7 @@ TrainingConfiguration2Ptr  TrainingConfiguration2::GenerateAConfiguraionForAHier
   {
     const TrainingClassPtr tc = *idx;
     MLClassConstPtr  ic = tc->MLClass ()->MLClassForGivenHierarchialLevel (level);
-    hierarchialConfig->AddATrainingClass (new TrainingClass (tc->Directory (), ic->Name (), "W", 1.0f, *hierarchialClassList));
+    hierarchialConfig->AddATrainingClass (new TrainingClass (tc->Directory (), ic->Name (), 1.0f, *hierarchialClassList));
   }
 
   hierarchialConfig->SyncronizeMLClassListWithTrainingClassList ();
@@ -823,7 +823,7 @@ void  TrainingConfiguration2::BuildTrainingClassListFromDirectoryStructure (cons
     if  (thereAreImageFilesInDir)
     {
       KKStr  className = MLClass::GetClassNameFromDirName (currentDirectory);
-      AddATrainingClass (new TrainingClass (subDir, className, "W", 1.0f, *mlClasses));
+      AddATrainingClass (new TrainingClass (subDir, className, 1.0f, *mlClasses));
     }
   }
 
@@ -864,7 +864,6 @@ void   TrainingConfiguration2::AddATrainingClass (MLClassConstPtr  _newClass)  /
                                                                                   // name for the subdirectory name.
   TrainingClassPtr  tc = new TrainingClass ("",
                                             _newClass->Name (),
-                                            "",
                                             1.0f,                          // Weight given to this Class during training
                                             *mlClasses
                                            );
@@ -1377,7 +1376,6 @@ TrainingClassPtr  TrainingConfiguration2::ValidateClassConfig (kkint32  sectionN
   else
     classDirToUse = "";
 
-  KKStr  foreground (SettingValue (sectionNum, "FOREGROUND", forgroundLineNum));
   if  (!className)
   {
     KKStr errMsg = "'TRAINING_CLASS' section, CLASS_NAME not defined.";
@@ -1410,7 +1408,7 @@ TrainingClassPtr  TrainingConfiguration2::ValidateClassConfig (kkint32  sectionN
     }
   }
 
-  TrainingClassPtr tc = new TrainingClass (classDirToUse, *className, foreground, weight, *mlClasses);
+  TrainingClassPtr tc = new TrainingClass (classDirToUse, *className, weight, *mlClasses);
 
   if  (validateDirectories)
   {
@@ -1424,20 +1422,6 @@ TrainingClassPtr  TrainingConfiguration2::ValidateClassConfig (kkint32  sectionN
       FormatGood (false);
       delete  tc;  tc = NULL;
       return NULL;
-    }
-
-    if  (foreground.Empty ())
-      foreground = "W";
-
-    foreground.Upper ();
-    if  ((foreground != "B")  &&  (foreground != "W"))
-    {
-      KKStr  errMsg = "Invalid FOREGROUND Specified[" + foreground + "].";
-      log.Level (-1) << endl << "ValidateClassConfig   ***ERROR***  " << errMsg <<  endl << endl;
-      FormatErrorsAdd (forgroundLineNum, errMsg);
-      FormatGood (false);
-      delete  tc;  tc = NULL;
-      return  NULL;
     }
   }
 

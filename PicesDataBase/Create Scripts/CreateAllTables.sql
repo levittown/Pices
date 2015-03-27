@@ -233,7 +233,7 @@ begin
       ScanLine               int unsigned     not null  default 0,
       ByteOffset             bigint unsigned  not null  default 0  comment 'Byte offset of start of ScanlLne in "SipperFileName" ',
       CTDDateTime            datetime         null,
-      Latitde                double           null,
+      Latitude                double           null,
       Longitude              double           null,
       CTDBattery             float            null   default 0.0,
       Conductivity           float            null   default 0.0,

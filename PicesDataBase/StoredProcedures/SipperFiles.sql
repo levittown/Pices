@@ -37,8 +37,8 @@ begin
                                                     (id.Density      > 13)     and  (id.Density      < 40.0)  and
                                                     (id.Fluorescence > -2)     and  (id.Fluorescence < 80.0)
                                       ) /*,
-                  sf.latitude       = (select id.Latitde  from InstrumentData id  
-                                              where  (id.SipperFileId = _sipperFileId)   and   (id.Latitde != 0.0)  and  (not isnull(id.Latitde))  and  (id.ScanLine > 20000)
+                  sf.latitude       = (select id.Latitude  from InstrumentData id  
+                                              where  (id.SipperFileId = _sipperFileId)   and   (id.Latitude != 0.0)  and  (not isnull(id.Latitude))  and  (id.ScanLine > 20000)
                                               order by id.ScanLine  
                                               limit 1
                                       ),
@@ -120,8 +120,8 @@ begin
     set _latitude  = 0.0;
     set _longitude = 0.0;
     
-    set _latitude = (select  id.Latitde  from InstrumentData id  
-                             where  (id.SipperFileId = _sipperFileId)   and   (id.Latitde != 0.0)  and  (not isnull(id.Latitde))  and  (id.ScanLine > 100000)
+    set _latitude = (select  id.Latitude  from InstrumentData id  
+                             where  (id.SipperFileId = _sipperFileId)   and   (id.Latitude != 0.0)  and  (not isnull(id.Latitude))  and  (id.ScanLine > 100000)
                              order by id.ScanLine  
                              limit 1
                     );

@@ -58,8 +58,8 @@ namespace MLL
 
     void    AddBinaryClassParms (BinaryClassParmsPtr  binaryClassParms);
 
-    void    AddBinaryClassParms (MLClassConstPtr     class1,
-                                 MLClassConstPtr     class2,
+    void    AddBinaryClassParms (MLClassConstPtr        class1,
+                                 MLClassConstPtr        class2,
                                  const svm_parameter&   _param,
                                  const FeatureNumList&  _selectedFeatures,
                                  float                  _weight
@@ -106,9 +106,9 @@ namespace MLL
     virtual void  A_Param            (float                 _A);
     virtual void  C_Param            (double                _CC);
 
-    virtual void  C_Param            (MLClassConstPtr  class1,
-                                      MLClassConstPtr  class2,
-                                      double              cParam
+    virtual void  C_Param            (MLClassConstPtr       class1,
+                                      MLClassConstPtr       class2,
+                                      double                cParam
                                      );
 
     virtual void  EncodingMethod     (SVM_EncodingMethod    _encodingMethod);
@@ -123,8 +123,8 @@ namespace MLL
     virtual void  WeightBitReduction (bool                  _weightBitReduction);
 
 
-    void  SetBinaryClassFields (MLClassConstPtr     class1,
-                                MLClassConstPtr     class2,
+    void  SetBinaryClassFields (MLClassConstPtr        class1,
+                                MLClassConstPtr        class2,
                                 const svm_parameter&   _param,
                                 const FeatureNumList&  _features,
                                 float                  _weight
@@ -132,8 +132,8 @@ namespace MLL
 
 
 
-    void  SetFeatureNums    (MLClassConstPtr     class1,
-                             MLClassConstPtr     class2,
+    void  SetFeatureNums    (MLClassConstPtr        class1,
+                             MLClassConstPtr        class2,
                              const FeatureNumList&  _features,
                              float                  _weight = -1  // -1 Indicates use existing value,
                             );

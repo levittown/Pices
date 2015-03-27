@@ -8,7 +8,7 @@
  *@brief  Used to maintain multiple orderings of a single list of FeatureVector objects.
  *@details
  * Will maintain multiple orderings of a single FeatureVectorList.  These orderings will be saved in 
- * a text file for recall later. This will allow the user to beable to repeat experiments using the 
+ * a text file for recall later. This will allow the user to be able to repeat experiments using the 
  * same ordering of data again. The Idea is that the 1st time this orderings is created the order 
  * will be randomly driven with Stratification by Class.  This ordering will then be saved in data 
  * Files for future recall.  More than one order can be maintained for a single list. An example of 

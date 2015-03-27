@@ -1,18 +1,20 @@
 #ifndef  _SVMMODEL_
 #define  _SVMMODEL_
-//***********************************************************************
-//*                           SVMModel                                  *
-//*                                                                     *
-//*  Represents a training model for svmlib.  Uses Image Feature data   *
-//*  MLClasses, libsvm parameters, and included features to build    *
-//*  a svm training model.  You can save this model to disk for later   *
-//*  use without having to train again. An application can create       *
-//*  several instances of this model for different phases of a          *
-//*  clasification architectuure.                                       *
-//***********************************************************************
+
+/**
+ *@class  MLL::SVMModel  
+ *@brief Represents a training model for libSVM.
+ *@details 
+ * Represents a training model for svmlib. Uses Image Feature data MLClasses, libSVM parameters, 
+ * and included features to build a svm training model. You can save this model to disk for later
+ * use without having to train again. An application can create several instances of this model
+ * for different phases of a classification architecture.
+ */
 
 
 #include "KKStr.h"
+using namespace  KKB;
+
 #include "ClassAssignments.h"
 #include "FileDesc.h"
 #include "MLClass.h"
@@ -82,9 +84,9 @@ namespace MLL
     /**
      *@brief Loads an SVM model from disk
      *@param[in]  _rootFileName The filename for the model; without an extension.
-     *@param[out] _successful Set to true if the model is succesfulyl loaded, false otherwise
+     *@param[out] _successful Set to true if the model is successfully loaded, false otherwise
      *@param[in]  _fileDesc A description of the training data that was used to train the classifier.
-     *@param[in]  _log A logfile stream. All important events will be ouput to this stream
+     *@param[in]  _log A log-file stream. All important events will be output to this stream
      *@param[in]  _cancelFlag  If set to true any process running in SVMModel will terminate.
      */
     SVMModel (const KKStr&   _rootFileName,   
@@ -99,12 +101,12 @@ namespace MLL
      *@brief Loads an SVM model from disk.
      *@details  The '_cancelFlag' parameter is meant to allow another thread to cancel processing
      *          by a different thread in SVMmodel.  Ex:  If one thread is building a new SVM for
-     *          this instance of SVMmodel, that thread will periodcaly monitor '_cancelFlag', if
+     *          this instance of SVMmodel, that thread will periodically monitor '_cancelFlag', if
      *          it is set to true it will terminate its processing.
      *@param[in]  _in A file stream to read and build SVMModel from.
-     *@param[out] _successful Set to true if the model is succesfulyl loaded, false otherwise
+     *@param[out] _successful Set to true if the model is successfully loaded, false otherwise
      *@param[in]  _fileDesc A description of the data file. I'm not sure this is needed for this function.
-     *@param[in]  _log A logfile stream. All important events will be ouput to this stream
+     *@param[in]  _log A log-file stream. All important events will be output to this stream
      *@param[in]  _cancelFlag  If set to true any process running in SVMModel will terminate.
      */
     SVMModel (istream&       _in,   // Create from existing Model on Disk.
@@ -119,16 +121,16 @@ namespace MLL
     /**
      *@brief  Constructor that will create a svmlib training model using the 
      *        features and classes for training purposes.
-     *@param[in]  _svmParam  Specifies the parameters to be used for trainig.  These
+     *@param[in]  _svmParam  Specifies the parameters to be used for training.  These
      *            are the same parameters that you would specify in the command line 
-     *            to svm_train.  Plus the feature nums to be  used.
+     *            to svm_train.  Plus the feature numbers to be  used.
      *@param[in]  _examples  Training data for the classifier.
-     *@param[in]  _assignments List of classes and there assovciated number ti be 
+     *@param[in]  _assignments List of classes and there associated number ti be 
      *            used by the SVM.  You can merge 1 or more classes by assigning them 
-     *            the same number.  This nummber will be used by the SVM.  When 
+     *            the same number.  This number will be used by the SVM.  When 
      *            predictions are done by SVM it return a number, _assignments will 
-     *            then be used to map backto the correct class.
-     *@param[in] _fileDesc  ile Description thaty describes the training data.
+     *            then be used to map back to the correct class.
+     *@param[in] _fileDesc  File Description that describes the training data.
      *@param[out] _log Log file to log messages to.
      *@param[in]  _cancelFlag  The training process will monitor this flag; if it goes true it
      *            return to caller.
@@ -161,8 +163,7 @@ namespace MLL
     kkint32            MemoryConsumedEstimated ()  const;
 
     virtual
-    bool               NormalizeNominalAttributes ();  // Return tru, if nominal fields
-                                                       // need to be normalized.
+    bool               NormalizeNominalAttributes ();  /**< Return true if nominal fields need to be normalized. */
 
     kkint32            NumOfClasses ()  const  {return numOfClasses;}
 
@@ -201,33 +202,33 @@ namespace MLL
 
     /**
      *@brief  Will predict the two most likely classes of 'example'.
-     *@param[in]  example Example to predict on.
+     *@param[in]  example The Example to predict on.
      *@param[in]  knownClass  Class that we already no the example to be;  can be pointing to NULL indicating that you do not know.
-     *@param[out] predClass1  Most likely class; depending on classifier paraketers this could be by number of votes or probability.
+     *@param[out] predClass1  Most likely class; depending on classifier parameters this could be by number of votes or probability.
      *@param[out] predClass2  Second most likely class.
      *@param[out] predClass1Votes Number votes 'predClass1' received.
      *@param[out] predClass2Votes Number votes 'predClass2' received.
      *@param[out] probOfKnownClass Probability of 'knownClass' if specified.
      *@param[out] predClassProb Probability of 'predClass1' if specified.
      *@param[out] predClass2Prob Probability of 'predClass2' if specified.
-     *@param[out] compact  Minus log likilihood of known class (-log (probabilities[knownClassNum]));
-     *@param[out] numOfWinners  Number of classes that had the sam enumber of votes as the winning class.
-     *@param[out] knownClassOneOfTheWinners  Will return true if the known class was one of the classes that had the highest numberof votes.
-     *@param[out] breakTie The difference in probability between the classes with thetwo hiest probabilities.
+     *@param[out] compact  Minus log likelihood of known class (-log (probabilities[knownClassNum]));
+     *@param[out] numOfWinners  Number of classes that had the same number of votes as the winning class.
+     *@param[out] knownClassOneOfTheWinners  Will return true if the known class was one of the classes that had the highest number of votes.
+     *@param[out] breakTie The difference in probability between the classes with the two highest probabilities.
      */
-    void   Predict (FeatureVectorPtr     example,
+    void   Predict (FeatureVectorPtr  example,
                     MLClassConstPtr   knownClass,
                     MLClassConstPtr&  predClass1,
                     MLClassConstPtr&  predClass2,
-                    kkint32&               predClass1Votes,
-                    kkint32&               predClass2Votes,
-                    double&              probOfKnownClass,
-                    double&              predClassProb,
-                    double&              predClass2Prob,
-                    double&              compact,
-                    kkint32&               numOfWinners,
-                    bool&                knownClassOneOfTheWinners,
-                    double&              breakTie
+                    kkint32&          predClass1Votes,
+                    kkint32&          predClass2Votes,
+                    double&           probOfKnownClass,
+                    double&           predClassProb,
+                    double&           predClass2Prob,
+                    double&           compact,
+                    kkint32&          numOfWinners,
+                    bool&             knownClassOneOfTheWinners,
+                    double&           breakTie
                    );
 
 
@@ -235,8 +236,8 @@ namespace MLL
      *@brief  Will get the probabilities assigned to each class.
      *@param[in]  example unknown example that we want to get predicted probabilities for. 
      *@param[in]  _mlClasses  List classes that caller is aware of.  This should be the same list that 
-     *                           was used when consttructing this SVMModel object.  The list must be the 
-     *                           same but not nessasarily in the same order as when SVMModel was 1st 
+     *                           was used when constructing this SVMModel object.  The list must be the 
+     *                           same but not necessarily in the same order as when SVMModel was 1st 
      *                          constructed.
      *@param[out] _votes  An array that must be as big as the number of classes in _mlClasses.
      *@param[out] _probabilities  An array that must be as big as the number of classes in _mlClasses.  
@@ -256,8 +257,8 @@ namespace MLL
      *          time and recompute the decision boundary and probability.  It will then
      *          return the S/V's that when removed improve the probability in 'c1's 
      *          the most.
-     *@param[in]  example  Example that was classified incorrectly.
-     *@param[in]  numToFind  The number of teh worst examples you are looking for.
+     *@param[in]  example  The example that was classified incorrectly.
+     *@param[in]  numToFind  The number of the worst examples you are looking for.
      *@param[in]  c1  Class that the 'example; parameter should have been classed as.
      *@param[in]  c2  Class that it was classified as.
      */
@@ -272,8 +273,8 @@ namespace MLL
      *@brief  For a given two class pair return the names of the 'numToFind' worst S/V's.
      *@details  This method will iterate through all the S/V's removing them one at a 
      *          time and retraining a new SVM and then comparing with the new prediction results.
-     *@param[in]  example  Example that was classified incorrectly.
-     *@param[in]  numToFind  The number of teh worst examples you are looking for.
+     *@param[in]  example  The example that was classified incorrectly.
+     *@param[in]  numToFind  The number of the worst examples you are looking for.
      *@param[in]  c1  Class that the 'example; parameter should have been classed as.
      *@param[in]  c2  Class that it was classified as.
      */
@@ -294,7 +295,7 @@ namespace MLL
 
     /**
      *@brief  Will return the probabilities for all pairs of the classes listed in 'classes'.
-     *@param[in]  classes  Classes that you wish to get class pair probabilities for;  the order will 
+     *@param[in]  classes  The Classes that you wish to get class pair probabilities for;  the order will 
      *            dictate how the two dimensional matrix 'crossProbTable' will be populated.
      *@param[out] crossProbTable  Will contain the probabilities of all the class pairs that can be formed from
      *            the list of classes in 'classes'.  'crossProbTable' will be a two dimension square matrix 
@@ -331,14 +332,14 @@ namespace MLL
 
     /**
      *@brief Constructs svm_problem structure from the examples passed to it. 
-     *@details This is called once for each logical class tyhat is going to be built in 
+     *@details This is called once for each logical class that is going to be built in 
      *         the One-vs-All. For each class there will be a binary SVM where one class
      *         is pitted against all other classes.  Using the 'classesThisAssignment'
-     *         parameter several classes can be grouped together as one logival class.
+     *         parameter several classes can be grouped together as one logical class.
      *@param[in]  examples The examples to build the svm_problem(s) with
-     *@param[out] prob The svm_problem struct that will be constructed
+     *@param[out] prob The svm_problem structure that will be constructed
      *@param[in]  xSpace A list of pointers to the memory allocated for all of the 
-     *            svm_node stuctures used in building the svm_problem.
+     *            svm_node structures used in building the svm_problem.
      *@param[in]  classesThisAssignment The list of classes that are to be treated 
      *            as class '0' all other classes are treated as class '1'.
      *@param[in]  featureEncoder Used to encode the feature data in 'examples' into 
@@ -363,10 +364,10 @@ namespace MLL
      *@param[in] examples The examples to build the svm_problem(s) with
      *@param[in]  class1Examples  Examples for 1st class.  
      *@param[in]  class2Examples  Examples for 2nd class.  
-     *@param[in]  _svmParam  SVM Parameters used for building overall classfier.
-     *@param[in]  _twoClassParms Parameters fo rthe specific two classes in question.
+     *@param[in]  _svmParam  SVM Parameters used for building overall classifier.
+     *@param[in]  _twoClassParms Parameters for the specific two classes in question.
      *@param[out] _encoder Based off parameters a FeatureEncoder will be built and 
-     *            returnede to caller.  Caller will get ownership and be resposnable
+     *            returned to caller.  Caller will get ownership and be responsible
      *            for deleting it.
      *@param[out] prob The Resultant two class classifier that will be built; caller
      *            will get ownership.
@@ -382,22 +383,22 @@ namespace MLL
                                     FeatureEncoderPtr&    _encoder,
                                     struct svm_problem&   prob, 
                                     XSpacePtr&            xSpace, 
-                                    MLClassConstPtr    class1, 
-                                    MLClassConstPtr    class2
+                                    MLClassConstPtr       class1, 
+                                    MLClassConstPtr       class2
                                    );
 
 
-    void  PredictProbabilitiesByBinaryCombos (FeatureVectorPtr            example,  
+    void  PredictProbabilitiesByBinaryCombos (FeatureVectorPtr         example,  
                                               const MLClassConstList&  _mlClasses,
-                                              kkint32*                      _votes,
-                                              double*                     _probabilities
+                                              kkint32*                 _votes,
+                                              double*                  _probabilities
                                              );
 
 
 
     /**
      *@brief  calculates the number of features that will be present after encoding, and allocates
-     *        predictedXSpace to acomadate the size.
+     *        predictedXSpace to accommodate the size.
      */
     void  CalculatePredictXSpaceNeeded ();
 
@@ -407,7 +408,7 @@ namespace MLL
      *        This method is not used in MachineType = "Binary"
      *@param[in] images_list The list of examples you want to attempt to reduce
      *@param[out] compressed_examples_list The reduced list of examples
-     *@return A CompressionStats struct containing the details of the compression
+     *@return A CompressionStats structure containing the details of the compression
      */
     CompressionStats Compress (FeatureVectorListPtr images_list, 
                                FeatureVectorListPtr compressed_examples_list
@@ -445,7 +446,7 @@ namespace MLL
      *@brief Converts a single example into the svm_problem format, using the method specified 
      *  by the EncodingMethod() value returned by svmParam
      *@param[in] example That we're converting
-     *@param[in] row      The svm_problem structue that the converted data will be stored
+     *@param[in] row      The svm_problem structure that the converted data will be stored
      */
     kkint32  EncodeImage (FeatureVectorPtr  example,
                         svm_node*         row
@@ -461,13 +462,13 @@ namespace MLL
 
 
     static
-    void  GreaterVotes (bool     useProbability,
-                        kkint32  numClasses,
-                        kkint32*   votes,
-                        kkint32&   numOfWinners,
-                        double*  probabilities,
-                        kkint32&   pred1Idx,
-                        kkint32&   pred2Idx
+    void  GreaterVotes (bool      useProbability,
+                        kkint32   numClasses,
+                        kkint32*  votes,
+                        kkint32&  numOfWinners,
+                        double*   probabilities,
+                        kkint32&  pred1Idx,
+                        kkint32&  pred2Idx
                        );
 
 
@@ -475,34 +476,34 @@ namespace MLL
     void  SetSelectedFeatures (const FeatureNumList& _selectedFeatures);
 
 
-    void  PredictOneVsAll (XSpacePtr            xSpace,
+    void  PredictOneVsAll (XSpacePtr         xSpace,
                            MLClassConstPtr   knownClass,
                            MLClassConstPtr&  predClass,
                            MLClassConstPtr&  predClass2,
-                           double&              probOfKnownClass,
-                           double&              predClassProb,
-                           double&              predClass2Prob,
-                           double&              compact,
-                           kkint32&               numOfWinners,
-                           bool&                knownClassOneOfTheWinners,
-                           double&              breakTie
+                           double&           probOfKnownClass,
+                           double&           predClassProb,
+                           double&           predClass2Prob,
+                           double&           compact,
+                           kkint32&          numOfWinners,
+                           bool&             knownClassOneOfTheWinners,
+                           double&           breakTie
                           );
 
 
 
-    void  PredictByBinaryCombos (FeatureVectorPtr     example,
+    void  PredictByBinaryCombos (FeatureVectorPtr  example,
                                  MLClassConstPtr   knownClass,
                                  MLClassConstPtr&  predClass,
                                  MLClassConstPtr&  predClass2,
-                                 kkint32&               predClass1Votes,
-                                 kkint32&               predClass2Votes,
-                                 double&              probOfKnownClass,
-                                 double&              predClassProb,
-                                 double&              predClass2Prob,
-                                 double&              breakTie,
-                                 double&              compact,
-                                 kkint32&               numOfWinners,
-                                 bool&                knownClassOneOfTheWinners
+                                 kkint32&          predClass1Votes,
+                                 kkint32&          predClass2Votes,
+                                 double&           probOfKnownClass,
+                                 double&           predClassProb,
+                                 double&           predClass2Prob,
+                                 double&           breakTie,
+                                 double&           compact,
+                                 kkint32&          numOfWinners,
+                                 bool&             knownClassOneOfTheWinners
                                 );
 
 
@@ -527,21 +528,21 @@ namespace MLL
 
     FeatureEncoderPtr*     binaryFeatureEncoders;
 
-    BinaryClassParmsPtr*   binaryParameters;      /**< only used when doing Classification with diff Feature 
+    BinaryClassParmsPtr*   binaryParameters;      /**< only used when doing Classification with different Feature 
                                                    * Selection by 2 class combo's
                                                    */
     VolConstBool&          cancelFlag;
 
     vector<kkint32>          cardinality_table;
 
-    MLClassConstPtr*       classIdxTable;         /**< Supports reverse class lookUp,  indexed by ClassAssignments num,
+    MLClassConstPtr*       classIdxTable;         /**< Supports reverse class lookUp, indexed by ClassAssignments number,
                                                    * works with assignments.
                                                    */
     CompressionStats       compression_stats;
 
     double**               crossClassProbTable;   /**< Probabilities  between Binary Classes From last Prediction */
 
-    kkint32                crossClassProbTableSize;   // Dimension of of each side of 'crossClassProbTable'  
+    kkint32                crossClassProbTableSize;   // Dimension of each side of 'crossClassProbTable'  
 
     FeatureEncoderPtr      featureEncoder;        /**< used when doing OneVsOne or OnevsAll processing
                                                    * When doing binary feature selection will use 
@@ -565,13 +566,12 @@ namespace MLL
 
     double*                probabilities;
 
-    KKStr                  rootFileName;   /**< This is the root name to be used by all componet 
-                                             * objects; such as svm_model, mlClasses, and
-                                             * svmParam(including seleced features).  Each one
-                                             * will have the same rootName with a different Suffix
+    KKStr                  rootFileName;   /**< This is the root name to be used by all component objects; such as 
+                                            * svm_model, mlClasses, and svmParam(including selected features). Each one
+                                             * will have the same rootName with a different Suffix :
                                              *     mlClasses  "<rootName>.image_classes"
-                                             *     svmParam      "<rootName>.svm_parm"
-                                             *     model         "<rootName>"
+                                             *     svmParam   "<rootName>.svm_parm"
+                                             *     model      "<rootName>"
                                              */
 
     FeatureNumList         selectedFeatures;
@@ -587,7 +587,7 @@ namespace MLL
     kkint32*                 votes;
 
     XSpacePtr*             xSpaces;    /**< There will be one xSpace structure for each libSVM classifier that has 
-                                        *   to be built; for a ttal of 'numOfModels'.   This will be the input to 
+                                        *   to be built; for a total of 'numOfModels'.   This will be the input to 
                                         *   the trainer for each one.
                                         */
 

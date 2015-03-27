@@ -16,7 +16,7 @@
  **  instance of each Class in memory.  Specifically the 'name' field *
  **  will be unique.  This is enforced by making the constructor and  *
  **  destructor private.  The only way to create a new instance of a  *
- **  'MLClass' object is to call one of the the static methods of     *
+ **  'MLClass' object is to call one of the static methods of         *
  **  'CreateNewMLClass'.  These methods will look for a instance of   *
  **  'MLClass' that already exists.  If one does not they will then   *
  **  create a new one.                                                *
@@ -25,13 +25,13 @@
  **  the object you will most be using when dealing with Images.      *
  **  classes.                                                         *
  **                                                                   *
- **  PicesClass  
+ **  PicesClass                                                       *
  **  There is a special relationship between this class  and a class  *
  **  called 'PicesClass' in the 'PicesInterface' library'.  PicesClass*
  **  is a managed c++ version of this class.  There is a one-to-one   *
  **  correspondence between the two classes.  When ever a instance    *
  **  of 'PicesClass' gets created it will automatically call the      *
- **  the static method 'MLClass::CreateNewMLClass' to get the      *
+ **  the static method 'MLClass::CreateNewMLClass' to get the         *
  **  unmanaged version of the class.                                  *
  **                                                                   *
  **                                                                   *
@@ -43,14 +43,20 @@
  **              to several methods in PicesLibrary.  They help       *
  **              separate the name into multiple class levels.        *
  **                                                                   *
- **  num       - Used by SVMModel when creating Training Models and   *
- **              Classifying an instance of a imageFeatures           *
- **                                                                   *
  **  parent    - Pointer to a instance of 'MLClass' that is the       *
  **              parent to this instance. And example would be a      *
  **              class called 'Copepod_Calanoid' will have a parent   *
  **              called 'Copepod'.  The parent class to all classes   *
  **              is "AllClasses"                                      *
+ **                                                                   *
+ **  mandatory   Class needs to be included in Classification Status  *
+ **              even if none occurred.                               *
+ **                                                                   *
+ **  summarize   Indicates that Classification report should produce  *
+ **              a summary column for the family of classes decedent  *
+ **              from this class. Example classes that would set this *
+ **              field true are 'Protist',  'Phyto',  'Crustacean',   *
+ **              etc....                                              *
  **                                                                   *
  **  unDefined - When set to true indicates that this class is not    *
  **              a Plankton or has not yet been classified as a       *
@@ -123,8 +129,8 @@ namespace MLL
      *@return  Pointer to an instance of 'MLClass' that will have the name '_name'.
      */
     static  MLClassPtr       CreateNewMLClass (const KKStr&  _name,
-                                                  kkint32       _classId = -1
-                                                 );
+                                                     kkint32 _classId = -1
+                                              );
 
     static  MLClassConstPtr  GetUnKnownClassStatic ();
 
@@ -217,8 +223,8 @@ namespace MLL
     void            StoredOnDataBase (bool _storedOnDataBase)  {storedOnDataBase = _storedOnDataBase;}
 
     bool            Summarize () const {return summarize;}   /**< Indicates that Classification report should produce a summary 
-                                                              * collumn for the family of classes decendent from this class. 
-                                                              * Example classes that would set ths field true are 'Protist',
+                                                              * column for the family of classes decedent from this class. 
+                                                              * Example classes that would set this field true are 'Protist',
                                                               * 'Phyto',  'Crustacean', etc....
                                                                */
 
@@ -234,13 +240,13 @@ namespace MLL
     void            WriteXML (std::ostream& o)  const;
     
   private:
-    kkint32         classId;      /**< From MySQL table  Classes, '-1' indicates that not loaded from mydsql table. */
+    kkint32         classId;      /**< From MySQL table  Classes, '-1' indicates that not loaded from mysql table. */
     float           countFactor;  /**< Specifies number to increment count when this class picked;  ex:  Shrinmp_02 would have 2.0. */
     KKStr           description;
 
-    bool            mandatory;    /**< Class nees to be included in Classification Status even if none occured. */
+    bool            mandatory;    /**< Class needs to be included in Classification Status even if none occurred. */
 
-    KKStr           name;         /**< Name of Class.                                                                               */
+    KKStr           name;         /**< Name of Class.                                                             */
 
     MLClassConstPtr parent;       /**< Supports the concept of Parent/Child classes as part of a hierarchy.
                                    * Adding this field to help support the PicesInterface version of this class.
@@ -252,9 +258,9 @@ namespace MLL
                                    * table "Classes".
                                    */
 
-    bool            summarize;    /**< Indicates that Classification report should produce a summary collumn 
-                                   * for the family of classes decendent from this class. Example classes that
-                                   * would set ths field true are 'Protist',  'Phyto',  'Crustacean', etc....
+    bool            summarize;    /**< Indicates that Classification report should produce a summary column 
+                                   * for the family of classes decedent from this class. Example classes that
+                                   * would set this field true are 'Protist',  'Phyto',  'Crustacean', etc....
                                    */
 
     KKStr           upperName;    /**< Upper case version of name;  Used by LookUpByName to assist in performance. */
@@ -289,8 +295,8 @@ namespace MLL
 
     /** @brief Construct a MLClassList object from the contents of a file. */
     MLClassList (const KKStr&  fileName,
-                    bool&         successfull
-                   );
+                 bool&         successfull
+                );
 
     virtual
       ~MLClassList ();
@@ -302,8 +308,8 @@ namespace MLL
 
     static
     MLClassListPtr  BuildListFromDelimtedStr (const KKStr&  s,
-                                                 char          delimiter
-                                                );
+                                              char          delimiter
+                                             );
 
 
     /** @brief  Clears the contents of this list and updates nameIndex structure. */
@@ -441,10 +447,10 @@ namespace MLL
 
 
     /** @brief  Should only be called from "MLClass::ChangeNameOfClass". */
-    void  ChangeNameOfClass (MLClassPtr  mlClass, 
-                             const KKStr&   oldName,
-                             const KKStr&   newName,
-                             bool&          successful
+    void  ChangeNameOfClass (MLClassPtr    mlClass, 
+                             const KKStr&  oldName,
+                             const KKStr&  newName,
+                             bool&         successful
                             );
 
     typedef  map<KKStr,MLClassPtr>     NameIndex;
@@ -471,8 +477,8 @@ namespace MLL
 
 
 
-  std::ostream&  operator<< (      std::ostream&    os,
-                             const MLClassList&  classList
+  std::ostream&  operator<< (      std::ostream&  os,
+                             const MLClassList&   classList
                             );
 
 

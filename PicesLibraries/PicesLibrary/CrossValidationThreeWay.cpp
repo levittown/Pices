@@ -49,9 +49,9 @@ using namespace  MLL;
 CrossValidationThreeWay::CrossValidationThreeWay (TrainingConfiguration2Ptr  _config,
                                                   bool                       useConfigAsIs,
                                                   FeatureVectorListPtr       _examples,
-                                                  MLClassConstListPtr     _mlClasses,
-                                                  MLClassConstPtr         _class1,
-                                                  MLClassConstPtr         _class2,
+                                                  MLClassConstListPtr        _mlClasses,
+                                                  MLClassConstPtr            _class1,
+                                                  MLClassConstPtr            _class2,
                                                   kkint32                    _numOfFolds,
                                                   bool                       _featuresAlreadyNormalized,
                                                   bool                       _stratify,
@@ -98,8 +98,8 @@ CrossValidationThreeWay::CrossValidationThreeWay (TrainingConfiguration2Ptr  _co
     weOwnTwoClassConfig = true;
     twoClassConfig = new TrainingConfiguration2 (*config);
     twoClassConfig->EmptyTrainingClasses ();
-    twoClassConfig->AddATrainingClass (new TrainingClass ("", class1->Name (), "F", 1.0f, *twoClassList)); 
-    twoClassConfig->AddATrainingClass (new TrainingClass ("", class2->Name (), "F", 1.0f, *twoClassList)); 
+    twoClassConfig->AddATrainingClass (new TrainingClass ("", class1->Name (), 1.0f, *twoClassList)); 
+    twoClassConfig->AddATrainingClass (new TrainingClass ("", class2->Name (), 1.0f, *twoClassList)); 
   }
   else
   {
@@ -319,7 +319,7 @@ void  CrossValidationThreeWay::CrossValidate (FeatureVectorListPtr   testImages,
 
     if  ((image->MLClass () == class1)  ||  (image->MLClass () == class2))
     {
-      // We are lookinga a test item that belongs to one of th etwo classes that we
+      // We are looking at a test item that belongs to one of the two classes that we
       // are trained for.
       if  (knownClass->UpperName () == predictedClass->UpperName ())
       {
@@ -373,7 +373,7 @@ void  CrossValidationThreeWay::CreateDistanceReport (ostream&  r)
     << "Distance to Margin Report" << endl
     << "Class1[" << class1->Name () << "]   Class2[" << class2->Name () << "]" << endl
     << endl
-    << "Feature Nums[" << config->GetFeatureNums () << "]" << endl
+    << "Feature Numbers[" << config->GetFeatureNums () << "]" << endl
     << endl
     << "Accuracy[" << StrFormatDouble (accuracy * 100, "zzz0.00") << "%" << "]"  << endl
     << endl;
@@ -494,7 +494,7 @@ void  CrossValidationThreeWay::CreateProbabilityReport (ostream&  r)
     << "Probability Report" << endl
     << "Class1[" << class1->Name () << "]   Class2[" << class2->Name () << "]" << endl
     << endl
-    << "Feature Nums[" << config->GetFeatureNums () << "]" << endl
+    << "Feature Numbers[" << config->GetFeatureNums () << "]" << endl
     << endl
     << "Accuracy[" << StrFormatDouble (accuracy * 100, "zzz0.00") << "%" << "]"  << endl
     << endl;
@@ -664,7 +664,7 @@ void  CrossValidationThreeWay::CalculateThirdClassDecisiveProbability (float&  m
 
 
 
-//  This version was made specifically for usew with ParseFeatureSlection results
+//  This version was made specifically for use with ParseFeatureSlection results
 void  CrossValidationThreeWay::CalculateThirdClassDecisiveProbability (FeatureVectorListPtr testData, 
                                                                        float&               mean,
                                                                        float&               stdDev
@@ -717,7 +717,7 @@ void   CrossValidationThreeWay::RunValidationOnly (FeatureVectorListPtr  validat
 {
   log.Level (10) << "CrossValidationThreeWay::RunValidationOnly" << endl;
   
-  // We need to get a duplicate copy of each image data because the traininer and classofier
+  // We need to get a duplicate copy of each image data because the trainer and classifier
   // will normalize the data.
 
   FeatureVectorListPtr  trainingImages = new FeatureVectorList (examples->FileDesc (), true, log);
@@ -732,7 +732,7 @@ void   CrossValidationThreeWay::RunValidationOnly (FeatureVectorListPtr  validat
   }
 
   {
-    FeatureVectorListPtr class2Images     = examples->ExtractImagesForAGivenClass (class2);
+    FeatureVectorListPtr class2Images    = examples->ExtractImagesForAGivenClass (class2);
     FeatureVectorListPtr class2ImagesDup = class2Images->DuplicateListAndContents ();
     trainingImages->AddQueue (*class2ImagesDup);
     class2ImagesDup->Owner (false);
