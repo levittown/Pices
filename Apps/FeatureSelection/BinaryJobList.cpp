@@ -43,7 +43,7 @@ using namespace  FeatureSelectionApp;
 
 
 BinaryJobList::BinaryJobList (ProcessorPtr  _processor):
-   KKQueue<BinaryJob> (true, 500),
+   KKQueue<BinaryJob> (true),
    fileName            (),
    lastFilePostion     (0),
    log                 (_processor->Log ()),
@@ -63,7 +63,7 @@ BinaryJobList::BinaryJobList (ProcessorPtr  _processor):
 BinaryJobList::BinaryJobList (ProcessorPtr _processor,
                               KKStr        _fileName
                              ):
-   KKQueue<BinaryJob> (true, 500),
+   KKQueue<BinaryJob> (true),
    fileName            (_fileName),
    lastFilePostion     (0),
    log                 (_processor->Log ()),
@@ -163,7 +163,7 @@ void  BinaryJobList::Save ()
     statusFile << IdxToPtr (x)->ToStatusStr ();
   }
   
-  lastFilePostion = statusFile.tellp ();
+  lastFilePostion = (kkint32)statusFile.tellp ();
 
   statusFile.close ();
 }  /* Save */
@@ -533,10 +533,10 @@ bool  JobAcuracyComparison (float  accuracy1, const FeatureNumList&  f1,  double
 
 
 
-class  GradeComparison: public  QueueComparison<BinaryJob>
+class  GradeComparison
 {
 public:
-   GradeComparison ():  QueueComparison<BinaryJob> () {} 
+   GradeComparison () {} 
 
 
    bool  operator () (BinaryJobPtr  j1,

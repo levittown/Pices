@@ -215,7 +215,7 @@ NeighborList::NeighborList (bool     _owner,
                             kkint32  _size,
                             RunLog&  _log
                            ):
-  KKQueue<Neighbor>  (_owner, _size),
+  KKQueue<Neighbor>  (_owner),
   log              (_log)
 {
 }
@@ -227,7 +227,7 @@ NeighborList::NeighborList (bool     _owner,
 NeighborList::NeighborList (ImageFeaturesList&  images,
                             RunLog&             _log
                            ):
-  KKQueue<Neighbor> (true, images.QueueSize ()),
+  KKQueue<Neighbor> (true),
   log             (_log)
 {
   ImageFeaturesList::iterator  idx;
@@ -241,10 +241,10 @@ NeighborList::NeighborList (ImageFeaturesList&  images,
 
 
 
-class  RowComparison: public  QueueComparison<Neighbor>
+class  RowComparison
 {
 public:
-   RowComparison ():  QueueComparison<Neighbor> () {}
+   RowComparison () {}
 
    bool  operator ()  (NeighborPtr  p1,  
                        NeighborPtr  p2
@@ -262,10 +262,10 @@ public:
 
 
 
-class  ClassComparison: public  QueueComparison<Neighbor>
+class  ClassComparison
 {
 public:
-   ClassComparison ():  QueueComparison<Neighbor> () {}
+   ClassComparison () {}
 
    bool  operator ()  (NeighborPtr  p1,  
                        NeighborPtr  p2
@@ -319,10 +319,10 @@ public:
 
 
 
-class  ClassRowComparison: public  QueueComparison<Neighbor>
+class  ClassRowComparison
 {
 public:
-   ClassRowComparison ():  QueueComparison<Neighbor> () {}
+   ClassRowComparison () {}
 
    bool  operator ()  (NeighborPtr  p1,  
                        NeighborPtr  p2

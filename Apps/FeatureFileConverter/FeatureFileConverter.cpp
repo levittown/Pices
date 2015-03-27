@@ -802,8 +802,8 @@ void  SplitForestCoverFile ()
   int  spruceFirTrainCount     = 0;
   FeatureVectorList::iterator  idx;
 
-  FeatureVectorListPtr  trainData = new FeatureVectorList (fileDesc, false, log, 10000);
-  FeatureVectorListPtr  testData  = new FeatureVectorList (fileDesc, false, log, 10000);
+  FeatureVectorListPtr  trainData = new FeatureVectorList (fileDesc, false, log);
+  FeatureVectorListPtr  testData  = new FeatureVectorList (fileDesc, false, log);
 
   int  c = 0;
 

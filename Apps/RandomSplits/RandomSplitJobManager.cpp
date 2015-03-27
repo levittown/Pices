@@ -498,8 +498,8 @@ void   RandomSplitJobManager::RetrieveRandomSplit (int                    splitN
     return;
   }
 
-  trainData = new FeatureVectorList (fileDesc, false, log, 1000);
-  testData  = new FeatureVectorList (fileDesc, false, log, 1000);
+  trainData = new FeatureVectorList (fileDesc, false, log);
+  testData  = new FeatureVectorList (fileDesc, false, log);
 
   const
   FeatureVectorListPtr  ordering = splits->Ordering (splitNum);

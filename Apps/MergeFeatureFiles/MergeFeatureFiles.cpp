@@ -1030,7 +1030,7 @@ void  Strip ()
                                  log
                                );
 
-  FeatureVectorListPtr  stripped = new FeatureVectorList (data->FileDesc (), false, log, 10000);
+  FeatureVectorListPtr  stripped = new FeatureVectorList (data->FileDesc (), false, log);
 
   FeatureVectorList::const_iterator  idx;
   for  (idx = data->begin ();  idx != data->end ();  ++idx)

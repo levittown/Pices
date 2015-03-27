@@ -575,8 +575,7 @@ FeatureVectorListPtr  Processor::BuildOurBinaryFeatureData (FeatureVectorListPtr
   {
     examplesForOurClasses = new FeatureVectorList (fileDesc, 
                                                    false,      // false = this instance will not own its contents.
-                                                   log, 
-                                                   srcData->QueueSize ()
+                                                   log
                                                   );
 
     FeatureVectorList::iterator  idx;
@@ -1145,7 +1144,7 @@ void  Processor::WriteStatusFile ()
 
 void  Processor::WriteStatusFileGrowthRates (ostream&  statusFile)
 {
-  int  precision = statusFile.precision ();
+  int  precision = (kkint32)statusFile.precision ();
   statusFile.precision (10);
   statusFile  << "A_GrowthRate"     << "\t" << aGrowthRate     << std::endl
               << "C_GrowthRate"     << "\t" << cGrowthRate     << std::endl
@@ -1158,7 +1157,7 @@ void  Processor::WriteStatusFileGrowthRates (ostream&  statusFile)
 
 void  Processor::WriteStatusFileBestParmValues (ostream&  statusFile)
 {
-  int  precision = statusFile.precision ();
+  int  precision = (kkint32)statusFile.precision ();
   statusFile.precision (13);
   statusFile << "Best_C"            << "\t"  << bestC            << std::endl;
   statusFile << "Best_GAMMA"        << "\t"  << bestGamma        << std::endl;

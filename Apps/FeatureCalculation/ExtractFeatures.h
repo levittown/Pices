@@ -12,7 +12,7 @@
 class  ExtractFeatures: public  PicesApplication
 {
 public:
-  typedef  KKU::uint  uint;
+  typedef  KKB::uint  uint;
 
   ExtractFeatures ();
   
@@ -22,8 +22,8 @@ public:
   const char*  ApplicationName () const  {return  "ExtractFeatures";}
 
   virtual
-  void  InitalizeApplication (int32   argc,
-                              char**  argv
+  void  InitalizeApplication (kkint32   argc,
+                              char**    argv
                              );
 
   void  ClassifyImage (ImageFeaturesPtr  image);
