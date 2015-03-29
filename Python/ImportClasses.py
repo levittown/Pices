@@ -152,16 +152,16 @@ def  ImportClassEntries(dirName):
      #                             host='sipper-db2.marine.usf.edu',
      #                             database='pices_new'
      #                          )
-     db = mysql.connector.Connect(user='kkramer',
-                                  password="tree10peach",
-                                  host='sipper-db2.marine.usf.edu',
-                                  database='pices_new'
-                                )
      #db = mysql.connector.Connect(user='kkramer',
      #                             password="tree10peach",
-     #                             host='localhost',
+     #                             host='sipper-db2.marine.usf.edu',
      #                             database='pices_new'
      #                           )
+     db = mysql.connector.Connect(user='kkramer',
+                                  password="tree10peach",
+                                  host='localhost',
+                                  database='pices_new'
+                                )
   except  mysql.connector.Error as err:
     db = None
     if  err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
@@ -237,6 +237,7 @@ def  main():
   #rootDir="E:\\Users\\kkramer\\Dropbox\\Sipper\\FromAndrewToKurt\\Validation\\2014-09-16\\"
   #rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews"
   #rootDir="C:\\Pices\\UpdatesFromOtherServers\\2015-03-11"
+  #rootDir="D:\\Users\\kkramer\\DropBox\\Dropbox\\ToKurt\\DataToKurt"
   rootDir="D:\\Users\\kkramer\\DropBox\\Dropbox\\ToKurt\\DataToKurt"
   #rootDir="C:\\Pices\\UpdatesFromOtherServers"
   ImportClassEntries(rootDir)
