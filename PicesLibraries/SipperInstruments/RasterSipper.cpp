@@ -64,8 +64,8 @@ RasterSipper::RasterSipper (kkint32 _height,
 
 
 /**
- *@brief  Constructs a RasterSipper from a BMP image loadded from disk.
- *@detais If BMP Image is a grayscale value pixel values will be reveresed.  See description of grayscale constructor.
+ *@brief  Constructs a RasterSipper from a BMP image loaded from disk.
+ *@detais If BMP Image is a gray-scale value pixel values will be reversed.  See description of gray-scale constructor.
  */
 RasterSipper::RasterSipper (const BmpImage&  _bmpImage):
   Raster (_bmpImage)
@@ -115,8 +115,8 @@ RasterSipper::RasterSipper (const RasterSipper& _raster,
 
 /**
  *@brief Constructs a raster object from a Image File.
- *@details If a color image the pixel values will be reveresed, see constructor
- *         for grayscale images.
+ *@details If a color image the pixel values will be reversed, see constructor
+ *         for gray-scale images.
  */
 RasterSipper::RasterSipper (const KKStr&  _fileName,
                             bool&          validFile
@@ -507,8 +507,8 @@ RasterSipperPtr  RasterSipper::ExtractChannel (ColorChannels  channel)
 
 
 //******************************************************************************
-//*  Wrote this method to deel with polution sample particles, meeded to help  *
-//* segment out particles from a verynoisy background.                         *
+//*  Wrote this method to deal with pollution sample particles, needed to help *
+//* segment out particles from a very noisy background.                        *
 //******************************************************************************
 RasterSipperPtr   RasterSipper::SegmentImage (bool  save)
 {
@@ -600,7 +600,7 @@ RasterSipperPtr  RasterSipper::FromSimpleCompression (const uchar*  compressedBu
                                                       kkuint32      compressedBuffLen
                                                      )  
 {
-  // I expect simple run length compressed data to be passed in.  The data was  orginally 
+  // I expect simple run length compressed data to be passed in.  The data was  originally 
   // compressed by SimpleCompressor and we will use the same class to decompress.
 
   // The format of the uncompressed data is very simple.
@@ -614,7 +614,7 @@ RasterSipperPtr  RasterSipper::FromSimpleCompression (const uchar*  compressedBu
   //                   --     ---     ---     ----   
   //          Row Height - 1 : (Last row of image) 
   //
-  //          Each byte inthe raster represents one pixel 0 - 255 grayscale;  where 0=background.
+  //          Each byte in the raster represents one pixel 0 - 255 gray-scale;  where 0=background.
 
   kkuint32  unCompressedSize = 0;
 
@@ -706,7 +706,7 @@ RasterSipperPtr  RasterSipper::FromCompressor (const uchar*  compressedBuff,    
 
   // 0 - 3:    Height:  high order to low order
   // 4 - 7:    Width:   high order to low order
-  // 8 - 8:    Color    0 = Grayscale,  1 = Color
+  // 8 - 8:    Color    0 = Gray-scale,  1 = Color
   // 9 - 8 + (Height * Width) Green Channel
   // xxxxx                    Red  Channel
   // xxxxx                    Blue Channel

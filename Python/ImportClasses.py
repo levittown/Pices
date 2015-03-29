@@ -147,26 +147,25 @@ def  IdentifyClass(db, c, className):
 
 def  ImportClassEntries(dirName):
   try:
-       #db = mysql.connector.Connect(user='kkramer',
-       #                             password="tree10peach",
-       #                             host='sipper-db2.marine.usf.edu',
-       #                             database='pices_new'
-       #                          )
-              
-       #db = mysql.connector.Connect(user='kkramer',
-       #                             password="tree10peach",
-       #                             host='sipper-db2.marine.usf.edu',
-       #                             database='pices_new'
-       #                           )
-       db = mysql.connector.Connect(user='kkramer',
-                                    password="tree10peach",
-                                    host='localhost',
-                                    database='pices_new'
-                                  )
+     #db = mysql.connector.Connect(user='kkramer',
+     #                             password="tree10peach",
+     #                             host='sipper-db2.marine.usf.edu',
+     #                             database='pices_new'
+     #                          )
+     db = mysql.connector.Connect(user='kkramer',
+                                  password="tree10peach",
+                                  host='sipper-db2.marine.usf.edu',
+                                  database='pices_new'
+                                )
+     #db = mysql.connector.Connect(user='kkramer',
+     #                             password="tree10peach",
+     #                             host='localhost',
+     #                             database='pices_new'
+     #                           )
   except  mysql.connector.Error as err:
     db = None
     if  err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-        print("Cound not conect to \"Sipper-d-marine.usf.edu\"")
+        print("Could not conect to \"Sipper-d-marine.usf.edu\"")
     elif  err.errno == errorcode.ER_BAD_DB_ERROR:
         print("Database does not exists")
     else:
@@ -177,7 +176,6 @@ def  ImportClassEntries(dirName):
 
   c = db.cursor()
 
-
   classesFileName = os.path.join(dirName, "Classes") + ".txt"
   classNameLookUp = LoadClassExtenalTranslationTable (classesFileName)
 
@@ -186,6 +184,7 @@ def  ImportClassEntries(dirName):
   count = 0
 
   for  l in classesData:
+    l = l.strip('\n\r')
     fields=l.split('\t')
     if  len(fields) > 2:
       classIdExt  = ToInt(fields[0])
@@ -237,7 +236,8 @@ def  ImportClassEntries(dirName):
 def  main():
   #rootDir="E:\\Users\\kkramer\\Dropbox\\Sipper\\FromAndrewToKurt\\Validation\\2014-09-16\\"
   #rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews"
-  rootDir="C:\\Pices\\UpdatesFromOtherServers\\2015-03-11"
+  #rootDir="C:\\Pices\\UpdatesFromOtherServers\\2015-03-11"
+  rootDir="D:\\Users\\kkramer\\DropBox\\Dropbox\\ToKurt\\DataToKurt"
   #rootDir="C:\\Pices\\UpdatesFromOtherServers"
   ImportClassEntries(rootDir)
   print("\n\n    *** Import Completed ***\n\n")

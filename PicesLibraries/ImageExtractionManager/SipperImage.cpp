@@ -136,7 +136,7 @@ void  SipperImage::Dialate (uchar** frame,
     LogicalFrameBlobPtr  blob = *idx;
     blob->DialateBlob (frame, blobIds, size);
   }
-}  /* Dialate */
+}  /* Dilate */
 
 
 

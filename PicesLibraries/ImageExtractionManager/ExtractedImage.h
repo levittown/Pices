@@ -19,7 +19,7 @@ using namespace  MLL;
 namespace  ImageExtractionManager
 {
   /**
-   *@brief   Represets particle that was extracted by 'LogicalFrame' with its related data.
+   *@brief   Represents particle that was extracted by 'LogicalFrame' with its related data.
    */
   class  ExtractedImage
   {

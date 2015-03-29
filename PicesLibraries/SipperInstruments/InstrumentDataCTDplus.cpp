@@ -51,7 +51,7 @@ InstrumentDataCTDplus::~InstrumentDataCTDplus ()
 
 void  InstrumentDataCTDplus::AssignCtdExternalInstruments ()
 {
-  // Ideally I should be getting these assignemnets from the SipperFiles table in the database.
+  // Ideally I should be getting these assignments from the SipperFiles table in the database.
 
   if  (manager->SipperFile ())
   {
@@ -161,7 +161,7 @@ void  InstrumentDataCTDplus::AssignCtdExternalInstruments ()
 
 
 /*!
- \ brief  Parses one string of CTD data.  Will parse out seperate fields.
+ \ brief  Parses one string of CTD data.  Will parse out separate fields.
  */
 void  InstrumentDataCTDplus::ProcessCTDdata (const KKStr&  txt)
 {
@@ -172,7 +172,7 @@ void  InstrumentDataCTDplus::ProcessCTDdata (const KKStr&  txt)
   
   if  ((txtZ[0] == '=')  &&  (txtZ[1] == '='))
   {
-    // We have a seperator line,  igonore
+    // We have a separator line,  ignore
     return;
   }
 

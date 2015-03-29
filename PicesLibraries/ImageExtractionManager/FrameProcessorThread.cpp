@@ -175,7 +175,7 @@ void  FrameProcessorThread::ProcessFrame (LogicalFramePtr  frame)
     bool  cf = false;
 
 
-    /**@todo  When a propper implementation for SIPPER 4 is made i will need to get instrument data for it.  */
+    /**@todo  When a proper implementation for SIPPER 4 is made i will need to get instrument data for it.  */
 
     InstrumentDataPtr  id = NULL;
     if  (this->parms.FileFormat () != sfSipper4Bit)
@@ -289,7 +289,7 @@ void  FrameProcessorThread::LoadClassifier (bool&  _successful)
 
     else
     {
-      AddMsg ("LoadClassifier   Classifier2 Created Sucessfully.");
+      AddMsg ("LoadClassifier   Classifier2 Created Successfully.");
       classifier = new Classifier2 (trainer, log);
     }
   }

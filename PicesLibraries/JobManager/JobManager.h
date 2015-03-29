@@ -38,7 +38,7 @@ namespace  JobManagment
                 int           _parentId,
                 int           _numPorcessesAllowed,
                 const KKStr&  _managerName,           /*!< Name of this 'JobManager' ; status and lock file will be based on it. */
-                int           _numJobsAtATime,        /*!< The number of jobs that can be allocatd at one time for a single process to execute. */
+                int           _numJobsAtATime,        /*!< The number of jobs that can be allocated at one time for a single process to execute. */
                 RunLog&       _log
                );
 
@@ -54,7 +54,7 @@ namespace  JobManagment
 
     virtual  JobPtr  Duplicate ()  const = 0;  /*!< Create a duplicate instance. */
 
-    virtual  const char*   JobType ()  const;   /*!< Allows us to know which specific implementaion of 'Job'  an instance really is. */
+    virtual  const char*   JobType ()  const;   /*!< Allows us to know which specific implementation of 'Job'  an instance really is. */
 
 
     bool        SupportCompletedJobData () const  {return  supportCompletedJobData;}
@@ -92,11 +92,11 @@ namespace  JobManagment
 
   private:
     virtual
-      JobListPtr  JobsCreateInitialSet () = 0;   // Derived classes use this method to sed the initial set of jobs.
+      JobListPtr  JobsCreateInitialSet () = 0;   // Derived classes use this method to set the initial set of jobs.
 
 
     /**
-     *@brief  Job manager calls this method when ever it is rady to start processing another group of jobs.
+     *@brief  Job manager calls this method when ever it is ready to start processing another group of jobs.
      *@details Derived classes need to implement this method; it will be called when all jobs have been completed. The 
      * variable 'jobs' will contain a list of all jobs.
      *@params[in,out]  jobsJustCompletd -  Contains a list of jobs that have been completed since the last time this 
@@ -119,7 +119,7 @@ namespace  JobManagment
 
 
     /** 
-     *@brief In one (Block - EndBlock)  sequesnce will update completd jobs and select next set of jobs to process.
+     *@brief In one (Block - EndBlock)  sequence will update completed jobs and select next set of jobs to process.
      */
     JobListPtr  GetNextSetOfJobs (JobListPtr  completedJobs);
 
@@ -155,7 +155,7 @@ namespace  JobManagment
 
     virtual void    StatusFileProcessLineJobStatusChange (KKStr&  statusLineStr);
 
-    virtual KKStr   ToStatusStr ();  /**< derived classes should implement this method. They need to return a tab delimietd string with all there parameters
+    virtual KKStr   ToStatusStr ();  /**< derived classes should implement this method. They need to return a tab delimited string with all there parameters
                                       * <FieldName1> <\t> <FieldValue1> <\t> <fieldName2> <\t> <FieldValue2>  etc etc etc ...
                                       * They should call the base Class version of this method and return that string first.
                                       * ex:  return JobManager::ToStatusStr () + "\t" + "FieldName1" + "\t" + "Value1" + "\t" + "FieldName2" + "\t" + "Value2";
@@ -181,13 +181,13 @@ namespace  JobManagment
                                              */
 
 
-    JobListPtr      jobs;                   /**<List of jobs that we are working with. We will be maintaining consistance with other
+    JobListPtr      jobs;                   /**<List of jobs that we are working with. We will be maintaining consistence with other
                                              * parallel running processes through the status' file. As we make changes to each 
-                                             * individule 'BinaryJob' we write them out to the status file. We periodically read from 
+                                             * individual 'BinaryJob' we write them out to the status file. We periodically read from 
                                              * the status file to see if there have been changes made by other processors.
                                              */
   
-    int             blockLevel;             /**< Starts at 0; will increment with each Call to 'Block' and decrementes with 'EndBlock'. */
+    int             blockLevel;             /**< Starts at 0; will increment with each Call to 'Block' and decrements with 'EndBlock'. */
     int             lockFile;
     KKStr           lockFileName;
     bool            lockFileOpened;

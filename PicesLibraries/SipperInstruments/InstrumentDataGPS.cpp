@@ -23,7 +23,7 @@ using namespace  SipperHardware;
 
 
 InstrumentDataGPS::InstrumentDataGPS (InstrumentDataManagerPtr _manager,
-                                      const KKStr&            _reportDir,
+                                      const KKStr&             _reportDir,
                                       bool                     _text,
                                       kkint32                  _instrumentId
                                      ):
@@ -69,7 +69,7 @@ void  InstrumentDataGPS::ParseDegreeMinutesStr (const KKStr&  str,
 
 
 /**
- * @brief Processes a GPGLL strig that contains Laditude and Longitudal info.
+ * @brief Processes a GPGLL string that contains Latitude and Longitudinal info.
  * @param[in] _str '$GPGLL' string with '$GPGLL' stripped off front.
  */
 void  InstrumentDataGPS::ProcessGPGLL (const KKStr&  _str)

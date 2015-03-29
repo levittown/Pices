@@ -299,9 +299,9 @@ void  InstrumentData::CreateBlocker ()
 }
 
       
-map<KKStr,kkuint32>*  InstrumentData::fieldNamesUpperIdx     = NULL;
-map<KKStr,kkuint32>*  InstrumentData::shortFieldNamesIdx     = NULL;
-GoalKeeperPtr       InstrumentData::blocker                = NULL;
+map<KKStr,kkuint32>*  InstrumentData::fieldNamesUpperIdx  = NULL;
+map<KKStr,kkuint32>*  InstrumentData::shortFieldNamesIdx  = NULL;
+GoalKeeperPtr       InstrumentData::blocker               = NULL;
 bool                InstrumentData::needToRunFinalCleanUp = false;
 
 

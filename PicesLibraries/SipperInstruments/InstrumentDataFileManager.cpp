@@ -272,7 +272,7 @@ void  InstrumentDataFileManager::GetClosestInstrumentData (const KKStr&        i
     // Lets see if we can get what we want from the current data file.
 
     // Get a copy of the 'currentDataFile'  into a local stack allocated variable
-    // this way if a diff thread changes it will not impact this thread.
+    // this way if a different thread changes it will not impact this thread.
     InstrumentDataListPtr  tempDataFile = currentDataFile;  
                                                             
     if  (tempDataFile)
@@ -465,7 +465,7 @@ InstrumentDataListPtr  InstrumentDataFileManager::GetInstrumentDataListForSipper
     idx = dataFiles.find (sipperRootName);
     if  (idx != dataFiles.end ())
     {
-      // Wonderfull we have already looked for this file before.
+      // Wonderful we have already looked for this file before.
       return  idx->second;
     }
   }
@@ -506,7 +506,7 @@ InstrumentDataListPtr  InstrumentDataFileManager::GetInstrumentDataListForSipper
       dataList = InstrumentDataList::CreateFromSipperFile (fullSipperFileName, sipperFile, cancelFlag, log);
       if  (dataList == NULL)
       {
-        // For what ever reason we could not load from the SIPPER file so se need to remove from file name list
+        // For what ever reason we could not load from the SIPPER file so we need to remove from file name list
         knownSipperFiles->erase (idx);
         // Since we did all the work to find out that the SIPPER file does not even exist;  we will create an 
         // entry in 'dataFiles' with a 'NULL' pointer to act as a flag.
@@ -650,7 +650,7 @@ RasterSipperPtr  InstrumentDataFileManager::GetOrigSipperImage (const KKStr&  si
   if  (sf->Eof ())
     return NULL;
 
-  // becase we are passing raster with 3 pixels on all sides we need separate variables that contain the 
+  // because we are passing raster with 3 pixels on all sides we need separate variables that contain the 
   // adjusted raster Height and Width to determine when we have read enough columns and rows from the 
   // Sipper file.
   kkuint32  heightAdj = height + 3;
@@ -670,9 +670,9 @@ RasterSipperPtr  InstrumentDataFileManager::GetOrigSipperImage (const KKStr&  si
   kkuint32  pixelsInRow;
   bool    flow;
 
-  kkuint32  rasterRow = 3;   // Starting row and collumn off with 1 so as to have one
-  kkuint32  rasterCol = 3;   // padded rows and collumn n top and left side.
-                           // will also pad bottom row and right collumn.
+  kkuint32  rasterRow = 3;   // Starting row and column off with 1 so as to have one
+  kkuint32  rasterCol = 3;   // padded rows and column n top and left side.
+                             // will also pad bottom row and right column.
    
   kkuint32  sipperCol = 0;
 
@@ -684,7 +684,7 @@ RasterSipperPtr  InstrumentDataFileManager::GetOrigSipperImage (const KKStr&  si
   sf->GetNextLine (lineBuff, lineBuffSize, lineSize, colCount, pixelsInRow, flow);
   while  ((sf->CurRow () <= endSipperRow)  &&  (rasterRow  <= heightAdj)  &&  (!sf->Eof ()))
   {
-    rasterCol = 3;  // Padding one blank left coluumn
+    rasterCol = 3;  // Padding one blank left column
     sipperCol = topLeftCol;
 
     while  ((rasterCol <= widthAdj)  &&  (sipperCol <= endSipperCol))

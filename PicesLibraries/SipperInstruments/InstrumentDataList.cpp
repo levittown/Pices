@@ -111,7 +111,7 @@ InstrumentDataListPtr  InstrumentDataList::CreateFromSipperFile (const KKStr&   
   float  scanRate = 24950.0f;
   if  (sipperFile)
   {
-    // Unfortunatly;  do to poor designing on my part;  we have instances when 'sipperFile' is not defined.
+    // Unfortunately;  do to poor designing on my part;  we have instances when 'sipperFile' is not defined.
     // in that case we will assume a ScanRate of 24950.0f.
     scanRate = sipperFile->ScanRate ();
     if  (scanRate < 1000)
@@ -449,8 +449,8 @@ VectorDouble  InstrumentDataList::FrameOffsetsInMeters (kkuint32 scanLinesPerFra
     const InstrumentDataPtr  id = *idx;
     while  (id->ScanLine () >= nextFrameScanLine)
     {
-      // This Istrumentdata record 'id' is beyond the end of th ecurrent frame.  In this case
-      // we want to calc the distance traveled in this frame and add to 'frameOffsets'.
+      // This InstrumentData record 'id' is beyond the end of the current frame.  In this case
+      // we want to calculate the distance traveled in this frame and add to 'frameOffsets'.
       kkuint32  scanLines = nextFrameScanLine - lastScanLineCalced;
       double  deltaTime = scanLines / scanRate;   // (ScanLines / ScanLines per Sec)
 
@@ -663,9 +663,9 @@ VectorUlong  InstrumentDataList::GetScanLinesPerMeterProfile ()  const
 
 void  InstrumentDataList::MakeSureFlowRateAndDepthDataIsThere (bool&  changesMade)
 {
-  // because isntrument data usually does not show up in a SIPPER file right away some data
-  // fields might be falsly populated with '0's.  In that case we would like to use the 
-  // first occurance of these fields are used to populate the earlier records.
+  // because instrument data usually does not show up in a SIPPER file right away some data
+  // fields might be falsely populated with '0's.  In that case we would like to use the 
+  // first occurrence of these fields are used to populate the earlier records.
 
   if  (QueueSize () < 1)
     return;
@@ -684,7 +684,7 @@ void  InstrumentDataList::MakeSureFlowRateAndDepthDataIsThere (bool&  changesMad
     InstrumentDataList::iterator  idx;
 
     {
-      // Find first occurence of flowRate and depth
+      // Find first occurrence of flowRate and depth
       for  (idx = begin ();  idx != end ();  idx++)
       {
         id = *idx;

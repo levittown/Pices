@@ -13,12 +13,12 @@
 //*   This code is currently not in use. I am toying with the idea to make  *
 //*   a general Job Management Frame Work. The Idea is that 'Job' and       *
 //*   'JobManager' would be used to build specific Job Management code      *
-//*   arround. In the case of 'FeatureSeletion'  we would detrive sub-      *
-//*   classes to manage the Major Speps and Jobs which would then in turn   *
-//*   call a different set of Derved classes that would manage Binary,      * 
-//*   MultiClass,  Parameter Tuning, and Feature Selection tasks.           *
+//*   around. In the case of 'FeatureSeletion'  we would derive subclasses  *
+//*   to manage the Major Steps and Jobs which would then in turn call a    *
+//*   different set of Derived classes that would manage Binary, MultiClass * 
+//*   Parameter Tuning, and Feature Selection tasks.                        *
 //*                                                                         *
-//*   ex:  JobManager would be replaced by.                                  *
+//*   ex:  JobManager would be replaced by.                                 *
 //*      ParameterManager:: public JobManager                               *
 //*      FeatureSelectionManager:: public JobManager                        *
 //*                                                                         *
@@ -42,8 +42,8 @@
  *@Namespace JobManagment
  *@brief  A framework for managing a large number of processes(Jobs) in a multi-cpu/ multi-o/s environment.
  *@details The Idea is that 'Job' and  'JobManager' would be used to build specific Job Management code
- * arround. In the case of 'FeatureSeletion'  we would detrive sub-classes to manage the Major Speps and 
- * Jobs which would then in turn call a different set of Derved classes that would manage Binary, MultiClass,  
+ * around. In the case of 'FeatureSeletion'  we would derive sub-classes to manage the Major Steps and 
+ * Jobs which would then in turn call a different set of Derived classes that would manage Binary, MultiClass,  
  * Parameter Tuning, and Feature Selection tasks.
  *@code
  *   ex:  JobManager would be replaced by.
@@ -76,7 +76,7 @@ namespace  JobManagment
 
     Job (const Job&  j);
 
-    //  To create a brand new job that has not been proceesed yet.
+    //  To create a brand new job that has not been processed yet.
     Job (JobManagerPtr  _manager,
          int            _jobId,
          int            _parentId,
@@ -97,7 +97,7 @@ namespace  JobManagment
 
     typedef  map<KKStr, ConstructorPtr>  ConstructorIndex;
 
-    static  ConstructorIndex  registeredConstructors;  /**< Track all the different constructors. Will be used to know wich constructor to
+    static  ConstructorIndex  registeredConstructors;  /**< Track all the different constructors. Will be used to know which constructor to
                                                         * use when reading the status file.
                                                         */
 
@@ -132,7 +132,7 @@ namespace  JobManagment
     virtual  JobPtr  Duplicate ()  const = 0;  /**< Create a duplicate instance. */
 
 
-    virtual  const char*   JobType ()  const;     /**< This will allow us to know which specific implementaion
+    virtual  const char*   JobType ()  const;     /**< This will allow us to know which specific implementation
                                                    * of 'Job'  an instance really is.
                                                    */
 
@@ -144,7 +144,7 @@ namespace  JobManagment
 
 
     /**
-     *@brief Imjpelmentation specific field processing.
+     *@brief Implementation specific field processing.
      *@details Any SubClass of Job needs to define this method. Whenever the 'ProcessStatusStr' method can not identify a field
      * it will call this method to let the child Class process the field.
      */
@@ -187,7 +187,7 @@ namespace  JobManagment
     void  AddPrerequisites (int        _prerequisite);
     void  AddPrerequisites (VectorInt  _prerequisites);
 
-    bool  InPrerequisites (int _jobId);   // Retuens true if  '_jobId' is in 'prerequisites'.
+    bool  InPrerequisites (int _jobId);   // Returns true if  '_jobId' is in 'prerequisites'.
 
 
     static   KKStr      JobStatusToStr   (JobStatus  status);
@@ -213,7 +213,7 @@ namespace  JobManagment
                                             * the number that are currently calling the 'ProcessNode' method.
                                             */
 
-    int             numPorcessesAllowed;   /**< The number of Processes that are allowd to process at same time.
+    int             numPorcessesAllowed;   /**< The number of Processes that are allowed to process at same time.
                                             * that is ('numPorcessesAllowed' <= 'numActiveProcessors').
                                             */
 

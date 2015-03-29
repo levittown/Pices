@@ -76,7 +76,7 @@ InstrumentDataManager::InstrumentDataManager (const KKStr&   _sipperFileName,
 
     // Place Initial Header Lines
 
-    *compReport << "// Comprehensice Instrument Data"                << endl
+    *compReport << "// Comprehensive Instrument Data"                << endl
                 << "// Date"        << "\t" << osGetLocalDateTime () << endl
                 << "// SipperFile"  << "\t" << sipperFileName  << "\t" << "TimeStamp"   << "\t" << osGetFileDateTime (sipperFileName) << endl
                 << "//" << endl;
@@ -181,8 +181,8 @@ InstrumentDataManager::~InstrumentDataManager ()
 
 void  InstrumentDataManager::InitializeLatitude ()
 {
-  // because we do not always have access to trhe SipperFile, or the SIPPER file does
-  // not have the latitude info in it we need to deduce the approximate lattitude from 
+  // because we do not always have access to the SipperFile, or the SIPPER file does
+  // not have the latitude info in it we need to deduce the approximate latitude from 
   // the sipper file name.
   if  (sipperFile)
   {

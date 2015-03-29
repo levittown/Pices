@@ -39,7 +39,7 @@ using  namespace  ImageExtractionManager;
 // -A 0  -CPD 3  -D D:\Pices\ExtractedImages\GU1002001S_05.spr  -ipd 1000  -min 150  -max 0  -Pre On  -R D:\Pices\ExtractedImages\GG1002001S_05\GG1002001S_05_c0.txt  -S F:\Pices\SipperFiles\GG1002\GG1002001S\GU1002001S_05.spr  -SF Sipper3  -C D:\Pices\DataFiles\TrainingModels\GulfOilBroad2_Discreate6_Dual.cfg  -X  -CountOnly  -MultiThreaded Yes 
 
 // 2013-03-26   Kurt
-// Re-running the extractions below because of descrencies with andrews PC.
+// Re-running the extractions below because of discrepancies with andrews PC.
 // -A 0  -CPD 3  -D D:\Pices\ExtractedImages\SMP751001035_16-ReRun  -ipd 1000  -min 150  -max 0  -Pre On  -R D:\Pices\ExtractedImages\SMP751001035_16-ReRun\SMP751001035_16_c0.txt  -S F:\Pices\SipperFiles\SMP751001\SMP751001_035\SMP751001035_16.spr  -SF Sipper3  -C GulfOilBroad_130314_Dual.cfg  -X  -CountOnly  -MultiThreaded Yes -DataBase LocalHost
 // -A 0  -CPD 3  -D D:\Pices\ExtractedImages\SMP751001035_13-ReRun  -ipd 1000  -min 150  -max 0  -Pre On  -R D:\Pices\ExtractedImages\SMP751001035_13-ReRun\SMP751001035_13_c0.txt  -S F:\Pices\SipperFiles\SMP751001\SMP751001_035\SMP751001035_13.spr  -SF Sipper3  -C GulfOilBroad_130314_Dual.cfg  -X  -CountOnly  -MultiThreaded Yes -DataBase LocalHost
 // -A 0  -CPD 3  -D D:\Pices\ExtractedImages\GG1002005S_01-ReRun    -ipd 1000  -min 150  -max 0  -Pre On  -R D:\Pices\ExtractedImages\GG1002005S_01-ReRun\GG1002005S_01_c0.txt  -S F:\Pices\SipperFiles\GG1002\GG1002005S\GG1002005S_01.spr  -SF Sipper3  -C GulfOilBroad_130314_Dual.cfg  -X  -CountOnly  -MultiThreaded Yes -DataBase LocalHost
@@ -380,7 +380,7 @@ void  ExtractionManager::Initialize (bool&  _successful)
 
   if  (dbConn)
   {
-    // Flag Siper file as Extraction Started.
+    // Flag Sipper file as Extraction Started.
     dbConn->SipperFilesUpdateExtractionStatus (sipperRootName, '2');
   }
 
@@ -452,7 +452,7 @@ void  ExtractionManager::Initialize (bool&  _successful)
     return;
   }
 
-  // Make sure Output Dircectory Exists
+  // Make sure Output Directory Exists
   osCreateDirectoryPath (parms.OutputRootDir ());
   
   KKStr  logFileName = osAddSlash (parms.OutputRootDir ()) + osGetRootName (parms.SipperFileName ()) + ".log";
@@ -902,7 +902,7 @@ void  ExtractionManager::MonitorUntilDone (ImageExtractionThreadListPtr  threads
 
       if  (AnyProcessorsCrashed ())
       {
-        KKStr  msg = "One or more Threads crashed and as a result the extraction did not complete corectly.";
+        KKStr  msg = "One or more Threads crashed and as a result the extraction did not complete correctly.";
         reportFile << endl << msg << endl << endl;
 
         log.Level (10) << endl  << "ExtractionManager::MonitorUntilDone  " << msg << endl << endl;
@@ -993,7 +993,7 @@ void  ExtractionManager::ManageTheExtraction (bool&  successful)
   {
     reportFile << endl 
       << endl
-      << "One or more Threads crashed and as a result the extraction did not complete corectly." << endl
+      << "One or more Threads crashed and as a result the extraction did not complete correctly." << endl
       << endl;
 
     log.Level (10) << endl
@@ -1190,7 +1190,7 @@ void  ExtractionManager::GenerateReport ()
   if  (parms.ScanLineEnd () > 0)
   {
     reportFile << endl
-               << "End Scanline Specified[" << parms.ScanLineEnd () << "] in Sipper File." << endl
+               << "End Scan-line Specified[" << parms.ScanLineEnd () << "] in Sipper File." << endl
                << endl;
   }
 

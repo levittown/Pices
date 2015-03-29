@@ -251,7 +251,7 @@ inline  int  Max (int x1,  int x2,  int x3,
 
 
 /**
- @brief  Returns the number of different neighobors.  'x1' - 'x9' are the blob id's of the neighbors you want to check.
+ @brief  Returns the number of different neighbors.  'x1' - 'x9' are the blob id's of the neighbors you want to check.
  */
 int  CountPixs (int x1,  int x2,  int x3,  
                 int x4,  int x5,  int x6,  
@@ -657,7 +657,7 @@ SipperImageExtraction::SipperImageExtraction (SipperImageExtractionParms&  _parm
     InstrumentDataListPtr   instrumentData = InstrumentDataFileManager::GetInstrumentDataForSipperFile 
                                              (parms.SipperFileName (), 
                                               sipperFileRec, 
-                                              true,   // true = Fource re-extraction of data from SipperFiles.
+                                              true,   // true = Force re-extraction of data from SipperFiles.
                                               parms.CancelField (), 
                                               log
                                              );
@@ -666,7 +666,7 @@ SipperImageExtraction::SipperImageExtraction (SipperImageExtractionParms&  _parm
       dbConn->InstrumentDataSaveListForOneSipperFile (parms.SipperFileName (), *instrumentData, parms.CancelField ());
   }
 
-  // Make sure Output Dircectory Exists
+  // Make sure Output Directory Exists
   osCreateDirectoryPath (parms.OutputRootDir ());
   
   KKStr  logFileName = osAddSlash (parms.OutputRootDir ()) + osGetRootName (_parms.SipperFileName ()) + ".log";
@@ -731,7 +731,7 @@ SipperImageExtraction::SipperImageExtraction (SipperImageExtractionParms&  _parm
                                                    parms.OutputRootDir (),
                                                    parms.ExtractFeatureData (),
                                                    veryLargeImageSize,
-                                                   (!parms.ConfigFileName ().Empty ()),  // We are going to clasify images,
+                                                   (!parms.ConfigFileName ().Empty ()),  // We are going to classify images,
                                                    parms.CountOnly (),
                                                    parms.ImagesPerDirectory (),
                                                    log
@@ -798,14 +798,14 @@ SipperImageExtraction::SipperImageExtraction (SipperImageExtractionParms&  _parm
 
         log.Level (-1) << endl
                        << endl
-                       << "SipperImageExtraction   *** ERROR ***  Building Traiing Process" << endl
+                       << "SipperImageExtraction   *** ERROR ***  Building Training Process" << endl
                        << endl;
         parms.Cancel (true);  // Can not continue. 
       }
 
       else
       {
-        log.Level (20) << "SipperImageExtraction::SipperImageExtraction   Classifier2 Created Sucessfully." << endl;
+        log.Level (20) << "SipperImageExtraction::SipperImageExtraction   Classifier2 Created Successfully." << endl;
         parms.StatusMessage ("");
         classifier = new Classifier2 (trainer, log);
       }
@@ -1074,7 +1074,7 @@ void  SipperImageExtraction::GetNextFrame (bool&  moreFrames)
   if  (!parms.MorphOperations ().Empty ())
     PerformMorphOperations ();
 
-  if  (parms.SaveFramesAfter ())     // kk 2005-03-03,  as per andrew only before frames.
+  if  (parms.SaveFramesAfter ())     // kk 2005-03-03,  as per Andrew only before frames.
     SaveFrame ("After");
 }  /* GetNextFrame */
 
@@ -1130,7 +1130,7 @@ void  SipperImageExtraction::SearchForCleanBreak ()
 
     if  ((lastRowInFrame <= 1000)  &&  (blankRowsInARow < 3))
     {
-      // Since we could not find a seperation between images lets look
+      // Since we could not find a separation between images lets look
       // for were the row with least pixels.
       uint  rowWithLeastPixels = lastRowInFrame;
       uint  leastNumOfPixels   = 999999;
@@ -1233,7 +1233,7 @@ void  SipperImageExtraction::EliminatePosibleLines (uint  colCount[])
       if  (width > MaxArtifactLineWidth)
         continue;
 
-      // Now that we defined a Possible Collumn lets get rid of the stupid Line.
+      // Now that we defined a Possible Column lets get rid of the stupid Line.
 
       uchar*  rowContent = NULL;
       for  (row = 0; row <= lastRowUsed; row++)
@@ -1688,7 +1688,7 @@ void  SipperImageExtraction::ExtractFrames ()
 
     if  (parms.Cancel ())
     {
-      log.Level (10) << "ExtractFrames   Inside Loop, Cacel request made." << endl;
+      log.Level (10) << "ExtractFrames   Inside Loop, Cancel request made." << endl;
       break;
     }
 
@@ -1729,8 +1729,8 @@ void  SipperImageExtraction::ExtractFrames ()
   reportFile << endl; 
   reportFile << "Total CPU Time    [" << StrFormatDouble (systemTimeUsed, "zzz,zz0.0") << "]." << endl; 
   reportFile << "End Time          [" << endTime                << "]." << endl;
-  reportFile << "Total Elasped Time[" << elaspedTime.Time ()    << "]." << endl;
-  reportFile << "Total Elasped Time[" << elaspedTime.Seconds () << "]." << endl 
+  reportFile << "Total Elapsed Time[" << elaspedTime.Time ()    << "]." << endl;
+  reportFile << "Total Elapsed Time[" << elaspedTime.Seconds () << "]." << endl 
              << endl;
 
   reportFile << "Totals" << endl << endl;
@@ -2471,7 +2471,7 @@ void  SipperImageExtraction::ProcessFrame ()
                              raster->Width  (),
                              sipperImage->PixelCount (),
                              parms.ConnectedPixelDist (),
-                             0,                                   // Extracttipon LogId
+                             0,                                   // Extraction LogId
                              0,
                              (int)(image->CentroidRow () + 0.5f),
                              (int)(image->CentroidCol () + 0.5f),
@@ -2507,7 +2507,7 @@ void  SipperImageExtraction::ProcessFrame ()
                                 predClass,
                                 sipperImage->PixelCount (),
                                 instrumentDataManager->Depth (),
-                                image,              // imageManager will take ownershop of image.
+                                image,              // imageManager will take ownership of image.
                                 raster,
                                 parms.Colorize ()
                                );

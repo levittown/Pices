@@ -39,7 +39,7 @@ SipperBuff3Bit::SipperBuff3Bit (InstrumentDataManagerPtr  _instrumentDataManager
 
 
 
-SipperBuff3Bit::SipperBuff3Bit (KKStr                    _fileName,
+SipperBuff3Bit::SipperBuff3Bit (KKStr                     _fileName,
                                 InstrumentDataManagerPtr  _instrumentDataManager,
                                 RunLog&                   _log
                                ):
@@ -67,16 +67,16 @@ typedef  SplitRec*  SplitRecPtr;
 
 
 void  SipperBuff3Bit::GetNextSipperRec (kkuint32&  spaceLeft,
-                                        uchar&   cameraNum,
-                                        bool&    raw,
-                                        bool&    eol,
-                                        bool&    flow,
-                                        uchar&   pixel0,
-                                        uchar&   pixel1,
-                                        uchar&   pixel2,
-                                        uchar&   pixel3,
+                                        uchar&     cameraNum,
+                                        bool&      raw,
+                                        bool&      eol,
+                                        bool&      flow,
+                                        uchar&     pixel0,
+                                        uchar&     pixel1,
+                                        uchar&     pixel2,
+                                        uchar&     pixel3,
                                         kkuint32&  numOfBlanks,
-                                        bool&    moreRecs
+                                        bool&      moreRecs
                                        )
 {
   uchar  pix1,  pix2,  pix3,  pix4,

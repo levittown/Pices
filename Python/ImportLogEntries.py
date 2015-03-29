@@ -268,7 +268,8 @@ def  main():
   #rootDir="E:\\Users\\kkramer\\Dropbox\\Sipper\\FromAndrewToKurt\\Validation\\2014-09-16\\"
   #rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews"
   #rootDir="C:\\Pices\\UpdatesFromOtherServers"
-  rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews\\2015-02-11"
+  #rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews\\2015-02-11"
+  rootDir="D:\\Users\\kkramer\\DropBox\\Dropbox\\ToKurt\\DataToKurt"
   ImportLogEntries(rootDir)
   print("\n\n    *** Import Completed ***\n\n")
 

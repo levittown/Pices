@@ -2,7 +2,7 @@
 #define  _IEM_SIPPERIMAGE_
 
 #include "RasterSipper.h"
-using namespace  KKB;
+using namespace  SipperHardware;
 
 #include "LogicalFrameBlob.h"
 

@@ -2,6 +2,8 @@
 #define  _SIPPERIMAGE_
 
 #include "RasterSipper.h"
+using namespace  SipperHardware;
+
 #include "SipperBlob.h"
 using namespace  KKB;
 using namespace  MLL;
@@ -37,16 +39,16 @@ public:
                 );
 
 
-  RasterSipperPtr  GetRaster (uchar** frame,
-                              int**   blobIds,     
-                              uint    firstFrameRowScanLine,
+  RasterSipperPtr  GetRaster (uchar**    frame,
+                              int**      blobIds,     
+                              uint       firstFrameRowScanLine,
                               kkuint64*  frameRowByteOffsets
                              );
 
 
 
 private:
-  kkuint64  byteOffset;  // Sipper File ByteOffset of scanline that contains the 1st row in this image.
+  kkuint64  byteOffset;  // Sipper File ByteOffset of scan-line that contains the 1st row in this image.
   uint    colLeft;
   uint    colRight;
   uint    pixelCount;

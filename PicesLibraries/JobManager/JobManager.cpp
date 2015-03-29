@@ -74,13 +74,13 @@ JobManager::JobManager (const JobManager& j):
 
 
 
-// Make sure the the _summaryResultsFileName is deleted before we start processing.
-JobManager::JobManager (JobManagerPtr _manager,                   // Ptr to job that is managing this 'JobManager'
+// Make sure the _summaryResultsFileName is deleted before we start processing.
+JobManager::JobManager (JobManagerPtr _manager,                   /**< Ptr to job that is managing this 'JobManager'   */
                         int           _jobId,
                         int           _parentId,
                         int           _numPorcessesAllowed,
-                        const KKStr&  _managerName,               // Name of this 'JobManager' ; sttaus and lock file will be based on it.
-                        int           _numJobsAtATime,            // The number of jobs that can be allocatd at one time for a single process to execute.
+                        const KKStr&  _managerName,               /**< Name of this 'JobManager' ; status and lock file will be based on it.  */
+                        int           _numJobsAtATime,            /**< The number of jobs that can be allocated at one time for a single process to execute.  */
                         RunLog&       _log
                        ):
   Job (_manager, _jobId, _parentId, _numPorcessesAllowed, _log),
@@ -344,7 +344,7 @@ void  JobManager::StatusFileProcessLine (const KKStr&  ln,
 {
   if  (ln.SubStrPart (0, 1) == "//")
   {
-    // A coment line;  we can ignore it.
+    // A comment line;  we can ignore it.
     return;
   }
 
@@ -361,7 +361,7 @@ void  JobManager::StatusFileProcessLine (const KKStr&  ln,
 
   if  (fieldName.CompareIgnoreCase ("JOB") == 0)
   {
-    // We have a Job entr line;  the next field determines JobType fllowed by parameters for that JobType constructor.
+    // We have a Job Entry line;  the next field determines JobType followed by parameters for that JobType constructor.
     KKStr  jobTypeName = fieldName = statusStr.ExtractToken2 ("\t");
 
     JobPtr  j = Job::CallAppropriateConstructor (this, jobTypeName, statusStr);
@@ -675,7 +675,7 @@ void  JobManager::StatusFileInitialize ()
               << "ExpansionFirstJobId" << "\t" << expansionFirstJobId           << endl;
 
   
-  StatusFileInitialize (*statusFile);  // Have derived classes do there initilization.
+  StatusFileInitialize (*statusFile);  // Have derived classes do there initialization.
 
   delete  jobs;  jobs = NULL;
   jobs = JobsCreateInitialSet ();
@@ -815,7 +815,7 @@ void   JobManager::ProcessNextExpansion (ostream&  o)
     }
   }
 
-  // Derived class will now peform expansion.
+  // Derived class will now perform expansion.
   JobListPtr  expandedJobs = JobsExpandNextSetOfJobs (jobsJustCompleted);
   {
     if  (expandedJobs)
@@ -1002,7 +1002,7 @@ void   JobManager::Run ()
       else
       {
         // We will sleep for a bit until there are more jobs to run
-        log.Level (10) << "JobManager::Run     No jobs avaialble to run; will sleep a bit." << endl;
+        log.Level (10) << "JobManager::Run     No jobs available to run; will sleep a bit." << endl;
         osSleep ((float)(30 + rand () % 10)); 
       }
     }

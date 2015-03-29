@@ -556,7 +556,7 @@ void  CImageExtractionWindowsDlg::OnTimerSingleThreaded ()
 
     this->KillTimer (ImageExtractionTimerID);
     
-    int returnCd = MessageBox (L"Image Extraction cancelation was forced.",
+    int returnCd = MessageBox (L"Image Extraction cancellation was forced.",
                                L"Image Extraction",
                                MB_OK
                               );
@@ -602,7 +602,7 @@ void  CImageExtractionWindowsDlg::OnTimerMultiThreaded ()
   m_statusMessage = multiThreadedExtractionManager->Log ().LastLine ().Str ();
 
   {
-    // We will be getting owneship of 'classStats' so will need to delete when done with.
+    // We will be getting ownership of 'classStats' so will need to delete when done with.
     ClassStatisticListPtr  classStats = multiThreadedExtractionManager->GetClassStatistics ();
     if  (classStats)
       OnTimerUpdateClassStats (classStats);
@@ -620,7 +620,7 @@ void  CImageExtractionWindowsDlg::OnTimerMultiThreaded ()
 
     this->KillTimer (ImageExtractionTimerID);
     
-    int returnCd = MessageBox (L"Image Extraction cancelation was forced.",
+    int returnCd = MessageBox (L"Image Extraction cancellation was forced.",
                                L"Image Extraction",
                                MB_OK
                               );

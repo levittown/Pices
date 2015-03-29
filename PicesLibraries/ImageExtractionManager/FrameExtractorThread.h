@@ -65,7 +65,7 @@ namespace  ImageExtractionManager
     //  Variables used for processing a single frame.
     uchar**     frame;
     uchar*      frameArea;
-    kkuint64*     frameRowByteOffset;
+    kkuint64*   frameRowByteOffset;
 
     kkuint32    totPixels;
 

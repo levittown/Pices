@@ -115,7 +115,7 @@ namespace  ImageExtractionManager
     kkuint32        frameNum;               /**< Sequential number assigned to each frame.                */
     kkuint32        imagesInFrame;          /**< Number of discreet images located by the connected component analysis. */
 
-    // Sgructures to support Blob Processing.
+    // Structures to support Blob Processing.
     LogicalFrameBlobPtr*  blobs;
     kkint32*          blobIdsArea;            /**< Continuous chunk of memory that was allocated to hold 'blobIds' in.   */
     kkint32**         blobIds;                /**< Two dimensional array that will work with frame.  For each pixel that is 

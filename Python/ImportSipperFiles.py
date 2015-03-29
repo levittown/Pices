@@ -225,8 +225,8 @@ def  ImportLogEntries(dirName):
                     stationName    + ", " +
                     deploymentNum  + ", " +
                     description    + ", " +
-                    str(latitude)       + ", " +
-                    str(longitude)      + ", " +
+                    str(latitude)  + ", " +
+                    str(longitude) + ", " +
                     dateTimeStart  + ", " +
                     sp0Instrument  + ", " +
                     sp1Instrument  + ", " +
@@ -236,10 +236,10 @@ def  ImportLogEntries(dirName):
                     ctdExt1        + ", " +
                     ctdExt2        + ", " +
                     ctdExt3        + ", " +
-                    str(sizeInBytes)    + ", " +
-                    str(numScanLines)   + ", " +
-                    str(scanRate)       + ", " +
-                    str(depth)          + ", " +
+                    str(sizeInBytes)  + ", " +
+                    str(numScanLines) + ", " +
+                    str(scanRate)     + ", " +
+                    str(depth)        + ", " +
                     extractionStatus              + ", " +
                     str(extractionScanLineStart)  + ", " +
                     extractionScanLineEndStr   +
@@ -258,7 +258,8 @@ def  ImportLogEntries(dirName):
 def  main():
   #rootDir="E:\\Users\\kkramer\\Dropbox\\Sipper\\FromAndrewToKurt\\Validation\\2014-09-16\\"
   #rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews"
-  rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews\\2015-02-11"
+  #rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews\\2015-02-11"
+  rootDir="D:\\Users\\kkramer\\DropBox\\Dropbox\\ToKurt\\DataToKurt"
   #rootDir="C:\\Pices\\UpdatesFromOtherServers"
   ImportLogEntries(rootDir)
   print("\n\n    *** Import Completed ***\n\n")

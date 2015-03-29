@@ -166,7 +166,7 @@ CTD_Plus_Data::CTD_Plus_Data (const KKStr&  _txt,
   kkint32  expNumExtVoltages = (ext0CCode.Empty () ? 0:1) + (ext1CCode.Empty () ? 0:1) + (ext2CCode.Empty () ? 0:1) + (ext3CCode.Empty () ? 0:1);
 
   VectorKKStr  fields = _txt.Split (",");
-  kkint32  numExternalVoltages = (kkint32)fields.size () - 9;  // Ther are 9 fixed fields and then up to four external voltages.
+  kkint32  numExternalVoltages = (kkint32)fields.size () - 9;  // There are 9 fixed fields and then up to four external voltages.
   if  (numExternalVoltages != expNumExtVoltages)
   {
     valid = false;
@@ -265,7 +265,7 @@ CTD_Plus_Data::CTD_Plus_Data (const KKStr&  _txt,
   }
       
    
-  // The folowing calc for deapth comes from:
+  // The following calculation for depth comes from:
   // SBE  Application Note No. 69,  Page 1.  July 2002
   // references UNESCO Technical Papers in Marine Science No. 44.
       
@@ -412,8 +412,8 @@ CTD_Plus_Data::CTD_Plus_Data (const KKStr&  _txt,
   void   CTD_Plus_Data::CalcTurbidity ()
   {
     // KAK 2013-07-01  
-    //There are two sets of calibrartions below,  The 1st one is what we have been using;  probably
-    // up to the 1st BP cruise,  but th esecond set are the ones we should be using as of the BP
+    //There are two sets of calibrations below,  The 1st one is what we have been using;  probably
+    // up to the 1st BP cruise,  but the second set are the ones we should be using as of the BP
     // oil spill cruises.
 
     // Using calibration sheet from WETLabs
@@ -430,7 +430,7 @@ CTD_Plus_Data::CTD_Plus_Data (const KKStr&  _txt,
     // NTU = ScaleFactor (5 NTU/V) * (turbiditySensor - DarkCounts(0.075 V) )
 
 
-    // KAK 2013-07-01  Received the below calibratin parameters from andrew to be used for BP cruises.
+    // KAK 2013-07-01  Received the below calibration parameters from Andrew to be used for BP cruises.
     // Using calibration sheet from WETLabs
     // dated November-16-2010
     // S/N: FLNTURTD-1112
@@ -469,7 +469,7 @@ CTD_Plus_Data::CTD_Plus_Data (const KKStr&  _txt,
 
 
     
-  float  OxygenSaturation (float waterTemp,   // Celcius
+  float  OxygenSaturation (float waterTemp,   // Celsius
                            float salinity     // psu
                           )
   {
@@ -599,8 +599,8 @@ KKStr  CTD_Plus_Data::Header1Str ()
          << "Conductivity"   << "\t"
          << "Density"        << "\t"
          << "Depth"          << "\t"
-         << "Flourences"     << "\t"
-         << "Flourences"     << "\t"
+         << "Fluorescence"   << "\t"
+         << "Fluorescence"   << "\t"
          << "Cdom"           << "\t"
          << "Cdom"           << "\t"
          << "Oxygen"         << "\t"
@@ -628,8 +628,8 @@ KKStr  CTD_Plus_Data::Header2Str ()
          << "mS/cm"    << "\t"   // Conductivity
          << "%"        << "\t"   // Density
          << "meters"   << "\t"   // Depth
-         << "Units"    << "\t"   // Flourences
-         << "Volts"    << "\t"   // Flourences
+         << "Units"    << "\t"   // Fluorescence
+         << "Volts"    << "\t"   // Fluorescence
          << "Units"    << "\t"   // CdomFlourences
          << "Volts"    << "\t"   // CdomFlourences
          << "ml/l"     << "\t"   // Oxygen

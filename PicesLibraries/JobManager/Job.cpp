@@ -54,7 +54,7 @@ Job::Job (const Job&  j):
  
 
   
-//  To create a brand new job that has not been proceesed yet.  
+//  To create a brand new job that has not been processed yet.  
 Job::Job (JobManagerPtr  _manager,
           int            _jobId,
           int            _parentId,

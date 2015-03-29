@@ -20,16 +20,16 @@ namespace GradeTrainingModel
 
     PicesClassList        classifierClasses = null;   /**< A list of classes that belong to the Classifier, 
                                                        *This list should be the class list before reduction do
-                                                       *to sleected training level.
+                                                       *to selected training level.
                                                        */
 
     PicesClass            otherClass        = null;   /**< Class labeld as other in Classifier.  This is
-                                                       * where Dual classifers send predictions that don't 
+                                                       * where Dual classifiers send predictions that don't 
                                                        * agree.
                                                        */
 
     int[]                 knownClassCounts  = null;
-    int                   numPredClasses    = -1;     // -1 = Data Struxctures need to be iniailized.
+    int                   numPredClasses    = -1;     // -1 = Data Structures need to be initialized.
     int[]                 predClassCounts   = null;
     int[][]               predictionCounts  = null;
     List<Prediction>      predictions       = new List<Prediction> ();
@@ -174,26 +174,26 @@ namespace GradeTrainingModel
 
       numPredClasses = classesPredLevel.Count;
 
-      totalCount                   = 0;
-      totalCorrect                 = 0.0f;
-      totalCorrectNPC              = 0;
+      totalCount      = 0;
+      totalCorrect    = 0.0f;
+      totalCorrectNPC = 0;
       for  (x = 0;  x < 8;   ++x)
       {
         totalByCorectLevel[x] = 0;
         totalPartOfClassifierByCorectLevel[x] = 0;
       }
 
-      totalPartOfClassifier        = 0;
-      totalPartOfClassifierCorrect = 0.0f;
+      totalPartOfClassifier           = 0;
+      totalPartOfClassifierCorrect    = 0.0f;
       totalPartOfClassifierCorrectNPC = 0;
       
-      totalNoise                   = 0;
-      totalNoiseCorrect            = 0.0f;
-      totalNoiseCorrectNPC         = 0;
+      totalNoise           = 0;
+      totalNoiseCorrect    = 0.0f;
+      totalNoiseCorrectNPC = 0;
 
-      totalNonNoise                = 0;
-      totalNonNoiseCorrect         = 0.0f;
-      totalNonNoiseCorrectNPC      = 0;
+      totalNonNoise           = 0;
+      totalNonNoiseCorrect    = 0.0f;
+      totalNonNoiseCorrectNPC = 0;
 
       totalNotPartOfClassifier = 0;
       knownClassCounts = new int[numPredClasses];
@@ -411,7 +411,7 @@ namespace GradeTrainingModel
                                                 ref int  predIDX
                                                )
     {
-      // First lets detemine which cell in the matrix that was clicked.
+      // First lets determine which cell in the matrix that was clicked.
       
       ListViewItem lvi = null;
 
@@ -434,7 +434,7 @@ namespace GradeTrainingModel
         return;
       }
 
-      // Determine the Column we are are interested in.
+      // Determine the Column we are interested in.
       ListViewItem.ListViewSubItem lvsi = null;
       for  (predIDX = 1;  predIDX < lvi.SubItems.Count;  predIDX++)
       {
@@ -743,14 +743,14 @@ namespace GradeTrainingModel
 
       if  (knowClassIdx < 0)
       {
-        MessageBox.Show ("Invalid Classs Specified[" + p.knowClass.Name + "]");
+        MessageBox.Show ("Invalid Class Specified[" + p.knowClass.Name + "]");
         return;
       }
 
       if  (predClassIdx < 0)
       {
 
-        MessageBox.Show ("Invalid Classs Specified[" + p.predClass.Name + "]");
+        MessageBox.Show ("Invalid Class Specified[" + p.predClass.Name + "]");
         return;
       }
 
@@ -761,7 +761,7 @@ namespace GradeTrainingModel
       try {imagesByPred[knowClassIdx][predClassIdx].Add (rootName, p);}
       catch (Exception e)
       {
-        MessageBox.Show (this, "Exception occured adding example[" + rootName + "]" + "\n" +
+        MessageBox.Show (this, "Exception occurred adding example[" + rootName + "]" + "\n" +
                                "Known Class[" + p.knowClass.Name + "] Pred Class[" + p.predClass.Name + "]" + "\n" +
                                "Exception [" + e.ToString () + "]" + "\n" +
                                e.StackTrace,
@@ -950,8 +950,8 @@ namespace GradeTrainingModel
       sw.WriteLine ("<tr><td>SVM Parameters</td>"           +  "<td>" + svmParamStr                           + "</td></tr>");
       sw.WriteLine ("<tr><td>Training Level</td>"           +  "<td>" + trainLevel.ToString ()                + "</td></tr>");
       sw.WriteLine ("<tr><td>Prediction Level</td>"         +  "<td>" + predLevel.ToString ()                 + "</td></tr>");
-      sw.WriteLine ("<tr><td>Minimum Probaility</td>"       +  "<td>" + minProbability.ToString ()            + "</td></tr>");
-      sw.WriteLine ("<tr><td>Maximum Probaility</td>"       +  "<td>" + maxProbability.ToString ()            + "</td></tr>");
+      sw.WriteLine ("<tr><td>Minimum Probability</td>"      +  "<td>" + minProbability.ToString ()            + "</td></tr>");
+      sw.WriteLine ("<tr><td>Maximum Probability</td>"      +  "<td>" + maxProbability.ToString ()            + "</td></tr>");
       sw.WriteLine ("</table>");
       sw.WriteLine ("<br>");
 
@@ -1038,7 +1038,7 @@ namespace GradeTrainingModel
 
       sw.WriteLine ("Run Time Parameters");
       sw.WriteLine ("Run Time"                 +  "\t" + DateTime.Now.ToString ());
-      sw.WriteLine ("Ground Truch Directory"   +  "\t" + groundTruthRootDir);
+      sw.WriteLine ("Ground Truth Directory"   +  "\t" + groundTruthRootDir);
       sw.WriteLine ("Config File Name"         +  "\t" + configFileName);
       sw.WriteLine ("SVM Parameters"           +  "\t" + svmParamStr);
       sw.WriteLine ("Training Level"           +  "\t" + trainLevel.ToString ());
@@ -1144,10 +1144,10 @@ namespace GradeTrainingModel
       sw.WriteLine ("" + "\t" + "");
       sw.WriteLine ("Total-Examples"             + "\t" + "Total number of predictions; same as \"Total-Images\"");
       sw.WriteLine ("Part-of-Classifier"         + "\t" + "True if:  Known class is (Defined as Other Class)  or  (any class in the classifier starts with the same name).");
-      sw.WriteLine ("Total-Part-of-Classifier"   + "\t" + "Total number of examples that are “Part-of-Classifier”.");
+      sw.WriteLine ("Total-Part-of-Classifier"   + "\t" + "Total number of examples that are “Part-of-Classifier.");
       sw.WriteLine ("Noise-Class"                + "\t" + "Class considered noise if its highest level is one of the following: \"UNKNOWN\", \"UNDEFINED\",  \"NONPLANKTON\",  \"NOISE\";  ex:  “Noise-Lines” would be considered a noise class.");
       sw.WriteLine ("Known-Class"                + "\t" + "The class that an example was ground-truthed as.");
-      sw.WriteLine ("Percent-Part-of-Classifier" + "\t" + "Total number of predictions that are considered ‘Part-of-Classifier’ divided by ‘Total-num-of-Predictions’.");
+      sw.WriteLine ("Percent-Part-of-Classifier" + "\t" + "Total number of predictions that are considered ‘Part-of-Classifier divided by ‘Total-num-of-Prediction's.");
       sw.WriteLine ("Total-Noise"                + "\t" + "Total number of examples where the \"Known-Class\" was considered \"Part-of-Classifier\" and \"Noise-Class\".");
       sw.WriteLine ("Percent-Noise"              + "\t" + "Fraction of All-Examples that are of a \"Known-Class\" that is flagged as \"Noise-Class\".");
       sw.WriteLine ("Total-Non-Noise"            + "\t" + "Total number of examples where the \"Known-Class\" was considered \"Part-of-Classifier\" and NOT \"Class-Considered-Noise\".");
