@@ -51,7 +51,7 @@ namespace  PicesInterface
 
   PicesGPSDataPoint::PicesGPSDataPoint (const GPSDataPoint&  stat):
       ctdDateTime  (PicesMethods::DateTimeKKUtoSystem (stat.CtdDateTime  ())),
-      gpsStartTime (PicesMethods::TimeTypeKKUtoSystem (stat.GPSStartTime ())),
+      gpsStartTime (PicesMethods::DateTimeKKUtoSystem (stat.GPSStartTime ())),
       sipperFileId (stat.SipperFileId ()),
       avgScanLine  (stat.AvgScanLine  ()),
       avgLatitude  (stat.AvgLatitude  ()),

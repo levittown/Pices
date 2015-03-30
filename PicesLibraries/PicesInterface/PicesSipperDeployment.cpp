@@ -75,6 +75,16 @@ String^  PicesSipperDeployment::Description::get ()  {return  PicesKKStr::KKStrT
 void PicesSipperDeployment::Description::set (String^  _description)  {deployment->Description (PicesKKStr::SystemStringToKKStr (_description));}
 
 
+String^  PicesSipperDeployment::ShortDescription::get ()
+{
+  String^  shortDesc = CruiseName + "-" + StationName;
+  String^  deployentNum = DeploymentNum;
+  if  (!String::IsNullOrEmpty (deployentNum))
+    shortDesc += "-" + deployentNum;
+  return  shortDesc;
+}
+
+
 System::DateTime  PicesSipperDeployment::DateTimeStart::get ()  
 {
   return  PicesMethods::DateTimeKKUtoSystem (deployment->DateTimeStart ());

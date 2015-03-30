@@ -65,6 +65,8 @@ namespace PicesCommander
 
     List<PlotRequest>  plotRequests = null;
 
+    bool               plotCruise = false;
+
 
     /// <summary>
     /// Data for one series that will be plotted will be maintained in a single instance of this class.
@@ -107,11 +109,11 @@ namespace PicesCommander
       }
 
 
+
       public  PicesGPSDataPoint ClosestPoint (double  longitude,  double longTh,
                                               double  latitude,   double latTh,
                                               ref int closestPointIndex,
                                               ref double  closestPointSquareDist
-                                             
                                              )
       {
         PicesGPSDataPoint   closestPoint = null;
@@ -142,21 +144,31 @@ namespace PicesCommander
               }
             }
           }
+
+          if  (dp.GPSStartTime > gpsDateTimeEnd)
+            gpsDateTimeEnd = dp.GPSStartTime;
+
+          if  (dp.GPSStartTime < gpsDateTimeStart)
+            gpsDateTimeStart = dp.GPSStartTime;
+
           index++;
         }
 
         return  closestPoint;
       }  /* ClosestPoint */
 
-      public  PicesSipperDeployment  deployment     = null;
-      public  PicesGPSDataPointList  data           = null;
-      public  double                 latitudeMin    = double.MaxValue;
-      public  double                 latitudeMax    = double.MinValue;
-      public  double                 longitudeMin   = double.MaxValue;
-      public  double                 longitudeMax   = double.MinValue;
+      public  PicesSipperDeployment  deployment        = null;
+      public  PicesGPSDataPointList  data              = null;
+      public  double                 latitudeMin       = double.MaxValue;
+      public  double                 latitudeMax       = double.MinValue;
+      public  double                 longitudeMin      = double.MaxValue;
+      public  double                 longitudeMax      = double.MinValue;
+      public  DateTime               gpsDateTimeStart  = DateTime.MaxValue;
+      public  DateTime               gpsDateTimeEnd    = DateTime.MaxValue;
     }  /* DataSeriesToPlot */
 
     
+
     private  List<DataSeriesToPlot>  series = new List<DataSeriesToPlot> ();
 
 
@@ -460,7 +472,27 @@ namespace PicesCommander
       goalie.StartBlock ();
       series.Add (seriesToPlot);
       goalie.EndBlock ();
-    }  /* AddClassToSeries */
+    }  /* AddDeploymentToSeries */
+
+
+
+    private  void  AddCruiseToSeries ()
+    {
+      DateTime  gpsDateTimeStart = DateTime.MaxValue;
+      DateTime  gpsDateTimeEnd   = DateTime.MinValue;
+
+      foreach  (DataSeriesToPlot  dsp in series)
+      {
+        if  (dsp.gpsDateTimeStart < gpsDateTimeStart)
+          gpsDateTimeStart = dsp.gpsDateTimeStart;
+
+        if  (dsp.gpsDateTimeStart > gpsDateTimeEnd)
+          gpsDateTimeEnd = dsp.gpsDateTimeEnd;
+      }
+
+
+
+    }  /* AddCruiseToSeries */
 
 
 
@@ -488,6 +520,11 @@ namespace PicesCommander
         if  (cancelRequested)
           break;
         AddDeploymentToSeries (pr.deployment, pr.color);
+      }
+
+      if  (plotCruise)
+      { 
+        AddCruiseToSeries ();
       }
 
       threadConn.Close ();
@@ -520,32 +557,41 @@ namespace PicesCommander
                                      ref double        minX,
                                      ref double        maxX,
                                      ref double        minY,
-                                     ref double        maxY
+                                     ref double        maxY,
+                                     ref DateTime      minGpsDateTime,
+                                     ref DateTime      maxGpsDateTime
                                     )
     {
       PicesGPSDataPointList  gpsData    = dataSeries.data;
       PicesSipperDeployment  deployment = dataSeries.deployment;
         
-      TimeSpan adjToTime = deployment.SyncTimeStampActual - deployment.SyncTimeStampCTD;
+      TimeSpan adjToTime    = deployment.SyncTimeStampActual - deployment.SyncTimeStampCTD;
+      TimeSpan adjToGPSTime = deployment.SyncTimeStampGPS    - deployment.SyncTimeStampCTD;
 
       DateTime startDateTime = new DateTime (1, 1, 1, 1, 1, 1);
-      TimeSpan startTime = new TimeSpan (0, 0, 0);
-      TimeSpan endTime   = new TimeSpan (0, 0, 0);
+      DateTime startTime     = new DateTime (1, 1, 1, 1, 1, 1);
+      DateTime endTime       = new DateTime (1, 1, 1, 1, 1, 1);
       if  (gpsData.Count > 0)
       {
         startDateTime = gpsData[0].CtdDateTime;
         startTime = gpsData[0].GPSStartTime;
+        if  (startTime.CompareTo (minGpsDateTime) < 0)
+          minGpsDateTime = startTime;
       }
 
       if  (gpsData.Count > 1)
+      {
         endTime = gpsData[gpsData.Count - 1].GPSStartTime;
+        if  (endTime.CompareTo (maxGpsDateTime) > 0)
+          maxGpsDateTime = endTime;
+      }
 
       startDateTime.Add (adjToTime);
       startTime.Add (adjToTime);
       endTime.Add (adjToTime);
-
-      String  startTimeStr = startTime.Hours.ToString ("00") + ":" + startTime.Minutes.ToString ("00");
-      String  endTimeStr   = endTime.Hours.ToString   ("00") + ":" + endTime.Minutes.ToString   ("00");
+      
+      String  startTimeStr = startTime.Hour.ToString ("00") + ":" + startTime.Minute.ToString ("00");
+      String  endTimeStr   = endTime.Hour.ToString   ("00") + ":" + endTime.Minute.ToString   ("00");
 
       String  legend = deployment.StationName;
       if  (!String.IsNullOrEmpty (deployment.DeploymentNum))
@@ -568,8 +614,6 @@ namespace PicesCommander
         if  (dp.AvgLongitude < minX)   minX = dp.AvgLongitude;
         if  (dp.AvgLongitude > maxX)   maxX = dp.AvgLongitude;
         DataPoint dataPoint = new DataPoint (dp.AvgLongitude, dp.AvgLatitude);
-        //dataPoint.AxisLabel = PicesMethods.LongitudeToString (dp.AvgLongitude, 2);
-        //= PicesMethods.LatitudeToString (dp.AvgLatitude, 3);
         s.Points.Add (dataPoint);
       }
 
@@ -583,6 +627,7 @@ namespace PicesCommander
     }
 
 
+
     private  void  UpdateChartAreas ()
     {
       goalie.StartBlock ();
@@ -591,6 +636,9 @@ namespace PicesCommander
       double  maxX = double.MinValue;
       double  minY = double.MaxValue;
       double  maxY = double.MinValue;
+
+      DateTime  minGpsDateTime = DateTime.MaxValue;
+      DateTime  maxGpsDateTime = DateTime.MinValue;
 
       timeInterval = (int)TimeInterval.Value;
       //String  plotAction = PlotAction.SelectedText;
@@ -624,7 +672,12 @@ namespace PicesCommander
 
       // First we will plot class counts on CharArea1
       foreach  (DataSeriesToPlot dstp in series)
-        AddSeriesToChart (dstp, ref minX, ref maxX, ref minY, ref maxY);
+        AddSeriesToChart (dstp, ref minX, ref maxX, ref minY, ref maxY, ref minGpsDateTime, ref maxGpsDateTime);
+
+      if  (PlotCruiseField.Checked)
+      {
+        AddCruiseGpsData (minGpsDateTime, maxGpsDateTime);
+      }
 
       double  latitudeMid = (maxY + minY) / 2.0;
 
@@ -635,8 +688,8 @@ namespace PicesCommander
       double  yRange = maxY - minY;
       double  xRangeAdj = xRange * Math.Cos(latitudeMid * degToRad);
 
-      double  yDensity = yRange     / plotAreaHeight;
-      double  xDenisty = xRangeAdj  / plotAreaWidth;
+      double  yDensity = yRange    / plotAreaHeight;
+      double  xDenisty = xRangeAdj / plotAreaWidth;
 
       if  (xDenisty > yDensity)
       {
@@ -665,7 +718,7 @@ namespace PicesCommander
     }  /* UpdateChartAreas */
 
 
-
+    
     private  void  SchedulePlotRequests ()
     {
       //String  plotAction = PlotAction.SelectedText;
@@ -680,6 +733,8 @@ namespace PicesCommander
       {
         plotRequests.Add (new PlotRequest (deployment, Color.Black));
       }
+
+      plotCruise = PlotCruiseField.Checked;
     }  /* SchedulePlotRequests */
 
 
@@ -711,10 +766,12 @@ namespace PicesCommander
     }
 
 
+
     private void RePlotButton_Click (object sender, EventArgs e)
     {
       UpdateChartAreas ();
     }
+
 
 
     int ticks = 0;
@@ -744,6 +801,7 @@ namespace PicesCommander
         EnableControls ();
       }
     }
+
 
 
     private void ChartGPS_Resize (object sender, EventArgs e)
@@ -1087,6 +1145,11 @@ namespace PicesCommander
           GetCogSogInfo (closestDeployment, closestPoint.CtdDateTime, ref cog, ref sog);
           COGField.Text = cog.ToString ("##0.0") + "deg's";
           SOGField.Text = sog.ToString ("#0.0") + " kts";
+          DeploymentHighlighted.Text = closestDeployment.ShortDescription;
+        }
+        else
+        {
+
         }
       }
     }

@@ -1120,11 +1120,6 @@ delimiter ;
 
 
 
-
-
-
-
-
 drop procedure  if exists InstrumentDataRetrieveGpsInfo;
 delimiter //
 
@@ -1134,20 +1129,28 @@ create procedure  InstrumentDataRetrieveGpsInfo (in  _cruiseName      varChar(64
                                                  in  _timeInterval    int
                                                 )
 begin
-  select  id.CTDDateTime                                                                         as  CTDDateTime, 
-          Sec_To_Time(_timeInterval * Floor(Time_To_Sec(Time(id.CTDDateTime)) / _timeInterval))  as  GpsStartTime,
-          sf.SipperFileId                                                                        as  SipperFileId,
-          avg(id.ScanLine)                                                                       as  AvgScanLine,
-          avg(id.Latitude)                                                                        as  AvgLatitude,
-          avg(id.Longitude)                                                                      as  AvgLongitude,
-          avg(FlowRate1)                                                                         as  AvgFlowRate
+  select d.SyncTimeStampCTD, d.SyncTimeStampGPS  into  @syncCTD, @syncGPS
+    from  Deployments d  where d.CruiseName = _cruiseName  and  d.StationName = _stationName  and  (d.DeploymentNum = _deploymentNum   or  _deploymentNum is null  or  _deploymentNum = "")  limit 1;
+
+  set  @gpsAdjSecs = TO_SECONDS(@syncGPS) - TO_SECONDS(@syncCTD);
+  
+  select  id.CTDDateTime                                         as  CTDDateTime,
+          date_add(id.CTDDateTime, INTERVAL @gpsAdjSecs SECOND)  as  GpsStartTime,
+          sf.SipperFileId                                        as  SipperFileId,
+          avg(id.ScanLine)                                       as  AvgScanLine,
+          avg(id.Latitude)                                       as  AvgLatitude,
+          avg(id.Longitude)                                      as  AvgLongitude,
+          avg(FlowRate1)                                         as  AvgFlowRate
      from InstrumentData id
      join (SipperFiles sf) on (sf.SipperFileId = id.SipperFileId)
      where sf.CruiseName    = _cruiseName     and 
            sf.StationName   = _stationName    and 
            sf.deploymentNum = _deploymentNum  and 
            id.FlowRate1 > 0
-     group by sf.CruiseName, sf.StationName, sf.DeploymentNum, Date(id.CTDDateTime), Floor(Time_To_Sec(Time(id.CTDDateTime)) / _timeInterval);
+     group by sf.CruiseName, 
+	            sf.StationName, 
+              sf.DeploymentNum,
+              floor(UNIX_TIMESTAMP(date_add(id.CTDDateTime, INTERVAL @gpsAdjSecs SECOND)) / _timeInterval);
 end
 //
 delimiter ;

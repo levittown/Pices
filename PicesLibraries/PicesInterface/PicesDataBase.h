@@ -70,14 +70,14 @@ namespace PicesInterface
 
     ///<summary>
     /// A general purpose SQL calling method;  It will execute the command in 'statement' with the 
-    /// yunderstanding that 'colsToReturn' will contain a list of columns in the result set that are to 
+    /// understanding that 'colsToReturn' will contain a list of columns in the result set that are to 
     /// be returned.
     ///</summary>
     ///<param name="statement"> SQL Statement that is to be executed.</param>
     ///<param name="colsToReturn"> A list of the columns from the results set that are to be returned
     /// The order that is specified will control the order in the returned results that they will appear.</param>
-    ///<returns>If successfull will return a two dimensional array of strings where each row represents a 
-    ///single row from the results set.  The columns will corespond to the names in 'colsToReturn'.
+    ///<returns>If successful will return a two dimensional array of strings where each row represents a 
+    ///single row from the results set.  The columns will correspond to the names in 'colsToReturn'.
     ///</returns>
     array<array<String^>^ >^  QueryStatement (String^          statement,
                                               array<String^>^  colsToReturn
@@ -99,9 +99,33 @@ namespace PicesInterface
     bool  Successful ()  {return  lastOpSuccessful;}
 
     static bool  ThreadInit ();  /**< Call at start of new thread.         */
-    static void  ThreadEnd ();   /**< Call just before thread termonates.  */
+    static void  ThreadEnd ();   /**< Call just before thread terminates.  */
 
     bool  Valid ();
+
+
+
+
+    //*******************************************************************************************
+    
+    ///<summary>
+    /// 
+    ///</summary>
+    ///<param  name ="cruiseName"> Cruse to retrieve GPS data for.</param>
+    ///<param  name ="utcStart">Start Date-Time to collect data for; nullptr indicates to start with 1st entry for cruise..</param>
+    ///<param  name ="utcEnd">End Date-Time to collect data for; nullptr indicates to start with 1st entry for cruise..</param>
+    ///<param  name ="interval">Summarize GPS data into blocks of time where intervals is in seconds; zero will indicate returning every entry.</param>
+    PicesGPSDataPointList   GpsDataRetrieveByCruise (String^            cruiseName,
+                                                     System::DateTime^  utcStart,
+                                                     System::DateTime^  utcEnd,
+                                                     int                interval
+                                                    )
+    {
+    }
+
+
+
+
 
 
     //*******************************************************************************************
@@ -132,9 +156,9 @@ namespace PicesInterface
     ///<summary>
     /// Updates an existing Feature-Data-Vector in the database.
     ///</summary>
-    ///<param name="databaseImage">Specifies that inage in the database that the Feature-Vecto was computed for;  if points 
-    /// to nullptr will attempt to locate via 'ImageFileName' in th e'example' parameter.</param>
-    ///<param name="example">The Feature-Vecter whos ata is t update the existing Featuire-Vector in the database.</param>
+    ///<param name="databaseImage">Specifies that image in the database that the Feature-Vector was computed for;  if points 
+    /// to nullptr will attempt to locate via 'ImageFileName' in the example' parameter.</param>
+    ///<param name="example">The Feature-Vector to update the existing Feature-Vector in the database with.</param>
     void   FeatureDataUpdate (PicesDataBaseImage^  databaseImage,
                               PicesFeatureVector^  example
                              );
@@ -324,9 +348,9 @@ namespace PicesInterface
 
     /**
      *@brief  Updates prediction on multiple images at one time.
-     *@param[in]  _logEntryId Log id of process that is doing th eclassification.
+     *@param[in]  _logEntryId Log id of process that is doing the classification.
      *@param[in]  _predictionList  A tab delimited string that will contain the list of predictions.  Each
-     *   image will be separated by line feed ('\n') charaters while each field for each uiage will be
+     *   image will be separated by line feed ('\n') characters while each field for each image will be
      *   separated by 'tabs'('\t').  So if there are two images with predictions the string will look like
      *   "<ImageFileRootName><\t><Class1Name><\t><Class1Prob><\t><Class2Name><\t><Class2Prob><\n><ImageFileRootName><\t><Class1Name><\t><Class1Prob><\t><Class2Name><\t><Class2Prob>"
      */
@@ -387,10 +411,11 @@ namespace PicesInterface
 
 
     //*******************************************************************************************
-    PicesClass^            MLClassLoad (String^  className);  // Load instance on PicesClass with name = "ClassName"  
-                                                                 // if not in database will return nullptr
+    PicesClass^            MLClassLoad (String^  className);  /**< Load instance on PicesClass with name = "ClassName"  
+                                                               * if not in database will return nullptr
+                                                               */
 
-    PicesClassList^        MLClassLoadList ();  // Will load all class'es from "Pices.Classes"  table.
+    PicesClassList^        MLClassLoadList ();  // Will load all classes from "Pices.Classes"  table.
 
     void                   MLClassInsert (PicesClass^  picesClass);
 
@@ -398,7 +423,7 @@ namespace PicesInterface
                                                 bool%        successful
                                                );
 
-    void                   MLClassUpdate (String^      oldClassName,   // if == nullptr  assumed taht name has not changed.
+    void                   MLClassUpdate (String^      oldClassName,   // if == nullptr  assumed that name has not changed.
                                           PicesClass^  picesClass
                                          );
 

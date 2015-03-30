@@ -33,7 +33,7 @@ namespace  SipperHardware
     GPSDataPoint (const GPSDataPoint&  _dataPoint);
 
     GPSDataPoint (DateTime _ctdDateTime,
-                  TimeType _gpsStartTime,
+                  DateTime _gpsStartTime,
                   kkint32  _sipperFileId,
                   kkuint32 _avgScanLine,
                   double   _avgLatitude,
@@ -44,7 +44,7 @@ namespace  SipperHardware
     ~GPSDataPoint ();
 
     DateTime  CtdDateTime         () const {return ctdDateTime;}
-    TimeType  GPSStartTime        () const {return gpsStartTime;}
+    DateTime  GPSStartTime        () const {return gpsStartTime;}
     kkint32   SipperFileId        () const {return sipperFileId;}
     kkuint32  AvgScanLine         () const {return avgScanLine;}
     double    AvgLatitude         () const {return avgLatitude;}
@@ -53,7 +53,7 @@ namespace  SipperHardware
 
   private:
     DateTime  ctdDateTime;
-    TimeType  gpsStartTime;   /**<  Time that this data point start covering from. */
+    DateTime  gpsStartTime;   /**<  Time that this data point start covering from. */
     kkint32   sipperFileId;
     kkuint32  avgScanLine;
     double    avgLatitude;

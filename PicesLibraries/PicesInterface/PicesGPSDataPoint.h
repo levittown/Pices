@@ -26,17 +26,17 @@ namespace PicesInterface
     !PicesGPSDataPoint ();
     ~PicesGPSDataPoint ();
 
-    property System::DateTime  CtdDateTime         {System::DateTime  get ()  {return  ctdDateTime;}}
-    property System::TimeSpan  GPSStartTime        {System::TimeSpan  get ()  {return  gpsStartTime;}}
-    property kkint32           SipperFileId        {kkint32           get ()  {return  sipperFileId;}}
-    property kkuint32          AvgScanLine         {kkuint32          get ()  {return  avgScanLine;}}
-    property double            AvgLatitude         {double            get ()  {return  avgLatitude;}}
-    property double            AvgLongitude        {double            get ()  {return  avgLongitude;}}
-    property float             AvgFlowRate         {float             get ()  {return  avgFlowRate;}}
+    property System::DateTime  CtdDateTime   {System::DateTime  get ()  {return  ctdDateTime;}}
+    property System::DateTime  GPSStartTime  {System::DateTime  get ()  {return  gpsStartTime;}}
+    property kkint32           SipperFileId  {kkint32           get ()  {return  sipperFileId;}}
+    property kkuint32          AvgScanLine   {kkuint32          get ()  {return  avgScanLine;}}
+    property double            AvgLatitude   {double            get ()  {return  avgLatitude;}}
+    property double            AvgLongitude  {double            get ()  {return  avgLongitude;}}
+    property float             AvgFlowRate   {float             get ()  {return  avgFlowRate;}}
        
   private:
     System::DateTime  ctdDateTime;
-    System::TimeSpan  gpsStartTime;   /**<  Time that this data point start covering from.  */
+    System::DateTime  gpsStartTime;   /**<  Time that this data point start covering from.  */
     kkint32           sipperFileId;
     kkuint32          avgScanLine;
     double            avgLatitude;
@@ -64,7 +64,7 @@ namespace PicesInterface
     !PicesGPSDataPointList ();
 
     /**
-     *@brief Duplicates the contsts of 'list' and adds to this instance.
+     *@brief Duplicates the consists of 'list' and adds to this instance.
      */
     void  AddList (PicesGPSDataPointList^ list);
 

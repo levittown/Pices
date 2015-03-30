@@ -33,20 +33,21 @@ namespace PicesInterface
     !PicesSipperDeployment ();
 
   public:
-    property  String^  CruiseName     {String^  get ();  void  set (String^ _cruiseName);}
-    property  String^  DeploymentNum  {String^  get ();  void  set (String^ _deploymentNum);}
-    property  String^  StationName    {String^  get ();  void  set (String^ _stationName);}
-    property  String^  Description    {String^  get ();  void  set (String^  _description);}
+    property  String^  CruiseName       {String^  get ();  void  set (String^ _cruiseName);}
+    property  String^  DeploymentNum    {String^  get ();  void  set (String^ _deploymentNum);}
+    property  String^  StationName      {String^  get ();  void  set (String^ _stationName);}
+    property  String^  Description      {String^  get ();  void  set (String^ _description);}
+    property  String^  ShortDescription {String^  get ();}
 
     property  System::DateTime  DateTimeStart {System::DateTime  get ();  void  set (System::DateTime  _dateTimeStart);}
     property  System::DateTime  DateTimeEnd   {System::DateTime  get ();  void  set (System::DateTime  _dateTimeEnd);}
 
 
-    property  double  Latitude     {double  get ()  {return  deployment->Latitude     ();}    void  set (double _latitude)     {deployment->Latitude     (_latitude);}}
-    property  double  Longitude    {double  get ()  {return  deployment->Longitude    ();}    void  set (double _longitude)    {deployment->Longitude    (_longitude);}}
+    property  double    Latitude     {double    get ()  {return  deployment->Latitude     ();}    void  set (double   _latitude)     {deployment->Latitude     (_latitude);}}
+    property  double    Longitude    {double    get ()  {return  deployment->Longitude    ();}    void  set (double   _longitude)    {deployment->Longitude    (_longitude);}}
     property  kkuint32  CropLeft     {kkuint32  get ()  {return  deployment->CropLeft     ();}    void  set (kkuint32 _cropLeft)     {deployment->CropLeft     (_cropLeft);}}      
     property  kkuint32  CropRight    {kkuint32  get ()  {return  deployment->CropRight    ();}    void  set (kkuint32 _cropRight)    {deployment->CropRight    (_cropRight);}}      
-    property  float   ChamberWidth {float   get ()  {return  deployment->ChamberWidth ();}    void  set (float  _chamberWidth) {deployment->ChamberWidth (_chamberWidth);}}
+    property  float     ChamberWidth {float     get ()  {return  deployment->ChamberWidth ();}    void  set (float    _chamberWidth) {deployment->ChamberWidth (_chamberWidth);}}
 
     property  System::DateTime   SyncTimeStampActual {System::DateTime   get ();   void  set (System::DateTime _syncTimeStampActual);}
     property  System::DateTime   SyncTimeStampCTD    {System::DateTime   get ();   void  set (System::DateTime _syncTimeStampCTD);}

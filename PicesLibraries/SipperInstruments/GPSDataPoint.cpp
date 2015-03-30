@@ -46,7 +46,7 @@ GPSDataPoint::GPSDataPoint (const GPSDataPoint&  _dataPoint):
 
 
 GPSDataPoint::GPSDataPoint (DateTime _ctdDateTime,
-                            TimeType _gpsStartTime,
+                            DateTime _gpsStartTime,
                             kkint32  _sipperFileId,
                             kkuint32 _avgScanLine,
                             double   _avgLatitude,

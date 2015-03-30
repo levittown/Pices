@@ -2460,9 +2460,9 @@ DataBaseGpsDataListPtr   DataBase::GpsDataQuery (const KKStr&     cruiseName,
 {
   DataBaseGpsDataListPtr   results = NULL;
 
-  KKStr  queryStr = "call GpsDataQuery(" + cruiseName.QuotedStr ( )                        + ", " +
+  KKStr  queryStr = "call GpsDataQuery(" + cruiseName.QuotedStr ( )                             + ", " +
                                            utcDateTimeStart.YYYY_MM_DD_HH_MM_SS ().QuotedStr () + ", " +
-                                           utcDateTimeEnd.YYYY_MM_DD_HH_MM_SS ().QuotedStr () + ", " +
+                                           utcDateTimeEnd.YYYY_MM_DD_HH_MM_SS ().QuotedStr ()   + ", " +
                                         ")";
   
   kkint32  returnCd = QueryStatement (queryStr);
@@ -2471,6 +2471,10 @@ DataBaseGpsDataListPtr   DataBase::GpsDataQuery (const KKStr&     cruiseName,
 
   return results;
 }  /* GpsDataQuery*/
+
+
+
+
 
 
 
@@ -6782,13 +6786,13 @@ GPSDataPointListPtr DataBase::InstrumentDataRetrieveGPSInfo (const KKStr&  cruis
   while  (ResultSetFetchNextRow ())
   {
     GPSDataPointPtr  stat 
-      = new GPSDataPoint (ResultSetGetDateTimeField      (0),   /**< CTDDateTime  */
-                          ResultSetGetTimeField          (1),   /**< GpsStartTime */
-                          ResultSetGetIntField           (2),   /**< SipperFileId */
+      = new GPSDataPoint (ResultSetGetDateTimeField        (0),   /**< CTDDateTime  */
+                          ResultSetGetDateTimeField        (1),   /**< GpsStartTime */
+                          ResultSetGetIntField             (2),   /**< SipperFileId */
                           (kkuint32)ResultSetGetFloatField (3),   /**< AvgScanLine  */
-                          ResultSetGetDoubleField        (4),   /**< AvgLatitude  */
-                          ResultSetGetDoubleField        (5),   /**< AvgLongitude */
-                          ResultSetGetFloatField         (6)    /**< AvgFlowRate  */
+                          ResultSetGetDoubleField          (4),   /**< AvgLatitude  */
+                          ResultSetGetDoubleField          (5),   /**< AvgLongitude */
+                          ResultSetGetFloatField           (6)    /**< AvgFlowRate  */
                          );
     results->PushOnBack (stat);
   }
