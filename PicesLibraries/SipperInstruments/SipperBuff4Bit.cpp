@@ -98,7 +98,7 @@ struct  SipperBuff4Bit::OpRecRunLen
 struct  SipperBuff4Bit::OpRecRun256Len1
 {
   /** For one or two raw pixels */
-  uchar  opCode     :4;      /**< 10 = up to 256 run-len  */
+  uchar  opCode     :4;      /**< 10 = up to 256 run-length  */
   uchar  pixelValue :4;
 };  /* OpRecRun256Len1 */
 
@@ -291,9 +291,9 @@ SipperBuff4Bit::~SipperBuff4Bit (void)
   //if  (opened)
   //  Close ();
 
-  delete  encodedBuff;          encodedBuff         = NULL;
-  delete  rawPixelRecBuffer;    rawPixelRecBuffer   = NULL;
-  delete  rawStr;               rawStr              = NULL;
+  delete encodedBuff;          encodedBuff       = NULL;
+  delete rawPixelRecBuffer;    rawPixelRecBuffer = NULL;
+  delete rawStr;               rawStr            = NULL;
 }
 
 

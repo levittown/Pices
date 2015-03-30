@@ -23,7 +23,7 @@ using  namespace SipperHardware;
 
 
 InstrumentDataPitchAndRoll::InstrumentDataPitchAndRoll (InstrumentDataManagerPtr _manager,
-                                                        const KKStr&            _reportDir,
+                                                        const KKStr&             _reportDir,
                                                         bool                     _text,
                                                         kkint32                  _instrumentId
                                                        ):

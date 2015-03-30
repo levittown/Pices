@@ -74,15 +74,15 @@ Sipper3Buff::~Sipper3Buff ()
 
 
 void  Sipper3Buff::GetNextSipperRec (kkuint32&  spaceLeft,
-                                     uchar&   cameraNum,
-                                     bool&    imageData,
-                                     bool&    raw,
-                                     bool&    eol,
-                                     bool&    grayScale,
-                                     uchar*   pixels,       // Array of size 12
-                                     uchar&   numPixels,    // num of pixels in pixels 
+                                     uchar&     cameraNum,
+                                     bool&      imageData,
+                                     bool&      raw,
+                                     bool&      eol,
+                                     bool&      grayScale,
+                                     uchar*     pixels,       // Array of size 12
+                                     uchar&     numPixels,    // num of pixels in pixels 
                                      kkuint32&  numOfBlanks,
-                                     bool&    moreRecs
+                                     bool&      moreRecs
                                     )
 {
   Sipper3Rec  sipperRec;
@@ -188,12 +188,12 @@ void  Sipper3Buff::GetNextSipperRec (kkuint32&  spaceLeft,
 
 
 
-void  Sipper3Buff::GetNextLine (uchar*  lineBuff,
+void  Sipper3Buff::GetNextLine (uchar*    lineBuff,
                                 kkuint32  lineBuffSize,
                                 kkuint32& lineSize,
                                 kkuint32  colCount[],
                                 kkuint32& pixelsInRow,
-                                bool&   flow
+                                bool&     flow
                                )
 {
   bool    imageData;

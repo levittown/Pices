@@ -27,8 +27,8 @@ using  namespace SipperHardware;
 
 InstrumentDataBatteryMeter::InstrumentDataBatteryMeter (InstrumentDataManagerPtr _manager,
                                                         const KKStr&            _reportDir,
-                                                        bool                     _text,
-                                                        kkint32                  _instrumentId
+                                                        bool                    _text,
+                                                        kkint32                 _instrumentId
                                                        ):
 
     InstrumentDataReport (_manager, _reportDir, _text, _instrumentId, false),

@@ -15,12 +15,11 @@
 #include <windows.h>
 #endif
 
-#include  "MemoryDebug.h"
-
+#include "MemoryDebug.h"
 using namespace std;
 
 
-#include  "KKBaseTypes.h"
+#include "KKBaseTypes.h"
 using namespace KKB;
 
 

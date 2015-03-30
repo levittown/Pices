@@ -276,7 +276,7 @@ void  ExtractionParms::DisplayExampleCmdLine ()
 {
   cout << endl;
 
-  cout << "Ussage:"  << endl;
+  cout << "Usage:"  << endl;
 
   cout << "  GrayImageExtraction  -s   <sipper file name>"                    << endl;
   cout << "                       -d   <destination directory.>"              << endl;
@@ -338,9 +338,9 @@ void  ExtractionParms::DisplayExampleCmdLine ()
   cout <<                                                                        endl;
   cout <<                                                                        endl;
   cout << "  -Morph <operations>   operations are 'o'-Opening, 'c'-Closing"   << endl;
-  cout << "        'e'-Erosion, 'd'-Dilation."                               << endl;
+  cout << "        'e'-Erosion, 'd'-Dilation."                                << endl;
   cout << "        example string  'O,O,D' = Two Openings followed by a"      << endl;
-  cout << "        followed by a Dialaton operation."                         << endl;
+  cout << "        followed by a Dilation operation."                         << endl;
   cout <<                                                                        endl;
   cout <<                                                                        endl;
   cout << "  -MultiThreaded  <Yes | NO>"                                      << endl;
@@ -765,7 +765,7 @@ void  ExtractionParms::ParseCmdLine (const CmdLineExpander&  cmdLineExpander,
 
 
 
-  // If there a DataBase Server  and  ieithe the "start" or "end" scan line were not defined 
+  // If there a DataBase Server  and either the "start" or "end" scan line were not defined 
   // then go to data base to see if specified in SipperFiles table.
   if  ((dataBaseServer != NULL)  &&  (scanLineStart < 1)  &&  (scanLineEnd < 1))
   {

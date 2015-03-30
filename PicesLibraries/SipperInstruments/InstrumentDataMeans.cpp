@@ -42,21 +42,21 @@ InstrumentDataMeans::InstrumentDataMeans ():
 {}
 
 
-InstrumentDataMeans::InstrumentDataMeans (bool   _downCast,
-                                          kkint32  _depthBin,
-                                          float  _binDepth,
-                                          kkint32  _scanLines,
-                                          float  _volumeSampled,
-                                          float  _temperatureMean,
-                                          float  _salinityMean,
-                                          float  _denisityMean,
-                                          float  _fluorescenceMean,
-                                          float  _fluorescenceSensorMean,
-                                          float  _oxygenMean,
-                                          float  _depthMean,
-                                          float  _transmisivityMean,
-                                          float  _turbidityMean,
-                                          float  _cdomFluorescenceMean
+InstrumentDataMeans::InstrumentDataMeans (bool    _downCast,
+                                          kkint32 _depthBin,
+                                          float   _binDepth,
+                                          kkint32 _scanLines,
+                                          float   _volumeSampled,
+                                          float   _temperatureMean,
+                                          float   _salinityMean,
+                                          float   _denisityMean,
+                                          float   _fluorescenceMean,
+                                          float   _fluorescenceSensorMean,
+                                          float   _oxygenMean,
+                                          float   _depthMean,
+                                          float   _transmisivityMean,
+                                          float   _turbidityMean,
+                                          float   _cdomFluorescenceMean
                                          ):
       downCast               (_downCast),
       depthBin               (_depthBin),

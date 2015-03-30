@@ -78,15 +78,15 @@ Sipper3RevBuff::~Sipper3RevBuff ()
 
 
 void  Sipper3RevBuff::GetNextSipperRec (kkuint32&  spaceLeft,
-                                        uchar&   cameraNum,
-                                        bool&    imageData,
-                                        bool&    raw,
-                                        bool&    eol,
-                                        bool&    grayScale,
-                                        uchar*   pixels,       // Array of size 12
-                                        uchar&   numPixels,    // num of pixels in pixels 
+                                        uchar&     cameraNum,
+                                        bool&      imageData,
+                                        bool&      raw,
+                                        bool&      eol,
+                                        bool&      grayScale,
+                                        uchar*     pixels,       // Array of size 12
+                                        uchar&     numPixels,    // number of pixels in pixels 
                                         kkuint32&  numOfBlanks,
-                                        bool&    moreRecs
+                                        bool&      moreRecs
                                        )
 {
   Sipper3Rec  sipperRec;
@@ -453,7 +453,7 @@ bool  Sipper3RevBuff::FileFormatGood ()
 
   kkint32  numInARowThatAreGood = 0;
   kkint32  numInARowThatAreBad  = 0;
-  kkint32  numRead             = 0;
+  kkint32  numRead              = 0;
 
   do  {
     bool  isNextLineGood = NextScanLineGood ();

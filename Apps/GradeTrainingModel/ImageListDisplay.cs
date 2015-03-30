@@ -125,10 +125,10 @@ namespace GradeTrainingModel
 
       Prediction  prediction = GetPrediction (fileName); 
    
-      // We need to call 'PredictProbabilities'  twice.  Once toget the intermediate images and the
-      // second time to perform prediction using the FeatureVector that was used in teh original
-      // prediction.  It has to be done this way becuase the version of 'PredictProbabilities' that
-      // derives teh FeatureVector from an image does not always have access of instrumentation data.
+      // We need to call 'PredictProbabilities'  twice.  Once to get the intermediate images and the
+      // second time to perform prediction using the FeatureVector that was used in the original
+      // prediction.  It has to be done this way because the version of 'PredictProbabilities' that
+      // derives the FeatureVector from an image does not always have access of instrumentation data.
 
       PicesRasterList featureCalcImages = new PicesRasterList();
       PicesPredictionList guesses2 = prediction.trainModel.PredictProbabilities(fullFileName, featureCalcImages);

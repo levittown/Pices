@@ -141,16 +141,16 @@ def  ImportLogEntries(dirName):
        #                             database='pices_new'
        #                          )
               
-       db = mysql.connector.Connect(user='kkramer',
-                                    password="tree10peach",
-                                    host='sipper-db2.marine.usf.edu',
-                                    database='pices_new'
-                                  )
        #db = mysql.connector.Connect(user='kkramer',
        #                             password="tree10peach",
-       #                             host='localhost',
+       #                             host='sipper-db2.marine.usf.edu',
        #                             database='pices_new'
        #                           )
+       db = mysql.connector.Connect(user='kkramer',
+                                    password="tree10peach",
+                                    host='localhost',
+                                    database='pices_new'
+                                  )
        #db = mysql.connector.Connect(user='root',
        #                             password="dasani30",
        #                             host='localhost',
@@ -215,7 +215,7 @@ def  ImportLogEntries(dirName):
       else:
         extractionScanLineEndStr = str(extractionScanLineEnd)
         
-        sqlStr = ("insert into SipperFiles(sipperFileName, ProgName, cruiseName, stationName, deploymentNum, " +
+        sqlStr = ("insert into SipperFiles(sipperFileName, cruiseName, stationName, deploymentNum, " +
                   "description, latitude, longitude, dateTimeStart, sp0Instrument, sp1Instrument, sp2Instrument, sp3Instrument, " +
                   "ctdExt0, ctdExt1, ctdExt2, ctdExt3, sizeInBytes, numScanLines, scanRate, depth, extractionStatus, " +
                   " extractionScanLineStart, extractionScanLineEnd)" + " " +
@@ -225,8 +225,8 @@ def  ImportLogEntries(dirName):
                     stationName    + ", " +
                     deploymentNum  + ", " +
                     description    + ", " +
-                    str(latitude)       + ", " +
-                    str(longitude)      + ", " +
+                    str(latitude)  + ", " +
+                    str(longitude) + ", " +
                     dateTimeStart  + ", " +
                     sp0Instrument  + ", " +
                     sp1Instrument  + ", " +
@@ -236,10 +236,10 @@ def  ImportLogEntries(dirName):
                     ctdExt1        + ", " +
                     ctdExt2        + ", " +
                     ctdExt3        + ", " +
-                    str(sizeInBytes)    + ", " +
-                    str(numScanLines)   + ", " +
-                    str(scanRate)       + ", " +
-                    str(depth)          + ", " +
+                    str(sizeInBytes)  + ", " +
+                    str(numScanLines) + ", " +
+                    str(scanRate)     + ", " +
+                    str(depth)        + ", " +
                     extractionStatus              + ", " +
                     str(extractionScanLineStart)  + ", " +
                     extractionScanLineEndStr   +
@@ -258,11 +258,49 @@ def  ImportLogEntries(dirName):
 def  main():
   #rootDir="E:\\Users\\kkramer\\Dropbox\\Sipper\\FromAndrewToKurt\\Validation\\2014-09-16\\"
   #rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews"
-  rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews\\2015-02-11"
+  #rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews\\2015-02-11"
+  #rootDir="D:\\Users\\kkramer\\DropBox\\Dropbox\\ToKurt\\DataToKurt"
+  rootDir="D:\\Users\\kkramer\\DropBox\\Dropbox\\ToKurt\\DataToKurt"
   #rootDir="C:\\Pices\\UpdatesFromOtherServers"
   ImportLogEntries(rootDir)
   print("\n\n    *** Import Completed ***\n\n")
 
 
 main()
+
+
+
+
+
+
+
+
+
+
+1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`pices_new`.`sipperfiles`, CONSTRAINT `sipperfiles_ibfk_3` FOREIGN KEY (`CruiseName`, `StationName`, `DeploymentNum`) REFERENCES `deployments` (`CruiseName`, `StationName`, `DeploymentNum`) ON)
+
+insert into SipperFiles(sipperFileName, cruiseName, stationName, deploymentNum, description, latitude, longitude, dateTimeStart,
+                        sp0Instrument, sp1Instrument, sp2Instrument, sp3Instrument,
+                        ctdExt0, ctdExt1, ctdExt2, ctdExt3, sizeInBytes, numScanLines, scanRate, depth, extractionStatus,
+                        extractionScanLineStart, extractionScanLineEnd)
+                 values("WB0814PCB02_01_01", "WB0814", "PCB01", "A", "", 0.0, 0.0, "2014-11-06 19:43:49", "BAT", "GPS", "CTD", "", "TRN", "OXG", "FLO", "TUR", 0, 0, 0.0, 0.0, "3", 0, 0)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

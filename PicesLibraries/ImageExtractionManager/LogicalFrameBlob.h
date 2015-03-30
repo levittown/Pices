@@ -1,14 +1,12 @@
 #if  !defined(_IEM_LOGICALFRAMEBLOB_)
 #define  _IEM_LOGICALFRAMEBLOB_
 /**
- @class MLL::LogicalFrameBlob
+ @class ImageExtractionManager::LogicalFrameBlob
  @brief  Used by the ImageExtractionManager to manage a single blob.
  @author  Kurt Kramer
  @details
  @code
  *****************************************************************************
- **                           LogicalFrameBlob                               *
- **                                                                          *
  **  Used by ImageExtractionManager to keep track of an individual connected *
  **  components in a sipper frame. We call these connected components blobs. *
  **  The fields rowTop, rowBot, colLeft, colRight indicate a tight bounding  *

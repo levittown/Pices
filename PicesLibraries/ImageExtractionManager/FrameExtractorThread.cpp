@@ -333,7 +333,7 @@ void  FrameExtractorThread::GetNextFrame (bool&  moreFrames)
   if  (parms.PreProcess ())
     EliminatePosibleLines (colCount);
 
-  if  (parms.SaveFramesAfter ())     // kk 2005-03-03,  as per andrew only before frames.
+  if  (parms.SaveFramesAfter ())     // kk 2005-03-03,  as per Andrew only before frames.
     SaveFrame ("After");
 }  /* GetNextFrame */
 
@@ -386,7 +386,7 @@ void  FrameExtractorThread::SearchForCleanBreak ()
 
     if  ((lastRowInFrame <= 1000)  &&  (blankRowsInARow < 3))
     {
-      // Since we could not find a seperation between images lets look
+      // Since we could not find a separation between images lets look
       // for were the row with least pixels.
       kkuint32  rowWithLeastPixels = lastRowInFrame;
       kkuint32  leastNumOfPixels   = 999999;
@@ -486,7 +486,7 @@ void  FrameExtractorThread::EliminatePosibleLines (kkuint32  colCount[])
       if  (width > MaxArtifactLineWidth)
         continue;
 
-      // Now that we defined a Possible Collumn lets get rid of the stupid Line.
+      // Now that we defined a Possible Column lets get rid of the stupid Line.
 
       uchar*  rowContent = NULL;
       for  (row = 0; row <= lastRowUsed; row++)

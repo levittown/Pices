@@ -31,7 +31,7 @@ namespace GradeTrainingModel
     private  String                      trainingModelName  = "";
     private  bool                        trainingModelValid = false;
     private  uint                        predictionLevel    = 1;
-    private  uint                        maxLevel           = 1;  // This is highest Hierarchial Level supported by the configuration file.
+    private  uint                        maxLevel           = 1;  // This is highest Hierarchical Level supported by the configuration file.
 
     private  int                         numOfFolds         = 10;
 
@@ -591,7 +591,7 @@ namespace GradeTrainingModel
           trainingModel = null;
         }
 
-        msgQueue.AddMsg ("\n" + "Building Final Classifier for User Querey");
+        msgQueue.AddMsg ("\n" + "Building Final Classifier for User Query");
         trainingModel = new TrainingModel2 (runLog, curSelModel);
         trainingModel.BuildTrainingModel (data);
       }
@@ -637,8 +637,8 @@ namespace GradeTrainingModel
       }
       catch  (Exception e)
       {
-        msgQueue.AddMsg ("\n\n\n" + "Exception occure building training model" + "\n" + e.ToString () + "\n\n");
-        MessageBox.Show (this, "Exception Occured Building Training Model." + "\n" + e.ToString (), "CrossValidate", MessageBoxButtons.OK);
+        msgQueue.AddMsg ("\n\n\n" + "Exception occur building training model" + "\n" + e.ToString () + "\n\n");
+        MessageBox.Show (this, "Exception Occurred Building Training Model." + "\n" + e.ToString (), "CrossValidate", MessageBoxButtons.OK);
         trainingModel = null;
         return;
       }

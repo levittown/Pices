@@ -148,7 +148,7 @@ void  DataBaseUpdateThread::Run ()
     if  (KKThread::TerminateFlag ())
     {
       // If the TerminateFlag has been set then we want to exit out of this thread as
-      // fast as we can evein if there is still data to be updated.
+      // fast as we can even if there is still data to be updated.
       break;
     }
 
