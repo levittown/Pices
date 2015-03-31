@@ -26,11 +26,6 @@ delimiter ;
 
 
 
-
-
-
-
-
 /**********************************************************************************************************************/
 drop procedure   if exists  GpcDataQuery;
 drop procedure   if exists  GpsDataQuery;
@@ -367,76 +362,5 @@ begin
 end
 //
 delimiter ;
-
-
-
-
-
-
-
-
-
-drop procedure  if exists GpsDataRetrieveByCruise;
-delimiter //
-
-create procedure  GpsDataRetrieveByCruise (in  _cruiseName  varChar(10),
-                                           in  _utcStart    DateTime,
-                                           in  _utcEnd      DateTime,
-									       in  _interval    int
-                                          )
-begin
-  declare  _curIntervalSecs     int default 0;
-  declare  _cruseStartDateTime  datetime;
-  declare  _cruseEndDateTime    datetime;
-
-  declare  _startTimeSecs
-
-  select  min(gd.UtcDateTime), max(gd.UtcDateTime)  into  _cruseStartDateTime, _cruseEndDateTime
-     from GpsData  gd
-	 where  (gd.CruiseName = _cruiseName)  and
-	        (gd.UtcDateTime >= _utcStart)  and
-			(gd.UtcDateTime <= _utcEnd);
-
-  
-	    
-
-
-  _curIntervalSecs = u
-
-
-
-
-
-
-  declare  _syncGpsDataTime   datetime;
-  declare  _syncCtdDateTime   datetime;
-  declare  _deltaGpsCtdSecs   int  default 0;
-  declare  _adjCtdDateTime    datetime;
-
-  declare  _gpsDataTime  datetime;
-
-  select  d.SyncTimeStampCTD, d.SyncTimeStampGPS  into  _syncCtdDateTime, _syncGpsDataTime
-          from Deployments d
-          where (d.CruiseName = _cruiseName)  and  (d.StationName = _stationName)  and  (d.DeploymentNum = _deploymentNum);
-
-  set _deltaGpsCtdSecs = to_seconds(_syncGpsDataTime) - to_seconds(_syncCtdDateTime);
-
-
-  set  _gpsDataTime = timestampadd(second, _deltaGpsCtdSecs, _ctdDataTime);
-
-
-  call  GpsDataGetEstimate (_cruiseName, _gpsDataTime, @latitude, @longitude, @cog, @sog);
-
-
-  select  gd.UtcDateTime, avg(gd.latitude), avg(gd.longitude), avg(gd.courseOverGround), avg(gd.speedOverGround)
-  from  GpsData gd
-  where  (gd.CruiseName = _cruiseName)  and
-         (gd.UtcDateTime >= _startGpsDataTime)  and
-         (gd.UtcDateTime <= _endGpsDataTime)
-     group by floor(Time_To_Sec(Time(gd.UtcDateTime)) / _timeInterval);
-end
-//
-delimiter ;
-
 
 

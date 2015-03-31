@@ -1878,6 +1878,30 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
 
 
 
+PicesGPSDataPointList^  PicesDataBase::GpsDataQuery (String^           cruiseName,
+                                                     System::DateTime  utcStart,
+                                                     System::DateTime  utcEnd
+                                                    )
+{
+  DataBaseGpsDataListPtr  gpsData = dbConn->GpsDataQuery (PicesKKStr::SystemStringToKKStr (cruiseName),
+                                                          PicesMethods::DateTimeSystemToKKU (utcStart),
+                                                          PicesMethods::DateTimeSystemToKKU (utcEnd)
+                                                         );
+  if  (!gpsData)
+    return  nullptr;
+
+
+
+
+}  /* GpsDataQuery */
+
+
+
+
+
+
+
+
   //***********************************************************************************
   PicesDataBaseLogEntry^  PicesDataBase::LogEntriesProcessStart (String^           progCode,
                                                                  String^           progName,

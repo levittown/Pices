@@ -114,14 +114,10 @@ namespace PicesInterface
     ///<param  name ="cruiseName"> Cruse to retrieve GPS data for.</param>
     ///<param  name ="utcStart">Start Date-Time to collect data for; nullptr indicates to start with 1st entry for cruise..</param>
     ///<param  name ="utcEnd">End Date-Time to collect data for; nullptr indicates to start with 1st entry for cruise..</param>
-    ///<param  name ="interval">Summarize GPS data into blocks of time where intervals is in seconds; zero will indicate returning every entry.</param>
-    PicesGPSDataPointList   GpsDataRetrieveByCruise (String^            cruiseName,
-                                                     System::DateTime^  utcStart,
-                                                     System::DateTime^  utcEnd,
-                                                     int                interval
-                                                    )
-    {
-    }
+    PicesGPSDataPointList^  GpsDataQuery (String^           cruiseName,
+                                          System::DateTime  utcStart,
+                                          System::DateTime  utcEnd
+                                         );
 
 
 

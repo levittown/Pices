@@ -191,9 +191,6 @@ KKStr  DataBase::FloatToStr (float f)
 
 
 
-
-
-
 GoalKeeperPtr            DataBase::blocker                  = NULL;
 volatile KKB::kkint32    DataBase::numDataBaseInstances     = 0;
 volatile bool            DataBase::mySqlEmbeddedServerInitailzied = false;
@@ -313,6 +310,8 @@ void  DataBase::InitializeMySqlLibraryServer ()
     }
   }
 }  /* InitializeMySqlLibraryServer */
+
+
 
 
 KKB::kkint32  initializeMySqlLibraryEmbeddedThreadId = 0;
@@ -2471,10 +2470,6 @@ DataBaseGpsDataListPtr   DataBase::GpsDataQuery (const KKStr&     cruiseName,
 
   return results;
 }  /* GpsDataQuery*/
-
-
-
-
 
 
 
