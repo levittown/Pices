@@ -19,6 +19,8 @@ namespace PicesInterface
   public  ref class PicesGPSDataPoint
   {
   public:
+    typedef  System::DateTime  DateTime;
+
     PicesGPSDataPoint (PicesGPSDataPoint^  stat);
 
     PicesGPSDataPoint (const GPSDataPoint&  stat);
@@ -26,23 +28,20 @@ namespace PicesInterface
     !PicesGPSDataPoint ();
     ~PicesGPSDataPoint ();
 
-    property System::DateTime  CtdDateTime   {System::DateTime  get ()  {return  ctdDateTime;}}
-    property System::DateTime  GPSStartTime  {System::DateTime  get ()  {return  gpsStartTime;}}
-    property kkint32           SipperFileId  {kkint32           get ()  {return  sipperFileId;}}
-    property kkuint32          AvgScanLine   {kkuint32          get ()  {return  avgScanLine;}}
-    property double            AvgLatitude   {double            get ()  {return  avgLatitude;}}
-    property double            AvgLongitude  {double            get ()  {return  avgLongitude;}}
-    property float             AvgFlowRate   {float             get ()  {return  avgFlowRate;}}
+    property  DateTime  GpsUtcTime        {DateTime  get ()  {return  gpsUtcTime;}}
+    property  double    Latitude          {double    get ()  {return  latitude;}}
+    property  double    Longitude         {double    get ()  {return  longitude;}}
+    property  float     CourseOverGround  {float     get ()  {return  courseOverGround;}}
+    property  float     SpeedOverGround   {float     get ()  {return  speedOverGround;}}
        
   private:
-    System::DateTime  ctdDateTime;
-    System::DateTime  gpsStartTime;   /**<  Time that this data point start covering from.  */
-    kkint32           sipperFileId;
-    kkuint32          avgScanLine;
-    double            avgLatitude;
-    double            avgLongitude;
-    float             avgFlowRate;
+    DateTime  gpsUtcTime;
+    double    latitude;
+    double    longitude;
+    float     courseOverGround;
+    float     speedOverGround;
   };  /* PicesGPSDataPoint */
+
 
 
   public  ref class  PicesGPSDataPointList:  List<PicesGPSDataPoint^>

@@ -38,25 +38,21 @@ using namespace  PicesInterface;
 namespace  PicesInterface
 {
   PicesGPSDataPoint::PicesGPSDataPoint (PicesGPSDataPoint^  stat):
-      ctdDateTime  (stat->ctdDateTime),
-      gpsStartTime (stat->gpsStartTime),
-      sipperFileId (stat->sipperFileId),
-      avgScanLine  (stat->avgScanLine),
-      avgLatitude  (stat->avgLatitude),
-      avgLongitude (stat->avgLongitude),
-      avgFlowRate  (stat->avgFlowRate)
+     gpsUtcTime        (stat->gpsUtcTime),
+     latitude          (stat->latitude),
+     longitude         (stat->longitude),
+     courseOverGround  (stat->courseOverGround),
+     speedOverGround   (stat->speedOverGround)
   {
   }
 
 
   PicesGPSDataPoint::PicesGPSDataPoint (const GPSDataPoint&  stat):
-      ctdDateTime  (PicesMethods::DateTimeKKUtoSystem (stat.CtdDateTime  ())),
-      gpsStartTime (PicesMethods::DateTimeKKUtoSystem (stat.GPSStartTime ())),
-      sipperFileId (stat.SipperFileId ()),
-      avgScanLine  (stat.AvgScanLine  ()),
-      avgLatitude  (stat.AvgLatitude  ()),
-      avgLongitude (stat.AvgLongitude ()),
-      avgFlowRate  (stat.AvgFlowRate  ())
+     gpsUtcTime        (PicesMethods::DateTimeKKUtoSystem (stat.GpsUtcTime ())),
+     latitude          (stat.Latitude         ()),
+     longitude         (stat.Longitude        ()),
+     courseOverGround  (stat.CourseOverGround ()),
+     speedOverGround   (stat.SpeedOverGround  ())
   {
   }
 

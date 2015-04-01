@@ -11,7 +11,7 @@
 using namespace KKB;
 
 
-#include "GPSDataPoint.h"
+#include "GpsDataPoint.h"
 #include "InstrumentData.h"
 #include "InstrumentDataList.h"
 #include "InstrumentDataMeans.h"
@@ -24,7 +24,6 @@ using namespace SipperHardware;
 
 
 #include "ClassStatistic.h"
-#include "DataBaseGpsData.h"
 #include "DataBaseImage.h"
 #include "DataBaseImageGroup.h"
 #include "DataBaseImageGroupEntry.h"
@@ -210,12 +209,14 @@ namespace MLL
 
 
     //***********************************************************************************
-    void    GpsDataInsert (const DataBaseGpsData&  gpsData);
+    void    GpsDataInsert (const KKStr&         cruiseName,
+                           const GPSDataPoint&  gpsData
+                          );
 
-    DataBaseGpsDataListPtr   GpsDataQuery (const KKStr&          cruiseName,
-                                           const KKB::DateTime&  utcDateTimeStart,
-                                           const KKB::DateTime&  utcDateTimeEnd
-                                          );
+    GPSDataPointListPtr   GpsDataQuery (const KKStr&          cruiseName,
+                                        const KKB::DateTime&  utcDateTimeStart,
+                                        const KKB::DateTime&  utcDateTimeEnd
+                                       );
 
     void  GpsDataDelete (const KKStr&          cruiseName,
                          const KKB::DateTime&  utcDateTimeStart,
@@ -1009,7 +1010,7 @@ namespace MLL
 
     SipperDeploymentListPtr  SipperDeploymentProcessResults ();
 
-    DataBaseGpsDataListPtr   GpsDataProcessResults ();
+    GPSDataPointListPtr   GpsDataProcessResults ();
 
 
     static char**         featureDataFieldNames;

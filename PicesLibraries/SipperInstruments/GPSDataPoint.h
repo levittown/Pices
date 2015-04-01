@@ -12,14 +12,14 @@ using namespace KKB;
 namespace  SipperHardware
 {
   /**
-   *@brief Represents a single GPS datapoint entry (GMT DateTime, Latitude and Longitude) from a imported GPS data source
+   *@brief Represents a single GPS data-point entry (GMT DateTime, Latitude and Longitude) from a imported GPS data source
    * provided by the research Vessels that SIPPER is deployed on.
    *@details
    * Research vessels will record GPS data into text files throughout the length of their cruises. Temporal granularity
    * will range from a couple seconds to a minute. This data is imported into the PICES database via the ImportGPSDataApp
    * application. The data is kept in the GpsData table of the PICES database.
    */
-  class GPSDataPoint
+  class  GPSDataPoint
   {
   public:
     typedef  KKB::kkint32   kkint32;
@@ -32,33 +32,27 @@ namespace  SipperHardware
 
     GPSDataPoint (const GPSDataPoint&  _dataPoint);
 
-    GPSDataPoint (DateTime _ctdDateTime,
-                  DateTime _gpsStartTime,
-                  kkint32  _sipperFileId,
-                  kkuint32 _avgScanLine,
-                  double   _avgLatitude,
-                  double   _avgLongitude,
-                  float    _avgFlowRate
+    GPSDataPoint (DateTime _gpsUtcTime,
+                  double   _latitude,
+                  double   _longitude,
+                  float    _courseOverGround,
+                  float    _speedOverGround
                  );
 
     ~GPSDataPoint ();
 
-    DateTime  CtdDateTime         () const {return ctdDateTime;}
-    DateTime  GPSStartTime        () const {return gpsStartTime;}
-    kkint32   SipperFileId        () const {return sipperFileId;}
-    kkuint32  AvgScanLine         () const {return avgScanLine;}
-    double    AvgLatitude         () const {return avgLatitude;}
-    double    AvgLongitude        () const {return avgLongitude;}
-    float     AvgFlowRate         () const {return avgFlowRate;}
+    DateTime  GpsUtcTime       () const {return gpsUtcTime;}
+    double    Latitude         () const {return latitude;}
+    double    Longitude        () const {return longitude;}
+    float     CourseOverGround () const {return courseOverGround;}
+    float     SpeedOverGround  () const {return speedOverGround;}
 
   private:
-    DateTime  ctdDateTime;
-    DateTime  gpsStartTime;   /**<  Time that this data point start covering from. */
-    kkint32   sipperFileId;
-    kkuint32  avgScanLine;
-    double    avgLatitude;
-    double    avgLongitude;
-    float     avgFlowRate;
+    DateTime  gpsUtcTime;   /**<  Time that this data point start covering from. */
+    double    latitude;
+    double    longitude;
+    float     courseOverGround;
+    float     speedOverGround;
   };
   typedef  GPSDataPoint::GPSDataPointPtr  GPSDataPointPtr;
 

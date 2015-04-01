@@ -204,7 +204,7 @@ drop procedure   if exists  GpsDataGetEstimateByCTDDateTime;
 delimiter //
 
 create procedure  GpsDataGetEstimateByCTDDateTime (in  _CruiseName        char(10),
-                                                   in  _stationName       varChar(64),
+                                                   in  _stationName       varChar(10),
                                                    in  _deploymentNum     varChar(4),
                                                    in  _ctdDateTime       datetime,
                                                    out _latitude          double,
@@ -239,7 +239,7 @@ drop procedure   if exists  GpsDataGetEstimateByCTDDateTime2;
 delimiter //
 
 create procedure  GpsDataGetEstimateByCTDDateTime2 (in  _CruiseName     char(10),
-                                                    in  _stationName    varChar(64),
+                                                    in  _stationName    varChar(10),
                                                     in  _deploymentNum  varChar(4),
                                                     in  _ctdDateTime    datetime
                                                    )
@@ -268,16 +268,12 @@ delimiter ;
 
 
 
-
-
-
-
   
 drop procedure  if exists GpsDataForDeployment;
 delimiter //
 
-create procedure  GpsDataForDeployment (in  _cruiseName      varChar(64),
-                                        in  _stationName     varChar(64),
+create procedure  GpsDataForDeployment (in  _cruiseName      varChar(10),
+                                        in  _stationName     varChar(10),
                                         in  _deploymentNum   varChar(4),
                                         in  _timeInterval    int
                                        )
@@ -299,7 +295,6 @@ begin
           where (d.CruiseName = _cruiseName)  and  (d.StationName = _stationName)  and  (d.DeploymentNum = _deploymentNum);
 
   set _deltaGpsCtdSecs = to_seconds(_syncGpsDataTime) - to_seconds(_syncCtdDateTime);
-
 
   select  min(id.CtdDateTime), max(id.CtdDateTime)  into  _startCtdDataTime, _endCtdDataTime
          from  InstrumentData id
@@ -327,8 +322,8 @@ delimiter ;
 drop procedure  if exists GpsDataByCtdDateTime;
 delimiter //
 
-create procedure  GpsDataByCtdDateTime (in  _cruiseName      varChar(64),
-                                        in  _stationName     varChar(64),
+create procedure  GpsDataByCtdDateTime (in  _cruiseName      varChar(10),
+                                        in  _stationName     varChar(10),
                                         in  _deploymentNum   varChar(4),
                                         in  _ctdDateTime     datetime
                                        )

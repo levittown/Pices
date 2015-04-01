@@ -19,6 +19,12 @@ using namespace std;
 #include "GoalKeeper.h"
 using namespace KKB;
 
+
+#include "GpsDataPoint.h"
+using namespace SipperHardware;
+
+
+
 #include "PicesKKStr.h"
 #include "PicesMethods.h"
 #include "PicesOSservices.h"
@@ -390,7 +396,7 @@ namespace  PicesInterface
 
     PicesFeatureVectorList^  results = gcnew PicesFeatureVectorList (*examples);
     // "results"  will own the individual instances in "examples" so we need
-    // to set the "Owner" property of "examples" to false so taht when it gets
+    // to set the "Owner" property of "examples" to false so that when it gets
     // deleted it does not delete them.
     examples->Owner (false);  
     delete  examples;  examples = NULL;
@@ -423,7 +429,7 @@ namespace  PicesInterface
 
     PicesFeatureVectorList^  results = gcnew PicesFeatureVectorList (*examples);
     // "results"  will own the individual instances in "examples" so we need
-    // to set the "Owner" property of "examples" to false so taht when it gets
+    // to set the "Owner" property of "examples" to false so that when it gets
     // deleted it does not delete them.
     examples->Owner (false);  
     delete  examples;  examples = NULL;
@@ -1229,7 +1235,7 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
     try  {r = dbConn->ImageFullSizeFind (PicesKKStr::SystemStringToKKStr (imageFileName));}
     catch  (KKException&  e1)  {throw gcnew Exception ("PicesDataBase::ImageFullSizeFind KKException\n" +  PicesKKStr::KKStrToSystenStr (e1.ToString ()));}
     catch  (exception&       e2)  {throw gcnew Exception ("PicesDataBase::ImageFullSizeFind std::exception\n" +  PicesKKStr::KKStrToSystenStr (e2.what ()));}
-    catch  (...)                  {throw gcnew Exception ("PicesDataBase::ImageFullSizeFind Exception ocured");}
+    catch  (...)                  {throw gcnew Exception ("PicesDataBase::ImageFullSizeFind Exception occurred");}
     if  (!r)
       return nullptr;
     return  gcnew PicesRaster (r);
@@ -1322,8 +1328,8 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
 
       if  (pc == nullptr)
       {
-        // This should not have been able to have happened;  but it did;  so lets have a breal point here
-        // there must be something wrong with my program logic.
+        // This should not have been able to have happened; but it did; so lets have a break point here 
+        // because there must be something wrong with my program logic.
         runLog->Log ().Level (-1) << endl << endl 
                                   << "PicesDataBase::MLClassLoadList   ***ERROR***" << endl
                                   << "                                    The Parent Child Relationship is Broken" << endl
@@ -1574,7 +1580,7 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
 
 
   /**
-   *@brief Get the names of individule field names; used by applications that will query InstrumentData table 
+   *@brief Get the names of individual field names; used by applications that will query InstrumentData table 
    * allowing users to select fields to query and display.
    */
   List<String^>^  PicesDataBase::InstrumentDataGetFieldNames ()
@@ -1883,16 +1889,17 @@ PicesGPSDataPointList^  PicesDataBase::GpsDataQuery (String^           cruiseNam
                                                      System::DateTime  utcEnd
                                                     )
 {
-  DataBaseGpsDataListPtr  gpsData = dbConn->GpsDataQuery (PicesKKStr::SystemStringToKKStr (cruiseName),
-                                                          PicesMethods::DateTimeSystemToKKU (utcStart),
-                                                          PicesMethods::DateTimeSystemToKKU (utcEnd)
-                                                         );
+  GPSDataPointListPtr  gpsData = dbConn->GpsDataQuery (PicesKKStr::SystemStringToKKStr (cruiseName),
+                                                       PicesMethods::DateTimeSystemToKKU (utcStart),
+                                                       PicesMethods::DateTimeSystemToKKU (utcEnd)
+                                                      );
   if  (!gpsData)
     return  nullptr;
 
+  PicesGPSDataPointList^  managedGpsData = gcnew PicesGPSDataPointList (*gpsData);
+  gpsData = NULL;
 
-
-
+  return  managedGpsData;
 }  /* GpsDataQuery */
 
 
@@ -2141,10 +2148,12 @@ PicesGPSDataPointList^  PicesDataBase::GpsDataQuery (String^           cruiseNam
 
 
 
+
   void  PicesDataBase::SipperFileLoadOracle ()
   {
     dbConn->SipperFileLoadOracle ();
   }
+
 
 
 
@@ -2172,7 +2181,7 @@ PicesGPSDataPointList^  PicesDataBase::GpsDataQuery (String^           cruiseNam
     if  (!(sipperFile->UnmanagedClass ()))
     {
       lastOpSuccessful  = false;
-      throw gcnew Exception ("PicesDataBase::SipperFileInsert   The Un-Managed Class wass 'NULL'.");
+      throw gcnew Exception ("PicesDataBase::SipperFileInsert   The Un-Managed Class was 'NULL'.");
     }
 
     dbConn->SipperFileInsert (*(sipperFile->UnmanagedClass ()));
@@ -2195,7 +2204,7 @@ PicesGPSDataPointList^  PicesDataBase::GpsDataQuery (String^           cruiseNam
     if  (!(sipperFile->UnmanagedClass ()))
     {
       lastOpSuccessful  = false;
-      throw gcnew Exception ("PicesDataBase::SipperFileUpdate   The Unmanaged Class wass 'NULL'.");
+      throw gcnew Exception ("PicesDataBase::SipperFileUpdate   The Unmanaged Class was 'NULL'.");
     }
 
     dbConn->SipperFileUpdate (*(sipperFile->UnmanagedClass ()));

@@ -12,7 +12,6 @@
 using namespace std;
 
 
-
 #include "KKBaseTypes.h"
 using namespace KKB;
 
@@ -22,44 +21,37 @@ using  namespace  SipperHardware;
 
 
 GPSDataPoint::GPSDataPoint ():
-    ctdDateTime  (),
-    gpsStartTime (),
-    sipperFileId (-1),
-    avgScanLine  (0),
-    avgLatitude  (0.0),
-    avgLongitude (0.0),
-    avgFlowRate  (0.0f)
+    gpsUtcTime        (),
+    latitude          (0.0),
+    longitude         (0.0),
+    courseOverGround  (0.0f),
+    speedOverGround   (0.0f)
 {
 }
 
 
 GPSDataPoint::GPSDataPoint (const GPSDataPoint&  _dataPoint):
-    ctdDateTime  (_dataPoint.ctdDateTime),
-    gpsStartTime (_dataPoint.gpsStartTime),
-    sipperFileId (_dataPoint.sipperFileId),
-    avgScanLine  (_dataPoint.avgScanLine),
-    avgLatitude  (_dataPoint.avgLatitude),
-    avgLongitude (_dataPoint.avgLongitude),
-    avgFlowRate  (_dataPoint.avgFlowRate)
+    gpsUtcTime        (_dataPoint.gpsUtcTime),
+    latitude          (_dataPoint.latitude),
+    longitude         (_dataPoint.longitude),
+    courseOverGround  (_dataPoint.courseOverGround),
+    speedOverGround   (_dataPoint.speedOverGround)
 {
 }
 
 
-GPSDataPoint::GPSDataPoint (DateTime _ctdDateTime,
-                            DateTime _gpsStartTime,
-                            kkint32  _sipperFileId,
-                            kkuint32 _avgScanLine,
-                            double   _avgLatitude,
-                            double   _avgLongitude,
-                            float    _avgFlowRate
+
+GPSDataPoint::GPSDataPoint (DateTime _gpsUtcTime,
+                            double   _latitude,
+                            double   _longitude,
+                            float    _courseOverGround,
+                            float    _speedOverGround
                            ):
-    ctdDateTime  (_ctdDateTime),
-    gpsStartTime (_gpsStartTime),
-    sipperFileId (_sipperFileId),
-    avgScanLine  (_avgScanLine),
-    avgLatitude  (_avgLatitude),
-    avgLongitude (_avgLongitude),
-    avgFlowRate  (_avgFlowRate)
+    gpsUtcTime       (_gpsUtcTime),
+    latitude         (_latitude),
+    longitude        (_longitude),
+    courseOverGround (_courseOverGround),
+    speedOverGround  (_speedOverGround)
 {
 }
 

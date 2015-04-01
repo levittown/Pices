@@ -95,8 +95,16 @@ namespace PicesCommander
             longitudeMax = dp.AvgLongitude;
           if  (dp.AvgLongitude < longitudeMin)
             longitudeMin = dp.AvgLongitude;
+
+          if (dp.GPSStartTime > gpsDateTimeEnd)
+            gpsDateTimeEnd = dp.GPSStartTime;
+
+          if (dp.GPSStartTime < gpsDateTimeStart)
+            gpsDateTimeStart = dp.GPSStartTime;
         }
       }
+
+
 
       /** Returns true if this series Min/Max place it with in the threshold area of the specified point. */
       public  bool  WithInThreshold (double  longitude,  double longTh,
@@ -144,12 +152,6 @@ namespace PicesCommander
               }
             }
           }
-
-          if  (dp.GPSStartTime > gpsDateTimeEnd)
-            gpsDateTimeEnd = dp.GPSStartTime;
-
-          if  (dp.GPSStartTime < gpsDateTimeStart)
-            gpsDateTimeStart = dp.GPSStartTime;
 
           index++;
         }
@@ -412,13 +414,13 @@ namespace PicesCommander
 
       foreach (PicesGPSDataPoint dp in gpsData)
       {
-        if  ((Math.Abs (dp.AvgLongitude ) < 0.1)  ||  (Math.Abs (dp.AvgLatitude) < 0.1))
+        if  ((Math.Abs (dp.Longitude ) < 0.1)  ||  (Math.Abs (dp.Latitude) < 0.1))
           continue;
-        if  ((dp.AvgLatitude == lastLat)  &&  (dp.AvgLongitude == lastLong))
+        if  ((dp.Latitude == lastLat)  &&  (dp.Longitude == lastLong))
           continue;
         fliteredGPSData.Add (dp);
-        lastLong = dp.AvgLongitude;
-        lastLat  = dp.AvgLatitude;
+        lastLong = dp.Longitude;
+        lastLat  = dp.Latitude;
       }
 
       gpsData = fliteredGPSData;
@@ -435,8 +437,8 @@ namespace PicesCommander
         double  totalSquareDistSquare = 0.0;
         for  (int x = 0;  x < (gpsData.Count - 1);  ++x)
         {
-          double  deltaLong  = gpsData[x + 1].AvgLongitude - gpsData[x].AvgLongitude;
-          double  deltaLat   = gpsData[x + 1].AvgLatitude  - gpsData[x].AvgLatitude;
+          double  deltaLong  = gpsData[x + 1].Longitude - gpsData[x].Longitude;
+          double  deltaLat   = gpsData[x + 1].Latitude  - gpsData[x].Latitude;
           double  squareDist = deltaLong * deltaLong + deltaLat * deltaLat;
           totalSquareDist += squareDist;
           totalSquareDistSquare += squareDist * squareDist;
@@ -565,39 +567,36 @@ namespace PicesCommander
       PicesGPSDataPointList  gpsData    = dataSeries.data;
       PicesSipperDeployment  deployment = dataSeries.deployment;
         
-      TimeSpan adjToTime    = deployment.SyncTimeStampActual - deployment.SyncTimeStampCTD;
-      TimeSpan adjToGPSTime = deployment.SyncTimeStampGPS    - deployment.SyncTimeStampCTD;
+      TimeSpan  adjGpsToActTime = deployment.SyncTimeStampActual - deployment.SyncTimeStampCTD;
+      TimeSpan  adjGpsToCTDTime = deployment.SyncTimeStampCTD    - deployment.SyncTimeStampGPS;
 
-      DateTime startDateTime = new DateTime (1, 1, 1, 1, 1, 1);
-      DateTime startTime     = new DateTime (1, 1, 1, 1, 1, 1);
-      DateTime endTime       = new DateTime (1, 1, 1, 1, 1, 1);
+      DateTime startTimeGps  = new DateTime (1, 1, 1, 1, 1, 1);
+      DateTime endTimeGps    = new DateTime (1, 1, 1, 1, 1, 1);
       if  (gpsData.Count > 0)
       {
-        startDateTime = gpsData[0].CtdDateTime;
-        startTime = gpsData[0].GPSStartTime;
-        if  (startTime.CompareTo (minGpsDateTime) < 0)
-          minGpsDateTime = startTime;
+        startTimeGps = gpsData[0].GpsUtcTime;
+        if  (startTimeGps.CompareTo (minGpsDateTime) < 0)
+          minGpsDateTime = startTimeGps;
       }
 
       if  (gpsData.Count > 1)
       {
-        endTime = gpsData[gpsData.Count - 1].GPSStartTime;
-        if  (endTime.CompareTo (maxGpsDateTime) > 0)
-          maxGpsDateTime = endTime;
+        endTimeGps = gpsData[gpsData.Count - 1].GpsUtcTime;
+        if  (endTimeGps.CompareTo (maxGpsDateTime) > 0)
+          maxGpsDateTime = endTimeGps;
       }
 
-      startDateTime.Add (adjToTime);
-      startTime.Add (adjToTime);
-      endTime.Add (adjToTime);
-      
-      String  startTimeStr = startTime.Hour.ToString ("00") + ":" + startTime.Minute.ToString ("00");
-      String  endTimeStr   = endTime.Hour.ToString   ("00") + ":" + endTime.Minute.ToString   ("00");
+      DateTime startTimeAct = startTimeGps.Add (adjGpsToActTime);
+      DateTime endTimeAct   = endTimeGps.Add   (adjGpsToActTime);
+
+      String startTimeStr = startTimeAct.Hour.ToString("00") + ":" + startTimeAct.Minute.ToString("00");
+      String endTimeStr   = endTimeAct.Hour.ToString("00")   + ":" + endTimeAct.Minute.ToString("00");
 
       String  legend = deployment.StationName;
       if  (!String.IsNullOrEmpty (deployment.DeploymentNum))
         legend += "-" + deployment.DeploymentNum;
 
-      legend += " (" + startDateTime.ToString ("MMM/dd HH:mm") +")";
+      legend += " (" + startTimeAct.ToString("MMM/dd HH:mm") + ")";
 
       Series s = new Series (legend);
       s.ChartType = SeriesChartType.Point;
@@ -607,13 +606,15 @@ namespace PicesCommander
       s.BorderWidth = 2;
 
       s.Points.Clear ();
+
+      if  (dataSeries.latitudeMin  < minY)  minY = dataSeries.latitudeMin;
+      if  (dataSeries.latitudeMax  > maxY)  maxY = dataSeries.latitudeMax;
+      if  (dataSeries.longitudeMin < minX)  minX = dataSeries.longitudeMin;
+      if  (dataSeries.longitudeMax > maxX)  maxX = dataSeries.longitudeMax;
+
       foreach  (PicesGPSDataPoint  dp in gpsData)
       {
-        if  (dp.AvgLatitude  < minY)   minY = dp.AvgLatitude;
-        if  (dp.AvgLatitude  > maxY)   maxY = dp.AvgLatitude;
-        if  (dp.AvgLongitude < minX)   minX = dp.AvgLongitude;
-        if  (dp.AvgLongitude > maxX)   maxX = dp.AvgLongitude;
-        DataPoint dataPoint = new DataPoint (dp.AvgLongitude, dp.AvgLatitude);
+        DataPoint dataPoint = new DataPoint (dp.Longitude, dp.Latitude);
         s.Points.Add (dataPoint);
       }
 
@@ -955,13 +956,21 @@ namespace PicesCommander
         PicesGPSDataPointList  gpsData    = dstp.data;
         PicesSipperDeployment  deployment = dstp.deployment;
 
-        tw.WriteLine ("Deployment" + "\t" + deployment.CruiseName + "\t" + deployment.StationName + "\t" + deployment.DeploymentNum);
-        tw.WriteLine ("DeploymentDescription" + "\t" +  deployment.Description);
+        tw.WriteLine ("Deployment"            + "\t" + deployment.CruiseName + "\t" + deployment.StationName + "\t" + deployment.DeploymentNum);
+        tw.WriteLine ("DeploymentDescription" + "\t" + deployment.Description);
+        tw.WriteLine ("SyncTimeStampActual"   + "\t" + deployment.SyncTimeStampActual.ToString ("yyyy/MM/dd HH:mm:ss"));
+        tw.WriteLine ("SyncTimeStampCTD"      + "\t" + deployment.SyncTimeStampCTD.ToString ("yyyy/MM/dd HH:mm:ss"));
+        tw.WriteLine ("SyncTimeStampGPS"      + "\t" + deployment.SyncTimeStampGPS.ToString ("yyyy/MM/dd HH:mm:ss"));
 
-        tw.WriteLine ("CtdDateTime" + "\t" + "AvgLongitude" + "\t" + "AvgLatitude" + "\t" + "StdGps");
+        tw.WriteLine("GpsUtcTime" + "\t" + "Longitude" + "\t" + "Latitude" + "\t" + "StdGps" + "\t" + "COG" + "\t" + "SOG(kts)");
         foreach  (PicesGPSDataPoint dp in gpsData)
         {
-          tw.WriteLine (dp.CtdDateTime.ToString ("yyyy/MM/dd HH:mm:ss") + "\t" + dp.AvgLongitude.ToString ("##0.00000000") + "\t" + dp.AvgLatitude.ToString ("##0.00000000") + "\t" + PicesMethods.LatitudeLongitudeToString (dp.AvgLatitude , dp.AvgLongitude));;
+          tw.WriteLine (dp.GpsUtcTime.ToString ("yyyy/MM/dd HH:mm:ss") + "\t" + 
+                        dp.Longitude.ToString ("##0.00000000") + "\t" + dp.Latitude.ToString ("##0.00000000") + "\t" + 
+                        PicesMethods.LatitudeLongitudeToString (dp.Latitude , dp.Longitude) + "\t" +
+                        dp.CourseOverGround.ToString ("##0.0") + "\t" +
+                        dp.SpeedOverGround.ToString ("##0.0")
+                        );
         }
         tw.WriteLine ("----EndOfDeoploymemt----");
         tw.WriteLine ();
