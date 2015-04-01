@@ -123,7 +123,6 @@ namespace PicesInterface
 
 
 
-
     //*******************************************************************************************
     void  FeatureDataInsertRow (String^              _sipperFileName,
                                 PicesFeatureVector^  _example

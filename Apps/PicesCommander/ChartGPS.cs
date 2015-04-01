@@ -86,21 +86,21 @@ namespace PicesCommander
       {
         foreach  (PicesGPSDataPoint  dp in data)
         {
-          if  (dp.AvgLatitude > latitudeMax)
-            latitudeMax = dp.AvgLatitude;
-          if  (dp.AvgLatitude < latitudeMin)
-            latitudeMin = dp.AvgLatitude;
+          if  (dp.Latitude > latitudeMax)
+            latitudeMax = dp.Latitude;
+          if  (dp.Latitude < latitudeMin)
+            latitudeMin = dp.Latitude;
 
-          if  (dp.AvgLongitude > longitudeMax)
-            longitudeMax = dp.AvgLongitude;
-          if  (dp.AvgLongitude < longitudeMin)
-            longitudeMin = dp.AvgLongitude;
+          if  (dp.Longitude > longitudeMax)
+            longitudeMax = dp.Longitude;
+          if  (dp.Longitude < longitudeMin)
+            longitudeMin = dp.Longitude;
 
-          if (dp.GPSStartTime > gpsDateTimeEnd)
-            gpsDateTimeEnd = dp.GPSStartTime;
+          if (dp.GpsUtcTime > gpsDateTimeEnd)
+            gpsDateTimeEnd = dp.GpsUtcTime;
 
-          if (dp.GPSStartTime < gpsDateTimeStart)
-            gpsDateTimeStart = dp.GPSStartTime;
+          if (dp.GpsUtcTime < gpsDateTimeStart)
+            gpsDateTimeStart = dp.GpsUtcTime;
         }
       }
 
@@ -136,12 +136,12 @@ namespace PicesCommander
         int  index = 0;
         foreach  (PicesGPSDataPoint dp in data)
         {
-          if  ((dp.AvgLongitude >= longitudeMin)  &&  (dp.AvgLongitude <= longitudeMax))
+          if  ((dp.Longitude >= longitudeMin)  &&  (dp.Longitude <= longitudeMax))
           {
-            if  ((dp.AvgLatitude >= latitudeMin)  &&  (dp.AvgLatitude <= latitudeMax))
+            if  ((dp.Latitude >= latitudeMin)  &&  (dp.Latitude <= latitudeMax))
             {
-              double  deltaLatitude  = (dp.AvgLatitude  - latitude)  / latTh;
-              double  deltaLongitude = (dp.AvgLongitude - longitude) / longTh;
+              double  deltaLatitude  = (dp.Latitude  - latitude)  / latTh;
+              double  deltaLongitude = (dp.Longitude - longitude) / longTh;
 
               double  squareDist = deltaLatitude * deltaLatitude + deltaLongitude * deltaLongitude;
               if  (squareDist < closestPointSquareDist)
@@ -1028,11 +1028,9 @@ namespace PicesCommander
       e.Value = m;
     }
 
-
     PicesGPSDataPoint  lastClosestPoint       = null;
     int                lastClosestSeriesIndex = -1;
     int                lastClosestPointIndex  = -1;
-
 
     private  void  HighLightClosestPoint (int                closestPointSeriesIndex,
                                           int                closestPointPointIndex,
@@ -1056,7 +1054,7 @@ namespace PicesCommander
       {
         if  ((closestPointPointIndex >= 0)  &&  (closestPointPointIndex < ProfileChart.Series[closestPointSeriesIndex].Points.Count))
         {
-          ProfileChart.Series[closestPointSeriesIndex].Points[closestPointPointIndex].Label = closestPoint.CtdDateTime.ToString ("HH:mm");
+          ProfileChart.Series[closestPointSeriesIndex].Points[closestPointPointIndex].Label = closestPoint.GpsUtcTime.ToString ("HH:mm");
           ProfileChart.Series[closestPointSeriesIndex].Points[closestPointPointIndex].MarkerSize = ProfileChart.Series[closestPointSeriesIndex].MarkerSize * 3;
           lastClosestPoint       = closestPoint;
           lastClosestSeriesIndex = closestPointSeriesIndex;
@@ -1144,14 +1142,14 @@ namespace PicesCommander
       if  (closestPoint != null)
       { 
         HighLightClosestPoint (closestPointSeriesIndex, closestPointIndex, closestPoint);
-        String  gpsStr = PicesMethods.LatitudeLongitudeToString (closestPoint.AvgLatitude, closestPoint.AvgLongitude);
+        String  gpsStr = PicesMethods.LatitudeLongitudeToString (closestPoint.Latitude, closestPoint.Longitude);
         CurGPSLocation.Text = gpsStr;
 
         if  (closestDeployment != null)
         {
           float   cog = 0.0f;
           float   sog = 0.0f;
-          GetCogSogInfo (closestDeployment, closestPoint.CtdDateTime, ref cog, ref sog);
+          GetCogSogInfo (closestDeployment, closestPoint.GpsUtcTime, ref cog, ref sog);
           COGField.Text = cog.ToString ("##0.0") + "deg's";
           SOGField.Text = sog.ToString ("#0.0") + " kts";
           DeploymentHighlighted.Text = closestDeployment.ShortDescription;
