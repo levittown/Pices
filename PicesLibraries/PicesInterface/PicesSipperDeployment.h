@@ -70,9 +70,14 @@ namespace PicesInterface
   public:
     PicesSipperDeploymentList ();
 
-    // Will take ownership of contents of 'stations'  but not the list itself.
-    // the caler will still be responsable for deleting the list('stations').
-    PicesSipperDeploymentList (SipperDeploymentListPtr  stations);
+    // Will take ownership of contents of 'deployments' but not the list itself.
+    // the caller will still be responsible for deleting the list('deployments').
+    PicesSipperDeploymentList (SipperDeploymentListPtr  deployments);
+
+    
+    array<String^>^  ExtractStationNames ();
+
+
 
   private:
     ~PicesSipperDeploymentList ();

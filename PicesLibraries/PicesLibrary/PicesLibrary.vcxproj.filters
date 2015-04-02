@@ -63,9 +63,6 @@
     <ClInclude Include="DataBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DataBaseGpsData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DataBaseImage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -291,9 +288,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DataBase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DataBaseGpsData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DataBaseImage.cpp">

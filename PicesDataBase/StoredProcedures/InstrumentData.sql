@@ -325,7 +325,7 @@ drop procedure if exists  InstrumentDataGetMidPointOfDeployment;
 drop function  if exists  InstrumentDataGetMidPointOfDeployment;
 
 delimiter //
-create function  InstrumentDataGetMidPointOfDeployment (_cruiseName      varChar(64),
+create function  InstrumentDataGetMidPointOfDeployment (_cruiseName      varChar(10),
                                                         _stationName     varChar(10),
                                                         _deploymentNum   varChar(4)
                                                        )
@@ -376,7 +376,7 @@ delimiter ;
 drop procedure if exists  InstrumentDataGetMidPointOfDeployment2;
 
 delimiter //
-create procedure  InstrumentDataGetMidPointOfDeployment2 (_cruiseName      varChar(64),
+create procedure  InstrumentDataGetMidPointOfDeployment2 (_cruiseName      varChar(10),
                                                           _stationName     varChar(10),
                                                           _deploymentNum   varChar(4)
                                                          )
@@ -403,7 +403,7 @@ delimiter ;
 drop procedure if exists  InstrumentDataByUpAndDownCast;
 
 delimiter //
-create procedure  InstrumentDataByUpAndDownCast (in  _cruiseName      varChar(64),
+create procedure  InstrumentDataByUpAndDownCast (in  _cruiseName      varChar(10),
                                                  in  _stationName     varChar(10),
                                                  in  _deploymentNum   varChar(4),
                                                  in  _className       varChar(64),
@@ -512,7 +512,7 @@ drop procedure if exists  InstrumentDataByUpAndDownCastUnfiltered;
 
 
 delimiter //
-create procedure InstrumentDataByUpAndDownCastUnfiltered (in  _cruiseName      varChar(64),
+create procedure InstrumentDataByUpAndDownCastUnfiltered (in  _cruiseName      varChar(10),
                                                           in  _stationName     varChar(10),
                                                           in  _deploymentNum   varChar(4),
                                                           in  _className       varChar(64),
@@ -625,7 +625,7 @@ drop procedure if exists  InstrumentDataByUpAndDownCast2;
 
 DELIMITER $$
 
-CREATE DEFINER=`root`@`localhost` procedure `InstrumentDataByUpAndDownCast2`(in  _cruiseName      varChar(64),
+CREATE DEFINER=`root`@`localhost` procedure `InstrumentDataByUpAndDownCast2`(in  _cruiseName      varChar(10),
                                                                              in  _stationName     varChar(10),
                                                                              in  _deploymentNum   varChar(4)
                                                                             )
@@ -677,11 +677,6 @@ delimiter ;
 
 
 
-
-
-
-
-
 /**********************************************************************************************************************/
 drop procedure  if exists InstrumentDataByDepth;
 
@@ -703,10 +698,7 @@ begin
     set  _classId = -1;
   end if;
 
-
   drop  temporary table if exists  ImageCountStats;
-
-
 
   create TEMPORARY table ImageCountStats
    (
@@ -1119,41 +1111,79 @@ delimiter ;
 
 
 
-
 drop procedure  if exists InstrumentDataRetrieveGpsInfo;
 delimiter //
 
-create procedure  InstrumentDataRetrieveGpsInfo (in  _cruiseName      varChar(64),
-                                                 in  _stationName     varChar(64),
+create procedure  InstrumentDataRetrieveGpsInfo (in  _cruiseName      varChar(10),
+                                                 in  _stationName     varChar(10),
                                                  in  _deploymentNum   varChar(4),
                                                  in  _timeInterval    int
                                                 )
 begin
+  declare  _ctdDateTime  DateTime;
+  declare  _utcDateTime  DateTime;
+  declare  _latitude     double;
+  declare  _longitude    double;
+  declare  _gpsAdjSecs   int   default null;
+  declare  ExitLoop      bool  default  false;
+
+  declare cur1 cursor for  select  id.CTDDateTime                                         as  CTDDateTime,
+                                   date_add(id.CTDDateTime, INTERVAL _gpsAdjSecs SECOND)  as  UtcDateTime,
+                                   avg(id.Latitude)                                       as  Latitude,
+                                   avg(id.Longitude)                                      as  Longitude
+                                 from InstrumentData id
+                                 join (SipperFiles sf) on (sf.SipperFileId = id.SipperFileId)
+                                 where sf.CruiseName    = _cruiseName     and 
+                                       sf.StationName   = _stationName    and 
+                                       sf.deploymentNum = _deploymentNum  and 
+                                       id.FlowRate1 > 0
+                                 group by sf.CruiseName, sf.StationName, sf.DeploymentNum,
+                                       floor(UNIX_TIMESTAMP(date_add(id.CTDDateTime, INTERVAL _gpsAdjSecs SECOND)) / _timeInterval);
+
+  declare continue HANDLER for not found set ExitLoop = true;
+
   select d.SyncTimeStampCTD, d.SyncTimeStampGPS  into  @syncCTD, @syncGPS
     from  Deployments d  where d.CruiseName = _cruiseName  and  d.StationName = _stationName  and  (d.DeploymentNum = _deploymentNum   or  _deploymentNum is null  or  _deploymentNum = "")  limit 1;
 
-  set  @gpsAdjSecs = TO_SECONDS(@syncGPS) - TO_SECONDS(@syncCTD);
+  set  _gpsAdjSecs = TO_SECONDS(@syncGPS) - TO_SECONDS(@syncCTD);
   
-  select  id.CTDDateTime                                         as  CTDDateTime,
-          date_add(id.CTDDateTime, INTERVAL @gpsAdjSecs SECOND)  as  GpsStartTime,
-          sf.SipperFileId                                        as  SipperFileId,
-          avg(id.ScanLine)                                       as  AvgScanLine,
-          avg(id.Latitude)                                       as  AvgLatitude,
-          avg(id.Longitude)                                      as  AvgLongitude,
-          avg(FlowRate1)                                         as  AvgFlowRate
-     from InstrumentData id
-     join (SipperFiles sf) on (sf.SipperFileId = id.SipperFileId)
-     where sf.CruiseName    = _cruiseName     and 
-           sf.StationName   = _stationName    and 
-           sf.deploymentNum = _deploymentNum  and 
-           id.FlowRate1 > 0
-     group by sf.CruiseName, 
-	            sf.StationName, 
-              sf.DeploymentNum,
-              floor(UNIX_TIMESTAMP(date_add(id.CTDDateTime, INTERVAL @gpsAdjSecs SECOND)) / _timeInterval);
+  drop  temporary table if exists  GpsTempData;
+
+  create TEMPORARY table GpsTempData
+   (
+     CTDDateTime       DateTime,
+     UtcDateTime       DateTime,
+     Latitude          double  default 0.0,
+     Longitude         double  default 0.0,
+     courseOverGround  float   default 0.0,
+     SpeedOverGround   float   default 0.0
+   );
+
+  open cur1;
+
+  TheMainLoop:  loop
+
+    fetch  cur1 into _ctdDateTime, _utcDateTime, _latitude, _longitude;
+    if ExitLoop then
+       close  cur1;
+       leave  TheMainLoop;
+    end if;
+    
+    call  GpsDataGetEstimate (_cruiseName, _utcDateTime, @longitude, @longitude, @cog, @sog);
+
+    insert  into GpsTempData  values (_ctdDateTime, _utcDateTime, _latitude, _longitude, @cog, @sog);
+  end loop  TheMainLoop;
+
+
+  select  * from  GpsTempData  order by  UtcDateTime;
+
+  /* drop  temporary table if exists  GpsTempData; */
 end
 //
 delimiter ;
+
+
+
 
 
 
@@ -1266,8 +1296,8 @@ begin
   declare  _syncCtdDateTime   datetime;
   
   declare  _stationName       char(10); 
-  declare  _deploymentNum     char(10);
-  declare  _sipperFileName    char(64)  default null;
+  declare  _deploymentNum     char(4);
+  declare  _sipperFileName    char(48)  default null;
   
   declare  _deltaGpsCtdSecs   int  default 0;
   

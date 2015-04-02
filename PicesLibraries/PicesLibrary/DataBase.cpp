@@ -37,6 +37,7 @@ using namespace std;
 using namespace KKB;
 
 // SipperInstruments Library
+#include "GPSDataPoint.h"
 #include "InstrumentDataFileManager.h"
 #include "SipperFile.h"
 #include "SipperStation.h"
@@ -2391,13 +2392,14 @@ vector<KKB::ulong>*  DataBase::FeatureDataGetScanLinesPerMeterProfile (const KKS
 //*******************************************************************************************
 //*******************************************************************************************
 
-DataBaseGpsDataListPtr   DataBase::GpsDataProcessResults ()
+GPSDataPointListPtr   DataBase::GpsDataProcessResults ()
 {
-  ResultSetLoad (DataBaseGpsData::FieldList ());
+  char const *const   fieldList[] = {"CruiseName", "UtcDateTime", "Latitude", "Longitude", "CourseOverGround", "SpeedOverGround", NULL};
+  ResultSetLoad (fieldList);
   if  (!resultSetMore)
     return  NULL;
 
-  DataBaseGpsDataListPtr  results = new DataBaseGpsDataList ();
+  GPSDataPointListPtr  results = new GPSDataPointList (true);
 
   KKStr     cruiseName;
   DateTime  utcDateTime;
@@ -2415,7 +2417,7 @@ DataBaseGpsDataListPtr   DataBase::GpsDataProcessResults ()
     courseOverGround = ResultSetGetFloatField    (4);
     speedOverGround  = ResultSetGetFloatField    (5);
 
-    DataBaseGpsDataPtr  gpsData = new DataBaseGpsData (cruiseName, utcDateTime, latitude, longitude, courseOverGround, speedOverGround);
+    GPSDataPointPtr  gpsData = new GPSDataPoint (utcDateTime, latitude, longitude, courseOverGround, speedOverGround);
     results->PushOnBack (gpsData);
   }
 
@@ -2426,8 +2428,9 @@ DataBaseGpsDataListPtr   DataBase::GpsDataProcessResults ()
 
 
 
-
-void    DataBase::GpsDataInsert (const DataBaseGpsData&  gpsData)
+void    DataBase::GpsDataInsert (const KKStr&         cruiseName,
+                                 const GPSDataPoint&  gpsData
+                                )
 {
   if  (!allowUpdates)
   {
@@ -2435,8 +2438,8 @@ void    DataBase::GpsDataInsert (const DataBaseGpsData&  gpsData)
     return;
   }
 
-  KKStr  insertStr = "call GpsDataInsert(" + gpsData.CruiseName ().QuotedStr ( )                        + ", " +
-                                             gpsData.UtcDateTime ().YYYY_MM_DD_HH_MM_SS ().QuotedStr () + ", " +
+  KKStr  insertStr = "call GpsDataInsert(" + cruiseName.QuotedStr ( )                                   + ", " +
+                                             gpsData.GpsUtcTime ().YYYY_MM_DD_HH_MM_SS ().QuotedStr () + ", " +
                                              StrFormatDouble (gpsData.Latitude  (), "###0.0000000")     + ", " + 
                                              StrFormatDouble (gpsData.Longitude (), "###0.0000000")     + ", " +
                                              StrFormatDouble (gpsData.CourseOverGround (), "##0.0000")  + ", " +
@@ -2452,24 +2455,52 @@ void    DataBase::GpsDataInsert (const DataBaseGpsData&  gpsData)
 
 
 
-DataBaseGpsDataListPtr   DataBase::GpsDataQuery (const KKStr&     cruiseName,
-                                                 const DateTime&  utcDateTimeStart,
-                                                 const DateTime&  utcDateTimeEnd
-                                                )
+GPSDataPointListPtr   DataBase::GpsDataQuery (const KKStr&     cruiseName,
+                                              const DateTime&  utcDateTimeStart,
+                                              const DateTime&  utcDateTimeEnd
+                                             )
 {
-  DataBaseGpsDataListPtr   results = NULL;
+  GPSDataPointListPtr   results = NULL;
 
   KKStr  queryStr = "call GpsDataQuery(" + cruiseName.QuotedStr ( )                             + ", " +
                                            utcDateTimeStart.YYYY_MM_DD_HH_MM_SS ().QuotedStr () + ", " +
-                                           utcDateTimeEnd.YYYY_MM_DD_HH_MM_SS ().QuotedStr ()   + ", " +
+                                           utcDateTimeEnd.YYYY_MM_DD_HH_MM_SS ().QuotedStr ()   +
                                         ")";
-  
+
   kkint32  returnCd = QueryStatement (queryStr);
   if  (returnCd == 0)
     results = GpsDataProcessResults ();
 
   return results;
 }  /* GpsDataQuery*/
+
+
+
+
+GPSDataPointListPtr   DataBase::GpsDataQueryByIntervals (const KKStr&     cruiseName,
+                                                         const DateTime&  utcDateTimeStart,
+                                                         const DateTime&  utcDateTimeEnd,
+                                                         kkint32          timeInterval
+                                                        )
+{
+  GPSDataPointListPtr   results = NULL;
+
+  KKStr  queryStr = "call GpsDataQueryByIntervals(" + cruiseName.QuotedStr ( )                             + ", " +
+                                                      utcDateTimeStart.YYYY_MM_DD_HH_MM_SS ().QuotedStr () + ", " +
+                                                      utcDateTimeEnd.YYYY_MM_DD_HH_MM_SS ().QuotedStr ()   + ", " + 
+                                                      StrFormatDouble (timeInterval, "###0")              +
+                                                ")";
+
+  kkint32  returnCd = QueryStatement (queryStr);
+  if  (returnCd == 0)
+    results = GpsDataProcessResults ();
+
+  return results;
+}  /* GpsDataQuery*/
+
+
+
+
 
 
 
@@ -6769,7 +6800,7 @@ GPSDataPointListPtr DataBase::InstrumentDataRetrieveGPSInfo (const KKStr&  cruis
   if  (returnCd != 0)
     return  NULL;
 
-  char const *  fieldNames[] = {"CTDDateTime", "GpsStartTime", "SipperFileId", "AvgScanLine", "AvgLatitude", "AvgLongitude", "AvgFlowRate", NULL};
+  char const *  fieldNames[] = {"CTDDateTime", "UtcDateTime", "Latitude", "Longitude", "courseOverGround", "SpeedOverGround", NULL};
   ResultSetLoad (fieldNames);
   if  (!resultSetMore)
   {
@@ -6781,13 +6812,11 @@ GPSDataPointListPtr DataBase::InstrumentDataRetrieveGPSInfo (const KKStr&  cruis
   while  (ResultSetFetchNextRow ())
   {
     GPSDataPointPtr  stat 
-      = new GPSDataPoint (ResultSetGetDateTimeField        (0),   /**< CTDDateTime  */
-                          ResultSetGetDateTimeField        (1),   /**< GpsStartTime */
-                          ResultSetGetIntField             (2),   /**< SipperFileId */
-                          (kkuint32)ResultSetGetFloatField (3),   /**< AvgScanLine  */
-                          ResultSetGetDoubleField          (4),   /**< AvgLatitude  */
-                          ResultSetGetDoubleField          (5),   /**< AvgLongitude */
-                          ResultSetGetFloatField           (6)    /**< AvgFlowRate  */
+      = new GPSDataPoint (ResultSetGetDateTimeField (1),   /**< GpsUtcTime        */
+                          ResultSetGetDoubleField   (2),   /**< Latitude          */
+                          ResultSetGetDoubleField   (3),   /**< Longitude         */
+                          ResultSetGetFloatField    (4),   /**< CourseOverGround  */
+                          ResultSetGetFloatField    (5)    /**< SpeedOverGround   */
                          );
     results->PushOnBack (stat);
   }

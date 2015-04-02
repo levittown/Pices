@@ -11,7 +11,7 @@
 using namespace KKB;
 
 
-#include "GPSDataPoint.h"
+#include "GpsDataPoint.h"
 #include "InstrumentData.h"
 #include "InstrumentDataList.h"
 #include "InstrumentDataMeans.h"
@@ -24,7 +24,6 @@ using namespace SipperHardware;
 
 
 #include "ClassStatistic.h"
-#include "DataBaseGpsData.h"
 #include "DataBaseImage.h"
 #include "DataBaseImageGroup.h"
 #include "DataBaseImageGroupEntry.h"
@@ -210,12 +209,26 @@ namespace MLL
 
 
     //***********************************************************************************
-    void    GpsDataInsert (const DataBaseGpsData&  gpsData);
+    void    GpsDataInsert (const KKStr&         cruiseName,
+                           const GPSDataPoint&  gpsData
+                          );
 
-    DataBaseGpsDataListPtr   GpsDataQuery (const KKStr&          cruiseName,
-                                           const KKB::DateTime&  utcDateTimeStart,
-                                           const KKB::DateTime&  utcDateTimeEnd
-                                          );
+    GPSDataPointListPtr   GpsDataQuery (const KKStr&          cruiseName,
+                                        const KKB::DateTime&  utcDateTimeStart,
+                                        const KKB::DateTime&  utcDateTimeEnd
+                                       );
+
+    /**
+     *@brief  Returns Summary GPSData for a specified Cruies and time range.
+     *@details  Each entry returned will be the avareage values for the range of entries that are with in 'timeInterval' seconds.
+     *  This is done by grouping by using the function      "Floor(Unix_Time(GpsUtcTime) / timeInterval)"
+     */
+    GPSDataPointListPtr   GpsDataQueryByIntervals (const KKStr&          cruiseName,
+                                                   const KKB::DateTime&  utcDateTimeStart,
+                                                   const KKB::DateTime&  utcDateTimeEnd,
+                                                   kkint32               timeInterval
+                                                  );
+
 
     void  GpsDataDelete (const KKStr&          cruiseName,
                          const KKB::DateTime&  utcDateTimeStart,
@@ -1009,7 +1022,7 @@ namespace MLL
 
     SipperDeploymentListPtr  SipperDeploymentProcessResults ();
 
-    DataBaseGpsDataListPtr   GpsDataProcessResults ();
+    GPSDataPointListPtr   GpsDataProcessResults ();
 
 
     static char**         featureDataFieldNames;

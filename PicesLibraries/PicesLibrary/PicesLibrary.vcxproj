@@ -143,7 +143,6 @@
     <ClInclude Include="CrossValidationThreeWay.h" />
     <ClInclude Include="CrossValidationVoting.h" />
     <ClInclude Include="DataBase.h" />
-    <ClInclude Include="DataBaseGpsData.h" />
     <ClInclude Include="DataBaseImage.h" />
     <ClInclude Include="DataBaseImageEntry.h" />
     <ClInclude Include="DataBaseImageGroup.h" />
@@ -221,7 +220,6 @@
     <ClCompile Include="CrossValidationThreeWay.cpp" />
     <ClCompile Include="CrossValidationVoting.cpp" />
     <ClCompile Include="DataBase.cpp" />
-    <ClCompile Include="DataBaseGpsData.cpp" />
     <ClCompile Include="DataBaseImage.cpp" />
     <ClCompile Include="DataBaseImageEntry.cpp" />
     <ClCompile Include="DataBaseImageGroup.cpp" />
