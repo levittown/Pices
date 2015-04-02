@@ -191,7 +191,7 @@ namespace SipperFile
     private  void  ValidateLongitude ()
     {
       errorProvider1.SetError (Longitude, null);
-      double longitude = PicesKKStr.StrToLatitude (Longitude.Text);
+      double longitude = PicesKKStr.StrToLongitude (Longitude.Text);
       Longitude.Text = PicesKKStr.LongitudeToStr (longitude);
     }
 

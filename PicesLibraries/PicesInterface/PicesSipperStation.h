@@ -21,7 +21,7 @@ namespace PicesInterface
   public:
     PicesSipperStation (SipperStationPtr  _station);
 
-    PicesSipperStation (PicesSipperCruise^  _cruise);  /// Creatuing a new station  that will belong to '_cruise'
+    PicesSipperStation (PicesSipperCruise^  _cruise);  /// Creating a new station  that will belong to '_cruise'
 
 
   private:
@@ -63,7 +63,7 @@ namespace PicesInterface
   {
   public:
     // Will take ownership of contents of 'stations'  but not the list itself.
-    // the caler will still be responsable for deleting the list('stations').
+    // the caller will still be responsible for deleting the list('stations').
     PicesSipperStationList (SipperStationListPtr  stations);
 
   private:

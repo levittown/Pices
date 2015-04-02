@@ -54,6 +54,8 @@ namespace PicesCommander
 
     private  TimeSpan  cruiseAdjGpsToActTime = new TimeSpan (0, 0, 0);
 
+    private  PicesSipperStationList  stations = null;
+
 
     
     private  class  PlotRequest
@@ -257,6 +259,8 @@ namespace PicesCommander
       PicesSipperDeploymentList  deployments = mainWinConn.SipperDeploymentLoad (cruiseName, "");
       if  (deployments == null)
         return;
+
+      stations = mainWinConn.SipperStationLoad (cruiseName);
 
       cruiseAdjGpsToActTime = new TimeSpan (0, 0, 0);
       long  adjGpsToActTime = 0;
@@ -627,7 +631,7 @@ namespace PicesCommander
       PicesGPSDataPointList  gpsData    = dataSeries.data;
       PicesSipperDeployment  deployment = dataSeries.deployment;
       PicesSipperCruise      cruise     = dataSeries.cruise;
-        
+
       TimeSpan  adjGpsToActTime = new TimeSpan (0, 0, 0);
       TimeSpan  adjGpsToCTDTime = new TimeSpan (0, 0, 0);
 
@@ -688,6 +692,7 @@ namespace PicesCommander
       s.ChartArea = "ChartArea1";
       s.Name = legend;
       s.XAxisType = AxisType.Primary;
+      s.MarkerStyle = MarkerStyle.Circle;
 
       s.Points.Clear ();
 
@@ -711,6 +716,40 @@ namespace PicesCommander
       dataSeries.chartSeriesIndex = ProfileChart.Series.Count;
       ProfileChart.Series.Add (s);
     }  /* AddSeriesToChart */
+
+
+
+    private  void  AddStationsToChart (double  minX,
+                                       double  maxX,
+                                       double  minY,
+                                       double  maxY
+                                      )
+    {
+      Series s = new Series ("Stations");
+      s.MarkerSize = 20;
+      s.MarkerStyle = MarkerStyle.Star5;
+      s.ChartType = SeriesChartType.Point;
+      s.ChartArea = "ChartArea1";
+      s.Name = "";
+      s.XAxisType = AxisType.Primary;
+      s.Legend = "";
+      s.Points.Clear ();
+
+      foreach  (PicesSipperStation station in stations)
+      {
+        double  lat = station.Latitude;
+        double  lon = station.Longitude;
+        if  ((lat < minY)  &&  (lat > maxY)  &&  (lon < minX)  &&  (lon > maxX))
+          continue;
+
+        DataPoint dataPoint = new DataPoint (lon, lat);
+        dataPoint.Label = station.StationName;
+        dataPoint.Font = new Font (FontFamily.GenericSerif, 12.0f);
+        s.Points.Add (dataPoint);
+      }
+
+      ProfileChart.Series.Add (s);
+    }  /* AddStationsToChart */
 
 
 
@@ -767,15 +806,18 @@ namespace PicesCommander
       foreach  (DataSeriesToPlot dstp in series)
       {
         if  (dstp.deployment != null)
+        {
           AddSeriesToChart (dstp, ref minX, ref maxX, ref minY, ref maxY, ref minGpsDateTime, ref maxGpsDateTime);
+        }
       }
-
       
+      AddStationsToChart (minX, maxX, minY, maxY);
+
       double  latitudeMid = (maxY + minY) / 2.0;
 
       float  plotAreaHeight = ProfileChart.Height;
       float  plotAreaWidth  = ProfileChart.Width;
-      
+
       double  xRange = maxX - minX;
       double  yRange = maxY - minY;
       double  xRangeAdj = xRange * Math.Cos(latitudeMid * degToRad);
@@ -1143,8 +1185,11 @@ namespace PicesCommander
       {
         if  ((lastClosestPointIndex >= 0)  &&  (lastClosestPointIndex < ProfileChart.Series[lastClosestSeriesIndex].Points.Count))
         {
-          ProfileChart.Series[lastClosestSeriesIndex].Points[lastClosestPointIndex].Label = "";
-          ProfileChart.Series[lastClosestSeriesIndex].Points[lastClosestPointIndex].MarkerSize = ProfileChart.Series[closestPointSeriesIndex].MarkerSize;
+          Series  s = ProfileChart.Series[lastClosestSeriesIndex];
+          DataPoint dp = s.Points[lastClosestPointIndex];
+          dp.Label = "";
+          dp.MarkerSize  = s.MarkerSize;
+          dp.MarkerStyle = s.MarkerStyle;
         }
       }
 
@@ -1156,8 +1201,12 @@ namespace PicesCommander
       {
         if  ((closestPointPointIndex >= 0)  &&  (closestPointPointIndex < ProfileChart.Series[closestPointSeriesIndex].Points.Count))
         {
-          ProfileChart.Series[closestPointSeriesIndex].Points[closestPointPointIndex].Label = adjDateTime.ToString ("HH:mm");
-          ProfileChart.Series[closestPointSeriesIndex].Points[closestPointPointIndex].MarkerSize = ProfileChart.Series[closestPointSeriesIndex].MarkerSize * 3;
+          Series  s = ProfileChart.Series[closestPointSeriesIndex];
+          DataPoint dp = s.Points[closestPointPointIndex];
+
+          dp.Label = adjDateTime.ToString ("HH:mm");
+          dp.MarkerStyle = MarkerStyle.Diamond;
+          dp.MarkerSize = s.MarkerSize * 3;
           lastClosestPoint       = closestPoint;
           lastClosestSeriesIndex = closestPointSeriesIndex;
           lastClosestPointIndex  = closestPointPointIndex;

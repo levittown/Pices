@@ -29,7 +29,7 @@ using namespace System::Windows::Forms;
 
 PicesSipperDeployment::PicesSipperDeployment (String^  _cruiseName,
                                               String^  _stationName
-                                              ):
+                                             ):
   deployment (new SipperDeployment ())
 
 {
@@ -190,4 +190,25 @@ PicesSipperDeploymentList::!PicesSipperDeploymentList ()
 {
 }
 
+
+
+
+array<String^>^  PicesSipperDeploymentList::ExtractStationNames ()
+{
+  Dictionary<String^,String^>^  stionNames = gcnew Dictionary<String^,String^>();
+
+  for each (PicesSipperDeployment^  d in this)
+  {
+    if  (!(stionNames->ContainsKey (d->DeploymentNum)))
+    {
+      stionNames->Add (d->DeploymentNum, d->DeploymentNum);
+    }
+  }
+
+  array<String^>^   results = gcnew array<String^> ();
+
+
+
+
+}  /* ExtractStationNames */
 
