@@ -218,6 +218,18 @@ namespace MLL
                                         const KKB::DateTime&  utcDateTimeEnd
                                        );
 
+    /**
+     *@brief  Returns Summary GPSData for a specified Cruies and time range.
+     *@details  Each entry returned will be the avareage values for the range of entries that are with in 'timeInterval' seconds.
+     *  This is done by grouping by using the function      "Floor(Unix_Time(GpsUtcTime) / timeInterval)"
+     */
+    GPSDataPointListPtr   GpsDataQueryByIntervals (const KKStr&          cruiseName,
+                                                   const KKB::DateTime&  utcDateTimeStart,
+                                                   const KKB::DateTime&  utcDateTimeEnd,
+                                                   kkint32               timeInterval
+                                                  );
+
+
     void  GpsDataDelete (const KKStr&          cruiseName,
                          const KKB::DateTime&  utcDateTimeStart,
                          const KKB::DateTime&  utcDateTimeEnd

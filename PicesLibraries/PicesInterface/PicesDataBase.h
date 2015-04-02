@@ -122,6 +122,18 @@ namespace PicesInterface
 
 
 
+    ///<summary>
+    ///Returns Summary GPSData for a specified Cruies and time range.
+    ///Each entry returned will be the avareage values for the range of entries that are with in 'timeInterval' seconds.
+    /// This is done by grouping by using the function      "Floor(Unix_Time(GpsUtcTime) / timeInterval)"
+    ///</summary> 
+    PicesGPSDataPointList^   GpsDataQueryByIntervals (String^           cruiseName,
+                                                      System::DateTime  utcStart,
+                                                      System::DateTime  utcEndk,
+                                                      int               timeInterval
+                                                     );
+
+
 
     //*******************************************************************************************
     void  FeatureDataInsertRow (String^              _sipperFileName,

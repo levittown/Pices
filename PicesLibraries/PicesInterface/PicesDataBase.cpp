@@ -1897,10 +1897,36 @@ PicesGPSDataPointList^  PicesDataBase::GpsDataQuery (String^           cruiseNam
     return  nullptr;
 
   PicesGPSDataPointList^  managedGpsData = gcnew PicesGPSDataPointList (*gpsData);
+  delete  gpsData;
   gpsData = NULL;
 
   return  managedGpsData;
 }  /* GpsDataQuery */
+
+
+
+
+
+PicesGPSDataPointList^   PicesDataBase::GpsDataQueryByIntervals (String^           cruiseName,
+                                                                 System::DateTime  utcStart,
+                                                                 System::DateTime  utcEnd,
+                                                                 int               timeInterval
+                                                                )
+{
+  GPSDataPointListPtr  gpsData = dbConn->GpsDataQueryByIntervals (PicesKKStr::SystemStringToKKStr (cruiseName),
+                                                                  PicesMethods::DateTimeSystemToKKU (utcStart),
+                                                                  PicesMethods::DateTimeSystemToKKU (utcEnd),
+                                                                  timeInterval
+                                                                 );
+  if  (!gpsData)
+    return  nullptr;
+
+  PicesGPSDataPointList^  managedGpsData = gcnew PicesGPSDataPointList (*gpsData);
+  delete  gpsData;
+  gpsData = NULL;
+
+  return  managedGpsData;
+}
 
 
 

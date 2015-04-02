@@ -40,11 +40,38 @@ begin
   select  * from  GPSData gd  
      where  (gd.CruiseName  =  _CruiseName)         and
             (gd.UtcDateTime >= _UtcDateTimeStart)  and
-            (gd.UtcDateTime <= _UtcDateTimeStart);
+            (gd.UtcDateTime <= _UtcDateTimeEnd);
 end
 //
 delimiter ;
 
+
+
+
+/**********************************************************************************************************************/
+drop procedure   if exists  GpsDataQueryByIntervals;
+delimiter //
+
+create procedure  GpsDataQueryByIntervals (in  _CruiseName         char(10),
+                                           in  _UtcDateTimeStart   DateTime,
+                                           in  _UtcDateTimeEnd     DateTime,
+										   in  _timeInterval       int
+                                          )
+begin
+  select  gd.CruiseName              as  CruiseName,
+          gd.UtcDateTime             as  UtcDateTime,
+          avg (gd.latitude)          as  Latitude,
+		  avg (gd.longitude)         as  Longitude,
+		  avg (gd.CourseOverGround)  as  CourseOverGround,
+		  avg (gd.SpeedOverGround)   as  SpeedOverGround
+    from  GpsData  gd
+    where (gd.CruiseName  =  _CruiseName)        and
+          (gd.UtcDateTime >= _UtcDateTimeStart)  and
+          (gd.UtcDateTime <= _UtcDateTimeEnd)
+    group by  gd.CruiseName, floor(UNIX_TIMESTAMP(gd.UtcDateTime) / _timeInterval);
+end
+//
+delimiter ;
 
 
 

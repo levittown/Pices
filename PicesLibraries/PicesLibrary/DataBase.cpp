@@ -2464,15 +2464,42 @@ GPSDataPointListPtr   DataBase::GpsDataQuery (const KKStr&     cruiseName,
 
   KKStr  queryStr = "call GpsDataQuery(" + cruiseName.QuotedStr ( )                             + ", " +
                                            utcDateTimeStart.YYYY_MM_DD_HH_MM_SS ().QuotedStr () + ", " +
-                                           utcDateTimeEnd.YYYY_MM_DD_HH_MM_SS ().QuotedStr ()   + ", " +
+                                           utcDateTimeEnd.YYYY_MM_DD_HH_MM_SS ().QuotedStr ()   +
                                         ")";
-  
+
   kkint32  returnCd = QueryStatement (queryStr);
   if  (returnCd == 0)
     results = GpsDataProcessResults ();
 
   return results;
 }  /* GpsDataQuery*/
+
+
+
+
+GPSDataPointListPtr   DataBase::GpsDataQueryByIntervals (const KKStr&     cruiseName,
+                                                         const DateTime&  utcDateTimeStart,
+                                                         const DateTime&  utcDateTimeEnd,
+                                                         kkint32          timeInterval
+                                                        )
+{
+  GPSDataPointListPtr   results = NULL;
+
+  KKStr  queryStr = "call GpsDataQueryByIntervals(" + cruiseName.QuotedStr ( )                             + ", " +
+                                                      utcDateTimeStart.YYYY_MM_DD_HH_MM_SS ().QuotedStr () + ", " +
+                                                      utcDateTimeEnd.YYYY_MM_DD_HH_MM_SS ().QuotedStr ()   + ", " + 
+                                                      StrFormatDouble (timeInterval, "###0")              +
+                                                ")";
+
+  kkint32  returnCd = QueryStatement (queryStr);
+  if  (returnCd == 0)
+    results = GpsDataProcessResults ();
+
+  return results;
+}  /* GpsDataQuery*/
+
+
+
 
 
 
