@@ -365,7 +365,7 @@ namespace SipperDiskManager
         }
         else
         {
-          MessageBox.Show ("[" + selectedDir +"] is not a valid dirctory", "Select Desination Directory", MessageBoxButtons.OK);
+          MessageBox.Show ("[" + selectedDir +"] is not a valid directory", "Select Destination Directory", MessageBoxButtons.OK);
         }
       }
       
@@ -427,7 +427,7 @@ namespace SipperDiskManager
       selectedFiles = new SipperFileControlBlockList ();
       
       disk.ResetSipperDirectory ();
-      MessageBox.Show ("The SIPPER drive has ben reset", "Reset SIPPER Drive",  MessageBoxButtons.OK);      
+      MessageBox.Show ("The SIPPER drive has been reset", "Reset SIPPER Drive",  MessageBoxButtons.OK);      
     }
 
 

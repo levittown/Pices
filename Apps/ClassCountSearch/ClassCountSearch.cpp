@@ -729,11 +729,11 @@ ConfusionMatrix2Ptr  ClassCountSearch::GradeClassList (MLClassConstListPtr  clas
 
   specificConfig->EmptyTrainingClasses ();
 
-  FeatureVectorListPtr  specificTrainExamples = new FeatureVectorList (fileDesc, false, log, 1000);
+  FeatureVectorListPtr  specificTrainExamples = new FeatureVectorList (fileDesc, false, log);
   FeatureVectorListPtr  specificGroundTruthExamples = NULL;
 
   if  (groundTruth)
-    specificGroundTruthExamples = new FeatureVectorList (fileDesc, false, log, 1000);
+    specificGroundTruthExamples = new FeatureVectorList (fileDesc, false, log);
   
   MLClassConstList::iterator  idx;
   for  (idx = classes->begin ();  idx != classes->end ();  ++idx)

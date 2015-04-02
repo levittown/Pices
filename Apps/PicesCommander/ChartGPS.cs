@@ -178,7 +178,7 @@ namespace PicesCommander
 
       /// <summary>
       ///  cruise and deployment are mutually exclusive.  The data in this series is for either a 
-      ///  single deployment or an entire cruise.  If it is for an entore cruise it will only
+      ///  single deployment or an entire cruise.  If it is for an entire cruise it will only
       ///  contain data for the time span covers all the deployments being plotted.
       /// </summary>
 
@@ -518,19 +518,21 @@ namespace PicesCommander
         }
       }
 
-      DataSeriesToPlot  seriesToPlot = new DataSeriesToPlot (deployment, fliteredGPSData);
-      seriesToPlot.LocateGPSBounds ();
-
-      goalie.StartBlock ();
-      series.Add (seriesToPlot);
-      goalie.EndBlock ();
+      if  (fliteredGPSData.Count > 1)
+      {
+        DataSeriesToPlot  seriesToPlot = new DataSeriesToPlot (deployment, fliteredGPSData);
+        seriesToPlot.LocateGPSBounds ();
+        goalie.StartBlock ();
+        series.Add (seriesToPlot);
+        goalie.EndBlock ();
+      }
     }  /* AddDeploymentToSeries */
 
 
 
 
     /// <summary>
-    /// Load GPS data that covers the time span of all the deployments taht are being plotted.
+    /// Load GPS data that covers the time span of all the deployments that are being plotted.
     /// </summary>
     private  void  AddCruiseToSeries ()
     {
@@ -582,7 +584,6 @@ namespace PicesCommander
       timeInterval = (int)TimeInterval.Value;
 
       series = new List<DataSeriesToPlot> ();
-
       foreach  (PlotRequest pr in plotRequests)
       {
         if  (cancelRequested)
@@ -631,6 +632,9 @@ namespace PicesCommander
       PicesGPSDataPointList  gpsData    = dataSeries.data;
       PicesSipperDeployment  deployment = dataSeries.deployment;
       PicesSipperCruise      cruise     = dataSeries.cruise;
+
+      if  (gpsData.Count < 2)
+        return;
 
       TimeSpan  adjGpsToActTime = new TimeSpan (0, 0, 0);
       TimeSpan  adjGpsToCTDTime = new TimeSpan (0, 0, 0);
@@ -719,10 +723,12 @@ namespace PicesCommander
 
 
 
-    private  void  AddStationsToChart (double  minX,
-                                       double  maxX,
-                                       double  minY,
-                                       double  maxY
+
+    private  void  AddStationsToChart (PicesSipperStationList  stationsToPlot,
+                                       ref double              minX,
+                                       ref double              maxX,
+                                       ref double              minY,
+                                       ref double              maxY
                                       )
     {
       Series s = new Series ("Stations");
@@ -735,12 +741,18 @@ namespace PicesCommander
       s.Legend = "";
       s.Points.Clear ();
 
-      foreach  (PicesSipperStation station in stations)
+      foreach  (PicesSipperStation station in stationsToPlot)
       {
         double  lat = station.Latitude;
         double  lon = station.Longitude;
-        if  ((lat < minY)  &&  (lat > maxY)  &&  (lon < minX)  &&  (lon > maxX))
+
+        if  ((lat == 0.0)  &&  (lon == 0.0))
           continue;
+
+        if  (lat < minY)  minY = lat;
+        if  (lat > maxY)  maxY = lat;
+        if  (lon < minX)  minX = lon;
+        if  (lon > maxX)  maxX = lon;
 
         DataPoint dataPoint = new DataPoint (lon, lat);
         dataPoint.Label = station.StationName;
@@ -802,16 +814,28 @@ namespace PicesCommander
           AddSeriesToChart (dstp, ref minX, ref maxX, ref minY, ref maxY, ref minGpsDateTime, ref maxGpsDateTime);
       }
 
+      PicesSipperDeploymentList  deploymentsPlotted = new PicesSipperDeploymentList ();
       // Second we plot series that is specific to a deployment.
       foreach  (DataSeriesToPlot dstp in series)
       {
         if  (dstp.deployment != null)
         {
+          String  stationName = dstp.deployment.StationName;
           AddSeriesToChart (dstp, ref minX, ref maxX, ref minY, ref maxY, ref minGpsDateTime, ref maxGpsDateTime);
+          deploymentsPlotted.Add (dstp.deployment);
         }
       }
-      
-      AddStationsToChart (minX, maxX, minY, maxY);
+
+      String[]  stationNamesToPlot = deploymentsPlotted.ExtractStationNames ();
+      PicesSipperStationList  stationsToPlot = new PicesSipperStationList ();
+      foreach (String stationName in stationNamesToPlot)
+      {
+        PicesSipperStation  stationToPlot = stations.LookUpByStationName (stationName);
+        if  (stationToPlot != null)
+          stationsToPlot.Add (stationToPlot);
+      }
+
+      AddStationsToChart (stationsToPlot, ref minX, ref maxX, ref minY, ref maxY);
 
       double  latitudeMid = (maxY + minY) / 2.0;
 
@@ -1213,35 +1237,6 @@ namespace PicesCommander
         }
       }
     }  /* HighLightClosestPoint */
-
-
-
-
-    private void  GetCogSogInfo (PicesSipperDeployment deployment,
-                                 DateTime              ctdDateTime,
-                                 ref float             cog,
-                                 ref float             sog
-                                )
-    {
-      String  sqlStr = "call GpsDataGetEstimateByCTDDateTime2 (\"" + deployment.CruiseName    + "\", \""  + 
-                                                                     deployment.StationName   + "\", \""  +
-                                                                     deployment.DeploymentNum + "\", \""  +
-                                                                     ctdDateTime.ToString ("yyyy-MM-dd HH:mm:dd") + "\"" +
-                                                              ")";
-      String[]  cols = {"CourseOverGround","SpeedOverGround"};
-      String[][] results = mainWinConn.QueryStatement (sqlStr, cols);
-      if  ((results == null)  ||  (results.Length < 1)  ||  (results[0].Length < 2))
-      {
-        cog = 0.0f;
-        sog = 0.0f;
-      }
-      else
-      {
-        cog = PicesKKStr.StrToFloat (results[0][0]);
-        sog = PicesKKStr.StrToFloat (results[0][1]);
-      }
-      return;
-    }
 
 
 

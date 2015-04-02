@@ -49,13 +49,13 @@ namespace PicesCommander
 
     private  PicesGoalKeeper             blocker             = null;
     private  bool                        doneLoading         = false;  // Set to true when successfully loaded all data.  
-    private  PicesClassStatisticList     loadedStats         = null;  // Statistics will accumulate in this list
+    private  PicesClassStatisticList     loadedStats         = null;   // Statistics will accumulate in this list
     private  Thread                      loaderThread        = null;
     private  bool                        loaderThreadRuning  = false;
     private  uint                        imageCountTotal     = 0;
     private  bool                        newStatsAvailable   = false;   // Indicates if there have been any update to the stats
-                                                                           // that will be returned since the last time a call to
-                                                                           // 'GetStatsAlreadyLoadedIfNew' was made.
+                                                                        // that will be returned since the last time a call to
+                                                                        // 'GetStatsAlreadyLoadedIfNew' was made.
     private  int                         sipperFilesCount    = 0;
 
     private  PicesVolumeSampledStatList  volumeWaterSampled  = null;

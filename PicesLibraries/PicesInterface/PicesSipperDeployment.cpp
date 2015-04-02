@@ -137,6 +137,7 @@ void  PicesSipperDeployment::SyncTimeStampActual::set (System::DateTime _syncTim
 
 
 void  PicesSipperDeployment::SyncTimeStampCTD::set (System::DateTime _syncTimeStampCTD)
+
 {
   deployment->SyncTimeStampCTD (PicesMethods::DateTimeSystemToKKU (_syncTimeStampCTD));
 }
@@ -170,7 +171,7 @@ PicesSipperDeploymentList::PicesSipperDeploymentList (SipperDeploymentListPtr  d
       Add (gcnew PicesSipperDeployment (*idx));
 
     // We now own the contents of 'stations'  so set the owner flag to 'false'.
-    // this way when the caller deletes 'stations' they will not delete the cntents
+    // this way when the caller deletes 'stations' they will not delete the contents
     // which we now own and depend on.
     deployments->Owner (false);
   }
@@ -195,20 +196,25 @@ PicesSipperDeploymentList::!PicesSipperDeploymentList ()
 
 array<String^>^  PicesSipperDeploymentList::ExtractStationNames ()
 {
-  Dictionary<String^,String^>^  stionNames = gcnew Dictionary<String^,String^>();
+  Dictionary<String^,String^>^  stationNames = gcnew Dictionary<String^,String^>();
 
   for each (PicesSipperDeployment^  d in this)
   {
-    if  (!(stionNames->ContainsKey (d->DeploymentNum)))
+    if  (!(stationNames->ContainsKey (d->StationName)))
     {
-      stionNames->Add (d->DeploymentNum, d->DeploymentNum);
+      stationNames->Add (d->StationName, d->StationName);
     }
   }
 
-  array<String^>^   results = gcnew array<String^> ();
+  array<String^>^   results = gcnew array<String^> (stationNames->Count);
 
+  int  x = 0;
+  for each(KeyValuePair<String^, String^>^ entry in stationNames)
+  {
+    results[x] = entry->Key;
+    ++x;
+  }
 
-
-
+  return  results;
 }  /* ExtractStationNames */
 

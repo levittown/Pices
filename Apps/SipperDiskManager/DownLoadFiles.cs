@@ -255,7 +255,7 @@ namespace SipperDiskManager
         }
         catch  (Exception e)
         {
-          MessageBox.Show ("Error opening File[" + destFileName + "] occured." + "\n\n" + e.ToString (),
+          MessageBox.Show ("Error opening File[" + destFileName + "] occurred." + "\n\n" + e.ToString (),
                            "CopyFileList",
                            MessageBoxButtons.OK
                           );
@@ -295,8 +295,8 @@ namespace SipperDiskManager
           }
           catch  (Exception e)
           {
-            DialogResult  dr = MessageBox.Show ("Disk Error Occured trying to read SIPPER disk" + "\n\n" +
-                                                "Do you want to keep on readng?"                + "\n\n" +
+            DialogResult  dr = MessageBox.Show ("Disk Error Occurred trying to read SIPPER disk" + "\n\n" +
+                                                "Do you want to keep on reading?"                + "\n\n" +
                                                 e.ToString (),
                                                 "CopyFileList", 
                                                 MessageBoxButtons.YesNo

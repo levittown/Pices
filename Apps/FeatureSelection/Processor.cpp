@@ -53,7 +53,7 @@ using namespace  FeatureSelectionApp;
 
 /**
  @brief  Processor Constructor for managing FinalResults jobs.
- @details  Make sure the the _summaryResultsFileName is deleted before we start processing.
+ @details  Make sure the _summaryResultsFileName is deleted before we start processing.
  */
 Processor::Processor (FeatureSelectionPtr  _featureSelection,
                       int                  _processorId,
@@ -182,7 +182,7 @@ Processor::Processor (FeatureSelectionPtr  _featureSelection,
 
 
 /**
- @brief  Processor constructor for managing searcg jobs, either feature selection or parameter search.
+ @brief  Processor constructor for managing search jobs, either feature selection or parameter search.
  */
 Processor::Processor (FeatureSelectionPtr  _featureSelection,
                       bool                 _byBinaryClasses,
@@ -217,7 +217,7 @@ Processor::Processor (FeatureSelectionPtr  _featureSelection,
   firstJobAvailableForExpansion (0),
   dateTimeFirstOneFound         (false),
   highGrade                     (-1.0f),
-  mlClasses                  (NULL),
+  mlClasses                     (NULL),
   lastCpuTimeReported           (0.0),
   lockFileOpened                (false),
   lockFile                      (-1),
@@ -345,8 +345,8 @@ Processor::Processor (FeatureSelectionPtr  _featureSelection,
   if  (byBinaryClasses)
   {
     config->EmptyTrainingClasses ();
-    config->AddATrainingClass (new TrainingClass ("", Class1Name (), "F", 1.0f, *mlClasses)); 
-    config->AddATrainingClass (new TrainingClass ("", Class2Name (), "F", 1.0f, *mlClasses)); 
+    config->AddATrainingClass (new TrainingClass ("", Class1Name (), 1.0f, *mlClasses)); 
+    config->AddATrainingClass (new TrainingClass ("", Class2Name (), 1.0f, *mlClasses)); 
     config->MachineType (OneVsOne);  
   }
 
@@ -562,7 +562,7 @@ FeatureVectorListPtr  Processor::BuildOurBinaryFeatureData (FeatureVectorListPtr
     log.Level (-1) << endl
                    << endl
                    << "Processor::BuildOurBinaryFeatureData       ***ERROR***" << endl
-                   << "                                       Mismatch of Filedesc"  << endl
+                   << "                                       Mismatch of FileDesc"  << endl
                    << endl;
     osWaitForEnter ();
     exit (-1);
@@ -736,7 +736,7 @@ void  Processor::ProcessStatusFileLine (KKStrParser&  statusStr)
 
   if  (statusStr.SubStrPart (0, 1) == "//")
   {
-    // A coment line;  we can ignore it.
+    // A comment line;  we can ignore it.
     return;
   }
 
@@ -1777,7 +1777,7 @@ void  Processor::ProcessNextBestCaseExpansion (ofstream*  statusFile,
 
   if  ((numJobsCreated < 1)  &&  (binaryJobs->AreAllJobsDone ()))
   {
-    // Since we have not expanded any Jobs then we are done with doing a Beam serach and now it is time to 
+    // Since we have not expanded any Jobs then we are done with doing a Beam search and now it is time to 
     // test our results.
 
     searchMethod = smTestResults;
@@ -1849,7 +1849,7 @@ void  Processor::ProcessBeamExpansion (ofstream*  statusFile,
 
   if  ((numThatWeExpanded < 1)  &&  (binaryJobs->AreAllJobsDone ()))
   {
-    // Since we have none expanded any Jobs then we are done with doing a Beam serach and now it is time to 
+    // Since we have none expanded any Jobs then we are done with doing a Beam search and now it is time to 
     // test our results.
 
     searchMethod = smTestResults;
@@ -2067,7 +2067,7 @@ void  Processor::ProcessGridSearchExpansionMostAccurate (ofstream*  statusFile,
 
   else if  (numOfExpansions == 2)
   {
-    // This is our third expansion;  we will now do a very FINE search arround Gamma and "C".
+    // This is our third expansion;  we will now do a very FINE search around Gamma and "C".
 
     BinaryJobPtr  highestGradedJob = binaryJobs->HighestGradedJob ();
 
@@ -2077,7 +2077,7 @@ void  Processor::ProcessGridSearchExpansionMostAccurate (ofstream*  statusFile,
     gammaMin = highestGradedJob->GammaParm () / gammaGrowthRate;
     gammaMax = highestGradedJob->GammaParm () * gammaGrowthRate;
  
-    // Now calc the Growth rates for the next expansion.
+    // Now calculation the Growth rates for the next expansion.
     cGrowthRate     = CalcGrowthRate (cMin,     cMax,     8);
     gammaGrowthRate = CalcGrowthRate (gammaMin, gammaMax, 8);
     aGrowthRate     = 1.0f;
@@ -2134,9 +2134,9 @@ void  Processor::ProcessGridSearchExpansionMostAccurate (ofstream*  statusFile,
   else if  (numOfExpansions == 5)
   {
     // We will locate the job that has the smallest difference between accuracy and predicted probability and 
-    // then perform a finner search arround its neighborhood.
+    // then perform a finner search around its neighborhood.
 
-    // Because  bestC and bestGamma are being writen then read from a status file some of the lesset insignificant
+    // Because  bestC and bestGamma are being written then read from a status file some of the least insignificant
     // digits might get lost;  so we add and subtract 0.0000001 to bestGamma.
     BinaryJobListPtr  targetJobs = binaryJobs->LookUpByParameters ((bestC     - 0.00001), (bestC     + 0.00001), 
                                                                    (bestGamma - 0.00001), (bestGamma + 0.00001)
@@ -2166,7 +2166,7 @@ void  Processor::ProcessGridSearchExpansionMostAccurate (ofstream*  statusFile,
   else if  (numOfExpansions == 6)
   {
     // We will locate the job that has the smallest difference between accuracy and predicted probability and 
-    // then perform a finer search arround its neighborhod.
+    // then perform a finer search around its neighborhood.
 
     // Because  bestC and bestGamma are being written to the status file and then read back from a status file some of the least insignificant
     // digits might get lost;  so we add and subtract 0.0000001 to bestGamma.
@@ -2178,7 +2178,7 @@ void  Processor::ProcessGridSearchExpansionMostAccurate (ofstream*  statusFile,
     aMin = lowestDeltaProbAccJob->AParm () / aGrowthRate;
     aMax = lowestDeltaProbAccJob->AParm () * aGrowthRate;
 
-    // Now calc growth rate we will use for this pass.
+    // Now calculation growth rate we will use for this pass.
     aGrowthRate = CalcGrowthRate (aMin, aMax, 64);
     cGrowthRate     = 1.0f;
     gammaGrowthRate = 1.0f;
@@ -2420,7 +2420,7 @@ void  Processor::ProcessGridSearchExpansionFastestFromBest (ofstream*  statusFil
     // This is our fifth expansion
     //
     //  We are now interested in refining the 'A' probability. The best job for each 'C' and
-    //  'gamma' pair of parmaters are selected and a search of the local 'A' paraeter area.
+    //  'gamma' pair of parameters are selected and a search of the local 'A' parameter area.
     //
     BinaryJobListPtr  highestGradedJobs = binaryJobs->ExtractHighestGrade (0.3f, 10);
     highestGradedJobs->SortDeltaProbAccuarcy ();
@@ -2541,7 +2541,7 @@ void  Processor::ProcessTestJobsAndPickTheBest (ofstream*  statusFile,
 {
   log.Level (10) << "Processor::ProcessTestJobsAndPickTheBest"  << endl;
 
-  // This will be handled seperastely in a different process. 
+  // This will be handled separately in a different process. 
   // by not creating any jobs we can now terminate this search.
 
   log.Level (20) << "Processor::ProcessTestJobsAndPickTheBest         exiting"  << endl;
@@ -2787,7 +2787,7 @@ void  Processor::GenerateFinalResultsReportHTML ()
 
   r << "<br />" << endl
     << "<br />" << endl
-    << "<h1>Trainning and Test data stats</h1>" << endl
+    << "<h1>Training and Test data stats</h1>" << endl
     << "<br />" 
     << "<h2>Training Data Stats:</h2>" << endl;
   trainingData->PrintClassStatisticsHTML (r);
@@ -3044,7 +3044,7 @@ BinaryJobListPtr  Processor::GetNextSetOfJobs (BinaryJobListPtr  completedJobs)
         double  cpuTimeUsed = fabs (currentCpuTime - lastCpuTimeReported);
         if  (cpuTimeUsed > 10.0)
         {
-          // In case we crash bvefore we get a chance to write this out. Lets report our current usage.
+          // In case we crash before we get a chance to write this out. Lets report our current usage.
           ReportCpuTimeUsed (statusFile);
         }
       }
@@ -3134,7 +3134,7 @@ void   Processor::Run ()
         executedJobs->PushOnBack (dupJob, result);
         if  (result != BinaryJobList::NoError)
         {
-          // This should just not beable to happen; but since it did; must be an interesting story.
+          // This should just not be able to happen; but since it did; must be an interesting story.
           log.Level (-1) << endl
             << "Processor::Run   ***ERROR***    DuplicateJob in 'executedJobs'." << endl
             << dupJob->ToStatusStr () << endl
@@ -3152,7 +3152,7 @@ void   Processor::Run ()
       else
       {
         // We will sleep for a bit until there are more jobs to run
-        log.Level (10) << "Processor::Run     No jobs avaialble to run; will sleep a bit." << endl;
+        log.Level (10) << "Processor::Run     No jobs available to run; will sleep a bit." << endl;
         osSleep ((float)(10 + rand () % 10)); 
       }
     }

@@ -205,7 +205,7 @@ namespace PicesCommander
       ImportValidatedClassAssignmentsDir (threadConn, sourceDirectory);
       if  (cancelImporting)
       {
-        RunLogAddMsg ("\n" + "Importing Assignmenst has been Canceled." + "\n\n");
+        RunLogAddMsg ("\n" + "Importing Assignments has been Canceled." + "\n\n");
       }
       else
       {

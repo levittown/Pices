@@ -177,8 +177,7 @@ void  RipOutClass::InitalizeApplication (kkint32 argc,
   {
     destImages = new FeatureVectorList (fileDesc, 
                                         true,                    // Will own imageFeatures contained in this list
-                                        log,     
-                                        srcImages->QueueSize ()  // Will initialize allocation to size of srcImages.
+                                        log
                                        );
   }
 
@@ -469,7 +468,7 @@ void  MakeEightClassDataSet (const KKStr&  srcFileName,
 
   MLClassConstPtr  excludeClass = MLClass::CreateNewMLClass ("Marine_Snow_Dark");
 
-  FeatureVectorListPtr  destData = new FeatureVectorList (srcData->FileDesc (), false, log, -1);
+  FeatureVectorListPtr  destData = new FeatureVectorList (srcData->FileDesc (), false, log);
 
   FeatureVectorList::iterator  idx;
   for  (idx = srcData->begin ();  idx != srcData->end ();  idx++)

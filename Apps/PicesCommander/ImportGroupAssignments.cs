@@ -29,7 +29,7 @@ namespace PicesCommander
     // Importing Thread Related Variables.
     private  bool                    cancelBackGround   = false;
     private  bool                    backGroundStarted  = false;  // Will be set to 'true' after the start button is pressed
-                                                                 // and all validations are passed.
+                                                                  // and all validations are passed.
     private  bool                    backGroundRunning   = false;
     private  bool                    backGroundCompleted = false;
     private  Thread                  backGroundThread    = null;
@@ -218,7 +218,7 @@ namespace PicesCommander
       ImportAssignmentsImportDir (sourceDirectory);
       if  (cancelBackGround)
       {
-        RunLogAddMsg ("\n" + "Importing Assignmenst has been Canceled." + "\n");
+        RunLogAddMsg ("\n" + "Importing Assignments has been Canceled." + "\n");
       }
       else
       {

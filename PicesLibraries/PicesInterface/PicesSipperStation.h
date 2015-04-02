@@ -62,9 +62,18 @@ namespace PicesInterface
   public ref class  PicesSipperStationList:  public  List<PicesSipperStation^>
   {
   public:
+    PicesSipperStationList ();
+
     // Will take ownership of contents of 'stations'  but not the list itself.
     // the caller will still be responsible for deleting the list('stations').
     PicesSipperStationList (SipperStationListPtr  stations);
+
+    ///<summary>
+    /// Returns the first instance of 'PicesSipperStation'  that has the same 'StationName'.  The search
+    /// is case insensitive and Cruise insensitive.
+    ///</summary>
+    PicesSipperStation^  LookUpByStationName (String^ stationName);
+
 
   private:
     ~PicesSipperStationList ();

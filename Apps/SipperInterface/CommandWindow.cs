@@ -108,7 +108,7 @@ namespace SipperInterface
     private List<SipperFileViewer.SipperFileViewer>  sipperPreviews = null;  
                                                              // List of all SipperFileViewers displayed
                                                              // This will allow me to properly close them
-                                                             // when the main app shuts down.
+                                                             // when the main application shuts down.
 
     private  List<CameraLineDisplay>  cameraLineDisplays = null;
 
@@ -856,7 +856,7 @@ namespace SipperInterface
       }
       catch  (Exception e)
       {
-        MessageBox.Show ("Unhandled exception in SipperInterface" + "\n\n" +
+        MessageBox.Show ("Un-handled exception in SipperInterface" + "\n\n" +
                          e.ToString ()
                         );
       }
