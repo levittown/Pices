@@ -34,10 +34,10 @@ namespace  ImageExtractionManager
     kkuint32  FrameNum      ()  const  {return frameNum;}
     kkuint32  ImagesInFrame ()  const  {return imagesInFrame;}
 
-    void  PopulateFrame (kkuint32 _frameNum,
-                         kkuint32 _frameHeight,
-                         uchar*   _frameArea,
-                         kkuint32 _frameSipperRow,
+    void  PopulateFrame (kkuint32   _frameNum,
+                         kkuint32   _frameHeight,
+                         uchar*     _frameArea,
+                         kkuint32   _frameSipperRow,
                          kkuint64*  _frameRowByteOffset,
                          kkuint32*  _pixelsPerRow
                         );
@@ -102,9 +102,9 @@ namespace  ImageExtractionManager
     kkuint32        frameWidth;             /**< Number of pixels per row in frame.                      */
     uchar*          frameArea;              /**< Pointer to block of memory that will contain frame       */
     kkuint32        frameSipperRow;         /**< Row within the Sipper File That Frame starts at.         */
-    kkuint64*         frameRowByteOffset;
+    kkuint64*       frameRowByteOffset;
     kkuint32        frameTotalPixels;       /**< Total number of pixels that frame could contain.         */
-    kkuint32*         pixelsPerRow;           /**< Number of foreground pixels in each row.                  */
+    kkuint32*       pixelsPerRow;           /**< Number of foreground pixels in each row.                  */
 
     uchar**         origFrame;              /**< 'origFrame' and 'origFrameArea' are only used when       */
     uchar*          origFrameArea;          /**<  morphological operations are performed.                 */

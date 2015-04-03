@@ -118,7 +118,7 @@ PicesTrainingConfiguration::PicesTrainingConfiguration (DirectoryInfo^  di,
 
   classes = config->ExtractClassList ();
 
-  // We are nvere ever suposed to delete a 'FileDesc' object.  they are managed wholly in the "FileDesc" class.  
+  // We are never ever suposed to delete a 'FileDesc' object.  they are managed wholly in the "FileDesc" class.  
   // Other parts of the app may and probably will be using this same instance.
   //delete  fd;  fd = NULL;
   AdjustCurMemoryPressure ();
@@ -163,7 +163,7 @@ void  PicesTrainingConfiguration::AdjustCurMemoryPressure ()
 
 
 
-void  PicesTrainingConfiguration::CancelLoad ()  // Call this methid to set the 'canclFlag' to true.
+void  PicesTrainingConfiguration::CancelLoad ()  // Call this method to set the 'canclFlag' to true.
 {
   *cancelFlag = true;
 }

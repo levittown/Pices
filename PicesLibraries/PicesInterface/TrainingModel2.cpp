@@ -354,7 +354,7 @@ void  TrainingModel2::CleanUpUnmanagedResources ()
     catch  (const exception&  e1)
     {
       runLog->Level (-1) << endl
-        << "TrainingModel2::CleanUpUnmanagedResources  ***ERROR***     Exception destroying the 'Trainer Objecvt." << endl
+        << "TrainingModel2::CleanUpUnmanagedResources  ***ERROR***     Exception destroying the 'Trainer Object." << endl
         << "                Exception[" << e1.what () << "]" << endl
         << endl;
 
@@ -363,7 +363,7 @@ void  TrainingModel2::CleanUpUnmanagedResources ()
     catch  (const char* e2)
     {
       runLog->Level (-1) << endl
-        << "TrainingModel2::CleanUpUnmanagedResources  ***ERROR***     Exception destroying the 'Trainer Objecvt." << endl
+        << "TrainingModel2::CleanUpUnmanagedResources  ***ERROR***     Exception destroying the 'Trainer Object." << endl
         << "                Exception[" << e2 << "]" << endl
         << endl;
     }
@@ -371,7 +371,7 @@ void  TrainingModel2::CleanUpUnmanagedResources ()
     catch  (...)
     {
       runLog->Level (-1) << endl
-        << "TrainingModel2::CleanUpUnmanagedResources  ***ERROR***     Exception destroying the 'Trainer Objecvt." << endl
+        << "TrainingModel2::CleanUpUnmanagedResources  ***ERROR***     Exception destroying the 'Trainer Object." << endl
         << endl;
 
     }
@@ -615,7 +615,7 @@ bool  TrainingModel2::IncludesClass (PicesClass^  mlClass)
 
 
 // Will return a list of classes that belong to this model. 
-// It will be created from "classList".  So the the caller 
+// It will be created from "classList".  So the caller 
 // can do with it as they want.
 PicesClassList^  TrainingModel2::MLClasses ()
 {
@@ -821,7 +821,7 @@ void  TrainingModel2::LoadTrainigLibrary (bool  forceRebuild)
 
   try
   {
-    /**@todo There is a memory corruption when th eprocess is canecelled. */
+    /**@todo There is a memory corruption when the process is canceled. */
     trainer = new TrainingProcess2 (configFileName, 
                                     NULL,              // Exclude List
                                     fd, 
@@ -963,7 +963,7 @@ void  TrainingModel2::BuildTrainingModel (PicesFeatureVectorList^  picesTraining
     if  (trainer->Abort ())
     {
       if  (errorMsgs != nullptr)
-        ErrorMsgsAdd ("TrainingModel2::BuildTrainingModel   Error occured buiding training model.");
+        ErrorMsgsAdd ("TrainingModel2::BuildTrainingModel   Error occurred building training model.");
       *valid = false;
     }
     else
@@ -1025,14 +1025,14 @@ PicesPredictionList^   TrainingModel2::PredictProbabilities (PicesFeatureVector^
   }
   catch  (KKException& e2)
   {
-    KKStr  errMsg = "TrainingModel2::PredictProbabilities   KKException occured calling 'ProbabilitiesByClass'.\n\n" + e2.ToString ();
+    KKStr  errMsg = "TrainingModel2::PredictProbabilities   KKException occurred calling 'ProbabilitiesByClass'.\n\n" + e2.ToString ();
     System::Windows::Forms::MessageBox::Show (PicesKKStr::KKStrToSystenStr (errMsg), "TrainingModel2::PredictProbabilities");
     delete  unKnownExample;  unKnownExample = NULL;
     return nullptr;
   }
   catch  (exception& e)
   {
-    KKStr  errMsg = "TrainingModel2::PredictProbabilities   std::exception occured calling 'ProbabilitiesByClass'.\n\n";
+    KKStr  errMsg = "TrainingModel2::PredictProbabilities   std::exception occurred calling 'ProbabilitiesByClass'.\n\n";
     errMsg << e.what ();
     System::Windows::Forms::MessageBox::Show (PicesKKStr::KKStrToSystenStr (errMsg), "TrainingModel2::PredictProbabilities");
     delete  unKnownExample;  unKnownExample = NULL;
@@ -1040,7 +1040,7 @@ PicesPredictionList^   TrainingModel2::PredictProbabilities (PicesFeatureVector^
   }
   catch  (...)
   {
-    System::Windows::Forms::MessageBox::Show ("Exception occured calling 'ProbabilitiesByClass'."
+    System::Windows::Forms::MessageBox::Show ("Exception occurred calling 'ProbabilitiesByClass'."
                                               "TrainingModel2::PredictProbabilities"
                                              );
     delete  unKnownExample;  unKnownExample = NULL;
@@ -1056,7 +1056,7 @@ PicesPredictionList^   TrainingModel2::PredictProbabilities (PicesFeatureVector^
   }
   catch  (...)
   {
-    System::Windows::Forms::MessageBox::Show ("Exception occured calling 'RetrieveCrossProbTable'."
+    System::Windows::Forms::MessageBox::Show ("Exception occurred calling 'RetrieveCrossProbTable'."
                                               "TrainingModel2::PredictProbabilities"
                                              );
     return nullptr;
@@ -1111,7 +1111,7 @@ PicesPrediction^  TrainingModel2::PredictClass (PicesFeatureVector^  example)
   }
   catch  (Exception^ e)
   {
-    System::Windows::Forms::MessageBox::Show ("Exception occured when calling 'Classifyer::ClassifyAImage'  in  'TrainingModel2::PredictClass'" + "\n\n" +
+    System::Windows::Forms::MessageBox::Show ("Exception occurred when calling 'Classifier::ClassifyAImage'  in  'TrainingModel2::PredictClass'" + "\n\n" +
                                               e->ToString (),
                                               "TrainingModel2::PredictClass"
                                              );
@@ -1168,7 +1168,7 @@ void  TrainingModel2::PredictClass (PicesFeatureVector^  featureVector,
   }
   catch  (Exception^ e)
   {
-    System::Windows::Forms::MessageBox::Show ("Exception occured when calling 'Classifyer::ClassifyAImage'  in  'TrainingModel2::PredictClass'" + "\n\n" +
+    System::Windows::Forms::MessageBox::Show ("Exception occurred when calling 'Classifier::ClassifyAImage'  in  'TrainingModel2::PredictClass'" + "\n\n" +
                                               e->ToString (),
                                               "TrainingModel2::PredictClass"
                                              );
@@ -1197,14 +1197,14 @@ void  TrainingModel2::PredictClass (PicesFeatureVector^  featureVector,
 
 
 void  TrainingModel2::PredictClass (System::String^   imageFileName,
-                                   System::Array^    raster,
-                                   System::Single^   depth,
-                                   System::Single^   salinity, 
-                                   System::Single^   oxygen, 
-                                   System::Single^   florences,
-                                   PicesPrediction^  prediction1,
-                                   PicesPrediction^  prediction2
-                                  )
+                                    System::Array^    raster,
+                                    System::Single^   depth,
+                                    System::Single^   salinity, 
+                                    System::Single^   oxygen, 
+                                    System::Single^   florences,
+                                    PicesPrediction^  prediction1,
+                                    PicesPrediction^  prediction2
+                                   )
 {
   if  (!classifier)
     return;
@@ -1282,7 +1282,7 @@ PicesPredictionList^   TrainingModel2::PredictProbabilities (System::String^   i
   {
     fv = NULL;
     sucessful = false;
-    System::Windows::Forms::MessageBox::Show ("Exception occured when Constructing a 'ImageFeatures' object" + "\n\n" +
+    System::Windows::Forms::MessageBox::Show ("Exception occurred when Constructing a 'ImageFeatures' object" + "\n\n" +
                                               e->ToString (),
                                               "TrainingModel2::PredictProbabilities"
                                              );
@@ -1291,7 +1291,7 @@ PicesPredictionList^   TrainingModel2::PredictProbabilities (System::String^   i
   {
     fv = NULL;
     sucessful = false;
-    System::Windows::Forms::MessageBox::Show ("Exception occured when Constructing a 'ImageFeatures' object\n\nTrainingModel2::PredictProbabilities");
+    System::Windows::Forms::MessageBox::Show ("Exception occurred when Constructing a 'ImageFeatures' object\n\nTrainingModel2::PredictProbabilities");
   }
 
   if  (!sucessful)
@@ -1328,7 +1328,7 @@ PicesPredictionList^   TrainingModel2::PredictProbabilities (System::String^   i
   }
   catch (Exception^ e)
   {
-    System::Windows::Forms::MessageBox::Show ("Exception occured calling 'PredictProbabilities'" + "\n\n" +
+    System::Windows::Forms::MessageBox::Show ("Exception occurred calling 'PredictProbabilities'" + "\n\n" +
                                               e->ToString (),
                                               "TrainingModel2::PredictProbabilities"
                                              );
@@ -1336,7 +1336,7 @@ PicesPredictionList^   TrainingModel2::PredictProbabilities (System::String^   i
   }
   catch  (...)
   {
-    System::Windows::Forms::MessageBox::Show ("Exception occured calling 'PredictProbabilities'."
+    System::Windows::Forms::MessageBox::Show ("Exception occurred calling 'PredictProbabilities'."
                                               "TrainingModel2::PredictProbabilities"
                                              );
     predictions = nullptr;
@@ -1384,7 +1384,7 @@ array<PicesInterface::ProbNamePair^>^
   MLClassPtr  c1Pices = c1->UnmanagedMLClass ();
   MLClassPtr  c2Pices = c2->UnmanagedMLClass ();
 
-  // Will make duplicate of featuire vector Because the Classifier will normalize the data.
+  // Will make duplicate of feature vector Because the Classifier will normalize the data.
   FeatureVectorPtr  dupFV = new FeatureVector (*picesFeatureVector->UnManagedClass ());
 
   vector<MLL::ProbNamePair> worstExamples 
@@ -1420,7 +1420,7 @@ array<PicesInterface::ProbNamePair^>^
   MLClassPtr  c1Pices = c1->UnmanagedMLClass ();
   MLClassPtr  c2Pices = c2->UnmanagedMLClass ();
 
-  // Will make duplicate of featuire vector Because the Classifier will normalize the data.
+  // Will make duplicate of feature vector Because the Classifier will normalize the data.
   FeatureVectorPtr  dupFV = new FeatureVector (*picesFeatureVector->UnManagedClass ());
 
   vector<MLL::ProbNamePair> worstExamples 
@@ -1511,7 +1511,7 @@ Bitmap^  TrainingModel2::BuildBitmapFromRasterData (uchar**  r,
 
         if  (pixelValue < 255)
         {
-          // We are looking at a forground pixel.
+          // We are looking at a foreground pixel.
           if  (row < rowFirst )
             rowFirst = row;
           rowLast = row;
@@ -1724,7 +1724,7 @@ void  TrainingModel2::AddClass (PicesClass^  newClass)
 void  TrainingModel2::AddImageToTrainingLibray (String^       imageFileName,
                                                 PicesRaster^  raster, 
                                                 PicesClass^   mlClass,
-                                                bool          onLine       // If set to true;  will prompt user if they want to add new class if not part of Traning Model.
+                                                bool          onLine       // If set to true;  will prompt user if they want to add new class if not part of Training Model.
                                                )
 {
   if  (raster == nullptr)
@@ -1809,7 +1809,7 @@ TrainingConfiguration2Ptr  TrainingModel2::GetConfigToUse ()
   {
     FileDescPtr  fd = FeatureFileIOPices::NewPlanktonFile (*runLog);
     config  = new TrainingConfiguration2 (fd, PicesKKStr::SystemStringToKKStr (modelName), *runLog, false);
-    // Don't need to delete 'fd'  'FileDesc' instances are kept in memry and shared when identicle.
+    // Don't need to delete 'fd'  'FileDesc' instances are kept in memory and shared when identical.
     configToUse = config;
   }
   return  configToUse;

@@ -48,7 +48,7 @@ LogicalFrameBlob::~LogicalFrameBlob ()
 
 
 void  LogicalFrameBlob::DialateBlob (uchar**   frame,
-                                     kkint32**   blobIds,
+                                     kkint32** blobIds,
                                      kkint32   size
                                     )
 {
@@ -90,7 +90,6 @@ void  LogicalFrameBlob::DialateBlob (uchar**   frame,
     curWorkPixel += width;
     workRow++;
   }
-
 
   workRow = 0;
   for  (row = rowTop;  row <= rowBot;  row++)

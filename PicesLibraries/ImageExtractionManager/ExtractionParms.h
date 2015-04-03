@@ -117,16 +117,16 @@ namespace  ImageExtractionManager
     kkuint32         IncrementImagesWritten   () {return  (++imagesWritten);}
     kkuint32         IncrementLinesExtracted  () {return  (++linesExtracted);}
 
-    void             ImagesPerDirectory       (kkuint32 _imagesPerDirectory)     {imagesPerDirectory = _imagesPerDirectory;}
-    void             IncrementBytesExtracted  (kkuint32 _bytesExtracted)         {bytesExtracted  += _bytesExtracted;}
-    void             IncrementPixelsRead      (kkuint32 _pixelsRead)             {pixelsRead      += _pixelsRead;}
-    void             IncrementPixelsWritten   (kkuint32 _pixelsWritten)          {pixelsWritten   += _pixelsWritten;}
-    void             BytesExtracted           (kkuint64 _bytesExtracted)         {bytesExtracted  = _bytesExtracted;}
-    void             LinesExtracted           (kkuint32 _linesExtracted)         {linesExtracted  = _linesExtracted;}
-    void             ImagesExtracted          (kkuint32 _imagesExtracted)        {imagesExtracted = _imagesExtracted;}
-    void             ImagesWritten            (kkuint32 _imagesWritten)          {imagesWritten   = _imagesWritten;}
-    void             PixelsRead               (kkuint32 _pixelsRead)             {pixelsRead      = _pixelsRead;}
-    void             PixelsWritten            (kkuint32 _pixelsWritten)          {pixelsWritten   = _pixelsWritten;}
+    void             ImagesPerDirectory       (kkuint32 _imagesPerDirectory)   {imagesPerDirectory = _imagesPerDirectory;}
+    void             IncrementBytesExtracted  (kkuint32 _bytesExtracted)       {bytesExtracted  += _bytesExtracted;}
+    void             IncrementPixelsRead      (kkuint32 _pixelsRead)           {pixelsRead      += _pixelsRead;}
+    void             IncrementPixelsWritten   (kkuint32 _pixelsWritten)        {pixelsWritten   += _pixelsWritten;}
+    void             BytesExtracted           (kkuint64 _bytesExtracted)       {bytesExtracted  = _bytesExtracted;}
+    void             LinesExtracted           (kkuint32 _linesExtracted)       {linesExtracted  = _linesExtracted;}
+    void             ImagesExtracted          (kkuint32 _imagesExtracted)      {imagesExtracted = _imagesExtracted;}
+    void             ImagesWritten            (kkuint32 _imagesWritten)        {imagesWritten   = _imagesWritten;}
+    void             PixelsRead               (kkuint32 _pixelsRead)           {pixelsRead      = _pixelsRead;}
+    void             PixelsWritten            (kkuint32 _pixelsWritten)        {pixelsWritten   = _pixelsWritten;}
     void             StatusMessage            (const KKStr& _statusMessage)    {statusMessage   = _statusMessage;}
 
 

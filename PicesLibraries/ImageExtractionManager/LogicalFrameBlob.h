@@ -48,9 +48,9 @@ namespace  ImageExtractionManager
 
     void  AddNeighbor (LogicalFrameBlobPtr  _neighbor);
 
-    void  DialateBlob (uchar**  frame,
+    void  DialateBlob (uchar**    frame,
                        kkint32**  blobIds,
-                       kkint32  size
+                       kkint32    size
                       );
 
     bool  Explored ()  const  {return explored;}
