@@ -866,6 +866,8 @@ namespace MLL
                                                    const KKStr&  deploymentNum
                                                   );
     
+    SipperDeploymentListPtr  DeploymentLoadByStation (const KKStr& stationName);
+
     void                     SipperDeploymentInsert (const SipperDeployment&  deployment);
 
     void                     SipperDeploymentUpdate (const SipperDeployment&  deployment);

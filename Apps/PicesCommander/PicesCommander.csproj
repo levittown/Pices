@@ -118,6 +118,12 @@
     <Compile Include="ChartDistribution.Designer.cs">
       <DependentUpon>ChartDistribution.cs</DependentUpon>
     </Compile>
+    <Compile Include="ChartGPSByStation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChartGPSByStation.Designer.cs">
+      <DependentUpon>ChartGPSByStation.cs</DependentUpon>
+    </Compile>
     <Compile Include="ClassificationStatus.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -265,6 +271,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ChartDistribution.resx">
       <DependentUpon>ChartDistribution.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ChartGPSByStation.resx">
+      <DependentUpon>ChartGPSByStation.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ClassificationStatus.resx">

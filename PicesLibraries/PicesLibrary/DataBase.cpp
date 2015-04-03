@@ -5251,13 +5251,27 @@ SipperDeploymentPtr    DataBase::SipperDeploymentLoad (const KKStr&  cruiseName,
   SipperDeploymentListPtr  results = SipperDeploymentProcessResults ();
   if  (results == NULL)
     return NULL;
-
-
   SipperDeploymentPtr  result = results->PopFromBack ();
   delete  results;
   results = NULL;
   return result;
 }  /* SipperDeploymentLoad*/
+
+
+
+
+
+
+SipperDeploymentListPtr  DataBase::DeploymentLoadByStation (const KKStr& stationName)
+{
+  KKStr  sqlStr = "call DeploymentLoadByStation(" + stationName.QuotedStr () + ")";
+  kkint32  returnCd = QueryStatement (sqlStr);
+  if  (returnCd != 0)
+    return  NULL;
+  SipperDeploymentListPtr  results = SipperDeploymentProcessResults ();
+  return results;
+}  /* DeploymentLoadByStation */
+
 
 
 

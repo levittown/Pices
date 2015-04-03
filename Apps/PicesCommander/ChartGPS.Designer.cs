@@ -80,7 +80,7 @@
       this.SelectionCriteriaPanel.Controls.Add(this.StationLabel);
       this.SelectionCriteriaPanel.Location = new System.Drawing.Point(12, 12);
       this.SelectionCriteriaPanel.Name = "SelectionCriteriaPanel";
-      this.SelectionCriteriaPanel.Size = new System.Drawing.Size(345, 72);
+      this.SelectionCriteriaPanel.Size = new System.Drawing.Size(354, 72);
       this.SelectionCriteriaPanel.TabIndex = 24;
       // 
       // Deployment
@@ -154,7 +154,7 @@
       // CancelPlotButton
       // 
       this.CancelPlotButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.CancelPlotButton.Location = new System.Drawing.Point(284, 501);
+      this.CancelPlotButton.Location = new System.Drawing.Point(293, 501);
       this.CancelPlotButton.Name = "CancelPlotButton";
       this.CancelPlotButton.Size = new System.Drawing.Size(75, 23);
       this.CancelPlotButton.TabIndex = 29;
@@ -256,7 +256,7 @@
       this.Status.Location = new System.Drawing.Point(11, 472);
       this.Status.Name = "Status";
       this.Status.ReadOnly = true;
-      this.Status.Size = new System.Drawing.Size(345, 23);
+      this.Status.Size = new System.Drawing.Size(356, 23);
       this.Status.TabIndex = 35;
       this.Status.TabStop = false;
       // 
@@ -267,7 +267,7 @@
       this.DeploymentsToPlot.FormattingEnabled = true;
       this.DeploymentsToPlot.Location = new System.Drawing.Point(12, 125);
       this.DeploymentsToPlot.Name = "DeploymentsToPlot";
-      this.DeploymentsToPlot.Size = new System.Drawing.Size(345, 232);
+      this.DeploymentsToPlot.Size = new System.Drawing.Size(355, 232);
       this.DeploymentsToPlot.TabIndex = 46;
       this.DeploymentsToPlot.Format += new System.Windows.Forms.ListControlConvertEventHandler(this.DeploymentsToPlot_Format);
       // 
@@ -277,7 +277,7 @@
       this.CurGPSLocation.Location = new System.Drawing.Point(174, 378);
       this.CurGPSLocation.Name = "CurGPSLocation";
       this.CurGPSLocation.ReadOnly = true;
-      this.CurGPSLocation.Size = new System.Drawing.Size(183, 23);
+      this.CurGPSLocation.Size = new System.Drawing.Size(193, 23);
       this.CurGPSLocation.TabIndex = 48;
       this.CurGPSLocation.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       // 
@@ -315,7 +315,7 @@
       // COGLabel
       // 
       this.COGLabel.AutoSize = true;
-      this.COGLabel.Location = new System.Drawing.Point(173, 404);
+      this.COGLabel.Location = new System.Drawing.Point(181, 414);
       this.COGLabel.Name = "COGLabel";
       this.COGLabel.Size = new System.Drawing.Size(30, 13);
       this.COGLabel.TabIndex = 53;
@@ -324,7 +324,7 @@
       // COGField
       // 
       this.COGField.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-      this.COGField.Location = new System.Drawing.Point(174, 420);
+      this.COGField.Location = new System.Drawing.Point(182, 430);
       this.COGField.Name = "COGField";
       this.COGField.ReadOnly = true;
       this.COGField.Size = new System.Drawing.Size(82, 23);
@@ -334,7 +334,7 @@
       // SOGLabel
       // 
       this.SOGLabel.AutoSize = true;
-      this.SOGLabel.Location = new System.Drawing.Point(273, 404);
+      this.SOGLabel.Location = new System.Drawing.Point(277, 414);
       this.SOGLabel.Name = "SOGLabel";
       this.SOGLabel.Size = new System.Drawing.Size(30, 13);
       this.SOGLabel.TabIndex = 55;
@@ -343,17 +343,17 @@
       // SOGField
       // 
       this.SOGField.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-      this.SOGField.Location = new System.Drawing.Point(274, 420);
+      this.SOGField.Location = new System.Drawing.Point(274, 430);
       this.SOGField.Name = "SOGField";
       this.SOGField.ReadOnly = true;
-      this.SOGField.Size = new System.Drawing.Size(82, 23);
+      this.SOGField.Size = new System.Drawing.Size(92, 23);
       this.SOGField.TabIndex = 54;
       this.SOGField.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       // 
       // DeploymentHighlightedLabel
       // 
       this.DeploymentHighlightedLabel.AutoSize = true;
-      this.DeploymentHighlightedLabel.Location = new System.Drawing.Point(13, 404);
+      this.DeploymentHighlightedLabel.Location = new System.Drawing.Point(13, 413);
       this.DeploymentHighlightedLabel.Name = "DeploymentHighlightedLabel";
       this.DeploymentHighlightedLabel.Size = new System.Drawing.Size(119, 13);
       this.DeploymentHighlightedLabel.TabIndex = 57;
@@ -362,10 +362,10 @@
       // DeploymentHighlighted
       // 
       this.DeploymentHighlighted.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-      this.DeploymentHighlighted.Location = new System.Drawing.Point(14, 420);
+      this.DeploymentHighlighted.Location = new System.Drawing.Point(14, 429);
       this.DeploymentHighlighted.Name = "DeploymentHighlighted";
       this.DeploymentHighlighted.ReadOnly = true;
-      this.DeploymentHighlighted.Size = new System.Drawing.Size(118, 23);
+      this.DeploymentHighlighted.Size = new System.Drawing.Size(158, 23);
       this.DeploymentHighlighted.TabIndex = 56;
       this.DeploymentHighlighted.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       // 
@@ -383,7 +383,7 @@
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(967, 599);
+      this.ClientSize = new System.Drawing.Size(967, 536);
       this.Controls.Add(this.PlotCruiseField);
       this.Controls.Add(this.DeploymentHighlightedLabel);
       this.Controls.Add(this.DeploymentHighlighted);

@@ -267,7 +267,6 @@ namespace PicesCommander
 
       foreach  (PicesSipperDeployment  deployment in deployments)
       {
-
         long  deploymentAdjGpsToAct = deployment.SyncTimeStampGPS.ToFileTimeUtc () - deployment.SyncTimeStampActual.ToFileTimeUtc ();
         if  (deploymentAdjGpsToAct != adjGpsToActTime)
         {
@@ -456,67 +455,9 @@ namespace PicesCommander
       if  ((gpsData == null)  ||  cancelRequested)
         return;
 
-      // Filter out noisy GPS data.
-
-      PicesGPSDataPointList  fliteredGPSData = new PicesGPSDataPointList ();
-      double  lastLat = 0.0;
-      double  lastLong = 0.0;
-
-      foreach (PicesGPSDataPoint dp in gpsData)
-      {
-        if  ((Math.Abs (dp.Longitude ) < 0.1)  ||  (Math.Abs (dp.Latitude) < 0.1))
-          continue;
-        if  ((dp.Latitude == lastLat)  &&  (dp.Longitude == lastLong))
-          continue;
-        fliteredGPSData.Add (dp);
-        lastLong = dp.Longitude;
-        lastLat  = dp.Latitude;
-      }
-
-      gpsData = fliteredGPSData;
-      fliteredGPSData = null;
-
-      if  (gpsData.Count < 2)
-      {
-        fliteredGPSData = gpsData;
-      }
-      else
-      {
-        double  totalSquareDist = 0.0;
-        double[] distBP = new double[gpsData.Count - 1];
-        double  totalSquareDistSquare = 0.0;
-        for  (int x = 0;  x < (gpsData.Count - 1);  ++x)
-        {
-          double  deltaLong  = gpsData[x + 1].Longitude - gpsData[x].Longitude;
-          double  deltaLat   = gpsData[x + 1].Latitude  - gpsData[x].Latitude;
-          double  squareDist = deltaLong * deltaLong + deltaLat * deltaLat;
-          totalSquareDist += squareDist;
-          totalSquareDistSquare += squareDist * squareDist;
-          distBP[x] = squareDist;
-        }
-
-        double  meanSquareDist = totalSquareDist / distBP.Length;
-        double  variance = (totalSquareDistSquare / distBP.Length) - (meanSquareDist * meanSquareDist);
-        double  stdDev = Math.Sqrt (variance);
-
-        double  distSquareTH = stdDev* 10;
-        int  firstIdx = 0;
-        if  (distBP.Length > 11)
-        {
-          for  (int x = 0;  x < 10;  ++x)
-          {
-            if  (distBP[x] > distSquareTH)
-              firstIdx = x + 1;
-          }
-        }
-        
-        fliteredGPSData = new PicesGPSDataPointList ();
-        for  (int x = firstIdx;  x < gpsData.Count;  ++x)
-        {
-          PicesGPSDataPoint dp = gpsData[x];
-          fliteredGPSData.Add (dp);
-        }
-      }
+      PicesGPSDataPointList  fliteredGPSData = gpsData.FilterOutNoise ();
+      if  (fliteredGPSData == null)
+        return;
 
       if  (fliteredGPSData.Count > 1)
       {
@@ -1119,13 +1060,15 @@ namespace PicesCommander
         tw.WriteLine ("SyncTimeStampCTD"      + "\t" + deployment.SyncTimeStampCTD.ToString ("yyyy/MM/dd HH:mm:ss"));
         tw.WriteLine ("SyncTimeStampGPS"      + "\t" + deployment.SyncTimeStampGPS.ToString ("yyyy/MM/dd HH:mm:ss"));
 
-        tw.WriteLine("GpsUtcTime" + "\t" + "Longitude" + "\t" + "Latitude" + "\t" + "StdGps" + "\t" + "COG" + "\t" + "SOG(kts)");
+        tw.WriteLine("GpsUtcTime"  + "\t" + "Latitude" + "\t" + "Longitude" + "\t" + "Latitude(hh:mm)" + "\t" + "Longitude(hh:mm)" +  "\t" + "COG" + "\t" + "SOG(kts)");
         foreach  (PicesGPSDataPoint dp in gpsData)
         {
-          tw.WriteLine (dp.GpsUtcTime.ToString ("yyyy/MM/dd HH:mm:ss") + "\t" + 
-                        dp.Longitude.ToString ("##0.00000000") + "\t" + dp.Latitude.ToString ("##0.00000000") + "\t" + 
-                        PicesMethods.LatitudeLongitudeToString (dp.Latitude , dp.Longitude) + "\t" +
-                        dp.CourseOverGround.ToString ("##0.0") + "\t" +
+          tw.WriteLine (dp.GpsUtcTime.ToString ("yyyy/MM/dd HH:mm:ss")    + "\t" + 
+                        dp.Latitude.ToString ("##0.00000000")             + "\t" + 
+                        dp.Longitude.ToString ("##0.00000000")            + "\t" + 
+                        PicesMethods.LatitudeToString  (dp.Latitude,  4)  + "\t" + 
+                        PicesMethods.LongitudeToString (dp.Longitude, 4)  + "\t" + 
+                        dp.CourseOverGround.ToString ("##0.0")            + "\t" +
                         dp.SpeedOverGround.ToString ("##0.0")
                         );
         }
@@ -1181,7 +1124,10 @@ namespace PicesCommander
       PicesSipperDeployment  d = (PicesSipperDeployment)e.ListItem;
       String  m = d.StationName;
       if (!String.IsNullOrEmpty (d.DeploymentNum))
-        m += "-" + d.DeploymentNum + "  " + d.Description;
+        m += "-" + d.DeploymentNum;
+
+      m += " (" + d.DateTimeStart.ToString ("yyyy-MMM-dd HH:mm") + ")";
+
       e.Value = m;
     }
 
@@ -1290,7 +1236,7 @@ namespace PicesCommander
         HighLightClosestPoint (closestPointSeriesIndex, closestPointIndex, closestPoint, closestDeployment);
         String  gpsStr = PicesMethods.LatitudeLongitudeToString (closestPoint.Latitude, closestPoint.Longitude);
         CurGPSLocation.Text = gpsStr;
-        COGField.Text = closestPoint.CourseOverGround.ToString ("##0.0") + "deg's";
+        COGField.Text = closestPoint.CourseOverGround.ToString ("##0.0") + " deg's";
         SOGField.Text = closestPoint.SpeedOverGround.ToString  ("#0.0") + " kts";
 
         if  (closestDeployment != null)

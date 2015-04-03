@@ -45,6 +45,21 @@ delimiter ;
  
 
 
+ 
+/**********************************************************************************************************************/
+drop  procedure  if exists DeploymentLoadByStation;
+delimiter //
+create procedure DeploymentLoadByStation (_stationName    char(10))
+begin
+  select * from  Deployments d  where  (d.StationName = _stationName)  order by  d.DateTimeStart;
+end
+//
+delimiter ;
+
+ 
+ 
+
+
 
 
 

@@ -586,14 +586,22 @@ namespace PicesInterface
                                                       String^  deploymentNum
                                                      );
   
+
+    PicesSipperDeploymentList^  SipperDeploymentLoadByStation (String^ stationName);
+    
+
     void                        SipperDeploymentInsert (PicesSipperDeployment^  deployment);
   
+
     void                        SipperDeploymentUpdate (PicesSipperDeployment^  deployment);
  
+
     void                        SipperDeploymentDelete (String^  cruiseName,
                                                         String^  stationName,
                                                         String^  deploymentNum
                                                        );
+
+
 
 
 

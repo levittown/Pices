@@ -126,6 +126,100 @@ namespace  PicesInterface
 
 
 
+
+  PicesGPSDataPointList^  PicesGPSDataPointList::FilterOutNoise ()
+  {
+    PicesGPSDataPointList^  fliteredGPSData = gcnew PicesGPSDataPointList ();
+    double  lastLat = 0.0;
+    double  lastLong = 0.0;
+
+    for each (PicesGPSDataPoint^ dp in this)
+    {
+      if  (Math::Abs (dp->Latitude < 0.1) || (Math::Abs (dp->Longitude) < 0.1))
+        continue;
+      if  ((dp->Latitude == lastLat)  &&  (dp->Longitude == lastLong))
+        continue;
+      fliteredGPSData->Add (dp);
+      lastLong = dp->Longitude;
+      lastLat  = dp->Latitude;
+    }
+
+    int  count = fliteredGPSData->Count;
+    if  (count < 1)
+      return  nullptr;
+
+    if  (count < 5)
+      return  fliteredGPSData;
+
+    double*  distBP = new double[count];
+    double   totalDist = 0.0;
+    double   totalDistSquare =  0.0;
+
+    int  n = count - 1;
+    PicesGPSDataPoint^ curDP  = fliteredGPSData[0];
+    PicesGPSDataPoint^ nextDP = fliteredGPSData[1];
+    for  (int x = 0;  x < n;  ++x)
+    {
+      nextDP = fliteredGPSData[x + 1];
+      double  deltaLon = nextDP->Longitude - curDP->Longitude;
+      double  deltaLat = nextDP->Latitude  - curDP->Latitude;
+      double  distSquare = deltaLon * deltaLon + deltaLat * deltaLat;
+      double  dist = Math::Sqrt (distSquare);
+      totalDist += dist;
+      totalDistSquare += distSquare;
+      distBP[x] = dist;
+      curDP = nextDP;
+    }
+
+    double  meanDist = totalDist / (double)n;
+    double  variance = (totalDistSquare - (totalDist * totalDist) / (double)n)  / (double)n;
+    double  stdDev = Math::Sqrt (variance);
+
+    double  distTH = meanDist + stdDev * 3.5;
+      
+    List<PicesGPSDataPointList^>^  clusters = gcnew List<PicesGPSDataPointList^> ();
+    PicesGPSDataPointList^  curCluster = gcnew PicesGPSDataPointList ();
+    clusters->Add (curCluster);
+
+    int  curIdx = 0;
+    while  (curIdx < (count - 1))
+    {
+      PicesGPSDataPoint^  curDP = fliteredGPSData[curIdx];
+      curCluster->Add (curDP);
+      if  (distBP[curIdx] > distTH)
+      {
+          curCluster = gcnew PicesGPSDataPointList ();
+          clusters->Add (curCluster);
+      }
+      ++curIdx;
+    }
+
+    curCluster->Add (fliteredGPSData[curIdx]);
+
+    delete  distBP;
+    distBP = NULL;
+
+    // At this point we broken up all the GPS points into clusters such that points with in a cluster are 
+    // within a threshold to their neighbors.  Now we need to decide if any of the clusters are just noise
+    // and should be excluded from the filtered list.
+
+    PicesGPSDataPointList^  finalFilteredList = gcnew PicesGPSDataPointList ();
+
+    for each  (PicesGPSDataPointList^  cluster in clusters)
+    {
+      if  (cluster->Count < 5)
+        continue;
+
+      for each  (PicesGPSDataPoint^  dp in  cluster)
+        finalFilteredList->Add (dp);
+    }
+
+    return  finalFilteredList;
+  }  /* FilterOutNoise */
+
+
+
+
   void  PicesGPSDataPointList::CleanUpMemory ()
   {
   }

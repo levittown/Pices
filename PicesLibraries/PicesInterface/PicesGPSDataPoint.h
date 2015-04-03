@@ -71,6 +71,12 @@ namespace PicesInterface
 
     void  CleanUpMemory ();
 
+    ///<summary>
+    ///Removes outliers based off GPS location.
+    ///</summary>
+    PicesGPSDataPointList^  FilterOutNoise ();
+
+
 
   private:
   };  /* PicesGPSDataPointList */

@@ -142,14 +142,15 @@ System::String^   PicesMethods::LatitudeToString (double latitude,
   String^  minFormatStr = "00";
   switch  (minDecimals)
   {
-  case 0: minFormatStr = "00";          break;
-  case 1: minFormatStr = "00.0";        break;
-  case 2: minFormatStr = "00.00";       break;
-  case 3: minFormatStr = "00.000";      break;
-  case 4: minFormatStr = "00.0000";     break;
-  case 5: minFormatStr = "00.00000";    break;
-  case 6: minFormatStr = "00.000000";   break;
-  case 7: minFormatStr = "00.0000000";  break;
+  case 0: minFormatStr = "00";           break;
+  case 1: minFormatStr = "00.0";         break;
+  case 2: minFormatStr = "00.00";        break;
+  case 3: minFormatStr = "00.000";       break;
+  case 4: minFormatStr = "00.0000";      break;
+  case 5: minFormatStr = "00.00000";     break;
+  case 6: minFormatStr = "00.000000";    break;
+  case 7: minFormatStr = "00.0000000";   break;
+  case 8: minFormatStr = "00.00000000";  break;
   }
 
   bool  north = (latitude >= 0.0);
@@ -171,14 +172,15 @@ System::String^   PicesMethods::LongitudeToString (double longitude,
   String^  minFormatStr = "00";
   switch  (minDecimals)
   {
-  case 0: minFormatStr = "00";          break;
-  case 1: minFormatStr = "00.0";        break;
-  case 2: minFormatStr = "00.00";       break;
-  case 3: minFormatStr = "00.000";      break;
-  case 4: minFormatStr = "00.0000";     break;
-  case 5: minFormatStr = "00.00000";    break;
-  case 6: minFormatStr = "00.000000";   break;
-  case 7: minFormatStr = "00.0000000";  break;
+  case 0: minFormatStr = "00";           break;
+  case 1: minFormatStr = "00.0";         break;
+  case 2: minFormatStr = "00.00";        break;
+  case 3: minFormatStr = "00.000";       break;
+  case 4: minFormatStr = "00.0000";      break;
+  case 5: minFormatStr = "00.00000";     break;
+  case 6: minFormatStr = "00.000000";    break;
+  case 7: minFormatStr = "00.0000000";   break;
+  case 8: minFormatStr = "00.00000000";  break;
   }
 
   while  (longitude > 180.0)
@@ -230,7 +232,7 @@ System::String^   PicesMethods::LatitudeLongitudeToString (double latitude,
   System::String^  latStr  = latitudeDegrees.ToString  ("00") + ":" + latitudeMinutes.ToString  ("00.0000") + (north ? "N" : "S");
   System::String^  longStr = longitudeDegrees.ToString ("00") + ":" + longitudeMinutes.ToString ("00.0000") + (west  ? "W" : "E");
 
-  return latStr + " " + longStr;
+  return latStr + "  " + longStr;
 }  /* LatitudeLongitudeToString */
 
 

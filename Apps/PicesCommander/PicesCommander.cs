@@ -2997,6 +2997,15 @@ namespace PicesCommander
     }
 
 
+
+    private void gPSChartsForAStationToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      ChartGPSByStation  cGPSbyStation = new ChartGPSByStation (stationName);
+      cGPSbyStation.ShowDialog (this);
+    }
+
+
+
     private  void  UpdatesNotAllowedMsg ()
     {
       PicesSipperVariables.UpdatesNotAllowed ("Pices Commander");

@@ -2079,8 +2079,24 @@ PicesGPSDataPointList^   PicesDataBase::GpsDataQueryByIntervals (String^        
     return gcnew PicesSipperDeployment (d);
   }
 
-    
+  
 
+
+  PicesSipperDeploymentList^  PicesDataBase::SipperDeploymentLoadByStation (String^ stationName)
+  {
+    SipperDeploymentListPtr  deployments = dbConn->DeploymentLoadByStation (PicesKKStr::SystemStringToKKStr (stationName));
+    if  (deployments == NULL)
+      return  nullptr;
+    
+    PicesSipperDeploymentList^  results = gcnew PicesSipperDeploymentList (deployments);
+    deployments->Owner (false);
+    delete  deployments;
+    deployments = NULL;
+    return  results;  
+  }
+
+
+  
 
   void   PicesDataBase::SipperDeploymentInsert (PicesSipperDeployment^  deployment)
   {
@@ -2328,6 +2344,8 @@ PicesGPSDataPointList^   PicesDataBase::GpsDataQueryByIntervals (String^        
                                 );
     lastOpSuccessful = dbConn->Valid ();
   }  /* SipperStationDelete */
+
+
 
 }  /* PicesInterface */
 
