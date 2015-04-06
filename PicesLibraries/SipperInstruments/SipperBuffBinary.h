@@ -112,9 +112,6 @@ namespace  SipperHardware
                         bool&      flow
                        );
 
-    virtual
-    void  SkipToScanLine (kkuint32  scanLine);
-
   private:
 
     inline
@@ -148,3 +145,4 @@ namespace  SipperHardware
 }  /* SipperHardware */
 
 #endif
+

@@ -16,7 +16,7 @@ using namespace std;
 using namespace KKB;
 
 
-#include  "SipperBuffBinary.h"
+#include "SipperBuffBinary.h"
 
 
 using namespace SipperHardware;

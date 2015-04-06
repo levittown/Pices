@@ -3116,5 +3116,13 @@ namespace PicesCommander
                                                              );
       csd.ShowDialog (this);
     }
+
+
+
+    private void importImagesIntoDeploymentToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      ImportImagesIntoDeployment  iiid = new ImportImagesIntoDeployment (cruiseName, stationName, deploymentNum);
+      iiid.ShowDialog (this);
+    }
   }
 }

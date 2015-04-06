@@ -33,9 +33,6 @@ public:
                      bool&      flow
                     );
 
-  virtual
-  void  SkipToScanLine (kkuint32  scanLine);
-
 
 private:
 

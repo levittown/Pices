@@ -82,6 +82,7 @@ namespace PicesCommander
       this.abundancePredictedValidatedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.horizontalProfileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.gPSChartsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.gPSChartsForAStationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.sizeDistributionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.groupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.assignNewGropNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -143,7 +144,7 @@ namespace PicesCommander
       this.WeightByVolume = new System.Windows.Forms.CheckBox();
       this.PlotType = new ChartControls.RadioButtonList();
       this.DistributionChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
-      this.gPSChartsForAStationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.importImagesIntoDeploymentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.SelectionCriteriaPanel.SuspendLayout();
       this.menuStrip1.SuspendLayout();
       this.NavigationPanel.SuspendLayout();
@@ -514,7 +515,8 @@ namespace PicesCommander
       // 
       this.classificationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.classificationRunToolStripMenuItem1,
-            this.importValidatedClassAssignmentsFromDirectoryToolStripMenuItem});
+            this.importValidatedClassAssignmentsFromDirectoryToolStripMenuItem,
+            this.importImagesIntoDeploymentToolStripMenuItem});
       this.classificationToolStripMenuItem.Name = "classificationToolStripMenuItem";
       this.classificationToolStripMenuItem.Size = new System.Drawing.Size(89, 20);
       this.classificationToolStripMenuItem.Text = "Classification";
@@ -627,6 +629,13 @@ namespace PicesCommander
       this.gPSChartsToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
       this.gPSChartsToolStripMenuItem.Text = "GPS Charts";
       this.gPSChartsToolStripMenuItem.Click += new System.EventHandler(this.gPSChartsToolStripMenuItem_Click);
+      // 
+      // gPSChartsForAStationToolStripMenuItem
+      // 
+      this.gPSChartsForAStationToolStripMenuItem.Name = "gPSChartsForAStationToolStripMenuItem";
+      this.gPSChartsForAStationToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
+      this.gPSChartsForAStationToolStripMenuItem.Text = "GPS Charts for a Station";
+      this.gPSChartsForAStationToolStripMenuItem.Click += new System.EventHandler(this.gPSChartsForAStationToolStripMenuItem_Click);
       // 
       // sizeDistributionToolStripMenuItem
       // 
@@ -1223,12 +1232,12 @@ namespace PicesCommander
       this.DistributionChart.TabIndex = 0;
       this.DistributionChart.Text = "Distribution";
       // 
-      // gPSChartsForAStationToolStripMenuItem
+      // importImagesIntoDeploymentToolStripMenuItem
       // 
-      this.gPSChartsForAStationToolStripMenuItem.Name = "gPSChartsForAStationToolStripMenuItem";
-      this.gPSChartsForAStationToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
-      this.gPSChartsForAStationToolStripMenuItem.Text = "GPS Charts for a Station";
-      this.gPSChartsForAStationToolStripMenuItem.Click += new System.EventHandler(this.gPSChartsForAStationToolStripMenuItem_Click);
+      this.importImagesIntoDeploymentToolStripMenuItem.Name = "importImagesIntoDeploymentToolStripMenuItem";
+      this.importImagesIntoDeploymentToolStripMenuItem.Size = new System.Drawing.Size(343, 22);
+      this.importImagesIntoDeploymentToolStripMenuItem.Text = "Import Images into Deployment";
+      this.importImagesIntoDeploymentToolStripMenuItem.Click += new System.EventHandler(this.importImagesIntoDeploymentToolStripMenuItem_Click);
       // 
       // PicesCommander
       // 
@@ -1393,6 +1402,7 @@ namespace PicesCommander
     private System.Windows.Forms.ToolStripMenuItem abundancePredictedValidatedToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem sizeDistributionToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem gPSChartsForAStationToolStripMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem importImagesIntoDeploymentToolStripMenuItem;
   }
 }
 
