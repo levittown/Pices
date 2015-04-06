@@ -256,7 +256,7 @@ namespace SipperHardware
      *      RasterSipperPtr  imageWithBlobOnly = segmentedImage->CreateFromOrginalImageWithSpecifidBlobsOnly (blobs);
      *@endcode
      *@param[in]  origImage  Image that this instance was derived for, must have same dimensions.
-     *@param[in]  blobs      Blobs that you want copied over from.
+     *@param[in]  blobs      A list of Blob instances that you want copied to the new instance of 'RasterSipper' returned,
      *@returns Image consisting of specified blobs only.
      */
     RasterSipperPtr     CreateFromOrginalImageWithSpecifidBlobsOnly (RasterSipperPtr    origImage,
@@ -305,7 +305,7 @@ namespace SipperHardware
 
 
     /**
-     *@brief Will return a grayscale image consisting of the specified color channel only.
+     *@brief Will return a gray-scale image consisting of the specified color channel only.
      */
     RasterSipperPtr     ExtractChannel (ColorChannels  channel);
 

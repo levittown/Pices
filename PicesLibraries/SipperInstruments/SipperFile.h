@@ -128,9 +128,9 @@ namespace  SipperHardware
      kkint64        sizeInBytes;
      kkint32        numScanLines;
   
-     float          scanRate;                //  Cammera Scan Rate  Lines/Sec
-     float          depth;                   //  Meters
-     char           extractionStatus;        //  '0=Not Extracted, 1=Extract, 2=Extracting, 3=Extracted'
+     float          scanRate;                /**<  Camera Scan Rate  Lines/Sec  */
+     float          depth;                   /**<  Meters  */
+     char           extractionStatus;        /**<  '0=Not Extracted, 1=Extract, 2=Extracting, 3=Extracted'  */
      kkuint32       extractionScanLineStart;
      kkuint32       extractionScanLineEnd;
     };

@@ -162,7 +162,7 @@ namespace  PicesInterface
 
     if  (unManagedIntermediateImages)
     {
-      _intermediateImages->AddList (unManagedIntermediateImages);  // Will take owneship of 'unManagedIntermediateImages' contents and delete the list.
+      _intermediateImages->AddList (unManagedIntermediateImages);  // Will take ownership of 'unManagedIntermediateImages' contents and delete the list.
       unManagedIntermediateImages = NULL;
     }
   }

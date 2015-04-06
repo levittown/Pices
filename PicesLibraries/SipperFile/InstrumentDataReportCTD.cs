@@ -95,7 +95,7 @@ namespace SipperFile
     int   LocateAMonthNameStr (String str)
     {
       // Meant to locate the Month in a String produced by CTD.  Which is always
-      // started by a upper case character followed by two lower case chracaters.
+      // started by a upper case character followed by two lower case characters.
 
 
       int idx = 0;
@@ -174,14 +174,14 @@ namespace SipperFile
           if  (block.Length > 120)
           {
             // We could not find the Month field yet the block is more than long enough to have 
-            // included it.  We will assume that we are loking at garbage and throw it away.
+            // included it.  We will assume that we are looking at garbage and throw it away.
             block = "";
             return;
           }
           else
           {
-            // We do not appear to have enough data to incluse a cmplete CTD string.  So we will just
-            // return bac to the caller and wait for some nore data to show up.
+            // We do not have enough data to include a complete CTD string. We will return back to 
+            // the caller and wait for data to show up.
             return;
           }
         }
@@ -340,7 +340,7 @@ namespace SipperFile
       string[] fields = txtLine.Split (',');
       if  (fields.Length < 10)
       {
-        // We have an uncomplete text line; no point trying to decode it.
+        // We have an un-complete text line; no point trying to decode it.
         return;
       }
     }
@@ -352,7 +352,7 @@ namespace SipperFile
       string[] fields = txtLine.Split (',');
       if  (fields.Length < 10)
       {
-        // We have an uncomplete text line; no point trying to decode it.
+        // We have an un complete text line; no point trying to decode it.
         return;
       }
     }  /* ParseRawFreqAndVoltsInDec */
@@ -409,7 +409,7 @@ namespace SipperFile
       string[] fields = txtLine.Split (',');
       if  (fields.Length < 10)
       {
-        // We have an uncomplete text line; no point trying to decode it.
+        // We have an un-complete text line; no point trying to decode it.
         return;
       }
       else if  (fields.Length > 13)
@@ -488,12 +488,12 @@ namespace SipperFile
       double  latitude = Manager ().Latitude ();
       if  (latitude < 1.0)
       {
-        // Set to latitude of Panama Cruises fisrt station.
+        // Set to latitude of Panama Cruises first station.
         latitude = 29 + (30.0 / 60.0);     // 2010-05-05    For gulf trip will use 29.5  degrees.
         //  latitude = 11 + (59.7 /60.0);  // 11 degrees 59.7 minutes were used for Panama Trip.
       }
    
-      // The folowing calc for deapth comes from:
+      // The following calculations for depth comes from:
       // SBE  Application Note No. 69,  Page 1.  July 2002
       // references UNESCO Technical Papers in Marine Science No. 44.
       
@@ -516,7 +516,7 @@ namespace SipperFile
       string[] fields = txtLine.Split (',');
       if  (fields.Length < 10)
       {
-        // We have an uncomplete text line; no point trying to decode it.
+        // We have an un-complete text line; no point trying to decode it.
         return;
       }
     }
@@ -649,11 +649,11 @@ namespace SipperFile
     
     
     private  float  OxygenSaturation 
-                   (float waterTemp,   // Celcius
+                   (float waterTemp,   // Celsius
                     float salinity     // psu
                    )
     {
-      // Froma page Appendix A, page 6of SBE 43  Dissolved Oxygen Sensor
+      // From page Appendix A, page 6of SBE 43  Dissolved Oxygen Sensor
       // Application Note No. 64.
 
       if  ((lastWaterTemp == waterTemp)  &&  (lastSalinity == salinity))

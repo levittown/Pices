@@ -120,7 +120,7 @@ PicesTrainingClassList::PicesTrainingClassList ()
 
 ///<summary>
 /// Will take ownership of the contents of 'trainingClasses'.  If 'trainingClasses'
-/// does not own its its own contents; will then create new instances of 'TrainingClass' 
+/// does not own its own contents; will then create new instances of 'TrainingClass' 
 /// objects.
 ///</summary>
 PicesTrainingClassList::PicesTrainingClassList (TrainingClassListPtr  trainingClasses)

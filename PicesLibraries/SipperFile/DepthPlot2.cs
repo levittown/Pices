@@ -35,7 +35,7 @@ namespace SipperFile
     private TextBox data8;
     private TextBox data9;
     private TextBox data10;  // Will be owned by "Form1",  we will only
-    // have a refrence to it.
+    // have a reference to it.
     private TextBox data11;
     private TextBox data12;
     private ComboBox data0Label;
@@ -819,7 +819,7 @@ namespace SipperFile
       
       if  (fieldIdxs[plottingAxisIdx, dataLabelIdx] == dataFieldIdx)
       {
-        //  Still pointiing to same label,  there is nothing to do.
+        //  Still pointing to same label,  there is nothing to do.
         return;
       }
       
@@ -892,7 +892,7 @@ namespace SipperFile
       w.WriteLine ("//");
       w.WriteLine ("// Ruler Values");
       w.WriteLine ("//");
-      w.WriteLine ("//  The following rows conatin the MinMax values and plot flag specified by the user.");
+      w.WriteLine ("//  The following rows contain the MinMax values and plot flag specified by the user.");
       w.WriteLine ("//  Each line consists 5 fields ['MinMax' '\t'  <FieldName>  '\t'  <MinValue>  '\t'  <MaxValue> '\t' <True/False>");
       w.WriteLine ("//");
       
@@ -1083,7 +1083,7 @@ namespace SipperFile
       
       if  (currentDataRow == null)
       {
-        // We have not collected any data yet.  We need a blank one to work with in the meen time.
+        // We have not collected any data yet.  We need a blank one to work with in the mean time.
         currentDataRow = new InstrumentData ();
       }
 

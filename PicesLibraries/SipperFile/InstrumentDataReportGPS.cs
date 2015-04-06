@@ -61,7 +61,7 @@ namespace SipperFile
 
 
     /**
-     * @brief Processes a GPGLL strig that contains Laditude and Longitudal info.
+     * @brief Processes a GPGLL string that contains Latitude and Longitude info.
      * @param[in] _str '$GPGLL' string with '$GPGLL' stripped off front.
      */
     private void  ProcessGPGLL (string[] fields)

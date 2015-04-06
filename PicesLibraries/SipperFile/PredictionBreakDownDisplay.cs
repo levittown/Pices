@@ -34,7 +34,7 @@ namespace SipperFile
     public PredictionBreakDownDisplay (PicesDataBase       _dbConn,
                                        String              _fileName,
                                        TrainingModel2      _trainingModel,
-                                       PicesInstrumentData _instrumentData,  /*!<  Instrument data that goes with image,  if null will read from dtabase. */
+                                       PicesInstrumentData _instrumentData,  /*!<  Instrument data that goes with image,  if null will read from database. */
                                        PicesRunLog         _runLog
                                       )
     {
@@ -77,7 +77,7 @@ namespace SipperFile
                                        PicesDataBaseImage  _image,
                                        PicesRaster         _raster,
                                        TrainingModel2      _trainingModel,
-                                       PicesInstrumentData _instrumentData,  /*!<  Instrument data that goes with image,  if null will read from dtabase. */
+                                       PicesInstrumentData _instrumentData,  /*!<  Instrument data that goes with image, if null will read from database. */
                                        PicesRunLog         _runLog
                                       )
     {

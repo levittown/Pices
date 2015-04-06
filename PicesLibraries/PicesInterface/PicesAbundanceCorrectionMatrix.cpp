@@ -217,7 +217,7 @@ void  PicesAbundanceCorrectionMatrix::PrintAdjustedResults (StreamWriter^       
     sw->WriteLine ();
     sw->WriteLine ("     ***ERROR***          ***ERROR***          ***ERROR***");
     sw->WriteLine ();
-    sw->WriteLine ("Exception occured attempting to compute abundance adjusted results.");
+    sw->WriteLine ("Exception occurred attempting to compute abundance adjusted results.");
     sw->WriteLine ();
     sw->WriteLine (eeee->ToString ());
     sw->WriteLine ();

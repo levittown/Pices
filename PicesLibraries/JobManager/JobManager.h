@@ -21,7 +21,7 @@ namespace  JobManagment
 {
   /**
   *@class  JobManager
-  *@brief  Responsable for keeping track of a list of jobs.
+  *@brief  Responsible for keeping track of a list of jobs.
   *@details See the application called RandomSplitsJobManager. It is the first application to use 
   *         this library. Any class that is derived from this class are required to implement these
   *         methods  "StatusFileProcessLine",  "StatusFileProcessLineJobStatusChange", "ToStatusStr"
@@ -33,7 +33,7 @@ namespace  JobManagment
 
     JobManager (const JobManager& j);
 
-    JobManager (JobManagerPtr _manager,               /*!< Ptr to job that is managing this 'JobManager'  */
+    JobManager (JobManagerPtr _manager,               /*!< Pointer to job that is managing this 'JobManager'  */
                 int           _jobId,
                 int           _parentId,
                 int           _numPorcessesAllowed,
@@ -156,7 +156,7 @@ namespace  JobManagment
     virtual void    StatusFileProcessLineJobStatusChange (KKStr&  statusLineStr);
 
     virtual KKStr   ToStatusStr ();  /**< derived classes should implement this method. They need to return a tab delimited string with all there parameters
-                                      * <FieldName1> <\t> <FieldValue1> <\t> <fieldName2> <\t> <FieldValue2>  etc etc etc ...
+                                      * <FieldName1> <\t> <FieldValue1> <\t> <fieldName2> <\t> <FieldValue2>  etc ...
                                       * They should call the base Class version of this method and return that string first.
                                       * ex:  return JobManager::ToStatusStr () + "\t" + "FieldName1" + "\t" + "Value1" + "\t" + "FieldName2" + "\t" + "Value2";
                                       */

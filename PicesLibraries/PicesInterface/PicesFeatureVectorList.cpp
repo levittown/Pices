@@ -205,7 +205,7 @@ namespace  PicesInterface
       return;
     }
 
-    featureData->Owner (false);  // The owership of the individule ImageFeature objects will be taken over by 
+    featureData->Owner (false);  // The ownership of the individual ImageFeature objects will be taken over by 
                                   // this container object "PicesFeatureVectorList".
 
     ImageFeaturesList::iterator  idx;

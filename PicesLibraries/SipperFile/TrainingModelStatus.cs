@@ -109,7 +109,7 @@ namespace SipperFile
 
     public  void  ForceCancelation ()
     {
-      // This is going to be a very ungracefull way to cancel. I am
+      // This is going to be a very ungraceful way to cancel. I am
       // I am going to attempt to kill the thread.
 
       trainingModelThread.Abort ();
@@ -284,7 +284,7 @@ namespace SipperFile
 
       if  (cancelFlag)
       {
-         dr = MessageBox.Show ("Cancel has alreadty been requested.   Do you wish to force cancelaion Yes/No ?",
+         dr = MessageBox.Show ("Cancel has already been requested.   Do you wish to force cancellation Yes/No ?",
                                "Training Model Status", 
                                MessageBoxButtons.YesNo
                               );

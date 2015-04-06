@@ -32,7 +32,7 @@ namespace SipperFile
 
       public   uint   runLength     = 0;
       public   Byte   runLengthChar = 0;
-      public   uint   textBlockLenHighByte = 0;  // If text block;  containg 1st 4 bits of length.
+      public   uint   textBlockLenHighByte = 0;  // If text block;  containing 1st 4 bits of length.
       public   uint   rawStringLen = 0;
       public   uint   rawStringBytesToRead = 0;
       public   Byte   rawPixel = 0;

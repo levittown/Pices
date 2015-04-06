@@ -123,28 +123,17 @@ public:
   virtual
   ~Sipper3Buff ();
 
-  const 
-  KKStr&   FileName ()  {return  fileName;}
-
-  kkuint32 CurRow   ()  {return  curRow;} 
-
-  bool     Eof ()       {return  eof;}
-
-  bool     Opened ()    {return  opened;}
-
-  kkuint32 RecCount ()  {return  recCount;}
 
   bool     FileFormatGood ();
 
-  void     GetNextLine (uchar*   lineBuff,
-                        kkuint32 lineBuffSize,
+  virtual
+  void     GetNextLine (uchar*     lineBuff,
+                        kkuint32   lineBuffSize,
                         kkuint32&  lineSize,
-                        kkuint32 colCount[],
+                        kkuint32   colCount[],
                         kkuint32&  pixelsInRow,
-                        bool&  flow
+                        bool&      flow
                        );
-
-  void  SkipToScanLine (kkuint32  scanLine);
 
 
 private:
@@ -161,15 +150,15 @@ private:
 
   inline
   void  GetNextSipperRec (kkuint32&  spaceLeft,
-                          uchar&   cameraNum,
-                          bool&    imageData,
-                          bool&    raw,
-                          bool&    eol,
-                          bool&    grayScale,
-                          uchar*   pixels,      /**< Array of size 12           */
-                          uchar&   numPixels,   /**< Number of pixels in pixels */
+                          uchar&     cameraNum,
+                          bool&      imageData,
+                          bool&      raw,
+                          bool&      eol,
+                          bool&      grayScale,
+                          uchar*     pixels,      /**< Array of size 12           */
+                          uchar&     numPixels,   /**< Number of pixels in pixels */
                           kkuint32&  numOfBlanks,
-                          bool&    moreRecs
+                          bool&      moreRecs
                          );
 
 

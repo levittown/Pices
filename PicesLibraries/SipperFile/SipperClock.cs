@@ -4,11 +4,13 @@ using System.Text;
 
 namespace SipperFile
 {
-  //****************************************************************************
-  //* Used by SipperFileBuffered to keep track of age if Buffered Frames       *
-  //* Every time a buffered frame is accesed it will updates its TimeStamp     *
-  //* from a global instance of 'SipperClock'                                  *
-  //****************************************************************************
+
+  /// <summary>
+  /// Used by SipperFileBuffered to keep track of age if Buffered Frames 
+  /// Every time a buffered frame is accessed it will updates its TimeStamp
+  /// from a global instance of 'SipperClock'.
+  /// </summary>
+ 
   public  class SipperClock
   {
     private  long  time = 0;

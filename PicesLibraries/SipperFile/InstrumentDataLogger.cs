@@ -4,17 +4,17 @@ using System.Windows.Forms;
 using System.IO;
 using System.Text;
 
-//*************************************************************************
-//*   The default logger that is to be used by InstrumentDataManager.  If *
-//*  you want to have more control over the instrumentation data then     *
-//*  sub-class from this class and overide the 'xxxxxxx' method.          *
-//*************************************************************************
 
 
 namespace SipperFile
 {
 
 
+  /// <summary>
+  ///   The default logger that is to be used by InstrumentDataManager.  If *
+  ///  you want to have more control over the instrumentation data then     *
+  ///  sub-class from this class and override the 'xxxxxxx' method.         *
+  /// </summary>
   public  class  InstrumentDataLogger
   {
     public  delegate  void  ReportLineCallBack (byte    deviceId, 

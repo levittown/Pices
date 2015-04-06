@@ -99,46 +99,45 @@ namespace  SipperHardware
 
 
     uchar    SelCameraNum () {return  selCameraNum;}
-    kkuint32 CurRow       () {return  curRow;} 
-    bool     Eof          () {return  eof;}
-    KKStr&   FileName     () {return  fileName;}
-    bool     Opened       () {return  opened;} 
-    kkuint32 RecCount     () {return  recCount;}
 
     void  SelCameraNum (uchar _selCameraNum)  {selCameraNum = _selCameraNum;}
 
 
-    void  GetNextLine  (uchar*   lineBuff,
-                        kkuint32 lineBuffSize,
+    virtual
+    void  GetNextLine  (uchar*     lineBuff,
+                        kkuint32   lineBuffSize,
                         kkuint32&  lineSize,
-                        kkuint32 colCount[],
+                        kkuint32   colCount[],
                         kkuint32&  pixelsInRow,
-                        bool&    flow);
+                        bool&      flow
+                       );
 
+    virtual
     void  SkipToScanLine (kkuint32  scanLine);
 
   private:
 
     inline
     void  GetNextSipperRec (kkint32&   spaceLeft,
-                            uchar&   cameraNum,
-                            bool&    raw,
-                            bool&    eol,
-                            bool&    flow,
-                            uchar&   pix0,
-                            uchar&   pix1,
-                            uchar&   pix2,
-                            uchar&   pix3,
-                            uchar&   pix4,
-                            uchar&   pix5,
-                            uchar&   pix6,
-                            uchar&   pix7,
-                            uchar&   pix8,
-                            uchar&   pix9,
-                            uchar&   pix10,
-                            uchar&   pix11,
+                            uchar&     cameraNum,
+                            bool&      raw,
+                            bool&      eol,
+                            bool&      flow,
+                            uchar&     pix0,
+                            uchar&     pix1,
+                            uchar&     pix2,
+                            uchar&     pix3,
+                            uchar&     pix4,
+                            uchar&     pix5,
+                            uchar&     pix6,
+                            uchar&     pix7,
+                            uchar&     pix8,
+                            uchar&     pix9,
+                            uchar&     pix10,
+                            uchar&     pix11,
                             kkint32&   numOfBlanks,
-                            bool&    moreRecs);
+                            bool&      moreRecs
+                           );
 
 
     uchar  selCameraNum;

@@ -40,7 +40,7 @@
 
 /**
  *@Namespace JobManagment
- *@brief  A framework for managing a large number of processes(Jobs) in a multi-cpu/ multi-o/s environment.
+ *@brief  A framework for managing a large number of processes(Jobs) in a multi-CPU/ multi-o/s environment.
  *@details The Idea is that 'Job' and  'JobManager' would be used to build specific Job Management code
  * around. In the case of 'FeatureSeletion'  we would derive sub-classes to manage the Major Steps and 
  * Jobs which would then in turn call a different set of Derived classes that would manage Binary, MultiClass,  

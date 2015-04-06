@@ -41,7 +41,7 @@ namespace SipperFile
     SolidBrush xAxisLableBrush = new SolidBrush (Color.White);
 
 
-    int  curCol = 0;  // current collumn to be plotting on
+    int  curCol = 0;  // current column to be plotting on
       
     //int  timeSpanSecs = 300;  //  in seconds
 
@@ -69,7 +69,7 @@ namespace SipperFile
     private  DateTime timeLeft    = DateTime.Now;
 
     private  float   secsPerCol = 1.0f;
-    private  int     timeRange = 300;   // 300 Seconds, 5 mins
+    private  int     timeRange = 300;   // 300 Seconds, 5 minutes
       
     private  int       ticCount      = 5;       // Number of Tic marks along X Axis
     private  Pen       ticPen        = new Pen (Color.LightGray);

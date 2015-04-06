@@ -1,7 +1,7 @@
 //********************************************************************************************
-//*  A class that will consist of static metods only.  This is where we will keep track of   *
-//*  the current active training libraries.  Thios way we will not need to implement the     *
-//*  code in each seperate application.                                                      *
+//*  A class that will consist of static methods only.  This is where we will keep track of  *
+//*  the current active training libraries. This way we will not need to implement the code  *
+//*  code in each separate application.                                                      *
 //********************************************************************************************
 
 using  System;
@@ -24,9 +24,9 @@ using  PicesInterface;
 namespace SipperFile
 {
   /// <summary>
-  /// A class that will consist of static metods only.  This is where we will keep track of
-  /// the current active training libraries.  Thios way we will not need to implement the
-  /// code in each seperate application. 
+  /// A class that will consist of static methods only.  This is where we will keep track of
+  /// the current active training libraries.  This way we will not need to implement the
+  /// code in each separate application. 
   /// 
   ///  Once a model is loaded via  "SetModel1"  or  "SetModel2"  they will not be unloaded 
   ///  except by the Memory Manager. This way if a process is using a specific model that 
@@ -37,7 +37,7 @@ namespace SipperFile
   {
     public  delegate  void  DoneLoadingEvent (TrainingModel2  model);
 
-    private  static  String               configFileName         = "c:\\Pices\\Configratiuons\\ActiveTrainingLibraries.cfg";
+    private  static  String               configFileName         = "c:\\Pices\\Configurations\\ActiveTrainingLibraries.cfg";
     private  static  Boolean              configLoaded           = false;
 
     private  static  TrainingModel2       model1                 = null;
@@ -103,7 +103,7 @@ namespace SipperFile
 
 
     /// <summary>
-    /// Indicates wheather tehre is at least one active Training Model fully loaded.
+    /// Indicates whether there is at least one active Training Model fully loaded.
     /// </summary>
     /// <returns></returns>
     public  static  bool  ModelsAreAvailable ()  
@@ -503,13 +503,10 @@ namespace SipperFile
         
       if  (model1CurentlyLoading)
       {
-        MessageBox.Show ("Can not set a new Model;  one is currenly loading now.");
+        MessageBox.Show ("Can not set a new Model;  one is currently loading now.");
         return;
       }
     }  /* SetModel1 */
-
-
-
 
 
 

@@ -64,7 +64,7 @@ namespace SipperFile
           }
           catch  (Exception  e4)
           {
-            manager.LogTxtLine (deviceId, "Exception occured during call to 'ParseTxtLine'." + "\n\n" + e4.ToString ());
+            manager.LogTxtLine (deviceId, "Exception occurred during call to 'ParseTxtLine'." + "\n\n" + e4.ToString ());
           }
           curLine = "";
           lastEolCh = ch;
@@ -86,7 +86,7 @@ namespace SipperFile
           }
           catch  (Exception e3)
           {
-            manager.LogTxtLine (deviceId, "Exception occured during call to 'ParseTxtBlock'." + "\n\n" + e3.ToString ());
+            manager.LogTxtLine (deviceId, "Exception occurred during call to 'ParseTxtBlock'." + "\n\n" + e3.ToString ());
             curLine = "";
           }
           lastEolCh = ch;

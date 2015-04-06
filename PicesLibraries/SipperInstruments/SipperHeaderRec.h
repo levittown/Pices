@@ -6,14 +6,6 @@
 
 #include  "Instrument.h"
 
-//********************************************************************************************
-//*  This 'class' is meant to deal with the header info at the start of each Sipper File.    *
-//*  This header info is in the form of a User Text message encoded as instrument data. The  *
-//*  'InstrumentDataUserMsgs' object is responsible for extracting this text.  This text can *
-//*  then be processed by the 'ParseHeaderStr' method.  There is a corresponding c# class in *
-//*  the 'SipperFile' library.                                                               *
-//********************************************************************************************
-
 
 namespace  SipperHardware
 {
@@ -51,6 +43,17 @@ namespace  SipperHardware
   typedef  vector<PortAssignmentPtr>  PortAssignmentList;
 
 
+
+
+ /**
+  *@class  SipperHeaderRec  Header info stored in the beginning of each sipper file.
+  *@details 
+  * This 'class' is meant to deal with the header info at the start of each Sipper File.
+  * This header info is in the form of a User Text message encoded as instrument data. The
+  * 'InstrumentDataUserMsgs' object is responsible for extracting this text.  This text can
+  * then be processed by the 'ParseHeaderStr' method.  There is a corresponding c# class in
+  * the 'SipperFile' library.
+  */
 
   class SipperHeaderRec
   {

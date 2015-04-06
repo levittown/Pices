@@ -18,7 +18,7 @@ namespace SipperFile
     
     //  Used to describe which logical column
     private  int              cropColLeft      = 0;     // Scan Column that we start with
-    private  int              cropColRight     = 4095;  // Scan Column that we end with;  other clumns will be ignored.
+    private  int              cropColRight     = 4095;  // Scan Column that we end with; other columns will be ignored.
     private  int              croppedWidth     = 4096;
     private  float            dispColsPerScanCol = 1.0f;  // Should be inverse of ratio;
     private  float            dispRowsPerScanRow = 1.0f;
@@ -301,7 +301,7 @@ namespace SipperFile
       }
 
 
-      // Now Try try the Sipple Sipper Format.
+      // Now try the Simple Sipper Format.
       try  
       {
         sipperFile = new SipperFileSimple (_fileName, _dataManger);
@@ -557,7 +557,7 @@ namespace SipperFile
   
     private  void  UpdateDisplayRow (byte[]   scanLine,
                                      ushort[] displayRow,
-                                     double   scanLineFrac      // Percentagof this row thatshoul contribute to the displayRow
+                                     double   scanLineFrac      // Percentage of this row that should contribute to the displayRow
                                     )
     {
       int  scanCol = cropColLeft;
@@ -608,7 +608,7 @@ namespace SipperFile
 
       byte[][]    scanRows = GetScanLines  (startScanRowInt, endScanRowInt);
 
-      //kak   When weOwnSipperFile resize from Max Screen when displaying from PicesInterface Comander weOwnSipperFile sometimes Get no Data WHY?
+      //kak   When weOwnSipperFile resize from Max Screen when displaying from PicesInterface Commander weOwnSipperFile sometimes Get no Data WHY?
       if  (scanRows == null)
         return;
 

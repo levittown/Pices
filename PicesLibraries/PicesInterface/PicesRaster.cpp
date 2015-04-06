@@ -167,7 +167,7 @@ namespace  PicesInterface
     case  MaskType::SQUARE9:  result = "Square-9";    break;
     case  MaskType::SQUARE11: result = "Square-11";   break;
     default:                  result = "UnKnown";     break;
-    }  /* end of switch (ot) */
+    }  /* end of switch (mt) */
 
     return  result;
   }  /* MaskTypeToStr */
@@ -217,7 +217,7 @@ namespace  PicesInterface
     case  OperationType::Closing:             result = "Closing";             break;
     case  OperationType::ConnectedComponent:  result = "ConnectedComponent";  break;
     case  OperationType::ConvexHull:          result = "ConvexHull";          break;
-    case  OperationType::Dilation:           result = "Dilation";           break;
+    case  OperationType::Dilation:            result = "Dilation";            break;
     case  OperationType::Edge:                result = "Edge";                break;
     case  OperationType::Erosion:             result = "Erosion";             break;
     case  OperationType::FillHoles:           result = "FillHoles";           break;
@@ -530,7 +530,7 @@ namespace  PicesInterface
 
     if  ((extension == "bmp")  &&  (!raster->Color ()))
     {
-      // We want to use the routine in ImageIO from "BaseLibrary" to save this image because it is much more efficient in space ussage.
+      // We want to use the routine in ImageIO from "BaseLibrary" to save this image because it is much more efficient in space usage.
       if  (raster->Color ())
         SaveImage (*raster, PicesKKStr::SystemStringToKKStr (fileName));
       else

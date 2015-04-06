@@ -2083,10 +2083,10 @@ void  ActiveLearning::ProcessAllJobs ()
     curJob = NULL;
 
 
-//    bool  memoryLeakOccured = _CrtDumpMemoryLeaks ();
-//    if  (memoryLeakOccured)
+//    bool  memoryLeakOccurred = _CrtDumpMemoryLeaks ();
+//    if  (memoryLeakOccurred)
 //    {
-//      cout << "Memory Leak Occured." << endl;
+//      cout << "Memory Leak Occurred." << endl;
 //    }
 
     curJob =  GetNextJob ();

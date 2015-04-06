@@ -81,7 +81,7 @@ namespace SipperFile
       // 
       dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
       this.PredProbability.DefaultCellStyle = dataGridViewCellStyle1;
-      this.PredProbability.HeaderText = "Probabilty";
+      this.PredProbability.HeaderText = "Probability";
       this.PredProbability.Name = "PredProbability";
       this.PredProbability.ReadOnly = true;
       this.PredProbability.Width = 80;

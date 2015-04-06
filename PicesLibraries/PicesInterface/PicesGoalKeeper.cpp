@@ -49,7 +49,7 @@ void  PicesGoalKeeper::StartBlock ()
         if  (curProcessorId == blockerThreadId)
         {
           // We are the thread that already holds the block;  so ok for us 
-          // to procees.
+          // to process.
           blockerDepth++;
           weAreBlocked = false;
           numBlockedThreads--;
@@ -161,7 +161,7 @@ void   PicesGoalKeeper::EndBlock ()
     throw gcnew Exception ("PicesGoalKeeper::EndBlock    Name[" + name + "]  There was no block established.");
 
   else if  (errorCode == 2)
-    throw gcnew Exception ("PicesGoalKeeper::EndBlock    Name[" + name + "]  ThreadId[" + curProcessorId + "] Curently holds Block;  our ThreadId[" + curProcessorId + "]");
+    throw gcnew Exception ("PicesGoalKeeper::EndBlock    Name[" + name + "]  ThreadId[" + curProcessorId + "] Currently holds Block;  our ThreadId[" + curProcessorId + "]");
 
   return;
 }  /* EndBlock */

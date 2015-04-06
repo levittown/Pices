@@ -258,7 +258,7 @@ namespace  PicesInterface
           depth = Max (0, depth);
           if  (depth > 1000)
           {
-            // Don't believe that it can be that deap so will ignore this Instrment Data line.
+            // Don't believe that it can be that deep so will ignore this Instrument Data line.
           }
           else
           {

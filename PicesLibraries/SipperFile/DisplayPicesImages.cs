@@ -605,7 +605,7 @@ namespace SipperFile
         catch (Exception  e3)
         {
           MessageBox.Show (this, 
-                           "Exception occured saving image\n\n" + e3.ToString (), 
+                           "Exception occurred saving image\n\n" + e3.ToString (), 
                            "Save Image",
                            MessageBoxButtons.OK
                           );

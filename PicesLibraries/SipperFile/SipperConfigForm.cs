@@ -999,7 +999,7 @@ namespace SipperFile
                   msg += errorMsgs[x];
                 }
 
-                MessageBox.Show (msg, "Validtion Errors");
+                MessageBox.Show (msg, "Validation Errors");
                 return;
         */        
       }			
@@ -1177,7 +1177,7 @@ namespace SipperFile
         return "";
       }
       catch  (SecurityException)            {return "User lacks required permissions.";}
-      catch  (UnauthorizedAccessException)  {return "Access to " + fn + " is denide.";}
+      catch  (UnauthorizedAccessException)  {return "Access to " + fn + " is denied.";}
       catch  (PathTooLongException)         {return "Path name is too long.";}
       catch  (NotSupportedException)        {return "Invalid File Name.";}
       catch  (Exception  e)
@@ -1282,7 +1282,7 @@ namespace SipperFile
     
       if  (invalidChractersUsed != "")
       {
-        return  "Invalid Chatracters[" + invalidChractersUsed + "]";
+        return  "Invalid Characters[" + invalidChractersUsed + "]";
       }
 
       return "";
@@ -1420,7 +1420,7 @@ namespace SipperFile
       this.headerSpaceLeft.Text = headerSpaceLeft.ToString ();
       if  (headerSpaceLeft < 0)
       {
-        errMsg = "The maximum allowable space allowed for the hearder field has been exceeded.";
+        errMsg = "The maximum allowable space allowed for the header field has been exceeded.";
         errorProvider1.SetError (this.headerSpaceLeft, errMsg);
       }
       else

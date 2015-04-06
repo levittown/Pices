@@ -1,10 +1,10 @@
 #ifndef  _INSTRUMENTDATACTDPLUS_
 #define  _INSTRUMENTDATACTDPLUS_
 
-#include  "KKStr.h"
+#include "KKStr.h"
 using namespace KKB;
 
-#include  "InstrumentDataReport.h"
+#include "InstrumentDataReport.h"
 
 namespace  SipperHardware
 {

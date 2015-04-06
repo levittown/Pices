@@ -1,27 +1,5 @@
 #ifndef  _SIPPERBUFF_
 #define  _SIPPERBUFF_
-//**************************************************************************
-//*                                SipperBuff                              *
-//*                                                                        *
-//*                                                                        *
-//* To be sub-classed for implementation of different specific Sipper file *
-//* layouts.                                                               *
-//*                                                                        *
-//*                                                                        *
-//* <p>Copyright: Copyright (c) 2003</p>                                   *
-//* <p>author     Kurt Kramer                                              * 
-//*                                                                        *
-//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *
-//*                                                                        *
-//*  January 2003   Communicate to Sipper File through this object.        *   
-//*  Kurt Kramer                                                           *
-//*                                                                        *
-//*  Kurt     2005-Feb-03  Added support for Sipper 3.                     *
-//*  kurt     2005-Aug-12  Added support for SIPPER instrument data.       *
-//*                        Now create an instance of InstrumentDataManager *
-//*                        which all SIPPER 3 instrument data is sent to.  *
-//*                                                                        *
-//**************************************************************************
 
 #include  "RunLog.h"
 #include  "KKStr.h"
@@ -54,13 +32,12 @@ namespace SipperHardware
                   sfSipper4Bit,
                   sfUnKnown
                  }  SipperFileFormat;
-
-
-
+  
 
 
   /**
    *@class SipperBuff  Base class to be used for all the different Sipper File Formats.
+   *@details  Each derived sub-class needs to implement 'GetNextSipperRec', 'FileFormatGood',
    *@see  InstrumentDataManager
    */
   class  SipperBuff
@@ -93,26 +70,28 @@ namespace SipperHardware
   
     kkuint32  CurRow           ()  const {return  curRow;} 
     kkuint64  CurRowByteOffset ()  const {return  curRowByteOffset;}
-    bool    Eof              ()  const {return  eof;}
-    bool    InvalidLine      ()  const {return  invalidLine;}
-    bool    Opened           ()  const {return  opened;}
+    bool      Eof              ()  const {return  eof;}
+    bool      InvalidLine      ()  const {return  invalidLine;}
+    bool      Opened           ()  const {return  opened;}
     kkuint32  RecCount         ()  const {return  recCount;}
-    kkint32 ScanRate         ()  const {return  25000;}
+    kkint32   ScanRate         ()  const {return  25000;}
   
     virtual
-    kkint32 LineWidth        ()  const {return (kkint32)MAXLINELEN;}  /**< Returns the width in pixles of the associated scanner file. */
+    kkint32 LineWidth        ()  const {return (kkint32)MAXLINELEN;}  /**< Returns the width in pixels of the associated scanner file. */
 
     virtual 
-    void  GetNextLine (uchar*   lineBuff,
-                       kkuint32 lineBuffSize,
+    void  GetNextLine (uchar*     lineBuff,
+                       kkuint32   lineBuffSize,
                        kkuint32&  lineSize,
-                       kkuint32 colCount[],
+                       kkuint32   colCount[],
                        kkuint32&  pixelsInRow,
-                       bool&    flow
+                       bool&      flow
                       ) = 0;
   
+    virtual
     void  SkipToScanLine (kkuint32  scanLine);
   
+    virtual
     void  SkipToScanLine (kkuint32  _scanLine,
                           kkuint64  _byteOffset
                          );

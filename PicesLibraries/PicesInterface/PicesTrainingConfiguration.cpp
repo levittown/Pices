@@ -118,8 +118,8 @@ PicesTrainingConfiguration::PicesTrainingConfiguration (DirectoryInfo^  di,
 
   classes = config->ExtractClassList ();
 
-  // We are never ever suposed to delete a 'FileDesc' object.  they are managed wholly in the "FileDesc" class.  
-  // Other parts of the app may and probably will be using this same instance.
+  // We are never ever supposed to delete a 'FileDesc' object.  they are managed wholly in the "FileDesc" class.  
+  // Other parts of the application may and probably will be using this same instance.
   //delete  fd;  fd = NULL;
   AdjustCurMemoryPressure ();
 }  /* CreateTrainingModelFromDirectory */

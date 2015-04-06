@@ -1,24 +1,21 @@
-#include  "FirstIncludes.h"
-#include  <stdio.h>
-#include  <string.h>
-#include  <ctype.h>
-
-#include  <iostream>
-#include  <fstream>
-#include  <vector>
-
-#include  "MemoryDebug.h"
-
+#include "FirstIncludes.h"
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include "MemoryDebug.h"
 using namespace std;
 
-#include  "KKBaseTypes.h"
-#include  "OSservices.h"
-#include  "RunLog.h"
-#include  "KKStr.h"
+#include "KKBaseTypes.h"
+#include "OSservices.h"
+#include "RunLog.h"
+#include "KKStr.h"
 using namespace KKB;
 
 
-#include  "Sipper3RevBuff.h"
+#include "Sipper3RevBuff.h"
 using namespace SipperHardware;
 
 
@@ -133,7 +130,7 @@ void  Sipper3RevBuff::GetNextSipperRec (kkuint32&  spaceLeft,
       //pixels[2] = sipperRec.pix5  * 4 + sipperRec.pix4  * 2 + sipperRec.pix3;
       //pixels[3] = sipperRec.pix2  * 4 + sipperRec.pix1  * 2 + sipperRec.pix0;
 
-      // As per bill Flanery, there was a deployment of SIPPER 3 such that 
+      // As per Bill Flanery, there was a deployment of SIPPER 3 such that 
       // some wires were reversed, so need to reverse the pixels to correct.
       // per email from B.F.   1,2,3,4 must be written to the image as 2,1,4,3.
       //                       0,1,2,3                                 1,0,3,2.
@@ -159,7 +156,7 @@ void  Sipper3RevBuff::GetNextSipperRec (kkuint32&  spaceLeft,
       pixels[11] = sipperRec.pix0;
 
       // Since this is B/W data,
-      // lets convert to   "0 for white"  and  "7 fo black"
+      // lets convert to   "0 for white"  and  "7 for black"
       kkint32  x;
       for  (x = 0;  x < 12;  x++)
       {

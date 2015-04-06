@@ -1,23 +1,5 @@
 #ifndef  _INSTRUMENTDATAMANAGER_
 #define  _INSTRUMENTDATAMANAGER_
-//*********************************************************************************
-//*                                                                               *
-//*  Responsible for managing instrument data that is collected by SipperBuff or  *
-//* one of its dependents.                                                        *
-//*                                                                               *
-//* Originally developed when SIPPER3 format came out.  This format includes      *
-//* instrument data.                                                              *
-//*                                                                               *
-//* Will maintain a list of 'InstrumentDataReport' instances.  One for each In-   *
-//* strumen/Sensor and Data or text.  SipperBuff will call 'ReportInstrumentData' *
-//* method.  We will decide the correct 'InstrumentdataReport' instance to send   *
-//* it to, and if necessary, create a new instance of one.                        *
-//*                                                                               *
-//*-------------------------------------------------------------------------------*
-//* 2005-08-12 Kurt Kramer   Initial development                                  *
-//*                                                                               *
-//*                                                                               *
-//*********************************************************************************
 
 #include "KKStr.h"
 #include "RunLog.h"
@@ -55,8 +37,13 @@ namespace SipperHardware
 
 
   /**
-   *@class  InstrumentDataManager  Manages instrumentation data supplied by SipperBuff classes
-   *forwarding to appropriate 'InstrumentDataReport' derived objects.
+   *@class  InstrumentDataManager  Manages instrumentation data supplied by SipperBuff derived classes
+   * forwarding to appropriate 'InstrumentDataReport' derived objects.
+   *@details  Responsible for managing instrument data that is collected by SipperBuff or one of its decedents.
+   * Originally developed when SIPPER3 format came out. This format includes instrument data. 
+   * Will maintain a list of 'InstrumentDataReport' instances.  One for each Instrument/Sensor and Data or Text.
+   * SipperBuff will call the 'ReportInstrumentData' method which will decide the correct 'InstrumentdataReport' instance to send
+   * it to, and if necessary, create a new instance of one.
    */
   class InstrumentDataManager
   {
@@ -69,7 +56,7 @@ namespace SipperHardware
      *@param[in]  _sipperFileName Name of Sipper file that is being processed.
      *@param[in]  _sipperFile An instance of a SipperFile object that contains SIPPER configuration data for specific SIPPER file.
      *@param[in]  _reportDir Directory where to place Instrument/Sensor data/text files.
-     *@param[in]  _log       A logfile stream. All important events will be output to this stream
+     *@param[in]  _log       A log-file stream. All important events will be output to this stream
      */
     InstrumentDataManager (const KKStr&   _sipperFileName,
                            SipperFilePtr  _sipperFile,
@@ -100,10 +87,10 @@ namespace SipperHardware
   
     /**
      *@brief When ever SipperBuff gets instrument data,  reports thru this method.
-     *@param[in]  curScanLine   Scan line that was last read when encountering this "Instrumentdata".
+     *@param[in]  curScanLine   Scan line that was last read when encountering this "InstrumentData".
      *@param[in]  InstrumentID  Sensor/Instrument ID
      *@param[in]  text          Set to true = text data,  false = binary data.
-     *@param[in]  data          data from SIPPER file.
+     *@param[in]  data          One byte of data from the SIPPER file.
     */
     void  ReportInstrumentData (kkuint32 curScanLine,
                                 uchar  instrumentId,
@@ -201,7 +188,7 @@ namespace SipperHardware
     KKStr                     sipperFileName;
     InstrumentDataReportPtr*  textReports;
   
-    // Fields to suport tracking scan lines per meter depth.
+    // Fields to support tracking scan lines per meter depth.
     kkint32                   depthLastReported;
     kkint32                   depthMax;
     kkuint32                  lastScanLine;

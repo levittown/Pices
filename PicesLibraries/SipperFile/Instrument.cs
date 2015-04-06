@@ -187,7 +187,7 @@ namespace SipperFile
   public class InstrumentBatteryMeters : Instrument
   {
     public InstrumentBatteryMeters ()
-      : base ("BAT", "Battery Metters")
+      : base ("BAT", "Battery Meters")
     {
     }
 

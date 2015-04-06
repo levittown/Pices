@@ -5,7 +5,7 @@
 /**
  *@class MLL::VolumeSampledStat
  *@details
- *  Used to Pass Volumne of water sampled per (depth in meters) groupings.  Each instance keeps track of binId, 
+ *  Used to Pass Volume of water sampled per (depth in meters) groupings.  Each instance keeps track of binId, 
  *  binDepth, and volumeSampled.
  *  
  *@author  Kurt Kramer
@@ -68,7 +68,7 @@ namespace  SipperHardware
     void  Add (const VolumeSampledStat&  stat);
 
     /** Caller is giving ownership of 'stat' to this instance; upon return 'stat' may be set to NULL
-     * indicating that it was merged with an existing instance alrady in the list.
+     * indicating that it was merged with an existing instance already in the list.
      */
     void  Give (VolumeSampledStatPtr&  stat);
     

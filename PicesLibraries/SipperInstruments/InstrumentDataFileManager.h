@@ -165,7 +165,7 @@ namespace  SipperHardware
                                                  kkuint32      tooLeftCol,
                                                  kkuint32      height,
                                                  kkuint32      width,
-                                                 KKB::uchar    connectedComponentDist,  /**< Siize of structure used by Connected Component Analysis */
+                                                 KKB::uchar    connectedComponentDist,  /**< Size of structure used by Connected Component Analysis */
                                                  RunLog&       log
                                                 );
   

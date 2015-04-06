@@ -234,7 +234,7 @@ namespace SipperFile
 
       if  (!DbConn ().LastOpSuccessful)
       {
-        MessageBox.Show (this, "Error occured udating Database.\n\n" + DbConn ().LastErrorDesc (), "Station Table Update Error", MessageBoxButtons.OK);
+        MessageBox.Show (this, "Error occurred updating Database.\n\n" + DbConn ().LastErrorDesc (), "Station Table Update Error", MessageBoxButtons.OK);
       }
     }  /* PerformUpdate*/
 

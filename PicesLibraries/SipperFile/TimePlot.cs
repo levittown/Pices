@@ -17,12 +17,12 @@ namespace SipperFile
 {
   public partial class TimePlot : Form
   {
-    // InstrumentData support variables,  one entry for each posible entry in InstrumentData. 
+    // InstrumentData support variables,  one entry for each possible entry in InstrumentData. 
     private  float[]          minValues       = null;
     private  float[]          maxValues       = null;
     private  bool []          plotDataSeries  = null;
     private  float[]          rowScaleFactors = null;  // Reflects the number units per pixel row for the respective data (minValues - maxValues)/numOfRows
-                                                       // Recalcilated every time the ChartPanel is resized.
+                                                       // Recalculated every time the ChartPanel is resized.
     
     // These variables support the actual data to be plotted
     private  int[]            fieldIdxs       = null;    // Specifies which InstrumentData fields are to be displayed in respective plottedSeries.
@@ -43,20 +43,21 @@ namespace SipperFile
     private  TimePlotParameters  chartParms       = null;
 
  
-    private int   lastHistoryRowDisplayed = -1;  // Indictes which history  row was last updated to the 
-                                                 // plot panel.  Any rows beyont this value will need to 
-                                                 // be painted to the panel.
+    private int   lastHistoryRowDisplayed = -1;  /**< Indicates which history  row was last updated to the 
+                                                  * plot panel.  Any rows beyond this value will need to 
+                                                  * be painted to the panel.
+                                                  */
 
     private  bool  liveUpdate = true;  // true  = Update display every clock tic
                                        // false = historical display.
 
 
-    private int    ticCount = 0;  // Used by 'updateChartTimer_Tick' to keep track of number of times ticker was envoked.
+    private int    ticCount = 0;  // Used by 'updateChartTimer_Tick' to keep track of number of times ticker was evoked.
 
     private DateTime  timeDomainScrollBarMin = DateTime.Now;   // Used by TimeDomainScrollBar  to keep track of what part 
     private DateTime  timeDomainScrollBarMax = DateTime.Now;   // of the time domain it is relating to.  This way we can 
-                                                                 // keep track as time goes along to make sure that the
-                                                                 // scrollBar acuratly reflects what data we have.
+                                                               // keep track as time goes along to make sure that the
+                                                               // scrollBar accurately reflects what data we have.
 
     private string    timePlotConfigFileName  = "";
 
@@ -348,7 +349,7 @@ namespace SipperFile
       suspendCount--;
       if  (suspendCount > 0)
       {
-        // We nned to be called until 'suspendCount' == 0  before we actuall ResumeLayout
+        // We need to be called until 'suspendCount' == 0  before we actual ResumeLayout
         return;
       }
 
@@ -749,8 +750,8 @@ namespace SipperFile
 
     private void  UpdateTimePlot ()
     {
-      // This fuction gets called by the timer;  we are to update the 
-      // plot area with any new data that has arived.
+      // This function gets called by the timer;  we are to update the 
+      // plot area with any new data that has arrived.
       
       if  (lastHistoryRowDisplayed < 0)
         lastHistoryRowDisplayed = 0;
@@ -763,7 +764,7 @@ namespace SipperFile
 
       if  (lastHistoryRowDisplayed > lastRowInHistory)
       {
-        // Histry must have been cleaed.  We have to reset 'lastHistoryRowDisplayed'
+        // History must have been cleared.  We have to reset 'lastHistoryRowDisplayed'
         lastHistoryRowDisplayed = lastRowInHistory;
       }
 
@@ -775,7 +776,7 @@ namespace SipperFile
       // Make sure that the last row in 'history' is visible in plot 
       // area as currently defined by 'timeLeft' and 'timeRight'.
 
-      // Compute instatanious Delta-Depth
+      // Compute instantaneous Delta-Depth
 
 
       InstrumentData  lastHistRow = (InstrumentData)(history[lastRowInHistory]);
@@ -827,7 +828,7 @@ namespace SipperFile
 
       int  row = 0;
 
-      // lets skip past all the old hostory.
+      // lets skip past all the old history.
       while  (row < rowsInHistory)
       {
         InstrumentData dr = (InstrumentData)history[row];
@@ -904,7 +905,7 @@ namespace SipperFile
         {
           if  (chartParms.TimeLeft ().CompareTo (minTime) < 0)
           {
-            // This should never be able to happen;  but unfortunatly it seems to be happening in test.
+            // This should never be able to happen;  but unfortunately it seems to be happening in test.
             ts = new TimeSpan (0, 0, 0);
           }
           else

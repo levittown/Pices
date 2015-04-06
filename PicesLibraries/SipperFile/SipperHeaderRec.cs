@@ -7,16 +7,16 @@ namespace SipperFile
 	/// <summary>
 	/// Summary description for SipperConfigRec.
   /// Used for the SipperFileHeader record.  It will have the ability to code and decode the 
-  /// information thatwill be stored at the very beginning of a SipperFile.
+  /// information that will be stored at the very beginning of a SipperFile.
 	/// </summary>
 	public class SipperHeaderRec
 	{
 
 
-    public const int MaxHeaderLen = 455;         // The first 455 bytes of a sipper file are supposd to be header
-                                                 // info.  After that teh avctual SIPPER data starts.
+    public const int MaxHeaderLen = 455;         // The first 455 bytes of a sipper file are supposed to be header
+                                                 // info.  After that the actual SIPPER data starts.
 
-    public const int MaxSipperFileNameLen = 30;  // Longest name thatthe SIPPER data controller can support
+    public const int MaxSipperFileNameLen = 30;  // Longest name that the SIPPER data controller can support
 
     private string   sipperFileName;
     private string   cruiseLocation;
@@ -82,7 +82,7 @@ namespace SipperFile
 
     
     // Builds Header string that will be placed at beginning of SIPPER file
-    // with ethe sfd command.
+    // with the sfd command.
     public  string  HeaderStr ()
     {
       int  x = 0;

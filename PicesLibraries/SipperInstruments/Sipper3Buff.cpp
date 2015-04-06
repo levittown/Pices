@@ -80,7 +80,7 @@ void  Sipper3Buff::GetNextSipperRec (kkuint32&  spaceLeft,
                                      bool&      eol,
                                      bool&      grayScale,
                                      uchar*     pixels,       // Array of size 12
-                                     uchar&     numPixels,    // num of pixels in pixels 
+                                     uchar&     numPixels,    /**< number of pixels in pixels.  */
                                      kkuint32&  numOfBlanks,
                                      bool&      moreRecs
                                     )

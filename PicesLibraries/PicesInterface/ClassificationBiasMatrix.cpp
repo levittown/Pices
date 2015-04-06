@@ -406,12 +406,12 @@ void   ClassificationBiasMatrix::PerformAdjustmnts (array<double>^  classifiedCo
                                                     array<double>^ &stdErrors
                                                    )
 {
-  // For description of calc's reed the paper: 
-  //    "Estimating the Taxonomic composition of a sample when individules are classified with error"
+  // For description of calculations read the paper: 
+  //    "Estimating the Taxonomic composition of a sample when individuals are classified with error"
   //     by Andrew Solow, Cabll Davis, Qiao Hu
-  //     Woods Hole Ocanographic Institution, Woods Hole Massachusetts
-  //     Marine Ecology Progresss Series
-  //     published 2006-july-06;  vol 216:309-311
+  //     Woods Hole Oceanographic Institution, Woods Hole Massachusetts
+  //     Marine Ecology Progress Series
+  //     published 2006-July-06;  vol 216:309-311
 
   if  (classifiedCounts == nullptr)
     throw gcnew Exception ("ClassificationBiasMatrix::PerformAdjustmnts    ***ERROR***   classifiedCounts==nullptr");
@@ -432,7 +432,7 @@ void   ClassificationBiasMatrix::PerformAdjustmnts (array<double>^  classifiedCo
     {
       if  ((*probabilities)[x][x] == 0.0)
       {
-        // This will cause the inversion of the diagonal marix to fail.  To deal
+        // This will cause the inversion of the diagonal matrix to fail.  To deal
         // with this situation; I will steal some probability from other buckets on 
         // same row.
 
@@ -492,7 +492,7 @@ void   ClassificationBiasMatrix::PerformAdjustmnts (array<double>^  classifiedCo
     }
 
 
-    db << endl << endl << "Inveset Matrix" << endl;
+    db << endl << endl << "Inverse Matrix" << endl;
     for  (c = 0;  c < probabilities->NumOfCols ();  c++)
        db << "\t" << c;
     db << endl;
@@ -673,6 +673,6 @@ void  ClassificationBiasMatrix::PrintAdjustedResults (StreamWriter^   sw,
   catch  (Exception^ e)
   {
     sw->Flush ();
-    throw gcnew Exception ("ClassificationBiasMatrix::PrintAdjustedResults  ***ERROR***  Error claculating Adjusted Results.", e);
+    throw gcnew Exception ("ClassificationBiasMatrix::PrintAdjustedResults  ***ERROR***  Error Calculating Adjusted Results.", e);
   }
 }  /* PrintAdjustedResults */

@@ -44,7 +44,7 @@ namespace SipperFile
     /// </summary>
     /// <param name="classes"></param>
     /// <param name="_rootDir">Root directory of training library that contains examples for the classes.</param>
-    /// <param name="_activeClasses">List of classes that current classifer supports;  these classes will be highlighted.</param>
+    /// <param name="_activeClasses">List of classes that current classifier supports;  these classes will be highlighted.</param>
     public SelectAPicesClass (PicesClassList  classes,
                               String          _rootDir,
                               PicesClassList  _activeClasses

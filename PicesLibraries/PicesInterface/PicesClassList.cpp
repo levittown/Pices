@@ -619,16 +619,16 @@ PicesClassList^  PicesClassList::ExtractListOfClassesForAGivenHierarchialLevel (
 
 
 
-  //**********************************************************************************
-  //*  Needed by PicesClassList to help locate instanes of 'PicesClass'  when given  *
-  //*  a pointer to a 'MLClass' object.  It implements a simple Binary Tree with  *
-  //*  that supports only 2 operations  'Add'  and  'LookUp'.                        *
-  //*                                                                                *
-  //*  neither 'map<>' or 'SortedList<>' could wuld with both Managed and Unmanaged  *
-  //*  objects together.                                                             *
-  //*                                                                                *
-  //*  This is an UnBalanced tree so some thought into reblancing it needs 2 b done. *
-  //**********************************************************************************
+  //************************************************************************************
+  //*  Needed by PicesClassList to help locate instances of 'PicesClass'  when given   *
+  //*  a pointer to a 'MLClass' object.  It implements a simple Binary Tree with       *
+  //*  that supports only 2 operations  'Add'  and  'LookUp'.                          *
+  //*                                                                                  *
+  //*  neither 'map<>' or 'SortedList<>' could work with both Managed and Unmanaged    *
+  //*  objects together.                                                               *
+  //*                                                                                  *
+  //*  This is an UnBalanced tree so some thought into re-balancing it needs 2 b done. *
+  //************************************************************************************
 PicesClassList::ManagedClassLocator::ManagedClassLocator  ()
 {
   root = nullptr;

@@ -8,7 +8,7 @@ namespace SipperFile
 	/// <summary>
 	/// Summary description for InstrumentDataManager.
   /// Instrument data from sipper files will be directed to an instance of this class.
-  /// then based off the DeviceId the data will be sent to the appropriate Instrtument 
+  /// then based off the DeviceId the data will be sent to the appropriate Instrument 
   /// derived class.
 	/// </summary>
 	public class InstrumentDataManager
@@ -20,7 +20,7 @@ namespace SipperFile
     PortAssignment[]          portAssignments = null;
 
     InstrumentDataReport[]    reporters = null;  // There will one potential Reporter for each of
-                                               // the 64 posible devices.
+                                               // the 64 possible devices.
 
 
     const byte                MaxNumOfDevices     = 64;
@@ -45,7 +45,7 @@ namespace SipperFile
     /// <param name="_sipperFile">The _sipper file.</param>
     /// <param name="_configRec">The _config rec.</param>
     /// <param name="_currentDataRow">The _current data row.</param>
-		public InstrumentDataManager (InstrumentDataLogger  _dataLogger,   // Will take ownershop of '_dataLogger'
+		public InstrumentDataManager (InstrumentDataLogger  _dataLogger,   // Will take ownership of '_dataLogger'
 		                              PicesSipperFile       _sipperFile,
                                   SipperConfigRec       _configRec,
                                   InstrumentData        _currentDataRow
@@ -140,7 +140,7 @@ namespace SipperFile
     private  void  InitializeLatitude ()
     {
       // because we do not always have access to the SipperFile, or the SIPPER file does
-      // not have the latitude info in it we need to deduce the approximate lattitude from 
+      // not have the latitude info in it we need to deduce the approximate latitude from 
       // the sipper file name.
       if  (sipperFile != null)
       {
@@ -174,7 +174,7 @@ namespace SipperFile
     /// <summary>
     /// Assigns the reporter.
     /// </summary>
-    /// <param name="deviceID">The device ID ccomming from the SIPPER file.  See Sipper3 File Format.
+    /// <param name="deviceID">The device ID coming from the SIPPER file.  See Sipper3 File Format.
     ///                        see Sipper3File.cs
     /// </param>
     /// <param name="reporter">The reporter.</param>

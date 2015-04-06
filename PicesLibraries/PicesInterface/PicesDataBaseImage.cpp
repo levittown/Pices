@@ -406,14 +406,14 @@ int  PicesDataBaseImageList::PicesDataBaseImageComparer::Compare
 
   if  (result == 0)
   {
-    // Since we are still tied;  we will compre in temporal order.
+    // Since we are still tied;  we will compare in temporal order.
     result = x->SipperFileName->CompareTo (y->SipperFileName);
     if  (result == 0)
       result = x->TopLeftRow.CompareTo (y->TopLeftRow);
   }
 
   if  (reverseSort)
-    result = 0 - result;  // Revese the result of th ecomparision.
+    result = 0 - result;  // Reverse the result of the comparison.
 
   return  result;
 }  /* Compare */
@@ -439,15 +439,15 @@ String^  PicesDataBaseImageList::SortOrderTypeToStr (SortOrderType  so)
 
   switch (so)
   {
-  case  SortOrderType::soNULL:                result = "Null";         break;
-  case  SortOrderType::soBreakTie:            result = "BreakTie";     break;
-  case  SortOrderType::soClassName:           result = "ClassName";    break;
-  case  SortOrderType::soDepth:               result = "Depth";        break;
-  case  SortOrderType::soProbability:         result = "Probability";  break;
-  case  SortOrderType::soClass2:              result = "Class2";       break;
-  case  SortOrderType::soSize:                result = "Size";         break;
-  case  SortOrderType::soSpatial:             result = "Spatial";      break;
-  case  SortOrderType::soValidatedClassName:  result = "ValidatedName";    break;
+  case  SortOrderType::soNULL:                result = "Null";           break;
+  case  SortOrderType::soBreakTie:            result = "BreakTie";       break;
+  case  SortOrderType::soClassName:           result = "ClassName";      break;
+  case  SortOrderType::soDepth:               result = "Depth";          break;
+  case  SortOrderType::soProbability:         result = "Probability";    break;
+  case  SortOrderType::soClass2:              result = "Class2";         break;
+  case  SortOrderType::soSize:                result = "Size";           break;
+  case  SortOrderType::soSpatial:             result = "Spatial";        break;
+  case  SortOrderType::soValidatedClassName:  result = "ValidatedName";  break;
    
   }
   return  result;

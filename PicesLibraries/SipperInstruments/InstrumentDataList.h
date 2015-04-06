@@ -10,12 +10,12 @@
  *@author  Kurt Kramer
  */
 
-#include  "KKBaseTypes.h"
-#include  "KKQueue.h"
-#include  "RunLog.h"
+#include "KKBaseTypes.h"
+#include "KKQueue.h"
+#include "RunLog.h"
 using namespace KKB;
 
-#include  "InstrumentData.h"
+#include "InstrumentData.h"
 
 namespace  SipperHardware
 {
@@ -63,7 +63,7 @@ namespace  SipperHardware
      */
     VectorDouble  FrameOffsetsInMeters (kkuint32 scanLinesPerFrame,
                                         float  scanRate,             // Scan lines per second.
-                                        float  defaultFlowRate       // If a Instrument Data record has a Flowrte <= 0.0 the the default rate will be used.
+                                        float  defaultFlowRate       // If a Instrument Data record has a FlowRate <= 0.0 the default rate will be used.
                                        );
   
     

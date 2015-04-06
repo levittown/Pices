@@ -394,7 +394,7 @@ namespace SipperFile
       }
       if  (errorMsgs.Length > 0)
       {
-        MessageBox.Show ("The fllowing errors occured" + "\n" + "\n" + errorMsgs + "\n", "Add Sipper Files Failed.");
+        MessageBox.Show ("The following errors occurred" + "\n" + "\n" + errorMsgs + "\n", "Add Sipper Files Failed.");
       }
       else
       {
@@ -434,7 +434,7 @@ namespace SipperFile
           DbConn ().SipperFileInsert (newSipperFile);
           if  (!DbConn ().Valid ())
           {
-            MessageBox.Show ("Error occured adding SipperFile[" + rootName + "]" + "\n\n" + DbConn ().LastErrorDesc ());
+            MessageBox.Show ("Error occurred adding SipperFile[" + rootName + "]" + "\n\n" + DbConn ().LastErrorDesc ());
             break;
           }
         }

@@ -2,7 +2,6 @@
 #define  _INSTRUMENTDATA_
 
 #include <map>
-
 #include "KKBaseTypes.h"
 #include "DateTime.h"
 #include "GoalKeeper.h"
@@ -223,7 +222,7 @@ namespace SipperHardware
 
     static kkint32       numFields;
     static kkint32       numDataFields;    /**< The first fields will be float fields that will be in a array.
-                                            * the rest will have there own individule fields.
+                                            * the rest will have there own individual fields.
                                             */
 
     static kkint32  scanLineIndex;
@@ -274,9 +273,9 @@ namespace SipperHardware
     double           longitude;
     kkuint32         scanLine;
 
-    kkuint16         cropLeft;       /**< Left  column that contains imaged data;  any columns to the left  are ocluded by imaging chamber or Frame. */
-    kkuint16         cropRight;      /**< Right column that contains imaged data;  any columns to the Right are ocluded by imaging chamber or Frame. */
-    kkuint16         activeColumns;  /**<  (1 + rightCrop - leftCrop - Inactive_Columns);  ex: Inactive_Columns Can be caued by poor light source.   */
+    kkuint16         cropLeft;       /**< Left  column that contains imaged data;  any columns to the left  are occluded by imaging chamber or Frame. */
+    kkuint16         cropRight;      /**< Right column that contains imaged data;  any columns to the Right are occluded by imaging chamber or Frame. */
+    kkuint16         activeColumns;  /**<  (1 + rightCrop - leftCrop - Inactive_Columns);  ex: Inactive_Columns Can be caused by poor light source.   */
   };  /* InstrumentData */
   
   

@@ -92,39 +92,33 @@ public:
   virtual
   ~SipperBuff3Bit ();
 
-  const KKStr&  FileName ()  {return  fileName;}
 
-  bool  Eof ()      {return  eof;}
-
-  kkuint32  CurRow ()   {return  curRow;} 
-
-  bool  Opened ()   {return  opened;}
-
-  kkuint32  RecCount () {return  recCount;}
-
-  void  GetNextLine (uchar* lineBuff,
-                     kkuint32 lineBuffSize,
+  virtual
+  void  GetNextLine (uchar*     lineBuff,
+                     kkuint32   lineBuffSize,
                      kkuint32&  lineSize,
-                     kkuint32 colCount[],
+                     kkuint32   colCount[],
                      kkuint32&  pixelsInRow,
-                     bool&  flow);
+                     bool&      flow
+                    );
 
+  virtual
   void  SkipToScanLine (kkuint32  scanLine);
 
 private:
 
   inline
   void  GetNextSipperRec (kkuint32&  spaceLeft,
-                          uchar&   cameraNum,
-                          bool&    raw,
-                          bool&    eol,
-                          bool&    flow,
-                          uchar&   pixel0,
-                          uchar&   pixel1,
-                          uchar&   pixel2,
-                          uchar&   pixel3,
+                          uchar&     cameraNum,
+                          bool&      raw,
+                          bool&      eol,
+                          bool&      flow,
+                          uchar&     pixel0,
+                          uchar&     pixel1,
+                          uchar&     pixel2,
+                          uchar&     pixel3,
                           kkuint32&  numOfBlanks,
-                          bool&    moreRecs);
+                          bool&      moreRecs);
 
 
 

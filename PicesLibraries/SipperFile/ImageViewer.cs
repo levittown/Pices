@@ -49,8 +49,7 @@ namespace SipperFile
 
 
 
-    // next set of static fields Specify which data fields are to which data label.  It will be fixed for all instaces of
-    // ImageViewer.
+    // next set of static fields Specify which data fields are to which data label.  It will be fixed for all instances of ImageViewer.
     private static int[]    dataFieldAssignments = null;
     private static string   configFileName       = null;
 
@@ -448,7 +447,7 @@ namespace SipperFile
         Brush  hashMarkBrush = Brushes.Red;
         Pen    gridPen   = new Pen (Color.FromArgb (30, 255, 0, 0));
 
-        // Verticle Hash Marks
+        // Vertical Hash Marks
         while  (true)
         {
           int  hashPos = (int)((float)x * pixesPerMM + 0.5f);

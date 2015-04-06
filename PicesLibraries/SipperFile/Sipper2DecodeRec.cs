@@ -34,8 +34,8 @@ namespace SipperFile
     //EOL = 0 if end of line NOT encountered (ie. This record contains pixels for pixel # <4096)
     //RAW = 1 if the DATA bits are raw (gray) encoded 
     //RAW = 0 if the DATA bits are compressed in run-length format
-    //FLOW = 0 if external flowmeter is in position 0
-    //FLOW = 1 if external flowmeter is in position 1
+    //FLOW = 0 if external flow-meter is in position 0
+    //FLOW = 1 if external flow-meter is in position 1
     //DATA11..0 = Data bits (described below)
 
 

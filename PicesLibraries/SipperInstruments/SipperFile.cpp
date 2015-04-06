@@ -2,14 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <memory>
-
 #include <string>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
 #include <map>
-
 #include "MemoryDebug.h"
 using namespace std;
 

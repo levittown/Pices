@@ -127,7 +127,7 @@ namespace  SipperHardware
   class  InstrumentBatteryMeters: public Instrument
   {
   public:
-    InstrumentBatteryMeters (): Instrument ("BAT", "Battery Metters")
+    InstrumentBatteryMeters (): Instrument ("BAT", "Battery Meters")
     {
     }
   

@@ -18,7 +18,7 @@ namespace SipperFile
     private  PicesRunLog        runLog      = null;
     private  PicesSipperFile    sipperFile  = null;
     private  bool               validationErrorsFound = false;
-    private  String[]           ctdExtrnlPortCodes = null;  // will be populated from dtabse first time needed.
+    private  String[]           ctdExtrnlPortCodes = null;  // will be populated from database first time needed.
     private  String[]           ctdExtrnlPortDesc  = null;
 
     private  double             latitude  = 0.0;
@@ -415,7 +415,7 @@ namespace SipperFile
 
       if  ((extractionScanLineEnd > 0)  &&  (extractionScanLineEnd < extractionScanLineStart))
       {
-        errorProvider1.SetError (ExtractionScanLineEnd, "End Scan line must be greater thah start scan line or '0'.");
+        errorProvider1.SetError (ExtractionScanLineEnd, "End Scan-line must be greater than start scan-line or '0'.");
         validationErrorsFound = true;
         return;
       }
@@ -464,7 +464,7 @@ namespace SipperFile
       }
       else
       {
-        MessageBox.Show (this,  "Update of databse failed.\n\n" + DbConn ().LastErrorDesc (),  "Update Failed", MessageBoxButtons.OK);
+        MessageBox.Show (this,  "Update of database failed.\n\n" + DbConn ().LastErrorDesc (),  "Update Failed", MessageBoxButtons.OK);
       }
     }
 

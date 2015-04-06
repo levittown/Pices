@@ -37,7 +37,7 @@ namespace  SipperHardware
     static  void  SetPicesHomeDir (const KKB::KKStr&  _picesHomeDir);
     static  void  FinalCleanUp ();
 
-    static  bool        AllowUpdates                   ();  /**< 'True' indicates that user is allowed to peofrom updates.                           */
+    static  bool        AllowUpdates                   ();  /**< 'True' indicates that user is allowed to perform updates.                           */
     static  KKB::KKStr  InstrumentDataFilesDir         ();  /**< @brief Directory where Instrument Data files are stored.                            */
     static  KKB::KKStr  InstrumentDataReportDir        ();  /**< @brief Directory where Instrument Data Reports are written to.                      */
     static  KKB::KKStr  PicesHomeDir                   ();  /**< @brief Pices Home Directory.  All other directories will be off this directory.     */
@@ -77,11 +77,11 @@ namespace  SipperHardware
 
 
     /**
-     *@brief  Will parse the name of a Image that was extracted from a SIPPER file into SipperFileName, ScanLineNum, amd ScanCol
+     *@brief  Will parse the name of a Image that was extracted from a SIPPER file into SipperFileName, ScanLineNum, and ScanCol
      *@param[in] fullFileName Name of file that was assigned by the SIPPER image extraction program. from this name the three fields 
-     *  SipperFileName, ScanLineNum, amd ScanCol can be extractd.
-     *@param[in] sipperFileName Name of SIPPERfile that the image was orignally extracted from.
-     *@param[in] scanLineNum The scan line with respect to the SIPPER file where the first row in the mage was extracted.
+     *  SipperFileName, ScanLineNum, and ScanCol can be extracted.
+     *@param[in] sipperFileName Name of SIPPERfile that the image was originally extracted from.
+     *@param[in] scanLineNum The scan line with respect to the SIPPER file where the first row in the image was extracted.
      *@param[in] scanCol The left most column in the original SIPPER file that this image  was extracted.
      */
     static  void  ParseImageFileName (const KKB::KKStr&  fullFileName,

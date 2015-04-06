@@ -193,7 +193,7 @@ PicesDataBaseImageGroupList::PicesDataBaseImageGroupList (DataBaseImageGroupList
   if  (!groups)
     return;
 
-  // If the provided list is not the owner of its contentes;  then we will need to create new instances.
+  // If the provided list is not the owner of its contents; then we will need to create new instances.
   bool  createNewInstance = !(groups->Owner ());
 
   DataBaseImageGroupList::iterator  idx;

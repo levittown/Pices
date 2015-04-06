@@ -56,7 +56,7 @@ namespace SipperFile
       }
       catch  (Exception e)
       {
-        msgQueue.AddMsg ("Exception openning SipperFile[" + sipperFileName + "]" + "\n" + e.ToString ());
+        msgQueue.AddMsg ("Exception opening SipperFile[" + sipperFileName + "]" + "\n" + e.ToString ());
         sipperFile = null;
         validSipper3 = false;
       }
@@ -125,7 +125,7 @@ namespace SipperFile
         }
         else
         {
-          MessageBox.Show (this, "Error occured trying to save CTD Data; refer to log on screen.", "Save Raw CTD Data", MessageBoxButtons.OK);
+          MessageBox.Show (this, "Error occurred trying to save CTD Data; refer to log on screen.", "Save Raw CTD Data", MessageBoxButtons.OK);
         }
 
         Close ();

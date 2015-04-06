@@ -150,12 +150,14 @@ namespace SipperHardware
 
     kkuint32 PixelsPerScanLine ()  const  {return pixelsPerScanLine;}
 
-    void     GetNextLine (uchar*   lineBuff,
-                          kkuint32 lineBuffSize,
+
+    virtual 
+    void     GetNextLine (uchar*     lineBuff,
+                          kkuint32   lineBuffSize,
                           kkuint32&  lineSize,
-                          kkuint32 colCount[],
+                          kkuint32   colCount[],
                           kkuint32&  pixelsInRow,
-                          bool&    flow
+                          bool&      flow
                          );
 
 
@@ -176,7 +178,7 @@ namespace SipperHardware
 
     static  void  ExitCleanUp ();
 
-    void  GetNextScanLine (uchar*  lineBuff,
+    void  GetNextScanLine (uchar*    lineBuff,
                            kkuint32  lineBuffSize,
                            kkuint32& lineLen
                           );

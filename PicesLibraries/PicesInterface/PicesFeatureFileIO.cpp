@@ -308,7 +308,7 @@ namespace  PicesInterface
 
     if  (!(driver->CanWrite ()))
     {
-      lastError = "Driver[" + PicesKKStr::KKStrToSystenStr (driver->DriverName ()) + "] does not support writting.";
+      lastError = "Driver[" + PicesKKStr::KKStrToSystenStr (driver->DriverName ()) + "] does not support writing.";
 
       _runLog->Writeln ("PicesFeatureFileIO::SaveFeatureFile  " + lastError);
       *successful = false;

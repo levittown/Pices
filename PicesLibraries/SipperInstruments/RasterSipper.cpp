@@ -3,7 +3,6 @@
  * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #include "FirstIncludes.h"
-
 #include <memory>
 #include <math.h>
 #include <limits.h>
@@ -13,9 +12,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
-
 #include "MemoryDebug.h"
-
 using namespace std;
 
 

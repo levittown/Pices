@@ -470,7 +470,7 @@ List<PicesClass^>^  PicesClass::BuildListOfDecendents ()
 
 
   // Will return the number of generations between this class and the candidate 
-  // class.  If 'candidate' is not a decendent then will return -1.
+  // class.  If 'candidate' is not a decedent then will return -1.
   int  PicesClass::NumGenerations (PicesClass^  candidate)
   {
     for each  (PicesClass^ pc in children)
@@ -502,7 +502,7 @@ List<PicesClass^>^  PicesClass::BuildListOfDecendents ()
     {
       sw = nullptr;
 
-      MessageBox::Show ("Error occured trying to create PicesClass Description file[" + fileName + "]" + "\n\n" +
+      MessageBox::Show ("Error occurred trying to create PicesClass Description file[" + fileName + "]" + "\n\n" +
                         e->ToString (),
                         "PicesClass.Save[" + fileName + "]",
                         MessageBoxButtons::OK

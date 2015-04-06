@@ -5,26 +5,26 @@
 #include <ctype.h>
 
 
-#include  <iostream>
-#include  <fstream>
-#include  <vector>
+#include <iostream>
+#include <fstream>
+#include <vector>
 
-#include  "MemoryDebug.h"
+#include "MemoryDebug.h"
 
 using namespace std;
 
 
-#include  "KKBaseTypes.h"
+#include "KKBaseTypes.h"
 using namespace KKB;
 
 
-#include  "Instrument.h"
+#include "Instrument.h"
 
-#include  "InstrumentDataManager.h"
-#include  "InstrumentDataReport.h"
-#include  "InstrumentDataCTDplus.h"
-#include  "InstrumentDataBatteryMeter.h"
-#include  "InstrumentDataPitchAndRoll.h"
+#include "InstrumentDataManager.h"
+#include "InstrumentDataReport.h"
+#include "InstrumentDataCTDplus.h"
+#include "InstrumentDataBatteryMeter.h"
+#include "InstrumentDataPitchAndRoll.h"
 
 using  namespace  SipperHardware;
 

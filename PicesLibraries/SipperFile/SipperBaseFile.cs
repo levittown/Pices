@@ -355,8 +355,8 @@ namespace SipperFile
         UpdateFrameByteOffsetsForFrameNum (frameNum);
         if  (frameNum > largestKnowmFrameNum)
         {
-          // this can happen when there are lesss than 'framNum' frames
-          // in the Siiper file.
+          // this can happen when there are less than 'framNum' frames
+          // in the Sipper file.
           found = false;
           BlockEnd ();
           return;

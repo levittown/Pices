@@ -1,27 +1,20 @@
-#include  "FirstIncludes.h"
-#include  <stdlib.h>
-#include  <stdio.h>
-#include  <math.h>
-#include  <memory>
-
-#include  <string>
-#include  <iostream>
-#include  <fstream>
-#include  <vector>
-
-#include  "MemoryDebug.h"
+#include "FirstIncludes.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
+#include <memory>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include "MemoryDebug.h"
 using namespace std;
 
 
-#include  "KKBaseTypes.h"
-
-
+#include "KKBaseTypes.h"
 using namespace KKB;
 
-
-
-#include  "VolumeSampledStat.h"
-
+#include "VolumeSampledStat.h"
 using  namespace  SipperHardware;
 
 

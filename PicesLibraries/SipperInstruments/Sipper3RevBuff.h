@@ -21,28 +21,19 @@ public:
   
   ~Sipper3RevBuff ();
 
-  const 
-  KKStr&  FileName ()  {return  fileName;}
-
-  kkuint32 CurRow ()    {return  curRow;} 
-
-  bool     Eof ()       {return  eof;}
-
-  bool     Opened ()    {return  opened;}
-
-  kkuint32 RecCount ()  {return  recCount;}
 
   bool     FileFormatGood ();
 
-
-  void  GetNextLine (uchar*   lineBuff,
-                     kkuint32 lineBuffSize,
+  virtual
+  void  GetNextLine (uchar*     lineBuff,
+                     kkuint32   lineBuffSize,
                      kkuint32&  lineSize,
-                     kkuint32 colCount[],
+                     kkuint32   colCount[],
                      kkuint32&  pixelsInRow,
-                     bool&   flow
+                     bool&      flow
                     );
 
+  virtual
   void  SkipToScanLine (kkuint32  scanLine);
 
 
@@ -50,20 +41,20 @@ private:
 
   inline
   void  GetNextSipperRec (kkuint32&  spaceLeft,
-                          uchar&   cameraNum,
-                          bool&    imageData,
-                          bool&    raw,
-                          bool&    eol,
-                          bool&    grayScale,
-                          uchar*   pixels,      /**< Array of size 12.            */
-                          uchar&   numPixels,   /**< Number of pixels in pixels.  */
+                          uchar&     cameraNum,
+                          bool&      imageData,
+                          bool&      raw,
+                          bool&      eol,
+                          bool&      grayScale,
+                          uchar*     pixels,      /**< Array of size 12.            */
+                          uchar&     numPixels,   /**< Number of pixels in pixels.  */
                           kkuint32&  numOfBlanks,
-                          bool&    moreRecs
+                          bool&      moreRecs
                          );
 
   bool  NextScanLineGood ();   /**< Used by SipperBuff to try and guess if this is a Sipper3  file. */
 
-  kkuint32  overflowPixels;      /**< if > 0, indicates that the last scan line read had an overflow by that many pixels. */
+  kkuint32  overflowPixels;    /**< if > 0, indicates that the last scan line read had an overflow by that many pixels. */
 
   static  
     uchar  ShadesFor3Bit[];

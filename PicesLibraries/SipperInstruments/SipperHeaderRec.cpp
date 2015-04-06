@@ -1,23 +1,18 @@
-#include  "FirstIncludes.h"
-#include  <stdio.h>
-#include  <string.h>
-#include  <ctype.h>
-
-
-#include  <iostream>
-#include  <vector>
-
-#include  "MemoryDebug.h"
-
+#include "FirstIncludes.h"
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <iostream>
+#include <vector>
+#include "MemoryDebug.h"
 using namespace std;
 
-
-#include  "KKBaseTypes.h"
-#include  "OSservices.h"
+#include "KKBaseTypes.h"
+#include "OSservices.h"
 using  namespace  KKB;
 
 
-#include  "SipperHeaderRec.h"
+#include "SipperHeaderRec.h"
 using  namespace  SipperHardware;
 
 

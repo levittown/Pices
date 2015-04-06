@@ -8,17 +8,13 @@ using System.Text;
 using System.Windows.Forms;
 using ChartControls;
 using SipperFile;
-//*****************************************************************************
-//*  Programmer:  Kurt Kramer                                                 *
-//*               University of South Florida                                 *
-//*                                                                           *
-//*  This class works with the DepthPlot2 Form. it maaintains all the param-  *
-//*  eters.                                                                   *
-//*****************************************************************************
 
 
 namespace SipperFile
 {
+  /// <summary>
+  /// This class works with the DepthPlot2 Form maintaining all the parameters.
+  /// </summary>
   class DepthPlot2Parameters
   {
     Panel         chartPanel = null;

@@ -382,10 +382,10 @@ void  RandomSampleJob::ReportResultsHeader (ostream&   r)
 void  RandomSampleJob::ReportResults (ostream&   r)
 {
     
-  bool  errorOccured = false;
+  bool  errorOccurred = false;
   do
   {
-    errorOccured = false;
+    errorOccurred = false;
 
     r << jobId                                               << "\t"
       << KernalTypeToStr      (config->KernalType ())        << "\t"
@@ -406,7 +406,7 @@ void  RandomSampleJob::ReportResults (ostream&   r)
     if  (r.fail ())
     {
       r.clear ();
-      errorOccured = true;
+      errorOccurred = true;
       #ifdef  WIN32
       Sleep (30000);
       #else
@@ -414,7 +414,7 @@ void  RandomSampleJob::ReportResults (ostream&   r)
       #endif
     }
 
-  }  while  (errorOccured);
+  }  while  (errorOccurred);
 
 }  /* ReportResults */
 

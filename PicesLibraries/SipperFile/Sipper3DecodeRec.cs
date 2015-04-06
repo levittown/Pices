@@ -144,7 +144,7 @@ namespace SipperFile
     /// Decodes the ushort into 16 bits expressed as an bool[15].
     /// </summary>
     /// <param name="d">Unsigned Short that you want to decode into bits.</param>
-    /// <returns>bool[16] where each element represents the coresponding bit in 'd'.</returns>
+    /// <returns>bool[16] where each element represents the corresponding bit in 'd'.</returns>
     private  bool[]  DecodeUshortIntoBits (ushort d)
     {
       bool[]  results = new bool[16];
@@ -171,8 +171,8 @@ namespace SipperFile
 
 
     /// <summary>
-    /// determines the number of pixels that will be needed in the scan line to accomidate this decoded SipperRec.
-    /// You would call this method before calling 'AddToScanLine' to make sure there is enough romm in can line.
+    /// determines the number of pixels that will be needed in the scan line to accommodate this decoded SipperRec.
+    /// You would call this method before calling 'AddToScanLine' to make sure there is enough room in can line.
     /// <see cref="AddToScanLine"/> 
     /// </summary>
     /// <returns>Number of pixels required on scan line.</returns>
@@ -193,9 +193,9 @@ namespace SipperFile
     /// <summary>
     /// Add the image data stored in the SIPPER 3 data record to a scanLine.  If the 
     /// SIPPER3 rec a Instrument data record then nothing will happen.  The 'idx' 
-    /// parameter will be adjused t its new position,
+    /// parameter will be adjusted t its new position,
     /// </summary>
-    /// <param name="scanLine">Scanline to add image data to.</param>
+    /// <param name="scanLine">Scan-line to add image data to.</param>
     /// <param name="idx">The next index in ScanLin to append image data to.</param>
     public  void  AddToScanLine (byte[]   scanLine,
                                  ref int  idx

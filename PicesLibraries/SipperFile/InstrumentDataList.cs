@@ -58,7 +58,7 @@ namespace SipperFile
 
 
     /// <summary>
-    /// Will cunstruct a InstrumentDataList from a PicesInstrumenDataBase.  Keep in kind that
+    /// Will construct a InstrumentDataList from a PicesInstrumenDataBase.  Keep in kind that
     /// PicesInstrumentData is a managed wrapper class for the unmanaged class 'InstrumentData' 
     /// from the 'SipperInstruments' library.
     /// </summary>
