@@ -22,7 +22,7 @@ namespace PicesCommander
 
     // Importing Thread Related Variables.
     private  bool                    cancelImporting    = false;
-    private  bool                    importingStarted   = false;  /** Will be set to 'true' after the start button is pressed and all validations are passed. */
+    private  bool                    importingStarted   = false;  /** Will be set to 'true' after the start button is pressed and all images are imported. */
     private  bool                    importingRunning   = false;
     private  bool                    importingCompleted = false;
     private  Thread                  importingThread    = null;
@@ -35,8 +35,6 @@ namespace PicesCommander
     public  bool                     CancelImporting     {get {return cancelImporting;}   set  {cancelImporting = value;}}
     public  bool                     ImportingRunning    {get {return importingRunning;}}
 
-
-    private  bool                    importImages = false;   /**< Indicates that we are importing images into the database; not just validating them. */
 
     private  PicesSipperFile         sipperFile     = null;
 
@@ -51,6 +49,11 @@ namespace PicesCommander
     private  PicesSipperCruise       cruise     = null;
     private  PicesSipperStation      station    = null;
     private  PicesSipperDeployment   deployment = null;
+
+    private  String                  configFileName = "";
+
+
+
 
 
     public  ImportImagesIntoDeployment (String  _cruiseName,
@@ -69,15 +72,18 @@ namespace PicesCommander
 
       unknownClass = GetClassFromName (mainWinConn, "UnKnown");
 
-      InitializeComponent();
+      configFileName = OSservices.AddSlash (PicesSipperVariables.PicesConfigurationDirectory ()) + "ImportImagesIntoDeployment.cfg";
 
-      SourceDirectory.Text = PicesSipperVariables.PicesHomeDir ();
-      SourceDirectory.Text = "D:\\Users\\kkramer\\PlanktonCompetition\\trunk\\Data\\";
+      InitializeComponent();
+      //SourceDirectory.Text = PicesSipperVariables.PicesHomeDir ();
     }
 
 
     private void ImportImagesIntoDeployment_Load(object sender, EventArgs e)
     {
+      LoadConfigurationFile ();
+      SourceDirectory.Text = sourceDirectory;
+
       LoadCruises ();
       if  (cruise != null)
       {
@@ -86,6 +92,68 @@ namespace PicesCommander
           LoadDeployments ();
       }
     }
+
+
+    private  void  SaveConfiguration ()
+    {
+      System.IO.StreamWriter  o = null;
+      try{o = new System.IO.StreamWriter (configFileName);}  catch  (Exception){o = null; return;}
+      
+      o.WriteLine ("//ChartGPS Configuration File");
+      o.WriteLine ("//");
+      o.WriteLine ("//DateTime Saved" + "\t" + DateTime.Now.ToString ("F"));
+      o.WriteLine ("//");
+      o.WriteLine ("SourceDirectory"  + "\t" + sourceDirectory);
+
+      o.Close ();
+      o = null;
+    }
+
+
+    private  void   LoadConfigurationFile ()
+    {
+      System.IO.StreamReader i = null;
+
+      try {i = new System.IO.StreamReader (configFileName);}  catch  (Exception) {i = null;}
+      if  (i == null)
+        return;
+
+      int  savedWidth  = 0;
+      int  savedHeight = 0;
+      bool screenWasMaximized = false;
+
+      String  nextLine = null;
+
+      while  (true)
+      {
+        try  {nextLine = i.ReadLine ();}  catch (Exception) {break;}
+        if  (nextLine == null)
+          break;
+
+        nextLine = nextLine.Trim ();
+        
+        if  ((nextLine.Length < 3)  ||  (nextLine.Substring (0, 2) == "//"))
+          continue;
+
+        String[] fields = nextLine.Split ('\t');
+        if  (fields.Length < 2)
+          continue;
+
+        String  fieldName  = fields[0];
+        String  fieldValue = fields[1];
+
+        switch  (fieldName)
+        { 
+          case  "SourceDirectory":
+            sourceDirectory = fieldValue;
+            break;
+        }
+      }
+
+      i.Close ();
+
+      //OnResizeEnd (new EventArgs ());
+    }  /* LoadConfigurationFile */
 
 
     private  void  LoadCruises ()
@@ -126,6 +194,7 @@ namespace PicesCommander
     }
 
 
+
     private  void  LoadDeployments ()
     {
       deployment = null;
@@ -146,8 +215,7 @@ namespace PicesCommander
         DeploymentField.SelectedItem = deployment;
     }
 
-
-
+    
 
 
     private  void  RunLogMsgQueueFlush ()
@@ -328,7 +396,7 @@ namespace PicesCommander
       ImportImagesFromDirectoryStructure (threadConn, sourceDirectory);
       if  (cancelImporting)
       {
-        runLog.Writeln ("\n" + "Importing Assignments has been Canceled." + "\n\n");
+        runLog.Writeln ("\n" + "Importing Images has been Canceled." + "\n\n");
       }
       else
       {
@@ -376,13 +444,12 @@ namespace PicesCommander
         return;
 
       PicesRaster r = new PicesRaster (fileName);
-      r = r.Padded (2);
+      r = r.RemoveZooscanBrackets ();
 
       PicesFeatureVector  fv = new PicesFeatureVector (r, picesRootName, null, runLog);
       fv.ImageFileName = picesRootName;
 
       int   imageId    = 0;
-
 
       uint  centroidRow = (uint)(0.5f + fv.CentroidRow);
       uint  centroidCol = (uint)(0.5f + fv.CentroidCol);
@@ -411,7 +478,7 @@ namespace PicesCommander
                              );
       if  (successful)
       {
-        threadConn.FeatureDataInsertRow (picesRootName, fv);
+        threadConn.FeatureDataInsertRow (sipperFileRootName, fv);
       }
       else
       {
@@ -465,6 +532,9 @@ namespace PicesCommander
         String  sipperFileName = cruiseName + stationName + deploymentNum + "-" + OSservices.GetRootName (dirName);
 
         sipperFile = new PicesSipperFile (sipperFileName);
+        sipperFile.CruiseName    = cruiseName;
+        sipperFile.StationName   = stationName;
+        sipperFile.DeploymentNum = deploymentNum;
         threadConn.SipperFileInsert (sipperFile);
 
         int numThisDir       = 0;
@@ -475,9 +545,8 @@ namespace PicesCommander
           if  ((ext == "bmp")  ||  (ext == "jpg"))
           {
             numThisDir++;
-            String  fullName = OSservices.AddSlash (dirName) + fn;
             bool  successful = false;
-            ImportImage (threadConn, sipperFileName, fullName, ref successful);
+            ImportImage (threadConn, sipperFileName, fn, ref successful);
             if  (!successful)
               ++numFailedThisDir;
 
@@ -575,7 +644,9 @@ namespace PicesCommander
       if  (validationErrorFound)
         return;
 
-      DialogResult  dr = MessageBox.Show (this, "Start Importing Images Assignments?", "Import Group Assignments", MessageBoxButtons.YesNo);
+      SaveConfiguration ();
+
+      DialogResult  dr = MessageBox.Show (this, "Start Importing Images ?", "Import Images", MessageBoxButtons.YesNo);
       if  (dr == DialogResult.No)
         return;
 
@@ -615,11 +686,13 @@ namespace PicesCommander
         ImportTimer.Enabled = false;
 
         if ((importingCompleted)  &&  (!cancelImporting))
-          MessageBox.Show (this, "Importing of Validated Class Assignments completed.");
+          MessageBox.Show (this, "Importing of Images completed.");
 
         this.Close ();
       }
     }
+
+
 
     private void CruiseField_Format (object sender, ListControlConvertEventArgs e)
     {
@@ -629,6 +702,8 @@ namespace PicesCommander
       String  m = c.CruiseName + " - " + c.DateStart.ToString ("yyyy-MM-dd");
       e.Value = m;
     }
+    
+
 
     private void StationField_Format(object sender, ListControlConvertEventArgs e)
     {

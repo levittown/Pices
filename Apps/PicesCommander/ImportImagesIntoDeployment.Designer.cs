@@ -62,7 +62,7 @@ namespace PicesCommander
       // SourceDirectoryLabel
       // 
       this.SourceDirectoryLabel.AutoSize = true;
-      this.SourceDirectoryLabel.Location = new System.Drawing.Point(13, 107);
+      this.SourceDirectoryLabel.Location = new System.Drawing.Point(13, 120);
       this.SourceDirectoryLabel.Name = "SourceDirectoryLabel";
       this.SourceDirectoryLabel.Size = new System.Drawing.Size(86, 13);
       this.SourceDirectoryLabel.TabIndex = 1;
@@ -70,7 +70,7 @@ namespace PicesCommander
       // 
       // SourceDirectory
       // 
-      this.SourceDirectory.Location = new System.Drawing.Point(102, 104);
+      this.SourceDirectory.Location = new System.Drawing.Point(102, 117);
       this.SourceDirectory.Name = "SourceDirectory";
       this.SourceDirectory.Size = new System.Drawing.Size(433, 20);
       this.SourceDirectory.TabIndex = 50;
@@ -78,7 +78,7 @@ namespace PicesCommander
       // 
       // BrowseSourceDir
       // 
-      this.BrowseSourceDir.Location = new System.Drawing.Point(540, 102);
+      this.BrowseSourceDir.Location = new System.Drawing.Point(540, 115);
       this.BrowseSourceDir.Name = "BrowseSourceDir";
       this.BrowseSourceDir.Size = new System.Drawing.Size(75, 23);
       this.BrowseSourceDir.TabIndex = 60;
@@ -139,7 +139,7 @@ namespace PicesCommander
       // CruiseNamelabel
       // 
       this.CruiseNamelabel.AutoSize = true;
-      this.CruiseNamelabel.Location = new System.Drawing.Point(22, 46);
+      this.CruiseNamelabel.Location = new System.Drawing.Point(22, 56);
       this.CruiseNamelabel.Name = "CruiseNamelabel";
       this.CruiseNamelabel.Size = new System.Drawing.Size(36, 13);
       this.CruiseNamelabel.TabIndex = 10;
@@ -148,9 +148,9 @@ namespace PicesCommander
       // CruiseField
       // 
       this.CruiseField.FormattingEnabled = true;
-      this.CruiseField.Location = new System.Drawing.Point(19, 63);
+      this.CruiseField.Location = new System.Drawing.Point(19, 73);
       this.CruiseField.Name = "CruiseField";
-      this.CruiseField.Size = new System.Drawing.Size(121, 21);
+      this.CruiseField.Size = new System.Drawing.Size(143, 21);
       this.CruiseField.TabIndex = 10;
       this.CruiseField.SelectedIndexChanged += new System.EventHandler(this.CruiseField_SelectedIndexChanged);
       this.CruiseField.Format += new System.Windows.Forms.ListControlConvertEventHandler(this.CruiseField_Format);
@@ -158,9 +158,9 @@ namespace PicesCommander
       // StationField
       // 
       this.StationField.FormattingEnabled = true;
-      this.StationField.Location = new System.Drawing.Point(158, 63);
+      this.StationField.Location = new System.Drawing.Point(178, 73);
       this.StationField.Name = "StationField";
-      this.StationField.Size = new System.Drawing.Size(81, 21);
+      this.StationField.Size = new System.Drawing.Size(102, 21);
       this.StationField.TabIndex = 10;
       this.StationField.SelectedIndexChanged += new System.EventHandler(this.StationField_SelectedIndexChanged);
       this.StationField.Format += new System.Windows.Forms.ListControlConvertEventHandler(this.StationField_Format);
@@ -168,7 +168,7 @@ namespace PicesCommander
       // StationLabel
       // 
       this.StationLabel.AutoSize = true;
-      this.StationLabel.Location = new System.Drawing.Point(162, 46);
+      this.StationLabel.Location = new System.Drawing.Point(182, 56);
       this.StationLabel.Name = "StationLabel";
       this.StationLabel.Size = new System.Drawing.Size(40, 13);
       this.StationLabel.TabIndex = 12;
@@ -177,9 +177,9 @@ namespace PicesCommander
       // DeploymentField
       // 
       this.DeploymentField.FormattingEnabled = true;
-      this.DeploymentField.Location = new System.Drawing.Point(264, 63);
+      this.DeploymentField.Location = new System.Drawing.Point(302, 73);
       this.DeploymentField.Name = "DeploymentField";
-      this.DeploymentField.Size = new System.Drawing.Size(66, 21);
+      this.DeploymentField.Size = new System.Drawing.Size(100, 21);
       this.DeploymentField.TabIndex = 30;
       this.DeploymentField.SelectedIndexChanged += new System.EventHandler(this.DeploymentField_SelectedIndexChanged);
       this.DeploymentField.Format += new System.Windows.Forms.ListControlConvertEventHandler(this.DeploymentField_Format);
@@ -187,7 +187,7 @@ namespace PicesCommander
       // Deploymentlabel
       // 
       this.Deploymentlabel.AutoSize = true;
-      this.Deploymentlabel.Location = new System.Drawing.Point(267, 46);
+      this.Deploymentlabel.Location = new System.Drawing.Point(306, 56);
       this.Deploymentlabel.Name = "Deploymentlabel";
       this.Deploymentlabel.Size = new System.Drawing.Size(63, 13);
       this.Deploymentlabel.TabIndex = 14;

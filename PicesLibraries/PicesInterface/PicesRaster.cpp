@@ -51,37 +51,11 @@ namespace  PicesInterface
   PicesRaster::PicesRaster  (String^  _fileName):
       memoryPressure (0)
   {
-    System::Drawing::Bitmap^ i = nullptr;
-    raster = NULL;
-    try
-    {
-      i = gcnew System::Drawing::Bitmap (_fileName);
-    }
-    catch (Exception^ e)
-    {
-      throw gcnew Exception ("PicesRaster::PicesRaster", e);
-    }
-
-    System::Drawing::Color   color;
-
-    int  r, c;
-
-    int h = i->Height;
-    int w = i->Width;
-
-    raster = new RasterSipper (h, w);
-
-    for  (r = 0;  r < h;  r++)
-    {
-      for  (c = 0;  c < w;  c++)
-      {
-        color = i->GetPixel (c, r);
-        raster->SetPixelValue (r, c, 255 - color.G);
-      }
-    }
-    raster->FileName (PicesKKStr::SystemStringToKKStr (_fileName));
-
-    memoryPressure = raster->Width () * raster->Height () * (raster->Color () ? 3 : 1);
+    bool  validFile = false;
+    KKStr fileName = PicesKKStr::SystemStringToKKStr (_fileName);
+    raster = new RasterSipper (fileName, validFile);
+    raster->FileName (fileName);
+    memoryPressure = raster->MemoryConsumedEstimated ();
     GC::AddMemoryPressure (memoryPressure);
   }
 
@@ -515,10 +489,19 @@ namespace  PicesInterface
 
 
 
+  PicesRaster^  PicesRaster::RemoveZooscanBrackets ()
+  {
+    RasterSipperPtr  r = raster->RemoveZooscanBrackets ();
+    return gcnew PicesRaster (r);
+  }
+
+
+
   PicesRaster^   PicesRaster::ReversedImage ()
   {
     return gcnew PicesRaster (raster->ReversedImage ());
   }
+
 
 
   void   PicesRaster::Save (String^  fileName)

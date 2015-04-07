@@ -352,6 +352,8 @@ namespace SipperHardware
 
     RasterSipperPtr     ReduceByFactor (float factor)  const;  //  0 < factor <= 1.0  ex: 0.5 = Make raster half size
 
+    RasterSipperPtr     RemoveZooscanBrackets ()  const;
+
     RasterSipperPtr     Rotate (float  turnAngle);
 
     RasterSipperPtr     SegmentImage (bool  save = false);
@@ -410,6 +412,26 @@ namespace SipperHardware
                                           kkint32       _height,  /**<  Height of resultant raster. Will start from '_row'  */
                                           kkint32       _width    /**<  Width of resultant raster.                          */
                                          );  private:
+
+  private:
+    bool  BlackPixel (kkint32  row,
+                      kkint32  col
+                     )
+                     const;
+
+    bool  RectangleAllBlack (kkint32  tlRow,
+                             kkint32  tlCol,
+                             kkint32  brRow,
+                             kkint32  brCol
+                            )
+                            const;
+
+    bool  RectangleAllWhite (kkint32  tlRow,
+                             kkint32  tlCol,
+                             kkint32  brRow,
+                             kkint32  brCol
+                            )
+                            const;
 
   };  /* RasterSipper */
 

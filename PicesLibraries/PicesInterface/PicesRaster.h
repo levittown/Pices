@@ -149,7 +149,9 @@ namespace PicesInterface
 
      PicesRaster^     OpenImage (MaskType  mt);
 
-     PicesRaster^     Padded (kkint32 padding);  /**< Duplicates image with extrac padding on all four sides. */
+     PicesRaster^     Padded (kkint32 padding);  /**< Duplicates image with extract padding on all four sides. */
+
+     PicesRaster^     RemoveZooscanBrackets ();
 
      PicesRaster^     ReversedImage ();
 

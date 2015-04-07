@@ -461,6 +461,156 @@ RasterSipperPtr  RasterSipper::ReduceByFactor (float factor)  const  //  0 < fac
 
 
 
+
+
+bool  RasterSipper::BlackPixel (kkint32  row,
+                                kkint32  col
+                               )
+                               const
+{
+  return  (green[row][col] > 225);
+}  /* BlackPixel */
+
+
+
+
+bool  RasterSipper::RectangleAllBlack (kkint32  tlRow,
+                                       kkint32  tlCol,
+                                       kkint32  brRow,
+                                       kkint32  brCol
+                                      )
+                                      const
+{
+  if  ((brRow < tlRow)  ||  (brCol < tlCol))
+    return false;
+
+  for  (kkint32 r = tlRow;  r <= brRow;  ++r)
+  {
+    for  (kkint32 c = tlCol;  c <= brCol;  ++c)
+      if  (green[r][c] < 225)
+        return  false;
+  }
+  return  true;
+}
+
+
+
+bool  RasterSipper::RectangleAllWhite (kkint32  tlRow,
+                                       kkint32  tlCol,
+                                       kkint32  brRow,
+                                       kkint32  brCol
+                                      )
+                                      const
+{
+  if  ((brRow < tlRow)  ||  (brCol < tlCol))
+    return false;
+  for  (kkint32 r = tlRow;  r <= brRow;  ++r)
+  {
+    for  (kkint32 c = tlCol;  c <= brCol;  ++c)
+      if  (green[r][c] > 32)
+        return  false;
+  }
+  return  true;
+}
+
+
+
+
+
+
+RasterSipperPtr  RasterSipper::RemoveZooscanBrackets ()  const
+{
+  kkint32  row, col;
+
+  // Locate Top Left Bracket.
+  kkint32  tlbRow = -1;
+  kkint32  tlbCol = -1;
+  for  (row = 1;  (row < (height - 10))  &&  (tlbRow < 0);  ++row)
+  {
+    for  (col = 1;  col < (width - 10);  ++col)
+    {
+      if  (RectangleAllBlack (row, col, row, col + 10)              &&
+           RectangleAllBlack (row, col, row + 10, col)              &&
+           RectangleAllWhite (row - 1, col - 1, row - 1,  col + 11) &&
+           RectangleAllWhite (row - 1, col - 1, row + 11, col - 1)
+          )
+      {
+        tlbRow = row;
+        tlbCol = col;
+        break;
+      }
+    }
+  }
+
+  if  (tlbRow < 0)
+    return  new RasterSipper (*this);
+
+  // Locate  Bottom Right Bracket
+  kkint32  brbRow = -1;
+  kkint32  brbCol = -1;
+  for  (row = height - 1;  (row >  tlbRow)  &&  (brbRow < 0);  --row)
+  {
+    for  (col = width - 1;  col >  tlbCol;  --col)
+    {
+      if  (RectangleAllBlack (row, col - 10, row, col)              &&
+           RectangleAllBlack (row - 10, col, row, col)              &&
+           RectangleAllWhite (row + 1, col - 11, row + 1,  col + 1) &&
+           RectangleAllWhite (row - 11, col + 1, row + 1, col + 1)
+          )
+      {
+        brbRow = row;
+        brbCol = col;
+        break;
+      }
+    }
+  }
+
+  if  (brbRow < 0)
+    return  new RasterSipper (*this);
+
+  tlbRow++;
+  tlbCol++;
+  brbRow--;
+  brbCol--;
+
+  kkint32  newHeight = (1 + brbRow - tlbRow) + 4;  // The additional "+ 4" is for padding of 2 rows top and bottom.
+  kkint32  newWidth  = (1 + brbCol - tlbCol) + 4;  // The additional "+ 4" is for padding of 2 rows top and bottom.
+
+  RasterSipperPtr  r = new RasterSipper (newHeight, newWidth, Color ());
+
+  uchar**  destGreen = r->Green ();
+  uchar**  destRed   = r->Red   ();
+  uchar**  destBlue  = r->Blue  ();
+
+  {
+    kkint32  destRow = 2;
+    for  (row = tlbRow;  row <= brbRow;  ++row)
+    {
+      kkint32  destCol = 2;
+      for  (col = tlbCol;  col <= brbCol;  ++col)
+      {
+        destGreen[destRow][destCol] = green[row][col];
+        if  (color)
+        {
+          destRed  [destRow][destCol] = red  [row][col];
+          destGreen[destRow][destCol] = green[row][col];
+        }
+        ++destCol;
+      }
+      ++destRow;
+    }
+  }
+
+
+  return  r;
+}  /* RemoveZooscanBrackets */
+
+
+
+
+
+
+
 RasterSipperPtr  RasterSipper::SobelEdgeDetector ()
 {
   RasterPtr  r = Raster::SobelEdgeDetector ();
