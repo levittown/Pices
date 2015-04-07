@@ -16,6 +16,7 @@ namespace PicesCommander
   {
     private  PicesDataBase           mainWinConn = null;
     private  PicesRunLog             runLog = null;
+    private  PicesMsgQueue           msgQueue = null;
 
     private  String                  sourceDirectory = null;
 
@@ -29,18 +30,14 @@ namespace PicesCommander
     // 
     private bool                     validationErrorFound = false;
 
-    private PicesGoalKeeper          runLogGoalie   = null;
-    private Queue<String>            runLogMsgQueue = null;  // List of messages that can be added to 'RunLog'.
-
     private int                      totalImagesUpdated = 0;
 
     public  bool                     CancelImporting     {get {return cancelImporting;}   set  {cancelImporting = value;}}
     public  bool                     ImportingRunning    {get {return importingRunning;}}
 
 
-    private  bool                    importImages = false;   /**< Indicates that we ar eimporting images into the database; not just validating them. */
+    private  bool                    importImages = false;   /**< Indicates that we are importing images into the database; not just validating them. */
 
-    private  String                  sipperFileName = "TRAIN";
     private  PicesSipperFile         sipperFile     = null;
 
     private  PicesDataBaseLogEntry   extractionLogEntryId = null;
@@ -61,7 +58,8 @@ namespace PicesCommander
                                         String  _deploymentNum
                                        )
     {
-      runLog  = new PicesRunLog ();
+      msgQueue = new PicesMsgQueue ("ImportImagesIntoDeployment");
+      runLog  = new PicesRunLog (msgQueue);
 
       cruiseName    = _cruiseName;
       stationName   = _stationName;
@@ -69,10 +67,6 @@ namespace PicesCommander
 
       mainWinConn  = PicesDataBase.GetGlobalDatabaseManagerNewInstance (runLog);
 
-      runLogGoalie = new PicesGoalKeeper ("ImportImagesIntoDeployment");
-      runLogMsgQueue = new Queue<String> ();
-
-      sipperFile = mainWinConn.SipperFileRecLoad (sipperFileName);
       unknownClass = GetClassFromName (mainWinConn, "UnKnown");
 
       InitializeComponent();
@@ -154,33 +148,19 @@ namespace PicesCommander
 
 
 
-    private  void  RunLogAddMsg (String  msg)
-    {
-      runLogGoalie.StartBlock ();
-
-      if  (runLogMsgQueue == null)
-        runLogMsgQueue = new Queue<String> ();
-
-      runLogMsgQueue.Enqueue (msg);
-
-      runLogGoalie.EndBlock ();
-    }  /* RunLogAddMsg */
-
 
 
     private  void  RunLogMsgQueueFlush ()
     {
-      runLogGoalie.StartBlock ();
-      if  (runLogMsgQueue != null)
+      if  (msgQueue != null)
       {
-        while  (runLogMsgQueue.Count > 0)
+        String  m = msgQueue.GetNextMsg ();
+        while  (m != null)
         {
-          String  msg = runLogMsgQueue.Dequeue ();
-          RunLog.AppendText (msg);
+          RunLog.AppendText (m);
+          m = msgQueue.GetNextMsg ();
         }
       }
-
-      runLogGoalie.EndBlock ();
     }  /* RunLogMsgQueueFlush */
 
 
@@ -310,13 +290,15 @@ namespace PicesCommander
       if  (!String.IsNullOrEmpty (sourceDirectory))
         cmdLine += " -SourceDir " + sourceDirectory;
 
+      cmdLine += "  -Cruise " + cruiseName;
+      cmdLine += "  -Station " + stationName;
+      if  (!String.IsNullOrEmpty (deploymentNum))
+        cmdLine += "  -Deployment " + deploymentNum;
+
       if  (mainWinConn == null)
         cmdLine += " -NoDatabase ";
       else
         cmdLine += (" -DataBase " + mainWinConn.Server.HostName);
-
-      if  (!String.IsNullOrEmpty (sipperFileName))
-        cmdLine += (" -SipperFile " + sipperFileName);
 
       cmdLine = cmdLine.TrimStart (' ');
 
@@ -339,18 +321,18 @@ namespace PicesCommander
                                                                 "ImportImagesIntoDeployment",  
                                                                 ExecutableDateTimeStamp (),
                                                                 ToCmdLine (),
-                                                                OSservices.GetRootName (sipperFileName)
+                                                                ""
                                                                );
       totalImagesUpdated = 0;
 
-      ImportValidatedClassAssignmentsDir (threadConn, sourceDirectory);
+      ImportImagesFromDirectoryStructure (threadConn, sourceDirectory);
       if  (cancelImporting)
       {
-        RunLogAddMsg ("\n" + "Importing Assignments has been Canceled." + "\n\n");
+        runLog.Writeln ("\n" + "Importing Assignments has been Canceled." + "\n\n");
       }
       else
       {
-        RunLogAddMsg ("\n\n" + "Total Images[" + totalImagesUpdated.ToString ("###,##0") + "\n\n");
+        runLog.Writeln ("\n\n" + "Total Images[" + totalImagesUpdated.ToString ("###,##0") + "\n\n");
       }
 
       threadConn.Close ();
@@ -380,11 +362,14 @@ namespace PicesCommander
 
 
     private  void  ImportImage (PicesDataBase  threadConn,
-                                String         fileName
+                                String         sipperFileRootName,
+                                String         fileName,
+                                ref bool       successful
                                )
     {
+      successful = false;
       String  rootName = OSservices.GetRootName (fileName);
-      String  picesRootName = sipperFileName + "_" + rootName;
+      String  picesRootName = sipperFileRootName + "_" + rootName;
 
       PicesDataBaseImage  dbi = threadConn.ImageLoad (picesRootName);
       if  (dbi != null)
@@ -397,7 +382,6 @@ namespace PicesCommander
       fv.ImageFileName = picesRootName;
 
       int   imageId    = 0;
-      bool  successful = false;
 
 
       uint  centroidRow = (uint)(0.5f + fv.CentroidRow);
@@ -411,7 +395,7 @@ namespace PicesCommander
 
       threadConn.ImageInsert (r,
                               picesRootName,
-                              sipperFileName, 
+                              sipperFileRootName, 
                               0, 0, 0, 
                               (uint)r.Height,  (uint)r.Width,
                               (uint)fv.OrigSize, 
@@ -427,35 +411,61 @@ namespace PicesCommander
                              );
       if  (successful)
       {
-        threadConn.FeatureDataInsertRow (sipperFileName, fv);
+        threadConn.FeatureDataInsertRow (picesRootName, fv);
       }
       else
       {
-        RunLogAddMsg ("RootName[" + rootName + "] Failed: " + threadConn.LastErrorDesc () + "\n");
+        runLog.Writeln ("RootName[" + rootName + "] Failed: " + threadConn.LastErrorDesc () + "\n");
       }
     }  /* ImportImage */
 
 
 
-    private  void  ImportValidatedClassAssignmentsDir (PicesDataBase  threadConn,
+    private  String[]  FilterListForImageFiles (String[]  fileNames)
+    {
+      List<String>  results = new List<string> ();
+
+      foreach  (String s in  fileNames)
+      {
+        String ext = OSservices.GetFileExtension (s);
+        if  (ext.Equals ("bmp", StringComparison.InvariantCultureIgnoreCase)  ||
+             ext.Equals ("jpg", StringComparison.InvariantCultureIgnoreCase)
+            )
+          results.Add (s);
+      }
+      if  (results.Count < 1)
+        return null;
+      else
+        return  results.ToArray ();
+    }  /* FilterListFirImageFiles */
+
+
+
+
+    private  void  ImportImagesFromDirectoryStructure (PicesDataBase  threadConn,
                                                        String         dirName
                                                       )
     {
-      RunLogAddMsg ("Dir[" + dirName + "]" + "\n");
+      runLog.Writeln ("Dir[" + dirName + "]" + "\n");
 
       String[]  fileNames = null;
       try  {fileNames = Directory.GetFiles (dirName);}  
-      catch(Exception e) 
+      catch  (Exception e) 
       {
-        RunLogAddMsg ("\n" + "Error retrieving file info for Directory[" + dirName + "]" + "\n");
-        RunLogAddMsg ("Exception[" + e.ToString () + "]" + "\n\n");
+        runLog.Writeln ("\n" + "Error retrieving file info for Directory[" + dirName + "]" + "\n");
+        runLog.Writeln ("Exception[" + e.ToString () + "]" + "\n\n");
         fileNames = null;
       }
 
       if  (fileNames != null)
+        fileNames = FilterListForImageFiles (fileNames);
+
+      if  (fileNames != null)
       {
-        String  className = PicesClass.GetClassNameFromDirName (dirName);
-        PicesClass  mlClass = null;
+        String  sipperFileName = cruiseName + stationName + deploymentNum + "-" + OSservices.GetRootName (dirName);
+
+        sipperFile = new PicesSipperFile (sipperFileName);
+        threadConn.SipperFileInsert (sipperFile);
 
         int numThisDir       = 0;
         int numFailedThisDir = 0;
@@ -464,37 +474,21 @@ namespace PicesCommander
           String  ext = OSservices.GetFileExtension (fn).ToLower ();
           if  ((ext == "bmp")  ||  (ext == "jpg"))
           {
-            String  rn = OSservices.GetRootName (fn);
-            if  (mlClass == null)
-              mlClass =  GetClassFromName (threadConn, className);
-
-            if  (importImages)
-            {
-              numThisDir++;
-              ImportImage (threadConn, fn);
-            }
-            else
-            {
-              //rn = "TRAIN_" + rn;
-              threadConn.ImagesUpdateValidatedAndPredictClass (rn, mlClass, 1.0f);
-              if  (threadConn.Successful ())
-              {
-                numThisDir++;
-              }
-              else
-              {
-                numFailedThisDir++;
-                RunLogAddMsg ("Dir[" + dirName + "]  RootName["  + rn + "]  Failed" + "\n");
-                RunLogAddMsg (threadConn.LastErrorDesc () + "\n");
-              }
-            }
+            numThisDir++;
+            String  fullName = OSservices.AddSlash (dirName) + fn;
+            bool  successful = false;
+            ImportImage (threadConn, sipperFileName, fullName, ref successful);
+            if  (!successful)
+              ++numFailedThisDir;
 
             if  ((numThisDir  % 100) == 0)
-              RunLogAddMsg ("Dir[" + dirName + "]  Files Updated[" + numThisDir.ToString ("###,##0") + "]" + "\n");
+              runLog.Writeln ("Dir[" + dirName + "]  Files Updated[" + numThisDir.ToString ("###,##0") + "]" + "\n");
           }
+          if  (cancelImporting)
+            break;
         }
 
-        RunLogAddMsg ("Dir[" + dirName + "]  Files Updated[" + numThisDir.ToString ("###,##0") + "]" + "\n");
+        runLog.Writeln ("Dir[" + dirName + "]  Files Updated[" + numThisDir.ToString ("###,##0") + "]" + "\n");
         totalImagesUpdated += numThisDir;
       }
 
@@ -510,13 +504,13 @@ namespace PicesCommander
           {
             if  ((subDir == ".")  ||  (subDir == ".."))
               continue;
-            ImportValidatedClassAssignmentsDir (threadConn, subDir);
+            ImportImagesFromDirectoryStructure (threadConn, subDir);
             if  (cancelImporting)
               break;
           }
         }
       }
-    }  /* ImportValidatedClassAssignmentsDir */
+    }  /* ImportImagesFromDirectoryStructure */
 
 
 

@@ -121,9 +121,7 @@
     <value>17, 17</value>
   </metadata>
   <data name="ApplicationDescription.Text" xml:space="preserve">
-    <value>This program will recursively scan the subdirectory structure that is selected above for images that are in the PICES Database.  Each sub-directory found will be used to determine the proper class for any images that the respective sub-directory contains. Both the Validated and Predicted class fields will be updated with this class-name.    
-
-The user can export images to a subdirectory and then manually classify them by moving them into directories that represent each class.</value>
+    <value>This function will import image files (*.bmp or *.jpg) that are located in a specified directory structure.  It is assumed that each image represents one extracted particle that is to be classified and stored in the PICES database.  You specify the Cruise, Station, and Deployment in the fields above that these images belong to.  The directory specified will be searched recursively where each node will be treated like a SIPER file.</value>
   </data>
   <metadata name="ImportTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>141, 17</value>
