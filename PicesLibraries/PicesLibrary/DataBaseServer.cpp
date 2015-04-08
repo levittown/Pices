@@ -190,9 +190,9 @@ void  DataBaseServerList::WriteConfigFile ()  const
 
   o << "//  PICES  MySQL  configuration file.  There will be one entry for each known MySQL database server." << std::endl
     << "//"  << std::endl
-    << "//   Date Writen: " << osGetLocalDateTime () << std::endl
+    << "//   Date Written: " << osGetLocalDateTime () << std::endl
     << "//"  << std::endl
-    << "//  Num Entries: " << QueueSize () << std::endl
+    << "//  Number Entries: " << QueueSize () << std::endl
     << "//" << std::endl;
 
   DataBaseServerList::const_iterator  idx;

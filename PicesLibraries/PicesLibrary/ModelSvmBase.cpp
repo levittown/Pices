@@ -162,21 +162,21 @@ void  ModelSvmBase::TrainModel (FeatureVectorListPtr  _trainExamples,
   catch (const KKException&  e)
   {
     validModel = false;
-    KKStr  errMsg = "ModelSvmBase::TrainModel  ***ERROR*** Exception occured calling 'Model::TrainModel'.";
+    KKStr  errMsg = "ModelSvmBase::TrainModel  ***ERROR*** Exception occurred calling 'Model::TrainModel'.";
     log.Level (-1) << endl << errMsg << endl << e.ToString () << endl << endl;
     throw  KKException (errMsg, e);
   }
   catch (const exception& e2)
   {
     validModel = false;
-    KKStr errMsg = "ModelSvmBase::TrainModel  ***ERROR*** Exception occured calling 'Model::TrainModel'.";
+    KKStr errMsg = "ModelSvmBase::TrainModel  ***ERROR*** Exception occurred calling 'Model::TrainModel'.";
     log.Level (-1) << endl << endl << errMsg << endl << e2.what () << endl << endl;
     throw KKException (errMsg, e2);
   }
   catch (...)
   {
     validModel = false;
-    KKStr errMsg = "ModelSvmBase::TrainModel  ***ERROR*** Exception occured calling 'Model::TrainModel'.";
+    KKStr errMsg = "ModelSvmBase::TrainModel  ***ERROR*** Exception occurred calling 'Model::TrainModel'.";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
     throw KKException (errMsg);
   }
@@ -216,7 +216,7 @@ void  ModelSvmBase::TrainModel (FeatureVectorListPtr  _trainExamples,
   catch (const std::exception&  e)
   {
     validModel = false;
-    KKStr  errMsg = "ModelSvmBase::TrainModel   ***ERROR*** Exception occured in 'SVM289_MFS::svm_train' building training model[" + rootFileName + "].";
+    KKStr  errMsg = "ModelSvmBase::TrainModel   ***ERROR*** Exception occurred in 'SVM289_MFS::svm_train' building training model[" + rootFileName + "].";
     errMsg << endl << "        Exception[" << e.what () << "]";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
     throw KKException (errMsg);
@@ -224,7 +224,7 @@ void  ModelSvmBase::TrainModel (FeatureVectorListPtr  _trainExamples,
   catch (...)
   {
     validModel = false;
-    KKStr  errMsg = "ModelSvmBase::TrainModel   ***ERROR*** Exception occured in 'SVM289_MFS::svm_train' building training model[" + rootFileName + "].";
+    KKStr  errMsg = "ModelSvmBase::TrainModel   ***ERROR*** Exception occurred in 'SVM289_MFS::svm_train' building training model[" + rootFileName + "].";
     log.Level (-1) << endl << endl << errMsg << endl << endl;
     throw KKException (errMsg);
   }

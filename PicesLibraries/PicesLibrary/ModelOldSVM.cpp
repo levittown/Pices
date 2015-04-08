@@ -58,7 +58,7 @@ ModelOldSVM::ModelOldSVM (FileDescPtr    _fileDesc,
  @param[in] _param The parameters for the svm, and for creating the model.
  @param[in] _fileDesc A description of the data file.
  @param[in] _cancelFlag  If you want this instance to stop processing set this field to true in another thread.
- @param[in] _log A logfile stream. All important events will be output to this stream
+ @param[in] _log A log-file stream. All important events will be output to this stream
  */
 ModelOldSVM::ModelOldSVM (const KKStr&            _name,
                           const ModelParamOldSVM& _param,         // Create new model from
@@ -470,7 +470,7 @@ vector<KKStr>  ModelOldSVM::SupportVectorNames () const
  *@brief  For a given two class pair return the names of the 'numToFind' worst S/V's.
  *@details  This method will iterate through all the S/V's removing them one at a time and recompute the
  * decision boundary and probability. It will then return the S/V's that when removed improve the probability in 'c1's the most.
- *@param[in]  example  Example that was classified incorrectly.
+ *@param[in]  example  The example that was classified incorrectly.
  *@param[in]  numToFind  The number of the worst examples you are looking for.
  *@param[in]  c1  Class that the 'example; parameter should have been classed as.
  *@param[in]  c2  Class that it was classified as.
@@ -490,7 +490,7 @@ vector<ProbNamePair>  ModelOldSVM::FindWorstSupportVectors (FeatureVectorPtr  ex
 /**
  *@brief  For a given two class pair return the names of the 'numToFind' worst S/V's.
  *@details  This method will iterate through all the S/V's removing them one at a time and retraining a new SVM and then comparing with the new prediction results.
- *@param[in]  example  Example that was classified incorrectly.
+ *@param[in]  example  The example that was classified incorrectly.
  *@param[in]  numToFind  The number of the worst examples you are looking for.
  *@param[in]  c1  Class that the 'example; parameter should have been classed as.
  *@param[in]  c2  Class that it was classified as.
@@ -578,7 +578,7 @@ void  ModelOldSVM::TrainModel (FeatureVectorListPtr  _trainExamples,
   }
   catch (...)
   {
-    log.Level (-1) << endl << endl << "ModelOldSVM::TrainModel  Exception occured building training model." << endl << endl;
+    log.Level (-1) << endl << endl << "ModelOldSVM::TrainModel  Exception occurred building training model." << endl << endl;
     validModel = false;
     delete  svmModel;
     svmModel = NULL;
@@ -597,7 +597,7 @@ void  ModelOldSVM::TrainModel (FeatureVectorListPtr  _trainExamples,
 
 
 /**
- *@brief  ModelOldSVM Specific 'PrepExampleForPrediction'  will only normalize data.
+ *@brief  ModelOldSVM Specific 'PrepExampleForPrediction' will only normalize data.
  *@param[in]  fv  Feature vector of example that needs to be prepared.
  *@param[out]  newExampleCreated  Indicates if either Feature Encoding and/or Normalization needed
  *             to be done.  If neither then the original instance is returned.  If Yes then 

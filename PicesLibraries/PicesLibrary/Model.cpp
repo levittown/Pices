@@ -124,12 +124,12 @@ Model::Model (FileDescPtr    _fileDesc,
     
     
 /**
- *@brief Use this custructor if you want to create a model from example data
+ *@brief Use this constructor if you want to create a model from example data
  *@param[in] _name 
  *@param[in] _param Will make own locale copy.
  *@param[in] _examples The image data we will be building the model from
  *@param[in] _fileDesc A description of the data file.
- *@param[in] _log A logfile stream. All important events will be output to this stream
+ *@param[in] _log A log-file stream. All important events will be output to this stream
  */
 Model::Model (const KKStr&       _name,
               const ModelParam&  _param,      // Create new model from
@@ -574,7 +574,7 @@ void  Model::Load (const KKStr&  _rootFileName,
                    bool&         _successful
                   )
 {
-  log.Level (10) << "Model::Load  Load Model in File[" << _rootFileName << "]." << endl;
+  log.Level (10) << "Model::Load  File[" << _rootFileName << "]." << endl;
   rootFileName = _rootFileName;
   KKStr  fileName = rootFileName + ".Model";
 
@@ -1010,7 +1010,7 @@ FeatureVectorPtr  Model::PrepExampleForPrediction (FeatureVectorPtr  fv,
 
 
 /**
- * Will normailize probabilites such that the sum of all equal 1.0 and no one probability will be less than 'minProbability'.
+ * Will normalize probabilities such that the sum of all equal 1.0 and no one probability will be less than 'minProbability'.
  */
 void  Model::NormalizeProbabilitiesWithAMinumum (kkint32  numClasses,
                                                  double*  probabilities,
@@ -1142,7 +1142,7 @@ void  Model::ReduceTrainExamples ()
   }
   else
   {
-    // Since we are replacing 'trainExamples' with 'reducedSet' we will now own 'trainExamples' buit not its contents.
+    // Since we are replacing 'trainExamples' with 'reducedSet' we will now own 'trainExamples' but not its contents.
     reducedSet->Owner (false);
     weOwnTrainExamples = true;
     trainExamples = reducedSet;
