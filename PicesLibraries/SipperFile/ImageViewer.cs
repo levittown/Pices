@@ -316,7 +316,7 @@ namespace SipperFile
       if  (sipperFile != null)
         scanRate = sipperFile.ScanRate;
 
-      esd = (float)(2.0 * Math.Sqrt (filledArea *  (0.096 / cropWidth) * 1000.0 * (id.FlowRate1 / sipperFile.ScanRate) * 1000.0 / 3.1415926));
+      esd = (float)(2.0 * Math.Sqrt (filledArea *  (0.096 / cropWidth) * 1000.0 * (flowRate1 / sipperFile.ScanRate) * 1000.0 / 3.1415926));
       eBv = (float)((4.0 / 3.0) * Math.PI * Math.Pow (Math.Sqrt (filledArea *  (chamberWidth / cropWidth) * 1000 * (flowRate1 / scanRate) * 1000.0 / Math.PI), 3));
 
       PicesPrediction  model1Prediction1 = new PicesPrediction (null, 0, 0.0f);

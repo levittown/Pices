@@ -123,7 +123,7 @@ void  ModelParamDual::ParseCmdLineParameter (const KKStr&  parameter,
     parameterUsed = true;
     if  (!TrainingConfiguration2::ConfigFileExists (configFileName2))
     {
-      log.Level (-1) << "ModelParamDual::ParseCmdLineParameter   ***ERROR***  Cinfiguration File2[" << configFileName2 << "]  Does not exist." << endl;
+      log.Level (-1) << "ModelParamDual::ParseCmdLineParameter   ***ERROR***  Configuration File2[" << configFileName2 << "]  Does not exist." << endl;
       ValidParam (false);
     }
   }
@@ -229,7 +229,7 @@ void  ModelParamDual::ReadSpecificImplementationXML (istream&  i)
     if  ((ln.Len () < 1)  || (ln.SubStrPart (0, 1) == "//"))
       continue;
 
-    KKStr  field = ln.ExtractQuotedStr ("\n\r\t", true); // true = decode escape charaters
+    KKStr  field = ln.ExtractQuotedStr ("\n\r\t", true); // true = decode escape characters
     field.Upper ();
 
     if  (field.EqualIgnoreCase ("<ModelParamDual>"))

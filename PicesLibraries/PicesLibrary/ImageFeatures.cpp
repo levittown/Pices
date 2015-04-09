@@ -45,8 +45,9 @@ using namespace  MLL;
 
 
 
-const kkint32  ImageFeatures::SizeThreshold = 100000;  // Size of image in num of pixels before we decide to reduce the
-                                                     // image to improve feature calculation.
+const kkint32  ImageFeatures::SizeThreshold = 100000;  /**< Size of image in number of foreground pixels before we decide to reduce the
+                                                        * image to improve feature calculation.
+                                                        */
 
 kkint32  ImageFeatures::FirstInstrumentDataField = 84;  // see 'NumSeperateInstrumentDataFields' below.
 
@@ -56,7 +57,7 @@ kkint32  ImageFeatures::FirstInstrumentDataField = 84;  // see 'NumSeperateInstr
  **                             NumSeperateInstrumentDataFields                              * 
  **                                                                                          *
  ** This is the number of fields that are not going to be stored in the regular feature file *
- ** but in seperate insrument data files that will be accessed by SiperFile name and scan    *
+ ** but in separate instrument data files that will be accessed by SiperFile name and scan   *
  ** line number.                                                                             *
  **                                                                                          *
  *********************************************************************************************
@@ -309,7 +310,7 @@ FeatureVector (FeatureFileIOPices::PlanktonMaxNumOfFields ()),
       {
         // There are pixels along the edge of the image,  To help avoid 
         // problems with feature calculation, we will pad the image with 
-        // a few extra row's and collumns.
+        // a few extra row's and columns.
         image->ReAllocateForBiggerScreen ();
         image->Save (_fileName);
       }
@@ -358,7 +359,7 @@ ImageFeatures::ImageFeatures (const FeatureVector&  featureVector):
 {
   if  (strcmp (featureVector.UnderlyingClass (), "ImageFeatures") == 0)
   {
-    // The underlying class is anothr ImageFeatures object.
+    // The underlying class is another ImageFeatures object.
     const ImageFeatures&  image = dynamic_cast<const ImageFeatures&>(featureVector);
 
     areaMMSquare     = image.AreaMMSquare    ();
@@ -569,7 +570,7 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
   //Save (*raster, baseName, "ConnectedComponent", saveImage);
 
 
-  // Baishali added ecentricity moments calc's
+  // Baishali added eccentricity moments calculations.
   float  momentf[9];
   raster->CentralMoments (momentf);
 
@@ -627,7 +628,7 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
   edgeImage->CentralMoments (edgeMomentf);
   delete  edgeImage;  edgeImage = NULL;
 
-  kkint32 area = (kkint32)(momentf[0] + 0.5f);  // Moment-0 is the same as the number of forground pixels in image.
+  kkint32 area = (kkint32)(momentf[0] + 0.5f);  // Moment-0 is the same as the number of foreground pixels in image.
   {
     ConvexHullPtr  ch = new ConvexHull();
     RasterPtr  convexImage = ch->Filter (*raster);
@@ -714,7 +715,7 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
 
 
   #if defined (DEBUB_CalcFeatures)
-  cout << "CalcFeatures   After Morphalogical Opertations." << std::endl;
+  cout << "CalcFeatures   After Morphological Operations." << std::endl;
   #endif
 
   {
@@ -783,7 +784,7 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
     
     featureData[EigenRatioIndex] = eigenRatio;
 
-    // Image will be rotated such that it slongest dimension will be paralell to the x-axis
+    // Image will be rotated such that it longest dimension will be parallel to the x-axis
 
     RasterSipperPtr rotatedImage = raster->Rotate (orientationAngle);
 
@@ -872,11 +873,11 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
 
 
   {
-    // This part has to be done after 'CalcOrientationAndEigerRatio' is called.  That is where the image centroid is calced.
+    // This part has to be done after 'CalcOrientationAndEigerRatio' is called; that is where the image centroid is computed.
     centroidCol = raster->CentroidCol () * reductionFactor;
     centroidRow = raster->CentroidRow () * reductionFactor;
 
-    // sfCentroid,  will use ImageFileName to calc Centroid with respect to sipper file.
+    // sfCentroid,  will use ImageFileName to calculate Centroid with respect to sipper file.
     //  FileName format is 
     sfCentroidCol = -1.0f;
     sfCentroidRow = -1.0;
@@ -908,7 +909,7 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
   featureData[TransparancyWtdIndex]  = (float)(momentfWeighted[0] / convexf);
 
   {
-    //RasterSipperPtr  fourier  = raster->FastFourierKK ();
+    //RasterSipperPtr  Fourier  = raster->FastFourierKK ();
     RasterSipperPtr  fourier  = raster->FastFourier ();
 
     Save (*fourier, "Fourier", saveImages);
@@ -940,7 +941,7 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
       kkint32  numOfTries = 0;
       while  (!successful)
       {
-        countourImage.Dilation (); // We want the image to be completly connected.
+        countourImage.Dilation (); // We want the image to be completely connected.
         {
           Save  (countourImage, "_JustBeforeContour", saveImages);
           ContourFollower contourFollower (countourImage, log);
@@ -950,13 +951,13 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
           {
             if  (numOfEdgePixels < minExpectedLen)
             {
-              // We probably found a detached piece;  so we need to do another dialation  and try again.
+              // We probably found a detached piece;  so we need to do another dilation  and try again.
               successful = false;
             }
           }
           if  (numOfTries > 3)
           {
-            // We have already tried 3 times;  we willjust go with what we have.
+            // We have already tried 3 times;  we will just go with what we have.
             successful = true;
           }
           numOfTries++;
@@ -967,11 +968,18 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
       {
         ContourFollower contourFollower2 (countourImage, log);
         PointListPtr  contourEdgePixels = contourFollower2.GenerateContourList ();
-        RasterSipperPtr  r = new RasterSipper (countourImage.Height (), countourImage.Width (), false);
-        r->DrawPointList (*contourEdgePixels, PixelValue (255, 255, 255));
-        Save  (*r, "_JustBeforeContour_Edge", saveImages);
-        delete  r;
-        delete  contourEdgePixels;
+        if  (!contourEdgePixels)
+        {
+          cerr << endl << "ImageFeatures::CalcFeatures     ***ERROR***     contourFollower2   returned NULL"  << endl << endl;    
+        }
+        else
+        {
+          RasterSipperPtr  r = new RasterSipper (countourImage.Height (), countourImage.Width (), false);
+          r->DrawPointList (*contourEdgePixels, PixelValue (255, 255, 255));
+          Save  (*r, "_JustBeforeContour_Edge", saveImages);
+          delete  r;                  r                 = NULL;
+          delete  contourEdgePixels;  contourEdgePixels = NULL;
+        }
       }
     }
 
@@ -1043,7 +1051,7 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
   }
 
 
-  featureData[0] = (float)areaBeforeReduction;  // Incase the image was reduced.
+  featureData[0] = (float)areaBeforeReduction;  // In case the image was reduced.
   OrigSize ((float)areaBeforeReduction);
 
 
@@ -1062,7 +1070,7 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
 
 
   #if defined (DEBUB_CalcFeatures)
-    cout << "CalcFeatures   Exiting Calcs." << std::endl;
+    cout << "CalcFeatures   Exiting CalcFeatures." << std::endl;
   #endif
 
 }  /* CalcFeatures */
@@ -1347,7 +1355,7 @@ ImageFeaturesPtr  ImageFeaturesList::PopFromBack ()
   if  (strcmp (fv->UnderlyingClass (), "ImageFeatures") != 0)
   {
     log.Level (-1)  << endl << endl 
-                    << "ImageFeaturesList::BackOfQueue ()    ***ERROR***        Entry poped from back of Queue is not a 'ImageFeatures' object." << endl
+                    << "ImageFeaturesList::BackOfQueue ()    ***ERROR***        Entry popped from back of Queue is not a 'ImageFeatures' object." << endl
                     << endl;
     return NULL;
   }
@@ -1564,7 +1572,7 @@ VectorDouble  ImageFeaturesList::ExtractPositionsByMeter (InstrumentDataListPtr 
       }
     }
     {
-      // Add in the diference from the start of the frame.
+      // Add in the difference from the start of the frame.
       double  deltaScanLines = example->SfCentroidRow () - scanLineToCalcFrom;
       double  deltaTime = deltaScanLines / defaultScanRate;
       double  deltaDist = deltaTime * flowRate;
@@ -1686,8 +1694,8 @@ void  ImageFeaturesList::PrintSpatialHistogramReport (ostream&               r,
 
 
 /**
- * @brief  Creates a duplicate of list and also dupliactes it contents.
- * @return Duplicated list with hardcopy of its contents.
+ * @brief  Creates a duplicate of list and also duplicates it contents.
+ * @return Duplicated list with hard copy of its contents.
  */
 ImageFeaturesListPtr  ImageFeaturesList::DuplicateListAndContents ()  const
 {
@@ -1834,7 +1842,7 @@ ImageFeaturesListPtr  ImageFeaturesList::StratifyAmoungstClasses (kkint32  numOf
 
 /**
  * @brief Fixed the two fields  sfCentroidCol & sfCentroidRow.
- *        This has to be done because teh original calcs for them assumed that  there
+ *        This has to be done because the original calculations for them assumed that  there
  *        would be no '_' characters in the sipper file name.
  */
 void  ImageFeaturesList::FixSipperFileScanLineAndColFields ()

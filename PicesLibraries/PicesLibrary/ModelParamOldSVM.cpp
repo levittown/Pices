@@ -480,7 +480,7 @@ void  ModelParamOldSVM::ReadSpecificImplementationXML (istream& i)
   while  (i.getline (buff, sizeof (buff)))
   {
     KKStr  ln (buff);
-    KKStr  field = ln.ExtractQuotedStr ("\n\r\t", true);      // true = decode escape charaters
+    KKStr  field = ln.ExtractQuotedStr ("\n\r\t", true);      // true = decode escape characters
     field.Upper ();
 
     if  (field.EqualIgnoreCase ("</ModelParamOldSVM>"))

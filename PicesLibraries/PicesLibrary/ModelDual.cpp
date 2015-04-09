@@ -857,7 +857,7 @@ void  ModelDual::ReadSpecificImplementationXML (istream&  i,
 
   if  (param == NULL)
   {
-    log.Level (-1) << "ModelDual::ReadSpecificImplementationXML   ***ERROR***   (param == NULL);  this should not ne able to happen." << endl;
+    log.Level (-1) << "ModelDual::ReadSpecificImplementationXML   ***ERROR***   (param == NULL);  this should not be able to happen." << endl;
     validModel = false;
     return;
   }
