@@ -343,8 +343,8 @@ begin
                               and  id.CTDBattery   > 5.5   and  id.CTDBattery    < 14.0
                               and  id.Depth        < 1000
                               and  id.Temperature  > 0.0   and  id.Temperature   < 40.0
-                              and  id.Salinity     > 20    and  id.Salinity      < 40.0
-                              and  id.Density      > 13    and  id.Density       < 40.0
+                                                           and  id.Salinity      < 40.0
+                                                           and  id.Density       < 40.0
                               and  id.Fluorescence > -2    and  id.Fluorescence  < 80.0
                    );
 
@@ -358,8 +358,8 @@ begin
                               and  id.CTDBattery   > 5.5   and  id.CTDBattery    < 14.0
                               and  id.Depth        < 1000
                               and  id.Temperature  > 0.0   and  id.Temperature   < 40.0
-                              and  id.Salinity     > 20    and  id.Salinity      < 40.0
-                              and  id.Density      > 13    and  id.Density       < 40.0
+                                                           and  id.Salinity      < 40.0
+                                                           and  id.Density       < 40.0
                               and  id.Fluorescence > -2    and  id.Fluorescence  < 80.0
                    );
 
@@ -495,8 +495,8 @@ begin
         and  id.CTDDateTime  < "2020-12-31 23:59:59"
         and  id.CTDBattery   > 5.5  and  id.CTDBattery    < 14.0
         and  id.Temperature  > 0.0  and  id.Temperature   < 40.0
-        and  id.Salinity     > 20   and  id.Salinity      < 40.0
-        and  id.Density      > 13   and  id.Density       < 40.0
+                                    and  id.Salinity      < 40.0
+                                    and  id.Density       < 40.0
         and  id.Fluorescence > -2   and  id.Fluorescence  < 80.0
       group by (id.CTDDateTime >= _midPoint), floor(id.depth / _depthBinSize);
 
@@ -504,6 +504,10 @@ end;
 //
 
 delimiter ;
+
+
+
+
 
 
 
@@ -605,16 +609,14 @@ begin
         and  id.CTDBattery   > 5.5  and  id.CTDBattery    < 14.0
         and  id.Depth        < 1000
         and  id.Temperature  > 0.0  and  id.Temperature   < 40.0
+                                    and  id.Salinity      < 40.0
+                                    and  id.Density       < 40.0
+        and  id.Fluorescence > -2   and  id.Fluorescence  < 80.0
       group by (id.CTDDateTime >= _midPoint), floor(id.depth / _depthBinSize);
 
 end;
 //
-
 delimiter ;
-
-
-
-
 
 
 
@@ -663,14 +665,13 @@ begin
         and  id.CTDDateTime  < "2020-12-31 23:59:59"
         and  id.CTDBattery   > 5.5  and  id.CTDBattery    < 14.0
         and  id.Temperature  > 0.0  and  id.Temperature   < 40.0
-      order by (id.CTDDateTime >= _midPoint), id.depth ;
-
+                                    and  id.Salinity      < 40.0
+                                    and  id.Density       < 40.0
+        and  id.Fluorescence > -2   and  id.Fluorescence  < 80.0
+      order by (id.CTDDateTime >= _midPoint), id.depth;
 end
-
 $$
-
 delimiter ;
-
 
 
 
@@ -782,8 +783,8 @@ begin
          and  id.CTDDateTime  < "2020-12-31 23:59:59"
          and  id.CTDBattery   > 5.5  and  id.CTDBattery    < 14.0
          and  id.Temperature  > 0.0  and  id.Temperature   < 40.0
-         and  id.Salinity     > 20   and  id.Salinity      < 40.0
-         and  id.Density      > 18   and  id.Density       < 40.0
+                                     and  id.Salinity      < 40.0
+                                     and  id.Density       < 40.0
          and  id.Fluorescence > -2   and  id.Fluorescence  < 80.0
        group by sf.CruiseName, sf.StationName, sf.DeploymentNum, floor(id.depth / _depthBinSize);
 
@@ -918,8 +919,8 @@ begin
          and  id.CTDDateTime  < "2020-12-31 23:59:59"
          and  id.CTDBattery   > 5.5  and  id.CTDBattery    < 14.0
          and  id.Temperature  > 0.0  and  id.Temperature   < 40.0
-         and  id.Salinity     > 20   and  id.Salinity      < 40.0
-         and  id.Density      > 18   and  id.Density       < 40.0
+                                     and  id.Salinity      < 40.0
+                                     and  id.Density       < 40.0
          and  id.Fluorescence > -2   and  id.Fluorescence  < 80.0
        group by sf.CruiseName, sf.StationName, floor(id.depth / _depthBinSize);
 
@@ -1096,8 +1097,8 @@ begin
                and  id.CTDBattery   > 5.5   and  id.CTDBattery    < 14.0
                and  id.Depth        > 0.0   and  id.Depth         < 500
                and  id.Temperature  > 0.0   and  id.Temperature   < 40.0
-               and  id.Salinity     > 20    and  id.Salinity      < 40.0
-               and  id.Density      > 13    and  id.Density       < 40.0
+                                            and  id.Salinity      < 40.0
+                                            and  id.Density       < 40.0
                and  id.Fluorescence > -2    and  id.Fluorescence  < 80.0
                
          group by (id.CtdDateTime < _midPoint), Floor(id.depth / _depthBinSize)
@@ -1261,8 +1262,8 @@ begin
                and  id.CTDBattery   > 5.5   and  id.CTDBattery    < 14.0
                and  id.Depth        > 0.0   and  id.Depth         < 500
                and  id.Temperature  > 0.0   and  id.Temperature   < 40.0
-               and  id.Salinity     > 20    and  id.Salinity      < 40.0
-               and  id.Density      > 13    and  id.Density       < 40.0
+                                            and  id.Salinity      < 40.0
+                                            and  id.Density       < 40.0
                and  id.Fluorescence > -2    and  id.Fluorescence  < 80.0
                
          group by (id.CtdDateTime < _midPoint), Floor(id.depth / _depthBinSize)
