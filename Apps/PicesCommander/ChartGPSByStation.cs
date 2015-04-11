@@ -411,7 +411,7 @@ namespace PicesCommander
 
       PicesGPSDataPointList  fliteredGPSData = gpsData.FilterOutNoise ();
 
-      if  (fliteredGPSData.Count > 1)
+      if  ((fliteredGPSData != null)  &&  (fliteredGPSData.Count > 1))
       {
         DataSeriesToPlot  seriesToPlot = new DataSeriesToPlot (deployment, fliteredGPSData);
         seriesToPlot.LocateGPSBounds ();
