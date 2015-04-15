@@ -10,7 +10,6 @@
 
 
 #include "FirstIncludes.h"
-
 #include <ctype.h>
 #include <math.h>
 #include <time.h>
@@ -19,12 +18,10 @@
 #include <map>
 #include <string>
 #include <vector>
-
 #if  defined(WIN32)
 #include <windows.h>
 #include <wingdi.h>
 #endif
-
 #include "MemoryDebug.h"
 using namespace std;
 
@@ -35,6 +32,7 @@ using namespace std;
 #include "OSservices.h"
 #include "RasterSipper.h"
 using namespace KKB;
+
 
 // SipperInstruments Library
 #include "GPSDataPoint.h"
@@ -4171,7 +4169,10 @@ void  DataBase::ImagesUpdateValidatedClass (const KKStr&     imageFileName,
             <<                                        mlClass->Name ().QuotedStr () << ", "
             <<                                        "1.0"                                                   
             <<                                 ")";
+
+
   kkint32  returnCd = QueryStatement (updateStr);
+
   ResultSetsClear ();
 }  /* ImagesUpdateValidatedClass */
 
