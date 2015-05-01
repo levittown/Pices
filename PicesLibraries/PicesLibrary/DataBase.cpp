@@ -5898,6 +5898,26 @@ SipperStationPtr  DataBase::SipperStationLoad (const KKStr&  cruiseName,
 
 
 
+SipperStationListPtr  DataBase::SipperStationsLoadByGpsRange (double  latitudeMin,
+                                                              double  latitudeMax,
+                                                              double  longitudeMin,
+                                                              double  longitudeMax
+                                                             )
+{
+  KKStr  sqlCmd (200);
+
+  sqlCmd << "call  StationsLoadByGpsRange(" << latitudeMin << ", " << latitudeMax << ", " << longitudeMin << ", " << longitudeMax << ")";
+  kkint32  returnCd = QueryStatement (sqlCmd);
+  if  (returnCd != 0)
+    return  NULL;
+
+  return  SipperStationProcessResults ();
+}  /* SipperStationsLoadByGpsRange */
+
+
+
+
+
 void   DataBase::SipperStationInsert (const SipperStation&  station)
 {
   if  (!allowUpdates)

@@ -2305,6 +2305,27 @@ PicesGPSDataPointList^   PicesDataBase::GpsDataQueryByIntervals (String^        
 
 
 
+
+  PicesSipperStationList^  PicesDataBase::SipperStationsLoadByGpsRange (double  latitudeMin,
+                                                                        double  latitudeMax,
+                                                                        double  longitudeMin,
+                                                                        double  longitudeMax
+                                                                      )
+  {
+    SipperStationListPtr  stations = dbConn->SipperStationsLoadByGpsRange (latitudeMin, latitudeMax, longitudeMin, longitudeMax);
+    if  (stations == NULL)
+      return  nullptr;
+    
+    PicesSipperStationList^  results = gcnew PicesSipperStationList (stations);
+    stations->Owner (false);
+    delete  stations;
+    stations = NULL;
+    return  results;
+  }  /* SipperStationsLoadByGpsRange */
+
+
+
+
   void  PicesDataBase::SipperStationInsert (PicesSipperStation^  station)
   {
     if  (station == nullptr)

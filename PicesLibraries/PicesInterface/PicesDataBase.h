@@ -648,6 +648,12 @@ namespace PicesInterface
                                                 String^  stationName
                                                );
 
+    PicesSipperStationList^  SipperStationsLoadByGpsRange (double  latitudeMin,
+                                                           double  latitudeMax,
+                                                           double  longitudeMin,
+                                                           double  longitudeMax
+                                                          );
+
     void                     SipperStationInsert (PicesSipperStation^  station);
 
     void                     SipperStationUpdate (PicesSipperStation^  station);

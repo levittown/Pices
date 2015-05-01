@@ -940,19 +940,25 @@ namespace MLL
 
 
     //***********************************************************************************
-    SipperStationListPtr  SipperStationLoad (const KKStr&  cruiseName);
+    SipperStationListPtr   SipperStationLoad (const KKStr&  cruiseName);
     
-    SipperStationPtr      SipperStationLoad (const KKStr&  cruiseName,
-                                             const KKStr&  stationName
-                                            );
+    SipperStationPtr       SipperStationLoad (const KKStr&  cruiseName,
+                                              const KKStr&  stationName
+                                             );
+
+     SipperStationListPtr  SipperStationsLoadByGpsRange (double  latitudeMin,
+                                                         double  latitudeMax,
+                                                         double  longitudeMin,
+                                                         double  longitudeMax
+                                                        );
     
-    void                  SipperStationInsert (const SipperStation&  station);
+    void                   SipperStationInsert (const SipperStation&  station);
 
-    void                  SipperStationUpdate (const SipperStation&  station);
+    void                   SipperStationUpdate (const SipperStation&  station);
 
-    void                  SipperStationDelete (const KKStr&  cruiseName,
-                                               const KKStr&  stationName
-                                              );
+    void                   SipperStationDelete (const KKStr&  cruiseName,
+                                                const KKStr&  stationName
+                                               );
     void   ResultSetsClear ();
 
   private:

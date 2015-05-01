@@ -59,5 +59,26 @@ begin
   delete from  Stations 
     where  (CruiseName = _cruiseName)  and  (StationName  = _stationName);
 end
+//s
+delimiter ;
+
+
+
+
+
+/**********************************************************************************************************************/
+drop procedure  if exists StationsLoadByGpsRange;
+
+delimiter //
+create procedure StationsLoadByGpsRange (latitudeMin    double,
+                                         latitudeMax    double,
+										 longitudeMin   double,
+                                         longitudeMax   double
+                                        )
+begin
+ select * from Stations s 
+     where (s.Longitude >= longitudeMin)  and  (s.Longitude <= longitudeMax)  and
+	       (s.Latitude  >= latitudeMin)   and  (s.Latitude  <= latitudeMax);
+end
 //
 delimiter ;
