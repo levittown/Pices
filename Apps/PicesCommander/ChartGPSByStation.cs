@@ -49,6 +49,9 @@ namespace PicesCommander
     private  double  degToRad = Math.PI / 180.0;
     private  double  radToDeg = 180.0   / Math.PI;
 
+    private  Font  titleFont     = new Font (FontFamily.GenericSerif, 14.0f);
+    private  Font  axisTitleFont = new Font (FontFamily.GenericSerif, 12.0f);
+    private  Font  axisLabelFont = new Font (FontFamily.GenericSerif, 10.0f);
     
     private  class  PlotRequest
     {
@@ -553,7 +556,7 @@ namespace PicesCommander
         int middle = count / 2;
         String  middleLable = deployment.CruiseName + "(" + startTimeAct.ToString ("yyyy-MM-dd") + ")";
         s.Points[middle].Label = middleLable;
-        s.Points[middle].Font = new Font (FontFamily.GenericSerif, 8.0f);
+        s.Points[middle].Font = new Font (FontFamily.GenericSerif, 9.0f);
       }
 
       dataSeries.chartSeriesIndex = ProfileChart.Series.Count;
@@ -626,7 +629,7 @@ namespace PicesCommander
       titleLine += "  Time-Interval: " + timeInterval;
      
       ProfileChart.Titles.Clear ();
-      ProfileChart.Titles.Add (titleLine);
+      ProfileChart.Titles.Add (new Title (titleLine, Docking.Top, titleFont, Color.Black));
 
       if  (series.Count < 1)
       {
@@ -636,13 +639,9 @@ namespace PicesCommander
       }
 
       ChartArea ca = ProfileChart.ChartAreas[0];
-      //ca.AxisY.Title = "Latitude";
 
-      //ca.AxisX.Title = "Longitude";
-      Font f = new Font (ca.AxisX.TitleFont.FontFamily, 10);
-      ca.AxisX.TitleFont = f;
-      f = new Font (ca.AxisY.TitleFont.FontFamily, 10);
-      ca.AxisY.TitleFont = f;
+      ca.AxisX.TitleFont = axisTitleFont;
+      ca.AxisY.TitleFont = axisTitleFont;
 
       ProfileChart.Series.Clear ();
 
@@ -673,10 +672,12 @@ namespace PicesCommander
       // Third we add stations that were not in one of the specified deployments but awe in the area of the deployments.
       // Find other stations in plot area.
       // Degrees/Kilo-Meter = 1/111  There are 111 Km/Degree of latitude
-      double  latPadding  = 15.0 * (1.0 / 111.0);  // Will add 5km's of padding to latitude.
+
+      double  paddingKms = (double)PaddingKms.Value;
+      double  latPadding  =  paddingKms * (1.0 / 111.0);  // Will add 5km's of padding to latitude.
       double  degreesToRads = Math.PI / 180.0;
-      double  kmsPerDegLong = 111.0 * Math.Cos (minY * degreesToRads);
-      double  longPadding = 15.0 * (1.0 / (kmsPerDegLong));
+      double  kmsPerDegLong = 111.6 * Math.Cos ((minY + maxY) / 2.0  * degreesToRads);
+      double  longPadding = paddingKms * (1.0 / (kmsPerDegLong));
 
       // 
       PicesSipperStationList  stationsInRange = 
@@ -700,31 +701,88 @@ namespace PicesCommander
 
       double  latitudeMid = (maxY + minY) / 2.0;
 
-      float  plotAreaHeight = ProfileChart.Height;
-      float  plotAreaWidth  = ProfileChart.Width;
+      float  plotAreaHeight = ProfileChart.ChartAreas[0].InnerPlotPosition.Height;
+      float  plotAreaWidth  = ProfileChart.ChartAreas[0].InnerPlotPosition.Width;
 
-      double  xRange = maxX - minX;
-      double  yRange = maxY - minY;
-      double  xRangeAdj = xRange * Math.Cos(latitudeMid * degToRad);
+      double  yRangeDegs = maxY - minY;
+      double  xRangeDegs = maxX - minX;
 
-      double  yDensity = yRange    / plotAreaHeight;
-      double  xDenisty = xRangeAdj / plotAreaWidth;
+      double  yRangeKms = yRangeDegs * 111.0;
+
+      double  longKmsPerDeg = 111.6 * Math.Cos (latitudeMid * degToRad);
+
+      double  xRangeKms = xRangeDegs * longKmsPerDeg;
+
+      double  yDensity = yRangeKms / plotAreaHeight;
+      double  xDenisty = xRangeKms / plotAreaWidth;
 
       if  (xDenisty > yDensity)
       {
-        yRange = xDenisty * plotAreaHeight;
-        double  leftOver = yRange - (maxY - minY);
-        minY = minY - leftOver / 2.0;
-        maxY = maxY + leftOver / 2.0;
+        double  newYRangeKms = xDenisty * plotAreaHeight;
+        double  newYRageDegs = newYRangeKms / 111.0;
+
+        double  deltaYRange = newYRageDegs - yRangeDegs;
+        minY = minY - deltaYRange / 2.0;
+        maxY = maxY + deltaYRange / 2.0;
       }
       else
       {
-        xRangeAdj = yDensity * plotAreaWidth;
-        xRange = xRangeAdj / Math.Cos(latitudeMid * degToRad);
-        double  leftOver = xRange - (maxX - minX);
-        minX = minX - leftOver / 2.0;
-        maxX = maxX + leftOver / 2.0;
+        double  newXRangeKms = yDensity * plotAreaWidth;
+        double  newXRangeDegs = newXRangeKms / longKmsPerDeg;
+
+        double  deltaXRange = newXRangeDegs - xRangeDegs;
+        minX = minX - (deltaXRange / 2.0);
+        maxX = maxX + (deltaXRange / 2.0);
       }
+
+      {
+        // X Axis Custom Labels
+        ca.AxisX.CustomLabels.Clear ();
+        double  delta = (maxX - minX) / 5.0;
+
+        char d = (char)176;
+        string dStr = d.ToString ();
+
+        double  fromPos = minX;
+        for  (int xx = 0;  xx < 5;  ++xx)
+        {
+          double  toPos = fromPos + delta;
+          double  midPos = (toPos + fromPos) / 2.0;
+          double  midPosAbs = Math.Abs (midPos);
+          double  degs = Math.Floor (midPosAbs);
+          double  mins = (midPosAbs - degs) * 60.0;
+          string  s = degs.ToString () + dStr + ":" + mins.ToString ("00.00") + "'" + ((midPos < 0.0) ? "W" : "E");
+          CustomLabel cl= new CustomLabel (fromPos, toPos, s, 0, LabelMarkStyle.LineSideMark, GridTickTypes.Gridline);
+          ca.AxisX.CustomLabels.Add (cl);
+          fromPos = toPos;
+        }
+        ca.AxisX.LabelStyle.Font = axisLabelFont;
+      }
+      
+
+      {
+        // Y Axis Custom Labels
+        ca.AxisY.CustomLabels.Clear ();
+        double  delta = (maxY - minY) / 5.0;
+
+        char d = (char)176;
+        string dStr = d.ToString ();
+
+        double  fromPos = minY;
+        for  (int xx = 0;  xx < 5;  ++xx)
+        {
+          double  toPos = fromPos + delta;
+          double  midPos = (toPos + fromPos) / 2.0;
+          double  midPosAbs = Math.Abs (midPos);
+          double  degs = Math.Floor (midPosAbs);
+          double  mins = (midPosAbs - degs) * 60.0;
+          string  s = degs.ToString () + dStr + ":" + mins.ToString ("00.00") + "'" + ((midPos < 0.0) ? "S" : "N");
+          CustomLabel cl= new CustomLabel (fromPos, toPos, s, 0, LabelMarkStyle.LineSideMark, GridTickTypes.Gridline);
+          ca.AxisY.CustomLabels.Add (cl);
+          fromPos = toPos;
+        }        ca.AxisY.LabelStyle.Font = axisLabelFont;
+      }
+      
 
       ca.AxisX.Minimum = minX;
       ca.AxisX.Maximum = maxX;
@@ -753,6 +811,8 @@ namespace PicesCommander
         plotRequests.Add (new PlotRequest (deployment, Color.Black));
       }
     }  /* SchedulePlotRequests */
+
+
 
 
 

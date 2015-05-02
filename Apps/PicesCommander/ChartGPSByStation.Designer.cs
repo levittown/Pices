@@ -29,14 +29,14 @@
     private void InitializeComponent ()
     {
       this.components = new System.ComponentModel.Container();
-      System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-      System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-      System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
-      System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint13 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(-87D, 29D);
-      System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint14 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(-86.8D, 28.2D);
-      System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint15 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(-86.9D, 29.1D);
-      System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint16 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(-86.9D, 29.3D);
-      System.Windows.Forms.DataVisualization.Charting.Title title4 = new System.Windows.Forms.DataVisualization.Charting.Title();
+      System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+      System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+      System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+      System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint5 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(-87D, 29D);
+      System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint6 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(-86.8D, 28.2D);
+      System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint7 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(-86.9D, 29.1D);
+      System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint8 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(-86.9D, 29.3D);
+      System.Windows.Forms.DataVisualization.Charting.Title title2 = new System.Windows.Forms.DataVisualization.Charting.Title();
       this.SelectionCriteriaPanel = new System.Windows.Forms.Panel();
       this.Station = new System.Windows.Forms.TextBox();
       this.StationLabel = new System.Windows.Forms.Label();
@@ -58,9 +58,12 @@
       this.SOGField = new System.Windows.Forms.TextBox();
       this.CruiseHighlightedLabel = new System.Windows.Forms.Label();
       this.DeploymentHighlighted = new System.Windows.Forms.TextBox();
+      this.PaddingKms = new System.Windows.Forms.NumericUpDown();
+      this.PaddingKmsLabel = new System.Windows.Forms.Label();
       this.SelectionCriteriaPanel.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.ProfileChart)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.TimeInterval)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.PaddingKms)).BeginInit();
       this.SuspendLayout();
       // 
       // SelectionCriteriaPanel
@@ -119,56 +122,56 @@
       // 
       this.ProfileChart.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
       this.ProfileChart.CausesValidation = false;
-      chartArea4.AlignmentOrientation = ((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations)((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Vertical | System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Horizontal)));
-      chartArea4.AlignWithChartArea = "ChartArea1";
-      chartArea4.AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.True;
-      chartArea4.AxisX.LabelAutoFitMaxFontSize = 12;
-      chartArea4.AxisX.LabelStyle.Format = "##0.000";
-      chartArea4.AxisX.MajorGrid.Enabled = false;
-      chartArea4.AxisX.Title = "Longitude";
-      chartArea4.AxisX2.LabelStyle.Format = "##0.00";
-      chartArea4.AxisX2.MajorGrid.Enabled = false;
-      chartArea4.AxisY.IsStartedFromZero = false;
-      chartArea4.AxisY.LabelAutoFitMaxFontSize = 12;
-      chartArea4.AxisY.LabelStyle.Format = "#0.000";
-      chartArea4.AxisY.MajorGrid.Enabled = false;
-      chartArea4.AxisY.MajorTickMark.Interval = 0D;
-      chartArea4.AxisY.MajorTickMark.IntervalOffset = 0D;
-      chartArea4.AxisY.MajorTickMark.IntervalOffsetType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
-      chartArea4.AxisY.MajorTickMark.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
-      chartArea4.AxisY.Title = "Latitude";
-      chartArea4.AxisY2.MajorGrid.Enabled = false;
-      chartArea4.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-      chartArea4.Name = "ChartArea1";
-      this.ProfileChart.ChartAreas.Add(chartArea4);
-      legend4.Alignment = System.Drawing.StringAlignment.Far;
-      legend4.DockedToChartArea = "ChartArea1";
-      legend4.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
-      legend4.IsDockedInsideChartArea = false;
-      legend4.Name = "Legend1";
-      this.ProfileChart.Legends.Add(legend4);
+      chartArea2.AlignmentOrientation = ((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations)((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Vertical | System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Horizontal)));
+      chartArea2.AlignWithChartArea = "ChartArea1";
+      chartArea2.AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.True;
+      chartArea2.AxisX.LabelAutoFitMaxFontSize = 12;
+      chartArea2.AxisX.LabelStyle.Format = "##0.000";
+      chartArea2.AxisX.MajorGrid.Enabled = false;
+      chartArea2.AxisX.Title = "Longitude";
+      chartArea2.AxisX2.LabelStyle.Format = "##0.00";
+      chartArea2.AxisX2.MajorGrid.Enabled = false;
+      chartArea2.AxisY.IsStartedFromZero = false;
+      chartArea2.AxisY.LabelAutoFitMaxFontSize = 12;
+      chartArea2.AxisY.LabelStyle.Format = "#0.000";
+      chartArea2.AxisY.MajorGrid.Enabled = false;
+      chartArea2.AxisY.MajorTickMark.Interval = 0D;
+      chartArea2.AxisY.MajorTickMark.IntervalOffset = 0D;
+      chartArea2.AxisY.MajorTickMark.IntervalOffsetType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
+      chartArea2.AxisY.MajorTickMark.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
+      chartArea2.AxisY.Title = "Latitude";
+      chartArea2.AxisY2.MajorGrid.Enabled = false;
+      chartArea2.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+      chartArea2.Name = "ChartArea1";
+      this.ProfileChart.ChartAreas.Add(chartArea2);
+      legend2.Alignment = System.Drawing.StringAlignment.Far;
+      legend2.DockedToChartArea = "ChartArea1";
+      legend2.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
+      legend2.IsDockedInsideChartArea = false;
+      legend2.Name = "Legend1";
+      this.ProfileChart.Legends.Add(legend2);
       this.ProfileChart.Location = new System.Drawing.Point(380, 12);
       this.ProfileChart.Name = "ProfileChart";
-      series4.BorderWidth = 2;
-      series4.ChartArea = "ChartArea1";
-      series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-      series4.Legend = "Legend1";
-      series4.LegendText = "A (2/2/13 12:32)";
-      series4.Name = "Deployment(XXX)";
-      dataPoint13.Label = "12:32";
-      dataPoint13.LegendText = "";
-      series4.Points.Add(dataPoint13);
-      series4.Points.Add(dataPoint14);
-      series4.Points.Add(dataPoint15);
-      series4.Points.Add(dataPoint16);
-      this.ProfileChart.Series.Add(series4);
+      series2.BorderWidth = 2;
+      series2.ChartArea = "ChartArea1";
+      series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+      series2.Legend = "Legend1";
+      series2.LegendText = "A (2/2/13 12:32)";
+      series2.Name = "Deployment(XXX)";
+      dataPoint5.Label = "12:32";
+      dataPoint5.LegendText = "";
+      series2.Points.Add(dataPoint5);
+      series2.Points.Add(dataPoint6);
+      series2.Points.Add(dataPoint7);
+      series2.Points.Add(dataPoint8);
+      this.ProfileChart.Series.Add(series2);
       this.ProfileChart.Size = new System.Drawing.Size(575, 513);
       this.ProfileChart.TabIndex = 30;
       this.ProfileChart.Text = "GPS Plot";
-      title4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      title4.Name = "GPS";
-      title4.Text = "GPS";
-      this.ProfileChart.Titles.Add(title4);
+      title2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      title2.Name = "GPS";
+      title2.Text = "GPS";
+      this.ProfileChart.Titles.Add(title2);
       this.ProfileChart.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ProfileChart_MouseClick);
       // 
       // TimeInterval
@@ -327,11 +330,45 @@
       this.DeploymentHighlighted.TabIndex = 56;
       this.DeploymentHighlighted.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       // 
+      // PaddingKms
+      // 
+      this.PaddingKms.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.PaddingKms.Location = new System.Drawing.Point(101, 381);
+      this.PaddingKms.Maximum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+      this.PaddingKms.Minimum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            65536});
+      this.PaddingKms.Name = "PaddingKms";
+      this.PaddingKms.Size = new System.Drawing.Size(54, 23);
+      this.PaddingKms.TabIndex = 32;
+      this.PaddingKms.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            65536});
+      // 
+      // PaddingKmsLabel
+      // 
+      this.PaddingKmsLabel.AutoSize = true;
+      this.PaddingKmsLabel.Location = new System.Drawing.Point(104, 365);
+      this.PaddingKmsLabel.Name = "PaddingKmsLabel";
+      this.PaddingKmsLabel.Size = new System.Drawing.Size(46, 13);
+      this.PaddingKmsLabel.TabIndex = 58;
+      this.PaddingKmsLabel.Text = "Padding";
+      // 
       // ChartGPSByStation
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(967, 544);
+      this.Controls.Add(this.PaddingKmsLabel);
+      this.Controls.Add(this.PaddingKms);
       this.Controls.Add(this.CruiseHighlightedLabel);
       this.Controls.Add(this.DeploymentHighlighted);
       this.Controls.Add(this.SOGLabel);
@@ -361,6 +398,7 @@
       this.SelectionCriteriaPanel.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)(this.ProfileChart)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.TimeInterval)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.PaddingKms)).EndInit();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -389,6 +427,8 @@
     private System.Windows.Forms.TextBox SOGField;
     private System.Windows.Forms.Label CruiseHighlightedLabel;
     private System.Windows.Forms.TextBox DeploymentHighlighted;
+    private System.Windows.Forms.NumericUpDown PaddingKms;
+    private System.Windows.Forms.Label PaddingKmsLabel;
 
 
   }
