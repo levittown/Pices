@@ -102,7 +102,7 @@ void  DataBaseUpdate::LoadSourceFile (const KKStr&  fileName,
   if  (!results)
   {
     log.Level (-1) << endl 
-      << "DataBaseUpdate::LoadSourceFile  ***ERROR***   Error occured executing sql string." << endl
+      << "DataBaseUpdate::LoadSourceFile  ***ERROR***   Error occurred executing sql string." << endl
       << dbConn->LastErrorDesc () << endl
       << endl;
 

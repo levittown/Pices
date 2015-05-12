@@ -925,7 +925,7 @@ void  FeatureSelection::StatusFileUpdate (BinaryClassListPtr  binClasses)
     if  (writeErrorOccured)
     {
       log.Level (-1) << endl 
-                     << "StatusFileUpdate     ***ERROR***     Error occured trying to write[" << statusFileName << "]" << endl
+                     << "StatusFileUpdate     ***ERROR***     Error occurred trying to write[" << statusFileName << "]" << endl
                      << endl
                      << "                     Error Code[" << errorCode << "]" << endl
                      << endl;

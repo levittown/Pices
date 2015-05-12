@@ -350,4 +350,3 @@ VectorFloat   ImageSizeDistribution::IntegratedDensityDistribution ()  const
 }  /* IntegratedDensityDistribution */
 
 
-

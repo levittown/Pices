@@ -102,6 +102,9 @@ using namespace  MLL;
 
 // -s D:\Users\kkramer\PlanktonCompetition\trunk\Data\test  -n D:\Users\kkramer\PlanktonCompetition\trunk\Data\test\KaggleTestFeatureData.data
 
+
+// -s C:\Users\Kurt\Dropbox\Sipper\ValidatdImagesSharedWithHusseinAlbarazanchi  -u 
+
 ExtractFeatures::ExtractFeatures ():
   PicesApplication (),
 
@@ -343,12 +346,12 @@ void   ExtractFeatures::DisplayCommandLineParameters ()
 {
   PicesApplication::DisplayCommandLineParameters ();
   cout << endl
-       << "    -d  Destination Diretory Tree; if specified a copy of Classified."  << endl
+       << "    -d  Destination Directory Tree; if specified a copy of Classified."  << endl
        << "        images will be placed here."                                    << endl   
        << endl
        << "    -n  Name of File to store Calculated Features in."                  << endl
        << endl
-       << "    -P  <Yes | No>  Purge Dupplicates; defaults to No."                 << endl
+       << "    -P  <Yes | No>  Purge Duplicates; defaults to No."                 << endl
        << endl
        << "    -r  Report File,  Defaults to Command Line."                        << endl
        << endl
@@ -661,7 +664,7 @@ void  ExtractFeatures::ReFreshInstrumentData (ImageFeaturesPtr  _featureVector)
     catch  (...)
     {
       log.Level (-1) << endl
-        << "ExtractFeatures::ReFreshInstrumentData   ***ERROR***   Exception occured calling  'InstrumentDataFileManager::GetClosestInstrumentData'." << endl
+        << "ExtractFeatures::ReFreshInstrumentData   ***ERROR***   Exception occurred calling  'InstrumentDataFileManager::GetClosestInstrumentData'." << endl
         << "                 ImageFileName: " << imageFileRootName << endl
         << endl;
       id = NULL;

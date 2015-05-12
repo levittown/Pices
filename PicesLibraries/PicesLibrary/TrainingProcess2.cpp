@@ -153,13 +153,13 @@ TrainingProcess2::TrainingProcess2 (const KKStr&         _configFileName,
   {ExtractTrainingClassFeatures (NULL, latestTrainingImageTimeStamp, changesMadeToTrainingLibrary);}
   catch (std::exception& e1)
   {
-    log.Level (-1) << "TrainingProcess2    *** EXCEPTION *** occured calling 'ExtractTrainingClassFeatures'." << endl
+    log.Level (-1) << "TrainingProcess2    *** EXCEPTION *** occurred calling 'ExtractTrainingClassFeatures'." << endl
                    << "   Exception[" << e1.what () << "]" << endl;
     Abort (true);
   }
   catch (...)
   {
-    log.Level (-1) << "TrainingProcess2    *** EXCEPTION *** occured calling 'ExtractTrainingClassFeatures'." << endl;
+    log.Level (-1) << "TrainingProcess2    *** EXCEPTION *** occurred calling 'ExtractTrainingClassFeatures'." << endl;
     Abort (true);
   }
     
@@ -250,13 +250,13 @@ TrainingProcess2::TrainingProcess2 (const KKStr&         _configFileName,
       }
       catch (std::exception e2)
       {
-        log.Level (-1) << "TrainingProcess2    *** EXCEPTION *** occured while processing exisating model." << endl
+        log.Level (-1) << "TrainingProcess2    *** EXCEPTION *** occurred while processing exisating model." << endl
                        << "   Exception[" << e2.what () << ":]" << endl;
         Abort (true);
       }
       catch (...)
       {
-        log.Level (-1) << "TrainingProcess2    *** EXCEPTION *** occured while processing exisating model." << endl;
+        log.Level (-1) << "TrainingProcess2    *** EXCEPTION *** occurred while processing exisating model." << endl;
         Abort (true);
       }
     }

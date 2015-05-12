@@ -67,6 +67,8 @@ namespace PicesCommander
 
     private  int     selectedSizeBucket = -1;
 
+    private  String  lastSaveDirectory = "";
+
     private  Font titleFont     = new Font (FontFamily.GenericSansSerif, 12);
     private  Font axisLabelFont = new Font (FontFamily.GenericSansSerif, 12);
     private  Font dataPoingFont = new Font (FontFamily.GenericSansSerif, 12, FontStyle.Bold);
@@ -88,6 +90,8 @@ namespace PicesCommander
       classes       = _classes;
       activeClasses = _activeClasses;
       rootDir       = _rootDir;
+
+      lastSaveDirectory = OSservices.AddSlash (PicesSipperVariables.PicesReportDir ()) + "AbundanceReports";
 
       statusMsgs = new PicesMsgQueue ("ChartSizeDistribution-StatusMsgs");
       msgQueue   = new PicesMsgQueue ("ChartSizeDistribution-RunLog");
@@ -178,6 +182,7 @@ namespace PicesCommander
       o.WriteLine ("GrowthRate"         + "\t" + GrowthRateField.Value);
       if  (SizeStatisticField.SelectedItem != null)
         o.WriteLine ("SizeStatistic"    + "\t" + SizeStatisticField.SelectedItem.ToString ());
+      o.WriteLine ("LastSaveDirectory"  + "\t" + lastSaveDirectory);
       o.Close ();
       o = null;
     }
@@ -277,6 +282,11 @@ namespace PicesCommander
               growthRate = 1.1f;
             GrowthRateField.Value = (decimal)growthRate;
             break;
+
+          case  "LastSaveDirectory":
+            char[]  whiteSpaceChars = {'\n', '\r', '\t', ' '};
+            lastSaveDirectory = fieldValue.Trim (whiteSpaceChars);
+            break;
         }
       }
 
@@ -350,7 +360,7 @@ namespace PicesCommander
       PicesImageSizeDistribution  classDownCast = null;
       PicesImageSizeDistribution  classUpCast = null;
       threadConn.ImagesSizeDistributionByDepth (this.cruise, this.station, this.deployment, c.Name,
-                                                1.0f,
+                                                5.0f,
                                                 ch,
                                                 (float)InitialSizeField.Value,
                                                 (float)GrowthRateField.Value,
@@ -797,17 +807,33 @@ namespace PicesCommander
       sfd.AddExtension = true;
       sfd.OverwritePrompt = true;
 
-      String fn = cruise + "_AbundanceByDeployment";
+      String fn = "AbundanceByDeployment";
+      if  (!String.IsNullOrWhiteSpace (cruise))
+      {
+        fn += ("_" + cruise);
+        if  (!String.IsNullOrWhiteSpace (station))
+        {
+          fn += ("-" + station);
+          if  (!String.IsNullOrWhiteSpace (deployment))
+            fn += ("-" + deployment);
+        }
+      }
+      
       if  (classToPlot != null)
         fn += ("_" + classToPlot.Name);
+      fn += ("_" + cast);
       fn += ".txt";
       sfd.FileName = fn;
+
+      sfd.InitialDirectory = lastSaveDirectory;
 
       //sfd.CheckFileExists = true;
       DialogResult dr = sfd.ShowDialog (this);
       if  (dr == DialogResult.OK)
       {
         fn = sfd.FileName;
+        lastSaveDirectory = OSservices.GetPathPartOfFile (fn);
+
         SaveTabDelToDisk (fn);
       }
     }
@@ -843,7 +869,73 @@ namespace PicesCommander
     }
 
 
-    
+    private  void  WriteTabDelToStream (TextWriter                  tw,
+                                        PicesImageSizeDistribution  sizeDistribution,
+                                        bool                        printDensity
+                                       )
+    {
+
+      uint x = 0;
+      uint  numDepthBins = (uint)sizeDistribution.NumDepthBins;
+      uint  numSizeBins  = (uint)sizeDistribution.NumSizeBuckets;
+
+      float[]  startValues  = bucketsDisplayed.SizeStartValues ();
+      float[]  endValues    = bucketsDisplayed.SizeEndValues   ();
+
+      uint  maxValuesLen = (uint)Math.Max (startValues.Length, endValues.Length);
+      uint  minValuesLen = (uint)Math.Min (startValues.Length, endValues.Length);
+
+      String  hl1 = ""         + "\t"  + "Volume"       + "\t" + "Image" + "\t"  + "Total"  + "\t"  + "Total";
+      String  hl2 = "Depth(m)" + "\t"  + "Sampled(m^3)" + "\t" + "Count" + "\t"  + "Pixels" + "\t"  + "FilledArea";
+
+
+      for  (x = 0;  x < minValuesLen; ++x)
+      {
+        hl1 += ("\t" + startValues[x]);
+        hl2 += ("\t" + endValues  [x]);
+      }
+
+      tw.WriteLine (hl1);
+      tw.WriteLine (hl2);
+
+      for  (uint depthBinIdx = 0;  depthBinIdx < numDepthBins;  ++depthBinIdx)
+      {
+        PicesImageSizeDistributionRow  row = sizeDistribution.GetDepthBin (depthBinIdx);
+        if  (row == null)
+          continue;
+
+        uint[]  distriution = row.Distribution ();
+        float   volumneSampled = row.VolumneSampled;
+
+        tw.Write (row.Depth           + "\t" + 
+                  volumneSampled      + "\t" +
+                  row.ImageCount      + "\t" +
+                  row.TotalPixels     + "\t" +
+                  row.TotalFilledArea
+                 );
+
+        for  (x = 0;  x < distriution.Length;  ++x)
+        {
+          tw.Write ("\t");
+          if  (printDensity)
+          {
+            float zed = 0.0f;
+            if  ((distriution[x] > 0)  &&  (volumneSampled != 0.0f))
+              zed  = (float)Math.Log10 (1.0f + (float)distriution[x] / (float)volumneSampled);
+            tw.Write (zed);
+          }
+          else
+          {
+            tw.Write (distriution[x]);
+          }
+        }
+
+        tw.WriteLine ();
+      }
+    }  /* WriteTabDelToStream */
+
+
+
     private  void  WriteTabDelToStream (TextWriter tw)
     {
       DateTime  curTime = DateTime.Now;
@@ -855,77 +947,23 @@ namespace PicesCommander
       tw.WriteLine ("Deployment"           + "\t" + deployment);
       tw.WriteLine ("Class"                + "\t" + classToPlot.Name);
       tw.WriteLine ("Include-Sub-Classes"  + "\t" + (includeSubClasses ? "Yes" : "No"));
+      tw.WriteLine ("Cast"                 + "\t" + cast);
       tw.WriteLine ();
-      tw.WriteLine ("There will be two tables below: 1-Density, 2-Counts.");
-      tw.WriteLine ();
-      tw.WriteLine ();
-      tw.WriteLine ();
-
-      tw.WriteLine ("Density");
-      tw.WriteLine ();
-      int  largestIdx = 0;
-      tw.Write ("Depth" + "\t" + "Vol-Sampled");
-      /*
-      foreach (DataSeriesToPlot dstp in series)
-      {
-        String s = dstp.legend;
-        tw.Write ("\t" + s);
-        if  (dstp.density.Length > largestIdx)
-          largestIdx = dstp.density.Length;
-      }
-      tw.WriteLine ();
-
-      for  (int  depthIdx = 0;  depthIdx < largestIdx;  ++depthIdx)
-      {
-        tw.Write (depthIdx * depthIncrement);
-        tw.Write ("\t");
-        if  (depthIdx < depthVolumeProfile.Length)
-          tw.Write (depthVolumeProfile[depthIdx]);
-
-        foreach  (DataSeriesToPlot dstp in series)
-        {
-          tw.Write ("\t");
-          if  (depthIdx < dstp.density.Length)
-            tw.Write (dstp.density[depthIdx]);
-        }
-        tw.WriteLine ();
-      }
+      tw.WriteLine ("There will be two tables below:  First: Counts   Second: Density.");
 
       tw.WriteLine ();
       tw.WriteLine ();
-      tw.WriteLine ();
-
       tw.WriteLine ("Counts");
       tw.WriteLine ();
-      largestIdx = 0;
-      tw.Write ("Depth" + "\t" + "Vol-Sampled");
-      foreach (DataSeriesToPlot dstp in series)
-      {
-        String s = dstp.legend;
-        tw.Write ("\t" + s);
-        if  (dstp.countsByDepth.Length > largestIdx)
-          largestIdx = dstp.countsByDepth.Length;
-      }
+      WriteTabDelToStream (tw, bucketsDisplayed, false);
+      
       tw.WriteLine ();
-
-      for  (int  depthIdx = 0;  depthIdx < largestIdx;  ++depthIdx)
-      {
-        tw.Write (depthIdx * depthIncrement);
-
-        tw.Write ("\t");
-        if  (depthIdx < depthVolumeProfile.Length)
-          tw.Write (depthVolumeProfile[depthIdx]);
-        
-        foreach  (DataSeriesToPlot dstp in series)
-        {
-          tw.Write ("\t");
-          if  (depthIdx < dstp.countsByDepth.Length)
-            tw.Write (dstp.countsByDepth[depthIdx]);
-        }
-        tw.WriteLine ();
-      }
-      */
-
+      tw.WriteLine ();
+      tw.WriteLine ();
+      tw.WriteLine ("Abundance (log10)");
+      tw.WriteLine ();
+      WriteTabDelToStream (tw, bucketsDisplayed, true);
+      
       tw.WriteLine ();
       tw.WriteLine ("End of ChartSizeDistribution");
     }  /* WriteTabDelToStream */

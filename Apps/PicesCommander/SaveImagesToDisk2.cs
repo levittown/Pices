@@ -307,6 +307,9 @@ namespace PicesCommander
 
     private  void  SaveImagesBySipperFiles ()
     {
+      bool  includeStationAndDeploymentInDirName = false;
+      bool  firstSipperFile = true;
+
       PicesSipperFileList  sipperFiles = null;
       if  (String.IsNullOrEmpty (sipperFileName))
       {
@@ -333,10 +336,19 @@ namespace PicesCommander
 
         foreach  (PicesSipperFile  sf in sipperFiles)
         {
-          if  ((sf.CruiseName    != lastCruise)  ||
-               (sf.StationName   != lastStation) ||
-               (sf.DeploymentNum != lastDeployment)
-              )
+          bool  startANewDir = false;
+          if  (firstSipperFile)
+            startANewDir = true;
+
+          else if   (sf.CruiseName != lastCruise)
+            startANewDir = true;
+
+          else if  ((includeStationAndDeploymentInDirName)  &&  
+                    ((sf.StationName != lastStation)  ||  (sf.DeploymentNum != lastDeployment))
+                   )
+            startANewDir = true;
+
+          if  (startANewDir)
           {
             lastCruise     = sf.CruiseName;
             lastStation    = sf.StationName;
@@ -346,11 +358,14 @@ namespace PicesCommander
             if  (!String.IsNullOrEmpty (lastCruise))
               dirPath = OSservices.AddSlash (dirPath) + lastCruise;
 
-            if  (!String.IsNullOrEmpty (lastStation))
-              dirPath = OSservices.AddSlash (dirPath) + lastStation;
+            if  (includeStationAndDeploymentInDirName)
+            {
+              if  (!String.IsNullOrEmpty (lastStation))
+                dirPath = OSservices.AddSlash (dirPath) + lastStation;
 
-            if  (!String.IsNullOrEmpty (lastDeployment))
-              dirPath = OSservices.AddSlash (dirPath) + lastDeployment;
+              if  (!String.IsNullOrEmpty (lastDeployment))
+                dirPath = OSservices.AddSlash (dirPath) + lastDeployment;
+            }
 
             OSservices.CreateDirectoryPath (dirPath);
             imagesPerClass = new Dictionary<string,int> ();

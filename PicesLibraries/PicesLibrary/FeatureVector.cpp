@@ -1050,7 +1050,7 @@ FeatureVectorListPtr  FeatureVectorList::OrderUsingNamesFromAFile (const KKStr& 
       // Image file name used more than once, will treat as error
       log.Level (-1) << endl
                      << "FeatureVectorList::OrderUsingNamesFromAFile   *** ERROR ***" << endl
-                     << "                      ImageFileName[" << imageFileName << "] occured more than once in file." << endl
+                     << "                      ImageFileName[" << imageFileName << "] occurred more than once in file." << endl
                      << endl;
       fclose (in);
       delete  orderedImages;

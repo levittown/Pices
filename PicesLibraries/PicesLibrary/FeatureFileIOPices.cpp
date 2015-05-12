@@ -1068,7 +1068,7 @@ void  FeatureFileIOPices::ReFreshInstrumentData
     catch  (...)
     {
       _log.Level (-1) << endl
-        << "FeatureFileIOPices::ReFreshInstrumentData   ***ERROR***   Exception occured calling  'InstrumentDataFileManager::GetClosestInstrumentData'." << endl
+        << "FeatureFileIOPices::ReFreshInstrumentData   ***ERROR***   Exception occurred calling  'InstrumentDataFileManager::GetClosestInstrumentData'." << endl
         << "                 ImageFileName: " << _imageFileName << endl
         << endl;
       id = NULL;
@@ -1265,7 +1265,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
 
       if  (origImage->Depth () == 0.0)
       {
-        // The Instrumentaton data is missing;
+        // The Instrumentation data is missing;
         ReFreshInstrumentData (imageFileName, origImage, _dataBase, _cancelFlag, _changesMade, _log);
       }
 
@@ -1289,7 +1289,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
       {
         _log.Level (-1) << endl << endl
           << "FeatureDataReSink   ***ERROR***"  << endl
-          << "       Exception occured calling constructor 'ImageFeatures'  trying to compute FeatureVector." << endl
+          << "       Exception occurred calling constructor 'ImageFeatures'  trying to compute FeatureVector." << endl
           << endl;
         successful = false;
         image = NULL;
@@ -1318,15 +1318,15 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
         {
           _log.Level (-1) << endl << endl
             << "FeatureDataReSink   ***ERROR***"  << endl
-            << "       Exception occured calling  'GetClosestInstrumentData'  ImageFileName[" << imageFileName << "]." << endl
+            << "       Exception occurred calling  'GetClosestInstrumentData'  ImageFileName[" << imageFileName << "]." << endl
             << endl;
           id = NULL;
         }
         
         if  ((origImage)  &&  (id == NULL))
         {
-          // Since we do not have access to Instruementation data for this image but we do have an
-          // older version of the ImageFeatures oject;  we will try to recover what we need from the 
+          // Since we do not have access to Instrumentation data for this image but we do have an
+          // older version of the ImageFeatures object;  we will try to recover what we need from the 
           // older version of the ImageFeatures object.
 
           if  (origImage->Depth () != 0.0f)

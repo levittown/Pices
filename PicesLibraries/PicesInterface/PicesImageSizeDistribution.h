@@ -30,6 +30,7 @@ namespace PicesInterface
     property  uint   ImageCount      {uint   get ()  {return imageSizeDistributionRow->ImageCount      ();}}
     property  uint   TotalPixels     {uint   get ()  {return imageSizeDistributionRow->TotalPixels     ();}}
     property  uint   TotalFilledArea {uint   get ()  {return imageSizeDistributionRow->TotalFilledArea ();}}
+    property  float  VolumneSampled  {float  get ()  {return imageSizeDistributionRow->VolumneSampled  ();}}
     
     array<uint>^  Distribution ();
 
