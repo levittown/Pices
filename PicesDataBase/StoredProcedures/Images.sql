@@ -338,6 +338,9 @@ begin
 
   if  (!isnull(_sipperFileName)  and  (_sipperFileName != ""))  then
     set  _sipperFileId = (select Sf.SipperFileId from SipperFiles sf  where  sf.SipperFileName = _sipperFileName);
+    if  _sipperFileId is  null  then
+      set _sipperFileId = 9999999;
+    end if;
     set  _whereClauses = concat(_whereClauses, " and i.SipperFileId = ", _sipperFileId);
   end if;
 
