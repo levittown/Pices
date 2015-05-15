@@ -470,7 +470,10 @@ namespace MLL
                        RasterSipper&   image
                       );
 
-
+    void  ImagesGetGpsData (const KKStr& imageRootName,
+                            double&      latitude,
+                            double&      longitude
+                           );
     
     void  ImagesSizeDistributionByDepth (const KKStr&               cruiseName,
                                          const KKStr&               stationName,

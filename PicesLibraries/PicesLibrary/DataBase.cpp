@@ -4383,7 +4383,35 @@ void  DataBase::ImageUpdate (DataBaseImage&  dbImage,
 }  /* ImageUpdate */
 
 
+void  DataBase::ImagesGetGpsData (const KKStr& imageRootName,
+                                  double&      latitude,
+                                  double&      longitude
+                                 )
+{
+  latitude = 0.0;
+  longitude = 0.0;
 
+  KKStr  sqlCmd = "call ImagesGetGpsData(" + imageRootName.QuotedStr () + ")";
+  kkint32  returnCd = QueryStatement (sqlCmd);
+  if  (returnCd != 0)
+    return;
+
+  char const *  fieldNames[] = {"Latitude", "Longitude", NULL};
+  ResultSetLoad (fieldNames);
+  if  (!resultSetMore)
+    return;
+
+  MYSQL_ROW  row = NULL;
+  while  (ResultSetFetchNextRow ())
+  {
+    latitude  = ResultSetGetDoubleField (0);
+    longitude = ResultSetGetDoubleField (1);
+  }
+
+  ResulSetFree ();
+
+  ResultSetsClear ();
+}  /* ImagesGetGpsData */
 
 
 void  DataBase::ImagesUpdateValidatedAndPredictClass (const KKStr&     imageFileName, 

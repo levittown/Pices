@@ -123,7 +123,6 @@ void  PicesApplication::InitalizeApplication (kkint32 argc,
     }
   }
 
-
   if  (dataBaseRequired)
   {
     if  (!db)

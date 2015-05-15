@@ -89,8 +89,10 @@ using namespace  MLL;
 
 // -s D:\Pices\TrainingLibraries\ETP_08_SubSet  -n D:\Pices\TrainingLibraries\ETP_08_SubSet\ETP_08_SubSet.data.c45  -u
 
-// 2014-11-13   Extratuing Features for Featire Selection run
+// 2014-11-13   Extracting Features for Feature Selection run
 // -s E:\Pices\TrainingLibraries\USF  -n E:\Pices\TrainingLibraries\USF\USF_All.dara  -u
+
+// -s D:\Pices\SavedImages\USF_SipperValidatedImagesGulfOfMexico  -u
 
 
 void  SetUpEmbeddedServer ()

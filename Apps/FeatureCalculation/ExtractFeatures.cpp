@@ -149,6 +149,7 @@ void  ExtractFeatures::InitalizeApplication (kkint32 argc,
                                              char**  argv
                                             )
 {
+  DataBaseRequired (true);
   PicesApplication::InitalizeApplication (argc, argv);
   if  (Abort ())
   {
@@ -769,8 +770,8 @@ void  ExtractFeatures::Extract ()
 
   if  ((classifier)  &&  (!destDirectory.Empty ()))
   {
-    // Since we have a Classofoer and a Destination Directory, we are going to move the
-    // images from there original location to a Destination Directory with sub-dircetories
+    // Since we have a Classifier and a Destination Directory, we are going to move the
+    // images from there original location to a Destination Directory with sub-directories
     // by Class Name.
     MoveImagesToDestinationDirectoryByClassName ();
   }

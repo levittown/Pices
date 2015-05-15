@@ -3059,3 +3059,40 @@ delimiter ;
 
 
 
+/************************************************************************************************************************/
+drop procedure  if   exists  ImagesGetGpsData;
+
+delimiter //
+create procedure  ImagesGetGpsData (in  _imageFileName    varChar(64))
+begin
+  declare _imageId       int default -1;
+  declare _latitude      double  default 0.0;
+  declare _longitude     double  default 0.0;
+  declare _sipperFileId  int default -1;
+  declare _scanLine      int(12)  default -1;
+  declare _frameLine     int(12)  default -1;
+
+  select  i.SipperFileId, i.ImageId, i.TopLeftRow  into _sipperFileId, _imageId, _scanLine   from Images i
+     where i.ImageFileName = _imageFileName;
+     
+  if  (_sipperFileId is not null)  and  (_sipperFileId > 0)  then
+    set  _frameLine = 4096 * Floor (_scanLine / 4096);
+    select  id.Latitude, id.Longitude into _latitude, _longitude
+	   from   InstrumentData id
+	   where  (id.SipperFileid =  _sipperFileId)  and  
+	          (id.ScanLine     >= _frameLine)    and  
+            (id.ScanLine     <  (_frameLine + 8192))
+	   limit 1;
+  end if;
+
+  select  _latitude as "Latitude",  _longitude  as  "Longitude";
+end;
+
+//
+delimiter ;
+    
+
+
+
+
+

@@ -939,10 +939,23 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadInSubDirectoryTree
       ImageFeaturesList::iterator  idx;
       for  (idx = dirImages->begin ();  idx != dirImages->end ();  idx++)
       {
-        if  ((*idx)->MLClass () != unKnownClass)
+        ImageFeaturesPtr image = *idx;
+        if  (image->MLClass () != unKnownClass)
         {
-          (*idx)->MLClass (unKnownClass);
+          image->MLClass (unKnownClass);
           changesMade = true;
+        }
+
+        if  (_dataBase)
+        {
+          double  latitude = 0.0;
+          double  longitude = 0.0;
+          _dataBase->ImagesGetGpsData (osGetRootName (image->ImageFileName ()), latitude, longitude);
+          if  ((latitude != 0.0)  &&  (longitude != 0.0))
+          {
+            image->Latitude (latitude);
+            image->Longitude (longitude);
+          }
         }
       }
 
@@ -1309,18 +1322,32 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
         image->ImageFileName (*imageFileName);
 
         // We will need to check the InstrumentDataFilesManager object for other data.
+        bool   weOwnID = false;
         InstrumentDataPtr  id =  NULL;
-        try
+        if  (_dataBase)
         {
-          id = InstrumentDataFileManager::GetClosestInstrumentData (imageFileName, _cancelFlag, _log);
+          KKStr  sipperFileName;
+          kkuint32  scanLineNum = 0;
+          kkuint32  scanCol = 0;
+          SipperVariables::ParseImageFileName (imageFileName, sipperFileName, scanLineNum, scanCol);
+          id = _dataBase->InstrumentDataGetByScanLine (sipperFileName, scanLineNum);
+          weOwnID = true;
         }
-        catch (...)
+
+        if  (!id)
         {
-          _log.Level (-1) << endl << endl
-            << "FeatureDataReSink   ***ERROR***"  << endl
-            << "       Exception occurred calling  'GetClosestInstrumentData'  ImageFileName[" << imageFileName << "]." << endl
-            << endl;
-          id = NULL;
+          try
+          {
+            id = InstrumentDataFileManager::GetClosestInstrumentData (imageFileName, _cancelFlag, _log);
+          }
+          catch (...)
+          {
+            _log.Level (-1) << endl << endl
+              << "FeatureDataReSink   ***ERROR***"  << endl
+              << "       Exception occurred calling  'GetClosestInstrumentData'  ImageFileName[" << imageFileName << "]." << endl
+              << endl;
+            id = NULL;
+          }
         }
         
         if  ((origImage)  &&  (id == NULL))
@@ -1362,6 +1389,12 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
 
         if  ((numOfNewFeatureExtractions % 100) == 0)
           cout << numOfNewFeatureExtractions << " Images Extracted." << endl;
+
+        if  (weOwnID)
+        {
+          delete  id;
+          id = NULL;
+        }
       }
     }
   }

@@ -38,7 +38,6 @@ namespace PicesCommander
 
     int     imagsPerDir = 10000;
 
-
     PicesRunLog  runLog = null;
 
     bool    errorsFound = false;
@@ -343,8 +342,8 @@ namespace PicesCommander
           if  (firstSipperFile)
             startANewDir = true;
 
-          else if   (sf.CruiseName != lastCruise)
-            startANewDir = true;
+          //else if   (sf.CruiseName != lastCruise)
+          //  startANewDir = true;
 
           else if  ((includeStationAndDeploymentInDirName)  &&  
                     ((sf.StationName != lastStation)  ||  (sf.DeploymentNum != lastDeployment))
@@ -375,6 +374,7 @@ namespace PicesCommander
           }
 
           SaveImagesForOneSipperFile (dirPath, sf, imagesPerClass);
+          firstSipperFile = false;
         }
       }
     }  /* SaveImagesBySipperFiles */
