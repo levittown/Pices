@@ -336,6 +336,9 @@ namespace PicesCommander
 
         foreach  (PicesSipperFile  sf in sipperFiles)
         {
+          if  (!(sf.CruiseName.ToUpper ().StartsWith ("WB")  ||  sf.CruiseName.ToUpper ().StartsWith ("B")))
+            continue;
+
           bool  startANewDir = false;
           if  (firstSipperFile)
             startANewDir = true;
@@ -355,11 +358,11 @@ namespace PicesCommander
             lastDeployment = sf.DeploymentNum;
             dirPath = OSservices.AddSlash (DestinationDirectory.Text);
 
-            if  (!String.IsNullOrEmpty (lastCruise))
-              dirPath = OSservices.AddSlash (dirPath) + lastCruise;
-
             if  (includeStationAndDeploymentInDirName)
             {
+              if  (!String.IsNullOrEmpty (lastCruise))
+                dirPath = OSservices.AddSlash (dirPath) + lastCruise;
+
               if  (!String.IsNullOrEmpty (lastStation))
                 dirPath = OSservices.AddSlash (dirPath) + lastStation;
 
