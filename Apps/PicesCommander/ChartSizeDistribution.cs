@@ -970,6 +970,102 @@ namespace PicesCommander
 
 
     
+
+    private  void  WriteForGnuplotToStream (TextWriter                  tw,
+                                            PicesImageSizeDistribution  sizeDistribution,
+                                            bool                        printDensity
+                                           )
+    {
+      uint x = 0;
+      uint  numDepthBins = (uint)sizeDistribution.NumDepthBins;
+      uint  numSizeBins  = (uint)sizeDistribution.NumSizeBuckets;
+
+      float[]  startValues  = bucketsDisplayed.SizeStartValues ();
+      float[]  endValues    = bucketsDisplayed.SizeEndValues   ();
+
+      uint  maxValuesLen = (uint)Math.Max (startValues.Length, endValues.Length);
+      uint  minValuesLen = (uint)Math.Min (startValues.Length, endValues.Length);
+
+
+      for  (int sizeIdx = 0;  sizeIdx < minValuesLen;  ++sizeIdx)
+      {
+        for  (uint depthBinIdx = 0;  depthBinIdx < numDepthBins;  ++depthBinIdx)
+        {
+          PicesImageSizeDistributionRow  row = sizeDistribution.GetDepthBin (depthBinIdx);
+          if  (row == null)
+            continue;
+
+          uint[]  distriution = row.Distribution ();
+          float   volumneSampled = row.VolumneSampled;
+
+          double  size = (startValues[sizeIdx] + endValues[sizeIdx]) / 2.0;
+          double  depth = row.Depth;
+          double  zed = 0.0;
+
+          if  (printDensity)
+          {
+            if  ((distriution[x] > 0)  &&  (volumneSampled != 0.0f))
+              zed  = (float)Math.Log10 (1.0f + (float)distriution[x] / (float)volumneSampled);
+          }
+          else
+          {
+            zed = distriution[x];
+          }
+          tw.WriteLine (size + ", " + depth + ", " + zed);
+        }
+      }
+    }  /* WriteTabDelToStream */
+
+
+
+
+
+
+    private  void  SaveForGnuplot (Object sender, EventArgs e)
+    {
+      SaveFileDialog sfd = new SaveFileDialog ();
+      sfd.Filter = "Comma delimited data to disk|*.txt";
+      sfd.Title = "Save Abundance info for gnuplot to disk.";
+      sfd.DefaultExt = "txt";
+      sfd.AddExtension = true;
+      sfd.OverwritePrompt = true;
+
+      String fn = cruise + "_AbundanceByDeployment";
+      if  (classToPlot != null)
+        fn += ("_" + classToPlot.Name);
+      fn += ".txt";
+      sfd.FileName = fn;
+
+      //sfd.CheckFileExists = true;
+      DialogResult dr = sfd.ShowDialog (this);
+      if  (dr == DialogResult.OK)
+      {
+        fn = sfd.FileName;
+
+        System.IO.StreamWriter sw = null;
+        try  {sw = new System.IO.StreamWriter (fn, false, System.Text.Encoding.ASCII);}
+        catch (Exception) {sw = null;}
+
+        if  (sw == null)
+        {
+          MessageBox.Show (this, "Could not open file[" + fn + "]", "Save for gnuplot", MessageBoxButtons.OK);
+          return;
+        }
+
+        WriteForGnuplotToStream (sw, bucketsDisplayed, true);
+
+        sw.Close ();
+        sw = null;
+
+        MessageBox.Show (this, "Abundance Data for gnuplot written to \"" + fn + "\".", "", MessageBoxButtons.OK);
+      }
+    }  /* SaveForGnuplot */
+
+
+
+
+
+
     
     private void ChartSizeDistribution_FormClosing (object sender, FormClosingEventArgs e)
     {
@@ -1090,14 +1186,16 @@ namespace PicesCommander
       MenuItem  i4 = new MenuItem ("Save Data Tab-Delimited to Disk",      SaveTabDelToDisk);
       MenuItem  i5 = new MenuItem ("Display Images for Size Range",        DisplayImagesForASizeBucket);
       MenuItem  i6 = new MenuItem ("Chart Vertical Distribution",          ChartVerticleDistributionForASizeBucket);
+      MenuItem  i7 = new MenuItem ("Save data for 'gnuplot'",              SaveForGnuplot);
+
       MenuItem[] menuItems = null;
       if  (sizeBucket >= 0)
-        menuItems = new MenuItem[]{i1, i2, i3, i4, i5, i6};
+        menuItems = new MenuItem[]{i1, i2, i3, i4, i5, i6, i7};
       else
-        menuItems = new MenuItem[]{i1, i2, i3, i4};
+        menuItems = new MenuItem[]{i1, i2, i3, i4, i7};
       ContextMenu  buttonMenu = new ContextMenu (menuItems);
       buttonMenu.Show (ProfileChart, p);
-    }
+    }  /* ChartContextMenu */
 
 
     private  void   DisplayImagesForASizeBucket (Object sender, EventArgs e)
