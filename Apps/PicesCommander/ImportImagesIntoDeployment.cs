@@ -118,10 +118,6 @@ namespace PicesCommander
       if  (i == null)
         return;
 
-      int  savedWidth  = 0;
-      int  savedHeight = 0;
-      bool screenWasMaximized = false;
-
       String  nextLine = null;
 
       while  (true)

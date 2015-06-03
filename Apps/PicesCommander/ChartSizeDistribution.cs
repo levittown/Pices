@@ -973,10 +973,10 @@ namespace PicesCommander
 
     private  void  WriteForGnuplotToStream (TextWriter                  tw,
                                             PicesImageSizeDistribution  sizeDistribution,
-                                            bool                        printDensity
+                                            bool                        printDensity,
+                                            bool                        plotVolumeSpectrum
                                            )
     {
-      uint x = 0;
       uint  numDepthBins = (uint)sizeDistribution.NumDepthBins;
       uint  numSizeBins  = (uint)sizeDistribution.NumSizeBuckets;
 
@@ -986,35 +986,54 @@ namespace PicesCommander
       uint  maxValuesLen = (uint)Math.Max (startValues.Length, endValues.Length);
       uint  minValuesLen = (uint)Math.Min (startValues.Length, endValues.Length);
 
+      double  depthBinSize = sizeDistribution.DepthBinSize;
+
 
       for  (int sizeIdx = 0;  sizeIdx < minValuesLen;  ++sizeIdx)
       {
+        double  size = (startValues[sizeIdx] + endValues[sizeIdx]) / 2.0;
         for  (uint depthBinIdx = 0;  depthBinIdx < numDepthBins;  ++depthBinIdx)
         {
+          double  depth = depthBinSize * depthBinIdx;
           PicesImageSizeDistributionRow  row = sizeDistribution.GetDepthBin (depthBinIdx);
           if  (row == null)
+          { 
+            tw.WriteLine (size + " " + depth + " " + "0");
             continue;
+          }
 
           uint[]  distriution = row.Distribution ();
           float   volumneSampled = row.VolumneSampled;
 
-          double  size = (startValues[sizeIdx] + endValues[sizeIdx]) / 2.0;
-          double  depth = row.Depth;
           double  zed = 0.0;
 
-          if  (printDensity)
+          if  (plotVolumeSpectrum)
           {
-            if  ((distriution[x] > 0)  &&  (volumneSampled != 0.0f))
-              zed  = (float)Math.Log10 (1.0f + (float)distriution[x] / (float)volumneSampled);
+            double  density = 0.0;
+            if  ((distriution[sizeIdx] > 0)  &&  (volumneSampled != 0.0f))
+              density  = (double)distriution[sizeIdx] / (double)volumneSampled;
+            double  nV = density * Math.PI * Math.Pow (size, 3.0) / 6.0;
+            double  nVd = nV * size;
+            zed = Math.Log10 (nVd);
           }
           else
           {
-            zed = distriution[x];
+            if  (printDensity)
+            {
+              if  ((distriution[sizeIdx] > 0)  &&  (volumneSampled != 0.0f))
+                zed  = (float)Math.Log10 (1.0f + (float)distriution[sizeIdx] / (float)volumneSampled);
+            }
+            else
+            {
+              zed = (float)Math.Log10 (1.0 + (double)distriution[sizeIdx]);
+            }
           }
-          tw.WriteLine (size + ", " + depth + ", " + zed);
+
+          tw.WriteLine (size + " " + depth + " " + zed);
         }
+        tw.WriteLine ();
       }
-    }  /* WriteTabDelToStream */
+    }  /* WriteForGnuplotToStream */
 
 
 
@@ -1030,7 +1049,10 @@ namespace PicesCommander
       sfd.AddExtension = true;
       sfd.OverwritePrompt = true;
 
-      String fn = cruise + "_AbundanceByDeployment";
+      String fn = cruise + "-" + station;
+      if  (!String.IsNullOrEmpty (deployment))
+        fn = fn + "-" + deployment;
+      fn = fn + "_AbundanceByDeployment";
       if  (classToPlot != null)
         fn += ("_" + classToPlot.Name);
       fn += ".txt";
@@ -1052,7 +1074,24 @@ namespace PicesCommander
           return;
         }
 
-        WriteForGnuplotToStream (sw, bucketsDisplayed, true);
+        WriteForGnuplotToStream (sw, bucketsDisplayed, true, false);
+
+        sw.Close ();
+        sw = null;
+
+        String  ext = OSservices.GetFileExtension (fn);
+        String  ofn = OSservices.RemoveExtension (fn) + "_nVd." + ext;
+
+        try  {sw = new System.IO.StreamWriter (ofn, false, System.Text.Encoding.ASCII);}
+        catch (Exception) {sw = null;}
+
+        if  (sw == null)
+        {
+          MessageBox.Show (this, "Could not open file[" + ofn + "]", "Save for gnuplot", MessageBoxButtons.OK);
+          return;
+        }
+
+        WriteForGnuplotToStream (sw, bucketsDisplayed, true, true);
 
         sw.Close ();
         sw = null;
