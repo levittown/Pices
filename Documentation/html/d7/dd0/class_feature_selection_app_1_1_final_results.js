@@ -1,0 +1,26 @@
+var class_feature_selection_app_1_1_final_results =
+[
+    [ "FinalResultsPtr", "d7/dd0/class_feature_selection_app_1_1_final_results.html#a5056e6afebb97fad712de3301fbf1c12", null ],
+    [ "uint", "d7/dd0/class_feature_selection_app_1_1_final_results.html#a3b3cfce2063d87ca468856c0ccb22b72", null ],
+    [ "FinalResults", "d7/dd0/class_feature_selection_app_1_1_final_results.html#a9cfabf95c77576e80b36a724b962b811", null ],
+    [ "~FinalResults", "d7/dd0/class_feature_selection_app_1_1_final_results.html#a3a70ffed9ff7e0b0b6bf9b497cf5afa1", null ],
+    [ "ConfusionMatrix", "d7/dd0/class_feature_selection_app_1_1_final_results.html#a5ddd69328c008310d53ce6b0dec6f085", null ],
+    [ "Description", "d7/dd0/class_feature_selection_app_1_1_final_results.html#adc7b89ece1e3edf8b9b3e50746d80fc1", null ],
+    [ "HeaderLineHTML1", "d7/dd0/class_feature_selection_app_1_1_final_results.html#a738766bef73e059db94a13bd3cf8bce6", null ],
+    [ "HeaderLineHTML2", "d7/dd0/class_feature_selection_app_1_1_final_results.html#a21affae8d8e968dc04cb63fed51c9f66", null ],
+    [ "LinkName", "d7/dd0/class_feature_selection_app_1_1_final_results.html#a187e25fd436456a20230270135fe9d8d", null ],
+    [ "MLClasses", "d7/dd0/class_feature_selection_app_1_1_final_results.html#a2f569ab90343272febb0b04d1eda0d43", null ],
+    [ "PrintAccuraciesByClassSummary", "d7/dd0/class_feature_selection_app_1_1_final_results.html#afa5891ddf2e62ade38e667ea7670e174", null ],
+    [ "PrintConfigParametersRandomSplitsHTML", "d7/dd0/class_feature_selection_app_1_1_final_results.html#a63d0d6445d13de179151de1e0f7023b8", null ],
+    [ "PrintConfigParametersValidationHTML", "d7/dd0/class_feature_selection_app_1_1_final_results.html#ac9ac842eee19af3f9522c859f6f31491", null ],
+    [ "RandomSplitAccuracies", "d7/dd0/class_feature_selection_app_1_1_final_results.html#a23f8c753aee47879ba753544d12ce126", null ],
+    [ "RandomSplitAccuracyByClass", "d7/dd0/class_feature_selection_app_1_1_final_results.html#a8a2190eea6cb3e40cba3778fdf037fa5", null ],
+    [ "RandomSplitClassCounts", "d7/dd0/class_feature_selection_app_1_1_final_results.html#a4578f6ebfc2cf0319f7971bcb270d5c6", null ],
+    [ "SelectionMethodStr", "d7/dd0/class_feature_selection_app_1_1_final_results.html#aacaa6e692b22872b31d938b975f1558b", null ],
+    [ "ToHTMLStr", "d7/dd0/class_feature_selection_app_1_1_final_results.html#a0ba9114aa39844a21f68b576fe7bed3d", null ],
+    [ "ValidationAccuracyByClass", "d7/dd0/class_feature_selection_app_1_1_final_results.html#a4e1ccd4497bf45dab04a85b993c30961", null ],
+    [ "ValidationClassCounts", "d7/dd0/class_feature_selection_app_1_1_final_results.html#a42c0aff36d352fb498e49609480f01f7", null ],
+    [ "ValidationClassedCorrectly", "d7/dd0/class_feature_selection_app_1_1_final_results.html#ab58d528656c7602a2195d5da57a53648", null ],
+    [ "ValidationClassedCorrectlySize", "d7/dd0/class_feature_selection_app_1_1_final_results.html#a2b9329db61b6797bca3cefdf0c7216bb", null ],
+    [ "ValidationConfusionMatrix", "d7/dd0/class_feature_selection_app_1_1_final_results.html#a0322272b53d14810b2fdb9d76c616a3e", null ]
+];

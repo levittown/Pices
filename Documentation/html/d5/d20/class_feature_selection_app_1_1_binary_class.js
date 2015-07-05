@@ -1,0 +1,26 @@
+var class_feature_selection_app_1_1_binary_class =
+[
+    [ "BinaryClass", "d5/d20/class_feature_selection_app_1_1_binary_class.html#a9308ef772300877b5de420b92cb0025a", null ],
+    [ "BinaryClass", "d5/d20/class_feature_selection_app_1_1_binary_class.html#ac8356deeb703e064bc631a545dc8414b", null ],
+    [ "BinaryClass", "d5/d20/class_feature_selection_app_1_1_binary_class.html#a75ec1d8d8b77bfb56b5cb332c7f3e14c", null ],
+    [ "BinaryClass", "d5/d20/class_feature_selection_app_1_1_binary_class.html#a07222e696846ffb48f56697223aaa065", null ],
+    [ "~BinaryClass", "d5/d20/class_feature_selection_app_1_1_binary_class.html#a0ae8a614c99d26a8c82cd5e51bdd275a", null ],
+    [ "BinaryClassStatusFromStr", "d5/d20/class_feature_selection_app_1_1_binary_class.html#ac42586d704f44da17895ade05d7e1b2a", null ],
+    [ "BinaryClassStatusToStr", "d5/d20/class_feature_selection_app_1_1_binary_class.html#a4c33359cf468da687749e21bd3877104", null ],
+    [ "Class1", "d5/d20/class_feature_selection_app_1_1_binary_class.html#a0e79fb4f4b7d1a50adebbbd6e32fad28", null ],
+    [ "Class1Name", "d5/d20/class_feature_selection_app_1_1_binary_class.html#a97a0d9d3e677e7c1ddd7b7b8ed50b80f", null ],
+    [ "Class2", "d5/d20/class_feature_selection_app_1_1_binary_class.html#adb0b0529832c3ed6035a69274a51780e", null ],
+    [ "Class2Name", "d5/d20/class_feature_selection_app_1_1_binary_class.html#a4dc22736c2f4de007973b5f1ba2ec775", null ],
+    [ "ConfigFileName", "d5/d20/class_feature_selection_app_1_1_binary_class.html#adf1cf057e0660b2f13649cc709d2b1ce", null ],
+    [ "DecrementNumProcessors", "d5/d20/class_feature_selection_app_1_1_binary_class.html#aa395863260cc30797f50acabc95b77b4", null ],
+    [ "FinalResultsFileName", "d5/d20/class_feature_selection_app_1_1_binary_class.html#a1b4134e9846099caba566c35458310aa", null ],
+    [ "IncrementNumProcessors", "d5/d20/class_feature_selection_app_1_1_binary_class.html#af7d2ddf6c5311de47366b2c7318cb824", null ],
+    [ "NumProcessors", "d5/d20/class_feature_selection_app_1_1_binary_class.html#a5c3d0269481431d345d18a90bee824a8", null ],
+    [ "NumProcessors", "d5/d20/class_feature_selection_app_1_1_binary_class.html#ae811ae64678e74364746c6fef887968f", null ],
+    [ "ProcessStatusStr", "d5/d20/class_feature_selection_app_1_1_binary_class.html#a1fa18d0635b939ca3e9928c905efa16d", null ],
+    [ "ResultType", "d5/d20/class_feature_selection_app_1_1_binary_class.html#a0dd22a67d08a3c385bbedcc2f8299fda", null ],
+    [ "SelectionMethod", "d5/d20/class_feature_selection_app_1_1_binary_class.html#a6736ded9bcf4b5c83a5652eb640ad8f7", null ],
+    [ "Status", "d5/d20/class_feature_selection_app_1_1_binary_class.html#a45c2cb32eaf2e23905a1491b659c0a01", null ],
+    [ "Status", "d5/d20/class_feature_selection_app_1_1_binary_class.html#ae66a07b3c5817a4833a38324da8d0594", null ],
+    [ "ToStr", "d5/d20/class_feature_selection_app_1_1_binary_class.html#a82b4e0536490a4bbf91b8634b6839563", null ]
+];

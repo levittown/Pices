@@ -1,0 +1,27 @@
+var class_m_l_l_1_1_sipper_buff4_bit =
+[
+    [ "OpRec", "dc/d6e/union_sipper_buff4_bit_1_1_op_rec.html", "dc/d6e/union_sipper_buff4_bit_1_1_op_rec" ],
+    [ "OpRecEndOfScanLine", "d1/dc2/struct_sipper_buff4_bit_1_1_op_rec_end_of_scan_line.html", "d1/dc2/struct_sipper_buff4_bit_1_1_op_rec_end_of_scan_line" ],
+    [ "OpRecInstrumentDataWord1", "d1/d8f/struct_sipper_buff4_bit_1_1_op_rec_instrument_data_word1.html", "d1/d8f/struct_sipper_buff4_bit_1_1_op_rec_instrument_data_word1" ],
+    [ "OpRecInstrumentDataWord2", "d6/d7a/struct_sipper_buff4_bit_1_1_op_rec_instrument_data_word2.html", "d6/d7a/struct_sipper_buff4_bit_1_1_op_rec_instrument_data_word2" ],
+    [ "OpRecInstrumentDataWord3", "d7/d52/struct_sipper_buff4_bit_1_1_op_rec_instrument_data_word3.html", "d7/d52/struct_sipper_buff4_bit_1_1_op_rec_instrument_data_word3" ],
+    [ "OpRecRaw1Pixel", "df/d16/struct_sipper_buff4_bit_1_1_op_rec_raw1_pixel.html", "df/d16/struct_sipper_buff4_bit_1_1_op_rec_raw1_pixel" ],
+    [ "OpRecRaw32Pixels", "dc/d22/struct_sipper_buff4_bit_1_1_op_rec_raw32_pixels.html", "dc/d22/struct_sipper_buff4_bit_1_1_op_rec_raw32_pixels" ],
+    [ "OpRecRaw513Pixels1", "d7/daa/struct_sipper_buff4_bit_1_1_op_rec_raw513_pixels1.html", "d7/daa/struct_sipper_buff4_bit_1_1_op_rec_raw513_pixels1" ],
+    [ "OpRecRaw513Pixels2", "d6/da3/struct_sipper_buff4_bit_1_1_op_rec_raw513_pixels2.html", "d6/da3/struct_sipper_buff4_bit_1_1_op_rec_raw513_pixels2" ],
+    [ "OpRecRun256Len1", "d6/d23/struct_sipper_buff4_bit_1_1_op_rec_run256_len1.html", "d6/d23/struct_sipper_buff4_bit_1_1_op_rec_run256_len1" ],
+    [ "OpRecRun256Len2", "d8/d6e/struct_sipper_buff4_bit_1_1_op_rec_run256_len2.html", "d8/d6e/struct_sipper_buff4_bit_1_1_op_rec_run256_len2" ],
+    [ "OpRecRunLen", "d9/d20/struct_sipper_buff4_bit_1_1_op_rec_run_len.html", "d9/d20/struct_sipper_buff4_bit_1_1_op_rec_run_len" ],
+    [ "OpRecTextBlock1", "d0/dd3/struct_sipper_buff4_bit_1_1_op_rec_text_block1.html", "d0/dd3/struct_sipper_buff4_bit_1_1_op_rec_text_block1" ],
+    [ "OpRecTextBlock2", "da/dd2/struct_sipper_buff4_bit_1_1_op_rec_text_block2.html", "da/dd2/struct_sipper_buff4_bit_1_1_op_rec_text_block2" ],
+    [ "RawPixelRec", "d8/d57/struct_sipper_buff4_bit_1_1_raw_pixel_rec.html", "d8/d57/struct_sipper_buff4_bit_1_1_raw_pixel_rec" ],
+    [ "SipperBuff4BitPtr", "dd/d4c/class_m_l_l_1_1_sipper_buff4_bit.html#a500c2dcfd46cc4ad7b8042d9928ed33d", null ],
+    [ "SipperBuff4Bit", "dd/d4c/class_m_l_l_1_1_sipper_buff4_bit.html#a1cd7d88fae3b89a77dc428b19525caeb", null ],
+    [ "SipperBuff4Bit", "dd/d4c/class_m_l_l_1_1_sipper_buff4_bit.html#a69f8b64cac9401b28b7feed72d7a3f1d", null ],
+    [ "~SipperBuff4Bit", "dd/d4c/class_m_l_l_1_1_sipper_buff4_bit.html#a3c7bb6b4c84b8c41db3a67e655ff4240", null ],
+    [ "CompensationTable", "dd/d4c/class_m_l_l_1_1_sipper_buff4_bit.html#a95b9d8a3fd8703bae18cb7b22caff892", null ],
+    [ "FileFormat", "dd/d4c/class_m_l_l_1_1_sipper_buff4_bit.html#ab912ce70cb52871dbf7f312f7ed40ab3", null ],
+    [ "FileFormatGood", "dd/d4c/class_m_l_l_1_1_sipper_buff4_bit.html#a165441b24fa72c5157bd65caa90cef37", null ],
+    [ "GetNextLine", "dd/d4c/class_m_l_l_1_1_sipper_buff4_bit.html#a77a88f24f053a46c198781247ad2db16", null ],
+    [ "PixelsPerScanLine", "dd/d4c/class_m_l_l_1_1_sipper_buff4_bit.html#af72e6942faf6d2567c87294f47a27a90", null ]
+];
