@@ -8,6 +8,8 @@ Release
 *.zip
 *.vcxproj
 *.sdf
+UpgradeLog*.*
+*.sdf
 
 
 /images/Thumbs.db
