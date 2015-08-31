@@ -251,11 +251,11 @@ void   FeatureFileStats::ReportStats ()
 {
   *report << endl << endl << endl;
 
-  MLClassConstListPtr  mlClasses = data->ExtractMLClassConstList ();
+  MLClassListPtr  mlClasses = data->ExtractListOfClasses ();
 
-  *report << "Feature File Name  [" << srcFileName                << "]" << endl;
-  *report << "Number of Classes  [" << mlClasses->QueueSize () << "]" << endl;
-  *report << "Number of Features [" << fileDesc->NumOfFields ()   << "]" << endl;
+  *report << "Feature File Name  [" << srcFileName              << "]" << endl;
+  *report << "Number of Classes  [" << mlClasses->QueueSize  () << "]" << endl;
+  *report << "Number of Features [" << fileDesc->NumOfFields () << "]" << endl;
 
   *report << endl;
 

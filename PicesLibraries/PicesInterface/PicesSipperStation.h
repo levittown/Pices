@@ -8,7 +8,7 @@ using namespace System::Diagnostics;
 
 
 #include  "SipperStation.h"
-using namespace  SipperHardware;
+using namespace  MLL;
 
 #include  "PicesRunLog.h"
 #include  "PicesKKStr.h"

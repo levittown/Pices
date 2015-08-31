@@ -51,15 +51,15 @@ using namespace KKB;
 #include "Instrument.h"
 #include "InstrumentDataList.h"
 #include "InstrumentDataFileManager.h"
-using namespace SipperHardware;
-
-
 #include "BinaryClassParms.h"
 #include "ConfusionMatrix2.h"
 #include "FeatureFileIO.h"
-#include "FeatureFileIOPices.h"
 #include "NormalizationParms.h"
-using namespace MLL;
+using namespace KKMLL;
+
+
+#include "FeatureFileIOPices.h"
+using namespace KKMLL;
 
 
 #include "AccByFeatureSel.h"
@@ -78,7 +78,7 @@ using namespace  FeatureSelectionApp;
 // K:\Thesis\TestSet9Classes\300_ImagesPerClass\Using5OldContourFfeatures\BinaryFeatureSearch2
 //  -C Thesis9Classes.cfg  -DataFile NineClasses_TestData.data  
 
-// 2005-04-19   Feature selction run with PunishmentFactor = 0.01
+// 2005-04-19   Feature selection run with PunishmentFactor = 0.01
 // K:\Thesis\TestSet9Classes\300_ImagesPerClass\Using5OldContourFfeatures\BinarFeatureSearch_Using_01-Punishment
 //  -C Thesis9Classes.cfg  -DataFile NineClasses_TestData.data  
 
@@ -184,10 +184,10 @@ FeatureSelection::FeatureSelection (int     argc,
   config                 (NULL),
   driver                 (FeatureFileIOPices::Driver ()),
   expansionLimit         (50),
-  featureCriteria        (fcBestTestSet),
+  featureCriteria        (FeatureCriteriaType::BestTestSet),
   featureCountPrefSmall  (true),
   fileDesc               (NULL),
-  gradingMethod          (gmAccuracy),
+  gradingMethod          (GradingMethodType::Accuracy),
   hostName               (""),
   mlClasses              (NULL),
   initialFeatures        (NULL),
@@ -195,21 +195,21 @@ FeatureSelection::FeatureSelection (int     argc,
   justGettingStats       (false),
   lockFile               (-1),
   log                    (),
-  majorStep              (msMfsParmTuningPre),  //This is the default MajorStep,  works with 'byBinaryClasses' and 'searchType'
+  majorStep              (MajorSteps::MfsParmTuningPre),  //This is the default MajorStep,  works with 'byBinaryClasses' and 'searchType'
   minTrainExamples       (1),
   nextProcessorId        (0),
   normalizationParms     (NULL),
   numJobsAtATime         (-1),
   numOfFolds             (5),
   numProcPerCombo        (-1),
-  paramSelCriteria       (jscMostAccurate),
+  paramSelCriteria       (JobSelectionCriteria::MostAccurate),
   positiveClass          (NULL),
-  processingOrder        (poStandard),
+  processingOrder        (ProcessingOrders::Standard),
   randomSplits           (NULL),
   randomSplitsNum        (30),
   randomSplitsIndexName  (),
   quitRunning            (false),
-  searchType             (stParameterSearch),   // We would normally start with All classes parameter search
+  searchType             (SearchTypes::ParameterSearch),   // We would normally start with All classes parameter search
   testData               (NULL),
   testDataFileName       (),
   trainingData           (NULL),
@@ -231,7 +231,7 @@ FeatureSelection::FeatureSelection (int     argc,
 
   lockFileName    = "FeatureSelection.Lock";
   statusFileName  = "FeatureSelection.Status";
-  mlClasses    = new MLClassConstList ();
+  mlClasses    = new MLClassList ();
   ProcessStatusFile (argc, argv);
 }
 
@@ -271,7 +271,7 @@ FeatureVectorListPtr  FeatureSelection::ValidationData ()
 
 /**
  * Will try to load a Random Splits of the combined Train, Test, and Validation data from an existing Orderings file
- * if none exists will create one that can be used by otrher instancs or future reruns.
+ * if none exists will create one that can be used by other instances or future reruns.
  */
 void  FeatureSelection::RandomSplitsBuild ()
 {
@@ -285,7 +285,7 @@ void  FeatureSelection::RandomSplitsBuild ()
   bool  cancelFlag = false;
   bool  successful = true;
 
-  FeatureVectorList  combinedData (fileDesc, false, log);
+  FeatureVectorList  combinedData (fileDesc, false);
   if  (trainingData)
     combinedData.AddQueue (*trainingData);
 
@@ -302,7 +302,7 @@ void  FeatureSelection::RandomSplitsBuild ()
     combinedData.AddQueue (*validationData);
 
   randomSplitsIndexName = osGetRootName (configFileNameSpecified) + "_RandomSplits" + StrFormatInt (randomSplitsNum, "000") + ".idx";
-  randomSplits = new Orderings (&combinedData, randomSplitsIndexName, randomSplitsNum, 10);
+  randomSplits = new Orderings (&combinedData, randomSplitsIndexName, randomSplitsNum, 10, log);
 
   return;
 }  /* RandomSplitsBuild */
@@ -371,7 +371,7 @@ bool  AllBinaryClassesAreDone (BinaryClassListPtr  binaryClasses)
   for  (idx = binaryClasses->begin ();  idx != binaryClasses->end ();  idx++)
   {
     BinaryClassPtr  bc = *idx;
-    if  ((bc->Status () != cpDone)  ||  (bc->NumProcessors () > 0))
+    if  ((bc->Status () != ClassPairStatus::Done)  ||  (bc->NumProcessors () > 0))
       return false;
   }
 
@@ -390,55 +390,55 @@ void  FeatureSelection::SetMajorStep (MajorSteps  step)
 
   switch  (step)
   {
-  case  msMfsParmTuningPre:
+  case  MajorSteps::MfsParmTuningPre:
     byBinaryClasses = false;
-    searchType      = stParameterSearch;
+    searchType      = SearchTypes::ParameterSearch;
     break;
 
 
-  case  msMfsFeatureSelection:
+  case  MajorSteps::MfsFeatureSelection:
     byBinaryClasses = false;
-    searchType      = stFeatureSelectionSearch;
+    searchType      = SearchTypes::FeatureSelectionSearch;
     break;
 
 
-  case  msMfsParmTuningPost:
+  case  MajorSteps::MfsParmTuningPost:
     byBinaryClasses = false;
-    searchType      = stParameterSearch;
+    searchType      = SearchTypes::ParameterSearch;
     break;
 
 
-  case  msBfsParmTuningPre:
+  case  MajorSteps::BfsParmTuningPre:
     byBinaryClasses = true;
-    searchType      = stParameterSearch;
+    searchType      = SearchTypes::ParameterSearch;
     break;
 
 
-  case  msBfsFeatureSelection:
+  case  MajorSteps::BfsFeatureSelection:
     byBinaryClasses = true;
-    searchType      = stFeatureSelectionSearch;
+    searchType      = SearchTypes::FeatureSelectionSearch;
     break;
 
 
-  case  msBfsParmTuningPost:
+  case  MajorSteps::BfsParmTuningPost:
     byBinaryClasses = true;
-    searchType      = stParameterSearch;
+    searchType      = SearchTypes::ParameterSearch;
     break;
 
 
-  case  msGenerateFinalResults:
+  case  MajorSteps::GenerateFinalResults:
     byBinaryClasses = false;
-    searchType      = stNULL;
+    searchType      = SearchTypes::Null;
     break;
 
 
-  case  msGenerateBruitSvmSearch:
+  case  MajorSteps::GenerateBruitSvmSearch:
     byBinaryClasses = false;
-    searchType      = stParameterSearch;
+    searchType      = SearchTypes::ParameterSearch;
     break;
 
 
-  case  msDone:
+  case  MajorSteps::Done:
     break;
 
   default:
@@ -558,16 +558,16 @@ void  FeatureSelection::DisplayCommandUsage ()
        << "          pairs."                                                              << endl
        << endl
        << "-GeneratFinalReports"                                                          << endl
-       << "        - Configures to generate the finalreports.  You would use this"        << endl
+       << "        - Configures to generate the final reports. You would use this"        << endl
        << "          if the Search Process is already completed and you want to re-run"   << endl
        << "          the Final Reports"                                                   << endl
        << endl
        << "-GenerateBruitSvmSearch"                                                       << endl
        << "        - Configures to generate a bruit force SVM Search. You would use this" << endl
        << "          if the Search Process is already completed and you want to plot"     << endl
-       << "          response to SVM paqrameters."                                        << endl
+       << "          response to SVM parameters."                                         << endl
        << endl
-       << "-Restart - Sets up status file to allow you to restart the serach process."    << endl
+       << "-Restart - Sets up status file to allow you to restart the search process."    << endl
        << "           make sure to processes are still running when you use this option." << endl
        << endl
        << "-ProcessingStats"                                                              << endl
@@ -683,12 +683,12 @@ BinaryClassListPtr  FeatureSelection::StatusFileLoad ()
     else if  (fieldName == "MAJORSTEP")
     {
       majorStep = MajorStepFromStr (buffStr);
-      if  (majorStep == msNULL)
+      if  (majorStep == MajorSteps::Null)
       {
         log.Level (-1) << endl
                        << "FeatureSelection::StatusFileLoad       *** ERROR ***" << endl
                        << endl
-                       << "                    Invlalid MajorStep[" << buffStr << "]" << endl
+                       << "                    Invalid MajorStep[" << buffStr << "]" << endl
                        << endl;
         EndBlock ();
         osWaitForEnter ();
@@ -716,12 +716,12 @@ BinaryClassListPtr  FeatureSelection::StatusFileLoad ()
     else if  (fieldName == "PARAMSELCRITERIA")
     {
       paramSelCriteria = JobSelectionCriteriaFromStr (buffStr);
-      if  (paramSelCriteria == jscNULL)
+      if  (paramSelCriteria == JobSelectionCriteria::Null)
       {
         log.Level (-1) << endl
                        << "FeatureSelection::StatusFileLoad       *** ERROR ***" << endl
                        << endl
-                       << "                    Invlaid ParamSelCriteria[" << buffStr << "]" << endl
+                       << "                    Invalid ParamSelCriteria[" << buffStr << "]" << endl
                        << endl;
         EndBlock ();
         osWaitForEnter ();
@@ -732,7 +732,7 @@ BinaryClassListPtr  FeatureSelection::StatusFileLoad ()
     else if  (fieldName.EqualIgnoreCase ("ProcessingOrder"))
     {
       processingOrder = ProcessingOrderFromStr (buffStr);
-      if  (processingOrder == poNULL)
+      if  (processingOrder == ProcessingOrders::Null)
       {
         log.Level (-1) << endl << endl
           << "FeatureSelection::StatusFileLoad   ***ERROR***   Invalid ProcessingOrder[" << buffStr << "] Encountered." << endl
@@ -777,7 +777,7 @@ BinaryClassListPtr  FeatureSelection::StatusFileLoad ()
     }
   }
 
-  if  (majorStep == msNULL)
+  if  (majorStep == MajorSteps::Null)
   {
     log.Level (-1) << endl << endl
           << "FeatureSelection::StatusFileLoad   ***ERROR***   MajorStep was not specified." << endl
@@ -850,9 +850,9 @@ void  FeatureSelection::StatusFileUpdate (BinaryClassListPtr  binClasses)
       exit (-1);
     }
 
-    statusFile << "BeamSize"                                    << "\t" << beamSize                                     << endl
-               << "ConfigFileName"                              << "\t" << configFileName                               << endl
-               << "ConfigFileNameSpecified"                     << "\t" << configFileNameSpecified                      << endl
+    statusFile << "BeamSize"                               << "\t" << beamSize                                     << endl
+               << "ConfigFileName"                         << "\t" << configFileName                               << endl
+               << "ConfigFileNameSpecified"                << "\t" << configFileNameSpecified                      << endl
                << "ConfigFileNameMfsFeaturesSel"           << "\t" << configFileNameMfsFeaturesSel                 << endl
                << "ConfigFileNameMfsFeatureSelTuned"       << "\t" << configFileNameMfsFeatureSelTuned             << endl
                << "ConfigFileNameMfsTuned"                 << "\t" << configFileNameMfsTuned                       << endl
@@ -862,28 +862,28 @@ void  FeatureSelection::StatusFileUpdate (BinaryClassListPtr  binClasses)
                << "ConfigFileNameBfsTunedFeaturesSel"      << "\t" << configFileNameBfsTunedFeaturesSel            << endl
                << "ConfigFileNameBfsTunedFeaturesSelTuned" << "\t" << configFileNameBfsTunedFeaturesSelTuned       << endl
                << "ConfigFileNameBfsFeaturesSelTuned"      << "\t" << configFileNameBfsFeaturesSelTuned            << endl
-               << "FeatureCriteria"                             << "\t" << FeatureCriteriaToStr (featureCriteria)       << endl
+               << "FeatureCriteria"                        << "\t" << FeatureCriteriaToStr (featureCriteria)       << endl
                << "FeatureCountPrefSmall"                  << "\t" << (featureCountPrefSmall ? "Yes" : "No")       << endl
-               << "FileFormat"                                  << "\t" << driver->DriverName ()                        << endl
-               << "GradingMethod"                               << "\t" << GradingMethodToStr (gradingMethod)           << endl
-               << "TrainingDataFileName"                        << "\t" << trainingDataFileName                         << endl
-               << "TestDataFileName"                            << "\t" << testDataFileName                             << endl
-               << "ValidationDataFileName"                      << "\t" << validationDataFileName                       << endl
-               << "InitialFeatures"                             << "\t" << initialFeaturesStr                           << endl
+               << "FileFormat"                             << "\t" << driver->DriverName ()                        << endl
+               << "GradingMethod"                          << "\t" << GradingMethodToStr (gradingMethod)           << endl
+               << "TrainingDataFileName"                   << "\t" << trainingDataFileName                         << endl
+               << "TestDataFileName"                       << "\t" << testDataFileName                             << endl
+               << "ValidationDataFileName"                 << "\t" << validationDataFileName                       << endl
+               << "InitialFeatures"                        << "\t" << initialFeaturesStr                           << endl
                << "RandomSplitsNum"                        << "\t" << randomSplitsNum                              << endl
                << "RandomSplitsFileName"                   << "\t" << randomSplitsFileName                         << endl
-               << "NextProcessorId"                             << "\t" << nextProcessorId                              << endl
-               << "LockFileName"                                << "\t" << lockFileName                                 << endl
-               << "NumJobsAtATime"                              << "\t" << numJobsAtATime                               << endl
-               << "NumOfFolds"                                  << "\t" << numOfFolds                                   << endl
-               << "NumProcPerCombo"                             << "\t" << numProcPerCombo                              << endl
-               << "ExpansionLimit"                              << "\t" << expansionLimit                               << endl
+               << "NextProcessorId"                        << "\t" << nextProcessorId                              << endl
+               << "LockFileName"                           << "\t" << lockFileName                                 << endl
+               << "NumJobsAtATime"                         << "\t" << numJobsAtATime                               << endl
+               << "NumOfFolds"                             << "\t" << numOfFolds                                   << endl
+               << "NumProcPerCombo"                        << "\t" << numProcPerCombo                              << endl
+               << "ExpansionLimit"                         << "\t" << expansionLimit                               << endl
                << "MinTrainExamples"                       << "\t" << minTrainExamples                             << endl
-               << "ParamSelCriteria"                            << "\t" << JobSelectionCriteriaToStr (paramSelCriteria) << endl
+               << "ParamSelCriteria"                       << "\t" << JobSelectionCriteriaToStr (paramSelCriteria) << endl
                << (byBinaryClasses ? "ByBinaryClasses" : "ByAllClasses")                                                << endl
-               << "SearchType"                                  << "\t" << SearchTypeToStr (searchType)                 << endl
+               << "SearchType"                             << "\t" << SearchTypeToStr (searchType)                 << endl
                << "ProcessingOrder"                        << "\t" << ProcessingOrderToStr (processingOrder)       << endl
-               << "MajorStep"                                   << "\t" << MajorStepToStr (majorStep)                   << endl;
+               << "MajorStep"                              << "\t" << MajorStepToStr (majorStep)                   << endl;
 
     if  (addingAClass)
       statusFile << "AddingAClass" << "\t" << addingAClass->Name () << endl;
@@ -1036,7 +1036,7 @@ void   FeatureSelection::ProcessCmdLine (int    argc,
       if  (expansionLimit < 1)
       {
         log.Level (-1) << endl << endl
-                       << "ProcessCmdLine   ExpansionLimit[" << field << "]  Must be greter than zero." << endl
+                       << "ProcessCmdLine   ExpansionLimit[" << field << "]  Must be greater than zero." << endl
                        << endl << endl;
 
         DisplayCommandUsage ();
@@ -1048,7 +1048,7 @@ void   FeatureSelection::ProcessCmdLine (int    argc,
 
     else if  ((switchStr == "-FILEFORMAT")  ||  (switchStr == "-FORMAT"))
     {
-      driver = FeatureFileIO::FileFormatFromStr (field, true, false);  // Has to beable to read
+      driver = FeatureFileIO::FileFormatFromStr (field, true, false);  // Has to be able to read
       if  (driver == NULL)
       {
         log.Level (-1) << endl << endl
@@ -1067,7 +1067,7 @@ void   FeatureSelection::ProcessCmdLine (int    argc,
     else if  ((switchStr == "-GM")  ||  (switchStr == "-GRADINGMETHOD"))
     {
       gradingMethod = GradingMethodFromStr (field);
-      if  (gradingMethod == gmNULL)
+      if  (gradingMethod == GradingMethodType::Null)
       {
         log.Level (-1) << endl << endl
                        << "ProcessCmdLine   Invalid Grading Method Specified[" << field << "]" << endl
@@ -1083,7 +1083,7 @@ void   FeatureSelection::ProcessCmdLine (int    argc,
     else if  ((switchStr == "-FEATURECRITERIA")  ||  (switchStr == "-FC"))
     {
       featureCriteria = FeatureCriteriaFromStr (field);
-      if  (featureCriteria == fcNULL)
+      if  (featureCriteria == FeatureCriteriaType::Null)
       {
         log.Level (-1) << endl << endl
                        << "ProcessCmdLine   Invalid Feature Criteria Specified[" << field << "]" << endl
@@ -1147,7 +1147,7 @@ void   FeatureSelection::ProcessCmdLine (int    argc,
              )
     {
       paramSelCriteria = JobSelectionCriteriaFromStr (field);
-      if  (paramSelCriteria == jscNULL)
+      if  (paramSelCriteria == JobSelectionCriteria::Null)
       {
         log.Level (-1) << "ProcessCmdLine   ***ERROR***"  << endl
                        << endl
@@ -1165,7 +1165,7 @@ void   FeatureSelection::ProcessCmdLine (int    argc,
     else if  ((switchStr.EqualIgnoreCase ("-ProcessingOrder"))  ||  (switchStr.EqualIgnoreCase ("-PO")))
     {
       processingOrder = ProcessingOrderFromStr (field);
-      if  (processingOrder == poNULL)
+      if  (processingOrder == ProcessingOrders::Null)
       {
         log.Level (-1) << endl << endl
           << "ProcessCmdLine   ***ERROR***      Invalid ProcessingOrder[" << field << "]" << endl
@@ -1211,7 +1211,7 @@ void   FeatureSelection::ProcessCmdLine (int    argc,
     else if  (switchStr == "-SEARCHTYPE")
     {
       searchType = SearchTypeFromStr (field);
-      if  (searchType == stNULL)
+      if  (searchType == SearchTypes::Null)
       {
         log.Level (-1) << endl << endl
           << "ProcessCmdLine   ***ERROR***    Invalid SearchType[" << field << "]" << endl
@@ -1300,11 +1300,11 @@ void   FeatureSelection::ProcessCmdLine (int    argc,
   } /* End of While */
 
 
-  if  (processingOrder == poStandard)
-    SetMajorStep (msMfsParmTuningPre);
+  if  (processingOrder == ProcessingOrders::Standard)
+    SetMajorStep (MajorSteps::MfsParmTuningPre);
 
-  else if  (processingOrder == poHall)
-    SetMajorStep (msMfsFeatureSelection);
+  else if  (processingOrder == ProcessingOrders::Hall)
+    SetMajorStep (MajorSteps::MfsFeatureSelection);
 
   else
   {
@@ -1355,7 +1355,7 @@ void  FeatureSelection::SetUpConfigFileNames ()
   }
 
     KKStr  rootName = osRemoveExtension (configFileName);
-  if  (processingOrder == poStandard)
+  if  (processingOrder == ProcessingOrders::Standard)
   {
     configFileNameMfsFeatureSelTuned       = "";
     configFileNameBfsTuned                 = "";
@@ -1368,7 +1368,7 @@ void  FeatureSelection::SetUpConfigFileNames ()
     configFileNameBfsFeaturesSel                 = rootName + "_BinaryClasses-FeaturesSel.cfg";
     configFileNameBfsFeaturesSelTuned            = rootName + "_BinaryClasses-FeaturesSelTuned.cfg";
   }
-  else if  (processingOrder == poHall)
+  else if  (processingOrder == ProcessingOrders::Hall)
   {
     configFileNameMfsTuned                       = "";
     configFileNameMfsTunedFeaturesSel            = "";
@@ -1410,8 +1410,8 @@ void  FeatureSelection::LoadRunTimeData ()
   if  (!osFileExists (configFileName))
   {
     delete  mlClasses;  mlClasses = NULL;
-    mlClasses = trainingData->ExtractMLClassConstList ();
-    config = TrainingConfiguration2::CreateFromFeatureVectorList (*trainingData, "", log);
+    mlClasses = trainingData->ExtractListOfClasses ();
+    config = TrainingConfiguration2::CreateFromFeatureVectorList (*trainingData, fileDesc, "", log);
     if  (initialFeatures)
       config->SetFeatureNums (*initialFeatures);
     config->Save (configFileName);
@@ -1438,7 +1438,7 @@ void  FeatureSelection::LoadRunTimeData ()
 
   if  (addingAClass)
   {
-    // Since we are adding a class we need to make sure that the class beeing added exists in the configuration file.
+    // Since we are adding a class we need to make sure that the class being added exists in the configuration file.
     if  (mlClasses->PtrToIdx (addingAClass) < 0)
     {
       log.Level (-1) << endl
@@ -1455,11 +1455,11 @@ void  FeatureSelection::LoadRunTimeData ()
 
   {
     // Check for agreement of class list between Train Data and Config File.
-    MLClassConstListPtr  trainDataClassList = trainingData->ExtractMLClassConstList ();
+    MLClassListPtr  trainDataClassList = trainingData->ExtractListOfClasses ();
     if  ((*trainDataClassList) !=  (*mlClasses))
     {
-      MLClassConstList  classesInConfigNotInTrain;
-      MLClassConstList  classesInTrainNotInConfig;
+      MLClassList  classesInConfigNotInTrain;
+      MLClassList  classesInTrainNotInConfig;
       classesInConfigNotInTrain = (*mlClasses) - (*trainDataClassList);
       classesInTrainNotInConfig = (*trainDataClassList) - (*mlClasses);
 
@@ -1491,7 +1491,7 @@ void  FeatureSelection::LoadRunTimeData ()
   else
   {
     bool valid = false;
-    initialFeatures = new FeatureNumList (config->FileDesc (), initialFeaturesStr, valid);
+    initialFeatures = new FeatureNumList (initialFeaturesStr, valid);
     if  (!valid)
     {
       log.Level (-1) << endl << endl
@@ -1506,14 +1506,14 @@ void  FeatureSelection::LoadRunTimeData ()
 
   {
     normalizationParms = new NormalizationParms (config, *trainingData, log);
-    normalizationParms->NormalizeImages (trainingData);
+    normalizationParms->NormalizeExamples (trainingData, log);
     alreadyNormalized = true;
 
     if  (testData)
-      normalizationParms->NormalizeImages (testData);
+      normalizationParms->NormalizeExamples (testData, log);
 
     if  (validationData)
-      normalizationParms->NormalizeImages (validationData);
+      normalizationParms->NormalizeExamples (validationData, log);
   }
 }  /* LoadRunTimeData */
 
@@ -1538,44 +1538,44 @@ BinaryClassListPtr   FeatureSelection::CreateInitialBinaryClassListFinalResultJo
 
   BinaryClassListPtr  binClasses = new BinaryClassList ();
 
-  if  (this->processingOrder == poStandard)
+  if  (this->processingOrder == ProcessingOrders::Standard)
   {
-    binClasses->PushOnBack (new BinaryClass (0, frtNoTuningAllFeatures,       SelectByVoting,      "MFS-NoTuningAllFeaturesVote.txt",     configFileNameSpecified));
-    binClasses->PushOnBack (new BinaryClass (0, frtNoTuningAllFeatures,       SelectByProbability, "MFS-NoTuningAllFeaturesProb.txt",     configFileNameSpecified));
+    binClasses->PushOnBack (new BinaryClass (0, FinalResultType::NoTuningAllFeatures,       SVM_SelectionMethod::Voting,      "MFS-NoTuningAllFeaturesVote.txt",     configFileNameSpecified));
+    binClasses->PushOnBack (new BinaryClass (0, FinalResultType::NoTuningAllFeatures,       SVM_SelectionMethod::Probability, "MFS-NoTuningAllFeaturesProb.txt",     configFileNameSpecified));
 
-    binClasses->PushOnBack (new BinaryClass (0, frtMfsParmsTuned,             SelectByVoting,      "FeaturesAllParmsTunedVote.txt",       configFileNameMfsTuned));
-    binClasses->PushOnBack (new BinaryClass (0, frtMfsParmsTuned,             SelectByProbability, "FeaturesAllParmsTunedProb.txt",       configFileNameMfsTuned));
+    binClasses->PushOnBack (new BinaryClass (0, FinalResultType::MfsParmsTuned,             SVM_SelectionMethod::Voting,      "FeaturesAllParmsTunedVote.txt",       configFileNameMfsTuned));
+    binClasses->PushOnBack (new BinaryClass (0, FinalResultType::MfsParmsTuned,             SVM_SelectionMethod::Probability, "FeaturesAllParmsTunedProb.txt",       configFileNameMfsTuned));
 
-    binClasses->PushOnBack (new BinaryClass (0, frtMfsParmsTunedFeaturesSel,  SelectByVoting,      "FeaturesSelParmsTunedVote.txt",       configFileNameMfsTunedFeaturesSel));
-    binClasses->PushOnBack (new BinaryClass (0, frtMfsParmsTunedFeaturesSel,  SelectByProbability, "FeaturesSelParmsTunedProb.txt",       configFileNameMfsTunedFeaturesSel));
+    binClasses->PushOnBack (new BinaryClass (0, FinalResultType::MfsParmsTunedFeaturesSel,  SVM_SelectionMethod::Voting,      "FeaturesSelParmsTunedVote.txt",       configFileNameMfsTunedFeaturesSel));
+    binClasses->PushOnBack (new BinaryClass (0, FinalResultType::MfsParmsTunedFeaturesSel,  SVM_SelectionMethod::Probability, "FeaturesSelParmsTunedProb.txt",       configFileNameMfsTunedFeaturesSel));
 
-    binClasses->PushOnBack (new BinaryClass (0, frtBfsFeaturesSel,            SelectByVoting,      "BinaryFeaturesSelVote.txt",           configFileNameBfsFeaturesSel));
-    binClasses->PushOnBack (new BinaryClass (0, frtBfsFeaturesSel,            SelectByProbability, "BinaryFeaturesSelProb.txt",           configFileNameBfsFeaturesSel));
+    binClasses->PushOnBack (new BinaryClass (0, FinalResultType::BfsFeaturesSel,            SVM_SelectionMethod::Voting,      "BinaryFeaturesSelVote.txt",           configFileNameBfsFeaturesSel));
+    binClasses->PushOnBack (new BinaryClass (0, FinalResultType::BfsFeaturesSel,            SVM_SelectionMethod::Probability, "BinaryFeaturesSelProb.txt",           configFileNameBfsFeaturesSel));
 
-    binClasses->PushOnBack (new BinaryClass (0, frtBfsFeaturesSelParmsTuned,  SelectByVoting,      "BinaryFeaturesSelParmsTunedVote.txt", configFileNameBfsFeaturesSelTuned));
-    binClasses->PushOnBack (new BinaryClass (0, frtBfsFeaturesSelParmsTuned,  SelectByProbability, "BinaryFeaturesSelParmsTunedProb.txt", configFileNameBfsFeaturesSelTuned));
+    binClasses->PushOnBack (new BinaryClass (0, FinalResultType::BfsFeaturesSelParmsTuned,  SVM_SelectionMethod::Voting,      "BinaryFeaturesSelParmsTunedVote.txt", configFileNameBfsFeaturesSelTuned));
+    binClasses->PushOnBack (new BinaryClass (0, FinalResultType::BfsFeaturesSelParmsTuned,  SVM_SelectionMethod::Probability, "BinaryFeaturesSelParmsTunedProb.txt", configFileNameBfsFeaturesSelTuned));
   }
 
-  else if  (this->processingOrder == poHall)
+  else if  (this->processingOrder == ProcessingOrders::Hall)
   {
-    binClasses->PushOnBack (new BinaryClass (0, frtNoTuningAllFeatures,       SelectByVoting,      "MFS-NoTuningAllFeaturesVote.txt",     configFileNameSpecified));
-    binClasses->PushOnBack (new BinaryClass (0, frtNoTuningAllFeatures,       SelectByProbability, "MFS-NoTuningAllFeaturesProb.txt",     configFileNameSpecified));
+    binClasses->PushOnBack (new BinaryClass (0, FinalResultType::NoTuningAllFeatures,       SVM_SelectionMethod::Voting,      "MFS-NoTuningAllFeaturesVote.txt",     configFileNameSpecified));
+    binClasses->PushOnBack (new BinaryClass (0, FinalResultType::NoTuningAllFeatures,       SVM_SelectionMethod::Probability, "MFS-NoTuningAllFeaturesProb.txt",     configFileNameSpecified));
 
-    binClasses->PushOnBack (new BinaryClass (0, frtMfsFeaturesSel,            SelectByVoting,      "MFS-FeaturesSelVote.txt",             configFileNameMfsFeaturesSel));
-    binClasses->PushOnBack (new BinaryClass (0, frtMfsFeaturesSel,            SelectByProbability, "MFS-FeaturesSelProb.txt",             configFileNameMfsFeaturesSel));
+    binClasses->PushOnBack (new BinaryClass (0, FinalResultType::MfsFeaturesSel,            SVM_SelectionMethod::Voting,      "MFS-FeaturesSelVote.txt",             configFileNameMfsFeaturesSel));
+    binClasses->PushOnBack (new BinaryClass (0, FinalResultType::MfsFeaturesSel,            SVM_SelectionMethod::Probability, "MFS-FeaturesSelProb.txt",             configFileNameMfsFeaturesSel));
 
-    binClasses->PushOnBack (new BinaryClass (0, frtMfsParmsTunedFeaturesSel,  SelectByVoting,      "MFS-FeaturesSelParmsTunedVote.txt",   configFileNameMfsFeatureSelTuned));
-    binClasses->PushOnBack (new BinaryClass (0, frtMfsParmsTunedFeaturesSel,  SelectByProbability, "MFS-FeaturesSelParmsTunedProb.txt",   configFileNameMfsFeatureSelTuned));
+    binClasses->PushOnBack (new BinaryClass (0, FinalResultType::MfsParmsTunedFeaturesSel,  SVM_SelectionMethod::Voting,      "MFS-FeaturesSelParmsTunedVote.txt",   configFileNameMfsFeatureSelTuned));
+    binClasses->PushOnBack (new BinaryClass (0, FinalResultType::MfsParmsTunedFeaturesSel,  SVM_SelectionMethod::Probability, "MFS-FeaturesSelParmsTunedProb.txt",   configFileNameMfsFeatureSelTuned));
 
 
-    binClasses->PushOnBack (new BinaryClass (0, frtBfsParmsTuned,             SelectByVoting,      "BFS-ParmsTunedVote.txt",              configFileNameBfsTuned));
-    binClasses->PushOnBack (new BinaryClass (0, frtBfsParmsTuned,             SelectByProbability, "BFS-ParmsTunedProb.txt",              configFileNameBfsTuned));
+    binClasses->PushOnBack (new BinaryClass (0, FinalResultType::BfsParmsTuned,             SVM_SelectionMethod::Voting,      "BFS-ParmsTunedVote.txt",              configFileNameBfsTuned));
+    binClasses->PushOnBack (new BinaryClass (0, FinalResultType::BfsParmsTuned,             SVM_SelectionMethod::Probability, "BFS-ParmsTunedProb.txt",              configFileNameBfsTuned));
 
-    binClasses->PushOnBack (new BinaryClass (0, frtBfsFeaturesSelParmsTuned,  SelectByVoting,      "BFS-ParmsTunedFeaturesSelVote.txt",   configFileNameBfsTunedFeaturesSel));
-    binClasses->PushOnBack (new BinaryClass (0, frtBfsFeaturesSelParmsTuned,  SelectByProbability, "BFS-ParmsTunedFeaturesSelProb.txt",   configFileNameBfsTunedFeaturesSel));
+    binClasses->PushOnBack (new BinaryClass (0, FinalResultType::BfsFeaturesSelParmsTuned,  SVM_SelectionMethod::Voting,      "BFS-ParmsTunedFeaturesSelVote.txt",   configFileNameBfsTunedFeaturesSel));
+    binClasses->PushOnBack (new BinaryClass (0, FinalResultType::BfsFeaturesSelParmsTuned,  SVM_SelectionMethod::Probability, "BFS-ParmsTunedFeaturesSelProb.txt",   configFileNameBfsTunedFeaturesSel));
 
-    binClasses->PushOnBack (new BinaryClass (0, frtBfsFeaturesSelParmsTuned,  SelectByVoting,      "BFS-ParmsTunedFeaturesSelParmsTunedVote.txt",   configFileNameBfsTunedFeaturesSelTuned));
-    binClasses->PushOnBack (new BinaryClass (0, frtBfsFeaturesSelParmsTuned,  SelectByProbability, "BFS-ParmsTunedFeaturesSelParmsTunedProb.txt",   configFileNameBfsTunedFeaturesSelTuned));
+    binClasses->PushOnBack (new BinaryClass (0, FinalResultType::BfsFeaturesSelParmsTuned,  SVM_SelectionMethod::Voting,      "BFS-ParmsTunedFeaturesSelParmsTunedVote.txt",   configFileNameBfsTunedFeaturesSelTuned));
+    binClasses->PushOnBack (new BinaryClass (0, FinalResultType::BfsFeaturesSelParmsTuned,  SVM_SelectionMethod::Probability, "BFS-ParmsTunedFeaturesSelParmsTunedProb.txt",   configFileNameBfsTunedFeaturesSelTuned));
   }
 
   return  binClasses;
@@ -1590,11 +1590,11 @@ BinaryClassListPtr  FeatureSelection::CreateInitialBinaryClassListBinaryComboSea
 
   BinaryClassListPtr  binClasses = new BinaryClassList ();
 
-  MLClassConstListPtr  classes = config->ExtractClassList ();
+  MLClassListPtr  classes = config->ExtractClassList ();
   classes->SortByName ();
 
-  MLClassConstPtr  class1 = NULL;
-  MLClassConstPtr  class2 = NULL;
+  MLClassPtr  class1 = NULL;
+  MLClassPtr  class2 = NULL;
 
   int  idx1, idx2;
   for  (idx1 = 0;  idx1 < (classes->QueueSize () - 1);  idx1++)
@@ -1632,12 +1632,12 @@ BinaryClassListPtr  FeatureSelection::CreateInitialBinaryClassList ()
 
   BinaryClassListPtr  binClasses = NULL;
 
-  if  (majorStep == msGenerateBruitSvmSearch)
+  if  (majorStep == MajorSteps::GenerateBruitSvmSearch)
   {
     binClasses = CreateInitialBinaryClassListBruitSvmSearch ();
   }
 
-  else if  (majorStep == msGenerateFinalResults)
+  else if  (majorStep == MajorSteps::GenerateFinalResults)
   {
     binClasses = CreateInitialBinaryClassListFinalResultJobs ();
   }
@@ -1691,7 +1691,7 @@ void FeatureSelection::LoadFeatureData ()
   log.Level (10) << "FeatureSelection::LoadFeatureData  Load Data Files" << endl;
 
   if  (mlClasses == NULL)
-    mlClasses = new MLClassConstList ();
+    mlClasses = new MLClassList ();
 
   trainingData = driver->LoadFeatureFile (trainingDataFileName, 
                                           *mlClasses, 
@@ -1750,7 +1750,7 @@ void FeatureSelection::LoadFeatureData ()
   {
     trainingTestData = new FeatureVectorList (*trainingData, false);
     trainingTestData->AddQueue (*testData);
-    trainingTestData = trainingTestData->StratifyAmoungstClasses (10);
+    trainingTestData = trainingTestData->StratifyAmoungstClasses (10, log);
   }
   else if  (trainingData)
   {
@@ -1790,11 +1790,11 @@ void  FeatureSelection::SetQuitRunningFlag ()
     for  (idx = binClasses->begin ();  idx != binClasses->end ();  idx++)
     {
       BinaryClassPtr  bc = *idx;
-      if  (bc->Status () == cpStarted)
+      if  (bc->Status () == ClassPairStatus::Started)
       {
         ProcessorPtr  p = NULL;
 
-        if  (bc->ResultType () == frtNULL)
+        if  (bc->ResultType () == FinalResultType::Null)
         {
           // We are creating a process that will be doing searching.
           p = new Processor (this,
@@ -1804,8 +1804,8 @@ void  FeatureSelection::SetQuitRunningFlag ()
                              searchType,
                              bc->Class1 (),
                              bc->Class2 (),
-                             smBestCaseNext,
-                             fsStarted
+                             SearchMethod::BestCaseNext,
+                             ProcessorStatus::Started
                            );
 
         }
@@ -1816,7 +1816,7 @@ void  FeatureSelection::SetQuitRunningFlag ()
                              -1,
                              bc,
                              fileDesc,
-                             fsStarted
+                             ProcessorStatus::Started
                             );
         }
 
@@ -1876,7 +1876,8 @@ void  FeatureSelection::GetProcessingStats ()
   LoadFeatureData ();
 
   delete  config;
-  config = new TrainingConfiguration2 (fileDesc, configFileName, log, false);
+  config = new TrainingConfiguration2 ();
+  config->Load (configFileName, false, log);
 
   if  (!config->FormatGood ())
   {
@@ -1931,14 +1932,15 @@ void  FeatureSelection::GetProcessingStats ()
 
   {
     // Lets get the ALL Classes Count 
-    SetMajorStep (msMfsFeatureSelection);
+    SetMajorStep (MajorSteps::MfsFeatureSelection);
 
     delete  binClasses;
     binClasses  = CreateInitialBinaryClassList ();
 
     resultConfigFileName = configFileNameMfsTunedFeaturesSel;
     delete  config;
-    config = new TrainingConfiguration2 (fileDesc, resultConfigFileName, log, false);
+    config = new TrainingConfiguration2 ();
+    config->Load (resultConfigFileName, false, log);
 
     fsFeatureCountMFS = config->GetFeatureNums ().NumSelFeatures ();
     cParamMFS         = config->C_Param ();
@@ -1950,7 +1952,7 @@ void  FeatureSelection::GetProcessingStats ()
     {
       BinaryClassPtr  bc = *idx;
 
-      ProcessorPtr  p = new Processor (this, false, 999999, fileDesc, stFeatureSelectionSearch, bc->Class1 (), bc->Class2 (), smNULL, fsDone);
+      ProcessorPtr  p = new Processor (this, false, 999999, fileDesc, SearchTypes::FeatureSelectionSearch, bc->Class1 (), bc->Class2 (), SearchMethod::Null, ProcessorStatus::Done);
       if  (p != NULL)
       {
         jobIdsByFeatureCountAllClasses = p->GetSmallestJobIdByFeatureCount ();
@@ -1966,9 +1968,10 @@ void  FeatureSelection::GetProcessingStats ()
 
   resultConfigFileName = configFileNameBfsFeaturesSelTuned;
   delete  config;
-  config = new TrainingConfiguration2 (fileDesc, resultConfigFileName, log, false);
+  config = new TrainingConfiguration2 ();
+  config->Load (resultConfigFileName, false, log);
 
-  SetMajorStep (msBfsParmTuningPost);
+  SetMajorStep (MajorSteps::BfsParmTuningPost);
 
   delete  binClasses;
   binClasses  = CreateInitialBinaryClassList ();
@@ -1983,8 +1986,8 @@ void  FeatureSelection::GetProcessingStats ()
   {
     BinaryClassPtr  bc = *idx;
 
-    MLClassConstPtr  class1 = bc->Class1 ();
-    MLClassConstPtr  class2 = bc->Class2 ();
+    MLClassPtr  class1 = bc->Class1 ();
+    MLClassPtr  class2 = bc->Class2 ();
 
     hdrLine1 << "\t" << bc->Class1Name ();
     hdrLine2 << "\t" << bc->Class2Name ();
@@ -1999,13 +2002,13 @@ void  FeatureSelection::GetProcessingStats ()
     }
 
 
-    BinaryClassParmsPtr  bcp = config->BinaryClassParms (bc->Class1 (), bc->Class2 ());
+    BinaryClassParmsPtr  bcp = config->GetBinaryClassParms (bc->Class1 (), bc->Class2 ());
     if  (bcp)
     {
       cParam       = bcp->C ();
       gammaParam   = bcp->Param ().Gamma ();
       probParam    = bcp->AParam ();
-      featureCount = bcp->SelectedFeatures ().NumSelFeatures ();
+      featureCount = bcp->SelectedFeatures ()->NumSelFeatures ();
     }
     else
     {
@@ -2015,20 +2018,20 @@ void  FeatureSelection::GetProcessingStats ()
       featureCount = 0;
     }
 
-    ProcessorPtr  p = new Processor (this, true, 999999, fileDesc, stFeatureSelectionSearch, bc->Class1 (), bc->Class2 (), smNULL, fsDone);
+    ProcessorPtr  p = new Processor (this, true, 999999, fileDesc, SearchTypes::FeatureSelectionSearch, bc->Class1 (), bc->Class2 (), SearchMethod::Null, ProcessorStatus::Done);
     if  (p == NULL)
     {
       jobIdsByFeatureCountBinaryClasses.push_back    (zeroCounts);
       cpuCyclesByFeatureCountBinaryClasses.push_back (zeroCountsDouble);
-      fsCpuCyclesByClassPair.push_back    (0.0);
+      fsCpuCyclesByClassPair.push_back               (0.0);
       featureCountBeamSearchStartBFS.push_back       (0.0);
     }
     else
     {
       jobIdsByFeatureCountBinaryClasses.push_back    (p->GetSmallestJobIdByFeatureCount ());
       cpuCyclesByFeatureCountBinaryClasses.push_back (p->GetCpuCyclesByFeatureCount  ());
-      fsCpuCyclesByClassPair.push_back    (p->TotalCpuTimeUsed ());
-      fsCpuCyclesByProcBFS.AddCycles (p->CpuCyclesByProcId ());
+      fsCpuCyclesByClassPair.push_back               (p->TotalCpuTimeUsed ());
+      fsCpuCyclesByProcBFS.AddCycles                 (p->CpuCyclesByProcId ());
       featureCountBeamSearchStartBFS.push_back       (p->BeamSearchFeatureCount ());
     }
 
@@ -2047,7 +2050,7 @@ void  FeatureSelection::GetProcessingStats ()
 
 
   //************************************************
-  //*   Get CPU Stats for parameter Serach Jobs.   *
+  //*   Get CPU Stats for parameter Search Jobs.   *
   //************************************************
   double  parmCpuCyclesMFS = 0.0;
   double  parmJobsMFS      = 0.0;
@@ -2055,7 +2058,7 @@ void  FeatureSelection::GetProcessingStats ()
     
   {
     // Lets get the ALL Classes Count 
-    SetMajorStep (msMfsParmTuningPre);
+    SetMajorStep (MajorSteps::MfsParmTuningPre);
     delete  binClasses;
     binClasses  = CreateInitialBinaryClassList ();
     BinaryClassList::iterator  idx;
@@ -2063,7 +2066,7 @@ void  FeatureSelection::GetProcessingStats ()
     {
       BinaryClassPtr  bc = *idx;
 
-      ProcessorPtr  p = new Processor (this, false, 999999, fileDesc, stParameterSearch, bc->Class1 (), bc->Class2 (), smNULL, fsDone);
+      ProcessorPtr  p = new Processor (this, false, 999999, fileDesc, SearchTypes::ParameterSearch, bc->Class1 (), bc->Class2 (), SearchMethod::Null, ProcessorStatus::Done);
       if  (p != NULL)
       {
         parmCpuCyclesMFS = p->TotalCpuTimeUsed ();
@@ -2082,7 +2085,7 @@ void  FeatureSelection::GetProcessingStats ()
 
 
   resultConfigFileName = configFileNameBfsFeaturesSelTuned;
-  SetMajorStep (msBfsParmTuningPost);
+  SetMajorStep (MajorSteps::BfsParmTuningPost);
 
   delete  binClasses;
   binClasses  = CreateInitialBinaryClassList ();
@@ -2091,7 +2094,7 @@ void  FeatureSelection::GetProcessingStats ()
   for  (idx = binClasses->begin ();  idx != binClasses->end ();  idx++)
   {
     BinaryClassPtr  bc = *idx;
-    ProcessorPtr  p = new Processor (this, true, 999999, fileDesc, stParameterSearch, bc->Class1 (), bc->Class2 (), smNULL, fsDone);
+    ProcessorPtr  p = new Processor (this, true, 999999, fileDesc, SearchTypes::ParameterSearch, bc->Class1 (), bc->Class2 (), SearchMethod::Null, ProcessorStatus::Done);
     if  (p == NULL)
     {
       parnCpuCyclesByClassPairBFS.push_back    (0.0);
@@ -2230,12 +2233,12 @@ void  FeatureSelection::GetProcessingStats ()
 
   {
     //*******************************************************
-    //*    Feature Selection CPU Ussage by Class Pairs    *
+    //*    Feature Selection CPU Usage by Class Pairs       *
     //*******************************************************
 
     r << endl 
       << endl
-      << "Feature Selection  CPU Ussage by Class Pairs" << endl
+      << "Feature Selection  CPU Usage by Class Pairs" << endl
       << endl;
     r << "" << "\t" << "All"      << "\t"  << ""      << "\t" << "Std"  << "\t" << ""    << "\t" << ""    << "\t" << "WtdClass" << hdrLine1  << endl;
     r << "" << "\t" << "Classes"  << "\t"  << "Mean"  << "\t" << "Dev"  << "\t" << "Min" << "\t" << "Max" << "\t" << "PairSize" << hdrLine2  << endl;
@@ -2343,11 +2346,11 @@ void  FeatureSelection::ProcessRestart ()
   {
     BinaryClassPtr bc = *idx;
     {
-      bc->Status (cpNotStarted);
+      bc->Status (ClassPairStatus::NotStarted);
       bc->NumProcessors (0);
       ProcessorPtr  p = NULL;
 
-      if  (bc->ResultType () == frtNULL)
+      if  (bc->ResultType () == FinalResultType::Null)
       {
         p = new Processor (this,
                            byBinaryClasses,
@@ -2356,8 +2359,8 @@ void  FeatureSelection::ProcessRestart ()
                            searchType,
                            bc->Class1 (),
                            bc->Class2 (),
-                           smBestCaseNext,
-                           fsStarted
+                           SearchMethod::BestCaseNext,
+                           ProcessorStatus::Started
                           );
       }
       else
@@ -2366,11 +2369,11 @@ void  FeatureSelection::ProcessRestart ()
                            -1,
                            bc,
                            fileDesc,
-                           fsStarted
+                           ProcessorStatus::Started
                           );
       }
           
-      if  ((p->Status () == fsStarted)  ||  (p->QuitRunning ())  ||  (p->Status () == fsNotStarted))
+      if  ((p->Status () == ProcessorStatus::Started)  ||  (p->QuitRunning ())  ||  (p->Status () == ProcessorStatus::NotStarted))
         p->ProcessRestart ();
       delete  p;  p = NULL;
     }
@@ -2410,7 +2413,7 @@ void  FeatureSelection::SetUpToBruitSvmSearch ()
   BinaryClassListPtr  binClasses = StatusFileLoad ();
 
   resultConfigFileName = configFileNameSpecified;
-  SetMajorStep (msGenerateBruitSvmSearch);
+  SetMajorStep (MajorSteps::GenerateBruitSvmSearch);
 
   delete  binClasses;
   binClasses = NULL;
@@ -2455,7 +2458,7 @@ void  FeatureSelection::SetUpToGenerateFinalReports ()
   BinaryClassListPtr  binClasses = StatusFileLoad ();
 
   resultConfigFileName = configFileNameBfsFeaturesSelTuned;
-  SetMajorStep (msGenerateFinalResults);
+  SetMajorStep (MajorSteps::GenerateFinalResults);
 
   delete  binClasses;
   binClasses = NULL;
@@ -2549,14 +2552,14 @@ void  FeatureSelection::ProcessStatusFile (int     argc,
 
     if  ((parm1 == "-QUIT")  ||  (parm1 == "-STOP"))
     {
-      SetQuitRunningFlag ();  // We will not return fron this call
+      SetQuitRunningFlag ();  // We will not return from this call
       EndBlock ();
       exit (0);
     }
 
     if  (parm1 == "-RESTART")
     { 
-      ProcessRestart ();     // We will not return fron this call
+      ProcessRestart ();     // We will not return from this call
       EndBlock ();
       exit (0);
     }
@@ -2564,7 +2567,7 @@ void  FeatureSelection::ProcessStatusFile (int     argc,
     if  (parm1.EqualIgnoreCase ("-FEAATURECOUNT")  ||  parm1.EqualIgnoreCase ("-ProcessingStats"))
     {
       justGettingStats = true;
-      GetProcessingStats ();     // We will not return fron this call
+      GetProcessingStats ();     // We will not return from this call
       EndBlock ();
       exit (0);
     }
@@ -2646,11 +2649,11 @@ TrainingConfiguration2Ptr  FeatureSelection::OpenConfig (const KKStr&  fn)
     return NULL;
   }
 
-  TrainingConfiguration2Ptr   c = new TrainingConfiguration2 (fileDesc, fn, log, false);
+  TrainingConfiguration2Ptr   c = new TrainingConfiguration2 ();
+  c->Load (fn, false, log);
   if  (!c->FormatGood ())
   {
     log.Level (-1) << endl
-                   << endl
                    << "FeatureSelection::OpenConfig    ***ERROR***" << endl
                    << endl
                    << "   Could not load Config File[" << configFileName << "]" << endl
@@ -2752,7 +2755,7 @@ void  FeatureSelection::LoadValidationData ()
     }
 
     if  (normalizationParms)
-      normalizationParms->NormalizeImages (validationData);
+      normalizationParms->NormalizeExamples (validationData, log);
   }
 }  /* LoadValidationData */
 
@@ -2764,7 +2767,7 @@ void  FeatureSelection::FinalReport ()
 
 
   KKStr  reportFileName = osRemoveExtension (configFileNameSpecified) + "_FinalReport.html";
-  HTMLReport r (reportFileName, "Feature Selection - Final Report", HTMLReport::Center);
+  HTMLReport r (reportFileName, "Feature Selection - Final Report", HTMLReport::AlignmentType::Center);
 
   r << "<center>" << endl
     << endl;
@@ -2832,29 +2835,29 @@ void  FeatureSelection::FinalReport ()
   double  longestPath           = 0.0;
   int     jobCount              = 0;
 
-  if  (processingOrder == poStandard)
+  if  (processingOrder == ProcessingOrders::Standard)
   {
     resultsSummary.push_back (RunAValidation ("MFS-NoTuningAllFeaturesVote.txt", 0.0, 0.0, 0.0, 0.0, 0));
     resultsSummary.push_back (RunAValidation ("MFS-NoTuningAllFeaturesProb.txt", 0.0, 0.0, 0.0, 0.0, 0));
 
-    cpuSecsUsedSearching = GetTotalCpuSecs (msMfsParmTuningPre, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount);
+    cpuSecsUsedSearching = GetTotalCpuSecs (MajorSteps::MfsParmTuningPre, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount);
     resultsSummary.push_back (RunAValidation ("FeaturesAllParmsTunedVote.txt", cpuSecsUsedSearching, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount));
     resultsSummary.push_back (RunAValidation ("FeaturesAllParmsTunedProb.txt", cpuSecsUsedSearching, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount));
 
-    cpuSecsUsedSearching = GetTotalCpuSecs (msMfsFeatureSelection, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount);
+    cpuSecsUsedSearching = GetTotalCpuSecs (MajorSteps::MfsFeatureSelection, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount);
     resultsSummary.push_back (RunAValidation ("FeaturesSelParmsTunedVote.txt", cpuSecsUsedSearching, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount));
     resultsSummary.push_back (RunAValidation ("FeaturesSelParmsTunedProb.txt", cpuSecsUsedSearching, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount));
 
-    cpuSecsUsedSearching = GetTotalCpuSecs (msBfsFeatureSelection, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount);
+    cpuSecsUsedSearching = GetTotalCpuSecs (MajorSteps::BfsFeatureSelection, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount);
     resultsSummary.push_back (RunAValidation ("BinaryFeaturesSelVote.txt", cpuSecsUsedSearching, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount));
     resultsSummary.push_back (RunAValidation ("BinaryFeaturesSelProb.txt", cpuSecsUsedSearching, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount));
  
-    cpuSecsUsedSearching = GetTotalCpuSecs (msBfsParmTuningPost, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount);
+    cpuSecsUsedSearching = GetTotalCpuSecs (MajorSteps::BfsParmTuningPost, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount);
     resultsSummary.push_back (RunAValidation ("BinaryFeaturesSelParmsTunedVote.txt", cpuSecsUsedSearching, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount));
     resultsSummary.push_back (RunAValidation ("BinaryFeaturesSelParmsTunedProb.txt", cpuSecsUsedSearching, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount));
   }
  
-  else if  (processingOrder == poHall)
+  else if  (processingOrder == ProcessingOrders::Hall)
   {
     cpuSecsUsedSearching   = 0.0;
     cpuSecsUsedProcessing  = 0.0;
@@ -2865,23 +2868,23 @@ void  FeatureSelection::FinalReport ()
     resultsSummary.push_back (RunAValidation ("MFS-NoTuningAllFeaturesVote.txt", 0.0, 0.0, 0.0, 0.0, 0));
     resultsSummary.push_back (RunAValidation ("MFS-NoTuningAllFeaturesProb.txt", 0.0, 0.0, 0.0, 0.0, 0));
 
-    cpuSecsUsedSearching = GetTotalCpuSecs (msMfsFeatureSelection, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount);
+    cpuSecsUsedSearching = GetTotalCpuSecs (MajorSteps::MfsFeatureSelection, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount);
     resultsSummary.push_back (RunAValidation ("MFS-FeaturesSelVote.txt", cpuSecsUsedSearching, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount));
     resultsSummary.push_back (RunAValidation ("MFS-FeaturesSelProb.txt", cpuSecsUsedSearching, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount));
 
-    cpuSecsUsedSearching = GetTotalCpuSecs (msMfsParmTuningPost, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount);
+    cpuSecsUsedSearching = GetTotalCpuSecs (MajorSteps::MfsParmTuningPost, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount);
     resultsSummary.push_back (RunAValidation ("MFS-FeaturesSelParmsTunedVote.txt", cpuSecsUsedSearching, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount));
     resultsSummary.push_back (RunAValidation ("MFS-FeaturesSelParmsTunedProb.txt", cpuSecsUsedSearching, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount));
 
-    cpuSecsUsedSearching = GetTotalCpuSecs (msBfsParmTuningPre, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount);
+    cpuSecsUsedSearching = GetTotalCpuSecs (MajorSteps::BfsParmTuningPre, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount);
     resultsSummary.push_back (RunAValidation ("BFS-ParmsTunedVote.txt", cpuSecsUsedSearching, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount));
     resultsSummary.push_back (RunAValidation ("BFS-ParmsTunedProb.txt", cpuSecsUsedSearching, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount));
 
-    cpuSecsUsedSearching = GetTotalCpuSecs (msBfsFeatureSelection, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount);
+    cpuSecsUsedSearching = GetTotalCpuSecs (MajorSteps::BfsFeatureSelection, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount);
     resultsSummary.push_back (RunAValidation ("BFS-ParmsTunedFeaturesSelVote.txt", cpuSecsUsedSearching, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount));
     resultsSummary.push_back (RunAValidation ("BFS-ParmsTunedFeaturesSelProb.txt", cpuSecsUsedSearching, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount));
 
-    cpuSecsUsedSearching = GetTotalCpuSecs (msBfsParmTuningPost, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount);
+    cpuSecsUsedSearching = GetTotalCpuSecs (MajorSteps::BfsParmTuningPost, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount);
     resultsSummary.push_back (RunAValidation ("BFS-ParmsTunedFeaturesSelParmsTunedVote.txt", cpuSecsUsedSearching, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount));
     resultsSummary.push_back (RunAValidation ("BFS-ParmsTunedFeaturesSelParmsTunedProb.txt", cpuSecsUsedSearching, cpuSecsUsedProcessing, elaspedTime, longestPath, jobCount));
   }
@@ -3063,7 +3066,7 @@ void  FeatureSelection::FinalReport ()
 
         r << "<br />" << endl
           << "<br />" << endl
-          << "Predictied Probability Confusion Matrix" << endl
+          << "Predicted Probability Confusion Matrix" << endl
           << endl;
         cm->PrintConfusionMatrixAvgPredProbHTML (r.OStream ());
 
@@ -3102,7 +3105,7 @@ void  FeatureSelection::FinalReport ()
 
         r << "<br />" << endl
           << "<br />" << endl
-          << "Predictied Probability Confusion Matrix" << endl
+          << "Predicted Probability Confusion Matrix" << endl
           << endl;
         cm->PrintConfusionMatrixAvgPredProbHTML (r.OStream ());
 
@@ -3137,7 +3140,7 @@ void  FeatureSelection::FeatureImpactSummary ()
 
   AccByFeatureSelListPtr  fsSumList = new AccByFeatureSelList (true);
 
-  SetMajorStep (msMfsFeatureSelection);
+  SetMajorStep (MajorSteps::MfsFeatureSelection);
   delete  config;  config = NULL;
   if  (!configFileNameMfsFeatureSelTuned.Empty ())
     config = OpenConfig (configFileNameMfsFeatureSelTuned); 
@@ -3148,7 +3151,7 @@ void  FeatureSelection::FeatureImpactSummary ()
   FeatureImpactSummary (fsSumList, binaryClasses);
   delete  binaryClasses;  binaryClasses = NULL;
 
-  SetMajorStep (msBfsFeatureSelection);
+  SetMajorStep (MajorSteps::BfsFeatureSelection);
   delete  config;  config = NULL;
   config = OpenConfig (configFileNameBfsFeaturesSelTuned);  
   binaryClasses = CreateInitialBinaryClassList ();
@@ -3188,7 +3191,7 @@ void  FeatureSelection::FeatureImpactSummary (AccByFeatureSelListPtr  fsSumList,
   {
     BinaryClassPtr  bc = *idx;
     ProcessorPtr  processor = NULL;
-    if  (bc->ResultType () == frtNULL)
+    if  (bc->ResultType () == FinalResultType::Null)
     {
       processor = new Processor (this,
                                  byBinaryClasses,
@@ -3197,8 +3200,8 @@ void  FeatureSelection::FeatureImpactSummary (AccByFeatureSelListPtr  fsSumList,
                                  searchType,
                                  bc->Class1 (), 
                                  bc->Class2 (), 
-                                 smBestCaseNext, 
-                                 fsDone
+                                 SearchMethod::BestCaseNext, 
+                                 ProcessorStatus::Done
                                 );
     }
     else
@@ -3207,7 +3210,7 @@ void  FeatureSelection::FeatureImpactSummary (AccByFeatureSelListPtr  fsSumList,
                                  -1,
                                  bc,
                                  fileDesc,
-                                 fsDone
+                                 ProcessorStatus::Done
                                 );
     }
 
@@ -3231,7 +3234,7 @@ ProcessorPtr  FeatureSelection::GetNextBinaryClassComboToRun ()
   // We are going to search for the BinaryClass that has the least number of 
   // processors already assigned to it.  This way if there are more processes 
   // running than there are BinaryClasses to be processed we will first get all
-  // of them running first with one processesor before we assign a second one.
+  // of them running first with one processor before we assign a second one.
   // 
   // This way I can specify a large number of processes per combo with out worrying
   // about one binary combo getting them all.
@@ -3253,13 +3256,13 @@ ProcessorPtr  FeatureSelection::GetNextBinaryClassComboToRun ()
   {
     BinaryClassPtr  bc = *idx;
     
-    if  (bc->Status () == cpNotStarted)
+    if  (bc->Status () == ClassPairStatus::NotStarted)
     {
       candidate = bc;
       break;
     }
 
-    if  ((bc->Status () == cpStarted)  &&  (bc->NumProcessors () < numProcPerCombo))
+    if  ((bc->Status () == ClassPairStatus::Started)  &&  (bc->NumProcessors () < numProcPerCombo))
     {
       if  (!candidate)
         candidate = bc;
@@ -3277,7 +3280,7 @@ ProcessorPtr  FeatureSelection::GetNextBinaryClassComboToRun ()
                    << "  NumProcessors[" << candidate->NumProcessors () << "]"
                    << endl;
 
-    candidate->Status (cpStarted);
+    candidate->Status (ClassPairStatus::Started);
     candidate->IncrementNumProcessors ();
 
     processIdCreated = nextProcessorId;
@@ -3293,7 +3296,7 @@ ProcessorPtr  FeatureSelection::GetNextBinaryClassComboToRun ()
                    << "Class1[" << candidate->Class1Name () <<"]  Class2[" << candidate->Class2Name () <<"]"
                    << endl;
 
-    if  (candidate->ResultType () == frtNULL)
+    if  (candidate->ResultType () == FinalResultType::Null)
     {
       // We are creating a process that will be doing searching.
       processor = new Processor (this,
@@ -3303,8 +3306,8 @@ ProcessorPtr  FeatureSelection::GetNextBinaryClassComboToRun ()
                                  searchType,
                                  candidate->Class1 (), 
                                  candidate->Class2 (), 
-                                 smBestCaseNext, 
-                                 fsNotStarted
+                                 SearchMethod::BestCaseNext, 
+                                 ProcessorStatus::NotStarted
                                 );
     }
 
@@ -3314,7 +3317,7 @@ ProcessorPtr  FeatureSelection::GetNextBinaryClassComboToRun ()
                                  processIdCreated,
                                  candidate,
                                  fileDesc,
-                                 fsNotStarted
+                                 ProcessorStatus::NotStarted
                                 );
     }
   }
@@ -3352,7 +3355,7 @@ void  FeatureSelection::ReduceProcessorCount (ProcessorPtr     processor,
     BinaryClassPtr bc = binClasses->IdxToPtr (idx);
 
     bool bcMatches = false;
-    if  (processor ->ResultType () == frtNULL)
+    if  (processor ->ResultType () == FinalResultType::Null)
       bcMatches = ((bc->Class1 () == processor->Class1 ())  &&  (bc->Class2 () == processor->Class2 ()));
     else
       bcMatches = (bc->FinalResultsFileName () == processor->SummaryResultsFileName ());
@@ -3361,7 +3364,7 @@ void  FeatureSelection::ReduceProcessorCount (ProcessorPtr     processor,
     {
       log.Level (30) << "ReduceProcessorCount  Found BinmaryClass and Flagging as done." << endl;
 
-      // We found the Biary Class in question
+      // We found the Binary Class in question
       found = true;
       bc->DecrementNumProcessors ();
       bc->Status (status);
@@ -3402,16 +3405,16 @@ void  FeatureSelection::SetUpForNextMajorStep (BinaryClassListPtr&  binaryClasse
   log.Level (10) << "FeatureSelection::SetUpForNextMajorStep" << endl;
 
 
-  if  (this->processingOrder == poHall)
+  if  (this->processingOrder == ProcessingOrders::Hall)
     SetUpForNextMajorStepHallOrder (binaryClasses, totalCpuTimeUsed);
 
-  else if  (this->processingOrder == poStandard)
+  else if  (this->processingOrder == ProcessingOrders::Standard)
     SetUpForNextMajorStepStandardOrder (binaryClasses, totalCpuTimeUsed);
 
   else
   {
     log.Level (-1) << endl << endl
-      << "FeatureSelection::SetUpForNextMajorStep    ***ERROR***    Inalid Processing Order Defined." << endl
+      << "FeatureSelection::SetUpForNextMajorStep    ***ERROR***    Invalid Processing Order Defined." << endl
       << endl;
     exit (-1);
   }
@@ -3421,10 +3424,9 @@ void  FeatureSelection::SetUpForNextMajorStep (BinaryClassListPtr&  binaryClasse
 
 
 /**
- @code
- This is called when a major step is cmpleted; and we want to set up for the next Major step.
- 1) Build the Configuration file using the results from the current MaorSetp applied to the prev configuraion file.
- 2) Set up for the next major step.
+ *This is called when a major step is completed; and we want to set up for the next Major step.
+ * -# Build the Configuration file using the results from the current MaorSetp applied to the prev configuration file.
+ * -# Set up for the next major step.
  */
 void  FeatureSelection::SetUpForNextMajorStepStandardOrder (BinaryClassListPtr&  binaryClasses,
                                                             double&              totalCpuTimeUsed
@@ -3437,29 +3439,29 @@ void  FeatureSelection::SetUpForNextMajorStepStandardOrder (BinaryClassListPtr& 
 
   switch  (majorStep)
   {
-  case  msMfsParmTuningPre:
+  case  MajorSteps::MfsParmTuningPre:
     {
-      log.Level (10) << "SetUpForNextMajorStepStandardOrder    'msMfsParmTuningPre'" << endl;
+      log.Level (10) << "SetUpForNextMajorStepStandardOrder    'MajorSteps::MfsParmTuningPre'" << endl;
       resultConfigFileName = configFileNameMfsTuned;
       BuildResultConfigFile (configFileNameSpecified, totalCpuTimeUsed, featureCriteria);
       delete  binaryClasses;  binaryClasses = NULL;
-      SetMajorStep (msMfsFeatureSelection);
+      SetMajorStep (MajorSteps::MfsFeatureSelection);
       binaryClasses  = CreateInitialBinaryClassList ();
       configFileName = resultConfigFileName;
     }
     break;
 
 
-  case  msMfsFeatureSelection:
+  case  MajorSteps::MfsFeatureSelection:
     {
-      log.Level (10) << "SetUpForNextMajorStepStandardOrder    'msMfsFeatureSelection'" << endl;
+      log.Level (10) << "SetUpForNextMajorStepStandardOrder    'MajorSteps::MfsFeatureSelection'" << endl;
       resultConfigFileName = configFileNameMfsTunedFeaturesSel;
       BuildResultConfigFile (configFileNameMfsTuned, totalCpuTimeUsed, featureCriteria);
-      SetMajorStep (msBfsFeatureSelection);
+      SetMajorStep (MajorSteps::BfsFeatureSelection);
       delete  binaryClasses;  binaryClasses = NULL;
       binaryClasses = CreateInitialBinaryClassList ();
 
-      // We want the next step to start with the configuration file from 'msMfsParmTuningPre'
+      // We want the next step to start with the configuration file from 'MajorSteps::MfsParmTuningPre'
       // This way we start with all features selected.
       configFileName = configFileNameMfsTuned;
       numJobsAtATime = 10;
@@ -3468,28 +3470,28 @@ void  FeatureSelection::SetUpForNextMajorStepStandardOrder (BinaryClassListPtr& 
     break;
 
 
-  case  msBfsFeatureSelection:
+  case  MajorSteps::BfsFeatureSelection:
     {
-      log.Level (10) << "SetUpForNextMajorStepStandardOrder    'msBfsFeatureSelection'" << endl;
+      log.Level (10) << "SetUpForNextMajorStepStandardOrder    'MajorSteps::BfsFeatureSelection'" << endl;
 
       resultConfigFileName = configFileNameBfsFeaturesSel;
       BuildResultConfigFile (configFileNameMfsTuned, totalCpuTimeUsed, featureCriteria);
 
       delete  binaryClasses;  binaryClasses = NULL;
-      SetMajorStep (msBfsParmTuningPost);
+      SetMajorStep (MajorSteps::BfsParmTuningPost);
       binaryClasses = CreateInitialBinaryClassList ();
       configFileName = resultConfigFileName;
     }
     break;
 
 
-  case  msBfsParmTuningPost:
+  case  MajorSteps::BfsParmTuningPost:
     { 
-      log.Level (10) << "SetUpForNextMajorStepStandardOrder    'msBfsParmTuningPost'" << endl;
+      log.Level (10) << "SetUpForNextMajorStepStandardOrder    'MajorSteps::BfsParmTuningPost'" << endl;
 
       resultConfigFileName = configFileNameBfsFeaturesSelTuned;
       BuildResultConfigFile (configFileNameBfsFeaturesSel, totalCpuTimeUsed, featureCriteria);
-      SetMajorStep (msGenerateFinalResults);
+      SetMajorStep (MajorSteps::GenerateFinalResults);
       delete  binaryClasses;
       binaryClasses  = CreateInitialBinaryClassList ();
       configFileName = resultConfigFileName;
@@ -3499,23 +3501,23 @@ void  FeatureSelection::SetUpForNextMajorStepStandardOrder (BinaryClassListPtr& 
     break;
 
 
-  case  msGenerateFinalResults:
+  case  MajorSteps::GenerateFinalResults:
     { 
-      log.Level (10) << "SetUpForNextMajorStepStandardOrder    'msGenerateFinalResults'" << endl;
+      log.Level (10) << "SetUpForNextMajorStepStandardOrder    'MajorSteps::GenerateFinalResults'" << endl;
       resultConfigFileName = configFileNameBfsFeaturesSelTuned;
-      // KAK 2010-07-11   I do not believe there is any reason to build a coniguration file at this point.
+      // KAK 2010-07-11   I do not believe there is any reason to build a configuration file at this point.
       //BuildResultConfigFile (totalCpuTimeUsed, featureCriteria, BinaryCombos);
       FinalReport ();
-      SetMajorStep (msDone);
+      SetMajorStep (MajorSteps::Done);
       numJobsAtATime  = 1;
       numProcPerCombo = 30;
     }
     break;
 
-  case  msGenerateBruitSvmSearch:
+  case  MajorSteps::GenerateBruitSvmSearch:
     { 
-      log.Level (10) << "SetUpForNextMajorStepStandardOrder    'msGenerateBruitSvmSearch'" << endl;
-      SetMajorStep (msDone);
+      log.Level (10) << "SetUpForNextMajorStepStandardOrder    'MajorSteps::GenerateBruitSvmSearch'" << endl;
+      SetMajorStep (MajorSteps::Done);
       numJobsAtATime  = 1;
       numProcPerCombo = 30;
     }
@@ -3539,25 +3541,25 @@ void  FeatureSelection::SetUpForNextMajorStepHallOrder (BinaryClassListPtr&  bin
 
   switch  (majorStep)
   {
-  case  msMfsFeatureSelection:
+  case  MajorSteps::MfsFeatureSelection:
     {
-      log.Level (10) << "SetUpForNextMajorStepHallOrder    'msMfsFeatureSelection'" << endl;
+      log.Level (10) << "SetUpForNextMajorStepHallOrder    'MajorSteps::MfsFeatureSelection'" << endl;
       resultConfigFileName = configFileNameMfsFeaturesSel;
       BuildResultConfigFile (configFileNameSpecified, totalCpuTimeUsed, featureCriteria);
       delete  binaryClasses;  binaryClasses = NULL;
-      SetMajorStep (msMfsParmTuningPost);
+      SetMajorStep (MajorSteps::MfsParmTuningPost);
       binaryClasses = CreateInitialBinaryClassList ();
       configFileName = resultConfigFileName;
     }
     break;
 
 
-  case  msMfsParmTuningPost:
+  case  MajorSteps::MfsParmTuningPost:
     { 
-      log.Level (10) << "SetUpForNextMajorStepHallOrder    'msMfsParmTuningPost'" << endl;
+      log.Level (10) << "SetUpForNextMajorStepHallOrder    'MajorSteps::MfsParmTuningPost'" << endl;
       resultConfigFileName = configFileNameMfsFeatureSelTuned;
       BuildResultConfigFile (configFileNameMfsFeaturesSel, totalCpuTimeUsed, featureCriteria);
-      SetMajorStep (msBfsParmTuningPre);
+      SetMajorStep (MajorSteps::BfsParmTuningPre);
       delete  binaryClasses;  binaryClasses = NULL;
       binaryClasses = CreateInitialBinaryClassList ();
 
@@ -3569,26 +3571,26 @@ void  FeatureSelection::SetUpForNextMajorStepHallOrder (BinaryClassListPtr&  bin
     break;
 
 
-  case  msBfsParmTuningPre:
+  case  MajorSteps::BfsParmTuningPre:
       {
-      log.Level (10) << "SetUpForNextMajorStepHallOrder    'msBfsParmTuningPre'" << endl;
+      log.Level (10) << "SetUpForNextMajorStepHallOrder    'MajorSteps::BfsParmTuningPre'" << endl;
 
       resultConfigFileName = configFileNameBfsTuned;
       BuildResultConfigFile (configFileNameSpecified, totalCpuTimeUsed, featureCriteria);
       delete  binaryClasses;  binaryClasses = NULL;
-      SetMajorStep (msBfsFeatureSelection);
+      SetMajorStep (MajorSteps::BfsFeatureSelection);
       binaryClasses = CreateInitialBinaryClassList ();
       configFileName = resultConfigFileName;
       }
     break;
 
 
-  case  msBfsFeatureSelection:
+  case  MajorSteps::BfsFeatureSelection:
     { 
-      log.Level (10) << "SetUpForNextMajorStepHallOrder    'msBfsFeatureSelection'" << endl;
+      log.Level (10) << "SetUpForNextMajorStepHallOrder    'MajorSteps::BfsFeatureSelection'" << endl;
       resultConfigFileName = configFileNameBfsTunedFeaturesSel;
       BuildResultConfigFile (configFileNameBfsTuned, totalCpuTimeUsed, featureCriteria);
-      SetMajorStep (msBfsParmTuningPost);
+      SetMajorStep (MajorSteps::BfsParmTuningPost);
       delete  binaryClasses;  binaryClasses = NULL;
       binaryClasses  = CreateInitialBinaryClassList ();
       configFileName = resultConfigFileName;
@@ -3599,12 +3601,12 @@ void  FeatureSelection::SetUpForNextMajorStepHallOrder (BinaryClassListPtr&  bin
 
 
 
-  case  msBfsParmTuningPost:
+  case  MajorSteps::BfsParmTuningPost:
     {
-      log.Level (10) << "SetUpForNextMajorStepHallOrder    'msBfsParmTuningPost'" << endl;
+      log.Level (10) << "SetUpForNextMajorStepHallOrder    'MajorSteps::BfsParmTuningPost'" << endl;
       resultConfigFileName = configFileNameBfsTunedFeaturesSelTuned;
       BuildResultConfigFile (configFileNameBfsTunedFeaturesSel, totalCpuTimeUsed, featureCriteria);
-      SetMajorStep (msGenerateFinalResults);
+      SetMajorStep (MajorSteps::GenerateFinalResults);
       delete  binaryClasses;  binaryClasses = NULL;
       binaryClasses  = CreateInitialBinaryClassList ();
       configFileName = resultConfigFileName;
@@ -3614,14 +3616,14 @@ void  FeatureSelection::SetUpForNextMajorStepHallOrder (BinaryClassListPtr&  bin
     break;
 
 
-  case  msGenerateFinalResults:
+  case  MajorSteps::GenerateFinalResults:
     { 
-      log.Level (10) << "SetUpForNextMajorStepHallOrder    'msGenerateFinalResults'" << endl;
+      log.Level (10) << "SetUpForNextMajorStepHallOrder    'MajorSteps::GenerateFinalResults'" << endl;
       resultConfigFileName = configFileNameBfsTunedFeaturesSelTuned;
-      // KAK 2010-07-11   I do not believe there is ant reason to build a coniguration file at this point.
+      // KAK 2010-07-11   I do not believe there is ant reason to build a configuration file at this point.
       //BuildResultConfigFile (totalCpuTimeUsed, featureCriteria, BinaryCombos);
       FinalReport ();
-      SetMajorStep (msDone);
+      SetMajorStep (MajorSteps::Done);
       numJobsAtATime  = 1;
       numProcPerCombo = 30;
     }
@@ -3680,7 +3682,7 @@ void  FeatureSelection::CheckForNextStep ()
   }
 
 
-  if  ((!quitRunning)  &&  (majorStep != msDone))
+  if  ((!quitRunning)  &&  (majorStep != MajorSteps::Done))
   {
     // Lets make sure our variables are set up for a new MajorStep.
     delete  config;  config = NULL;
@@ -3709,23 +3711,23 @@ void  FeatureSelection::CheckForNextStep ()
 
 void  FeatureSelection::Run ()
 {
-  while  ((majorStep != msDone)  &&  (!quitRunning))
+  while  ((majorStep != MajorSteps::Done)  &&  (!quitRunning))
   {
     log.Level (10) << "FeatureSelection::Run   Starting Step[" << MajorStepToStr (majorStep) << "]" << endl;
 
     ProcessorPtr  processor = GetNextBinaryClassComboToRun ();
-    while  ((processor)  &&  (!quitRunning)  &&  (majorStep != msDone))
+    while  ((processor)  &&  (!quitRunning)  &&  (majorStep != MajorSteps::Done))
     {
       processor->Run ();
 
-      if  (processor->Status () == fsDone)
-        ReduceProcessorCount (processor, cpDone);
+      if  (processor->Status () == ProcessorStatus::Done)
+        ReduceProcessorCount (processor, ClassPairStatus::Done);
 
-      else if  (processor->Status () == fsStarted)
-        ReduceProcessorCount (processor, cpStarted);
+      else if  (processor->Status () == ProcessorStatus::Started)
+        ReduceProcessorCount (processor, ClassPairStatus::Started);
 
       else 
-        ReduceProcessorCount (processor, cpNotStarted);
+        ReduceProcessorCount (processor, ClassPairStatus::NotStarted);
 
       delete  processor;  processor = NULL;
       if  (quitRunning)
@@ -3761,7 +3763,7 @@ void  FeatureSelection::Run ()
 
 void  FeatureSelection::BuildResultConfigFile (const KKStr&       prevConfigFileName,
                                                double&            totalCpuTimeUsed,
-                                               fcFeatureCriteria  featureCriteria
+                                               FeatureCriteriaType  featureCriteria
                                               )
 {
   log.Level (10) << "FeatureSelection::BuildResultConfigFile" << endl;
@@ -3783,13 +3785,14 @@ void  FeatureSelection::BuildResultConfigFile (const KKStr&       prevConfigFile
 
 
   delete  config;
-  config = new TrainingConfiguration2 (fileDesc, prevConfigFileName, log, false);
+  config = new TrainingConfiguration2 ();
+  config->Load (prevConfigFileName, false, log);
   if  (this->byBinaryClasses)
-    config->MachineType (BinaryCombos);
+    config->MachineType (SVM_MachineType::BinaryCombos);
   else
-    config->MachineType (OneVsOne);
+    config->MachineType (SVM_MachineType::OneVsOne);
 
-  if  ((majorStep == msMfsFeatureSelection)  &&   (processingOrder == poHall))
+  if  ((majorStep == MajorSteps::MfsFeatureSelection)  &&   (processingOrder == ProcessingOrders::Hall))
   {
     int  numOfFeatures = InitialFeatures ().NumSelFeatures ();
     config->C_Param (1.0);
@@ -3804,7 +3807,7 @@ void  FeatureSelection::BuildResultConfigFile (const KKStr&       prevConfigFile
 
     ProcessorPtr  processor = NULL;
 
-    if  (bc->ResultType () == frtNULL)
+    if  (bc->ResultType () == FinalResultType::Null)
     {
       // We are creating a process that will be doing searching.
       processor = new Processor (this, 
@@ -3814,8 +3817,8 @@ void  FeatureSelection::BuildResultConfigFile (const KKStr&       prevConfigFile
                                  searchType,
                                  bc->Class1 (), 
                                  bc->Class2 (), 
-                                 smBestCaseNext, 
-                                 fsDone
+                                 SearchMethod::BestCaseNext, 
+                                 ProcessorStatus::Done
                                 );
     }
 
@@ -3825,7 +3828,7 @@ void  FeatureSelection::BuildResultConfigFile (const KKStr&       prevConfigFile
                                  -1,
                                  bc,
                                  fileDesc,
-                                 fsDone
+                                 ProcessorStatus::Done
                                 );
     }
 
@@ -3833,7 +3836,7 @@ void  FeatureSelection::BuildResultConfigFile (const KKStr&       prevConfigFile
 
     FeatureNumList  bestFeatures (fileDesc);
 
-    if  (searchType == stFeatureSelectionSearch)
+    if  (searchType == SearchTypes::FeatureSelectionSearch)
     {
       bestFeatures = processor->SelectBestFeatures ();
       if  (processor->ByBinaryClasses ())
@@ -3856,7 +3859,7 @@ void  FeatureSelection::BuildResultConfigFile (const KKStr&       prevConfigFile
     }
 
 
-    else if  (searchType == stParameterSearch)
+    else if  (searchType == SearchTypes::ParameterSearch)
     {
       float   aParm     = 0;
       double  cParm     = 0.0;
@@ -3872,7 +3875,7 @@ void  FeatureSelection::BuildResultConfigFile (const KKStr&       prevConfigFile
 
         svm_parameter  parameters;
         
-        if  (modelParam->ModelParamType () == ModelParam::mptOldSVM)
+        if  (modelParam->ModelParamType () == ModelParam::ModelParamTypes::OldSVM)
         {
           svmParam = dynamic_cast<ModelParamOldSVMPtr> (modelParam)->SvmParameters ();
           if  (svmParam)
@@ -3971,7 +3974,7 @@ double  FeatureSelection::GetTotalCpuSecs (BinaryClassListPtr  binClasses,
 
     ProcessorPtr  processor = NULL;
 
-    if  (bc->ResultType () == frtNULL)
+    if  (bc->ResultType () == FinalResultType::Null)
     {
       // We are creating a process that will be doing searching.
       processor = new Processor (this, 
@@ -3981,8 +3984,8 @@ double  FeatureSelection::GetTotalCpuSecs (BinaryClassListPtr  binClasses,
                                  searchType,
                                  bc->Class1 (), 
                                  bc->Class2 (), 
-                                 smBestCaseNext, 
-                                 fsDone
+                                 SearchMethod::BestCaseNext, 
+                                 ProcessorStatus::Done
                                 );
     }
     else
@@ -3991,7 +3994,7 @@ double  FeatureSelection::GetTotalCpuSecs (BinaryClassListPtr  binClasses,
                                  -1,
                                  bc,
                                  fileDesc,
-                                 fsDone
+                                 ProcessorStatus::Done
                                 );
     }
 

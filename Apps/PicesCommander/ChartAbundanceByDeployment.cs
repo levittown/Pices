@@ -161,7 +161,7 @@ namespace PicesCommander
 
       mainWinConn = PicesDataBase.GetGlobalDatabaseManagerNewInstance (runLog);
 
-      configFileName = OSservices.AddSlash (PicesSipperVariables.PicesConfigurationDirectory ()) + "ChartAbundanceByDeployment.cfg";
+      configFileName = OSservices.AddSlash (PicesSipperVariables.ConfigurationDirectory ()) + "ChartAbundanceByDeployment.cfg";
 
       BuildCriteriaString ();
 

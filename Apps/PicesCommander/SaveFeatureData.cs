@@ -346,13 +346,13 @@ namespace PicesCommander
       {
         String classSampleDir = OSservices.AddSlash (sampleDir + pc.Name);
         OSservices.CreateDirectoryPath (classSampleDir);
-        PicesFeatureVectorList examplesThisClass = featureData.ExtractImagesForAGivenClass (pc);
+        PicesFeatureVectorList examplesThisClass = featureData.ExtractExamplesForAGivenClass (pc);
         examplesThisClass.RandomizeOrder ();
 
         int  numWritten = 0;
         foreach  (PicesFeatureVector  fv in examplesThisClass)
         {
-          String  imageRootName = OSservices.GetRootName (fv.ImageFileName);
+          String  imageRootName = OSservices.GetRootName (fv.ExampleFileName);
 
           PicesRaster  i = dbConn.ImageFullSizeFind (imageRootName);
           if  (i != null)

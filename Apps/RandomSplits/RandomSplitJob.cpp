@@ -1,37 +1,37 @@
 #include "FirstIncludes.h"
-
 #include <stdlib.h>
 #include <memory>
 #include <math.h>
-
 #include <map>
 #include <string>
 #include <iostream>
 #include <fstream>
 #include <vector>
-
 #include "MemoryDebug.h"
 #include "KKBaseTypes.h"
-
 using namespace std;
+
 
 #include "Compressor.h"
 #include "OSservices.h"
 #include "KKStr.h"
 using namespace KKB;
 
-#include "InstrumentDataFileManager.h"
-using namespace  SipperHardware;
 
 #include "ClassificationBiasMatrix.h"
 #include "CrossValidation.h"
-#include "DataBase.h"
 #include "FeatureFileIO.h"
-#include "FeatureFileIOPices.h"
 #include "FileDesc.h"
+#include "InstrumentDataFileManager.h"
 #include "MLClass.h"
+using namespace KKMLL;
+
+
+#include "DataBase.h"
+#include "FeatureFileIOPices.h"
 #include "ImageFeatures.h"
 using namespace MLL;
+
 
 #include "JobManager.h"
 using namespace  JobManagment;
@@ -249,11 +249,11 @@ void  RandomSplitJob::ProcessNode ()
 
   // Run 'numFolds' Fold on TrainData to derive Bias Adjustment Parameters.
   {
-    FeatureVectorListPtr  trainDataStratified = trainData->StratifyAmoungstClasses (numFolds);
+    FeatureVectorListPtr  trainDataStratified = trainData->StratifyAmoungstClasses (numFolds, log);
 
     bool  cancelFlag = false;
     CrossValidation  cv (Manager ()->Config (), trainDataStratified, Manager ()->MLClasses (), numFolds, false, trainData->FileDesc (), log, cancelFlag);
-    cv.RunCrossValidation ();
+    cv.RunCrossValidation (log);
     biasParms = new ClassificationBiasMatrix (*(cv.ConfussionMatrix ()), log);
 
     delete  trainDataStratified;
@@ -263,7 +263,7 @@ void  RandomSplitJob::ProcessNode ()
   {
     bool  cancelFlag = false;
     CrossValidation  cv (Manager ()->Config (), trainData, Manager ()->MLClasses (), numFolds, false, trainData->FileDesc (), log, cancelFlag);
-    cv.RunValidationOnly (testData, NULL);
+    cv.RunValidationOnly (testData, NULL, log);
 
     randomSplitsResults = new ConfusionMatrix2 (*cv.ConfussionMatrix ());
 

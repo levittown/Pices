@@ -19,9 +19,9 @@ typedef  ImageFeaturesList*  ImageFeaturesListPtr;
 
 #ifndef  _MLCLASS_
 class  MLClass;
-typedef  MLClass*  MLClassConstPtr;
-class  MLClassConstList;
-typedef  MLClassConstList*  MLClassConstListPtr;
+typedef  MLClass*  MLClassPtr;
+class  MLClassList;
+typedef  MLClassList*  MLClassListPtr;
 #endif
 
 
@@ -31,7 +31,14 @@ class  SpatialAnalysis:  public PicesApplication
 public:
   typedef  KKB::uint  uint;
 
-  typedef  enum  {NullStat, BQVStat, Davis92Stat, PQVStat, TTLQCStat}  StatType;
+  enum class  StatType  
+  {
+    Null,
+    BQV,
+    Davis92,
+    PQV,
+    TTLQC
+  };
 
   SpatialAnalysis();
 

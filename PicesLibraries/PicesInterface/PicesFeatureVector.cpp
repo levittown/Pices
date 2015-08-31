@@ -1,13 +1,9 @@
 #include "StdAfx.h"
 #include "FirstIncludes.h"
-
 #include <stdio.h>
 #include <math.h>
-
-
 #include <ctype.h>
 #include <time.h>
-
 #include <fstream>
 #include <iostream>
 #include <ostream>
@@ -24,17 +20,20 @@ using namespace System::Windows::Forms;
 #include "KKBaseTypes.h"
 #include "GoalKeeper.h"
 #include "OSservices.h"
-
+#include "Raster.h"
 using namespace KKB;
 
 
-#include "SipperVariables.h"
-using namespace  SipperHardware;
-
 #include "FileDesc.h"
 #include "MLClass.h"
+using namespace  KKMLL;
+
+
+#include "PicesVariables.h"
+using namespace  MLL;
+
+
 #include "FeatureFileIOPices.h"
-#include "Raster.h"
 using namespace  MLL;
 
 
@@ -42,9 +41,7 @@ using namespace  MLL;
 #include "PicesRaster.h"
 #include "PicesRunLog.h"
 #include "PicesMethods.h"
-
 #include "PicesFeatureVector.h"
-
 using namespace  PicesInterface;
 
 
@@ -86,7 +83,7 @@ namespace  PicesInterface
     if  (imageFileName != nullptr)
       r->FileName (PicesKKStr::SystemStringToKKStr (imageFileName));
 
-    features = new ImageFeatures (*r, mlClass->UnmanagedMLClass (), unMangedIntermediateImages);
+    features = new ImageFeatures (*r, mlClass->UnmanagedMLClass (), unMangedIntermediateImages, log->Log ());
 
     if  (unMangedIntermediateImages)
     {
@@ -96,9 +93,6 @@ namespace  PicesInterface
 
     GC::AddMemoryPressure (MemPreasPerFV);
   }
-
-
-
 
   PicesFeatureVector::PicesFeatureVector (System::Array^   raster,
                                           System::String^  imageFileName,
@@ -117,7 +111,7 @@ namespace  PicesInterface
     if  (imageFileName != nullptr)
       r->FileName (PicesKKStr::SystemStringToKKStr (imageFileName));
 
-    features = new ImageFeatures (*r, mlClass->UnmanagedMLClass ());
+    features = new ImageFeatures (*r, mlClass->UnmanagedMLClass (), NULL, log->Log ());
 
     delete  r;  r = NULL;
     GC::AddMemoryPressure (MemPreasPerFV);
@@ -156,7 +150,8 @@ namespace  PicesInterface
     features = new ImageFeatures (PicesKKStr::SystemStringToKKStr (_imageFileName),
                                   mlClass->UnmanagedMLClass (), 
                                   successful, 
-                                  unManagedIntermediateImages
+                                  unManagedIntermediateImages,
+                                  log->Log ()
                                  );
     GC::AddMemoryPressure (MemPreasPerFV);
 
@@ -269,12 +264,12 @@ namespace  PicesInterface
 
 
 
-  String^  PicesFeatureVector::ImageFileName::get ()  
+  String^  PicesFeatureVector::ExampleFileName::get ()  
   {
     if  (!features)
       return "";
 
-    return  PicesKKStr::KKStrToSystenStr (features->ImageFileName ());
+    return  PicesKKStr::KKStrToSystenStr (features->ExampleFileName ());
   }
 
 
@@ -335,12 +330,12 @@ namespace  PicesInterface
 
 
 
-  void  PicesFeatureVector::ImageFileName::set (String^ _imageFileName)
+  void  PicesFeatureVector::ExampleFileName::set (String^ _examleFileName)
   {
     if  (!features)
       return;
 
-    features->ImageFileName (PicesKKStr::SystemStringToKKStr (_imageFileName));
+    features->ExampleFileName (PicesKKStr::SystemStringToKKStr (_examleFileName));
   }
 
 
@@ -356,8 +351,6 @@ namespace  PicesInterface
 
 
 
-
-
   void  PicesFeatureVector::Depth::set (float _depth)
   {
     if  (features)
@@ -365,8 +358,6 @@ namespace  PicesInterface
       features->Depth (_depth);
     }
   }
-
-
 
 
 
@@ -447,7 +438,7 @@ namespace  PicesInterface
     uint   scanLineNum;
     uint   scanColNum;
 
-    SipperVariables::ParseImageFileName (fullFileName, sipperFileName, scanLineNum, scanColNum);
+    PicesVariables::ParseImageFileName (fullFileName, sipperFileName, scanLineNum, scanColNum);
 
 
     System::String^ _sipperFileName = PicesKKStr::KKStrToSystenStr (sipperFileName);
@@ -471,7 +462,7 @@ namespace  PicesInterface
     uint   scanLine;
     uint   scanCol;
 
-    SipperVariables::ParseImageFileName (fullFileName, sipperFileName, scanLine, scanCol);
+    PicesVariables::ParseImageFileName (fullFileName, sipperFileName, scanLine, scanCol);
 
     _sipperFileName = PicesKKStr::KKStrToSystenStr (sipperFileName);
     _scanLine = scanLine;

@@ -3,8 +3,10 @@
 
 #include "Raster.h"
 #include "KKStr.h"
-#include "MLLTypes.h"
+
 #include "MLClass.h"
+
+#include "MLLTypes.h"
 #include "ImageFeatures.h"
 #include "SizeDistribution.h"
 
@@ -16,7 +18,7 @@ namespace  MLL
   public:
     class  ManagedClass;
     typedef  ManagedClass*  ManagedClassPtr;
-    typedef  map<MLClassConstPtr,ManagedClassPtr>  ManagedClassList;
+    typedef  map<MLClassPtr     ,ManagedClassPtr>  ManagedClassList;
     typedef  ManagedClassList*  ManagedClassListPtr;
 
 
@@ -33,7 +35,7 @@ namespace  MLL
     ~SipperExtractionImageManager ();
 
     void  AddImage (const KKStr&     fileName,
-                    MLClassConstPtr  predClass,
+                    MLClassPtr       predClass,
                     kkint32          size,
                     float            depth,
                     ImageFeaturesPtr example,
@@ -61,7 +63,7 @@ namespace  MLL
 
 
   private:
-    ManagedClassPtr  ManagedClassLookUp (MLClassConstPtr  mlClass);
+    ManagedClassPtr  ManagedClassLookUp (MLClassPtr       mlClass);
 
     ImageFeaturesListPtr  allExamples;
     bool                  countOnly;

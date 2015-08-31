@@ -1,5 +1,4 @@
 #include "FirstIncludes.h"
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
@@ -8,14 +7,11 @@
 #include <fstream>
 #include <map>
 #include <vector>
-
 #ifdef  WIN32
 #include <ostream>
 #include <windows.h>
 #endif
-
 #include "MemoryDebug.h"
-
 using namespace  std;
 
 
@@ -24,15 +20,18 @@ using namespace  std;
 #include "KKStr.h"
 using namespace KKB;
 
-#include "InstrumentDataFileManager.h"
-using namespace SipperHardware;
 
 #include "Classifier2.h"
-#include "DataBase.h"
 #include "FeatureFileIOPices.h"
 #include "MLClass.h"
-#include "SipperFile.h"
 #include "TrainingProcess2.h"
+using namespace KKMLL;
+
+
+#include "DataBase.h"
+#include "InstrumentDataFileManager.h"
+#include "SipperFile.h"
+#include "PicesTrainingConfiguration.h"
 using namespace MLL;
 
 
@@ -134,7 +133,7 @@ void  Test ()
 {
   RunLog   runLog ("c:\\Temp\\TestTrainingProcess.txt");
   KKStr    configFileName = "etp_hierarchy.cfg";
-  FileDescPtr  fd = FeatureFileIOPices::NewPlanktonFile (runLog);
+  FileDescPtr  fd = FeatureFileIOPices::NewPlanktonFile ();
   
   InstrumentDataFileManager::InitializePush ();
 
@@ -143,18 +142,15 @@ void  Test ()
   KKStrPtr  statusMsg  = new KKStr ();
 
 
-  TrainingProcess2Ptr  trainer = 
-              new TrainingProcess2 (configFileName, 
-                                   fd, 
-                                   runLog, 
-                                   false,         // false = Features are not Already Normalized
-                                   *cancelFlag, 
-                                   *statusMsg
-                                  );
+  PicesTrainingConfigurationPtr  config = new PicesTrainingConfiguration ();
+  config->Load (configFileName, true, runLog);
+
+  TrainingProcess2Ptr  trainer 
+      = TrainingProcess2::CreateTrainingProcess (config, true, TrainingProcess2::WhenToRebuild::NotUpToDate, true, *cancelFlag, runLog);
   delete  trainer;
+  trainer = NULL;
 
 }
-
 
 
 #include "InstrumentData.h"

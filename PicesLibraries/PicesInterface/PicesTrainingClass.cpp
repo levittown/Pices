@@ -16,15 +16,14 @@ using namespace std;
 
 
 #include "MemoryDebug.h"
-
 #include "KKBaseTypes.h"
 #include "GoalKeeper.h"
-
 #include "OSservices.h"
 using namespace  KKB;
 
+
 #include "TrainingClass.h"
-using namespace  MLL;
+using namespace  KKMLL;
 
 #include "PicesTrainingClass.h"
 #include "PicesClassList.h"
@@ -43,11 +42,16 @@ PicesTrainingClass::PicesTrainingClass (PicesClass^  _class,
                                         String^      _directory
                                        )
 {
-  MLClassConstList  classes;
+  MLClassList  classes;
 
-  trainingClass = new TrainingClass (PicesKKStr::SystemStringToKKStr (_directory), 
+  VectorKKStr  directories;
+  directories.push_back (PicesKKStr::SystemStringToKKStr (_directory));
+
+  trainingClass = new TrainingClass (directories,
                                      PicesKKStr::SystemStringToKKStr (_class->Name),
-                                     1.0f,
+                                     1.0f,     // WeightFactor
+                                     1.0f,     // CountFactor
+                                     NULL,     // Sub-Classifier
                                      classes
                                     );
 }
@@ -76,7 +80,7 @@ String^  PicesTrainingClass::Directory::get ()
   if (trainingClass == NULL)
     return  gcnew String ("");
 
-  return  PicesKKStr::KKStrToSystenStr (trainingClass->Directory ());
+  return  PicesKKStr::KKStrToSystenStr (trainingClass->Directory (0));
 }
 
 
@@ -84,7 +88,7 @@ String^  PicesTrainingClass::Directory::get ()
 
 void  PicesTrainingClass::Directory::set (String^  _directory)
 {
-  trainingClass->Directory (PicesKKStr::SystemStringToKKStr (_directory));
+  trainingClass->Directory (0, PicesKKStr::SystemStringToKKStr (_directory));
 }
 
 
@@ -106,7 +110,7 @@ String^   PicesTrainingClass::ExpandedDirectory (String^  rootDir)
 {
   if  (rootDir == nullptr)
     rootDir = String::Empty;
-  return  PicesKKStr::KKStrToSystenStr (trainingClass->ExpandedDirectory (PicesKKStr::SystemStringToKKStr (rootDir)));
+  return  PicesKKStr::KKStrToSystenStr (trainingClass->ExpandedDirectory (PicesKKStr::SystemStringToKKStr (rootDir), 0));
 }  /* ExpandedDirectory */
 
 

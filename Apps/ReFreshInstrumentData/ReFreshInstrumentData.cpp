@@ -1,5 +1,4 @@
 #include "FirstIncludes.h"
-
 #include <stdlib.h>
 #include <memory>
 #include <math.h>
@@ -11,18 +10,17 @@
 #include "MemoryDebug.h"
 using namespace std;
 
+
 #include "KKBaseTypes.h"
 #include "Compressor.h"
 #include "OSservices.h"
 #include "KKStr.h"
 using namespace KKB;
 
-#include "SipperFile.h"
-#include "SipperVariables.h"
-using namespace SipperHardware;
-
 
 #include "DataBase.h"
+#include "SipperFile.h"
+#include "PicesVariables.h"
 using namespace MLL;
 
 
@@ -137,7 +135,7 @@ void   ReFreshInstrumentData::Main ()
 
   DateTime  runDate = osGetLocalDateTime ();
 
-  KKStr reportFileDir = osAddSlash (SipperVariables::PicesReportDir ()) + "ReFreshInstrumentData";
+  KKStr reportFileDir = osAddSlash (PicesVariables::ReportDir ()) + "ReFreshInstrumentData";
   osCreateDirectoryPath (reportFileDir);
 
   reportFileName = osAddSlash (reportFileDir) + "ReFreshInstrumentData";

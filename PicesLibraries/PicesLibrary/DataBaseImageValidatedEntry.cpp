@@ -8,7 +8,6 @@
 #include <fstream>
 #include <vector>
 #include <map>
-
 #include "MemoryDebug.h"
 
 using namespace std;
@@ -19,6 +18,7 @@ using namespace std;
 using namespace KKB;
 
 #include "MLClass.h"
+using namespace  KKMLL;
 
 #include "DataBaseImageValidatedEntry.h"
 using namespace  MLL;
@@ -26,7 +26,7 @@ using namespace  MLL;
 
 DataBaseImageValidatedEntry::DataBaseImageValidatedEntry (const KKStr&     _imageFileName,
                                                           PointListPtr     _sizeCoordinates,
-                                                          MLClassConstPtr  _validatedClass
+                                                          MLClassPtr       _validatedClass
                                                          ):
     imageFileName   (_imageFileName),
     sizeCoordinates (_sizeCoordinates),
@@ -38,7 +38,7 @@ DataBaseImageValidatedEntry::DataBaseImageValidatedEntry (const KKStr&     _imag
 
 DataBaseImageValidatedEntry::DataBaseImageValidatedEntry (const KKStr&     _imageFileName,
                                                           const KKStr&     _sizeCoordinatesDelStr,
-                                                          MLClassConstPtr  _validatedClass
+                                                          MLClassPtr       _validatedClass
                                                          ):
     imageFileName   (_imageFileName),
     sizeCoordinates (NULL),

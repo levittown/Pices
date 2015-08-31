@@ -182,7 +182,7 @@ namespace PicesCommander
 
       mainWinConn = PicesDataBase.GetGlobalDatabaseManagerNewInstance (runLog);
 
-      configFileName = OSservices.AddSlash (PicesSipperVariables.PicesConfigurationDirectory ()) + "ChartDistribution.cfg";
+      configFileName = OSservices.AddSlash (PicesSipperVariables.ConfigurationDirectory ()) + "ChartDistribution.cfg";
 
       InitializeComponent ();
     }

@@ -17,6 +17,7 @@ namespace PicesCommander
 #if DEBUG
       PicesMethods.StartMemoryLeakDetection ();
 #endif
+      PicesSipperVariables.InitializeEnvironment ();
       PicesDataBase.Initialization ();
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);

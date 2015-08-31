@@ -9,10 +9,9 @@ using namespace System::IO;
 
 //using namespace PicesCSharpClasses;
 
-#include  "PicesGoalKeeper.h"
-#include  "MLClass.h"
-#include  "MLClassConstList.h"
-#include  "PicesClass.h"
+#include "PicesGoalKeeper.h"
+#include "MLClass.h"
+#include "PicesClass.h"
 
 
 namespace PicesInterface 
@@ -29,7 +28,7 @@ namespace PicesInterface
     PicesClassList ();
     PicesClassList (String^  _directory);
     PicesClassList (PicesClassList^  _classes);
-    PicesClassList (const MLClassConstListPtr  _classes);  /**< Does NOT take ownership of '_classes' */
+    PicesClassList (const MLClassListPtr  _classes);  /**< Does NOT take ownership of '_classes' */
 
   protected:
     !PicesClassList ();
@@ -56,18 +55,18 @@ namespace PicesInterface
     PicesClassList^   ExtractListOfClassesForAGivenHierarchialLevel (uint level);
 
     /**
-     * Returns list of classes hat ar ein this container that have the 'Summarize' flag set to true;  these are 
-     * classes that need to have a summary collumn printed in te classification report for them selevs and any 
-     * decendents they have.  Example if the 'Crustacea_Copepod' class has this field then there will be a 
+     * Returns list of classes that are in this container that have the 'Summarize' flag set to true;  these are 
+     * classes that need to have a summary column printed in the classification report for themselves and any 
+     * descendants they have.  Example if the 'Crustacea_Copepod' class has this field then there will be a 
      * column in the report that sums up all the Crustacea_Copepod's and their children.
      */
     PicesClassList^   ExtractSummarizeClasses ();
 
 
     /**
-     * Will generate an array of 2 String's.  Each String will represent a seperate line to be 
-     * uses as a Class name Header.  Classes will be seperated by the tab('\t') character.
-     * The underscore('_') character in the Class name wil be used to deliminate what goes 
+     * Will generate an array of 2 String's.  Each String will represent a separate line to be 
+     * uses as a Class name Header.  Classes will be separated by the "tab('\t')" character.
+     * The underscore('_') character in the Class name will be used to deliminate what goes 
      * on which line.  Ex:  The class name "Crustacean_Copepod_Oncea"  will have "Crustacean" 
      * on the 1st line and "Copepod-Oncea" on the second line.
      */
@@ -75,9 +74,9 @@ namespace PicesInterface
 
 
     /**
-     * Will generate an array of 3 String's.  Each String will represent a seperate line to be 
-     * uses as a Class name Header.  Classes will be seperated by the tab('\t') character.
-     * The underscore('_') character in the Class name wil be used to deliminate what goes 
+     * Will generate an array of 3 String's.  Each String will represent a separate line to be 
+     * uses as a Class name Header.  Classes will be separated by the "tab('\t')" character.
+     * The underscore('_') character in the Class name will be used to deliminate what goes 
      * on which line.  Ex:  The class name "Crustacean_Copepod_Oncea"  will have "Crustacean" 
      * on the 1st line, "Copepod" on the second line, and "Oncea" on the third line.
      */
@@ -89,10 +88,10 @@ namespace PicesInterface
 
     
     /**
-     * Usinge the "_name" parameter will search the global ClassList(allClassesInUniverse)
-     * for an existing instance of 'PicesClass' that has the same name.  If one is found
-     * that is what is retuned to the caller; otherwise a new intance is created and returned 
-     * to the caller.  This new instance will also be added to 'allClassesInUniverse'.
+     * Using the "_name" parameter will search the global ClassList(allClassesInUniverse)
+     * for an existing instance of 'PicesClass' that has the same name. If one is found
+     * that is what is returned to the caller; otherwise a new instance is created and returned 
+     * to the caller. This new instance will also be added to 'allClassesInUniverse'.
      */
     static  PicesClass^  GetUniqueClass (String^  _name,
                                          String^  _parentName
@@ -103,7 +102,7 @@ namespace PicesInterface
      * Will locate a PicesClass instance that has the same unmanaged mlClass reference.
      * if none exists then will create a new one and add to 'allClassesInUniverse'.
      */
-    static  PicesClass^  GetUniqueClass (MLClassConstPtr  mlClass);  
+    static  PicesClass^  GetUniqueClass (MLClassPtr  mlClass);  
 
     static  PicesClass^  GetUnKnownClassStatic ();
 
@@ -119,7 +118,7 @@ namespace PicesInterface
 
     PicesClass^  LookUpByName (String^  className);
 
-    PicesClass^  LookUpByUnmanagedClass (MLClassConstPtr  unmanagedClass);
+    PicesClass^  LookUpByUnmanagedClass (MLClassPtr  unmanagedClass);
 
     int          LookUpIndex (PicesClass^ c);
 
@@ -127,8 +126,8 @@ namespace PicesInterface
 
     void         SortByName ();
 
-    /**@brief  Constructs a unmanaged instance of 'MLClassList' that caller wil own and be responsable for deleting. */
-    MLClassConstListPtr  ToMLClassConstList ();
+    /**@brief  Constructs a unmanaged instance of 'MLClassList' that caller will own and be responsible for deleting. */
+    MLClassListPtr  ToMLClassConstList ();
 
 
 
@@ -155,24 +154,24 @@ namespace PicesInterface
 
 
     //*********************************************************************************
-    //*  The following structuures support the Concept of only one instance of a      *
+    //*  The following structures support the Concept of only one instance of a       *
     //*  'PicesClass' object for the same name will be created.  A global list of     *
-    //*  already existinmg instances will be maintained by 'allClassesInUniverse'.    *
-    //*  The ability to locate an existing instance quickly will be acomplised by     *
+    //*  already existing instances will be maintained by 'allClassesInUniverse'.     *
+    //*  The ability to locate an existing instance quickly will be accomplished by   *
     //*  'allClassesInUniverseUnManagedIndex' and 'allClassesInUniverseNameIndex'.    *
     //*                                                                               *
     //*********************************************************************************
     ref  class  Node
     {
     public:
-      Node (MLClassConstPtr  _unmanagedClass,
-            PicesClass^         _managedClass
+      Node (MLClassPtr   _unmanagedClass,
+            PicesClass^  _managedClass
            );
 
-      MLClassConstPtr   unmanagedClass;
-      PicesClass^          managedClass;
-      Node^                left;
-      Node^                right;
+      MLClassPtr   unmanagedClass;
+      PicesClass^  managedClass;
+      Node^        left;
+      Node^        right;
     };  /* Node */
   
 
@@ -182,11 +181,11 @@ namespace PicesInterface
       ManagedClassLocator  ();
       Node^  root;
 
-      bool  Add (MLClassConstPtr  unmanagedClass,
-                 PicesClass^         managedClass
+      bool  Add (MLClassPtr   unmanagedClass,
+                 PicesClass^  managedClass
                 );
 
-      PicesClass^   LookUp (MLClassConstPtr  unmanagedClass);
+      PicesClass^   LookUp (MLClassPtr  unmanagedClass);
     };  /* ManagedClassLocator */
 
 

@@ -1,12 +1,10 @@
 #include "FirstIncludes.h"
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <fstream>
 #include <iostream>
 #include <map>
 #include <vector>
-
 #ifdef  WIN32
 #include <io.h>
 #include <windows.h>
@@ -14,24 +12,21 @@
 //#include  <sys/loadavg.h>
 #include <unistd.h>
 #endif
-
-
 #include  "MemoryDebug.h"
-
 using namespace std;
 
 
 #include "KKBaseTypes.h"
 #include "KKQueue.h"
+#include "KKStr.h"
 #include "OSservices.h"
 #include "RunLog.h"
 #include "StatisticalFunctions.h"
-#include "KKStr.h"
 using namespace KKB;
 
 
 #include "MLClass.h"
-using namespace MLL;
+using namespace KKMLL;
 
 #include "AccByFeatureSel.h"
 #include "BinaryJob.h"
@@ -207,8 +202,8 @@ FeatureNumList   FeatureImpact::FeatureThatDontHurt ()
 
 
 void  FeatureImpact::UpdateAccByFeatureSelList (AccByFeatureSelListPtr  accByFeatureSelList,
-                                                MLClassConstPtr      class1,
-                                                MLClassConstPtr      class2
+                                                MLClassPtr      class1,
+                                                MLClassPtr      class2
                                                 )
 {
   if  (!accByFeatureSelList)

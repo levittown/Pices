@@ -25,6 +25,9 @@ using namespace KKB;
 #include "MLClass.h"
 #include "TrainingConfiguration2.h"
 #include "TrainingProcess2.h"
+using namespace  KKMLL;
+
+#include "PicesTrainingConfiguration.h"
 using namespace MLL;
 
 
@@ -75,12 +78,12 @@ void  SetThreadName (DWORD        dwThreadID,
 
 TrainTestThread::TrainTestThread (const KKStr&                        _desc,
                                   AbundanceCorrectionStatsBuilderPtr  _parent,
-                                  TrainingConfiguration2Ptr           _config,           /**< Will NOT  take ownership.       */
-                                  MLClassConstListPtr              _allClasses,
+                                  PicesTrainingConfigurationPtr       _config,           /**< Will NOT  take ownership.       */
+                                  MLClassListPtr                      _allClasses,
                                   FeatureVectorListPtr                _trainData,        /**< Will take ownship of this list. */
-                                  MLClassConstListPtr              _trainDataClasses,
+                                  MLClassListPtr                      _trainDataClasses,
                                   FeatureVectorListPtr                _testData,         /**< Will take ownship of this list. */
-                                  MLClassConstPtr                  _otherClass,
+                                  MLClassPtr                          _otherClass,
                                   const KKStr&                        _threadName,
                                   MsgQueuePtr                         _msgQueue,
                                   RunLogPtr                           _runLog
@@ -96,7 +99,7 @@ TrainTestThread::TrainTestThread (const KKStr&                        _desc,
    otherClass         (_otherClass),
    parent             (_parent),
    runLog             (_runLog),
-   status             (tsNotStarted),
+   status             (NotStarted),
    terminateFlag      (false),
    testData           (_testData),
    threadName         (_threadName),
@@ -176,9 +179,9 @@ extern "C"
   unsigned int ThreadStartCallBack (void* param) 
   {
 	  TrainTestThreadPtr  tp = (TrainTestThreadPtr)param;
-    tp->Status (tsStarting);
+    tp->Status (Starting);
 	  tp->Run ();
-    tp->Status (tsStopped);
+    tp->Status (Stopped);
 	  return 0;
   }
 }
@@ -247,47 +250,37 @@ void  TrainTestThread::SetPriority (int tp)
 
 void  TrainTestThread::Run () 
 {
-  Status (tsStarting);
+  Status (Starting);
 
   bool  successful = false;
 
-  Status (tsRunning);
+  Status (Running);
 
   TrainingProcess2Ptr  tp = NULL;
 
   {
-    KKStr  statusMsg;
-
-    tp = new TrainingProcess2 (config, 
-                               trainData,
-                               NULL, 
-                               trainData->FileDesc (), 
-                               *runLog,
-                               true,                     /**<  'true' = fource Rebuild */
-                               cancelFlag, 
-                               statusMsg
-                              );
+    tp = TrainingProcess2::CreateTrainingProcessFromTrainingExamples 
+         (config,
+          trainData,
+          false,    //  false = Do NOT take ownership of training examples.
+          false,    //  false = NOT  "featuresAlreadyNormalized"
+          cancelFlag,
+          *runLog
+         );
 
     if  (tp->Abort ())
-    {
-      msgQueue->AddMsg (threadName + " Construnction of training model failed.");
-    }
-    else
-    {
-      msgQueue->AddMsg (threadName + " Training Classifier.");
-      tp->CreateModelsFromTrainingData ();
-    }
+      msgQueue->AddMsg (threadName + " Construction of training model failed.");
   }
 
   if  (tp->Abort ())
   {
     AddMsg (threadName + "  TrainTestThread::Run     building of 'TrainingProcess2' failed.");
     Crashed (true);
-    Status (tsStopping);
+    Status (Stopping);
     return;
   }
 
-  Classifier2Ptr  classifier = new Classifier2(tp, *runLog);
+  Classifier2Ptr  classifier = new Classifier2 (tp, *runLog);
 
   abundanceCorMatrix = new AbundanceCorrectionMatrix (*trainDataClasses, otherClass, *runLog);
   confusionMatrix    = new ConfusionMatrix2 (*allClasses);
@@ -300,47 +293,50 @@ void  TrainTestThread::Run ()
 
     FeatureVectorPtr    dupImage = new FeatureVector (*fv); 
 
-    MLClassConstPtr  knownClass = dupImage->MLClass ();
+    MLClassPtr  knownClass = dupImage->MLClass ();
 
-    MLClassConstPtr  predClass1      = NULL;
-    MLClassConstPtr  predClass2      = NULL;
-    kkint32             predClass1Votes = 0;
-    kkint32             predClass2Votes = 0;
-    double              knownClassProb  = 0.0;
-    double              predClass1Prob  = 0.0; 
-    double              predClass2Prob  = 0.0;
-    kkint32             numOfWinners    = 0;
-    double              breakTie        = 0.0;
-    double              compact         = 0.0;
+    MLClassPtr  predClass1      = NULL;
+    MLClassPtr  predClass2      = NULL;
+    kkint32     predClass1Votes = 0;
+    kkint32     predClass2Votes = 0;
+    double      knownClassProb  = 0.0;
+    double      predClass1Prob  = 0.0; 
+    double      predClass2Prob  = 0.0;
+    kkint32     numOfWinners    = 0;
+    double      breakTie        = 0.0;
 
-    classifier->ClassifyAImage (*dupImage, 
+    classifier->ClassifyAExample (*dupImage, 
                                 predClass1,      predClass2, 
                                 predClass1Votes, predClass2Votes, 
                                 knownClassProb, 
                                 predClass1Prob,  predClass2Prob, 
-                                numOfWinners,    breakTie, 
-                                compact
+                                numOfWinners,    breakTie
                                );
 
-    MLClassConstPtr class2UseForAbundanceMatrix = predClass1;
+    MLClassPtr class2UseForAbundanceMatrix = predClass1;
     if  (trainDataClasses->PtrToIdx (class2UseForAbundanceMatrix) < 0)
       class2UseForAbundanceMatrix = otherClass;
 
     abundanceCorMatrix->Prediction (knownClass, class2UseForAbundanceMatrix, *runLog);
 
-    confusionMatrix->Increment (knownClass, predClass1, dupImage->OrigSize (), predClass1Prob, *runLog);
+    confusionMatrix->Increment (knownClass,
+                                predClass1,
+                                dupImage->OrigSize (),
+                                predClass1Prob,
+                                *runLog
+                               );
     delete  dupImage;
     dupImage = NULL;
   }
 
-  Status (tsStopping);
+  Status (Stopping);
 
   delete  classifier;   classifier = NULL;
   delete  tp;           tp         = NULL;
 
   AddMsg ("Run " + ThreadName () + " done.");
 
-  Status (tsStopped);
+  Status (Stopped);
 }  /* Run */
 
 

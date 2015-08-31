@@ -32,8 +32,7 @@ using namespace  KKB;
 
 
 #include "MLClass.h"
-#include "MLClassConstList.h"
-using namespace  MLL;
+using namespace  KKMLL;
 
 
 #include "BinaryJobList.h"
@@ -95,7 +94,7 @@ FileDescPtr   BinaryJobList::FileDesc ()
 
 void  BinaryJobList::Load ()
 {
-  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+  ErrorCodes  result = ErrorCodes::NoError;
 
   FILE*  in = osFOPEN (fileName.Str (), "r");
   if  (!in)
@@ -233,7 +232,7 @@ BinaryJobPtr  BinaryJobList::LocateOpenJob ()
   for  (x = 0;  x < QueueSize (); x++)
   {
     BinaryJobPtr  j = IdxToPtr (x);
-    if  (j->Status () == bjOpen)
+    if  (j->Status () == BinaryJobStatus::Open)
       return  j;
   }
 
@@ -442,7 +441,7 @@ bool  BinaryJobList::AreAllJobsDone ()
   for  (x = 0;  x < QueueSize (); x++)
   {
     BinaryJobPtr  j = IdxToPtr (x);
-    if  ((j->Status () != bjDone)  &&  (j->Status () != bjExpanded))
+    if  ((j->Status () != BinaryJobStatus::Done)  &&  (j->Status () != BinaryJobStatus::Expanded))
       return false;
   }
 
@@ -469,7 +468,7 @@ BinaryJobPtr  BinaryJobList::SelectOneDoneJobAtRandomFromTop10Percent ()
     int  idx = rand () % limit;
 
     BinaryJobPtr  j = IdxToPtr (idx);
-    if  (j->Status () == bjDone)
+    if  (j->Status () == BinaryJobStatus::Done)
       return  j;
     numOfTries++;
   }
@@ -545,7 +544,7 @@ public:
    {
      return   JobAcuracyComparison (j1->Grade (), j1->Features (), j1->ProcessingTime (), j1->RandomNum (),
                                     j2->Grade (), j2->Features (), j2->ProcessingTime (), j2->RandomNum (),
-                                    true  // true = We Prefer small number of featuers given equal accuracy.
+                                    true  // true = We Prefer small number of features given equal accuracy.
                                    );
    }
 };  /* GradeComparison */
@@ -969,7 +968,7 @@ int   BinaryJobList::SmallestNumberOfFeaturesExpanded ()  const
   for  (idx = begin ();  idx != end ();  idx++)
   {
     const BinaryJobPtr  j = *idx;
-    if  (j->Status () == bjExpanded)
+    if  (j->Status () == BinaryJobStatus::Expanded)
       smallestNumberOfFeaturesExpanded = Min (smallestNumberOfFeaturesExpanded, j->Features ().NumSelFeatures ());
   }
 
@@ -981,7 +980,7 @@ int   BinaryJobList::SmallestNumberOfFeaturesExpanded ()  const
 
 FeatureNumList  BinaryJobList::SelectFeaturesByMostFeaturesWithHighestGrade ()  const
 {
-  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+  ErrorCodes  result = ErrorCodes::NoError;
 
   FeatureNumList  features (processor->FileDesc ());
 
@@ -1033,10 +1032,10 @@ void   BinaryJobList::PushOnBack (BinaryJobPtr  j)
     << endl
     << endl;
 
-  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+  ErrorCodes  result = ErrorCodes::NoError;
 
   PushOnBack (j, result);
-  if  (result != NoError)
+  if  (result != ErrorCodes::NoError)
   {
     log.Level (-1) << endl 
       << "BinaryJobList::PushOnBack   ***ERROR***   Duplicate Job    JobId [" << j->JobId () << "]." << endl
@@ -1050,7 +1049,7 @@ void   BinaryJobList::PushOnBack (BinaryJobPtr  j,
                                   ErrorCodes&   result
                                  )
 {
-  result = NoError;
+  result = ErrorCodes::NoError;
 
   jobIdLookUpTableIdx = jobIdLookUpTable.find (j->JobId ());
   if  (jobIdLookUpTableIdx != jobIdLookUpTable.end ())
@@ -1065,11 +1064,11 @@ void   BinaryJobList::PushOnBack (BinaryJobPtr  j,
                    << "    Job Being Added :" << j->ToStatusStr () << endl
                    << endl
                    << endl;
-    result = DuplicateJobId;
+    result = ErrorCodes::DuplicateJobId;
     return;
   }
 
-  if  (j->JobType () != jtRandomSplit)
+  if  (j->JobType () != JobTypes::RandomSplit)
   {
     // Non RandomSplit jobs are required to have unique parameters.
     ParmsKey key (j);
@@ -1086,7 +1085,7 @@ void   BinaryJobList::PushOnBack (BinaryJobPtr  j,
                      << "        New      Job :" << j->ToStatusStr  () << endl
                      << endl
                      << endl;
-      result = DuplicateParameters;
+      result = ErrorCodes::DuplicateParameters;
       return;
     }
   }
@@ -1094,7 +1093,7 @@ void   BinaryJobList::PushOnBack (BinaryJobPtr  j,
   KKQueue<BinaryJob>::PushOnBack (j);
   jobIdLookUpTable.insert (JobIdLookUpTablePair (j->JobId (), j));
 
-  if  (j->JobType () != jtRandomSplit)
+  if  (j->JobType () != JobTypes::RandomSplit)
     parmsLookUpTable.insert (ParmsLookUpTablePair (j, j));
 
   return;
@@ -1107,7 +1106,7 @@ void   BinaryJobList::PushOnBack (BinaryJobPtr  j,
 //  lastFilePostion to determine where to read from.
 void   BinaryJobList::ReFresh ()
 {
-  ErrorCodes  result = NoError;
+  ErrorCodes  result = ErrorCodes::NoError;
 
   FILE*  in = osFOPEN (fileName.Str (), "r");
   if  (!in)
@@ -1162,7 +1161,7 @@ bool  BinaryJobList::JobsStillRunning ()
   for  (idx = begin ();  idx != end ();  idx++)
   {
     BinaryJobPtr  j = *idx;
-    if  (j->Status () == bjStarted)
+    if  (j->Status () == BinaryJobStatus::Started)
       return true;
   }
   return  false;
@@ -1173,7 +1172,7 @@ bool  BinaryJobList::JobsStillRunning ()
 
 BinaryJobListPtr  BinaryJobList::ExtractHighestGrade (int  numToExtract)
 {
-  ErrorCodes  result = NoError;
+  ErrorCodes  result = ErrorCodes::NoError;
   BinaryJobListPtr  highestGradeJobs = new BinaryJobList (processor);
   highestGradeJobs->Owner (false);
 
@@ -1187,10 +1186,10 @@ BinaryJobListPtr  BinaryJobList::ExtractHighestGrade (int  numToExtract)
   {
     BinaryJobPtr  j = *idx;
     highestGradeJobs->PushOnBack (j, result);
-    if  (result != NoError)
+    if  (result != ErrorCodes::NoError)
     {
       log.Level (-1) << endl 
-        << "BinaryJobList::ExtractHighestGrade   ***ERROR***   Dupliacte Jobs adding to 'highestGradeJobs'." << endl
+        << "BinaryJobList::ExtractHighestGrade   ***ERROR***   Duplicate Jobs adding to 'highestGradeJobs'." << endl
         << endl;
     }
   }
@@ -1205,7 +1204,7 @@ BinaryJobListPtr  BinaryJobList::ExtractHighestGrade (int  numToExtract)
  */
 BinaryJobListPtr  BinaryJobList::ExtractHighestGrade (float  percentageFromTop)
 {
-  ErrorCodes  result = NoError;
+  ErrorCodes  result = ErrorCodes::NoError;
   BinaryJobListPtr  highestGradeJobs = new BinaryJobList (processor);
   highestGradeJobs->Owner (false);
   if  (QueueSize () < 1)
@@ -1236,7 +1235,7 @@ BinaryJobListPtr  BinaryJobList::ExtractHighestGrade (float  topPercentage,
                                                       int    minNumOfJobs
                                                      )
 {
-  ErrorCodes  result = NoError;
+  ErrorCodes  result = ErrorCodes::NoError;
 
   BinaryJobListPtr  highestGradeJobs = new BinaryJobList (processor);
   highestGradeJobs->Owner (false);
@@ -1269,7 +1268,7 @@ BinaryJobListPtr  BinaryJobList::ExtractHighestGrade (float  topPercentage,
 
 BinaryJobListPtr  BinaryJobList::ExtractLowDeltaProbAccuarcy (float acceptableDelta)
 {
-  ErrorCodes  result = NoError;
+  ErrorCodes  result = ErrorCodes::NoError;
 
   BinaryJobListPtr  lowDeltaProbAccuarcyJobs = new BinaryJobList (processor);
   lowDeltaProbAccuarcyJobs->Owner (false);
@@ -1291,7 +1290,7 @@ BinaryJobListPtr  BinaryJobList::ExtractLowDeltaProbAccuarcy (float acceptableDe
 
 BinaryJobListPtr  BinaryJobList::ExtractByMinimumProcessintTime (double  maxProcessingTime)
 {
-  ErrorCodes  result = NoError;
+  ErrorCodes  result = ErrorCodes::NoError;
 
   BinaryJobListPtr  jobs = new BinaryJobList (processor);
   jobs->Owner (false);
@@ -1315,7 +1314,7 @@ BinaryJobListPtr  BinaryJobList::ExtractHighestTestGrade (float  topPercentage,
                                                           bool   featureCountPrefSmall
                                                          )
 {
-  ErrorCodes  result = NoError;
+  ErrorCodes  result = ErrorCodes::NoError;
 
   BinaryJobListPtr  highestTestGradeJobs = new BinaryJobList (processor);
   highestTestGradeJobs->Owner (false);
@@ -1351,7 +1350,7 @@ BinaryJobListPtr  BinaryJobList::LookUpByParameters (double  minC,
                                                      double  maxGamma
                                                     )
 {
-  ErrorCodes  result = NoError;
+  ErrorCodes  result = ErrorCodes::NoError;
 
   BinaryJobListPtr  jobs = new BinaryJobList (processor);
   jobs->Owner (false);
@@ -1401,7 +1400,7 @@ BinaryJobListPtr  BinaryJobList::ExtractFastestJobs (double  minTime,
 
 BinaryJobListPtr  BinaryJobList::ExtractJobsWithSmallestDeltaAccProbForEachSvmParameterSet ()
 {
-  ErrorCodes  result = NoError;
+  ErrorCodes  result = ErrorCodes::NoError;
 
   BinaryJobListPtr  jobs = new BinaryJobList (processor);
   jobs->Owner (false);
@@ -1449,7 +1448,7 @@ BinaryJobListPtr  BinaryJobList::ExtractJobsWithSmallestDeltaAccProbForEachSvmPa
 
 BinaryJobListPtr  BinaryJobList::ExtractTestJobs ()
 {
-  ErrorCodes  result = NoError;
+  ErrorCodes  result = ErrorCodes::NoError;
 
   BinaryJobListPtr  testJobs = new BinaryJobList (processor);
   testJobs->Owner (false);
@@ -1521,7 +1520,7 @@ void  BinaryJobList::ReportResultsHTML (ostream&  r)
   r << "<table align=\"center\" border=\"2\" cellpadding=\"3\" cellspacing=\"0\" frame=\"box\"  summary=\"Feature Impact Table\">"
     << "  <thead valign=\"bottom\">" << endl
     << "     <tr>" << BinaryJob::ReportHeaderLineHTML () << "</tr>" << endl
-    << "  </thead" << endl
+    << "  </thread" << endl
     << "  <tbody>" << endl;
 
   BinaryJobList::iterator  idx;
@@ -1688,7 +1687,7 @@ void  BinaryJobList::GenrateSvmResponseSheet (ostream&  r)
 
 BinaryJobListPtr  BinaryJobList::ExtractJobsForAGivenFeatureCount (int featureCount)
 {
-  ErrorCodes  result = NoError;
+  ErrorCodes  result = ErrorCodes::NoError;
 
   BinaryJobListPtr  jobsWithFeatureCount = new BinaryJobList (processor);
   jobsWithFeatureCount->Owner (false);
@@ -1709,7 +1708,7 @@ BinaryJobListPtr  BinaryJobList::ExtractJobsForAGivenFeatureCount (int featureCo
 
 BinaryJobListPtr  BinaryJobList::CreateTestJobsForHighetsGradePerFeatureCount ()
 {
-  ErrorCodes  result = NoError;
+  ErrorCodes  result = ErrorCodes::NoError;
 
   BinaryJobListPtr  testJobs = new BinaryJobList (processor);
   testJobs->Owner (true);

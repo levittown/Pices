@@ -24,8 +24,8 @@ using namespace  KKB;
 
 
 
-#include "SipperVariables.h"
-using namespace  SipperHardware;
+#include "PicesVariables.h"
+using namespace  MLL;
 
 
 
@@ -51,9 +51,16 @@ PicesSipperVariables::PicesSipperVariables (void)
 
 
 
+void  PicesSipperVariables::InitializeEnvironment ()
+{
+  PicesVariables::InitializeEnvironment ();
+}
+
+
+
 bool PicesSipperVariables::AllowUpdates ()
 {
-  return SipperVariables::AllowUpdates ();
+  return PicesVariables::AllowUpdates ();
 }
 
 
@@ -66,94 +73,93 @@ void  PicesSipperVariables::UpdatesNotAllowed (String^  caption)
 
 String^  PicesSipperVariables::InstrumentDataFilesDir ()
 {
-  return  PicesKKStr::KKStrToSystenStr (SipperVariables::InstrumentDataFilesDir ());
+  return  PicesKKStr::KKStrToSystenStr (PicesVariables::InstrumentDataFilesDir ());
 }
 
 
 
-String^  PicesSipperVariables::PicesHomeDir ()
+String^  PicesSipperVariables::HomeDir ()
 {
-  return  PicesKKStr::KKStrToSystenStr (SipperVariables::PicesHomeDir ());
+  return  PicesKKStr::KKStrToSystenStr (PicesVariables::HomeDir ());
 }
 
 
-String^  PicesSipperVariables::PicesConfigurationDirectory ()
+String^  PicesSipperVariables::ConfigurationDirectory ()
 {
-  return  PicesKKStr::KKStrToSystenStr (SipperVariables::PicesConfigurationDirectory ());
-}
-
-
-
-String^  PicesSipperVariables::PicesCmdLineProgDir ()
-{
-  return  PicesKKStr::KKStrToSystenStr (SipperVariables::PicesCmdLineProgDir ());
+  return  PicesKKStr::KKStrToSystenStr (PicesVariables::ConfigurationDirectory ());
 }
 
 
 
-
-String^  PicesSipperVariables::PicesDataFilesDirectory ()
+String^  PicesSipperVariables::CmdLineProgDir ()
 {
-  return  PicesKKStr::KKStrToSystenStr (SipperVariables::PicesDataFilesDirectory ());
+  return  PicesKKStr::KKStrToSystenStr (PicesVariables::CmdLineProgDir ());
 }
 
 
 
-String^  PicesSipperVariables::SipperConfigrationFileName ()
+String^  PicesSipperVariables::DataFileDirectory ()
 {
-  return  PicesKKStr::KKStrToSystenStr (SipperVariables::SipperConfigrationFileName ());
+  return  PicesKKStr::KKStrToSystenStr (PicesVariables::DataFileDirectory ());
 }
 
 
 
-String^  PicesSipperVariables::PicesDataFileDirectory ()
+String^  PicesSipperVariables::DataFilesDirectory ()
 {
-  return  PicesKKStr::KKStrToSystenStr (SipperVariables::PicesDataFileDirectory ());
+  return  PicesKKStr::KKStrToSystenStr (PicesVariables::DataFilesDirectory ());
+}
+
+
+
+String^  PicesSipperVariables::ConfigrationFileName ()
+{
+  return  PicesKKStr::KKStrToSystenStr (PicesVariables::ConfigrationFileName ());
 }
 
 
 
 String^  PicesSipperVariables::PicesReportDir ()
 {
-  return  PicesKKStr::KKStrToSystenStr (SipperVariables::PicesReportDir ());
+  return  PicesKKStr::KKStrToSystenStr (PicesVariables::ReportDir ());
 }
 
 
 
-String^  PicesSipperVariables::PicesTempDirectory ()
+String^  PicesSipperVariables::TempDirectory ()
 {
-  return  PicesKKStr::KKStrToSystenStr (SipperVariables::PicesTempDirectory ());
+  return  PicesKKStr::KKStrToSystenStr (PicesVariables::TempDirectory ());
 }
 
 
 
 String^  PicesSipperVariables::SipperDirectoryListFileName ()
 {
-  return  PicesKKStr::KKStrToSystenStr (SipperVariables::SipperDirectoryListFileName ());
+  return  PicesKKStr::KKStrToSystenStr (PicesVariables::SipperDirectoryListFileName ());
 }
 
 
 String^  PicesSipperVariables::SipperFilesDefaultDir ()
 {
-  return  PicesKKStr::KKStrToSystenStr (SipperVariables::SipperFilesDefaultDir ());
+  return  PicesKKStr::KKStrToSystenStr (PicesVariables::SipperFilesDefaultDir ());
 }
 
 
 String^  PicesSipperVariables::SipperFilesDirectory ()
 {
-  return  PicesKKStr::KKStrToSystenStr (SipperVariables::SipperFilesDefaultDir ());
+  return  PicesKKStr::KKStrToSystenStr (PicesVariables::SipperFilesDefaultDir ());
 }
 
 
 String^  PicesSipperVariables::SipperInterfaceDir ()
 {
-  return  PicesKKStr::KKStrToSystenStr (SipperVariables::SipperInterfaceDir ());
+  return  PicesKKStr::KKStrToSystenStr (PicesVariables::SipperInterfaceDir ());
 }
 
 
 String^  PicesSipperVariables::SipperInterfaceLogDir ()
 {
-  return  PicesKKStr::KKStrToSystenStr (SipperVariables::SipperInterfaceLogDir ());
+  return  PicesKKStr::KKStrToSystenStr (PicesVariables::SipperInterfaceLogDir ());
 }  /* SipperInterfaceLogDir */
 
 
@@ -161,5 +167,5 @@ String^  PicesSipperVariables::SipperInterfaceLogDir ()
 
 String^  PicesSipperVariables::TrainingModelsConfigurationDir ()
 {
-  return  PicesKKStr::KKStrToSystenStr (SipperVariables::TrainingModelsConfigurationDir ());
+  return  PicesKKStr::KKStrToSystenStr (PicesVariables::TrainingModelsConfigurationDir ());
 }

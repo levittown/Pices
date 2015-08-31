@@ -43,7 +43,7 @@ class RunLog;
 class  SipperImageExtractionParms
 {
 public:
-  typedef  SipperHardware::SipperFileFormat  SipperFileFormat;
+  typedef  MLL::SipperFileFormat  SipperFileFormat;
 
   SipperImageExtractionParms (int      argc,
                               char**   argv,

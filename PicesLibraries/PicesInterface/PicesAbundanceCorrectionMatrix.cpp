@@ -23,21 +23,24 @@ using namespace System::IO;
 
 #include "GoalKeeper.h"
 #include "Matrix.h"
-using namespace KKB;
+using namespace  KKB;
 
-#include "AbundanceCorrectionMatrix.h"
+
 #include "ClassStatistic.h"
 #include "MLClass.h"
-using namespace MLL;
+using namespace  KKMLL;
+
+
+#include "AbundanceCorrectionMatrix.h"
+using namespace  MLL;
+
 
 #include "PicesOSservices.h"
 #include "PicesKKStr.h"
 #include "PicesClass.h"
 #include "PicesClassList.h"
 #include "PicesMethods.h"
-
 #include "PicesAbundanceCorrectionMatrix.h"
-
 using namespace  PicesInterface;
 
 
@@ -48,7 +51,7 @@ PicesAbundanceCorrectionMatrix::PicesAbundanceCorrectionMatrix (PicesClassList^ 
                                                                ):
    abundanceMatrix (NULL)
 {
-  MLClassConstListPtr  unManagedClasses = _classes->ToMLClassConstList ();
+  MLClassListPtr  unManagedClasses = _classes->ToMLClassConstList ();
   abundanceMatrix = new AbundanceCorrectionMatrix (*unManagedClasses, _otherClass->UnmanagedMLClass (), _runLog->Log ());
   delete  unManagedClasses;
   unManagedClasses= NULL;

@@ -349,7 +349,7 @@ void  PicesDataBaseImageList::RandomizeOrder ()
 
 
 
-PicesDataBaseImageList^  PicesDataBaseImageList::ExtractImagesForAGivenClass (PicesClass^  _class)
+PicesDataBaseImageList^  PicesDataBaseImageList::ExtractExamplesForAGivenClass (PicesClass^  _class)
 {
   PicesDataBaseImageList^  result = gcnew PicesDataBaseImageList ();
   for each  (PicesDataBaseImage^ i in *this)
@@ -358,7 +358,7 @@ PicesDataBaseImageList^  PicesDataBaseImageList::ExtractImagesForAGivenClass (Pi
       result->Add (i);
   }
   return  result;
-}  /* ExtractImagesForAGivenClass  */
+}  /* ExtractExamplesForAGivenClass  */
 
 
 

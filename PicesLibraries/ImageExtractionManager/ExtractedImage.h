@@ -45,9 +45,9 @@ namespace  ImageExtractionManager
     ImageFeaturesPtr    FeatureVector          () const  {return featureVector;}
     RasterSipperPtr     Image                  () const  {return image;}
     kkuint32            PixelCount             () const  {return pixelCount;}
-    MLClassConstPtr     PredClass1             () const  {return predClass1;}
+    MLClassPtr          PredClass1             () const  {return predClass1;}
     float               PredClass1Prob         () const  {return predClass1Prob;}
-    MLClassConstPtr     PredClass2             () const  {return predClass2;}
+    MLClassPtr          PredClass2             () const  {return predClass2;}
     float               PredClass2Prob         () const  {return predClass2Prob;}
     kkuint32            SipperFileScanRow      () const  {return sipperFileScanRow;}
     kkuint32            SipperFileScanCol      () const  {return sipperFileScanCol;}
@@ -55,10 +55,10 @@ namespace  ImageExtractionManager
     void  FeatureVector (ImageFeaturesPtr  _featureVector);
     void  Depth         (float             _depth)           {depth     = _depth;}
 
-    void  Prediction (MLClassConstPtr _predClass1,
-                      float           _predClass1Prob,
-                      MLClassConstPtr _predClass2,
-                      float           _predClass2Prob
+    void  Prediction (MLClassPtr  _predClass1,
+                      float       _predClass1Prob,
+                      MLClassPtr  _predClass2,
+                      float       _predClass2Prob
                      );
     
 
@@ -68,17 +68,17 @@ namespace  ImageExtractionManager
 
 
   private:
-    kkuint64            byteOffsetFirstScanRow;
-    float               depth;
-    ImageFeaturesPtr    featureVector;
-    RasterSipperPtr     image;
-    kkuint32            pixelCount;
-    MLClassConstPtr     predClass1;
-    float               predClass1Prob;
-    MLClassConstPtr     predClass2;
-    float               predClass2Prob;
-    kkuint32            sipperFileScanRow;
-    kkuint32            sipperFileScanCol;
+    kkuint64          byteOffsetFirstScanRow;
+    float             depth;
+    ImageFeaturesPtr  featureVector;
+    RasterSipperPtr   image;
+    kkuint32          pixelCount;
+    MLClassPtr        predClass1;
+    float             predClass1Prob;
+    MLClassPtr        predClass2;
+    float             predClass2Prob;
+    kkuint32          sipperFileScanRow;
+    kkuint32          sipperFileScanCol;
   };  /* ExtractedImage */
 
   typedef  ExtractedImage*  ExtractedImagePtr;

@@ -1,31 +1,26 @@
-#include  "FirstIncludes.h"
-
-#include  <stdlib.h>
-#include  <memory>
-
-#include  <string>
-#include  <iostream>
-#include  <fstream>
-#include  <vector>
-
-
-#include  "MemoryDebug.h"
-
+#include "FirstIncludes.h"
+#include <stdlib.h>
+#include <memory>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include "MemoryDebug.h"
 using namespace  std;
 
 
-#include  "KKBaseTypes.h"
-#include  "OSservices.h"
-#include  "KKStr.h"
+#include "KKBaseTypes.h"
+#include "OSservices.h"
+#include "KKStr.h"
 using namespace  KKB;
 
 
-#include  "FeatureFileIO.h"
-#include  "FeatureFileIOPices.h"
-#include  "FeatureNumList.h"
-#include  "FeatureVector.h"
-#include  "FileDesc.h"
-#include  "MLClass.h"
+#include "FeatureFileIO.h"
+#include "FeatureFileIOPices.h"
+#include "FeatureNumList.h"
+#include "FeatureVector.h"
+#include "FileDesc.h"
+#include "MLClass.h"
 using namespace  MLL;
 
 #include  "RipOutClass.h"
@@ -33,7 +28,7 @@ using namespace  MLL;
 
 // -Src  C:\bigpine\Plankton\plankton\Apps\CrossValidation\NineClasses_TestData.data  -Dest C:\bigpine\Plankton\plankton\Apps\CrossValidation\Trich_and_Protist.data  -Class Trich  -Class Protist_all
 
-// 2006-Jan-19,   Creeating Forest Cover data set as described in Torwards Scallable SVM, for bit reduction paper.
+// 2006-Jan-19,   Creating Forest Cover data set as described in Towards Scalable SVM, for bit reduction paper.
 // K:\Plankton\Papers\BitReduction\DataSets\ForestCover
 // -SrcFileName covtype.data -Format c45  -ClassName Lodgepole_Pine  -ClassName Spruce_Fir -DestFileName CovType_TwoClass.data
 
@@ -48,18 +43,18 @@ using namespace  MLL;
 
 RipOutClass::RipOutClass ():
   PicesApplication (),
-  cancelFlag      (false),
-  classesToRipOut (),
-  destFileName    (),
-  destImages      (NULL),
-  mlClasses       (),
-  inFileFormat    (FeatureFileIOPices::Driver ()),
-  numOfFolds      (10),
-  outFileFormat   (FeatureFileIOPices::Driver ()),
-  srcFileName     (),
-  srcImages       (NULL),
-  stratify        (false),
-  successful      (true)
+  cancelFlag       (false),
+  classesToRipOut  (),
+  destFileName     (),
+  destImages       (NULL),
+  mlClasses        (),
+  inFileFormat     (FeatureFileIOPices::Driver ()),
+  numOfFolds       (10),
+  outFileFormat    (FeatureFileIOPices::Driver ()),
+  srcFileName      (),
+  srcImages        (NULL),
+  stratify         (false),
+  successful       (true)
 {
 }
 
@@ -90,7 +85,6 @@ void  RipOutClass::InitalizeApplication (kkint32 argc,
   if  (classesToRipOut.QueueSize () < 1)
   {
     log.Level (-1) << endl
-                   << endl
                    << "You must specify at least one class name '-ClassName xxxxx'." << endl
                    << endl;
     Abort (true);
@@ -100,7 +94,6 @@ void  RipOutClass::InitalizeApplication (kkint32 argc,
   if  (srcFileName.Empty ())
   {
     log.Level (-1) << endl
-                   << endl
                    << "You must specify a Source File" << endl
                    << endl;
     DisplayCommandLineParameters ();
@@ -137,7 +130,7 @@ void  RipOutClass::InitalizeApplication (kkint32 argc,
   {
     destFileName = osRemoveExtension (srcFileName);
 
-    MLClassConstList::iterator idx;
+    MLClassList::iterator idx;
     for  (idx = classesToRipOut.begin ();  idx != classesToRipOut.end ();  idx++)
       destFileName << "_" << (*idx)->Name ();
 
@@ -175,12 +168,8 @@ void  RipOutClass::InitalizeApplication (kkint32 argc,
 
   if  (!destImages)
   {
-    destImages = new FeatureVectorList (fileDesc, 
-                                        true,                    // Will own imageFeatures contained in this list
-                                        log
-                                       );
+    destImages = srcImages->ManufactureEmptyList (true);
   }
-
 
   PicesApplication::PrintStandardHeaderInfo (cout);
   cout  << endl;
@@ -195,8 +184,6 @@ void  RipOutClass::InitalizeApplication (kkint32 argc,
     cout <<  "NumOfFolds      [" << numOfFolds                              << "]."   << endl;
   cout  << "------------------------------------------------------------------------" << endl;
   cout  << endl;
-
-
 }  /* InitalizeApplication */
 
 
@@ -388,7 +375,7 @@ void   RipOutClass::DisplayCommandLineParameters ()
        << "ex: RipOutClass  -Src Test.data  -ClassName Larvacean  -ClassName Protist"                << endl
        << endl
        << "             Will append to file 'Test_Larvacean_Protist.data' all entries"               << endl
-       << "             in 'Test.Data' that belong to the classes 'Larvacan' and"                    << endl
+       << "             in 'Test.Data' that belong to the classes 'Larvacean' and"                    << endl
        << "             'Protist'."                                                                  << endl
        << endl;
 }
@@ -398,16 +385,16 @@ void   RipOutClass::DisplayCommandLineParameters ()
 
 void  RipOutClass::ExtractSpecifiedClass ()
 {
-  // The constrctor would have loaded both the source and the distination files.
-  // so most of the work is alreadt done.
+  // The constructor would have loaded both the source and the destination files.
+  // so most of the work is already done.
 
-  FeatureVectorListPtr  resultList = new FeatureVectorList (*destImages, false);
+  FeatureVectorListPtr  resultList = destImages->Duplicate (false);
 
-  MLClassConstList::iterator idx;
+  MLClassList::iterator idx;
   for  (idx = classesToRipOut.begin ();  idx != classesToRipOut.end ();  idx++)
   {
-    MLClassConstPtr  mlClass = *idx;
-    FeatureVectorListPtr  sepcifiedClassData = srcImages->ExtractImagesForAGivenClass (mlClass);
+    MLClassPtr  mlClass = *idx;
+    FeatureVectorListPtr  sepcifiedClassData = srcImages->ExtractExamplesForAGivenClass (mlClass);
     cout << "Class [" << mlClass->Name () << "]  Entries Found[" << sepcifiedClassData->QueueSize () << "]" << endl;
     resultList->AddQueue (*sepcifiedClassData);
     delete  sepcifiedClassData;
@@ -417,7 +404,7 @@ void  RipOutClass::ExtractSpecifiedClass ()
   if  (stratify)
   {
     FeatureVectorListPtr  stratifiedList 
-             = resultList->StratifyAmoungstClasses (&classesToRipOut, -1, numOfFolds);
+             = resultList->StratifyAmoungstClasses (&classesToRipOut, -1, numOfFolds, log);
     delete  resultList;
     resultList = stratifiedList;
   }
@@ -448,12 +435,12 @@ void  MakeEightClassDataSet (const KKStr&  srcFileName,
   bool  cancelFlag  = false;
   bool  successful  = false;
   bool  changesMade = false;
-  MLClassConstListPtr  classes  = new MLClassConstList ();
+  MLClassListPtr  classes  = new MLClassList ();
 
   FeatureFileIOPtr  driver = FeatureFileIO::FileFormatFromStr ("C45");
   if  (!driver)
   {
-    cerr << endl << endl << "MakeEightClassDataSet  ***ERROR***  Invalid drivetr." << endl << endl;
+    cerr << endl << endl << "MakeEightClassDataSet  ***ERROR***  Invalid driver." << endl << endl;
     exit (0);
   }
     
@@ -466,9 +453,9 @@ void  MakeEightClassDataSet (const KKStr&  srcFileName,
     exit (0);
   }
 
-  MLClassConstPtr  excludeClass = MLClass::CreateNewMLClass ("Marine_Snow_Dark");
+  MLClassPtr  excludeClass = MLClass::CreateNewMLClass ("Marine_Snow_Dark");
 
-  FeatureVectorListPtr  destData = new FeatureVectorList (srcData->FileDesc (), false, log);
+  FeatureVectorListPtr  destData = srcData->ManufactureEmptyList (false);
 
   FeatureVectorList::iterator  idx;
   for  (idx = srcData->begin ();  idx != srcData->end ();  idx++)
@@ -481,8 +468,7 @@ void  MakeEightClassDataSet (const KKStr&  srcFileName,
     }
   }
 
-  
-  FeatureVectorListPtr  stratifiedData = destData->StratifyAmoungstClasses (10);
+  FeatureVectorListPtr  stratifiedData = destData->StratifyAmoungstClasses (10, log);
 
   driver->SaveFeatureFile (destFileName, 
                            stratifiedData->AllFeatures (), 

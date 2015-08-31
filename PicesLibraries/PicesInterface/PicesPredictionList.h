@@ -9,16 +9,6 @@ using namespace System::Diagnostics;
 
 #include  "PicesPrediction.h"
 
-namespace  MLL
-{
-  #if  !defined(_CLASSPROB_)
-  class  ClassProb;
-  typedef  ClassProb*  ClassProbPtr;
-  class  ClassProbList;
-  typedef  ClassProbList*  ClassProbListPtr;
-  #endif
-}
-
 
 
 namespace PicesInterface
@@ -30,7 +20,7 @@ namespace PicesInterface
 
     PicesPredictionList (int  size);
 
-    PicesPredictionList (MLL::ClassProbList&  predictions);
+    PicesPredictionList (KKMLL::ClassProbList&  predictions);
 
     PicesPrediction^  LookUpByClass (PicesClass^ c);
 

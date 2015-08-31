@@ -14,7 +14,7 @@ using namespace System::Diagnostics;
 
 #include "InstrumentData.h"
 #include "InstrumentDataList.h"
-using namespace SipperHardware;
+using namespace  MLL;
 
 #include "OSservices.h"
 #include "PicesKKStr.h"

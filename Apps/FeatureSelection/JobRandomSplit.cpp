@@ -1,8 +1,6 @@
 #include  "FirstIncludes.h"
-
 #include  <stdlib.h>
 #include  <stdio.h>
-
 #include  <fstream>
 #include  <iostream>
 #include  <map>
@@ -16,11 +14,8 @@
 #include <unistd.h>
 #endif
 
-
 #include  "MemoryDebug.h"
-
 using namespace std;
-
 
 
 #include "KKBaseTypes.h"
@@ -35,7 +30,7 @@ using namespace KKB;
 #include "ConfusionMatrix2.h"
 #include "CrossValidation.h"
 #include "TrainingProcess2.h"
-using namespace  MLL;
+using namespace  KKMLL;
 
 
 #include "JobRandomSplit.h"
@@ -80,7 +75,7 @@ JobRandomSplit::JobRandomSplit (ProcessorPtr  _processor,
      BinaryJob (_processor, _statusLine),
      splitNum (-1)
 {
-  // The call to the 'BinaryJob' constructor would have arsed the '_statusLine' string for fields that are particular to
+  // The call to the 'BinaryJob' constructor would have parsed the '_statusLine' string for fields that are particular to
   // 'BinaryJob'.  Now we will have to scan for fields that are particular to 'JobRandomSplit'.
   ProcessStatusStr (_statusLine);
 }
@@ -98,7 +93,7 @@ JobRandomSplit::~JobRandomSplit ()
 
 JobTypes  JobRandomSplit::JobType ()  const
 {
-  return  jtRandomSplit;
+  return  JobTypes::RandomSplit;
 }
 
 
@@ -118,7 +113,7 @@ void   JobRandomSplit::EvaluateNode ()
 {
   log.Level (9) << "  " << endl;
   log.Level (9) << "JobRandomSplit::EvaluteNode JobId[" << jobId << "]  SplitNum[" << splitNum << "]" << endl;
-  status = bjStarted;
+  status = BinaryJobStatus::Started;
 
   TrainingConfiguration2Ptr  config = processor->Config ();
 
@@ -147,20 +142,20 @@ void   JobRandomSplit::EvaluateNode ()
                                             cancelFlag
                                            );
 
-  crossValidation->RunValidationOnly (randSplitTestData);
+  crossValidation->RunValidationOnly (randSplitTestData, NULL, log);
 
   testAccuracy     = crossValidation->Accuracy ();
   testAccuracyNorm = crossValidation->AccuracyNorm ();
   testAvgPredProb  = (float)crossValidation->AvgPredProb () * 100.0f;
   testFMeasure     = crossValidation->ConfussionMatrix ()->FMeasure (processor->PositiveClass (), log);
 
-  if  (processor->GradingMethod () == gmAccuracy)
+  if  (processor->GradingMethod () == GradingMethodType::Accuracy)
     testGrade = testAccuracy;
 
-  else if  (processor->GradingMethod () == gmAccuracyNorm)
+  else if  (processor->GradingMethod () == GradingMethodType::AccuracyNorm)
     testGrade = testAccuracyNorm;
 
-  else if  (processor->GradingMethod () == gmFMeasure)
+  else if  (processor->GradingMethod () == GradingMethodType::FMeasure)
     testGrade = testFMeasure;
 
   else
@@ -191,7 +186,7 @@ void   JobRandomSplit::EvaluateNode ()
   delete  randSplitTrainData;  randSplitTrainData = NULL;
   delete  randSplitTestData;   randSplitTestData  = NULL;
 
-  status = bjDone;
+  status = BinaryJobStatus::Done;
 }  /* EvaluateNode */
 
 
@@ -251,19 +246,19 @@ void  JobRandomSplit::CreateRandomSplitTrainAndTestExamples (FeatureVectorListPt
     return;
   }
 
-  FeatureVectorListPtr  trainData = processor->TrainingData ();
-  FeatureVectorListPtr  testData  = processor->TestData     ();
-  FeatureVectorListPtr  validationData  = processor->ValidationData ();
+  FeatureVectorListPtr  trainData      = processor->TrainingData ();
+  FeatureVectorListPtr  testData       = processor->TestData     ();
+  FeatureVectorListPtr  validationData = processor->ValidationData ();
 
 
-  randSplitTrainData = new FeatureVectorList (randSplitData->FileDesc (), false, log);
-  randSplitTestData  = new FeatureVectorList (randSplitData->FileDesc (), false, log);
+  randSplitTrainData = randSplitData->ManufactureEmptyList (false);
+  randSplitTestData  = randSplitData->ManufactureEmptyList (false);
 
 
-  MLClassConstList::const_iterator  idx;
+  MLClassList::const_iterator  idx;
   for  (idx = processor->MLClasses ()->begin ();  idx != processor->MLClasses ()->end ();  idx++)
   {
-    MLClassConstPtr  ic = *idx;
+    MLClassPtr  ic = *idx;
 
     int  numTrainThisClass = 0;
     if  (trainData)
@@ -305,7 +300,7 @@ void  JobRandomSplit::ReFresh (BinaryJob&  j)
   BinaryJob::ReFresh (j);
   splitNum = -1;
 
-  if  (j.JobType () == jtRandomSplit)
+  if  (j.JobType () == JobTypes::RandomSplit)
   {
     JobRandomSplit&  randomSplitJob = dynamic_cast<JobRandomSplit&> (j);
     splitNum = randomSplitJob.splitNum;

@@ -13,11 +13,9 @@ using namespace std;
 #include "OSservices.h"
 using namespace KKB;
 
-#include "SipperVariables.h"
-using namespace SipperHardware;
-
+#include "PicesVariables.h"
 #include "DataBaseServer.h"
-using  namespace  MLL;
+using namespace  MLL;
 
 
 DataBaseServer::DataBaseServer ():
@@ -173,8 +171,8 @@ DataBaseServerList::~DataBaseServerList ()
 
 void  DataBaseServerList::WriteConfigFile ()  const
 {
-  osCreateDirectoryPath (SipperVariables::PicesConfigurationDirectory ());
-  KKStr  configFileName = osAddSlash (SipperVariables::PicesConfigurationDirectory ()) + "MySql.cfg";
+  osCreateDirectoryPath (PicesVariables::ConfigurationDirectory ());
+  KKStr  configFileName = osAddSlash (PicesVariables::ConfigurationDirectory ()) + "MySql.cfg";
  
   log.Level (10) << "DataBaseServerList::WriteConfigFile    Writing ConfigFileName[" << configFileName << "]" << endl;
   
@@ -210,7 +208,7 @@ void  DataBaseServerList::WriteConfigFile ()  const
 
 void  DataBaseServerList::ReadConfigFile ()
 {
-  KKStr  configFileName = osAddSlash (SipperVariables::PicesConfigurationDirectory ()) + "MySql.cfg";
+  KKStr  configFileName = osAddSlash (PicesVariables::ConfigurationDirectory ()) + "MySql.cfg";
 
   log.Level (10) << "DataBaseServerList::ReadConfigFile      ConfigFileName[" <<  configFileName << "]" << endl;
   FILE* in = osFOPEN (configFileName.Str (), "r");

@@ -68,8 +68,8 @@ namespace SipperFile
                       InstrumentDataList   _history
                      )
     {
-      OSservices.CreateDirectory (PicesSipperVariables.PicesConfigurationDirectory ());
-      timePlotConfigFileName = OSservices.AddSlash (PicesSipperVariables.PicesConfigurationDirectory ()) + "TimePlotConfig.txt";
+      OSservices.CreateDirectory (PicesSipperVariables.ConfigurationDirectory ());
+      timePlotConfigFileName = OSservices.AddSlash (PicesSipperVariables.ConfigurationDirectory ()) + "TimePlotConfig.txt";
 
       sipperConfigRec = _sipperConfigRec;
       history         = _history;

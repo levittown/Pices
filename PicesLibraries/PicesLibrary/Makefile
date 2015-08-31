@@ -27,8 +27,6 @@ FEATURENUMLIST     = FeatureNumList.h      $(ATTRIBUTE)
 
 MLCLASS            = MLClass.h
 
-MLCLASSCONSTLIST   = MLClassConstList.h
-
 FILEDESC           = FileDesc.h            $(ATTRIBUTE)          $(MLCLASS)  $(MLCLASSCONSTLIST)
 
 ORDERINGS          = Orderings.h           $(FILEDESC)
@@ -162,7 +160,7 @@ SVMWRAPPER         = SvmWrapper.h          $(SVMPARAM)
 TRAININGCLASS      = TrainingClass.h
 
 
-TRAININGCONFIGURATION2 = TrainingConfiguration2.h  \
+PICESTRAININGCONFIGURATION = PicesTrainingConfiguration.h  \
                      $(FILEDESC)           $(FEATUREVECTOR)      $(MODEL)          $(MODELPARAM)        \
                      $(MODELPARAMOLDSVM)   $(SVMPARAM)           $(TRAININGCLASS)
 
@@ -205,7 +203,7 @@ OBJECTS  = Attribute.o                   BinaryClassParms.o            BitReduct
            FeatureFileIOSparse.o         FeatureFileIOUCI.o           FeatureNumList.o             \
            FeatureVector.o               FileDesc.o                   ImageFeatures.o              \
            ImageFeaturesDataIndexed.o    ImageFeaturesNameIndexed.o   MLClass.o                    \
-           MLClassConstList.o            Model.o                      ModelDual.o                  \
+           Model.o                      ModelDual.o                  \
            ModelSvmBase.o                \
            ModelKnn.o                    ModelOldSVM.o                ModelUsfCasCor.o             \
            ModelParam.o                  ModelParam.o                 ModelParamDual.o             \
@@ -214,7 +212,7 @@ OBJECTS  = Attribute.o                   BinaryClassParms.o            BitReduct
            Orderings.o                   PicesApplication.o           SipperExtractionImageManager.o  \
            SizeDistribution.o            svm.o                        svm2.o                       \
            SVMModel.o                    SVMparam.o                   SvmWrapper.o                 \
-           TrainingClass.o               TrainingConfiguration2.o     \
+           TrainingClass.o               PicesTrainingConfiguration.o     \
            TrainingProcess2.o            UsfCasCor.o
            
            
@@ -403,10 +401,6 @@ MLClass.o :         MLClass.cpp   $(MLCLASS)   $(FILEDESG)  $(MLCLASSCONSTLIST)
 	$(CC) $(CFLAGS) -c MLClass.cpp
 
 
-MLClassConstList.o : MLClassConstList.cpp   $(MLCLASSCONSTLIST)   $(FILEDESC)  $(MLCLASS)  
-	$(CC) $(CFLAGS) -c MLClassConstList.cpp
-
-
 ModelParam.o :  ModelParam.cpp       $(MODELPARAM)        $(FILEDESC)            $(MLCLASS)        \
                 $(MODELPARAM)        $(MODELPARAMKNN)     $(MODELPARAMOLDSVM)    $(MODELPARAMSVMBASE)
 	$(CC) $(CFLAGS) -c ModelParam.cpp
@@ -512,12 +506,12 @@ TrainingClass.o :      TrainingClass.cpp        $(TRAININGCLASS)        $(MLCLAS
 	$(CC) $(CFLAGS) -c TrainingClass.cpp
 
 
-TrainingConfiguration2.o : TrainingConfiguration2.cpp  $(TRAININGCONFIGURATION2)      $(BINARYCLASSPARMS)    \
+PicesTrainingConfiguration.o : PicesTrainingConfiguration.cpp  $(PICESTRAININGCONFIGURATION)      $(BINARYCLASSPARMS)    \
                            $(FEATUREFILEIO)            $(FEATUREFILEIOPICES)          $(FEATURENUMLIST)      \
                            $(FEATUREVECTOR)            $(FILEDESC)                    $(MLCLASS)          \
                            $(IMAGEFEATURES)            $(MODEL)                       $(MODELPARAMKNN)       \
                            $(MODELPARAMOLDSVM)         $(MODELPARAMSVMBASE)           $(NORMALIZATIONPARMS)
-	$(CC) $(CFLAGS) -c TrainingConfiguration2.cpp
+	$(CC) $(CFLAGS) -c PicesTrainingConfiguration.cpp
 
 
 TrainingProcess2.o :   TrainingProcess2.cpp         $(TRAININGPROCESS2)          $(CLASSASSIGNMENTS)      \

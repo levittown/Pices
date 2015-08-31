@@ -79,7 +79,7 @@ PicesRunLog::~PicesRunLog ()
 // with 'rootName' with the Date and Time appended to the end.
 PicesRunLog^  PicesRunLog::CreateRunLog (String^  rootName)
 {
-  String^  dir = OSservices::AddSlash (PicesSipperVariables::PicesTempDirectory ()) + "RunLogs";
+  String^  dir = OSservices::AddSlash (PicesSipperVariables::TempDirectory ()) + "RunLogs";
   OSservices::CreateDirectoryPath (dir);
 
   String^  fileName = OSservices::AddSlash (dir) + rootName + "_RunLog_" + System::DateTime::Now.ToString ("yyyyMMdd-HHmmss") + ".txt";

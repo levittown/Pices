@@ -3,34 +3,34 @@
 #include <stdlib.h>
 #include <memory>
 #include <math.h>
-
 #include <map>
 #include <string>
 #include <iostream>
 #include <fstream>
 #include <vector>
-
 #include "MemoryDebug.h"
 #include "KKBaseTypes.h"
-
 using namespace std;
+
 
 #include "Compressor.h"
 #include "OSservices.h"
 #include "KKStr.h"
 using namespace KKB;
 
-#include "InstrumentDataFileManager.h"
-using namespace SipperHardware;
 
-#include "DataBase.h"
-#include "DataBaseImage.h"
 #include "FeatureFileIO.h"
-#include "FeatureFileIOPices.h"
 #include "FileDesc.h"
 #include "MLClass.h"
+using namespace  KKMLL;
+
+
+#include "InstrumentDataFileManager.h"
+#include "DataBase.h"
+#include "DataBaseImage.h"
+#include "FeatureFileIOPices.h"
 #include "ImageFeatures.h"
-using namespace MLL;
+using namespace  MLL;
 
 
 #include "MergeFeatureFiles.h"
@@ -245,7 +245,7 @@ void   MergeFeatureFiles::DisplayCommandLineParameters ()
 
   cout << endl
        << "    -src   <Source File>  Can specify multiple -src parameters.  You specify"    << endl
-       << "           one of these parametrs for eachfeature file to include in"            << endl
+       << "           one of these parameters for each feature file to include in"          << endl
        << "           destination feature file."                                            << endl
        << endl
        << "    -dest  <destination File>  Mandatory parameter and can only specify one."    << endl
@@ -256,11 +256,11 @@ void   MergeFeatureFiles::DisplayCommandLineParameters ()
        << endl
        << "           Read  formats Supported: " << FeatureFileIO::FileFormatsReadOptionsStr    () << endl
        << "           Write formats Supported: " << FeatureFileIO::FileFormatsWrittenOptionsStr () << endl
-       << "           if no '-format' paramter provided defaults to 'Pices'."               << endl
+       << "           if no '-format' parameter provided defaults to 'Pices'."              << endl
        << endl
        << "    -Stratify <NumOfFolds>     Will stratify the output by 'Class'."             << endl
        << endl
-       << "    -Randomize   Will sort th edestination file into random order."              << endl
+       << "    -Randomize   Will sort the destination file into random order."              << endl
        << endl
        << endl
        << "Examples:"                                                                       << endl
@@ -298,7 +298,7 @@ void   MergeFeatureFiles::Main ()
       KKStr             srcFileName = srcFileNames[srcIdx];
       FeatureFileIOPtr  srcFormat   = srcFormats  [srcIdx];
       
-      MLClassConstList   classes;
+      MLClassList   classes;
       
       FeatureVectorListPtr  s = NULL;
 
@@ -315,7 +315,7 @@ void   MergeFeatureFiles::Main ()
       }
 
       if  (!srcData)
-        srcData = new FeatureVectorList (s->FileDesc (), true, log);
+        srcData = new FeatureVectorList (s->FileDesc (), true);
 
       if  ((*(s->FileDesc ())) != (*(srcData->FileDesc ())))
       {
@@ -346,7 +346,7 @@ void   MergeFeatureFiles::Main ()
 
     if  (stratify)
     {
-      FeatureVectorListPtr  stratifiedSrc = srcData->StratifyAmoungstClasses (numOfFolds);
+      FeatureVectorListPtr  stratifiedSrc = srcData->StratifyAmoungstClasses (numOfFolds, log);
       srcData->Owner (false);
       stratifiedSrc->Owner (true);
       delete  srcData;
@@ -994,7 +994,7 @@ void  ImportValidatedClassInfo ()
     validatedClassId   = s.ExtractTokenInt  (",\n\t\r");
     validatedClassName = s.ExtractQuotedStr (",\n\t\r", false);
 
-    MLClassConstPtr  c = MLClass::CreateNewMLClass (validatedClassName);
+    MLClassPtr  c = MLClass::CreateNewMLClass (validatedClassName);
 
     dbConn->ImagesUpdateValidatedClass (imageFileName, c);
    
@@ -1019,7 +1019,7 @@ void  Strip ()
 
   FeatureFileIOPtr driver =  FeatureFileIO::FileFormatFromStr ("C45");
 
-  MLClassConstList  mlClasses;
+  MLClassList  mlClasses;
   FeatureVectorListPtr  data = 
         driver->LoadFeatureFile ("D:\\Pices\\Reports\\FeatureDataFiles\\AllValidatedImages_ForJonathon\\AllValidatedDataNorm.data",
                                  mlClasses,
@@ -1030,13 +1030,13 @@ void  Strip ()
                                  log
                                );
 
-  FeatureVectorListPtr  stripped = new FeatureVectorList (data->FileDesc (), false, log);
+  FeatureVectorListPtr  stripped = new FeatureVectorList (data->FileDesc (), false);
 
   FeatureVectorList::const_iterator  idx;
   for  (idx = data->begin ();  idx != data->end ();  ++idx)
   {
     FeatureVectorPtr  fv = *idx;
-    KKStr  fn = fv->ImageFileName ();
+    KKStr  fn = fv->ExampleFileName ();
     if  (fn.StartsWith ("SML")  ||  (fn.StartsWith ("SMP")))
     {
     }

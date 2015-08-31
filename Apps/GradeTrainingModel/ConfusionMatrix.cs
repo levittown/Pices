@@ -82,7 +82,7 @@ namespace GradeTrainingModel
     int                         lastWidth  = 0;
     int                         lastHeight = 0;
 
-    PicesTrainingConfiguration  config;
+    PicesTrainingConfigManaged  config = null;
     TrainingModel2              trainingModel  = null;
     String                      groundTruthRootDir = null;
 
@@ -103,7 +103,7 @@ namespace GradeTrainingModel
 
 
 
-    public ConfusionMatrix (PicesTrainingConfiguration  _config,
+    public ConfusionMatrix (PicesTrainingConfigManaged  _config,
                             PicesClassList              _classifierClasses,  /**< List of classes in origianl Classifier before reduction due to training level. */
                             TrainingModel2              _trainingModel,
                             String                      _modelName,

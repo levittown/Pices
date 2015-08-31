@@ -1,12 +1,10 @@
-#include  "FirstIncludes.h"
-
-#include  <stdlib.h>
-#include  <stdio.h>
-
-#include  <fstream>
-#include  <iostream>
-#include  <map>
-#include  <vector>
+#include "FirstIncludes.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <fstream>
+#include <iostream>
+#include <map>
+#include <vector>
 
 #ifdef  WIN32
 #include <io.h>
@@ -15,11 +13,8 @@
 //#include  <sys/loadavg.h>
 #include <unistd.h>
 #endif
-
-
-#include  "MemoryDebug.h"
-
-using namespace std;
+#include "MemoryDebug.h"
+using namespace  std;
 
 
 
@@ -31,11 +26,9 @@ using namespace std;
 using namespace KKB;
 
 
-
 #include "Job.h"
 #include "JobManager.h"
 using namespace  JobManagment;
-
 
 
 Job::Job (const Job&  j):

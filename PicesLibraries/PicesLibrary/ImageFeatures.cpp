@@ -1,16 +1,12 @@
-#include  "FirstIncludes.h"
-
-#include  <ctype.h>
-#include  <time.h>
-
-#include  <string>
-#include  <iostream>
-#include  <fstream>
-#include  <map>
-#include  <vector>
-
-#include  "MemoryDebug.h"
-
+#include "FirstIncludes.h"
+#include <ctype.h>
+#include <time.h>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <map>
+#include <vector>
+#include "MemoryDebug.h"
 using namespace  std;
 
 
@@ -20,27 +16,28 @@ using namespace  std;
 #include "ConvexHull.h"
 #include "DateTime.h"
 #include "KKException.h"
-#include "ImageIO.h"
-#include "OSservices.h"
-#include "RasterSipper.h"
-#include "RunLog.h"
 #include "KKStr.h"
+#include "ImageIO.h"
+#include "ImageDirTree.h"
+#include "OSservices.h"
+#include "RunLog.h"
 using namespace  KKB;
+
+
+#include "FeatureNumList.h"
+#include "FeatureFileIO.h"
+#include "FeatureVector.h"
+#include "MLClass.h"
+using namespace  KKMLL;
 
 
 #include "InstrumentData.h"
 #include "InstrumentDataList.h"
 #include "InstrumentDataFileManager.h"
-#include "SipperVariables.h"
-using namespace SipperHardware;
-
-
-#include "ImageFeatures.h"
-#include "FeatureNumList.h"
-#include "FeatureFileIO.h"
+#include "RasterSipper.h"
+#include "PicesVariables.h"
 #include "FeatureFileIOPices.h"
-#include "MLClass.h"
-#include "ImageDirTree.h"
+#include "ImageFeatures.h"
 using namespace  MLL;
 
 
@@ -49,18 +46,12 @@ const kkint32  ImageFeatures::SizeThreshold = 100000;  /**< Size of image in num
                                                         * image to improve feature calculation.
                                                         */
 
-kkint32  ImageFeatures::FirstInstrumentDataField = 84;  // see 'NumSeperateInstrumentDataFields' below.
+kkint32  ImageFeatures::FirstInstrumentDataField = 84;  /**< see 'NumSeperateInstrumentDataFields' below.  */
 
 /**
- @code
- *********************************************************************************************
- **                             NumSeperateInstrumentDataFields                              * 
- **                                                                                          *
- ** This is the number of fields that are not going to be stored in the regular feature file *
- ** but in separate instrument data files that will be accessed by SiperFile name and scan   *
- ** line number.                                                                             *
- **                                                                                          *
- *********************************************************************************************
+ * This is the number of fields that are not going to be stored in the regular feature file
+ * but in separate instrument data files that will be accessed by SiperFile name and scan
+ * line number.
  */
 kkint32  ImageFeatures::NumSeperateInstrumentDataFields = 4;  
 
@@ -213,8 +204,9 @@ ImageFeatures::ImageFeatures (const ImageFeatures&  _image):
 
 
 ImageFeatures::ImageFeatures (const BmpImage&      _image,
-                              MLClassConstPtr      _mlClass,
-                              RasterSipperListPtr  _saveImages
+                              MLClassPtr           _mlClass,
+                              RasterSipperListPtr  _saveImages,
+                              RunLog&              _log
                              ):
   FeatureVector (FeatureFileIOPices::PlanktonMaxNumOfFields ()),
   areaMMSquare     (0.0f),
@@ -230,10 +222,10 @@ ImageFeatures::ImageFeatures (const BmpImage&      _image,
 
 {
   MLClass       (_mlClass);
-  ImageFileName (_image.FileName ());
+  ExampleFileName (_image.FileName ());
 
   RasterSipperPtr raster = new RasterSipper (_image);
-  CalcFeatures (*raster, _saveImages);
+  CalcFeatures (*raster, _saveImages, _log);
   delete  raster;
 }
 
@@ -241,8 +233,9 @@ ImageFeatures::ImageFeatures (const BmpImage&      _image,
 
 
 ImageFeatures::ImageFeatures (RasterSipper&        _raster,
-                              MLClassConstPtr      _mlClass,
-                              RasterSipperListPtr  _saveImages
+                              MLClassPtr           _mlClass,
+                              RasterSipperListPtr  _saveImages,
+                              RunLog&              _log
                              ):
   FeatureVector (FeatureFileIOPices::PlanktonMaxNumOfFields ()),
 
@@ -259,7 +252,7 @@ ImageFeatures::ImageFeatures (RasterSipper&        _raster,
 
 {
   MLClass    (_mlClass);
-  ImageFileName (_raster.FileName ());
+  ExampleFileName (_raster.FileName ());
 
   KKStr  imageRootName = osGetRootName (_raster.FileName ()).ToUpper ();
   if  (imageRootName == "STATION1C_04_00474734_2979")
@@ -268,15 +261,16 @@ ImageFeatures::ImageFeatures (RasterSipper&        _raster,
   }
 
 
-  CalcFeatures  (_raster, _saveImages);
+  CalcFeatures  (_raster, _saveImages, _log);
 }
 
 
 
 ImageFeatures::ImageFeatures (KKStr                _fileName,
-                              MLClassConstPtr      _mlClass,
+                              MLClassPtr           _mlClass,
                               bool&                _successfull,
-                              RasterSipperListPtr  _saveImages
+                              RasterSipperListPtr  _saveImages,
+                              RunLog&              _log
                              ):
 
 FeatureVector (FeatureFileIOPices::PlanktonMaxNumOfFields ()),
@@ -292,8 +286,8 @@ FeatureVector (FeatureFileIOPices::PlanktonMaxNumOfFields ()),
   version          (0)
 
 {
-  MLClass       (_mlClass);
-  ImageFileName    (_fileName);
+  MLClass         (_mlClass);
+  ExampleFileName (_fileName);
 
   KKStr  ext = osGetFileExtension (_fileName);
   ext.Upper ();
@@ -326,7 +320,7 @@ FeatureVector (FeatureFileIOPices::PlanktonMaxNumOfFields ()),
   if  (raster)
   {
     raster->ConnectedComponent (3);
-    CalcFeatures (*raster, _saveImages);
+    CalcFeatures (*raster, _saveImages, _log);
     delete  raster;
   }
   else
@@ -357,7 +351,7 @@ ImageFeatures::ImageFeatures (const FeatureVector&  featureVector):
    version          (0)
 
 {
-  if  (strcmp (featureVector.UnderlyingClass (), "ImageFeatures") == 0)
+  if  (typeid (featureVector) == typeid (ImageFeatures))
   {
     // The underlying class is another ImageFeatures object.
     const ImageFeatures&  image = dynamic_cast<const ImageFeatures&>(featureVector);
@@ -395,6 +389,13 @@ kkint32  ImageFeatures::MemoryConsumedEstimated ()  const
 
 
 
+ImageFeaturesPtr  ImageFeatures::Duplicate ()  const
+{
+  return new ImageFeatures (*this);
+}
+
+
+
 void  ImageFeatures::ResetVersion (short  newVersion)
 {
   Version (newVersion);
@@ -402,12 +403,13 @@ void  ImageFeatures::ResetVersion (short  newVersion)
 
 
 
-bool   ImageFeatures::atExitDefined   = false;
+bool   ImageFeatures::atExitDefined = false;
 
 
 void  ImageFeatures::FinalCleanUp ()
 {
 }  /* FinalCleanUp */
+
 
 
 
@@ -451,7 +453,8 @@ void  ImageFeatures::Save (RasterSipper&        raster,
 //#define  DEBUB_CalcFeatures
 
 void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
-                                   RasterSipperListPtr  saveImages
+                                   RasterSipperListPtr  saveImages,
+                                   RunLog&              log
                                   )
 {
   #if defined (DEBUB_CalcFeatures)
@@ -459,9 +462,6 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
        << std::endl
        << "ImageFeatures::CalcFeatures" << std::endl;
   #endif
-
-
-  RunLog  log;
 
   if  (NumOfFeatures () != FeatureFileIOPices::PlanktonMaxNumOfFields ())
   {
@@ -537,7 +537,6 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
     weOwnRaster = true;
   }
 
-
   if  (areaBeforeReduction < 20)
   {
     for  (kkint32 tp = 0; tp < numOfFeatures; tp++)
@@ -557,7 +556,7 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
 
   FVFloat  convexf = 0.0;
 
-  osParseFileSpec (ImageFileName (), driveLetter, path, root, extension);
+  osParseFileSpec (ExampleFileName (), driveLetter, path, root, extension);
   KKStr  baseName = "c:\\Temp\\TestImages2\\" + root + "\\" + root;
 
   if  (saveImages)
@@ -660,7 +659,7 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
   
 
   RasterSipperPtr open5Raster = new RasterSipper (*raster);
-  open5Raster->Opening (MorphOp::SQUARE5);
+  open5Raster->Opening (MorphOp::MaskTypes::SQUARE5);
   FVFloat  areaOpen5 = FVFloat (open5Raster->ForegroundPixelCount ());
   if  (saveImages)
     Save (*open5Raster, "Opening5_" + StrFormatInt ((kkint32)areaOpen5, "ZZZZZZ0"), saveImages);
@@ -669,7 +668,7 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
   
 
   RasterSipperPtr open7Raster = new RasterSipper (*raster);
-  open7Raster->Opening (MorphOp::SQUARE7);
+  open7Raster->Opening (MorphOp::MaskTypes::SQUARE7);
   FVFloat  areaOpen7 = FVFloat (open7Raster->ForegroundPixelCount ());
   if  (saveImages)
     Save (*open7Raster, "Opening7_" + StrFormatInt ((kkint32)areaOpen7, "ZZZZZZ0"), saveImages);
@@ -677,7 +676,7 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
   open7Raster = NULL;
   
   RasterSipperPtr open9Raster = new RasterSipper (*raster);
-  open9Raster->Opening (MorphOp::SQUARE9);
+  open9Raster->Opening (MorphOp::MaskTypes::SQUARE9);
   FVFloat  areaOpen9 = (FVFloat)open9Raster->ForegroundPixelCount ();
   if  (saveImages)
     Save (*open9Raster, "Opening9_" + StrFormatInt ((kkint32)areaOpen9, "ZZZZZZ0"), saveImages);
@@ -698,7 +697,7 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
   close3Raster = NULL;
   
   RasterSipperPtr close5Raster = new RasterSipper (*raster);
-  close5Raster->Closing (MorphOp::SQUARE5);
+  close5Raster->Closing (MorphOp::MaskTypes::SQUARE5);
   FVFloat  areaClose5 = FVFloat (close5Raster->ForegroundPixelCount ());
   if  (saveImages)
     Save (*close5Raster, "Close5_" + StrFormatInt ((kkint32)areaClose5, "ZZZZZZ0"), saveImages);
@@ -706,7 +705,7 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
   close5Raster = NULL;
   
   RasterSipperPtr close7Raster = new RasterSipper (*raster);
-  close7Raster->Closing (MorphOp::SQUARE7);
+  close7Raster->Closing (MorphOp::MaskTypes::SQUARE7);
   FVFloat  areaClose7 = FVFloat (close7Raster->ForegroundPixelCount ());
   if  (saveImages)
     Save (*close7Raster, "Close7_" + StrFormatInt ((kkint32)areaClose7, "ZZZZZZ0"), saveImages);
@@ -882,13 +881,13 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
     sfCentroidCol = -1.0f;
     sfCentroidRow = -1.0;
 
-    if  (!ImageFileName ().Empty ())
+    if  (!ExampleFileName ().Empty ())
     {
       KKStr  sipperFileName (30);
       kkuint32 scanLineNum = 0;
       kkuint32 scanColNum  = 0;
 
-      SipperVariables::ParseImageFileName (ImageFileName (), sipperFileName, scanLineNum, scanColNum);
+      PicesVariables::ParseImageFileName (ExampleFileName (), sipperFileName, scanLineNum, scanColNum);
 
       if  (!sipperFileName.Empty ())
       {
@@ -1082,11 +1081,10 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
 
 ImageFeaturesList::ImageFeaturesList (FileDescPtr  _fileDesc,
                                       bool         _owner,
-                                      RunLog&      _log,
                                       kkint32      _size
                                      ):
 
-    FeatureVectorList (_fileDesc, _owner, _log),
+    FeatureVectorList (_fileDesc, _owner),
     version           (0)
 {
 
@@ -1095,17 +1093,16 @@ ImageFeaturesList::ImageFeaturesList (FileDescPtr  _fileDesc,
 
 
 
-ImageFeaturesList::ImageFeaturesList (RunLog&             _log,
-                                      MLClassConstPtr  _mlClass,
-                                      const KKStr&        _dirName,
-                                      const KKStr&        _fileName
+ImageFeaturesList::ImageFeaturesList (RunLog&       _log,
+                                      MLClassPtr    _mlClass,
+                                      const KKStr&  _dirName,
+                                      const KKStr&  _fileName
                                      ):
 
-  FeatureVectorList (FeatureFileIOPices::NewPlanktonFile (_log), true, _log),
-  version       (0)
-
+  FeatureVectorList (FeatureFileIOPices::NewPlanktonFile (), true),
+  version           (0)
 {
-  FeatureExtraction (_dirName, _fileName, _mlClass);
+  FeatureExtraction (_dirName, _fileName, _mlClass, _log);
 }
 
 
@@ -1113,7 +1110,7 @@ ImageFeaturesList::ImageFeaturesList (RunLog&             _log,
 
 ImageFeaturesList::ImageFeaturesList (const ImageFeaturesList&  images):
 
-   FeatureVectorList (images.FileDesc (), images.Owner (), images.log),
+   FeatureVectorList (images.FileDesc (), images.Owner ()),
    version           (images.version)
 {
   const_iterator  idx;
@@ -1134,7 +1131,7 @@ ImageFeaturesList::ImageFeaturesList (const ImageFeaturesList&  images,
                                       bool                      _owner
                                      ):
 
-   FeatureVectorList (images.FileDesc (), _owner, images.log),
+   FeatureVectorList (images.FileDesc (), _owner),
    version           (images.version)
 {
   const_iterator  idx;
@@ -1154,13 +1151,12 @@ ImageFeaturesList::ImageFeaturesList (const FeatureVectorList&  featureVectorLis
                                      ):
 
   FeatureVectorList (featureVectorList.FileDesc (),
-                     _owner, 
-                     featureVectorList.log
+                     _owner
                     ),
   version (0)
 
 {
-  if  (strcmp (featureVectorList.UnderlyingClass (), "ImageFeaturesList") == 0)
+  if  (typeid (featureVectorList) == typeid (ImageFeaturesList))
   {
     const ImageFeaturesList&  images = dynamic_cast<const ImageFeaturesList&> (featureVectorList);
     version = images.Version ();
@@ -1194,7 +1190,7 @@ ImageFeaturesList::ImageFeaturesList (const FeatureVectorList&  featureVectorLis
     for  (idx = featureVectorList.begin ();  idx != featureVectorList.end ();  idx++)
     {
       FeatureVectorPtr featureVector = *idx;
-      if  (strcmp (featureVector->UnderlyingClass (), "ImageFeatures") == 0)
+      if  (typeid (*featureVector) == typeid (ImageFeatures))
       {
         ImageFeaturesPtr image = dynamic_cast<ImageFeaturesPtr>(featureVector);
         PushOnBack (image);
@@ -1203,9 +1199,9 @@ ImageFeaturesList::ImageFeaturesList (const FeatureVectorList&  featureVectorLis
       {
         // ****    ERROR  ****
         KKStr  msg (200);
-        msg << "ImageFeaturesList Copy Constructor for FeatureVectorList  Example[" <<  featureVector->ImageFileName () 
+        msg << "ImageFeaturesList Copy Constructor for FeatureVectorList  Example[" <<  featureVector->ExampleFileName () 
             << "] does not have a underlying type of 'ImageFeatures'.";
-        log.Level (-1) << endl << endl << msg << endl << endl;
+        cerr << endl << msg << endl;
         throw KKException (msg);
       }
     }
@@ -1225,11 +1221,10 @@ ImageFeaturesList::ImageFeaturesList (const FeatureVectorList&  featureVectorLis
 //* The subset will consist of the images who's mlClass is one of the     *
 //* ones in mlClasses.                                                    *
 //****************************************************************************
-ImageFeaturesList::ImageFeaturesList (MLClassConstList&  _mlClasses,
-                                      ImageFeaturesList&    _images,
-                                      RunLog&               _log
+ImageFeaturesList::ImageFeaturesList (MLClassList&        _mlClasses,
+                                      ImageFeaturesList&  _images
                                      ):
-  FeatureVectorList (_mlClasses, _images, _log),
+  FeatureVectorList (_mlClasses, _images),
   version           (_images.version)
 
 {
@@ -1240,13 +1235,12 @@ ImageFeaturesList::ImageFeaturesList (MLClassConstList&  _mlClasses,
 
 ImageFeaturesList::ImageFeaturesList (const FeatureVectorList&  featureVectorList):
   FeatureVectorList (featureVectorList.FileDesc (),
-                     featureVectorList.Owner (), 
-                     featureVectorList.log
+                     featureVectorList.Owner ()
                     ),
   version (0)
 
 {
-  if  (strcmp (featureVectorList.UnderlyingClass (), "ImageFeaturesList") == 0)
+  if  (typeid (featureVectorList) == typeid (ImageFeaturesList))
   {
     const ImageFeaturesList&  images = dynamic_cast<const ImageFeaturesList&> (featureVectorList);
     version = images.Version ();
@@ -1280,7 +1274,7 @@ ImageFeaturesList::ImageFeaturesList (const FeatureVectorList&  featureVectorLis
     for  (idx = featureVectorList.begin ();  idx != featureVectorList.end ();  idx++)
     {
       FeatureVectorPtr featureVector = *idx;
-      if  (strcmp (featureVector->UnderlyingClass (), "ImageFeatures") == 0)
+      if  (typeid (*featureVector) == typeid (ImageFeatures))
       {
         ImageFeaturesPtr image = dynamic_cast<ImageFeaturesPtr>(featureVector);
         PushOnBack (image);
@@ -1288,14 +1282,10 @@ ImageFeaturesList::ImageFeaturesList (const FeatureVectorList&  featureVectorLis
       else
       {
         // ****    ERROR  ****
-        log.Level (-1) << endl << endl << endl
-             << "ImageFeaturesList ::ImageFeaturesList (const FeatureVectorList&  featureVectorList)              ***ERROR***" << endl
-             << endl
-             << "One of the elements in 'featureVectorList' is not of 'ImageFeatures'  type.  We can not  recast this element"
-             << "FileName[" << featureVector->ImageFileName () << "]"  << endl
-             << endl;
-        osWaitForEnter ();
-        exit (-1);
+        KKStr  errMsg (128);
+        errMsg << "ImageFeaturesList ::ImageFeaturesList  ***ERROR***   Elements in 'featureVectorList' is not of 'ImageFeatures'  type;   FileName[" << featureVector->ExampleFileName () << "]";
+        cerr << endl << errMsg << endl << endl;
+        throw KKException (errMsg);
       }
     }
   }
@@ -1307,6 +1297,14 @@ ImageFeaturesList::ImageFeaturesList (const FeatureVectorList&  featureVectorLis
 
 ImageFeaturesList::~ImageFeaturesList ()
 {
+}
+
+
+
+
+ImageFeaturesListPtr  ImageFeaturesList::Duplicate (bool _owner)  const
+{
+  return new ImageFeaturesList (*this, _owner);
 }
 
 
@@ -1333,13 +1331,12 @@ ImageFeaturesPtr  ImageFeaturesList::BackOfQueue ()
     return NULL;
 
   FeatureVectorPtr  fv = back ();
-  if  (strcmp (fv->UnderlyingClass (), "ImageFeatures") == 0)
+  if  (typeid (*fv) == typeid (ImageFeatures))
     return  dynamic_cast<ImageFeaturesPtr> (fv);
 
-  
-  log.Level (-1) << endl << endl 
-                 << "ImageFeaturesList::BackOfQueue ()    ***ERROR***        Entry at back of Queue is not a 'ImageFeatures' object." << endl
-                 << endl;
+  cerr << endl 
+       << "ImageFeaturesList::BackOfQueue ()    ***ERROR***   Entry at back of Queue is not a 'ImageFeatures' object." << endl
+       << endl;
 
   return NULL;
 }  /* BackOfQueue */
@@ -1352,11 +1349,11 @@ ImageFeaturesPtr  ImageFeaturesList::PopFromBack ()
   if  (size () < 1)  return NULL;
 
   FeatureVectorPtr  fv = back ();
-  if  (strcmp (fv->UnderlyingClass (), "ImageFeatures") != 0)
+  if  (typeid (*fv) != typeid (ImageFeatures))
   {
-    log.Level (-1)  << endl << endl 
-                    << "ImageFeaturesList::BackOfQueue ()    ***ERROR***        Entry popped from back of Queue is not a 'ImageFeatures' object." << endl
-                    << endl;
+    cerr << endl 
+         << "ImageFeaturesList::PopFromBack ()    ***ERROR***        Entry popped from back of Queue is not a 'ImageFeatures' object." << endl
+         << endl;
     return NULL;
   }
 
@@ -1409,6 +1406,11 @@ ImageFeaturesPtr  ImageFeaturesList::LookUpByRootName (const KKStr&  _rootName)
 
 
 
+ImageFeaturesListPtr   ImageFeaturesList::ManufactureEmptyList (bool _owner)  const
+{
+  return new ImageFeaturesList (FileDesc (), _owner);
+}
+
 
 
 ImageFeaturesPtr  ImageFeaturesList::LookUpByImageFileName (const KKStr&  _imageFileName)  const
@@ -1420,12 +1422,15 @@ ImageFeaturesPtr  ImageFeaturesList::LookUpByImageFileName (const KKStr&  _image
 
 
 
-ImageFeaturesListPtr  ImageFeaturesList::OrderUsingNamesFromAFile (const KKStr&  fileName)
+ImageFeaturesListPtr  ImageFeaturesList::OrderUsingNamesFromAFile (const KKStr&  fileName,
+                                                                   RunLog&       runLog
+                                                                  )
 {
-  FeatureVectorListPtr  examples = FeatureVectorList::OrderUsingNamesFromAFile (fileName);
+  FeatureVectorListPtr  examples = FeatureVectorList::OrderUsingNamesFromAFile (fileName, runLog);
   examples->Owner (false);
   ImageFeaturesListPtr  orderedImages = new ImageFeaturesList (*examples);
   delete  examples;
+  examples = NULL;
   return  orderedImages;
 }  /* OrderUsingNamesFromAFile */
 
@@ -1434,15 +1439,16 @@ ImageFeaturesListPtr  ImageFeaturesList::OrderUsingNamesFromAFile (const KKStr& 
 
 
 
-void   ImageFeaturesList::FeatureExtraction (const KKStr&        _dirName, 
-                                             const KKStr&        _fileName, 
-                                             MLClassConstPtr  _mlClass
+void   ImageFeaturesList::FeatureExtraction (const KKStr&  _dirName, 
+                                             const KKStr&  _fileName, 
+                                             MLClassPtr    _mlClass,
+                                             RunLog&       _runLog
                                             )
 {
   KKStr  className = _mlClass->Name ();
-  log.Level (10) << "FeatureExtraction,  dirName   [" << _dirName    << "]." << endl;
-  log.Level (10) << "                    fileName  [" << _fileName   << "]." << endl;
-  log.Level (10) << "                    className [" << className   << "]." << endl;
+  _runLog.Level (10) << "FeatureExtraction,  dirName   [" << _dirName    << "]." << endl;
+  _runLog.Level (10) << "                    fileName  [" << _fileName   << "]." << endl;
+  _runLog.Level (10) << "                    className [" << className   << "]." << endl;
 
   bool  cancelFlag  = false;
   bool  successful  = false;
@@ -1474,7 +1480,7 @@ void   ImageFeaturesList::FeatureExtraction (const KKStr&        _dirName,
       continue;
 
     KKStr  fullFileName = osAddSlash (_dirName) + (*imageFileName);
-    ImageFeaturesPtr image = new ImageFeatures (fullFileName, _mlClass, successfull);
+    ImageFeaturesPtr image = new ImageFeatures (fullFileName, _mlClass, successfull, NULL, _runLog);
 
     if  (!image)
     {
@@ -1486,14 +1492,14 @@ void   ImageFeaturesList::FeatureExtraction (const KKStr&        _dirName,
 
     if  (!successfull)
     {
-      log.Level (-1) << "ImageFeaturesList::FeatureExtraction  ***ERROR***, Processing file[" << imageFileName << "]." << endl;
+      _runLog.Level (-1) << "ImageFeaturesList::FeatureExtraction  ***ERROR***, Processing file[" << imageFileName << "]." << endl;
       delete  image;
     }
 
     else
     {
-      image->ImageFileName (imageFileName);
-      log.Level (30) << image->ImageFileName () << "  " << image->OrigSize () << endl;
+      image->ExampleFileName (imageFileName);
+      _runLog.Level (30) << image->ExampleFileName () << "  " << image->OrigSize () << endl;
       PushOnBack (image);
     }
 
@@ -1505,13 +1511,13 @@ void   ImageFeaturesList::FeatureExtraction (const KKStr&        _dirName,
   kkuint32  numExamplesWritten = 0;
 
   // WriteImageFeaturesToFile (fullFeatureFileName, RawFormat, FeatureNumList::AllFeatures (fileDesc));
-  FeatureFileIOPices::Driver ()->SaveFeatureFile (fullFeatureFileName, 
-                                                  FeatureNumList::AllFeatures (FileDesc ()), 
+  FeatureFileIOPices::Driver ()->SaveFeatureFile (fullFeatureFileName,
+                                                  this->AllFeatures (),
                                                   *this, 
                                                   numExamplesWritten,
                                                   cancelFlag,
                                                   successful,
-                                                  log
+                                                  _runLog
                                                  );
 
   delete  fileNameList;  fileNameList = NULL;
@@ -1526,8 +1532,6 @@ VectorDouble  ImageFeaturesList::ExtractPositionsByMeter (InstrumentDataListPtr 
                                                          )
 {
   SortBySpatialDistance ();
-
-  ImageFeaturesList::iterator  idx;
 
   if  (defaultScanRate <= 0.0f)
     defaultScanRate = 24950.0f;
@@ -1549,7 +1553,10 @@ VectorDouble  ImageFeaturesList::ExtractPositionsByMeter (InstrumentDataListPtr 
   double  flowRate = defaultFlowRate;
   double  scanRate = defaultScanRate;
 
-  for  (idx = begin ();  idx != end ();  idx++)
+
+  ImageFeaturesList::iterator  idx;
+
+  for  (idx = begin ();  idx != end ();  ++idx)
   {
     ImageFeaturesPtr  example = *idx;
     position = 0.0;
@@ -1601,10 +1608,9 @@ VectorInt   ImageFeaturesList::CreateSpatialDistributionHistogram (InstrumentDat
   VectorInt     histogram;
   kkuint32      bucketIdx = 0;
 
-  VectorDouble::iterator  idx;
-  for  (idx = positions.begin ();  idx != positions.end ();  idx++)
+  for  (auto idx: positions)
   {
-    bucketIdx = (kkint32)floor (*idx / bucketSize);
+    bucketIdx = (kkint32)floor (idx / bucketSize);
 
     if  (bucketIdx < 0)
       bucketIdx= 0;
@@ -1633,18 +1639,17 @@ void  ImageFeaturesList::PrintSpatialHistogramReport (ostream&               r,
 
   vector<VectorInt>  histogramsByClass;
 
-  MLClassConstListPtr  classes = ExtractMLClassConstList ();
+  MLClassListPtr  classes = ExtractListOfClasses ();
   classes->SortByName ();
 
   kkuint32  maxHistogramSize = (kkuint32)allClassesHistogram.size ();
 
 
-  MLClassConstList::iterator  idx;
-  for  (idx = classes->begin ();  idx != classes->end ();  idx++)
+  for  (auto idx: *classes)
   {
-    MLClassConstPtr  ic = *idx;
+    MLClassPtr ic = idx;
 
-    ImageFeaturesListPtr  imagesThisClass = ExtractImagesForAGivenClass (ic);
+    ImageFeaturesListPtr  imagesThisClass = ExtractExamplesForAGivenClass (ic);
 
     VectorInt  histogramThisClass = imagesThisClass->CreateSpatialDistributionHistogram (instrumentData, defaultScanRate, defaultFlowRate, bucketSize);
     maxHistogramSize = Max (maxHistogramSize, (kkuint32)histogramThisClass.size ());
@@ -1699,7 +1704,7 @@ void  ImageFeaturesList::PrintSpatialHistogramReport (ostream&               r,
  */
 ImageFeaturesListPtr  ImageFeaturesList::DuplicateListAndContents ()  const
 {
-  ImageFeaturesListPtr  copyiedList = new ImageFeaturesList (FileDesc (), true, log, QueueSize ());
+  ImageFeaturesListPtr  copyiedList = new ImageFeaturesList (FileDesc (), true, QueueSize ());
 
   for  (kkint32 idx = 0;  idx < QueueSize ();  idx++)
   {
@@ -1718,10 +1723,11 @@ ImageFeaturesListPtr  ImageFeaturesList::DuplicateListAndContents ()  const
 
 
 void  ImageFeaturesList::RecalcFeatureValuesFromImagesInDirTree (KKStr    rootDir,
-                                                                 bool&    successful
+                                                                 bool&    successful,
+                                                                 RunLog&  runLog
                                                                 )
 {
-  log.Level (20) << "RecalcFeatureValuesFromImagesInDirTree   RootDir[" << rootDir << "]." << endl;
+  runLog.Level (20) << "RecalcFeatureValuesFromImagesInDirTree   RootDir[" << rootDir << "]." << endl;
 
   successful = false;
 
@@ -1735,28 +1741,28 @@ void  ImageFeaturesList::RecalcFeatureValuesFromImagesInDirTree (KKStr    rootDi
 
   if  (fileDirectory.Size () < 1)
   {
-    log.Level (10) << "RecalcFeatureValuesFromImagesInDirTree  No Image Files in[" << rootDir << "]" << endl;
+    runLog.Level (10) << "RecalcFeatureValuesFromImagesInDirTree  No Image Files in[" << rootDir << "]" << endl;
     return;
   }
 
   KKStrConstPtr  dirPath = NULL;
 
-  iterator  idx;
   ImageFeaturesPtr  image = NULL;
 
-  for  (idx = begin ();   idx != end ();  idx++)
+  ImageFeaturesList::iterator  idx;
+  for  (idx = begin ();  idx != end ();  ++idx)
   {
     image = *idx;
-    dirPath = fileDirectory.LocateImage (image->ImageFileName ());
+    dirPath = fileDirectory.LocateImage (image->ExampleFileName ());
     if  (!dirPath)
     {
-      log.Level (10) << "RecalcFeatureValuesFromImagesInDirTree  Could not locate Image[" << image->ImageFileName () << "] in Subdirectory Tree." << endl;
+      runLog.Level (10) << "RecalcFeatureValuesFromImagesInDirTree  Could not locate Image[" << image->ExampleFileName () << "] in Subdirectory Tree." << endl;
       return;
     }
 
     KKStr  fullFileName (dirPath);
     osAddLastSlash (fullFileName);
-    fullFileName << image->ImageFileName ();
+    fullFileName << image->ExampleFileName ();
 
     bool   validFile;
     RasterSipperPtr  raster = new RasterSipper (fullFileName, validFile);
@@ -1765,7 +1771,7 @@ void  ImageFeaturesList::RecalcFeatureValuesFromImagesInDirTree (KKStr    rootDi
       delete  raster;
       return;
     }
-    image->CalcFeatures (*raster);
+    image->CalcFeatures (*raster, NULL, runLog);
     delete  raster;  raster = NULL;
   }
 }  /* RecalcFeatureValuesFromImagesInDirTree */
@@ -1788,28 +1794,29 @@ ImageFeaturesListPtr  ImageFeaturesList::ExtractDuplicatesByRootImageFileName ()
 
 
 
-ImageFeaturesListPtr   ImageFeaturesList::ExtractImagesForAGivenClass (MLClassConstPtr  _mlClass,
-                                                                       kkint32             _maxToExtract,
-                                                                       FVFloat              _minSize
+ImageFeaturesListPtr   ImageFeaturesList::ExtractExamplesForAGivenClass (MLClassPtr  _mlClass,
+                                                                       kkint32     _maxToExtract,
+                                                                       FVFloat     _minSize
                                                                       )  const
 {
-  FeatureVectorListPtr  featureVectorList = FeatureVectorList::ExtractImagesForAGivenClass (_mlClass, _maxToExtract, _minSize);
+  FeatureVectorListPtr  featureVectorList = FeatureVectorList::ExtractExamplesForAGivenClass (_mlClass, _maxToExtract, _minSize);
   ImageFeaturesListPtr  imageFeaturesList = new ImageFeaturesList (*featureVectorList);
   featureVectorList->Owner (false);
   delete  featureVectorList;  featureVectorList = NULL;
   return  imageFeaturesList;
-}  /*  ExtractImagesForAGivenClass  */
+}  /*  ExtractExamplesForAGivenClass  */
 
 
 
 
 
-ImageFeaturesListPtr  ImageFeaturesList::StratifyAmoungstClasses (MLClassConstListPtr  mlClasses,
-                                                                  kkint32                 maxImagesPerClass,
-                                                                  kkint32                 numOfFolds
+ImageFeaturesListPtr  ImageFeaturesList::StratifyAmoungstClasses (MLClassListPtr  mlClasses,
+                                                                  kkint32         maxImagesPerClass,
+                                                                  kkint32         numOfFolds,
+                                                                  RunLog&         runLog
                                                                  )
 {
-  FeatureVectorListPtr  stratifiedFeatureVectors = FeatureVectorList::StratifyAmoungstClasses (mlClasses, maxImagesPerClass, numOfFolds);
+  FeatureVectorListPtr  stratifiedFeatureVectors = FeatureVectorList::StratifyAmoungstClasses (mlClasses, maxImagesPerClass, numOfFolds, runLog);
   ImageFeaturesListPtr  stratifiedImagefeatures  = new ImageFeaturesList (*stratifiedFeatureVectors);
   stratifiedFeatureVectors->Owner (false);
   delete stratifiedFeatureVectors;  stratifiedFeatureVectors = NULL;
@@ -1819,11 +1826,13 @@ ImageFeaturesListPtr  ImageFeaturesList::StratifyAmoungstClasses (MLClassConstLi
 
 
 
-ImageFeaturesListPtr  ImageFeaturesList::StratifyAmoungstClasses (kkint32  numOfFolds)
+ImageFeaturesListPtr  ImageFeaturesList::StratifyAmoungstClasses (kkint32  numOfFolds,
+                                                                  RunLog&  runLog
+                                                                 )
 {
-  MLClassConstListPtr  classes = ExtractMLClassConstList ();
+  MLClassListPtr  classes = this->ExtractListOfClasses ();
 
-  FeatureVectorListPtr  stratifiedFeatureVectors = FeatureVectorList::StratifyAmoungstClasses (classes, -1, numOfFolds);
+  FeatureVectorListPtr  stratifiedFeatureVectors = FeatureVectorList::StratifyAmoungstClasses (classes, -1, numOfFolds, runLog);
   ImageFeaturesListPtr  stratifiedImagefeatures  = new ImageFeaturesList (*stratifiedFeatureVectors);
   
   stratifiedFeatureVectors->Owner (false);
@@ -1847,12 +1856,12 @@ ImageFeaturesListPtr  ImageFeaturesList::StratifyAmoungstClasses (kkint32  numOf
  */
 void  ImageFeaturesList::FixSipperFileScanLineAndColFields ()
 {
-  iterator  idx;
-  for  (idx = begin ();  idx != end ();  idx++)
+  ImageFeaturesList::iterator  idx;
+  for  (idx = begin ();  idx != end ();  ++idx)
   {
     ImageFeaturesPtr  i = *idx;
 
-    KKStr  rootName = osGetRootName (i->ImageFileName ());
+    KKStr  rootName = osGetRootName (i->ExampleFileName ());
     kkint32 x = rootName.LocateLastOccurrence ('_');
     if  (x > 0)
     {
@@ -1917,7 +1926,7 @@ VectorFloat   ImageFeaturesList::CalculateDensitesByQuadrat (float        scanRa
   VectorInt  imagesPerQuadrat;
   imagesPerQuadrat.push_back (0);
 
-  InstrumentDataPtr  id = InstrumentDataFileManager::GetClosestInstrumentData (firstOne->ImageFileName (), cancelFlag, log);
+  InstrumentDataPtr  id = InstrumentDataFileManager::GetClosestInstrumentData (firstOne->ExampleFileName (), cancelFlag, log);
   curFlowRate = FlowRate (id, defaultFlowRate);
 
   for  (idx = begin ();  idx != end ();  idx++)
@@ -1927,7 +1936,7 @@ VectorFloat   ImageFeaturesList::CalculateDensitesByQuadrat (float        scanRa
     if  (id  &&  ((i->SfCentroidRow () - id->ScanLine ()) > 4096))
     {
       // Time to get a more UpToDate Instrument Data Item
-      id = InstrumentDataFileManager::GetClosestInstrumentData (i->ImageFileName (), cancelFlag, log);
+      id = InstrumentDataFileManager::GetClosestInstrumentData (i->ExampleFileName (), cancelFlag, log);
       curFlowRate = FlowRate (id, defaultFlowRate);
     }
 

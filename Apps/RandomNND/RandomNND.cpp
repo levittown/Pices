@@ -326,7 +326,7 @@ void  RandomNND::PopulateDataRandomly ()
 void	RandomNND::LookForNeighbors (int  iteration)
 {
   log.Level (10) << "RandomNND::LookForNeighbors    iteration[" << iteration << "]" << endl;
-  data[iteration]->FindNearestNeighbors (AnyPlanktonClass, NULL);
+  data[iteration]->FindNearestNeighbors (NeighborType::AnyPlankton, NULL);
 }  /* LookForNeighbors */
 
 

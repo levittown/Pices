@@ -37,7 +37,7 @@ private:
 
 
   bool              cancelFlag;
-  MLClassConstList  mlClasses;
+  MLClassList  mlClasses;
   ofstream*         r;
   KKStr             reportFileName;
   KKStr             rootDir;

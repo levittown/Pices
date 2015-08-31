@@ -19,25 +19,28 @@ using namespace std;
 using namespace  KKB;
 
 
+#include "Classifier2.h"
+#include "DataBase.h"
+#include "FactoryFVProducer.h"
+#include "FeatureVectorProducer.h"
+#include "FileDesc.h"
+#include "MLClass.h"
+#include "ImageFeatures.h"
+#include "TrainingProcess2.h"
+using namespace  KKMLL;
+
+
+#include "FeatureFileIOPices.h"
 #include "InstrumentData.h"
 #include "InstrumentDataManager.h"
 #include "InstrumentDataFileManager.h"
+#include "PicesTrainingConfiguration.h"
 #include "SipperBuff.h"
 #include "SipperBuffBinary.h"
 #include "SipperBuff3Bit.h"
 #include "Sipper3Buff.h"
 #include "Sipper3RevBuff.h"
-using namespace  SipperHardware;
-
-
-#include "Classifier2.h"
-#include "DataBase.h"
-#include "FileDesc.h"
-#include "FeatureFileIOPices.h"
-#include "MLClass.h"
-#include "ImageFeatures.h"
 #include "SipperExtractionImageManager.h"
-#include "TrainingProcess2.h"
 using namespace  MLL;
 
 
@@ -66,6 +69,8 @@ FrameProcessorThread::FrameProcessorThread (ExtractionParms&        _parms,
   fileDesc              (NULL),
   framePool             (_framePool),
   framesProcessed       (0),
+  fvProducer            (NULL),
+  fvProducerFactory     (NULL),
   imagesAwaitingUpdate  (_imagesAwaitingUpdate),
   imagesClassified      (0),
   imagesFound           (0),
@@ -82,7 +87,9 @@ FrameProcessorThread::FrameProcessorThread (ExtractionParms&        _parms,
 
   sipperRootName = osGetRootName (parms.SipperFileName ());
 
-  fileDesc = FeatureFileIOPices::NewPlanktonFile (log);
+  fvProducerFactory = _extractionManager->FvProducerFactory ();
+  fvProducer        = fvProducerFactory->ManufactureInstance (log);
+  fileDesc          = fvProducerFactory->FileDesc ();
 
   InstrumentDataFileManager::InitializePush ();
  
@@ -106,6 +113,7 @@ FrameProcessorThread::~FrameProcessorThread ()
 
   delete  trainer;     trainer     = NULL;
   delete  classifier;  classifier  = NULL;
+  delete  fvProducer;  fvProducer  = NULL;
 }
 
 
@@ -158,24 +166,25 @@ void  FrameProcessorThread::ProcessFrame (LogicalFramePtr  frame)
                   << StrFormatInt (sipperTopCol, "0000")
                   << ".bmp";
   
-    ImageFeaturesPtr  featureVector = NULL;
+    FeatureVectorPtr  featureVector      = NULL;
+    ImageFeaturesPtr  picesFeatureVector = NULL;
+
     RasterSipperPtr raster = extractedImage->Image ();
     raster->FileName (imageFileName);
     
-    float            depth            = 0.0f;
-    MLClassConstPtr  predClass1       = unKnownMLClass;
-    MLClassConstPtr  predClass2       = NULL;
-    kkint32          predClass1Votes  = 0;
-    kkint32          predClass2Votes  = 0;
-    double           knownClassProb   = 0.0;
-    double           predClass1Prob   = 0.0;
-    double           predClass2Prob   = 0.0;
-    double           compact          = 0.0;
+    float        depth            = 0.0f;
+    MLClassPtr   predClass1       = unKnownMLClass;
+    MLClassPtr   predClass2       = NULL;
+    kkint32      predClass1Votes  = 0;
+    kkint32      predClass2Votes  = 0;
+    double       knownClassProb   = 0.0;
+    double       predClass1Prob   = 0.0;
+    double       predClass2Prob   = 0.0;
     
     bool  cf = false;
 
 
-    /**@todo  When a proper implementation for SIPPER 4 is made i will need to get instrument data for it.  */
+    /**@todo  When a proper implementation for SIPPER 4 is made I will need to get instrument data for it.  */
 
     InstrumentDataPtr  id = NULL;
     if  (this->parms.FileFormat () != sfSipper4Bit)
@@ -187,26 +196,37 @@ void  FrameProcessorThread::ProcessFrame (LogicalFramePtr  frame)
     if  (parms.ExtractFeatureData ())
     {
       raster->FileName (imageFileName);
+      featureVector = fvProducer->ComputeFeatureVector (*raster, unKnownMLClass, NULL, 1.0f, log);
+      featureVector->ExampleFileName (imageFileName);
 
-      featureVector = new ImageFeatures (*raster, unKnownMLClass);
-
-      featureVector->ImageFileName (imageFileName);
+      picesFeatureVector = NULL;
+      if  (typeid (*featureVector) == typeid (ImageFeatures))
+      {
+        picesFeatureVector = dynamic_cast<ImageFeaturesPtr> (featureVector);
+        featureVector = NULL;
+      }
+      else
+      {
+        picesFeatureVector = new ImageFeatures (*featureVector);
+        delete  featureVector;
+        featureVector = NULL;
+      }
 
       if  (id)
       {
-        featureVector->FlowRate1    (id->FlowRate1    ());
-        featureVector->FlowRate2    (id->FlowRate2    ());
-        featureVector->Latitude     (id->Latitude     ());
-        featureVector->Longitude    (id->Longitude    ());
-        featureVector->Depth        (id->Depth        ());
-        featureVector->Salinity     (id->Salinity     ());
-        featureVector->Oxygen       (id->Oxygen       ());
-        featureVector->Fluorescence (id->Fluorescence ());
+        picesFeatureVector->FlowRate1    (id->FlowRate1    ());
+        picesFeatureVector->FlowRate2    (id->FlowRate2    ());
+        picesFeatureVector->Latitude     (id->Latitude     ());
+        picesFeatureVector->Longitude    (id->Longitude    ());
+        picesFeatureVector->Depth        (id->Depth        ());
+        picesFeatureVector->Salinity     (id->Salinity     ());
+        picesFeatureVector->Oxygen       (id->Oxygen       ());
+        picesFeatureVector->Fluorescence (id->Fluorescence ());
       }
 
-      featureVector->SfCentroidCol (featureVector->CentroidCol () + float  (sipperTopCol));
-      featureVector->SfCentroidRow (featureVector->CentroidRow () + double (sipperTopRow));
- 
+      picesFeatureVector->SfCentroidCol (picesFeatureVector->CentroidCol () + float  (sipperTopCol));
+      picesFeatureVector->SfCentroidRow (picesFeatureVector->CentroidRow () + double (sipperTopRow));
+
       // Duplicate Image Detection was moved over to the 'DataBaseUpdateThread".
 
       if  (classifier)
@@ -215,28 +235,27 @@ void  FrameProcessorThread::ProcessFrame (LogicalFramePtr  frame)
         bool knownClassOneOfTheWinners  = false;
         double  breakTie    = 0.0f;
 
-        ImageFeaturesPtr  dupFV = new ImageFeatures (*featureVector);
-        classifier->ClassifyAImage (*dupFV,
+        ImageFeaturesPtr  dupFV = new ImageFeatures (*picesFeatureVector);
+        classifier->ClassifyAExample (*dupFV,
                                      predClass1,       predClass2,
                                      predClass1Votes,  predClass2Votes,
                                      knownClassProb,   
                                      predClass1Prob,   predClass2Prob,
                                      numOfWinners,
-                                     breakTie,
-                                     compact
+                                     breakTie
                                     );
 
-        featureVector->MLClass     (predClass1);
-        featureVector->Probability    ((float)predClass1Prob);
-        featureVector->BreakTie       ((float)breakTie);
-        featureVector->PredictedClass (predClass1);
+        picesFeatureVector->MLClass        (predClass1);
+        picesFeatureVector->Probability    ((float)predClass1Prob);
+        picesFeatureVector->BreakTie       ((float)breakTie);
+        picesFeatureVector->PredictedClass (predClass1);
         delete  dupFV;
         dupFV = NULL;
       }
     }
 
     extractedImage->Depth         (depth);
-    extractedImage->FeatureVector (featureVector);
+    extractedImage->FeatureVector (picesFeatureVector);
     
     extractedImage->Prediction (predClass1, (float)predClass1Prob, predClass2, (float)predClass2Prob);
 
@@ -263,27 +282,27 @@ void  FrameProcessorThread::LoadClassifier (bool&  _successful)
   if  ((parms.ExtractFeatureData ())  &&  (!parms.ConfigFileName ().Empty ()))
   {
     AddMsg ("LoadClassifier    Building Training Model");
-    KKStr  trainerStatusMsg = "";
 
-    trainer = new TrainingProcess2 (parms.ConfigFileName (),
-                                    fileDesc,
-                                    log,
-                                    false,          // false = Feature are not already normalized.
-                                    CancelFlag (),
-                                    trainerStatusMsg
-                                   );
-
+    trainer = TrainingProcess2::LoadExistingTrainingProcess (parms.ConfigFileName (), CancelFlag (), log);
 
     if  (ShutdownOrTerminateRequested ())
     {
       AddMsg ("LoadClassifier    Image Extraction Canceled.");
     }
 
+    else if  (!trainer)
+    {
+      _successful = false;
+      KKStr  msg (100);
+      msg << "LoadClassifier    ***ERROR***  TrainingProcess  failed to load;  ConfigFileName[" << parms.ConfigFileName () << "].";
+      AddMsg (msg);
+    }
+
     else if  (trainer->Abort ())
     {
       _successful = false;
       KKStr  msg (100);
-      msg << "LoadClassifier    ***ERROR***  Building Classifier for ConfigFileName[" << parms.ConfigFileName () << "]  Reason[" << trainerStatusMsg << "].";
+      msg << "LoadClassifier    ***ERROR***  Building Classifier for ConfigFileName[" << parms.ConfigFileName () << "].";
       AddMsg (msg);
     }
 
@@ -302,9 +321,9 @@ LogicalFramePtr  FrameProcessorThread::GetNextFrameToProcess ()
   LogicalFramePtr  logicalFrame = framePool->GetNextFrameToProcess ();
   while  ((logicalFrame == NULL)  &&  (!CancelFlag ()))
   {
-    osSleep (0.01f);
+    osSleepMiliSecs (20);
     logicalFrame = framePool->GetNextFrameToProcess ();
-    if  ((logicalFrame == NULL)  &&  TerminateFlag ())
+    if  ((logicalFrame == NULL)  &&  ShutdownFlag ())
     {
       // There are no more frames needing processing and the Extraction Manager wants to stop when convenient.
       break;
@@ -325,9 +344,9 @@ LogicalFramePtr  FrameProcessorThread::GetNextFrameToProcess ()
 
 void  FrameProcessorThread::Run ()
 {
-  Status (tsStarting);
+  Status (ThreadStatus::Starting);
 
-  Status (tsRunning);
+  Status (ThreadStatus::Running);
 
   LogicalFramePtr  logicalFrame = GetNextFrameToProcess ();
   while  (!CancelFlag ())
@@ -338,14 +357,14 @@ void  FrameProcessorThread::Run ()
       framePool->FrameProcessed (logicalFrame);
     }
     
-    else if  (TerminateFlag ())
+    else if  (ShutdownFlag ())
       break;
 
     logicalFrame = GetNextFrameToProcess ();
   }
 
-  Status (tsStopping);
+  Status (ThreadStatus::Stopping);
   AddMsg ("Run " + ThreadName () + " done.");
 
-  Status (tsStopped);
+  Status (ThreadStatus::Stopped);
 }  /* Run */

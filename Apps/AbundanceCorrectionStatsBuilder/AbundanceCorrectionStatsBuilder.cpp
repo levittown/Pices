@@ -18,25 +18,27 @@ using namespace std;
 #include "KKStr.h"
 using namespace KKB;
 
-#include "InstrumentDataFileManager.h"
-#include "SipperVariables.h"
-using namespace SipperHardware;
 
-#include "AbundanceCorrectionMatrix.h"
 #include "ConfusionMatrix2.h"
 #include "DuplicateImages.h"
 #include "FeatureFileIO.h"
 #include "FeatureFileIOPices.h"
 #include "FeatureVector.h"
 #include "FileDesc.h"
-#include "MLClass.h"
 #include "ImageFeatures.h"
-using namespace MLL;
+#include "InstrumentDataFileManager.h"
+#include "MLClass.h"
+using namespace KKMLL;
+
+
+#include "AbundanceCorrectionMatrix.h"
+#include "PicesVariables.h"
+#include "PicesApplication.h"
+using namespace  MLL;
 
 
 #include "AbundanceCorrectionStatsBuilder.h"
 #include "TrainTestThread.h"
-
 using namespace  AbundanceCorrectionApplication;
 
 
@@ -91,6 +93,7 @@ void  AbundanceCorrectionStatsBuilder::InitalizeApplication (kkint32 argc,
                                                              char**  argv
                                                             )
 {
+  ConfigRequired (true);
   PicesApplication::InitalizeApplication (argc, argv);
   if  (argc < 2)
   {
@@ -108,7 +111,7 @@ void  AbundanceCorrectionStatsBuilder::InitalizeApplication (kkint32 argc,
   //maxNumActiveThreads = 1;  // KKKK  For debugging only.
 
 
-  fileDesc = FeatureFileIOPices::NewPlanktonFile (log);
+  fileDesc = FeatureFileIOPices::NewPlanktonFile ();
 
   InstrumentDataFileManager::InitializePush ();
   if  (Abort ())
@@ -135,7 +138,7 @@ bool  AbundanceCorrectionStatsBuilder::ProcessCmdLineParameter (const KKStr&  pa
     numOfFolds = parmValue.ToInt ();
     if  ((numOfFolds < 2)  ||  (numOfFolds > 1000))
     {
-      log.Level (-1) << "ProcessCmdLineParameter   ***ERROR***    Invalid '-NumFolds' [" << numOfFolds << "] Invlaid;  valid values (2 - 1000)." << endl;
+      log.Level (-1) << "ProcessCmdLineParameter   ***ERROR***    Invalid '-NumFolds' [" << numOfFolds << "] Invalid;  valid values (2 - 1000)." << endl;
       Abort (true);
       parmValid = false;
     }
@@ -160,9 +163,8 @@ bool  AbundanceCorrectionStatsBuilder::ProcessCmdLineParameter (const KKStr&  pa
  ******************************************************************************/
 void   AbundanceCorrectionStatsBuilder::DisplayCommandLineParameters ()
 {
+  PicesApplication::DisplayCommandLineParameters ();
   log.Level (0) << "AbundanceCorrectionStatsBuilder"                           << endl;
-  log.Level (0)                                                                << endl;
-  log.Level (0) << "    -Config   <Configuration File>"                        << endl;
   log.Level (0)                                                                << endl;
   log.Level (0) << "    -folds  <number of folds>  Will default to 10."        << endl;
   log.Level (0)                                                                << endl;
@@ -190,7 +192,7 @@ void   AbundanceCorrectionStatsBuilder::PrintStartStatistics ()
 {
   if  (trainLibData)
   {
-    *report << endl << endl << "Traing Library Stats" << endl;
+    *report << endl << endl << "Training Library Stats" << endl;
     trainLibData->PrintClassStatistics (*report);
   }
 
@@ -208,8 +210,7 @@ void  AbundanceCorrectionStatsBuilder::RemoveDuplicateImages ()
   *report << endl << endl;
 
   FeatureVectorListPtr  allExamples = new FeatureVectorList (fileDesc, 
-                                                             false,    // 'false' = will not own contents.
-                                                             log
+                                                             false    // 'false' = will not own contents.
                                                             ); 
   allExamples->AddQueue (*trainLibData);
   allExamples->AddQueue (*otherClassData);
@@ -250,7 +251,7 @@ void   AbundanceCorrectionStatsBuilder::TerminateThreads ()
 {
   TrainTestThreadList::iterator  idx;
 
-  log.Level (10) << "TerminateThreads   Flagging all running threads to termnate." << endl;
+  log.Level (10) << "TerminateThreads   Flagging all running threads to terminate." << endl;
   for  (idx = queueRunning->begin ();  idx != queueRunning->end ();  ++idx)
   {
     TrainTestThreadPtr  thread = *idx;
@@ -266,7 +267,7 @@ void   AbundanceCorrectionStatsBuilder::TerminateThreads ()
     for  (idx = queueRunning->begin ();  idx != queueRunning->end ();  ++idx)
     {
       TrainTestThreadPtr  thread = *idx;
-      if  ((thread->Status () != tsStopped)  &&  (thread->Status () != tsNotStarted))
+      if  ((thread->Status () != Stopped)  &&  (thread->Status () != NotStarted))
         ++numThreadsRunning;
     }
 
@@ -311,11 +312,11 @@ void   AbundanceCorrectionStatsBuilder::ManageThreads ()
         {
           oneOrMoreThreadsCrashed = true;
           log.Level (10) << endl << endl
-            << "ManageThreads    ***ERROR***      Thresad[" << thread->Desc () << "]   Crashed."  << endl
+            << "ManageThreads    ***ERROR***      Thread[" << thread->Desc () << "]   Crashed."  << endl
             << endl;
         }
 
-        if  (thread->Status () == tsStopped)
+        if  (thread->Status () == Stopped)
         {
           idx = queueRunning->erase (idx);
           queueDone->PushOnBack (thread);
@@ -365,8 +366,8 @@ void   AbundanceCorrectionStatsBuilder::CreateInitialThreadInstaces ()
 {
   log.Level (10) << "AbundanceCorrectionStatsBuilder::CreateInitialThreadInstaces"  << endl;
   
-  FeatureVectorListPtr  stratifiedTrainData = trainLibData->StratifyAmoungstClasses (numOfFolds);
-  FeatureVectorListPtr  stratifiedOtherData = otherClassData->StratifyAmoungstClasses (numOfFolds);
+  FeatureVectorListPtr  stratifiedTrainData = trainLibData->StratifyAmoungstClasses (numOfFolds, log);
+  FeatureVectorListPtr  stratifiedOtherData = otherClassData->StratifyAmoungstClasses (numOfFolds, log);
 
   kkint32  numTrainExamples = stratifiedTrainData->QueueSize ();
   kkint32  numOtherExamples = stratifiedOtherData->QueueSize ();
@@ -387,8 +388,8 @@ void   AbundanceCorrectionStatsBuilder::CreateInitialThreadInstaces ()
     firstOtherFvInFold = lastOtherFvInFold + 1;
     lastOtherFvInFold  = (numOtherExamples * (foldNum + 1) / numOfFolds) - 1;
 
-    FeatureVectorListPtr  trainData = new FeatureVectorList (fileDesc, false, log);
-    FeatureVectorListPtr  testData  = new FeatureVectorList (fileDesc, false, log);
+    FeatureVectorListPtr  trainData = new FeatureVectorList (fileDesc, false);
+    FeatureVectorListPtr  testData  = new FeatureVectorList (fileDesc, false);
 
     for  (kkint32 idx = 0;  idx < numTrainExamples;  ++idx)
     {
@@ -399,7 +400,7 @@ void   AbundanceCorrectionStatsBuilder::CreateInitialThreadInstaces ()
         trainData->PushOnBack (fv);
     }
 
-    // Add OtherClass exampes to test data.
+    // Add OtherClass examples to test data.
     for  (kkint32 idx = firstOtherFvInFold;  idx <= lastOtherFvInFold;  ++idx)
     {
       FeatureVectorPtr fv = stratifiedOtherData->IdxToPtr (idx);
@@ -415,12 +416,12 @@ void   AbundanceCorrectionStatsBuilder::CreateInitialThreadInstaces ()
                 this,
                 config,
                 allClasses,
-                trainData,            // Will take ownesrship and delete in its destructor.
+                trainData,            // Will take ownership and delete in its destructor.
                 trainLibDataClasses,
-                testData,             // Will take ownesrship and delete in its destructor.
+                testData,             // Will take ownership and delete in its destructor.
                 otherClass,
                 threadName,
-                msgQueue,             // Will take ownesrship and delete in its destructor.
+                msgQueue,             // Will take ownership and delete in its destructor.
                 threadRunLog
                );
 
@@ -484,7 +485,7 @@ void   AbundanceCorrectionStatsBuilder::Main ()
   if  (reportFileName.Empty ())
   {
     DateTime  d = osGetLocalDateTime ();
-    KKStr  reportDir = osAddSlash (SipperVariables::PicesReportDir ()) + "AbundanceAdjustments";
+    KKStr  reportDir = osAddSlash (PicesVariables::ReportDir ()) + "AbundanceAdjustments";
     osCreateDirectoryPath (reportDir);
     if  (configFileName.Empty ())
       reportFileName = osAddSlash (reportDir) + "NoConfigFile" + "_" + d.YYYYMMDDHHMMSS () + ".txt";
@@ -495,49 +496,12 @@ void   AbundanceCorrectionStatsBuilder::Main ()
   report = new ofstream (reportFileName.Str ());
   PrintComandLineParameters ();
 
-  if  (configFileName.Empty ())
-  {
-    log.Level (-1) << endl << endl 
-      << "AbundanceCorrectionStatsBuilder::Main   ***ERROR***    Configuration File was not specified." << endl
-      << endl;
-    Abort (true);
-    *report << endl << "*** NO CONFIGURATION FILE SPECIFIED ***" << endl << endl;
-    return;
-  }
-
-  delete  config;
-  config = new TrainingConfiguration2 (fileDesc, 
-                                       configFileFullPath, 
-                                       log,
-                                       true    /**<  'true' = validateDirectories. */
-                                      );
-
-  if  (!config->FormatGood ())
-  {
-    log.Level (-1) << endl
-      << "AbundanceCorrectionStatsBuilder::Main   Config[" << configFileName << "] has invalid format." << endl
-      << endl;
-
-    VectorKKStr  errors = config->FormatErrorsWithLineNumbers ();
-    VectorKKStr::const_iterator  idx;
-    log.Level (-1) << endl;
-    for  (idx = errors.begin ();  idx != errors.end ();  ++idx)
-      log.Level (-1) << (*idx) << endl;
-    log.Level (-1) << endl << endl;
-
-    *report << endl << endl << "***   Configuratiuon file[" << configFileName << " contains formatting errors." << endl << endl;
-
-    config->PrintFormatErrors (*report);
-
-    return;
-  }
-
   bool      changesMadeToTrainingLibraries = false;
   bool      cancelFlag = false;
   DateTime  latestImageTimeStamp;
 
   delete  trainLibData;
-  trainLibData = config->LoadFeatureDataFromTrainingLibraries (latestImageTimeStamp, changesMadeToTrainingLibraries, cancelFlag);
+  trainLibData = config->LoadFeatureDataFromTrainingLibraries (latestImageTimeStamp, changesMadeToTrainingLibraries, cancelFlag, log);
   if  (!trainLibData)
   {
     log.Level (-1) << endl
@@ -557,13 +521,13 @@ void   AbundanceCorrectionStatsBuilder::Main ()
   if  (configClasses->PtrToIdx (otherClass) >= 0)
   {
     log.Level (-1) << endl
-      << "AbundanceCorrectionStatsBuilder::Main   ***ERROR***   OtherClass[" << otherClass->Name () << "] is specified as a Training Class; it must be swepcified separatly." << endl
+      << "AbundanceCorrectionStatsBuilder::Main   ***ERROR***   OtherClass[" << otherClass->Name () << "] is specified as a Training Class; it must be specified separately." << endl
       << endl;
     *report << endl << "*** Failed to load other class data ***" << endl;
     return;
   }
 
-  trainLibDataClasses = trainLibData->ExtractMLClassConstList ();
+  trainLibDataClasses = trainLibData->ExtractListOfClasses ();
   trainLibDataClasses->SortByName ();
 
   if  ((*configClasses) != (*trainLibDataClasses))
@@ -573,14 +537,14 @@ void   AbundanceCorrectionStatsBuilder::Main ()
       << "AbundanceCorrectionStatsBuilder::Main   ***ERROR***   Class make up of training data does not correspond to configuration file." << endl
       << endl;
 
-    *report << endl << "*** Training data contains different classes that Confg File  ***" << endl;
+    *report << endl << "*** Training data contains different classes that Config File  ***" << endl;
     return;
   }
 
-  allClasses = new MLClassConstList (*trainLibDataClasses);
+  allClasses = new MLClassList (*trainLibDataClasses);
   allClasses->PushOnBack (otherClass);
 
-  otherClassData = config->LoadOtherClasssExamples ();
+  otherClassData = config->LoadOtherClasssExamples (log);
   if  ((!otherClassData)  ||  (otherClassData->QueueSize () < 1))
   {
     Abort (true);
@@ -597,8 +561,8 @@ void   AbundanceCorrectionStatsBuilder::Main ()
   RemoveDuplicateImages ();
 
   normalizationParms = new NormalizationParms (config, *trainLibData, log);
-  normalizationParms->NormalizeImages (trainLibData);
-  normalizationParms->NormalizeImages (otherClassData);
+  normalizationParms->NormalizeExamples (trainLibData, log);
+  normalizationParms->NormalizeExamples (otherClassData, log);
 
   CreateInitialThreadInstaces ();
 

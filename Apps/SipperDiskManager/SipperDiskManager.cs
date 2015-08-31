@@ -38,7 +38,7 @@ namespace SipperDiskManager
 
     public SipperDiskManager ()
     {
-      destDir = OSservices.AddSlash (PicesSipperVariables.PicesHomeDir ()) + "SipperFiles";
+      destDir = OSservices.AddSlash (PicesSipperVariables.HomeDir ()) + "SipperFiles";
       OSservices.CreateDirectory (destDir);
 
       InitializeComponent ();

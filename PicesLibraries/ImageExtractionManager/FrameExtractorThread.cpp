@@ -2,11 +2,11 @@
  * Copyright (C) 2012 Kurt Kramer
  * For conditions of distribution and use, see copyright notice in ImageExtractionManager.h
  */
-#include  "FirstIncludes.h"
-#include  <string>
-#include  <iostream>
-#include  <vector>
-#include  "MemoryDebug.h"
+#include "FirstIncludes.h"
+#include <string>
+#include <iostream>
+#include <vector>
+#include "MemoryDebug.h"
 using namespace std;
 
 
@@ -27,7 +27,7 @@ using namespace KKB;
 #include "SipperBuff3Bit.h"
 #include "Sipper3Buff.h"
 #include "Sipper3RevBuff.h"
-using namespace SipperHardware;
+using namespace MLL;
 
 
 #include "FrameExtractorThread.h"
@@ -545,7 +545,7 @@ void  FrameExtractorThread::SaveFrame (const KKStr& suffix)
 
 void  FrameExtractorThread::Run ()
 {
-  Status (tsStarting);
+  Status (ThreadStatus::Starting);
 
   AddMsg ("Run  Starting");
 
@@ -557,7 +557,7 @@ void  FrameExtractorThread::Run ()
   frameNum = 0;
   bool  moreFrames = true;
 
-  Status (tsRunning);
+  Status (ThreadStatus::Running);
 
   GetNextFrame (moreFrames);
   while  (moreFrames  &&  (!CancelFlag ()))
@@ -581,7 +581,7 @@ void  FrameExtractorThread::Run ()
     GetNextFrame (moreFrames);
   }
 
-  Status (tsStopping);
+  Status (ThreadStatus::Stopping);
 
   AddMsg ("Run   Done Extracting Frames.");
   
@@ -591,7 +591,7 @@ void  FrameExtractorThread::Run ()
   endTime =  osGetLocalDateTime ();
   elaspedTime = endTime - startTime;
 
-  Status (tsStopped);
+  Status (ThreadStatus::Stopped);
 }  /* Run */
 
 

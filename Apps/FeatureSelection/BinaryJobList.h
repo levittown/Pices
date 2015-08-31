@@ -25,7 +25,12 @@ namespace FeatureSelectionApp
 
     typedef  BinaryJobList*  BinaryJobListPtr;
 
-    typedef  enum  {NoError, DuplicateJobId, DuplicateParameters}  ErrorCodes;
+    enum class  ErrorCodes
+    {
+      NoError,
+      DuplicateJobId,
+      DuplicateParameters
+    };
 
 
     BinaryJobList (ProcessorPtr  _processor);

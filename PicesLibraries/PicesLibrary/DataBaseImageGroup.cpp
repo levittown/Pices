@@ -1,19 +1,18 @@
-#include  "FirstIncludes.h"
-#include  <stdlib.h>
-#include  <memory>
+#include "FirstIncludes.h"
+#include <stdlib.h>
+#include <memory>
 
-#include  <string>
-#include  <iostream>
-#include  <fstream>
-#include  <vector>
-#include  <map>
-
-
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <map>
 using namespace std;
 
-#include  "MemoryDebug.h"
-#include  "KKBaseTypes.h"
+#include "MemoryDebug.h"
+#include "KKBaseTypes.h"
 using namespace KKB;
+
 
 #include "DataBaseImageGroup.h"
 using namespace  MLL;

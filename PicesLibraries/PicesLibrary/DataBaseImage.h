@@ -24,7 +24,7 @@ typedef  MSQL_STRUCT* MYSQL_ROW;
 using namespace KKB;
 
 #include "RasterSipper.h"
-using namespace  SipperHardware;
+using namespace  MLL;
 
 namespace MLL 
 {
@@ -165,7 +165,7 @@ namespace MLL
 
     MLClassListPtr  ExtractListOfClasses ();
 
-    DataBaseImageListPtr  ExtractImagesForAGivenClass (MLClassPtr  _mlClass);
+    DataBaseImageListPtr  ExtractExamplesForAGivenClass (MLClassPtr  _mlClass);
 
 
     VectorFloat  CalculateDensitesByQuadrat (float        scanRate,     // Scan Lines per Sec.

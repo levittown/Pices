@@ -56,7 +56,7 @@
  *@see  DataBaseServer
  *
  *@section  PICESSpecific "PICES Specific"
- * This is code that is built on the SipperInstruments (aka SipperHardware Namespace),  Machine Learning Code, Featuire Data Code
+ * This is code that is built on the SipperInstruments (aka MLL Namespace),  Machine Learning Code, Feature Data Code
  *@see ImageFeatures
  *@see TrainingConfiguration2
  *@see DataBaseImage

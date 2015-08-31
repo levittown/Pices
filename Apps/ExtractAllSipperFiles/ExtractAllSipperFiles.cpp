@@ -20,11 +20,10 @@ using namespace std;
 #include "KKStr.h"
 using namespace KKB;
 
-#include "SipperVariables.h"
-using namespace  SipperHardware;
-
 #include "DataBase.h"
-using namespace MLL;
+#include "PicesVariables.h"
+using namespace  MLL;
+
 
 #include "ExtractAllSipperFiles.h"
 
@@ -241,11 +240,11 @@ void  ExtractAllSipperFiles::RunOneImageExtraction (const KKStr&  sfn)
 
   dbConn->SipperFilesUpdateExtractionStatus (rootName, '1');
 
-  KKStr  destDir = osAddSlash (osAddSlash (SipperVariables::PicesHomeDir ()) + "ExtractedImages") + osGetRootName (sfn);
+  KKStr  destDir = osAddSlash (osAddSlash (PicesVariables::HomeDir ()) + "ExtractedImages") + osGetRootName (sfn);
 
   KKStr  cmd(1000);
 
-  KKStr  progName = osAddSlash (osAddSlash (SipperVariables::PicesHomeDir ()) + "exe") + "ImageExtractionWindows.exe";
+  KKStr  progName = osAddSlash (osAddSlash (PicesVariables::HomeDir ()) + "exe") + "ImageExtractionWindows.exe";
 
   cmd << progName                            << "  "
       << "-s"      << " " << sfn             << "  "

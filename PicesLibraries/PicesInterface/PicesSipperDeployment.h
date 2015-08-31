@@ -10,7 +10,7 @@ using namespace System::Diagnostics;
 using namespace KKB;
 
 #include  "SipperDeployment.h"
-using namespace SipperHardware;
+using namespace MLL;
 
 #include  "PicesRunLog.h"
 

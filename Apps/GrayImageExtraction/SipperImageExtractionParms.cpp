@@ -21,11 +21,9 @@ using namespace std;
 #include "OSservices.h"
 using namespace KKB;
 
-#include "SipperBuff.h"
-using namespace SipperHardware;
-
 #include "DataBase.h"
-#include "TrainingConfiguration2.h"
+#include "PicesTrainingConfiguration.h"
+#include "SipperBuff.h"
 using namespace MLL;
 
 

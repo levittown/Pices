@@ -926,7 +926,7 @@ int   BitReductionPaper::DetermineCompressedImageCount ()
     for  (idx = mlClasses->begin ();  idx != mlClasses->end ();  idx++)
     {
       MLClassPtr  mlClass = *idx;
-      FeatureVectorListPtr  imagesThisClass = srcImages->ExtractImagesForAGivenClass (mlClass);
+      FeatureVectorListPtr  imagesThisClass = srcImages->ExtractExamplesForAGivenClass (mlClass);
       imagesToTrain->AddQueue (*imagesThisClass);
       delete  imagesThisClass;
     }

@@ -49,7 +49,7 @@ namespace PicesCommander
 
 
 
-    private PicesTrainingConfiguration  config = null;  
+    private PicesTrainingConfigManaged  config = null;  
 
 
     public CreateFeatureSelectionDataSets (String  _initialModelName)
@@ -104,7 +104,7 @@ namespace PicesCommander
       ModelName.Text = initialModelName;
 
       UpdatePercentageFields ();
-      DestinationDirectory.Text = OSservices.AddSlash (PicesSipperVariables.PicesDataFilesDirectory ()) + "FeatureSelection";
+      DestinationDirectory.Text = OSservices.AddSlash (PicesSipperVariables.DataFilesDirectory ()) + "FeatureSelection";
     }
 
 
@@ -125,7 +125,7 @@ namespace PicesCommander
 
       if  (runLog == null)
         runLog = new PicesRunLog ();
-      PicesTrainingConfiguration  tc = new PicesTrainingConfiguration (ModelName.Text, runLog);
+      PicesTrainingConfigManaged  tc = new PicesTrainingConfigManaged (ModelName.Text, runLog);
 
       if  (!tc.Valid ())
       {
@@ -329,7 +329,7 @@ namespace PicesCommander
       OSservices.CreateDirectoryPath (destinationDirectory);
 
       AddMsgToDialogMsgQueue (DateTime.Now.ToShortTimeString () + " Loading feature data for Model[" + modelName + "]");
-      config = new PicesTrainingConfiguration (modelName, runLog);
+      config = new PicesTrainingConfigManaged (modelName, runLog);
       if  (!config.Valid ())
       {
         AddMsgToDialogMsgQueue ("\n\n");
@@ -391,7 +391,7 @@ namespace PicesCommander
         int  testCount       = 0;
         int  validationCount = 0;
 
-        PicesFeatureVectorList  examplesForClass = data.ExtractImagesForAGivenClass (c);
+        PicesFeatureVectorList  examplesForClass = data.ExtractExamplesForAGivenClass (c);
         int n = examplesForClass.Count;
         
         AddMsgToDialogMsgQueue (DateTime.Now.ToShortTimeString () + " Processing Class[" + c.Name + "]  Count[" + n + "]");
@@ -499,7 +499,7 @@ namespace PicesCommander
         if  (fv.Depth == 0.0f)
         {
 
-          String  nextSipperFileName = PicesMethods.SipperFileNameFromImageFileName (fv.ImageFileName);
+          String  nextSipperFileName = PicesMethods.SipperFileNameFromImageFileName (fv.ExampleFileName);
 
           if  (nextSipperFileName != curSipperFileName)
           {

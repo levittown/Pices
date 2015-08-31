@@ -61,8 +61,8 @@ private:
   KKStr                     destDirectory;
   KKStr                     featureFileName;
   KKStrListPtr              fileNameList;
-  MLClassConstPtr           mlClass;
-  MLClassConstListPtr       mlClasses;
+  MLClassPtr                mlClass;
+  MLClassListPtr            mlClasses;
   ImageFeaturesListPtr      images;
   bool                      purgeDuplicates;
   ostream*                  report;

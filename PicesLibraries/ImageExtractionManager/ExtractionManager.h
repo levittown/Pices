@@ -8,14 +8,15 @@
 #include "RunLog.h"
 using namespace  KKB;
 
-#include "SipperFile.h"
-using namespace  SipperHardware;
+#include "DuplicateImages.h"
+#include "FactoryFVProducer.h"
+#include "FileDesc.h"
+using namespace  KKMLL;
 
 #include "DataBase.h"
 #include "DataBaseLogEntry.h"
 #include "DataBaseImageValidatedEntry.h"
-#include "DuplicateImages.h"
-#include "FileDesc.h"
+#include "SipperFile.h"
 #include "SipperExtractionImageManager.h"
 using namespace MLL;
 
@@ -40,11 +41,12 @@ namespace  ImageExtractionManager
 
     ~ExtractionManager ();
 
-    const bool&  CancelFlag    ()  const  {return cancelFlag;}
-    const bool&  Crashed       ()  const  {return crashed;}
-    const bool&  DoneExecuting ()  const  {return doneExecuting;}
-    RunLog&      Log           ()  const  {return log;}
-    kkuint32     LogEntryId    ()  const  {return logEntryId;}
+    const bool&           CancelFlag        ()  const  {return cancelFlag;}
+    const bool&           Crashed           ()  const  {return crashed;}
+    const bool&           DoneExecuting     ()  const  {return doneExecuting;}
+    FactoryFVProducerPtr  FvProducerFactory ()  const  {return fvProducerFactory;}
+    RunLog&               Log               ()  const  {return log;}
+    kkuint32              LogEntryId        ()  const  {return logEntryId;}
 
     bool  AllProcessorsTerminated (ImageExtractionThreadListPtr  threads);
 
@@ -121,6 +123,7 @@ namespace  ImageExtractionManager
     bool                                doneExecuting;          /**< The last thing this instance will do in 'ManageTheExtraction'is set this flag to true. */
     double                              endCPUsecs;
     DateTime                            endTime;
+    FactoryFVProducerPtr                fvProducerFactory;
     FileDescPtr                         fileDesc;
     FrameExtractorThreadPtr             frameExtractorThread;
     LogicalFrameQueuePtr                framePool;              /**< Frames that will be used by 'FrameExtractorThread' and 'FrameProcessorThread'. */

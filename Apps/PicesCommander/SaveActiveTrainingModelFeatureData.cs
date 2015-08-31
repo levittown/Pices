@@ -41,7 +41,7 @@ namespace PicesCommander
 
 
 
-    private PicesTrainingConfiguration  config = null;  
+    private PicesTrainingConfigManaged  config = null;  
 
 
     public SaveActiveTrainingModelFeatureData (String  _initialModelName)
@@ -88,7 +88,7 @@ namespace PicesCommander
       }
       FileFormat.Text = "Pices";
 
-      DestinationFileName.Text = OSservices.AddSlash (PicesSipperVariables.PicesTempDirectory ()) + ModelName.Text + ".data";
+      DestinationFileName.Text = OSservices.AddSlash (PicesSipperVariables.TempDirectory ()) + ModelName.Text + ".data";
     }
 
 
@@ -109,7 +109,7 @@ namespace PicesCommander
 
       if  (runLog == null)
         runLog = new PicesRunLog (dialogMsgQueue);
-      PicesTrainingConfiguration  tc = new PicesTrainingConfiguration (ModelName.Text, runLog);
+      PicesTrainingConfigManaged  tc = new PicesTrainingConfigManaged (ModelName.Text, runLog);
 
       if  (!tc.Valid ())
       {
@@ -237,7 +237,7 @@ namespace PicesCommander
       AddMsgToDialogMsgQueue (DateTime.Now.ToShortTimeString () + " Started");
 
       AddMsgToDialogMsgQueue (DateTime.Now.ToShortTimeString () + " Loading feature data for Model[" + modelName + "]");
-      config = new PicesTrainingConfiguration (modelName, runLog);
+      config = new PicesTrainingConfigManaged (modelName, runLog);
       if  (!config.Valid ())
       {
         AddMsgToDialogMsgQueue ("\n\n");
@@ -317,7 +317,7 @@ namespace PicesCommander
           uint  scanCol = 0;
           String  nextSipperFileName = "";
 
-          PicesFeatureVector.ParseImageFileName (fv.ImageFileName, ref nextSipperFileName, ref sacnLineNum, ref scanCol);
+          PicesFeatureVector.ParseImageFileName (fv.ExampleFileName, ref nextSipperFileName, ref sacnLineNum, ref scanCol);
 
           if  (nextSipperFileName != curSipperFileName)
           {

@@ -93,7 +93,7 @@ namespace SipperFileViewer
 
     private  void  BeforeCallingInitializeComponent ()
     {
-      sipperFileViewerConfigFileName = OSservices.AddSlash (PicesSipperVariables.PicesConfigurationDirectory ()) + "SipperFileViewer.txt";
+      sipperFileViewerConfigFileName = OSservices.AddSlash (PicesSipperVariables.ConfigurationDirectory ()) + "SipperFileViewer.txt";
     }
 
 

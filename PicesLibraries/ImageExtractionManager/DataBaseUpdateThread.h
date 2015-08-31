@@ -5,9 +5,14 @@
 #include "RunLog.h"
 using namespace KKB;
 
-#include "DataBase.h"
+
 #include "DuplicateImages.h"
+using namespace  KKMLL;
+
+
+#include "DataBase.h"
 using namespace  MLL;
+
 
 #include "PreDefinedClasses.h"
 #include "ExtractionParms.h"
@@ -31,7 +36,7 @@ namespace  ImageExtractionManager
 
     virtual ~DataBaseUpdateThread ();
 
-    virtual  ThreadTypes   ThreadType ()  {return ttDataBAseUpdater;}
+    virtual  ThreadTypes   ThreadType ()  {return  ThreadTypes::DataBaseUpdater;}
 
     void  GetRunTimeStats (kkuint32&  _imagesUpdated,
                            kkuint32&  _duplicatesDetected,

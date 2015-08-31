@@ -114,7 +114,7 @@ PassAssignments::PassAssignments (FileDescPtr         _fileDesc,
     {
       mlClass = mlClasses.IdxToPtr (classIDX);
       int  numImagesToExtract = imagesPerClass[classIDX];
-      FeatureVectorListPtr  imagesInClass = _images.ExtractImagesForAGivenClass (mlClass, numImagesToExtract);
+      FeatureVectorListPtr  imagesInClass = _images.ExtractExamplesForAGivenClass (mlClass, numImagesToExtract);
 
       if  (imagesInClass->QueueSize () < numImagesToExtract)
       {
@@ -175,7 +175,7 @@ void  PassAssignments::PopulateImagesPerClass (FeatureVectorList&  images)
       int  imagesToExtractThisClass = totalNumImageszInInitialTrainLibrary - imageCount;
       if  (classIDX < (mlClasses.QueueSize () - 1))
       {
-        FeatureVectorListPtr  imagesInThisClass = images.ExtractImagesForAGivenClass (mlClass);
+        FeatureVectorListPtr  imagesInThisClass = images.ExtractExamplesForAGivenClass (mlClass);
         float  fracThisClass = (float)(imagesInThisClass->QueueSize ()) / (float)(images.QueueSize ());
         imagesToExtractThisClass = (int)(fracThisClass * (float)totalNumImageszInInitialTrainLibrary + 0.5f);
         delete  imagesInThisClass;
@@ -528,7 +528,7 @@ void  PassAssignments::ExtractInitialTrainingAndTestImages (int                 
 
   for  (icIDX.Reset ();  mlClass = icIDX.CurPtr ();  ++icIDX)
   {
-    FeatureVectorListPtr  imagesInClass = masterList.ExtractImagesForAGivenClass (mlClass);
+    FeatureVectorListPtr  imagesInClass = masterList.ExtractExamplesForAGivenClass (mlClass);
 
     FeatureVectorPtr  image = NULL;
 

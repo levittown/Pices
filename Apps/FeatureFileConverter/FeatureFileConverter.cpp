@@ -110,7 +110,7 @@ FeatureFileConverter::FeatureFileConverter ():
   destFileName      (),
   destFileDesc      (NULL),
   encodeFeatureData (false),
-  encodingMethod    (ModelParam::NoEncoding),
+  encodingMethod    (ModelParam::EncodingMethodType::NoEncoding),
   enumerateClasses  (false),
   features          (NULL),
   normalizeData     (false),
@@ -233,7 +233,7 @@ void  FeatureFileConverter::InitalizeApplication (kkint32 argc,
   else
   {
     bool  validFeatures = true;
-    features = new FeatureNumList (srcFileDesc, featureStr, validFeatures);
+    features = new FeatureNumList (featureStr, validFeatures);
     if  (!validFeatures)
     {
       log.Level (-1) << endl
@@ -338,7 +338,7 @@ bool  FeatureFileConverter::ProcessCmdLineParameter (const KKStr&  parmSwitch,
            )
   {
     encodingMethod = ModelParam::EncodingMethodFromStr (parmValue);
-    if  (encodingMethod != Encoding_NULL)
+    if  (encodingMethod !=  ModelParam::EncodingMethodType::Null)
     {
       encodeFeatureData = true;
     }
@@ -352,7 +352,7 @@ bool  FeatureFileConverter::ProcessCmdLineParameter (const KKStr&  parmSwitch,
         encodeFeatureData = false;
       else
       {
-        encodingMethod = ModelParam::BinaryEncoding;
+        encodingMethod = ModelParam::EncodingMethodType::Binary;
         encodeFeatureData = true;
       }
     }
@@ -499,7 +499,7 @@ void   FeatureFileConverter::NormalizeExamples (ModelParam&         param,
   {
     bool  successful = false;
     normParms = new NormalizationParms (param, examples, log);
-    normParms->Save (nornParmsFileName, successful);
+    normParms->Save (nornParmsFileName, successful, log);
     if  (!successful)
     {
       KKStr  errMsg = "Could not save normalization parameters file[" + nornParmsFileName + "]";
@@ -508,7 +508,7 @@ void   FeatureFileConverter::NormalizeExamples (ModelParam&         param,
     }
   }
 
-  normParms->NormalizeImages (&examples);
+  normParms->NormalizeExamples (&examples, log);
 
   delete  normParms;
   normParms = NULL;
@@ -522,18 +522,17 @@ void  FeatureFileConverter::EncodeFeatureData ()
 {
   bool  successful = false;
 
-  ModelParamKnn  param (srcFileDesc, log);
+  ModelParamKnn  param;
 
   param.EncodingMethod    (encodingMethod);
-  param.CompressionMethod (ModelParam::BRnoCompression);
   if  (features)
     param.SelectedFeatures  (*features);
 
-  FeatureEncoder2  encoder (param, srcFileDesc, log);
+  FeatureEncoder2  encoder (param, srcFileDesc);
   
   // We do the next line to generate a report of the encoded field assignments.
   *report << endl;
-  FileDescPtr  encodedFileDesc = encoder.CreateEncodedFileDesc (report);
+  FileDescPtr  encodedFileDesc = encoder.CreateEncodedFileDesc (report, log);
 
   NormalizeExamples (param, *data);
 
@@ -571,14 +570,14 @@ void   FeatureFileConverter::ConvertData ()
   int  numWithAllZeros = 0;
 
   {
-    FeatureVectorListPtr  newData  = new FeatureVectorList (srcFileDesc, true, log);
+    FeatureVectorListPtr  newData = data->ManufactureEmptyList (true);
 
     // Will store examples that have all zero's for all features in "zeroData"
     // container.  This way they can be deleted from memory later and not result
     // in a memory leak.  This has to be done because they are not going to
     // be placed into newData which is going to become the owner of all the
     // examples.
-    FeatureVectorListPtr  zeroData = new FeatureVectorList (srcFileDesc, true, log);
+    FeatureVectorListPtr  zeroData = data->ManufactureEmptyList (true);
 
     // How many have all 0's for feature data.
     FeatureVectorList::iterator  idx;
@@ -632,26 +631,26 @@ void   FeatureFileConverter::ConvertData ()
 
   if  (enumerateClasses)
   {
-    // We are going to change the name of the classes to numbers enumberated by className 
+    // We are going to change the name of the classes to numbers enumerated by className 
 
-    MLClassConstListPtr  mlClasses = data->ExtractMLClassConstList ();
+    MLClassListPtr  mlClasses = data->ExtractListOfClasses ();
     mlClasses->SortByName ();
 
-    MLClassConstListPtr  newClassNames = new MLClassConstList ();
+    MLClassListPtr  newClassNames = new MLClassList ();
 
     int classIdx = 0;
-    MLClassConstList::iterator idx;
+    MLClassList::iterator idx;
     for  (idx = mlClasses->begin ();  idx !=  mlClasses->end ();  idx++)
     {
       KKStr  newName = StrFormatInt (classIdx, "zzz0");
-      MLClassConstPtr  mlClass = newClassNames->GetMLClassPtr (newName);
+      MLClassPtr  mlClass = newClassNames->GetMLClassPtr (newName);
       classIdx++;
     }
 
     FeatureVectorList::iterator  idx2;
     for  (idx2 = data->begin ();  idx2 != data->end ();  idx2++)
     {
-      MLClassConstPtr  c = (*idx2)->MLClass ();
+      MLClassPtr  c = (*idx2)->MLClass ();
       int  classIndex = mlClasses->PtrToIdx (c);
       (*idx2)->MLClass (newClassNames->IdxToPtr (classIndex));
     }
@@ -779,7 +778,7 @@ void  SplitForestCoverFile ()
 {
   RunLog  log;
 
-  MLClassConstList  mlClasses;  
+  MLClassList  mlClasses;  
   bool  cancelFlag  = false;
   bool  successful;
   bool  changesMade = false;
@@ -795,15 +794,15 @@ void  SplitForestCoverFile ()
   images->RandomizeOrder ();
   images->RandomizeOrder ();
 
-  MLClassConstPtr  lodgepolePine = mlClasses.GetMLClassPtr ("Lodgepole_Pine");
-  MLClassConstPtr  spruceFir     = mlClasses.GetMLClassPtr ("Spruce_Fir");
+  MLClassPtr  lodgepolePine = mlClasses.GetMLClassPtr ("Lodgepole_Pine");
+  MLClassPtr  spruceFir     = mlClasses.GetMLClassPtr ("Spruce_Fir");
 
   int  lodgepolePineTrainCount = 0;
   int  spruceFirTrainCount     = 0;
   FeatureVectorList::iterator  idx;
 
-  FeatureVectorListPtr  trainData = new FeatureVectorList (fileDesc, false, log);
-  FeatureVectorListPtr  testData  = new FeatureVectorList (fileDesc, false, log);
+  FeatureVectorListPtr  trainData = images->ManufactureEmptyList (false);
+  FeatureVectorListPtr  testData  = images->ManufactureEmptyList (false);
 
   int  c = 0;
 
@@ -872,7 +871,7 @@ void  SplitForestCoverFile ()
 
 void  NormalizeAllValidatdData ()
 {
-  MLClassConstList  classes;
+  MLClassList  classes;
   bool  _cancelFlag = false;
   bool  _successful = false;
   bool  _changesMade = false;
@@ -892,7 +891,7 @@ void  NormalizeAllValidatdData ()
   kkuint32  numWritten = 0;
 
   NormalizationParms parms (true, *fd, log);
-  parms.NormalizeImages (fd);
+  parms.NormalizeExamples (fd, log);
   FeatureFileIOC45::Driver ()->SaveFeatureFile 
     ("C:\\Pices\\Reports\\FeatureDataFiles\\AllValidatedImages\\AllValidatedImagesNorm.data",
      fd->AllFeatures (),
@@ -903,7 +902,7 @@ void  NormalizeAllValidatdData ()
      log
     );
 
-  parms.Save ("C:\\Pices\\Reports\\FeatureDataFiles\\AllValidatedImages\\AllValidatedImagesNorm.parms.txt", _successful);
+  parms.Save ("C:\\Pices\\Reports\\FeatureDataFiles\\AllValidatedImages\\AllValidatedImagesNorm.parms.txt", _successful, log);
 
 }  /* NormalizeAllValidatdData */
 

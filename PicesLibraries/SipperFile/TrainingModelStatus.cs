@@ -37,9 +37,7 @@ namespace SipperFile
     private  PicesRunLog     runLog               = new PicesRunLog ();
     private  String          trainingModelLogFileName  = null;
 
-    private  Queue<String>   logMessages          = new  Queue<String> ();
-    private  PicesGoalKeeper logGoalie            = null;
-
+    private  PicesMsgQueue   logMessages          = new PicesMsgQueue ("TrainingModelStatus");
 
     private  AlertCompletion  completionEvent;
 
@@ -53,8 +51,6 @@ namespace SipperFile
       trainingModelName = _trainingModelName;
       forceRebuild      = _forceRebuild;
       completionEvent   = _completionEvent;
-
-      logGoalie = new PicesGoalKeeper ("TrainingModelStatus-" + OSservices.GetRootName (_trainingModelName));
     }
 
    
@@ -62,8 +58,6 @@ namespace SipperFile
     public  TrainingModel2  TrainiedModel         ()  {return  trainingModel;}
     public  bool            TrainingModelRunning  ()  {return  trainingModelRunning;}
     public  bool            ValidModel            ()  {return  validModel;}
-
-
 
 
 
@@ -83,8 +77,6 @@ namespace SipperFile
         ForceCancelation ();
       }
     }   /* CleanUpMemory */
-
-
 
 
 
@@ -122,24 +114,16 @@ namespace SipperFile
 
     private  void  LogMessagesAdd (String  msg)
     {
-      logGoalie.StartBlock ();
       if  (logMessages == null)
-        logMessages = new Queue<string> ();
-      logMessages.Enqueue (msg);
-      logGoalie.EndBlock ();
+        logMessages = new PicesMsgQueue ("TrainingModelStatus");
+      logMessages.AddMsg (msg);
     }
 
 
     private  String  LogMessageGetNext ()
     {
-      String  msg = null;
-      logGoalie.StartBlock ();
-      if  ((logMessages != null)  &&  (logMessages.Count > 0))
-        msg = logMessages.Dequeue ();
-      logGoalie.EndBlock ();
-      return msg;
+      return logMessages.GetNextMsg ();
     }
-
 
 
     private void  LogMessageFlush ()
@@ -175,11 +159,14 @@ namespace SipperFile
 
       trainingModel = new TrainingModel2 (runLog, trainingModelName);
       trainingModelLogFileName = trainingModel.RunLogFileName;
+      trainingModel.AttachMsgQueueToRunLog (logMessages);
 
       if  (forceRebuild)
         trainingModel.LoadTrainigLibrary (true);  // true = Force Rebuild of Model
       else
         trainingModel.LoadExistingModelOtherwiseBuild (null);
+
+      trainingModel.AttachMsgQueueToRunLog (null);
 
       if  (trainingModel.Valid)
       {
@@ -189,9 +176,7 @@ namespace SipperFile
       {
         List<String>  errMsgs = trainingModel.ErrorMsgs;
         if  (errMsgs != null)
-          foreach (String s in errMsgs)
-            LogMessagesAdd (s);
-
+          logMessages.AddMsgs (errMsgs);
         validModel = false;
         trainingModel = null;
       }
@@ -201,7 +186,7 @@ namespace SipperFile
     }  /* LoadTrainingModel */
 
 
-
+    private  bool  loadHasBeenCanceledDialogActive = false;
 
     private void timer1_Tick (object sender, EventArgs e)
     {
@@ -227,7 +212,7 @@ namespace SipperFile
       if  (trainingModel != null)
       {
         LogMessageFlush();
-        String  msg = trainingModel.LastRunLogTextLine ();
+        String  msg =  logMessages.GetNextMsg ();
         if  (msg != null)
         {
           TrainingModelOutput.AppendText (msg);
@@ -243,7 +228,12 @@ namespace SipperFile
         if  (cancelFlag)
         {
           LogMessageFlush ();
-          MessageBox.Show ("Training Model[" + trainingModelName + "] load has been canceled.");
+          if  (!loadHasBeenCanceledDialogActive)
+          { 
+            loadHasBeenCanceledDialogActive = true;
+            MessageBox.Show ("Training Model[" + trainingModelName + "] load has been canceled.");
+            loadHasBeenCanceledDialogActive = false;
+          }
         }
 
         else if  (!validModel)

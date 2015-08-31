@@ -1,5 +1,4 @@
-#include  "FirstIncludes.h"
-
+#include "FirstIncludes.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
@@ -17,11 +16,13 @@ using namespace std;
 using namespace KKB;
 
 
-#include "SipperExtractionImageManager.h"
-
 #include "FeatureFileIO.h"
-#include "FeatureFileIOPices.h"
 #include "MLClass.h"
+using namespace KKMLL;
+
+
+#include "SipperExtractionImageManager.h"
+#include "FeatureFileIOPices.h"
 #include "ImageFeatures.h"
 using namespace MLL;
 //#include  "SipperImageExtractionParms.h"
@@ -41,7 +42,7 @@ class  SipperExtractionImageManager::ImageEntry
 public:
   ImageEntry (const KKStr&     _fileName,
               kkint32          _size,
-              MLClassConstPtr  _predClass
+              MLClassPtr       _predClass
              ):
        fileName  (_fileName),
        predClass (_predClass),
@@ -49,7 +50,7 @@ public:
    {}
 
   KKStr               fileName;
-  MLClassConstPtr  predClass;
+  MLClassPtr       predClass;
   kkint32             size;
 };  /* ImageEntry */
 
@@ -60,7 +61,7 @@ class  SipperExtractionImageManager::ManagedClass
 {
 public:
   ManagedClass (FileDescPtr      _fileDesc,
-                MLClassConstPtr  _mlClass,
+                MLClassPtr       _mlClass,
                 const KKStr&     _rootDir,
                 bool             _saveFeatureData,
                 bool             _countOnly,
@@ -72,11 +73,11 @@ public:
 
   const KKStr&        ClassName      () const;
   const KKStr&        ClassNameUpper () const;
-  MLClassConstPtr  MLClass     () const  {return mlClass;}
+  MLClassPtr       MLClass     () const  {return mlClass;}
   kkint32             ImageCount     () const  {return imageCount;}
 
   void  AddImage (const KKStr&      fileName,
-                  MLClassConstPtr   predClass,
+                  MLClassPtr        predClass,
                   kkint32           size,
                   ImageFeaturesPtr  example,
                   RasterPtr         raster,
@@ -102,7 +103,7 @@ private:
   ImageFeaturesListPtr  examplesCurDir;
   FileDescPtr           fileDesc;
   KKStr                 fullSubDirName;
-  MLClassConstPtr       mlClass;
+  MLClassPtr            mlClass;
   kkint32               imageCount;
   kkuint32              imagesPerDirectory;
   RunLog&               log;
@@ -151,11 +152,10 @@ SipperExtractionImageManager::SipperExtractionImageManager (FileDescPtr  _fileDe
 
 
   allExamples = new ImageFeaturesList (fileDesc, 
-                                       true,     // will own images/examples 
-                                       log
+                                       true     // will own images/examples 
                                       );
 
-  MLClassConstPtr  largeMLClass = MLClass::CreateNewMLClass ("VeryLargeImages");
+  MLClassPtr       largeMLClass = MLClass::CreateNewMLClass ("VeryLargeImages");
   largeImages = new ManagedClass (fileDesc,
                                   largeMLClass,
                                   rootDir,
@@ -165,7 +165,7 @@ SipperExtractionImageManager::SipperExtractionImageManager (FileDescPtr  _fileDe
                                   log
                                  );
 
-  managedClasses.insert (pair<MLClassConstPtr, ManagedClassPtr> (largeMLClass, largeImages));
+  managedClasses.insert (pair<MLClassPtr     , ManagedClassPtr> (largeMLClass, largeImages));
 }
 
 
@@ -277,7 +277,7 @@ void  SipperExtractionImageManager::ReportStatsByDepth (ostream&      r,
 
 
 
-SipperExtractionImageManager::ManagedClassPtr  SipperExtractionImageManager::ManagedClassLookUp (MLClassConstPtr  mlClass)
+SipperExtractionImageManager::ManagedClassPtr  SipperExtractionImageManager::ManagedClassLookUp (MLClassPtr       mlClass)
 {
   ManagedClassList::iterator p;
   p = managedClasses.find (mlClass);
@@ -294,7 +294,7 @@ SipperExtractionImageManager::ManagedClassPtr  SipperExtractionImageManager::Man
                                                    );
 
 
-  managedClasses.insert (pair<MLClassConstPtr, ManagedClassPtr> (mlClass, managedClass));
+  managedClasses.insert (pair<MLClassPtr     , ManagedClassPtr> (mlClass, managedClass));
 
   return managedClass;
 }  /* ManagedClassLookUp */
@@ -303,7 +303,7 @@ SipperExtractionImageManager::ManagedClassPtr  SipperExtractionImageManager::Man
 
 
 void  SipperExtractionImageManager::AddImage (const KKStr&      fileName,
-                                              MLClassConstPtr   predClass,
+                                              MLClassPtr        predClass,
                                               kkint32           size,
                                               float             depth,
                                               ImageFeaturesPtr  example,
@@ -374,13 +374,13 @@ void  SipperExtractionImageManager::SaveFrame (const KKStr&     _fileName,
 {
   if  (imagesAreClassified)
   {
-    MLClassConstPtr  frameClass = MLClass::CreateNewMLClass ("Frames");
+    MLClassPtr       frameClass = MLClass::CreateNewMLClass ("Frames");
     ManagedClassPtr  frameManager = ManagedClassLookUp (frameClass);
     frameManager->SaveFrame (_fileName, _raster, _colorize);
   }
   else
   {
-    MLClassConstPtr  unknowClass = MLClass::GetUnKnownClassStatic ();
+    MLClassPtr       unknowClass = MLClass::GetUnKnownClassStatic ();
     ManagedClassPtr  unknownManagedClass = ManagedClassLookUp (unknowClass);
     unknownManagedClass->SaveFrame (_fileName, _raster, _colorize);
   }
@@ -448,7 +448,7 @@ ClassStatisticListPtr  SipperExtractionImageManager::ClassStats ()  const
 
 SipperExtractionImageManager::ManagedClass::ManagedClass 
                            (FileDescPtr         _fileDesc,
-                            MLClassConstPtr  _mlClass,
+                            MLClassPtr       _mlClass,
                             const KKStr&        _rootDir,
                             bool                _saveFeatureData,
                             bool                _countOnly,
@@ -528,7 +528,6 @@ void  SipperExtractionImageManager::ManagedClass::StartNewDirectory ()
     delete  examplesCurDir;  examplesCurDir = NULL;
     examplesCurDir = new ImageFeaturesList (fileDesc, 
                                             false,     // false = We will not own these examples
-                                            log,
                                             1000
                                            );
   }
@@ -540,7 +539,7 @@ void  SipperExtractionImageManager::ManagedClass::StartNewDirectory ()
 
 void  SipperExtractionImageManager::ManagedClass::AddImage 
                              (const KKStr&         fileName,
-                              MLClassConstPtr   predClass,
+                              MLClassPtr           predClass,
                               kkint32              size,
                               ImageFeaturesPtr     example,
                               RasterPtr            raster,
@@ -596,7 +595,7 @@ void  SipperExtractionImageManager::ManagedClass::AddImage
 
   if  (saveFeatureData)
   {
-    example->ImageFileName (fileName);
+    example->ExampleFileName (fileName);
     examplesCurDir->PushOnBack (example);
   }
 
@@ -640,8 +639,8 @@ void  SipperExtractionImageManager::ManagedClass::CloseOutCurDirectory ()
     for  (idx = (ImageFeaturesList::const_iterator)examplesCurDir->begin ();  idx != examplesCurDir->end ();  idx++)
     {
       ImageFeaturesPtr  example = *idx;
-      KKStr  fullFileName = osAddSlash (curSubDirName) + example->ImageFileName ();
-      example->ImageFileName (fullFileName);
+      KKStr  fullFileName = osAddSlash (curSubDirName) + example->ExampleFileName ();
+      example->ExampleFileName (fullFileName);
     }
 
     delete  examplesCurDir;  examplesCurDir = NULL;

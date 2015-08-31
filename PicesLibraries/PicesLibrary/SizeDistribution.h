@@ -20,9 +20,13 @@
 //#define  BucketSize   100
 
 
-#include  "MLClass.h"
-#include  "FeatureVector.h"
-#include  "RunLog.h"
+#include "RunLog.h"
+
+
+#include "MLClass.h"
+#include "FeatureVector.h"
+using  namespace  KKMLL;
+
 
 class  ClassTotals;
 typedef  ClassTotals*  ClassTotalsPtr;
@@ -44,7 +48,7 @@ namespace  MLL
     ~SizeDistribution ();
 
 
-    void     Increment (MLClassConstPtr  mlClass,
+    void     Increment (MLClassPtr       mlClass,
                         kkint32             size
                         );
 

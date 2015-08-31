@@ -61,7 +61,7 @@ namespace PicesCommander
 
       InitializeComponent();
 
-      SourceDirectory.Text = PicesSipperVariables.PicesHomeDir ();
+      SourceDirectory.Text = PicesSipperVariables.HomeDir ();
       SourceDirectory.Text = "D:\\Users\\kkramer\\PlanktonCompetition\\trunk\\Data\\";
     }
 
@@ -253,7 +253,7 @@ namespace PicesCommander
       r = r.Padded (2);
 
       PicesFeatureVector  fv = new PicesFeatureVector (r, picesRootName, null, runLog);
-      fv.ImageFileName = picesRootName;
+      fv.ExampleFileName = picesRootName;
 
       int   imageId    = 0;
       bool  successful = false;
@@ -403,10 +403,10 @@ namespace PicesCommander
       FolderBrowserDialog  fbd = new FolderBrowserDialog ();
 
       if  (String.IsNullOrEmpty (SourceDirectory.Text))
-        SourceDirectory.Text = PicesSipperVariables.PicesHomeDir ();
+        SourceDirectory.Text = PicesSipperVariables.HomeDir ();
 
       if  (!Directory.Exists (SourceDirectory.Text))
-        SourceDirectory.Text = PicesSipperVariables.PicesHomeDir ();
+        SourceDirectory.Text = PicesSipperVariables.HomeDir ();
 
       fbd.SelectedPath = SourceDirectory.Text;
 

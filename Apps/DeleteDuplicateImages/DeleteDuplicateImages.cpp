@@ -18,11 +18,7 @@ using namespace std;
 #include "RunLog.h"
 using namespace KKB;
 
-#include "Instrument.h"
-#include "InstrumentDataFileManager.h"
-using namespace  SipperHardware;
 
-#include "PicesApplication.h"
 #include "Classifier2.h"
 #include "DuplicateImages.h"
 #include "DataBAse.h"
@@ -30,12 +26,18 @@ using namespace  SipperHardware;
 #include "FeatureFileIOPices.h"
 #include "FeatureNumList.h"
 #include "MLClass.h"
+using namespace KKMLL;
+
+
 #include "ImageFeatures.h"
+#include "Instrument.h"
+#include "InstrumentDataFileManager.h"
+#include "PicesApplication.h"
+#include "PicesFVProducer.h"
 using namespace MLL;
 
 
-
-#include  "DeleteDuplicateImages.h"
+#include "DeleteDuplicateImages.h"
 
 // -ROOTDIR C:\TrainingApp\TrainingImages
 
@@ -152,9 +154,9 @@ void  DeleteDuplicateImages::DeleteImages ()
   *r << "Report File    :" << reportFileName        << "]" << endl;
   *r << endl;
 
-  // We will first Load Images
-  ImageFeaturesListPtr images = FeatureFileIOPices::LoadInSubDirectoryTree 
-                                     (rootDir,
+  ImageFeaturesListPtr  images = FeatureFileIOPices::Driver ()->LoadInSubDirectoryTree 
+                                     (PicesFVProducerFactory::Factory (&log),
+                                      rootDir,
                                       mlClasses,
                                       false,       // false = DONT _useDirectoryNameForClassName
                                       DB (),
@@ -178,7 +180,7 @@ void  DeleteDuplicateImages::DeleteImages ()
   // We can now look for duplicates in list.
   DuplicateImagesPtr  dupLocator = new DuplicateImages (images, log);
 
-  DuplicateImageListPtr  setsOfDupImages = dupLocator->DupImages ();
+  DuplicateImageListPtr  setsOfDupImages = dupLocator->DupExamples ();
 
   *r << "Number of Duplicate Sets [" << setsOfDupImages->QueueSize () << "]" << endl;
   *r << endl;
@@ -193,7 +195,7 @@ void  DeleteDuplicateImages::DeleteImages ()
 
     ImageFeaturesListPtr  dups = new ImageFeaturesList (*(dupSet->DuplicatedImages ()), false);
 
-    ImageFeaturesPtr      imageToKeep = (ImageFeaturesPtr)dupSet->ImageWithSmallestScanLine ();
+    ImageFeaturesPtr      imageToKeep = (ImageFeaturesPtr)dupSet->ExampleWithSmallestScanLine ();
     ImageFeaturesPtr      firstImage  = NULL;
     bool                  allTheSameClass = dupSet->AllTheSameClass ();
     if  (!allTheSameClass)
@@ -205,7 +207,7 @@ void  DeleteDuplicateImages::DeleteImages ()
     else
     {
       *r << endl
-         << "Duplicate Class[" << imageToKeep->ClassName () << "]  FileName[" << imageToKeep->ImageFileName () << "]  Keeping." << endl;
+         << "Duplicate Class[" << imageToKeep->ClassName () << "]  FileName[" << imageToKeep->ExampleFileName () << "]  Keeping." << endl;
     }
 
     for  (ImageFeaturesList::iterator iIDX = dups->begin ();  iIDX != dups->end ();  iIDX++)
@@ -217,9 +219,9 @@ void  DeleteDuplicateImages::DeleteImages ()
 
       if  (i != imageToKeep)
       {
-        KKStr  fullFileName = osAddSlash (rootDir) + i->ImageFileName ();
+        KKStr  fullFileName = osAddSlash (rootDir) + i->ExampleFileName ();
 
-        *r << "          Class[" << i->ClassName () << "]  FileName[" << i->ImageFileName () << "]  ";
+        *r << "          Class[" << i->ClassName () << "]  FileName[" << i->ExampleFileName () << "]  ";
 
         if  (!duplicateImagesDir.Empty ())
         {
@@ -230,16 +232,16 @@ void  DeleteDuplicateImages::DeleteImages ()
             if  (imageToKeep)
             {
               newFileName = osAddSlash (duplicateImagesDir) + 
-                            osGetRootName (imageToKeep->ImageFileName ()) 
+                            osGetRootName (imageToKeep->ExampleFileName ()) 
                             + "-" +
-                            osGetRootName (i->ImageFileName ());
+                            osGetRootName (i->ExampleFileName ());
             }
             else
             {
               newFileName = osAddSlash (duplicateImagesDir) + 
-                            osGetRootName (firstImage->ImageFileName ()) 
+                            osGetRootName (firstImage->ExampleFileName ()) 
                             + "-" +
-                            osGetRootName (i->ImageFileName ());
+                            osGetRootName (i->ExampleFileName ());
             }
             if  (dupCount > 0)
               newFileName << "-" << dupCount;
@@ -312,7 +314,7 @@ int  main (int  argc,  char**  argv)
     bool    cancelFlag   = false;
     KKStr   errorMessage = "";
     bool    successful   = false;
-    MLClassConstList  classes (rl);
+    MLClassList  classes (rl);
 
     TrainingConfiguration2Ptr  config = 
       TrainingConfiguration2::CreateFromDirectoryStructure 
@@ -338,7 +340,7 @@ int  main (int  argc,  char**  argv)
 
     if  (!trainer->Abort ())
     {
-      MLClassConstList  classes (*(trainer->MLClasses ()));
+      MLClassList  classes (*(trainer->MLClasses ()));
 
       Classifier  classifier (trainer);
 

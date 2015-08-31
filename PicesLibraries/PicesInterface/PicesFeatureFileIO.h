@@ -16,7 +16,7 @@ namespace PicesInterface
 
   public:
     static  array<String^>^  RegisteredDriverNames (bool  canRead,    /**< if True driver must be able to Read a Feature File. */
-                                                    bool  canWrite    /**< if True driver must be able to Wrire a Feature File. */
+                                                    bool  canWrite    /**< if True driver must be able to Write a Feature File. */
                                                    );
 
     static  bool             ValidDriverName (String^ _driverName);

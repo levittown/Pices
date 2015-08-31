@@ -58,9 +58,10 @@ def  TimeFromHHMMSS(s):
 
 
 def  ProcessMetDataFile(cruiseName, fileName):
+  passWord=""
   try:
        db = mysql.connector.Connect(user='root',
-                                    password="dasani30",
+                                    password=passWord,
                                     host='sipper-db.marine.usf.edu',
                                     database='pices_new'
                                   )

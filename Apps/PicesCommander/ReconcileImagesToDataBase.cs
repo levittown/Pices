@@ -109,7 +109,7 @@ namespace PicesCommander
     {
       String  rootName = OSservices.GetRootNameOfDirectory (SourceDirectory.Text);
       DateTime d = DateTime.Now;
-      String  logFileName =  OSservices.AddSlash (PicesSipperVariables.PicesTempDirectory ()) + rootName + "_ReconcileImageNames_" +
+      String  logFileName =  OSservices.AddSlash (PicesSipperVariables.TempDirectory ()) + rootName + "_ReconcileImageNames_" +
                              d.ToString ("yyyyMMdd-HHmmss") + ".txt";
 
       // Any images that are not in the Database that are to be removed will be moved to the subdirectory structure below.

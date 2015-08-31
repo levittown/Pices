@@ -382,7 +382,7 @@ namespace SipperFile
 
     private  static  void  SetConfigurationFileName ()
     {
-      configFileName = OSservices.AddSlash (PicesSipperVariables.PicesConfigurationDirectory ()) + "ActiveTrainingLibraries.cfg";
+      configFileName = OSservices.AddSlash (PicesSipperVariables.ConfigurationDirectory ()) + "ActiveTrainingLibraries.cfg";
     }  /* SetConfigurationFileName */
 
 

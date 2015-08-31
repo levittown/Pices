@@ -193,7 +193,7 @@ namespace PicesCommander
 
       mainWinConn = PicesDataBase.GetGlobalDatabaseManagerNewInstance (runLog);
 
-      configFileName = OSservices.AddSlash (PicesSipperVariables.PicesConfigurationDirectory ()) + "ChartGPSByStation.cfg";
+      configFileName = OSservices.AddSlash (PicesSipperVariables.ConfigurationDirectory ()) + "ChartGPSByStation.cfg";
 
       InitializeComponent ();
     }
@@ -695,7 +695,6 @@ namespace PicesCommander
         }
       }
 
-
       // Forth We add the stations to the Plot.
       AddStationsToChart (stationsToPlot, ref minX, ref maxX, ref minY, ref maxY);
 
@@ -782,7 +781,7 @@ namespace PicesCommander
           fromPos = toPos;
         }        ca.AxisY.LabelStyle.Font = axisLabelFont;
       }
-      
+
 
       ca.AxisX.Minimum = minX;
       ca.AxisX.Maximum = maxX;

@@ -1,12 +1,10 @@
-#include  "FirstIncludes.h"
-
-#include  <stdlib.h>
-#include  <stdio.h>
-
-#include  <fstream>
-#include  <iostream>
-#include  <map>
-#include  <vector>
+#include "FirstIncludes.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <fstream>
+#include <iostream>
+#include <map>
+#include <vector>
 
 #ifdef  WIN32
 #include <io.h>
@@ -15,12 +13,8 @@
 //#include  <sys/loadavg.h>
 #include <unistd.h>
 #endif
-
-
 #include  "MemoryDebug.h"
-
 using namespace std;
-
 
 
 #include "KKBaseTypes.h"
@@ -31,11 +25,10 @@ using namespace std;
 using namespace KKB;
 
 
-
 #include "ConfusionMatrix2.h"
 #include "CrossValidation.h"
 #include "TrainingProcess2.h"
-using namespace  MLL;
+using namespace  KKMLL;
 
 
 #include "JobValidation.h"
@@ -116,7 +109,7 @@ JobValidation::~JobValidation ()
 
 JobTypes  JobValidation::JobType ()  const
 {
-  return  jtValidation;
+  return  JobTypes::Validation;
 }
 
 
@@ -136,14 +129,14 @@ void   JobValidation::EvaluateNode ()
 {
   log.Level (9) << "  " << endl;
   log.Level (9) << "JobValidation::EvaluteNode JobId[" << jobId << "]" << endl;
-  status = bjStarted;
+  status = BinaryJobStatus::Started;
 
   bool  configFileFormatGood = true;
   
-  TrainingConfiguration2Ptr  config = new TrainingConfiguration2 (this->Processor ()->FileDesc (), configFileName, log, false);
+  TrainingConfiguration2Ptr  config = new TrainingConfiguration2 ();
+  config->Load (configFileName, false, log);
   if  (!config->FormatGood ())
     configFileFormatGood;
-
 
   config->SetFeatureNums (features);
   config->C_Param (cParm);
@@ -154,17 +147,17 @@ void   JobValidation::EvaluateNode ()
 
   switch  (processor->ResultType ())
   {
-  case  frtMfsFeaturesSel:
-  case  frtNoTuningAllFeatures:
-  case  frtMfsParmsTuned: 
-  case  frtMfsParmsTunedFeaturesSel: 
-           config->MachineType (OneVsOne);
+  case  FinalResultType::MfsFeaturesSel:
+  case  FinalResultType::NoTuningAllFeatures:
+  case  FinalResultType::MfsParmsTuned: 
+  case  FinalResultType::MfsParmsTunedFeaturesSel: 
+           config->MachineType (SVM_MachineType::OneVsOne);
            break;
     
-  case  frtBfsFeaturesSel:
-  case  frtBfsParmsTuned:
-  case  frtBfsFeaturesSelParmsTuned:
-           config->MachineType (BinaryCombos);
+  case  FinalResultType::BfsFeaturesSel:
+  case  FinalResultType::BfsParmsTuned:
+  case  FinalResultType::BfsFeaturesSelParmsTuned:
+           config->MachineType (SVM_MachineType::BinaryCombos);
            break;
   }
 
@@ -192,20 +185,20 @@ void   JobValidation::EvaluateNode ()
   classedCorrectlySize = validationData->QueueSize ();
   classedCorrectly = new bool[classedCorrectlySize];
 
-  crossValidation->RunValidationOnly (validationData, classedCorrectly);
+  crossValidation->RunValidationOnly (validationData, classedCorrectly, log);
 
   testAccuracy      = crossValidation->Accuracy ();
   testAccuracyNorm  = crossValidation->AccuracyNorm ();
   testAvgPredProb   = (float)crossValidation->AvgPredProb () * 100.0f;
   testFMeasure      = (float)crossValidation->ConfussionMatrix ()->FMeasure (processor->PositiveClass (), log);
 
-  if  (processor->GradingMethod () == gmAccuracy)
+  if  (processor->GradingMethod () == GradingMethodType::Accuracy)
     testGrade = testAccuracy;
 
-  else if  (processor->GradingMethod () == gmAccuracyNorm)
+  else if  (processor->GradingMethod () == GradingMethodType::AccuracyNorm)
     testGrade = testAccuracyNorm;
 
-  else if  (processor->GradingMethod () == gmFMeasure)
+  else if  (processor->GradingMethod () == GradingMethodType::FMeasure)
     testGrade = testFMeasure;
 
   else
@@ -223,7 +216,7 @@ void   JobValidation::EvaluateNode ()
       rl << endl << endl
          << "ConfigFileName"          << "\t" << configFileName  << "\t" << "Format Good[" << (configFileFormatGood ? "Yes" : "No") << endl
          << "SummaryResultsFileName"  << "\t" << processor->SummaryResultsFileName () << endl
-         << "Configuration CmdLine"   << "\t" << config->SVMparamREF ().ToString ()   << endl
+         << "Configuration CmdLine"   << "\t" << config->SVMparamREF (log).ToString ()   << endl
          << "ImagesPerClass"          << "\t" << config->ImagesPerClass ()            << endl
          << endl;
 
@@ -270,7 +263,7 @@ void   JobValidation::EvaluateNode ()
 
   delete  crossValidation;     crossValidation    = NULL;
   delete  config;              config = NULL;
-  status = bjDone;
+  status = BinaryJobStatus::Done;
 }  /* EvaluateNode */
 
 
@@ -322,7 +315,7 @@ void  JobValidation::ReFresh (BinaryJob&  j)
   classedCorrectly = NULL;
   classedCorrectlySize = 0;
 
-  if  (j.JobType () == jtValidation)
+  if  (j.JobType () == JobTypes::Validation)
   {
     JobValidation&  validationJob = dynamic_cast<JobValidation&> (j);
 

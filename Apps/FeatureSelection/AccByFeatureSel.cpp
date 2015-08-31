@@ -8,15 +8,14 @@
   #include <stdlib.h>
 #endif
 
-#include  <stdlib.h>
-#include  <stdio.h>
-
-#include  <algorithm>
-#include  <fstream>
-#include  <map>
-#include  <iostream>
-#include  <map>
-#include  <vector>
+#include <stdlib.h>
+#include <stdio.h>
+#include <algorithm>
+#include <fstream>
+#include <map>
+#include <iostream>
+#include <map>
+#include <vector>
 
 #ifdef  WIN32
 #include <io.h>
@@ -39,17 +38,18 @@ using namespace KKB;
 
 
 #include  "MLClass.h"
-using namespace  MLL;
+using namespace  KKMLL;
+
 
 #include  "AccByFeatureSel.h"
 using namespace  FeatureSelectionApp;
 
 
-AccByFeatureSel::AccByFeatureSel (MLClassConstPtr  _class1,
-                                  MLClassConstPtr  _class2,
-                                  int                 _featureNum,
-                                  float               _avgAccGain,
-                                  float               _stdDevAccGain
+AccByFeatureSel::AccByFeatureSel (MLClassPtr  _class1,
+                                  MLClassPtr  _class2,
+                                  int         _featureNum,
+                                  float       _avgAccGain,
+                                  float       _stdDevAccGain
                                  ):
   class1        (_class1),
   class2        (_class2),
@@ -86,7 +86,7 @@ const KKStr&   AccByFeatureSel::Class2Name () const
 
 
 AccByFeatureSelList::AccByFeatureSelList (bool  _owner):
-  KKQueue<AccByFeatureSel> (_owner, 100)
+  KKQueue<AccByFeatureSel> (_owner)
 {
 }
 

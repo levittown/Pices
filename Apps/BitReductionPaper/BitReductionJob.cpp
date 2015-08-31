@@ -1346,7 +1346,7 @@ void  BitReductionJob::ExtractRandomSamplingForTrainAndTest (FeatureVectorListPt
   for  (idx = classes->begin ();  idx != classes->end ();  idx++)
   {
     MLClassPtr  ic = *idx;
-    FeatureVectorListPtr  examplesThisClass = fullTrainData->ExtractImagesForAGivenClass (ic);
+    FeatureVectorListPtr  examplesThisClass = fullTrainData->ExtractExamplesForAGivenClass (ic);
     examplesThisClass->RandomizeOrder ();
 
     int  numInClass = examplesThisClass->QueueSize ();

@@ -23,7 +23,6 @@ using namespace System::Windows::Forms;
 #include "KKBaseTypes.h"
 #include "GoalKeeper.h"
 #include "OSservices.h"
-
 using namespace KKB;
 
 
@@ -33,23 +32,20 @@ using namespace KKB;
 #include "FileDesc.h"
 #include "MLClass.h"
 #include "NormalizationParms.h"
+using namespace KKMLL;
+
 
 #include "PicesKKStr.h"
 #include "PicesRaster.h"
 #include "PicesRunLog.h"
 #include "PicesFeatureVector.h"
 #include "PicesFeatureVectorList.h"
-
-
 #include "PicesFeatureFileIO.h"
-
-
 using namespace  PicesInterface;
 
 
 namespace  PicesInterface
 {
-
   PicesFeatureFileIO::PicesFeatureFileIO (String^  driverName):
       cancelLoad          (NULL),
       changesMade         (NULL),
@@ -269,7 +265,7 @@ namespace  PicesInterface
 
     FeatureVectorListPtr  data = _examples->ToFeatureVectorList (_runLog);
     NormalizationParms normParms (true, *data, _runLog->Log ()); 
-    normParms.NormalizeImages (data);
+    normParms.NormalizeExamples (data, _runLog->Log ());
 
     driver->SaveFeatureFile (PicesKKStr::SystemStringToKKStr (_fileName), 
                              data->AllFeatures (), 
@@ -282,7 +278,7 @@ namespace  PicesInterface
 
     bool  successful = false;
     KKStr normParameterName = osRemoveExtension (PicesKKStr::SystemStringToKKStr (_fileName)) + ".norm";
-    normParms.Save (normParameterName, successful);
+    normParms.Save (normParameterName, successful, _runLog->Log ());
 
     delete  data;
     data = NULL;
@@ -316,7 +312,7 @@ namespace  PicesInterface
     }
 
 
-    MLClassConstListPtr  classes = new MLClassConstList ();
+    MLClassListPtr  classes = new MLClassList ();
     FeatureVectorListPtr  data = driver->LoadFeatureFile (PicesKKStr::SystemStringToKKStr (_fileName), 
                                                           *classes,
                                                           -1,

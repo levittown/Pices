@@ -155,7 +155,7 @@ namespace PicesCommander
       OSservices.CreateDirectoryPath (reportFileDir);
 
       DateTime n = DateTime.Now;
-      String  logFileName = OSservices.AddSlash(PicesSipperVariables.PicesTempDirectory()) + "InstrumentDataByDeployment_Log_" +
+      String  logFileName = OSservices.AddSlash(PicesSipperVariables.TempDirectory()) + "InstrumentDataByDeployment_Log_" +
                              n.Year.ToString("0000") + "-" + n.Month.ToString("00") + "-" + n.Day.ToString("00") + "_" +
                              n.Hour.ToString("00") + "-" + n.Minute.ToString("00") + "-" + n.Hour.ToString("00") +
                              ".txt";

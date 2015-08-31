@@ -23,8 +23,6 @@ using namespace  KKB;
 
 #include "ClassStatistic.h"
 #include "OSservices.h"
-#include "SipperImageExtractionParms.h"
-#include "SipperImageExtraction.h"
 
 
 #include "ExtractionManager.h"
@@ -91,7 +89,6 @@ CImageExtractionWindowsDlg::CImageExtractionWindowsDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CImageExtractionWindowsDlg::IDD, pParent),
 
       imageExtractionThread          (NULL),
-      imageExtractionParms           (NULL),
       multiTreadedExtractionParms    (NULL),
       multiThreadedExtractionManager (NULL),
 
@@ -156,7 +153,6 @@ CImageExtractionWindowsDlg::CImageExtractionWindowsDlg(CWnd* pParent /*=NULL*/)
 
 CImageExtractionWindowsDlg::~CImageExtractionWindowsDlg ()
 {
-  delete  imageExtractionParms;             imageExtractionParms           = NULL;
   delete  multiTreadedExtractionParms;      multiTreadedExtractionParms    = NULL;
   delete  multiThreadedExtractionManager;   multiThreadedExtractionManager = NULL;
 }
@@ -267,11 +263,11 @@ BOOL CImageExtractionWindowsDlg::OnInitDialog()
 	
 	// TODO: Add extra initialization here
 
-    SetTimer (ImageExtractionTimerID, 1000, NULL);
+  SetTimer (ImageExtractionTimerID, 1000, NULL);
 
-    UpdateDialogStaticVariables ();
+  UpdateDialogStaticVariables ();
 
-    StartImageExtraction ();
+  StartImageExtraction ();
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -353,9 +349,6 @@ void CImageExtractionWindowsDlg::OnCancel()
 
   if  (returnCd == IDYES)
   {
-    if  (imageExtractionParms)
-      imageExtractionParms->Cancel (true);
-
     if  (multiThreadedExtractionManager)
       multiThreadedExtractionManager->TerminateProcessing (0);
 
@@ -383,9 +376,6 @@ void CImageExtractionWindowsDlg::OnTimer  (UINT nIDEvent)
     if  (extractionStopped)
       OnTimerExtractionStopped ();
     
-    else if  (imageExtractionParms)
-      OnTimerSingleThreaded ();
-
     else if  (multiTreadedExtractionParms)
       OnTimerMultiThreaded ();
   }
@@ -515,56 +505,6 @@ void  CImageExtractionWindowsDlg::OnTimerUpdateClassStats (const ClassStatisticL
 
 
 
-void  CImageExtractionWindowsDlg::OnTimerSingleThreaded ()
-{
-  if  (imageExtractionParms->Cancel ()  &&  (!imageExtractionParms->DoneExecuting ()))
-  {
-    DateTime now = osGetLocalDateTime ();
-    DateTime elaspedTime = now - cancelRequestStartTime;
-
-    kkuint64  secsWeHaveBeenWaitingForCancel = elaspedTime.Seconds ();
-    if  (secsWeHaveBeenWaitingForCancel > 120)
-    {
-      // We have waited long enough;  we are just going to kill the thread.
-      terminateNow = true;
-      return;
-    }
-  }
-
-  KKStr  bytesExtractedStr  = StrFormatInt64 (imageExtractionParms->BytesExtracted (), "ZZZ,ZZZ,ZZZ,ZZ0");
-  KKStr  linesExtractedStr  = StrFormatInt (imageExtractionParms->LinesExtracted  (), "ZZZ,ZZZ,ZZZ,ZZ0");
-  KKStr  imagesExtractedStr = StrFormatInt (imageExtractionParms->ImagesExtracted (), "ZZZ,ZZZ,ZZZ,ZZ0");
-  KKStr  imagesWrittenStr   = StrFormatInt (imageExtractionParms->ImagesWritten   (), "ZZZ,ZZZ,ZZZ,ZZ0");
-
-  m_bytesExtracted  = bytesExtractedStr.Str  ();
-  m_linesExtracted  = linesExtractedStr.Str  ();
-  m_imagesExtracted = imagesExtractedStr.Str ();
-  m_imagesWritten   = imagesWrittenStr.Str   ();
-
-  m_extractProgress.SetPos ((int)(imageExtractionParms->BytesExtracted () / 1024));
-  m_statusMessage = imageExtractionParms->Log ().LastLine ().Str ();
-
-  ClassStatisticListPtr  classStats = imageExtractionParms->ClassStats ();
-  if  (classStats)
-    OnTimerUpdateClassStats (classStats);
-
-  UpdateData (false);
-
-  if  (terminateNow)
-  {
-    m_cancel.EnableWindow (false);
-
-    this->KillTimer (ImageExtractionTimerID);
-    
-    int returnCd = MessageBox (L"Image Extraction cancellation was forced.",
-                               L"Image Extraction",
-                               MB_OK
-                              );
-    CDialog::OnCancel();
-  }
-}  /* OnTimerSingleThreaded */
-
-
 
 void  CImageExtractionWindowsDlg::OnTimerMultiThreaded ()
 {
@@ -688,66 +628,6 @@ UINT   ImageExtractionMultiThreaded (LPVOID pParam)
 
 
 
-UINT   ImageExtractionSingleThreaded (LPVOID pParam)
-{
-  osRunAsABackGroundProcess ();
-
-  CImageExtractionWindowsDlg* imageExtractionWindowsDlg = (CImageExtractionWindowsDlg*)pParam;
-  if  (imageExtractionWindowsDlg == NULL) //   ||   (!parms->IsKindOf (RUNTIME_CLASS (SipperImageExtractionParms)))
-    return 1;   // if pObject is not valid
-
-  SipperImageExtractionParmsPtr  parms = imageExtractionWindowsDlg->ImageExtractionParms ();
-
-
-  //RunLog  log;
-
-
-  bool  successful = true;
-
-  {
-    successful = true;
-    SipperImageExtraction  imageExtraction (*parms, successful, parms->Log ());
-    if  (!successful)
-    { 
-      osDisplayWarning ("Failed to initialize 'SipperImageExtraction'\n" +
-                        parms->StatusMessage ()
-                       );
-    }
-    else
-    {
-      imageExtraction.ExtractFrames ();
-    }
-  }
-
-    
-  if  (parms->Cancel ())
-  {
-    imageExtractionWindowsDlg->ExtractionCanceled (true);
-  }
-
-  else if  (!successful)
-  {
-    imageExtractionWindowsDlg->ExtractionCrashed (true);
-  }
-
-  imageExtractionWindowsDlg->ExtractionStopped (true);
-
-
-  parms->DoneExecuting (true);
-
-  return 0;   // thread completed successfully
-}  /* ImageExtractionSingleThreaded */
-
-
-
-
-
-void   CImageExtractionWindowsDlg::ImageExtractionParms (SipperImageExtractionParmsPtr  _imageExtractionParms)  
-{
-  imageExtractionParms = _imageExtractionParms;
-}  /* ImageExtractionParms */
-
-
 
 
 void  CImageExtractionWindowsDlg::MultiTreadedExtractionParms (ExtractionParmsPtr  _multiTreadedExtractionParms)
@@ -764,25 +644,7 @@ void  CImageExtractionWindowsDlg::MultiThreadedExtractionManager (ExtractionMana
 
 void   CImageExtractionWindowsDlg::UpdateDialogStaticVariables ()
 {
-  if  (imageExtractionParms)
-  {
-    KKStr  sipperFileSizeStr = StrFormatInt64 (imageExtractionParms->SipperFileSize (), "ZZZ,ZZZ,ZZZ,ZZ0");
-
-    m_sipperFileSize       = sipperFileSizeStr.Str ();
-    m_sipperFileName       = imageExtractionParms->SipperFileName ().Str ();
-    m_database             = imageExtractionParms->DataBaseServerDesc ().Str ();
-    m_destinationDirectory = imageExtractionParms->OutputRootDir ().Str ();
-    m_saveFrames           = imageExtractionParms->SaveFrames ();
-    m_extractFeatures      = imageExtractionParms->ExtractFeatureData ();
-    m_minimumSize          = imageExtractionParms->MinImageSize ();
-    m_maximumSize          = imageExtractionParms->MaxImageSize ();
-    m_configFileName       = osGetRootName (imageExtractionParms->ConfigFileName ()).Str ();
-
-    m_extractProgress.SetRange32 (0, (int)(imageExtractionParms->SipperFileSize () / 1024));
-    UpdateData (false);
-  }
-
-  else if  (multiTreadedExtractionParms)
+  if  (multiTreadedExtractionParms)
   {
     KKStr  sipperFileSizeStr = StrFormatInt64 (multiTreadedExtractionParms->SipperFileSize (), "ZZZ,ZZZ,ZZZ,ZZ0");
 
@@ -806,19 +668,9 @@ void   CImageExtractionWindowsDlg::UpdateDialogStaticVariables ()
 
 void CImageExtractionWindowsDlg::StartImageExtraction ()
 {
-  if  (imageExtractionParms)
-  {
-    imageExtractionThread = AfxBeginThread (ImageExtractionSingleThreaded,
-                                            (LPVOID)this
-                                           );
-
-  }
-  else if  (multiTreadedExtractionParms)
-  {
-    imageExtractionThread = AfxBeginThread (ImageExtractionMultiThreaded,
-                                            (LPVOID)this
-                                           );
-  }
+  imageExtractionThread = AfxBeginThread (ImageExtractionMultiThreaded,
+                                          (LPVOID)this
+                                         );
 //                                          THREAD_PRIORITY_NORMAL, 
 //                                          2000000
 }  /* StartImageExtraction */

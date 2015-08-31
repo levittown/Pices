@@ -9,7 +9,6 @@
 
 #include "CrossValidation.h"
 #include "FeatureNumList.h"
-#include "MLClassConstList.h"
 #include "ImageFeatures.h"
 
 #define  PunishmentFactor  0.00f
@@ -17,8 +16,23 @@
 
 namespace FeatureSelectionApp
 {
-  typedef  enum   {jtNULL, jtBinaryCombo, jtRandomSplit, jtValidation}  JobTypes;
-  typedef  enum   {bjNULL, bjOpen, bjStarted, bjDone, bjExpanded}  bjBinaryJobStatus;
+  enum class  JobTypes
+  {
+    Null,
+    BinaryCombo, 
+    RandomSplit, 
+    Validation
+  };
+
+
+  enum class  BinaryJobStatus
+  {
+    Null,
+    Open,
+    Started,
+    Done,
+    Expanded
+  };
 
   class   BinaryJobList;
   typedef BinaryJobList* BinaryJobListPtr;
@@ -93,12 +107,12 @@ namespace FeatureSelectionApp
     const
     FeatureNumList&     Features              () const {return features;}
     int                 JobId                 () const {return jobId;}
-    kkint32             NumOfRounds        () const {return numOfRounds;}
+    kkint32             NumOfRounds           () const {return numOfRounds;}
     int                 ParentId              () const {return parentId;}
     ProcessorPtr        Processor             () const {return processor;}
     double              ProcessingTime        () const {return processingTime;}
     int                 RandomNum             () const {return randomNum;}
-    bjBinaryJobStatus   Status                () const {return status;}
+    BinaryJobStatus     Status                () const {return status;}
     KKStr               StatusStr             () const;
     float               TestAccuracy          () const {return testAccuracy;}
     float               TestAccuracyNorm      () const {return testAccuracyNorm;}
@@ -124,7 +138,7 @@ namespace FeatureSelectionApp
     void   JobId              (int                _jobId)             {jobId            = _jobId;}
     void   NumOfRounds        (kkint32            _numOfRounds)       {numOfRounds      = _numOfRounds;}
     void   ProcessingTime     (double             _processingTime)    {processingTime   = _processingTime;}
-    void   Status             (bjBinaryJobStatus  _status)            {status           = _status;}
+    void   Status             (BinaryJobStatus  _status)            {status           = _status;}
     void   TestAccuracy       (float              _testAccuracy)      {testAccuracy     = _testAccuracy;}
     void   TestAccuracyNorm   (float              _testAccuracyNorm)  {testAccuracyNorm = _testAccuracyNorm;}
     void   TestAvgPredProb    (float              _testAvgPredProb)   {testAvgPredProb  = _testAvgPredProb;}
@@ -161,8 +175,8 @@ namespace FeatureSelectionApp
     virtual
     KKStr   ToStatusStr ();
 
-    static  KKStr              BinaryJobStatusToStr   (bjBinaryJobStatus  status);
-    static  bjBinaryJobStatus  BinaryJobStatusFromStr (KKStr  statusStr);
+    static  KKStr              BinaryJobStatusToStr   (BinaryJobStatus  status);
+    static  BinaryJobStatus  BinaryJobStatusFromStr (KKStr  statusStr);
 
 
     double   CParm     () {return  cParm;}
@@ -192,39 +206,37 @@ namespace FeatureSelectionApp
                                const KKStr&  fieldValue
                               );
 
-
-
-    float                accuracy;
-    float                accuracyNorm;
-    float                avgPredProb;         // Average predictited probability
-    int                  chgFeatureNum;
-    float                decisiveProbMean;
-    float                decisiveProbStdDev;
-    FeatureNumList       features;
-    float                fMeasure;
-    float                grade;
-    RunLog&              log;
-    int                  jobId;
-    int                  parentId;
-    double               processingTime;
-    ProcessorPtr         processor;
-    int                  randomNum;
-    bjBinaryJobStatus    status;
-    float                testAccuracy;
-    float                testAccuracyNorm;
-    float                testAvgPredProb;
-    float                testFMeasure;
-    float                testGrade;
-    int                  testNumSVs;      // Number of Suport Vectors created during Test
+    float            accuracy;
+    float            accuracyNorm;
+    float            avgPredProb;         // Average predicted probability
+    int              chgFeatureNum;
+    float            decisiveProbMean;
+    float            decisiveProbStdDev;
+    FeatureNumList   features;
+    float            fMeasure;
+    float            grade;
+    RunLog&          log;
+    int              jobId;
+    int              parentId;
+    double           processingTime;
+    ProcessorPtr     processor;
+    int              randomNum;
+    BinaryJobStatus  status;
+    float            testAccuracy;
+    float            testAccuracyNorm;
+    float            testAvgPredProb;
+    float            testFMeasure;
+    float            testGrade;
+    int              testNumSVs;      // Number of Support Vectors created during Testm  
 
 
     // next three are only used during parameter search
-    double               cParm;
-    double               gammaParm;
-    float                aParm;
-    kkint32              numOfRounds;
+    double           cParm;
+    double           gammaParm;
+    float            aParm;
+    kkint32          numOfRounds;
 
-    bool                 validateOnly;
+    bool             validateOnly;
   };
 
   typedef  BinaryJob::BinaryJobPtr  BinaryJobPtr;

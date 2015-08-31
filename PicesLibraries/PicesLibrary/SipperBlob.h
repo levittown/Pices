@@ -25,6 +25,10 @@
 #include "KKStr.h"
 using namespace  KKB;
 
+#include "MLClass.h"
+using namespace  KKMLL;
+
+
 namespace  MLL
 {
 
@@ -34,16 +38,6 @@ class  ImageFeaturesList;
 
 typedef  ImageFeatures*      ImageFeaturesPtr;
 typedef  ImageFeaturesList*  ImageFeaturesListPtr;
-#endif
-
-
-
-#ifndef  _MLCLASS_
-class  MLClass;
-class  MLClassList;
-
-typedef  MLClass*      MLClassPtr;
-typedef  MLClassList*  MLClassListPtr;
 #endif
 
 
@@ -101,7 +95,8 @@ typedef  MLClassList*  MLClassListPtr;
                             MLClassPtr  mlClass,
                             kkuint32    firstFrameRowScanLine,
                             bool        save,        /**< Set to true to save file false if only calculating features.      */
-                            bool        colorize     /**< Set to true if you wish to save the 7 GrayScale values as colors. */
+                            bool        colorize,    /**< Set to true if you wish to save the 7 GrayScale values as colors. */
+                            RunLog&     runLog
                            );
 
     static void   MaxFrameHeight (kkuint32  _maxFrameHeight)  {maxFrameHeight = _maxFrameHeight;}

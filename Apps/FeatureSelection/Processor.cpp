@@ -38,7 +38,7 @@ using namespace KKB;
 
 #include "MLClass.h"
 #include "TrainingProcess2.h"
-using namespace  MLL;
+using namespace  KKMLL;
 
 
 #include "Processor.h"
@@ -59,7 +59,7 @@ Processor::Processor (FeatureSelectionPtr  _featureSelection,
                       int                  _processorId,
                       BinaryClassPtr       _binaryClass,
                       FileDescPtr          _fileDesc,
-                      fsProcessorStatus    _status
+                      ProcessorStatus    _status
                      ):
   bestA                         (-1.0),
   beamSize                      (1),
@@ -83,7 +83,7 @@ Processor::Processor (FeatureSelectionPtr  _featureSelection,
   firstJobAvailableForExpansion (0),
   dateTimeFirstOneFound         (false),
   highGrade                     (-1.0f),
-  mlClasses                  (NULL),
+  mlClasses                     (NULL),
   lastCpuTimeReported           (0.0),
   lockFileOpened                (false),
   lockFile                      (-1),
@@ -95,10 +95,10 @@ Processor::Processor (FeatureSelectionPtr  _featureSelection,
   procId                        (-1),
   processorId                   (_processorId),
   quitRunning                   (false),
-  resultType                    (frtNULL),
-  searchMethod                  (smOnePassOnly),
-  searchType                    (stNULL),
-  selectionMethod               (SelectionMethod_NULL),
+  resultType                    (FinalResultType::Null),
+  searchMethod                  (SearchMethod::OnePassOnly),
+  searchType                    (SearchTypes::Null),
+  selectionMethod               (SVM_SelectionMethod::Null),
   statusFileNextByte            (0),
   status                        (_status),
   summaryResultsFileName        (),
@@ -120,20 +120,21 @@ Processor::Processor (FeatureSelectionPtr  _featureSelection,
 
   Block ();
 
-  config = new TrainingConfiguration2 (fileDesc, _binaryClass->ConfigFileName (), log, false);
+  config = new TrainingConfiguration2 ();
+  config ->Load (_binaryClass->ConfigFileName (), false, log);
   switch  (_binaryClass->ResultType ())
   {
-  case  frtMfsFeaturesSel:
-  case  frtMfsParmsTuned:
-  case  frtMfsParmsTunedFeaturesSel:
-    config->MachineType (OneVsOne);
+  case  FinalResultType::MfsFeaturesSel:
+  case  FinalResultType::MfsParmsTuned:
+  case  FinalResultType::MfsParmsTunedFeaturesSel:
+    config->MachineType (SVM_MachineType::OneVsOne);
     break;
 
 
-  case  frtBfsFeaturesSel:
-  case  frtBfsParmsTuned:
-  case  frtBfsFeaturesSelParmsTuned:
-    config->MachineType (BinaryCombos);
+  case  FinalResultType::BfsFeaturesSel:
+  case  FinalResultType::BfsParmsTuned:
+  case  FinalResultType::BfsFeaturesSelParmsTuned:
+    config->MachineType (SVM_MachineType::BinaryCombos);
     break;
 
   }
@@ -147,7 +148,7 @@ Processor::Processor (FeatureSelectionPtr  _featureSelection,
 
   lastCpuTimeReported = osGetSystemTimeUsed ();
 
-  classesThisProcess = new MLClassConstList (*mlClasses);
+  classesThisProcess = new MLClassList (*mlClasses);
 
   trainingData = BuildOurBinaryFeatureData (featureSelection->TrainingData ());
   if  (featureSelection->TestData ())
@@ -188,11 +189,11 @@ Processor::Processor (FeatureSelectionPtr  _featureSelection,
                       bool                 _byBinaryClasses,
                       int                  _processorId,
                       FileDescPtr          _fileDesc,
-                      stSearchTypes        _searchType,
-                      MLClassConstPtr   _class1,
-                      MLClassConstPtr   _class2,
-                      smSearchMethod       _searchMethod,
-                      fsProcessorStatus    _status
+                      SearchTypes        _searchType,
+                      MLClassPtr   _class1,
+                      MLClassPtr   _class2,
+                      SearchMethod       _searchMethod,
+                      ProcessorStatus    _status
                      ):
 
   bestA                         (-1.0),
@@ -229,10 +230,10 @@ Processor::Processor (FeatureSelectionPtr  _featureSelection,
   procId                        (-1),
   processorId                   (_processorId),
   quitRunning                   (false),
-  resultType                    (frtNULL),
+  resultType                    (FinalResultType::Null),
   searchMethod                  (_searchMethod),
   searchType                    (_searchType),
-  selectionMethod               (SelectionMethod_NULL),
+  selectionMethod               (SVM_SelectionMethod::Null),
   summaryResultsFileName        (),
   statusFileNextByte            (0),
   status                        (_status),
@@ -257,39 +258,39 @@ Processor::Processor (FeatureSelectionPtr  _featureSelection,
   if  (byBinaryClasses)
   {
     classNames = Class1Name () + "-" + Class2Name ();
-    classesThisProcess = new MLClassConstList ();
+    classesThisProcess = new MLClassList ();
     classesThisProcess->PushOnBack (class1);
     classesThisProcess->PushOnBack (class2);
   }
   else
   {
     classNames = "AllClasses";
-    classesThisProcess = new MLClassConstList (*mlClasses);
+    classesThisProcess = new MLClassList (*mlClasses);
   }
 
 
   KKStr  searchTypeStr = "Parm";
-  if  (searchType == stFeatureSelectionSearch)
+  if  (searchType == SearchTypes::FeatureSelectionSearch)
     searchTypeStr = "Feature";
 
   lockFileName   = classNames + ".Lock";
 
-  if  (featureSelection->MajorStep () == msGenerateBruitSvmSearch)
+  if  (featureSelection->MajorStep () == MajorSteps::GenerateBruitSvmSearch)
   {
     statusFileName = classNames + "_BruitParmSearch.Status";
     resultFileName = classNames + "_BruitParmSearch.Results";
-    searchMethod   = smGrid;
+    searchMethod   = SearchMethod::Grid;
   }
 
-  else if  (featureSelection->ProcessingOrder () == poStandard)
+  else if  (featureSelection->ProcessingOrder () == ProcessingOrders::Standard)
   {
-    if  (searchType == stFeatureSelectionSearch)
+    if  (searchType == SearchTypes::FeatureSelectionSearch)
     {
      statusFileName = classNames + "_Feature.Status";
       resultFileName = classNames + "_Feature.Results";
     }
 
-    else if  (searchType == stParameterSearch)
+    else if  (searchType == SearchTypes::ParameterSearch)
     {
      statusFileName = classNames + "_Parm.Status";
       resultFileName = classNames + "_Parm.Results";
@@ -302,30 +303,30 @@ Processor::Processor (FeatureSelectionPtr  _featureSelection,
     }
   }
 
-  else if  (featureSelection->ProcessingOrder () == poHall)
+  else if  (featureSelection->ProcessingOrder () == ProcessingOrders::Hall)
   {
     switch  (featureSelection->MajorStep ())
     {
-    case  msMfsFeatureSelection:
-    case  msBfsFeatureSelection:
+    case  MajorSteps::MfsFeatureSelection:
+    case  MajorSteps::BfsFeatureSelection:
       statusFileName = classNames + "_Feature.Status";
       resultFileName = classNames + "_Feature.Results";
       break;
 
-    case  msMfsParmTuningPre:
-    case  msBfsParmTuningPre:
+    case  MajorSteps::MfsParmTuningPre:
+    case  MajorSteps::BfsParmTuningPre:
       statusFileName = classNames + "_Parm-Pre.Status";
       resultFileName = classNames + "_Parm-Pre.Results";
       break;
 
-    case  msMfsParmTuningPost:
-    case  msBfsParmTuningPost:
+    case  MajorSteps::MfsParmTuningPost:
+    case  MajorSteps::BfsParmTuningPost:
       statusFileName = classNames + "_Parm-Post.Status";
       resultFileName = classNames + "_Parm-Post.Results";
       break;
 
     default:
-      log.Level (-1) << endl << endl
+      log.Level (-1) << endl
           << "Processor::Processor   ***ERROR***    Invalid MajorStep[" << MajorStepToStr (featureSelection->MajorStep ()) << "]  defined for parameter search processing." << endl
           << endl;
       exit (-1);
@@ -334,7 +335,7 @@ Processor::Processor (FeatureSelectionPtr  _featureSelection,
 
   else
   {
-    log.Level (-1) << endl << endl
+    log.Level (-1) << endl
       << "Processor::Processor   ***ERROR***    Invalid ProcessingOrder[" << ProcessingOrderToStr (featureSelection->ProcessingOrder ()) << "]  defined for parameter search processing." << endl
       << endl;
     exit (-1);
@@ -344,15 +345,16 @@ Processor::Processor (FeatureSelectionPtr  _featureSelection,
   config = new TrainingConfiguration2 (*featureSelection->Config ());
   if  (byBinaryClasses)
   {
+    VectorKKStr directories;
     config->EmptyTrainingClasses ();
-    config->AddATrainingClass (new TrainingClass ("", Class1Name (), 1.0f, *mlClasses)); 
-    config->AddATrainingClass (new TrainingClass ("", Class2Name (), 1.0f, *mlClasses)); 
-    config->MachineType (OneVsOne);  
+    config->AddATrainingClass (new TrainingClass (directories, Class1Name (), 1.0f, 0.0f, NULL, *mlClasses)); 
+    config->AddATrainingClass (new TrainingClass (directories, Class2Name (), 1.0f, 0.0f, NULL, *mlClasses)); 
+    config->MachineType (SVM_MachineType::OneVsAll);  
   }
 
-  if  ((featureSelection->MajorStep () == msMfsFeatureSelection)  &&   (featureSelection->ProcessingOrder () == poHall))
+  if  ((featureSelection->MajorStep () == MajorSteps::MfsFeatureSelection)  &&   (featureSelection->ProcessingOrder () == ProcessingOrders::Hall))
   {
-    if  (config->ModelingMethod () == Model::mtUsfCasCor)
+    if  (config->ModelingMethod () == Model::ModelTypes::UsfCasCor)
     {
       config->Number_of_rounds (2);
     }
@@ -374,10 +376,10 @@ Processor::Processor (FeatureSelectionPtr  _featureSelection,
 
   if  (!osFileExists (statusFileName))
   {
-    if  (searchType == stFeatureSelectionSearch)
+    if  (searchType == SearchTypes::FeatureSelectionSearch)
       InitializeStatusFile ();
 
-    else if  (searchType == stParameterSearch)
+    else if  (searchType == SearchTypes::ParameterSearch)
       InitializeStatusFileParameterSearch ();
   }
 
@@ -426,7 +428,7 @@ const FeatureNumList&   Processor::InitialFeatures () const
 
 
 
-MLClassConstPtr  Processor::PositiveClass ()  const
+MLClassPtr  Processor::PositiveClass ()  const
 {
   if  (featureSelection)
     return  featureSelection->PositiveClass ();
@@ -573,10 +575,7 @@ FeatureVectorListPtr  Processor::BuildOurBinaryFeatureData (FeatureVectorListPtr
 
   if  (byBinaryClasses)
   {
-    examplesForOurClasses = new FeatureVectorList (fileDesc, 
-                                                   false,      // false = this instance will not own its contents.
-                                                   log
-                                                  );
+    examplesForOurClasses = srcData->ManufactureEmptyList (false);
 
     FeatureVectorList::iterator  idx;
 
@@ -712,8 +711,8 @@ void  Processor::ProcessStatusFileLineJobStatusChange (KKStrParser&  statusLineS
   KKStr statusStr = statusLineStr.GetNextToken ("\t");
   statusStr.TrimLeft ();
   statusStr.TrimRight ();
-  bjBinaryJobStatus status = BinaryJob::BinaryJobStatusFromStr (statusStr);
-  if  (status == bjNULL)
+  BinaryJobStatus status = BinaryJob::BinaryJobStatusFromStr (statusStr);
+  if  (status == BinaryJobStatus::Null)
   {
     log.Level (-1) << endl << endl 
                    << "ProcessStatusLineJobStatusChange    ***Error***      Invalid Status Specified" << endl
@@ -732,7 +731,7 @@ void  Processor::ProcessStatusFileLineJobStatusChange (KKStrParser&  statusLineS
 
 void  Processor::ProcessStatusFileLine (KKStrParser&  statusStr)
 {
-  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+  BinaryJobList::ErrorCodes  result = BinaryJobList::ErrorCodes::NoError;
 
   if  (statusStr.SubStrPart (0, 1) == "//")
   {
@@ -793,7 +792,7 @@ void  Processor::ProcessStatusFileLine (KKStrParser&  statusStr)
       else
       {
         binaryJobs->PushOnBack (j, result);
-        if  (result != BinaryJobList::NoError)
+        if  (result != BinaryJobList::ErrorCodes::NoError)
         {
           log.Level (-1) << endl << endl 
                          <<"Processor::ProcessStatusFileLine     ***ERROR***     Duplicate Jobs  ***" << endl
@@ -821,7 +820,7 @@ void  Processor::ProcessStatusFileLine (KKStrParser&  statusStr)
     else
     {
       binaryJobs->PushOnBack (j, result);
-      if  (result != BinaryJobList::NoError)
+      if  (result != BinaryJobList::ErrorCodes::NoError)
       {
         log.Level (-1) << endl << endl 
                        <<"Processor::ProcessStatusFileLine     ***ERROR***     Duplicate Jobs  ***" << endl
@@ -846,7 +845,7 @@ void  Processor::ProcessStatusFileLine (KKStrParser&  statusStr)
     else
     {
       binaryJobs->PushOnBack (j, result);
-      if  (result != BinaryJobList::NoError)
+      if  (result != BinaryJobList::ErrorCodes::NoError)
       {
         log.Level (-1) << endl << endl 
                        <<"Processor::ProcessStatusFileLine     ***ERROR***     Duplicate Jobs  ***" << endl
@@ -955,7 +954,7 @@ void  Processor::ProcessStatusFileLine (KKStrParser&  statusStr)
   else if  (fieldName == "SEARCHMETHOD")
   {
     searchMethod = SearchMethodFromStr (statusStr.GetNextToken ());
-    if  ((searchMethod == smBeam)  &&  (beamSearchFeatureCount < 1))
+    if  ((searchMethod == SearchMethod::Beam)  &&  (beamSearchFeatureCount < 1))
       beamSearchFeatureCount = binaryJobs->SmallestNumberOfFeaturesExpanded ();
   }
 
@@ -1190,7 +1189,7 @@ void  Processor::InitializeStatusFileParameterSearch ()
 {
   log.Level (10) << "Processor::InitializeStatusFileParameterSearch" << endl;
 
-  searchMethod = smGrid;
+  searchMethod = SearchMethod::Grid;
 
   delete  binaryJobs;
   binaryJobs = new BinaryJobList (this);
@@ -1199,13 +1198,13 @@ void  Processor::InitializeStatusFileParameterSearch ()
 
   ofstream* statusFile = OpenStatusFile (ios::app);
 
-  if  (config->ModelType () == Model::mtUsfCasCor)
+  if  (config->ModelType () == Model::ModelTypes::UsfCasCor)
   {
     CreateParameterJobsUsfCasCor (statusFile, 1, 30);
   }
   else
   {
-    if  ((featureSelection->ParamSelCriteria () == jscBruitForce)  ||  (featureSelection->MajorStep () == msGenerateBruitSvmSearch))
+    if  ((featureSelection->ParamSelCriteria () == JobSelectionCriteria::BruitForce)  ||  (featureSelection->MajorStep () == MajorSteps::GenerateBruitSvmSearch))
     {
       cGrowthRate     = 1.15f;
       gammaGrowthRate = 1.3f;
@@ -1250,7 +1249,7 @@ void  Processor::InitializeStatusFileRandomSplits (BinaryClassPtr   _binaryClass
 {
   log.Level (10) << "Processor::InitializeStatusFileRandomSplits" << endl;
 
-  searchMethod = smOnePassOnly;
+  searchMethod = SearchMethod::OnePassOnly;
 
   delete  binaryJobs;
   binaryJobs = new BinaryJobList (this);
@@ -1279,7 +1278,7 @@ void  Processor::InitializeStatusFile ()
 {
   log.Level (10) << "Processor::InializeStatusFile" << endl;
 
-  BinaryJobList::ErrorCodes  result  = BinaryJobList::NoError;
+  BinaryJobList::ErrorCodes  result = BinaryJobList::ErrorCodes::NoError;
 
   delete  binaryJobs;
   binaryJobs = new BinaryJobList (this);
@@ -1294,10 +1293,10 @@ void  Processor::InitializeStatusFile ()
                                           config->A_Param      ()
                                          );
   binaryJobs->PushOnBack (firstJob, result);
-  if  (result != BinaryJobList::NoError)
+  if  (result != BinaryJobList::ErrorCodes::NoError)
   {
     log.Level (-1) << endl << endl 
-                   <<"Processor::InitializeStatusFile     ***ERROR***     Duplicate Jobs  ***" << endl
+                   <<"Processor::InitializeStatusFile   ***ERROR***   Duplicate Jobs  ***" << endl
                    << "   New Job[" << firstJob->JobId () << "]" << endl
                    << "   There is no way this should have been able t happen since the queue should have been empty!!!" << endl
                    << endl;
@@ -1319,7 +1318,7 @@ void  Processor::FlagJobsForTesting (ofstream*         statusFile,
 {
   log.Level (10) << "Processor::FlagJobsForTesting"  << endl;
 
-  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+  BinaryJobList::ErrorCodes  result = BinaryJobList::ErrorCodes::NoError;
 
   BinaryJobList::iterator  idx;
   for  (idx = candidats->begin ();  idx != candidats->end ();  idx++)
@@ -1358,11 +1357,11 @@ void  Processor::FlagJobsForTesting (ofstream*         statusFile,
     newJob->Grade              (j->Grade              ());
     newJob->ProcessingTime     (j->ProcessingTime     ());
     newJob->ValidateOnly (true);
-    newJob->Status (bjOpen);
+    newJob->Status (BinaryJobStatus::Open);
 
     *statusFile << newJob->JobTypeStr () << "\t" << newJob->ToStatusStr () << endl;
     binaryJobs->PushOnBack (newJob, result);
-    if  (result != BinaryJobList::NoError)
+    if  (result != BinaryJobList::ErrorCodes::NoError)
     {
       log.Level (-1) << endl
         << "Processor::FlagJobsForTesting   ***ERROR***   Duplicate Job." <<  endl
@@ -1388,7 +1387,7 @@ void  Processor::CreateParameterJobsUsfCasCor (ofstream*  statusFile,
 {
   log.Level (10) << "Processor::CreateParameterJobsUsfCasCor" << endl;
 
-  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+  BinaryJobList::ErrorCodes  result = BinaryJobList::ErrorCodes::NoError;
   
   // It is assumed that we have a 'EndBlock
   *statusFile << "// CreateParameterJobsUsfCasCor" << endl
@@ -1428,7 +1427,7 @@ void  Processor::CreateParameterJobsUsfCasCor (ofstream*  statusFile,
                                         );
         *statusFile << j->JobTypeStr () << "\t" << j->ToStatusStr () << endl;
         binaryJobs->PushOnBack (j, result);
-        if  (result != BinaryJobList::NoError)
+        if  (result != BinaryJobList::ErrorCodes::NoError)
         {
           log.Level (-1) << endl << endl 
                          <<"Processor::CreateParameterJobsUsfCasCor     ***ERROR***     Duplicate Jobs  ***" << endl
@@ -1464,7 +1463,7 @@ void  Processor::CreateParameterJobs (ofstream*  statusFile,
 {
   log.Level (10) << "Processor::CreateParameterJobs" << endl;
 
-  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+  BinaryJobList::ErrorCodes  result = BinaryJobList::ErrorCodes::NoError;
 
   // It is assumed that we have a 'EndBlock
   *statusFile << "// CreateParameterJobs" << endl
@@ -1504,7 +1503,7 @@ void  Processor::CreateParameterJobs (ofstream*  statusFile,
                                           );
           *statusFile << j->JobTypeStr () << "\t" << j->ToStatusStr () << endl;
           binaryJobs->PushOnBack (j, result);
-          if  (result != BinaryJobList::NoError)
+          if  (result != BinaryJobList::ErrorCodes::NoError)
           {
             log.Level (-1) << endl << endl 
                            <<"Processor::CreateParameterJobs     ***ERROR***     Duplicate Jobs  ***" << endl
@@ -1545,7 +1544,7 @@ void  Processor::CreateRandomSplitsJobs (ostream*  statusFile)
 {
   log.Level (10) << "Processor::CreateRandomSplitsJobs" << endl;
 
-  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+  BinaryJobList::ErrorCodes  result = BinaryJobList::ErrorCodes::NoError;
 
   int  splitNum = 0;
   for  (splitNum = 0; splitNum < featureSelection->RandomSplitsNum ();  splitNum++)
@@ -1564,7 +1563,7 @@ void  Processor::CreateRandomSplitsJobs (ostream*  statusFile)
 
     *statusFile << j->JobTypeStr () << "\t" << j->ToStatusStr () << endl;
     binaryJobs->PushOnBack (j, result);
-    if  (result != BinaryJobList::NoError)
+    if  (result != BinaryJobList::ErrorCodes::NoError)
     {
       log.Level (-1) << endl << endl 
                      <<"Processor::CreateParameterJobs     ***ERROR***     Duplicate Jobs  ***" << endl
@@ -1584,14 +1583,14 @@ void  Processor::CreateValidationJob (ostream*        statusFile,
 {
   log.Level (10) << "Processor::CreateValidationJob" << endl;
   
-  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+  BinaryJobList::ErrorCodes  result = BinaryJobList::ErrorCodes::NoError;
 
   double  cParm       = config->C_Param     ();
   double  gamma       = config->Gamma       ();
   double  aParm       = config->A_Param     ();
   int     numOfRounds = config->NumOfRounds ();
 
-  if  (ResultType () == frtNoTuningAllFeatures)
+  if  (ResultType () == FinalResultType::NoTuningAllFeatures)
   {
     cParm = 1.0;
     gamma = 1.0 / (double)(InitialFeatures ().NumSelFeatures ());
@@ -1613,7 +1612,7 @@ void  Processor::CreateValidationJob (ostream*        statusFile,
 
   *statusFile << j->JobTypeStr () << "\t" << j->ToStatusStr () << endl;
   binaryJobs->PushOnBack (j, result);
-  if  (result != BinaryJobList::NoError)
+  if  (result != BinaryJobList::ErrorCodes::NoError)
   {
     log.Level (-1) << endl << endl 
                    <<"Processor::CreateValidationJob     ***ERROR***     Duplicate Jobs  ***" << endl
@@ -1679,9 +1678,9 @@ void  Processor::UpdateExpandedJobs (ofstream*         statusFile,
                                      BinaryJobListPtr  newJobs
                                     )
 {
-  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+  BinaryJobList::ErrorCodes  result = BinaryJobList::ErrorCodes::NoError;
 
-  expandedJob->Status (bjExpanded);
+  expandedJob->Status (BinaryJobStatus::Expanded);
 
   *statusFile << "JobStatusChange" << "\t" << expandedJob->JobId () << "\t" << expandedJob->StatusStr () << endl;
 
@@ -1691,7 +1690,7 @@ void  Processor::UpdateExpandedJobs (ofstream*         statusFile,
     BinaryJobPtr  j = *idx;
     *statusFile << j->JobTypeStr () << "\t" << j->ToStatusStr () << endl;
     binaryJobs->PushOnBack (j, result);
-    if  (result != BinaryJobList::NoError)
+    if  (result != BinaryJobList::ErrorCodes::NoError)
     {
       log.Level (-1) << endl 
         << "Processor::UpdateExpandedJobs   ***ERROR***    Duplicate Job   JobId[" << j->JobId () << "]" << endl
@@ -1725,7 +1724,7 @@ void  Processor::ProcessNextBestCaseExpansion (ofstream*  statusFile,
   while  ((numThatWeExpanded < beamSize)  &&  (idx < binaryJobs->QueueSize ()))
   {
     BinaryJobPtr  jobToExpand = binaryJobs->IdxToPtr (idx);
-    if  ((jobToExpand->Status () == bjDone)  &&  (jobToExpand->Features ().NumOfFeatures () > 1))
+    if  ((jobToExpand->Status () == BinaryJobStatus::Done)  &&  (jobToExpand->Features ().NumOfFeatures () > 1))
     {
       // We found a candidate;
       {
@@ -1766,7 +1765,7 @@ void  Processor::ProcessNextBestCaseExpansion (ofstream*  statusFile,
     BinaryJobPtr  jobToExpand = binaryJobs->SelectOneDoneJobAtRandomFromTop10Percent ();
     if  (jobToExpand)
     {
-      jobToExpand->Status (bjExpanded);
+      jobToExpand->Status (BinaryJobStatus::Expanded);
       BinaryJobListPtr  expandedJobs = jobToExpand->ExpandBestCaseBackward (binaryJobs, NULL);
       expandedJobs->Owner (false);
 
@@ -1780,7 +1779,7 @@ void  Processor::ProcessNextBestCaseExpansion (ofstream*  statusFile,
     // Since we have not expanded any Jobs then we are done with doing a Beam search and now it is time to 
     // test our results.
 
-    searchMethod = smTestResults;
+    searchMethod = SearchMethod::TestResults;
     beamSize   = 1;
 
     *statusFile << "SearchMethod"  << "\t" << SearchMethodToStr (searchMethod)  << endl;
@@ -1816,7 +1815,7 @@ void  Processor::ProcessBeamExpansion (ofstream*  statusFile,
   {
     BinaryJobPtr  jobToExpand = binaryJobs->IdxToPtr (idx);
 
-    if  ((jobToExpand->Status() == bjDone)                        &&  
+    if  ((jobToExpand->Status() == BinaryJobStatus::Done)                        &&  
          (jobToExpand->Features ().NumOfFeatures () > 1)          &&
          (jobToExpand->JobId () >= firstJobAvailableForExpansion)
         )
@@ -1852,7 +1851,7 @@ void  Processor::ProcessBeamExpansion (ofstream*  statusFile,
     // Since we have none expanded any Jobs then we are done with doing a Beam search and now it is time to 
     // test our results.
 
-    searchMethod = smTestResults;
+    searchMethod = SearchMethod::TestResults;
     beamSize   = 1;
 
     *statusFile << "SearchMethod"  << "\t" << SearchMethodToStr (searchMethod)  << endl;
@@ -1986,7 +1985,7 @@ void  Processor::ProcessGridSearchExpansionMostAccurate (ofstream*  statusFile,
                                                          int&       numJobsCreated
                                                         )
 {
-  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+  BinaryJobList::ErrorCodes  result = BinaryJobList::ErrorCodes::NoError;
 
   *statusFile << "//" << endl
               << "//  Grid Expansion Most Accurate  [" << numOfExpansions       << "]"  << endl
@@ -2220,7 +2219,7 @@ void  Processor::ProcessGridSearchExpansionMostAccurate (ofstream*  statusFile,
                                           ) == NULL)
       {
         jobsToTest->PushOnBack (j, result);
-        if  (result != BinaryJobList::NoError)
+        if  (result != BinaryJobList::ErrorCodes::NoError)
         {
           log.Level (-1) << endl 
             << "Processor::ProcessGridSearchExpansionMostAccurate   ***ERROR***    Duplicate Job   JobId[" << j->JobId () << "]" << endl
@@ -2266,7 +2265,7 @@ void  Processor::ProcessGridSearchExpansionFastestFromBest (ofstream*  statusFil
                                                             int&       numJobsCreated
                                                            )
 {
-  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+  BinaryJobList::ErrorCodes  result = BinaryJobList::ErrorCodes::NoError;
 
   *statusFile << "//" << endl
               << "//  Grid Expansion    [" << numOfExpansions       << "]"  << endl
@@ -2458,7 +2457,7 @@ void  Processor::ProcessGridSearchExpansionFastestFromBest (ofstream*  statusFil
       {
         BinaryJobPtr  jobToTest = highestGradedJobs->IdxToPtr (x);
         jobsToTest->PushOnBack (jobToTest, result);
-        if  (result != BinaryJobList::NoError)
+        if  (result != BinaryJobList::ErrorCodes::NoError)
         {
           log.Level (-1) << endl
             << "Processor::UpdateExpandedJobs   ***ERROR***    Duplicate Job   JobId[" << jobToTest->JobId () << "]" << endl
@@ -2496,7 +2495,7 @@ void  Processor::ProcessTestResultsExpansion (ofstream*  statusFile,
   // We will locate the jobs that have the highest training accuracy by feature count. Then for each one 
   // of them we will test against the test data set.
 
-  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+  BinaryJobList::ErrorCodes  result = BinaryJobList::ErrorCodes::NoError;
 
   BinaryJobListPtr  jobsToTest = binaryJobs->CreateTestJobsForHighetsGradePerFeatureCount ();
   jobsToTest->Owner (false);
@@ -2506,7 +2505,7 @@ void  Processor::ProcessTestResultsExpansion (ofstream*  statusFile,
   {
     BinaryJobPtr  j = *idx;
     binaryJobs->PushOnBack (j, result);
-    if  (result != BinaryJobList::NoError)
+    if  (result != BinaryJobList::ErrorCodes::NoError)
     {
       log.Level (-1) << endl 
         << "Processor::ProcessTestResultsExpansion   ***ERROR***    Duplicate Job   JobId[" << j->JobId () << "]" << endl
@@ -2522,7 +2521,7 @@ void  Processor::ProcessTestResultsExpansion (ofstream*  statusFile,
   *statusFile << "NextJobId" << "\t" << nextJobId << endl;
   numJobsCreated = jobsToTest->QueueSize ();
 
-  searchMethod = smTestResults;
+  searchMethod = SearchMethod::TestResults;
   *statusFile << "SearchMethod"  << "\t" << SearchMethodToStr (searchMethod)  << endl;
  
   delete  jobsToTest;
@@ -2558,32 +2557,32 @@ void  Processor::ProcessNextExpansion (ofstream*  statusFile)
   ReportCpuTimeUsed (statusFile);
 
 
-  if  (searchMethod == smOnePassOnly)
+  if  (searchMethod == SearchMethod::OnePassOnly)
   {
     // We are processing Final Results;  In this case there is no expansion.
     // by not creating any new jobs it will cause the process to terminate.
   }
 
-  else if  (searchMethod == smBestCaseNext)
+  else if  (searchMethod == SearchMethod::BestCaseNext)
   {
     if  (expansionsSinceHighGrade >= expansionLimit)
     {
       // SwithOverToBeamSearch
-      searchMethod = smBeam;
+      searchMethod = SearchMethod::Beam;
       beamSize   = Max (5, beamSize);
       *statusFile << "SearchMethod"  << "\t" << SearchMethodToStr (searchMethod)  << endl;
       *statusFile << "BeamSize"      << "\t" << beamSize                          << endl;
     }
   }
 
-  else if  (searchMethod == smTestResults)
+  else if  (searchMethod == SearchMethod::TestResults)
   {
     BinaryJobListPtr  testJobs = binaryJobs->ExtractTestJobs ();
     testJobs->Owner (false);
     if  ((testJobs != NULL)  &&  (testJobs->QueueSize () > 0))
     {
       // We have already generated and ran the Test Jobs; we can now pick the best.
-      searchMethod = smPickTheBest;
+      searchMethod = SearchMethod::PickTheBest;
       *statusFile << "SearchMethod"  << "\t" << SearchMethodToStr (searchMethod)  << endl;
     }
     delete  testJobs;
@@ -2594,33 +2593,33 @@ void  Processor::ProcessNextExpansion (ofstream*  statusFile)
 
   switch  (searchMethod)
   {
-    case  smBestCaseNext:  ProcessNextBestCaseExpansion (statusFile, numNewJobsCreated);
+    case  SearchMethod::BestCaseNext:  ProcessNextBestCaseExpansion (statusFile, numNewJobsCreated);
                            break;
 
-    case  smBeam:          ProcessBeamExpansion (statusFile, numNewJobsCreated);
+    case  SearchMethod::Beam:          ProcessBeamExpansion (statusFile, numNewJobsCreated);
                            break;
     
-    case  smTestResults:   ProcessTestResultsExpansion (statusFile, numNewJobsCreated);
+    case  SearchMethod::TestResults:   ProcessTestResultsExpansion (statusFile, numNewJobsCreated);
                            break;
 
-    case  smPickTheBest:   ProcessTestJobsAndPickTheBest (statusFile, numNewJobsCreated);
+    case  SearchMethod::PickTheBest:   ProcessTestJobsAndPickTheBest (statusFile, numNewJobsCreated);
                            break;
 
-    case  smGrid:          {
-                             if  (featureSelection->Config ()->ModelType () == Model::mtUsfCasCor)
+    case  SearchMethod::Grid:          {
+                             if  (featureSelection->Config ()->ModelType () == Model::ModelTypes::UsfCasCor)
                              {
                                ProcessGridSearchExpansionUsfCasCor (statusFile, numNewJobsCreated);
                              }
 
                              else if  
-                                 ((featureSelection->ParamSelCriteria () == jscBruitForce)  ||  
-                                  (featureSelection->MajorStep () ==  msGenerateBruitSvmSearch)
+                                 ((featureSelection->ParamSelCriteria () == JobSelectionCriteria::BruitForce)  ||  
+                                  (featureSelection->MajorStep () ==  MajorSteps::GenerateBruitSvmSearch)
                                  )
                              {
                                ProcessGridSearchExpansionBruitForce (statusFile, numNewJobsCreated);
                              }
 
-                             else if  (featureSelection->ParamSelCriteria () == jscMostAccurate)
+                             else if  (featureSelection->ParamSelCriteria () == JobSelectionCriteria::MostAccurate)
                              {
                                ProcessGridSearchExpansionMostAccurate (statusFile, numNewJobsCreated);
                              }
@@ -2656,17 +2655,17 @@ void  Processor::GenerateFinalResultsReport ()
   log.Level (10) << "Processor::GenerateFinalResultsReport" << endl;
   ofstream r (resultFileName.Str ());
   
-  r << "Current Time     [" << osGetLocalDateTime ()                                            << "]" << endl
-    << "Class1           [" << Class1Name ()                                                    << "]" << endl
-    << "Class2           [" << Class2Name ()                                                    << "]" << endl
-    << "Model Type       [" << config->ModelTypeStr ()                                          << "]" << endl
-    << "Config Parms     [" << config->ModelParameterCmdLine ()                                 << "]" << endl
-    << "Train File       [" << featureSelection->TrainingDataFileName ()                        << "]" << endl
-    << "Test  File       [" << featureSelection->TestDataFileName ()                            << "]" << endl
-    << "Num Expansions   [" << numOfExpansions                                                  << "]" << endl
-    << "Grading Method   [" << GradingMethodToStr (featureSelection->GradingMethod ())          << "]" << endl
-    << "TotalCpuTimeUsed [" << TotalCpuTimeUsed ()                                              << "]" << endl
-    << "ParamSelCriteria [" << JobSelectionCriteriaType (featureSelection->ParamSelCriteria ()) << "]" << endl
+  r << "Current Time     [" << osGetLocalDateTime ()                                             << "]" << endl
+    << "Class1           [" << Class1Name ()                                                     << "]" << endl
+    << "Class2           [" << Class2Name ()                                                     << "]" << endl
+    << "Model Type       [" << config->ModelTypeStr ()                                           << "]" << endl
+    << "Config Parms     [" << config->ModelParameterCmdLine ()                                  << "]" << endl
+    << "Train File       [" << featureSelection->TrainingDataFileName ()                         << "]" << endl
+    << "Test  File       [" << featureSelection->TestDataFileName ()                             << "]" << endl
+    << "Num Expansions   [" << numOfExpansions                                                   << "]" << endl
+    << "Grading Method   [" << GradingMethodToStr (featureSelection->GradingMethod ())           << "]" << endl
+    << "TotalCpuTimeUsed [" << TotalCpuTimeUsed ()                                               << "]" << endl
+    << "ParamSelCriteria [" << JobSelectionCriteriaToStr (featureSelection->ParamSelCriteria ()) << "]" << endl
     << endl 
     << endl;
 
@@ -2687,7 +2686,7 @@ void  Processor::GenerateFinalResultsReport ()
   binaryJobs->SortByTestGrade (featureSelection->FeatureCountPrefSmall ());
   binaryJobs->ReportResults (r);
 
-  if  (searchType == stFeatureSelectionSearch)
+  if  (searchType == SearchTypes::FeatureSelectionSearch)
   {
     r << endl << endl;
     FeatureImpact featureImpact (*binaryJobs);
@@ -2728,7 +2727,7 @@ void  Processor::GenerateFinalResultsReportHTML ()
   KKStr  captionStr = SearchTypeToStr (searchType) + " search results for "; 
 
   KKStr  titleStr   = "";
-  if  (searchType == stFeatureSelectionSearch)
+  if  (searchType == SearchTypes::FeatureSelectionSearch)
     titleStr = "Feature Selection ";
   else
     titleStr = "Parameter Tunning ";
@@ -2754,7 +2753,7 @@ void  Processor::GenerateFinalResultsReportHTML ()
   }
 
 
-  KKStr  paramSelCriteriaStr = JobSelectionCriteriaType (featureSelection->ParamSelCriteria ());
+  KKStr  paramSelCriteriaStr = JobSelectionCriteriaToStr (featureSelection->ParamSelCriteria ());
 
   ofstream r (htmlFileName.Str ());
 
@@ -2805,7 +2804,7 @@ void  Processor::GenerateFinalResultsReportHTML ()
   binaryJobs->SortByTestGrade (featureSelection->FeatureCountPrefSmall ());
   binaryJobs->ReportResultsHTML (r);
 
-  if  (searchType == stFeatureSelectionSearch)
+  if  (searchType == SearchTypes::FeatureSelectionSearch)
   {
     FeatureImpact featureImpact (*binaryJobs);
 
@@ -2861,7 +2860,7 @@ void  Processor::GenerateFinalResultsReportValidationHTML (ostream& r)
 
   bool  cancelFlag = false;
   CrossValidation  cv (config, trainingData, classesThisProcess, 1, true, fileDesc, log, cancelFlag);
-  cv.RunValidationOnly (validationData, NULL);
+  cv.RunValidationOnly (validationData, NULL, log);
 
 
   r << "<br /><br />" << endl
@@ -2889,22 +2888,22 @@ void  Processor::ProcessRestart ()
 
   StatusFileLoad ();
 
-  if  (this->status != fsDone)
+  if  (this->status != ProcessorStatus::Done)
   {
     ofstream* statusFile = OpenStatusFile (ios::app);
 
-    status = fsNotStarted;
+    status = ProcessorStatus::NotStarted;
     *statusFile << "ReStart" << endl;
-    *statusFile << "Status"  << "\t" << ProcessorStatusToStr (fsNotStarted) << endl;
+    *statusFile << "Status"  << "\t" << ProcessorStatusToStr (ProcessorStatus::NotStarted) << endl;
 
 
     BinaryJobList::iterator  idx;
     for  (idx = binaryJobs->begin ();  idx != binaryJobs->end ();   idx++)
     {
       BinaryJobPtr  j = *idx;
-      if  (j->Status () == bjStarted)
+      if  (j->Status () == BinaryJobStatus::Started)
       {
-        j->Status (bjOpen);
+        j->Status (BinaryJobStatus::Open);
         *statusFile << j->JobTypeStr () << "\t" << j->ToStatusStr () << endl;
       }
     }
@@ -3025,7 +3024,7 @@ BinaryJobListPtr  Processor::GetNextSetOfJobs (BinaryJobListPtr  completedJobs)
 
     if  (!nextJob)
     {
-      if  ((binaryJobs->AreAllJobsDone ())  ||  (searchMethod == smBestCaseNext))
+      if  ((binaryJobs->AreAllJobsDone ())  ||  (searchMethod == SearchMethod::BestCaseNext))
       {
         // There are no jobs to do;  we will have to expand some existing jobs then
         ProcessNextExpansion (statusFile);
@@ -3052,9 +3051,9 @@ BinaryJobListPtr  Processor::GetNextSetOfJobs (BinaryJobListPtr  completedJobs)
 
     while  (nextJob  &&  (jobsToExecute->QueueSize () < numJobsAtATime))
     {
-      BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+      BinaryJobList::ErrorCodes  result = BinaryJobList::ErrorCodes::NoError;
       jobsToExecute->PushOnBack (nextJob, result);
-      if  (result != BinaryJobList::NoError)
+      if  (result != BinaryJobList::ErrorCodes::NoError)
       {
         // This should just not be able to happen;  but if it does there must be an interesting story.
         log.Level (-1) << endl
@@ -3062,7 +3061,7 @@ BinaryJobListPtr  Processor::GetNextSetOfJobs (BinaryJobListPtr  completedJobs)
           << "    " << nextJob->ToStatusStr () << endl
           << endl;
       }
-      nextJob->Status (bjStarted);
+      nextJob->Status (BinaryJobStatus::Started);
       *statusFile << "JobStatusChange" << "\t" << nextJob->JobId () << "\t" << nextJob->StatusStr () << endl;
       nextJob = binaryJobs->LocateOpenJob ();
     }
@@ -3109,7 +3108,7 @@ void   Processor::Run ()
 
   bool  keepOnRunning = true;
 
-  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+  BinaryJobList::ErrorCodes  result = BinaryJobList::ErrorCodes::NoError;
 
   BinaryJobListPtr  executedJobs  = NULL;
   BinaryJobListPtr  jobsToExecute = GetNextSetOfJobs (NULL);
@@ -3132,7 +3131,7 @@ void   Processor::Run ()
         BinaryJobPtr  dupJob = BinaryJob::CreateDuplicateJob (*j);
 
         executedJobs->PushOnBack (dupJob, result);
-        if  (result != BinaryJobList::NoError)
+        if  (result != BinaryJobList::ErrorCodes::NoError)
         {
           // This should just not be able to happen; but since it did; must be an interesting story.
           log.Level (-1) << endl
@@ -3169,22 +3168,22 @@ void   Processor::Run ()
   delete  jobsToExecute;  jobsToExecute = NULL;
  
 
-  if   (noMoreJobsLeftToExpand  &&  ((status != fsDone)))
+  if   (noMoreJobsLeftToExpand  &&  ((status != ProcessorStatus::Done)))
   {
     Block ();
 
     StatusFileRefresh ();
 
-    if  (status != fsDone)
+    if  (status != ProcessorStatus::Done)
     {
       // GenerateFinalResultsReport ();
 
-      if  (this->FeatureSelection ()->MajorStep () == msGenerateBruitSvmSearch)
+      if  (this->FeatureSelection ()->MajorStep () == MajorSteps::GenerateBruitSvmSearch)
         GenrateSvmResponseSheet ();
       else
         GenerateFinalResultsReportHTML ();
       
-      status = fsDone;
+      status = ProcessorStatus::Done;
     
       ofstream*  statusFile = OpenStatusFile (ios::app);
 
@@ -3288,7 +3287,7 @@ void  Processor::GetBestParametersFromTestResults (double&  cParm,
                                                    float&   aParm
                                                   )
 {
-  if  (featureSelection->ParamSelCriteria () == jscMostAccurate)
+  if  (featureSelection->ParamSelCriteria () == JobSelectionCriteria::MostAccurate)
   {
     aParm     = bestA;
     cParm     = bestC;
@@ -3296,7 +3295,7 @@ void  Processor::GetBestParametersFromTestResults (double&  cParm,
     return;
   }
 
-  else if  (featureSelection->ParamSelCriteria () == jscBruitForce)
+  else if  (featureSelection->ParamSelCriteria () == JobSelectionCriteria::BruitForce)
   {
     aParm     = bestA;
     cParm     = bestC;
@@ -3351,33 +3350,33 @@ FeatureNumList  Processor::SelectBestFeatures ()
 {
   FeatureNumList  bestFeatures (fileDesc);
 
-  if  (featureSelection->SearchType () == stFeatureSelectionSearch)
+  if  (featureSelection->SearchType () == SearchTypes::FeatureSelectionSearch)
   {
     switch  (featureSelection->FeatureCriteria ())
     {
-      case  fcMerge2Best:     bestFeatures = MergeKBestFeatureSelections (2, 2);
-                              break;
+    case  FeatureCriteriaType::Merge2Best:      bestFeatures = MergeKBestFeatureSelections (2, 2);
+                                                 break;
 
-      case  fcMerge3Best:     bestFeatures = MergeKBestFeatureSelections (3, 3);
-                              break;
+      case  FeatureCriteriaType::Merge3Best:     bestFeatures = MergeKBestFeatureSelections (3, 3);
+                                                 break;
 
-      case  fcMerge4Best:     bestFeatures = MergeKBestFeatureSelections (4, 4);
-                              break;
+      case  FeatureCriteriaType::Merge4Best:     bestFeatures = MergeKBestFeatureSelections (4, 4);
+                                                 break;
 
-      case  fcMerge5Best:     bestFeatures = MergeKBestFeatureSelections (5, 5);
-                              break;
+      case  FeatureCriteriaType::Merge5Best:     bestFeatures = MergeKBestFeatureSelections (5, 5);
+                                                 break;
 
-      case  fcMerge6Best:     bestFeatures = MergeKBestFeatureSelections (6, 6);
-                              break;
+      case  FeatureCriteriaType::Merge6Best:     bestFeatures = MergeKBestFeatureSelections (6, 6);
+                                                 break;
 
-      case  fcMerge7Best:     bestFeatures = MergeKBestFeatureSelections (7, 7);
-                              break;
+      case  FeatureCriteriaType::Merge7Best:     bestFeatures = MergeKBestFeatureSelections (7, 7);
+                                                 break;
 
-      case  fcBestTestSet:    bestFeatures = GetFeaturesFromTestResults ();
-                              break;
+      case  FeatureCriteriaType::BestTestSet:    bestFeatures = GetFeaturesFromTestResults ();
+                                                 break;
 
-      case  fcRemoveHurtful:  bestFeatures = GetFeaturesRemoveHurtFul ();
-                              break;
+      case  FeatureCriteriaType::RemoveHurtful:  bestFeatures = GetFeaturesRemoveHurtFul ();
+                                                 break;
 
     }
   }

@@ -1,13 +1,10 @@
-#include  "FirstIncludes.h"
-
-#include  <stdlib.h>
-#include  <stdio.h>
-
-#include  <fstream>
-#include  <iostream>
-#include  <map>
-#include  <vector>
-
+#include "FirstIncludes.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <fstream>
+#include <iostream>
+#include <map>
+#include <vector>
 #ifdef  WIN32
 #include <io.h>
 #include <windows.h>
@@ -15,10 +12,7 @@
 //#include  <sys/loadavg.h>
 #include <unistd.h>
 #endif
-
-
 #include  "MemoryDebug.h"
-
 using namespace std;
 
 
@@ -31,11 +25,10 @@ using namespace std;
 using namespace KKB;
 
 
-
 #include "ConfusionMatrix2.h"
 #include "CrossValidation.h"
 #include "TrainingProcess2.h"
-using namespace  MLL;
+using namespace  KKMLL;
 
 
 #include "RandomSplitResults.h"
@@ -54,7 +47,7 @@ RandomSplitResults::RandomSplitResults (RunLog&  _log):
 }
 
 
-RandomSplitResults::RandomSplitResults (FinalResultType          _resultType,
+RandomSplitResults::RandomSplitResults (FinalResultType           _resultType,
                                         TrainingConfiguration2Ptr _config,
                                         CrossValidationPtr        _crossValidation,
                                         FeatureVectorListPtr      _trainData,

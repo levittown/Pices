@@ -4,12 +4,17 @@
 #include "HTMLReport.h"
 using namespace  KKB;
 
-#include "PicesApplication.h"
+
 #include "ConfusionMatrix2.h"
 #include "DataBase.h"
 #include "MLClass.h"
-#include "ImageFeatures.h"
 #include "TrainingConfiguration2.h"
+using  namespace  KKMLL;
+
+
+#include "ImageFeatures.h"
+#include "PicesApplication.h"
+#include "PicesTrainingConfiguration.h"
 using  namespace  MLL;
 
 
@@ -72,8 +77,8 @@ private:
   KKStr                      groundTruthDirName;
   ImageFeaturesListPtr       groundTruth;
 
-  MLClassConstPtr            mlClass;
-  MLClassConstListPtr        mlClasses;
+  MLClassPtr                 mlClass;
+  MLClassListPtr             mlClasses;
 
   ostream*                   report;
   ofstream*                  reportFile;

@@ -329,7 +329,7 @@ void  BitReductionJobList::ExtractRandomSamplingForTrainAndTest (const KKStr&   
   for  (idx = classes->begin ();  idx != classes->end ();  idx++)
   {
     MLClassPtr  ic = *idx;
-    FeatureVectorListPtr  examplesThisClass = data->ExtractImagesForAGivenClass (ic);
+    FeatureVectorListPtr  examplesThisClass = data->ExtractExamplesForAGivenClass (ic);
     examplesThisClass->RandomizeOrder ();
 
     int  numInClass = examplesThisClass->QueueSize ();

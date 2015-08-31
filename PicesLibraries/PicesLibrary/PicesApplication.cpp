@@ -3,27 +3,32 @@
  * For conditions of distribution and use, see copyright notice in KKB.h
  */
 #include "FirstIncludes.h"
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string>
 #include <iostream>
 #include <fstream>
 #include <vector>
-
 #include "MemoryDebug.h"
 using  namespace  std;
+
 
 #include "OSservices.h"
 using  namespace  KKB;
 
 
-#include "PicesApplication.h"
+#include "FactoryFVProducer.h"
+#include "FileDesc.h"
+#include "PicesTrainingConfiguration.h"
+using namespace  KKMLL;
+
+
 #include "DataBase.h"
 #include "DataBaseServer.h"
 #include "FeatureFileIOPices.h"
-#include "FileDesc.h"
-#include "TrainingConfiguration2.h"
+#include "PicesApplication.h"
+#include "PicesFVProducer.h"
+#include "PicesVariables.h"
 using namespace MLL;
 
 
@@ -37,9 +42,12 @@ PicesApplication::PicesApplication (RunLog&  _log):
   db                 (NULL),
   dbServer           (NULL),
   dataBaseRequired   (false),
-  fileDesc           (NULL)
+  fileDesc           (NULL),
+  fvFactoryProducer  (NULL)
 {
-  fileDesc = FeatureFileIOPices::NewPlanktonFile (log);
+  fileDesc = FeatureFileIOPices::NewPlanktonFile ();
+  fvFactoryProducer = PicesFVProducerFactory::Factory (&log);
+  PicesVariables::InitializeEnvironment ();
 }
 
 
@@ -53,9 +61,11 @@ PicesApplication::PicesApplication ():
   db                 (NULL),
   dbServer           (NULL),
   dataBaseRequired   (false),
-  fileDesc           (NULL)
+  fileDesc           (NULL),
+  fvFactoryProducer  (NULL)
 {
-  fileDesc = FeatureFileIOPices::NewPlanktonFile (log);
+  fileDesc = FeatureFileIOPices::NewPlanktonFile ();
+  fvFactoryProducer = PicesFVProducerFactory::Factory (&log);
 }
 
 
@@ -70,7 +80,8 @@ PicesApplication::PicesApplication (const PicesApplication&  _application):
   db                 (NULL),
   dbServer           (NULL),
   dataBaseRequired   (_application.dataBaseRequired),
-  fileDesc           (_application.fileDesc)
+  fileDesc           (_application.fileDesc),
+  fvFactoryProducer  (_application.fvFactoryProducer)
 {
   if  (_application.db)
     db = new DataBase (_application.db->Server (), log);
@@ -79,7 +90,7 @@ PicesApplication::PicesApplication (const PicesApplication&  _application):
     dbServer = new DataBaseServer (*_application.dbServer);
 
   if  (_application.config)
-    config = new TrainingConfiguration2 (*config);
+    config = new PicesTrainingConfiguration (*config);
 }
 
 
@@ -105,7 +116,7 @@ void  PicesApplication::InitalizeApplication (kkint32 argc,
     if  (configFileName.Empty ())
     {
       log.Level (-1) << endl
-                     << "PicesApplication::InitalizeApplication   ***ERROR***   Configuration parametr is required." << endl
+                     << "PicesApplication::InitalizeApplication   ***ERROR***   Configuration parameter is required." << endl
                      << endl;
       Abort (true);
     }
@@ -113,15 +124,21 @@ void  PicesApplication::InitalizeApplication (kkint32 argc,
 
   if  (!configFileName.Empty ())
   {
-    config = new TrainingConfiguration2 (fileDesc, configFileFullPath, log, true);
+    config = new PicesTrainingConfiguration ();
+    config ->Load (configFileFullPath, true, log);
     if  (!(config->FormatGood ()))
     {
       log.Level (-1) << endl
                      << "PicesApplication::InitalizeApplication   ***ERROR***   Configuration file[" << configFileName << "] is not valid." << endl
+                     << endl
+                     << config->FormatErrorsWithLineNumbers ()
                      << endl;
+
       Abort (true);
     }
+    fvFactoryProducer = config->FvFactoryProducer (log);
   }
+
 
   if  (dataBaseRequired)
   {
@@ -198,7 +215,7 @@ bool  PicesApplication::ProcessDataBaseParameter (const KKStr&  parmSwitch,
     if  (!dbServer)
     {
       log.Level (-1) << endl
-        << "PicesApplication::ProcessDataBaseParameter  ***ERROR***    Invalid DataBase Sepcified Name [" << parmValue << "]." << endl
+        << "PicesApplication::ProcessDataBaseParameter  ***ERROR***    Invalid DataBase Specified Name [" << parmValue << "]." << endl
         << endl;
       return  false;
     }
@@ -232,7 +249,7 @@ void  PicesApplication::DisplayCommandLineParameters ()
        << "    -DataBase  <DB-Description>  Specify the specific DB Server to connect to; 'DB-Description' will specify"  << endl
        << "                                 which entry in the 'MySql.cfg' configuration file to get parameters from."    << endl
        << "                                 This file is located in the ${PicesHomDir}\\Configurations directory."        << endl
-       << "                                 If parameter not specifoed will default to the last DataBase sertver"         << endl
+       << "                                 If parameter not specified will default to the last DataBase sertver"         << endl
        << "                                 specified."                                                                   << endl
        << endl
        << "    -Config   <Config File>      Specify the name of teh Training Model Configuration file to use. These"      << endl
@@ -248,9 +265,9 @@ bool  PicesApplication::ProcessConfigFileParameter  (const KKStr&  parmSwitch,
                                                     )
 {
   configFileName = parmValue;
-  configFileFullPath = TrainingConfiguration2::GetEffectiveConfigFileName (configFileName);
+  configFileFullPath = PicesTrainingConfiguration::GetEffectiveConfigFileName (configFileName);
 
-  bool  valid = TrainingConfiguration2::ConfigFileExists (configFileFullPath);
+  bool  valid = PicesTrainingConfiguration::ConfigFileExists (configFileFullPath);
   if  (!valid)
   {
     log.Level (-1) << endl
@@ -295,10 +312,12 @@ void  PicesApplication::PrintStandardHeaderInfo (ostream&  o)
   }
   if  (config)
   {
-    o << "Model Type"              << "\t" << config->ModelTypeStr          ()  << endl;
-    o << "SVM Parameters"          << "\t" << config->ModelParameterCmdLine ()  << endl;
-    o << "Num Hierarchial Levels"  << "\t" << config->NumHierarchialLevels  ()  << endl;
+    o << "Model Type"               << "\t" << config->ModelTypeStr          ()  << endl;
+    o << "SVM Parameters"           << "\t" << config->ModelParameterCmdLine ()  << endl;
+    o << "Num Hierarchical Levels"  << "\t" << config->NumHierarchialLevels  ()  << endl;
     if  (config->OtherClass ())
       o << "Other Class"  << "\t" << config->OtherClass ()->Name () << endl;
   }
+
+  o << "FactoryFVProducer" << "\t" << fvFactoryProducer->Name () << endl;
 }  /* PrintStandardHeaderInfo */

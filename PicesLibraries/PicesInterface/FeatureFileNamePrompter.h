@@ -275,7 +275,7 @@ namespace PicesInterface
         FormatField->Items->Add (PicesKKStr::KKStrToSystenStr (*idx));
 
 
-      configFileName = OSservices::AddSlash (PicesSipperVariables::PicesConfigurationDirectory ()) + "FeatureFileNamePrompter.cfg";
+      configFileName = OSservices::AddSlash (PicesSipperVariables::ConfigurationDirectory ()) + "FeatureFileNamePrompter.cfg";
       ConfigurationLoad ();
     }
 

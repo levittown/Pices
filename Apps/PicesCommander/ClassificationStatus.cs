@@ -828,7 +828,7 @@ namespace PicesCommander
 
             foreach  (PicesFeatureVector fv in examples)
             {
-              String sfn = PicesMethods.SipperFileNameFromImageFileName (fv.ImageFileName);
+              String sfn = PicesMethods.SipperFileNameFromImageFileName (fv.ExampleFileName);
               if  (sipperFileDictionary.ContainsKey (sfn))
                 filteredList.Add (fv);
             }
@@ -1183,23 +1183,23 @@ namespace PicesCommander
         oSize.WriteLine ();
         oSize.WriteLine ();
         oSize.WriteLine ();
-        oSize.WriteLine ("Size (mm^2) Distribution of number of individuals or particles (counts) summed over all depths for Down Cast");
+        oSize.WriteLine ("Size (mm^2) Distribution of number of individuals or particles (counts) summed over all depths for  *** Down-Cast ***");
         oSize.WriteLine ();
         sizeDistributionDown.PrintTabDelDistributionMatrix (oSize, 0.0f);
         oSize.WriteLine ();
         oSize.WriteLine ();
-        sizeDistributionDown.PrintTabDelDistributionMatrixesForSummaryClasses (oSize, "Size (mm^2) Distribution of number of individuals or particles (counts) summed over all depths for Down Cast", 0.0f);
+        sizeDistributionDown.PrintTabDelDistributionMatrixesForSummaryClasses (oSize, "Size (mm^2) Distribution of number of individuals or particles (counts) summed over all depths for  *** Down-Cast ***", 0.0f);
         oSize.WriteLine ();
         oSize.WriteLine ();
         oSize.WriteLine ();
         oSize.WriteLine ();
         oSize.WriteLine ();
-        oSize.WriteLine ("Size (mm^2) Distribution of number of individuals or particles (counts) summed over all depths for Up Cast");
+        oSize.WriteLine ("Size (mm^2) Distribution of number of individuals or particles (counts) summed over all depths for   *** Up-Cast ***");
         oSize.WriteLine ();
         sizeDistributionUp.PrintTabDelDistributionMatrix (oSize, 0.0f);
         oSize.WriteLine ();
         oSize.WriteLine ();
-        sizeDistributionUp.PrintTabDelDistributionMatrixesForSummaryClasses (oSize, "Size (mm^2) Distribution of number of individuals or particles (counts) summed over all depths for Up Cast", 0.0f);
+        sizeDistributionUp.PrintTabDelDistributionMatrixesForSummaryClasses (oSize, "Size (mm^2) Distribution of number of individuals or particles (counts) summed over all depths for  *** Up-Cast ***", 0.0f);
         oSize.WriteLine ();
         oSize.WriteLine ();
         oSize.WriteLine ();
@@ -1212,23 +1212,23 @@ namespace PicesCommander
         oSize.WriteLine ();
         oSize.WriteLine ();
         oSize.WriteLine ();
-        oSize.WriteLine ("Size (mm^2) Distribution of numbers of individuals or particles per m3 (density) summed over all depths of the Down Cast");
+        oSize.WriteLine ("Size (mm^2) Distribution of numbers of individuals or particles per m3 (density) summed over all depths of the   *** Down-Cast ***");
         oSize.WriteLine ();
         sizeDistributionDown.PrintTabDelDistributionMatrix (oSize, totalVolumeDown);
         oSize.WriteLine ();
         oSize.WriteLine ();
-        sizeDistributionDown.PrintTabDelDistributionMatrixesForSummaryClasses (oSize, "Size (mm^2) Distribution of numbers of individuals or particles per m3 (density) summed over all depths of the Down Cast", totalVolumeDown);
+        sizeDistributionDown.PrintTabDelDistributionMatrixesForSummaryClasses (oSize, "Size (mm^2) Distribution of numbers of individuals or particles per m3 (density) summed over all depths of the   *** Down-Cast ***", totalVolumeDown);
         oSize.WriteLine ();
         oSize.WriteLine ();
         oSize.WriteLine ();
         oSize.WriteLine ();
         oSize.WriteLine ();
-        oSize.WriteLine ("Size (mm^2) Distribution of numbers of individuals or particles per m3 (density) summed over all depths of the Up Cast");
+        oSize.WriteLine ("Size (mm^2) Distribution of numbers of individuals or particles per m3 (density) summed over all depths of the  *** Up-Cast ***");
         oSize.WriteLine ();
         sizeDistributionUp.PrintTabDelDistributionMatrix (oSize, totalVolumeUp);
         oSize.WriteLine ();
         oSize.WriteLine ();
-        sizeDistributionUp.PrintTabDelDistributionMatrixesForSummaryClasses (oSize, "Size (mm^2) Distribution of numbers of individuals or particles per m3 (density) summed over all depths of the Up Cast", totalVolumeUp);
+        sizeDistributionUp.PrintTabDelDistributionMatrixesForSummaryClasses (oSize, "Size (mm^2) Distribution of numbers of individuals or particles per m3 (density) summed over all depths of the  *** Up-Cast ***", totalVolumeUp);
         oSize.WriteLine ();
         oSize.WriteLine ();
         oSize.WriteLine ();
@@ -1261,7 +1261,7 @@ namespace PicesCommander
         oDepth.WriteLine ();
         oDepth.WriteLine ();
 
-        oDepth.WriteLine ("DownCast"  + "\t\t" + "Down-Cast"  + "\t\t" + "Down-Cast"  + "\t\t" + "Down-Cast"  + "\t\t" + "Down-Cast"  + "\t\t" + "Down-Cast");
+        oDepth.WriteLine ("*** Down-Cast ***"  + "\t\t" + "*** Down-Cast ***"  + "\t\t" + "*** Down-Cast ***"  + "\t\t" + "*** Down-Cast ***"  + "\t\t" + "*** Down-Cast ***"  + "\t\t" + "*** Down-Cast ***");
         oDepth.WriteLine ();
         oDepth.WriteLine ("Abundance Density (#/m3) for each Class by 1 meter depth Increments for the Down Cast");
                           
@@ -1272,7 +1272,7 @@ namespace PicesCommander
         oDepth.WriteLine ();
         oDepth.WriteLine ();
         
-        oDepth.WriteLine ("Up-Cast"  + "\t\t" + "Up-Cast"  + "\t\t" + "Up-Cast"  + "\t\t" + "Up-Cast"  + "\t\t" + "Up-Cast"  + "\t\t" + "Up-Cast");
+        oDepth.WriteLine ("*** Up-Cast ***"  + "\t\t" + "*** Up-Cast ***"  + "\t\t" + "*** Up-Cast ***"  + "\t\t" + "*** Up-Cast ***"  + "\t\t" + "*** Up-Cast ***"  + "\t\t" + "*** Up-Cast ***");
         oDepth.WriteLine ();
         oDepth.WriteLine ("Abundance Density (#/m3) for each Class by 1 meter depth Increments for the Up Cast");
         oDepth.WriteLine ();
@@ -1419,6 +1419,9 @@ namespace PicesCommander
     }  /* PrintBiasAdjustedResults */
 
 
+
+
+
     /// <summary>
     /// Builds an array that represents the time spent at each depth increment.
     /// This will be done by scanning the InstrumentData for all the sipper files involved
@@ -1494,6 +1497,9 @@ namespace PicesCommander
 
       return  depthTimeProfile;
     }  /* GetScanLinesPerMeterProfile */
+
+
+
 
 
 
@@ -1596,6 +1602,9 @@ namespace PicesCommander
       for  (int x = 0;  x < totalVolumePerMeterUp.Count;  ++x)
         totalVolumePerMeterUp  [x].ComputeMean ();
     }  /* GetVolumePerMeterProfile */
+
+
+
 
 
 

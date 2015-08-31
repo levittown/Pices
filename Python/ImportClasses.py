@@ -146,19 +146,20 @@ def  IdentifyClass(db, c, className):
 
 
 def  ImportClassEntries(dirName):
+  passWord=""
   try:
      #db = mysql.connector.Connect(user='kkramer',
-     #                             password="tree10peach",
+     #                             password=passWord,
      #                             host='sipper-db2.marine.usf.edu',
      #                             database='pices_new'
      #                          )
      #db = mysql.connector.Connect(user='kkramer',
-     #                             password="tree10peach",
+     #                             password=passWord,
      #                             host='sipper-db2.marine.usf.edu',
      #                             database='pices_new'
      #                           )
      db = mysql.connector.Connect(user='kkramer',
-                                  password="tree10peach",
+                                  password=passWord,
                                   host='localhost',
                                   database='pices_new'
                                 )
@@ -238,7 +239,8 @@ def  main():
   #rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews"
   #rootDir="C:\\Pices\\UpdatesFromOtherServers\\2015-03-11"
   #rootDir="D:\\Users\\kkramer\\DropBox\\Dropbox\\ToKurt\\DataToKurt"
-  rootDir="D:\\Users\\kkramer\\DropBox\\Dropbox\\ToKurt\\DataToKurt"
+  #rootDir="D:\\Users\\kkramer\\DropBox\\Dropbox\\ToKurt\\DataToKurt"
+  rootDir="C:\\Users\\Kurt\Dropbox\\ToCotPices\\2015-06-23"
   #rootDir="C:\\Pices\\UpdatesFromOtherServers"
   ImportClassEntries(rootDir)
   print("\n\n    *** Import Completed ***\n\n")

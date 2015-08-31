@@ -20,7 +20,7 @@ using namespace std;
 using namespace KKB;
 
 #include "SipperFile.h"
-using namespace  SipperHardware;
+using namespace  MLL;
 
 #include "PicesKKStr.h"
 #include "PicesMethods.h"

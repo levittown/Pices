@@ -99,7 +99,7 @@ namespace PicesCommander
 
       mainWinConn = PicesDataBase.GetGlobalDatabaseManagerNewInstance (runLog);
 
-      configFileName = OSservices.AddSlash (PicesSipperVariables.PicesConfigurationDirectory ()) + "ChartSizeDistribution.cfg";
+      configFileName = OSservices.AddSlash (PicesSipperVariables.ConfigurationDirectory ()) + "ChartSizeDistribution.cfg";
 
       InitializeComponent ();
     }
@@ -935,7 +935,7 @@ namespace PicesCommander
     }  /* WriteTabDelToStream */
 
 
-
+    
     private  void  WriteTabDelToStream (TextWriter tw)
     {
       DateTime  curTime = DateTime.Now;
@@ -954,22 +954,22 @@ namespace PicesCommander
       tw.WriteLine ();
       tw.WriteLine ();
       tw.WriteLine ("Counts");
-      tw.WriteLine ();
+        tw.WriteLine ();
       WriteTabDelToStream (tw, bucketsDisplayed, false);
-      
+
       tw.WriteLine ();
       tw.WriteLine ();
       tw.WriteLine ();
       tw.WriteLine ("Abundance (log10)");
-      tw.WriteLine ();
+        tw.WriteLine ();
       WriteTabDelToStream (tw, bucketsDisplayed, true);
-      
+
       tw.WriteLine ();
       tw.WriteLine ("End of ChartSizeDistribution");
     }  /* WriteTabDelToStream */
 
 
-    
+
 
     private  void  WriteForGnuplotToStream (TextWriter                  tw,
                                             PicesImageSizeDistribution  sizeDistribution,

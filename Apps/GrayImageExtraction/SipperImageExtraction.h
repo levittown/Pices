@@ -15,14 +15,14 @@
 //*  Kurt Kramer    alone application.                                     *
 //*                                                                        *
 //*  July 2003      RE-organized such that the actual image Extraction is  *
-//*  Kurt Kramer    an independent object thatcan be used by other apps.   *
+//*  Kurt Kramer    an independent object that can be used by other apps.  *
 //*                                                                        *
 //*                                                                        *
 //*  2005-Feb-22    Added duplicate image detection.  Because sometimes    *
-//*  Kurt Kramer    SIPPER will write its last buffer in a file twice theer*
+//*  Kurt Kramer    SIPPER will write its last buffer in a file twice there*
 //*                 can be duplicate images extracted.  We detect these    *
-//*                 through there feature data.  Duplicactes will be       *
-//*                 placed in a seperate directory called                  *
+//*                 through there feature data. Duplicates will be placed  *
+//*                 in a separate directory called                         *
 //*                 "c:\Temp\DuplicateImages\<SipperFileName>"             *
 //*                                                                        *
 //*  2005-08-12     Adding support for SIPPER 3 Instrument data.  Did this *
@@ -51,23 +51,24 @@
 using namespace KKB;
 
 
-#include  "SipperBuff.h"
-#include  "InstrumentDataManager.h"
-using namespace SipperHardware;
+#include "Classifier2.h"
+#include "DuplicateImages.h"
+#include "FileDesc.h"
+#include "MLClass.h"
+#include "ImageFeatures.h"
+#include "SipperBlob.h"
+#include "SipperExtractionImageManager.h"
+#include "TrainingProcess2.h"
+using namespace KKMLL;
 
-#include  "Classifier2.h"
-#include  "DataBase.h"
-#include  "DuplicateImages.h"
-#include  "FileDesc.h"
-#include  "MLClass.h"
-#include  "ImageFeatures.h"
-#include  "SipperBlob.h"
-#include  "SipperExtractionImageManager.h"
-#include  "TrainingProcess2.h"
+
+#include "DataBase.h"
+#include "SipperBuff.h"
+#include "InstrumentDataManager.h"
 using namespace MLL;
 
-#include  "SipperImage.h"
-#include  "SipperImageExtractionParms.h"
+#include "SipperImage.h"
+#include "SipperImageExtractionParms.h"
 
 
 
@@ -80,7 +81,7 @@ using namespace MLL;
  @class  SipperImageExtraction
  @brief  Sipper Image Extraction module.  Shared by both GrayImageExtraction and ImageExtractionWindows.
  @details Module was originally developed back in 2003 with the advent of SIPPER 2.   It had one 
-          through many enhanacements since then.
+          through many enhancements since then.
  @author  Kurt Kramer
  */
 
@@ -182,13 +183,13 @@ private:
   //  Variables used for processing a single frame.
   uchar**     frame;
   uchar*      frameArea;
-  kkuint64*     frameRowByteOffset;
+  kkuint64*    frameRowByteOffset;
 
   uchar**     origFrame;       // 'origFrame' and 'origFrameArea' are only used when
-  uchar*      origFrameArea;   // morphalogical operations are performed.
+  uchar*      origFrameArea;   // morphological operations are performed.
 
   uchar**     workFrame;       // 'workFrame' & 'workFrameArea' are used to perform 
-  uchar*      workFrameArea;   // morphalogical operations with.
+  uchar*      workFrameArea;   // morphological operations with.
 
   uint        totPixels;
 
@@ -222,7 +223,7 @@ private:
   uint        lastRowUsed;     // Last row in frame that is being used.  If the prev
                                // had lastRowInFrame that was less than lastRowUsed
                                // then the extra rows will be moved to beginning of
-                               // frame when the next frame is retreived.
+                               // frame when the next frame is retrieved.
 
   uint        maxFrameHeight;  // Max number of rows in a frame.
 
@@ -242,7 +243,7 @@ private:
   KKStr                     sipperRootName;
   InstrumentDataManagerPtr  instrumentDataManager;
 
-  MLClassPtr             unKnownMLClass;
+  MLClassPtr                unKnownMLClass;
   
   DuplicateImagesPtr        dupImageDetector;
   KKStr                     duplicateImageDir;

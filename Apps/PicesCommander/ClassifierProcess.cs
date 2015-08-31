@@ -263,7 +263,7 @@ namespace PicesCommander
 
       if  (reClassify)
       {
-        String  imageFileName = fv.ImageFileName;
+        String  imageFileName = fv.ExampleFileName;
         String  imageFileRootName = OSservices.GetRootName (imageFileName);
 
         if  ((fv.Validated)  &&  (validatedTrumps))
@@ -285,7 +285,7 @@ namespace PicesCommander
           probPredList = PredictClasses (fv, pred1, pred2, imageFileName, imageFileRootName);
         }
 
-        String  imageRootName = OSservices.GetRootName (fv.ImageFileName);
+        String  imageRootName = OSservices.GetRootName (fv.ExampleFileName);
         lock  (predictionUpdateQueue)
         {
           if  (pred1.MLClass.ClassId < 0)
@@ -337,12 +337,12 @@ namespace PicesCommander
           depthDistribution_1.Increment  (pred1.MLClass, (int)fv.Depth);
           if  (downCast)
           {
-            depthDistribution_1Up.Increment  (pred1.MLClass, (int)fv.Depth);
-            sizeDistributionDown.Increment   (pred1.MLClass, fv.AreaMMSquare);
+            depthDistribution_1Down.Increment (pred1.MLClass, (int)fv.Depth);
+            sizeDistributionDown.Increment    (pred1.MLClass, fv.AreaMMSquare);
           }
           else
           {
-            depthDistribution_1Down.Increment (pred1.MLClass, (int)fv.Depth);
+            depthDistribution_1Up.Increment   (pred1.MLClass, (int)fv.Depth);
             sizeDistributionUp.Increment      (pred1.MLClass, fv.AreaMMSquare);
           }
           depthDistribution_10.Increment (pred1.MLClass, (int)fv.Depth);

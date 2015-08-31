@@ -60,7 +60,7 @@ namespace PicesCommander
 
       InitializeComponent();
 
-      SourceDirectory.Text = PicesSipperVariables.PicesHomeDir ();
+      SourceDirectory.Text = PicesSipperVariables.HomeDir ();
     }
 
 
@@ -168,7 +168,7 @@ namespace PicesCommander
     private  void  StartTheBackGroundProcedure ()
     {
       DateTime n = DateTime.Now;
-      String logFileName = OSservices.AddSlash(PicesSipperVariables.PicesTempDirectory()) + "ImportGroupAssignments_Log_" +
+      String logFileName = OSservices.AddSlash(PicesSipperVariables.TempDirectory()) + "ImportGroupAssignments_Log_" +
                              n.Year.ToString("0000") + "-" + n.Month.ToString("00") + "-" + n.Day.ToString("00") + "_" +
                              n.Hour.ToString("00") + "-" + n.Minute.ToString("00") + "-" + n.Hour.ToString("00") +
                              ".txt";
@@ -337,10 +337,10 @@ namespace PicesCommander
       FolderBrowserDialog  fbd = new FolderBrowserDialog ();
 
       if  (String.IsNullOrEmpty (SourceDirectory.Text))
-        SourceDirectory.Text = PicesSipperVariables.PicesHomeDir ();
+        SourceDirectory.Text = PicesSipperVariables.HomeDir ();
 
       if  (Directory.Exists (SourceDirectory.Text))
-        SourceDirectory.Text = PicesSipperVariables.PicesHomeDir ();
+        SourceDirectory.Text = PicesSipperVariables.HomeDir ();
 
       fbd.SelectedPath = SourceDirectory.Text;
 

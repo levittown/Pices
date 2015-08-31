@@ -1,19 +1,21 @@
 #ifndef  _NEIGHBOR_
 #define  _NEIGHBOR_
 
-#include  "KKQueue.h"
-#include  "KKStr.h"
-#include  "MLClass.h"
-#include  "ImageFeatures.h"
+#include "KKQueue.h"
+#include "KKStr.h"
+using namespace  KKB;
 
-using namespace  MLL;
+
+#include "ImageFeatures.h"
+#include "MLClass.h"
+using namespace  KKMLL;
 
 
 class   Neighbor;
 typedef  Neighbor*  NeighborPtr;
 
 
-typedef  enum  {AnyPlanktonClass, SamePlanktonClass}  NeighborType;
+enum  class  NeighborType  {AnyPlankton, SamePlankton};
 
 
 KKStr  NeighborTypeToStr (NeighborType  n);
@@ -25,7 +27,7 @@ public:
   Neighbor (double              _row,
             double              _col,
             const KKStr&        _fileName,
-            MLClassConstPtr  _mlClass,
+            MLClassPtr  _mlClass,
             double              _size
            );
 
@@ -35,14 +37,14 @@ public:
   double           Col             () const  {return  col;}
   double           Dist            ();
   const KKStr&     FileName        () const  {return  fileName;}
-  MLClassConstPtr  MLClass         () const  {return  mlClass;}
+  MLClassPtr       MLClass         () const  {return  mlClass;}
   Neighbor*        NearestNeighbor () const  {return  nearestNeighbor;}
   double           Row             () const  {return  row;}
   KKStr            RowCol          ();
   double           Size            () const  {return  size;}
   double           SquareDist      () const  {return  squareDist;}
 
-  MLClassConstPtr  NearestNeighborClass     ()  const;
+  MLClassPtr       NearestNeighborClass     ()  const;
   const KKStr&     NearestNeighborClassName ()  const;
   double           NearestNeighborSize      ()  const;
   double           NearestNeighborRow       ()  const;
@@ -60,19 +62,19 @@ public:
                     );
 
 private:
-  double           col;
-  double           dist;
-  bool             distCalculated;
-  KKStr            fileName;
-  MLClassConstPtr  mlClass;
-  kkint32          largestDist;
-  Neighbor*        nearestNeighbor;
-  double           row;
-  double           size;
-  double           squareDist;
+  double      col;
+  double      dist;
+  bool        distCalculated;
+  KKStr       fileName;
+  MLClassPtr  mlClass;
+  kkint32     largestDist;
+  Neighbor*   nearestNeighbor;
+  double      row;
+  double      size;
+  double      squareDist;
 
   static
-  KKStr            noClassName;
+  KKStr       noClassName;
 };
 
 
@@ -104,7 +106,7 @@ public:
   //                     that class                                             *
   //*****************************************************************************  
   void  FindNearestNeighbors (NeighborType     neighborType,
-                              MLClassConstPtr  restrictedClass = NULL
+                              MLClassPtr  restrictedClass = NULL
                              );
 
   VectorIntPtr  HistogramByDistance (kkint32  numOfBuckets,
@@ -121,17 +123,17 @@ public:
   double LargestDist () const; 
 
 
-  void  ReportClassNeighbor (MLClassConstListPtr  mlClasses,
+  void  ReportClassNeighbor (MLClassListPtr  mlClasses,
                              ostream&             r
                             );
 
-  void  ReportClassRow (MLClassConstListPtr  mlClasses,
+  void  ReportClassRow (MLClassListPtr  mlClasses,
                         ostream&             r
                        );
 
-  void  ReportClassRowRestricted (MLClassConstListPtr  mlClasses,
+  void  ReportClassRowRestricted (MLClassListPtr  mlClasses,
                                   ostream&             r,
-                                  MLClassConstPtr      restrictedClass
+                                  MLClassPtr      restrictedClass
                                  );
 
   void  SortByClass ();

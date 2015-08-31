@@ -3,9 +3,7 @@
 #include  <iostream>
 #include  <map>
 #include  <vector>
-
 #include  "MemoryDebug.h"
-
 using namespace  std;
 
 
@@ -13,7 +11,6 @@ using namespace  std;
 #include "RasterSipper.h"
 #include "KKStr.h"
 using namespace  KKB;
-
 
 
 #include "LogicalFrameBlob.h"

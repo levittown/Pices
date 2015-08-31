@@ -18,6 +18,7 @@ namespace SipperFileViewer
 #if DEBUG
       PicesMethods.StartMemoryLeakDetection ();
 #endif
+      PicesSipperVariables.InitializeEnvironment ();
 
       Application.EnableVisualStyles ();
       Application.SetCompatibleTextRenderingDefault (false);

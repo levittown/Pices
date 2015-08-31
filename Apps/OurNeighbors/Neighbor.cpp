@@ -1,15 +1,12 @@
 #include "FirstIncludes.h"
-
 #include <fstream>
 #include <iostream>
 #include <map>
 #include <vector>
 #include <math.h>
-
-
 #include "MemoryDebug.h"
-
 using namespace std;
+
 
 #include "KKBaseTypes.h"
 #include "OSservices.h"
@@ -17,16 +14,16 @@ using namespace std;
 using namespace KKB;
 
 
-#include  "Neighbor.h"
-using namespace MLL;
+#include "Neighbor.h"
+
 
 
 KKStr  NeighborTypeToStr (NeighborType  n)
 {
-  if  (n == AnyPlanktonClass)
+  if  (n == NeighborType::AnyPlankton)
     return "Any";
 
-  else if  (n == SamePlanktonClass)
+  else if  (n == NeighborType::SamePlankton)
     return  "Same";
 
   return "";
@@ -35,11 +32,11 @@ KKStr  NeighborTypeToStr (NeighborType  n)
 
 
 
-Neighbor::Neighbor (double           _row,
-                    double           _col,
-                    const KKStr&     _fileName,
-                    MLClassConstPtr  _mlClass,
-                    double           _size
+Neighbor::Neighbor (double        _row,
+                    double        _col,
+                    const KKStr&  _fileName,
+                    MLClassPtr    _mlClass,
+                    double        _size
                    ):
 
   row             (_row),
@@ -58,11 +55,11 @@ Neighbor::Neighbor (double           _row,
 
 
 Neighbor::Neighbor (ImageFeaturesPtr  image):
-   row             (image->SfCentroidRow ()),
-   col             (image->SfCentroidCol ()),
-   fileName        (image->ImageFileName ()),
-   mlClass         (image->MLClass       ()),
-   size            (image->OrigSize      ()),
+   row             (image->SfCentroidRow   ()),
+   col             (image->SfCentroidCol   ()),
+   fileName        (image->ExampleFileName ()),
+   mlClass         (image->MLClass         ()),
+   size            (image->OrigSize        ()),
    nearestNeighbor (NULL),
    squareDist      (0.0f),
    dist            (0.0f),
@@ -79,7 +76,7 @@ KKStr  Neighbor::noClassName = "";
 
 
 
-MLClassConstPtr   Neighbor::NearestNeighborClass     ()  const
+MLClassPtr   Neighbor::NearestNeighborClass ()  const
 {
   if  (nearestNeighbor)
     return  nearestNeighbor->MLClass ();
@@ -143,7 +140,7 @@ double  Neighbor::Dist ()
 
 
 
-void  Neighbor::SquareDist (double      _squareDist)       
+void  Neighbor::SquareDist (double _squareDist)       
 {
   squareDist     = _squareDist;
   distCalculated = false;
@@ -378,7 +375,7 @@ void  NeighborList::SortByClassRow ()
 
 
 void  NeighborList::FindNearestNeighbors (NeighborType     neighborType,
-                                          MLClassConstPtr  restrictedClass
+                                          MLClassPtr  restrictedClass
                                          )
 {
   SortByRow ();
@@ -398,7 +395,7 @@ void  NeighborList::FindNearestNeighbors (NeighborType     neighborType,
     {
       NeighborPtr  nextNeighbor = IdxToPtr (z);
 
-      if  ((neighborType == AnyPlanktonClass)  ||
+      if  ((neighborType == NeighborType::AnyPlankton)  ||
            (curNeighbor->MLClass () == nextNeighbor->MLClass ())
           )
       {
@@ -411,7 +408,7 @@ void  NeighborList::FindNearestNeighbors (NeighborType     neighborType,
 
       if  (atLeastOneNeighborFound  &&  (squareRowDist > curNeighbor->SquareDist ()))
       {
-        // No point searching any farther ahead.  We can not posibly find 
+        // No point searching any farther ahead.  We can not possibly find 
         // anything that will be closer.
         break;
       }
@@ -444,7 +441,7 @@ double  NeighborList::LargestDist ()  const
 
 
 
-void  NeighborList::ReportClassNeighbor (MLClassConstListPtr  mlClasses,
+void  NeighborList::ReportClassNeighbor (MLClassListPtr  mlClasses,
                                          ostream&             r
                                         )
 {
@@ -486,14 +483,14 @@ void  NeighborList::ReportClassNeighbor (MLClassConstListPtr  mlClasses,
   NeighborPtr  n = *next;
   while  (n)
   {
-    MLClassConstPtr  fromClass = n->MLClass ();
+    MLClassPtr  fromClass = n->MLClass ();
     kkint32             fromClassIdx = mlClasses->PtrToIdx (fromClass);
 
     while  (n  &&  (n->MLClass () == fromClass))
     {
       // Start doing stuff for from class Totals
 
-      MLClassConstPtr  toClass    = n->NearestNeighborClass ();
+      MLClassPtr  toClass    = n->NearestNeighborClass ();
       kkint32             toClassIdx = -1;
       if  (toClass)
         toClassIdx = mlClasses->PtrToIdx (toClass);
@@ -596,7 +593,7 @@ void  NeighborList::ReportClassNeighbor (MLClassConstListPtr  mlClasses,
 
   for  (idx1 = 0;  idx1 < numOfClasses;  idx1++)
   {
-    MLClassConstPtr  class1 = mlClasses->IdxToPtr (idx1);
+    MLClassPtr  class1 = mlClasses->IdxToPtr (idx1);
 
     r << class1->Name () << "\t" << classCounts[idx1];
 
@@ -618,7 +615,7 @@ void  NeighborList::ReportClassNeighbor (MLClassConstListPtr  mlClasses,
 
   for  (idx1 = 0;  idx1 < numOfClasses;  idx1++)
   {
-    MLClassConstPtr  class1 = mlClasses->IdxToPtr (idx1);
+    MLClassPtr  class1 = mlClasses->IdxToPtr (idx1);
 
     double  p = 100.0f *  (double)classCounts[idx1] / (double)QueueSize ();
 
@@ -649,7 +646,7 @@ void  NeighborList::ReportClassNeighbor (MLClassConstListPtr  mlClasses,
 
   for  (idx1 = 0;  idx1 < numOfClasses;  idx1++)
   {
-    MLClassConstPtr  class1 = mlClasses->IdxToPtr (idx1);
+    MLClassPtr  class1 = mlClasses->IdxToPtr (idx1);
     r << class1->Name ();
 
     for  (idx2 = 0;  idx2 < numOfClasses;  idx2++)
@@ -675,7 +672,7 @@ void  NeighborList::ReportClassNeighbor (MLClassConstListPtr  mlClasses,
 
   for  (idx1 = 0;  idx1 < numOfClasses;  idx1++)
   {
-    MLClassConstPtr  class1 = mlClasses->IdxToPtr (idx1);
+    MLClassPtr  class1 = mlClasses->IdxToPtr (idx1);
     r << class1->Name ();
 
     for  (idx2 = 0;  idx2 < numOfClasses;  idx2++)
@@ -707,7 +704,7 @@ void  NeighborList::ReportClassNeighbor (MLClassConstListPtr  mlClasses,
 
 
 
-void  NeighborList::ReportClassRow (MLClassConstListPtr  mlClasses,
+void  NeighborList::ReportClassRow (MLClassListPtr  mlClasses,
                                     ostream&                r
                                    )
 {
@@ -755,7 +752,7 @@ void  NeighborList::ReportClassRow (MLClassConstListPtr  mlClasses,
   NeighborPtr  n = *next;
   while  (n)
   {
-    MLClassConstPtr  fromClass = n->MLClass ();
+    MLClassPtr  fromClass = n->MLClass ();
     kkint32          fromClassIdx = mlClasses->PtrToIdx (fromClass);
 
     kkint32  numInThisGroup = 0;
@@ -894,7 +891,7 @@ void  NeighborList::ReportClassRow (MLClassConstListPtr  mlClasses,
   kkint32  idx1;
   for  (idx1 = 0;  idx1 < numOfClasses;  idx1++)
   {
-    MLClassConstPtr  class1 = mlClasses->IdxToPtr (idx1);
+    MLClassPtr  class1 = mlClasses->IdxToPtr (idx1);
     r << class1->Name ()    << "\t" 
       << classCounts[idx1]  << "\t"
 
@@ -925,9 +922,9 @@ void  NeighborList::ReportClassRow (MLClassConstListPtr  mlClasses,
 
 
 
-void  NeighborList::ReportClassRowRestricted (MLClassConstListPtr  mlClasses,
+void  NeighborList::ReportClassRowRestricted (MLClassListPtr  mlClasses,
                                               ostream&             r,
-                                              MLClassConstPtr      restrictedClass
+                                              MLClassPtr      restrictedClass
                                              )
 {
   SortByClassRow ();
@@ -979,7 +976,7 @@ void  NeighborList::ReportClassRowRestricted (MLClassConstListPtr  mlClasses,
 
   while  ((n)  &&  (n->MLClass () == restrictedClass))
   {
-    MLClassConstPtr  fromClass = n->MLClass ();
+    MLClassPtr  fromClass = n->MLClass ();
 
     kkint32  numInThisGroup = 0;
 

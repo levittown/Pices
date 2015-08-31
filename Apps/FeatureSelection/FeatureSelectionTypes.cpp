@@ -1,5 +1,4 @@
 #include "FirstIncludes.h"
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>
@@ -9,9 +8,7 @@
 #include <iostream>
 #include <map>
 #include <vector>
-
 #include "MemoryDebug.h"
-
 using namespace std;
 
 
@@ -30,32 +27,35 @@ using namespace std;
 #include "KKStr.h"
 using namespace KKB;
 
+
 #include "MLClass.h"
-using namespace MLL;
+using namespace KKMLL;
+
 
 #include "FeatureSelectionTypes.h"
 using namespace  FeatureSelectionApp;
 
 
-poProcessingOrder  FeatureSelectionApp::ProcessingOrderFromStr (const KKStr&  procOrderStr)
+
+ProcessingOrders  FeatureSelectionApp::ProcessingOrderFromStr (const KKStr&  procOrderStr)
 {
   if  (procOrderStr.EqualIgnoreCase ("StandardOrder")  ||  procOrderStr.EqualIgnoreCase ("Standard"))
-    return  poStandard;
+    return  ProcessingOrders::Standard;
 
   if  (procOrderStr.EqualIgnoreCase ("HallOrder")      ||   procOrderStr.EqualIgnoreCase ("Hall"))
-    return  poHall;
+    return  ProcessingOrders::Hall;
 
-  return  poNULL;
+  return  ProcessingOrders::Null;
 }
 
 
 
-KKStr  FeatureSelectionApp::ProcessingOrderToStr (poProcessingOrder  order)
+KKStr  FeatureSelectionApp::ProcessingOrderToStr (ProcessingOrders  order)
 {
-  if  (order == poStandard)
+  if  (order == ProcessingOrders::Standard)
     return "StandardOrder";
 
-  if  (order == poHall)
+  if  (order == ProcessingOrders::Hall)
     return "HallOrder";
 
   return "";
@@ -69,36 +69,36 @@ MajorSteps  FeatureSelectionApp::MajorStepFromStr (KKStr  majorStepStr)
   majorStepStr.Upper ();
 
   if  (majorStepStr.EqualIgnoreCase ("ALLCLASSESPARMTUNING")  ||  majorStepStr.EqualIgnoreCase ("MfsParmTuningPre"))
-    return  msMfsParmTuningPre;
+    return  MajorSteps::MfsParmTuningPre;
 
   if  (majorStepStr.EqualIgnoreCase ("ALLCLASSESFEATURESELECTION")  ||  majorStepStr.EqualIgnoreCase ("MfsFeatureSelection"))
-    return  msMfsFeatureSelection;
+    return  MajorSteps::MfsFeatureSelection;
 
   if  (majorStepStr.EqualIgnoreCase ("MfsParmTuningPost"))
-    return msMfsParmTuningPost;
+    return MajorSteps::MfsParmTuningPost;
 
   if  (majorStepStr.EqualIgnoreCase ("BINARYCLASSESFEATURESELECTION")  ||  majorStepStr.EqualIgnoreCase ("BfsFeatureSelection"))
-    return  msBfsFeatureSelection;
+    return  MajorSteps::BfsFeatureSelection;
 
   if  (majorStepStr.EqualIgnoreCase ("BfsParmTuningPre"))
-    return msBfsParmTuningPre;
+    return MajorSteps::BfsParmTuningPre;
 
   if  ((majorStepStr == "BINARYCLASSESPARMTUNING")  ||  majorStepStr.EqualIgnoreCase ("BfsParmTuningPost"))
-    return  msBfsParmTuningPost;
+    return  MajorSteps::BfsParmTuningPost;
 
   if  ((majorStepStr == "GENERATEFINALERESULTS")  ||  (majorStepStr == "GENERATEFINALRESULTS"))
-    return  msGenerateFinalResults;
+    return  MajorSteps::GenerateFinalResults;
 
   if  ((majorStepStr == "FINALEREPORT")  ||  (majorStepStr == "FINALREPORT"))
-    return  msFinalReport;
+    return  MajorSteps::FinalReport;
 
   if  (majorStepStr.EqualIgnoreCase ("GenerateBruitSvmSearch"))
-    return  msGenerateBruitSvmSearch;
+    return  MajorSteps::GenerateBruitSvmSearch;
 
   if  (majorStepStr == "ALLDONE")
-    return  msDone;
+    return  MajorSteps::Done;
 
-  return  msNULL;
+  return  MajorSteps::Null;
 }  /* MajorStepFromStr */
 
 
@@ -106,34 +106,34 @@ MajorSteps  FeatureSelectionApp::MajorStepFromStr (KKStr  majorStepStr)
 
 KKStr  FeatureSelectionApp::MajorStepToStr (MajorSteps  step)
 {
-  if  (step == msMfsParmTuningPre)
+  if  (step == MajorSteps::MfsParmTuningPre)
     return  "MfsParmTuningPre";
 
-  if  (step == msMfsFeatureSelection)
+  if  (step == MajorSteps::MfsFeatureSelection)
     return  "MfsFeatureSelection";
 
-  if  (step == msMfsParmTuningPost)
+  if  (step == MajorSteps::MfsParmTuningPost)
     return "MfsParmTuningPost";
 
-  if  (step == msBfsFeatureSelection)
+  if  (step == MajorSteps::BfsFeatureSelection)
     return  "BfsFeatureSelection";
 
-  if  (step == msBfsParmTuningPre)
+  if  (step == MajorSteps::BfsParmTuningPre)
     return  "BfsParmTuningPre";
 
-  if  (step == msBfsParmTuningPost)
+  if  (step == MajorSteps::BfsParmTuningPost)
     return  "BfsParmTuningPost";
 
-  if  (step == msGenerateFinalResults)
+  if  (step == MajorSteps::GenerateFinalResults)
     return  "GenerateFinalResults";
 
-  if  (step == msGenerateBruitSvmSearch)
+  if  (step == MajorSteps::GenerateBruitSvmSearch)
     return  "GenerateBruitSvmSearch";
 
-  if  (step == msFinalReport)
+  if  (step == MajorSteps::FinalReport)
     return  "FinalReport";
 
-  if  (step == msDone)
+  if  (step == MajorSteps::Done)
     return  "AllDone";
 
   return  "NULL";
@@ -144,27 +144,27 @@ KKStr  FeatureSelectionApp::MajorStepToStr (MajorSteps  step)
 FinalResultType  FeatureSelectionApp::FinalResultTypeFromStr (const KKStr&  s)
 {
   if  (s.EqualIgnoreCase ("NoTuningAllFeatures"))
-    return frtNoTuningAllFeatures;
+    return FinalResultType::NoTuningAllFeatures;
 
   if  (s.EqualIgnoreCase ("MfsFeaturesSel"))
-    return frtMfsFeaturesSel;
+    return FinalResultType::MfsFeaturesSel;
 
   if  (s.EqualIgnoreCase ("FeaturesAllParmsTuned")  ||  s.EqualIgnoreCase ("MfsParmsTuned"))
-    return frtMfsParmsTuned;
+    return FinalResultType::MfsParmsTuned;
 
   if  (s.EqualIgnoreCase ("FeaturesSelParmsTuned")  ||  s.EqualIgnoreCase ("MfsParmsTunedFeaturesSel"))
-    return frtMfsParmsTunedFeaturesSel;
+    return FinalResultType::MfsParmsTunedFeaturesSel;
 
   if  (s.EqualIgnoreCase ("BinaryFeaturesSel")  ||   s.EqualIgnoreCase ("BfsFeaturesSel"))
-    return frtBfsFeaturesSel;
+    return FinalResultType::BfsFeaturesSel;
 
   if  (s.EqualIgnoreCase ("BfsParmsTuned"))
-    return frtBfsParmsTuned;
+    return FinalResultType::BfsParmsTuned;
 
   if  (s.EqualIgnoreCase ("BinaryFeaturesSelParmsTuned")  ||  s.EqualIgnoreCase ("BfsFeaturesSelParmsTuned"))
-    return frtBfsFeaturesSelParmsTuned;
+    return FinalResultType::BfsFeaturesSelParmsTuned;
 
-  return  frtNULL;
+  return  FinalResultType::Null;
 }
 
 
@@ -173,21 +173,21 @@ KKStr  FeatureSelectionApp::FinalResultTypeToStr (FinalResultType  frt)
 {
   switch  (frt)
   {
-  case  frtNULL:                        return "";                             break;
-  case  frtNoTuningAllFeatures:         return "NoTuningAllFeatures";          break;
-  case  frtMfsFeaturesSel:              return "MfsFeaturesSel";               break;
-  case  frtMfsParmsTuned:               return "MfsParmsTuned";                break;
-  case  frtMfsParmsTunedFeaturesSel:    return "MfsParmsTunedFeaturesSel";     break;
-  case  frtBfsFeaturesSel:              return "BfsFeaturesSel";               break;
-  case  frtBfsParmsTuned:               return "BfsParmsTuned";                break;
-  case  frtBfsFeaturesSelParmsTuned:    return "BfsFeaturesSelParmsTuned";     break;
+  case  FinalResultType::Null:                        return "";                             break;
+  case  FinalResultType::NoTuningAllFeatures:         return "NoTuningAllFeatures";          break;
+  case  FinalResultType::MfsFeaturesSel:              return "MfsFeaturesSel";               break;
+  case  FinalResultType::MfsParmsTuned:               return "MfsParmsTuned";                break;
+  case  FinalResultType::MfsParmsTunedFeaturesSel:    return "MfsParmsTunedFeaturesSel";     break;
+  case  FinalResultType::BfsFeaturesSel:              return "BfsFeaturesSel";               break;
+  case  FinalResultType::BfsParmsTuned:               return "BfsParmsTuned";                break;
+  case  FinalResultType::BfsFeaturesSelParmsTuned:    return "BfsFeaturesSelParmsTuned";     break;
   }
   return "";
 }
 
 
 
-stSearchTypes  FeatureSelectionApp::SearchTypeFromStr (KKStr  searchTypeStr)
+SearchTypes  FeatureSelectionApp::SearchTypeFromStr (KKStr  searchTypeStr)
 {
   searchTypeStr.Upper ();
 
@@ -196,12 +196,12 @@ stSearchTypes  FeatureSelectionApp::SearchTypeFromStr (KKStr  searchTypeStr)
        (searchTypeStr == "PARAMETER")  ||
        (searchTypeStr == "P")
       )
-    return  stParameterSearch;
+    return  SearchTypes::ParameterSearch;
 
   if  ((searchTypeStr == "FEATURE")   ||
        (searchTypeStr == "F")
       )
-    return  stFeatureSelectionSearch;
+    return  SearchTypes::FeatureSelectionSearch;
 
   if  ((searchTypeStr == "FINALEREPORTS")                         ||
        (searchTypeStr == "GENERATINGFINALEREPORTS")               ||
@@ -209,23 +209,23 @@ stSearchTypes  FeatureSelectionApp::SearchTypeFromStr (KKStr  searchTypeStr)
        (searchTypeStr.EqualIgnoreCase ("GenerateFinaleResults"))  ||
        (searchTypeStr.EqualIgnoreCase ("GenerateFinalResults"))
       )
-    return  stGeneratingFinalResults;
+    return  SearchTypes::GeneratingFinalResults;
 
-  return stNULL;
+  return SearchTypes::Null;
 }  /* SerachTypeFromStr */
 
 
 
 
-KKStr  FeatureSelectionApp::SearchTypeToStr (stSearchTypes  _searchType)
+KKStr  FeatureSelectionApp::SearchTypeToStr (SearchTypes  _searchType)
 {
-  if  (_searchType == stFeatureSelectionSearch)
+  if  (_searchType == SearchTypes::FeatureSelectionSearch)
     return  "Feature";
 
-  if  (_searchType == stParameterSearch)
+  if  (_searchType == SearchTypes::ParameterSearch)
     return  "Parameter";
 
-  if  (_searchType == stGeneratingFinalResults)
+  if  (_searchType == SearchTypes::GeneratingFinalResults)
     return  "GenerateFinalResults";
 
   return  "NULL";
@@ -236,17 +236,17 @@ KKStr  FeatureSelectionApp::SearchTypeToStr (stSearchTypes  _searchType)
 
 KKStr  FeatureSelectionApp::GradingMethodToStr (GradingMethodType  gm)
 {
-  if  (gm == gmAccuracy)
-    return  "gmAccuracy";
+  if  (gm == GradingMethodType::Accuracy)
+    return  "Accuracy";
   
-  else if  (gm == gmAccuracyNorm)
-    return  "gmAccuracyNorm";
+  else if  (gm == GradingMethodType::AccuracyNorm)
+    return  "AccuracyNorm";
   
-  else if  (gm == gmFMeasure)
-    return  "gmFMeasure";
+  else if  (gm == GradingMethodType::FMeasure)
+    return  "FMeasure";
 
   else 
-    return  "gmNULL";
+    return  "Null";
 }  /* GradingMethodFromStr */
 
 
@@ -254,16 +254,16 @@ KKStr  FeatureSelectionApp::GradingMethodToStr (GradingMethodType  gm)
 
 GradingMethodType  FeatureSelectionApp::GradingMethodFromStr (const KKStr&  str)
 {
-  if  ((str.CompareIgnoreCase ("gmAccuracy") == 0)  ||  (str.CompareIgnoreCase ("Accuracy") == 0)  ||  (str.CompareIgnoreCase ("AccuracyMethod") == 0))
-    return  gmAccuracy;
+  if  ((str.CompareIgnoreCase ("Accuracy") == 0)  ||  (str.CompareIgnoreCase ("Accuracy") == 0)  ||  (str.CompareIgnoreCase ("AccuracyMethod") == 0))
+    return  GradingMethodType::Accuracy;
 
-  if  ((str.CompareIgnoreCase ("gmAccuracyNorm") == 0)  ||  (str.CompareIgnoreCase ("AccuracyNorm") == 0)  ||  (str.CompareIgnoreCase ("AccuracyNormMethod") == 0))
-    return  gmAccuracyNorm;
+  if  ((str.CompareIgnoreCase ("AccuracyNorm") == 0)  ||  (str.CompareIgnoreCase ("AccuracyNorm") == 0)  ||  (str.CompareIgnoreCase ("AccuracyNormMethod") == 0))
+    return  GradingMethodType::AccuracyNorm;
 
-  if  ((str.CompareIgnoreCase ("F-Measure") == 0)  ||  (str.CompareIgnoreCase ("gmFMeasure") == 0)  ||  (str.CompareIgnoreCase ("FMeasure") == 0))
-    return  gmFMeasure;
+  if  ((str.CompareIgnoreCase ("F-Measure") == 0)  ||  (str.CompareIgnoreCase ("FMeasure") == 0)  ||  (str.CompareIgnoreCase ("FMeasure") == 0))
+    return  GradingMethodType::FMeasure;
 
-  return gmNULL;
+  return GradingMethodType::Null;
 }  /* GradingMethodFromStr */
 
 
@@ -272,13 +272,13 @@ GradingMethodType  FeatureSelectionApp::GradingMethodFromStr (const KKStr&  str)
 
 
 
-KKStr  FeatureSelectionApp::JobSelectionCriteriaToStr (JobSelectionCriteriaType  jsc)
+KKStr  FeatureSelectionApp::JobSelectionCriteriaToStr (JobSelectionCriteria  jsc)
 {
   switch  (jsc)
   {
-    case  jscMostAccurate:     return  "MostAccurate";
-    case  jscFastestFromBest:  return  "FastestFromBest";
-    case  jscBruitForce:       return  "BruitForce";
+    case  JobSelectionCriteria::MostAccurate:     return  "MostAccurate";
+    case  JobSelectionCriteria::FastestFromBest:  return  "FastestFromBest";
+    case  JobSelectionCriteria::BruitForce:       return  "BruitForce";
   }
 
   return  "NULL";
@@ -287,19 +287,19 @@ KKStr  FeatureSelectionApp::JobSelectionCriteriaToStr (JobSelectionCriteriaType 
 
 
 
-JobSelectionCriteriaType  FeatureSelectionApp::JobSelectionCriteriaFromStr (const KKStr&  str)
+JobSelectionCriteria  FeatureSelectionApp::JobSelectionCriteriaFromStr (const KKStr&  str)
 {
   KKStr  s = str.ToUpper ();
   if  ((s == "MOSTACCURATE")  ||  (s == "MA"))
-    return  jscMostAccurate;
+    return  JobSelectionCriteria::MostAccurate;
 
   if  ((s == "FASTESTFROMBEST")  ||  (s == "FFB"))
-    return  jscFastestFromBest;
+    return  JobSelectionCriteria::FastestFromBest;
 
   if  ((s == "BRUITFORCE")       ||  (s == "BF"))
-    return  jscBruitForce;
+    return  JobSelectionCriteria::BruitForce;
 
-  return  jscNULL;
+  return  JobSelectionCriteria::Null;
 }
 
 
@@ -312,28 +312,28 @@ JobSelectionCriteriaType  FeatureSelectionApp::JobSelectionCriteriaFromStr (cons
 
 
 //*************************************************************************
-//*    Responsable for keep track of which set of Binmary Classes a given *
-//*  Processor is responsable for.                                        *
+//*    Responsible for keep track of which set of Binary Classes a given  *
+//*  Processor is responsible for.                                        *
 //*                                                                       *
 //*************************************************************************
-KKStr  FeatureSelectionApp::SearchMethodToStr (smSearchMethod  searchMethod)
+KKStr  FeatureSelectionApp::SearchMethodToStr (SearchMethod  searchMethod)
 {
-  if  (searchMethod == smBestCaseNext)
+  if  (searchMethod == SearchMethod::BestCaseNext)
     return "BestCaseNext";
 
-  if  (searchMethod == smBeam)
+  if  (searchMethod == SearchMethod::Beam)
     return "Beam";
 
-  if  (searchMethod == smTestResults)
+  if  (searchMethod == SearchMethod::TestResults)
     return  "TestResults";
 
-  if  (searchMethod == smPickTheBest)
+  if  (searchMethod == SearchMethod::PickTheBest)
     return  "PickTheBest";
 
-  if  (searchMethod == smGrid)
+  if  (searchMethod == SearchMethod::Grid)
     return "Grid";
 
-  if  (smOnePassOnly == smOnePassOnly)
+  if  (SearchMethod::OnePassOnly == SearchMethod::OnePassOnly)
     return "OnePassOnly";
 
   return "";
@@ -343,45 +343,45 @@ KKStr  FeatureSelectionApp::SearchMethodToStr (smSearchMethod  searchMethod)
 
 
 
-smSearchMethod  FeatureSelectionApp::SearchMethodFromStr (KKStr  searchMethodStr)
+SearchMethod  FeatureSelectionApp::SearchMethodFromStr (KKStr  searchMethodStr)
 {
   searchMethodStr.Upper ();
 
   if  (searchMethodStr      == "BESTCASENEXT")
-    return smBestCaseNext;
+    return SearchMethod::BestCaseNext;
 
   else if  (searchMethodStr == "BEAM")
-    return smBeam;
+    return SearchMethod::Beam;
 
   else if  (searchMethodStr == "TESTRESULTS")
-    return smTestResults;
+    return SearchMethod::TestResults;
 
   else if  (searchMethodStr == "PICKTHEBEST")
-    return smPickTheBest;
+    return SearchMethod::PickTheBest;
 
   else if  (searchMethodStr == "GRID")
-    return smGrid;
+    return SearchMethod::Grid;
 
   else if  (searchMethodStr == "ONEPASSONLY")
-    return smOnePassOnly;
+    return SearchMethod::OnePassOnly;
 
   else
-    return smNULL;
+    return SearchMethod::Null;
 }  /* SearchMethodToStr */
 
 
 
 
 
-KKStr  FeatureSelectionApp::ProcessorStatusToStr (fsProcessorStatus  processorStatus)
+KKStr  FeatureSelectionApp::ProcessorStatusToStr (ProcessorStatus  processorStatus)
 {
-  if  (processorStatus == fsNotStarted)
+  if  (processorStatus == ProcessorStatus::NotStarted)
     return "NotStarted";
 
-  if  (processorStatus == fsStarted)
+  if  (processorStatus == ProcessorStatus::Started)
     return "Started";
 
-  if  (processorStatus == fsDone)
+  if  (processorStatus == ProcessorStatus::Done)
     return "Done";
 
   return "";
@@ -391,34 +391,34 @@ KKStr  FeatureSelectionApp::ProcessorStatusToStr (fsProcessorStatus  processorSt
 
 
 
-fsProcessorStatus  FeatureSelectionApp::ProcessorStatusFromStr (const KKStr&  processorStatusStr)
+ProcessorStatus  FeatureSelectionApp::ProcessorStatusFromStr (const KKStr&  processorStatusStr)
 {
   if  (processorStatusStr.EqualIgnoreCase ("NOTSTARTED"))
-    return  fsNotStarted;
+    return  ProcessorStatus::NotStarted;
 
   if  (processorStatusStr.EqualIgnoreCase ("STARTED"))
-    return fsStarted;
+    return ProcessorStatus::Started;
   
   if  (processorStatusStr.EqualIgnoreCase ("DONE"))
-    return fsDone;
+    return ProcessorStatus::Done;
 
-  return  fsNULL;
+  return  ProcessorStatus::Null;
 }  /* ProcessorStatusFromStr */
 
 
 
-KKStr  FeatureSelectionApp::FeatureCriteriaToStr (fcFeatureCriteria  featureCriteria)
+KKStr  FeatureSelectionApp::FeatureCriteriaToStr (FeatureCriteriaType  featureCriteria)
 {
   switch  (featureCriteria)
   {
-  case  fcMerge2Best:     return  "Merge2Best";
-  case  fcMerge3Best:     return  "Merge3Best";
-  case  fcMerge4Best:     return  "Merge4Best";
-  case  fcMerge5Best:     return  "Merge5Best";
-  case  fcMerge6Best:     return  "Merge6Best";
-  case  fcMerge7Best:     return  "Merge7Best";
-  case  fcBestTestSet:    return  "BestTestSet";
-  case  fcRemoveHurtful:  return  "RemoveHurtful";
+  case  FeatureCriteriaType::Merge2Best:     return  "Merge2Best";
+  case  FeatureCriteriaType::Merge3Best:     return  "Merge3Best";
+  case  FeatureCriteriaType::Merge4Best:     return  "Merge4Best";
+  case  FeatureCriteriaType::Merge5Best:     return  "Merge5Best";
+  case  FeatureCriteriaType::Merge6Best:     return  "Merge6Best";
+  case  FeatureCriteriaType::Merge7Best:     return  "Merge7Best";
+  case  FeatureCriteriaType::BestTestSet:    return  "BestTestSet";
+  case  FeatureCriteriaType::RemoveHurtful:  return  "RemoveHurtful";
   }
 
   return  "";
@@ -426,34 +426,34 @@ KKStr  FeatureSelectionApp::FeatureCriteriaToStr (fcFeatureCriteria  featureCrit
 
 
 
-fcFeatureCriteria  FeatureSelectionApp::FeatureCriteriaFromStr (KKStr  featureCriteriaStr)
+FeatureCriteriaType  FeatureSelectionApp::FeatureCriteriaFromStr (KKStr  featureCriteriaStr)
 {
   featureCriteriaStr.Upper ();
   if  ((featureCriteriaStr == "MERGE2BEST")  ||  (featureCriteriaStr == "M2B"))
-    return  fcMerge2Best;
+    return  FeatureCriteriaType::Merge2Best;
 
   if  ((featureCriteriaStr == "MERGE3BEST")  ||  (featureCriteriaStr == "M3B"))
-    return  fcMerge3Best;
+    return  FeatureCriteriaType::Merge3Best;
 
   if  ((featureCriteriaStr == "MERGE4BEST")  ||  (featureCriteriaStr == "M4B"))
-    return  fcMerge4Best;
+    return  FeatureCriteriaType::Merge4Best;
 
   if  ((featureCriteriaStr == "MERGE5BEST")  ||  (featureCriteriaStr == "M5B"))
-    return  fcMerge5Best;
+    return  FeatureCriteriaType::Merge5Best;
 
   if  ((featureCriteriaStr == "MERGE6BEST")  ||  (featureCriteriaStr == "M6B"))
-    return  fcMerge6Best;
+    return  FeatureCriteriaType::Merge6Best;
 
   if  ((featureCriteriaStr == "MERGE7BEST")  ||  (featureCriteriaStr == "M7B"))
-    return  fcMerge7Best;
+    return  FeatureCriteriaType::Merge7Best;
 
   if  ((featureCriteriaStr == "BESTTESTSET")  ||  (featureCriteriaStr == "BTS"))
-    return  fcBestTestSet;
+    return  FeatureCriteriaType::BestTestSet;
 
   if  ((featureCriteriaStr == "REMOVEHURTFUL")  ||  (featureCriteriaStr == "RH"))
-    return  fcRemoveHurtful;
+    return  FeatureCriteriaType::RemoveHurtful;
 
-  return  fcNULL;
+  return  FeatureCriteriaType::Null;
 }  /* FeatureCriteriaFromStr */
 
 

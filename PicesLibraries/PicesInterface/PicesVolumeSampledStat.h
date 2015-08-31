@@ -9,7 +9,7 @@ using namespace System::Diagnostics;
 
 
 #include "VolumeSampledStat.h"
-using namespace  SipperHardware;
+using namespace  MLL;
 
 #include "PicesKKStr.h"
 #include "PicesRunLog.h"
@@ -44,7 +44,7 @@ namespace PicesInterface
     PicesVolumeSampledStatList ();
 
     /**
-     *@breief  Construct a list of managed PicesVolumeSampledStat instances from the contents of the unmanaged list 'unmanagedImages'.
+     *@brief  Construct a list of managed PicesVolumeSampledStat instances from the contents of the unmanaged list 'unmanagedImages'.
      *@details  Will NOT take ownership of the instances of 'VolumeSampledStat' in 'stats but will create managed copies.
      *@param[in]  stats  List of unmanaged 'VolumeSampledStat' objects; new Managed instances of 'VolumeSampledStat' will be created and added to list.
      */

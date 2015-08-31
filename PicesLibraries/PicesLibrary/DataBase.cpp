@@ -34,23 +34,21 @@ using namespace std;
 using namespace KKB;
 
 
-// SipperInstruments Library
+#include "FileDesc.h"
+#include "FeatureFileIOPices.h"
+#include "ImageFeatures.h"
+using  namespace  KKMLL;
+
+
+#include "DataBase.h"
+#include "DataBaseServer.h"
 #include "GPSDataPoint.h"
 #include "InstrumentDataFileManager.h"
 #include "SipperFile.h"
 #include "SipperStation.h"
-#include "SipperVariables.h"
+#include "PicesVariables.h"
 #include "SipperCruise.h"
 #include "VolumeSampledStat.h"
-using namespace SipperHardware;
-
-
-#include "FileDesc.h"
-#include "FeatureFileIOPices.h"
-#include "ImageFeatures.h"
-
-#include "DataBase.h"
-#include "DataBaseServer.h"
 using  namespace  MLL;
 
 
@@ -258,7 +256,7 @@ void  DataBase::InitializeDataBaseStaticVariables ()
 
     if  (!staticVariablesInialized)
     {
-      KKStr  picesHomeDir = SipperVariables::PicesHomeDir ();
+      KKStr  picesHomeDir = PicesVariables::HomeDir ();
       if  (picesHomeDir.Empty ())
       {
         KKStr  errMsg = "DataBase::InitializeDataBaseStaticVariables    ***ERROR***       Can not locate the PICES home directory.    Please make sure that the Environment variable \"PicesHomeDir\" is set to the correct location.";
@@ -542,7 +540,7 @@ DataBase::DataBase (RunLog&  _log):
 {
   CreateBlocker ();
   blocker->StartBlock ();
-  allowUpdates = SipperVariables::AllowUpdates ();
+  allowUpdates = PicesVariables::AllowUpdates ();
   InitializeDataBaseStaticVariables ();
   server = GetDefaultMySqlParameters ();
   int  returnCd = Connect ();
@@ -570,7 +568,7 @@ DataBase::DataBase (DataBaseServerConstPtr  _server,
   CreateBlocker ();
   blocker->StartBlock ();
 
-  allowUpdates = SipperVariables::AllowUpdates ();
+  allowUpdates = PicesVariables::AllowUpdates ();
 
   InitializeDataBaseStaticVariables ();
   
@@ -1820,7 +1818,7 @@ void  DataBase::FeatureDataInsertRow (const KKStr&          _sipperFileName,
   }
 
   KKStr  sipperFileName = osGetRootName (_sipperFileName);
-  KKStr  imageFileName  = osGetRootName (example.ImageFileName ());
+  KKStr  imageFileName  = osGetRootName (example.ExampleFileName ());
 
   KKStr  insertStatement (3000);
   insertStatement << "call  FeatureDataInsert(" << imageFileName.QuotedStr () << ", " << sipperFileName.QuotedStr ();
@@ -1913,23 +1911,23 @@ ImageFeaturesListPtr  DataBase::FeatureDataProcessResults ()
   ConstCharStarArray   fieldNames = GetFeatureDataFieldNames ();
 
   if  (!featureFileDesc)
-    featureFileDesc = FeatureFileIOPices::NewPlanktonFile (log);
+    featureFileDesc = FeatureFileIOPices::NewPlanktonFile ();
 
   ResultSetLoad (fieldNames);
   if  (!resultSetMore)
     return  NULL;
 
-  ImageFeaturesListPtr  results = new ImageFeaturesList (featureFileDesc, true, log, resultSetNumRows);
+  ImageFeaturesListPtr  results = new ImageFeaturesList (featureFileDesc, true, resultSetNumRows);
 
   kkuint32  topLeftRow  = 0;
   kkuint32  topLeftCol  = 0;
 
-  KKStr  class1Name         (64);
+  KKStr    class1Name (64);
   kkint32  class1Id = -1;
-  KKStr  classNameValidated (64);
+  KKStr    classNameValidated (64);
   kkint32  classValidatedId = -1;
-  float  class1Prob = 0.0f;
-  float  class2Prob = 0.0f;
+  float    class1Prob = 0.0f;
+  float    class2Prob = 0.0f;
 
   float  imagesDepth = 0.0f;
 
@@ -1939,7 +1937,7 @@ ImageFeaturesListPtr  DataBase::FeatureDataProcessResults ()
   {
     ImageFeaturesPtr  i = new ImageFeatures (featureFileDesc->NumOfFields ());
 
-    i->ImageFileName (ResultSetGetField       (1));
+    i->ExampleFileName (ResultSetGetField     (1));
     topLeftRow = ResultSetGetUintField        (2);
     topLeftCol = ResultSetGetUintField        (3);
     i->OrigSize (ResultSetGetFloatField       (4));
@@ -2009,7 +2007,7 @@ ImageFeaturesPtr    DataBase::FeatureDataRecLoad (const KKStr&  imageFileName)
   if  (returnCd != 0)
   {
     log.Level (-1) << endl << endl 
-                   << "DataBase::FeatureDataRecLoad     ***ERROR***" << endl
+                   << "DataBase::FeatureDataRecLoad   ***ERROR***" << endl
                    << endl
                    << "Error[" << lastMySqlErrorDesc << "]" << endl
                    << endl;
@@ -2034,7 +2032,7 @@ ImageFeaturesPtr    DataBase::FeatureDataRecLoad (const KKStr&  imageFileName)
   {
     // To make sure that we have valid CTD data the search must start no sooner than 30K scan 
     // lines from the beginning of the sipper file.
-    KKStr  SipperFileName = InstrumentDataFileManager::SipperFileRootNameFromSipperImageFileName (result->ImageFileName ());
+    KKStr  SipperFileName = InstrumentDataFileManager::SipperFileRootNameFromSipperImageFileName (result->ExampleFileName ());
     InstrumentDataPtr  id = this->InstrumentDataGetByScanLine (SipperFileName, Max ((ulong)30000, (ulong)(result->SfCentroidRow ())));
     if  (id  &&  id->Depth () > 0.0)
     {
@@ -2105,7 +2103,7 @@ ImageFeaturesPtr   DataBase::FeatureDataRecLoad (DataBaseImagePtr  image)
   {
     // To make sure that we have valid CTD data the search must start no sooner than 30K scan 
     // lines from the beginning of the sipper file.
-    KKStr  SipperFileName = InstrumentDataFileManager::SipperFileRootNameFromSipperImageFileName (result->ImageFileName ());
+    KKStr  SipperFileName = InstrumentDataFileManager::SipperFileRootNameFromSipperImageFileName (result->ExampleFileName ());
     InstrumentDataPtr  id = this->InstrumentDataGetByScanLine (SipperFileName, Max ((ulong)30000, (ulong)(result->SfCentroidRow ())));
     if  (id  &&  id->Depth () > 0.0)
     {
@@ -2150,7 +2148,7 @@ ImageFeaturesPtr   DataBase::FeatureDataRecLoad (DataBaseImagePtr  image)
  *@param[in] cancelFlag                Flag will be monitored;  if turns true the method will return at 1st chance.
  */
 ImageFeaturesListPtr  DataBase::FeatureDataGetOneSipperFile (const KKStr&     sipperFileName,
-                                                             MLClassConstPtr  mlClass,
+                                                             MLClassPtr       mlClass,
                                                              char             classKeyToUse,
                                                              bool             reExtractInstrumentData,
                                                              bool&            cancelFlag
@@ -2240,7 +2238,7 @@ ImageFeaturesListPtr  DataBase::FeatureDataGetOneSipperFile (const KKStr&     si
 
 
 ImageFeaturesListPtr  DataBase::FeatureDataForImageGroup (const DataBaseImageGroupPtr  imageGroup,
-                                                          MLClassConstPtr              mlClass,
+                                                          MLClassPtr                   mlClass,
                                                           char                         classKeyToUse,
                                                           const bool&                  cancelFlag
                                                          )
@@ -2311,7 +2309,7 @@ void   DataBase::FeatureDataUpdate (DataBaseImagePtr  dataBaseImage,
   }
   else
   {
-    KKStr  rootImageName =  KKB::osGetRootName (example->ImageFileName ());
+    KKStr  rootImageName =  KKB::osGetRootName (example->ExampleFileName ());
     updateStr << "  where ImageId = (select  ImageId from Images where ImageFileName = " << rootImageName.QuotedStr () << ")";
   }
 
@@ -2580,7 +2578,7 @@ MLClassListPtr   DataBase::MLClassProcessResults ()
 
 
 
-MLClassConstPtr  DataBase::MLClassLoad (const KKStr&  className)
+MLClassPtr       DataBase::MLClassLoad (const KKStr&  className)
 {
   KKStr  selectStr (128);
 
@@ -2593,7 +2591,7 @@ MLClassConstPtr  DataBase::MLClassLoad (const KKStr&  className)
     return NULL;
   }
 
-  MLClassConstPtr  result = NULL;
+  MLClassPtr       result = NULL;
 
   MLClassListPtr classes = MLClassProcessResults ();
   if  ((classes != NULL)  &&  (classes->size () > 0))
@@ -2611,7 +2609,7 @@ MLClassConstPtr  DataBase::MLClassLoad (const KKStr&  className)
 
 
 
-MLClassConstListPtr  DataBase::MLClassLoadList ()
+MLClassListPtr  DataBase::MLClassLoadList ()
 {
   KKStr  selectStr = "call  ClassesRetrieveAll()";
   kkint32  returnCd = QueryStatement (selectStr);
@@ -2635,7 +2633,7 @@ MLClassConstListPtr  DataBase::MLClassLoadList ()
   
   MLClass::ResetAllParentsToAllClasses ();
 
-  MLClassConstListPtr  classes = new MLClassConstList ();
+  MLClassListPtr  classes = new MLClassList ();
 
   vector<MLClassPtr>   classesWithParents;
   vector<KKStr>        classesWithParentsNames;
@@ -2643,12 +2641,12 @@ MLClassConstListPtr  DataBase::MLClassLoadList ()
   while  (ResultSetFetchNextRow ())
   {
     kkint32  classId     = ResultSetGetIntField (0);
-    KKStr  className   = ResultSetGetField    (1);
+    KKStr    className   = ResultSetGetField    (1);
     kkint32  parentId    = ResultSetGetIntField (2);
-    KKStr  parentName  = ResultSetGetField    (3);
-    KKStr  description = ResultSetGetField    (4);
-    bool   mandatory   = ResultSetGetBool     (5);
-    bool   summarize   = ResultSetGetBool     (6);
+    KKStr    parentName  = ResultSetGetField    (3);
+    KKStr    description = ResultSetGetField    (4);
+    bool     mandatory   = ResultSetGetBool     (5);
+    bool     summarize   = ResultSetGetBool     (6);
 
     if  (!className.Empty ())
     {
@@ -2671,7 +2669,7 @@ MLClassConstListPtr  DataBase::MLClassLoadList ()
 
   for  (kkuint32 x = 0;  x < classesWithParents.size ();  x++)
   {
-    MLClassConstPtr parent = classes->LookUpByName (classesWithParentsNames[x]);
+    MLClassPtr      parent = classes->LookUpByName (classesWithParentsNames[x]);
     if  (parent)
     {
       if  (parent->IsAnAncestor (classesWithParents[x]))
@@ -2696,7 +2694,7 @@ MLClassConstListPtr  DataBase::MLClassLoadList ()
 
 
 
-MLClassConstListPtr  DataBase::MLClassLoadChildren (const KKStr&  className)
+MLClassListPtr  DataBase::MLClassLoadChildren (const KKStr&  className)
 {
   KKStr  selectStr (128);
 
@@ -2712,7 +2710,7 @@ MLClassConstListPtr  DataBase::MLClassLoadChildren (const KKStr&  className)
   MLClassListPtr temp = MLClassProcessResults ();
   ResultSetsClear ();
 
-  MLClassConstListPtr results = new MLClassConstList (*temp);
+  MLClassListPtr results = new MLClassList (*temp);
   delete temp;
   temp = NULL;
   return results;
@@ -2919,11 +2917,11 @@ void  DataBase::ImageInsert (const RasterSipper&    image,
                                    kkuint32         classLogEntryId,
                                    kkuint32         centroidRow,
                                    kkuint32         centroidCol,
-                                   MLClassConstPtr  class1,
+                                   MLClassPtr       class1,
                                    float            class1Prob,
-                                   MLClassConstPtr  class2,
+                                   MLClassPtr       class2,
                                    float            class2Prob,
-                                   MLClassConstPtr  validatedClass,
+                                   MLClassPtr       validatedClass,
                                    float            depth,
                                    float            imageSize,
                                    PointListPtr     sizeCoordinates,
@@ -3134,7 +3132,7 @@ ClassStatisticListPtr  DataBase::ImageProcessClassStaticsResults ()
 
 ClassStatisticListPtr  DataBase::ImageGetClassStatistics (DataBaseImageGroupPtr  imageGroup,
                                                           const KKStr&           sipperFileName,
-                                                          MLClassConstPtr        mlClass,
+                                                          MLClassPtr             mlClass,
                                                           char                   classKeyToUse,
                                                           float                  minProb,
                                                           float                  maxProb,
@@ -3186,7 +3184,7 @@ ClassStatisticListPtr  DataBase::ImageGetClassStatistics (DataBaseImageGroupPtr 
                                                           const KKStr&           cruiseName,
                                                           const KKStr&           stationName,
                                                           const KKStr&           deploymentNum,
-                                                          MLClassConstPtr        mlClass,
+                                                          MLClassPtr             mlClass,
                                                           char                   classKeyToUse,
                                                           float                  minProb,
                                                           float                  maxProb,
@@ -3232,7 +3230,7 @@ ClassStatisticListPtr  DataBase::ImageGetClassStatistics (DataBaseImageGroupPtr 
 VectorUint*  DataBase::ImageGetDepthStatistics (DataBaseImageGroupPtr  imageGroup,
                                                 const KKStr&           sipperFileName,
                                                 float                  depthIncrements,
-                                                MLClassConstPtr        mlClass,
+                                                MLClassPtr             mlClass,
                                                 char                   classKeyToUse,
                                                 float                  minProb,
                                                 float                  maxProb,
@@ -3307,7 +3305,7 @@ VectorUint*  DataBase::ImageGetDepthStatistics (DataBaseImageGroupPtr  imageGrou
                                                 const KKStr&           stationName,
                                                 const KKStr&           deploymentNum,
                                                 float                  depthIncrements,
-                                                MLClassConstPtr        mlClass,
+                                                MLClassPtr             mlClass,
                                                 char                   classKeyToUse,
                                                 float                  minProb,
                                                 float                  maxProb,
@@ -3645,7 +3643,7 @@ DataBaseImagePtr  DataBase::ImagesLocateClosestImage (const KKStr&  imageFileNam
   KKStr   sipperFileName (32);
   kkuint32  scanLineNum = 0;
   kkuint32  scanCol     = 0;
-  SipperVariables::ParseImageFileName (imageFileName, sipperFileName, scanLineNum, scanCol);
+  PicesVariables::ParseImageFileName (imageFileName, sipperFileName, scanLineNum, scanCol);
   return  ImagesLocateClosestImage (sipperFileName, scanLineNum, scanCol);
 }  /* ImagesLocateClosestImage */
 
@@ -3768,7 +3766,7 @@ DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  group,
 
 DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  imageGroup,
                                              const KKStr&           sipperFileName,
-                                             MLClassConstPtr        mlClass,
+                                             MLClassPtr             mlClass,
                                              char                   classKeyToUse,
                                              float                  probMin,
                                              float                  probMax,
@@ -3823,7 +3821,7 @@ DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  imageGroup,
                                              const KKStr&           cruiseName,
                                              const KKStr&           stationName,
                                              const KKStr&           deploymentNum,
-                                             MLClassConstPtr        mlClass,
+                                             MLClassPtr             mlClass,
                                              char                   classKeyToUse,
                                              float                  probMin,
                                              float                  probMax,
@@ -3885,7 +3883,7 @@ DataBaseImageListPtr  DataBase::ImagesQueryByGrouop
                                    const KKStr&           stationName,
                                    const KKStr&           deploymentNum,
                                    const KKStr&           sipperFileName,
-                                   MLClassConstPtr        mlClass,
+                                   MLClassPtr             mlClass,
                                    char                   classKeyToUse,
                                    float                  probMin,
                                    float                  probMax,
@@ -3966,7 +3964,7 @@ DataBaseImageListPtr  DataBase::ImagesQueryForScanLineRange (const KKStr&   sipp
 DataBaseImageListPtr  DataBase::ImagesQueryDeploymentSizeRange (const KKStr&     cruiseName,
                                                                 const KKStr&     stationName,
                                                                 const KKStr&     deploymentNum,
-                                                                MLClassConstPtr  mlClass,
+                                                                MLClassPtr       mlClass,
                                                                 char             cast,         /**< 'U' = UpCast, 'D' = DownCast,  'B' = Both' */
                                                                 char             statistic,    /**< '0' = Area mm^2,  '1' = Diameter,  '2' = Spheroid Volume and '3' = EBv ((4/3)(Pie)(Major/2)(Minor/2)^2) */
                                                                 float            sizeStart,
@@ -4013,13 +4011,13 @@ DataBaseImageListPtr  DataBase::ImagesQueryDeploymentSizeRange (const KKStr&    
 
   if  ((mlClass != NULL)   &&  includeChildren)
   {
-    MLClassConstListPtr  children = MLClassLoadChildren (mlClass->Name ());
+    MLClassListPtr  children = MLClassLoadChildren (mlClass->Name ());
     if  (children)
     {
-      MLClassConstList::const_iterator  idx;
+      MLClassList::const_iterator  idx;
       for  (idx = children->begin ();  idx != children->end ();  ++idx)
       {
-        MLClassConstPtr  child = *idx;
+        MLClassPtr       child = *idx;
         DataBaseImageListPtr  childsImages 
           = ImagesQueryDeploymentSizeRange (cruiseName, stationName, deploymentNum,
                                             child,
@@ -4092,9 +4090,9 @@ VectorKKStr*   DataBase::ImageListOfImageFileNamesByScanLineRange (const KKStr& 
 
 
 void  DataBase::ImagesUpdatePredictions (const KKStr&     imageFileName,
-                                         MLClassConstPtr  class1Pred,
+                                         MLClassPtr       class1Pred,
                                          float            class1Prob,
-                                         MLClassConstPtr  class2Pred,
+                                         MLClassPtr       class2Pred,
                                          float            class2Prob,
                                          kkuint32         logEntryId
                                        )
@@ -4151,7 +4149,7 @@ void  DataBase::ImagesUpdatePredictionsList (kkuint32      _logEntryId,
 
 
 void  DataBase::ImagesUpdateValidatedClass (const KKStr&     imageFileName, 
-                                            MLClassConstPtr  mlClass
+                                            MLClassPtr       mlClass
                                            )
 {
   if  (!allowUpdates)
@@ -4169,10 +4167,7 @@ void  DataBase::ImagesUpdateValidatedClass (const KKStr&     imageFileName,
             <<                                        mlClass->Name ().QuotedStr () << ", "
             <<                                        "1.0"                                                   
             <<                                 ")";
-
-
   kkint32  returnCd = QueryStatement (updateStr);
-
   ResultSetsClear ();
 }  /* ImagesUpdateValidatedClass */
 
@@ -4251,7 +4246,7 @@ DataBaseImageValidatedEntryListPtr
     KKStr  validateClassName = ResultSetGetField (3);
     KKStr  sizeCoordinatesStr = ResultSetGetField (4);
 
-    MLClassConstPtr  validatedClass = NULL;
+    MLClassPtr       validatedClass = NULL;
     if  (!validateClassName.Empty ())
       validatedClass = MLClass::CreateNewMLClass (validateClassName, validatedClassId);
     results->push_back (new DataBaseImageValidatedEntry (imageFileName, sizeCoordinatesStr, validatedClass));
@@ -4415,7 +4410,7 @@ void  DataBase::ImagesGetGpsData (const KKStr& imageRootName,
 
 
 void  DataBase::ImagesUpdateValidatedAndPredictClass (const KKStr&     imageFileName, 
-                                                      MLClassConstPtr  mlClass, 
+                                                      MLClassPtr       mlClass, 
                                                       float            class1Prob
                                                      )
 {

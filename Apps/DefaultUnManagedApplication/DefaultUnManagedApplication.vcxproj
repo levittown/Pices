@@ -101,12 +101,11 @@
     <ClInclude Include="DefaultUnManagedApplication.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\KSquareLibraries\KKMachineLearning\KKMachineLearning.vcxproj">
+      <Project>{eda94c7f-b7b2-48dc-833d-a4948f00a7a2}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\PicesLibraries\PicesLibrary\PicesLibrary.vcxproj">
       <Project>{fa9c865e-0227-4ebc-a291-ed0f2453afb3}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PicesLibraries\SipperInstruments\SipperInstruments.vcxproj">
-      <Project>{b1867f2d-9e97-4e33-a56b-297caf616589}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>

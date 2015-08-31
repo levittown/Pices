@@ -125,7 +125,7 @@ VectorIntPtr  RandomNND::GetHistogramForARandomDistribution (VectorDouble&  allD
     randomDistribution->PushOnBack (new Neighbor (row, col, "", NULL, image->OrigSize ()));
   }
 
-  randomDistribution->FindNearestNeighbors (AnyPlanktonClass, NULL);
+  randomDistribution->FindNearestNeighbors (NeighborType::AnyPlankton, NULL);
 
   VectorIntPtr  distributionHistogram = randomDistribution->HistogramByDistance (numOfBuckets, bucketSize);
 
@@ -180,7 +180,7 @@ void	RandomNND::GenerateReport ()
     ImageFeaturesPtr  image = *idx;
     realData->PushOnBack (new Neighbor (image->SfCentroidRow (), image->SfCentroidCol (), "", NULL, image->OrigSize ()));
   }
-  realData->FindNearestNeighbors (AnyPlanktonClass, NULL);
+  realData->FindNearestNeighbors (NeighborType::AnyPlankton, NULL);
   double largestDist = realData->LargestDist ();
 
   if  ((numOfBuckets < 1)  &&  (bucketSize < 1))

@@ -118,7 +118,7 @@ namespace PicesCommander
 
     public PicesCommander()
     {
-      configFileName = OSservices.AddSlash (PicesSipperVariables.PicesConfigurationDirectory ()) + "PicesCommander.cfg";
+      configFileName = OSservices.AddSlash (PicesSipperVariables.ConfigurationDirectory ()) + "PicesCommander.cfg";
 
       InitializeComponent();
 
@@ -154,7 +154,7 @@ namespace PicesCommander
         if  (rootDir == null)
         {
           String  modelName = tm.ModelName;
-          rootDir = OSservices.AddSlash (PicesSipperVariables.PicesHomeDir ()) + OSservices.GetRootName (modelName);
+          rootDir = OSservices.AddSlash (PicesSipperVariables.HomeDir ()) + OSservices.GetRootName (modelName);
         }
       }
     }
@@ -2674,7 +2674,7 @@ namespace PicesCommander
         return;
       }
 
-      PicesTrainingConfiguration  config = new PicesTrainingConfiguration (tm.ModelName, runLog);
+      PicesTrainingConfigManaged  config = new PicesTrainingConfigManaged (tm.ModelName, runLog);
       if  (!config.Valid ())
       {
         MessageBox.Show (this, "Invalid Training Model[" + tm.ModelName + "]  can not retrieve feature data.", "Extract Training Model Feature Data", MessageBoxButtons.OK);
@@ -2761,14 +2761,14 @@ namespace PicesCommander
 
       DateTime  dt = DateTime.Now;
 
-      String  tempDirPath = PicesSipperVariables.PicesTempDirectory ();
+      String  tempDirPath = PicesSipperVariables.TempDirectory ();
       OSservices.CreateDirectoryPath (tempDirPath);
 
       String  reportDir = OSservices.AddSlash (PicesSipperVariables.PicesReportDir ()) + "CrossValiations";
       OSservices.CreateDirectoryPath (reportDir);
 
       String  reportFileName = OSservices.AddSlash (reportDir) + modelName + "_" + dt.ToString ("yyyyMMdd-hhmmss") + ".txt";
-      String  programName = OSservices.AddSlash (PicesSipperVariables.PicesCmdLineProgDir ()) + "CrossValidation.exe";
+      String  programName = OSservices.AddSlash (PicesSipperVariables.CmdLineProgDir ()) + "CrossValidation.exe";
       String  arguments = "-c " + modelName + "  -Folds 10  -R " + reportFileName + "  -BiasMatrix";
       
       Process proc = new Process();
@@ -2896,14 +2896,14 @@ namespace PicesCommander
 
       DateTime  dt = DateTime.Now;
 
-      String  tempDirPath = PicesSipperVariables.PicesTempDirectory ();
+      String  tempDirPath = PicesSipperVariables.TempDirectory ();
       OSservices.CreateDirectoryPath (tempDirPath);
 
       String  reportDir = OSservices.AddSlash (PicesSipperVariables.PicesReportDir ()) + "AbundanceAdjustments";
       OSservices.CreateDirectoryPath (reportDir);
 
       String  reportFileName = OSservices.AddSlash (reportDir) + modelName + "_" + dt.ToString ("yyyyMMdd-hhmmss") + ".txt";
-      String  programName = OSservices.AddSlash (PicesSipperVariables.PicesCmdLineProgDir ()) + "AbundanceCorrectionStatsBuilder.exe";
+      String  programName = OSservices.AddSlash (PicesSipperVariables.CmdLineProgDir ()) + "AbundanceCorrectionStatsBuilder.exe";
       String  arguments = "-c " + modelName + "  -Folds 10  -R " + reportFileName + "";
       
       Process proc = new Process();

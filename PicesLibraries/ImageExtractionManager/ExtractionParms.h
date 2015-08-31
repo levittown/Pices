@@ -7,13 +7,10 @@
 #include "KKStr.h"
 using namespace  KKB;
 
-#include "SipperBuff.h"
-using namespace  SipperHardware;
-
-
 #include "ClassStatistic.h"
 #include "DataBaseServer.h"
 #include "MLClass.h"
+#include "SipperBuff.h"
 #include "SipperExtractionImageManager.h"
 using namespace MLL;
 
@@ -30,7 +27,7 @@ namespace  ImageExtractionManager
   class  ExtractionParms
   {
   public:
-    typedef  SipperHardware::SipperFileFormat  SipperFileFormat;
+    typedef  MLL::SipperFileFormat  SipperFileFormat;
 
     ExtractionParms (kkint32  argc,
                      char**   argv,

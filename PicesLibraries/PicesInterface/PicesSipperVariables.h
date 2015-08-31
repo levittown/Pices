@@ -21,18 +21,20 @@ namespace PicesInterface
   public:
     PicesSipperVariables ();
 
+    static  void  InitializeEnvironment ();
+
     static  bool     AllowUpdates                   ();  /**< 'True' indicates that user is allowed to peofrom updates.  */
     static  void     UpdatesNotAllowed (String^  caption);
 
     static  String^  InstrumentDataFilesDir         ();
-    static  String^  PicesConfigurationDirectory    ();  // Where application configuration files go;  NOT training models.
-    static  String^  PicesCmdLineProgDir            ();  // Directory where you can find Command Line programs such as "CrossValidation.exe"
-    static  String^  PicesDataFilesDirectory        ();
-    static  String^  PicesHomeDir                   ();
-    static  String^  PicesTempDirectory             ();
-    static  String^  PicesDataFileDirectory         ();
+    static  String^  ConfigurationDirectory         ();  // Where application configuration files go;  NOT training models.
+    static  String^  CmdLineProgDir                 ();  // Directory where you can find Command Line programs such as "CrossValidation.exe"
+    static  String^  DataFilesDirectory             ();
+    static  String^  HomeDir                        ();
+    static  String^  TempDirectory                  ();
+    static  String^  DataFileDirectory              ();
     static  String^  PicesReportDir                 ();
-    static  String^  SipperConfigrationFileName     ();
+    static  String^  ConfigrationFileName           ();
     static  String^  SipperDirectoryListFileName    ();
     static  String^  SipperFilesDefaultDir          ();
     static  String^  SipperFilesDirectory           ();   // Same as 'SipperFilesDefaultDir'

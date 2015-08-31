@@ -1,14 +1,18 @@
 #if  !defined(_RESULTS_)  
 #define  _RESULTS_
 
-#include  "FeatureSelectionTypes.h"
-#include  "BinaryJob.h"
-#include  "ConfusionMatrix2.h"
-#include  "FeatureVector.h"
+
+#include "ConfusionMatrix2.h"
+#include "FeatureVector.h"
+#include "SVMparam.h"
+using namespace  KKMLL;
+
+#include"BinaryJob.h"
+#include"FeatureSelectionTypes.h"
 
 
 //***************************************************************************
-//*  Used to store rsults from a single RandomSplit job (JobRandomSplit).   *
+//*  Used to store results from a single RandomSplit job (JobRandomSplit).  *
 //*  Will hold both ConfusionMatrix and CrossValiodation Results(such as)   *
 //*  TrainingTime, TestTime, Number Support Vectors, etc.                   *
 //*  These results will be written to a file by 'JobRandomSplit' as each    *
@@ -48,7 +52,7 @@ namespace FeatureSelectionApp
     ConfusionMatrix2Ptr     ConfusionMatrix     ()  const  {return confusionMatrix;}
     KKStr                   Description         ()  const;
     const KKStr&            HostName            ()  const  {return hostName;}
-    MLClassConstListPtr  MLClasses        ()  const;
+    MLClassListPtr          MLClasses           ()  const;
     int                     JobId               ()  const  {return jobId;}
     SVM_MachineType         MachineType         ()  const  {return machineType;}
     KKStr                   MachineTypeStr      ()  const;

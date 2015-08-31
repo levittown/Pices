@@ -108,8 +108,8 @@ namespace SipperInterface
                        InstrumentDataList  _history
                       )
 		{
-      OSservices.CreateDirectoryPath (PicesSipperVariables.PicesConfigurationDirectory ());
-      dataWindowConfigFileName = OSservices.AddSlash (PicesSipperVariables.PicesConfigurationDirectory ()) + "DepthPlotConfig.txt";
+      OSservices.CreateDirectoryPath (PicesSipperVariables.ConfigurationDirectory ());
+      dataWindowConfigFileName = OSservices.AddSlash (PicesSipperVariables.ConfigurationDirectory ()) + "DepthPlotConfig.txt";
 
 			//
 			// Required for Windows Form Designer support

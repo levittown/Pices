@@ -4,8 +4,10 @@
 #include "KKBaseTypes.h"
 #include "DateTime.h"
 #include "RunLog.h"
+using namespace  KKB;
+
 #include "MLClass.h"
-#include "MLClassConstList.h"
+using namespace  KKMLL;
 
 namespace MLL 
 {
@@ -36,9 +38,9 @@ namespace MLL
      *                       local instance.
      *@param[in] _otherClass This is the class that predictions to any class that is not in '_otherClass' will go to.
      */
-    AbundanceCorrectionMatrix (MLClassConstList&  _classes,
-                               MLClassConstPtr    _otherClass,
-                               RunLog&            _log
+    AbundanceCorrectionMatrix (MLClassList&  _classes,
+                               MLClassPtr    _otherClass,
+                               RunLog&       _log
                               );
     
     AbundanceCorrectionMatrix (const KKStr&  configFileName,
@@ -76,9 +78,9 @@ namespace MLL
     /**@brief Will lump all counts in 'inputCounts' into classes that match this instance 'classList' and 'otherClass' grouping. */
     ClassStatisticListPtr   LumpCounts (const ClassStatisticList&  inputCounts);
 
-    void  Prediction (MLClassConstPtr  knownClass,
-                      MLClassConstPtr  predClass,
-                      RunLog&          log
+    void  Prediction (MLClassPtr  knownClass,
+                      MLClassPtr  predClass,
+                      RunLog&     log
                      );
 
     void  PrintConfusionMatrixTabDelimited (ostream&  outFile);
@@ -105,7 +107,7 @@ namespace MLL
 
     void  CleanUp ();
     
-    kkint32  LookUpClassIdx (MLClassConstPtr c);
+    kkint32  LookUpClassIdx (MLClassPtr c);
 
     void  ReadForConfigFileName (const KKStr&  configFileName,
                                  RunLog&       log
@@ -130,14 +132,14 @@ namespace MLL
                     );
 
 
-    MLClassConstList  classes;
-    KKB::DateTime     dateTimeComputed;
-    kkuint32*         knownByClass;
-    kkuint32          numClasses;    /**< Number of classes in 'classes' plus one for 'otherClass'. */
-    kkuint32          numCorrect;
-    kkuint32          numPredictions;
-    MLClassConstPtr   otherClass;
-    kkint32           otherClassIdx; /**< Index into 'classes' for 'otherClass'.                    */
+    MLClassList    classes;
+    KKB::DateTime  dateTimeComputed;
+    kkuint32*      knownByClass;
+    kkuint32       numClasses;    /**< Number of classes in 'classes' plus one for 'otherClass'. */
+    kkuint32       numCorrect;
+    kkuint32       numPredictions;
+    MLClassPtr     otherClass;
+    kkint32        otherClassIdx; /**< Index into 'classes' for 'otherClass'.                    */
 
     /**
      * A two dimensional matrix where each column will represent known class.  The predictions of the known class

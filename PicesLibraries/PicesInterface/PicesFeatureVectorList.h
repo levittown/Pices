@@ -9,7 +9,6 @@ using namespace System::Diagnostics;
 
 
 #include "MLClass.h"
-#include "MLClassConstList.h"
 #include "ImageFeatures.h"
 #include "PicesRunLog.h"
 
@@ -68,7 +67,7 @@ namespace PicesInterface {
                                                         PicesRunLog^  runLog
                                                        );
 
-    PicesFeatureVectorList^  ExtractImagesForAGivenClass (PicesClass^  mlClass);
+    PicesFeatureVectorList^  ExtractExamplesForAGivenClass (PicesClass^  mlClass);
 
     PicesClassList^  ExtractListOfClasses ();
 
@@ -108,7 +107,7 @@ namespace PicesInterface {
 
 
     bool*                   cancelFlag;   // the "CancelLoad" methid will monitor this flag;  if set to true will terminate.
-    MLClassConstListPtr  classes;
+    MLClassListPtr  classes;
     uint*                   numExamplesWritten;  // used by SaveFeatureFile 
     bool                    owner;
     bool                    sortedByImageFileName;

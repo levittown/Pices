@@ -54,7 +54,7 @@ namespace FeatureSelectionApp
     static  KKStr  HeaderLineHTML1 ();
     static  KKStr  HeaderLineHTML2 ();
 
-    MLClassConstListPtr  MLClasses ()  const;
+    MLClassListPtr  MLClasses ()  const;
 
     KKStr  LinkName () const;
 

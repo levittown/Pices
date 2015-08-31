@@ -25,10 +25,13 @@ using namespace  std;
 using namespace  KKB;
 
 
-#include "DataBase.h"
 #include "DuplicateImages.h"
 #include "FileDesc.h"
 #include "MLClass.h"
+using namespace  KKMLL;
+
+
+#include "DataBase.h"
 #include "ImageFeatures.h"
 using namespace  MLL;
 
@@ -38,6 +41,7 @@ using namespace  MLL;
 #include "ExtractionParms.h"
 #include "ExtractedImage.h"
 using namespace  ImageExtractionManager;
+
 
 
 DataBaseUpdateThread::DataBaseUpdateThread (ExtractionParms&                 _parms,
@@ -70,7 +74,7 @@ DataBaseUpdateThread::DataBaseUpdateThread (ExtractionParms&                 _pa
   if  (parms.ExtractFeatureData ())
   {
     dupImageDetector = new DuplicateImages (fileDesc, log);
-    duplicateImages  = new ImageFeaturesList (fileDesc, true, log);
+    duplicateImages  = new ImageFeaturesList (fileDesc, true);
     duplicateImageDir = osAddSlash (parms.OutputRootDir ()) + "DuplicateImages";
     osCreateDirectoryPath (duplicateImageDir);
   }
@@ -118,12 +122,12 @@ ExtractedImagePtr  DataBaseUpdateThread::GetNextImageToUpdate ()
 
 void  DataBaseUpdateThread::Run ()
 {
-  Status (tsStarting);
+  Status (ThreadStatus::Starting);
 
   AddMsg ("Run   Starting");
   if  (CancelFlag ())
   {
-    Status (tsStopped);
+    Status (ThreadStatus::Stopped);
     return;
   }
 
@@ -135,12 +139,12 @@ void  DataBaseUpdateThread::Run ()
       Crashed (true);
       KKStr  msg (100);
       msg << "Run     Failed to connect to database;  Error[" << dbConn->LastErrorDesc () << "].";
-      Status (tsStopped);
+      Status (ThreadStatus::Stopped);
       return;
     } 
   }
 
-  Status (tsRunning);
+  Status (ThreadStatus::Running);
 
   ExtractedImagePtr  extractedImage = GetNextImageToUpdate ();
   while  (true)
@@ -179,11 +183,11 @@ void  DataBaseUpdateThread::Run ()
       // from the database.
       if  (dupImageDetector)
       {
-        DuplicateImagePtr  dupImages = dupImageDetector->AddSingleImage (featureVector);
+        DuplicateImagePtr  dupImages = dupImageDetector->AddSingleExample (featureVector);
         if  (dupImages)
         {
           KKStr  msg (100);
-          msg << "Run   Duplicate Image Detected[" << featureVector->ImageFileName () << "].";
+          msg << "Run   Duplicate Image Detected[" << featureVector->ExampleFileName () << "].";
           AddMsg (msg);
           imageIsDuplicate = true;
           imageUpdated     = false;
@@ -191,9 +195,9 @@ void  DataBaseUpdateThread::Run ()
           if  (!duplicateImageDir.Empty ())
           {
             // Since image is a duplicate we will need to move it to duplicates directory
-            KKStr  newRootName = osGetRootName (dupImages->FirstImageAdded ()->ImageFileName ()) 
+            KKStr  newRootName = osGetRootName (dupImages->FirstExampleAdded ()->ExampleFileName ()) 
                                   + "-" +
-                                  osGetRootName (featureVector->ImageFileName ());
+                                  osGetRootName (featureVector->ExampleFileName ());
             KKStr  newFullFileName = osAddSlash (duplicateImageDir) + newRootName + ".bmp";
             osDeleteFile (newFullFileName);  // Make sure there is no file already there from prev run.
             
@@ -210,7 +214,6 @@ void  DataBaseUpdateThread::Run ()
           delete  raster;
           raster = NULL;
         }
-
       }
 
       if  (!imageIsDuplicate)
@@ -316,11 +319,11 @@ void  DataBaseUpdateThread::Run ()
     extractedImage = GetNextImageToUpdate ();
   }
 
-  Status (tsStopping);
+  Status (ThreadStatus::Stopping);
 
   delete  dbConn;
   dbConn = NULL;
-  Status (tsStopped);
+  Status (ThreadStatus::Stopped);
 
   AddMsg ("Run    Exiting");
 } /* Run */

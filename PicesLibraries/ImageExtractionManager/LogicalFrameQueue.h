@@ -1,9 +1,9 @@
 #if  !defined(_IEM_LOGICALFRAMEQUEUE_)
 #define  _IEM_LOGICALFRAMEQUEUE_
 
-#include  <queue>
-#include  "GoalKeeper.h"
-#include  "ExtractionParms.h"
+#include <queue>
+#include "GoalKeeper.h"
+#include "ExtractionParms.h"
 
 
 #if  !defined(_IEM_LOGICALFRAME_)

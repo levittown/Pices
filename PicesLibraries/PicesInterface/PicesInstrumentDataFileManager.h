@@ -13,7 +13,7 @@ using namespace System::Diagnostics;
 
 
 #include  "InstrumentDataFileManager.h"
-using namespace SipperHardware;
+using namespace MLL;
 
 #include  "PicesInstrumentData.h"
 #include  "PicesSipperFile.h"

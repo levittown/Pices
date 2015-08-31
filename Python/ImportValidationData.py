@@ -81,24 +81,25 @@ def  LoadClassList(fileName):
 
 
 def  ImportValidationDataInDirectory(dirName):
+  passWord=""
   try:
-       #db = mysql.connector.Connect(user='kkramer',
-       #                             password="tree10peach",
-       #                             host='sipper-db2.marine.usf.edu',
-       #                             database='pices_new'
-       #                          )
-              
-       #db = mysql.connector.Connect(user='kkramer',
-       #                             password="tree10peach",
-       #                             host='sipper-db2.marine.usf.edu',
-       #                             database='pices_new'
-       #                           )
-       
-       db = mysql.connector.Connect(user='root',
-                                    password="dasani30",
-                                    host='localhost',
-                                    database='pices_new'
-                                  )
+    #db = mysql.connector.Connect(user=kkramer',
+    #                             password=passWord,
+    #                             host='sipper-db2.marine.usf.edu',
+    #                             database='pices_new'
+    #                          )
+
+    db = mysql.connector.Connect(user='kkramer',
+                                 password=passWord,
+                                 host='sipper-db2.marine.usf.edu',
+                                 database='pices_new'
+                               )
+
+    #db = mysql.connector.Connect(user='root',
+    #                             password=passWord,
+    #                             host='localhost',
+    #                             database='pices_new'
+    #                           )
 
   except  mysql.connector.Error as err:
     db = None
@@ -128,8 +129,8 @@ def  ImportValidationDataInDirectory(dirName):
   for  l in validationData:
     fields=l.split('\t')
     if  len(fields) > 1:
-      imageFileName=fields[0].strip("\"")
-      classId=ToInt(fields[1])
+      imageFileName=fields[1].strip("\"")
+      classId=ToInt(fields[5])
       className=classDic[classId]
       sqlStr="call ImagesUpdateValidatedClassIfDiff(" + "\""  + imageFileName  + "\"" + "," + \
                                                         "\""  + className      + "\"" + "," + \
@@ -150,8 +151,9 @@ def  ImportValidationDataInDirectory(dirName):
 
 def  main():
   #rootDir="E:\\Users\\kkramer\\Dropbox\\Sipper\\FromAndrewToKurt\\Validation\\2014-09-16\\"
-  rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews"
+  #rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews"
   #rootDir="C:\\Pices\\UpdatesFromOtherServers"
+  rootDir="D:\\Temp"
   ImportValidationDataInDirectory(rootDir)
 
 

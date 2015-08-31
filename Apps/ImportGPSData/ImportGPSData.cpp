@@ -1,5 +1,4 @@
 #include "FirstIncludes.h"
-
 #include <stdlib.h>
 #include <memory>
 #include <math.h>
@@ -8,22 +7,19 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-
 #include "MemoryDebug.h"
 #include "KKBaseTypes.h"
-
 using namespace std;
 
 #include "OSservices.h"
 #include "KKStr.h"
 using namespace KKB;
 
+
+#include "DataBase.h"
 #include "SipperCruise.h"
 #include "SipperDeployment.h"
 #include "SipperFile.h"
-using namespace  SipperHardware;
-
-#include  "DataBase.h"
 using namespace MLL;
 
 

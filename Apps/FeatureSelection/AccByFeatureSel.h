@@ -6,6 +6,7 @@
 #include  "KKStr.h"
 
 #include  "MLClass.h"
+using namespace  KKMLL;
 
 namespace FeatureSelectionApp
 {
@@ -14,8 +15,8 @@ namespace FeatureSelectionApp
   public:
     typedef  AccByFeatureSel*  AccByFeatureSelPtr;
 
-    AccByFeatureSel (MLClassConstPtr  class1,
-                     MLClassConstPtr  class2,
+    AccByFeatureSel (MLClassPtr  class1,
+                     MLClassPtr  class2,
                      int                 featureNum,
                      float               avgAccGain,
                      float               stdDevAccGain
@@ -23,8 +24,8 @@ namespace FeatureSelectionApp
 
     ~AccByFeatureSel ();
 
-    MLClassConstPtr  Class1        () const {return class1;}
-    MLClassConstPtr  Class2        () const {return class2;}
+    MLClassPtr  Class1        () const {return class1;}
+    MLClassPtr  Class2        () const {return class2;}
     const KKStr&        Class1Name    () const;
     const KKStr&        Class2Name    () const;
     int                 FeatureNum    () const {return featureNum;}
@@ -32,15 +33,16 @@ namespace FeatureSelectionApp
     float               StdDevAccGain () const {return stdDevAccGain;}
 
   private:
-    MLClassConstPtr  class1;
-    MLClassConstPtr  class2;
+    MLClassPtr  class1;
+    MLClassPtr  class2;
     int                 featureNum;
     float               avgAccGain;
     float               stdDevAccGain;
   };  /* AccByFeatureSel */
 
-
   typedef  AccByFeatureSel::AccByFeatureSelPtr  AccByFeatureSelPtr;
+
+#define  _AccByFeatureSel_Defined_
 
 
   class  AccByFeatureSelList:  public KKQueue<AccByFeatureSel>

@@ -5,8 +5,10 @@
 #include "Matrix.h"
 using namespace  KKB;
 
+
 #include "MLClass.h"
-using namespace  MLL;
+using namespace  KKMLL;
+
 
 #include "PicesRunLog.h"
 #include "PicesClassList.h"
@@ -35,7 +37,7 @@ namespace PicesInterface
   {
   public:
     /**
-     *@brief  Will constuct a instance from from the parameter file for '_configFileName'.
+     *@brief  Will construct a instance from the parameter file for '_configFileName'.
      *@param[in] _configFileName The name of the BiasMatrix file will be derived from the configuration 
      *                           file name.  Se the code for 'the term 'PicesAbundanceCorrectionMatrix' in PicesLibrary'.
 	   *@param[in,out] _runLog     Logging file to use.
@@ -54,10 +56,10 @@ namespace PicesInterface
     ~PicesAbundanceCorrectionMatrix ();
 
 
-    System::DateTime   DateTimeComputed ();
-    array<float>^      ProbOfDetection  ();
-    array<float>^      ProbOfFalseAlarm ();
-    bool               Valid            ();
+    System::DateTime  DateTimeComputed ();
+    array<float>^     ProbOfDetection  ();
+    array<float>^     ProbOfFalseAlarm ();
+    bool              Valid            ();
 
 
     void  AddIn (PicesAbundanceCorrectionMatrix^  matrix,

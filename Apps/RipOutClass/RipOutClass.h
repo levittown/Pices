@@ -30,10 +30,10 @@ public:
 
 private:
   bool                  cancelFlag;
-  MLClassConstList      classesToRipOut;
+  MLClassList      classesToRipOut;
 	KKStr                 destFileName;
   FeatureVectorListPtr  destImages;
-	MLClassConstList      mlClasses;
+	MLClassList      mlClasses;
   FeatureFileIOPtr      inFileFormat;
   int                   numOfFolds;
   FeatureFileIOPtr      outFileFormat;

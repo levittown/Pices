@@ -16,10 +16,10 @@
 
 
 
-#ifndef _BOOLEAN_TYPE_
-#define _BOOLEAN_TYPE_
-typedef enum {False, True} Boolean;
-#endif
+//#ifndef _BOOLEAN_TYPE_
+//#define _BOOLEAN_TYPE_
+//typedef enum {False, true} bool;
+//#endif
 
 
 #define LINELEN   1024
@@ -28,7 +28,7 @@ typedef enum {False, True} Boolean;
 /* switches used in the interface routines */
 #define INT         0
 #define FLOAT       1
-#define ENUM        2      /* interger values that use #defines */
+#define ENUM        2      /* integer values that use #defines */
 #define BOOLE       3
 #define GETTRAINING 4
 #define GETTEST     5
@@ -179,7 +179,7 @@ public:
   /* Functions */
   char*  parm_to_string (int k);
 
-  char*  boolean_to_string (Boolean var);
+  char*  boolean_to_string (bool var);
 
   char*  type_to_string (int var);
 
@@ -232,7 +232,7 @@ public:
 
   int      _type_convert (char *input);
 
-  Boolean  _boolean_convert (char *input);
+  bool     _boolean_convert (char *input);
 
 
 
@@ -380,10 +380,10 @@ public:
   void  FULL_FORWARD_PASS (float input[]);
 
 
-  void  COMPUTE_ERRORS (float    goal[], 
-                        Boolean  output_slopesp, 
-                        Boolean  statsp, 
-                        int      xw
+  void  COMPUTE_ERRORS (float  goal[], 
+                        bool   output_slopesp, 
+                        bool   statsp, 
+                        int    xw
                        );
 
   void  UPDATE_OUTPUT_WEIGHTS ();
@@ -488,25 +488,25 @@ public:
 
 
   /* Flags */
-  Boolean  use_index_files;
-  Boolean  do_predictions;
-  Boolean  normalize_features;
-  Boolean  resubstitution;
-  Boolean  do_training;
-  Boolean  save_network_each_trial;
-  Boolean  save_network_each_round;
-  Boolean  load_weights;
+  bool  use_index_files;
+  bool  do_predictions;
+  bool  normalize_features;
+  bool  resubstitution;
+  bool  do_training;
+  bool  save_network_each_trial;
+  bool  save_network_each_round;
+  bool  load_weights;
 
 
   int UnitType;		               /**< hidden unit type can be SIGMOID or GAUSIAN*/
   int OutputType;	               /**< output unit type can be SIGMOID or LINEAR */
   
-  float SigmoidMax;              /**< Maximum output vaule for sigmoid units. Used to alter sigmoid range without having to edit *
+  float SigmoidMax;              /**< Maximum output value for sigmoid units. Used to alter sigmoid range without having to edit *
                                   * training values.  Use the symbols "min" and  "max" in the input file.  The input routines    * 
                                   * will translate to the appropriate float values.
                                   */
  
-  float SigmoidMin;              /**< Minimum output vaule for sigmoid units.                                            */
+  float SigmoidMin;              /**< Minimum output value for sigmoid units.                                            */
   float WeightRange;             /**< Random-init weights in range [-WR,+WR]                                             */
   float SigmoidPrimeOffset;      /**< Add to sigmoid-prime to kill flat spots                                            */
   float WeightMultiplier;	       /**< Scale Candidate correlation to get init weight                                     */
@@ -540,7 +540,7 @@ public:
   int      ErrorBits;             /**< Total # bits in epoch that were wrong           */
 
   float*   SumErrors;             /**< Accumulate the sum of the error values used in the correlation phase. 
-                                   * Sum is stored seperately for each output.  Values are converted to 
+                                   * Sum is stored separately for each output.  Values are converted to 
                                    * average errors before use in ADJUST_CORRELATION 
                                    */
 
@@ -548,18 +548,18 @@ public:
   float    SumSqError;            /**< Accumulate the sum of the square of the error values used in the correlation phase.*/
   float    BestCandidateScore;    /**< Best correlation score of all candidate units. */
   int      BestCandidate;         /**< Index of the candidate unit with best score. */
-  Boolean  UseCache;	            /**< If TRUE, cache the forward-pass values instead of repeatedly computing them. */
+  bool     UseCache;	            /**< If TRUE, cache the forward-pass values instead of repeatedly computing them. */
   int      Epoch;                 /**< Current epoch number */
-  Boolean  Graphics;	            /**< If TRUE, print progress after each epoch. */
-  Boolean  NonRandomSeed;	        /**< TRUE => use 1 as the seed for the random number generator.  Useful when comparing
+  bool     Graphics;	            /**< If TRUE, print progress after each epoch. */
+  bool     NonRandomSeed;	        /**< TRUE => use 1 as the seed for the random number generator.  Useful when comparing
 			                             * different parameter settings.  FALSE => use system clock to start random sequence. 
                                    */
 
-  Boolean  Test;		               /**< If TRUE, run a test epoch and print the result after each round of output tuning. */
+  bool  Test;		               /**< If TRUE, run a test epoch and print the result after each round of output tuning. */
 
-  Boolean  SinglePass;            /**< TRUE => Pause after forward/backward cycle      */
-  Boolean  SingleEpoch;           /**< TRUE => Pause after each training epoch         */
-  Boolean  Step;                  /**< Turned to TRUE after each pause, briefly        */
+  bool  SinglePass;            /**< TRUE => Pause after forward/backward cycle      */
+  bool  SingleEpoch;           /**< TRUE => Pause after each training epoch         */
+  bool  Step;                  /**< Turned to TRUE after each pause, briefly        */
   int      Trial;                 /**< Current trial number, used in log outputs       */
 
 
@@ -606,9 +606,9 @@ public:
   int      Ninputs;             /**< Number of input units */
   int      Noutputs;            /**< Number of output units */
   int      Ncandidates;	        /**< Nu mber of candidate units trained at once. */
-  int      MaxCases;		        /**< Maxi mum number of training cases that can be accommdated by the current data structures.  */
+  int      MaxCases;		        /**< Maxi mum number of training cases that can be accommodated by the current data structures.  */
   int      Ncases;		          /**< Number  of training cases currently in use. Assume a contiguous block beginning with   */
-  int      FirstCase;	          /**< Addres s of the first training case in the currently active set.  Usually zero, but may
+  int      FirstCase;	          /**< Address of the first training case in the currently active set.  Usually zero, but may
                                  *  differ if we are training on different chunks of the training set at different times.       
                                  */
 
@@ -664,19 +664,19 @@ public:
   int      NtestOutputValues;	       /**< Number of outputs in the test set.      */
   float    TrainingStdDev;           /**< Std Dev of entire training set.  Used to normalize the ErrorIndex. */
   float    TestStdDev;
-  float    ErrorIndex;               /**< Normalized error function for continuos output training sets. */
+  float    ErrorIndex;               /**< Normalized error function for continuous output training sets. */
   float    ErrorIndexThreshold;      /**< Stop training when ErrorIndex is < EIT. */
   int      ErrorMeasure;             /**< Set to BITS for using ErrorBits to stop of INDEX to use ErrorIndex to stop.  */
 
   /***************************************************************************/
-  /* Save and plot file related varibles                                     */
+  /* Save and plot file related variables                                    */
   /***************************************************************************/
-  Boolean  DumpWeights;              /**< Are we dumping weights into a file. */
+  bool  DumpWeights;              /**< Are we dumping weights into a file. */
   char     DumpFileRoot[LINELEN+1];  /**< Root of the names for the files */
   FILE*    WeightFile;	             /**< Contains weights from the current net. */
 
   int      Nparameters;
-  Boolean  InterruptPending;         /**< TRUE => user has pressed Control-C */
+  bool     InterruptPending;         /**< TRUE => user has pressed Control-C */
   PARMS    ParmTable[37];
 
   void  ConstructParmTable ();

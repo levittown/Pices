@@ -13,11 +13,14 @@ using namespace std;
 #include "MsgQueue.h"
 using namespace KKB;
 
-#include "SipperVariables.h"
-using namespace  SipperHardware;
+#include "PicesTrainingConfiguration.h"
+using namespace  KKMLL;
 
 #include "FeatureFileIOPices.h"
+#include "PicesVariables.h"
+#include "PicesFVProducer.h"
 using namespace  MLL;
+
 
 #include "DataBaseUpdateThread.h"
 #include "ExtractionManager.h"
@@ -74,6 +77,7 @@ ExtractionManager::ExtractionManager (const KKStr&      _applicationName,
   framePool              (NULL),
   frameProcessors        (NULL),
   frameWidth             (0),
+  fvProducerFactory      (NULL),
   imageManager           (NULL),
   imagesAwaitingUpdate   (NULL),
   log                    (_log),
@@ -93,8 +97,8 @@ ExtractionManager::ExtractionManager (const KKStr&      _applicationName,
   veryLargeImageSize     (10000)
 {
   InstrumentDataFileManager::InitializePush ();
-
-  fileDesc = FeatureFileIOPices::NewPlanktonFile (log);
+  fvProducerFactory = PicesFVProducerFactory::Factory (&log);
+  fileDesc = fvProducerFactory->FileDesc ();
 }
 
 
@@ -169,8 +173,8 @@ void  ExtractionManager::TerminateProcessing (kkint32 miliSecsToWait)
     for  (idx = allThreads->begin ();  idx != allThreads->end ();  ++idx)
     {
       ImageExtractionThreadPtr  thread = *idx;
-      if  ((thread->Status () == KKThread::tsStopped)     ||
-           (thread->Status () == KKThread::tsNotStarted)  ||
+      if  ((thread->Status () == KKThread::ThreadStatus::Stopped)     ||
+           (thread->Status () == KKThread::ThreadStatus::NotStarted)  ||
            (thread->Crashed ())
           )
       {
@@ -207,13 +211,6 @@ void  ExtractionManager::TerminateProcessing (kkint32 miliSecsToWait)
     }
   }
 }  /* CancelProcessing */
-
-
-
-
-
-
-
 
 
 
@@ -365,7 +362,7 @@ void  ExtractionManager::Initialize (bool&  _successful)
   sipperRootName = osGetRootName (parms.SipperFileName ());
 
   DateTime  now = osGetLocalDateTime ();
-  KKStr  validationInfoDir = SipperVariables::ValidationInfoDir ();
+  KKStr  validationInfoDir = PicesVariables::ValidationInfoDir ();
   osCreateDirectoryPath (validationInfoDir);
   validationInfoFileName        = osAddSlash (validationInfoDir) + sipperRootName + "_ValidationInfo.txt";
   validationInfoFileNameHistory = osAddSlash (validationInfoDir) + sipperRootName + "_ValidationInfo_" + now.YYYYMMDDHHMMSS () + ".txt";
@@ -527,27 +524,47 @@ void  ExtractionManager::Initialize (bool&  _successful)
 
   {
     // This makes sure that the Classifier stored on disk is up-2-date.
-    KKStr  trainerStatusMsg;
-    TrainingProcess2Ptr  trainer 
-         = new TrainingProcess2 (parms.ConfigFileName (),
-                                 NULL,
-                                 fileDesc, 
-                                 log, 
-                                 NULL, 
-                                 false,             // false = DON'T force model rebuild.
-                                 true,              // true = Check for duplicate images in training data.
-                                 cancelFlag,
-                                 trainerStatusMsg
-                                );
-
-    if  (trainer->Abort ())
+    PicesTrainingConfigurationPtr  config = new PicesTrainingConfiguration ();
+    config->Load (parms.ConfigFileName (), true, log);
+    if  (!config->FormatGood ())
     {
+      log.Level (-1) << endl
+        << "ExtractionManager::Initialize   ***ERROR***   Invalid Configuration[" << parms.ConfigFileName () << "]" << endl
+        << config->FormatErrors () << endl
+        << endl;
       completionStatus = "Abort building Classifier";
       _successful = false;
     }
 
-    delete  trainer;
-    trainer = NULL;
+    else
+    {
+      fvProducerFactory = config->FvFactoryProducer (log);
+      fileDesc = fvProducerFactory->FileDesc ();
+
+      KKStr  trainerStatusMsg;
+      TrainingProcess2Ptr  trainer = 
+          trainer->CreateTrainingProcess (config, 
+                                          true,    // Check for duplicates.
+                                          TrainingProcess2::WhenToRebuild::NotUpToDate,
+                                          true,    // Save Trained Model
+                                          cancelFlag,
+                                          log
+                                         );
+      if  ((!trainer)  ||  trainer->Abort ())
+      {
+        log.Level (-1) << endl
+          << "ExtractionManager::Initialize   ***ERROR***   Training Process Failed[" << parms.ConfigFileName () << "]" << endl
+          << endl;
+        completionStatus = "Abort building Classifier";
+        _successful = false;
+      }
+
+      delete  trainer;
+      trainer = NULL;
+    }
+
+    delete  config;
+    config = NULL;
   }
 
   if  (!_successful)
@@ -709,7 +726,7 @@ void  ExtractionManager::StartThreads (bool&  threadsStartedSuccessfully)
 void  ExtractionManager::StartThread (ImageExtractionThreadPtr  threadInstance)
 {
   bool  successful = false;
-  threadInstance->Start (KKThread::tpNormal, successful);
+  threadInstance->Start (KKThread::ThreadPriority::Normal, successful);
 }  /* StartThread */
 
 
@@ -859,7 +876,7 @@ bool  ExtractionManager::AllProcessorsTerminated (ImageExtractionThreadListPtr  
     for  (idx = threads->begin ();  idx != threads->end ();  ++idx)
     {
       ImageExtractionThreadPtr  t = *idx;
-      if  (t->Status () != KKThread::tsStopped)
+      if  (t->Status () != KKThread::ThreadStatus::Stopped)
       {
         allProcessorsTerminated = false;
         break;

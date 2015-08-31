@@ -23,15 +23,18 @@ using namespace  KKB;
 
 #include "Classifier2.h"
 #include "ConfusionMatrix2.h"
-#include "DataBase.h"
 #include "DuplicateImages.h"
 #include "FeatureFileIO.h"
 #include "FeatureFileIOPices.h"
 #include "FeatureNumList.h"
 #include "MLClass.h"
-#include "ImageFeatures.h"
 #include "TrainingProcess2.h"
 #include "TrainingConfiguration2.h"
+using namespace  KKMLL;
+
+
+#include "DataBase.h"
+#include "ImageFeatures.h"
 using namespace  MLL;
 
 
@@ -75,7 +78,7 @@ GradeClassification::GradeClassification () :
   htmlFileName        (),
   sourceRootDirPath   (),
   mlClass             (NULL),
-  mlClasses           (new MLClassConstList ()),
+  mlClasses           (new MLClassList ()),
   report              (NULL),
   reportFile          (NULL),
   reportFileName      ()
@@ -174,7 +177,7 @@ void  GradeClassification::InitalizeApplication (kkint32 argc,
   
   if  (htmlFileName.Empty ())
     htmlFileName = osRemoveExtension (reportFileName) + ".html";
-  html = new HTMLReport (htmlFileName, "Grading Report", HTMLReport::Center);
+  html = new HTMLReport (htmlFileName, "Grading Report", HTMLReport::AlignmentType::Center);
 
   *report << endl;
 
@@ -316,7 +319,8 @@ void  GradeClassification::Grade ()
   log.Level (10) << "GradeClassification::Grade   Loading Ground Truth"  << endl;
 
   groundTruth = FeatureFileIOPices::Driver ()->LoadInSubDirectoryTree 
-                      (groundTruthDirName, 
+                      (fvFactoryProducer,
+                       groundTruthDirName, 
                        *mlClasses, 
                        true,             // true = useDirectoryNameForClassName
                        DB (),
@@ -361,7 +365,8 @@ void  GradeClassification::GradeSourceImagesAgainstGroundTruth ()
   // Directory.
 
   ImageFeaturesListPtr  sourceImages = FeatureFileIOPices::Driver ()->LoadInSubDirectoryTree 
-                          (sourceRootDirPath, 
+                          (fvFactoryProducer,
+                           sourceRootDirPath, 
                            *mlClasses,
                            true,              // true = useDirectoryNameForClassName
                            DB (),
@@ -421,7 +426,8 @@ void  GradeClassification::GradeUsingTrainingConfiguration ()
 
   log.Level (10) << "GradeUsingTrainingConfiguration  Loading Training Data." << endl;
 
-  FeatureVectorListPtr  trainingData = config->LoadFeatureDataFromTrainingLibraries (latestImageTimeStamp, changesMadeToTrainingLibraries, cancelFlag);
+  FeatureVectorListPtr  trainingData 
+    = config->LoadFeatureDataFromTrainingLibraries (latestImageTimeStamp, changesMadeToTrainingLibraries, cancelFlag, log);
   if  (!trainingData)
   {
     log.Level (-1) << endl << endl << endl
@@ -441,7 +447,7 @@ void  GradeClassification::GradeUsingTrainingConfiguration ()
   {
     log.Level (10) << "GradeUsingTrainingConfiguration    Hierarchy Level[" << hierarchyLevel << "]" << endl;
 
-    TrainingConfiguration2Ptr  configThisLevel = config->GenerateAConfiguraionForAHierarchialLevel (hierarchyLevel);
+    TrainingConfiguration2Ptr  configThisLevel = config->GenerateAConfiguraionForAHierarchialLevel (hierarchyLevel, log);
 
     FeatureVectorListPtr  trainingDataThisLevel = trainingData->ExtractExamplesForHierarchyLevel (hierarchyLevel);
     FeatureVectorListPtr  groundTruthThisLevel  = groundTruth->ExtractExamplesForHierarchyLevel (hierarchyLevel);
@@ -449,31 +455,30 @@ void  GradeClassification::GradeUsingTrainingConfiguration ()
 
     KKStr  statusMessage;
 
-    TrainingProcess2 trainer (configThisLevel,
+    TrainingProcess2Ptr  trainer = TrainingProcess2::CreateTrainingProcessFromTrainingExamples
+                             (configThisLevel,
                               trainingDataThisLevel,
-                              NULL,                               // No report file,
-                              trainingDataThisLevel->FileDesc (),
-                              log,
-                              false,                              // false = features are not already normalized.
+                              false,      // false = Don't takeOwnershipOfTrainingExamples
+                              false,      // false = features are NOT already normalized.
                               cancelFlag,
-                              statusMessage
+                              log
                              );
-    trainer.CreateModelsFromTrainingData ();
 
     {
-      Classifier2 classifier (&trainer, log);
+      Classifier2 classifier (trainer, log);
       FeatureVectorList::iterator  idx;
 
       for  (idx = groundTruthThisLevelClassified->begin ();  idx != groundTruthThisLevelClassified->end ();  idx++)
       {
         FeatureVectorPtr  fv = *idx;
-        MLClassConstPtr  ic = classifier.ClassifyAImage (*fv);
+        MLClassPtr  ic = classifier.ClassifyAExample (*fv);
         fv->MLClass (ic);
       }
     }
 
     GradeExamplesAgainstGroundTruth (groundTruthThisLevelClassified, groundTruthThisLevel);
 
+    delete  trainer;                         trainer                        = NULL;
     delete  groundTruthThisLevelClassified;  groundTruthThisLevelClassified = NULL;
     delete  groundTruthThisLevel;            groundTruthThisLevel           = NULL;
     delete  trainingDataThisLevel;           trainingDataThisLevel          = NULL;
@@ -491,7 +496,7 @@ void  GradeClassification::GradeUsingTrainingConfiguration ()
 void  GradeClassification::ReportResults ()
 {
   *report << endl << endl << endl
-          << "Summary by Training and Prediction Hierarchy Leveles" << endl
+          << "Summary by Training and Prediction Hierarchy Levels" << endl
           << endl
           << "Train"  << "\t" << "Prediction" << "\t" << ""  << endl
           << "Level"  << "\t" << "Level"      << "\t" << "Acuracy" << endl;
@@ -568,14 +573,14 @@ void  GradeClassification::ValidateThatBothListsHaveSameEntries (FeatureVectorLi
   {
     FeatureVectorPtr  groundTruthExample = *idx;
 
-    KKStr  rootName = osGetRootName (groundTruthExample->ImageFileName ());
+    KKStr  rootName = osGetRootName (groundTruthExample->ExampleFileName ());
 
     FeatureVectorPtr  exampleToGrade = examplesToGrade.LookUpByRootName (rootName);
 
     if  (!exampleToGrade)
     {
       theyAreTheSame = false;
-      *report << rootName << "\t" << "*** MISSING ***" << "\t" << groundTruthExample->ImageFileName () << endl;
+      *report << rootName << "\t" << "*** MISSING ***" << "\t" << groundTruthExample->ExampleFileName () << endl;
       missingExamplesToGrade++;
     }
   }
@@ -594,14 +599,14 @@ void  GradeClassification::ValidateThatBothListsHaveSameEntries (FeatureVectorLi
   {
     FeatureVectorPtr  exampleToGrade = *idx;
 
-    KKStr  rootName = osGetRootName (exampleToGrade->ImageFileName ());
+    KKStr  rootName = osGetRootName (exampleToGrade->ExampleFileName ());
 
     FeatureVectorPtr  groundTruthExample = groundTruth.LookUpByRootName (rootName);
 
     if  (!groundTruthExample)
     {
       theyAreTheSame = false;
-      *report << rootName << "\t" << "*** MISSING ***" << "\t" << exampleToGrade->ImageFileName () << "\t" << endl;
+      *report << rootName << "\t" << "*** MISSING ***" << "\t" << exampleToGrade->ExampleFileName () << "\t" << endl;
       missingGroundTruthExamples++;
     }
   }
@@ -625,34 +630,34 @@ void  GradeClassification::GradeExamplesAgainstGroundTruth (FeatureVectorListPtr
 
   groundTruth->SortByRootName ();
 
-  MLClassConstPtr  unknownClass = mlClasses->GetUnKnownClass ();
+  MLClassPtr  unknownClass = mlClasses->GetUnKnownClass ();
 
-  MLClassConstListPtr classes = NULL;
+  MLClassListPtr classes = NULL;
   {
-    MLClassConstListPtr examplesToGradeClasses = examplesToGrade->ExtractMLClassConstList ();
-    MLClassConstListPtr groundTruthClasses     = groundTruth->ExtractMLClassConstList ();
-    classes = MLClassConstList::MergeClassList (*examplesToGradeClasses, *groundTruthClasses);
+    MLClassListPtr examplesToGradeClasses = examplesToGrade->ExtractListOfClasses ();
+    MLClassListPtr groundTruthClasses     = groundTruth->ExtractListOfClasses ();
+    classes = MLClassList::MergeClassList (*examplesToGradeClasses, *groundTruthClasses);
     delete  examplesToGradeClasses;
     delete  groundTruthClasses;
   }
 
   kkuint16  maxHierarchialLevel = 0;
   {
-    MLClassConstList::iterator  idx;
+    MLClassList::iterator  idx;
     for  (idx = classes->begin ();  idx != classes->end ();  idx++)
     {
-      MLClassConstPtr  c = *idx;
+      MLClassPtr  c = *idx;
       maxHierarchialLevel = Max (maxHierarchialLevel, c->NumHierarchialLevels ());
     }
   }
 
-  // Create ConfusionMatrix objects for each posible level of Hierarchy. The 'resultsSummary' vector will 
-  // end up owning the instances of 'ConfusionMatrix2' and th edestructr will be responable for deleting them.
+  // Create ConfusionMatrix objects for each possible level of Hierarchy. The 'resultsSummary' vector will 
+  // end up owning the instances of 'ConfusionMatrix2' and the destructor will be responsible for deleting them.
   uint  curLevel = 0;
   vector<ConfusionMatrix2Ptr>  cmByLevel;
   for  (curLevel = 0;  curLevel < maxHierarchialLevel;  curLevel++)
   {
-    MLClassConstListPtr  classesThisLevel = classes->ExtractListOfClassesForAGivenHierarchialLevel (curLevel);
+    MLClassListPtr  classesThisLevel = classes->ExtractListOfClassesForAGivenHierarchialLevel (curLevel);
     ConfusionMatrix2Ptr  cm = new ConfusionMatrix2 (*classesThisLevel);
     cmByLevel.push_back (cm);
   }
@@ -665,13 +670,13 @@ void  GradeClassification::GradeExamplesAgainstGroundTruth (FeatureVectorListPtr
   for  (idx = examplesToGrade->begin ();  idx !=  examplesToGrade->end ();  idx++)
   {
     ImageFeaturesPtr  exampleToGrade = *idx;
-    MLClassConstPtr  predictedClass = exampleToGrade->MLClass ();
+    MLClassPtr  predictedClass = exampleToGrade->MLClass ();
     float          origSize       = exampleToGrade->OrigSize ();
     float          probability    = exampleToGrade->Probability ();
 
-    KKStr  rootName = osGetRootName (exampleToGrade->ImageFileName ());
+    KKStr  rootName = osGetRootName (exampleToGrade->ExampleFileName ());
     FeatureVectorPtr  groundTruthExample = groundTruth->LookUpByRootName (rootName);
-    MLClassConstPtr  groundTruthClass = unknownClass;
+    MLClassPtr  groundTruthClass = unknownClass;
     if  (groundTruthExample)
       groundTruthClass = groundTruthExample->MLClass ();
 
@@ -679,8 +684,8 @@ void  GradeClassification::GradeExamplesAgainstGroundTruth (FeatureVectorListPtr
 
     for  (curLevel = 0;  curLevel < maxHierarchialLevel;  curLevel++)
     {
-      MLClassConstPtr  groundTruthClasssThisLevel = groundTruthClass->MLClassForGivenHierarchialLevel (curLevel);
-      MLClassConstPtr  predictedClassThisLevel    = predictedClass->MLClassForGivenHierarchialLevel   (curLevel);
+      MLClassPtr  groundTruthClasssThisLevel = groundTruthClass->MLClassForGivenHierarchialLevel (curLevel);
+      MLClassPtr  predictedClassThisLevel    = predictedClass->MLClassForGivenHierarchialLevel   (curLevel);
 
       cmByLevel[curLevel]->Increment (groundTruthClasssThisLevel, predictedClassThisLevel, (int)origSize, probability, log);
     }
@@ -690,12 +695,12 @@ void  GradeClassification::GradeExamplesAgainstGroundTruth (FeatureVectorListPtr
   //cm.PrintTrueFalsePositivesTabDelimited (*report);
 
   {
-    // report Hierarchial results
+    // report Hierarchal results
     for  (curLevel = 0;  curLevel < maxHierarchialLevel;  curLevel++)
     {
       log.Level (10) << "GradeClassification::GradeExamplesAgainstGroundTruth   Printing Level[" << curLevel << "]" << endl;
       *report << endl << endl << endl
-              << "Confusion Matrix   Training Level[" << maxHierarchialLevel << "]       Preduction Level[" << (curLevel + 1) << "]" << endl
+              << "Confusion Matrix   Training Level[" << maxHierarchialLevel << "]       Prediction Level[" << (curLevel + 1) << "]" << endl
               << endl;
       cmByLevel[curLevel]->PrintConfusionMatrixTabDelimited (*report);
       resultsSummary.push_back (SummaryRec (maxHierarchialLevel, curLevel + 1, cmByLevel[curLevel]));

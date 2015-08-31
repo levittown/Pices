@@ -7,14 +7,14 @@ using namespace System::Collections;
 using namespace System::Collections::Generic;
 using namespace System::Diagnostics;
 
-#include  "GPSDataPoint.h"
-using namespace  SipperHardware;
+#include "GPSDataPoint.h"
+using namespace  MLL;
 
-#include  "PicesKKStr.h"
-#include  "PicesRunLog.h"
+#include "PicesKKStr.h"
+#include "PicesRunLog.h"
 
 
-namespace PicesInterface 
+namespace  PicesInterface 
 {
   public  ref class PicesGPSDataPoint
   {
@@ -52,7 +52,7 @@ namespace PicesInterface
     PicesGPSDataPointList (PicesGPSDataPointList^  stats);
 
     /**
-     *@breief  Construct a list of managed PicesGPSDataPoint instances from the contents of the unmanaged list 'unmanagedImages'.
+     *@brief  Construct a list of managed PicesGPSDataPoint instances from the contents of the unmanaged list 'unmanagedImages'.
      *@details  Will NOT take ownership of the instances of 'GPSDataPoint' in 'stats but will create managed copies.
      *@param[in]  stats  List of unmanaged 'GPSDataPoint' objects; new Managed instances of 'GPSDataPoint' will be created and added to list.
      */

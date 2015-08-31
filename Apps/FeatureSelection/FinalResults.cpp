@@ -49,7 +49,7 @@ using namespace KKB;
 
 #include "BinaryClassParms.h"
 #include "ConfusionMatrix2.h"
-using namespace MLL;
+using namespace KKMLL;
 
 #include "FinalResults.h"
 #include "RandomSplitResults.h"
@@ -139,7 +139,7 @@ ConfusionMatrix2Ptr  FinalResults::ValidationConfusionMatrix ()
 
 
 
-MLClassConstListPtr  FinalResults::MLClasses ()  const
+MLClassListPtr  FinalResults::MLClasses ()  const
 {
   if  (validationResults)
     return  validationResults->MLClasses ();
@@ -542,7 +542,7 @@ void  FinalResults::PrintAccuraciesByClassSummary (vector<FinalResultsPtr>&  res
     return;
   }
 
-  MLClassConstListPtr  classes = results[0]->MLClasses ();
+  MLClassListPtr  classes = results[0]->MLClasses ();
   if  (!classes)
   {
     o << endl << endl
@@ -551,7 +551,7 @@ void  FinalResults::PrintAccuraciesByClassSummary (vector<FinalResultsPtr>&  res
     return;
   }
 
-  MLClassConstList::iterator  idx;
+  MLClassList::iterator  idx;
   
   o << "<table cellpadding=\"2\" cellspacing=\"0\" border=\"2\">" << endl;
 	o << "<tr>" << endl;
@@ -561,7 +561,7 @@ void  FinalResults::PrintAccuraciesByClassSummary (vector<FinalResultsPtr>&  res
 
   for  (idx = classes->begin ();  idx != classes->end ();  idx++)
   {
-    MLClassConstPtr  ic = *idx;
+    MLClassPtr  ic = *idx;
     KKStr  className = ic->Name ();
     VectorKKStr classNameParsed = className.Parse ("_");
 

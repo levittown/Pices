@@ -101,7 +101,7 @@ namespace PicesInterface
 
     void  CleanUpMemory ();
 
-    PicesDataBaseImageList^  ExtractImagesForAGivenClass (PicesClass^  _class);
+    PicesDataBaseImageList^  ExtractExamplesForAGivenClass (PicesClass^  _class);
 
     PicesClassList^  ExtractListOfClasses ();
 

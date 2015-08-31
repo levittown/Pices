@@ -9,11 +9,15 @@ using namespace System::Collections::Generic;
 using namespace System::Diagnostics;
 
 
-#include  "MLClass.h"
-#include  "ImageFeatures.h"
-#include  "PicesRunLog.h"
-using namespace  KKB;
+#include "MLClass.h"
+using namespace  KKMLL;
+
+#include "ImageFeatures.h"
 using namespace  MLL;
+
+
+#include "PicesRunLog.h"
+using namespace  KKB;
 
 
 namespace PicesInterface 

@@ -20,19 +20,20 @@ using namespace  std;
 #include "KKStr.h"
 using namespace  KKB;
 
-#include "SipperVariables.h"
-using namespace  SipperHardware;
+
+#include "Classifier2.h"
+#include "FeatureFileIOC45.h"
+#include "MLClass.h"
+#include "NormalizationParms.h"
+#include "TrainingProcess2.h"
+using namespace  KKMLL;
 
 #include "DataBase.h"
 #include "DataBaseServer.h"
-#include "FeatureFileIOC45.h"
 #include "FeatureFileIOPices.h"
-#include "HashTable.h"
-#include "MLClass.h"
 #include "ImageFeatures.h"
-#include "NormalizationParms.h"
-#include "TrainingProcess2.h"
-#include "Classifier2.h"
+#include "PicesVariables.h"
+#include "PicesFVProducer.h"
 using namespace  MLL;
 
 
@@ -89,10 +90,8 @@ using namespace  MLL;
 
 // -s D:\Pices\TrainingLibraries\ETP_08_SubSet  -n D:\Pices\TrainingLibraries\ETP_08_SubSet\ETP_08_SubSet.data.c45  -u
 
-// 2014-11-13   Extracting Features for Feature Selection run
+// 2014-11-13   Extratuing Features for Featire Selection run
 // -s E:\Pices\TrainingLibraries\USF  -n E:\Pices\TrainingLibraries\USF\USF_All.dara  -u
-
-// -s D:\Pices\SavedImages\USF_SipperValidatedImagesGulfOfMexico  -u
 
 
 void  SetUpEmbeddedServer ()
@@ -120,10 +119,11 @@ void  RandomlySelectImagesByClass (const KKStr&  srcRootDir,
   DataBasePtr  dataBase = new DataBase (log);
 
   bool  cancelFlag = false;
-  MLClassConstListPtr  mlClasses = new MLClassConstList ();
+  MLClassListPtr  mlClasses = new MLClassList ();
 
   ImageFeaturesListPtr  images = FeatureFileIOPices::Driver ()->LoadInSubDirectoryTree 
-                                   (srcRootDir, 
+                                   (PicesFVProducerFactory::Factory (&log),
+                                    srcRootDir, 
                                     *mlClasses,
                                     true,               // true = useDirectoryNameForClassName
                                     dataBase,
@@ -132,31 +132,31 @@ void  RandomlySelectImagesByClass (const KKStr&  srcRootDir,
                                     log
                                    );
 
-  MLClassConstListPtr  classes = images->ExtractMLClassConstList ();
+  MLClassListPtr  classes = images->ExtractListOfClasses ();
 
-  MLClassConstList::iterator  idx;
+  MLClassList::iterator  idx;
   
   for  (idx = classes->begin ();  idx != classes->end ();  ++idx)
   {
-    MLClassConstPtr  c = *idx;
+    MLClassPtr  c = *idx;
     cout << endl << endl << "Class " << c->Name () << endl;
 
-    ImageFeaturesListPtr  imagesThisClass = images->ExtractImagesForAGivenClass (c);
+    ImageFeaturesListPtr  imagesThisClass = images->ExtractExamplesForAGivenClass (c);
     imagesThisClass->RandomizeOrder ();
 
     KKStr  srcDirName  = osAddSlash (srcRootDir) + c->Name ();
     KKStr  destDirName = osAddSlash (destRootDir) + c->Name ();
     osCreateDirectoryPath (destDirName);
 
-    ImageFeaturesListPtr  featureDataForThisClass = new ImageFeaturesList (imagesThisClass->FileDesc (), false, log);
+    ImageFeaturesListPtr  featureDataForThisClass = new ImageFeaturesList (imagesThisClass->FileDesc (), false);
     int  zed = Min (imagesPerClass, imagesThisClass->QueueSize ());
     kkint32  x = 0;
     ImageFeaturesList::iterator  idx2;
     for  (idx2 = imagesThisClass->begin (), x = 0;  ((idx2 != imagesThisClass->end ())  &&  (x < zed));  idx2++, ++x)
     {
       ImageFeaturesPtr i = *idx2;
-      KKStr  srcFileName  = osAddSlash (srcDirName)  + osGetRootName (i->ImageFileName ()) + ".bmp";
-      KKStr  destFileName = osAddSlash (destDirName) + osGetRootName (i->ImageFileName ()) + ".bmp";
+      KKStr  srcFileName  = osAddSlash (srcDirName)  + osGetRootName (i->ExampleFileName ()) + ".bmp";
+      KKStr  destFileName = osAddSlash (destDirName) + osGetRootName (i->ExampleFileName ()) + ".bmp";
       osCopyFile (srcFileName, destFileName);
       featureDataForThisClass->PushOnBack (i);
     }
@@ -202,12 +202,12 @@ SipperFileListPtr  GetListOfSipperFiles (DataBasePtr           dbConn,
   for  (idx = examples->begin ();  idx != examples->end ();  idx++)
   {
     ImageFeaturesPtr  i = *idx;
-    KKStr  imageFileName =  i->ImageFileName ();
+    KKStr  imageFileName =  i->ExampleFileName ();
     KKStr   sipperFileName;
     kkuint32  scanLineNum = 0;
     kkuint32  scanCol     = 0;
 
-    SipperVariables::ParseImageFileName (imageFileName, sipperFileName, scanLineNum, scanCol);
+    PicesVariables::ParseImageFileName (imageFileName, sipperFileName, scanLineNum, scanCol);
     sipperFilesIdx = sipperFiles.find (sipperFileName);
     if  (sipperFilesIdx == sipperFiles.end ())
     {
@@ -277,10 +277,11 @@ void  ImportImagesIntoDataBase (const KKStr&  rootDir)
   DataBasePtr  dbConn = new DataBase (dbs, runLog);
 
 
-  MLClassConstList  classes;
+  MLClassList  classes;
   bool cancelFlag = false;
   ImageFeaturesListPtr  data = FeatureFileIOPices::Driver ()->LoadInSubDirectoryTree 
-    (rootDir,
+    (PicesFVProducerFactory::Factory (&runLog),
+     rootDir,
      classes,
      true,               //useDirectoryNameForClassName,
      dbConn,
@@ -308,7 +309,7 @@ void  ImportImagesIntoDataBase (const KKStr&  rootDir)
     ++count;
 
     bool  validFile = true;
-    KKStr  imageFileName = osAddSlash (rootDir) + i->ImageFileName ();
+    KKStr  imageFileName = osAddSlash (rootDir) + i->ExampleFileName ();
     RasterPtr  r = new Raster (imageFileName, validFile);
     if  (!validFile)
     {
@@ -320,7 +321,7 @@ void  ImportImagesIntoDataBase (const KKStr&  rootDir)
       kkuint32  scanLineNum = 0;
       kkuint32  scanCol     = 0;
 
-      SipperVariables::ParseImageFileName (imageFileName, sipperFileName, scanLineNum, scanCol);
+      PicesVariables::ParseImageFileName (imageFileName, sipperFileName, scanLineNum, scanCol);
 
       //kkint32  size;
       //kkint32  weight;
@@ -378,7 +379,7 @@ void  ImportImagesIntoDataBase (const KKStr&  rootDir)
 void  FilterETP2008 ()
 {
   RunLog  runLog;
-  MLClassConstListPtr  classes = new MLClassConstList ();
+  MLClassListPtr  classes = new MLClassList ();
 
   bool  cancelFlag  = false;
   bool  successful  = false;
@@ -397,17 +398,17 @@ void  FilterETP2008 ()
   if  (!data)
     return;
 
-  ImageFeaturesListPtr  result = new ImageFeaturesList (data->FileDesc (), false, runLog, 10000);
+  ImageFeaturesListPtr  result = new ImageFeaturesList (data->FileDesc (), false, 10000);
 
   delete  classes;
-  classes = data->ExtractMLClassConstList ();
+  classes = data->ExtractListOfClasses ();
 
-  MLClassConstList::iterator  idx;
+  MLClassList::iterator  idx;
   for  (idx = classes->begin ();  idx != classes->end ();  ++idx)
   {
-    MLClassConstPtr  c = *idx;
+    MLClassPtr  c = *idx;
 
-    ImageFeaturesListPtr  examplesInClass = data->ExtractImagesForAGivenClass (c);
+    ImageFeaturesListPtr  examplesInClass = data->ExtractExamplesForAGivenClass (c);
 
     if  ((examplesInClass->QueueSize () > 199)  &&  (c->UpperName ().SubStrPart (0, 4) != "NOISE"))
       result->AddQueue (*examplesInClass);
@@ -418,8 +419,7 @@ void  FilterETP2008 ()
 
   bool  valid = false;
 
-  FeatureNumList  selFeatures (result->FileDesc (), 
-                               "1,9,16,18-23,25,26,28,29,31,38-42,44-47,50,51,53,54,56,58-71,73-87",
+  FeatureNumList  selFeatures ("1,9,16,18-23,25,26,28,29,31,38-42,44-47,50,51,53,54,56,58-71,73-87",
                                valid
                               );
   kkuint32  numWritten = 0;
@@ -435,7 +435,7 @@ void  FilterETP2008 ()
      );
 
   NormalizationParms normParms (false, *result, runLog);
-  normParms.NormalizeImages (result);
+  normParms.NormalizeExamples (result, runLog);
 
   FeatureFileIOC45::Driver ()->SaveFeatureFile
      ("C:\\Pices\\Reports\\FeatureDataFiles\\ETP2008_Filtered_Norm.data",
@@ -459,7 +459,7 @@ void  JohnsonParkerTest ()
 {
   RunLog  log;
 
-  MLClassConstList  mlClasses;
+  MLClassList  mlClasses;
 
   bool  cancelFlag  = false;
   bool  sucessful   = false;
@@ -489,7 +489,7 @@ void  JohnsonParkerTest ()
   FileDescPtr  fileDesc = trainData->FileDesc ();
 
   KKStr  parameterStr = "-a 1  -c 25.11886  -d 3  -e 0.001  -g 0.01474560 -h 1  -i 0  -j 0  -k 0  -l 1  -m 100  -n 0.5  -p 0.1  -q 0  -r 0  -s 0  -t 2  -u 127.48761  -z 0  -MT OneVsOne  -SM Voting";
-  TrainingConfiguration2*  config = TrainingConfiguration2::CreateFromFeatureVectorList (*trainData, parameterStr, log);
+  TrainingConfiguration2*  config = TrainingConfiguration2::CreateFromFeatureVectorList (*trainData, fileDesc, parameterStr, log);
   if  (!config)
   {
     log.Level (-1) << endl << endl 
@@ -503,26 +503,21 @@ void  JohnsonParkerTest ()
   config->ImagesPerClass (500);
 
   bool  valid = false;
-  FeatureNumList  selFeatures (fileDesc, "0-56", valid);
+  FeatureNumList  selFeatures ("0-56", valid);
   config->SetFeatureNums (selFeatures);
 
   config->Save ("E:\\Pices\\Reports\\FeatureData\\ETP2008_Filtered_Norm.cfg");
 
   KKStr  statusMessage = "";
 
-  TrainingProcess2 trainer (config, 
-                            trainData, 
-                            NULL,                   //_reportFile,
-                            fileDesc,
-                            log,
-                            true,                   // true = _featuresAlreadyNormalized,
+  TrainingProcess2Ptr  trainer = TrainingProcess2::CreateTrainingProcessFromTrainingExamples
+                           (config,
+                            trainData,
+                            false,       // false = Don't take ownership of examples.
+                            true,        // true = Features are already normalized.
                             cancelFlag,
-                            statusMessage
+                            log
                           );
-
-  trainer.CreateModelsFromTrainingData ();
-
-
 
   FeatureVectorListPtr  testData = FeatureFileIOC45::Driver ()->LoadFeatureFile
     (testDataFileName,
@@ -541,6 +536,7 @@ void  JohnsonParkerTest ()
     return;
   }
 
+  delete  trainer;
   delete  trainData;
 }  /* JohnsonParkerTest */
 

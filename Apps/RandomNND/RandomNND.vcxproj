@@ -182,10 +182,6 @@
       <Project>{fa9c865e-0227-4ebc-a291-ed0f2453afb3}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\..\PicesLibraries\SipperInstruments\SipperInstruments.vcxproj">
-      <Project>{b1867f2d-9e97-4e33-a56b-297caf616589}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

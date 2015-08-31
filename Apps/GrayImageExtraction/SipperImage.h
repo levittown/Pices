@@ -2,8 +2,6 @@
 #define  _SIPPERIMAGE_
 
 #include "RasterSipper.h"
-using namespace  SipperHardware;
-
 #include "SipperBlob.h"
 using namespace  MLL;
 

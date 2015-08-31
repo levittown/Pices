@@ -26,7 +26,7 @@ using namespace KKB;
 
 
 #include "FileDesc.h"
-using namespace MLL;
+using namespace KKMLL;
 
 #include "PicesKKStr.h"
 #include "PicesSipperFile.h"
@@ -34,7 +34,7 @@ using namespace MLL;
 
 
 #include "PicesInstrumentDataFileManager.h"
-using namespace  SipperHardware;
+using namespace  MLL;
 using namespace  PicesInterface;
 
 

@@ -181,7 +181,7 @@ namespace PicesCommander
 
       mainWinConn = PicesDataBase.GetGlobalDatabaseManagerNewInstance (runLog);
 
-      configFileName = OSservices.AddSlash (PicesSipperVariables.PicesConfigurationDirectory ()) + "ClassDepthProfileChart.cfg";
+      configFileName = OSservices.AddSlash (PicesSipperVariables.ConfigurationDirectory ()) + "ClassDepthProfileChart.cfg";
 
       BuildCriteriaString ();
 

@@ -17,11 +17,11 @@ namespace GradeTrainingModel
 {
   public partial class GetRunTimeParameters : Form
   {
-    private  String                      configFileName     = null;
-    private  bool                        crossValidation    = false;
-    private  PicesTrainingConfiguration  curSelModel        = null;
-    private  TrainingModel2              trainingModel      = null;
-    private  PicesFeatureVectorList      groundTruth        = null;
+    private  String                      configFileName        = null;
+    private  bool                        crossValidation       = false;
+    private  PicesTrainingConfigManaged  curSelModel           = null;
+    private  TrainingModel2              trainingModel         = null;
+    private  PicesFeatureVectorList      groundTruth           = null;
     private  PicesClassList              origClassifierClasses = null;
 
     private  PicesClass                  otherClass         = null;   /**< Will specify the Other clause from the configuration file when a dual c;lassifier is utilized. */
@@ -62,7 +62,7 @@ namespace GradeTrainingModel
       InitializeComponent();
       noAgreementClass = PicesClassList.GetUniqueClass ("NoAgreement", "");
       
-      configFileName = OSservices.AddSlash (PicesSipperVariables.PicesConfigurationDirectory ()) + "GradeTrainingModel.txt";
+      configFileName = OSservices.AddSlash (PicesSipperVariables.ConfigurationDirectory ()) + "GradeTrainingModel.txt";
       
       LoadTrainingModelComboBox ();
       InitializeTrainAndPredLevelFields ();
@@ -352,7 +352,7 @@ namespace GradeTrainingModel
         return;
 
       trainingModelName = TrainingModelSelected.Text;
-      curSelModel       = new PicesTrainingConfiguration (trainingModelName, runLog);
+      curSelModel       = new PicesTrainingConfigManaged (trainingModelName, runLog);
       trainingModelValid = curSelModel.Valid ();
       if  (!trainingModelValid)
       {
@@ -516,7 +516,7 @@ namespace GradeTrainingModel
     private  void  GradeAgainstCrossValidationRun ()
     {
       if  (curSelModel == null)
-        curSelModel = new PicesTrainingConfiguration (configFileName, runLog);
+        curSelModel = new PicesTrainingConfigManaged (configFileName, runLog);
 
       if  (!curSelModel.Valid ())
       {
@@ -866,7 +866,7 @@ namespace GradeTrainingModel
 
     private void EditModel_Click (object sender, EventArgs e)
     {
-      String  fullModelName = PicesTrainingConfiguration.GetEffectiveConfigFileName (trainingModelName);
+      String  fullModelName = PicesTrainingConfigManaged.GetEffectiveConfigFileName (trainingModelName);
 
       Process proc = new Process();
       proc.StartInfo.WorkingDirectory = @"";

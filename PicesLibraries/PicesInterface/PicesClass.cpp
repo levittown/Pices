@@ -13,24 +13,23 @@
 #include<vector>
 using namespace std;
 
+
 #include "MemoryDebug.h"
 #include "KKBaseTypes.h"
-
 #include "GoalKeeper.h"
 using namespace KKB;
 
+
 #include "MLClass.h"
+using namespace KKMLL;
+
 
 //#include "PicesKKStr.h"
 #include "PicesOSservices.h"
-
 #include "PicesClass.h"
 #include "PicesClassList.h"
 #include "PicesKKStr.h"
-
-
 using namespace  PicesInterface;
-
 
 
 using namespace System;
@@ -86,7 +85,7 @@ namespace  PicesInterface
     unmanagedMLClass = MLClass::CreateNewMLClass (PicesKKStr::SystemStringToKKStr (name));
     if  (_parent != nullptr)
     {
-      MLClassConstPtr  unmanagedParentClass = _parent->UnmanagedMLClass ();
+      MLClassPtr  unmanagedParentClass = _parent->UnmanagedMLClass ();
       unmanagedMLClass->Parent (unmanagedParentClass);
     }
     unDefined = unmanagedMLClass->UnDefined ();

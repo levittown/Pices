@@ -20,25 +20,25 @@ using namespace  std;
 using namespace  KKB;
 
 #include "MLClass.h"
-using namespace  MLL;
+using namespace  KKMLL;
 
 
 #include "BinaryClass.h"
 using namespace  FeatureSelectionApp;
 
 
-BinaryClass::BinaryClass (MLClassConstPtr  _class1,
-                          MLClassConstPtr  _class2,
+BinaryClass::BinaryClass (MLClassPtr  _class1,
+                          MLClassPtr  _class2,
                           int                 _numProcessors
                          ):
 
    class1                (_class1),
    class2                (_class2),
    numProcessors         (_numProcessors),
-   status                (cpNotStarted),
-   resultType            (frtNULL),
+   status                (ClassPairStatus::NotStarted),
+   resultType            (FinalResultType::Null),
    finalResultsFileName  (),
-   selectionMethod       (SelectionMethod_NULL),
+   selectionMethod       (SVM_SelectionMethod::Null),
    configFileName        ()
 
 {
@@ -55,7 +55,7 @@ BinaryClass::BinaryClass (int                  _numProcessors,
    class1                (NULL),
    class2                (NULL),
    numProcessors         (_numProcessors),
-   status                (cpNotStarted),
+   status                (ClassPairStatus::NotStarted),
    resultType            (_resultType),
    finalResultsFileName  (_finalResultsFileName),
    selectionMethod       (_selectionMethod),
@@ -66,15 +66,15 @@ BinaryClass::BinaryClass (int                  _numProcessors,
 
 
 BinaryClass::BinaryClass (KKStr                   statusStr,
-                          MLClassConstListPtr  mlClasses
+                          MLClassListPtr  mlClasses
                           ):
    class1                (NULL),
    class2                (NULL),
    numProcessors         (0),
-   status                (cpNULL),
-   resultType            (frtNULL),
+   status                (ClassPairStatus::Null),
+   resultType            (FinalResultType::Null),
    finalResultsFileName (),
-   selectionMethod        (SelectionMethod_NULL),
+   selectionMethod        (SVM_SelectionMethod::Null),
    configFileName        ()
 {
   ProcessStatusStr (statusStr, mlClasses);
@@ -85,13 +85,13 @@ BinaryClass::BinaryClass (KKStr                   statusStr,
 
 KKStr  BinaryClass::BinaryClassStatusToStr (ClassPairStatus  status)
 {
-  if  (status == cpNotStarted)
+  if  (status == ClassPairStatus::NotStarted)
     return  "NotStarted";
 
-  if  (status == cpStarted)
+  if  (status == ClassPairStatus::Started)
     return "Started";
 
-  if  (status == cpDone)
+  if  (status == ClassPairStatus::Done)
     return "Done";
 
   return  "";
@@ -105,15 +105,15 @@ ClassPairStatus  BinaryClass::BinaryClassStatusFromStr (KKStr  statusStr)
   statusStr.Upper ();
 
   if  (statusStr == "NOTSTARTED")
-    return  cpNotStarted;
+    return  ClassPairStatus::NotStarted;
 
   if  (statusStr == "STARTED")
-    return  cpStarted;
+    return  ClassPairStatus::Started;
 
   if  (statusStr == "DONE")
-    return  cpDone;
+    return  ClassPairStatus::Done;
 
-  return cpNULL;
+  return ClassPairStatus::Null;
 }  /* BinaryClassStatusFromStr */
 
 
@@ -126,7 +126,7 @@ BinaryClass::~BinaryClass ()
 
  
 void  BinaryClass::ProcessStatusStr  (KKStr                   statusStr,
-                                      MLClassConstListPtr  mlClasses
+                                      MLClassListPtr  mlClasses
                                      )
 {
   KKStr  fieldName;
@@ -212,13 +212,13 @@ KKStr  BinaryClass::ToStr ()
       << "Status"              << "\t" << BinaryClassStatusToStr (status) << "\t"
       << "NumProcessors"       << "\t" << numProcessors;
 
-  if  ((resultType != frtNULL)  ||  (selectionMethod != SelectionMethod_NULL))
+  if  ((resultType != FinalResultType::Null)  ||  (selectionMethod != SVM_SelectionMethod::Null))
   {
    str << "\t"
        << "FinalResultType"  << "\t" << FinalResultTypeToStr (resultType)      << "\t"
-       << "ResultsFileName"   << "\t" << finalResultsFileName                   << "\t"
-       << "SelectionMethod"   << "\t" << SelectionMethodToStr (selectionMethod)  << "\t"
-       << "configFileName"    << "\t" << configFileName;
+       << "ResultsFileName"  << "\t" << finalResultsFileName                   << "\t"
+       << "SelectionMethod"  << "\t" << SelectionMethodToStr (selectionMethod) << "\t"
+       << "configFileName"   << "\t" << configFileName;
   }
 
   return  str;
@@ -260,7 +260,7 @@ void  BinaryClass::DecrementNumProcessors ()
 
 
 BinaryClassList::BinaryClassList ():
-  KKQueue<BinaryClass> (true, 200)
+  KKQueue<BinaryClass> (true)
 
 {
 }

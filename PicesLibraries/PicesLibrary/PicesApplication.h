@@ -12,6 +12,10 @@
 #include "KKStr.h"
 using namespace KKB;
 
+#include "FactoryFVProducer.h"
+#include "FileDesc.h"
+using namespace  KKMLL;
+
 
 namespace MLL
 {
@@ -27,14 +31,10 @@ namespace MLL
   typedef  DataBaseServer const * DataBaseServerConstPtr;
 #endif
 
-#if !defined(_FileDescDefined_)
-  class  FileDesc;
-  typedef  FileDesc*  FileDescPtr;
-#endif
 
-#ifndef  _TrainingConfiguration2_Defined_
-  class    TrainingConfiguration2;
-  typedef  TrainingConfiguration2*  TrainingConfiguration2Ptr;
+#if  !defined(_PicesTrainingConfiguration_Defined_)
+  class    PicesTrainingConfiguration;
+  typedef  PicesTrainingConfiguration*  PicesTrainingConfigurationPtr;
 #endif
 
 
@@ -45,8 +45,8 @@ namespace MLL
    *@details  This class is meant to be a general class that all standalone applications should be inherited 
    *from. If provides command line options that are common to all Pices Applications.
    * Supported Command Options:
-   * -# -Config   <Model Name>    The training model configuration file; only the root part needs to be specified;  these files
-   *                              can be found in the "$<PicesHomeDir>\DataFiles\TrainingModels"  directory.
+   * -# -Config   <Model-Name>    The training model configuration file; only the root part needs to be specified; these files
+   *                              can be found in the "$<PicesHomeDir>\Classifier\TrainingModels"  directory.
    * -# -DataBase <Description>   This  'Description' references the Description field in the MySQL.cfg file found in 
    *                              "${PicesHomeDir}\Configurations\" directory.
    * -# -LogFile  <File-Name>     File that logger messages (RunLog) are to be written to;  if not specified will default 
@@ -117,12 +117,13 @@ namespace MLL
 
     DataBasePtr   DB ();
 
-    TrainingConfiguration2Ptr  Config             ()  const  {return config;}
-    const KKStr&               ConfigFileName     ()  const  {return configFileName;}
-    const KKStr&               ConfigFileFullPath ()  const  {return configFileFullPath;}
-    DataBaseServerPtr          DbServer           ()  const  {return dbServer;}
-    FileDescPtr                FileDesc           ()  const  {return fileDesc;}
+    PicesTrainingConfigurationPtr  Config             ()  const  {return config;}
+    const KKStr&                   ConfigFileName     ()  const  {return configFileName;}
+    const KKStr&                   ConfigFileFullPath ()  const  {return configFileFullPath;}
+    DataBaseServerPtr              DbServer           ()  const  {return dbServer;}
+    FileDescPtr                    FileDesc           ()  const  {return fileDesc;}
 
+    void                           FvFactoryProducer  (FactoryFVProducerPtr _fvFactoryProducer)  {fvFactoryProducer = _fvFactoryProducer;}
 
     void  PrintStandardHeaderInfo (ostream&  o);
 
@@ -171,10 +172,11 @@ namespace MLL
                                      );
 
   protected:
-    TrainingConfiguration2Ptr  config;
-    KKStr                      configFileName;
-    KKStr                      configFileFullPath;
-    FileDescPtr                fileDesc;
+    PicesTrainingConfigurationPtr  config;
+    KKStr                          configFileName;
+    KKStr                          configFileFullPath;
+    FileDescPtr                    fileDesc;
+    FactoryFVProducerPtr           fvFactoryProducer;
 
   private:
     bool               configRequired;

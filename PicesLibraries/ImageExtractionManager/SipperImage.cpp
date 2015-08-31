@@ -9,11 +9,9 @@
 #include <queue>
 #include <stack>
 #include <vector>
-
 #ifdef WIN32
 #include <windows.h>
 #endif
-
 #include "MemoryDebug.h"
 using namespace std;
 

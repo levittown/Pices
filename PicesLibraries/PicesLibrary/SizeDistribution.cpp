@@ -1,5 +1,3 @@
-#include "FirstIncludes.h"
-
 //***************************************************************************
 //*                                                                         *
 //*-------------------------------------------------------------------------*
@@ -10,15 +8,13 @@
 //*  Kurt    Jul-12-2003                                                    *
 //***************************************************************************
 //* 
+#include "FirstIncludes.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <map>
 #include <string>
-
-
-#include  "MemoryDebug.h"
-
+#include "MemoryDebug.h"
 using namespace  std;
 
 
@@ -29,9 +25,11 @@ using namespace  std;
 using namespace  KKB;
 
 
-#include "SizeDistribution.h"
 #include "MLClass.h"
 #include "FeatureVector.h"
+using namespace  KKMLL;
+
+#include "SizeDistribution.h"
 using namespace  MLL;
 
 
@@ -277,7 +275,7 @@ MLClassListPtr   SizeDistribution::BuildMLClassList ()  const
 
 
 
-void   SizeDistribution::Increment (MLClassConstPtr  mlClass,
+void   SizeDistribution::Increment (MLClassPtr       mlClass,
                                     kkint32             size
                                    )
 {
@@ -473,7 +471,7 @@ void  SizeDistribution::PrintByClassCollumns (ostream&      o,
     kkint32  bucketTotal = 0;
     for  (cIDX = classes->begin ();  cIDX != classes->end ();  cIDX++)
     {
-      MLClassConstPtr  mlClass = *cIDX;
+      MLClassPtr       mlClass = *cIDX;
       ClassTotals::ClassTotalsPtr  classTotals = totals->LookUp (mlClass->Name ());
       bucketTotal += classTotals->BucketCount (bucketIDX);
     }
@@ -525,7 +523,7 @@ void  SizeDistribution::PrintByClassCollumns (ostream&      o,
     kkint32  intIDX = 0;
     for  (cIDX = classes->begin ();  cIDX != classes->end ();  cIDX++)
     {
-      MLClassConstPtr  mlClass = *cIDX;
+      MLClassPtr       mlClass = *cIDX;
       ClassTotals::ClassTotalsPtr  classTotals = totals->LookUp (mlClass->Name ());
 
       kkint32  qtyThisBucket = classTotals->BucketCount (bucketIDX);

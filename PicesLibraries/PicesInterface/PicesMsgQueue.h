@@ -3,6 +3,7 @@
 using namespace System;
 using namespace System::ComponentModel;
 using namespace System::Collections;
+using namespace System::Collections::Generic;
 using namespace System::Diagnostics;
 
 #include "MsgQueue.h"
@@ -22,6 +23,8 @@ namespace PicesInterface
 
     void          AddMsg (String^  msg);
 
+    void          AddMsgs (List<String^>^  msgs);
+
     void          Close ();
 
     /** 
@@ -34,7 +37,7 @@ namespace PicesInterface
     /**@brief  Removes from the queue the oldest message added to the queue that has not been removed. */
     String^       GetNextMsg ();
 
-    MsgQueuePtr      MsgQueue ()  {return msgQueue;}
+    MsgQueuePtr   MsgQueue ()  {return msgQueue;}
 
 
   private:

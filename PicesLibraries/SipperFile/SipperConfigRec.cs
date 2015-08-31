@@ -21,8 +21,8 @@ namespace SipperFile
 
     public SipperConfigRec()
     {
-      OSservices.CreateDirectory (PicesSipperVariables.PicesConfigurationDirectory ());
-      sipperConfigurationFileName = PicesSipperVariables.SipperConfigrationFileName ();
+      OSservices.CreateDirectory (PicesSipperVariables.ConfigurationDirectory ());
+      sipperConfigurationFileName = PicesSipperVariables.ConfigrationFileName ();
       Load ();
     }
 

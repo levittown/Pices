@@ -32,9 +32,9 @@ public:
   ~RandomSplitJobManager ();
 
 
-  TrainingConfiguration2Ptr  Config    ()  const {return  config;}
-  MLClassConstListPtr        MLClasses ()  const {return  mlClasses;}
-  int                        NumFolds  ()  const {return  numFolds;}
+  TrainingConfiguration2Ptr  Config    () const  {return config;}
+  MLClassListPtr             MLClasses () const  {return mlClasses;}
+  int                        NumFolds  () const  {return numFolds;}
 
 
 
@@ -78,14 +78,14 @@ private:
 
 
   /*!
-   \brief  Injitilize a new StatusFile. 
+   \brief  Initialize a new StatusFile. 
    \details  JobManager::InitilizeJobManager  Will call this method if no Status file exists yet.
    */
   virtual  void  StatusFileInitialize (ostream& o);
 
 
   /*
-   \brief  Process a status file line, if not meant fo rus then call the base classes method.
+   \brief  Process a status file line, if not meant for us then call the base classes method.
    \details Every new text line read in from the Status File by 'JobManager' will be passed to this routine.
             If the text line is not meant for us then call the Base classes version of this method.  
             JobManager::StatusFileProcessLine ().
@@ -110,7 +110,7 @@ private:
   KKStr                     dataIndexFileName;
   FileDescPtr               fileDesc;
   FeatureFileIOPtr          format;
-  MLClassConstListPtr       mlClasses;
+  MLClassListPtr            mlClasses;
   int                       numFolds;
   int                       numSplits;
   float                     splitFraction;

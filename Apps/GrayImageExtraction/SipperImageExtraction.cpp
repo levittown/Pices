@@ -29,27 +29,29 @@ using namespace  std;
 using namespace  KKB;
 
 
+#include "Classifier2.h"
 #include "InstrumentData.h"
 #include "InstrumentDataManager.h"
 #include "InstrumentDataFileManager.h"
+#include "DuplicateImages.h"
+#include "FeatureFileIO.h"
+#include "FileDesc.h"
+#include "MLClass.h"
+#include "SipperBlob.h"
+#include "TrainingProcess2.h"
+using namespace  KKMLL;
+
+
+
+#include "DataBase.h"
+#include "FeatureFileIOPices.h"
+#include "ImageFeatures.h"
+#include "PicesTrainingConfiguration.h"
 #include "SipperBuff.h"
 #include "SipperBuffBinary.h"
 #include "SipperBuff3Bit.h"
 #include "Sipper3Buff.h"
 #include "Sipper3RevBuff.h"
-using namespace SipperHardware;
-
-
-#include "Classifier2.h"
-#include "DataBase.h"
-#include "DuplicateImages.h"
-#include "FeatureFileIO.h"
-#include "FeatureFileIOPices.h"
-#include "FileDesc.h"
-#include "MLClass.h"
-#include "ImageFeatures.h"
-#include "SipperBlob.h"
-#include "TrainingProcess2.h"
 using namespace  MLL;
 
 
@@ -432,7 +434,7 @@ void  UpdateInstrumentDataFieldsInFeatrureRecords (DataBasePtr  dbConn,
     {
       ImageFeaturesPtr fd = *idx2;
 
-      KKStr  imageFileName = osGetRootName (fd->ImageFileName ());
+      KKStr  imageFileName = osGetRootName (fd->ExampleFileName ());
 
       InstrumentDataPtr  id = InstrumentDataFileManager::GetClosestInstrumentData (imageFileName, cancelFlag, log);
       if  (id)
@@ -510,7 +512,7 @@ SipperImageExtraction::SipperImageExtraction (SipperImageExtractionParms&  _parm
 
   connectedPixelDist         (_parms.ConnectedPixelDist ()),
   parms                      (_parms),
-  fileDesc                   (FeatureFileIOPices::NewPlanktonFile (_log)),
+  fileDesc                   (FeatureFileIOPices::NewPlanktonFile ()),
   veryLargeImageSize         (10000),
   imagesWrittenInFrame       (0),
   frame                      (NULL),
@@ -547,7 +549,7 @@ SipperImageExtraction::SipperImageExtraction (SipperImageExtractionParms&  _parm
   sipperBuff                 (NULL),
   sipperRootName             (),
   instrumentDataManager      (NULL),
-  unKnownMLClass          (NULL),
+  unKnownMLClass             (NULL),
   dupImageDetector           (NULL),
   duplicateImageDir          (),
   duplicateImages            (NULL),
@@ -625,9 +627,9 @@ SipperImageExtraction::SipperImageExtraction (SipperImageExtractionParms&  _parm
     sipperFileRec->SizeInBytes (fileSizeInBytes);
     sipperFileRec->DateTimeStart (sipperFileTimeStamp);
 
-    sipperFileRec->Sp0 (SipperHardware::Instrument::LookUpByShortName ("CTD"));
-    sipperFileRec->Sp1 (SipperHardware::Instrument::LookUpByShortName ("P-R"));
-    sipperFileRec->Sp2 (SipperHardware::Instrument::LookUpByShortName ("BAT"));
+    sipperFileRec->Sp0 (MLL::Instrument::LookUpByShortName ("CTD"));
+    sipperFileRec->Sp1 (MLL::Instrument::LookUpByShortName ("P-R"));
+    sipperFileRec->Sp2 (MLL::Instrument::LookUpByShortName ("BAT"));
 
     sipperFileRec->CtdExt0 ("TRN");
     sipperFileRec->CtdExt1 ("OXG");
@@ -758,56 +760,70 @@ SipperImageExtraction::SipperImageExtraction (SipperImageExtractionParms&  _parm
                << endl;
   }
 
-
   unKnownMLClass   = MLClass::CreateNewMLClass ("UnKnown");
 
   if  (parms.ExtractFeatureData ())
   {
     dupImageDetector = new DuplicateImages (fileDesc, log);
-    duplicateImages  = new ImageFeaturesList (fileDesc, true, log, 100);
+    duplicateImages  = new ImageFeaturesList (fileDesc, true, 100);
     duplicateImageDir = osAddSlash (parms.OutputRootDir ()) + "DuplicateImages";
     osCreateDirectoryPath (duplicateImageDir);
 
     if  (!parms.ConfigFileName ().Empty ())
     {
       parms.StatusMessage ("Building Training Model");
-      trainer = new TrainingProcess2 (parms.ConfigFileName (),
-                                     NULL,
-                                     fileDesc, 
-                                     log, 
-                                     &reportFile, 
-                                     false,             // false = DON'T force model rebuild.
-                                     true,              // true = Check for duplicate images in training data.
-                                     parms.CancelField (),
-                                     parms.StatusMessageField ()
-                                    );
 
-      if  (parms.CancelField ())
-      {
-        parms.StatusMessage ("Image Extraction Canceled.");
-        log.Level (0) << endl
-                      << "SipperImageExtraction::SipperImageExtraction        *** Canceled ***" << endl
-                      << endl;
-      }
-
-      else if  (trainer->Abort ())
+      PicesTrainingConfigurationPtr  config = new PicesTrainingConfiguration ();
+      config->Load (parms.ConfigFileName (), true, log);
+      if  (!config->FormatGood ())
       {
         _successful = false;
 
-        parms.StatusMessage ("Error building Classifier2 for ConfigFileName[" + parms.ConfigFileName () + "].");
+        parms.StatusMessage ("ConfigFileName[" + parms.ConfigFileName () + "]  format bad.");
 
         log.Level (-1) << endl
-                       << endl
-                       << "SipperImageExtraction   *** ERROR ***  Building Training Process" << endl
+                       << "SipperImageExtraction   ***ERROR***  ConfigFileName[" << parms.ConfigFileName () << "] is Invalid!!!"
+                       << config->FormatErrorsWithLineNumbers ()
                        << endl;
-        parms.Cancel (true);  // Can not continue. 
       }
 
       else
       {
-        log.Level (20) << "SipperImageExtraction::SipperImageExtraction   Classifier2 Created Successfully." << endl;
-        parms.StatusMessage ("");
-        classifier = new Classifier2 (trainer, log);
+        trainer = TrainingProcess2::CreateTrainingProcess 
+                                      (config,
+                                       true,              // true = Check for duplicate images in training data.
+                                       TrainingProcess2::WhenToRebuild::NotUpToDate,
+                                       true,              // true = Save Training Model if needed to be rebuilt.
+                                       parms.CancelField (),
+                                       log
+                                      );
+        if  (parms.CancelField ())
+        {
+          parms.StatusMessage ("Image Extraction Canceled.");
+          log.Level (0) << endl
+                        << "SipperImageExtraction::SipperImageExtraction        *** Canceled ***" << endl
+                        << endl;
+        }
+
+        else if  (trainer->Abort ())
+        {
+          _successful = false;
+
+          parms.StatusMessage ("Error building Classifier2 for ConfigFileName[" + parms.ConfigFileName () + "].");
+
+          log.Level (-1) << endl
+                         << endl
+                         << "SipperImageExtraction   ***ERROR***  Building Training Process" << endl
+                         << endl;
+          parms.Cancel (true);  // Can not continue. 
+        }
+
+        else
+        {
+          log.Level (20) << "SipperImageExtraction::SipperImageExtraction   Classifier2 Created Successfully." << endl;
+          parms.StatusMessage ("");
+          classifier = new Classifier2 (trainer, log);
+        }
       }
     }
   }
@@ -2360,7 +2376,7 @@ void  SipperImageExtraction::ProcessFrame ()
                   << ".bmp";
     
 
-    MLClassConstPtr  predClass = unKnownMLClass;
+    MLClassPtr  predClass = unKnownMLClass;
     ImageFeaturesPtr  image = NULL;
     RasterSipperPtr raster = sipperImage->GetRaster (frame, blobIds, frameSipperRow, frameRowByteOffset);
     
@@ -2371,9 +2387,9 @@ void  SipperImageExtraction::ProcessFrame ()
     {
       raster->FileName (imageFileName);
 
-      image = new ImageFeatures (*raster, unKnownMLClass);
+      image = new ImageFeatures (*raster, unKnownMLClass, NULL, log);
 
-      image->ImageFileName (imageFileName);
+      image->ExampleFileName (imageFileName);
 
       InstrumentDataPtr  id = InstrumentDataFileManager::GetClosestInstrumentData (imageFileName, parms.Cancel (), log);
       if  (id)
@@ -2398,22 +2414,22 @@ void  SipperImageExtraction::ProcessFrame ()
 
       if  (dupImageDetector)
       {
-        DuplicateImagePtr  dupImages = dupImageDetector->AddSingleImage (image);
+        DuplicateImagePtr  dupImages = dupImageDetector->AddSingleExample (image);
         if  (dupImages)
         {
-          log.Level (30) << "ProcessFrame  Duplicate Image Detected[" << image->ImageFileName () << "]." << endl;
+          log.Level (30) << "ProcessFrame  Duplicate Image Detected[" << image->ExampleFileName () << "]." << endl;
           imageIsDuplicate = true;
           duplicateImages->PushOnBack (image);
           reportFile << endl 
                      << "Duplicate Image Detected[" << imageFileName << "]" << endl
-                     << "Original Image is       [" << dupImages->FirstImageAdded ()->ImageFileName () << "]" << endl;
+                     << "Original Image is       [" << dupImages->FirstExampleAdded ()->ExampleFileName () << "]" << endl;
 
           if  (!duplicateImageDir.Empty ())
           {
             // Since image is a duplicate we will need to move it to duplicates directory
-            KKStr  newRootName = osGetRootName (dupImages->FirstImageAdded ()->ImageFileName ()) 
+            KKStr  newRootName = osGetRootName (dupImages->FirstExampleAdded ()->ExampleFileName ()) 
                                   + "-" +
-                                  osGetRootName (image->ImageFileName ());
+                                  osGetRootName (image->ExampleFileName ());
             KKStr  newFullFileName = osAddSlash (duplicateImageDir) + newRootName + ".bmp";
             osDeleteFile (newFullFileName);  // Make sure there is no file already there from prev run.
             BmpImage bmpImage (*raster);
@@ -2432,7 +2448,7 @@ void  SipperImageExtraction::ProcessFrame ()
           double  breakTie    = 0.0f;
 
           ImageFeaturesPtr  dupImage = new ImageFeatures (*image);
-          predClass = classifier->ClassifyAImage (*dupImage, probability, numOfWinners, knownClassOneOfTheWinners, breakTie);
+          predClass = classifier->ClassifyAExample (*dupImage, probability, numOfWinners, knownClassOneOfTheWinners, breakTie);
           image->MLClass     (predClass);
           image->Probability    ((float)probability);
           image->BreakTie       ((float)breakTie);

@@ -1,5 +1,4 @@
 #include "FirstIncludes.h"
-
 #include <stdlib.h>
 #include <memory>
 #include <math.h>
@@ -8,26 +7,29 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-
 #include "MemoryDebug.h"
 #include "KKBaseTypes.h"
-
 using namespace std;
+
 
 #include "Compressor.h"
 #include "OSservices.h"
 #include "KKStr.h"
 using namespace KKB;
 
-#include "InstrumentDataFileManager.h"
 
-#include "DataBase.h"
 #include "FeatureFileIO.h"
-#include "FeatureFileIOPices.h"
 #include "FileDesc.h"
 #include "MLClass.h"
+using namespace KKMLL;
+
+
+#include "DataBase.h"
+#include "FeatureFileIOPices.h"
+#include "InstrumentDataFileManager.h"
 #include "ImageFeatures.h"
 using namespace MLL;
+
 
 #include "JobManager.h"
 using namespace  JobManagment;

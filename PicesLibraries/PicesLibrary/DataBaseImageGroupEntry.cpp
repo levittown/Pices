@@ -1,14 +1,13 @@
-#include  "FirstIncludes.h"
-#include  <stdlib.h>
-#include  <memory>
+#include "FirstIncludes.h"
+#include <stdlib.h>
+#include <memory>
 
-#include  <string>
-#include  <iostream>
-#include  <fstream>
-#include  <vector>
-#include  <map>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <map>
 #include "MemoryDebug.h"
-
 using namespace std;
 
 #include "KKBaseTypes.h"

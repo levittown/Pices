@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using PicesInterface;
 
 namespace GradeTrainingModel
 {
@@ -12,6 +13,7 @@ namespace GradeTrainingModel
     [STAThread]
     static void Main()
     {
+      PicesSipperVariables.InitializeEnvironment ();
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
       Application.Run(new GetRunTimeParameters());

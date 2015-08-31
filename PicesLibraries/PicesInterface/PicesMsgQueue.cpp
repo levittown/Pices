@@ -102,3 +102,17 @@ void  PicesMsgQueue::AddMsg (String^  msg)
 
 
 
+
+void  PicesMsgQueue::AddMsgs (List<String^>^  msgs)
+{
+  if  (msgQueue)
+  {
+    for each  (String^  s in msgs)
+      msgQueue->AddMsg (PicesKKStr::SystemStringToKKStr (s));
+  }
+}
+
+
+
+
+

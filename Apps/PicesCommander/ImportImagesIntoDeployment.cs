@@ -72,10 +72,10 @@ namespace PicesCommander
 
       unknownClass = GetClassFromName (mainWinConn, "UnKnown");
 
-      configFileName = OSservices.AddSlash (PicesSipperVariables.PicesConfigurationDirectory ()) + "ImportImagesIntoDeployment.cfg";
+      configFileName = OSservices.AddSlash (PicesSipperVariables.ConfigurationDirectory ()) + "ImportImagesIntoDeployment.cfg";
 
       InitializeComponent();
-      //SourceDirectory.Text = PicesSipperVariables.PicesHomeDir ();
+      //SourceDirectory.Text = PicesSipperVariables.HomeDir ();
     }
 
 
@@ -443,7 +443,7 @@ namespace PicesCommander
       r = r.RemoveZooscanBrackets ();
 
       PicesFeatureVector  fv = new PicesFeatureVector (r, picesRootName, null, runLog);
-      fv.ImageFileName = picesRootName;
+      fv.ExampleFileName = picesRootName;
 
       int   imageId    = 0;
 
@@ -603,10 +603,10 @@ namespace PicesCommander
       FolderBrowserDialog  fbd = new FolderBrowserDialog ();
 
       if  (String.IsNullOrEmpty (SourceDirectory.Text))
-        SourceDirectory.Text = PicesSipperVariables.PicesHomeDir ();
+        SourceDirectory.Text = PicesSipperVariables.HomeDir ();
 
       if  (!Directory.Exists (SourceDirectory.Text))
-        SourceDirectory.Text = PicesSipperVariables.PicesHomeDir ();
+        SourceDirectory.Text = PicesSipperVariables.HomeDir ();
 
       fbd.SelectedPath = SourceDirectory.Text;
 

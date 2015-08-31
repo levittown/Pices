@@ -1,15 +1,12 @@
 #include "FirstIncludes.h"
-
 #include <stdlib.h>
 #include <memory>
 #include <math.h>
-
 #include <string>
 #include <iostream>
 #include <fstream>
 #include <map>
 #include <vector>
-
 #include "MemoryDebug.h"
 #include "KKBaseTypes.h"
 
@@ -21,14 +18,17 @@ using namespace  std;
 #include "KKStr.h"
 using namespace  KKB;
 
-#include "InstrumentDataFileManager.h"
-#include "SipperVariables.h"
-using namespace  SipperHardware;
 
 #include "FeatureFileIO.h"
-#include "FeatureFileIOPices.h"
 #include "MLClass.h"
+using namespace  KKMLL;
+
+
+#include "FeatureFileIOPices.h"
 #include "ImageFeatures.h"
+#include "InstrumentDataFileManager.h"
+#include "PicesVariables.h"
+#include "PicesFVProducer.h"
 using namespace  MLL;
 
 
@@ -63,7 +63,7 @@ SpatialAnalysis::SpatialAnalysis ():
   sipperFile           (NULL),
   sipperFileName       (""),
   sourceRootDirPath    (""),
-  statType             (Davis92Stat),
+  statType             (StatType::Davis92),
   transactLength       (0.0),
   upperConfIntervalIdx (0),
   windowSize           (1.0f)
@@ -121,7 +121,7 @@ void  SpatialAnalysis::InitalizeApplication (kkint32 argc,
                      "_SpatialAnalysis_"                          + 
                      StatTypeToStr (statType)                     + "_";
 
-    if  (statType == Davis92Stat)
+    if  (statType == StatType::Davis92)
     {
       int  windowSizeInt = (int)(floor (windowSize));
       int  windowSizeFtp = (int)(floor (windowSize * 100.0f + 0.5f)) % 100;
@@ -152,11 +152,12 @@ void  SpatialAnalysis::InitalizeApplication (kkint32 argc,
     return;
   }
 
-  MLClassConstListPtr  classes = new MLClassConstList ();
+  MLClassListPtr  classes = new MLClassList ();
 
   log.Level (10) << "SpatialAnalysis   Loading Plankton Data." << endl;
-  data =  FeatureFileIOPices::LoadInSubDirectoryTree 
-                                 (sourceRootDirPath,
+  data =  FeatureFileIOPices::Driver ()->LoadInSubDirectoryTree
+                                 (PicesFVProducerFactory::Factory (&log),
+                                  sourceRootDirPath,
                                   *classes,
                                   true,            // useDirectoryNameForClassName,
                                   DB (),
@@ -225,7 +226,7 @@ void  SpatialAnalysis::GetSipperFileNameAndInstrumentData ()
     uint  scanCol         = 0;
     KKStr  tempSipperFileName = "";
     
-    SipperVariables::ParseImageFileName (i->ImageFileName (), tempSipperFileName, scanLineNum, scanCol);
+    PicesVariables::ParseImageFileName (i->ExampleFileName (), tempSipperFileName, scanLineNum, scanCol);
     tempSipperFileName = osGetRootName (tempSipperFileName);
     if  (sipperFileName.Empty ())
     {
@@ -340,7 +341,7 @@ bool  SpatialAnalysis::ProcessCmdLineParameter (const KKStr&  parmSwitch,
       )
   {
     statType = StatTypeFromStr (parmValue);
-    if  (statType == NullStat)
+    if  (statType == StatType::Null)
     {
       log.Level (-1) << endl << endl
                      << "SpatialAnalysis::ProcessCmdLineParameter    ***ERROR***" << endl
@@ -835,9 +836,9 @@ void  SpatialAnalysis::CalcStatistic (ImageFeaturesList&   src,
 
     switch  (statType)
     {
-    case  BQVStat:      stat = CalcBQV    (densityByQuadrat, dist);  break;
-    case  PQVStat:      stat = CalcPQV    (densityByQuadrat, dist);  break;
-    case  TTLQCStat:    stat = CalcTTLQC  (densityByQuadrat, dist);  break;
+    case  StatType::BQV:      stat = CalcBQV    (densityByQuadrat, dist);  break;
+    case  StatType::PQV:      stat = CalcPQV    (densityByQuadrat, dist);  break;
+    case  StatType::TTLQC:    stat = CalcTTLQC  (densityByQuadrat, dist);  break;
     }  /* switch  (statType) */
 
     stats.push_back (stat);
@@ -913,11 +914,11 @@ KKStr  SpatialAnalysis::StatTypeToStr (StatType  statType)
 {
   switch  (statType)
   {
-  case  NullStat:    return  "NULL";
-  case  BQVStat:     return  "BQV";
-  case  Davis92Stat: return  "DAVIS92";
-  case  PQVStat:     return  "PQV";
-  case  TTLQCStat:   return  "TTLQC";
+  case  StatType::Null:    return  "NULL";
+  case  StatType::BQV:     return  "BQV";
+  case  StatType::Davis92: return  "DAVIS92";
+  case  StatType::PQV:     return  "PQV";
+  case  StatType::TTLQC:   return  "TTLQC";
   default:
       return "UnKnown";
   }
@@ -932,18 +933,18 @@ SpatialAnalysis::StatType  SpatialAnalysis::StatTypeFromStr (KKStr  s)
   s = s.ToUpper ();
 
   if  (s == "BQV")
-    return  BQVStat;
+    return  StatType::BQV;
 
   else if  (s == "DAVIS92")
-    return  Davis92Stat;
+    return  StatType::Davis92;
 
   else if  (s == "PQV")
-    return  PQVStat;
+    return  StatType::PQV;
 
   else if  (s == "TTLQC")
-    return  TTLQCStat;
+    return  StatType::TTLQC;
 
-  return  NullStat;
+  return  StatType::Null;
 }  /* StatTypeToStr */
 
 
@@ -951,17 +952,17 @@ SpatialAnalysis::StatType  SpatialAnalysis::StatTypeFromStr (KKStr  s)
 void  SpatialAnalysis::PrintSpatialHistogramReport ()
 {
   *r << endl << endl
-     << "Spatial Histogram  10 Meter Inrements" << endl
+     << "Spatial Histogram  10 Meter Increments" << endl
      << endl;
   data->PrintSpatialHistogramReport (*r, instrumentData, defaultScanRate, defaultFlowRate, 10.0f);
 
   *r << endl << endl
-     << "Spatial Histogram  5 Meter Inrements" << endl
+     << "Spatial Histogram  5 Meter Increments" << endl
      << endl;
   data->PrintSpatialHistogramReport (*r, instrumentData, defaultScanRate, defaultFlowRate, 5.0f);
 
   *r << endl << endl
-     << "Spatial Histogram  1 Meter Inrements" << endl
+     << "Spatial Histogram  1 Meter Increments" << endl
      << endl;
   data->PrintSpatialHistogramReport (*r, instrumentData, defaultScanRate, defaultFlowRate, 1.0f);
 }  /* PrintSpatialHistogramReport */
@@ -977,7 +978,7 @@ void  SpatialAnalysis::RunDavis92SpatialAnalysis ()
 
   long  maxNumScanLines = (long)data->BackOfQueue ()->SfCentroidRow ();
 
-  MLClassConstListPtr  classes = data->ExtractMLClassConstList ();
+  MLClassListPtr  classes = data->ExtractListOfClasses ();
   classes->SortByName ();
 
   vector<VectorFloat>   stats;
@@ -1006,8 +1007,8 @@ void  SpatialAnalysis::RunDavis92SpatialAnalysis ()
   int   classIdx = 0;
   for  (classIdx = 0;  classIdx < classes->QueueSize ();  classIdx++)
   {
-    MLClassConstPtr  ic = classes->IdxToPtr (classIdx);
-    ImageFeaturesListPtr  imagesThisClass = data->ExtractImagesForAGivenClass (ic);
+    MLClassPtr  ic = classes->IdxToPtr (classIdx);
+    ImageFeaturesListPtr  imagesThisClass = data->ExtractExamplesForAGivenClass (ic);
     if  (!imagesThisClass)
       continue;
 
@@ -1049,7 +1050,7 @@ void  SpatialAnalysis::RunDavis92SpatialAnalysis ()
     KKStr  hl2 = "Bucket";
     for  (classIdx = 0;  classIdx < classes->QueueSize ();  classIdx++)
     {
-      MLClassConstPtr  ic = classes->IdxToPtr (classIdx);
+      MLClassPtr  ic = classes->IdxToPtr (classIdx);
 
       hl1 << "\t" << "\t" << ic->Name ()              << "\t" << ""     << "\t" << ""        << "\t"  << ""     << "\t" << ""     << "\t"  << "Lower"  << "\t"  << "Upper";
       hl2 << "\t" << "\t" << StatTypeToStr (statType) << "\t" << "Mean" << "\t" << "StdDev"  << "\t"  << "Min"  << "\t" << "Max"  << "\t"  << "Conf"   << "\t"  << "Conf";
@@ -1067,7 +1068,7 @@ void  SpatialAnalysis::RunDavis92SpatialAnalysis ()
     *r << ((bucketIdx + 1) * bucketSize);
     for  (classIdx = 0;  classIdx < classes->QueueSize ();  classIdx++)
     {
-      MLClassConstPtr  ic = classes->IdxToPtr (classIdx);
+      MLClassPtr  ic = classes->IdxToPtr (classIdx);
       if  (((uint)bucketIdx < stats   [classIdx].size ())  &&
            ((uint)bucketIdx < means   [classIdx].size ())  &&
            ((uint)bucketIdx < stdDevs [classIdx].size ())  &&
@@ -1094,15 +1095,13 @@ void  SpatialAnalysis::RunDavis92SpatialAnalysis ()
     *r << std::endl;
   }
 
-
   PrintSpatialHistogramReport ();
-
 
   classIdx = 0;
   for  (classIdx = 0;  classIdx < classes->QueueSize ();  classIdx++)
   {
-    MLClassConstPtr  ic = classes->IdxToPtr (classIdx);
-    ImageFeaturesListPtr  imagesThisClass = data->ExtractImagesForAGivenClass (ic);
+    MLClassPtr  ic = classes->IdxToPtr (classIdx);
+    ImageFeaturesListPtr  imagesThisClass = data->ExtractExamplesForAGivenClass (ic);
     if  (!imagesThisClass)
       continue;
 
@@ -1116,13 +1115,11 @@ void  SpatialAnalysis::RunDavis92SpatialAnalysis ()
     for  (uint  idx = 0;  idx < positions.size ();  idx++)
     {
       ImageFeaturesPtr fv = imagesThisClass->IdxToPtr (idx);
-      *r << fv->ImageFileName () << "\t" << fv->SfCentroidRow () << "\t" << positions[idx] << endl;
+      *r << fv->ExampleFileName () << "\t" << fv->SfCentroidRow () << "\t" << positions[idx] << endl;
     }
 
     delete  imagesThisClass;
   }
-
-
 }  /* RunDavis92SpatialAnalysis */
 
 
@@ -1151,7 +1148,7 @@ void  SpatialAnalysis::RunSpatialAnalysis ()
  
   maxNumScanLines = (long)ceil(data->BackOfQueue ()->SfCentroidRow ());
 
-  MLClassConstListPtr  classes = data->ExtractMLClassConstList ();
+  MLClassListPtr  classes = data->ExtractListOfClasses ();
   classes->SortByName ();
 
   vector<VectorFloat>   stats;
@@ -1172,8 +1169,8 @@ void  SpatialAnalysis::RunSpatialAnalysis ()
   int   classIdx = 0;
   for  (classIdx = 0;  classIdx < classes->QueueSize ();  classIdx++)
   {
-    MLClassConstPtr  ic = classes->IdxToPtr (classIdx);
-    ImageFeaturesListPtr  imagesThisClass = data->ExtractImagesForAGivenClass (ic);
+    MLClassPtr  ic = classes->IdxToPtr (classIdx);
+    ImageFeaturesListPtr  imagesThisClass = data->ExtractExamplesForAGivenClass (ic);
     if  (!imagesThisClass)
       continue;
 
@@ -1229,7 +1226,7 @@ void  SpatialAnalysis::RunSpatialAnalysis ()
     KKStr  hl2 = "Dist";
     for  (classIdx = 0;  classIdx < classes->QueueSize ();  classIdx++)
     {
-      MLClassConstPtr  ic = classes->IdxToPtr (classIdx);
+      MLClassPtr  ic = classes->IdxToPtr (classIdx);
 
       hl1 << "\t" << "\t" << ic->Name ()              << "\t" << ""     << "\t" << "";
       hl2 << "\t" << "\t" << StatTypeToStr (statType) << "\t" << "Mean" << "\t" << "StdDev";
@@ -1245,7 +1242,7 @@ void  SpatialAnalysis::RunSpatialAnalysis ()
     *r << dist;
     for  (classIdx = 0;  classIdx < classes->QueueSize ();  classIdx++)
     {
-      MLClassConstPtr  ic = classes->IdxToPtr (classIdx);
+      MLClassPtr  ic = classes->IdxToPtr (classIdx);
       if  (((uint)dist < stats[classIdx].size ())  &&
            ((uint)dist < means[classIdx].size ())  &&
            ((uint)dist < stdDevs[classIdx].size ())
@@ -1278,7 +1275,7 @@ int  main (int     argc,
   spatialReport.InitalizeApplication (argc, argv);
   if  (!spatialReport.Abort ())
   {
-    if  (spatialReport.TypeOfStat () == SpatialAnalysis::Davis92Stat)
+    if  (spatialReport.TypeOfStat () == SpatialAnalysis::StatType::Davis92)
       spatialReport.RunDavis92SpatialAnalysis ();
     else
       spatialReport.RunSpatialAnalysis ();

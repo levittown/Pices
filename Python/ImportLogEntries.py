@@ -161,28 +161,28 @@ def  LogEntryExist(db, c, _logEntryIdExt, _progName, _cmdLine, _dateTimeStart):
 
 #Server	Description:Default	Embedded:No	HostName:localhost	UserName:root	PassWord:Dasani30!	PortNum: 3306	MySqlDataDir:	DataBaseName:pices_new
 
-
+passWord=""
 
 def  ImportLogEntries(dirName):
   try:
        #db = mysql.connector.Connect(user='kkramer',
-       #                             password="tree10peach",
+       #                             password=passWord,
        #                             host='sipper-db2.marine.usf.edu',
        #                             database='pices_new'
        #                          )
               
        db = mysql.connector.Connect(user='kkramer',
-                                    password="tree10peach",
+                                    password=passWord,
                                     host='sipper-db2.marine.usf.edu',
                                     database='pices_new'
                                   )
        #db = mysql.connector.Connect(user='kkramer',
-       #                             password="tree10peach",
+       #                             password=passWord,
        #                             host='localhost',
        #                             database='pices_new'
        #                           )
        #db = mysql.connector.Connect(user='root',
-       #                             password="dasani30",
+       #                             password=passWord,
        #                             host='localhost',
        #                             database='pices_new'
        #                           )
@@ -269,7 +269,8 @@ def  main():
   #rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews"
   #rootDir="C:\\Pices\\UpdatesFromOtherServers"
   #rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews\\2015-02-11"
-  rootDir="D:\\Users\\kkramer\\DropBox\\Dropbox\\ToKurt\\DataToKurt"
+  #rootDir="D:\\Users\\kkramer\\DropBox\\Dropbox\\ToKurt\\DataToKurt"
+  rootDir="C:\\Users\\Kurt\Dropbox\\ToCotPices\\2015-06-23"
   ImportLogEntries(rootDir)
   print("\n\n    *** Import Completed ***\n\n")
 

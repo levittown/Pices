@@ -6,8 +6,6 @@
 #include "KKStr.h"
 using namespace  KKB;
 
-#include "SipperImageExtractionParms.h"
-
 #include "PreDefinedClasses.h"
 using namespace  ImageExtractionManager;
 
@@ -59,7 +57,6 @@ public:
 
 
 public:
-    void  ImageExtractionParms           (SipperImageExtractionParmsPtr  _imageExtractionParms);            /**< Takes ownership of '_imageExtractionParms'.           */
     void  MultiTreadedExtractionParms    (ExtractionParmsPtr             _multiTreadedExtractionParms);     /**< Takes ownership of '_multiTreadedExtractionParms'.    */
     void  MultiThreadedExtractionManager (ExtractionManagerPtr           _multiThreadedExtractionManager);  /**< Takes ownership of '_multiThreadedExtractionManager'. */
 
@@ -69,7 +66,6 @@ public:
     void  ExtractionCanceled             (bool   _extractionCanceled)   {extractionCanceled   = _extractionCanceled;}
 
     ExtractionParmsPtr             MultiTreadedExtractionParms ()  const  {return multiTreadedExtractionParms;}
-    SipperImageExtractionParmsPtr  ImageExtractionParms        ()  const  {return imageExtractionParms;}
 
     void  ManageImageExtractionMultiThreaded ();
 
@@ -97,7 +93,6 @@ private:
                            // this flag will let the main thread know to stop right now.
 
   CWinThread*                    imageExtractionThread;
-  SipperImageExtractionParmsPtr  imageExtractionParms;
 
   ExtractionParmsPtr             multiTreadedExtractionParms;
   ExtractionManagerPtr           multiThreadedExtractionManager;
@@ -109,7 +104,6 @@ private:
   
   void  OnTimerExtractionStopped ();
   void  OnTimerUpdateClassStats  (const ClassStatisticListPtr  classStats);
-  void  OnTimerSingleThreaded    ();
   void  OnTimerMultiThreaded     ();
 
 public:

@@ -29,13 +29,13 @@ namespace MLL
 
     DataBaseImageValidatedEntry (const KKStr&     _imageFileName,
                                  PointListPtr     _sizeCoordinates, /**< Will take ownership of point list */
-                                 MLClassConstPtr  _validatedClass
+                                 MLClassPtr       _validatedClass
                                 );
 
 
     DataBaseImageValidatedEntry (const KKStr&     _imageFileName,
                                  const KKStr&     _sizeCoordinatesDelStr, /**< Will take ownership of point list */
-                                 MLClassConstPtr  _validatedClass
+                                 MLClassPtr       _validatedClass
                                 );
 
 
@@ -45,7 +45,7 @@ namespace MLL
     const KKStr&        ImageFileName         () const  {return imageFileName;}
     const PointListPtr  SizeCoordinates       () const  {return sizeCoordinates;}
     KKStr               SizeCoordinatesDelStr () const;
-    MLClassConstPtr     ValidatedClass        () const  {return validatedClass;}
+    MLClassPtr          ValidatedClass        () const  {return validatedClass;}
     const KKStr&        ValidatedClassName    () const;
 
     float  ImageSize (float  heightFactor,
@@ -56,7 +56,7 @@ namespace MLL
   private:
     KKStr            imageFileName;
     PointListPtr     sizeCoordinates;
-    MLClassConstPtr  validatedClass;
+    MLClassPtr       validatedClass;
   };
 
   typedef  DataBaseImageValidatedEntry::DataBaseImageValidatedEntryPtr  DataBaseImageValidatedEntryPtr;

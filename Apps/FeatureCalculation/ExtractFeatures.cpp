@@ -1,5 +1,4 @@
 #include  "FirstIncludes.h"
-
 #include <stdlib.h>
 #include <memory>
 #include <string>
@@ -7,33 +6,32 @@
 #include <fstream>
 #include <map>
 #include <vector>
-
-
 #include "MemoryDebug.h"
-
-
 using namespace std;
+
 
 #include "KKBaseTypes.h"
 #include "OSservices.h"
 #include "KKStr.h"
 using namespace  KKB;
 
-#include "InstrumentDataFileManager.h"
-#include "SipperVariables.h"
-using namespace  SipperHardware;
 
 #include "Classifier2.h"
 #include "DuplicateImages.h"
 #include "FileDesc.h"
 #include "FeatureFileIO.h"
-#include "FeatureFileIOPices.h"
 #include "MLClass.h"
-#include "ImageFeatures.h"
 #include "TrainingConfiguration2.h"
 #include "TrainingProcess2.h"
-using namespace  MLL;
+using namespace  KKMLL;
 
+
+#include "FeatureFileIOPices.h"
+#include "ImageFeatures.h"
+#include "InstrumentDataFileManager.h"
+#include "PicesTrainingConfiguration.h"
+#include "PicesVariables.h"
+using namespace  MLL;
 
 
 #include  "ExtractFeatures.h"
@@ -47,7 +45,7 @@ using namespace  MLL;
 // -c "C:\TrainingApp\DataFiles\TrainingModels\ECOHAB test.cfg"   -S K:\v1\Plankton\ExtractedImages   -n K:\v1\Plankton\ExtractedImages\ExtractedImages.data    -r K:\v1\Plankton\ExtractedImages\ExtractedImagesReport.txt  -l K:\v1\Plankton\ExtractedImages\ExtractedImagesLog.txt  -d K:\v1\Plankton\ClassifiedImages
 
 // 2004-09-23
-// Just running agains Training Libraries,  to make sure Featue Data files are up to date,  and get Class Stats
+// Just running against Training Libraries,  to make sure Feature Data files are up to date,  and get Class Stats
 // -S C:\TrainingApp\TrainingImages  -n C:\TrainingApp\TrainingImages\AllTrainingImages.data  -r C:\TrainingApp\TrainingImages\AllTrainingImagesReport.txt
 
 // -s C:\TrainingApp\ClassifiedImages\hrs020607  -U
@@ -102,16 +100,13 @@ using namespace  MLL;
 
 // -s D:\Users\kkramer\PlanktonCompetition\trunk\Data\test  -n D:\Users\kkramer\PlanktonCompetition\trunk\Data\test\KaggleTestFeatureData.data
 
-
-// -s C:\Users\Kurt\Dropbox\Sipper\ValidatdImagesSharedWithHusseinAlbarazanchi  -u 
-
 ExtractFeatures::ExtractFeatures ():
   PicesApplication (),
 
   cancelFlag                   (false),
   classifier                   (NULL),
   mlClass                      (MLClass::CreateNewMLClass ("UnKnown")),
-  mlClasses                    (new MLClassConstList ()),
+  mlClasses                    (new MLClassList ()),
   images                       (NULL),
   purgeDuplicates              (false),
   report                       (NULL),
@@ -149,7 +144,6 @@ void  ExtractFeatures::InitalizeApplication (kkint32 argc,
                                              char**  argv
                                             )
 {
-  DataBaseRequired (true);
   PicesApplication::InitalizeApplication (argc, argv);
   if  (Abort ())
   {
@@ -216,16 +210,13 @@ void  ExtractFeatures::InitalizeApplication (kkint32 argc,
   {
     mlClasses = Config ()->ExtractClassList ();
 
-    trainer = new TrainingProcess2 (configFileName, 
-                                    NULL,
-                                    fileDesc,
-                                    log, 
-                                    report, 
-                                    false,             // false = DONT force model rebuild.
-                                    false,
-                                    cancelFlag,
-                                    statusMessage
-                                   );
+    trainer = TrainingProcess2::CreateTrainingProcess (Config (),
+                                                       true,      // true = Check for Duplicates.
+                                                       TrainingProcess2::WhenToRebuild::NotUpToDate,
+                                                       true,      // true = Save Model if rebuilt.
+                                                       cancelFlag,
+                                                       log
+                                                      );
     if  (trainer->Abort ())
     {
       log.Level (-1) << "ExtractFeatures::InitalizeApplication    *** ERROR ***" << endl;
@@ -348,17 +339,17 @@ void   ExtractFeatures::DisplayCommandLineParameters ()
   PicesApplication::DisplayCommandLineParameters ();
   cout << endl
        << "    -d  Destination Directory Tree; if specified a copy of Classified."  << endl
-       << "        images will be placed here."                                    << endl   
+       << "        images will be placed here."                                     << endl   
        << endl
-       << "    -n  Name of File to store Calculated Features in."                  << endl
+       << "    -n  Name of File to store Calculated Features in."                   << endl
        << endl
-       << "    -P  <Yes | No>  Purge Duplicates; defaults to No."                 << endl
+       << "    -P  <Yes | No>  Purge Duplicates; defaults to No."                   << endl
        << endl
-       << "    -r  Report File,  Defaults to Command Line."                        << endl
+       << "    -r  Report File,  Defaults to Command Line."                         << endl
        << endl
-       << "    -s  Source Directory Tree to Search for images."                    << endl
+       << "    -s  Source Directory Tree to Search for images."                     << endl
        << endl
-       << "    -u  Use   Directory Name  as   Class Name"                          << endl
+       << "    -u  Use   Directory Name  as   Class Name"                           << endl
        << endl;
 }  /* DisplayCommandLineParameters */
 
@@ -376,20 +367,20 @@ void  ExtractFeatures::ClassifyImage (ImageFeaturesPtr  image)
   if  (!classifier)
     return;
 
-  MLClassConstPtr  mlClass;
+  MLClassPtr  mlClass;
   double           probability;
   int              numOfWinners;
   bool             knownClassOneOfTheWinners;
   double           breakTie;
 
-  mlClass = classifier->ClassifyAImage (*image, 
+  mlClass = classifier->ClassifyAExample (*image, 
                                         probability, 
                                         numOfWinners,
                                         knownClassOneOfTheWinners,
                                         breakTie
                                        );
 
-  MLClassConstPtr  ourClass = mlClasses->GetMLClassPtr (mlClass->Name ());
+  MLClassPtr  ourClass = mlClasses->GetMLClassPtr (mlClass->Name ());
 
   if  (mlClass)
   {
@@ -433,7 +424,7 @@ void  ExtractFeatures::ReportDuplicates ()
   }
 
   if  (purgeDuplicates)
-    duplicateChecker.PurgeDuplicates (images, report);
+    duplicateChecker.PurgeDuplicates (images, true, report);
 }  /* ReportDuplicates */
 
 
@@ -451,7 +442,7 @@ void  ExtractFeatures::MoveImagesToDestinationDirectoryByClassName ()
 
   while  (image)
   {
-    MLClassConstPtr  curClass = image->MLClass ();
+    MLClassPtr  curClass = image->MLClass ();
 
     log.Level (20) << "MoveImagesToDestinationDirectoryByClassName   Class[" << curClass->Name () << "]." << endl;
 
@@ -459,7 +450,7 @@ void  ExtractFeatures::MoveImagesToDestinationDirectoryByClassName ()
 
     while  (image  &&  (curClass == image->MLClass ()))
     {
-      ImageFeaturesListPtr  imagesInThisSubDir = new ImageFeaturesList (fileDesc, true, log, 1000);
+      ImageFeaturesListPtr  imagesInThisSubDir = new ImageFeaturesList (fileDesc, true, 1000);
 
       KKStr  classSubDirName (curClass->Name ());
       classSubDirName << "_" << StrFormatInt (classSubDirectoryNum, "z00");
@@ -489,13 +480,13 @@ void  ExtractFeatures::MoveImagesToDestinationDirectoryByClassName ()
       {
         KKStr  sourceDirName (sourceRootDirPath);
         osAddLastSlash (sourceDirName);
-        sourceDirName << osGetPathPartOfFile (image->ImageFileName ());
-        KKStr  imageFileName (osGetRootNameWithExtension (image->ImageFileName ()));
+        sourceDirName << osGetPathPartOfFile (image->ExampleFileName ());
+        KKStr  imageFileName (osGetRootNameWithExtension (image->ExampleFileName ()));
         
         osMoveFileBetweenDirectories (imageFileName, sourceDirName, classSubDirFullPathName);
 
         ImageFeaturesPtr  imageInClassDir = new ImageFeatures (*image);
-        imageInClassDir->ImageFileName (imageFileName);
+        imageInClassDir->ExampleFileName (imageFileName);
 
         imagesInThisSubDir->PushOnBack (imageInClassDir);
         image = *iIDX;  iIDX++;
@@ -535,10 +526,10 @@ void  ExtractFeatures::MoveOver_SMP751001037_22_ImagesIntoSeparateDir (ImageFeat
   {
     ImageFeaturesPtr  i = *idx;
     //if  (i->ImageFileName ().LocateStr ("SMP751001037_22") >= 0)
-    if  ((i->ImageFileName ().LocateStr ("SMP751001034") >= 0) || (i->ImageFileName ().LocateStr ("SMP751001035") >= 0) || (i->ImageFileName ().LocateStr ("SMP751001037") >= 0))
+    if  ((i->ExampleFileName ().LocateStr ("SMP751001034") >= 0) || (i->ExampleFileName ().LocateStr ("SMP751001035") >= 0) || (i->ExampleFileName ().LocateStr ("SMP751001037") >= 0))
     {
-      KKStr  srcFileName   = osAddSlash (sourceRootDirPath) + i->ImageFileName ();
-      KKStr  destFileName  = "I:\\Pices\\may_BP_2010\\SMP751001_34_35_37\\" + i->ImageFileName ();
+      KKStr  srcFileName   = osAddSlash (sourceRootDirPath) + i->ExampleFileName ();
+      KKStr  destFileName  = "I:\\Pices\\may_BP_2010\\SMP751001_34_35_37\\" + i->ExampleFileName ();
       KKStr  destDir = osGetPathPartOfFile (destFileName);
       if  (destDir != lastDestDir)
       {
@@ -547,7 +538,7 @@ void  ExtractFeatures::MoveOver_SMP751001037_22_ImagesIntoSeparateDir (ImageFeat
       }
 
       osCopyFile (srcFileName, destFileName);
-      cout << i->ImageFileName () << endl;
+      cout << i->ExampleFileName () << endl;
     }
   }
 }  /* MoveOver_SMP751001037_22_ImagesIntoSeparateDir */
@@ -566,8 +557,8 @@ void  ExtractFeatures::ClassifyImages ()
   double    startCPUsecs = osGetSystemTimeUsed ();
 
 
-  MLClassConstPtr  ourClass       = NULL;
-  MLClassConstPtr  predictedClass = NULL;
+  MLClassPtr  ourClass       = NULL;
+  MLClassPtr  predictedClass = NULL;
   ImageFeaturesPtr    image          = NULL;
 
   ImageFeaturesList::iterator  iIDX;
@@ -577,7 +568,7 @@ void  ExtractFeatures::ClassifyImages ()
     image = *iIDX;
     ImageFeaturesPtr  tempImage = new ImageFeatures (*image);
 
-    predictedClass = classifier->ClassifyAImage (*tempImage, 
+    predictedClass = classifier->ClassifyAExample (*tempImage, 
                                                  probability,
                                                  numOfWinners,
                                                  knownClassOneOfTheWinners,
@@ -619,7 +610,7 @@ void  ExtractFeatures::ClassifyImages ()
   *report << "====================" << endl;
   *report << "Start Time    [" << classificationStartTime  << "]" << endl;
   *report << "End Time      [" << classificationEndTime    << "]" << endl;
-  *report << "Elasped Time  [" << elaspedTime.Seconds ()   << "]"
+  *report << "Elapsed Time  [" << elaspedTime.Seconds ()   << "]"
           << "  Classifications Per Sec     [" << StrFormatDouble (classificationsPerElaspedSec, "ZZZ0.000") << "]" << endl;
   *report << "CPU Secs Used [" << cpuSecsUsed              << "]" 
           << "  Classifications Per CPU Sec [" << StrFormatDouble (classificationsPerCPUsec,     "ZZZ0.000") << "]" << endl;
@@ -637,7 +628,7 @@ void  ExtractFeatures::ReFreshInstrumentData (ImageFeaturesPtr  _featureVector)
   bool  weOwnInstrumentData = false;
   InstrumentDataPtr  id = NULL;
 
-  KKStr  imageFileRootName = osGetRootName (_featureVector->ImageFileName ());
+  KKStr  imageFileRootName = osGetRootName (_featureVector->ExampleFileName ());
 
   if  (DB ())
   {
@@ -645,7 +636,7 @@ void  ExtractFeatures::ReFreshInstrumentData (ImageFeaturesPtr  _featureVector)
     kkuint32  scanLineNum = 0;
     kkuint32  scanCol     = 0;
 
-    SipperVariables::ParseImageFileName (imageFileRootName, sipperFileName, scanLineNum, scanCol);
+    PicesVariables::ParseImageFileName (imageFileRootName, sipperFileName, scanLineNum, scanCol);
 
     id = DB ()->InstrumentDataGetByScanLine (sipperFileName, scanLineNum);
     if  (id)
@@ -728,7 +719,8 @@ void  ExtractFeatures::Extract ()
   KKStr  relativeDir;
 
   images = FeatureFileIOPices::Driver ()->LoadInSubDirectoryTree 
-                                   (sourceRootDirPath, 
+                                   (fvFactoryProducer,
+                                    sourceRootDirPath, 
                                     *mlClasses,
                                     useDirectoryNameForClassName,
                                     DB (),

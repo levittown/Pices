@@ -18,14 +18,15 @@ using namespace std;
 #include "KKStr.h"
 using namespace KKB;
 
-#include "InstrumentData.h"
-#include "InstrumentDataFileManager.h"
-using namespace SipperHardware;
+
+#include "MLClass.h"
+using namespace  KKMLL;
+
 
 #include "DataBaseImage.h"
-#include "MLClass.h"
+#include "InstrumentData.h"
+#include "InstrumentDataFileManager.h"
 using namespace MLL;
-
 
 
 
@@ -278,7 +279,7 @@ MLClassListPtr  DataBaseImageList::ExtractListOfClasses ()
 
 
 
-DataBaseImageListPtr  DataBaseImageList::ExtractImagesForAGivenClass (MLClassPtr  _mlClass)
+DataBaseImageListPtr  DataBaseImageList::ExtractExamplesForAGivenClass (MLClassPtr  _mlClass)
 { 
   DataBaseImageListPtr  images = new DataBaseImageList (false);
   DataBaseImageList::iterator  idx;
@@ -295,7 +296,7 @@ DataBaseImageListPtr  DataBaseImageList::ExtractImagesForAGivenClass (MLClassPtr
   }
 
   return   images;
-}  /* ExtractImagesForAGivenClass */
+}  /* ExtractExamplesForAGivenClass */
 
 
 

@@ -32,7 +32,7 @@ PROJECT_NAME           = Pices
 # This could be handy for archiving the generated documentation or 
 # if some version control system is used.
 
-PROJECT_NUMBER         = 1.84
+PROJECT_NUMBER         = 1.90
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description 
 # for a project that appears at the top of each page and should give viewer 
@@ -661,20 +661,21 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
-INPUT                  = $(PicesProjectDir)/BaseLibrary \
-                         $(PicesProjectDir)/PicesLibraries/ImageExtractionManager \
+INPUT                  = $(PicesProjectDir)/PicesLibraries/ImageExtractionManager \
                          $(PicesProjectDir)/PicesLibraries/JobManager \
                          $(PicesProjectDir)/PicesLibraries/PicesInterface \
                          $(PicesProjectDir)/PicesLibraries/PicesLibrary \
                          $(PicesProjectDir)/PicesLibraries/SipperDiskUtilities \
                          $(PicesProjectDir)/PicesLibraries/SipperFile \
-                         $(PicesProjectDir)/PicesLibraries/SipperInstruments \
                          $(PicesProjectDir)/Apps/PicesCommander \
                          $(PicesProjectDir)/Apps/SipperFileViewer \
                          $(PicesProjectDir)/Apps/GradeTrainingModel \
                          $(PicesProjectDir)/Pices_MainPage.h \
                          $(PicesProjectDir)/Apps/FeatureSelection \
-                         $(PicesProjectDir)/Apps/ImageExtractionWindows
+                         $(PicesProjectDir)/Apps/ImageExtractionWindows \
+                         $(PicesProjectDir)/PicesLibraries/ImageExtractionManager \
+                         $(KSQUARELIBRARIES)/KKBase \
+                         $(KSQUARELIBRARIES)/KKMachineLearning
 
 # This tag can be used to specify the character encoding of the source files 
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding, which is 

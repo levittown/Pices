@@ -1346,7 +1346,7 @@ void  ActiveLearning::ExtractValidationImages (MLClassList&     classes,
   {
     mlClass = classes.IdxToPtr (classNum);
 
-    classImages[classNum] = srcImages.ExtractImagesForAGivenClass (mlClass);
+    classImages[classNum] = srcImages.ExtractExamplesForAGivenClass (mlClass);
 
     if  (classImages[classNum]->QueueSize () < smallestNumOfImagesInAClass)
        smallestNumOfImagesInAClass = classImages[classNum]->QueueSize ();
@@ -1426,7 +1426,7 @@ void  ActiveLearning::UpdateNonStreamingTestImages (SortOrderType       sortOrde
     bool    knownClassOneOfTheWinners;
     
 
-    MLClassPtr  predictedClass =  classifier->ClassifyAImage (*testImage, 
+    MLClassPtr  predictedClass =  classifier->ClassifyAExample (*testImage, 
                                                                  probability, 
                                                                  numOfWinners,
                                                                  knownClassOneOfTheWinners,
@@ -1506,10 +1506,10 @@ void  ActiveLearning::ProcessASingleRetraining (SortOrderType        sortOrder,
       bool     knownClassOneOfTheWinners;
     
 //    MLClassPtr  predictedClass 
-//               =  classifier->ClassifyAImage (*testImage, probability, distanceToBoarder);
+//               =  classifier->ClassifyAExample (*testImage, probability, distanceToBoarder);
 
 
-      MLClassPtr  predictedClass =  classifier->ClassifyAImage (*testImage, 
+      MLClassPtr  predictedClass =  classifier->ClassifyAExample (*testImage, 
                                                                    probability, 
                                                                    numOfWinners,
                                                                    knownClassOneOfTheWinners,
@@ -1572,7 +1572,7 @@ void  ActiveLearning::ProcessASingleRetraining (SortOrderType        sortOrder,
       int     numOfWinners;
       bool    knownClassOneOfTheWinners;
     
-      MLClassPtr  predictedClass =  classifier->ClassifyAImage (*testImage, 
+      MLClassPtr  predictedClass =  classifier->ClassifyAExample (*testImage, 
                                                                    probability, 
                                                                    numOfWinners,
                                                                    knownClassOneOfTheWinners,

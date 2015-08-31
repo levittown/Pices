@@ -1,12 +1,10 @@
-#include  "FirstIncludes.h"
-
-#include  <stdlib.h>
-#include  <stdio.h>
-
-#include  <fstream>
-#include  <iostream>
-#include  <map>
-#include  <vector>
+#include "FirstIncludes.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <fstream>
+#include <iostream>
+#include <map>
+#include <vector>
 
 #ifdef  WIN32
 #include <io.h>
@@ -17,7 +15,7 @@
 #endif
 
 
-#include  "MemoryDebug.h"
+#include "MemoryDebug.h"
 
 using namespace std;
 
@@ -36,7 +34,7 @@ using namespace KKB;
 #include "CrossValidation.h"
 #include "FeatureVector.h"
 #include "TrainingProcess2.h"
-using namespace  MLL;
+using namespace  KKMLL;
 
 
 #include "Results.h"
@@ -54,12 +52,12 @@ Results::Results (RunLog&  _log):
     jobId               (0),
     hostName            (""),
     log                 (_log),
-    machineType         (MachineType_NULL),
+    machineType         (SVM_MachineType::Null),
     numFeatures         (0.0),
     numFeaturesWeighted (0.0f),
     numSVs              (0.0),
-    resultType          (frtNULL),
-    selectionMethod     (SelectionMethod_NULL),
+    resultType          (FinalResultType::Null),
+    selectionMethod     (SVM_SelectionMethod::Null),
     svmParameters       (),
     testTime            (0.0),
     totalNumSVs         (0.0),
@@ -81,12 +79,12 @@ Results::Results (FinalResultType          _resultType,
   hostName            (_hostName),
   jobId               (0),
   log                 (_log),
-  machineType         (MachineType_NULL),
+  machineType         (SVM_MachineType::Null),
   numFeatures         (0.0),
   numFeaturesWeighted (0.0f),
   numSVs              (0.0),
   resultType          (_resultType),
-  selectionMethod     (SelectionMethod_NULL),
+  selectionMethod     (SVM_SelectionMethod::Null),
   svmParameters       (),
   testTime            (0.0),
   totalNumSVs         (0.0),
@@ -105,7 +103,7 @@ Results::Results (FinalResultType          _resultType,
   configFileName      = _config->FileName ();
   machineType         = _config->MachineType     ();
   selectionMethod     = _config->SelectionMethod ();
-  svmParameters       = _config->SVMparamREF     ().ToString ();
+  svmParameters       = _config->SVMparamREF     (log).ToString ();
 }
 
 
@@ -315,25 +313,25 @@ Results&   Results::operator+= (const Results&  right)
     configFileName = "";
 
 
-  if  (machineType == MachineType_NULL)
+  if  (machineType == SVM_MachineType::Null)
     machineType = right.machineType;
 
   else if  (machineType != right.machineType)
-    machineType = MachineType_NULL;
+    machineType = SVM_MachineType::Null;
 
 
-  if  (resultType == frtNULL)
+  if  (resultType == FinalResultType::Null)
     resultType = right.resultType;
 
   else if  (resultType != right.resultType)
-    resultType = frtNULL;
+    resultType = FinalResultType::Null;
 
 
-  if  (selectionMethod ==  SelectionMethod_NULL)
+  if  (selectionMethod ==  SVM_SelectionMethod::Null)
     selectionMethod = right.selectionMethod;
 
   else if  (selectionMethod != right.selectionMethod)
-    selectionMethod = SelectionMethod_NULL;
+    selectionMethod = SVM_SelectionMethod::Null;
 
 
   if  (svmParameters.Empty ())
@@ -391,15 +389,15 @@ Results&   Results::operator/= (int divisor)
 
 
 /*!
- \brief  Creates a List of Classes from associated Confussion Matrix.
- \details  caller will be responsavle for deleting this list.
+ \brief  Creates a List of Classes from associated Confusion Matrix.
+ \details  caller will be responsible for deleting this list.
  */
-MLClassConstListPtr  Results::MLClasses ()  const
+MLClassListPtr  Results::MLClasses ()  const
 {
   if  (!confusionMatrix)
-    return  new MLClassConstList ();
+    return  new MLClassList ();
   else
-    return  new MLClassConstList (confusionMatrix->MLClasses ());
+    return  new MLClassList (confusionMatrix->MLClasses ());
 }
 
 

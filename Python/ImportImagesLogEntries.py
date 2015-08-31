@@ -161,25 +161,26 @@ def  LogEntryExist(db, c, _imagesLogEntryId, _imageIdOurs, _imageFileName, _vali
 
 
 def  ImportLogEntries(dirName):
+  passWord=""
   try:
        #db = mysql.connector.Connect(user='kkramer',
-       #                             password="tree10peach",
+       #                             password=passWord,
        #                             host='sipper-db2.marine.usf.edu',
        #                             database='pices_new'
        #                          )
               
        db = mysql.connector.Connect(user='kkramer',
-                                    password="tree10peach",
+                                    password=passWord,
                                     host='sipper-db2.marine.usf.edu',
                                     database='pices_new'
                                   )
        #db = mysql.connector.Connect(user='kkramer',
-       #                             password="tree10peach",
+       #                             password=passWord,
        #                             host='localhost',
        #                             database='pices_new'
        #                           )
        #db = mysql.connector.Connect(user='root',
-       #                             password="dasani30",
+       #                             password=passWord,
        #                             host='localhost',
        #                             database='pices_new'
        #                           )
@@ -295,7 +296,8 @@ def  main():
   #rootDir="C:\\Pices\\UpdatesFromOtherServers"
   #rootDir="C:\\Pices\\UpdatesFromOtherServers\\2015-03-11"
   #rootDir="D:\\Users\\kkramer\\DropBox\\Dropbox\\ToKurt\\DataToKurt"
-  rootDir= "C:\\Users\\Kurt\\Dropbox\\ToKurt\\DataToKurt"
+  #rootDir= "C:\\Users\\Kurt\\Dropbox\\ToKurt\\DataToKurt"
+  rootDir="C:\\Users\\Kurt\Dropbox\\ToCotPices\\2015-06-23"
   ImportLogEntries(rootDir)
   print("\n\n    *** Import Completed ***\n\n")
 

@@ -1,22 +1,19 @@
-#include  "FirstIncludes.h"
-
-#include  <stdio.h>
-#include  <math.h>
-#include  <ctype.h>
-#include  <time.h>
-
-#include  <fstream>
-#include  <iostream>
-#include  <map>
-#include  <string>
-#include  <vector>
-
-#include  "MemoryDebug.h"
-
+#include "FirstIncludes.h"
+#include <stdio.h>
+#include <math.h>
+#include <ctype.h>
+#include <time.h>
+#include <fstream>
+#include <iostream>
+#include <map>
+#include <string>
+#include <vector>
+#include "MemoryDebug.h"
 using namespace std;
 
 
 #include "KKBaseTypes.h"
+#include "KKException.h"
 #include "DateTime.h"
 #include "GlobalGoalKeeper.h"
 #include "ImageIO.h"
@@ -25,17 +22,20 @@ using namespace std;
 #include "KKStr.h"
 using namespace KKB;
 
-#include "InstrumentDataFileManager.h"
-#include "SipperVariables.h"
-using namespace  SipperHardware;
+
+#include "FactoryFVProducer.h"
+#include "FeatureVectorProducer.h"
+#include "FileDesc.h"
+#include "MLClass.h"
+using namespace  KKMLL;
+
 
 #include "DataBase.h"
 #include "FeatureFileIOPices.h"
-#include "FileDesc.h"
-#include "MLClass.h"
-#include "MLClassConstList.h"
 #include "ImageFeatures.h"
 #include "InstrumentData.h"
+#include "InstrumentDataFileManager.h"
+#include "PicesVariables.h"
 using namespace MLL;
 
 
@@ -59,7 +59,7 @@ FeatureFileIOPices  FeatureFileIOPices::driver;
 FeatureFileIOPices::FeatureFileIOPices ():
    FeatureFileIO ("Pices",
                   true,      // true = _canRead,
-                  true      // true = _canWrite,
+                  true       // true = _canWrite,
                  )                
 {
 }
@@ -71,7 +71,7 @@ FeatureFileIOPices::~FeatureFileIOPices ()
 }
 
 
-void  FeatureFileIOPices::Parse_FEATURE_DATA_FILE_Line (KKStr&  line,
+void  FeatureFileIOPices::Parse_FEATURE_DATA_FILE_Line (KKStr&    line,
                                                         kkint32&  version,
                                                         kkint32&  numOfFields,
                                                         kkint32&  numOfExamples
@@ -161,7 +161,7 @@ VectorInt  FeatureFileIOPices::CreateIndirectionTable (const VectorKKStr&  field
     else if  (fieldName == "sfcentroidcol")
       indirectionTable.push_back (rfSfCentroidCol);
 
-    else if  (fieldName == "laditude")
+    else if  ((fieldName == "laditude")  ||  (fieldName == "latitude"))
       indirectionTable.push_back (rfLaditude);
 
     else if  (fieldName == "longitude")
@@ -183,12 +183,12 @@ VectorInt  FeatureFileIOPices::CreateIndirectionTable (const VectorKKStr&  field
 
 
 
-FileDescPtr  FeatureFileIOPices::GetFileDesc (const KKStr&         _fileName,
-                                              istream&             _in,
-                                              MLClassConstListPtr  _classes,
-                                              kkint32&               _estSize,
-                                              KKStr&               _errorMessage,
-                                              RunLog&              _log
+FileDescPtr  FeatureFileIOPices::GetFileDesc (const KKStr&    _fileName,
+                                              istream&        _in,
+                                              MLClassListPtr  _classes,
+                                              kkint32&        _estSize,
+                                              KKStr&          _errorMessage,
+                                              RunLog&         _log
                                              )
 {
   char  buff[102400];
@@ -251,7 +251,7 @@ FileDescPtr  FeatureFileIOPices::GetFileDesc (const KKStr&         _fileName,
   for  (featureNum = 0;  featureNum < numOfFeatures;  featureNum++)
   {
     KKStr&  fieldName = fields[featureNum];
-    fd->AddAAttribute (fieldName, NumericAttribute, alreadyExists);
+    fd->AddAAttribute (fieldName, AttributeType::Numeric, alreadyExists);
     if  (alreadyExists)
     {
       _log.Level (-1) << endl << endl 
@@ -276,9 +276,9 @@ FileDescPtr  FeatureFileIOPices::GetFileDesc (const KKStr&         _fileName,
 
 ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&       _fileName,
                                                     const FileDescPtr  _fileDesc,
-                                                    MLClassConstList&  _classes, 
+                                                    MLClassList&       _classes, 
                                                     istream&           _in,
-                                                    long               _maxCount,    // Maximum # images to load,  less than '0'  indicates all.
+                                                    kkint32            _maxCount,    // Maximum # images to load,  less than '0'  indicates all.
                                                     VolConstBool&      _cancelFlag,
                                                     bool&              _changesMade,
                                                     KKStr&             _errorMessage,
@@ -324,8 +324,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&       _fileName
   }
   
 
-  // The second line will have a list of fields;  we will use ths line to build
-  // an indirection table.
+  // The second line will have a list of fields;  we will use this line to build an indirection table.
   _in.getline (buff, sizeof (buff) - 1);
   KKStr  fieldDescLine (buff);
   VectorKKStr  fields = fieldDescLine.Parse ("\n\r\t");
@@ -345,7 +344,6 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&       _fileName
 
   ImageFeaturesListPtr examples = new ImageFeaturesList (_fileDesc, 
                                                          true,          // true=Owner  examples will own the ImageFeatures instances it contains.
-                                                         _log,
                                                          numOfExamples
                                                         );
 
@@ -360,7 +358,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&       _fileName
   char   firstChar;
   kkint32  lineCount = 0;
 
-  FVFloat  value;
+  FeatureVector::FVFloat  value;
 
   kkint32  lineNum = 0;
 
@@ -436,7 +434,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&       _fileName
 
           else
           {
-            value = (FVFloat)atof (field.Str ());
+            value = (FeatureVector::FVFloat)atof (field.Str ());
             example->AddFeatureData (fieldNum,  value);
           }
           break;
@@ -453,11 +451,11 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&       _fileName
           break;
 
         case rfImageFileName: 
-          example->ImageFileName (field);
+          example->ExampleFileName (field);
           break;
 
         case rfOrigSize: 
-          example->OrigSize ((FVFloat)atof (field.Str ()));
+          example->OrigSize ((FeatureVector::FVFloat)atof (field.Str ()));
           break;
 
         case rfNumOfEdgePixels: 
@@ -469,11 +467,11 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&       _fileName
           break;
 
         case rfCentroidRow: 
-          example->CentroidRow((FVFloat)atof (field.Str ()));
+          example->CentroidRow((FeatureVector::FVFloat)atof (field.Str ()));
           break;
 
         case rfCentroidCol: 
-          example->CentroidCol ((FVFloat)atof (field.Str ()));
+          example->CentroidCol ((FeatureVector::FVFloat)atof (field.Str ()));
           break;
 
         case rfPredictedClass: 
@@ -527,14 +525,14 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&       _fileName
       if  (example->OrigSize () <= 0)
         example->OrigSize (example->FeatureData (0));
 
-      if  (example->ImageFileName ().Empty ())
+      if  (example->ExampleFileName ().Empty ())
       {
         KKStr  imageFileName = _fileName + "_" + StrFormatInt (lineCount, "ZZZZZZ0");
-        example->ImageFileName (imageFileName);
+        example->ExampleFileName (imageFileName);
       }
 
-      if  (example->ImageFileName ().Empty ())
-        example->ImageFileName (osGetRootName (_fileName) + "_" + StrFormatInt (lineCount, "000000"));
+      if  (example->ExampleFileName ().Empty ())
+        example->ExampleFileName (osGetRootName (_fileName) + "_" + StrFormatInt (lineCount, "000000"));
 
 
       if  (numOfFeatures  >= MaxNumPlanktonRawFields)
@@ -549,7 +547,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&       _fileName
           InstrumentDataPtr  id = NULL;
           try
           {
-            id = InstrumentDataFileManager::GetClosestInstrumentData (example->ImageFileName (), _cancelFlag, _log);
+            id = InstrumentDataFileManager::GetClosestInstrumentData (example->ExampleFileName (), _cancelFlag, _log);
           }
           catch  (...)
           {
@@ -595,7 +593,7 @@ void   FeatureFileIOPices::SaveFile (FeatureVectorList&     _data,
                                      const KKStr&           _fileName,
                                      const FeatureNumList&  _selFeatures,
                                      ostream&               _out,
-                                     kkuint32&                _numExamplesWritten,
+                                     kkuint32&              _numExamplesWritten,
                                      VolConstBool&          _cancelFlag,
                                      bool&                  _successful,
                                      KKStr&                 _errorMessage,
@@ -608,7 +606,7 @@ void   FeatureFileIOPices::SaveFile (FeatureVectorList&     _data,
 
   bool  weOwnImages = false;
 
-  if  (strcmp (_data.UnderlyingClass (), "ImageFeatures") == 0)
+  if  (typeid (_data) == typeid (ImageFeaturesList))
   {
     examples = dynamic_cast<ImageFeaturesListPtr>(&_data);
   }
@@ -630,7 +628,7 @@ void   FeatureFileIOPices::SaveFile (FeatureVectorList&     _data,
   }
 
 
-  ClassIndexList  classIdx;
+  MLClassIndexList  classIdx;
 
   _out << "FEATURE_DATA_FILE"                                                << "\t"  
        << "Version"        << "\t" << StrFormatInt (fileVersionNum, "ZZZ0")  << "\t" 
@@ -659,7 +657,7 @@ void   FeatureFileIOPices::SaveFile (FeatureVectorList&     _data,
          << "BreakTie"          << "\t"
          << "SfCentroidRow"     << "\t"
          << "SfCentroidCol"     << "\t"
-         << "Laditude"          << "\t"
+         << "Latitude"          << "\t"
          << "Longitude"
          << endl;
   }
@@ -703,7 +701,7 @@ void   FeatureFileIOPices::SaveFile (FeatureVectorList&     _data,
         _out.precision (11);
         _out << example->ClassName          () << "\t" 
              << mlClassIdx                     << "\t"
-             << example->ImageFileName      () << "\t" 
+             << example->ExampleFileName    () << "\t" 
              << example->OrigSize           () << "\t"
              << example->NumOfEdgePixels    () << "\t"
              << example->Probability        () << "\t"
@@ -844,7 +842,7 @@ const  char*  FeatureFileIOPices::PlanktonRawFeatureDecriptions[] =
   "Depth",                   // 84
   "Salinity",                // 85
   "Oxygen",                  // 86
-  "Florences"                // 87
+  "Fluorescence"             // 87
 
 };
 
@@ -870,9 +868,7 @@ KKStr   FeatureFileIOPices::PlanktonFieldName (kkint32  fieldNum)
 
 
 
-
-
-kkint32 FeatureFileIOPices::PlanktonMaxNumOfFields ()
+kkint32  FeatureFileIOPices::PlanktonMaxNumOfFields ()
 {
   return  MaxNumPlanktonRawFields;
 }
@@ -880,13 +876,36 @@ kkint32 FeatureFileIOPices::PlanktonMaxNumOfFields ()
 
 
 ImageFeaturesListPtr  FeatureFileIOPices::LoadInSubDirectoryTree 
-                                             (KKStr              _rootDir,
-                                              MLClassConstList&  _mlClasses,
-                                              bool               _useDirectoryNameForClassName,
-                                              DataBasePtr        _dataBase,
-                                              VolConstBool&      _cancelFlag, 
-                                              bool               _rewiteRootFeatureFile,
-                                              RunLog&            _log
+                                             (FactoryFVProducerPtr  _fvProducerFactory,
+                                              KKStr                 _rootDir,
+                                              MLClassList&          _mlClasses,
+                                              bool                  _useDirectoryNameForClassName,
+                                              VolConstBool&         _cancelFlag, 
+                                              bool                  _rewiteRootFeatureFile,
+                                              RunLog&               _log
+                                             )
+{
+  return  LoadInSubDirectoryTree (_fvProducerFactory,
+                                  _rootDir,
+                                  _mlClasses,
+                                  _useDirectoryNameForClassName,
+                                  NULL,
+                                  _cancelFlag, 
+                                  _rewiteRootFeatureFile,
+                                  _log
+                                );
+}
+
+
+ImageFeaturesListPtr  FeatureFileIOPices::LoadInSubDirectoryTree 
+                                             (FactoryFVProducerPtr  _fvProducerFactory,
+                                              KKStr                 _rootDir,
+                                              MLClassList&          _mlClasses,
+                                              bool                  _useDirectoryNameForClassName,
+                                              DataBasePtr           _dataBase,
+                                              VolConstBool&         _cancelFlag, 
+                                              bool                  _rewiteRootFeatureFile,
+                                              RunLog&               _log
                                              )
 {
   _log.Level (10) << "FeatureFileIOPices::LoadInSubDirectoryTree    rootDir[" << _rootDir << "]." << endl;
@@ -907,7 +926,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadInSubDirectoryTree
     fullFeatureFileName = "Root.data";
   }
 
-  MLClassConstPtr  unKnownClass = _mlClasses.GetUnKnownClass ();
+  MLClassPtr       unKnownClass = _mlClasses.GetUnKnownClass ();
   if  (_useDirectoryNameForClassName)
   {
     KKStr className = MLClass::GetClassNameFromDirName (_rootDir);
@@ -918,12 +937,13 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadInSubDirectoryTree
 
   ImageFeaturesListPtr  dirImages = NULL;
 
-  FileDescPtr  fileDesc = FeatureFileIOPices::NewPlanktonFile (_log);
+  FileDescPtr  fileDesc = FeatureFileIOPices::NewPlanktonFile ();
 
   if  (_rewiteRootFeatureFile)
   {
     DateTime  timeStamp;
-    dirImages = FeatureDataReSink (_rootDir,
+    dirImages = FeatureDataReSink (_fvProducerFactory,
+                                   _rootDir,
                                    featureFileName,
                                    unKnownClass,
                                    _useDirectoryNameForClassName,
@@ -950,7 +970,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadInSubDirectoryTree
         {
           double  latitude = 0.0;
           double  longitude = 0.0;
-          _dataBase->ImagesGetGpsData (osGetRootName (image->ImageFileName ()), latitude, longitude);
+          _dataBase->ImagesGetGpsData (osGetRootName (image->ExampleFileName ()), latitude, longitude);
           if  ((latitude != 0.0)  &&  (longitude != 0.0))
           {
             image->Latitude (latitude);
@@ -978,9 +998,8 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadInSubDirectoryTree
   }
   else
   {
-    dirImages =  new ImageFeaturesList (fileDesc, true, _log, 100);
+    dirImages =  new ImageFeaturesList (fileDesc, true, 100);
   }
-
 
   // Now that we have processed all image files in "rootDir",
   // lets process any sub-directories.
@@ -1003,7 +1022,8 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadInSubDirectoryTree
 
       KKStr  newDirPath = osAddSlash (_rootDir) + subDirName;
 
-      ImageFeaturesListPtr  subDirImages = LoadInSubDirectoryTree (newDirPath, 
+      ImageFeaturesListPtr  subDirImages = LoadInSubDirectoryTree (_fvProducerFactory,
+                                                                   newDirPath, 
                                                                    _mlClasses, 
                                                                    _useDirectoryNameForClassName,
                                                                    _dataBase,
@@ -1020,8 +1040,8 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadInSubDirectoryTree
       for  (idx = subDirImages->begin ();  idx != subDirImages->end ();  idx++)
       {
         image = *idx;
-        KKStr  newImageFileName = subDirName + image->ImageFileName ();
-        image->ImageFileName (newImageFileName);
+        KKStr  newImageFileName = subDirName + image->ExampleFileName ();
+        image->ExampleFileName (newImageFileName);
       }
 
       dirImages->AddQueue (*subDirImages);
@@ -1061,7 +1081,7 @@ void  FeatureFileIOPices::ReFreshInstrumentData
     kkuint32  scanLineNum = 0;
     kkuint32  scanCol     = 0;
 
-    SipperVariables::ParseImageFileName (_imageFileName, sipperFileName, scanLineNum, scanCol);
+    PicesVariables::ParseImageFileName (_imageFileName, sipperFileName, scanLineNum, scanCol);
 
     id = _dataBase->InstrumentDataGetByScanLine (sipperFileName, scanLineNum);
     if  (id)
@@ -1109,25 +1129,24 @@ void  FeatureFileIOPices::ReFreshInstrumentData
 }  /* ReFreshInstrumentData */
 
 
-
-
 ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink 
-                                        (KKStr              _dirName, 
-                                         const KKStr&       _fileName, 
-                                         MLClassConstPtr    _unknownClass,
-                                         bool               _useDirectoryNameForClassName,
-                                         DataBasePtr        _dataBase,
-                                         MLClassConstList&  _mlClasses,
-                                         VolConstBool&      _cancelFlag,    // will be monitored,  if set to True  Load will terminate.
-                                         bool&              _changesMade,
-                                         DateTime&          _timeStamp,
-                                         RunLog&            _log
+                                        (FactoryFVProducerPtr  _fvProducerFactory,
+                                         const KKStr&          _dirName, 
+                                         const KKStr&          _fileName, 
+                                         MLClassPtr            _unknownClass,
+                                         bool                  _useDirectoryNameForClassName,
+                                         DataBasePtr           _dataBase,
+                                         MLClassList&          _mlClasses,
+                                         VolConstBool&         _cancelFlag,    /**< will be monitored, if set to True  Load will terminate.  */
+                                         bool&                 _changesMade,
+                                         KKB::DateTime&        _timeStamp,
+                                         RunLog&               _log
                                         )
 {
   _changesMade = false;
   _timeStamp = DateTime ();
 
-  FileDescPtr  fileDesc = FeatureFileIOPices::NewPlanktonFile (_log);
+  FileDescPtr  fileDesc = _fvProducerFactory->FileDesc ();
   if  (_unknownClass == NULL)
     _unknownClass = MLClass::GetUnKnownClassStatic ();
 
@@ -1144,11 +1163,9 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
   _log.Level (10) << "                   fileName      [" << _fileName  << "]." << endl;
   _log.Level (10) << "                   UnKnownClass  [" << className  << "]." << endl;
 
-  osAddLastSlash (_dirName);
-  
   KKStr  fullFeatureFileName = osAddSlash (_dirName) +  _fileName;
 
-  bool  successful;
+  bool  successful = true;
 
   KKStr fileNameToOpen;
   if  (_dirName.Empty ())
@@ -1164,18 +1181,18 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
   if  (origFeatureVectorData == NULL)
   {
     successful = false;
-    origFeatureVectorData = new ImageFeaturesList (fileDesc, true, _log, 10);
+    origFeatureVectorData = _fvProducerFactory->ManufacturFeatureVectorList (true, _log);
   }
 
   if  (_cancelFlag)
   {
     delete  origFeatureVectorData;  origFeatureVectorData = NULL;
-    return  new ImageFeaturesList (fileDesc, true, _log, 10);
+    return  new ImageFeaturesList (fileDesc, true, 10);
   }
 
   ImageFeaturesListPtr  origFeatureData = NULL;
 
-  if  (strcmp (origFeatureVectorData->UnderlyingClass (), "ImageFeaturesList") == 0)
+  if  (typeid (*origFeatureVectorData) == typeid (ImageFeaturesList))
      origFeatureData = dynamic_cast<ImageFeaturesListPtr>(origFeatureVectorData);
   else
   {
@@ -1195,10 +1212,11 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
       _changesMade = true;
 
     delete  origFeatureData;  origFeatureData = NULL;
-
-    return  new ImageFeaturesList (fileDesc, true, _log, 10);
+    return  new ImageFeaturesList (fileDesc, true, 10);
   }
 
+  
+  FeatureVectorProducerPtr  fvProducer = _fvProducerFactory->ManufactureInstance (_log);
   InstrumentDataFileManager::InitializePush ();
 
   if  (successful)
@@ -1217,12 +1235,12 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
   else
   {
     delete  origFeatureData;
-    origFeatureData = new ImageFeaturesList (fileDesc, true, _log);
+    origFeatureData = new ImageFeaturesList (fileDesc, true);
   }
 
   origFeatureData->SortByRootName (false);
 
-  ImageFeaturesListPtr  extractedFeatures = new ImageFeaturesList (fileDesc, true, _log, fileNameList->QueueSize () + 2);
+  ImageFeaturesListPtr  extractedFeatures = new ImageFeaturesList (fileDesc, true, fileNameList->QueueSize () + 2);
   extractedFeatures->Version (CurrentFeatureFileVersionNum);
 
   fileNameList->Sort (false);
@@ -1288,21 +1306,45 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
     else
     {
       // We either  DON'T have an original image    or    versions are not the same.
-      KKStr  fullFileName = _dirName + (*imageFileName);
+      KKStr  fullFileName = osAddSlash (_dirName) + (*imageFileName);
       ImageFeaturesPtr image = NULL;
+      successful = true;
       try
       {
         if  (logImagesGettingFeaturesCalced)
-          _log.Level (10) << "FeatureDataReSink " << imageFileName << endl;
-        image = new ImageFeatures (fullFileName, _unknownClass, successful);
+          _log.Level (10) << "FeatureFileIOPices::FeatureDataReSink " << imageFileName << endl;
+
+        FeatureVectorPtr  fv =  fvProducer->ComputeFeatureVectorFromImage (fullFileName, _unknownClass, NULL, _log);
+        if  (fv)
+        {
+          if  (typeid (*fv) == typeid (ImageFeatures))
+          {
+            image = dynamic_cast<ImageFeaturesPtr> (fv);
+            fv = NULL;
+          }
+          else
+          {
+            image = new ImageFeatures (*fv);
+            delete  fv;
+            fv = NULL;
+          }
+        }
         if  (logImagesGettingFeaturesCalced)
           _log.Level (10) << "FeatureDataReSink " << imageFileName << "  Computed." << endl;
+      }
+      catch  (const KKException& e1)
+      {
+        _log.Level (-1) << endl
+          << "FeatureFileIOPices::FeatureDataReSink   ***ERROR***  Exception occurred computing FeatureVector;  ImageFileName[" << imageFileName << "]." << endl
+          << "   " << e1.ToString () << endl
+          << endl;
+        successful = false;
+        image = NULL;
       }
       catch  (...)
       {
         _log.Level (-1) << endl << endl
-          << "FeatureDataReSink   ***ERROR***"  << endl
-          << "       Exception occurred calling constructor 'ImageFeatures'  trying to compute FeatureVector." << endl
+          << "FeatureFileIOPices::FeatureDataReSink   ***ERROR***  Exception occurred computing FeatureVector;  ImageFileName[" << imageFileName << "]." << endl
           << endl;
         successful = false;
         image = NULL;
@@ -1310,16 +1352,15 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
 
       if  (!successful)
       {
-        _log.Level (-1) << " FeatureFileIOPices::FeatureDataReSink  *** ERROR ***, Processing Image File["
-                       << imageFileName << "]."
-                       << endl;
+        _log.Level (-1) << " FeatureFileIOPices::FeatureDataReSink  *** ERROR ***, Processing Image File[" << imageFileName << "]." << endl;
         delete  image;
+        image = NULL;
       }
 
       else
       {
         _changesMade = true;
-        image->ImageFileName (*imageFileName);
+        image->ExampleFileName (*imageFileName);
 
         // We will need to check the InstrumentDataFilesManager object for other data.
         bool   weOwnID = false;
@@ -1329,7 +1370,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
           KKStr  sipperFileName;
           kkuint32  scanLineNum = 0;
           kkuint32  scanCol = 0;
-          SipperVariables::ParseImageFileName (imageFileName, sipperFileName, scanLineNum, scanCol);
+          PicesVariables::ParseImageFileName (*imageFileName, sipperFileName, scanLineNum, scanCol);
           id = _dataBase->InstrumentDataGetByScanLine (sipperFileName, scanLineNum);
           weOwnID = true;
         }
@@ -1338,7 +1379,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
         {
           try
           {
-            id = InstrumentDataFileManager::GetClosestInstrumentData (imageFileName, _cancelFlag, _log);
+            id = InstrumentDataFileManager::GetClosestInstrumentData (*imageFileName, _cancelFlag, _log);
           }
           catch (...)
           {
@@ -1383,7 +1424,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
           }
         }
 
-        _log.Level (30) << image->ImageFileName () << "  " << image->OrigSize () << endl;
+        _log.Level (30) << image->ExampleFileName () << "  " << image->OrigSize () << endl;
         extractedFeatures->PushOnBack (image);
         numOfNewFeatureExtractions++;
 
@@ -1424,6 +1465,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
 
   delete  fileNameList;     fileNameList    = NULL;
   delete  origFeatureData;  origFeatureData = NULL;
+  delete  fvProducer;       fvProducer      = NULL;
 
   InstrumentDataFileManager::InitializePop ();
 
@@ -1434,10 +1476,39 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
 
 
 
+
+ImageFeaturesListPtr FeatureFileIOPices::FeatureDataReSink (FactoryFVProducerPtr  _fvProducerFactory,
+                                                            const KKStr&          _dirName, 
+                                                            const KKStr&          _fileName, 
+                                                            MLClassPtr            _unknownClass,
+                                                            bool                  _useDirectoryNameForClassName,
+                                                            MLClassList&          _mlClasses,
+                                                            VolConstBool&         _cancelFlag,    // will be monitored,  if set to True  Load will terminate.
+                                                            bool&                 _changesMade,
+                                                            KKB::DateTime&        _timeStamp,
+                                                            RunLog&               _log
+                                                           )
+{
+  return FeatureDataReSink (_fvProducerFactory, 
+                            _dirName, 
+                            _fileName, 
+                            _unknownClass, 
+                            _useDirectoryNameForClassName,
+                            NULL, 
+                            _mlClasses, 
+                            _cancelFlag, 
+                            _changesMade, 
+                            _timeStamp, 
+                            _log);
+}
+
+
+
+
 FileDescPtr  FeatureFileIOPices::planktonFileDesc = NULL;
 
 
-FileDescPtr  FeatureFileIOPices::NewPlanktonFile (RunLog&  _log)
+FileDescPtr  FeatureFileIOPices::NewPlanktonFile ()
 {
   if  (planktonFileDesc)
     return  planktonFileDesc;
@@ -1449,7 +1520,7 @@ FileDescPtr  FeatureFileIOPices::NewPlanktonFile (RunLog&  _log)
     bool  alreadyExists = false;
     planktonFileDesc = new FileDesc ();
     for  (kkint32 fieldNum = 0;  fieldNum < MaxNumPlanktonRawFields;  fieldNum++)
-      planktonFileDesc->AddAAttribute (PlanktonFieldName (fieldNum), NumericAttribute, alreadyExists);
+      planktonFileDesc->AddAAttribute (PlanktonFieldName (fieldNum), AttributeType::Numeric, alreadyExists);
 
     // Lets make sure that one was already created by opening up a data file.
     planktonFileDesc = FileDesc::GetExistingFileDesc (planktonFileDesc);

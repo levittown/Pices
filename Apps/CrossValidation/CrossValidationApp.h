@@ -8,14 +8,18 @@
 using namespace  KKB;
 
 #include "ConfusionMatrix2.h"
+#include "FactoryFVProducer.h"
 #include "FeatureNumList.h"
 #include "FileDesc.h"
 #include "MLClass.h"
-#include "MLClassConstList.h"
 #include "ImageFeatures.h"
 #include "Orderings.h"
 #include "TrainingConfiguration2.h"
+using namespace  KKMLL;
+
+#include "picesTrainingConfiguration.h"
 using namespace  MLL;
+
 
 
 class  CrossValidationRun;
@@ -51,15 +55,18 @@ public:
 
   DateTime                   endTime;
 
+  FactoryFVProducerPtr       fvFactoryProducer;
+
   bool                       featuresAreNormalizedAlready;
 
   FileDescPtr                fileDesc;
 
   FeatureVectorListPtr       examples;
 
-  MLClassConstListPtr        mlClasses;
+  MLClassListPtr             mlClasses;
 
   FeatureFileIOPtr           inputFormat;
+  bool                       inputFormatSpecified;
 
   KKStr                      loadFileName;
 
@@ -68,9 +75,9 @@ public:
   double                     logLossMax;
   double                     logLossMin;
 
-  KKStr                      missedClassedDir; /**< Directory where miss clasified examples should be copied to. */
+  KKStr                      missedClassedDir; /**< Directory where miss classified examples should be copied to. */
 
-  MLClassConstPtr            noiseMLClass;
+  MLClassPtr                 noiseMLClass;
 
   int                        numOfFolds;
 
@@ -86,9 +93,9 @@ public:
 
   float                      punishmentFactor;
 
-  //  If greater than 0, will indicate that we want to randomly select that many fatures 
+  //  If greater than 0, will indicate that we want to randomly select that many features 
   //  from the ones that are already specified in the configuration file. Zero (0) means no 
-  //  random fature selection
+  //  random feature selection
   int                        randomFeatures;
 
   //  If set to true will randomize the order of the test data
@@ -101,8 +108,6 @@ public:
 
   int                        randomSetWidth;
 
-  double                     reduction_time;
-
   KKStr                      reportFileName;
 
   ostream*                   report;
@@ -111,9 +116,9 @@ public:
 
   RunLog                     runLog;
 
-  KKStr                      saveFileName;         /**< file mame to save extracted examples into if user specifies -s option. */
+  KKStr                      saveFileName;         /**< file name to save extracted examples into if user specifies -s option. */
 
-  float                      splitPercentage;      /**< A number gretare than 0 and less than 100.0%  */
+  float                      splitPercentage;      /**< A number greater than 0 and less than 100.0%  */
 
   DateTime                   startTime;
 
@@ -145,11 +150,7 @@ public:
                        int                   foldNum,
                        double&               trainingTime,
                        double&               classificationTime,
-                       int&                  reductionPreImageCount,
-                       int&                  reductionPostImageCount,
-                       double&               reductionTime,
-                       int&                  supportPoints,
-                       KKStr&                bitReductionByFeature
+                       int&                  supportPoints
                       );
 
 
@@ -161,8 +162,8 @@ public:
                                              );
 
 
-  KKStr  LocateImageFileUsingConfigurationFile (const  KKStr&    fileName,
-                                                MLClassConstPtr  knownClass
+  KKStr  LocateImageFileUsingConfigurationFile (const  KKStr&   fileName,
+                                                MLClassPtr      knownClass
                                                );
 
   void   ProcessCmdLineParameters (int     argc, 
@@ -183,9 +184,9 @@ public:
   void   PrintSizeHistogram ();
 
 
-  void   PostMisclassifiedImage (KKStr            fileName,
-                                 MLClassConstPtr  knownClass,
-                                 MLClassConstPtr  predictedClass
+  void   PostMisclassifiedImage (KKStr       fileName,
+                                 MLClassPtr  knownClass,
+                                 MLClassPtr  predictedClass
                                 );
 
 

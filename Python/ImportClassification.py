@@ -152,18 +152,18 @@ def  ImportClassificationDataOneFile(fileNum, fullFileName, classDic, logEntryDi
 def  ImportClassificationData(dirName):
   try:
        #db = mysql.connector.Connect(user='kkramer',
-       #                             password="tree10peach",
+       #                             password=passWord,
        #                             host='sipper-db2.marine.usf.edu',
        #                             database='pices_new'
        #                          )
               
        #db = mysql.connector.Connect(user='kkramer',
-       #                             password="tree10peach",
+       #                             password=passWord,
        #                             host='sipper-db2.marine.usf.edu',
        #                             database='pices_new'
        #                           )
        db = mysql.connector.Connect(user='kkramer',
-                                    password="tree10peach",
+                                    password=passWord,
                                     host='localhost',
                                     database='pices_new'
                                   )
@@ -202,31 +202,31 @@ def  ImportClassificationData(dirName):
   #ImportClassificationDataOneFile(1, (os.path.join(dirName, "ImagesClassificationCruise_ETP2007") + ".txt"), classDic, logEntryDict, db, c)
   #ImportClassificationDataOneFile(1, (os.path.join(dirName, "ImagesClassificationCruise_ETP2008") + ".txt"), classDic, logEntryDict, db, c)
   #ImportClassificationDataOneFile(1, (os.path.join(dirName, "ImagesClassificationCruise_HRS02")   + ".txt"), classDic, logEntryDict, db, c)
-  #ImportClassificationDataOneFile(1, (os.path.join(dirName, "ImagesClassificationCruise_WB0111")  + ".txt"), classDic, logEntryDict, db, c)
-
+  ImportClassificationDataOneFile(1, (os.path.join(dirName, "ImagesClassificationCruise_WB0111")  + ".txt"), classDic, logEntryDict, db, c)
   ImportClassificationDataOneFile(1, (os.path.join(dirName, "ImagesClassificationCruise_WB0211")  + ".txt"), classDic, logEntryDict, db, c)
   ImportClassificationDataOneFile(1, (os.path.join(dirName, "ImagesClassificationCruise_WB0212")  + ".txt"), classDic, logEntryDict, db, c)
   ImportClassificationDataOneFile(1, (os.path.join(dirName, "ImagesClassificationCruise_WB0213")  + ".txt"), classDic, logEntryDict, db, c)
   ImportClassificationDataOneFile(1, (os.path.join(dirName, "ImagesClassificationCruise_WB0511")  + ".txt"), classDic, logEntryDict, db, c)
   ImportClassificationDataOneFile(1, (os.path.join(dirName, "ImagesClassificationCruise_WB0512")  + ".txt"), classDic, logEntryDict, db, c)
-  ImportClassificationDataOneFile(1, (os.path.join(dirName, "ImagesClassificationCruise_WB0611")  + ".txt"), classDic, logEntryDict, db, c)
-  ImportClassificationDataOneFile(1, (os.path.join(dirName, "ImagesClassificationCruise_WB0812")  + ".txt"), classDic, logEntryDict, db, c)
-  ImportClassificationDataOneFile(1, (os.path.join(dirName, "ImagesClassificationCruise_WB0813")  + ".txt"), classDic, logEntryDict, db, c)
-  ImportClassificationDataOneFile(6, (os.path.join(dirName, "ImagesClassificationCruise_WB0814")  + ".txt"), classDic, logEntryDict, db, c)
-  ImportClassificationDataOneFile(7, (os.path.join(dirName, "ImagesClassificationCruise_WB0911")  + ".txt"), classDic, logEntryDict, db, c)
-  ImportClassificationDataOneFile(8, (os.path.join(dirName, "ImagesClassificationCruise_WB1008")  + ".txt"), classDic, logEntryDict, db, c)
+  #ImportClassificationDataOneFile(1, (os.path.join(dirName, "ImagesClassificationCruise_WB0611")  + ".txt"), classDic, logEntryDict, db, c)
+  #ImportClassificationDataOneFile(1, (os.path.join(dirName, "ImagesClassificationCruise_WB0812")  + ".txt"), classDic, logEntryDict, db, c)
+  #ImportClassificationDataOneFile(1, (os.path.join(dirName, "ImagesClassificationCruise_WB0813")  + ".txt"), classDic, logEntryDict, db, c)
+  #ImportClassificationDataOneFile(6, (os.path.join(dirName, "ImagesClassificationCruise_WB0814")  + ".txt"), classDic, logEntryDict, db, c)
+  #ImportClassificationDataOneFile(7, (os.path.join(dirName, "ImagesClassificationCruise_WB0911")  + ".txt"), classDic, logEntryDict, db, c)
+  #ImportClassificationDataOneFile(8, (os.path.join(dirName, "ImagesClassificationCruise_WB1008")  + ".txt"), classDic, logEntryDict, db, c)
   ImportClassificationDataOneFile(1, (os.path.join(dirName, "ImagesClassificationCruise_WB1012")  + ".txt"), classDic, logEntryDict, db, c)
-  ImportClassificationDataOneFile(1, (os.path.join(dirName, "ImagesClassificationCruise_WB1012")  + ".txt"), classDic, logEntryDict, db, c)
-  ImportClassificationDataOneFile(1, (os.path.join(dirName, "ImagesClassificationCruise_WB1101")  + ".txt"), classDic, logEntryDict, db, c)
-  ImportClassificationDataOneFile(1, (os.path.join(dirName, "ImagesClassificationCruise_WB1111")  + ".txt"), classDic, logEntryDict, db, c)
-  ImportClassificationDataOneFile(1, (os.path.join(dirName, "ImagesClassificationCruise_WFS2008") + ".txt"), classDic, logEntryDict, db, c)
+  #ImportClassificationDataOneFile(1, (os.path.join(dirName, "ImagesClassificationCruise_WB1012")  + ".txt"), classDic, logEntryDict, db, c)
+  #ImportClassificationDataOneFile(1, (os.path.join(dirName, "ImagesClassificationCruise_WB1101")  + ".txt"), classDic, logEntryDict, db, c)
+  #ImportClassificationDataOneFile(1, (os.path.join(dirName, "ImagesClassificationCruise_WB1111")  + ".txt"), classDic, logEntryDict, db, c)
+  #ImportClassificationDataOneFile(1, (os.path.join(dirName, "ImagesClassificationCruise_WFS2008") + ".txt"), classDic, logEntryDict, db, c)
 
 
 def  main():
   #rootDir="E:\\Users\\kkramer\\Dropbox\\Sipper\\FromAndrewToKurt\\Validation\\2014-09-16\\"
   #rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews"
   #rootDir="C:\\Pices\\UpdatesFromOtherServers\\2015-03-11"
-  rootDir="C:\\Users\\Kurt\\Dropbox\\ToKurt\\DataToKurt"
+  #rootDir="C:\\Users\\Kurt\\Dropbox\\ToKurt\\DataToKurt"
+  rootDir="D:\\Temp"
   ImportClassificationData(rootDir)
 
 

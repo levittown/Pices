@@ -6,19 +6,21 @@
 using namespace KKB;
 
 
-#include "InstrumentDataManager.h"
-using namespace SipperHardware;
-
-
 #include "Classifier2.h"
-#include "DataBase.h"
+#include "FactoryFVProducer.h"
+#include "FeatureVectorProducer.h"
 #include "FileDesc.h"
 #include "MLClass.h"
+#include "TrainingProcess2.h"
+using namespace  KKMLL;
+
+
+#include "DataBase.h"
 #include "ImageFeatures.h"
+#include "InstrumentDataManager.h"
 #include "SipperBlob.h"
 #include "SipperExtractionImageManager.h"
-#include "TrainingProcess2.h"
-using namespace MLL;
+using namespace  MLL;
 
 
 #include "PreDefinedClasses.h"
@@ -42,7 +44,7 @@ namespace  ImageExtractionManager
 
     virtual  ~FrameProcessorThread ();
 
-    virtual  ThreadTypes   ThreadType ()  {return ttFrameProcessor;}
+    virtual  ThreadTypes   ThreadType ()  {return ThreadTypes::FrameProcessor;}
 
     void  GetRunTimeStats (kkuint32&  _framesProcessed,
                            kkuint32&  _scanLinesProcessed,
@@ -58,18 +60,20 @@ namespace  ImageExtractionManager
     KKStr             SipperFileFormatStr ();
     LogicalFramePtr   GetNextFrameToProcess ();
 
-    Classifier2Ptr          classifier;
-    FileDescPtr             fileDesc;
-    LogicalFrameQueuePtr    framePool;
-    kkuint32                framesProcessed;
-    ExtractedImageQueuePtr  imagesAwaitingUpdate;
-    kkuint32                imagesClassified;
-    kkuint32                imagesFound;
-    RunLog                  log;
-    kkuint32                scanLinesProcessed;
-    KKStr                   sipperRootName;
-    TrainingProcess2Ptr     trainer;
-    MLClassPtr              unKnownMLClass;
+    Classifier2Ptr            classifier;
+    FactoryFVProducerPtr      fvProducerFactory;
+    FeatureVectorProducerPtr  fvProducer;
+    FileDescPtr               fileDesc;
+    LogicalFrameQueuePtr      framePool;
+    kkuint32                  framesProcessed;
+    ExtractedImageQueuePtr    imagesAwaitingUpdate;
+    kkuint32                  imagesClassified;
+    kkuint32                  imagesFound;
+    RunLog                    log;
+    kkuint32                  scanLinesProcessed;
+    KKStr                     sipperRootName;
+    TrainingProcess2Ptr       trainer;
+    MLClassPtr                unKnownMLClass;
   };  /* FrameProcessorThread */
 
   typedef  FrameProcessorThread*  FrameProcessorThreadPtr;

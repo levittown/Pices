@@ -11,12 +11,6 @@
 
 namespace  ImageExtractionManager
 {
-  typedef  enum  {ttFrameExtractor,
-                  ttFrameProcessor,
-                  ttDataBAseUpdater
-                 }  
-                   ThreadTypes;
-
   /**
    *@brief   The base class to be used by all Extraction Manager threads.
    *@details  This will be the base class for each one of the different types of processing that 
@@ -26,6 +20,14 @@ namespace  ImageExtractionManager
   class  ImageExtractionThread:  public KKThread
   {
   public:
+    enum class ThreadTypes: int
+    {
+      FrameExtractor,
+      FrameProcessor,
+      DataBaseUpdater
+     };
+
+
     ImageExtractionThread (ExtractionParms&     _parms,
                            ExtractionManagerPtr _extractionManager,
                            const KKStr&         _threadName,

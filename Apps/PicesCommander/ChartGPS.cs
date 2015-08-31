@@ -214,7 +214,7 @@ namespace PicesCommander
 
       mainWinConn = PicesDataBase.GetGlobalDatabaseManagerNewInstance (runLog);
 
-      configFileName = OSservices.AddSlash (PicesSipperVariables.PicesConfigurationDirectory ()) + "ChartGPS.cfg";
+      configFileName = OSservices.AddSlash (PicesSipperVariables.ConfigurationDirectory ()) + "ChartGPS.cfg";
 
       InitializeComponent ();
     }
@@ -755,6 +755,7 @@ namespace PicesCommander
           AddSeriesToChart (dstp, ref minX, ref maxX, ref minY, ref maxY, ref minGpsDateTime, ref maxGpsDateTime);
       }
 
+      Dictionary<String, PicesSipperStation>  stationsPlotted = new Dictionary<string,PicesSipperStation> ();
       PicesSipperDeploymentList  deploymentsPlotted = new PicesSipperDeploymentList ();
       // Second we plot series that is specific to a deployment.
       foreach  (DataSeriesToPlot dstp in series)
@@ -773,9 +774,37 @@ namespace PicesCommander
       {
         PicesSipperStation  stationToPlot = stations.LookUpByStationName (stationName);
         if  (stationToPlot != null)
+        {
           stationsToPlot.Add (stationToPlot);
+          stationsPlotted.Add (stationToPlot.StationName, stationToPlot);
+        }
       }
 
+      // Third we add stations that were not in one of the specified deployments but awe in the area of the deployments.
+      // Find other stations in plot area.
+      // Degrees/Kilo-Meter = 1/111  There are 111 Km/Degree of latitude
+
+      double  paddingKms = (double)PaddingKms.Value;
+      double  latPadding  =  paddingKms * (1.0 / 111.0);  // Will add 5km's of padding to latitude.
+      double  degreesToRads = Math.PI / 180.0;
+      double  kmsPerDegLong = 111.6 * Math.Cos ((minY + maxY) / 2.0  * degreesToRads);
+      double  longPadding = paddingKms * (1.0 / (kmsPerDegLong));
+
+      PicesSipperStationList  stationsInRange = 
+         mainWinConn.SipperStationsLoadByGpsRange (minY - latPadding, maxY + latPadding, minX - longPadding, maxX + longPadding);
+
+      if  (stationsInRange != null)
+      {
+        foreach  (PicesSipperStation  stationToPlot in stationsInRange)
+        {
+          if  (!stationsPlotted.ContainsKey (stationToPlot.StationName))
+          {
+            stationsPlotted.Add (stationToPlot.StationName, stationToPlot);
+            stationsToPlot.Add (stationToPlot);
+          }
+        }
+      }
+      
       AddStationsToChart (stationsToPlot, ref minX, ref maxX, ref minY, ref maxY);
 
       double  latitudeMid = (maxY + minY) / 2.0;

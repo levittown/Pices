@@ -23,17 +23,18 @@ typedef wchar_t WCHAR;
 #include "RunLog.h"
 using namespace  KKB;
 
-#include "DataBase.h"
-#include "InstrumentDataFileManager.h"
 #include "MLClass.h"
+using namespace  KKMLL;
+
+
+#include "DataBase.h"
+#include "Instrument.h"
+#include "InstrumentDataFileManager.h"
+#include "PicesVariables.h"
 using namespace  MLL;
 
-#include  "Instrument.h"
-#include  "SipperVariables.h"
-using namespace SipperHardware;
-
 #include "ExtractionParms.h"
-using namespace ImageExtractionManager;
+using namespace  ImageExtractionManager;
 
 
 #include "ImageExtractionWindows.h"
@@ -45,6 +46,9 @@ using namespace ImageExtractionManager;
 // -A 0  -CPD 3  -D D:\TrainingApp\ExtractedImages\Station1G_10-xxxx\  -ipd 1000  -min 500  -max 0  -Pre On  -R D:\TrainingApp\ExtractedImages\Station1G_10-xxxx\Station1G_10_c0.txt  -S D:\TrainingApp\SipperFiles\Station1G_10.spr  -SF Sipper3  -C D:\TrainingApp\DataFiles\TrainingModels\etpB_training.cfg  -X
 
 // -A 0  -CPD 3  -D D:\Pices\ExtractedImages\GG1002005S_01  -ipd 1000  -min 150  -max 0  -Pre On  -R D:\Pices\ExtractedImages\GG1002005S_01\GG1002005S_01_c0.txt  -S F:\Pices\SipperFiles\GG1002\GG1002005S\GG1002005S_01.spr  -SF Sipper3  -C D:\Pices\DataFiles\TrainingModels\GulfOilBroad2_Discreate6_Dual.cfg  -X  -CountOnly  -MultiThreaded Yes 
+
+
+// -c USF_MFS.cfg  -S F:\Pices\SipperFiles\USF\WB0512\PCB05\WB0512PCB05_03.spr  -Min 250  -sf Sipper3  -d F:\Pices\ExtractedImages\WB0512\PCB05\WB0512PCB05_03  -x
 
 /////////////////////////////////////////////////////////////////////////////
 // CImageExtractionWindowsApp
@@ -92,6 +96,9 @@ CImageExtractionWindowsApp theApp;
 // CImageExtractionWindowsApp initialization
 BOOL CImageExtractionWindowsApp::InitInstance()
 {
+  PicesVariables::InitializeEnvironment ();
+
+
 	AfxEnableControlContainer();
 
 	// Standard initialization
@@ -120,18 +127,7 @@ BOOL CImageExtractionWindowsApp::InitInstance()
   wcstombs_s (&pReturnValue, buff, sizeof (buff), m_lpCmdLine,  (size_t)sizeof (buff));
   KKStr  cmdLine = buff;
 
-  SipperImageExtractionParmsPtr  imageExtractionParms = 
-               new SipperImageExtractionParms (progName, 
-                                               cmdLine, 
-                                               true,               // Running as Windows App
-                                               errorMessage, 
-                                               cmdLineGood,
-                                               log
-                                              );
-
-  if  (imageExtractionParms->MultiThreaded ())
-  {
-    multiThreadedExtractionParms 
+  multiThreadedExtractionParms 
        = new ExtractionParms (progName, 
                               cmdLine, 
                               true,               // Running as Windows App
@@ -139,9 +135,6 @@ BOOL CImageExtractionWindowsApp::InitInstance()
                               cmdLineGood,
                               log
                              );
-    delete  imageExtractionParms;
-    imageExtractionParms = NULL;
-  }
 
   if  (!errorMessage.Empty ())
   {
@@ -153,16 +146,15 @@ BOOL CImageExtractionWindowsApp::InitInstance()
                                L"Invalid Parameters",
                                MB_OK
                               );
-    imageExtractionParms->DisplayExampleCmdLine ();
-    delete  imageExtractionParms;          imageExtractionParms         = NULL;
-    delete  multiThreadedExtractionParms;  multiThreadedExtractionParms = NULL;
+    multiThreadedExtractionParms->DisplayExampleCmdLine ();
+    delete  multiThreadedExtractionParms;
+    multiThreadedExtractionParms = NULL;
     return  false;
   }
 
   {
     CImageExtractionWindowsDlg dlg;
 
-    dlg.ImageExtractionParms (imageExtractionParms);                 /**< 'dlg' will take ownership of 'imageExtractionParms'.          */
     dlg.MultiTreadedExtractionParms (multiThreadedExtractionParms);  /**< 'dlg' will take ownership of 'multiThreadedExtractionParms'.  */
 
 	  m_pMainWnd = &dlg;
@@ -180,7 +172,6 @@ BOOL CImageExtractionWindowsApp::InitInstance()
   }
 
   //delete  imageExtractionParms;
-  imageExtractionParms = NULL;
 
   //InstrumentData::FinalCleanUp ();
   //Instrument::FinalCleanUp ();

@@ -1,14 +1,10 @@
-#include  "FirstIncludes.h"
-
-#include  <fstream>
-#include  <iostream>
-#include  <map>
-#include  <vector>
-#include  <math.h>
-
-
-#include  "MemoryDebug.h"
-
+#include "FirstIncludes.h"
+#include <fstream>
+#include <iostream>
+#include <map>
+#include <vector>
+#include <math.h>
+#include "MemoryDebug.h"
 using namespace std;
 
 

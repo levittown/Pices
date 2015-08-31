@@ -15,10 +15,7 @@
 //#include  <sys/loadavg.h>
 #include <unistd.h>
 #endif
-
-
 #include  "MemoryDebug.h"
-
 using namespace std;
 
 
@@ -31,11 +28,10 @@ using namespace std;
 using namespace KKB;
 
 
-
 #include "ConfusionMatrix2.h"
 #include "CrossValidation.h"
 #include "TrainingProcess2.h"
-using namespace  MLL;
+using namespace  KKMLL;
 
 
 #include "BinaryJob.h"
@@ -105,7 +101,7 @@ BinaryJob::BinaryJob (ProcessorPtr    _processor,
   parentId           (_parentId),
   processingTime     (-1.0f),
   randomNum          (rand () % 1000),
-  status             (bjOpen),
+  status             (BinaryJobStatus::Open),
   testAccuracy       (-1.0f),
   testAccuracyNorm   (-1.0f),
   testAvgPredProb    (-1.0f),
@@ -151,7 +147,7 @@ BinaryJob::BinaryJob (ProcessorPtr    _processor,
   parentId           (_parentId),
   processingTime     (-1.0f),
   randomNum          (rand () % 10000),
-  status             (bjOpen),
+  status             (BinaryJobStatus::Open),
   testAccuracy       (-1.0f),
   testAccuracyNorm   (-1.0f),
   testAvgPredProb    (-1.0f),
@@ -187,7 +183,7 @@ BinaryJob::BinaryJob (ProcessorPtr _processor,
   parentId           (-1),
   processor          (_processor),
   processingTime     (-1.0f),
-  status             (bjNULL),
+  status             (BinaryJobStatus::Null),
   testAccuracy       (-1.0f),
   testAccuracyNorm   (-1.0f),
   testAvgPredProb    (-1.0f),
@@ -225,7 +221,7 @@ BinaryJob::BinaryJob (RunLog&      _log,
   parentId           (-1),
   processingTime     (-1.0f),
   randomNum          (0),
-  status             (bjOpen),
+  status             (BinaryJobStatus::Open),
   testAccuracy       (-1.0f),
   testAccuracyNorm   (-1.0f),
   testAvgPredProb    (-1.0f),
@@ -248,10 +244,10 @@ BinaryJob::~BinaryJob ()
 
 BinaryJobPtr  BinaryJob::CreateDuplicateJob (BinaryJob&  j)
 {
-  if  (j.JobType () == jtRandomSplit)
+  if  (j.JobType () == JobTypes::RandomSplit)
     return  new JobRandomSplit (dynamic_cast<JobRandomSplit&> (j));
 
-  else if  (j.JobType () == jtValidation)
+  else if  (j.JobType () == JobTypes::Validation)
     return  new JobValidation (dynamic_cast<JobValidation&> (j));
 
   else
@@ -264,7 +260,7 @@ BinaryJobPtr  BinaryJob::CreateDuplicateJob (BinaryJob&  j)
 
 JobTypes  BinaryJob::JobType ()  const
 {
-  return  jtBinaryCombo;
+  return  JobTypes::BinaryCombo;
 }
 
 
@@ -272,9 +268,9 @@ KKStr   BinaryJob::JobTypeStr ()  const
 {
   switch  (JobType ())
   {
-  case  jtBinaryCombo:  return  "BinaryComboJob";
-  case  jtRandomSplit:  return  "RandomSplitJob";
-  case  jtValidation:   return  "JobValidation";
+  case  JobTypes::BinaryCombo:  return  "BinaryComboJob";
+  case  JobTypes::RandomSplit:  return  "RandomSplitJob";
+  case  JobTypes::Validation:   return  "JobValidation";
   }
 
   return  "";
@@ -302,7 +298,7 @@ BinaryJobPtr  BinaryJob::CreateTestJob (BinaryJobPtr  sourceJob)
 
   testJob->JobId (newJobId);
   testJob->ValidateOnly (true);
-  testJob->Status (bjOpen);
+  testJob->Status (BinaryJobStatus::Open);
 
   return  testJob;
 }  /* CreateTestJob */
@@ -350,18 +346,18 @@ void    BinaryJob::ReFresh (BinaryJob&  j)
 
 
 
-KKStr  BinaryJob::BinaryJobStatusToStr (bjBinaryJobStatus  status)
+KKStr  BinaryJob::BinaryJobStatusToStr (BinaryJobStatus  status)
 {
-  if  (status == bjOpen)
+  if  (status == BinaryJobStatus::Open)
     return  "Open";
 
-  if  (status == bjStarted)
+  if  (status == BinaryJobStatus::Started)
     return "Started";
 
-  if  (status == bjDone)
+  if  (status == BinaryJobStatus::Done)
     return "Done";
 
-  if  (status == bjExpanded)
+  if  (status == BinaryJobStatus::Expanded)
     return "Expanded";
 
   return  "";
@@ -370,23 +366,23 @@ KKStr  BinaryJob::BinaryJobStatusToStr (bjBinaryJobStatus  status)
 
 
 
-bjBinaryJobStatus  BinaryJob::BinaryJobStatusFromStr (KKStr  statusStr)
+BinaryJobStatus  BinaryJob::BinaryJobStatusFromStr (KKStr  statusStr)
 {
   statusStr.Upper ();
 
   if  (statusStr == "OPEN")
-    return  bjOpen;
+    return  BinaryJobStatus::Open;
 
   if  (statusStr == "STARTED")
-    return bjStarted;
+    return BinaryJobStatus::Started;
 
   if  (statusStr == "DONE")
-    return bjDone;
+    return BinaryJobStatus::Done;
 
   if  (statusStr == "EXPANDED")
-    return  bjExpanded;
+    return  BinaryJobStatus::Expanded;
 
-  return bjNULL;
+  return BinaryJobStatus::Null;
 }  /* BinaryJobStatusToStr */
 
 
@@ -485,7 +481,7 @@ void  BinaryJob::ProcessStatusStr (KKStrParser&  statusStr)
     else  if  (fieldName == "FEATURES")
     {
       bool valid;
-      features = FeatureNumList (processor->FileDesc (), fieldValue, valid);
+      features = FeatureNumList (fieldValue, valid);
     }
 
     else if  (fieldName == "RANDOMNUM")
@@ -597,7 +593,7 @@ BinaryJobListPtr  BinaryJob::ExpandBestCaseBackward (BinaryJobListPtr  exitingJo
   log.Level (20) << "BinaryJob::ExpandBestCaseBackward   JobId[" << jobId << "]" << endl;
   BinaryJobListPtr  expandedJobs = new BinaryJobList (processor);
 
-  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+  BinaryJobList::ErrorCodes  result = BinaryJobList::ErrorCodes::NoError;
 
   if  (features.NumOfFeatures () < 2)
     return expandedJobs;
@@ -625,7 +621,7 @@ BinaryJobListPtr  BinaryJob::ExpandBestCaseBackward (BinaryJobListPtr  exitingJo
                                           );
 
       expandedJobs->PushOnBack (newJob, result);
-      if  (result != BinaryJobList::NoError)
+      if  (result != BinaryJobList::ErrorCodes::NoError)
       {
         cerr << endl
           << "BinaryJob::ExpandBestCaseBackward   ***ERROR***   Duplicate Job adding to 'expandedJobs'." << endl
@@ -650,7 +646,7 @@ BinaryJobListPtr  BinaryJob::ExpandBestCaseForward (BinaryJobListPtr  exitingJob
 {
   log.Level (20) << "BinaryJob::ExpandBestCaseForward   JobId[" << jobId << "]" << endl;
   
-  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+  BinaryJobList::ErrorCodes  result = BinaryJobList::ErrorCodes::NoError;
   
   BinaryJobListPtr  expandedJobs = new BinaryJobList (processor);
 
@@ -683,7 +679,7 @@ BinaryJobListPtr  BinaryJob::ExpandBestCaseForward (BinaryJobListPtr  exitingJob
                                           );
 
       expandedJobs->PushOnBack (newJob, result);
-      if  (result != BinaryJobList::NoError)
+      if  (result != BinaryJobList::ErrorCodes::NoError)
       {
         cerr << endl
           << "BinaryJob::ExpandBestCaseForward   ***ERROR***   Duplicate Job adding to 'expandedJobs'." << endl
@@ -705,7 +701,7 @@ void  BinaryJob::EvaluateNode ()
 {
   log.Level (9) << "  " << endl;
   log.Level (9) << "BinaryJob::EvaluteNode JobId[" << jobId << "]  FeatureCount[" << features.NumOfFeatures () << "]" << endl;
-  status = bjStarted;
+  status = BinaryJobStatus::Started;
 
   TrainingConfiguration2Ptr  config = processor->Config ();
 
@@ -734,11 +730,11 @@ void  BinaryJob::EvaluateNode ()
     if  (processor->TestData () == NULL)
     {
       crossValidation->NumOfFolds (processor->NumOfFolds () * 2);
-      crossValidation->RunCrossValidation ();
+      crossValidation->RunCrossValidation (log);
     }
     else
     {
-      crossValidation->RunValidationOnly (processor->TestData ());
+      crossValidation->RunValidationOnly (processor->TestData (), NULL, log);
     }
 
     testAccuracy     = crossValidation->Accuracy ();
@@ -746,13 +742,13 @@ void  BinaryJob::EvaluateNode ()
     testAvgPredProb  = (float)crossValidation->AvgPredProb () * 100.0f;
     testFMeasure     = crossValidation->ConfussionMatrix ()->FMeasure (processor->PositiveClass (), log);
 
-    if  (processor->GradingMethod () == gmAccuracy)
+    if  (processor->GradingMethod () == GradingMethodType::Accuracy)
       testGrade = testAccuracy;
 
-    if  (processor->GradingMethod () == gmAccuracyNorm)
+    if  (processor->GradingMethod () == GradingMethodType::AccuracyNorm)
       testGrade = testAccuracyNorm;
 
-    else if  (processor->GradingMethod () == gmFMeasure)
+    else if  (processor->GradingMethod () == GradingMethodType::FMeasure)
       testGrade = testFMeasure;
 
     else
@@ -762,7 +758,7 @@ void  BinaryJob::EvaluateNode ()
   }
   else
   {
-    crossValidation->RunCrossValidation ();
+    crossValidation->RunCrossValidation (log);
 
     //crossValidation->CalculateThirdClassDecisiveProbability (decisiveProbMean, decisiveProbStdDev);
 
@@ -771,13 +767,13 @@ void  BinaryJob::EvaluateNode ()
     avgPredProb  = (float)crossValidation->AvgPredProb () * 100.0f;
     fMeasure     = crossValidation->ConfussionMatrix ()->FMeasure (processor->PositiveClass (), log);
 
-    if  (processor->GradingMethod () == gmAccuracy)
+    if  (processor->GradingMethod () == GradingMethodType::Accuracy)
        grade = accuracy;
 
-    if  (processor->GradingMethod () == gmAccuracyNorm)
+    if  (processor->GradingMethod () == GradingMethodType::AccuracyNorm)
        grade = accuracyNorm;
 
-    else if  (processor->GradingMethod () == gmFMeasure)
+    else if  (processor->GradingMethod () == GradingMethodType::FMeasure)
        grade = fMeasure;
 
     else
@@ -788,7 +784,7 @@ void  BinaryJob::EvaluateNode ()
 
   delete  crossValidation;  crossValidation = NULL;
 
-  status = bjDone;
+  status = BinaryJobStatus::Done;
 }  /* EvaluteNode */
 
 
@@ -800,8 +796,8 @@ KKStr  BinaryJob::ReportHeaderLine1 ()
   h1Line << ""             << "\t"  // Jobid
          << ""             << "\t"  // Parent Job Id
          << "NumOfRounds"  << "\t"  // Parent Job Id
-         << "C"            << "\t"  // C Paremeter
-         << "Gamma"        << "\t"  // Gamma Paremeter
+         << "C"            << "\t"  // C Parameter
+         << "Gamma"        << "\t"  // Gamma Parameter
          << "A"            << "\t"  // A Parameter
          << ""             << "\t"  // Accuracy
          << "Norm"         << "\t"  // Norm Accuracy
@@ -831,8 +827,8 @@ KKStr  BinaryJob::ReportHeaderLine2 ()
   h2Line << "JobId"        << "\t"
          << "Parent"       << "\t"
          << "Parm"         << "\t"  // NumOfRounds
-         << "Parm"         << "\t"  // C Paremeter
-         << "Parm"         << "\t"  // Gamma Paremeter
+         << "Parm"         << "\t"  // C Parameter
+         << "Parm"         << "\t"  // Gamma Parameter
          << "Parm"         << "\t"  // A Parameter
          << "Accuracy"     << "\t"  // Accuracy
          << "Accuracy"     << "\t"

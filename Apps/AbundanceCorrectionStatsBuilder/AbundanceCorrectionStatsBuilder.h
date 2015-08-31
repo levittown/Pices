@@ -4,6 +4,8 @@
 #include "MsgQueue.h"
 #include "RunLog.h"
 #include "KKStr.h"
+using namespace KKB;
+
 
 #include "AbundanceCorrectionMatrix.h"
 #include "FeatureFileIO.h"
@@ -12,12 +14,14 @@
 #include "ImageFeatures.h"
 #include "MLClass.h"
 #include "NormalizationParms.h"
-#include "PicesApplication.h"
 #include "TrainingConfiguration2.h"
+using namespace KKMLL;
+
+#include "PicesApplication.h"
+using namespace MLL;
 
 namespace  AbundanceCorrectionApplication
 {
-
   #if  !defined(_TRAINTESTTHREAD_)
   class  TrainTestThread;
   typedef  TrainTestThread*          TrainTestThreadPtr;
@@ -25,7 +29,7 @@ namespace  AbundanceCorrectionApplication
   typedef  TrainTestThreadList*      TrainTestThreadListPtr;
   #endif
 
-  class  AbundanceCorrectionStatsBuilder: public PicesApplication
+  class  AbundanceCorrectionStatsBuilder: public  PicesApplication
   {
   public:
     typedef  KKB::uchar  uchar;
@@ -70,13 +74,9 @@ namespace  AbundanceCorrectionApplication
     void   TerminateThreads ();
 
 
-    MLClassConstListPtr           allClasses;           /**< Contains  trainLibDataClasses + otherClass               */
+    MLClassListPtr                allClasses;           /**< Contains  trainLibDataClasses + otherClass               */
 
-    MLClassConstListPtr           configClasses;
-
-    KKStr                         configFileName;
-
-    KKStr                         configFileFullPath;   /**< Will include the full path to config file that is used.  */
+    MLClassListPtr                configClasses;
 
     int                           maxNumActiveThreads;
 
@@ -88,7 +88,7 @@ namespace  AbundanceCorrectionApplication
 
     bool                          oneOrMoreThreadsCrashed;
 
-    MLClassConstPtr               otherClass;
+    MLClassPtr                    otherClass;
 
     FeatureVectorListPtr          otherClassData;
 
@@ -102,9 +102,9 @@ namespace  AbundanceCorrectionApplication
 
     ostream*                      report;
 
-    FeatureVectorListPtr          trainLibData;         /**< All the examples that were retrived from the configuration file. */
+    FeatureVectorListPtr          trainLibData;         /**< All the examples that were retrieved from the configuration file. */
 
-    MLClassConstListPtr           trainLibDataClasses;
+    MLClassListPtr                trainLibDataClasses;
   };  /* AbundanceCorrectionStatsBuilder */
 
   typedef  AbundanceCorrectionStatsBuilder*  AbundanceCorrectionStatsBuilderPtr;

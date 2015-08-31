@@ -1,35 +1,37 @@
-#include  "FirstIncludes.h"
-
-#include  <stdlib.h>
-#include  <memory>
-#include  <math.h>
-
-#include  <map>
-#include  <string>
-#include  <iostream>
-#include  <fstream>
-#include  <vector>
-
-#include  "MemoryDebug.h"
-#include  "KKBaseTypes.h"
-
+#include "FirstIncludes.h"
+#include <stdlib.h>
+#include <memory>
+#include <math.h>
+#include <map>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include "MemoryDebug.h"
+#include "KKBaseTypes.h"
 using namespace std;
+
 
 #include "HTMLReport.h"
 #include "OSservices.h"
 #include "KKStr.h"
 using namespace KKB;
 
-#include "InstrumentDataFileManager.h"
 
-#include "DataBase.h"
 #include "FeatureFileIO.h"
-#include "FeatureFileIOPices.h"
 #include "FileDesc.h"
 #include "MLClass.h"
-#include "ImageFeatures.h"
 #include "TrainingConfiguration2.h"
+using namespace KKMLL;
+
+
+#include "DataBase.h"
+#include "FeatureFileIOPices.h"
+#include "ImageFeatures.h"
+#include "InstrumentDataFileManager.h"
+#include "PicesTrainingConfiguration.h"
 using namespace MLL;
+
 
 #include "JobManager.h"
 using namespace  JobManagment;
@@ -50,7 +52,7 @@ RandomSplitJobManager::RandomSplitJobManager (const RandomSplitJobManager&    j)
    dataIndexFileName (j.dataIndexFileName),
    fileDesc          (j.fileDesc),
    format            (j.format),
-   mlClasses      (NULL),
+   mlClasses         (NULL),
    numFolds          (j.numFolds),
    numSplits         (j.numSplits),
    splitFraction     (j.splitFraction),
@@ -58,16 +60,16 @@ RandomSplitJobManager::RandomSplitJobManager (const RandomSplitJobManager&    j)
 
 {
   if  (j.config)
-    config = new TrainingConfiguration2 (*config);
+    config = j.Config ()->Duplicate ();
 
   if  (j.data)
-    data = new FeatureVectorList (*data, true);
+    data = j.data->Duplicate (true);
 
   if  (j.mlClasses)
-    mlClasses = new MLClassConstList (*mlClasses);
+    mlClasses = new MLClassList (*j.mlClasses);
 
   if  (j.splits)
-    splits = new Orderings (*splits);
+    splits = new Orderings (*j.splits);
 }
 
 
@@ -97,7 +99,7 @@ RandomSplitJobManager::RandomSplitJobManager (const KKStr&      _configFileName,
    dataIndexFileName (),
    fileDesc          (NULL),
    format            (_format),
-   mlClasses      (NULL),
+   mlClasses         (NULL),
    numFolds          (_numFolds),
    numSplits         (_numSplits),
    splitFraction     (_splitFraction),
@@ -111,21 +113,19 @@ RandomSplitJobManager::RandomSplitJobManager (const KKStr&      _configFileName,
 
 
 
-
-
 RandomSplitJobManager::~RandomSplitJobManager ()
 {
-  delete  config;         config       = NULL;
-  delete  data;           data         = NULL;
-  delete  mlClasses;   mlClasses = NULL;
-  delete  splits;         splits       = NULL;
+  delete config;      config    = NULL;
+  delete data;        data      = NULL;
+  delete mlClasses;   mlClasses = NULL;
+  delete splits;      splits    = NULL;
 }
 
 
 
 const char*  RandomSplitJobManager::JobType ()  const
 {
-  return  "RandomSplitJobManager";
+  return "RandomSplitJobManager";
 }
 
 
@@ -138,7 +138,7 @@ JobPtr  RandomSplitJobManager::Duplicate ()  const
 
 
 
-void    RandomSplitJobManager::ProcessNode ()
+void   RandomSplitJobManager::ProcessNode ()
 {
 }
 
@@ -171,7 +171,7 @@ JobListPtr  RandomSplitJobManager::JobsExpandNextSetOfJobs (const JobListPtr  jo
 
 void   RandomSplitJobManager::JobCompleted  (ostream& o, JobPtr   j)
 {
-  // We are called right afetr a single jobs is done.
+  // We are called right after a single jobs is done.
 
 }
 
@@ -218,7 +218,7 @@ void  RandomSplitJobManager::GenerateFinalResultsReport ()
     }
   }
 
-  f << endl << "Mean Avarage of all andom Splits." << endl;
+  f << endl << "Mean Average of all random Splits." << endl;
   avgResults.FactorCounts (1.0 / (double)x);
   avgResults.PrintConfusionMatrixTabDelimited (f);
   f << endl 
@@ -313,8 +313,6 @@ void  RandomSplitJobManager::GenerateFinalResultsReport ()
     << endl;
   totalCM.PrintConfusionMatrixTabDelimited (f);
 
-
-
   f << ""            << "\t" << ""      << "\t" << l1 << endl
     << ""            << "\t" << "Split" << "\t" << l2 << endl
     << "Description" << "\t" << "Num"   << "\t" << l3 << endl;
@@ -363,18 +361,16 @@ void  RandomSplitJobManager::StatusFileInitialize (ostream& o)
   o << "//  RandomSplitJobManager"                        << endl
     << "//  Initialized  " << osGetLocalDateTime ()       << endl
     << endl
-    << "ConfigFileName"    << "\t" << configFileName                        << endl
-    << "DataFileName"      << "\t" << dataFileName                          << endl
-    << "DataIndexFileName" << "\t" << dataIndexFileName                     << endl  
-    << "Format"            << "\t" << format->DriverName ()                 << endl
-    << "NumFolds"          << "\t" << numFolds                              << endl
-    << "NumSplits"         << "\t" << numSplits                             << endl
-    << "SplitFraction"     << "\t" << splitFraction                         << endl
-    << "MLClasses"      << "\t" << mlClasses->ToCommaDelimitedStr ()  << endl
+    << "ConfigFileName"    << "\t" << configFileName                     << endl
+    << "DataFileName"      << "\t" << dataFileName                       << endl
+    << "DataIndexFileName" << "\t" << dataIndexFileName                  << endl  
+    << "Format"            << "\t" << format->DriverName ()              << endl
+    << "NumFolds"          << "\t" << numFolds                           << endl
+    << "NumSplits"         << "\t" << numSplits                          << endl
+    << "SplitFraction"     << "\t" << splitFraction                      << endl
+    << "MLClasses"         << "\t" << mlClasses->ToCommaDelimitedStr ()  << endl
     << endl;
 }  /* StatusFileInitialize */
-
-
 
 
 
@@ -385,14 +381,14 @@ void  RandomSplitJobManager::LoadRunTimeData ()
   bool  successful  = false;
   bool  changesMade = false;
 
-  delete  config;        config       = NULL;
-  delete  splits;        splits       = NULL; 
+  delete  config;     config    = NULL;
+  delete  splits;     splits    = NULL; 
   delete  mlClasses;  mlClasses = NULL;
-  delete  data;          data         = NULL;
+  delete  data;       data      = NULL;
 
 
   if  (!mlClasses)
-    mlClasses = new MLClassConstList ();
+    mlClasses = new MLClassList ();
 
   data = format->LoadFeatureFile (dataFileName, 
                                   *mlClasses, 
@@ -404,25 +400,26 @@ void  RandomSplitJobManager::LoadRunTimeData ()
                                  );
   if  ((!successful)  &&  (!data))
   {
-    KKStr  errorMsg = "RandomSplitJobManager::LoadRunTimeData    *** Error Loading DataFile[" + dataFileName + "] ***";
+    KKStr  errorMsg = "RandomSplitJobManager::LoadRunTimeData   ***ERROR***   Loading DataFile[" + dataFileName + "] ***";
     throw  errorMsg;
   }
 
   mlClasses->SortByName ();
 
   fileDesc = data->FileDesc ();
-
-  config = new TrainingConfiguration2 (fileDesc, configFileName, log, false);
+  
+  config = new PicesTrainingConfiguration ();
+  config->Load (configFileName, false, log);
   if  (!config->FormatGood ())
   {
-    KKStr  errorMsg = "RandomSplitJobManager::LoadRunTimeData    ***ERROR***     Format of Configuration File[" + configFileName + "] is invalid.";
+    KKStr  errorMsg = "RandomSplitJobManager::LoadRunTimeData   ***ERROR***   Format of Configuration File[" + configFileName + "] is invalid.";
     throw  errorMsg;
   }
 
   if  (dataIndexFileName.Empty ())
     dataIndexFileName = osRemoveExtension (dataFileName) + "_RandomSlits_" + StrFormatInt (numSplits, "ZZ00") + ".idx";
 
-  splits = new Orderings (data, dataIndexFileName, numSplits, 1);
+  splits = new Orderings (data, dataIndexFileName, numSplits, 1, log);
 }  /* LoadRunTimeData */
 
 
@@ -438,7 +435,7 @@ void   RandomSplitJobManager::StatusFileProcessLine (const KKStr&  _ln,
   KKStr  fieldValue = ln.ExtractToken2 ("\t");
   
   if  (fieldName.CompareIgnoreCase ("MLClasses") == 0)
-    mlClasses = MLClassConstList::BuildListFromDelimtedStr (fieldValue, ',');
+    mlClasses = MLClassList::BuildListFromDelimtedStr (fieldValue, ',');
 
   else if  (fieldName.CompareIgnoreCase ("ConfigFileName") == 0)
     configFileName = fieldValue;
@@ -498,18 +495,19 @@ void   RandomSplitJobManager::RetrieveRandomSplit (int                    splitN
     return;
   }
 
-  trainData = new FeatureVectorList (fileDesc, false, log);
-  testData  = new FeatureVectorList (fileDesc, false, log);
 
   const
   FeatureVectorListPtr  ordering = splits->Ordering (splitNum);
 
-  MLClassConstList::const_iterator  classIDX;
+  trainData = ordering->ManufactureEmptyList (false);
+  testData  = ordering->ManufactureEmptyList (false);
+
+  MLClassList::const_iterator  classIDX;
   for  (classIDX = mlClasses->begin ();  classIDX != mlClasses->end ();  classIDX++)
   {
-    MLClassConstPtr  ic = *classIDX;
+    MLClassPtr  ic = *classIDX;
 
-    FeatureVectorListPtr  examplesThisClass = ordering->ExtractImagesForAGivenClass (ic);
+    FeatureVectorListPtr  examplesThisClass = ordering->ExtractExamplesForAGivenClass (ic);
     int  numTrainExamplesNeeded = (int)(0.5 + (double)(examplesThisClass->QueueSize ()) * (double)splitFraction);
 
     int  numExamplesAddToTrainSet = 0;

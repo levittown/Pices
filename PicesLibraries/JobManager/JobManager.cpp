@@ -72,8 +72,6 @@ JobManager::JobManager (const JobManager& j):
 
 
 
-
-
 // Make sure the _summaryResultsFileName is deleted before we start processing.
 JobManager::JobManager (JobManagerPtr _manager,                   /**< Pointer to job that is managing this 'JobManager'   */
                         int           _jobId,

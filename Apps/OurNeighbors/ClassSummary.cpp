@@ -1,28 +1,27 @@
-#include  "FirstIncludes.h"
-
-#include  <fstream>
-#include  <iostream>
-#include  <map>
-#include  <vector>
-#include  <math.h>
-
-
-#include  "MemoryDebug.h"
-#include  "KKBaseTypes.h"
-
+#include "FirstIncludes.h"
+#include <fstream>
+#include <iostream>
+#include <map>
+#include <vector>
+#include <math.h>
+#include "MemoryDebug.h"
 using namespace std;
-using namespace KKB;
+
 
 #include "OSservices.h"
+using namespace KKB;
 
-#include "MLClassConstList.h"
-using namespace MLL;
+
+#include "KKBaseTypes.h"
+#include "MLClass.h"
+using namespace KKMLL;
+
 
 #include "ClassSummary.h"
 
 
 ClassSummary::ClassSummary ():
-  mlClass     (NULL),
+  mlClass        (NULL),
   lloydsEntries  (NULL),
   realDataU2Stat (0.0f),
   z_Score        (0.0f)
@@ -33,7 +32,7 @@ ClassSummary::ClassSummary ():
 
 
 
-ClassSummary::ClassSummary (MLClassConstPtr     _mlClass,
+ClassSummary::ClassSummary (MLClassPtr          _mlClass,
                             LLoydsEntryListPtr  _lloydsEntries,
                             float               _realDataU2Stat,
                             float               _z_Score
@@ -283,7 +282,7 @@ void  ClassSummaryList::SpatialOverlapReport (ostream&  o)  const
 {
   KKStr classTitle1, classTitle2;
 
-  MLClassConstListPtr  classes = GetListOfClasses ();
+  MLClassListPtr  classes = GetListOfClasses ();
   classes->ExtractTwoTitleLines (classTitle1, classTitle2);
 
 
@@ -369,9 +368,9 @@ VectorInt  ClassSummaryList::LLoydsBinSizes ()  const
 
 
 
-MLClassConstListPtr  ClassSummaryList::GetListOfClasses ()  const
+MLClassListPtr  ClassSummaryList::GetListOfClasses ()  const
 {
-  MLClassConstListPtr  classes = new MLClassConstList ();
+  MLClassListPtr  classes = new MLClassList ();
   ClassSummaryList::const_iterator  idx;
   for  (idx = begin ();  idx != end ();  idx++)
     classes->AddMLClass ((*idx)->MLClass ());

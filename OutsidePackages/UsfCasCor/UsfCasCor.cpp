@@ -26,7 +26,7 @@
 
    All other parameters that could be specified in the .net file are
    specified as
-     -O option=value    (e.g. -O UseCache=True)
+     -O option=value    (e.g. -O UseCache=true)
 
  - Defaults are used for parameters, in case someone starts it without
    any...
@@ -250,14 +250,14 @@ UsfCasCor::UsfCasCor ():
 
   the_random_seed         (0),
 
-  use_index_files         (False),
-  do_predictions          (True),
-  normalize_features      (False),
-  resubstitution          (False),
-  do_training             (True),
-  save_network_each_trial (False),
-  save_network_each_round (False),
-  load_weights            (False),
+  use_index_files         (false),
+  do_predictions          (true),
+  normalize_features      (false),
+  resubstitution          (false),
+  do_training             (true),
+  save_network_each_trial (false),
+  save_network_each_round (false),
+  load_weights            (false),
 
   UnitType                (SIGMOID),
   OutputType              (SIGMOID),
@@ -292,14 +292,14 @@ UsfCasCor::UsfCasCor ():
 
 
   /* These variables and switches control the simulation and display.    */
-  UseCache                (False),
+  UseCache                (false),
   Epoch                   (0),        
-  Graphics                (False),
-  NonRandomSeed           (False),
-  Test                    (True),
-  SinglePass              (False),
-  SingleEpoch             (False),
-  Step                    (False),
+  Graphics                (false),
+  NonRandomSeed           (false),
+  Test                    (true),
+  SinglePass              (false),
+  SingleEpoch             (false),
+  Step                    (false),
   Trial                   (0),
 
   /* The sets of training inputs and outputs. */
@@ -387,9 +387,9 @@ UsfCasCor::UsfCasCor ():
   /***************************************************************************/
   /* Save and plot file related varibles                                     */
   /***************************************************************************/
-  DumpWeights             (False),
+  DumpWeights             (false),
   WeightFile              (NULL),
-  InterruptPending        (False),
+  InterruptPending        (false),
   Nparameters             (0)
 
 {
@@ -399,9 +399,9 @@ UsfCasCor::UsfCasCor ():
   longopts[1] = option ("version",                no_argument,       0, 'v');
   longopts[2] = option ("filestem",               required_argument, 0, 'f');
   longopts[3] = option ("normalize",              optional_argument, 0, 'N');
-  longopts[4] = option ("no-normalize",           no_argument,       (int*)&normalize_features, False);
-  longopts[5] = option ("use-example-weights",    no_argument,       (int*)&load_weights,       True);
-  longopts[6] = option ("no-use-example-weights", no_argument,       (int*)&load_weights,       False);
+  longopts[4] = option ("no-normalize",           no_argument,       (int*)&normalize_features, false);
+  longopts[5] = option ("use-example-weights",    no_argument,       (int*)&load_weights,       true);
+  longopts[6] = option ("no-use-example-weights", no_argument,       (int*)&load_weights,       false);
   longopts[7] = option ("mpi",                    required_argument, 0, option_mpi);
   longopts[8] = option (0,0,0,0);
 }
@@ -575,7 +575,7 @@ int  UsfCasCor::main (int argc, char *argv[])
 
     case 'N':
       normalization_method = 0;
-      normalize_features = True;
+      normalize_features = true;
 
       if  (optarg != NULL)
       {
@@ -590,14 +590,14 @@ int  UsfCasCor::main (int argc, char *argv[])
 
 
     case 'I':
-      use_index_files=True;
-      printf(" Using index files\n");
+      use_index_files=true;
+      printf ("\tUsing index files\n");
       break;
 
 
     case 'P':                        
-      do_predictions=True;
-      printf(" Using predictions\n");
+      do_predictions=true;
+      printf ("\tUsing predictions\n");
       break;
 
 
@@ -608,7 +608,7 @@ int  UsfCasCor::main (int argc, char *argv[])
 
 
     case 'R':
-      resubstitution = True;
+      resubstitution = true;
       break;
 
 
@@ -618,8 +618,8 @@ int  UsfCasCor::main (int argc, char *argv[])
 
 
     case 's':
-      save_network_each_trial = True;
-      save_network_each_round = True;
+      save_network_each_trial = true;
+      save_network_each_round = true;
       break;
 
 
@@ -629,7 +629,7 @@ int  UsfCasCor::main (int argc, char *argv[])
 
 
     case 'T':
-      do_training=False;
+      do_training=false;
       break;
 
     default:
@@ -710,7 +710,7 @@ void  UsfCasCor::Initialize (kkint32  _in_limit,
 
   /** Features will already be normalized. */
   normalization_method = 0;
-  normalize_features = False; 
+  normalize_features = false; 
   the_random_seed =_the_random_seed;
 
   /* First, load the data and configuration */
@@ -766,7 +766,7 @@ void  UsfCasCor::setup_network()
 
 
   /* Randomization. If not specified on command line and NonRandomSeed
-     is not True then seed with time (truly random) */
+     is not true then seed with time (truly random) */
   if  (NonRandomSeed) 
      the_random_seed = 1;
 
@@ -1021,7 +1021,7 @@ void CHECK_INTERRUPT (void)
 void TRAP_CONTROL_C(int sig)
 {
   /* 
-  InterruptPending = True;
+  InterruptPending = true;
   signal(SIGINT, TRAP_CONTROL_C);
   */
 }
@@ -1041,7 +1041,7 @@ void TRAP_CONTROL_C(int sig)
 #define EOL '\0'
 
 
-Boolean _boolean_convert();
+bool _boolean_convert();
 int     _type_convert();
 
 //char parm_string[LINELEN];
@@ -1068,7 +1068,7 @@ char*  UsfCasCor::parm_to_string(int k)
 
   case BOOLE: case BOOLE_NO:
     sprintf(parm_string, "%s=%s\n", ParmTable[k].keyword, 
-      boolean_to_string(*(Boolean *)ParmTable[k].varptr));
+      boolean_to_string(*(bool *)ParmTable[k].varptr));
     break;
 
   default:
@@ -1108,14 +1108,14 @@ char*  UsfCasCor::type_to_string (int var)
 
 
 
-char*  UsfCasCor::boolean_strings[2]={"False","True"};
+char*  UsfCasCor::boolean_strings[2]={"false","true"};
 
-char*  UsfCasCor::boolean_to_string (Boolean var)
+char*  UsfCasCor::boolean_to_string (bool var)
 {
   switch (var) 
   {
-    case False:  return(boolean_strings[0]);
-    case True:   return(boolean_strings[1]);
+    case false:  return(boolean_strings[0]);
+    case true:   return(boolean_strings[1]);
 
     default: die("Bad boolean type\n");
  }
@@ -1143,7 +1143,7 @@ void  UsfCasCor::strdncase (char *s)
 
 
 /* Given a keyword string, return the index into the keyword table.
- * Assumes that the keys are in alphabetacal order.  Keyword comparison
+ * Assumes that the keys are in alphabetical order.  Keyword comparison
  * is all lower case.  Return FAILURE when not found.
  */
 int  UsfCasCor::find_key (char *searchkey)
@@ -1175,11 +1175,11 @@ int  UsfCasCor::find_key (char *searchkey)
 
 
 
-/* Parse a line of input into keyword value pairs and reset the given 
+/** Parse a line of input into keyword value pairs and reset the given 
  * parameters to given values.  Comment lines start with the character
  * '#' and are ignored.  If a bad keyword is given a message is printed,
  * but processing continues.  The routine returns a value telling the 
- * calling routine whether to grap another line, read in  the training, 
+ * calling routine whether to grab another line, read in  the training, 
  * or read in testing data.  The special keywords "Training", and 
  * "Testing" signal the changes in status.
  */
@@ -1219,7 +1219,7 @@ int   UsfCasCor::process_line (char *line)
             *(int *)ParmTable[k].varptr = _type_convert(valtok);
             break;
           case BOOLE: case BOOLE_NO:
-            *(Boolean *)ParmTable[k].varptr= _boolean_convert(valtok);
+            *(bool *)ParmTable[k].varptr= _boolean_convert(valtok);
             break;
           case INITFILE:
             warn("initfile option no longer accepted.");
@@ -1258,13 +1258,13 @@ int  UsfCasCor::_type_convert (char *input)
   if  (!strcmp (input,"true"))
     return (1);
 
-  else if  (!strcmp (input, "1")) /* allow backward compatiple input */
+  else if  (!strcmp (input, "1")) /* allow backward compatible input */
     return (1);
 
   else if  (!strcmp (input, "false"))
     return (0);
 
-  else if  (!strcmp(input, "0"))  /* allow backward compatiple input */
+  else if  (!strcmp(input, "0"))  /* allow backward compatible input */
     return (0);
 
   else if  (!strcmp (input, "sigmoid"))
@@ -1295,14 +1295,14 @@ int  UsfCasCor::_type_convert (char *input)
 
 
 
-Boolean  UsfCasCor::_boolean_convert (char *input)
+bool  UsfCasCor::_boolean_convert (char *input)
 {
   strdncase (input);
   if  (!strcmp (input,"true") || !strcmp(input,"1"))
-    return True;
+    return true;
 
   if  (!strcmp (input,"false") || !strcmp(input,"0"))
-    return False;
+    return false;
 
   die("Bad string sent to boolean_convert: %s", input);
 }  /* _boolean_convert */
@@ -2507,14 +2507,12 @@ void  UsfCasCor::load_namesfile (char *filestem)
 
 
 
-
-
 void  UsfCasCor::process_namesfile (char *filestem) 
 {
   char filename[LINELEN+1];
   FILE *fp;
   char s[N], *p, *q, *r;
-  Boolean seen_classes=False;
+  bool seen_classes=false;
   int feature_count=0;
   int i;
 
@@ -2585,7 +2583,7 @@ void  UsfCasCor::process_namesfile (char *filestem)
         p = q;
       }
 
-      seen_classes=True;
+      seen_classes=true;
     } 
     
     else 
@@ -2998,7 +2996,8 @@ void  UsfCasCor::OUTPUT_FORWARD_PASS ()
   float *ow;
 /********/
 
-  for(j=0; j<Noutputs; j++){
+  for(j=0; j<Noutputs; j++)
+  {
     sum = 0.0;
     ow  = OutputWeights[j];
 
@@ -3022,7 +3021,7 @@ void  UsfCasCor::OUTPUT_FORWARD_PASS ()
 */
 void  UsfCasCor::COMPUTE_UNIT_VALUE (int j)
 {
-  int i;
+  int   i;
   int   *c;		/* pointer to unit's connections array */
   float *w,		/* pointer to unit's weights array*/
         sum = 0.0;
@@ -3072,16 +3071,16 @@ void  UsfCasCor::FULL_FORWARD_PASS (float input[])
  *  to compute slopes for output weights.  If statsp is TRUE, accumulate error
  *  statistics. 
  */
-void  UsfCasCor::COMPUTE_ERRORS (float    goal[], 
-                                 Boolean  output_slopesp, 
-                                 Boolean  statsp, 
-                                 int      xw
+void  UsfCasCor::COMPUTE_ERRORS (float  goal[], 
+                                 bool   output_slopesp, 
+                                 bool   statsp, 
+                                 int    xw
                                 )
 {
   int i,j;
-  float out = 0.0,
-        dif = 0.0,
-        err_prime = 0.0;
+  float out = 0.0;
+  float dif = 0.0;
+  float err_prime = 0.0;
   float *os;		/* pointer to unit's output slopes array */
   int goal_winner,output_winner;
 /********/
@@ -3097,7 +3096,8 @@ void  UsfCasCor::COMPUTE_ERRORS (float    goal[],
   if ( goal_winner != output_winner ) ErrorMisclassifications++;
 
 
-  for(j=0; j<Noutputs; j++){
+  for  (j = 0;  j < Noutputs;  j++)
+  {
     out = Outputs[j];
     dif = out - goal[j];
     if ( load_weights && xw >= 0 && example_weight[xw] != 1.0 ) 
@@ -3107,7 +3107,8 @@ void  UsfCasCor::COMPUTE_ERRORS (float    goal[],
 
     Errors[j] = err_prime;
 
-    if (statsp){
+    if  (statsp)
+    {
       if (fabs(dif) > ScoreThreshold) ErrorBits++;
       TrueError += dif * dif;
       SumErrors[j] += err_prime;
@@ -3116,7 +3117,7 @@ void  UsfCasCor::COMPUTE_ERRORS (float    goal[],
 
     if (output_slopesp)
       for(i=0; i<Nunits; i++)
-	os[i] += err_prime * Values[i];
+        os[i] += err_prime * Values[i];
 
   }				/* end for unit j */
 }  /* COMPUTE_ERRORS */
@@ -3194,7 +3195,7 @@ void  UsfCasCor::TRAIN_OUTPUTS_EPOCH ()
       Errors = ExtraErrors;
       FULL_FORWARD_PASS(TrainingInputs[i]);
     }
-    COMPUTE_ERRORS(Goal, True, True, i);
+    COMPUTE_ERRORS (Goal, true, true, i);
   }
  
   switch (ErrorMeasure){
@@ -3235,7 +3236,7 @@ int  UsfCasCor::TRAIN_OUTPUTS (int max_epochs)
   int retval = TIMEOUT;	  /* will be reset within loop for other conditions */
   float last_error = 0.0;
   int quit_epoch = Epoch + OutputPatience;
-  Boolean first_time = True;
+  bool first_time = true;
 /********/
 
   for(i=0; i<max_epochs; i++)
@@ -3259,7 +3260,7 @@ int  UsfCasCor::TRAIN_OUTPUTS (int max_epochs)
     
     else if  (first_time)
     {
-      first_time = False;
+      first_time = false;
       last_error = TrueError;
     }
 
@@ -3567,7 +3568,7 @@ void  UsfCasCor::TRAIN_INPUTS_EPOCH ()
       Values = ExtraValues;
       Errors = ExtraErrors;
       FULL_FORWARD_PASS(TrainingInputs[i]);
-      COMPUTE_ERRORS(Goal, False, False, i);
+      COMPUTE_ERRORS (Goal, false, false, i);
      }
     COMPUTE_SLOPES();
   }
@@ -3607,7 +3608,7 @@ void  UsfCasCor::CORRELATIONS_EPOCH ()
       Values = ExtraValues;
       Errors = ExtraErrors;
       FULL_FORWARD_PASS(TrainingInputs[i]);
-      COMPUTE_ERRORS(Goal, False, False, i);
+      COMPUTE_ERRORS (Goal, false, false, i);
     }
     COMPUTE_CORRELATIONS();
   }
@@ -3631,7 +3632,7 @@ int  UsfCasCor::TRAIN_INPUTS (int max_epochs)
   int i;
   float last_score = 0.0;
   int quit = max_epochs;
-  Boolean first_time = True;
+  bool first_time = true;
 /**********/
 
   for(i=0; i<Noutputs; i++)	/* Convert to the average error for use in */
@@ -3645,7 +3646,7 @@ int  UsfCasCor::TRAIN_INPUTS (int max_epochs)
     if(InputPatience == 0)
       continue;			/* continue training until victory */
     else if(first_time){
-      first_time = False;
+      first_time = false;
       last_score = BestCandidateScore;
     }
     else if(fabs(BestCandidateScore - last_score) > /* still getting better */
@@ -3813,7 +3814,7 @@ void  UsfCasCor::TEST_EPOCH (double test_threshold)
   /* Globals must be saved from the last training phase. If they are not  */
   /* saved then the next unit will be training to correlate with the test */
   /* set error. */
-  Boolean old_UC = UseCache;	/* temporarily turn off cache */
+  bool old_UC = UseCache;	/* temporarily turn off cache */
   float old_ST = ScoreThreshold; /* save global */
   float old_TE = TrueError;	/* save global */
   float *old_SE = SumErrors;	/* save global */
@@ -3823,7 +3824,7 @@ void  UsfCasCor::TEST_EPOCH (double test_threshold)
     cerr << endl << "UsfCasCor::TEST_EPOCH    test_threshold[" << test_threshold << "]  has exceeded capacity of a float variabnle." << endl << endl;
 
   ScoreThreshold = (float)test_threshold;
-  UseCache = False;
+  UseCache = false;
 
   Values = ExtraValues;
   Errors = ExtraErrors;
@@ -3846,7 +3847,7 @@ void  UsfCasCor::TEST_EPOCH (double test_threshold)
     Goal = TestOutputs[i];
     FULL_FORWARD_PASS(TestInputs[i]);
     
-    COMPUTE_ERRORS(Goal, False, True, -1);
+    COMPUTE_ERRORS (Goal, false, true, -1);
   } 
 
   if(ErrorMeasure == INDEX)
@@ -3878,7 +3879,7 @@ void  UsfCasCor::PREDICT (float test_threshold)
   /* Globals must be saved from the last training phase. If they are not  */
   /* saved then the next unit will be training to correlate with the test */
   /* set error. */
-  Boolean old_UC = UseCache;	/* temporarily turn off cache */
+  bool old_UC = UseCache;	/* temporarily turn off cache */
   float old_ST = ScoreThreshold; /* save global */
   float old_TE = TrueError;	/* save global */
   float *old_SE = SumErrors;	/* save global */
@@ -3908,7 +3909,7 @@ void  UsfCasCor::PREDICT (float test_threshold)
   }
 
   ScoreThreshold = test_threshold;
-  UseCache = False;
+  UseCache = false;
 
   Values = ExtraValues;
   Errors = ExtraErrors;
@@ -3958,7 +3959,7 @@ void  UsfCasCor::PREDICT (float test_threshold)
     fprintf  (predfile,"%s\n", class_label[max_pred]);
     
 
-    COMPUTE_ERRORS (Goal, False, True, -1);
+    COMPUTE_ERRORS (Goal, false, true, -1);
   } 
 
 

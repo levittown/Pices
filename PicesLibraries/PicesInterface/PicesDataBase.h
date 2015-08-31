@@ -357,8 +357,8 @@ namespace PicesInterface
      *@brief  Updates prediction on multiple images at one time.
      *@param[in]  _logEntryId Log id of process that is doing the classification.
      *@param[in]  _predictionList  A tab delimited string that will contain the list of predictions.  Each
-     *   image will be separated by line feed ('\n') characters while each field for each image will be
-     *   separated by 'tabs'('\t').  So if there are two images with predictions the string will look like
+     *   image will be separated by linefeed ('\n') characters while each field for each image will be
+     *   separated by "tabs('\t')".  So if there are two images with predictions the string will look like
      *   "<ImageFileRootName><\t><Class1Name><\t><Class1Prob><\t><Class2Name><\t><Class2Prob><\n><ImageFileRootName><\t><Class1Name><\t><Class1Prob><\t><Class2Name><\t><Class2Prob>"
      */
     void  ImagesUpdatePredictionsList (uint     _logEntryId,

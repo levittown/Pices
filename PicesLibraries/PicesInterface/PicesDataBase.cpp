@@ -20,8 +20,7 @@ using namespace KKB;
 
 
 #include "GpsDataPoint.h"
-using namespace SipperHardware;
-
+using namespace MLL;
 
 
 #include "PicesKKStr.h"
@@ -487,10 +486,10 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
                                   )
 {
 
-  MLClassConstPtr  umClass1          = NULL;
-  MLClassConstPtr  umClass2          = NULL;
-  MLClassConstPtr  umValidatedClass  = NULL;
-  PointListPtr     umSizeCoordinates = NULL;
+  MLClassPtr    umClass1          = NULL;
+  MLClassPtr    umClass2          = NULL;
+  MLClassPtr    umValidatedClass  = NULL;
+  PointListPtr  umSizeCoordinates = NULL;
 
   if  (class1 != nullptr)
     umClass1 = class1->UnmanagedMLClass ();
@@ -1250,7 +1249,7 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
                                                                     * if not in database will return nullptr
                                                                     */
   {
-    MLClassConstPtr  mlClass = dbConn->MLClassLoad (PicesKKStr::SystemStringToKKStr (className));
+    MLClassPtr  mlClass = dbConn->MLClassLoad (PicesKKStr::SystemStringToKKStr (className));
     if  (mlClass == NULL)
       return  nullptr;
     else
@@ -1287,7 +1286,7 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
 
   PicesClassList^  PicesDataBase::MLClassLoadList ()
   {
-    MLClassConstListPtr  classes = dbConn->MLClassLoadList ();
+    MLClassListPtr  classes = dbConn->MLClassLoadList ();
     if  (!classes)
       return  nullptr;
 
@@ -1295,10 +1294,10 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
 
     PicesClassList^  picesClasses = gcnew PicesClassList ();
 
-    MLClassConstList::iterator  idx;
+    MLClassList::iterator  idx;
     for  (idx = classes->begin ();  idx != classes->end ();  idx++)
     {
-      MLClassConstPtr  ic = *idx;
+      MLClassPtr  ic = *idx;
 
       PicesClass^ c = PicesClassList::GetUniqueClass (PicesKKStr::KKStrToSystenStr (ic->Name ()), nullptr);
       c->Mandatory = ic->Mandatory ();
@@ -1321,7 +1320,7 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
 
     for  (idx = classes->begin ();  idx != classes->end ();  idx++)
     {
-      MLClassConstPtr  ic = *idx;
+      MLClassPtr  ic = *idx;
 
       PicesClass^ pc = picesClasses->LookUpByUnmanagedClass (ic);
 

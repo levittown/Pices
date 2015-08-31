@@ -28,38 +28,24 @@
 #include "KKStr.h"
 using namespace KKB;
 
-#include "InstrumentData.h"
-#include "InstrumentDataList.h"
-#include "RasterSipper.h"
-using namespace SipperHardware;               
-
+          
 #include "Attribute.h"
 #include "ClassStatistic.h"
 #include "FeatureNumList.h"
 #include "FeatureVector.h"
 #include "FileDesc.h"
+#include "MLClass.h"
+using namespace  KKMLL;
 
+
+#include "InstrumentData.h"
+#include "InstrumentDataList.h"
+#include "RasterSipper.h"
+using namespace MLL;     
 
 
 namespace MLL 
 {
-
-  #ifndef  _FEATURENUMLIST_
-  class  FeatureNumList;
-  typedef  FeatureNumList*  FeatureNumListPtr;
-  #endif
-
-  #ifndef  _MLCLASS_
-  class  MLClass;
-  typedef  MLClass*  MLClassPtr;
-  typedef  MLClass const  MLClassConst;
-  typedef  MLClassConst * MLClassConstPtr;
-  class  MLClassList;
-  typedef  MLClassList*  MLClassListPtr;
-  #endif
-
-
-
   //#define  InfinityValue  (FVFloat)99999999999999.99
   //#define  NaNvalute      (FVFloat)99999999999999.99
 
@@ -79,7 +65,7 @@ namespace MLL
   //
   //
   // 2007-11-12  Kurt      44   Added 4 new Instrumentation fields 'Depth', Oxygen'
-  //                            'Fluorescences', and 'Salinity'
+  //                            'Fluorescence', and 'Salinity'
   //
   // 2008-08-25  Kurt      45   When the image is greater than a given threshold it will
   //                            be reduced in size by an integer such that the new size
@@ -111,20 +97,23 @@ namespace MLL
 
 
     ImageFeatures (RasterSipper&        _raster,
-                   MLClassConstPtr      _mlClass,
-                   RasterSipperListPtr  _saveImages = NULL
+                   MLClassPtr           _mlClass,
+                   RasterSipperListPtr  _saveImages,
+                   RunLog&              _log
                   );
 
     ImageFeatures (const BmpImage&      _image,
-                   MLClassConstPtr      _mlClass,
-                   RasterSipperListPtr  _saveImages = NULL
+                   MLClassPtr           _mlClass,
+                   RasterSipperListPtr  _saveImages,
+                   RunLog&              _log
                   );
 
 
     ImageFeatures (KKStr                _fileName,
-                   MLClassConstPtr      _mlClass,
+                   MLClassPtr           _mlClass,
                    bool&                _successfull,
-                   RasterSipperListPtr  _saveImages = NULL
+                   RasterSipperListPtr  _saveImages,
+                   RunLog&              _log
                   );
 
 
@@ -140,67 +129,67 @@ namespace MLL
      ** else                                                                             *
      **   | Info that is particular to a 'ImageFeatures' object will be set to default   *
      **   | values.                                                                      *
-     * ************************************************************************************
+     *************************************************************************************
      *@endcode
      */
     ImageFeatures (const FeatureVector&  featureVector);
 
     virtual  ~ImageFeatures ();
 
+    virtual  ImageFeaturesPtr  Duplicate ()  const;
+
     // Access Methods.
     void  AreaMMSquare     (float                _areaMMSquare)     {areaMMSquare     = _areaMMSquare;}
     void  CentroidCol      (FVFloat               _centroidCol)      {centroidCol      = _centroidCol;}
     void  CentroidRow      (FVFloat               _centroidRow)      {centroidRow      = _centroidRow;}
-    void  CtdDateTime      (const KKB::DateTime& _ctdDateTime)      {ctdDateTime      = _ctdDateTime;}
+    void  CtdDateTime      (const KKB::DateTime&  _ctdDateTime)      {ctdDateTime      = _ctdDateTime;}
     void  Depth            (FVFloat               _depth)            {FeatureData (DepthIndex,        _depth);}
     void  Fluorescence     (FVFloat               _fluorescence)     {FeatureData (FluorescenceIndex, _fluorescence);}
     void  FlowRate1        (FVFloat               _flowRate1)        {FeatureData (FlowRate1Index,    _flowRate1);}
     void  FlowRate2        (FVFloat               _flowRate2)        {FeatureData (FlowRate2Index,    _flowRate2);}
-    void  Latitude         (double               _laditude)         {latitude         = _laditude;}
-    void  Longitude        (double               _longitude)        {longitude        = _longitude;}
-    void  NumOfEdgePixels  (kkint32              _numOfEdgePixels)  {numOfEdgePixels  = _numOfEdgePixels;}
+    void  Latitude         (double                _laditude)         {latitude         = _laditude;}
+    void  Longitude        (double                _longitude)        {longitude        = _longitude;}
+    void  NumOfEdgePixels  (kkint32               _numOfEdgePixels)  {numOfEdgePixels  = _numOfEdgePixels;}
     void  Oxygen           (FVFloat               _oxygen)           {FeatureData (OxygenIndex,   _oxygen);}
     void  Salinity         (FVFloat               _salinity)         {FeatureData (SalinityIndex, _salinity);}
 
     void  SfCentroidCol    (FVFloat _SfCentroidCol) {sfCentroidCol    = _SfCentroidCol;}
-    void  SfCentroidRow    (double _SfCentroidRow) {sfCentroidRow    = _SfCentroidRow;}
+    void  SfCentroidRow    (double  _SfCentroidRow) {sfCentroidRow    = _SfCentroidRow;}
 
-    void  Version          (short  _version)       {version          = _version;}
+    void  Version          (short   _version)       {version          = _version;}
 
 
-    float          AreaMMSquare       () const  {return  areaMMSquare;}
-    float          CentroidCol        () const  {return  centroidCol;}    /**< @brief Centroid column with respect to image.  */
-    float          CentroidRow        () const  {return  centroidRow;}    /**< @brief Centroid row with respect to image.     */
+    float           AreaMMSquare       () const  {return  areaMMSquare;}
+    float           CentroidCol        () const  {return  centroidCol;}    /**< @brief Centroid column with respect to image.  */
+    float           CentroidRow        () const  {return  centroidRow;}    /**< @brief Centroid row with respect to image.     */
     FVFloat         Depth              () const  {return  FeatureData (DepthIndex);}
-    KKB::DateTime  CtdDateTime        () const  {return  ctdDateTime;}
+    KKB::DateTime   CtdDateTime        () const  {return  ctdDateTime;}
     FVFloat         FilledArea         () const  {return  FeatureData (FilledAreaIndex);}
     FVFloat         Fluorescence       () const  {return  FeatureData (FluorescenceIndex);}
     FVFloat         FlowRate1          () const  {return  FeatureData (FlowRate1Index);}
     FVFloat         FlowRate2          () const  {return  FeatureData (FlowRate2Index);}
-    double         Latitude           () const  {return  latitude;}
+    double          Latitude           () const  {return  latitude;}
     FVFloat         Length             () const  {return  FeatureData (LengthIndex);}
-    double         Longitude          () const  {return  longitude;}
-    kkint32        NumOfEdgePixels    () const  {return  numOfEdgePixels;}
+    double          Longitude          () const  {return  longitude;}
+    kkint32         NumOfEdgePixels    () const  {return  numOfEdgePixels;}
     FVFloat         Oxygen             () const  {return  FeatureData (OxygenIndex);}
     FVFloat         Salinity           () const  {return  FeatureData (SalinityIndex);}
-    float          SfCentroidCol      () const  {return  sfCentroidCol;}  /**< @brief Centroid column with respect to whole Sipper File. */
-    double         SfCentroidRow      () const  {return  sfCentroidRow;}  /**< @brief Centroid row with respect to whole Sipper File.    */
-    short          Version            () const  {return  version;}
+    float           SfCentroidCol      () const  {return  sfCentroidCol;}  /**< @brief Centroid column with respect to whole Sipper File. */
+    double          SfCentroidRow      () const  {return  sfCentroidRow;}  /**< @brief Centroid row with respect to whole Sipper File.    */
+    short           Version            () const  {return  version;}
     FVFloat         Width              () const  {return  FeatureData (WidthIndex);}
 
     virtual
     kkint32  MemoryConsumedEstimated ()  const;
 
-    void  ResetNumOfFeatures (kkint32  newNumOfFeatures);  // Used to reallocate memory for feature data.
+    //void  ResetNumOfFeatures (kkint32  newNumOfFeatures);  // Used to reallocate memory for feature data.
     void  ResetVersion       (short  newVersion);
 
 
     void    CalcFeatures (RasterSipper&        srcRaster,
-                          RasterSipperListPtr  saveImages = NULL
+                          RasterSipperListPtr  saveImages,
+                          RunLog&              log
                          );
-
-    virtual  const char*  UnderlyingClass () const  {return  "ImageFeatures";}
-
 
     static  kkint32  FirstInstrumentDataField;          /**< @brief The first feature field that we get from a separate instrument data field.  */
 
@@ -218,7 +207,7 @@ namespace MLL
                         RasterSipperListPtr  _saveImages = NULL
                        );
 
-    float          centroidCol;     //   cnetroid with just respect to the image.
+    float          centroidCol;     //   centroid with just respect to the image.
     float          centroidRow;     //     ""     ""      ""     ""    ""    ""
     KKB::DateTime  ctdDateTime;
     float          areaMMSquare;    /**< Size of image in Square mm. */
@@ -229,7 +218,7 @@ namespace MLL
     double         sfCentroidRow;   //     ""     ""      ""     ""    ""    ""
     short          version;         /**< This is the same versionNumber as in ImageFeaturesList
                                      * It is related to the Feature calculation routine.  This
-                                     * will assist in us changing the feature calcs in the
+                                     * will assist in us changing the feature calculations in the
                                      * future and  objects and methods having a means of
                                      * knowing if the features are similar.
                                      */
@@ -351,8 +340,8 @@ namespace MLL
   public: 
     typedef  ImageFeaturesList*  ImageFeaturesListPtr;
 
-    typedef  SipperHardware::InstrumentDataPtr      InstrumentDataPtr;
-    typedef  SipperHardware::InstrumentDataListPtr  InstrumentDataListPtr;
+    typedef  MLL::InstrumentDataPtr      InstrumentDataPtr;
+    typedef  MLL::InstrumentDataListPtr  InstrumentDataListPtr;
 
     typedef  KKB::kkint32 kkint32;
     typedef  KKB::kkuint32  kkuint32;
@@ -360,7 +349,6 @@ namespace MLL
 
     ImageFeaturesList (FileDescPtr  _fileDesc,
                        bool         _owner,
-                       RunLog&      _log,
                        kkint32      _size = 1000
                       );
 
@@ -390,7 +378,7 @@ namespace MLL
     /**
      *@details
      *  Will create a duplicate List of images, in the same order.  If '_owner' = true will create
-     *  new instancs of contents and own them.  If 'owner' = false, will copy over pointers to
+     *  new instances of contents and own them.  If 'owner' = false, will copy over pointers to
      *  existing instances.  If any of the existing instances do not have an underlying class of
      * ImageFeatures;  the function will throw an EXCEPTIION.
      */
@@ -404,7 +392,7 @@ namespace MLL
      *        specified directory.
      *@details
      * Will scan the directory _dirName for any image files.  For each image found a new instance of ImageFeatures
-     * will be created whos features will be derived from the image.  These ImageFeatures' objects will be 
+     * will be created who's features will be derived from the image.  These ImageFeatures' objects will be 
      * assigned the class specified by '_mlClass'.  A new data file containing the extracted features will be
      * saved in fileName.
      *
@@ -413,10 +401,10 @@ namespace MLL
      *@param[in] _dirName   Directory to scan for images.
      *@param[in] _fileName  Name of file to contain the extracted feature data.  Will be og the Raw format.
      */
-    ImageFeaturesList (RunLog&          _log,
-                       MLClassConstPtr  _mlClass,
-                       const KKStr&     _dirName,
-                       const KKStr&     _fileName
+    ImageFeaturesList (RunLog&       _log,
+                       MLClassPtr    _mlClass,
+                       const KKStr&  _dirName,
+                       const KKStr&  _fileName
                       );
 
 
@@ -430,11 +418,9 @@ namespace MLL
         any the contents only point to the ones already in _images.
       @param[in] _mlClasses  List of classes that we are interested in.
       @param[in] _images        Source examples that we want to scan.
-      @param[in] _log           
      */
-    ImageFeaturesList (MLClassConstList&  _mlClasses,
-                       ImageFeaturesList&    _images,
-                       RunLog&               _log
+    ImageFeaturesList (MLClassList&         _mlClasses,
+                       ImageFeaturesList&   _images
                       );
 
 
@@ -477,27 +463,27 @@ namespace MLL
                                                        RunLog&      log
                                                       );
 
+    virtual
+    ImageFeaturesListPtr   Duplicate (bool _owner)  const;
+
+    virtual
     ImageFeaturesListPtr   DuplicateListAndContents ()  const;
 
 
     /**
      *@brief  Returns: a list of 'ImageFeatures' objects that have duplicate root file names.
      *@details
-     *@code
-     ***************************************************************************************************
-     ** Returns: a list of 'ImageFeatures' objects that have duplicate root file names. The returned   *
-     ** list will not own these items.  All instances of the duplicate objects will be returned.       *
-     ** Ex: if three instances have the same ImageFileName all three will be returned.                 *
-     ***************************************************************************************************
-     *@endcode
+     * Returns: a list of 'ImageFeatures' objects that have duplicate root file names. The returned
+     * list will not own these items.  All instances of the duplicate objects will be returned.
+     * Ex: if three instances have the same ImageFileName all three will be returned.
      */
     ImageFeaturesListPtr   ExtractDuplicatesByRootImageFileName ();
 
 
-    ImageFeaturesListPtr   ExtractImagesForAGivenClass (MLClassConstPtr  _mlClass,
-                                                        kkint32          _maxToExtract = -1,
-                                                        FVFloat           _minSize      = -1.0f
-                                                       )  const;
+    ImageFeaturesListPtr   ExtractExamplesForAGivenClass (MLClassPtr  _mlClass,
+                                                          kkint32     _maxToExtract = -1,
+                                                          FVFloat     _minSize      = -1.0f
+                                                         )  const;
 
 
     /**
@@ -522,9 +508,10 @@ namespace MLL
 
     void                   FixSipperFileScanLineAndColFields ();
 
-    void                   FeatureExtraction (const KKStr&    _dirName,
-                                              const KKStr&    _fileName,
-                                              MLClassConstPtr _mlClass
+    void                   FeatureExtraction (const KKStr&  _dirName,
+                                              const KKStr&  _fileName,
+                                              MLClassPtr    _mlClass,
+                                              RunLog&       _runLog
                                              );
 
     VectorInt              CreateSpatialDistributionHistogram (InstrumentDataListPtr  instrumentData,
@@ -539,6 +526,11 @@ namespace MLL
 
     ImageFeaturesPtr       LookUpByRootName (const KKStr&  _rootName);
 
+
+    virtual
+    ImageFeaturesListPtr   ManufactureEmptyList (bool _owner)  const;
+
+
     /**
      *@brief  return a list of examples that consist and are in the same 
      *        order as the list of ImageFileNames in the file 'fileName'.
@@ -547,7 +539,9 @@ namespace MLL
      *  ImageFeaturesList instance with images in order based off contents
      *  of file. If error occurs will return NULL.
     */
-    ImageFeaturesListPtr   OrderUsingNamesFromAFile (const KKStr&  fileName);
+    ImageFeaturesListPtr   OrderUsingNamesFromAFile (const KKStr&  fileName,
+                                                     RunLog&       runLog
+                                                    );
 
     ImageFeaturesPtr       PopFromBack ();
 
@@ -558,26 +552,28 @@ namespace MLL
                                                         float                  bucketSize
                                                        );
 
-    void                   RecalcFeatureValuesFromImagesInDirTree (KKStr  rootDir,
-                                                                   bool&  successful
+    void                   RecalcFeatureValuesFromImagesInDirTree (KKStr    rootDir,
+                                                                   bool&    successful,
+                                                                   RunLog&  runLog
                                                                   );
 
     void                   SortBySpatialDistance ();
 
-    ImageFeaturesListPtr   StratifyAmoungstClasses (kkint32  numOfFolds);
+    ImageFeaturesListPtr   StratifyAmoungstClasses (kkint32  numOfFolds,
+                                                    RunLog&  runLog
+                                                   );
 
 
-    ImageFeaturesListPtr   StratifyAmoungstClasses (MLClassConstListPtr  mlClasses,
-                                                    kkint32                 maxImagesPerClass,
-                                                    kkint32                 numOfFolds
+    ImageFeaturesListPtr   StratifyAmoungstClasses (MLClassListPtr  mlClasses,
+                                                    kkint32         maxImagesPerClass,
+                                                    kkint32         numOfFolds,
+                                                    RunLog&         runLog
                                                    );
 
 
     short                  Version () const  {return  version;}
    
     void                   Version (short  _version)  {version = _version;}
-
-    virtual  const char*   UnderlyingClass ()  const  {return  "ImageFeaturesList";}
 
 
     class  const_iterator
@@ -794,13 +790,13 @@ namespace MLL
         double  sl1 = 0.0;
         double  sl2 = 0.0;
 
-        if  (strcmp (p1->UnderlyingClass (), "ImageFeatures") == 0)
+        if  (typeid (*p1) == typeid (ImageFeatures))
         {
           ImageFeaturesPtr i1 = dynamic_cast<ImageFeaturesPtr>(p1);
           sl1 = i1->SfCentroidRow (); 
         }
 
-        if  (strcmp (p2->UnderlyingClass (), "ImageFeatures") == 0)
+        if  (typeid (*p2) == typeid (ImageFeatures))
         {
           ImageFeaturesPtr i2 = dynamic_cast<ImageFeaturesPtr>(p2);
           sl2 = i2->SfCentroidRow (); 

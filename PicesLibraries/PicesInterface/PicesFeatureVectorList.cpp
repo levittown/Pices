@@ -23,6 +23,7 @@ using namespace System::Windows::Forms;
 #include "KKBaseTypes.h"
 #include "GoalKeeper.h"
 #include "OSservices.h"
+#include "Raster.h"
 using namespace KKB;
 
 
@@ -30,8 +31,12 @@ using namespace KKB;
 #include "FeatureFileIOPices.h"
 #include "FileDesc.h"
 #include "MLClass.h"
-#include "OSservices.h"
-#include "Raster.h"
+using namespace KKMLL;
+
+
+#include "PicesFVProducer.h"
+using namespace  MLL;
+
 
 #include "PicesKKStr.h"
 #include "PicesOSservices.h"
@@ -39,8 +44,6 @@ using namespace KKB;
 #include "PicesRunLog.h"
 #include "PicesFeatureVector.h"
 #include "PicesFeatureVectorList.h"
-
-
 using namespace  PicesInterface;
 
 
@@ -82,7 +85,7 @@ namespace  PicesInterface
     while  (examples.size () > 0)
     {
       FeatureVectorPtr  fv = examples.PopFromFront ();
-      if  (strcmp (fv->UnderlyingClass (), "ImageFeatures") == 0)
+      if  (typeid (*fv) == typeid (ImageFeatures))
       {
         pfv = gcnew PicesFeatureVector (dynamic_cast<ImageFeaturesPtr> (fv));
         fv = NULL;
@@ -183,13 +186,14 @@ namespace  PicesInterface
       classes = NULL;
     }
 
-    classes = new MLClassConstList ();
+    classes = new MLClassList ();
 
     if  (!cancelFlag)
       cancelFlag = new bool (false);
 
     ImageFeaturesListPtr  featureData = FeatureFileIOPices::Driver ()->LoadInSubDirectoryTree 
-                                       (PicesKKStr::SystemStringToKKStr (rootDir),
+                                       (PicesFVProducerFactory::Factory (&(log->Log ())),
+                                        PicesKKStr::SystemStringToKKStr (rootDir),
                                         *classes,
                                         useDirectoryNameForClassName,
                                         NULL,     // DataBasePtr
@@ -254,7 +258,7 @@ namespace  PicesInterface
 
 
 
-  PicesFeatureVectorList^  PicesFeatureVectorList::ExtractImagesForAGivenClass (PicesClass^  mlClass)
+  PicesFeatureVectorList^  PicesFeatureVectorList::ExtractExamplesForAGivenClass (PicesClass^  mlClass)
   {
     PicesFeatureVectorList^  extractedExamples = gcnew PicesFeatureVectorList ();
 
@@ -265,7 +269,7 @@ namespace  PicesInterface
     }
 
     return  extractedExamples;
-  }  /* ExtractImagesForAGivenClass */
+  }  /* ExtractExamplesForAGivenClass */
 
 
 
@@ -292,7 +296,7 @@ namespace  PicesInterface
 
     for each (PicesClass^  pc in classes)
     {
-      PicesFeatureVectorList^  examplesThisClass = ExtractImagesForAGivenClass (pc);
+      PicesFeatureVectorList^  examplesThisClass = ExtractExamplesForAGivenClass (pc);
       examplesThisClass->RandomizeOrder ();
       foldNum = 0;
       for each (PicesFeatureVector^  pfv in examplesThisClass)
@@ -330,8 +334,8 @@ namespace  PicesInterface
                            PicesFeatureVector^ b
                           )
     {
-      String^ sA = OSservices::GetRootName (a->ImageFileName);
-      String^ sB = OSservices::GetRootName (b->ImageFileName);
+      String^ sA = OSservices::GetRootName (a->ExampleFileName);
+      String^ sB = OSservices::GetRootName (b->ExampleFileName);
       return  sA->CompareTo (sB);
     }
   };
@@ -368,7 +372,7 @@ namespace  PicesInterface
     while  (left < right)
     {
       middle = (left + right) / 2;
-      String^  middleRootName = OSservices::GetRootName ((this)[middle]->ImageFileName);
+      String^  middleRootName = OSservices::GetRootName ((this)[middle]->ExampleFileName);
       int  x = middleRootName->CompareTo (imageFileRootName);
 
       if  (x < 0)
@@ -392,7 +396,7 @@ namespace  PicesInterface
   // Creates an unmanaged list of feature vectors.
   FeatureVectorListPtr  PicesFeatureVectorList::ToFeatureVectorList (PicesRunLog^  runLog)
   {
-    FeatureVectorListPtr  fvl = new FeatureVectorList (FeatureFileIOPices::NewPlanktonFile (runLog->Log ()), false, runLog->Log ());
+    FeatureVectorListPtr  fvl = new FeatureVectorList (FeatureFileIOPices::NewPlanktonFile (), false);
 
     for each (PicesFeatureVector^ fv in *this)
       fvl->PushOnBack (fv->UnManagedClass ());

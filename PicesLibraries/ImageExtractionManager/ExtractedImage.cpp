@@ -74,10 +74,10 @@ void  ExtractedImage::FeatureVector (ImageFeaturesPtr  _featureVector)
 }
 
 
-void  ExtractedImage::Prediction (MLClassConstPtr _predClass1,
-                                  float           _predClass1Prob,
-                                  MLClassConstPtr _predClass2,
-                                  float           _predClass2Prob
+void  ExtractedImage::Prediction (MLClassPtr  _predClass1,
+                                  float       _predClass1Prob,
+                                  MLClassPtr  _predClass2,
+                                  float       _predClass2Prob
                                  )
 {
   predClass1      = _predClass1;

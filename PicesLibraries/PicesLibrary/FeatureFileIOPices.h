@@ -2,7 +2,9 @@
 #define  _FEATUREFILEIOPICES_
 
 #include "FeatureFileIO.h"
-#include "MLClassConstList.h"
+#include "FeatureNumList.h"
+using namespace  KKMLL;
+
 #include "ImageFeatures.h"
 
 
@@ -48,20 +50,20 @@ namespace MLL
     FeatureFileIOPices ();
     virtual ~FeatureFileIOPices ();
 
-    virtual  FileDescPtr  GetFileDesc (const KKStr&         _fileName,
-                                       std::istream&        _in,
-                                       MLClassConstListPtr  _classes,
-                                       kkint32&               _estSize,
-                                       KKStr&               _errorMessage,
-                                       RunLog&              _runLog
+    virtual  FileDescPtr  GetFileDesc (const KKStr&    _fileName,
+                                       std::istream&   _in,
+                                       MLClassListPtr  _classes,
+                                       kkint32&        _estSize,
+                                       KKStr&          _errorMessage,
+                                       RunLog&         _runLog
                                       );
 
 
     virtual  ImageFeaturesListPtr  LoadFile (const KKStr&       _fileName,
                                              const FileDescPtr  _fileDesc,
-                                             MLClassConstList&  _classes, 
+                                             MLClassList&       _classes, 
                                              std::istream&      _in,
-                                             long               _maxCount,    // Maximum # images to load.
+                                             kkint32            _maxCount,    // Maximum # images to load.
                                              VolConstBool&      _cancelFlag,
                                              bool&              _changesMade,
                                              KKStr&             _errorMessage,
@@ -82,7 +84,7 @@ namespace MLL
 
 
     static  FeatureFileIOPicesPtr  Driver                 ()                  {return &driver;}
-    static  FileDescPtr            NewPlanktonFile        (RunLog&  _log);
+    static  FileDescPtr            NewPlanktonFile        ();
     static  KKStr                  PlanktonFieldName      (kkint32  fieldNum);
     static  kkint32                PlanktonMaxNumOfFields ();
 
@@ -98,66 +100,94 @@ namespace MLL
      * file to be recomputed.  The feature file version number gets incremented whenever we change
      * the feature file computation routine.
      *
-     *@param[in] _dirName,      Directory where source images are located.
-     *@param[in] _fileName,     Feature file that is being synchronized.
-     *@param[in] _unknownClass, Class to be used when class is unknown
-     *@param[in] _useDirectoryNameForClassName, if true then class name of each entry
+     *@param[in] _dirName       Directory where source images are located.
+     *@param[in] _fileName      Feature file that is being synchronized.
+     *@param[in] _unknownClass  Class to be used when class is unknown
+     *@param[in] _useDirectoryNameForClassName  if true then class name of each entry
      *           will be set to directory name.
      *@param[in] _database If not NULL retrieves Instrument data from the PICES database table InstrumentData.
      *@param[in] _mlClasses  List of classes
      *@param[in] _cancelFlag  Boolean variable that will be monitored; if it goes True then will terminate 
      * processing right away and return to caller.
-     *@param[out] _changesMade, If returns as true then there were changes made to the 
+     *@param[out] _changesMade  If returns as true then there were changes made to the 
      *            feature file 'fileName'.  If set to false, then no changes were made.
      *@param[out] _timeStamp Timestamp of feature file.
-     *@param[in] _log, where to send diagnostic messages to.
+     *@param[in] _log  where to send diagnostic messages to.
      *@returns - A ImageFeaturesList container object.  This object will own all the examples loaded
      */
-    static
-    ImageFeaturesListPtr  FeatureDataReSink (KKStr              _dirName, 
-                                             const KKStr&       _fileName, 
-                                             MLClassConstPtr    _unknownClass,
-                                             bool               _useDirectoryNameForClassName,
-                                             DataBasePtr        _dataBase,
-                                             MLClassConstList&  _mlClasses,
-                                             VolConstBool&      _cancelFlag,    // will be monitored,  if set to True  Load will terminate.
-                                             bool&              _changesMade,
-                                             KKB::DateTime&     _timeStamp,
-                                             RunLog&            _log
+    virtual
+    ImageFeaturesListPtr  FeatureDataReSink (FactoryFVProducerPtr  _fvProducerFactory,
+                                             const KKStr&          _dirName, 
+                                             const KKStr&          _fileName, 
+                                             MLClassPtr            _unknownClass,
+                                             bool                  _useDirectoryNameForClassName,
+                                             DataBasePtr           _dataBase,
+                                             MLClassList&          _mlClasses,
+                                             VolConstBool&         _cancelFlag,    // will be monitored,  if set to True  Load will terminate.
+                                             bool&                 _changesMade,
+                                             KKB::DateTime&        _timeStamp,
+                                             RunLog&               _log
                                             );
+
+    /**
+     * Same as 'FeatureDataReSink' except does not include '_dataBase'; will call above method passing in 
+     * NULL  for  '_dataBase'.
+     */
+    virtual
+    ImageFeaturesListPtr  FeatureDataReSink (FactoryFVProducerPtr  _fvProducerFactory,
+                                             const KKStr&          _dirName, 
+                                             const KKStr&          _fileName, 
+                                             MLClassPtr            _unknownClass,
+                                             bool                  _useDirectoryNameForClassName,
+                                             MLClassList&          _mlClasses,
+                                             VolConstBool&         _cancelFlag,    // will be monitored,  if set to True  Load will terminate.
+                                             bool&                 _changesMade,
+                                             KKB::DateTime&        _timeStamp,
+                                             RunLog&               _log
+                                            );
+
 
 
 
 
     /**                       LoadInSubDirectoryTree
      *@brief Loads in the contents of a sub-directory tree.
-     *       Meant to work with SIPPER plankton images, it starts at a specified subdirectory and 
+     *@details Meant to work with SIPPER plankton images, it starts at a specified subdirectory and 
      *       transverses all subdirectories.  It makes use of FeatureDataReSink for each specific
      *       sub-directory.
-     *@param[in] _rootDir,   Starting directory.
-     *@param[in,out] _mlClasses, List of classes, any new classes in fileName will be added.
-     *@param[in] _useDirectoryNameForClassName, if true set class names to sub-directory name.
+     *@param[in] _rootDir  Starting directory.
+     *@param[in,out] _mlClasses List of classes, any new classes in fileName will be added.
+     *@param[in] _useDirectoryNameForClassName  if true set class names to sub-directory name.
      *           This happens because the user may manually move images between directories using
      *           the sub-directory name as the class name.
      *@param[in] _dataBase  If not null retrieve Instrument data from the Instruments database table.
      *@param[in] _cancelFlag  Will be monitored; if set to True Load will terminate.
-     *@param[in] _rewiteRootFeatureFile, If true rewrite the feature file in the specified 'rootDir'.  This
+     *@param[in] _rewiteRootFeatureFile  If true rewrite the feature file in the specified 'rootDir'.  This
      *           feature file will contain all entries from all sub-directories below it.
      *@param[in,out] _log  Logger where messages are to be written to.
-     *@returns - A ImageFeaturesList container object.  This object will own all the examples loaded.
+     *@returns - A ImageFeaturesList container object that will own all the examples loaded.
      */
-    static
-      ImageFeaturesListPtr  LoadInSubDirectoryTree (KKStr              _rootDir,
-                                                    MLClassConstList&  _mlClasses,
-                                                    bool               _useDirectoryNameForClassName,
-                                                    DataBasePtr        _dataBase,
-                                                    VolConstBool&      _cancelFlag,
-                                                    bool               _rewiteRootFeatureFile,
-                                                    RunLog&            _log
+    virtual
+      ImageFeaturesListPtr  LoadInSubDirectoryTree (FactoryFVProducerPtr  _fvProducerFactory,
+                                                    KKStr                 _rootDir,
+                                                    MLClassList&          _mlClasses,
+                                                    bool                  _useDirectoryNameForClassName,
+                                                    DataBasePtr           _dataBase,
+                                                    VolConstBool&         _cancelFlag,
+                                                    bool                  _rewiteRootFeatureFile,
+                                                    RunLog&               _log
                                                    );
 
 
-
+    virtual
+      ImageFeaturesListPtr  LoadInSubDirectoryTree (FactoryFVProducerPtr  _fvProducerFactory,
+                                                    KKStr                 _rootDir,
+                                                    MLClassList&          _mlClasses,
+                                                    bool                  _useDirectoryNameForClassName,
+                                                    VolConstBool&         _cancelFlag,
+                                                    bool                  _rewiteRootFeatureFile,
+                                                    RunLog&               _log
+                                                   );
 
 
 

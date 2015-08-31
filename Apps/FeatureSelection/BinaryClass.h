@@ -2,20 +2,25 @@
 #define  _BINARYCLASS_
 
 
-typedef  enum  {cpNULL, cpNotStarted, cpStarted, cpDone}  ClassPairStatus;
+enum class  ClassPairStatus 
+{
+  Null, 
+  NotStarted, 
+  Started, 
+  Done
+};
 
 
-#include  "KKQueue.h"
-#include  "MLClass.h"
-#include  "SVMparam.h"
-
-
-
+#include "KKQueue.h"
 using namespace  KKB;
-using namespace  MLL;
 
 
-#include  "FeatureSelectionTypes.h"
+#include "MLClass.h"
+#include "SVMparam.h"
+using namespace  KKMLL;
+
+
+#include "FeatureSelectionTypes.h"
 
 
 namespace FeatureSelectionApp
@@ -23,9 +28,9 @@ namespace FeatureSelectionApp
   class BinaryClass
   {
   public:
-    BinaryClass (MLClassConstPtr  _class1,
-                 MLClassConstPtr  _class2,
-                 int                 _processorId
+    BinaryClass (MLClassPtr  _class1,
+                 MLClassPtr  _class2,
+                 int         _processorId
                 );
 
     BinaryClass (int         _numProcessors,
@@ -33,8 +38,8 @@ namespace FeatureSelectionApp
                  MajorSteps  _majorSetp
                 );
 
-    BinaryClass (KKStr                  statusStr,
-                 MLClassConstListPtr mlClasses
+    BinaryClass (KKStr           statusStr,
+                 MLClassListPtr  mlClasses
                 );
 
     // For creating a Final Results Processor;  that will manage random splits.
@@ -47,8 +52,8 @@ namespace FeatureSelectionApp
 
     ~BinaryClass ();
 
-    MLClassConstPtr  Class1        () const  {return class1;}
-    MLClassConstPtr  Class2        () const  {return class2;}
+    MLClassPtr          Class1        () const  {return class1;}
+    MLClassPtr          Class2        () const  {return class2;}
     int                 NumProcessors () const  {return numProcessors;}
     ClassPairStatus     Status        () const  {return status;}
 
@@ -66,8 +71,8 @@ namespace FeatureSelectionApp
     void  NumProcessors (int              _numProcessors) {numProcessors = _numProcessors;}
     void  Status        (ClassPairStatus  _status)        {status        = _status;}
 
-    void  ProcessStatusStr  (KKStr                   statusStr,
-                             MLClassConstListPtr  mlClasses
+    void  ProcessStatusStr  (KKStr           statusStr,
+                             MLClassListPtr  mlClasses
                             );
 
     virtual  KKStr   ToStr ();
@@ -77,8 +82,8 @@ namespace FeatureSelectionApp
 
 
   private:
-    MLClassConstPtr  class1;
-    MLClassConstPtr  class2;  
+    MLClassPtr  class1;
+    MLClassPtr  class2;  
     int                 numProcessors;  // The number of processors that are working on this combination.
     ClassPairStatus     status;
 

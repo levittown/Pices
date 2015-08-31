@@ -134,34 +134,34 @@ def  SipperFileExist (db, c, _sipperFileIdExt, _sipperFileName):
 
 
 def  ImportLogEntries(dirName):
+  passWord=""
   try:
-       #db = mysql.connector.Connect(user='kkramer',
-       #                             password="tree10peach",
-       #                             host='sipper-db2.marine.usf.edu',
-       #                             database='pices_new'
-       #                          )
-              
-       #db = mysql.connector.Connect(user='kkramer',
-       #                             password="tree10peach",
-       #                             host='sipper-db2.marine.usf.edu',
-       #                             database='pices_new'
-       #                           )
-       db = mysql.connector.Connect(user='kkramer',
-                                    password="tree10peach",
-                                    host='localhost',
-                                    database='pices_new'
-                                  )
-       #db = mysql.connector.Connect(user='root',
-       #                             password="dasani30",
-       #                             host='localhost',
-       #                             database='pices_new'
-       #                           )
+    #db = mysql.connector.Connect(user='kkramer',
+    #                             password=passWord,
+    #                             host='sipper-db2.marine.usf.edu',
+    #                             database='pices_new'
+    #                          )
+
+    #db = mysql.connector.Connect(user='kkramer',
+    #                             password=passWord,
+    #                             host='sipper-db2.marine.usf.edu',
+    #                             database='pices_new'
+    #                           )
+    db = mysql.connector.Connect(user='kkramer',
+                                 password=passWord,
+                                 host='localhost',
+                                 database='pices_new'
+                                )
+    #db = mysql.connector.Connect(user='root',
+    #                             password=passWord,
+    #                             host='localhost',
+    #                             database='pices_new'
+    #                           )
   except  mysql.connector.Error as err:
     db = None
     if  err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
         print("Cound not conect to \"Sipper-d-marine.usf.edu\"")
-    elif  err.errno == errorcode.ER_BAD_DB_ERROR:
-        print("Database does not exists")
+    elif  err.errno == errorcode.ER_BAD_DB_ERROR:        print("Database does not exists")
     else:
         print(err)
 
@@ -260,7 +260,8 @@ def  main():
   #rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews"
   #rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews\\2015-02-11"
   #rootDir="D:\\Users\\kkramer\\DropBox\\Dropbox\\ToKurt\\DataToKurt"
-  rootDir="D:\\Users\\kkramer\\DropBox\\Dropbox\\ToKurt\\DataToKurt"
+  #rootDir="D:\\Users\\kkramer\\DropBox\\Dropbox\\ToKurt\\DataToKurt"
+  rootDir="C:\\Users\\Kurt\Dropbox\\ToCotPices\\2015-06-23"
   #rootDir="C:\\Pices\\UpdatesFromOtherServers"
   ImportLogEntries(rootDir)
   print("\n\n    *** Import Completed ***\n\n")
@@ -277,13 +278,13 @@ main()
 
 
 
-1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`pices_new`.`sipperfiles`, CONSTRAINT `sipperfiles_ibfk_3` FOREIGN KEY (`CruiseName`, `StationName`, `DeploymentNum`) REFERENCES `deployments` (`CruiseName`, `StationName`, `DeploymentNum`) ON)
-
-insert into SipperFiles(sipperFileName, cruiseName, stationName, deploymentNum, description, latitude, longitude, dateTimeStart,
-                        sp0Instrument, sp1Instrument, sp2Instrument, sp3Instrument,
-                        ctdExt0, ctdExt1, ctdExt2, ctdExt3, sizeInBytes, numScanLines, scanRate, depth, extractionStatus,
-                        extractionScanLineStart, extractionScanLineEnd)
-                 values("WB0814PCB02_01_01", "WB0814", "PCB01", "A", "", 0.0, 0.0, "2014-11-06 19:43:49", "BAT", "GPS", "CTD", "", "TRN", "OXG", "FLO", "TUR", 0, 0, 0.0, 0.0, "3", 0, 0)
+#1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`pices_new`.`sipperfiles`, CONSTRAINT `sipperfiles_ibfk_3` FOREIGN KEY (`CruiseName`, `StationName`, `DeploymentNum`) REFERENCES `deployments` (`CruiseName`, `StationName`, `DeploymentNum`) ON)
+#
+#insert into SipperFiles(sipperFileName, cruiseName, stationName, deploymentNum, description, latitude, longitude, dateTimeStart,
+#                        sp0Instrument, sp1Instrument, sp2Instrument, sp3Instrument,
+#                        ctdExt0, ctdExt1, ctdExt2, ctdExt3, sizeInBytes, numScanLines, scanRate, depth, extractionStatus,
+#                        extractionScanLineStart, extractionScanLineEnd)
+#                 values("WB0814PCB02_01_01", "WB0814", "PCB01", "A", "", 0.0, 0.0, "2014-11-06 19:43:49", "BAT", "GPS", "CTD", "", "TRN", "OXG", "FLO", "TUR", 0, 0, 0.0, 0.0, "3", 0, 0)
 
 
 

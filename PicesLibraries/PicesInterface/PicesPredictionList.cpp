@@ -21,11 +21,12 @@ using namespace System::Windows::Forms;
 #include "KKBaseTypes.h"
 #include "GoalKeeper.h"
 #include "OSservices.h"
-
 using namespace KKB;
+
 
 #include "ClassProb.h"
 #include "MLClass.h"
+using namespace KKMLL;
 
 //#include "PicesKKStr.h"
 
@@ -53,7 +54,7 @@ PicesPredictionList::PicesPredictionList (ClassProbList&  predictions):
   for  (idx = predictions.begin ();  idx != predictions.end ();  ++idx)
   {
     ClassProbPtr  cp = *idx;
-    MLClassConstPtr  ic = cp->classLabel;
+    MLClassPtr  ic = cp->classLabel;
     if  (!ic)
       continue;
 

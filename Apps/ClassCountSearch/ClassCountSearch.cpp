@@ -25,8 +25,6 @@ using namespace  std;
 #include "KKStr.h"
 using namespace  KKB;
 
-#include "SipperVariables.h"
-using namespace SipperHardware;
 
 #include "Classifier2.h"
 #include "ConfusionMatrix2.h"
@@ -35,10 +33,16 @@ using namespace SipperHardware;
 #include "FeatureFileIO.h"
 #include "FeatureFileIOPices.h"
 #include "FeatureNumList.h"
-#include "MLClass.h"
 #include "ImageFeatures.h"
+#include "MLClass.h"
+#include "PicesVariables.h"
 #include "TrainingProcess2.h"
 #include "TrainingConfiguration2.h"
+using namespace  KKMLL;
+
+
+#include "PicesTrainingConfiguration.h"
+#include "PicesFVProducer.h"
 using namespace  MLL;
 
 
@@ -49,11 +53,11 @@ using namespace  MLL;
 class  ClassCountSearch::ClassStats
 {
 public:
-  ClassStats (MLClassConstPtr  _mlClass,
-              double           _truePositives,
-              double           _trueNegatives,
-              double           _falsePositives,
-              double           _falseNegatives
+  ClassStats (MLClassPtr  _mlClass,
+              double      _truePositives,
+              double      _trueNegatives,
+              double      _falsePositives,
+              double      _falseNegatives
              )
   {
     mlClass     = _mlClass;
@@ -112,7 +116,7 @@ public:
       return  falseNegatives / denominator;
   }
 
-  MLClassConstPtr  mlClass;
+  MLClassPtr  mlClass;
 
   double  truePositives;
   double  trueNegatives;
@@ -131,11 +135,11 @@ public:
   {}
 
 
-  void  Push (MLClassConstPtr  _mlClass,
-              double         _truePositives,
-              double         _trueNegatives,
-              double         _falsePositives,
-              double         _falseNegatives
+  void  Push (MLClassPtr  _mlClass,
+              double      _truePositives,
+              double      _trueNegatives,
+              double      _falsePositives,
+              double      _falseNegatives
              )
   {
     PushOnBack (new ClassStats (_mlClass, _truePositives, _trueNegatives, _falsePositives, _falseNegatives));
@@ -273,14 +277,6 @@ public:
     return  smallestValue;
   }  /* PopLargestType1Error */
 
-
-
-
-
-
-
-
-
 };  /* ClassStatsList */
 
 
@@ -326,7 +322,7 @@ ClassCountSearch::ClassCountSearch ():
   groundTruthDirName   (),
   groundTruth          (NULL),
   groundTruthClasses   (NULL),
-  mlClasses            (new MLClassConstList ()),
+  mlClasses            (new MLClassList ()),
   report               (NULL),
   report1Type1Errors   (NULL),
   reportFileName       (),
@@ -369,8 +365,9 @@ void  ClassCountSearch::InitalizeApplication (kkint32 argc,
                                               char**  argv
                                              )
 {
+  ConfigRequired (true);
   PicesApplication::InitalizeApplication (argc, argv);
-  fileDesc = FeatureFileIOPices::NewPlanktonFile (log);
+  fileDesc = FeatureFileIOPices::NewPlanktonFile ();
 
   osRunAsABackGroundProcess ();
 
@@ -414,7 +411,7 @@ void  ClassCountSearch::InitalizeApplication (kkint32 argc,
 
   if  (reportFileName.Empty ())
   {
-    KKStr  reportDir = osAddSlash (SipperVariables::PicesReportDir ()) + "ClassCountSearch";
+    KKStr  reportDir = osAddSlash (PicesVariables::ReportDir ()) + "ClassCountSearch";
     KKB::osCreateDirectoryPath (reportDir);
     reportFileName = osAddSlash (reportDir) + osGetRootNameOfDirectory (configFileName) + "_ClassCountSearch.txt";
   }
@@ -430,7 +427,7 @@ void  ClassCountSearch::InitalizeApplication (kkint32 argc,
   *report << "------------------------------------------------------------------------" << endl;
   *report << "Report File Name"       << "\t" << reportFileName       << endl;
   *report << "Config File Name"       << "\t" << configFileName       << endl;
-  *report << "Ground Truch Directory" << "\t" << groundTruthDirName   << endl;
+  *report << "Ground Truth Directory" << "\t" << groundTruthDirName   << endl;
   if  (config)
   {
     *report << "Model Type"     << "\t" << config->ModelTypeStr          ()  << endl;
@@ -448,7 +445,7 @@ void  ClassCountSearch::InitalizeApplication (kkint32 argc,
   *report1Type1Errors << "------------------------------------------------------------------------" << endl;
   *report1Type1Errors << "Report File Name"       << "\t" << reportFileName      << endl;
   *report1Type1Errors << "Config File Name"       << "\t" << configFileName      << endl;
-  *report1Type1Errors << "Ground Truch Directory" << "\t" << groundTruthDirName  << endl;
+  *report1Type1Errors << "Ground Truth Directory" << "\t" << groundTruthDirName  << endl;
   if  (config)
   {
     *report1Type1Errors << "Model Type"      << "\t" << config->ModelTypeStr          ()  << endl;
@@ -530,7 +527,8 @@ void  ClassCountSearch::Main ()
   if  (!groundTruthDirName.Empty ())
   {
     groundTruth = FeatureFileIOPices::Driver ()->LoadInSubDirectoryTree 
-                        (groundTruthDirName, 
+                        (fvFactoryProducer,
+                         groundTruthDirName, 
                          *mlClasses, 
                          true,             // true = useDirectoryNameForClassName
                          DB (),
@@ -544,7 +542,7 @@ void  ClassCountSearch::Main ()
         dupDetector.ReportDuplicates (*report);
     }
 
-    groundTruthClasses = groundTruth->ExtractMLClassConstList ();
+    groundTruthClasses = groundTruth->ExtractListOfClasses ();
   }
 
   DateTime  latestImageTimeStamp;
@@ -552,16 +550,16 @@ void  ClassCountSearch::Main ()
 
   {
     KKB::DateTime  latestImageTimeStamp;
-    trainExamples = config->LoadFeatureDataFromTrainingLibraries (latestImageTimeStamp, changesMadeToTrainingLibraries, cancelFlag);
+    trainExamples = config->LoadFeatureDataFromTrainingLibraries (latestImageTimeStamp, changesMadeToTrainingLibraries, cancelFlag, log);
     if  (!trainExamples)
     {
       log.Level (-1) << endl
-        << "ClassCountSearch::Main   ***ERROR***   Failed to load trainig examples for model: " << config->FileName () << endl << endl;
+        << "ClassCountSearch::Main   ***ERROR***   Failed to load training examples for model: " << config->FileName () << endl << endl;
       exit (-1);
     }
   }
 
-  trainExamplesClasses = trainExamples->ExtractMLClassConstList ();
+  trainExamplesClasses = trainExamples->ExtractListOfClasses ();
   trainExamplesClasses->SortByName ();
 
 
@@ -572,11 +570,11 @@ void  ClassCountSearch::Main ()
   *report1Type1Errors << "Error"  << "\t" << "Class" << "\t" << "Number"   << "\t" << "Number"  << "\t" << ""         << "\t" << "Wtd"     << "\t" << "With >"     << "\t" << l2 << endl;
   *report1Type1Errors << "Type"   << "\t" << "Count" << "\t" << "Examples" << "\t" << "Ignored" << "\t" << "Accuracy" << "\t" << "Equally" << "\t" << "Type1Error" << "\t" << l3 << endl;
 
-  combinationsToTry.push (new MLClassConstList (*trainExamplesClasses));
+  combinationsToTry.push (new MLClassList (*trainExamplesClasses));
 
   while  (combinationsToTry.size () > 0)
   {
-    MLClassConstListPtr  nextClassCombo = combinationsToTry.front ();
+    MLClassListPtr  nextClassCombo = combinationsToTry.front ();
     combinationsToTry.pop ();
     ProcessClassCombo (nextClassCombo);
     delete  nextClassCombo;
@@ -592,12 +590,12 @@ ClassStatsListPtr  ClassCountSearch::ComputeClassStatsList (ConfusionMatrix2Ptr 
 {
   ClassStatsListPtr  stats = new ClassStatsList ();
 
-  const MLClassConstList&  classes = cm->MLClasses ();
+  const MLClassList&  classes = cm->MLClasses ();
 
-  MLClassConstList::const_iterator  idx;
+  MLClassList::const_iterator  idx;
   for  (idx = classes.begin ();  idx != classes.end ();  ++idx)
   {
-    MLClassConstPtr  ic = *idx;
+    MLClassPtr  ic = *idx;
 
     double  truePositives  = 0.0;
     double  trueNegatives  = 0.0;
@@ -616,7 +614,7 @@ ClassStatsListPtr  ClassCountSearch::ComputeClassStatsList (ConfusionMatrix2Ptr 
 
 
 
-void  ClassCountSearch::ProcessClassCombo (MLClassConstListPtr  classes)
+void  ClassCountSearch::ProcessClassCombo (MLClassListPtr  classes)
 {
   log.Level (10) << "ClassCountSearch::ProcessClassCombo" << endl;
 
@@ -652,10 +650,10 @@ void  ClassCountSearch::ProcessClassCombo (MLClassConstListPtr  classes)
   falsePositivesStr   << "FalsePositives" << "\t" << classes->QueueSize () << "\t" << numExamples << "\t" << numIgnored << "\t" << cm->Accuracy () << "\t" << cm->AccuracyNorm () << "\t" << nextCandidate->mlClass->Name ();
   sensitivityStr      << "FalsePositives" << "\t" << classes->QueueSize () << "\t" << numExamples << "\t" << numIgnored << "\t" << cm->Accuracy () << "\t" << cm->AccuracyNorm () << "\t" << nextCandidate->mlClass->Name ();
 
-  MLClassConstList::iterator  idx;
+  MLClassList::iterator  idx;
   for  (idx = trainExamplesClasses->begin ();  idx != trainExamplesClasses->end ();  ++idx)
   {
-    MLClassConstPtr  ic = *idx;
+    MLClassPtr  ic = *idx;
     if  (classes->PtrToIdx (ic) < 0)
     {
       *report1Type1Errors << "\t" << "********";
@@ -701,7 +699,7 @@ void  ClassCountSearch::ProcessClassCombo (MLClassConstListPtr  classes)
 
   if  (classes->QueueSize () > 3)
   {
-    MLClassConstListPtr  nextClassList = new MLClassConstList (*classes);
+    MLClassListPtr  nextClassList = new MLClassList (*classes);
     nextClassList->DeleteEntry (nextCandidate->mlClass);
     combinationsToTry.push (nextClassList);
   }
@@ -713,9 +711,9 @@ void  ClassCountSearch::ProcessClassCombo (MLClassConstListPtr  classes)
 
 
 
-ConfusionMatrix2Ptr  ClassCountSearch::GradeClassList (MLClassConstListPtr  classes,
-                                                       kkint32&             numExamples, 
-                                                       kkint32&             numIgnored
+ConfusionMatrix2Ptr  ClassCountSearch::GradeClassList (MLClassListPtr  classes,
+                                                       kkint32&        numExamples, 
+                                                       kkint32&        numIgnored
                                                        )
 {
   log.Level (10) << "ClassCountSearch::GradeClassList" << endl;
@@ -729,27 +727,27 @@ ConfusionMatrix2Ptr  ClassCountSearch::GradeClassList (MLClassConstListPtr  clas
 
   specificConfig->EmptyTrainingClasses ();
 
-  FeatureVectorListPtr  specificTrainExamples = new FeatureVectorList (fileDesc, false, log);
+  FeatureVectorListPtr  specificTrainExamples = fvFactoryProducer->ManufacturFeatureVectorList (false, log);
   FeatureVectorListPtr  specificGroundTruthExamples = NULL;
 
   if  (groundTruth)
-    specificGroundTruthExamples = new FeatureVectorList (fileDesc, false, log);
+    specificGroundTruthExamples = fvFactoryProducer->ManufacturFeatureVectorList (false, log);
   
-  MLClassConstList::iterator  idx;
+  MLClassList::iterator  idx;
   for  (idx = classes->begin ();  idx != classes->end ();  ++idx)
   {
-    MLClassConstPtr  ic = *idx;
+    MLClassPtr  ic = *idx;
     specificConfig->AddATrainingClass (ic);
 
     {
-      FeatureVectorListPtr  trainExamplesThisClass = trainExamples->ExtractImagesForAGivenClass (ic);
+      FeatureVectorListPtr  trainExamplesThisClass = trainExamples->ExtractExamplesForAGivenClass (ic);
       specificTrainExamples->AddQueue (*trainExamplesThisClass);
       delete  trainExamplesThisClass;  trainExamplesThisClass = NULL;
     }
 
     if  (groundTruth)
     {
-      FeatureVectorListPtr  groundTruthExamplesThisClass = groundTruth->ExtractImagesForAGivenClass (ic);
+      FeatureVectorListPtr  groundTruthExamplesThisClass = groundTruth->ExtractExamplesForAGivenClass (ic);
       specificGroundTruthExamples->AddQueue (*groundTruthExamplesThisClass);
       delete  groundTruthExamplesThisClass;
       groundTruthExamplesThisClass = NULL;
@@ -759,7 +757,7 @@ ConfusionMatrix2Ptr  ClassCountSearch::GradeClassList (MLClassConstListPtr  clas
 
   if  (!specificGroundTruthExamples)
   {
-    FeatureVectorListPtr  stratified = specificTrainExamples->StratifyAmoungstClasses (10);
+    FeatureVectorListPtr  stratified = specificTrainExamples->StratifyAmoungstClasses (10, log);
     delete  specificTrainExamples;
     specificTrainExamples = stratified;
     stratified = NULL;
@@ -779,13 +777,13 @@ ConfusionMatrix2Ptr  ClassCountSearch::GradeClassList (MLClassConstListPtr  clas
   {
     numExamples = specificGroundTruthExamples->QueueSize ();
     numIgnored  = groundTruth->QueueSize () - numExamples;
-    cv.RunValidationOnly (specificGroundTruthExamples, NULL);
+    cv.RunValidationOnly (specificGroundTruthExamples, NULL, log);
   }
   else
   {
     numExamples = specificTrainExamples->QueueSize ();
     numIgnored  = trainExamples->QueueSize () - numExamples;
-    cv.RunCrossValidation ();
+    cv.RunCrossValidation (log);
   }
 
   ConfusionMatrix2Ptr  cm = cv.GiveMeOwnershipOfConfusionMatrix ();

@@ -15,21 +15,22 @@ using namespace std;
 #include "RunLog.h"
 using namespace KKB;
 
-#include "SipperVariables.h"
-using namespace SipperHardware;
+
+#include "ClassStatistic.h"
+#include "MLClass.h"
+using namespace  KKMLL;
+
 
 #include "AbundanceCorrectionMatrix.h"
 #include "MLLTypes.h"
-#include "ClassStatistic.h"
-#include "MLClass.h"
-//#include  "ImageFeatures.h"
+#include "PicesVariables.h"
 using namespace MLL;
 
 
 
-AbundanceCorrectionMatrix::AbundanceCorrectionMatrix (MLClassConstList& _classes,
-                                                      MLClassConstPtr   _otherClass,
-                                                      RunLog&           _log
+AbundanceCorrectionMatrix::AbundanceCorrectionMatrix (MLClassList& _classes,
+                                                      MLClassPtr   _otherClass,
+                                                      RunLog&      _log
                                                      ):
   classes          (_classes),
   dateTimeComputed (osGetLocalDateTime ()),
@@ -141,7 +142,7 @@ void  AbundanceCorrectionMatrix::CleanUp ()
 
 
 
-kkint32  AbundanceCorrectionMatrix::LookUpClassIdx (MLClassConstPtr c)
+kkint32  AbundanceCorrectionMatrix::LookUpClassIdx (MLClassPtr c)
 {
   if  (c == otherClass)
     return otherClassIdx;
@@ -151,8 +152,8 @@ kkint32  AbundanceCorrectionMatrix::LookUpClassIdx (MLClassConstPtr c)
 
 
 
-void  AbundanceCorrectionMatrix::Prediction (MLClassConstPtr  knownClass,
-                                             MLClassConstPtr  predClass,
+void  AbundanceCorrectionMatrix::Prediction (MLClassPtr  knownClass,
+                                             MLClassPtr  predClass,
                                              RunLog&             log
                                             )
 {
@@ -200,7 +201,7 @@ void   AbundanceCorrectionMatrix::AllocateVector (vector<T>&  v,  kkuint32 len)
 
 
 
-/** Using confusion matrix already built will compute probOfDetection(Sensitivity)  and  probOfFalseAlarm(Specifiity). */
+/** Using confusion matrix already built will compute probOfDetection(Sensitivity)  and  probOfFalseAlarm(specificity). */
 void  AbundanceCorrectionMatrix::ComputeStatistics ()
 {
   AllocateVector (probOfDetection,  numClasses);
@@ -242,7 +243,7 @@ void  AbundanceCorrectionMatrix::ComputeStatistics ()
 
 void  AbundanceCorrectionMatrix::SaveForConfigFileName (const KKStr&  configFileName)
 {
-  KKStr  abundanceAdjDirName = SipperVariables::TrainingModelsSaveFilesDir ();
+  KKStr  abundanceAdjDirName = PicesVariables::TrainingModelsSaveFilesDir ();
   osCreateDirectoryPath (abundanceAdjDirName);
   KKStr  fileName =  osAddSlash (abundanceAdjDirName) + osGetRootName (configFileName) + "_AbundanceAdj.txt";
 
@@ -257,7 +258,7 @@ void  AbundanceCorrectionMatrix::ReadForConfigFileName (const KKStr&  configFile
                                                         RunLog&       log
                                                        )
 {
-  KKStr  abundanceAdjDirName = SipperVariables::TrainingModelsSaveFilesDir ();
+  KKStr  abundanceAdjDirName = PicesVariables::TrainingModelsSaveFilesDir ();
   osCreateDirectoryPath (abundanceAdjDirName);
   KKStr  fileName =  osAddSlash (abundanceAdjDirName) + osGetRootName (configFileName) + "_AbundanceAdj.txt";
 
@@ -584,7 +585,7 @@ void   AbundanceCorrectionMatrix::PrintConfusionMatrixTabDelimited (ostream&  ou
 
   KKStr  titleLine1, titleLine2, titleLine3;
   {
-    MLClassConstListPtr  allClasses = new MLClassConstList (classes);
+    MLClassListPtr  allClasses = new MLClassList (classes);
     allClasses->PushOnBack ((MLClassPtr)otherClass);
     allClasses->ExtractThreeTitleLines (titleLine1, titleLine2, titleLine3);
     delete  allClasses;
@@ -669,7 +670,7 @@ ClassStatisticListPtr   AbundanceCorrectionMatrix::LumpCounts (const ClassStatis
 
   for  (kkuint32  outputCountsIdx = 0;  outputCountsIdx < numClasses;  ++outputCountsIdx)
   {
-    MLClassConstPtr  ic = NULL;
+    MLClassPtr  ic = NULL;
     if  (outputCountsIdx == otherClassIdx)
       ic = otherClass;
     else
@@ -710,7 +711,7 @@ ClassStatisticListPtr   AbundanceCorrectionMatrix::AdjustClassificationCounts (c
 
   for  (kkuint32  outputCountsIdx = 0;  outputCountsIdx < numClasses;  ++outputCountsIdx)
   {
-    MLClassConstPtr  ic = NULL;
+    MLClassPtr  ic = NULL;
     if  (outputCountsIdx == otherClassIdx)
       ic = otherClass;
     else

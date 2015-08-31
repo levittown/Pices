@@ -1,5 +1,4 @@
 #include "FirstIncludes.h"
-
 #include <stdlib.h>
 #include <memory>
 #include <string>
@@ -7,9 +6,7 @@
 #include <fstream>
 #include <map>
 #include <vector>
-
 using namespace std;
-
 #include "MemoryDebug.h"
 
 

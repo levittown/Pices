@@ -27,7 +27,7 @@ namespace  ImageExtractionManager
 
     virtual ~FrameExtractorThread ();
 
-    virtual  ThreadTypes   ThreadType ()  {return ttFrameExtractor;}
+    virtual  ThreadTypes   ThreadType ()  {return  ThreadTypes::FrameExtractor;}
 
     kkuint32      FrameWidth         ()  const  {return frameWidth;}
     const KKStr&  SipperBuffFileName ()  const  {return sipperBuffFileName;}

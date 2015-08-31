@@ -95,7 +95,7 @@ namespace SipperFile
 		{
       title = _title;
 
-      dataWindowConfigFileName = OSservices.AddSlash (PicesSipperVariables.PicesConfigurationDirectory ()) + "DepthPlotConfig.txt";
+      dataWindowConfigFileName = OSservices.AddSlash (PicesSipperVariables.ConfigurationDirectory ()) + "DepthPlotConfig.txt";
 
       //
 			// Required for Windows Form Designer support

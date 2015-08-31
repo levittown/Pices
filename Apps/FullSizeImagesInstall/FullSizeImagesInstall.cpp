@@ -1,34 +1,30 @@
 #include "FirstIncludes.h"
-
 #include <stdlib.h>
 #include <memory>
 #include <math.h>
-
 #include <map>
 #include <string>
 #include <iostream>
 #include <fstream>
 #include <vector>
-
 #include "MemoryDebug.h"
 #include "KKBaseTypes.h"
-
 using namespace std;
+
 
 #include "ImageIO.h"
 #include "OSservices.h"
 #include "KKStr.h"
 using namespace KKB;
 
-#include "SipperCruise.h"
-#include "SipperDeployment.h"
-#include "SipperFile.h"
-#include "SipperVariables.h"
-using namespace  SipperHardware;
 
 #include "DataBase.h"
 #include "ImageFeatures.h"
-using namespace MLL;
+#include "SipperCruise.h"
+#include "SipperDeployment.h"
+#include "SipperFile.h"
+#include "PicesVariables.h"
+using namespace  MLL;
 
 
 #include "FullSizeImagesInstall.h"
@@ -147,7 +143,7 @@ void   FullSizeImagesInstall::DisplayCommandLineParameters ()
   cout << endl
        << "   Application that will scan through all images in the MySQL Images table"      << endl
        << "   and verify that a FullSize image exists for those that are larger than"       << endl
-       << "   their thumbnail version.  The data will be proecssed by SipperFile entries."  << endl
+       << "   their thumbnail version.  The data will be processed by SipperFile entries."  << endl
        << endl;
 }  /* DisplayCommandLineParameters */
 
@@ -215,7 +211,7 @@ void   FullSizeImagesInstall::ProcessSipperFile (SipperFilePtr  sipperFile)
       = DB ()->ImagesQuery (NULL,                            // imageGroup,
                             sipperFile->SipperFileName (),
                             NULL,                            //mlClass,
-                            'P',                             // classKeyToUse, 'P' - Use Prediced Class Key,  'V' - Validated Class */
+                            'P',                             // classKeyToUse, 'P' - Use Predicted Class Key,  'V' - Validated Class */
                             0.0f,                            // probMin,
                             1.0f,                            // probMax,
                             0,                               // sizeMin,
@@ -289,7 +285,7 @@ void   FullSizeImagesInstall::ProcessSipperFile (SipperFilePtr  sipperFile)
 
           if  (i == NULL)
           {
-            // The image was not in the ImageFullSize table,  we wil now reconstruct the image and save it to the ImageFullSize table.
+            // The image was not in the ImageFullSize table,  we will now reconstruct the image and save it to the ImageFullSize table.
             try  {i = image->GetOrigImageFromSipperFile (log);}
             catch (...) {i = NULL;}
 
@@ -305,9 +301,9 @@ void   FullSizeImagesInstall::ProcessSipperFile (SipperFilePtr  sipperFile)
               *report << image->ImageFileName () << "\t" << "Recovered" << endl;
               DB ()->ImageFullSizeSave (image->ImageFileName (), *i);
 
-              ImageFeaturesPtr  fd = new ImageFeatures (*i, image->Class1 (), NULL);
+              ImageFeaturesPtr  fd = new ImageFeatures (*i, image->Class1 (), NULL, log);
 
-              fd->ImageFileName (image->ImageFileName ());
+              fd->ExampleFileName (image->ImageFileName ());
               ImageFeaturesPtr  existingFeatureData = DB ()->FeatureDataRecLoad (image->ImageFileName ());
 
               InstrumentDataPtr  id = NULL;
@@ -402,7 +398,7 @@ void   FullSizeImagesInstall::Main ()
   if  (reportFileName.Empty ())
   {
 
-    KKStr  reportDir = osAddSlash (SipperVariables::PicesReportDir ()) + "FullSizeImagesInstall";
+    KKStr  reportDir = osAddSlash (PicesVariables::ReportDir ()) + "FullSizeImagesInstall";
     osCreateDirectoryPath (reportDir);
     reportFileName = osAddSlash (reportDir) + "FullSizeImagesInstall_" + osGetLocalDateTime ().YYYYMMDDHHMMSS () + ".txt";
   }

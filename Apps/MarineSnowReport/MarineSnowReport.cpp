@@ -1,6 +1,4 @@
 #include "FirstIncludes.h"
-
- 
 #include <string>
 #include <ctype.h>
 #include <math.h>
@@ -18,9 +16,7 @@
 #include <iostream>
 #include <map>
 #include <vector>
-
 #include "MemoryDebug.h"
-
 
 #ifdef WIN32
 #include <windows.h>
@@ -34,18 +30,16 @@ using namespace  std;
 #include "CmdLineExpander.h"
 using namespace  KKB;
 
+
+#include "DataBase.h"
 #include "Instrument.h"
 #include "InstrumentDataFileManager.h"
 #include "InstrumentDataManager.h"
+#include "PicesVariables.h"
 #include "SipperBuff.h"
-#include "SipperVariables.h"
-using namespace SipperHardware;
-
-
-#include "DataBase.h"
 #include "SipperCruise.h"
-#include "SipperStation.h"
 #include "SipperDeployment.h"
+#include "SipperStation.h"
 using namespace  MLL;
 
 
@@ -155,15 +149,15 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
 {
   cout << deployment->CruiseName () << "\t" << deployment->StationName () << "\t" << deployment->DeploymentNum () << endl;
 
-  MLClassConstListPtr  allClasses = db.MLClassLoadList ();
+  MLClassListPtr  allClasses = db.MLClassLoadList ();
 
   ImageSizeDistributionPtr  downCast = NULL;
   ImageSizeDistributionPtr  upCast   = NULL;
 
   ImageSizeDistributionPtr  totalDownCast = NULL;
 
-  MLClassConstPtr  detritusClass = allClasses->LookUpByName ("Detritus");
-  MLClassConstListPtr  classes = detritusClass->BuildListOfDecendents (detritusClass);
+  MLClassPtr  detritusClass = allClasses->LookUpByName ("Detritus");
+  MLClassListPtr  classes = detritusClass->BuildListOfDecendents (detritusClass);
   if  (classes->PtrToIdx (detritusClass) < 0)
     classes->AddMLClass (detritusClass);
 
@@ -200,10 +194,10 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
   }
 
 
-  MLClassConstList::const_iterator  idx;
+  MLClassList::const_iterator  idx;
   for  (idx = classes->begin ();  idx != classes->end ();  ++idx)
   {
-    MLClassConstPtr c = *idx;
+    MLClassPtr c = *idx;
     ImageSizeDistributionPtr  downCast = NULL;
     ImageSizeDistributionPtr  upCast   = NULL;
     db.ImagesSizeDistributionByDepth (deployment->CruiseName (), deployment->StationName (), deployment->DeploymentNum (), c->Name (), 
@@ -603,8 +597,7 @@ void  MarineSnowReport (const KKStr&  statistic)
   else
     statisticStr = "Volume";
 
-
-  marineSnowReportDirectory = osAddSlash (osAddSlash (SipperVariables::PicesReportDir ()) + "MarineSnowReports") + KKB::osGetLocalDateTime ().Date ().YYYYMMDD () + "_" + statisticStr;
+  marineSnowReportDirectory = osAddSlash (osAddSlash (PicesVariables::ReportDir ()) + "MarineSnowReports") + KKB::osGetLocalDateTime ().Date ().YYYYMMDD () + "_" + statisticStr;
   //marineSnowReportDirectory = "D:\\Users\\kkramer\\DropBox\\Dropbox\\USF_OilSpillGroup\\MarineSnow_" + KKB::osGetLocalDateTime ().Date ().YYYYMMDD ();
   KKB::osCreateDirectoryPath (marineSnowReportDirectory);
 

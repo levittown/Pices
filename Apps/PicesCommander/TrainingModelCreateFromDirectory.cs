@@ -15,7 +15,7 @@ namespace PicesCommander
   public partial class TrainingModelCreateFromDirectory : Form
   {
     private  bool  validationErrorsFound = false;
-    private  PicesTrainingConfiguration  config = null;
+    private  PicesTrainingConfigManaged  config = null;
     private  PicesRunLog  runLog = new PicesRunLog ();
 
     private  String  lastDirectoryValidated = "";
@@ -30,7 +30,7 @@ namespace PicesCommander
 
     private  void  LoadDirectoryTree ()
     {
-      config = new PicesTrainingConfiguration (new DirectoryInfo (SourceDirectory.Text), runLog);
+      config = new PicesTrainingConfigManaged (new DirectoryInfo (SourceDirectory.Text), runLog);
     }
 
 
@@ -104,7 +104,7 @@ namespace PicesCommander
 
         if  ((SourceDirectory.Text.CompareTo (lastDirectoryValidated) != 0)  &&  (!validationErrorsFound))
         {
-          config = new PicesTrainingConfiguration (di, runLog);
+          config = new PicesTrainingConfigManaged (di, runLog);
           LoadClassList ();
           ModelName.Text = OSservices.GetRootNameOfDirectory (SourceDirectory.Text);
         }
@@ -199,7 +199,7 @@ namespace PicesCommander
         fbd.SelectedPath = lastDirectoryValidated;
       else
       {
-        fbd.SelectedPath = PicesSipperVariables.PicesHomeDir ();
+        fbd.SelectedPath = PicesSipperVariables.HomeDir ();
       }
 
       DialogResult dr = fbd.ShowDialog (this);

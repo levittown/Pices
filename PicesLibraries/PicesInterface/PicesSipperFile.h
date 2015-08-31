@@ -9,9 +9,9 @@ using namespace System::Diagnostics;
 
 //using namespace PicesCSharpClasses;
 
-#include  "SipperFile.h"
-#include  "ImageFeatures.h"
-#include  "PicesRunLog.h"
+#include "SipperFile.h"
+#include "ImageFeatures.h"
+#include "PicesRunLog.h"
 
 
 namespace PicesInterface 
@@ -19,8 +19,8 @@ namespace PicesInterface
   public  ref class PicesSipperFile  
   {
   public:
-    typedef  SipperHardware::SipperFilePtr      SipperFilePtr;
-    typedef  SipperHardware::InstrumentPtr      InstrumentPtr;
+    typedef  MLL::SipperFilePtr   SipperFilePtr;
+    typedef  MLL::InstrumentPtr   InstrumentPtr;
    
     PicesSipperFile (String^  _sipperFileName);
 
@@ -82,7 +82,7 @@ namespace PicesInterface
   public ref class PicesSipperFileList:  List<PicesSipperFile^>
   {
   public:
-    typedef  SipperHardware::SipperFileListPtr  SipperFileListPtr;
+    typedef  MLL::SipperFileListPtr  SipperFileListPtr;
 
 
     PicesSipperFileList ();

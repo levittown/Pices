@@ -14,7 +14,7 @@
 //*==============================================================================*
 //*  History                                                                     *
 //*                                                                              *
-//*  Programmer       Date     Desccription                                      *
+//*  Programmer       Date     Description                                       *
 //*  ------------  ----------  --------------------------------------------------*
 //*  Kurt Kramer   2002-06-??  Original development, sorts sparse or raw format  *
 //*                            data,                                             *
@@ -29,7 +29,7 @@
 //*  Kurt Kramer   2004-08-01  Added the comment section.                        *
 //*                                                                              *
 //*  Kurt Kramer   2005-01-20  Added a one-off Function that will build Data     *
-//*                            for Active Llearning Expirement that will         *
+//*                            for Active Learning Experiment that will         *
 //*                            require Diff Prior for diff classes.              *
 //*                            CreateDiffPriorDataSet ()                         *
 //*                                                                              *
@@ -103,7 +103,7 @@ using namespace MLL;
 // ActiveLearning_ValidationImages.data
 
 //  2004-09-30
-// Create test and Validation files for Tesis 9 class Test Data
+// Create test and Validation files for Thesis 9 class Test Data
 //  -f C:\users\kkramer\GradSchool\Thesis\TestSet9Classes\NineClasses.data  -i raw  -a TEST_VALIDATE  -p 80
 
 
@@ -319,13 +319,15 @@ using namespace MLL;
 #define  MaxClassCount  500
 
 
-typedef  enum  {ShuffleAction, 
-                SplitAction, 
-                CreateTrainAndTest, 
-                ConvertAction,
-                TrimClassesAction
-               }  
-                Action;
+enum  class  Action: int
+{
+  Shuffle,
+  Split,
+  CreateTrainAndTest,
+  Convert,
+  TrimClasses
+};  
+
 
 
 KKStr  ActionToStr (Action _action)
@@ -333,11 +335,11 @@ KKStr  ActionToStr (Action _action)
   KKStr  actionStr = "";
   switch  (_action)
   {
-  case  ShuffleAction:       actionStr = "Shuffle";       break;
-  case  SplitAction:         actionStr = "Split";         break;
-  case  CreateTrainAndTest:  actionStr = "TrainAndTest";  break;
-  case  ConvertAction:       actionStr = "Convert";       break;
-  case  TrimClassesAction:   actionStr = "TrimClasses";   break;
+  case  Action::Shuffle:             actionStr = "Shuffle";       break;
+  case  Action::Split:               actionStr = "Split";         break;
+  case  Action::CreateTrainAndTest:  actionStr = "TrainAndTest";  break;
+  case  Action::Convert:             actionStr = "Convert";       break;
+  case  Action::TrimClasses:         actionStr = "TrimClasses";   break;
   }
 
   return  actionStr;
@@ -392,7 +394,7 @@ bool                  successful = false;
 
 int                   trainLimitPerClass = -1;   // if > 0 then limites the numbetr of examples that can go into the traning set.
 
-MLClassConstListPtr     mlClasses = NULL;
+MLClassListPtr        mlClasses = NULL;
 
 
 
@@ -402,7 +404,7 @@ void  ShuffleData (FeatureVectorListPtr  examples)
   srand  ((unsigned)time (NULL));
 
   FeatureVectorListPtr  shuffledData = 
-          examples->StratifyAmoungstClasses (mlClasses, lopOff, numOfFolds);
+          examples->StratifyAmoungstClasses (mlClasses, lopOff, numOfFolds, runLog);
 
   KKStr  outFileName = rootName + "_shuffled.data";
   KKStr  statFile    = rootName + ".statistics";
@@ -461,20 +463,21 @@ void  SplitExamples (FeatureVectorList*  examples)
   stats << "Output Files[" << outFileName1   << ", " << outFileName2 << "]." << endl;
   stats << endl;
 
-  FeatureVectorList  file1Examples (fileDesc, false, runLog);
-  FeatureVectorList  file2Examples (fileDesc, false, runLog);
+  FeatureVectorList  file1Examples (fileDesc, false);
+  FeatureVectorList  file2Examples (fileDesc, false);
 
-  MLClassConstListPtr  classes = examples->ExtractMLClassConstList ();
+  MLClassListPtr  classes = examples->ExtractListOfClasses ();
+    
   classes->SortByName ();
-  MLClassConstList::iterator  idx = classes->begin ();
+  MLClassList::iterator  idx = classes->begin ();
 
   stats << endl;
   stats << "ClassName" << "\t" << "Count" << endl;
 
   for  (idx = classes->begin ();  idx != classes->end ();  idx++)
   {
-    MLClassConstPtr  mlClass = *idx;
-    FeatureVectorListPtr  imagesThisClass = examples->ExtractImagesForAGivenClass (mlClass, -1, -1);
+    MLClassPtr  mlClass = *idx;
+    FeatureVectorListPtr  imagesThisClass = examples->ExtractExamplesForAGivenClass (mlClass, -1, -1);
     imagesThisClass->RandomizeOrder ();
 
     stats << mlClass->Name () << "\t" << imagesThisClass->QueueSize () << endl;
@@ -503,10 +506,10 @@ void  SplitExamples (FeatureVectorList*  examples)
         << endl;
 
   FeatureVectorListPtr  file1Shuffeled
-         = file1Examples.StratifyAmoungstClasses (mlClasses, lopOff, numOfFolds);
+         = file1Examples.StratifyAmoungstClasses (mlClasses, lopOff, numOfFolds, runLog);
 
   FeatureVectorListPtr  file2Shuffeled
-         = file2Examples.StratifyAmoungstClasses (mlClasses, lopOff, numOfFolds);
+         = file2Examples.StratifyAmoungstClasses (mlClasses, lopOff, numOfFolds, runLog);
 
 
   stats << "Output File[" << outFileName1.Str () << "]  Records[" << file1Shuffeled->QueueSize () << "]" << endl;
@@ -541,9 +544,9 @@ void  SplitExamples (FeatureVectorList*  examples)
 void  NormalizeData (FeatureVectorListPtr  examples)
 {
   runLog.Level (10) << "NormalizeData: Normalizing Data" << endl;
-  TrainingConfiguration2 config (fileDesc, mlClasses, "",  runLog); 
+  TrainingConfiguration2 config (mlClasses, fileDesc, "",  runLog); 
   NormalizationParms normalizationParms (&config, *examples, runLog);
-  normalizationParms.NormalizeImages (examples);
+  normalizationParms.NormalizeExamples (examples, runLog);
 }  /* NormalizeData */
 
 
@@ -562,14 +565,14 @@ void  CreateTrainAndTestDataSets (FeatureVectorListPtr  examples)
   if  (lopOff < 1)
     lopOff = INT_MAX;
 
-  FeatureVectorList  trainingExamples (fileDesc, false, runLog);
-  FeatureVectorList  testExamples     (fileDesc, false, runLog);
+  FeatureVectorList  trainingExamples (fileDesc, false);
+  FeatureVectorList  testExamples     (fileDesc, false);
 
   for  (int cIDX = 0;  cIDX < numOfClasses;  cIDX++)
   {
     examples->RandomizeOrder ();
 
-    classExamples = examples->ExtractImagesForAGivenClass (mlClasses->IdxToPtr (cIDX), lopOff, -1);
+    classExamples = examples->ExtractExamplesForAGivenClass (mlClasses->IdxToPtr (cIDX), lopOff, -1);
 
     int  maxNumOfTrainExamples = (int)(classExamples->QueueSize () * percentSplit + 0.5);
     if  ((maxNumOfTrainExamples > trainLimitPerClass)  &&  (trainLimitPerClass > 0))
@@ -600,7 +603,7 @@ void  CreateTrainAndTestDataSets (FeatureVectorListPtr  examples)
   {
     if  (numOfFolds > 1)
     {
-      FeatureVectorListPtr  testExamplesStratified = trainingExamples.StratifyAmoungstClasses (mlClasses, -1, numOfFolds);
+      FeatureVectorListPtr  testExamplesStratified = trainingExamples.StratifyAmoungstClasses (mlClasses, -1, numOfFolds, runLog);
       KKB::uint  numExamplesWritten = 0;
       outputFormat->SaveFeatureFile (rootName + "_Train.data",  *selectedFeatures, *testExamplesStratified, numExamplesWritten, cancelFlag, successful, runLog);
       delete  testExamplesStratified;  testExamplesStratified = NULL;
@@ -664,7 +667,7 @@ void  ProcessParms (int    argcXXX,
   const VectorKKStr  parameters = cmdLineExpander.ExpandedParameters ();
 
   inputFormat  = FeatureFileIOPices::Driver ();
-  action       = SplitAction;
+  action       = Action::Split;
   percentSplit = 0.75;
   lopOff       = -1;
 
@@ -699,23 +702,23 @@ void  ProcessParms (int    argcXXX,
     if  ((cmdSwitch == "-A")  ||  (cmdSwitch == "-ACTION"))
     {
       if  (parm == "SPLIT")
-        action = SplitAction;
+        action = Action::Split;
                     
       else if  (parm == "SHUFFLE")
-        action = ShuffleAction;
+        action = Action::Shuffle;
  
       else if  (parm.EqualIgnoreCase ("TrainAndTest")  ||  parm.EqualIgnoreCase ("TrainTest"))
-        action = CreateTrainAndTest;
+        action = Action::CreateTrainAndTest;
  
       else if  (parm == "CONVERT")
-        action = ConvertAction;
+        action = Action::Convert;
 
       else if  ((parm == "TRIMCLASSES")  ||  (parm == "TC"))
-        action = TrimClassesAction;
+        action = Action::TrimClasses;
  
       else
       {
-         cerr << "*** ERROR *** Inavalid Action[" << parm << "]" << endl;
+         cerr << "*** ERROR *** Invalid Action[" << parm << "]" << endl;
          DisplayCommandLineUssage ();
          exit (-1);
       }
@@ -951,22 +954,22 @@ void   TrimClasses (FeatureVectorListPtr  examples)
 {
   runLog.Level (10) << "TrimClassesAction" << endl;
 
-  MLClassConstListPtr  classes = examples->ExtractMLClassConstList ();
-  MLClassConstList::iterator  idx;
+  MLClassListPtr  classes = examples->ExtractListOfClasses ();
+  MLClassList::iterator  idx;
 
 
   KKStr  configFileName = osRemoveExtension (inputFileName) + "_Trimmed.cfg";
   ofstream  configFile (configFileName.Str ());
 
-  FeatureVectorList  trimedList (examples->FileDesc (), false, runLog);
+  FeatureVectorList  trimedList (examples->FileDesc (), false);
 
-  MLClassConstList  newClassList;
+  MLClassList  newClassList;
 
   int  minRequired = numOfFolds * 2;
 
   for  (idx = classes->begin ();  idx != classes->end ();  idx++)
   {
-    FeatureVectorListPtr  imagesThisClass = examples->ExtractImagesForAGivenClass (*idx, lopOff, -1);
+    FeatureVectorListPtr  imagesThisClass = examples->ExtractExamplesForAGivenClass (*idx, lopOff, -1);
 
     if  (imagesThisClass->QueueSize () > minRequired)
     {
@@ -989,7 +992,7 @@ void   TrimClasses (FeatureVectorListPtr  examples)
   if  (outputFileName.Empty ())
     outputFileName = osRemoveExtension (inputFileName) + "_Trimmed." + osGetFileExtension (inputFileName);
 
-  FeatureVectorListPtr  straifiedList = trimedList.StratifyAmoungstClasses (&newClassList, lopOff, numOfFolds);
+  FeatureVectorListPtr  straifiedList = trimedList.StratifyAmoungstClasses (&newClassList, lopOff, numOfFolds, runLog);
 
   KKB::uint  numExamplesWritten = 0;
   outputFormat->SaveFeatureFile (outputFileName, *selectedFeatures, *straifiedList, numExamplesWritten, cancelFlag, successful, runLog);
@@ -1130,7 +1133,7 @@ void  ForestCover ()
 {
   bool            successful  = true;
   bool            changesMade = false;
-  MLClassConstList  classes;
+  MLClassList  classes;
   FeatureVectorListPtr trainData = FeatureFileIOC45::Driver ()->LoadFeatureFile 
                                                    ("K:\\Plankton\\Papers\\BitReduction\\DataSets\\ForestCover\\CovType_TwoClass.data", 
                                                     classes,
@@ -1180,7 +1183,7 @@ void  CheckWebData ()
 
   bool            successful  = true;
   bool            changesMade = false;
-  MLClassConstList  classes;
+  MLClassList  classes;
   FeatureVectorListPtr sparseData = FeatureFileIOSparse::Driver ()->LoadFeatureFile 
                                                    ("K:\\Plankton\\Papers\\BitReduction\\DataSets\\WEB_Data\\anonymous-msweb_sparse.data", 
                                                     classes,
@@ -1227,10 +1230,10 @@ void  CheckWebData ()
 
   classes.SortByName ();
 
-  MLClassConstList::iterator  cIDX;
+  MLClassList::iterator  cIDX;
   for  (cIDX = classes.begin ();  cIDX != classes.end ();  cIDX++)
   {
-    MLClassConstPtr  c = *cIDX;
+    MLClassPtr  c = *cIDX;
 
     r << endl
       << endl
@@ -1239,8 +1242,8 @@ void  CheckWebData ()
     KKStr  allMean;
     KKStr  sparseMean;
 
-    FeatureVectorListPtr allClass    = allData->ExtractImagesForAGivenClass (c);
-    FeatureVectorListPtr sparseClass = sparseData->ExtractImagesForAGivenClass (c);
+    FeatureVectorListPtr allClass    = allData->ExtractExamplesForAGivenClass (c);
+    FeatureVectorListPtr sparseClass = sparseData->ExtractExamplesForAGivenClass (c);
 
     allMean    << allClass->QueueSize ();
     sparseMean << sparseClass->QueueSize ();
@@ -1292,7 +1295,7 @@ void  CreateFolds (int  numOfFolds)
   bool  changesMade = true;
   bool  successfull = false;
   FeatureFileIOPtr  inputFormat = FeatureFileIOPices::Driver ();
-  MLClassConstListPtr classes = new MLClassConstList ();
+  MLClassListPtr classes = new MLClassList ();
   FeatureVectorListPtr  zed = inputFormat->LoadFeatureFile
 	  ("I:\\Pices\\may_BP_2010\\features_34_35_37.data",
 	     *classes, 
@@ -1309,7 +1312,7 @@ void  CreateFolds (int  numOfFolds)
 
   log.Level (10) << "CreateFolds  Creating 'exampleTrimmed'" << endl;
   ImageFeaturesListPtr examplesTrimmed 
-	  = new ImageFeaturesList (examples->FileDesc (), false, log, 0);
+	  = new ImageFeaturesList (examples->FileDesc (), false, 0);
 
   ClassStatisticListPtr stats = examples->GetClassStatistics ();
   ClassStatisticList::iterator idx;
@@ -1318,13 +1321,13 @@ void  CreateFolds (int  numOfFolds)
     if  ((*idx)->Count () < 10)
       continue;
 
-	MLClassConstPtr c = (*idx)->MLClass ();
-    ImageFeaturesListPtr  examplesThisClass = examples->ExtractImagesForAGivenClass (c);
+	MLClassPtr c = (*idx)->MLClass ();
+    ImageFeaturesListPtr  examplesThisClass = examples->ExtractExamplesForAGivenClass (c);
 	examplesTrimmed->AddQueue (*examplesThisClass);
 	delete  examplesThisClass; examplesThisClass = NULL;
   }
 
-  ImageFeaturesListPtr  stratifiedExamples = examplesTrimmed->StratifyAmoungstClasses (numOfFolds);
+  ImageFeaturesListPtr  stratifiedExamples = examplesTrimmed->StratifyAmoungstClasses (numOfFolds, runLog);
   double  examplesPerFold = (double)stratifiedExamples->size () / numOfFolds;
 
   
@@ -1335,8 +1338,8 @@ void  CreateFolds (int  numOfFolds)
     if  (foldNum == (numOfFolds - 1))
 	  endIdx = stratifiedExamples->size ();
 
-	ImageFeaturesListPtr trainThisFold = new ImageFeaturesList (examples->FileDesc (), false, log, 0);
-	ImageFeaturesListPtr testThisFold  = new ImageFeaturesList (examples->FileDesc (), false, log, 0);
+	ImageFeaturesListPtr trainThisFold = new ImageFeaturesList (examples->FileDesc (), false, 0);
+	ImageFeaturesListPtr testThisFold  = new ImageFeaturesList (examples->FileDesc (), false, 0);
 
 	for  (int curIdx = 0;  curIdx < (int)stratifiedExamples->size ();  curIdx++)
 	{
@@ -1347,7 +1350,7 @@ void  CreateFolds (int  numOfFolds)
         testThisFold->PushOnBack  (example);
 	}
 
-	ImageFeaturesListPtr trainStratified = trainThisFold->StratifyAmoungstClasses (10);
+	ImageFeaturesListPtr trainStratified = trainThisFold->StratifyAmoungstClasses (10, runLog);
 
 	KKStr  foldDirName = osAddSlash (outputRootDir) + "Fold_" + StrFormatInt (foldNum, "@@");
 	osCreateDirectoryPath (foldDirName);
@@ -1373,8 +1376,7 @@ void  CreateFolds (int  numOfFolds)
 								  log
 								 );
 
-
-    startIdx = endIdx;
+  startIdx = endIdx;
 	endIdx = (int)floor (endIdx + examplesPerFold);
     
 	delete trainStratified;  trainStratified = NULL; 
@@ -1400,7 +1402,7 @@ void  FilterLessThan10 ()
   bool  changesMade = true;
   bool  successfull = false;
   FeatureFileIOPtr  inputFormat = FeatureFileIOPices::Driver ();
-  MLClassConstListPtr classes = new MLClassConstList ();
+  MLClassListPtr classes = new MLClassList ();
   FeatureVectorListPtr  zed = inputFormat->LoadFeatureFile
 	  ("I:\\Pices\\may_BP_2010\\features_34_35_37.data",
 	     *classes, 
@@ -1417,7 +1419,7 @@ void  FilterLessThan10 ()
 
   log.Level (10) << "CreateFolds  Creating 'exampleTrimmed'" << endl;
   ImageFeaturesListPtr examplesTrimmed 
-	  = new ImageFeaturesList (examples->FileDesc (), false, log, 0);
+	  = new ImageFeaturesList (examples->FileDesc (), false, 0);
 
   ClassStatisticListPtr stats = examples->GetClassStatistics ();
   ClassStatisticList::iterator idx;
@@ -1426,8 +1428,8 @@ void  FilterLessThan10 ()
     if  ((*idx)->Count () < 10)
       continue;
 
-	MLClassConstPtr c = (*idx)->MLClass ();
-    ImageFeaturesListPtr  examplesThisClass = examples->ExtractImagesForAGivenClass (c);
+	MLClassPtr c = (*idx)->MLClass ();
+    ImageFeaturesListPtr  examplesThisClass = examples->ExtractExamplesForAGivenClass (c);
 	examplesTrimmed->AddQueue (*examplesThisClass);
 	delete  examplesThisClass; examplesThisClass = NULL;
   }
@@ -1524,7 +1526,7 @@ int  main (int argc, char **argv)
   //CreateFolds (10);
   //exit (-1);
 
-  mlClasses = new MLClassConstList ();
+  mlClasses = new MLClassList ();
 
   ProcessParms (argc, argv);
   if  (report)
@@ -1564,7 +1566,7 @@ int  main (int argc, char **argv)
   else
   {
     bool valid;
-    selectedFeatures = new FeatureNumList (fileDesc, selectedFeaturesStr, valid);
+    selectedFeatures = new FeatureNumList (selectedFeaturesStr, valid);
     if  (!valid)
     {
       cerr << endl
@@ -1582,7 +1584,7 @@ int  main (int argc, char **argv)
     if  (dupDetector.DuplicatesFound ())
     {
       dupDetector.ReportDuplicates (cout);
-      dupDetector.PurgeDuplicates (examples, NULL);
+      dupDetector.PurgeDuplicates (examples, false, NULL);
     }
   }
 
@@ -1596,23 +1598,23 @@ int  main (int argc, char **argv)
 
   switch  (action)
   {
-    case  CreateTrainAndTest:
+    case  Action::CreateTrainAndTest:
         CreateTrainAndTestDataSets (examples);
         break;
 
-    case  ConvertAction:
+    case  Action::Convert:
         ConvertData (examples);
         break;
 
-    case  TrimClassesAction:
+    case  Action::TrimClasses:
         TrimClasses (examples);
         break;
 
-    case  ShuffleAction:
+    case  Action::Shuffle:
         ShuffleData (examples);
         break;
 
-    case  SplitAction:
+    case  Action::Split:
         SplitExamples (examples);
         break;
 

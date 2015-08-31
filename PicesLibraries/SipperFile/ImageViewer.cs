@@ -188,7 +188,7 @@ namespace SipperFile
 
     private  void  ConfigurationLoad ()
     {
-      configFileName = OSservices.AddSlash (PicesSipperVariables.PicesConfigurationDirectory ()) + "ImageViewer.cfg";
+      configFileName = OSservices.AddSlash (PicesSipperVariables.ConfigurationDirectory ()) + "ImageViewer.cfg";
       System.IO.StreamReader i = null;
       dataFieldAssignments = new int[4];
       dataFieldAssignments[0] = PicesInstrumentData.GetFieldNum ("Depth");

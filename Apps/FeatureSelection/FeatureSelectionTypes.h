@@ -7,126 +7,120 @@
 
 namespace FeatureSelectionApp
 {
-  typedef  enum  
+  enum class  GradingMethodType: int
   {
-    gmNULL, 
-    gmAccuracy,
-    gmAccuracyNorm,
-    gmFMeasure
-  }  
-    GradingMethodType;
+    Null, 
+    Accuracy,
+    AccuracyNorm,
+    FMeasure
+  };
 
 
-  typedef  enum  
+  enum class  JobSelectionCriteria: int
   {
-    jscNULL,
-    jscMostAccurate,      // Select the job that has teh highest Accuracy all other criteria is secondary.
-    jscFastestFromBest,   // Select the Fastest Job from the group of jobs that are most accurate, 
-    jscBruitForce         // Perform a plain bruit force Grid Search
-  }  
-    JobSelectionCriteriaType;
+    Null,
+    MostAccurate,      /**< Select the job that has the highest Accuracy all other criteria is secondary. */
+    FastestFromBest,   /**< Select the Fastest Job from the group of jobs that are most accurate,         */
+    BruitForce         /**< Perform a plain bruit force Grid Search                                       */
+  }; 
 
 
-  typedef  enum
+  enum class  ProcessingOrders: int
   {
-    poNULL,
-    poStandard,  // AllClasses (Parameter,  FeatureSelection)  Binary (AllParam, FeatureSel, Parameter);
-    poHall       // AllClasses (FeatureSel, ParamTuning)       Binary (ParamTuning, FeatureSel, ParamTuning);
-  }  poProcessingOrder;
+    Null,
+    Standard,  // AllClasses (Parameter,  FeatureSelection)  Binary (AllParam, FeatureSel, Parameter);
+    Hall       // AllClasses (FeatureSel, ParamTuning)       Binary (ParamTuning, FeatureSel, ParamTuning);
+  };
 
 
 
 
   /**
    @brief  MajorSteps that need to be processed.
-   @details Depening on the Processing Order the FeatureSelection experiment will follow a specific order of major steps.
+   @details Depending on the Processing Order the FeatureSelection experiment will follow a specific order of major steps.
    @code
-     Standard:   msMfsParmTuningPre,    msMfsFeatureSelection, msBfsFeatureSelection, msBfsParmTuningPost
-     Hall:       msMfsFeatureSelection, msMfsParmTuningPost,   msBfsParmTuningPre,    msBfsFeatureSelection, msBfsParmTuningPost
+     Standard:   MajorSteps::MfsParmTuningPre,    MajorSteps::MfsFeatureSelection, MajorSteps::BfsFeatureSelection, MajorSteps::BfsParmTuningPost
+     Hall:       MajorSteps::MfsFeatureSelection, MajorSteps::MfsParmTuningPost,   MajorSteps::BfsParmTuningPre,    MajorSteps::BfsFeatureSelection, MajorSteps::BfsParmTuningPost
    @endcode
    */
-  typedef  enum  
+  enum class  MajorSteps: int
   {
-    msNULL,
+    Null,
 
-    msMfsParmTuningPre,
-    msMfsFeatureSelection,
-    msMfsParmTuningPost,
+    MfsParmTuningPre,
+    MfsFeatureSelection,
+    MfsParmTuningPost,
 
-    msBfsParmTuningPre,
-    msBfsFeatureSelection,
-    msBfsParmTuningPost,
+    BfsParmTuningPre,
+    BfsFeatureSelection,
+    BfsParmTuningPost,
 
-    msGenerateFinalResults,
-    msFinalReport,
-    msGenerateBruitSvmSearch,
-    msDone
-  } MajorSteps;
+    GenerateFinalResults,
+    FinalReport,
+    GenerateBruitSvmSearch,
+    Done
+  };
 
 
 
-  typedef  enum
+  enum class  FinalResultType: int
   {
-    frtNULL,
-    frtNoTuningAllFeatures,
-    frtMfsFeaturesSel,
-    frtMfsParmsTuned,
-    frtMfsParmsTunedFeaturesSel,
-    frtBfsFeaturesSel,
-    frtBfsParmsTuned,
-    frtBfsFeaturesSelParmsTuned,
-  }  FinalResultType;
+    Null,
+    NoTuningAllFeatures,
+    MfsFeaturesSel,
+    MfsParmsTuned,
+    MfsParmsTunedFeaturesSel,
+    BfsFeaturesSel,
+    BfsParmsTuned,
+    BfsFeaturesSelParmsTuned
+  };
 
 
 
-  typedef  enum  
+  enum class  SearchTypes: int
   {
-    stNULL,
-    stFeatureSelectionSearch,
-    stParameterSearch,
-    stGeneratingFinalResults
-  }
-    stSearchTypes;
+    Null,
+    FeatureSelectionSearch,
+    ParameterSearch,
+    GeneratingFinalResults
+  };
 
 
 
-  typedef  enum  
+  enum class  ProcessorStatus: int
   {
-    fsNULL, 
-    fsNotStarted, 
-    fsStarted, 
-    fsDone
-  }  
-    fsProcessorStatus;
+    Null,
+    NotStarted,
+    Started,
+    Done
+  };
 
 
-  typedef  enum  
+  enum class  SearchMethod: int
   {
-    smNULL, 
-    smBestCaseNext,     //   
-    smBeam,             //  > Feature Search
-    smTestResults,      //    
-    smPickTheBest,      //
-    smGrid,             // Used by Parameter Search only
-    smOnePassOnly       // Means there are no expansions;  just process the inital Jobs.
-  } 
-    smSearchMethod;
+    Null, 
+    BestCaseNext,     //   
+    Beam,             //  > Feature Search
+    TestResults,      //    
+    PickTheBest,      //
+    Grid,             // Used by Parameter Search only
+    OnePassOnly       // Means there are no expansions;  just process the initial Jobs.
+  };
 
 
 
-  typedef  enum
+  enum class  FeatureCriteriaType: int
   {
-    fcNULL,
-    fcMerge2Best,
-    fcMerge3Best,
-    fcMerge4Best,
-    fcMerge5Best,
-    fcMerge6Best,
-    fcMerge7Best,
-    fcBestTestSet,
-    fcRemoveHurtful
-  }
-    fcFeatureCriteria;
+    Null,
+    Merge2Best,
+    Merge3Best,
+    Merge4Best,
+    Merge5Best,
+    Merge6Best,
+    Merge7Best,
+    BestTestSet,
+    RemoveHurtful
+  };
 
 
 
@@ -161,8 +155,8 @@ namespace FeatureSelectionApp
 
 
 
-  poProcessingOrder  ProcessingOrderFromStr (const KKStr&  procOrderStr);
-  KKStr              ProcessingOrderToStr   (poProcessingOrder  order);
+  ProcessingOrders  ProcessingOrderFromStr (const KKStr&  procOrderStr);
+  KKStr              ProcessingOrderToStr   (ProcessingOrders  order);
 
 
 
@@ -176,8 +170,8 @@ namespace FeatureSelectionApp
   KKStr            FinalResultTypeToStr   (FinalResultType  frt);
 
 
-  stSearchTypes  SearchTypeFromStr (KKStr  searchTypeStr);
-  KKStr          SearchTypeToStr   (stSearchTypes  _searchType);
+  SearchTypes  SearchTypeFromStr (KKStr  searchTypeStr);
+  KKStr          SearchTypeToStr   (SearchTypes  _searchType);
 
 
 
@@ -186,23 +180,23 @@ namespace FeatureSelectionApp
 
 
 
-  KKStr  JobSelectionCriteriaToStr (JobSelectionCriteriaType  gm);
-  JobSelectionCriteriaType  JobSelectionCriteriaFromStr (const KKStr&  str);
+  KKStr  JobSelectionCriteriaToStr (JobSelectionCriteria  gm);
+  JobSelectionCriteria  JobSelectionCriteriaFromStr (const KKStr&  str);
 
 
 
-  KKStr              SearchMethodToStr      (smSearchMethod     searchMethod);
-  smSearchMethod     SearchMethodFromStr    (KKStr              searchMethodStr);
+  KKStr              SearchMethodToStr      (SearchMethod     searchMethod);
+  SearchMethod     SearchMethodFromStr    (KKStr              searchMethodStr);
 
 
 
-  KKStr              ProcessorStatusToStr   (fsProcessorStatus  processorStatus);
-  fsProcessorStatus  ProcessorStatusFromStr (const KKStr&       processorStatusStr);
+  KKStr              ProcessorStatusToStr   (ProcessorStatus  processorStatus);
+  ProcessorStatus  ProcessorStatusFromStr (const KKStr&       processorStatusStr);
 
 
 
-  KKStr              FeatureCriteriaToStr   (fcFeatureCriteria  featureCriteria);
-  fcFeatureCriteria  FeatureCriteriaFromStr (KKStr              featureCriteriaStr);
+  KKStr              FeatureCriteriaToStr   (FeatureCriteriaType  featureCriteria);
+  FeatureCriteriaType  FeatureCriteriaFromStr (KKStr              featureCriteriaStr);
 }
 
 #endif

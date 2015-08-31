@@ -1,4 +1,4 @@
-#include "FirstIncludes.h"
+﻿#include "FirstIncludes.h"
 
 // Kurt Kramer  2012-03-01  
 // Added a Second Best Guess Confusion Matrix. That is a confusion matrix that only reports the
@@ -37,31 +37,34 @@ using namespace  std;
 #include "StatisticalFunctions.h"
 using namespace  KKB;
 
-#include "Instrument.h"
-#include "InstrumentDataFileManager.h"
-#include "InstrumentDataManager.h"
-#include "SipperBuff.h"
-using namespace SipperHardware;
 
 #include "BinaryClassParms.h"
 #include "Classifier2.h"
 #include "CmdLineExpander.h"
 #include "CrossValidation.h"
 #include "CrossValidationVoting.h"
-#include "CrossValidationThreeWay.h"
 #include "CrossValidationMxN.h"
 #include "DuplicateImages.h"
 #include "FeatureFileIO.h"
 #include "FeatureFileIOC45.h"
 #include "FeatureFileIOPices.h"
 #include "FeatureNumList.h"
+#include "Instrument.h"
+#include "InstrumentDataFileManager.h"
+#include "InstrumentDataManager.h"
 #include "Orderings.h"
 #include "OSservices.h"
+#include "TrainingProcess2.h"
+using namespace  KKMLL;
+
+
+#include "DataBase.h"
+#include "SipperBuff.h"
 #include "SipperCruise.h"
 #include "SipperStation.h"
 #include "SipperDeployment.h"
-
-#include "TrainingProcess2.h"
+#include "PicesTrainingConfiguration.h"
+#include "PicesFVProducer.h"
 using namespace  MLL;
 
 
@@ -464,12 +467,14 @@ CrossValidationApp::CrossValidationApp ()
     copyMissClassedImages        (false),
     directory                    (),
     doRandomSplits               (false),
+    examples                     (NULL),
     featuresAreNormalizedAlready (false),
     fileDesc                     (NULL),
-    examples                     (NULL),
+    fvFactoryProducer            (NULL),
     generateBiasMatrix           (false),
     mlClasses                    (NULL),
     inputFormat                  (FeatureFileIOPices::Driver ()),
+    inputFormatSpecified         (false),
     logLossCount                 (0),
     logLossTotal                 (0.0),
     logLossMax                   (1.0 - 0.000000000000001),
@@ -480,7 +485,6 @@ CrossValidationApp::CrossValidationApp ()
     probReport                   (NULL),
     punishmentFactor             (0.10f),
     randomizeInputData           (false),
-    reduction_time               (0.0),
     report                       (NULL),
     reportFileStream             (NULL),
     runLog                       (),
@@ -489,7 +493,9 @@ CrossValidationApp::CrossValidationApp ()
 
 {
   InstrumentDataFileManager::Initialize ();
-  mlClasses = new MLClassConstList ();
+  mlClasses = new MLClassList ();
+  fvFactoryProducer = PicesFVProducerFactory::Factory (&runLog);
+  inputFormat = fvFactoryProducer->DefaultFeatureFileIO ();
 }  /* CrossValidationApp */
 
 
@@ -514,7 +520,7 @@ void  CrossValidationApp::RemoveDuplicateImages (FeatureVectorList&  examples)
 {
   runLog.Level (10) << "RemoveDuplicateImages" << endl;
 
-  KKStrListPtr   duplicateImages = examples.ExtractDuplicatesByImageFileName ();
+  KKStrListPtr   duplicateImages = examples.ExtractDuplicatesByExampleFileName ();
 
   KKStrPtr  dupName = NULL;
   //StringListIterator dIDX (*duplicateImages);
@@ -554,7 +560,7 @@ void  CrossValidationApp::DistributesImagesRandomlyWithInFolds (int    imagesPer
 
   successful = true;
 
-  FeatureVectorListPtr  newImages = examples->StratifyAmoungstClasses (mlClasses, imagesPerClass, numOfFolds);
+  FeatureVectorListPtr  newImages = examples->StratifyAmoungstClasses (mlClasses, imagesPerClass, numOfFolds, runLog);
   examples->Owner (false);
   delete examples;
   examples = newImages;
@@ -570,17 +576,17 @@ void  CrossValidationApp::CmdLineHelp ()
   cout  << std::endl;
   cout  <<  "CrossValidation"                                                                << endl;
   cout  <<  "    -BiasMatrix      Generate a Bias Matrix to be used by PicesCommader to"     << endl;
-  cout  <<  "                     adjust Classificartion results for learner Bias."          << endl;
+  cout  <<  "                     adjust Classification results for learner Bias."           << endl;
   cout  <<  "    -Config          <Configuration File>"                                      << endl;
-  cout  <<  "    -DF              <Data File>            Overides Config File"               << endl;
+  cout  <<  "    -DF              <Data File>            Overrides Config File"              << endl;
   cout  <<  "    -Dir             <Source Directory>"                                        << endl;
   cout  <<  "    -Folds           <Num of Folds>         defaults to 10"                     << endl;
   cout  <<  "    -Format          <" << FeatureFileIO::FileFormatsReadOptionsStr () << ">"   << endl;
   cout  <<  "    -Hierarchy"                                                                 << endl;
   cout  <<  "    -Log             <Log File Name>"                                           << endl;
   cout  <<  "    -MissClassed     <Directory where to copy Misclassified Images to>"         << endl;
-  cout  <<  "    -Normalized                          Data has Already beeen Normalized"     << endl;
-  cout  <<  "    -Probability     <File Name>         Generat Probability Predictions"       << endl;
+  cout  <<  "    -Normalized                          Data has Already been Normalized"      << endl;
+  cout  <<  "    -Probability     <File Name>         Generate Probability Predictions"      << endl;
   cout  <<  "    -Randomize                           Randomize order of Input Data"         << endl;
   cout  <<  "    -Report          <Report File Name>"                                        << endl;
   cout  <<  "    -SplitPercentage <Percentage to use as Training Data>"                      << endl;
@@ -650,14 +656,14 @@ void  CrossValidationApp::ProcessCmdLineParameter (KKStr  parmSwitch,
 
   else if  ((parmSwitch == "-DIR")  ||  (parmSwitch == "-DIRECTORY"))
   {
-    // The user wants the rogram to build a feature file from the examples in 
+    // The user wants the program to build a feature file from the examples in 
     // the directory structure pointed to by parValue. The sub-dir names will
     // be used to specify the class name.
     directory = parmValue;
     if  (!osValidDirectory (directory))
     {
       runLog.Level (-1) << endl
-                        << "ProcessCmdLineParameter - Dir[" << directory << "]  Invaild Directory." << endl
+                        << "ProcessCmdLineParameter - Dir[" << directory << "]  Invalid Directory." << endl
                         << endl;
       osWaitForEnter ();
       exit (-1);
@@ -678,7 +684,8 @@ void  CrossValidationApp::ProcessCmdLineParameter (KKStr  parmSwitch,
       CmdLineHelp ();
       osWaitForEnter ();
       exit (-1);
-    } 
+    }
+    inputFormatSpecified = true;
   }
 
   else if  (parmSwitch == "-FOLDS")
@@ -963,18 +970,15 @@ void  CrossValidationApp::ProcessCmdLineParameters (int     argcXXX,
   if  ((!configFileName.Empty ())  &&  (directory.Empty ())  &&  (loadFileName.Empty ()))
   {
     // We are going to load data from configuration file.
-    runLog.Level (10) << " ProcessCmdLineParameters::Loading Feature Data using Cinfig File[" << configFileName << "]." << endl;
+    runLog.Level (10) << " ProcessCmdLineParameters::Loading Feature Data using Config File[" << configFileName << "]." << endl;
 
     bool  successful = false;
     KKStr  errorMessage;
 
-    fileDesc = FeatureFileIOPices::NewPlanktonFile (runLog);
+    fileDesc = FeatureFileIOPices::NewPlanktonFile ();
 
-    config = new TrainingConfiguration2 (fileDesc,
-                                        configFileName, 
-                                        runLog, 
-                                        true  // true = validate directories
-                                       );
+    config = new PicesTrainingConfiguration ();
+    config->Load (configFileName, true, runLog);
       
     if  (!config->FormatGood ())
     {
@@ -987,13 +991,17 @@ void  CrossValidationApp::ProcessCmdLineParameters (int     argcXXX,
       exit (-1);
     }
 
+    fvFactoryProducer = config->FvFactoryProducer (runLog);
+    if  (!inputFormatSpecified)
+      inputFormat = fvFactoryProducer->DefaultFeatureFileIO ();
+
     delete  mlClasses;  mlClasses = NULL;
     mlClasses = config->ExtractClassList ();
 
     DateTime  latestImageTimeStamp;
     bool      changesMadeToTrainingLibraries;
 
-    examples = config->LoadFeatureDataFromTrainingLibraries (latestImageTimeStamp, changesMadeToTrainingLibraries, cancelFlag);
+    examples = config->LoadFeatureDataFromTrainingLibraries (latestImageTimeStamp, changesMadeToTrainingLibraries, cancelFlag, runLog);
 
     if  (!examples)
     {
@@ -1008,7 +1016,7 @@ void  CrossValidationApp::ProcessCmdLineParameters (int     argcXXX,
     }
 
     delete  mlClasses;
-    mlClasses = examples->ExtractMLClassConstList ();
+    mlClasses = examples->ExtractListOfClasses ();
     DistributesImagesRandomlyWithInFolds (-1, successful);
     if  (!successful)
     {
@@ -1029,13 +1037,12 @@ void  CrossValidationApp::ProcessCmdLineParameters (int     argcXXX,
     bool  successful = false;
     KKStr  errorMessage;
     
-    fileDesc = FeatureFileIOPices::NewPlanktonFile (runLog);
+    fileDesc = FeatureFileIOPices::NewPlanktonFile ();
 
     if  (configFileName.Empty ())
     {
-      config = TrainingConfiguration2::CreateFromDirectoryStructure 
-                                        (fileDesc,
-                                         configFileName,
+      config = PicesTrainingConfiguration::CreateFromDirectoryStructure 
+                                        (configFileName,
                                          directory,
                                          runLog,
                                          successful,
@@ -1045,11 +1052,8 @@ void  CrossValidationApp::ProcessCmdLineParameters (int     argcXXX,
     }
     else
     {
-      config = new TrainingConfiguration2 (fileDesc,
-                                          configFileName, 
-                                          runLog, 
-                                          true  // true = validate directories
-                                         );    
+      config = new PicesTrainingConfiguration ();
+      config->Load (configFileName, true, runLog);    
       successful = config->FormatGood ();
     }
       
@@ -1065,17 +1069,22 @@ void  CrossValidationApp::ProcessCmdLineParameters (int     argcXXX,
       exit (-1);
     }
 
+    fvFactoryProducer = config->FvFactoryProducer (runLog);
+    if  (!inputFormatSpecified)
+      inputFormat = fvFactoryProducer->DefaultFeatureFileIO ();
+
     delete  mlClasses;
     mlClasses = config->ExtractClassList ();
 
     delete  examples;
-    examples = FeatureFileIOPices::LoadInSubDirectoryTree 
-                                    (directory, 
+    examples = FeatureFileIOPices::Driver ()->LoadInSubDirectoryTree 
+                                    (fvFactoryProducer,
+                                     directory,
                                      *mlClasses, 
                                      true,            // use Directory name for className
-                                     NULL,            // DataBasePtr   If Specifired will retrieve missing iunstrumenttation data from database.
+                                     NULL,            // DataBasePtr   If Specified will retrieve missing instrumentation data from database.
                                      cancelFlag,
-                                     true,            // reWrite Featutre Files.
+                                     true,            // reWrite Feature Files.
                                      runLog
                                     );
   
@@ -1083,7 +1092,7 @@ void  CrossValidationApp::ProcessCmdLineParameters (int     argcXXX,
 
 
     delete  mlClasses;
-    mlClasses = examples->ExtractMLClassConstList ();
+    mlClasses = examples->ExtractListOfClasses ();
 
     mlClasses->SortByName ();
 
@@ -1113,7 +1122,7 @@ void  CrossValidationApp::ProcessCmdLineParameters (int     argcXXX,
 
   else
   {
-    // User has specified a file with feature data to use rathar than extrcating data
+    // User has specified a file with feature data to use rather than extracting data
     // from examples. ( -U command line option)
     runLog.Level (10) << "ProcessCmdLineParameters::Loading Feature Data from File[" << loadFileName << "]." << endl;
 
@@ -1132,7 +1141,7 @@ void  CrossValidationApp::ProcessCmdLineParameters (int     argcXXX,
 
     // Since for right now we do not know how to handle missing data, 
     // will remove from data loaded from file;
-    examples->RemoveEntriesWithMissingFeatures ();
+    examples->RemoveEntriesWithMissingFeatures (runLog);
 
     fileDesc = examples->FileDesc ();
 
@@ -1141,30 +1150,36 @@ void  CrossValidationApp::ProcessCmdLineParameters (int     argcXXX,
       configFileName = osRemoveExtension (loadFileName) + ".cfg";
       if  (!osFileExists (configFileName))
       {
-        config = new TrainingConfiguration2 (fileDesc, 
-                                            mlClasses, 
-                                            "-m 200 -s 0 -n 0.11 -t 2 -g 0.1  -c 1  -u 100  -up  -sm Voting  -mt OneVsOne",
-                                            runLog            
-                                           );
+        config = new PicesTrainingConfiguration (mlClasses, 
+                                                 "-m 200 -s 0 -n 0.11 -t 2 -g 0.1  -c 1  -u 100  -up  -sm Voting  -mt OneVsOne",
+                                                 runLog            
+                                                );
         config->Save (configFileName);
         delete  config;  config = NULL;
       }
     }
 
     {
-      config = new TrainingConfiguration2 (fileDesc, configFileName, runLog, false);
+      config = new PicesTrainingConfiguration ();
+      config->Load (configFileName, false, runLog);
       if  (!config->FormatGood ())
       {
         runLog.Level (-1) << endl
                           << "ProcessCmdLineParameters **** Invalid Configuration File[" << configFileName << "] ****" << endl
+                          << config->FormatErrorsWithLineNumbers ()
                           << endl;
         CmdLineHelp ();
         osWaitForEnter ();
         exit (-1);
       }
-      MLClassConstListPtr  configMLClasses = config->ExtractClassList ();
 
-      FeatureVectorListPtr  filteredList = new FeatureVectorList (*configMLClasses, *examples, runLog);
+      fvFactoryProducer = config->FvFactoryProducer (runLog);
+      if  (!inputFormatSpecified)
+        inputFormat = fvFactoryProducer->DefaultFeatureFileIO ();
+
+      MLClassListPtr  configMLClasses = config->ExtractClassList ();
+
+      FeatureVectorListPtr  filteredList = examples->ExtractExamplesForClassList (configMLClasses);
       if  (filteredList->QueueSize () == examples->QueueSize ())
       {
         delete  filteredList;  
@@ -1172,12 +1187,12 @@ void  CrossValidationApp::ProcessCmdLineParameters (int     argcXXX,
       }
       else
       {
-        FeatureVectorListPtr  dupedFilteredExamples = new FeatureVectorList (*filteredList, true);
+        FeatureVectorListPtr  dupedFilteredExamples = filteredList->Duplicate (true);
         delete  filteredList;  filteredList = NULL;
         delete  examples;      examples     = NULL;
         examples = dupedFilteredExamples;
         delete  mlClasses;
-        mlClasses = examples->ExtractMLClassConstList ();
+        mlClasses = examples->ExtractListOfClasses ();
       }
 
       delete  configMLClasses;  configMLClasses= NULL;
@@ -1210,7 +1225,7 @@ void  CrossValidationApp::ProcessCmdLineParameters (int     argcXXX,
 
     // Since for right now we do not know how to handle missing data, 
     // will remove from data loaded from file;
-    validationData->RemoveEntriesWithMissingFeatures ();
+    validationData->RemoveEntriesWithMissingFeatures (runLog);
   }
 }  /* ProcessCmdLineParameters */
 
@@ -1222,8 +1237,8 @@ void  CrossValidationApp::ProcessCmdLineParameters (int     argcXXX,
 #define  thresholdMed    1000
 
 
-KKStr  CrossValidationApp::LocateImageFileUsingConfigurationFile (const  KKStr&        fileName,
-                                                                  MLClassConstPtr   knownClass
+KKStr  CrossValidationApp::LocateImageFileUsingConfigurationFile (const  KKStr&  fileName,
+                                                                  MLClassPtr     knownClass
                                                                  )
 {
   const 
@@ -1245,13 +1260,13 @@ KKStr  CrossValidationApp::LocateImageFileUsingConfigurationFile (const  KKStr& 
       if  (trainingClass->MLClass ()->UpperName () == knownClass->UpperName ())
       {
         // We look in this specific directory
-        dirWhereFileIs = osLookForFile (fileName, trainingClass->ExpandedDirectory (config->RootDir ()));
+        dirWhereFileIs = osLookForFile (fileName, trainingClass->ExpandedDirectory (config->RootDir (), 0));
         break;
       }
     }
     else
     {
-      dirWhereFileIs = osLookForFile (fileName, trainingClass->ExpandedDirectory (config->RootDir ()));
+      dirWhereFileIs = osLookForFile   (fileName, trainingClass->ExpandedDirectory (config->RootDir (), 0));
       if  (!dirWhereFileIs.Empty ())
         break;
     }
@@ -1264,9 +1279,9 @@ KKStr  CrossValidationApp::LocateImageFileUsingConfigurationFile (const  KKStr& 
 
 
 
-void  CrossValidationApp::PostMisclassifiedImage (KKStr               fileName,
-                                                  MLClassConstPtr  knownClass,
-                                                  MLClassConstPtr  predictedClass
+void  CrossValidationApp::PostMisclassifiedImage (KKStr       fileName,
+                                                  MLClassPtr  knownClass,
+                                                  MLClassPtr  predictedClass
                                                  )
 {
   KKStr  newDir;
@@ -1322,11 +1337,7 @@ void  CrossValidationApp::CrossValidate
                      int                    foldNum,
                      double&                trainingTime,
                      double&                classificationTime,
-                     int&                   reductionPreImageCount,
-                     int&                   reductionPostImageCount,
-                     double&                reductionTime,
-                     int&                   supportPoints,
-                     KKStr&                 bitReductionByFeature
+                     int&                   supportPoints
                     )
 
 {
@@ -1337,32 +1348,26 @@ void  CrossValidationApp::CrossValidate
   bool     cancelFlag = false;
   KKStr    statusMessage;
 
-  TrainingProcess2  trainer (config, 
-                             trainingImages, 
-                             report,
-                             fileDesc,
-                             runLog,
+  TrainingProcess2Ptr  trainer = TrainingProcess2::CreateTrainingProcessFromTrainingExamples
+                            (config,
+                             trainingImages,
+                             false,
                              featuresAreNormalizedAlready,
                              cancelFlag,
-                             statusMessage
+                             runLog
                             );
 
   //double  startTrainingTime = osGetSystemTimeUsed ();
-  trainer.CreateModelsFromTrainingData ();
   //double  endTrainingTime   = osGetSystemTimeUsed ();
   //trainingTime = (endTrainingTime - startTrainingTime);
 
-  supportPoints           = trainer.NumOfSupportVectors ();
+  supportPoints           = trainer->NumOfSupportVectors ();
 
-  trainingTime            = trainer.TrainingTime ();
-  reductionPreImageCount  = trainer.ReductionPreExampleCount  ();
-  reductionPostImageCount = trainer.ReductionPostExampleCount ();
-  reductionTime           = trainer.ReductionTime ();
-  bitReductionByFeature   = trainer.BitReductionByFeature ();
+  trainingTime            = trainer->TrainingTime ();
 
   runLog.Level (20) << "CrossValidate   Creating Classification Object" << endl;
 
-  Classifier2  classifier (&trainer, runLog);
+  Classifier2  classifier (trainer, runLog);
 
   noiseMLClass = mlClasses->GetNoiseClass ();
 
@@ -1403,30 +1408,29 @@ void  CrossValidationApp::CrossValidate
   {
     example = *imageIDX;
 
-    MLClassConstPtr  knownClass = example->MLClass ();
+    MLClassPtr  knownClass = example->MLClass ();
 
-    MLClassConstPtr  predClass1       = NULL;
-    MLClassConstPtr  predClass2       = NULL;
-    kkint32             predClass1Votes  = 0;
-    kkint32             predClass2Votes  = 0;
-    double              knownClassProb   = 0.0;
-    double              predClass1Prob   = 0.0;
-    double              predClass2Prob   = 0.0;
-    kkint32             numOfWinners     = 0;
-    double              breakTie         = 0.0;
-    double              compact          = 0.0;
+    MLClassPtr  predClass1       = NULL;
+    MLClassPtr  predClass2       = NULL;
+    kkint32     predClass1Votes  = 0;
+    kkint32     predClass2Votes  = 0;
+    double      knownClassProb   = 0.0;
+    double      predClass1Prob   = 0.0;
+    double      predClass2Prob   = 0.0;
+    kkint32     numOfWinners     = 0;
+    double      breakTie         = 0.0;
+    double      compact          = 0.0;
 
-    classifier.ClassifyAImage (*example,
+    classifier.ClassifyAExample (*example,
                                predClass1,       predClass2,
                                predClass1Votes,  predClass2Votes,
                                knownClassProb,   
                                predClass1Prob,   predClass2Prob,
-                               numOfWinners,     breakTie,
-                               compact
+                               numOfWinners,     breakTie
                               );
     
     
-    // Becuase unfortunatly 'ClassifyAImage'  updates the MLClass field in the 'FeatureVector' 
+    // Because unfortunately 'ClassifyAExample'  updates the MLClass field in the 'FeatureVector' 
     // instance to the predicted class we need to set the class back to the original class.
     example->MLClass (knownClass);
 
@@ -1461,7 +1465,7 @@ void  CrossValidationApp::CrossValidate
 
     if  (predictionReport)
     {
-      *predictionReport << osGetRootName (example->ImageFileName ()) << "\t"
+      *predictionReport << osGetRootName (example->ExampleFileName ()) << "\t"
                         << (int)example->OrigSize () << "\t"
                         << knownClass->Name ()       << "\t"
                         << predClass1->Name ()       << "\t"
@@ -1480,8 +1484,8 @@ void  CrossValidationApp::CrossValidate
       int  classIDX = 0;
 
       *probReport 
-        << osGetRootName (example->ImageFileName ())  << "\t"
-        << knownClass->Name ()                        << "\t"
+        << osGetRootName (example->ExampleFileName ())  << "\t"
+        << knownClass->Name ()                          << "\t"
         << predClass1->Name ();
 
       int*  probsIDX = new int[mlClasses->QueueSize ()];
@@ -1509,7 +1513,7 @@ void  CrossValidationApp::CrossValidate
     if  (copyMissClassedImages)
     {
       if  (knownClass != predClass1)
-        PostMisclassifiedImage ((*imageIDX)->ImageFileName (),
+        PostMisclassifiedImage ((*imageIDX)->ExampleFileName (),
                                 knownClass, 
                                 predClass1
                                );
@@ -1559,10 +1563,9 @@ void  CrossValidationApp::CrossValidate
  else
    foldAccuracy = 100.0 * (double)foldCorrect / (double)foldCount;
 
+ delete  trainer;  trainer = NULL;
+
  runLog.Level (20) << "CrossValidate - Done." << endl;
-
- reduction_time += trainer.ReductionTime();
-
 }  /* CrossValidate */
 
 
@@ -1577,7 +1580,6 @@ void  CrossValidationApp::ValidationProcess ()
   double time_before = 0.0, time_after = 0.0;
   double classification_time = 0.0;
   double training_time = 0.0;
-  double reduction_time = 0.0;
 
   if  (!validationData)
   {
@@ -1591,32 +1593,29 @@ void  CrossValidationApp::ValidationProcess ()
     exit (-1);
   }
 
-  bool     cancelFlag    = false;
-  KKStr   statusMessage = "";
+  bool  cancelFlag = false;
 
-  TrainingProcess2  trainer (config, 
-                             examples,
-                             report,
-                             fileDesc, 
-                             runLog,
-                             featuresAreNormalizedAlready,
-                             cancelFlag,
-                             statusMessage
-                            );
-
-  // train the SVM
   time_before = osGetSystemTimeUsed();
-  trainer.CreateModelsFromTrainingData ();
+
+  TrainingProcess2Ptr  trainer = TrainingProcess2::CreateTrainingProcessFromTrainingExamples
+         (config,
+          examples,
+          false,
+          featuresAreNormalizedAlready,
+          cancelFlag,
+          runLog
+         );
+
   time_after = osGetSystemTimeUsed();
   training_time = time_after - time_before;
 
-  int  numOfSupportVectors  =  trainer.NumOfSupportVectors ();
+  int  numOfSupportVectors = trainer->NumOfSupportVectors ();
 
   runLog.Level (10) << "ValidationProcess   Support Vectors Found[" << numOfSupportVectors << "]" << endl;
 
   // create the classification object
   runLog.Level (20) << "ValidationProcess   Creating Classification Object" << endl;
-  Classifier2 classifier (&trainer, runLog);
+  Classifier2 classifier (trainer, runLog);
 
   int  numOfClasses = mlClasses->QueueSize ();
   ConfusionMatrix2   cm         (*mlClasses);
@@ -1663,28 +1662,26 @@ void  CrossValidationApp::ValidationProcess ()
   for  (imageIDX = validationData->begin ();  imageIDX != validationData->end (); ++imageIDX)
   {
     example = *imageIDX;
-    MLClassConstPtr  knownClass = example->MLClass ();
+    MLClassPtr  knownClass = example->MLClass ();
 
-    MLClassConstPtr  predClass1       = NULL;
-    MLClassConstPtr  predClass2       = NULL;
-    kkint32             predClass1Votes  = 0;
-    kkint32             predClass2Votes  = 0;
-    double              knownClassProb   = 0.0;
-    double              predClass1Prob   = 0.0;
-    double              predClass2Prob   = 0.0;
-    kkint32             numOfWinners     = 0;
-    double              breakTie         = 0.0;
-    double              compact          = 0.0;
+    MLClassPtr  predClass1       = NULL;
+    MLClassPtr  predClass2       = NULL;
+    kkint32     predClass1Votes  = 0;
+    kkint32     predClass2Votes  = 0;
+    double      knownClassProb   = 0.0;
+    double      predClass1Prob   = 0.0;
+    double      predClass2Prob   = 0.0;
+    kkint32     numOfWinners     = 0;
+    double      breakTie         = 0.0;
 
-    classifier.ClassifyAImage (*example,
+    classifier.ClassifyAExample (*example,
                                predClass1,      predClass2,
                                predClass1Votes, predClass2Votes,
                                knownClassProb, 
                                predClass1Prob,  predClass2Prob,
-                               numOfWinners,    breakTie,
-                               compact
+                               numOfWinners,    breakTie
                               );
-    // Becuase unfortunatly 'ClassifyAImage'  updates the MLClass field in the 'FeatureVector' 
+    // Because unfortunately 'ClassifyAExample'  updates the MLClass field in the 'FeatureVector' 
     // instance to the predicted class we need to set the class back to the original class.
     example->MLClass (knownClass);
 
@@ -1714,13 +1711,13 @@ void  CrossValidationApp::ValidationProcess ()
     {
       if  (knownClass != predClass1)
       {
-        PostMisclassifiedImage (example->ImageFileName (), knownClass, predClass1);
+        PostMisclassifiedImage (example->ExampleFileName (), knownClass, predClass1);
       }
     }
 
     if  (predictionReport)
     {
-      *predictionReport << osGetRootName (example->ImageFileName ()) << "\t"
+      *predictionReport << osGetRootName (example->ExampleFileName ()) << "\t"
                         << (int)example->OrigSize () << "\t"
                         << knownClass->Name ()       << "\t"
                         << predClass1->Name ()       << "\t"
@@ -1739,7 +1736,7 @@ void  CrossValidationApp::ValidationProcess ()
       int  classIDX = 0;
 
       *probReport 
-        << osGetRootName (example->ImageFileName ())  << "\t"
+        << osGetRootName (example->ExampleFileName ())  << "\t"
         << knownClass->Name ()                        << "\t"
         << predClass1->Name ();
 
@@ -1780,13 +1777,6 @@ void  CrossValidationApp::ValidationProcess ()
   endTime = osGetLocalDateTime();
   DateTime  elapsedTime = endTime - startTime;
 
-  reduction_time = trainer.ReductionTime ( );
-  long int num_images_before_reduction = trainer.ReductionPreExampleCount ( );
-  long int num_images_after_reduction  = trainer.ReductionPostExampleCount ( );
-  float reduction_ratio = trainer.ReductionRatio ( );
-  training_time -= reduction_time;
-
-
   *report << "****************************************************************************************"         << endl;
   *report << "CPU Run Time Statistics"                                                                          << endl;
   *report << "Start          Time [" << startTime      << "]."                                                  << endl;
@@ -1794,15 +1784,12 @@ void  CrossValidationApp::ValidationProcess ()
   *report << "Elapsed        Time [" << elapsedTime    << "],  secs [" << elapsedTime.Seconds () << "]."        << endl;
   *report << "Training       Time [" << StrFormatDouble (training_time,       "zzz,zz0.000")     << "] secs."   << endl;
   *report << "Classification Time [" << StrFormatDouble (classification_time, "zzz,zz0.000")     << "] secs."   << endl;
-  *report << "Reduction      Time [" << StrFormatDouble (reduction_time, "zzz,zz0.000")          << "] secs."    << endl;
-  *report << "Pre Reduction       ["  << num_images_before_reduction                             << "] examples," << endl;
-  *report << "Post Reduction      ["  << num_images_after_reduction                              << "] examples,"  << endl;
-  *report << "Reduction Ratio     ["  << StrFormatDouble (reduction_ratio, "zzz,zz0.000")        << "]"          << endl;
   *report << "Support Vectors     ["  << numOfSupportVectors                                     << "]"         << endl;
   *report << "****************************************************************************************"         << endl;
   *report << endl << endl;
 
-  delete  validationData;         validationData     = NULL;
+  delete  validationData;   validationData = NULL;
+  delete  trainer;          trainer        = NULL;
 
   runLog.Level (10) << "ValidationProcess - Done." << endl;
 }  /* ValidationProcess */
@@ -1859,7 +1846,7 @@ void  CrossValidationApp::ReportConfigurationInfo ()
   for  (idx = config->TrainingClasses ().begin ();  idx != config->TrainingClasses ().end ();  idx++)
   {
     TrainingClassPtr tc = *idx;
-    *report <<  tc->Directory () << "\t" << tc->Name () << "\t" << tc->Weight () << std::endl;
+    *report <<  tc->Directory (0) << "\t" << tc->Name () << "\t" << tc->Weight () << std::endl;
   }
 
   *report << endl;
@@ -2038,16 +2025,16 @@ void  CrossValidationApp::RandomlySelectedProcessResults (vector<CrossValidation
 
 
 
-FeatureVectorListPtr  CrossValidationApp::RandomlySampleData (const   FeatureVectorListPtr data, 
-                                                              float   percentToKeep, 
-                                                              double& samplingTime
+FeatureVectorListPtr  CrossValidationApp::RandomlySampleData (const    FeatureVectorListPtr data, 
+                                                              float    percentToKeep, 
+                                                              double&  samplingTime
                                                              )
 {
   double  startTime = osGetSystemTimeUsed ();
 
   int  numToKeep = int (float (data->QueueSize ()) * percentToKeep + 0.5);
   data->RandomizeOrder ();
-  FeatureVectorListPtr  sample = new FeatureVectorList (fileDesc, false, runLog);
+  FeatureVectorListPtr  sample = data->ManufactureEmptyList (false);
 
   int x;
   for  (x = 0;  x < numToKeep;  x++)
@@ -2171,17 +2158,17 @@ void  CrossValidationApp::RandomSplitsIntoTrainAndTest (FeatureVectorListPtr   s
                                                         FeatureVectorListPtr&  splitDataTest
                                                        )
 {
-  runLog.Level (20) << "RandomSplitsIntoTrainAndTest   Seperating into Train and Test datasets." << endl;
+  runLog.Level (20) << "RandomSplitsIntoTrainAndTest   Separating into Train and Test datasets." << endl;
 
-  splitDataTrain = new FeatureVectorList (splitData->FileDesc (), false, runLog);
-  splitDataTest  = new FeatureVectorList (splitData->FileDesc (), false, runLog);
+  splitDataTrain = splitData->ManufactureEmptyList (false);
+  splitDataTest  = splitData->ManufactureEmptyList (false);
 
-  MLClassConstListPtr  classes = splitData->ExtractMLClassConstList ();
-  MLClassConstList::iterator  idx;
+  MLClassListPtr  classes = splitData->ExtractListOfClasses ();
+  MLClassList::iterator  idx;
   for  (idx = classes->begin ();  idx != classes->end ();  idx++)
   {
-    MLClassConstPtr  c = *idx;
-    FeatureVectorListPtr  examplesThisClass = splitData->ExtractImagesForAGivenClass (c);
+    MLClassPtr  c = *idx;
+    FeatureVectorListPtr  examplesThisClass = splitData->ExtractExamplesForAGivenClass (c);
     int  numTrainExamples = (int)(0.5f + ((float)(examplesThisClass->QueueSize ()) * splitPercentage / 100.0f));
     if  (numTrainExamples < 1)
       numTrainExamples = 1;
@@ -2379,10 +2366,7 @@ int  CrossValidationApp::Main (int  argc,  char** argv)
             << "Class Statistics for validation data." << endl
             << endl;
 
-  *report << this->validationData->ClassStatisticsStr () << endl << endl;
-
-
-
+    *report << this->validationData->ClassStatisticsStr () << endl << endl;
 
     ValidationProcess ();
     return  -1;
@@ -2410,21 +2394,12 @@ int  CrossValidationApp::Main (int  argc,  char** argv)
 
   double*  foldClassTimes  = new double[numOfFolds];
   double*  foldTrainTimes  = new double[numOfFolds];
-
-  int*     reductionPostImageCounts = new int[numOfFolds];
-  int*     reductionPreImageCounts  = new int[numOfFolds];
-  double*  foldReductionTimes       = new double [numOfFolds];
-  int*     supportPoints            = new int[numOfFolds];
-
-    VectorKKStr  bitReductionsByFeature (numOfFolds, "");
+  int*     supportPoints   = new int   [numOfFolds];
 
   int  foldNum;
 
   double  totalTrainingTime            = 0.0;
   double  totalClassificationTime      = 0.0;
-  double  totalReductionTime           = 0.0;
-  int     totalReductionPostImageCount = 0;
-  int     totalReductionPreImageCount  = 0;
   int     totalSupportPoints           = 0;
 
   //  thirdClass = new FeatureVectorList ("C:\\TrainingApp\\TrainingImages\\trich_tufts\\Trichodesmium_tufts.data",
@@ -2445,9 +2420,9 @@ int  CrossValidationApp::Main (int  argc,  char** argv)
     *report << endl;
     *report << "Fold [" << (foldNum + 1) << "]  of  [" << numOfFolds << "]" << endl;
 
-    FeatureVectorListPtr  trainingImages = new FeatureVectorList (fileDesc, true, runLog);
+    FeatureVectorListPtr  trainingImages = examples->ManufactureEmptyList (true);
 
-    FeatureVectorListPtr  testImages     = new FeatureVectorList (fileDesc, true, runLog);
+    FeatureVectorListPtr  testImages     = examples->ManufactureEmptyList (true);
 
     runLog.Level (10) << "Fold Num["        << foldNum        << "]   "
                       << "FirstTestImage["  << firstInGroup   << "]   "
@@ -2473,9 +2448,6 @@ int  CrossValidationApp::Main (int  argc,  char** argv)
 
     foldClassTimes [foldNum] = 0.0;
     foldTrainTimes [foldNum] = 0.0;
-    reductionPostImageCounts[foldNum] = 0;
-    reductionPreImageCounts[foldNum]  = 0;
-    foldReductionTimes [foldNum] = 0.0;
 
     CrossValidate (testImages, 
                    trainingImages, 
@@ -2484,30 +2456,20 @@ int  CrossValidationApp::Main (int  argc,  char** argv)
                    cmSmall, 
                    cmMed,
                    cmLarge,
-                   foldCounts               [foldNum],
-                   foldAccuracies           [foldNum],
+                   foldCounts     [foldNum],
+                   foldAccuracies [foldNum],
                    foldNum,
-                   foldTrainTimes           [foldNum],
-                   foldClassTimes           [foldNum],
-                   reductionPreImageCounts  [foldNum],
-                   reductionPostImageCounts [foldNum],
-                   foldReductionTimes       [foldNum],
-                   supportPoints            [foldNum],
-                   bitReductionsByFeature   [foldNum]
+                   foldTrainTimes [foldNum],
+                   foldClassTimes [foldNum],
+                   supportPoints  [foldNum]
                   );
 
     totalTrainingTime            += foldTrainTimes           [foldNum];
     totalClassificationTime      += foldClassTimes           [foldNum];
-    totalReductionPostImageCount += reductionPostImageCounts [foldNum];
-    totalReductionPreImageCount  += reductionPreImageCounts  [foldNum];
-    totalReductionTime           += foldReductionTimes       [foldNum];
     totalSupportPoints           += supportPoints            [foldNum];
 
     runLog.Level (10) << "TraingingTime[" << foldTrainTimes     [foldNum]       << "] "
                       << "ClassTime["     << foldClassTimes     [foldNum]       << "] "
-                      << "ReductionTime[" << foldReductionTimes [foldNum]       << "] "
-                      << "InitialSize["   << reductionPreImageCounts  [foldNum] << "]"
-                      << "ReducedSize["   << reductionPostImageCounts [foldNum] << "]"
                       << endl;
 
     delete  trainingImages;    trainingImages = NULL;
@@ -2515,8 +2477,6 @@ int  CrossValidationApp::Main (int  argc,  char** argv)
 
     firstInGroup = firstInGroup + numImagesPerFold;
   }
-
-  float  reductionRatio = 100.0f * (float)totalReductionPostImageCount / (float)totalReductionPreImageCount;
 
   *report << "Cross Validation" << endl;
   *report << endl;
@@ -2529,42 +2489,27 @@ int  CrossValidationApp::Main (int  argc,  char** argv)
           << "Accuracy"          << "\t" 
           << "TrainTime"         << "\t" 
           << "ClassTime"         << "\t"
-          << "ReductionTime"     << "\t"
-          << "InitalImageCount"  << "\t"
-          << "ReducedImageCount" << "\t"
-          << "ReductionRatio"    << "\t"
           << "SupportPoints"
           << endl;
 
   for  (foldNum = 0;  foldNum < numOfFolds;  foldNum++)
   {
-    float  reductionRatio = 100.0f * (float)reductionPostImageCounts [foldNum] / (float)reductionPreImageCounts [foldNum];
-
     *report << foldNum                                               << "\t"
                 << foldCounts               [foldNum]                    << "\t" 
                 << StrFormatDouble (foldAccuracies[foldNum], "zzz0.000") << "\t" 
                 << foldTrainTimes           [foldNum]                    << "\t"
                 << foldClassTimes           [foldNum]                    << "\t"
-                << foldReductionTimes       [foldNum]                    << "\t"
-                << reductionPreImageCounts  [foldNum]                    << "\t"
-                << reductionPostImageCounts [foldNum]                    << "\t"
-                << StrFormatDouble (reductionRatio, "ZZ0.00") << "%"     << "\t"
-                << supportPoints            [foldNum]                    << "\t"
-                << bitReductionsByFeature   [foldNum]  
+                << supportPoints            [foldNum]
                 << endl;
   }
 
   double logLoss = -(logLossTotal / logLossCount);
 
   *report << "Totals" <<                     "\t"
-              <<                                 "\t"
-              <<                                 "\t"
-              << totalTrainingTime            << "\t"
-              << totalClassificationTime      << "\t" 
-              << totalReductionTime           << "\t"
-              << totalReductionPreImageCount  << "\t"
-              << totalReductionPostImageCount << "\t"
-              << StrFormatDouble (reductionRatio, "ZZ0.00") << "%"  << "\t"
+              <<                             "\t"
+              <<                             "\t"
+              << totalTrainingTime        << "\t"
+              << totalClassificationTime  << "\t" 
               << totalSupportPoints
               << endl;
 
@@ -2577,8 +2522,6 @@ int  CrossValidationApp::Main (int  argc,  char** argv)
           << "Log-Loss" << "\t" << logLoss << endl 
           << endl;
   cm.PrintConfusionMatrixTabDelimited (*report);
-  *report << std::endl;
-  *report << "Reduced Image Count" << "\t" << totalReductionPostImageCount << std::endl;
   *report << std::endl;
 
   *report <<  std::endl << std::endl << std::endl
@@ -2639,8 +2582,6 @@ int  CrossValidationApp::Main (int  argc,  char** argv)
   *report << "Kernal         Time [" << kernalTimeUsed << "] secs."                                            << endl;
   *report << "Training       Time [" << StrFormatDouble (totalTrainingTime,       "zzz,zz0.000")  << "] secs." << endl;
   *report << "Classification Time [" << StrFormatDouble (totalClassificationTime, "zzz,zz0.000")  << "] secs." << endl;
-  *report << "Reduction      Time [" << StrFormatDouble (reduction_time, "zzz,zz0.000")  << "] secs."          << endl;
-  *report << "Reduction Ratio     [" << StrFormatDouble (reductionRatio, "zz0.00")<< "%"        << "]"          << endl;
   *report << "Support Points      [" << totalSupportPoints << "]" << endl;
   *report                                                                                                      << endl;
   *report << "****************************************************************************************"        << endl;
@@ -2655,14 +2596,11 @@ int  CrossValidationApp::Main (int  argc,  char** argv)
 
   //osWaitForEnter();
 
-  delete[]  foldCounts;                  foldCounts               = NULL;
-  delete[]  foldAccuracies;              foldAccuracies           = NULL;
-  delete[]  foldClassTimes;              foldClassTimes           = NULL;
-  delete[]  foldTrainTimes;              foldTrainTimes           = NULL;
-  delete[]  foldReductionTimes;          foldReductionTimes       = NULL;
-  delete[]  supportPoints;               supportPoints            = NULL;
-  delete[]  reductionPreImageCounts;     reductionPreImageCounts  = NULL;
-  delete[]  reductionPostImageCounts;    reductionPostImageCounts = NULL;
+  delete[]  foldCounts;      foldCounts      = NULL;
+  delete[]  foldAccuracies;  foldAccuracies  = NULL;
+  delete[]  foldClassTimes;  foldClassTimes  = NULL;
+  delete[]  foldTrainTimes;  foldTrainTimes  = NULL;
+  delete[]  supportPoints;   supportPoints   = NULL;
 
   //osWaitForEnter();
   return  0;
@@ -2679,7 +2617,7 @@ int  CrossValidationApp::Main (int  argc,  char** argv)
 void  SetUpJMLRDataSet ()
 {
   RunLog  log;
-  MLClassConstList  classes;
+  MLClassList  classes;
 
   KKStr  fileName = "ActiveLearning_MasterTestImages_c45.data";
   
@@ -2698,16 +2636,16 @@ void  SetUpJMLRDataSet ()
 
   file->RandomizeOrder ();
 
-  FeatureVectorListPtr  testData   = new FeatureVectorList (file->FileDesc (), false, log);
-  FeatureVectorListPtr  trainData  = new FeatureVectorList (file->FileDesc (), false, log);
+  FeatureVectorListPtr  testData   = file->ManufactureEmptyList (false);
+  FeatureVectorListPtr  trainData  = file->ManufactureEmptyList (false);
 
   int  count = 0;
 
-  MLClassConstList::iterator  idx;
+  MLClassList::iterator  idx;
   for  (idx = classes.begin ();   idx != classes.end ();  idx++)
   {
-    MLClassConstPtr  mlClass = *idx;
-    FeatureVectorListPtr  imageThisClass = file->ExtractImagesForAGivenClass (mlClass, -1, -1);
+    MLClassPtr  mlClass = *idx;
+    FeatureVectorListPtr  imageThisClass = file->ExtractExamplesForAGivenClass (mlClass, -1, -1);
     imageThisClass->RandomizeOrder ();
 
     int  numExamplesThisClass = 0;
@@ -2730,7 +2668,7 @@ void  SetUpJMLRDataSet ()
     delete  imageThisClass;  imageThisClass = NULL;
   }
 
-  FeatureVectorListPtr    trainDataStratified = trainData->StratifyAmoungstClasses (&classes, 999999, 10);
+  FeatureVectorListPtr    trainDataStratified = trainData->StratifyAmoungstClasses (&classes, 999999, 10, log);
 
   KKB::uint  numExamplesWritten = 0;
   FeatureFileIOC45::Driver ()->SaveFeatureFile ("JMLR-Train.data",  trainData->AllFeatures (), *trainDataStratified, numExamplesWritten, cancelFlag, successful, log);
@@ -2738,7 +2676,7 @@ void  SetUpJMLRDataSet ()
 
 
   TrainingConfiguration2Ptr  config 
-      = TrainingConfiguration2::CreateFromFeatureVectorList (*trainData, "", log);
+      = TrainingConfiguration2::CreateFromFeatureVectorList (*trainData, trainData->FileDesc (), "", log);
 
   config->Save ("JMLR.cfg");
 
@@ -2756,7 +2694,7 @@ void  SetUpJMLRDataSet ()
 void  SplitUpETPdataSet ()
 {
   RunLog  log;
-  MLClassConstList  classes;
+  MLClassList  classes;
 
   KKStr  fileName = "ETP.data";
   
@@ -2774,17 +2712,17 @@ void  SplitUpETPdataSet ()
 
   file->RandomizeOrder ();
 
-  FeatureVectorListPtr  testData        = new FeatureVectorList (file->FileDesc (), false, log);
-  FeatureVectorListPtr  trainData       = new FeatureVectorList (file->FileDesc (), false, log);
-  FeatureVectorListPtr  validationData  = new FeatureVectorList (file->FileDesc (), false, log);
+  FeatureVectorListPtr  testData        = file->ManufactureEmptyList (false);
+  FeatureVectorListPtr  trainData       = file->ManufactureEmptyList (false);
+  FeatureVectorListPtr  validationData  = file->ManufactureEmptyList (false);
 
   int  count = 0;
 
-  MLClassConstList::iterator  idx;
+  MLClassList::iterator  idx;
   for  (idx = classes.begin ();   idx != classes.end ();  idx++)
   {
-    MLClassConstPtr  mlClass = *idx;
-    FeatureVectorListPtr  imageThisClass = file->ExtractImagesForAGivenClass (mlClass, -1, -1);
+    MLClassPtr  mlClass = *idx;
+    FeatureVectorListPtr  imageThisClass = file->ExtractExamplesForAGivenClass (mlClass, -1, -1);
     imageThisClass->RandomizeOrder ();
 
 
@@ -2827,9 +2765,9 @@ void  SplitUpETPdataSet ()
     delete  imageThisClass;  imageThisClass = NULL;
   }
 
-  MLClassConstListPtr  classesThatAreLeft = trainData->ExtractMLClassConstList ();
+  MLClassListPtr  classesThatAreLeft = trainData->ExtractListOfClasses ();
 
-  FeatureVectorListPtr    trainDataStratified = trainData->StratifyAmoungstClasses (classesThatAreLeft, 999999, 10);
+  FeatureVectorListPtr    trainDataStratified = trainData->StratifyAmoungstClasses (classesThatAreLeft, 999999, 10, log);
 
   KKB::uint  numExamplesWritten = 0;
   FeatureFileIOPices::Driver ()->SaveFeatureFile ("ETP-Train.data",        trainData->AllFeatures       (), *trainDataStratified, numExamplesWritten, cancelFlag, successful, log);
@@ -2837,7 +2775,7 @@ void  SplitUpETPdataSet ()
   FeatureFileIOPices::Driver ()->SaveFeatureFile ("ETP-Validation.data",   validationData->AllFeatures  (), *validationData,      numExamplesWritten, cancelFlag, successful, log);
 
   TrainingConfiguration2Ptr  config 
-      = TrainingConfiguration2::CreateFromFeatureVectorList (*trainData, "", log);
+      = TrainingConfiguration2::CreateFromFeatureVectorList (*trainData, trainData->FileDesc (), "", log);
 
   config->Save ("ETP.cfg");
 
@@ -2855,7 +2793,7 @@ void  SplitUpETPdataSet ()
 void  SetUpLetterDataSet ()
 {
   RunLog  log;
-  MLClassConstList  classes;
+  MLClassList  classes;
 
   KKStr  file1Name = "letter-c45_80p.data";
   KKStr  file2Name = "letter-c45_20p.data";
@@ -2885,7 +2823,7 @@ void  SetUpLetterDataSet ()
 void  SetNineClassesTrainAndTest ()
 {
   RunLog  log;
-  MLClassConstList  classes;
+  MLClassList  classes;
 
   KKStr  rootName  = "NineClasses";
   KKStr  file1Name = "NineClasses_TrainData_c45.data";
@@ -2903,22 +2841,22 @@ void  SetNineClassesTrainAndTest ()
   FeatureVectorListPtr  file1 = FeatureFileIOC45::Driver ()->LoadFeatureFile (file1Name, classes, 999999, cancelFlag, successful, changesMade, log);
   FeatureVectorListPtr  file2 = FeatureFileIOC45::Driver ()->LoadFeatureFile (file2Name, classes, 999999, cancelFlag, successful, changesMade, log);
 
-  FeatureVectorListPtr  allExamples = new FeatureVectorList (*file1, false);
+  FeatureVectorListPtr  allExamples = file1->Duplicate (false);
   allExamples->AddQueue (*file2);
   allExamples->RandomizeOrder ();
 
-  FeatureVectorListPtr  testData       = new FeatureVectorList (allExamples->FileDesc (), false, log);
-  FeatureVectorListPtr  trainData      = new FeatureVectorList (allExamples->FileDesc (), false, log);
-  FeatureVectorListPtr  trainTestData  = new FeatureVectorList (allExamples->FileDesc (), false, log);
-  FeatureVectorListPtr  validationData = new FeatureVectorList (allExamples->FileDesc (), false, log);
+  FeatureVectorListPtr  testData       = allExamples->ManufactureEmptyList (false);
+  FeatureVectorListPtr  trainData      = allExamples->ManufactureEmptyList (false);
+  FeatureVectorListPtr  trainTestData  = allExamples->ManufactureEmptyList (false);
+  FeatureVectorListPtr  validationData = allExamples->ManufactureEmptyList (false);
 
   int  count = 0;
 
-  MLClassConstList::iterator  idx;
+  MLClassList::iterator  idx;
   for  (idx = classes.begin ();   idx != classes.end ();  idx++)
   {
-    MLClassConstPtr  mlClass = *idx;
-    FeatureVectorListPtr  imageThisClass = allExamples->ExtractImagesForAGivenClass (mlClass, -1, -1);
+    MLClassPtr  mlClass = *idx;
+    FeatureVectorListPtr  imageThisClass = allExamples->ExtractExamplesForAGivenClass (mlClass, -1, -1);
 
     int  numTrainImages = (int)(0.5f + (float)imageThisClass->QueueSize () / 2.0f);
     int  numTestImages  = (int)(0.5f + (float)imageThisClass->QueueSize () / 4.0f);
@@ -2961,7 +2899,7 @@ void  SetNineClassesTrainAndTest ()
     delete  imageThisClass;  imageThisClass = NULL;
   }
 
-  FeatureVectorListPtr    trainDataStratified = trainData->StratifyAmoungstClasses (&classes, 999999, 10);
+  FeatureVectorListPtr    trainDataStratified = trainData->StratifyAmoungstClasses (&classes, 999999, 10, log);
 
   KKB::uint  numExamplesWritten = 0;
   FeatureFileIOC45::Driver ()->SaveFeatureFile (trainName,      trainData->AllFeatures      (), *trainDataStratified, numExamplesWritten, cancelFlag, successful, log);
@@ -2991,7 +2929,7 @@ void  SplitUpForestData ()
   // C:\bigpine\Plankton\Papers\BinaryFeatureSelection\Experiments\ForestCover
 
   RunLog  log;
-  MLClassConstList  classes;
+  MLClassList  classes;
 
   KKStr  fileName       = "covtype.data";
   KKStr  trainName      = "CovType-Train.data";
@@ -3013,18 +2951,18 @@ void  SplitUpForestData ()
 
   file->RandomizeOrder ();
 
-  FeatureVectorListPtr  testData       = new FeatureVectorList (file->FileDesc (), false, log);
-  FeatureVectorListPtr  trainData      = new FeatureVectorList (file->FileDesc (), false, log);
-  FeatureVectorListPtr  trainTestData  = new FeatureVectorList (file->FileDesc (), false, log);
-  FeatureVectorListPtr  validationData = new FeatureVectorList (file->FileDesc (), false, log);
+  FeatureVectorListPtr  testData       = file->ManufactureEmptyList (false);
+  FeatureVectorListPtr  trainData      = file->ManufactureEmptyList (false);
+  FeatureVectorListPtr  trainTestData  = file->ManufactureEmptyList (false);
+  FeatureVectorListPtr  validationData = file->ManufactureEmptyList (false);
 
   int  count = 0;
 
-  MLClassConstList::iterator  idx;
+  MLClassList::iterator  idx;
   for  (idx = classes.begin ();   idx != classes.end ();  idx++)
   {
-    MLClassConstPtr  mlClass = *idx;
-    FeatureVectorListPtr  imageThisClass = file->ExtractImagesForAGivenClass (mlClass, -1, -1);
+    MLClassPtr  mlClass = *idx;
+    FeatureVectorListPtr  imageThisClass = file->ExtractExamplesForAGivenClass (mlClass, -1, -1);
 
     int imagesThisClass = 0;
     FeatureVectorList::iterator idx2;
@@ -3062,7 +3000,7 @@ void  SplitUpForestData ()
     delete  imageThisClass;  imageThisClass = NULL;
   }
 
-  FeatureVectorListPtr    trainDataStratified = trainData->StratifyAmoungstClasses (&classes, 999999, 10);
+  FeatureVectorListPtr    trainDataStratified = trainData->StratifyAmoungstClasses (&classes, 999999, 10, log);
 
   KKB::uint  numExamplesWritten = 0;
   FeatureFileIOC45::Driver ()->SaveFeatureFile (trainName,      trainData->AllFeatures      (), *trainDataStratified, numExamplesWritten, cancelFlag, successful, log);
@@ -3092,34 +3030,34 @@ void  CreateBfsFromMfs (const KKStr&  mfsFileName,
 {
   RunLog  log;
 
-  FileDescPtr   fileDesc = FeatureFileIOPices::NewPlanktonFile (log);
-  TrainingConfiguration2Ptr  mfsConfig 
-    = new TrainingConfiguration2 (fileDesc, mfsFileName, log, false);
+  FileDescPtr   fileDesc = FeatureFileIOPices::NewPlanktonFile ();
+  PicesTrainingConfigurationPtr  mfsConfig = new PicesTrainingConfiguration ();
+  mfsConfig->Load (mfsFileName, false, log);
 
-  TrainingConfiguration2Ptr  newBfsConfig = new TrainingConfiguration2 (*mfsConfig);
+  PicesTrainingConfigurationPtr  newBfsConfig = new PicesTrainingConfiguration (*mfsConfig);
 
-  TrainingConfiguration2Ptr  srcBfs1Config = new TrainingConfiguration2 (fileDesc, srcBfs1Name, log, false);
-  TrainingConfiguration2Ptr  srcBfs2Config = new TrainingConfiguration2 (fileDesc, srcBfs2Name, log, false);
-  TrainingConfiguration2Ptr  srcBfs3Config = new TrainingConfiguration2 (fileDesc, srcBfs3Name, log, false);
-  TrainingConfiguration2Ptr  srcBfs4Config = new TrainingConfiguration2 (fileDesc, srcBfs4Name, log, false);
-  TrainingConfiguration2Ptr  srcBfs5Config = new TrainingConfiguration2 (fileDesc, srcBfs5Name, log, false);
+  PicesTrainingConfigurationPtr  srcBfs1Config = new PicesTrainingConfiguration ();  srcBfs1Config->Load (srcBfs1Name, false, log);
+  PicesTrainingConfigurationPtr  srcBfs2Config = new PicesTrainingConfiguration ();  srcBfs2Config->Load (srcBfs2Name, false, log);
+  PicesTrainingConfigurationPtr  srcBfs3Config = new PicesTrainingConfiguration ();  srcBfs3Config->Load (srcBfs3Name, false, log);
+  PicesTrainingConfigurationPtr  srcBfs4Config = new PicesTrainingConfiguration ();  srcBfs4Config->Load (srcBfs4Name, false, log);
+  PicesTrainingConfigurationPtr  srcBfs5Config = new PicesTrainingConfiguration ();  srcBfs5Config->Load (srcBfs5Name, false, log);
 
-  MLClassConstListPtr  classes = mfsConfig->ExtractClassList ();
+  MLClassListPtr  classes = mfsConfig->ExtractClassList ();
   classes->SortByName ();
 
-  MLClassConstListPtr  classes1 = srcBfs1Config->ExtractClassList ();
+  MLClassListPtr  classes1 = srcBfs1Config->ExtractClassList ();
   classes1->SortByName ();
 
-  MLClassConstListPtr  classes2 = srcBfs2Config->ExtractClassList ();
+  MLClassListPtr  classes2 = srcBfs2Config->ExtractClassList ();
   classes2->SortByName ();
 
-  MLClassConstListPtr  classes3 = srcBfs3Config->ExtractClassList ();
+  MLClassListPtr  classes3 = srcBfs3Config->ExtractClassList ();
   classes3->SortByName ();
 
-  MLClassConstListPtr  classes4 = srcBfs4Config->ExtractClassList ();
+  MLClassListPtr  classes4 = srcBfs4Config->ExtractClassList ();
   classes4->SortByName ();
 
-  MLClassConstListPtr  classes5 = srcBfs4Config->ExtractClassList ();
+  MLClassListPtr  classes5 = srcBfs4Config->ExtractClassList ();
   classes5->SortByName ();
 
   ofstream   missingClasses ("C:\\Temp\\MissingClasses.txt");
@@ -3127,7 +3065,7 @@ void  CreateBfsFromMfs (const KKStr&  mfsFileName,
   missingClasses << "============================================================================" << endl;
   for  (kkint32  idx1 = 0; idx1 < (classes->QueueSize () - 1);  ++idx1)
   {
-    MLClassConstPtr  c1 = classes->IdxToPtr (idx1);
+    MLClassPtr  c1 = classes->IdxToPtr (idx1);
 
     if  ((classes1->PtrToIdx (c1) < 0)  &&  (classes2->PtrToIdx (c1) < 0)  &&  (classes3->PtrToIdx (c1) < 0)  &&  (classes4->PtrToIdx (c1) < 0)  )
     {
@@ -3136,7 +3074,7 @@ void  CreateBfsFromMfs (const KKStr&  mfsFileName,
 
     for  (kkint32  idx2 = idx1 + 1; idx2 < classes->QueueSize ();  ++idx2)
     {
-      MLClassConstPtr c2 = classes->IdxToPtr (idx2);
+      MLClassPtr c2 = classes->IdxToPtr (idx2);
 
       BinaryClassParmsPtr  bcp = srcBfs1Config->GetBinaryClassParms (c1, c2);
       if  (bcp == NULL)
@@ -3158,7 +3096,7 @@ void  CreateBfsFromMfs (const KKStr&  mfsFileName,
 
       if  (bcp)
       {
-        newBfsConfig->SetBinaryClassFields (c1, c2, bcp->Param (), bcp->SelectedFeatures (), bcp->Weight ());
+        newBfsConfig->SetBinaryClassFields (c1, c2, bcp->Param (), *(bcp->SelectedFeatures ()), bcp->Weight ());
       }
       else
       {
@@ -3168,9 +3106,9 @@ void  CreateBfsFromMfs (const KKStr&  mfsFileName,
   }
 
   bool  valid = false;
-  newBfsConfig->MachineType (BinaryCombos);
-  newBfsConfig->SelectionMethod (SelectByProbability);
-  newBfsConfig->SetFeatureNums (FeatureNumList (fileDesc, "0-84", valid));
+  newBfsConfig->MachineType (SVM_MachineType::BinaryCombos);
+  newBfsConfig->SelectionMethod (SVM_SelectionMethod::Probability);
+  newBfsConfig->SetFeatureNums (FeatureNumList ("0-84", valid));
 
   KKStr  baseName = osRemoveExtension (mfsFileName);
   KKStr  tail = mfsFileName.Tail (8);
@@ -3182,11 +3120,11 @@ void  CreateBfsFromMfs (const KKStr&  mfsFileName,
 
   newBfsConfig->Save (newBfsFileName);
 
-  ModelParamDualPtr dualModelParms = new ModelParamDual (fileDesc, osGetRootNameWithExtension (mfsFileName), osGetRootNameWithExtension (newBfsFileName), true, log);
+  ModelParamDualPtr dualModelParms = new ModelParamDual (osGetRootNameWithExtension (mfsFileName), osGetRootNameWithExtension (newBfsFileName), true);
   dualModelParms->OtherClass (MLClass::CreateNewMLClass ("Other", -1));
   
-  TrainingConfiguration2Ptr  newDualConfig = new TrainingConfiguration2 (fileDesc, classes, dualModelParms, log);
-  newDualConfig->SetFeatureNums (FeatureNumList (fileDesc, "0-84", valid));
+  TrainingConfiguration2Ptr  newDualConfig = new TrainingConfiguration2 (classes, fileDesc, dualModelParms, log);
+  newDualConfig->SetFeatureNums (FeatureNumList ("0-84", valid));
   newDualConfig->ExamplesPerClass (mfsConfig->ExamplesPerClass ());
   newDualConfig->RootDir (mfsConfig->RootDir ());
   newDualConfig->Save (newDualFileName);
@@ -3335,9 +3273,9 @@ void  DetermineCropSettingsFromHighWaterMarks (vector<VectorUchar*>&  frameHighW
 void  DetermineCropSettingsForSipperFile (RunLog&        runLog,
                                           DataBasePtr    db, 
                                           SipperFilePtr  sipperFile,
-                                          kkuint16&        cropLeftAvg,
-                                          kkuint16&        cropRightAvg,
-                                          kkuint16&        activeColumnsAvg
+                                          kkuint16&      cropLeftAvg,
+                                          kkuint16&      cropRightAvg,
+                                          kkuint16&      activeColumnsAvg
                                          )
 {
   cropLeftAvg      = 0;
@@ -3756,4 +3694,3 @@ int  main (int    argc,
 
   return 0;
 }
-

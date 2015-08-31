@@ -11,7 +11,20 @@
 using namespace KKB;
 
 
+
+#include "ClassStatistic.h"
+#include "FileDesc.h"
+#include "MLClass.h"
+using namespace  KKMLL;
+
+
+#include "DataBaseImage.h"
+#include "DataBaseImageGroup.h"
+#include "DataBaseImageGroupEntry.h"
+#include "DataBaseImageValidatedEntry.h"
+#include "DataBaseLogEntry.h"
 #include "GpsDataPoint.h"
+#include "ImageSizeDistribution.h"
 #include "InstrumentData.h"
 #include "InstrumentDataList.h"
 #include "InstrumentDataMeans.h"
@@ -20,18 +33,8 @@ using namespace KKB;
 #include "SipperFile.h"
 #include "SipperStation.h"
 #include "VolumeSampledStat.h"
-using namespace SipperHardware;
+using namespace  MLL;
 
-
-#include "ClassStatistic.h"
-#include "DataBaseImage.h"
-#include "DataBaseImageGroup.h"
-#include "DataBaseImageGroupEntry.h"
-#include "DataBaseImageValidatedEntry.h"
-#include "DataBaseLogEntry.h"
-#include "FileDesc.h"
-#include "ImageSizeDistribution.h"
-#include "MLClass.h"
 
 
 #ifndef  _mysql_h
@@ -125,8 +128,8 @@ namespace MLL
 
 
     kkint32  QueryStatement (const char* queryStr,
-                           kkint32     queryStrLen
-                          );
+                             kkint32     queryStrLen
+                            );
 
     kkint32  QueryStatement (const KKStr&  statement);
 
@@ -181,15 +184,15 @@ namespace MLL
      *@param[in] classKeyToUse  If equal to 'V' will only return Validated examples.
      *@param[in] reExtractInstrumentData If set to true will Re-Extract Instrument data from the SipperFile.
      */
-    ImageFeaturesListPtr  FeatureDataGetOneSipperFile (const KKStr&     sipperFileRootName,
-                                                       MLClassConstPtr  mlClass,
-                                                       char             classKeyToUse,
-                                                       bool             reExtractInstrumentData,
-                                                       bool&            cancelFlag
+    ImageFeaturesListPtr  FeatureDataGetOneSipperFile (const KKStr&  sipperFileRootName,
+                                                       MLClassPtr    mlClass,
+                                                       char          classKeyToUse,
+                                                       bool          reExtractInstrumentData,
+                                                       bool&         cancelFlag
                                                       );
 
     ImageFeaturesListPtr  FeatureDataForImageGroup (const DataBaseImageGroupPtr  imageGroup,
-                                                    MLClassConstPtr              mlClass,
+                                                    MLClassPtr                   mlClass,
                                                     char                         classKeyToUse,
                                                     const bool&                  cancelFlag
                                                    );
@@ -219,8 +222,8 @@ namespace MLL
                                        );
 
     /**
-     *@brief  Returns Summary GPSData for a specified Cruies and time range.
-     *@details  Each entry returned will be the avareage values for the range of entries that are with in 'timeInterval' seconds.
+     *@brief  Returns Summary GPSData for a specified Cruises and time range.
+     *@details  Each entry returned will be the average values for the range of entries that are with in 'timeInterval' seconds.
      *  This is done by grouping by using the function      "Floor(Unix_Time(GpsUtcTime) / timeInterval)"
      */
     GPSDataPointListPtr   GpsDataQueryByIntervals (const KKStr&          cruiseName,
@@ -259,15 +262,15 @@ namespace MLL
                              kkuint32         classLogEntryId,
                              kkuint32         centroidRow,
                              kkuint32         centroidCol,
-                             MLClassConstPtr  class1,
+                             MLClassPtr       class1,
                              float            class1Prob,
-                             MLClassConstPtr  class2,
+                             MLClassPtr       class2,
                              float            class2Prob,
-                             MLClassConstPtr  validatedClass,
+                             MLClassPtr       validatedClass,
                              float            depth,
                              float            imageSize,
                              PointListPtr     sizeCoordinates,
-                             kkint32&           imageId,
+                             kkint32&         imageId,
                              bool&            successful
                        );
 
@@ -305,7 +308,7 @@ namespace MLL
    
     DataBaseImageListPtr  ImagesQuery (DataBaseImageGroupPtr  imageGroup,
                                        const KKStr&           sipperFileName,
-                                       MLClassConstPtr        mlClass,
+                                       MLClassPtr             mlClass,
                                        char                   classKeyToUse,   /**< 'P' - Use Predicted Class Key,  'V' - Validated Class */
                                        float                  probMin,
                                        float                  probMax,
@@ -325,7 +328,7 @@ namespace MLL
                                        const KKStr&          cruiseName,
                                        const KKStr&          stationName,
                                        const KKStr&          deploymentNum,
-                                       MLClassConstPtr       mlClass,
+                                       MLClassPtr            mlClass,
                                        char                  classKeyToUse,
                                        float                 probMin,
                                        float                 probMax,
@@ -343,7 +346,7 @@ namespace MLL
     DataBaseImageListPtr  ImagesQuery (const KKStr&    cruiseName,
                                        const KKStr&    stationName,
                                        const KKStr&    deploymentNum,
-                                       MLClassConstPtr mlClass,
+                                       MLClassPtr      mlClass,
                                        char            classKeyToUse,
                                        float           minProb,
                                        float           minSize,
@@ -367,7 +370,7 @@ namespace MLL
                                      const KKStr&           stationName,
                                      const KKStr&           deploymentNum,
                                      const KKStr&           sipperFileName,
-                                     MLClassConstPtr        mlClass,
+                                     MLClassPtr             mlClass,
                                      char                   classKeyToUse,
                                      float                  probMin,
                                      float                  probMax,
@@ -387,19 +390,19 @@ namespace MLL
                                                       );
 
     
-    DataBaseImageListPtr  ImagesQueryDeploymentSizeRange (const KKStr&     cruiseName,
-                                                          const KKStr&     stationName,
-                                                          const KKStr&     deploymentNum,
-                                                          MLClassConstPtr  mlClass,
-                                                          char             cast,         /**< 'U' = UpCast, 'D' = DownCast,  'B' = Both' */
-                                                          char             statistic,    /**< '0' = Area mm^2,  '1' = Diameter,  '2' = Spheroid Volume and '3' = EBv ((4/3)(Pie)(Major/2)(Minor/2)^2) */
-                                                          float            sizeStart,
-                                                          float            sizeEnd,
-                                                          float            depthMin,
-                                                          float            depthMax,
-                                                          kkint32          sampleQty,
-                                                          bool             includeChildren,
-                                                          VolConstBool&    cancelFlag
+    DataBaseImageListPtr  ImagesQueryDeploymentSizeRange (const KKStr&   cruiseName,
+                                                          const KKStr&   stationName,
+                                                          const KKStr&   deploymentNum,
+                                                          MLClassPtr     mlClass,
+                                                          char           cast,         /**< 'U' = UpCast, 'D' = DownCast,  'B' = Both' */
+                                                          char           statistic,    /**< '0' = Area mm^2,  '1' = Diameter,  '2' = Spheroid Volume and '3' = EBv ((4/3)(Pie)(Major/2)(Minor/2)^2) */
+                                                          float          sizeStart,
+                                                          float          sizeEnd,
+                                                          float          depthMin,
+                                                          float          depthMax,
+                                                          kkint32        sampleQty,
+                                                          bool           includeChildren,
+                                                          VolConstBool&  cancelFlag
                                                          );
 
 
@@ -420,12 +423,12 @@ namespace MLL
                                           );
 
 
-    void  ImagesUpdatePredictions (const KKStr&    imageFileName,
-                                   MLClassConstPtr class1Pred,
-                                   float           class1Prob,
-                                   MLClassConstPtr class2Pred,
-                                   float           class2Prob,
-                                   kkuint32        logEntryId
+    void  ImagesUpdatePredictions (const KKStr&  imageFileName,
+                                   MLClassPtr    class1Pred,
+                                   float         class1Prob,
+                                   MLClassPtr    class2Pred,
+                                   float         class2Prob,
+                                   kkuint32      logEntryId
                                   );
 
 
@@ -442,8 +445,8 @@ namespace MLL
                                       );
 
 
-    void  ImagesUpdateValidatedClass (const KKStr&     imageFileName,
-                                      MLClassConstPtr  mlClass
+    void  ImagesUpdateValidatedClass (const KKStr&  imageFileName,
+                                      MLClassPtr    mlClass
                                      );
 
     void  ImagesUpdateImageSize (const KKStr&        imageFileName,
@@ -461,9 +464,9 @@ namespace MLL
 
 
     /// Update both the Validates and Class1Name
-    void  ImagesUpdateValidatedAndPredictClass (const KKStr&     imageFileName,
-                                                MLClassConstPtr  mlClass, 
-                                                float            class1Prob
+    void  ImagesUpdateValidatedAndPredictClass (const KKStr&  imageFileName,
+                                                MLClassPtr    mlClass, 
+                                                float         class1Prob
                                                );
 
     void  ImageUpdate (DataBaseImage&  dbImage,
@@ -492,7 +495,7 @@ namespace MLL
 
     ClassStatisticListPtr  ImageGetClassStatistics (DataBaseImageGroupPtr  imageGroup,
                                                     const KKStr&           sipperFileName,
-                                                    MLClassConstPtr        mlClass,
+                                                    MLClassPtr             mlClass,
                                                     char                   classKeyToUse,
                                                     float                  minProb,
                                                     float                  maxProb,
@@ -507,7 +510,7 @@ namespace MLL
                                                     const KKStr&           cruiseName,
                                                     const KKStr&           stationName,
                                                     const KKStr&           deploymentNum,
-                                                    MLClassConstPtr        mlClass,
+                                                    MLClassPtr             mlClass,
                                                     char                   classKeyToUse,
                                                     float                  minProb,
                                                     float                  maxProb,
@@ -528,7 +531,7 @@ namespace MLL
     VectorUint*  ImageGetDepthStatistics (DataBaseImageGroupPtr  imageGroup,
                                           const KKStr&           sipperFileName,
                                           float                  depthIncrements,
-                                          MLClassConstPtr        mlClass,
+                                          MLClassPtr             mlClass,
                                           char                   classKeyToUse,
                                           float                  minProb,
                                           float                  maxProb,
@@ -542,7 +545,7 @@ namespace MLL
                                           const KKStr&           stationName,
                                           const KKStr&           deploymentNum,
                                           float                  depthIncrements,
-                                          MLClassConstPtr        mlClass,
+                                          MLClassPtr             mlClass,
                                           char                   classKeyToUse,
                                           float                  minProb,
                                           float                  maxProb,
@@ -578,9 +581,9 @@ namespace MLL
 
 
     //***********************************************************************************
-    MLClassConstPtr  MLClassLoad (const KKStr&  className);
+    MLClassPtr  MLClassLoad (const KKStr&  className);
 
-    MLClassConstListPtr  MLClassLoadList ();
+    MLClassListPtr  MLClassLoadList ();
 
     void  MLClassInsert (MLClass&  mlClass,
                          bool&     successful
@@ -592,7 +595,7 @@ namespace MLL
                         );
 
 
-    MLClassConstListPtr  MLClassLoadChildren (const KKStr&  className);
+    MLClassListPtr  MLClassLoadChildren (const KKStr&  className);
 
 
     /**
@@ -943,25 +946,25 @@ namespace MLL
 
 
     //***********************************************************************************
-    SipperStationListPtr   SipperStationLoad (const KKStr&  cruiseName);
+    SipperStationListPtr  SipperStationLoad (const KKStr&  cruiseName);
     
-    SipperStationPtr       SipperStationLoad (const KKStr&  cruiseName,
-                                              const KKStr&  stationName
-                                             );
-
+    SipperStationPtr      SipperStationLoad (const KKStr&  cruiseName,
+                                             const KKStr&  stationName
+                                            );
+    
      SipperStationListPtr  SipperStationsLoadByGpsRange (double  latitudeMin,
                                                          double  latitudeMax,
                                                          double  longitudeMin,
                                                          double  longitudeMax
                                                         );
     
-    void                   SipperStationInsert (const SipperStation&  station);
+    void                  SipperStationInsert (const SipperStation&  station);
 
-    void                   SipperStationUpdate (const SipperStation&  station);
+    void                  SipperStationUpdate (const SipperStation&  station);
 
-    void                   SipperStationDelete (const KKStr&  cruiseName,
-                                                const KKStr&  stationName
-                                               );
+    void                  SipperStationDelete (const KKStr&  cruiseName,
+                                               const KKStr&  stationName
+                                              );
     void   ResultSetsClear ();
 
   private:

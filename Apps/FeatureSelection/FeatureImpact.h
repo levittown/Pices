@@ -6,17 +6,20 @@
 #include  "KKStr.h"
 
 
-#if  !defined(_ACCBYFEATURESEL_)
+
+#include  "BinaryJobList.h"
+
+namespace FeatureSelectionApp
+{
+
+#if  !defined(_AccByFeatureSel_Defined_)
 class  AccByFeatureSel;
 typedef  AccByFeatureSel*  AccByFeatureSelPtr;
 class  AccByFeatureSelList;
 typedef  AccByFeatureSelList*  AccByFeatureSelListPtr;
 #endif
 
-#include  "BinaryJobList.h"
 
-namespace FeatureSelectionApp
-{
   class FeatureImpact
   {
   public:
@@ -35,8 +38,8 @@ namespace FeatureSelectionApp
     FeatureNumList  FeatureThatDontHurt ();
 
     void  UpdateAccByFeatureSelList (AccByFeatureSelListPtr  accByFeatureSelList,
-                                     MLClassConstPtr      class1,
-                                     MLClassConstPtr      class2
+                                     MLClassPtr      class1,
+                                     MLClassPtr      class2
                                     );
 
   private:

@@ -1,11 +1,9 @@
-#include  "FirstIncludes.h"
-#include  <fstream>
-#include  <iostream>
-#include  <map>
-#include  <vector>
-
+#include "FirstIncludes.h"
+#include <fstream>
+#include <iostream>
+#include <map>
+#include <vector>
 #include  "MemoryDebug.h"
-
 using namespace  std;
 
 
@@ -16,9 +14,12 @@ using namespace  std;
 using namespace  KKB;
 
 
-#include "SipperBlob.h"
 #include "MLClass.h"
+using namespace  KKMLL;
+
+
 #include "ImageFeatures.h"
+#include "SipperBlob.h"
 using namespace  MLL;
 
 
@@ -53,13 +54,14 @@ SipperBlob::~SipperBlob ()
 
 
 ImageFeaturesPtr  SipperBlob::Save (uchar**     frame,
-                                    kkint32**     blobIds,
+                                    kkint32**   blobIds,
                                     KKStr       fileName,
                                     bool        createImageFeaturesObject,
                                     MLClassPtr  mlClass,
                                     kkuint32    firstFrameRowScanLine,
-                                    bool        save,     /**< If set to false will not save, just calc features. */
-                                    bool        colorize  /**< Set to true if you wish to save the 7 grayscale values as colors.*/
+                                    bool        save,     /**< If set to false will not save, just calculate features. */
+                                    bool        colorize, /**< Set to true if you wish to save the 7 gray-scale values as colors.*/
+                                    RunLog&     runLog
                                    )
 
 {
@@ -141,7 +143,7 @@ ImageFeaturesPtr  SipperBlob::Save (uchar**     frame,
 
   if  (createImageFeaturesObject)
   {
-    image = new ImageFeatures (bmpImage, mlClass);
+    image = new ImageFeatures (bmpImage, mlClass, NULL, runLog);
     //image->CentroidCol (image->CentroidCol () + colLeft);     //  kk  2005-feb-02
     //image->CentroidRow (image->CentroidRow () + rowTop + firstFrameRowScanLine);
   }
@@ -271,7 +273,6 @@ void  SipperBlob::DialateBlob (uchar** frame,
         // This is a background pixel anyway, it would not be assigned to a blob.
         continue;
       }
-
 
       // Next lets determine if this pixel will be the recipient of dilation.
       bool  dialatePixel = false;

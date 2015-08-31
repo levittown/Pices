@@ -10,8 +10,8 @@
 //*                                                                                                       *
 //*  Description:                                                                                         *
 //*  ------------                                                                                         *
-//*  Developed this application to test out the idea of using Feature Selection for each combinatio of    *
-//*  binary classes.  First started to play with this idea back in 2003 with a provious version of this   *
+//*  Developed this application to test out the idea of using Feature Selection for each combination of   *
+//*  binary classes.  First started to play with this idea back in 2003 with a prvious version of this   *
 //*  program called BeasmSearchSVM.                                                                       *
 //*                                                                                                       *
 //*  Four Phases:                                                                                         *
@@ -19,7 +19,7 @@
 //*  2) Feature Selection for all classes combined.                                                       *
 //*                                                                                                       *
 //*  3) Feature Selection for each binary class combination. (Parameters selected in phase 1 will be used)*
-//*  4) Parameter Tuning  for each binary class combinaion.                                               *
+//*  4) Parameter Tuning  for each binary class combination.                                              *
 //*                                                                                                       *
 //*  Each phase must be completed before the next one can be started.                                     *
 //*                                                                                                       *
@@ -29,14 +29,14 @@
 //*                                                                                                       *
 //*  FeatureSelection:   This module;  main control.                                                      *
 //*                                                                                                       *
-//*  Processor:          Created to perform a specific phase.  Several processors wil be created; one     *
-//*                      for each CPU that you want to utilize.  Teh processor will schedule in a         *
-//*                      cooperetive fasion all the jobs nessasary to perform a given phase.  A processor *
+//*  Processor:          Created to perform a specific phase.  Several processors will be created; one    *
+//*                      for each CPU that you want to utilize. The processor will schedule in a          *
+//*                      cooperative fashion all the jobs necessary to perform a given phase. A processor *
 //*                      can be for either All-Classes or for a given binary combination of classes.      *
 //*                                                                                                       *
-//*  BinaryJob:          Used to control one single evaluation of parameters or features. When fearure    *
+//*  BinaryJob:          Used to control one single evaluation of parameters or features. When feature    *
 //*                      feature selection is started it will create a single 'BinaryJob' instance that   *
-//*                      will represent all features selected.  Each exansion will then create more       *
+//*                      will represent all features selected.  Each expansion will then create more      *
 //*                      'BinaryJob' instances.                                                           *
 //*                                                                                                       *
 //*  FeatureImpact:                                                                                       *
@@ -47,12 +47,12 @@
 //*     that command only.                                                                                *
 //*     a. -restart                                                                                       *
 //*     b. -quit                                                                                          *
-//*     c. -FinalReport                                                                                  *
+//*     c. -FinalReport                                                                                   *
 //*     d. -Lock                                                                                          *
 //*                                                                                                       *
 //*                                                                                                       *
 //*  2) If no 'FeatureSelection.Status' file exists then a new one is created and initialized to          *
-//*     starting configuration.  If one does exists then loads the curent status of from it.  When        *
+//*     starting configuration.  If one does exists then loads the current status of from it.  When       *
 //*     one does exist there is no need to provide any command lie parameters.                            *
 //*                                                                                                       *
 //*                                                                                                       *
@@ -70,14 +70,16 @@
 
 #include "FeatureFileIO.h"
 #include "FeatureVector.h"
-#include "FeatureSelectionTypes.h"
 #include "FinalResults.h"
 #include "MLClass.h"
 #include "Orderings.h"
 #include "TrainingConfiguration2.h"
+using namespace  KKMLL;
 
 
-#include  "BinaryClass.h"
+#include "BinaryClass.h"
+#include "FeatureSelectionTypes.h"
+using namespace  FeatureSelectionApp;
 
 
 namespace FeatureSelectionApp
@@ -107,19 +109,19 @@ namespace FeatureSelectionApp
     ~FeatureSelection ();
 
 
-    MLClassConstPtr           AddingAClass           ()  const {return addingAClass;}
+    MLClassPtr                AddingAClass           ()  const {return addingAClass;}
     bool                      AlreadyNormalized      ()  const {return alreadyNormalized;}
     int                       BeamSize               ()  const {return beamSize;}
     const KKStr&              ConfigFileName         ()  const {return configFileName;}
     TrainingConfiguration2Ptr Config                 ()  const {return config;}
     int                       ExpansionLimit         ()  const {return expansionLimit;}
-    fcFeatureCriteria         FeatureCriteria        ()  const {return  featureCriteria;}
+    FeatureCriteriaType       FeatureCriteria        ()  const {return  featureCriteria;}
     bool                      FeatureCountPrefSmall  ()  const {return featureCountPrefSmall;}
     GradingMethodType         GradingMethod          ()  const {return gradingMethod;}
     bool                      JustGettingStats       ()  const {return justGettingStats;}
     RunLog&                   Log                    ()        {return log;}
     const KKStr&              HostName               ()  const {return hostName;}
-    MLClassConstListPtr       MLClasses              ()  const {return mlClasses;}
+    MLClassListPtr            MLClasses              ()  const {return mlClasses;}
     const FeatureNumList&     InitialFeatures        ()  const;
     MajorSteps                MajorStep              ()  const {return majorStep;}
     int                       MinTrainExamples       ()  const {return minTrainExamples;}
@@ -127,11 +129,11 @@ namespace FeatureSelectionApp
     int                       NumJobsAtATime         ()  const {return numJobsAtATime;}
     int                       NumProcPerCombo        ()  const {return numProcPerCombo;}
     int                       NumOfFolds             ()  const {return numOfFolds;}
-    JobSelectionCriteriaType  ParamSelCriteria       ()  const {return paramSelCriteria;}
-    MLClassConstPtr           PositiveClass          ()  const {return positiveClass;}
-    poProcessingOrder         ProcessingOrder        ()  const {return processingOrder;}
+    JobSelectionCriteria      ParamSelCriteria       ()  const {return paramSelCriteria;}
+    MLClassPtr                PositiveClass          ()  const {return positiveClass;}
+    ProcessingOrders          ProcessingOrder        ()  const {return processingOrder;}
     int                       RandomSplitsNum        ()  const {return randomSplitsNum;}
-    stSearchTypes             SearchType             ()  const {return searchType;}
+    SearchTypes               SearchType             ()  const {return searchType;}
     FeatureVectorListPtr      TestData               ()  const {return testData;}
     const KKStr&              TestDataFileName       ()  const {return testDataFileName;}
     FeatureVectorListPtr      TrainingData           ()  const {return trainingData;}
@@ -143,7 +145,7 @@ namespace FeatureSelectionApp
 
     void    BuildResultConfigFile (const KKStr&       prevConfigFileName,
                                    double&            totalCpuTimeUsed,
-                                   fcFeatureCriteria  featureCriteria
+                                   FeatureCriteriaType  featureCriteria
                                   );
 
     KKStr   CommandLineStr  ();
@@ -197,8 +199,8 @@ namespace FeatureSelectionApp
 
     /**
      *  Given a list of Binary classes will load the original Status files for each one and return 
-     *  the total number of Cpu Seconds.  This can be usefull to determine the total number of CPU
-     *  seconds used to prcess a Major Step.
+     *  the total number of Cpu Seconds.  This can be useful to determine the total number of CPU
+     *  seconds used to process a Major Step.
      */
     double              GetTotalCpuSecs (BinaryClassListPtr  binClasses,
                                          double&             totalProcessingTime,
@@ -265,7 +267,7 @@ namespace FeatureSelectionApp
 
     void                StatusFileUpdate (BinaryClassListPtr  binClasses);
 
-    MLClassConstPtr        addingAClass;              // Used when adding a class to a previously completed feature selection.
+    MLClassPtr                addingAClass;              // Used when adding a class to a previously completed feature selection.
 
     bool                      alreadyNormalized;
 
@@ -295,7 +297,7 @@ namespace FeatureSelectionApp
 
     FeatureFileIOPtr          driver;      // Format that the Feature Files are in, ex C45
 
-    fcFeatureCriteria         featureCriteria;
+    FeatureCriteriaType         featureCriteria;
 
     bool                      featureCountPrefSmall;   // true = preference for smallest number of features, else largest number of features.
 
@@ -305,7 +307,7 @@ namespace FeatureSelectionApp
 
     KKStr                     hostName;            // Host name of computer we are running on
 
-    MLClassConstListPtr    mlClasses;
+    MLClassListPtr            mlClasses;
 
     FeatureNumListPtr         initialFeatures;
     KKStr                     initialFeaturesStr;
@@ -335,11 +337,11 @@ namespace FeatureSelectionApp
                                                 // then as many as we want.
 
 
-    poProcessingOrder         processingOrder;        // The order of the major steps.
+    ProcessingOrders         processingOrder;        // The order of the major steps.
 
-    JobSelectionCriteriaType  paramSelCriteria;       // Criteria used to select next jobs to expand during parameter grid search
+    JobSelectionCriteria  paramSelCriteria;       // Criteria used to select next jobs to expand during parameter grid search
 
-    MLClassConstPtr        positiveClass;
+    MLClassPtr        positiveClass;
 
     int                       procId;                // Process ID assigned by OS
 
@@ -358,7 +360,7 @@ namespace FeatureSelectionApp
 
     KKStr                     resultConfigFileName;
 
-    stSearchTypes             searchType;
+    SearchTypes             searchType;
 
     KKStr                     statusFileName;
 

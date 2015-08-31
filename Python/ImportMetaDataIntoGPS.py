@@ -37,12 +37,13 @@ def  ToFloat(s):
 
 
 def  ProcessMetDataFile(cruiseName, fileName):
+  passWord=""
   try:
-       db = mysql.connector.Connect(user='root',
-                                    password="dasani30",
-                                    host='sipper-db.marine.usf.edu',
-                                    database='pices_new'
-                                  )
+    db = mysql.connector.Connect(user='root',
+                                 password=passWord,
+                                 host='sipper-db.marine.usf.edu',
+                                 database='pices_new'
+                                )
   except  mysql.connector.Error as err:
     if  err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
         print("Cound notconect to \"Sipper-d-marine.usf.edu\"")

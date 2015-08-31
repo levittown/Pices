@@ -8,17 +8,20 @@ using namespace System::Diagnostics;
 
 
 #include "Classifier2.h"
-#include "ImageFeatures.h"
-#include "PicesFeatureVector.h"
-#include "PicesRunLog.h"
 #include "TrainingProcess2.h"
+
+#include "ImageFeatures.h"
+#include "PicesTrainingConfiguration.h"
 
 // Pices Interface Headers
 #include "PicesClass.h"
 #include "PicesClassList.h"
+#include "PicesFeatureVector.h"
+#include "PicesMsgQueue.h"
 #include "PicesPrediction.h"
 #include "PicesPredictionList.h"
-#include "PicesTrainingConfiguration.h"
+#include "PicesRunLog.h"
+#include "PicesTrainingConfigManaged.h"
 
 
 
@@ -52,7 +55,15 @@ namespace PicesInterface
 	public ref class TrainingModel2 
 	{
 	public:
-    enum class ModelTypes   {Null = 0, OldSVM = 1, SvmBase = 2, KNN = 3, UsfCasCor = 4, Dual = 5};
+    enum class ModelTypes: int
+    {
+      Null      = KKMLL::Model::ModelTypes::Null,
+      OldSVM    = KKMLL::Model::ModelTypes::OldSVM,
+      SvmBase   = KKMLL::Model::ModelTypes::SvmBase,
+      KNN       = KKMLL::Model::ModelTypes::KNN,
+      UsfCasCor = KKMLL::Model::ModelTypes::UsfCasCor,
+      Dual      = KKMLL::Model::ModelTypes::Dual
+    };
 
     TrainingModel2 (PicesRunLog^     _picesRunLog,
                     System::String^  _modelName
@@ -63,11 +74,11 @@ namespace PicesInterface
                    );
 
     TrainingModel2 (PicesRunLog^                 _picesRunLog,
-                    PicesTrainingConfiguration^  _config
+                    PicesTrainingConfigManaged^  _config
                    );
 
     /** 
-     *@brief  Will creae an instance to be used with an already existing instance of 'TrainingProcess2'.
+     *@brief  Will create an instance to be used with an already existing instance of 'TrainingProcess2'.
      *@details I created this to help get a break down of a prediction on a Dual class classifier.
      */
     TrainingModel2 (PicesRunLog^         _picesRunLog,
@@ -93,7 +104,7 @@ namespace PicesInterface
     property  int               ImagesPerClass           {int               get ();}
     property  String^           ModelName                {String^           get ()  {return  modelName;}}
     property  ModelTypes        ModelType                {ModelTypes        get ();}
-    property  uint              NumHierarchialLevels     {uint              get ();}     // returns back the number of hierarchail levels there
+    property  uint              NumHierarchialLevels     {uint              get ();}     // returns back the number of hierarchical levels there
     property  PicesClass^       OtherClass               {PicesClass^       get ();}
     property  String^           ParameterStr             {String^           get ();}
     property  String^           RootDir                  {String^           get ();}
@@ -119,14 +130,17 @@ namespace PicesInterface
                                     bool          onLine  
                                    );
 
+
+    void  AttachMsgQueueToRunLog (PicesMsgQueue^  msgQueue);
+
+
     void  BuildTrainingModel (PicesFeatureVectorList^  picesTrainingData);
 
 
     void  CancelLoad ();   // Sets cancel flag to terminate loading of training model.
 
-    PicesClassList^  MLClasses ();  // Will return a list of classes that belong to this model. 
-                                       // It will be created from "classList".  So the the caller 
-                                       // can do with it as they want.
+    PicesClassList^  MLClasses ();  // Will return a list of classes that belong to this model. It will be created from 
+                                    // "classList".  So the caller can do with it as they want.
 
     String^  DirectoryPathForClass (PicesClass^  mlClass);
 
@@ -138,10 +152,11 @@ namespace PicesInterface
 
     String^  LastRunLogTextLine ();
 
+    void  BuildNewTrainedModel ();
+
     void  LoadExistingTrainedModel ();
 
-    void  LoadExistingModelOtherwiseBuild (PicesMsgQueue^  msgQueue  /**< Will attach message queue to runLog */
-                                          );
+    void  LoadExistingModelOtherwiseBuild (PicesMsgQueue^  msgQueue);  /**< Will attach message queue to runLog */
 
     void  LoadTrainigLibrary (bool  forceRebuild);
 
@@ -168,7 +183,7 @@ namespace PicesInterface
                        );
 
 
-    // This call assumes that there was a sucessfull call to PredictProbabilities before.
+    // This call assumes that there was a successful call to PredictProbabilities before.
     PicesPredictionList^   BinaryProbailitiesForClass (PicesClass^  leftClass);
 
     array<PicesInterface::ProbNamePair^>^  
@@ -227,35 +242,35 @@ namespace PicesInterface
     void     ErrorMsgsAdd (const VectorKKStr&  _errorMsgs);
 
 
-    TrainingConfiguration2Ptr   GetConfigToUse ();
+    PicesTrainingConfigurationConstPtr   GetConfigToUse ();
 
     void  PopulateCSharpClassList ();
 
     void  UpdateMemoryPressure ();
 
 
-    bool*                     cancelFlag;
-    Classifier2Ptr            classifier;
-    MLClassConstListPtr    classes;
-    TrainingConfiguration2Ptr config;
-    double**                  crossProbTable;
-    int                       crossProbTableNumClasses;
-    int                       curMemoryPressure;
-    List<String^>^            errorMsgs;     /**< Error messages for later recall are added to this list. */
-    bool                      loadTrainingLibraryRunning;
-    System::String^           modelName;
-    PicesRunLog^              picesRunLog;
-    double*                   probabilities;
-    RunLogPtr                 runLog;
-    String^                   runLogFileName;
-    int                       runLogLastLineNum;
-    KKStrPtr                  statusMsg;
-    TrainingProcess2Ptr       trainer;
-    bool                      trainerWeOwn;
-    bool*                     valid;     // True if Training Library Valid
-    int*                      votes;
+    bool*                         cancelFlag;
+    Classifier2Ptr                classifier;
+    MLClassListPtr                classes;
+    PicesTrainingConfigurationPtr config;
+    double**                      crossProbTable;
+    int                           crossProbTableNumClasses;
+    int                           curMemoryPressure;
+    List<String^>^                errorMsgs;     /**< Error messages for later recall are added to this list. */
+    bool                          loadTrainingLibraryRunning;
+    System::String^               modelName;
+    PicesRunLog^                  picesRunLog;
+    double*                       probabilities;
+    RunLogPtr                     runLog;
+    String^                       runLogFileName;
+    int                           runLogLastLineNum;
+    PicesMsgQueue^                runLogMsgQueue;
+    TrainingProcess2Ptr           trainer;
+    bool                          trainerWeOwn;
+    bool*                         valid;     // True if Training Library Valid
+    int*                          votes;
 
-    PicesClassList^           classList;
-    array<Pen^>^              colorValues;
+    PicesClassList^               classList;
+    array<Pen^>^                  colorValues;
   };
 }

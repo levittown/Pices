@@ -33,7 +33,7 @@ namespace GradeTrainingModel
         if  (fv == null)
           return "";
         else
-          return fv.ImageFileName;
+          return fv.ExampleFileName;
       }
     }
 
@@ -43,8 +43,8 @@ namespace GradeTrainingModel
     public  PicesFeatureVector  fv;
     public  TrainingModel2      trainModel;
     public  bool                partOfClassifier;  /**< Indicates that the known class of the example belongs to the Classifier
-                                                   * before ClassName reduction specified by training level.
-                                                   */
+                                                    * before ClassName reduction specified by training level.
+                                                    */
   }  /* Prediction*/
 
 }

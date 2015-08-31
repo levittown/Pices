@@ -63,9 +63,12 @@
       this.DeploymentHighlightedLabel = new System.Windows.Forms.Label();
       this.DeploymentHighlighted = new System.Windows.Forms.TextBox();
       this.PlotCruiseField = new System.Windows.Forms.CheckBox();
+      this.PaddingKmsLabel = new System.Windows.Forms.Label();
+      this.PaddingKms = new System.Windows.Forms.NumericUpDown();
       this.SelectionCriteriaPanel.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.ProfileChart)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.TimeInterval)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.PaddingKms)).BeginInit();
       this.SuspendLayout();
       // 
       // SelectionCriteriaPanel
@@ -379,11 +382,45 @@
       this.PlotCruiseField.Text = "Plot Cruise";
       this.PlotCruiseField.UseVisualStyleBackColor = true;
       // 
+      // PaddingKmsLabel
+      // 
+      this.PaddingKmsLabel.AutoSize = true;
+      this.PaddingKmsLabel.Location = new System.Drawing.Point(101, 361);
+      this.PaddingKmsLabel.Name = "PaddingKmsLabel";
+      this.PaddingKmsLabel.Size = new System.Drawing.Size(46, 13);
+      this.PaddingKmsLabel.TabIndex = 60;
+      this.PaddingKmsLabel.Text = "Padding";
+      // 
+      // PaddingKms
+      // 
+      this.PaddingKms.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.PaddingKms.Location = new System.Drawing.Point(98, 377);
+      this.PaddingKms.Maximum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+      this.PaddingKms.Minimum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            65536});
+      this.PaddingKms.Name = "PaddingKms";
+      this.PaddingKms.Size = new System.Drawing.Size(54, 23);
+      this.PaddingKms.TabIndex = 32;
+      this.PaddingKms.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            65536});
+      // 
       // ChartGPS
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(967, 536);
+      this.Controls.Add(this.PaddingKmsLabel);
+      this.Controls.Add(this.PaddingKms);
       this.Controls.Add(this.PlotCruiseField);
       this.Controls.Add(this.DeploymentHighlightedLabel);
       this.Controls.Add(this.DeploymentHighlighted);
@@ -414,6 +451,7 @@
       this.SelectionCriteriaPanel.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)(this.ProfileChart)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.TimeInterval)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.PaddingKms)).EndInit();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -447,6 +485,8 @@
     private System.Windows.Forms.Label DeploymentHighlightedLabel;
     private System.Windows.Forms.TextBox DeploymentHighlighted;
     private System.Windows.Forms.CheckBox PlotCruiseField;
+    private System.Windows.Forms.Label PaddingKmsLabel;
+    private System.Windows.Forms.NumericUpDown PaddingKms;
 
 
   }

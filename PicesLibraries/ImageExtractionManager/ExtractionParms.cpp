@@ -4,13 +4,10 @@
 #include <fstream>
 #include <vector>
 #include "MemoryDebug.h"
-
 #if  defined(_WINDOWS)
 typedef wchar_t WCHAR;
 #endif
-
 using namespace std;
-
 
 
 #include "KKBaseTypes.h"
@@ -20,12 +17,11 @@ using namespace std;
 #include "RunLog.h"
 using namespace KKB;
 
-#include "SipperBuff.h"
-#include "SipperFile.h"
-using namespace SipperHardware;
 
 #include "DataBase.h"
-#include "TrainingConfiguration2.h"
+#include "PicesTrainingConfiguration.h"
+#include "SipperBuff.h"
+#include "SipperFile.h"
 using namespace MLL;
 
 
@@ -96,7 +92,7 @@ ExtractionParms::ExtractionParms (KKStr    progName,
 
 
 
-ExtractionParms::ExtractionParms (int      argc,
+ExtractionParms::ExtractionParms (kkint32  argc,
                                   char**   argv,
                                   bool     _runningAsAWindowsApp,
                                   KKStr&   errorMessage,
@@ -456,7 +452,7 @@ void  ExtractionParms::ParseCmdLine (const CmdLineExpander&  cmdLineExpander,
     else if  ((switchStr == "-C")  ||  (switchStr == "-CONFIG"))
     {
       configFileNameSpecified = parmStr;
-      configFileName = TrainingConfiguration2::GetEffectiveConfigFileName (parmStr);
+      configFileName = PicesTrainingConfiguration::GetEffectiveConfigFileName (parmStr);
     }
 
     else if  ((switchStr == "-COLORIZE")  ||  (switchStr == "-COLOR"))

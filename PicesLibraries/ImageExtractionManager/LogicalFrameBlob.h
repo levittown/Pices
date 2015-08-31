@@ -15,11 +15,13 @@
  @endcode
 */
 
-#include  "KKBaseTypes.h"
-#include  "KKQueue.h"
-#include  "RasterSipper.h"
-#include  "KKStr.h"
+#include "KKBaseTypes.h"
+#include "KKQueue.h"
+#include "KKStr.h"
+using namespace  KKB;
 
+#include "RasterSipper.h"
+using namespace  MLL;
 
 namespace  ImageExtractionManager  
 {

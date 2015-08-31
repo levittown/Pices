@@ -57,7 +57,7 @@ namespace PicesCommander
 
       runLog = new PicesRunLog ();
       InitializeComponent ();
-      DestinationDirectory.Text =  OSservices.AddSlash  (OSservices.AddSlash (PicesSipperVariables.PicesHomeDir ()) + "SavedImages");
+      DestinationDirectory.Text =  OSservices.AddSlash  (OSservices.AddSlash (PicesSipperVariables.HomeDir ()) + "SavedImages");
       OSservices.CreateDirectoryPath (DestinationDirectory.Text);
        
       //  PicesTempDirectory ());

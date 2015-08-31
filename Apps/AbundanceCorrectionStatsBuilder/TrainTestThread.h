@@ -3,8 +3,16 @@
 
 #include "MsgQueue.h"
 
-#include "AbundanceCorrectionMatrix.h"
+
 #include "ConfusionMatrix2.h"
+using namespace  KKMLL;
+
+
+#include "PicesTrainingConfiguration.h"
+using namespace  MLL;
+
+
+#include "AbundanceCorrectionMatrix.h"
 
 namespace  AbundanceCorrectionApplication
 {
@@ -14,11 +22,11 @@ namespace  AbundanceCorrectionApplication
   #endif
 
 
-  typedef  enum  {tsNotStarted,
-                  tsStarting,
-                  tsRunning,
-                  tsStopping,
-                  tsStopped
+  typedef  enum  {NotStarted,
+                  Starting,
+                  Running,
+                  Stopping,
+                  Stopped
                  } 
                    ThreadStatus;
 
@@ -30,12 +38,12 @@ namespace  AbundanceCorrectionApplication
   public:
     TrainTestThread (const KKStr&                        _desc,
                      AbundanceCorrectionStatsBuilderPtr  _parent,
-                     TrainingConfiguration2Ptr           _config,           /**< Will NOT  take ownership.       */
-                     MLClassConstListPtr              _allClasses,
+                     PicesTrainingConfigurationPtr       _config,           /**< Will NOT  take ownership.       */
+                     MLClassListPtr                      _allClasses,
                      FeatureVectorListPtr                _trainData,        /**< Will take ownship of this list. */
-                     MLClassConstListPtr              _trainDataClasses,
+                     MLClassListPtr                      _trainDataClasses,
                      FeatureVectorListPtr                _testData,         /**< Will take ownship of this list. */
-                     MLClassConstPtr                  _otherClass,
+                     MLClassPtr                          _otherClass,
                      const KKStr&                        _threadName,
                      MsgQueuePtr                         _msgQueue,
                      RunLogPtr                           _runLog
@@ -84,7 +92,7 @@ namespace  AbundanceCorrectionApplication
     AbundanceCorrectionMatrixPtr         abundanceCorMatrix;
 
     const
-    MLClassConstListPtr               allClasses;     /**<  Will be owned by parent.  */
+    MLClassListPtr                       allClasses;     /**<  Will be owned by parent.  */
 
     volatile bool                        cancelFlag;     /**< Threads need to monotir this flag;  if it goes 'true'  they need 
                                                           * to terminate as quick as possible.
@@ -103,7 +111,7 @@ namespace  AbundanceCorrectionApplication
     MsgQueuePtr                          msgQueue;       /**< This MsgQueue instance will be owned by 'ExtractionManager' we will just use
                                                           * it to communicate messeges to the controlling process.
                                                           */
-    MLClassConstPtr                   otherClass;
+    MLClassPtr                           otherClass;
 
     AbundanceCorrectionStatsBuilderPtr   parent;
 
@@ -121,7 +129,7 @@ namespace  AbundanceCorrectionApplication
     FeatureVectorListPtr                 trainData;
 
     const
-    MLClassConstListPtr               trainDataClasses;  /**<  Will be owned by parent.  */
+    MLClassListPtr                       trainDataClasses;  /**<  Will be owned by parent.  */
 
 
     //  Data structures and methods specific to Windows thread management.

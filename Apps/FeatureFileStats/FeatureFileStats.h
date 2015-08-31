@@ -43,7 +43,7 @@ private:
   bool                  cancelFlag;
   FeatureVectorListPtr  data;
 
-  MLClassConstList      mlClasses;
+  MLClassList      mlClasses;
 
 	ostream*              report;
 	ofstream*             reportFile;

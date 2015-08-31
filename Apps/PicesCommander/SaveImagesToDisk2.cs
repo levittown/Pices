@@ -38,6 +38,7 @@ namespace PicesCommander
 
     int     imagsPerDir = 10000;
 
+
     PicesRunLog  runLog = null;
 
     bool    errorsFound = false;
@@ -122,7 +123,7 @@ namespace PicesCommander
       else
         DepthMax.Text = depthMax.ToString ("##,##0.00");
 
-      DestinationDirectory.Text =  OSservices.AddSlash  (OSservices.AddSlash (PicesSipperVariables.PicesHomeDir ()) + "SavedImages");
+      DestinationDirectory.Text =  OSservices.AddSlash  (OSservices.AddSlash (PicesSipperVariables.HomeDir ()) + "SavedImages");
       OSservices.CreateDirectoryPath (DestinationDirectory.Text);
        
       //  PicesTempDirectory ());
@@ -347,7 +348,7 @@ namespace PicesCommander
 
           else if  ((includeStationAndDeploymentInDirName)  &&  
                     ((sf.StationName != lastStation)  ||  (sf.DeploymentNum != lastDeployment))
-                   )
+              )
             startANewDir = true;
 
           if  (startANewDir)
@@ -359,14 +360,14 @@ namespace PicesCommander
 
             if  (includeStationAndDeploymentInDirName)
             {
-              if  (!String.IsNullOrEmpty (lastCruise))
-                dirPath = OSservices.AddSlash (dirPath) + lastCruise;
+            if  (!String.IsNullOrEmpty (lastCruise))
+              dirPath = OSservices.AddSlash (dirPath) + lastCruise;
 
-              if  (!String.IsNullOrEmpty (lastStation))
-                dirPath = OSservices.AddSlash (dirPath) + lastStation;
+            if  (!String.IsNullOrEmpty (lastStation))
+              dirPath = OSservices.AddSlash (dirPath) + lastStation;
 
-              if  (!String.IsNullOrEmpty (lastDeployment))
-                dirPath = OSservices.AddSlash (dirPath) + lastDeployment;
+            if  (!String.IsNullOrEmpty (lastDeployment))
+              dirPath = OSservices.AddSlash (dirPath) + lastDeployment;
             }
 
             OSservices.CreateDirectoryPath (dirPath);

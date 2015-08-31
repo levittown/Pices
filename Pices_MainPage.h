@@ -37,7 +37,7 @@
  * - SipperFleViewer A simple viewer application that allows the user to view the raw sipper data, both
  *                  imagery and instrumentation data.
  *
- * - GradeTrainingModel GUI Tool to grade the different training libraries against user ground truthed data;
+ * - GradeTrainingModel GUI Tool to grade the different training libraries against user ground-truthed data;
  *                  generates reports where user can select the classification granularity with respect to
  *                  class hierarchy.
  *
@@ -45,7 +45,7 @@
  *
  * - SpatialAnalysis 
  *
- * - @link CrossValidationApp  CrossValidation @endlink
+ * - CrossValidationApp  Application that will perform various flavors of the tradition n-fold cross validation.
  *
  * - @link FeatureSelectionApp FeatureSelection @endlink  Application that will tune SVM parameters and image extracted features to 
  *                   maximize classification accuracy;  it was decide to run on a cluster; the more
@@ -62,51 +62,59 @@
  * There are several libraries that are utilized by the various applications.
  *
  *List of Libraries:
- * - @link KKU BaseLibrary(c++) @endlink  Basic functionality that is common to other libraries and applications. Some examples 
- *                include string management(@link KKU::KKStr KKStr @endlink), Matrix operations(@link MLL::Matrix Matrix @endlink), 
- *                Image Processing(@link KKU::Raster Raster@endlink), Token Parsing(@link KKU::Tokenizer Tokenizer @endlink), 
+ * - @link KKB KKBase(c++) @endlink  Basic functionality that is common to other libraries and applications. Some examples 
+ *                include string management(@link KKB::KKStr KKStr @endlink), Matrix operations(@link KKB::Matrix Matrix @endlink), 
+ *                Image Processing(@link KKB::Raster Raster @endlink), Token Parsing(@link KKB::Tokenizer Tokenizer @endlink), 
  *                Statistics, Histogramming, and common operating system specific routines. Most O/S specific code is implemented in the 
- *                module "osServices.cpp" moodule. Thread management is implemented in the two classes @link KKU::KKThread KKThread @endlink and 
- *                @link KKU::KKThreadManager KKThreadManager @endlink. This is an earlier version of the of the KKBase library found 
+ *                module "osServices.cpp" module. Thread management is implemented in the two classes @link KKB::KKThread KKThread @endlink and 
+ *                @link KKB::KKThreadManager KKThreadManager @endlink. This is an earlier version of the of the KKBase library found 
  *                in "KSquareLibraries".
  *
- * - @link SipperHardware  SipperIstruments(c++) @endlink Classes and functions that are specific to the SIPPER platform are maintained in
- *                this library. Examples are a group of classes meant to process the different SIPPER
- *                file formats going back to the original SIPPER I platform.
- *     -# @link SipperHardware::SipperBuff SipperBuff @endlink Base class to the different SIPPER FIle Formats; provides generalized support for processing SIPPER Files.
- *     -# @link SipperHardware::InstrumentData InstrumentData @endlink Maintains the various instrument data fields that are embedded or associated with a SIPPER file such
- *                       as Depth, Pith, Roll, GPS Coordinates, Temperatue, etc ...
- *     -# @link SipperHardware::InstrumentDataReport InstrumentDataReport @endlink Base class to the different devices that will embed data into
- *                       the SIPPER File,such as the Pitch and Roll sensor, CTD, Battery. Each specialization of this class will have the knowlede 
- *                       on how to interpret/pase the related data stream.
- *     -# @link SipperHardware::InstrumentDataManager InstrumentDataManager @endlink Central reporting facility that all 
+ * - @link KKMLL KKMachineLearning(c++) @endlink  Classes required to support Machine Learning functionality.
+ *     -# @link KKMLL::FeatureFileIO FeatureFileIO @endlink Several common feature data file formats are supported. (sparse, arff, 
+ *                c45, etc...)
+ *     -# @link KKMLL::TrainingConfiguration2 Training-Model-Configuration @endlink class and routines that maintain classifier parameters; 
+ *                such as classifier type.
+ *     -# @link KKMLL::MLClass  Machine Learning Classes @endlink and containers for tracking lists of classes.
+ *     -# Hierarchical Class naming is supported.
+ *     -# @link KKMLL::FeatureVector "FeatureVector" @endlink General purpose container for @link KKMLL::FeatureVector FeatureVector @endlink derived instances.
+ *     -# @link KKMLL::FeatureVectorList "FeatureVectorList" @endlink  General purpose container for @link KKMLL::FeatureVector FeatureVector @endlink derived instances.
+ *     -# @link KKMLL::NormalizationParms Normalization @endlink for FeatureData.
+ *     -# @link KKMLL::ConfusionMatrix2 Confusion-Matrix @endlink Object used to capture prediction information and build a confusion matrix.
+ *     -# @link KKMLL::CrossValidation CrossValidation @endlink Example 10 fold CV; also (N x X) cross Validation; typically used by grading a classifier.
+ *     -# @link KKMLL::Model Training-Model-Implementations @endlink  Pair-Wise Feature selected SVM, Common Features SVM, UsfCasCor, and Dual.
+ *     -# @link KKMLL::FeatureVectorProducer FeatureVectorProducer @endlink  A abstract class used to define the interfaces required for Creating 
+ *                     @link KKMLL::FeatureVector FeatureVector @endlink derived instances from a source object. Examples are 
+ *                     @link KKMLL::GrayScaleImagesFVProducer GrayScaleImagesFVProducer @endlink computes instances of @link KKMLL::GrayScaleImagesFV GrayScaleImagesFV @endlink
+ *                     feature-vectors; or @link MLL::PicesFVProducer PicesFVProducer @endlink produces a Pices specific feature vector.
+ *
+ * - @link MLL PicesLibary(c++) @endlink  Classes and Code that is specific to the Sipper and Pices World Examples are a group of classes meant 
+ *                 to process the different SIPPER file formats going back to the original SIPPER-I platform. A class for MySQL Database interface,
+ *                 a specialized Pices version of @link KKMLL::TrainingConfiguration2 TrainingConfiguration2 @endlink called PicesTrainigConfiguration.
+ *     -# @link MLL::SipperBuff SipperBuff @endlink Base class to the different SIPPER FIle Formats; provides generalized support for processing SIPPER Files.
+ *     -# @link MLL::InstrumentData InstrumentData @endlink Maintains the various instrument data fields that are embedded or associated with a SIPPER file such
+ *                       as Depth, Pith, Roll, GPS Coordinates, Temperature, etc ...
+ *     -# @link MLL::InstrumentDataReport InstrumentDataReport @endlink Base class to the different devices that will embed data into
+ *                       the SIPPER File,such as the Pitch and Roll sensor, CTD, Battery. Each specialization of this class will have the knowledge 
+ *                       on how to interpret/parse the related data stream.
+ *     -# @link MLL::InstrumentDataManager InstrumentDataManager @endlink Central reporting facility that all 
  *                      'InstrumentDataReport' derived classes send there data thru to be fused together resulting in instances
  *                      of 'InstrumentData'.
- * 
- * - @link MLL PicesLibary(c++) @endlink  Classes and Code that support Machine-Learning and specific Pices imaging routines. Other
- *                functionality includes MySQL DataBase. 
- *     -# @link MLL::FeatureFileIO FeatureFileIO @endlink Several common feature data file formats are supported. (sparse, arff, 
- *                c45, etc...)
- *     -# @link MLL::TrainingConfiguration2 Training-Model-Configuration @endlink class and routines that maintain classifier parameters; 
- *                such as classifier type.
- *     -# @link MLL::MLClass  Machine Learning Classes @endlink and containers for tracking lists of classes.
- *     -# Hierarchical Class naming is supported.
- *     -# FeatureData containers  @link MLL::FeatureVectorList "FeatureVectorList" @endlink and @link MLL::ImageFeaturesList "ImageFeaturesList" @endlink, 
-                              stratifying by class.
- *     -# @link MLL::NormalizationParms Normalization @endlink for FeatureData.
- *     -# @Link MLL::ConfusionMatrix2 Confusion-Matrix @endlnk
- *     -# @link MLL::CrossValidation CrossValidation @endlink Example 10 fold CV; also (N x X) cross Validation; typically used by grading a classifier.
- *     -# @link MLL::Model Training-Model-Implementations @endlink  Pair-Wise Feature selected SVM, Common Features SVM, UsfCasCor, and Dual.
+ *     -# @link MLL::FeatureFileIOPices FeatureFileIOPices @endlink A Pices specific derived class of @link KKMLL::FeatureFileIO  FeatureFileIO @endlink
+ *                      that supports the reading and writing of a Pices specific feature data.
+ *     -# @link MLL::PicesTrainingConfiguration PicesTrainingConfiguration @endlink Specialized configuration file for a Pices Training Library.
+ *     -# @link MLL::ImageFeatures  ImageFeatures @endlink  A SIPPER specific implementation of @link KKMLL::FeatureVector FeatureVector @endlink class 
+ *                      that is aware of SIPPER elements such as CTD Instrumentation data, GPS coordinates, Flow-rates, etc... 
  *
- * - PicesInterface (cli/c++) A mixed Managed/Unmanaged memory model library its purpose is to provide a interface
+ * - PicesInterface (cli/c++) A mixed Managed/Unmanaged memory model library; its purpose is to provide a interface
  *                           from the ".net" world to the unmanaged world of the O/S neutral c++ code.
  *
  * - ImageExtractionManager (c++) A frame work for extracting and classifying SIPPER imagery data; it will process
  *                           the raw SIPPER data using multiple threads to maximize throughput.
  *
- * - @link JobManagment JobManager @endlink Two classes that simplify the implementation of a parallelizable application. It manages
- *                           discrete jobs with theire interdependencies. So far only RandomSplits makes use of this library; but
- *                           FeatureSelection would be an excelent candidate for utlizing this framework.
+ * - @link JobManagment JobManager @endlink Two classes that simplify the implementation of a parallelizable applications. It manages
+ *                           discrete jobs with their interdependencies. So far only RandomSplits makes use of this library; but
+ *                           FeatureSelection would be an excellent candidate for utilizing this framework.
  *
  * - SipperFile (c#) .net classes used by the different GUI applications.
  * 

@@ -59,7 +59,7 @@ private:
   FeatureNumListPtr     features;    // When equial NULL means All features.
   KKStr                 featureStr;  
 
-  MLClassConstList   mlClasses;
+  MLClassList   mlClasses;
 
   bool                  normalizeData;
   KKStr                 nornParmsFileName;

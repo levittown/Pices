@@ -1,6 +1,5 @@
 #include "StdAfx.h"
 #include "FirstIncludes.h"
-
 #include <stdio.h>
 #include <math.h>
 #include <ctype.h>
@@ -29,8 +28,11 @@ using namespace KKB;
 #include "ClassProb.h"
 #include "FeatureFileIOPices.h"
 #include "InstrumentDataFileManager.h"
-#include "SipperVariables.h"
-#include "TrainingConfiguration2.h"
+#include "PicesVariables.h"
+using namespace  KKMLL;
+
+
+#include "PicesTrainingConfiguration.h"
 using namespace  MLL;
 
 
@@ -38,7 +40,7 @@ using namespace  MLL;
 #include "PicesFeatureVectorList.h"
 #include "PicesOSservices.h"
 #include "PicesSipperVariables.h"
-#include "PicesTrainingConfiguration.h"
+#include "PicesTrainingConfigManaged.h"
 #include "PicesKKStr.h"
 #include "PicesRaster.h"
 #include "TrainingModel2.h"
@@ -57,7 +59,6 @@ namespace  PicesInterface
 TrainingModel2::TrainingModel2 (PicesRunLog^     _picesRunLog,
                                 System::String^  _modelName
                                ):
-
               cancelFlag                 (new bool),
               classifier                 (NULL),
               classes                    (NULL),
@@ -74,12 +75,11 @@ TrainingModel2::TrainingModel2 (PicesRunLog^     _picesRunLog,
               runLog                     (NULL),
               runLogFileName             (nullptr),
               runLogLastLineNum          (0),
-              statusMsg                  (new KKStr ()),
+              runLogMsgQueue             (nullptr),
               trainer                    (NULL),
               trainerWeOwn               (false),
               valid                      (new bool (true)),
               votes                      (NULL)
-               
 {
   if  (System::String::IsNullOrEmpty (_modelName))
   {
@@ -101,7 +101,7 @@ TrainingModel2::TrainingModel2 (PicesRunLog^     _picesRunLog,
 
 
 TrainingModel2::TrainingModel2 (PicesRunLog^                 _picesRunLog,
-                                PicesTrainingConfiguration^  _config
+                                PicesTrainingConfigManaged^  _config
                                ):
 
               cancelFlag                 (new bool),
@@ -120,7 +120,7 @@ TrainingModel2::TrainingModel2 (PicesRunLog^                 _picesRunLog,
               runLog                     (NULL),
               runLogFileName             (nullptr),
               runLogLastLineNum          (0),
-              statusMsg                  (new KKStr ()),
+              runLogMsgQueue             (nullptr),
               trainer                    (NULL),
               trainerWeOwn               (false),
               valid                      (new bool (true)),
@@ -136,7 +136,7 @@ TrainingModel2::TrainingModel2 (PicesRunLog^                 _picesRunLog,
   GC::Collect ();
   CreateRunLog ();
   osRunAsABackGroundProcess ();
-  config = new TrainingConfiguration2 (*(_config->Config ()));
+  config = new PicesTrainingConfiguration (*(_config->Config ()));
   UpdateMemoryPressure ();
 }
 
@@ -163,7 +163,7 @@ TrainingModel2::TrainingModel2 (PicesRunLog^                _picesRunLog,
               runLog                     (NULL),
               runLogFileName             (nullptr),
               runLogLastLineNum          (0),
-              statusMsg                  (new KKStr ()),
+              runLogMsgQueue             (nullptr),
               trainer                    (NULL),
               trainerWeOwn               (false),
               valid                      (new bool (true)),
@@ -189,16 +189,15 @@ TrainingModel2::TrainingModel2 (PicesRunLog^                _picesRunLog,
 
   CreateRunLog ();
 
-  KKStr  configFileName = osAddSlash (SipperVariables::TrainingModelsConfigurationDir ()) + modelNameKKStr;
+  KKStr  configFileName = osAddSlash (PicesVariables::TrainingModelsConfigurationDir ()) + modelNameKKStr;
 
-  FileDescPtr fd = FeatureFileIOPices::NewPlanktonFile (*runLog);
+  FileDescPtr fd = FeatureFileIOPices::NewPlanktonFile ();
 
 
   try
   {
-    config = TrainingConfiguration2::CreateFromDirectoryStructure 
-                                          (fd,
-                                           configFileName,
+    config = PicesTrainingConfiguration::CreateFromDirectoryStructure 
+                                          (configFileName,
                                            dirName,
                                            *runLog,
                                            successful,
@@ -247,7 +246,7 @@ TrainingModel2::TrainingModel2 (PicesRunLog^         _picesRunLog,
               runLog                     (NULL),
               runLogFileName             (nullptr),
               runLogLastLineNum          (0),
-              statusMsg                  (new KKStr ()),
+              runLogMsgQueue             (nullptr),
               trainer                    (_trainer),
               trainerWeOwn               (false),
               valid                      (new bool (true)),
@@ -267,8 +266,9 @@ TrainingModel2::TrainingModel2 (PicesRunLog^         _picesRunLog,
 
   KKStr  errorMessage;
 
-  if  (trainer->Config ())
-    config = new TrainingConfiguration2 (*(trainer->Config ()));
+  TrainingConfiguration2ConstPtr  c = trainer->Config ();
+  if  (c)
+    config = new PicesTrainingConfiguration (*c);
 
   if  (trainer->Abort ())
     *valid = false;
@@ -277,7 +277,7 @@ TrainingModel2::TrainingModel2 (PicesRunLog^         _picesRunLog,
   delete  classes;  classes = NULL;
 
   if  (trainer->MLClasses ())
-    classes = new MLClassConstList (*(trainer->MLClasses ()));
+    classes = new MLClassList (*(trainer->MLClasses ()));
 
   PopulateCSharpClassList ();
 
@@ -321,7 +321,6 @@ void  TrainingModel2::UpdateMemoryPressure ()
   if  (classifier)  newMemoryPressure += classifier->MemoryConsumedEstimated ();
   if  (classes)     newMemoryPressure += classes->MemoryConsumedEstimated ();
   if  (config)      newMemoryPressure += config->MemoryConsumedEstimated ();
-  if  (statusMsg)   newMemoryPressure += statusMsg->MemoryConsumedEstimated ();
 
   if  (trainer  && trainerWeOwn)
     newMemoryPressure += trainer->MemoryConsumedEstimated ();
@@ -343,6 +342,9 @@ void  TrainingModel2::CleanUpUnmanagedResources ()
 {
   delete  classifier;
   classifier = NULL;
+
+  if  (runLog)
+    runLog->AttachMsgQueue (NULL);
 
   if  (trainerWeOwn)
   {
@@ -381,7 +383,6 @@ void  TrainingModel2::CleanUpUnmanagedResources ()
   delete  cancelFlag;      cancelFlag     = NULL;
   delete  classes;         classes        = NULL;
   delete  config;          config         = NULL;
-  delete  statusMsg;       statusMsg      = NULL;
   delete  valid;           valid          = NULL;
   delete  probabilities;   probabilities  = NULL;
   delete  votes;           votes          = NULL;
@@ -393,7 +394,6 @@ void  TrainingModel2::CleanUpUnmanagedResources ()
     delete  crossProbTable;
     crossProbTable = NULL;
   }
-
 
   if  (runLog)
   {
@@ -435,12 +435,24 @@ TrainingModel2^   TrainingModel2::CreateTrainingModelRight ()
 
 
 
+void  TrainingModel2::AttachMsgQueueToRunLog (PicesMsgQueue^  msgQueue)
+{
+  if  (runLog != nullptr)
+  {
+    runLogMsgQueue = msgQueue;
+    if  (runLogMsgQueue == nullptr)
+      runLog->AttachMsgQueue (NULL);
+    else if  (runLog != nullptr)
+      runLog->AttachMsgQueue (msgQueue->MsgQueue ());
+  }
+}
+
 
 void  TrainingModel2::CreateRunLog ()
 {
   if  (runLog == NULL)
   {
-    String^  dir = OSservices::AddSlash (PicesSipperVariables::PicesTempDirectory ()) + "RunLogs";
+    String^  dir = OSservices::AddSlash (PicesSipperVariables::TempDirectory ()) + "RunLogs";
     OSservices::CreateDirectoryPath (dir);
 
     bool fileNameAlreadyUsed = true;
@@ -454,6 +466,8 @@ void  TrainingModel2::CreateRunLog ()
       while  (fileNameAlreadyUsed);
 
     runLog = new RunLog (PicesKKStr::SystemStringToKKStr (runLogFileName).Str ());
+    if  (runLogMsgQueue != nullptr)
+      runLog->AttachMsgQueue (runLogMsgQueue->MsgQueue ());
   }
 }  /* CreateRunLog */
 
@@ -461,11 +475,7 @@ void  TrainingModel2::CreateRunLog ()
 
 String^  TrainingModel2::LastRunLogTextLine ()
 {
-  if  (runLog == NULL)
-    return nullptr;
-
   String^  lastLine = nullptr;
-
   if  (runLogLastLineNum != runLog->LineCount ())
   {
     lastLine = gcnew String (PicesKKStr::KKStrToSystenStr (runLog->LastLine ()));
@@ -474,8 +484,6 @@ String^  TrainingModel2::LastRunLogTextLine ()
 
   return  lastLine;
 }  /* LastRunLogTextLine */
-
-
 
 
 
@@ -502,14 +510,14 @@ TrainingModel2::ModelTypes   TrainingModel2::ModelType::get ()
 
 PicesClass^  TrainingModel2::OtherClass::get ()
 {
-  MLClassConstPtr  otherClass = NULL;
+  MLClassPtr  otherClass = NULL;
 
   if  (config)
     otherClass = config->OtherClass ();
 
   else if  (!trainer)
   {
-    TrainingConfiguration2Ptr trainConfig = trainer->Config ();
+    TrainingConfiguration2ConstPtr trainConfig = trainer->Config ();
     if  (config)
       otherClass = trainConfig->OtherClass ();
   }
@@ -525,22 +533,21 @@ PicesClass^  TrainingModel2::OtherClass::get ()
 
 String^  TrainingModel2::RootDir::get ()
 {
-  TrainingConfiguration2Ptr  configToUse = GetConfigToUse ();
+  PicesTrainingConfigurationConstPtr  configToUse = GetConfigToUse ();
   if  (configToUse)
      return PicesKKStr::KKStrToSystenStr (configToUse->RootDir ());
   else
-     return  OSservices::AddSlash (PicesSipperVariables::PicesHomeDir ()) + OSservices::GetRootName (modelName);
+     return  OSservices::AddSlash (PicesSipperVariables::HomeDir ()) + OSservices::GetRootName (modelName);
 }
 
 
 
 void  TrainingModel2::SaveConfiguration ()
 {
-  TrainingConfiguration2Ptr  configToUse = GetConfigToUse ();
+  PicesTrainingConfigurationConstPtr  configToUse = GetConfigToUse ();
   KKStr  fileName = configToUse->FileName ();
   if  (fileName.Empty ())
-    fileName = osAddSlash (SipperVariables::TrainingModelsConfigurationDir ()) + PicesKKStr::SystemStringToKKStr (modelName);
-
+    fileName = osAddSlash (PicesVariables::TrainingModelsConfigurationDir ()) + PicesKKStr::SystemStringToKKStr (modelName);
   configToUse->Save (fileName);
 }  /* SaveConfiguration*/
 
@@ -576,7 +583,7 @@ void  TrainingModel2::PopulateCSharpClassList ()
     int  idx;
     for  (idx = 0;  idx < crossProbTableNumClasses;  idx++)
     {
-      MLClassConstPtr  ic = classes->IdxToPtr (idx);
+      MLClassPtr  ic = classes->IdxToPtr (idx);
       System::String^  className = PicesKKStr::KKStrToSystenStr (ic->Name ());
       PicesClass^  cSharpClass = PicesClassList::GetUniqueClass (className, "");
       classList->Add (cSharpClass);
@@ -601,7 +608,7 @@ bool  TrainingModel2::IncludesClass (PicesClass^  mlClass)
   if  (mlClass == nullptr)
     return false;
 
-  TrainingConfiguration2Ptr  configToUse = GetConfigToUse ();
+  PicesTrainingConfigurationConstPtr  configToUse = GetConfigToUse ();
   if  (!configToUse)
     return false;
 
@@ -630,22 +637,14 @@ PicesClassList^  TrainingModel2::MLClasses ()
 void  TrainingModel2::LoadExistingModelOtherwiseBuild (PicesMsgQueue^  msgQueue)
 {
   if  ((runLog != NULL)  &&  (msgQueue != nullptr))
+  {
+    runLogMsgQueue = msgQueue;
     runLog->AttachMsgQueue (msgQueue->MsgQueue ());
+  }
 
   LoadExistingTrainedModel ();
   if  ((!trainer)  &&  (!(*cancelFlag)))
-    LoadTrainigLibrary (false);
-
-  if  ((!(*cancelFlag))  &&  (*valid))
-  {
-    delete  classes;  classes = NULL;
-    if  (trainer->MLClasses ())
-      classes = new MLClassConstList (*(trainer->MLClasses ()));
-    else
-      throw gcnew Exception ("TrainingModel2::LoadExistingModelOtherwiseBuild     (trainer->MLClasses() == NULL)");
-
-    PopulateCSharpClassList ();
-  }
+    BuildNewTrainedModel ();
 
   UpdateMemoryPressure ();
 } /* LoadExistingModelOtherwiseBuild */
@@ -663,26 +662,22 @@ void  TrainingModel2::LoadTrainingModelForGivenLevel (uint            level,
 
   InstrumentDataFileManager::InitializePush ();
 
-  FileDescPtr fd = FeatureFileIOPices::NewPlanktonFile (*runLog);
+  FileDescPtr fd = FeatureFileIOPices::NewPlanktonFile ();
 
   KKB::KKStr  configFileName = PicesKKStr::SystemStringToKKStr (modelName);
 
   *cancelFlag = false;
 
   if  ((msgQueue != nullptr)  &&  (runLog != NULL))
+  {
+    runLogMsgQueue = msgQueue;
     runLog->AttachMsgQueue (msgQueue->MsgQueue ());
+  }
 
   try
   {
     trainerWeOwn = true;
-    trainer = new TrainingProcess2 (configFileName,
-                                    NULL,
-                                    fd,
-                                    *runLog,
-                                    level,
-                                    *cancelFlag,
-                                    *statusMsg
-                                   );
+    trainer = TrainingProcess2::CreateTrainingProcessForLevel (configFileName, level, *cancelFlag, *runLog);
   }
   catch (System::AccessViolationException^ z)
   {
@@ -694,7 +689,7 @@ void  TrainingModel2::LoadTrainingModelForGivenLevel (uint            level,
     return;
   }
 
-  if  (trainer->Abort ())
+  if  ((!trainer)  ||  (trainer->Abort ()))
   {
     *valid = false;
     delete  trainer;    trainer = NULL;
@@ -705,7 +700,7 @@ void  TrainingModel2::LoadTrainingModelForGivenLevel (uint            level,
     delete  classes;  classes = NULL;
 
     if  (trainer->MLClasses ())
-      classes = new MLClassConstList (*(trainer->MLClasses ()));
+      classes = new MLClassList (*(trainer->MLClasses ()));
     else
       throw gcnew Exception ("TrainingModel2::LoadTrainingModelForGivenLevel     (trainer->MLClasses() == NULL)");
 
@@ -729,24 +724,15 @@ void  TrainingModel2::LoadExistingTrainedModel ()
 
   InstrumentDataFileManager::InitializePush ();
 
-  FileDescPtr fd = FeatureFileIOPices::NewPlanktonFile (*runLog);
+  FileDescPtr fd = FeatureFileIOPices::NewPlanktonFile ();
 
   KKB::KKStr  configFileName = PicesKKStr::SystemStringToKKStr (modelName);
 
   *cancelFlag = false;
-
- 
-
   try
   {
     trainerWeOwn = true;
-    trainer = new TrainingProcess2 (configFileName, 
-                                    fd, 
-                                    *runLog,
-                                    false,         // false = Features are not Already Normalized
-                                    *cancelFlag, 
-                                    *statusMsg
-                                   );
+    trainer = TrainingProcess2::LoadExistingTrainingProcess (configFileName, *cancelFlag, *runLog);
   }
   catch (System::AccessViolationException^ z)
   {
@@ -769,7 +755,7 @@ void  TrainingModel2::LoadExistingTrainedModel ()
     return;
   }
 
-  if  (trainer->Abort ())
+  if  ((!trainer)  ||  (trainer->Abort ()))
   {
     delete  trainer;  trainer = NULL;
     delete  classes;  classes = NULL;
@@ -784,7 +770,7 @@ void  TrainingModel2::LoadExistingTrainedModel ()
     delete  classes;  classes = NULL;
 
     if  (trainer->MLClasses ())
-      classes = new MLClassConstList (*(trainer->MLClasses ()));
+      classes = new MLClassList (*(trainer->MLClasses ()));
     else
       throw gcnew Exception ("LoadExistingTrainedModel    (trainer->MLClasses() == NULL)");
 
@@ -801,6 +787,110 @@ void  TrainingModel2::LoadExistingTrainedModel ()
 
 
 
+void  TrainingModel2::BuildNewTrainedModel ()
+{
+  ErrorMsgsClear ();
+
+  InstrumentDataFileManager::InitializePush ();
+
+  int x = 0;
+
+  GC::Collect ();
+
+  KKB::KKStr  configFileName = PicesKKStr::SystemStringToKKStr (modelName);
+
+  trainerWeOwn = true;
+
+  *cancelFlag = false;
+    
+  delete  trainer;
+  trainer = NULL;
+
+  if  (config)
+    delete config;
+  config = new PicesTrainingConfiguration ();
+  config->Load (configFileName, true, *runLog);
+  if  (!config->FormatGood ())
+  {
+    *runLog << endl << "TrainingModel2::BuildNewTrainedModel   ***ERROR***    Configuration[" << configFileName << "] invalid format." << endl;
+    *runLog << config->FormatErrors () << endl << endl;
+    *valid = false;
+    return;
+  }
+
+  try
+  {
+    /**@todo There is a memory corruption when the process is canceled. */
+    trainer = TrainingProcess2::CreateTrainingProcess (config,
+                                                       true,     // true = Check for duplicates.
+                                                       TrainingProcess2::WhenToRebuild::AlwaysRebuild,
+                                                       true,     // true = save model;
+                                                       *cancelFlag,
+                                                       *runLog
+                                                      );
+  }
+  catch (System::AccessViolationException^ z)
+  {
+    (*runLog) << "TrainingModel2::BuildNewTrainedModel   ***ERROR***  Memory Access Exception calling 'CreateTrainingProcess'" << endl
+      << PicesKKStr::SystemStringToKKStr (z->ToString ()) << endl;
+
+    delete  trainer;  trainer = NULL;
+    *valid = false;
+    InstrumentDataFileManager::InitializePop ();
+    UpdateMemoryPressure ();
+    return;
+  }
+  catch  (System::Exception^  z2)
+  {
+    (*runLog) << "TrainingModel2::BuildNewTrainedModel   ***ERROR***  Memory Access Exception calling 'CreateTrainingProcess'" << endl
+              << PicesKKStr::SystemStringToKKStr (z2->ToString ()) << endl;
+    delete  trainer;  trainer = NULL;
+    *valid = false;
+    InstrumentDataFileManager::InitializePop ();
+    UpdateMemoryPressure ();
+    return;
+  }
+
+  if  (*cancelFlag)
+  {
+    *valid = false;
+    delete  trainer;
+    trainer = NULL;
+  }
+
+  else if  (!trainer)
+  {
+    (*runLog) << "TrainingModel2::LoadTrainigLibrary   ***ERROR***  No TrainingProcess instance created." << endl;
+    *valid = false;
+  }
+
+  else if  (trainer->Abort ())
+  {
+    *valid = false;
+    delete  trainer;
+    trainer = NULL;
+  }
+  else
+  {
+    *valid = true;
+    delete  classes;  classes = NULL;
+    if  (trainer->MLClasses ())
+      classes = new MLClassList (*(trainer->MLClasses ()));
+    else
+      throw gcnew Exception ("TrainingModel2::LoadTrainigLibrary    (trainer->MLClasses() == NULL)");
+    classifier = new Classifier2 (trainer, *runLog);
+    PopulateCSharpClassList ();
+  }
+
+  InstrumentDataFileManager::InitializePop ();
+
+  UpdateMemoryPressure ();
+  GC::Collect ();
+}  /* BuildNewTrainedModel */
+
+
+
+
 void  TrainingModel2::LoadTrainigLibrary (bool  forceRebuild)
 {
   ErrorMsgsClear ();
@@ -811,7 +901,7 @@ void  TrainingModel2::LoadTrainigLibrary (bool  forceRebuild)
 
   GC::Collect ();
 
-  FileDescPtr fd = FeatureFileIOPices::NewPlanktonFile (*runLog);
+  FileDescPtr fd = FeatureFileIOPices::NewPlanktonFile ();
 
   KKB::KKStr  configFileName = PicesKKStr::SystemStringToKKStr (modelName);
 
@@ -819,19 +909,29 @@ void  TrainingModel2::LoadTrainigLibrary (bool  forceRebuild)
 
   *cancelFlag = false;
 
+  
+  delete  trainer;
+  trainer = NULL;
+
+  if  (config)
+    delete config;
+  config = new PicesTrainingConfiguration ();
+  config->Load (configFileName, true, *runLog);
+
+  TrainingProcess2::WhenToRebuild  whenToBuild = TrainingProcess2::WhenToRebuild::NotUpToDate;
+  if  (forceRebuild)
+    whenToBuild = TrainingProcess2::WhenToRebuild::AlwaysRebuild;
+
   try
   {
     /**@todo There is a memory corruption when the process is canceled. */
-    trainer = new TrainingProcess2 (configFileName, 
-                                    NULL,              // Exclude List
-                                    fd, 
-                                    *runLog,
-                                    NULL,              // report file stream
-                                    forceRebuild,
-                                    true,             // false = don't check for duplicates.
-                                    *cancelFlag, 
-                                    *statusMsg
-                                   );
+    trainer = TrainingProcess2::CreateTrainingProcess (config,
+                                                       true,     // true = Check for duplicates.
+                                                       whenToBuild,
+                                                       true,     // true = save model;
+                                                       *cancelFlag,
+                                                       *runLog
+                                                      );
   }
   catch (System::AccessViolationException^ z)
   {
@@ -880,6 +980,12 @@ void  TrainingModel2::LoadTrainigLibrary (bool  forceRebuild)
     trainer = NULL;
   }
 
+  else if  (!trainer)
+  {
+    (*runLog) << "TrainingModel2::LoadTrainigLibrary   ***ERROR***  No TrainingProcess instance created." << endl;
+    *valid = false;
+  }
+
   else if  (trainer->Abort ())
   {
     try  {ErrorMsgsAdd (trainer->ConfigFileFormatErrors ());}  
@@ -896,7 +1002,7 @@ void  TrainingModel2::LoadTrainigLibrary (bool  forceRebuild)
     *valid = true;
     delete  classes;  classes = NULL;
     if  (trainer->MLClasses ())
-      classes = new MLClassConstList (*(trainer->MLClasses ()));
+      classes = new MLClassList (*(trainer->MLClasses ()));
     else
       throw gcnew Exception ("TrainingModel2::LoadTrainigLibrary    (trainer->MLClasses() == NULL)");
     classifier = new Classifier2 (trainer, *runLog);
@@ -911,35 +1017,44 @@ void  TrainingModel2::LoadTrainigLibrary (bool  forceRebuild)
 
 
 
+
+
+
+
+
+
 void  TrainingModel2::BuildTrainingModel (PicesFeatureVectorList^  picesTrainingData)
 {
   GC::Collect ();
 
-  FileDescPtr fd = FeatureFileIOPices::NewPlanktonFile (*runLog);
+  FileDescPtr fd = FeatureFileIOPices::NewPlanktonFile ();
 
   KKB::KKStr  configFileName = PicesKKStr::SystemStringToKKStr (modelName);
   *cancelFlag = false;
 
-  FeatureVectorListPtr  trainingData = new FeatureVectorList (fd, false, *runLog);
+  delete  config;
+  config = new PicesTrainingConfiguration ();
+  config->Load (configFileName, false, *runLog);
+
+  FeatureVectorListPtr  trainingData = new FeatureVectorList (fd, false);
   for each (PicesFeatureVector^ pfv in picesTrainingData)
     trainingData->PushOnBack (pfv->Features ());
 
-  classes = trainingData->ExtractMLClassConstList ();
+  classes = trainingData->ExtractListOfClasses ();
   classes->SortByName ();
   PopulateCSharpClassList ();
 
   try
   {
     trainerWeOwn = true;
-    trainer = new TrainingProcess2 (config, 
-                                    trainingData, 
-                                    NULL, 
-                                    fd, 
-                                    *runLog,
-                                    false,              // false = Features are NOT already normalized.
-                                    *cancelFlag, 
-                                    *statusMsg
-                                   ); 
+    trainer = TrainingProcess2::CreateTrainingProcessFromTrainingExamples
+                     (config, 
+                      trainingData,
+                      false,         // false = Don't take ownership.
+                      false,         // false = features are NOT already normalized.
+                      *cancelFlag,
+                      *runLog
+                     );
   }
   catch (System::AccessViolationException^ z)
   {
@@ -950,7 +1065,7 @@ void  TrainingModel2::BuildTrainingModel (PicesFeatureVectorList^  picesTraining
     return;
   }
 
-  if  (trainer->Abort ())
+  if  ((!trainer)  ||  trainer->Abort ())
   {
     *valid = false;
     delete  trainer;    trainer = NULL;
@@ -958,19 +1073,8 @@ void  TrainingModel2::BuildTrainingModel (PicesFeatureVectorList^  picesTraining
   else
   {
     trainerWeOwn = true;
-    trainer->CreateModelsFromTrainingData ();
-
-    if  (trainer->Abort ())
-    {
-      if  (errorMsgs != nullptr)
-        ErrorMsgsAdd ("TrainingModel2::BuildTrainingModel   Error occurred building training model.");
-      *valid = false;
-    }
-    else
-    {
-      *valid = true;
-      classifier = new Classifier2 (trainer, *runLog);
-    }
+    *valid = true;
+    classifier = new Classifier2 (trainer, *runLog);
   }
 
   InstrumentDataFileManager::InitializePop ();
@@ -1066,7 +1170,7 @@ PicesPredictionList^   TrainingModel2::PredictProbabilities (PicesFeatureVector^
   for  (int idx = 0;  idx < numClasses;  idx++)
     predictions->Add (gcnew PicesPrediction (classList[idx], votes[idx], probabilities[idx]));
 
-  if  (classifier->SelectionMethod () == SelectByVoting)
+  if  (classifier->SelectionMethod () == SVM_SelectionMethod::Voting)
      predictions->SortByVotingHighToLow ();
   else
      predictions->SortByProbabilityHighToLow ();
@@ -1078,25 +1182,24 @@ PicesPredictionList^   TrainingModel2::PredictProbabilities (PicesFeatureVector^
 
 
 
-
 PicesPrediction^  TrainingModel2::PredictClass (PicesFeatureVector^  example)
 {
   FeatureVector  testExample (*(example->Features ()));  // We need a local copy; because the ClassifyImage function is going 
                                                          // to normalize the data.
 
-  MLClassConstPtr  class1Pred     = NULL;
-  MLClassConstPtr  class2Pred     = NULL;
-  int                 class1Votes    = -1;
-  int                 class2Votes    = -1;
-  double              class1Prob     = -1.0f;
-  double              class2Prob     = -1.0f;
-  double              knownClassProb = -1.0f;
-  int                 numOfWinners   = -1;
-  double              breakTie       = -1.0f;
-  double              compact        = -1.0;
+  MLClassPtr  class1Pred     = NULL;
+  MLClassPtr  class2Pred     = NULL;
+  int         class1Votes    = -1;
+  int         class2Votes    = -1;
+  double      class1Prob     = -1.0f;
+  double      class2Prob     = -1.0f;
+  double      knownClassProb = -1.0f;
+  int         numOfWinners   = -1;
+  double      breakTie       = -1.0f;
+  double      compact        = -1.0;
   try
   {
-    classifier->ClassifyAImage (testExample, 
+    classifier->ClassifyAExample (testExample, 
                                 class1Pred, 
                                 class2Pred,
                                 class1Votes,
@@ -1105,13 +1208,12 @@ PicesPrediction^  TrainingModel2::PredictClass (PicesFeatureVector^  example)
                                 class1Prob,
                                 class2Prob, 
                                 numOfWinners,
-                                breakTie,
-                                compact
+                                breakTie
                                );
   }
   catch  (Exception^ e)
   {
-    System::Windows::Forms::MessageBox::Show ("Exception occurred when calling 'Classifier::ClassifyAImage'  in  'TrainingModel2::PredictClass'" + "\n\n" +
+    System::Windows::Forms::MessageBox::Show ("Exception occurred when calling 'Classifier::ClassifyAExample'  in  'TrainingModel2::PredictClass'" + "\n\n" +
                                               e->ToString (),
                                               "TrainingModel2::PredictClass"
                                              );
@@ -1141,19 +1243,19 @@ void  TrainingModel2::PredictClass (PicesFeatureVector^  featureVector,
   if  (!classifier)
     return;
 
-  MLClassConstPtr  class1Pred     = NULL;
-  MLClassConstPtr  class2Pred     = NULL;
-  int                 class1Votes    = -1;
-  int                 class2Votes    = -1;
-  double              class1Prob     = -1.0f;
-  double              class2Prob     = -1.0f;
-  double              knownClassProb = -1.0f;
-  int                 numOfWinners   = -1;
-  double              breakTie       = -1.0f;
-  double              compact        = -1.0;
+  MLClassPtr  class1Pred     = NULL;
+  MLClassPtr  class2Pred     = NULL;
+  int         class1Votes    = -1;
+  int         class2Votes    = -1;
+  double      class1Prob     = -1.0f;
+  double      class2Prob     = -1.0f;
+  double      knownClassProb = -1.0f;
+  int         numOfWinners   = -1;
+  double      breakTie       = -1.0f;
+  double      compact        = -1.0;
   try
   {
-    classifier->ClassifyAImage (*(featureVector->UnManagedClass ()),
+    classifier->ClassifyAExample (*(featureVector->UnManagedClass ()),
                                 class1Pred, 
                                 class2Pred,
                                 class1Votes,
@@ -1162,13 +1264,12 @@ void  TrainingModel2::PredictClass (PicesFeatureVector^  featureVector,
                                 class1Prob,
                                 class2Prob, 
                                 numOfWinners,
-                                breakTie,
-                                compact
+                                breakTie
                                );
   }
   catch  (Exception^ e)
   {
-    System::Windows::Forms::MessageBox::Show ("Exception occurred when calling 'Classifier::ClassifyAImage'  in  'TrainingModel2::PredictClass'" + "\n\n" +
+    System::Windows::Forms::MessageBox::Show ("Exception occurred when calling 'Classifier::ClassifyAExample'  in  'TrainingModel2::PredictClass'" + "\n\n" +
                                               e->ToString (),
                                               "TrainingModel2::PredictClass"
                                              );
@@ -1271,12 +1372,12 @@ PicesPredictionList^   TrainingModel2::PredictProbabilities (System::String^   i
   
   KKStr  fn = PicesKKStr::SystemStringToKKStr (imageFileName);
 
-  MLClassConstPtr  unKnownClass = classes->IdxToPtr (0);
+  MLClassPtr  unKnownClass = classes->IdxToPtr (0);
 
   ImageFeaturesPtr  fv = NULL;
   try
   {
-    fv = new ImageFeatures (fn, unKnownClass, sucessful, unManagedIntermediateImages);
+    fv = new ImageFeatures (fn, unKnownClass, sucessful, unManagedIntermediateImages, *runLog);
   }
   catch  (Exception^ e)
   {
@@ -1387,7 +1488,7 @@ array<PicesInterface::ProbNamePair^>^
   // Will make duplicate of feature vector Because the Classifier will normalize the data.
   FeatureVectorPtr  dupFV = new FeatureVector (*picesFeatureVector->UnManagedClass ());
 
-  vector<MLL::ProbNamePair> worstExamples 
+  vector<KKMLL::ProbNamePair> worstExamples 
     = classifier->FindWorstSupportVectors (dupFV, 
                                            numToFind, 
                                            c1Pices, 
@@ -1423,7 +1524,7 @@ array<PicesInterface::ProbNamePair^>^
   // Will make duplicate of feature vector Because the Classifier will normalize the data.
   FeatureVectorPtr  dupFV = new FeatureVector (*picesFeatureVector->UnManagedClass ());
 
-  vector<MLL::ProbNamePair> worstExamples 
+  vector<KKMLL::ProbNamePair> worstExamples 
     = classifier->FindWorstSupportVectors2 (dupFV, 
                                             numToFind, 
                                             c1Pices, 
@@ -1581,7 +1682,7 @@ void  TrainingModel2::CancelLoad ()   // Sets cancel flag to terminate loading o
 
 String^  TrainingModel2::DirectoryPathForClass (PicesClass^  mlClass)
 {
-  TrainingConfiguration2Ptr  configToUse = GetConfigToUse ();
+  TrainingConfiguration2ConstPtr  configToUse = GetConfigToUse ();
   if  (configToUse == NULL)
     return nullptr;
 
@@ -1594,7 +1695,7 @@ String^  TrainingModel2::DirectoryPathForClass (PicesClass^  mlClass)
 
 array<String^>^  TrainingModel2::GetListOfTrainingModels ()
 {
-  KKStr searchSpec = osAddSlash (SipperVariables::TrainingModelsConfigurationDir ()) + "*.cfg";
+  KKStr searchSpec = osAddSlash (PicesVariables::TrainingModelsConfigurationDir ()) + "*.cfg";
   KKStrListPtr   fileNames = osGetListOfFiles (searchSpec);
   if  (fileNames == NULL)
     return  nullptr;
@@ -1630,7 +1731,7 @@ array<String^>^  TrainingModel2::GetListOfTrainingModels ()
 
 uint  TrainingModel2::NumHierarchialLevels::get ()
 {
-  TrainingConfiguration2Ptr  configToUse = GetConfigToUse ();
+  TrainingConfiguration2ConstPtr  configToUse = GetConfigToUse ();
   if  (configToUse)
     return  configToUse->NumHierarchialLevels ();
   else
@@ -1642,7 +1743,7 @@ uint  TrainingModel2::NumHierarchialLevels::get ()
 
 int  TrainingModel2::ImagesPerClass::get ()
 {
-  TrainingConfiguration2Ptr tConfig = trainer->Config ();
+  TrainingConfiguration2ConstPtr tConfig = trainer->Config ();
   if  (tConfig)
     return  tConfig->ImagesPerClass ();
   else
@@ -1663,7 +1764,7 @@ String^  TrainingModel2::ParameterStr::get ()
 
     else
     {
-      TrainingConfiguration2Ptr tConfig = trainer->Config ();
+      TrainingConfiguration2ConstPtr tConfig = trainer->Config ();
       if  (tConfig)
       {
         ModelParamPtr  parameters = tConfig->ModelParameters ();
@@ -1675,7 +1776,7 @@ String^  TrainingModel2::ParameterStr::get ()
 
   if  (parmStr.Empty ())
   {
-    TrainingConfiguration2Ptr  configToUse = GetConfigToUse ();
+    PicesTrainingConfigurationConstPtr  configToUse = GetConfigToUse ();
     if  ((configToUse)  &&  (configToUse->ModelParameters ()))
       parmStr = configToUse->ModelParameters ()->ToCmdLineStr ();
   }
@@ -1688,7 +1789,7 @@ String^  TrainingModel2::ParameterStr::get ()
 
 String^  TrainingModel2::ConfigFileName::get ()
 {
-  TrainingConfiguration2Ptr  configToUse = GetConfigToUse ();
+  PicesTrainingConfigurationConstPtr  configToUse = GetConfigToUse ();
   if  (configToUse)
     return PicesKKStr::KKStrToSystenStr (configToUse->FileName ());
   else
@@ -1699,22 +1800,31 @@ String^  TrainingModel2::ConfigFileName::get ()
 
 void  TrainingModel2::AddClass (PicesClass^  newClass)
 {
-  TrainingConfiguration2Ptr  configToUse = GetConfigToUse ();
-  if  (configToUse == NULL)
-    throw gcnew Exception ("Could not retrieve the configuration file.");
+  if  (!config)
+  {
+    if  (!String::IsNullOrEmpty (modelName))
+    {
+      config = new PicesTrainingConfiguration ();
+      config->Load (PicesKKStr::SystemStringToKKStr (modelName), false, *runLog);
+    }
+    else
+    {
+      config = new PicesTrainingConfiguration ();
+    }
+  }
 
   MLClassPtr  c = newClass->UnmanagedMLClass ();
 
-  KKStr  dirPath =  (configToUse->DirectoryPathForClass (c));
+  KKStr  dirPath =  (config->DirectoryPathForClass (c));
   if  (!dirPath.Empty ())
     throw gcnew Exception ("Class already in Training Model.");
 
   // kak 2010-05-09
   // We need to make sure the directory for this class exists.
-  KKStr  classDirName = osAddSlash (configToUse->RootDir ()) + c->Name ();
+  KKStr  classDirName = osAddSlash (config->RootDir ()) + c->Name ();
   osCreateDirectoryPath (classDirName);
 
-  configToUse->AddATrainingClass (c);
+  config->AddATrainingClass (c);
 }   /* AddClass */
 
 
@@ -1733,7 +1843,7 @@ void  TrainingModel2::AddImageToTrainingLibray (String^       imageFileName,
   if  (mlClass == nullptr)
     throw gcnew Exception ("No class provided;   \"mlClass == nullptr;\"  in method \"TrainingModel2::AddImageToTrainingLibray\"");
 
-  TrainingConfiguration2Ptr  configToUse = GetConfigToUse ();
+  PicesTrainingConfigurationConstPtr  configToUse = GetConfigToUse ();
   if  (!configToUse)
     throw  gcnew Exception  ("No defined Configuration file available for ModelName[" + modelName + "]");
 
@@ -1797,18 +1907,24 @@ void  TrainingModel2::AddImageToTrainingLibray (String^       imageFileName,
 
 
 
-TrainingConfiguration2Ptr  TrainingModel2::GetConfigToUse ()
+PicesTrainingConfigurationConstPtr  TrainingModel2::GetConfigToUse ()
 {
-  TrainingConfiguration2Ptr  configToUse = NULL;
+  PicesTrainingConfigurationConstPtr  configToUse = NULL;
   if  (config)
     configToUse = config;
-  else
-    configToUse = trainer->Config ();
+
+  else if  (trainer)
+  {
+    TrainingConfiguration2ConstPtr  tConfig = trainer->Config ();
+    if  (typeid (*tConfig)  ==  typeid (PicesTrainingConfiguration))
+      configToUse = dynamic_cast<PicesTrainingConfigurationConstPtr> (tConfig);
+  }
 
   if  (!configToUse)
   {
-    FileDescPtr  fd = FeatureFileIOPices::NewPlanktonFile (*runLog);
-    config  = new TrainingConfiguration2 (fd, PicesKKStr::SystemStringToKKStr (modelName), *runLog, false);
+    FileDescPtr  fd = FeatureFileIOPices::NewPlanktonFile ();
+    config  = new PicesTrainingConfiguration ();
+    config->Load (PicesKKStr::SystemStringToKKStr (modelName), false, *runLog);
     // Don't need to delete 'fd'  'FileDesc' instances are kept in memory and shared when identical.
     configToUse = config;
   }

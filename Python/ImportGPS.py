@@ -136,9 +136,10 @@ def  ProcessSumaryGPSFile (fileName,
                            cruiseName,
                            startTime
                           ):
+  passWord=""
   try:
        db = mysql.connector.Connect(user='root',
-                                    password="Dasani30!",
+                                    password=passWord,
                                     host='localhost',
                                     database='pices_new')
   except  mysql.connector.Error as err:
@@ -195,13 +196,13 @@ def  ProcessNMEAFile (fileName,
                       cruiseName
                      ):
   try:
-       db = mysql.connector.Connect(user='root',
-                                    password="Dasani30!",
-                                    host='localhost',
+       db = mysql.connector.Connect(user='xxxxxxxx',
+                                    password="zzzzzzzz",
+                                    host='sipper-db2.marine.usf.edu',
                                     database='pices_new')
   except  mysql.connector.Error as err:
       if  err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-          print("Cound notconect to \"Sipper-d-marine.usf.edu\"")
+          print("Cound not conect to \"Sipper-d-marine.usf.edu\"")
       elif  err.errno == errorcode.ER_BAD_DB_ERROR:
           print("Database does not exists")
       else:
@@ -315,7 +316,7 @@ def  ProcessCruise(cruiseName, dir):
 #ProcessCruise("WB1012", "F:\\Pices\\SipperFiles\\WB1012\\GPS-Data")
 #ProcessCruise("WB1008", "F:\\Pices\\SipperFiles\\WB1008\\GPS-Data")
 #ProcessCruise("WB0911", "F:\\Pices\\SipperFiles\\WB0911\\GPS-Data")
-ProcessCruise("WB0814", "F:\\Pices\\SipperFiles\\WB0814\\GPS-Data")
+ProcessCruise("WB0814", "F:\\Pices\\SipperFiles\\USF\\WB0814\\GPSData")
 #ProcessCruise("WB0813", "F:\\Pices\\SipperFiles\\WB0813\\GpsData\\Daly Aug 2013 Met")
 #ProcessCruise("WB0611", "F:\\Pices\\SipperFiles\\WB0611\\GPS-Data")
 

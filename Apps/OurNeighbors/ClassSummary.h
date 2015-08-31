@@ -1,13 +1,15 @@
 #ifndef  _CLASSSUMMARY_
 #define _CLASSSUMMARY_
 
-#include  "KKBaseTypes.h"
 
-#include  "MLClass.h"
-#include  "LLoydsEntry.h"
-#include  "RunLog.h"
+#include "KKBaseTypes.h"
+#include "RunLog.h"
+using namespace  KKB;
 
-using namespace  MLL;
+
+#include "MLClass.h"
+#include "LLoydsEntry.h"
+using namespace  KKMLL;
 
 
 class  ClassSummary
@@ -22,7 +24,7 @@ public:
 
   ClassSummary ();
 
-  ClassSummary (MLClassConstPtr  _mlClass,
+  ClassSummary (MLClassPtr          _mlClass,
                 LLoydsEntryListPtr  _lloydsBins,
                 float               _realDataU2Stat,
                 float               _z_Score
@@ -32,7 +34,7 @@ public:
 
   const KKStr&               ClassName ()       const;
 
-  const  MLClassConstPtr  MLClass ()  const  {return mlClass;}
+  const  MLClassPtr  MLClass ()  const  {return mlClass;}
 
   kkint32                    LLoydsBin (kkuint32 binNum) const;
 
@@ -54,7 +56,7 @@ public:
 
 
 private:
-  MLClassConstPtr  mlClass;
+  MLClassPtr  mlClass;
   LLoydsEntryListPtr  lloydsEntries;
 
   float               realDataU2Stat;
@@ -77,7 +79,7 @@ public:
   ClassSummaryList (RunLog&  _log);
 
 
-  MLClassConstListPtr  GetListOfClasses ()  const;
+  MLClassListPtr  GetListOfClasses ()  const;
 
   VectorInt  LLoydsBinSizes ()  const;
 

@@ -208,10 +208,8 @@ PicesDataBaseServerList::PicesDataBaseServerList (PicesRunLog^  _log)
 
   defaultServerDescription = PicesKKStr::KKStrToSystenStr (servers->DefaultServerDescription ());
 
-  // Since 'PicesDataBaseServer' takes ownership of the 'DataBaseServer' object being passed in
-  // we don't want the 'servers' list to own them;  this way when we delete 'servers' we do
-  // not delete the instances of 'DataBaseServer' that it references.
-  servers->Owner (false);
+  // Since 'PicesDataBaseServer' creates its uses copy constructor to creates its own instance of 'DataBaseServer' object being passed in
+  // we want 'servers' to still own its own instances so that they are deleted.
   delete  servers;
   servers = NULL;
 }

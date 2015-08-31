@@ -197,7 +197,7 @@ namespace PicesInterface
     PicesRasterList ();
 
     /**
-     *@breief  Construct a list of managed PicesRaster instances from the contents of the unmanaged list 'unmanagedImages'.
+     *@brief  Construct a list of managed PicesRaster instances from the contents of the unmanaged list 'unmanagedImages'.
      *@details  Will take ownership of the instances of Raster in 'unmanagedImages'.  The list will be deleted and the unmanaged
      *          code should not try to access any of 'unmanagedImages' contents after this call.
      *@param[in,out]  unmanagedImages  List of unmanaged 'Raster' objects; the ownership of these instances will be given 

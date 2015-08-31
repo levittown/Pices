@@ -7,10 +7,11 @@ using namespace System::Collections;
 using namespace System::Collections::Generic;
 using namespace System::Diagnostics;
 
-#include  "ClassStatistic.h"
-#include  "MLClass.h"
+#include "ClassStatistic.h"
+#include "MLClass.h"
+using namespace  KKMLL;
 
-#include  "PicesClass.h"
+#include "PicesClass.h"
 
 
 namespace PicesInterface

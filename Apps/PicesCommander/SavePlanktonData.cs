@@ -442,7 +442,7 @@ namespace PicesCommander
       {
         String classSampleDir = OSservices.AddSlash (sampleDir + pc.Name);
         OSservices.CreateDirectoryPath (classSampleDir);
-        PicesDataBaseImageList examplesThisClass = planktonData.ExtractImagesForAGivenClass (pc);
+        PicesDataBaseImageList examplesThisClass = planktonData.ExtractExamplesForAGivenClass (pc);
         examplesThisClass.RandomizeOrder ();
 
         int  numWritten = 0;

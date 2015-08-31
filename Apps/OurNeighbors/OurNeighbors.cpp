@@ -22,14 +22,19 @@ using namespace KKB;
 
 // From PICL
 #include "FeatureFileIO.h"
-#include "FeatureFileIOPices.h"
 #include "MLClass.h"
+using namespace  KKMLL;
+
+
+#include "FeatureFileIOPices.h"
 #include "ImageFeatures.h"
-#include "LLoydsEntry.h"
+#include "PicesFVProducer.h"
+#include "FeatureFileIOPices.h"
 using namespace  MLL;
 
 
 #include "ClassSummary.h"
+#include "LLoydsEntry.h"
 #include "OurNeighbors.h"
 #include "Neighbor.h"
 #include "RandomNND.h"
@@ -73,19 +78,21 @@ OurNeighbors::OurNeighbors ():
   bucketSize          (0),
   cancelFlag          (false),
   excludedClasses     (NULL),
+  fvProducerFactory   (NULL),
   sourceRootDirPath   (),
   mlClass             (MLClass::CreateNewMLClass ("UnKnown")),
-  mlClasses           (new MLClassConstList ()),
+  mlClasses           (new MLClassList ()),
   report              (NULL),
   fromPlanktonName    (),
   fromPlankton        (NULL),
   lastScanLine        (0),
   lloydsBinsFileName  (),
-  neighborType        (AnyPlanktonClass),
+  neighborType        (NeighborType::AnyPlankton),
   numOfBuckets        (0),
   numOfIterations     (20),
   randomizeLocations  (false)
 {
+  fvProducerFactory = PicesFVProducerFactory::Factory (&log);
 }
 
 
@@ -128,7 +135,7 @@ void  OurNeighbors::InitalizeApplication (kkint32 argc,
 	}
 
   if  (!excludedClasses)
-    excludedClasses = new MLClassConstList ();
+    excludedClasses = new MLClassList ();
 
 	if  (sourceRootDirPath.Empty ())
 		sourceRootDirPath = osGetCurrentDirectory ();
@@ -233,7 +240,7 @@ bool  OurNeighbors::ProcessCmdLineParameter (const KKStr&  parmSwitch,
     else 
     {
       if  (!excludedClasses)
-        excludedClasses = new MLClassConstList ();
+        excludedClasses = new MLClassList ();
 
       if  (excludedClasses->LookUpByName (parmValue) != NULL)
       {
@@ -286,10 +293,10 @@ bool  OurNeighbors::ProcessCmdLineParameter (const KKStr&  parmSwitch,
   else if  (parmSwitch.EqualIgnoreCase ("-NEARESTNEIGHBORTYPE")  ||  parmSwitch.EqualIgnoreCase ("-NNT"))
   {
     if  (parmValue.EqualIgnoreCase ("0")  ||  parmValue.EqualIgnoreCase ("ANY"))
-      neighborType = AnyPlanktonClass;
+      neighborType = NeighborType::AnyPlankton;
 
     else if  (parmValue.EqualIgnoreCase ("1")  ||  parmValue.EqualIgnoreCase ("SAME"))
-      neighborType = SamePlanktonClass;
+      neighborType = NeighborType::SamePlankton;
   }
 
   else if  (parmSwitch.EqualIgnoreCase ("-R")  ||  parmSwitch.EqualIgnoreCase ("-REPORT"))
@@ -340,7 +347,7 @@ void   OurNeighbors::DisplayCommandLineParameters ()
 			 << "    -ExcludeClass <ClassName>    Name of class to exclude.  You may "    << endl
        << "                                 specify this parameter more than once." << endl
        << endl
-			 << "    -LLoydsBinSize <Number>      Numbetr of scan lines per bin"          << endl
+			 << "    -LLoydsBinSize <Number>      Number of scan lines per bin"           << endl
        << endl;
 }  /* DisplayCommandLineParameters */
 
@@ -365,17 +372,17 @@ void   OurNeighbors::DisplayCommandLineParameters ()
  *    .../Trichodesmium/SubDir2
  *    
  *  The idea is that when trying to determine what class a image really is we look
- *  at the first sub-dir name in the path.  We may also have to deel with seq-num's 
+ *  at the first sub-dir name in the path.  We may also have to deal with seq-num's 
  *  as part of the name,  in that case we strip the _ and following numbers from the 
  *  name to get the correct class name.
  ****************************************************************************************/
-MLClassConstPtr  OurNeighbors::DetermineClassFromFileName (const  KKStr&  fileName)
+MLClassPtr  OurNeighbors::DetermineClassFromFileName (const  KKStr&  fileName)
 {
 	kkint32  x;
 	KKStr filename_copy = fileName;
 
-	// If there are no path seperator characters('\'  or  '/')  charaters in name
-	// then we will not beable to determine the class.
+	// If there are no path separator characters('\'  or  '/')  characters in name
+	// then we will not be able to determine the class.
 	
   x = osLocateFirstSlashChar (filename_copy);
 	if  (x <= 0)
@@ -384,17 +391,17 @@ MLClassConstPtr  OurNeighbors::DetermineClassFromFileName (const  KKStr&  fileNa
 
   KKStr  className = filename_copy.SubStrPart (0, x - 1);
   
-  // now lets get rid of any posible trailing seq number.
-  // We are assuming that a underscore{"_") character seperates the calss name from the seq number.
+  // now lets get rid of any possible trailing seq number.
+  // We are assuming that a underscore{"_") character separates the calcs name from the seq number.
   // So if there is an underscore character,  and all the characters to the right of it are
-  // underscore charcters,  then we will remove teh underscore and the following numbers.
+  // underscore characters,  then we will remove the underscore and the following numbers.
 	x = className.LocateLastOccurrence ('_');
   if  (x > 0)
   {
-    // Now lets eliminate any seqence number in name
-    // We are assuming that a underscore{"_") character seperates the class name from the seq number.
-    // So if there is an underscore character,  and all the characters to the right of it are
-    // numeric charcters,  then we will remove teh underscore and the following numbers.
+    // Now lets eliminate any sequence number in name
+    // We are assuming that a underscore{"_") character separates the class name from the seq number.
+    // So if there is an underscore character, and all the characters to the right of it are
+    // numeric characters, then we will remove the underscore and the following numbers.
 
     kkint32  y = x + 1;
 
@@ -415,7 +422,7 @@ MLClassConstPtr  OurNeighbors::DetermineClassFromFileName (const  KKStr&  fileNa
   // Now that we have a string with the class name,  lets get a pointer 
   // to a mlClass object from mlClasses ,  if none there then we get 
   // to create a new class.
-	MLClassConstPtr  mlClass = mlClasses->GetMLClassPtr (className);
+	MLClassPtr  mlClass = mlClasses->GetMLClassPtr (className);
 
 	return  mlClass;
 }  /* DetermineClassFromFileName */
@@ -463,13 +470,13 @@ void	OurNeighbors::RandomReport (ImageFeaturesList&  images)
 
   ClassSummaryList  classSummaries (log);
 
-  MLClassConstList::iterator  classIdx;
+  MLClassList::iterator  classIdx;
 
   VectorKKStr  zScoreSummaryLines;
 
   for  (classIdx = mlClasses->begin ();  classIdx != mlClasses->end ();  classIdx++)
   {
-    MLClassConstPtr  mlClass = *classIdx;
+    MLClassPtr  mlClass = *classIdx;
 
     if  (fromPlankton  &&  (fromPlankton != mlClass))
       continue;
@@ -482,7 +489,7 @@ void	OurNeighbors::RandomReport (ImageFeaturesList&  images)
     double  sampleMaxDist   = 0.0f;
     double  sampleMinDist   = 0.0f;
 
-    ImageFeaturesListPtr  imagesInClass = images.ExtractImagesForAGivenClass (mlClass);
+    ImageFeaturesListPtr  imagesInClass = images.ExtractExamplesForAGivenClass (mlClass);
     if  (imagesInClass->QueueSize () > 0)
     {
       // We are going to make a list of images that has duplicate instances of 'ImageFeatures' objects 
@@ -587,7 +594,7 @@ void	OurNeighbors::RandomReport (ImageFeaturesList&  images)
     {
       // Find the mean and stddev of Nearest Neighbor regardless of class.
       NeighborList  allClassesNeighbors (images, log);
-      allClassesNeighbors.FindNearestNeighbors (AnyPlanktonClass, fromPlankton);
+      allClassesNeighbors.FindNearestNeighbors (NeighborType::AnyPlankton, fromPlankton);
 
       double  allClassesMinDistAnyClass    = 0.0f;
       double  allClassesMaxDistAnyClass    = 0.0f;
@@ -686,11 +693,12 @@ void	OurNeighbors::LookForNeighbors ()
 	 * file will be used. However, if an image has been moved it's features will have
 	 * to be recalculated (which is handled by the function call) and we'll have to
 	 * look in the origImageFeatures list for the original predicted class. We must do 
-	 * this since the the predicted class for an image file should NEVER change between
+	 * this since the predicted class for an image file should NEVER change between
 	 * classification runs.
 	 */
-  currentImageFeatures =  FeatureFileIOPices::LoadInSubDirectoryTree 
-                                 (sourceRootDirPath,
+  FeatureFileIOPices::Driver ()->LoadInSubDirectoryTree
+                                 (PicesFVProducerFactory::Factory (&log),
+                                  sourceRootDirPath,
                                   *mlClasses,
                                   false,           // useDirectoryNameForClassName,
                                   DB (),
@@ -707,7 +715,7 @@ void	OurNeighbors::LookForNeighbors ()
     for  (idx = currentImageFeatures->begin ();  idx != currentImageFeatures->end ();  idx++)
     {
       ImageFeaturesPtr image = *idx;
-      MLClassConstPtr  mlClass = DetermineClassFromFileName (image->ImageFileName ());
+      MLClassPtr  mlClass = DetermineClassFromFileName (image->ExampleFileName ());
       if  (mlClass)
         image->MLClass (mlClass);
     }
@@ -778,13 +786,12 @@ void	OurNeighbors::LookForNeighbors ()
 void	OurNeighbors::RemoveExcludedClasses (ImageFeaturesListPtr&  examples)
 {
    bool  keepClass = true;
-   MLClassConstPtr  oldClass = NULL;
+   MLClassPtr  oldClass = NULL;
 
    examples->SortByClass ();
 
    ImageFeaturesListPtr  examplesToKeep = new ImageFeaturesList (examples->FileDesc (), 
                                                                  true, // true = We will own images,
-                                                                 log,
                                                                  examples->QueueSize ()
                                                                 );
    examples->Owner (false);
@@ -855,7 +862,7 @@ LLoydsEntryPtr  OurNeighbors::DeriveLLoydsBins (const ImageFeaturesList&  exampl
     kkint32 lloydsBin =  kkint32 (i->SfCentroidRow () / double (lloydsBinSize));
     if  (lloydsBin >= numLLoydsBins)
     {
-      // This can not happen;  but if it does; then I must of screwed uo the programming.
+      // This can not happen; but if it does; then I must of screwed up the programming.
       log.Level (-1) << endl << endl << endl
                      << "OurNeighbors::DeriveLLoydsBins       **** ERROR ****" << endl
                      << endl
@@ -878,9 +885,9 @@ LLoydsEntryPtr  OurNeighbors::DeriveLLoydsBins (const ImageFeaturesList&  exampl
 
 
 
-kkint32  main (kkint32   argc,
-             char**  argv
-            )
+kkint32  main (kkint32  argc,
+               char**   argv
+              )
 {
   OurNeighbors  nearestNeighborReport;
   nearestNeighborReport.InitalizeApplication (argc, argv);

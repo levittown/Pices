@@ -51,11 +51,12 @@ namespace PicesInterface
     
     /**
      *@brief  Calculates features off the image that is in "raster".
-     *@details Features that are based off instrumentation data will come from the IntrumentDataManager
-     * the "imageFileName" will be parsed to get SipperFileName and ScanLine.
-     *@param[in]  raster  Raster in the form of a 2 dmensional byte array.
+     *@details This is a wrapper class for MLL::ImageFeatures allowing the managed word to work with the unmanaged world.
+     * Features that are based off instrumentation data will come from the IntrumentDataManager the "imageFileName" will be parsed 
+     * to get SipperFileName, ScanLine, and ScanCol.
+     *@param[in]  raster  Raster in the form of a 2 dimensional byte array.
      *@param[in]  imageFileName  Name of image that is stored in 'raster'; should follow Sipper file name conventions.
-     *@param[in,out]  logging file.
+     *@param[in,out] log logging file.
      *@see  PicesLibrary::ImageFeatures::CalcFeatures
      */
     PicesFeatureVector (System::Array^   raster,
@@ -102,7 +103,7 @@ namespace PicesInterface
     property bool              FeatureDataMissing {bool        get ();}  // If feature values are 0.0f then will return 'true' else 'false'.
     property float             FilledArea         {float       get ();}
     property PicesClass^       MLClass            {PicesClass^ get ();  void  set (PicesClass^  _mlClass);}
-    property String^           ImageFileName      {String^     get ();  void  set (String^      _imageFileName);}
+    property String^           ExampleFileName    {String^     get ();  void  set (String^      _exampleFileName);}
     property int               NumFeatures        {int         get ();}
     property float             OrigSize           {float       get ();}
     property float             Probability        {float       get ();  void  set (float        _probability);}

@@ -19,7 +19,7 @@ using namespace std;
 using namespace KKB;
 
 #include "SipperCruise.h"
-using namespace SipperHardware;
+using namespace MLL;
 
 #include "PicesSipperStation.h"
 #include "PicesKKStr.h"

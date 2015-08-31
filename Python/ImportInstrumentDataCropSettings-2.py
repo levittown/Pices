@@ -25,11 +25,11 @@ def  ToFloat(s):
 #                                  database='pices_new')
 
 try:
-      db = mysql.connector.Connect(user='root',
-                             password="dasani30",
-                             host='localhost',
-                             database='pices_new')
-
+  passWord=""
+  db = mysql.connector.Connect(user='root',
+                               password=passWord,
+                               host='localhost',
+                               database='pices_new')
 
 except  mysql.connector.Error as err:
     if  err.errno == errorcode.ER_ACCESS_DENIED_ERROR:

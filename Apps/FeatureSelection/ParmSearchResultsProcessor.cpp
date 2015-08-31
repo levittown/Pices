@@ -1,5 +1,4 @@
 #include "FirstIncludes.h"
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>
@@ -10,9 +9,7 @@
 #include <fstream>
 #include <map>
 #include <vector>
-
 #include "MemoryDebug.h"
-
 using namespace  std;
 
 
@@ -25,7 +22,7 @@ using namespace  KKB;
 
 
 #include "MLClass.h"
-using namespace  MLL;
+using namespace  KKMLL;
 
 
 #include "ParmSearchResultsProcessor.h"
@@ -51,12 +48,12 @@ ParmSearchResultsProcessor::ParmSearchResultsProcessor (ProcessorPtr _processor)
 
 BinaryJobListPtr  ParmSearchResultsProcessor::GetBestCandidates ()
 {
-  BinaryJobList::ErrorCodes  result = BinaryJobList::NoError;
+  BinaryJobList::ErrorCodes  result = BinaryJobList::ErrorCodes::NoError;
 
   BinaryJobListPtr  jobs = processor->BinaryJobs ();
 
  
-  // We will first get jobs with the higest 1% accuracy.
+  // We will first get jobs with the highest 1% accuracy.
   jobs->SortByAccuracy ();
 
   BinaryJobListPtr  accuracyCandidateJobs = new BinaryJobList (processor);
@@ -74,7 +71,7 @@ BinaryJobListPtr  ParmSearchResultsProcessor::GetBestCandidates ()
       break;
 
     accuracyCandidateJobs->PushOnBack (j, result);
-    if  (result != BinaryJobList::NoError)
+    if  (result != BinaryJobList::ErrorCodes::NoError)
     {
       cerr << endl
         << "ParmSearchResultsProcessor::GetBestCandidates   ***ERROR***   Duplicate Job adding to 'accuracyCandidateJobs'." << endl
@@ -84,7 +81,7 @@ BinaryJobListPtr  ParmSearchResultsProcessor::GetBestCandidates ()
   }
 
 
-  // From the High accuracy jobs we want teh ones that ran fastest.
+  // From the High accuracy jobs we want the ones that ran fastest.
   BinaryJobListPtr  finalCandidateJobs = new BinaryJobList (processor);
   finalCandidateJobs->Owner (false);
 
@@ -102,7 +99,7 @@ BinaryJobListPtr  ParmSearchResultsProcessor::GetBestCandidates ()
       break;
 
     finalCandidateJobs->PushOnBack (j, result);
-    if  (result != BinaryJobList::NoError)
+    if  (result != BinaryJobList::ErrorCodes::NoError)
     {
       cerr << endl
         << "ParmSearchResultsProcessor::GetBestCandidates   ***ERROR***   Duplicate Job adding to 'finalCandidateJobs'." << endl

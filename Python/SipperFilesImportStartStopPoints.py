@@ -16,12 +16,13 @@ def  ToInt(s):
 
 
 def  ProcessSipperFileStartStopPoints(fileName):
+  passWord=""
   try:
-       db = mysql.connector.Connect(user='root',
-                                    password="dasani30",
-                                    host='sipper-db.marine.usf.edu',
-                                    database='pices_new'
-                                  )
+    db = mysql.connector.Connect(user='root',
+                                 password=passWord,
+                                 host='sipper-db.marine.usf.edu',
+                                 database='pices_new'
+                                )
   except  mysql.connector.Error as err:
     db = None
     if  err.errno == errorcode.ER_ACCESS_DENIED_ERROR:

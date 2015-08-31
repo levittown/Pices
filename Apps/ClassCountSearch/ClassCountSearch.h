@@ -6,11 +6,16 @@
 using namespace  KKB;
 
 #include "ConfusionMatrix2.h"
+#include "FactoryFVProducer.h"
 #include "MLClass.h"
 #include "ImageFeatures.h"
-#include "PicesApplication.h"
 #include "TrainingConfiguration2.h"
+using  namespace  KKMLL;
+
+#include "PicesApplication.h"
+#include "PicesTrainingConfiguration.h"
 using  namespace  MLL;
+
 
 class  ClassCountSearch: public PicesApplication
 {
@@ -43,37 +48,37 @@ public:
 private:
   void  DisplayCommandLineParameters ();
 
-  MLClassConstPtr  SelectNextClassToRemove (ConfusionMatrix2Ptr  cm);
+  MLClassPtr  SelectNextClassToRemove (ConfusionMatrix2Ptr  cm);
 
-  ConfusionMatrix2Ptr  GradeClassList (MLClassConstListPtr  classes,
-                                       kkint32&               numExamples, 
-                                       kkint32&               numIgnored
+  ConfusionMatrix2Ptr  GradeClassList (MLClassListPtr  classes,
+                                       kkint32&        numExamples, 
+                                       kkint32&        numIgnored
                                       );
 
   ClassStatsListPtr  ComputeClassStatsList (ConfusionMatrix2Ptr  cm);
 
-  void       ProcessClassCombo (MLClassConstListPtr  classes);
+  void       ProcessClassCombo (MLClassListPtr  classes);
 
   void       ReportResults ();
 
 
 
-  bool                        cancelFlag;
+  bool                   cancelFlag;
 
-  KKStr                       groundTruthDirName;
-  FeatureVectorListPtr        groundTruth;
-  MLClassConstListPtr         groundTruthClasses;
+  KKStr                  groundTruthDirName;
+  FeatureVectorListPtr   groundTruth;
+  MLClassListPtr         groundTruthClasses;
 
-  MLClassConstListPtr         mlClasses;
+  MLClassListPtr         mlClasses;
 
-  ofstream*                   report;
-  ofstream*                   report1Type1Errors;
-  KKStr                       reportFileName;
+  ofstream*              report;
+  ofstream*              report1Type1Errors;
+  KKStr                  reportFileName;
 
-  FeatureVectorListPtr        trainExamples;
-  MLClassConstListPtr         trainExamplesClasses;
+  FeatureVectorListPtr   trainExamples;
+  MLClassListPtr         trainExamplesClasses;
 
-  queue<MLClassConstListPtr>  combinationsToTry;           
+  queue<MLClassListPtr>  combinationsToTry;           
 
 };
 

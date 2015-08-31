@@ -54,3 +54,7 @@ PicesDataBase/PicesDataBase.dbmdl
 PlanktonApps.v12.suo
 *.dbmdl
 PicesDataBase/PicesDataBase.dbmdl
+
+*.suo
+PicesLibraries/PicesLibrary/SVMModel_ORIG.cpp
+Documentation

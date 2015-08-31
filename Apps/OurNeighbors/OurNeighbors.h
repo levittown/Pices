@@ -45,7 +45,7 @@ private:
                                          kkint32                   lloydsBinSize
                                         );
 
-  MLClassConstPtr      DetermineClassFromFileName (const  KKStr&  fileName);
+  MLClassPtr           DetermineClassFromFileName (const  KKStr&  fileName);
 
   kkint32              LastScanLine (const ImageFeaturesList&  images)  const;
 
@@ -55,29 +55,30 @@ private:
 
 
 
-  kkint32              bucketSize;
-  bool                 cancelFlag;
-  MLClassConstListPtr  excludedClasses;   // List of classes to exclude from report.
-  KKStr                featureFileName;
-  KKStr                fromPlanktonName;
-  MLClassConstPtr      fromPlankton;
-  ostream*             html;
-	ofstream*            htmlFile;
-	KKStr                htmlFileName;
-	MLClassConstPtr      mlClass;
-	MLClassConstListPtr  mlClasses;
-  kkint32              lastScanLine;  // Last scan line in SIPPER file;  
-  kkint32              baseLLoydsBinSize;
-  KKStr                lloydsBinsFileName;
-  NeighborType         neighborType;
-  kkint32              numOfIterations;
-  kkint32              numOfBuckets;
-  bool                 randomizeLocations;
-	ostream*             report;
-	ofstream*            reportFile;
-	KKStr                reportFileName;
-	KKStr                sourceRootDirPath;
-	KKStr                startDirectory;
+  kkint32               bucketSize;
+  bool                  cancelFlag;
+  MLClassListPtr        excludedClasses;   // List of classes to exclude from report.
+  FactoryFVProducerPtr  fvProducerFactory;
+  KKStr                 featureFileName;
+  KKStr                 fromPlanktonName;
+  MLClassPtr            fromPlankton;
+  ostream*              html;
+	ofstream*             htmlFile;
+	KKStr                 htmlFileName;
+	MLClassPtr            mlClass;
+	MLClassListPtr        mlClasses;
+  kkint32               lastScanLine;  // Last scan line in SIPPER file;  
+  kkint32               baseLLoydsBinSize;
+  KKStr                 lloydsBinsFileName;
+  NeighborType          neighborType;
+  kkint32               numOfIterations;
+  kkint32               numOfBuckets;
+  bool                  randomizeLocations;
+	ostream*              report;
+	ofstream*             reportFile;
+	KKStr                 reportFileName;
+	KKStr                 sourceRootDirPath;
+	KKStr                 startDirectory;
 };
 
 #endif

@@ -90,17 +90,17 @@ PicesClassList::PicesClassList (PicesClassList^  _classes)
 
 
 
-PicesClassList::PicesClassList (const MLClassConstListPtr  _classes):
+PicesClassList::PicesClassList (const MLClassListPtr  _classes):
     List<PicesClass^> (),
     directory         (nullptr),
     rootNode          (nullptr)
 {
   directory = "";
 
-  MLClassConstList::const_iterator  idx;
+  MLClassList::const_iterator  idx;
   for  (idx = _classes->begin ();  idx != _classes->end ();  ++idx)
   {
-    MLClassConstPtr  ic = *idx;
+    MLClassPtr  ic = *idx;
     Add (PicesClassList::GetUniqueClass (ic));
   }
 }
@@ -123,9 +123,9 @@ void  PicesClassList::CleanUpUnmanagedResources ()
 {
 }
 
-MLClassConstListPtr  PicesClassList::ToMLClassConstList ()
+MLClassListPtr  PicesClassList::ToMLClassConstList ()
 {
-  MLClassConstListPtr  result = new MLClassConstList ();
+  MLClassListPtr  result = new MLClassList ();
   for each (PicesClass^ pc in *this)
   {
     result->PushOnBack (pc->UnmanagedMLClass ());
@@ -196,7 +196,7 @@ PicesClass^  PicesClassList::LookUpByName (String^  className)
 
 
 
-PicesClass^  PicesClassList::LookUpByUnmanagedClass (MLClassConstPtr  unmanagedClass)
+PicesClass^  PicesClassList::LookUpByUnmanagedClass (MLClassPtr  unmanagedClass)
 {
   for each (PicesClass^ pc in (*this))
   {
@@ -518,7 +518,7 @@ PicesClass^  PicesClassList::GetUniqueClass (String^  _name,
 //*  Supports the idea that there is only one instance of a class with the same  *
 //*  name in memory.                                                             *
 //********************************************************************************
-PicesClass^  PicesClassList::GetUniqueClass (MLClassConstPtr  mlClass)
+PicesClass^  PicesClassList::GetUniqueClass (MLClassPtr  mlClass)
 {
   if  (mlClass == NULL)
     int zed = 9999;
@@ -635,8 +635,8 @@ PicesClassList::ManagedClassLocator::ManagedClassLocator  ()
 }
 
 
-PicesClassList::Node::Node (MLClassConstPtr _unmanagedClass,
-                            PicesClass^     _managedClass
+PicesClassList::Node::Node (MLClassPtr   _unmanagedClass,
+                            PicesClass^  _managedClass
                            ):
        unmanagedClass (_unmanagedClass),
        managedClass   (_managedClass),
@@ -648,8 +648,8 @@ PicesClassList::Node::Node (MLClassConstPtr _unmanagedClass,
  
   
 
-bool  PicesClassList::ManagedClassLocator::Add (MLClassConstPtr  unmanagedClass,
-                                                PicesClass^      managedClass
+bool  PicesClassList::ManagedClassLocator::Add (MLClassPtr   unmanagedClass,
+                                                PicesClass^  managedClass
                                                )
 {
   if  (root == nullptr)
@@ -696,7 +696,7 @@ bool  PicesClassList::ManagedClassLocator::Add (MLClassConstPtr  unmanagedClass,
 
 
 
-PicesClass^   PicesClassList::ManagedClassLocator::LookUp (MLClassConstPtr  unmanagedClass)
+PicesClass^   PicesClassList::ManagedClassLocator::LookUp (MLClassPtr  unmanagedClass)
 {
   if  (root == nullptr)
     return nullptr;

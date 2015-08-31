@@ -28,7 +28,7 @@ using namespace KKB;
 #include "ConfusionMatrix2.h"
 #include "CrossValidation.h"
 #include "TrainingProcess2.h"
-using namespace  MLL;
+using namespace  KKMLL;
 
 #include "ValidationResults.h"
 #include "BinaryJob.h"
