@@ -4479,12 +4479,11 @@ void  DataBase::ImageUpdateInstrumentDataFields (InstrumentDataPtr  instumentDat
 
 
 
-
-
 void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruiseName,
                                                const KKStr&               stationName,
                                                const KKStr&               deploymentNum,
                                                const KKStr&               className,
+                                               float                      maxDepth,
                                                float                      depthBinSize,
                                                char                       statistic,
                                                double                     initialValue,
@@ -4513,6 +4512,7 @@ void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruise
          <<       ","  << stationName.QuotedStr ()
          <<       ","  << deploymentNum.QuotedStr ()
          <<       ","  << className.QuotedStr ()
+         <<       ","  << maxDepth
          <<       ","  << depthBinSize
          <<       ","  << statisticStr.QuotedStr ()
          <<       ","  << initialValue
@@ -4600,70 +4600,101 @@ void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruise
       endValues.push_back (lastEndValue);
       startValues.push_back (lastEndValue);
     }
+    else
+    {
+      log.Level (-1) << endl
+        << "DataBase::ImagesSizeDistributionByDepth   ***ERROR***   Unrecognized Column Idx:" << columnIdx << "  Name:" <<  colName.QuotedStr () << endl
+        << endl;
+    }
     ++columnIdx;
   }
   endValues.push_back (9999999.99f);
 
   kkuint32  sizeBucketCount = startValues.size ();
 
-  for  (kkuint32  resultsIDX = 0;  resultsIDX < results->NumRows ();  ++resultsIDX)
+  kkint32  maxColIdx = Max(downCastIdx, bucketIdx, bucketDepthIdx, imageCountIdx, totalPixelCountIdx, totalFilledAreaIdx, firstSizeBucketIdx);
+
+  bool  colDefAllThere = ((downCastIdx        >= 0) &&
+                          (bucketIdx          >= 0) &&
+                          (bucketDepthIdx     >= 0) &&
+                          (imageCountIdx      >= 0) &&
+                          (totalPixelCountIdx >= 0) &&
+                          (totalFilledAreaIdx >= 0) &&
+                          (firstSizeBucketIdx >= 0)
+                         );
+  if  (!colDefAllThere)
   {
-    KKStrList& row = (*results)[resultsIDX];
-    bool  downCastRow = row[downCastIdx].ToBool ();
-
-    ImageSizeDistributionPtr  sizeDistribution = NULL;
-
-    float  volSampled = 0.0f;
-
-    kkint32  totalPixelCount = 0;
-    kkint32  totalFilledArea = 0;
-
-    float  depth      = row[bucketDepthIdx].ToFloat ();
-    kkint32  imageCount = row[imageCountIdx].ToInt32 ();
-
-    kkint32  depthBinIdx = (kkint32)(depth / depthBinSize);
-
-    if  (totalPixelCountIdx >= 0)
-      totalPixelCount = row[totalPixelCountIdx].ToInt32 ();
-
-    if  (totalFilledAreaIdx >= 0)
-      totalFilledArea = row[totalFilledAreaIdx].ToInt32 ();
-
-    VolumeSampledStatPtr  volStat = NULL;
-
-    if  (downCastRow)
+    log.Level (-1) << endl 
+        << "DataBase::ImagesSizeDistributionByDepth   ***ERROR***   Column definitions are missing." << endl
+        << "downCastIdx        = " << downCastIdx         << endl
+        << "bucketIdx          = " << bucketIdx           << endl
+        << "bucketDepthIdx     = " << bucketDepthIdx      << endl
+        << "imageCountIdx      = " << imageCountIdx       << endl
+        << "totalPixelCountIdx = " << totalPixelCountIdx  << endl
+        << "totalFilledAreaIdx = " << totalFilledAreaIdx  << endl
+        << "firstSizeBucketIdx = " << firstSizeBucketIdx  << endl
+        << endl;
+  }
+  else
+  {
+    for  (kkuint32  resultsIDX = 0;  resultsIDX < results->NumRows ();  ++resultsIDX)
     {
-      if (!downCast)
+      KKStrList& row = (*results)[resultsIDX];
+      bool  downCastRow = row[downCastIdx].ToBool ();
+
+      ImageSizeDistributionPtr  sizeDistribution = NULL;
+
+      float  volSampled = 0.0f;
+
+      kkint32  totalPixelCount = 0;
+      kkint32  totalFilledArea = 0;
+
+      float    depth      = row[bucketDepthIdx].ToFloat ();
+      kkint32  imageCount = row[imageCountIdx].ToInt32 ();
+
+      kkint32  depthBinIdx = (kkint32)(depth / depthBinSize);
+
+      if  (totalPixelCountIdx >= 0)
+        totalPixelCount = row[totalPixelCountIdx].ToInt32 ();
+
+      if  (totalFilledAreaIdx >= 0)
+        totalFilledArea = row[totalFilledAreaIdx].ToInt32 ();
+
+      VolumeSampledStatPtr  volStat = NULL;
+
+      if  (downCastRow)
       {
-        downCast = new ImageSizeDistribution (depthBinSize, initialValue, growthRate, endValue, startValues, endValues, log);
+        if (!downCast)
+       {
+          downCast = new ImageSizeDistribution (depthBinSize, initialValue, growthRate, endValue, startValues, endValues, log);
+        }
+        sizeDistribution = downCast;
+        if  (volSampledDownCast)
+          volStat = volSampledDownCast->Locate (depthBinIdx);
+        else
+          volStat = NULL;
       }
-      sizeDistribution = downCast;
-      if  (volSampledDownCast)
-        volStat = volSampledDownCast->Locate (depthBinIdx);
       else
-        volStat = NULL;
-    }
-    else
-    {
-      if  (!upCast)
       {
-        upCast = new ImageSizeDistribution (depthBinSize, initialValue, growthRate, endValue, startValues, endValues, log);
+        if  (!upCast)
+        {
+          upCast = new ImageSizeDistribution (depthBinSize, initialValue, growthRate, endValue, startValues, endValues, log);
+        }
+        sizeDistribution = upCast;
+        if  (volSampledUpCast)
+          volStat = volSampledUpCast->Locate (depthBinIdx);
+        else
+          volStat = NULL;
       }
-      sizeDistribution = upCast;
-      if  (volSampledUpCast)
-        volStat = volSampledUpCast->Locate (depthBinIdx);
-      else
-        volStat = NULL;
-    }
 
-    if  (volStat)
-      volSampled = volStat->VolumeSampled ();
+      if  (volStat)
+        volSampled = volStat->VolumeSampled ();
 
-
-    sizeDistribution->DefineRow (depth, imageCount, totalPixelCount, totalFilledArea, volSampled);
-    for  (kkuint32  zed = firstSizeBucketIdx, sizeIdx = 0;  zed < row.size ();  ++zed, ++sizeIdx)
-    {
-      sizeDistribution->AddData (depth, sizeIdx, row[zed].ToInt32 ());
+      sizeDistribution->DefineRow (depth, imageCount, totalPixelCount, totalFilledArea, volSampled);
+      for  (kkuint32  zed = firstSizeBucketIdx, sizeIdx = 0;  zed < row.size ();  ++zed, ++sizeIdx)
+      {
+        sizeDistribution->AddData (depth, sizeIdx, row[zed].ToInt32 ());
+      }
     }
   }
 

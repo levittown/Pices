@@ -477,19 +477,21 @@ namespace MLL
                             double&      latitude,
                             double&      longitude
                            );
-    
-    void  ImagesSizeDistributionByDepth (const KKStr&               cruiseName,
-                                         const KKStr&               stationName,
-                                         const KKStr&               deploymentNum,
-                                         const KKStr&               className,
-                                         float                      depthBinSize,
-                                         char                       statistic,
-                                         double                     initialValue,
-                                         double                     growthRate,
-                                         double                    endValue,
-                                         ImageSizeDistributionPtr&  downCast,
-                                         ImageSizeDistributionPtr&  upCast
-                                        );
+
+
+     void  ImagesSizeDistributionByDepth (const KKStr&               cruiseName,
+                                          const KKStr&               stationName,
+                                          const KKStr&               deploymentNum,
+                                          const KKStr&               className,
+                                          float                      maxDepth,
+                                          float                      depthBinSize,
+                                          char                       statistic,
+                                          double                     initialValue,
+                                          double                     growthRate,
+                                          double                     endValue,
+                                          ImageSizeDistributionPtr&  downCast,
+                                          ImageSizeDistributionPtr&  upCast
+                                         );
 
 
 

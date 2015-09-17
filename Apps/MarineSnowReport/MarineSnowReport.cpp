@@ -138,6 +138,9 @@ void  CreateThresholdHeaders (VectorFloat&  sizeThresholds,
 }  /* CreateThresholdHeaders */
 
 
+double  startValue = 0.005;
+double  growthRate = 1.2;
+double  endValue   = 170.0;
 
 
 DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
@@ -165,32 +168,41 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
   allClasses = NULL;
 
   char  statisticCode = '0';
-  double  startValue = 0.005;
-  double  growthRate = 1.2;
-  double  endValue   = 170.0;
+
+
+  // '0' = "Area";
+  // '1' = "Diameter";
+  // '2' = "Volume";
+
+  // KKKK
+
+  double  lenStart = 0.1;
+  double  lenGR    = 1.1;
+  double  lenEnd   = 100.0;
+
 
   if  (statistic == "0")
   {
     statisticCode = '0';
-    startValue    = 0.010;
-    growthRate    = 1.122462048; // k = 2^(1/6)
-    endValue      = 1000.0;
+    startValue    = PIE * pow((lenStart / 2.0), 2.0);
+    growthRate    = pow(lenGR, 2.0);
+    endValue      = PIE * pow((lenEnd / 2.0), 2.0);
   }
 
   else if  (statistic == "1")
   {
     statisticCode = '1';
-    startValue    = 0.10;
-    growthRate    = 1.059463094;  // k = 2^(1/12)
-    endValue      = 100.0;
+    startValue    = lenStart;
+    growthRate    = lenGR;
+    endValue      = lenEnd;
   }
 
   else if  (statistic == "2")
   {
     statisticCode = '2';
-    startValue    = 0.001;
-    growthRate    = 1.189207115;  // k = 2^(1/4)
-    endValue      = 10000.0;
+    startValue    = (4.0 / 3.0) * PIE *  pow((lenStart / 2.0), 3.0);
+    growthRate    = pow(lenGR, 3.0);
+    endValue      = (4.0 / 3.0) * PIE *  pow((lenEnd   / 2.0), 3.0);
   }
 
 
@@ -201,10 +213,9 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
     ImageSizeDistributionPtr  downCast = NULL;
     ImageSizeDistributionPtr  upCast   = NULL;
     db.ImagesSizeDistributionByDepth (deployment->CruiseName (), deployment->StationName (), deployment->DeploymentNum (), c->Name (), 
-                                      1.0f, statisticCode, startValue, growthRate, endValue, 
+                                      140.0, 1.0f, statisticCode, startValue, growthRate, endValue, 
                                       downCast, upCast
                                     );
-
     if  (downCast)
     {
       if  (!totalDownCast)
@@ -213,7 +224,6 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
       }
       totalDownCast ->AddIn (*downCast, runLog);
     }
-
     delete  downCast;  downCast = NULL;
     delete  upCast;    upCast   = NULL;
   }
@@ -251,17 +261,20 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
   KKStr  reportFileRootName1 =  osAddSlash (marineSnowReportDirectory) + reportRootName + ".txt";
   ofstream  r1 (reportFileRootName1.Str ());
 
-  r1 << "Cruise"     << "\t" << deployment->CruiseName    () << endl
-     << "Station"    << "\t" << deployment->StationName   () << endl
-     << "Deployment" << "\t" << deployment->DeploymentNum () << endl
-     << "DateTime"   << "\t" << osGetLocalDateTime ()        << endl
-     << "DataBase"   << "\t" << db.ServerDescription ()      << endl
-     << "ProgName"   << "\t" << osGetProgName ()             << endl
-     << "BuildTime"  << "\t" << __DATE__ << " " << __TIME__  << endl
-     << "SvnVersion" << "\t" << svnVersionStr                << endl
-     << "HostName"   << "\t" << osGetHostName ()             << endl
-     << "UserName"   << "\t" << osGetUserName ()             << endl
+  r1 << "Cruise"        << "\t" << deployment->CruiseName    () << endl
+     << "Station"       << "\t" << deployment->StationName   () << endl
+     << "Deployment"    << "\t" << deployment->DeploymentNum () << endl
+     << "DateTime"      << "\t" << osGetLocalDateTime ()        << endl
+     << "DataBase"      << "\t" << db.ServerDescription ()      << endl
+     << "ProgName"      << "\t" << osGetProgName ()             << endl
+     << "BuildTime"     << "\t" << __DATE__ << " " << __TIME__  << endl
+     << "SvnVersion"    << "\t" << svnVersionStr                << endl
+     << "HostName"      << "\t" << osGetHostName ()             << endl
+     << "UserName"      << "\t" << osGetUserName ()             << endl
      << "StatisticCode" << "\t" << statistic << "\t" << statisticStr << endl
+     << "Start-Val"     << "\t" << startValue << endl
+     << "Growth-Rate"   << "\t" << growthRate << endl
+     << "End-Val"       << "\t" << endValue << endl
      << endl
      << endl;
 
@@ -303,9 +316,9 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
     if  (!row)
       continue;
 
-    bool   downCast    = true;
+    bool     downCast    = true;
     kkint32  bucketIdx   = rowIdx;
-    float  bucketDepth = row->Depth ();
+    float    bucketDepth = row->Depth ();
     kkint32  imageCount  = (kkint32)row->ImageCount ();
     kkint32  pixelCount  = row->TotalPixels ();
     kkint32  filledArea  = row->TotalFilledArea ();
@@ -388,9 +401,9 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
     if  (!row)
       continue;
 
-    bool   downCast    = true;
+    bool     downCast    = true;
     kkint32  bucketIdx   = rowIdx;
-    float  bucketDepth = row->Depth ();
+    float    bucketDepth = row->Depth ();
     kkint32  imageCount  = (kkint32)row->ImageCount ();
     kkint32  pixelCount  = row->TotalPixels ();
     kkint32  filledArea  = row->TotalFilledArea ();
@@ -480,14 +493,17 @@ void  PrintSummaryReports (DataBasePtr                  db,
 
   KKStr svnVersionStr = QUOTE (_SVNVERSION_);
 
-  r  << "DateTime"   << "\t" << osGetLocalDateTime ()        << endl
-     << "DataBase"   << "\t" << db->ServerDescription ()     << endl
-     << "ProgName"   << "\t" << osGetProgName ()             << endl
-     << "BuildTime"  << "\t" << __DATE__ << " " << __TIME__  << endl
-     << "SvnVersion" << "\t" << svnVersionStr                << endl
-     << "HostName"   << "\t" << osGetHostName ()             << endl
-     << "UserName"   << "\t" << osGetUserName ()             << endl
-     << "Statistic"  << "\t" << statistic << "\t" << statisticStr << endl
+  r  << "DateTime"    << "\t" << osGetLocalDateTime ()        << endl
+     << "DataBase"    << "\t" << db->ServerDescription ()     << endl
+     << "ProgName"    << "\t" << osGetProgName ()             << endl
+     << "BuildTime"   << "\t" << __DATE__ << " " << __TIME__  << endl
+     << "SvnVersion"  << "\t" << svnVersionStr                << endl
+     << "HostName"    << "\t" << osGetHostName ()             << endl
+     << "UserName"    << "\t" << osGetUserName ()             << endl
+     << "Statistic"   << "\t" << statistic << "\t" << statisticStr << endl
+     << "Start-Val"   << "\t" << startValue << endl
+     << "Growth-Rate" << "\t" << growthRate << endl
+     << "End-Val"     << "\t" << endValue << endl
      << endl
      << endl
      << endl;
@@ -619,10 +635,20 @@ void  MarineSnowReport (const KKStr&  statistic)
      continue;
 
     if  ((deployment->CruiseName ().EqualIgnoreCase ("WB1008"))  ||
+         (deployment->CruiseName ().EqualIgnoreCase ("WB0810"))  ||
+         (deployment->CruiseName ().EqualIgnoreCase ("WB0910"))  ||
+         (deployment->CruiseName ().EqualIgnoreCase ("WB1210"))  ||
+         (deployment->CruiseName ().EqualIgnoreCase ("WB0211"))  ||
+         (deployment->CruiseName ().EqualIgnoreCase ("WB0511"))  ||
          (deployment->CruiseName ().EqualIgnoreCase ("WB0911"))  ||
          (deployment->CruiseName ().EqualIgnoreCase ("WB0812"))  ||
+         (deployment->CruiseName ().EqualIgnoreCase ("WB0212"))  ||
+         (deployment->CruiseName ().EqualIgnoreCase ("WB0512"))  ||
+         (deployment->CruiseName ().EqualIgnoreCase ("WB0812"))  ||
+         (deployment->CruiseName ().EqualIgnoreCase ("WB0213"))  ||
+         (deployment->CruiseName ().EqualIgnoreCase ("WB0513"))  ||
          (deployment->CruiseName ().EqualIgnoreCase ("WB0813"))  ||
-         (deployment->CruiseName ().EqualIgnoreCase ("WB0814"))
+         (deployment->CruiseName ().EqualIgnoreCase ("WB0814"))  
         )
     {
       runLog.Level (10) << "MarineSnowReport    Found Cruise: " << deployment->CruiseName ()  << endl;
@@ -640,8 +666,10 @@ void  MarineSnowReport (const KKStr&  statistic)
 
   PrintSummaryReports (db, summaries, statistic, statisticStr);
 
-
   CleanUpSummaries (summaries);
+
+  delete  deployments;
+  deployments = NULL;
 
   delete  db;
   db = NULL;
@@ -664,6 +692,8 @@ int  main (int    argc,
     _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF ); 
   #endif
 
+  MarineSnowReport ("0");
+  MarineSnowReport ("1");
   MarineSnowReport ("2");
 
   return 0;
