@@ -8,7 +8,6 @@
 
 #include "RunLog.h"
 #include "KKStr.h"
-using namespace KKB;
 
 
 #include "KKMLVariables.h"

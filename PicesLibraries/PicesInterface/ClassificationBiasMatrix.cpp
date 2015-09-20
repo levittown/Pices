@@ -1,20 +1,20 @@
-#include  "StdAfx.h"
-#include  "FirstIncludes.h"
+#include "StdAfx.h"
+#include "FirstIncludes.h"
 
-#include  <stdio.h>
-#include  <math.h>
-#include  <ctype.h>
-#include  <time.h>
-#include  <fstream>
-#include  <iostream>
-#include  <map>
-#include  <ostream>
-#include  <string>
-#include  <vector>
-using namespace std;
+#include <stdio.h>
+#include <math.h>
+#include <ctype.h>
+#include <time.h>
+#include <fstream>
+#include <iostream>
+#include <map>
+#include <ostream>
+#include <string>
+#include <vector>
+//using namespace std;
 
-#include  "MemoryDebug.h"
-#include  "KKBaseTypes.h"
+#include "MemoryDebug.h"
+#include "KKBaseTypes.h"
 
 using namespace System;
 using namespace System::Collections::Generic;
@@ -25,6 +25,8 @@ using namespace System::IO;
 using namespace KKB;
 
 #include "PicesOSservices.h"
+
+
 #include "PicesKKStr.h"
 
 #include "ClassificationBiasMatrix.h"
@@ -463,45 +465,45 @@ void   ClassificationBiasMatrix::PerformAdjustmnts (array<double>^  classifiedCo
 
   if  (false)
   {
-    ofstream  db ("c:\\Temp\\InverseMatric.txt");
+    std::ofstream  db ("c:\\Temp\\InverseMatric.txt");
 
     int r,c;
-    db << "Probabilities Matrix" << endl;
+    db << "Probabilities Matrix" << std::endl;
     for  (c = 0;  c < probabilities->NumOfCols ();  c++)
        db << "\t" << c;
-    db << endl;
+    db << std::endl;
     for  (r = 0; r < probabilities->NumOfRows ();  r++)
     {
       db << r;
       for  (c = 0;  c < probabilities->NumOfCols ();  c++)
         db << "\t" << (*probabilities)[r][c];
-      db << endl;
+      db << std::endl;
     }
 
 
-    db << endl << endl << "Transposed Matrix" << endl;
+    db << std::endl << std::endl << "Transposed Matrix" << std::endl;
     for  (c = 0;  c < probabilities->NumOfCols ();  c++)
        db << "\t" << c;
-    db << endl;
+    db << std::endl;
     for  (r = 0; r < transposed.NumOfRows ();  r++)
     {
       db << r;
       for  (c = 0;  c < transposed.NumOfCols ();  c++)
         db << "\t" << transposed[r][c];
-      db << endl;
+      db << std::endl;
     }
 
 
-    db << endl << endl << "Inverse Matrix" << endl;
+    db << std::endl << std::endl << "Inverse Matrix" << std::endl;
     for  (c = 0;  c < probabilities->NumOfCols ();  c++)
        db << "\t" << c;
-    db << endl;
+    db << std::endl;
     for  (r = 0; r < Q.NumOfRows ();  r++)
     {
       db << r;
       for  (c = 0;  c < Q.NumOfCols ();  c++)
         db << "\t" << Q[r][c];
-      db << endl;
+      db << std::endl;
     }
   }
 

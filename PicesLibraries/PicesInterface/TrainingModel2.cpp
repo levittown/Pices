@@ -10,7 +10,6 @@
 #include <ostream>
 #include <string>
 #include <vector>
-using namespace std;
 
 
 #include "MemoryDebug.h"
@@ -22,6 +21,7 @@ using namespace std;
 #include "RunLog.h"
 #include "KKStr.h"
 using namespace KKB;
+
 
 
 #include "Classifier2.h"
@@ -47,7 +47,6 @@ using namespace  MLL;
 using namespace PicesInterface;
 
 
-using namespace std;
 using namespace System;
 using namespace System::Drawing::Imaging;
 using namespace System::Windows::Forms;
@@ -353,29 +352,27 @@ void  TrainingModel2::CleanUpUnmanagedResources ()
       delete  trainer;         
       trainer = NULL;
     }
-    catch  (const exception&  e1)
+    catch  (const std::exception&  e1)
     {
-      runLog->Level (-1) << endl
-        << "TrainingModel2::CleanUpUnmanagedResources  ***ERROR***     Exception destroying the 'Trainer Object." << endl
-        << "                Exception[" << e1.what () << "]" << endl
-        << endl;
-
+      runLog->Level (-1) << std::endl
+        << "TrainingModel2::CleanUpUnmanagedResources  ***ERROR***     Exception destroying the 'Trainer Object." << std::endl
+        << "                Exception[" << e1.what () << "]" << std::endl
+        << std::endl;
     }
 
     catch  (const char* e2)
     {
-      runLog->Level (-1) << endl
-        << "TrainingModel2::CleanUpUnmanagedResources  ***ERROR***     Exception destroying the 'Trainer Object." << endl
-        << "                Exception[" << e2 << "]" << endl
-        << endl;
+      runLog->Level (-1) << std::endl
+        << "TrainingModel2::CleanUpUnmanagedResources  ***ERROR***     Exception destroying the 'Trainer Object." << std::endl
+        << "                Exception[" << e2 << "]" << std::endl
+        << std::endl;
     }
 
     catch  (...)
     {
-      runLog->Level (-1) << endl
-        << "TrainingModel2::CleanUpUnmanagedResources  ***ERROR***     Exception destroying the 'Trainer Object." << endl
-        << endl;
-
+      runLog->Level (-1) << std::endl
+        << "TrainingModel2::CleanUpUnmanagedResources  ***ERROR***     Exception destroying the 'Trainer Object." << std::endl
+        << std::endl;
     }
   }
   trainer = NULL;
@@ -397,7 +394,7 @@ void  TrainingModel2::CleanUpUnmanagedResources ()
 
   if  (runLog)
   {
-    (*runLog).Level (10) << "TrainingModel2::CleanUpUnmanagedResources  Done Cleaning Up." << endl;
+    (*runLog).Level (10) << "TrainingModel2::CleanUpUnmanagedResources  Done Cleaning Up." << std::endl;
     delete  runLog;
     runLog = NULL;
   }
@@ -681,7 +678,7 @@ void  TrainingModel2::LoadTrainingModelForGivenLevel (uint            level,
   }
   catch (System::AccessViolationException^ z)
   {
-    (*runLog).Level (-1) << PicesKKStr::SystemStringToKKStr (z->ToString ()) << endl;
+    (*runLog).Level (-1) << PicesKKStr::SystemStringToKKStr (z->ToString ()) << std::endl;
     delete  trainer;  trainer = NULL;
     delete  classes;  classes = NULL;
     *valid = false;
@@ -736,7 +733,7 @@ void  TrainingModel2::LoadExistingTrainedModel ()
   }
   catch (System::AccessViolationException^ z)
   {
-    (*runLog).Level (-1) << PicesKKStr::SystemStringToKKStr (z->ToString ()) << endl;
+    (*runLog).Level (-1) << PicesKKStr::SystemStringToKKStr (z->ToString ()) << std::endl;
     delete  trainer;  trainer = NULL;
     delete  classes;  classes = NULL;
     *valid = false;
@@ -812,8 +809,8 @@ void  TrainingModel2::BuildNewTrainedModel ()
   config->Load (configFileName, true, *runLog);
   if  (!config->FormatGood ())
   {
-    *runLog << endl << "TrainingModel2::BuildNewTrainedModel   ***ERROR***    Configuration[" << configFileName << "] invalid format." << endl;
-    *runLog << config->FormatErrors () << endl << endl;
+    *runLog << std::endl << "TrainingModel2::BuildNewTrainedModel   ***ERROR***    Configuration[" << configFileName << "] invalid format." << std::endl;
+    *runLog << config->FormatErrors () << std::endl << std::endl;
     *valid = false;
     return;
   }
@@ -831,8 +828,8 @@ void  TrainingModel2::BuildNewTrainedModel ()
   }
   catch (System::AccessViolationException^ z)
   {
-    (*runLog) << "TrainingModel2::BuildNewTrainedModel   ***ERROR***  Memory Access Exception calling 'CreateTrainingProcess'" << endl
-      << PicesKKStr::SystemStringToKKStr (z->ToString ()) << endl;
+    (*runLog) << "TrainingModel2::BuildNewTrainedModel   ***ERROR***  Memory Access Exception calling 'CreateTrainingProcess'" << std::endl
+      << PicesKKStr::SystemStringToKKStr (z->ToString ()) << std::endl;
 
     delete  trainer;  trainer = NULL;
     *valid = false;
@@ -842,8 +839,8 @@ void  TrainingModel2::BuildNewTrainedModel ()
   }
   catch  (System::Exception^  z2)
   {
-    (*runLog) << "TrainingModel2::BuildNewTrainedModel   ***ERROR***  Memory Access Exception calling 'CreateTrainingProcess'" << endl
-              << PicesKKStr::SystemStringToKKStr (z2->ToString ()) << endl;
+    (*runLog) << "TrainingModel2::BuildNewTrainedModel   ***ERROR***  Memory Access Exception calling 'CreateTrainingProcess'" << std::endl
+              << PicesKKStr::SystemStringToKKStr (z2->ToString ()) << std::endl;
     delete  trainer;  trainer = NULL;
     *valid = false;
     InstrumentDataFileManager::InitializePop ();
@@ -860,7 +857,7 @@ void  TrainingModel2::BuildNewTrainedModel ()
 
   else if  (!trainer)
   {
-    (*runLog) << "TrainingModel2::LoadTrainigLibrary   ***ERROR***  No TrainingProcess instance created." << endl;
+    (*runLog) << "TrainingModel2::LoadTrainigLibrary   ***ERROR***  No TrainingProcess instance created." << std::endl;
     *valid = false;
   }
 
@@ -935,7 +932,7 @@ void  TrainingModel2::LoadTrainigLibrary (bool  forceRebuild)
   }
   catch (System::AccessViolationException^ z)
   {
-    (*runLog) << PicesKKStr::SystemStringToKKStr (z->ToString ()) << endl;
+    (*runLog) << PicesKKStr::SystemStringToKKStr (z->ToString ()) << std::endl;
 
     if  (trainer)
     {
@@ -945,7 +942,7 @@ void  TrainingModel2::LoadTrainigLibrary (bool  forceRebuild)
       }
       catch  (Exception^)  
       {
-        (*runLog) << "TrainingModel2::LoadTrainigLibrary   ***ERROR***  Exception calling 'ErrorMsgsAdd'." << endl;
+        (*runLog) << "TrainingModel2::LoadTrainigLibrary   ***ERROR***  Exception calling 'ErrorMsgsAdd'." << std::endl;
       }
     }
 
@@ -957,13 +954,13 @@ void  TrainingModel2::LoadTrainigLibrary (bool  forceRebuild)
   }
   catch  (System::Exception^  z2)
   {
-    (*runLog) << PicesKKStr::SystemStringToKKStr (z2->ToString ()) << endl;
+    (*runLog) << PicesKKStr::SystemStringToKKStr (z2->ToString ()) << std::endl;
     if  (trainer)
     {
       try{ErrorMsgsAdd (trainer->ConfigFileFormatErrors ());}
       catch  (Exception^)  
       {
-      (*runLog) << "TrainingModel2::LoadTrainigLibrary   ***ERROR***  Exception calling 'ErrorMsgsAdd'." << endl;
+      (*runLog) << "TrainingModel2::LoadTrainigLibrary   ***ERROR***  Exception calling 'ErrorMsgsAdd'." << std::endl;
       }
     }
     delete  trainer;  trainer = NULL;
@@ -982,7 +979,7 @@ void  TrainingModel2::LoadTrainigLibrary (bool  forceRebuild)
 
   else if  (!trainer)
   {
-    (*runLog) << "TrainingModel2::LoadTrainigLibrary   ***ERROR***  No TrainingProcess instance created." << endl;
+    (*runLog) << "TrainingModel2::LoadTrainigLibrary   ***ERROR***  No TrainingProcess instance created." << std::endl;
     *valid = false;
   }
 
@@ -991,7 +988,7 @@ void  TrainingModel2::LoadTrainigLibrary (bool  forceRebuild)
     try  {ErrorMsgsAdd (trainer->ConfigFileFormatErrors ());}  
     catch  (Exception^)  
     {
-      (*runLog) << "TrainingModel2::LoadTrainigLibrary   ***ERROR***  Exception calling 'ErrorMsgsAdd'." << endl;
+      (*runLog) << "TrainingModel2::LoadTrainigLibrary   ***ERROR***  Exception calling 'ErrorMsgsAdd'." << std::endl;
     }
     *valid = false;
     delete  trainer;
@@ -1014,10 +1011,6 @@ void  TrainingModel2::LoadTrainigLibrary (bool  forceRebuild)
   UpdateMemoryPressure ();
   GC::Collect ();
 }  /* LoadTrainigLibrary */
-
-
-
-
 
 
 
@@ -1058,7 +1051,7 @@ void  TrainingModel2::BuildTrainingModel (PicesFeatureVectorList^  picesTraining
   }
   catch (System::AccessViolationException^ z)
   {
-    (*runLog) << PicesKKStr::SystemStringToKKStr (z->ToString ()) << endl;
+    (*runLog) << PicesKKStr::SystemStringToKKStr (z->ToString ()) << std::endl;
     delete  trainer;  trainer = NULL;
     *valid = false;
     InstrumentDataFileManager::InitializePop ();
@@ -1099,7 +1092,7 @@ PicesPredictionList^   TrainingModel2::BinaryProbailitiesForClass (PicesClass^  
     (*runLog).Level (-1) << "\n"
                          <<  "TrainingModel2::BinaryProbailitiesForClass   ***ERROR***" << "\n" 
                          <<  "                   idx[" << idx << "] >= crossProbTableNumClasses[" << crossProbTableNumClasses << "]" << "\n"
-                         << endl;
+                         << std::endl;
     return  nullptr;
   }
 
@@ -1134,7 +1127,7 @@ PicesPredictionList^   TrainingModel2::PredictProbabilities (PicesFeatureVector^
     delete  unKnownExample;  unKnownExample = NULL;
     return nullptr;
   }
-  catch  (exception& e)
+  catch  (std::exception& e)
   {
     KKStr  errMsg = "TrainingModel2::PredictProbabilities   std::exception occurred calling 'ProbabilitiesByClass'.\n\n";
     errMsg << e.what ();
@@ -1461,7 +1454,7 @@ array<String^>^  TrainingModel2::SupportVectorNames (PicesClass^ c1,
   MLClassPtr  c1Pices = c1->UnmanagedMLClass ();
   MLClassPtr  c2Pices = c2->UnmanagedMLClass ();
 
-  vector<KKStr> fvNames = classifier->SupportVectorNames (c1Pices, c2Pices);
+  std::vector<KKStr> fvNames = classifier->SupportVectorNames (c1Pices, c2Pices);
 
   array<String^>^  results = gcnew array<String^> (fvNames.size ());
   for  (uint zed = 0;  zed < fvNames.size ();  zed++)
@@ -1488,7 +1481,7 @@ array<PicesInterface::ProbNamePair^>^
   // Will make duplicate of feature vector Because the Classifier will normalize the data.
   FeatureVectorPtr  dupFV = new FeatureVector (*picesFeatureVector->UnManagedClass ());
 
-  vector<KKMLL::ProbNamePair> worstExamples 
+  std::vector<KKMLL::ProbNamePair> worstExamples
     = classifier->FindWorstSupportVectors (dupFV, 
                                            numToFind, 
                                            c1Pices, 
@@ -1524,7 +1517,7 @@ array<PicesInterface::ProbNamePair^>^
   // Will make duplicate of feature vector Because the Classifier will normalize the data.
   FeatureVectorPtr  dupFV = new FeatureVector (*picesFeatureVector->UnManagedClass ());
 
-  vector<KKMLL::ProbNamePair> worstExamples 
+  std::vector<KKMLL::ProbNamePair> worstExamples
     = classifier->FindWorstSupportVectors2 (dupFV, 
                                             numToFind, 
                                             c1Pices, 

@@ -10,12 +10,13 @@
 #include <ostream>
 #include <string>
 #include <vector>
-using namespace std;
+
 
 #include "MemoryDebug.h"
 #include "KKBaseTypes.h"
 #include "KKException.h"
 #include "GoalKeeper.h"
+#include "RunLog.h"
 using namespace KKB;
 
 
@@ -1158,6 +1159,7 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
                                  String^                       stationName,
                                  String^                       deploymentNum,
                                  String^                       className,
+                                 float                         maxDepth,
                                  float                         depthBinSize,
                                  char                          statistic,
                                  float                         initialValue,
@@ -1180,6 +1182,7 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
         initialValue,
         growthRate,
         endValue,
+        maxDepth,
         downCastUM,
         upCastUM
        );
@@ -1231,8 +1234,8 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
     RasterSipperPtr  r = NULL;
 
     try  {r = dbConn->ImageFullSizeFind (PicesKKStr::SystemStringToKKStr (imageFileName));}
-    catch  (KKException&  e1)  {throw gcnew Exception ("PicesDataBase::ImageFullSizeFind KKException\n" +  PicesKKStr::KKStrToSystenStr (e1.ToString ()));}
-    catch  (exception&       e2)  {throw gcnew Exception ("PicesDataBase::ImageFullSizeFind std::exception\n" +  PicesKKStr::KKStrToSystenStr (e2.what ()));}
+    catch  (KKException&     e1)  {throw gcnew Exception ("PicesDataBase::ImageFullSizeFind KKException\n" +  PicesKKStr::KKStrToSystenStr (e1.ToString ()));}
+    catch  (std::exception&  e2)  {throw gcnew Exception ("PicesDataBase::ImageFullSizeFind std::exception\n" +  PicesKKStr::KKStrToSystenStr (e2.what ()));}
     catch  (...)                  {throw gcnew Exception ("PicesDataBase::ImageFullSizeFind Exception occurred");}
     if  (!r)
       return nullptr;
@@ -1328,11 +1331,11 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
       {
         // This should not have been able to have happened; but it did; so lets have a break point here 
         // because there must be something wrong with my program logic.
-        runLog->Log ().Level (-1) << endl << endl 
-                                  << "PicesDataBase::MLClassLoadList   ***ERROR***" << endl
-                                  << "                                    The Parent Child Relationship is Broken" << endl
-                                  << "                                    ClassName[" << ic->Name () << "]" << endl
-                                  << endl;
+        runLog->Log ().Level (-1) << std::endl << std::endl
+                                  << "PicesDataBase::MLClassLoadList   ***ERROR***" << std::endl
+                                  << "                                    The Parent Child Relationship is Broken" << std::endl
+                                  << "                                    ClassName[" << ic->Name () << "]" << std::endl
+                                  << std::endl;
       }
       else if  (ic->Parent () == NULL)
       {
@@ -1779,7 +1782,7 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
   {
     KKStrListPtr  fieldNamesList = PicesKKStr::SystemStringListToKKStrListPtr (fieldNames);
 
-    vector<vector<float> >*  unManagedResults
+    std::vector<std::vector<float> >*  unManagedResults
       = dbConn->InstrumentDataGetSpecificFields (PicesKKStr::SystemStringToKKStr (sipperFileName), 
                                                  fieldNamesList, 
                                                  PicesMethods::DateTimeSystemToKKU (dateTimeStart), 
@@ -1819,7 +1822,7 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
   {
     KKStrListPtr  fieldNamesList = PicesKKStr::SystemStringListToKKStrListPtr (fieldNames);
 
-    vector<vector<float> >*  unManagedResults
+    std::vector<std::vector<float> >*  unManagedResults
       = dbConn->InstrumentDataGetSpecificFields (PicesKKStr::SystemStringToKKStr (cruiseName), 
                                                  PicesKKStr::SystemStringToKKStr (stationName), 
                                                  PicesKKStr::SystemStringToKKStr (deploymentNum), 

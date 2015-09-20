@@ -390,6 +390,7 @@ namespace PicesInterface
                                          String^                       stationName,
                                          String^                       deploymentNum,
                                          String^                       className,
+                                         float                         maxDepth,
                                          float                         depthBinSize,
                                          char                          statistic,
                                          float                         initialValue,

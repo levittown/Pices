@@ -244,16 +244,6 @@
     <Compile Include="VolumeByDepth.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Apps\ChartControls\ChartControls.csproj">
-      <Project>{37F16DB1-CF2E-4B70-893C-CD0C173DE7D2}</Project>
-      <Name>ChartControls</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PicesInterface\PicesInterface.vcxproj">
-      <Project>{8f609a95-37bc-4e0f-8cd5-4196a86cd4b8}</Project>
-      <Name>PicesInterface</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="DisplayPicesImages.resx">
       <DependentUpon>DisplayPicesImages.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -350,6 +340,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="SurfaceArrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Apps\ChartControls\ChartControls.csproj">
+      <Project>{37f16db1-cf2e-4b70-893c-cd0c173de7d2}</Project>
+      <Name>ChartControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PicesInterface\PicesInterface.vcxproj">
+      <Project>{8f609a95-37bc-4e0f-8cd5-4196a86cd4b8}</Project>
+      <Name>PicesInterface</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -83,13 +83,13 @@ namespace MLL
                       RunLog&     log
                      );
 
-    void  PrintConfusionMatrixTabDelimited (ostream&  outFile);
+    void  PrintConfusionMatrixTabDelimited (std::ostream&  outFile);
 
-    void  ReadXml (istream&  i,
-                   RunLog&   log
+    void  ReadXml (std::istream&  i,
+                   RunLog&        log
                   );
 
-    void  WriteXml (ostream&  o);
+    void  WriteXml (std::ostream&  o);
 
     void  SaveForConfigFileName (const KKStr&  configFileName);
 
@@ -101,7 +101,7 @@ namespace MLL
     void  AllocatePredictionsTable ();
 
     template<typename T>
-    void   AllocateVector (vector<T>&  v,  kkuint32 len);
+    void   AllocateVector (std::vector<T>&  v,  kkuint32 len);
 
     kkuint32*   AllocateUint32Array (kkuint32 len);
 
@@ -114,21 +114,21 @@ namespace MLL
                                 );
 
     template<typename T>
-    istream&  ReadVector (vector<T>&  v,
-                          istream&    i
-                         );
+    std::istream&  ReadVector (std::vector<T>&  v,
+                               std::istream&    i
+                              );
 
     template<typename T>
-    KKStr  VectorToStr (vector<T>&  v);
+    KKStr  VectorToStr (std::vector<T>&  v);
 
     template<typename T>
     KKStr  ArrayToStr (T* a,  kkuint32 len);
 
 
     template<typename T>
-    void  ReadArray (kkuint32  len,
-                     T*&       a,
-                     istream&  i
+    void  ReadArray (kkuint32       len,
+                     T*&            a,
+                     std::istream&  i
                     );
 
 

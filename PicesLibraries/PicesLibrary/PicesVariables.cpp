@@ -90,7 +90,7 @@ const KKStr&  PicesVariables::HomeDir ()
         }
         else
         {
-          osDisplayWarning ("Can Not locate a valid PICES Home Directory; make sure 'PicesKaggleHomeDir' is setup correctly.");
+          osDisplayWarning ("Can Not locate a valid PICES Home Directory; make sure 'PicesHomeDir' is setup correctly.");
         }
       }
     }

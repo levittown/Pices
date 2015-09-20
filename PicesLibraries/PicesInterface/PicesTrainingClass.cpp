@@ -1,6 +1,5 @@
 #include "StdAfx.h"
 #include "FirstIncludes.h"
-
 #include <stdio.h>
 #include <math.h>
 #include <ctype.h>
@@ -12,7 +11,6 @@
 #include <ostream>
 #include <string>
 #include <vector>
-using namespace std;
 
 
 #include "MemoryDebug.h"

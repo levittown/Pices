@@ -4,8 +4,8 @@ using namespace System;
 using namespace System::ComponentModel;
 using namespace System::Collections;
 
-#include  "DateTime.h"
-#include  "PicesRunLog.h"
+#include "DateTime.h"
+#include "PicesRunLog.h"
 
 
 namespace PicesInterface {

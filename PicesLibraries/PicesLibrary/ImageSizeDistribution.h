@@ -134,8 +134,8 @@ namespace MLL
     float                endValue;
     kkuint32             numSizeBuckets;
 
-    vector<ImageSizeDistributionRowPtr>  depthDistributions;
-    ImageSizeDistributionRowPtr          allDepths;
+    std::vector<ImageSizeDistributionRowPtr>  depthDistributions;
+    ImageSizeDistributionRowPtr               allDepths;
 
 
     VectorFloat          sizeStartValues;

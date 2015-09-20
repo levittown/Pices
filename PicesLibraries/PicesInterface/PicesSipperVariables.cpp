@@ -1,6 +1,5 @@
 #include "StdAfx.h"
 #include "FirstIncludes.h"
-
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -16,7 +15,7 @@
 #include <string>
 #include <vector>
 #include "MemoryDebug.h"
-using namespace std;
+
 
 #include "KKBaseTypes.h"
 #include "KKQueue.h"

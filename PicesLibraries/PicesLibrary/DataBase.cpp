@@ -2,9 +2,6 @@
 // before  "FirstIncludes.h"
 #include <errmsg.h>
 #include <my_global.h>
-#include <my_sys.h>
-#include <mysql.h>
-
 #undef min
 #undef max
 
@@ -24,6 +21,8 @@
 #endif
 #include "MemoryDebug.h"
 using namespace std;
+#include <my_sys.h>
+#include <mysql.h>
 
 
 // Base Library

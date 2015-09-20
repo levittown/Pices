@@ -1,25 +1,24 @@
-#include  "StdAfx.h"
-#include  "FirstIncludes.h"
+#include "StdAfx.h"
+#include "FirstIncludes.h"
+#include <stdio.h>
+#include <math.h>
+#include <ctype.h>
+#include <time.h>
+#include <fstream>
+#include <iostream>
+#include <map>
+#include <ostream>
+#include <string>
+#include <vector>
 
-#include  <stdio.h>
-#include  <math.h>
-#include  <ctype.h>
-#include  <time.h>
-#include  <fstream>
-#include  <iostream>
-#include  <map>
-#include  <ostream>
-#include  <string>
-#include  <vector>
-using namespace std;
 
-#include  "MemoryDebug.h"
-#include  "KKBaseTypes.h"
-#include  "OSservices.h"
+#include "MemoryDebug.h"
+#include "KKBaseTypes.h"
+#include "OSservices.h"
 //using namespace KKB;
 
-#include  "PicesSipperCruise.h"
-#include  "PicesKKStr.h"
+#include "PicesSipperCruise.h"
+#include "PicesKKStr.h"
 using namespace PicesInterface;
 
 using namespace System;

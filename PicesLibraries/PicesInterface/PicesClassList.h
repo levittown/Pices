@@ -70,7 +70,7 @@ namespace PicesInterface
      * on which line.  Ex:  The class name "Crustacean_Copepod_Oncea"  will have "Crustacean" 
      * on the 1st line and "Copepod-Oncea" on the second line.
      */
-    array<String^>^    ExtractTwoTitleLines ();
+    cli::array<String^>^    ExtractTwoTitleLines ();
 
 
     /**
@@ -80,7 +80,7 @@ namespace PicesInterface
      * on which line.  Ex:  The class name "Crustacean_Copepod_Oncea"  will have "Crustacean" 
      * on the 1st line, "Copepod" on the second line, and "Oncea" on the third line.
      */
-    array<String^>^    ExtractThreeTitleLines ();
+    cli::array<String^>^    ExtractThreeTitleLines ();
 
 
     static  PicesClassList^  GetAllKnownClasses ();

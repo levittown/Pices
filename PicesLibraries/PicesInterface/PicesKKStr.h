@@ -5,8 +5,8 @@ using namespace System::ComponentModel;
 using namespace System::Collections;
 using namespace System::Collections::Generic;
 
-#include  "DateTime.h"
-#include  "KKStr.h"
+#include "DateTime.h"
+#include "KKStr.h"
 
 
 namespace PicesInterface 
@@ -23,7 +23,7 @@ namespace PicesInterface
       KKB::KKStrPtr  SystemStringToKKStrPtr (System::String^  s);
 
     static
-      KKB::KKStrListPtr  SystemStringArrayToKKStrListPtr (array<String^>^  list);
+      KKB::KKStrListPtr  SystemStringArrayToKKStrListPtr (cli::array<String^>^  list);
 
     static
       KKB::KKStrListPtr  SystemStringListToKKStrListPtr (List<String^>^  list);

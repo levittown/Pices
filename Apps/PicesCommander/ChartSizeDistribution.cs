@@ -360,6 +360,7 @@ namespace PicesCommander
       PicesImageSizeDistribution  classDownCast = null;
       PicesImageSizeDistribution  classUpCast = null;
       threadConn.ImagesSizeDistributionByDepth (this.cruise, this.station, this.deployment, c.Name,
+                                                0.0f,   // MaxDepth
                                                 5.0f,
                                                 ch,
                                                 (float)InitialSizeField.Value,

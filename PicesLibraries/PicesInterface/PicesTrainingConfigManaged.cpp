@@ -1,6 +1,5 @@
 #include "StdAfx.h"
 #include  "FirstIncludes.h"
-
 #include <stdio.h>
 #include <math.h>
 #include <ctype.h>
@@ -11,7 +10,6 @@
 #include <string>
 #include <strstream>
 #include <vector>
-using namespace std;
 
 
 #include "KKBaseTypes.h"
@@ -68,7 +66,7 @@ PicesTrainingConfigManaged::PicesTrainingConfigManaged (String^       _configFil
   log               (_log),
   valid             (gcnew System::Boolean (false))
 {
-  strstream  logStr;
+  std::strstream  logStr;
   KKStr  configFileName = PicesKKStr::SystemStringToKKStr (_configFileName);
   FileDescPtr  fileDesc = FeatureFileIOPices::NewPlanktonFile ();
   config = new PicesTrainingConfiguration ();

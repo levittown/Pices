@@ -216,9 +216,9 @@ namespace MLL
 
     static bool  needToRunFinalCleanUp;
 
-    static GoalKeeperPtr       blocker;
-    static map<KKStr,kkuint32>*  fieldNamesUpperIdx;
-    static map<KKStr,kkuint32>*  shortFieldNamesIdx;
+    static GoalKeeperPtr              blocker;
+    static std::map<KKStr,kkuint32>*  fieldNamesUpperIdx;
+    static std::map<KKStr,kkuint32>*  shortFieldNamesIdx;
 
     static kkint32       numFields;
     static kkint32       numDataFields;    /**< The first fields will be float fields that will be in a array.

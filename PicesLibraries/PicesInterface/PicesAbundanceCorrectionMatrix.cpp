@@ -12,7 +12,6 @@
 #include <string>
 #include <strstream>
 #include <vector>
-using namespace std;
 
 #include "MemoryDebug.h"
 #include "KKBaseTypes.h"
@@ -20,6 +19,7 @@ using namespace std;
 using namespace System;
 using namespace System::Collections::Generic;
 using namespace System::IO;
+
 
 #include "GoalKeeper.h"
 #include "Matrix.h"
@@ -88,10 +88,10 @@ System::DateTime  PicesAbundanceCorrectionMatrix::DateTimeComputed ()
 }
 
 
-array<float>^  PicesAbundanceCorrectionMatrix::ProbOfDetection ()
+cli::array<float>^  PicesAbundanceCorrectionMatrix::ProbOfDetection ()
 {
-  const vector<float>&  v = abundanceMatrix->ProbOfDetection ();
-  array<float>^  result = gcnew array<float> (v.size ());
+  const std::vector<float>&  v = abundanceMatrix->ProbOfDetection ();
+  cli::array<float>^  result = gcnew cli::array<float> (v.size ());
   for  (kkuint32 x = 0;  x < v.size ();  ++x)
     result[x] = v[x];
 
@@ -100,10 +100,10 @@ array<float>^  PicesAbundanceCorrectionMatrix::ProbOfDetection ()
 
 
 
-array<float>^     PicesAbundanceCorrectionMatrix::ProbOfFalseAlarm ()
+cli::array<float>^     PicesAbundanceCorrectionMatrix::ProbOfFalseAlarm ()
 {
-  const vector<float>&  v = abundanceMatrix->ProbOfFalseAlarm ();
-  array<float>^  result = gcnew array<float> (v.size ());
+  const std::vector<float>&  v = abundanceMatrix->ProbOfFalseAlarm ();
+  cli::array<float>^  result = gcnew cli::array<float> (v.size ());
   for  (kkuint32 x = 0;  x < v.size ();  ++x)
     result[x] = v[x];
 
@@ -145,7 +145,7 @@ void  PicesAbundanceCorrectionMatrix::Prediction (PicesClass^   knownClass,
 
 void  PicesAbundanceCorrectionMatrix::PrintConfusionMatrixTabDelimited (StreamWriter^  outFile)
 {
-  ostrstream o;
+  std::ostrstream o;
   abundanceMatrix->PrintConfusionMatrixTabDelimited (o);
   char*  orig = o.str ();
   String^ systemString = gcnew String (orig);
@@ -240,7 +240,7 @@ void  PicesAbundanceCorrectionMatrix::PrintAdjustedResults (StreamWriter^       
   PicesClassList^  classOrder = adjCounts->ToPicesClassList ();
   int  size = adjCounts->Count;
 
-  array<String^>^  classTitles = classOrder->ExtractThreeTitleLines ();
+  cli::array<String^>^  classTitles = classOrder->ExtractThreeTitleLines ();
   if  (classTitles != nullptr)
   {
     for  (int z = 0;  z < classTitles->Length;  ++z)
@@ -254,8 +254,8 @@ void  PicesAbundanceCorrectionMatrix::PrintAdjustedResults (StreamWriter^       
 
   int  col = 0;
 
-  array<float>^  probOfFalseAlarm = ProbOfFalseAlarm ();
-  array<float>^  probOfDetection  = ProbOfDetection ();
+  cli::array<float>^  probOfFalseAlarm = ProbOfFalseAlarm ();
+  cli::array<float>^  probOfDetection  = ProbOfDetection ();
 
   if  (probOfFalseAlarm->Length == size)
   {

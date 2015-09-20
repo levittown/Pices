@@ -74,7 +74,7 @@ namespace  MLL
                           );
 
     void  WriteXML (const KKStr&  varName,
-                    ostream&      o
+                    std::ostream&  o
                    )  const;
 
 

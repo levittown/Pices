@@ -7,11 +7,10 @@ using namespace System::Windows::Forms;
 using namespace System::Data;
 using namespace System::Drawing;
 
-using namespace  std;
 
-#include  "PicesKKStr.h"
-#include  "PicesDataBase.h"
-#include  "PicesDataBaseServer.h"
+#include "PicesKKStr.h"
+#include "PicesDataBase.h"
+#include "PicesDataBaseServer.h"
 
 namespace PicesInterface {
 

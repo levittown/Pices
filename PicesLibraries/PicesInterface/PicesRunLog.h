@@ -6,7 +6,7 @@ using namespace System::Collections;
 using namespace System::Diagnostics;
 
 #include "RunLog.h"
-using namespace  KKB;
+
 
 #include "PicesMsgQueue.h"
 

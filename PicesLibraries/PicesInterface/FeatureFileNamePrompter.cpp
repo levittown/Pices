@@ -10,7 +10,6 @@
 #include <ostream>
 #include <string>
 #include <vector>
-using namespace std;
 
 #include "MemoryDebug.h"
 #include "KKBaseTypes.h"

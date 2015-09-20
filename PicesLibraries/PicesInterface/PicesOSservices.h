@@ -38,7 +38,7 @@ namespace PicesInterface
 
     static String^   GetFileExtension (String^  fullFileName);
 
-    static  array<String^>^   GetListOfFiles (String^  dirPath,
+    static cli::array<String^>^   GetListOfFiles (String^  dirPath,
                                               String^  fileSpec
                                              );
 

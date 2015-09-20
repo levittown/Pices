@@ -11,13 +11,13 @@
 #include<ostream>
 #include<string>
 #include<vector>
-using namespace std;
 
 
 #include "MemoryDebug.h"
 #include "KKBaseTypes.h"
 #include "GoalKeeper.h"
 using namespace KKB;
+
 
 
 #include "MLClass.h"
@@ -27,6 +27,8 @@ using namespace KKMLL;
 //#include "PicesKKStr.h"
 #include "PicesOSservices.h"
 #include "PicesClass.h"
+
+
 #include "PicesClassList.h"
 #include "PicesKKStr.h"
 using namespace  PicesInterface;

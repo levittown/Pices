@@ -783,20 +783,20 @@ namespace MLL
      *@returns 2D float array where each row will represent a Instrument row and each column will 
      *  represent a field specified in 'fieldNames'.
      */
-    vector<vector<float> >*  InstrumentDataGetSpecificFields (const KKStr&          sipperFileName,
-                                                              const KKStrListPtr    fieldNames,
-                                                              const KKB::DateTime&  dateTimeStart,
-                                                              const KKB::DateTime&  dateTimeEnd
-                                                             );
+    std::vector<std::vector<float> >*  InstrumentDataGetSpecificFields (const KKStr&          sipperFileName,
+                                                                        const KKStrListPtr    fieldNames,
+                                                                        const KKB::DateTime&  dateTimeStart,
+                                                                        const KKB::DateTime&  dateTimeEnd
+                                                                       );
 
 
-     vector<vector<float> >*  InstrumentDataGetSpecificFields (const KKStr&          cruiseName,
-                                                               const KKStr&          stationName,
-                                                               const KKStr&          deploymentNum,
-                                                               const KKStrListPtr    fieldNames,
-                                                               const KKB::DateTime&  dateTimeStart,
-                                                               const KKB::DateTime&  dateTimeEnd
-                                                              );
+     std::vector<std::vector<float> >*  InstrumentDataGetSpecificFields (const KKStr&          cruiseName,
+                                                                         const KKStr&          stationName,
+                                                                         const KKStr&          deploymentNum,
+                                                                         const KKStrListPtr    fieldNames,
+                                                                         const KKB::DateTime&  dateTimeStart,
+                                                                         const KKB::DateTime&  dateTimeEnd
+                                                                        );
 
 
     GPSDataPointListPtr InstrumentDataRetrieveGPSInfo (const KKStr&  cruiseName,
@@ -893,14 +893,14 @@ namespace MLL
                                              const KKStr& deploymentNum
                                             );
 
-    SipperFileListPtr     SipperFileLoad      (const KKStr& cruiseName,
-                                               const KKStr& stationName,
-                                               const KKStr& deploymentNum
-                                              );
+    SipperFileListPtr     SipperFileLoad (const KKStr& cruiseName,
+                                          const KKStr& stationName,
+                                          const KKStr& deploymentNum
+                                         );
 
     void                  SipperFileLoadOracle ();
 
-    SipperFilePtr         SipperFileRecLoad   (const KKStr& _sipperFileName);
+    SipperFilePtr         SipperFileRecLoad (const KKStr& _sipperFileName);
 
 
     void                  SipperFileInsert (SipperFile&   sipperFile);
@@ -939,8 +939,8 @@ namespace MLL
 
 
     void                  SipperFilesGetCTDDateTime (const KKStr&    _sipperFileName,
-                                                     kkint32&          _sipperFileId, 
-                                                     kkuint32&         _numScanLines, 
+                                                     kkint32&        _sipperFileId, 
+                                                     kkuint32&       _numScanLines, 
                                                      KKB::DateTime&  _CTDDateTimeStart, 
                                                      KKB::DateTime&  _CTDDateTimeEnd
                                                     );

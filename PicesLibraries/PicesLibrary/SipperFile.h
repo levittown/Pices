@@ -186,7 +186,7 @@ namespace  MLL
     static  void  AddSipperFileEntries (SipperFileListPtr  sipperFiles);
 
   private:
-    static  map<KKStr,SipperFilePtr>  allSipperFiles;  /**<  A list of every sipper File ever created;  will own its contents. */
+    static  std::map<KKStr,SipperFilePtr>  allSipperFiles;  /**<  A list of every sipper File ever created;  will own its contents. */
   };
 
 
