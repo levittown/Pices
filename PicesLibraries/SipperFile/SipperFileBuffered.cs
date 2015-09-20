@@ -596,7 +596,6 @@ namespace SipperFile
     {
       int x = 0;
       int y = 0;
-      int z = 0;
 
       double  startScanRow = displayRowStart     * (double)ratio;
       double  endScanRow   = (displayRowEnd + 1) * (double)ratio;

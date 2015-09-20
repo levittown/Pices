@@ -266,7 +266,7 @@ void  CointToScanLine71787452 ()
 
     if  ((lineCount % 10000) == 0)
     {
-      cout << StrFormatInt (lineCount, "###,###,##0") << "\t" << StrFormatInt (sf->ByteOffset (), "###,###,###,##0") << endl;
+      cout << StrFromUint32 (lineCount) << "\t" << StrFromUint64 (sf->ByteOffset ()) << endl;
     }
 
     sf->GetNextLine (lineBuff, lineBuffSize, lineSize, colCount, pixelsInRow, flow);
@@ -292,7 +292,7 @@ void  CopyOverSipperFileXXX ()
 
   while  (bytesLeft > 0)
   {
-    kkint32  bytesThisLoop = sizeof (buff);
+    kkint64  bytesThisLoop = sizeof (buff);
     if  (bytesLeft < bytesThisLoop)
       bytesThisLoop = bytesLeft;
 

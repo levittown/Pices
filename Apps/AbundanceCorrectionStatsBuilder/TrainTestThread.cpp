@@ -321,7 +321,7 @@ void  TrainTestThread::Run ()
 
     confusionMatrix->Increment (knownClass,
                                 predClass1,
-                                dupImage->OrigSize (),
+                                (kkint32)dupImage->OrigSize (),
                                 predClass1Prob,
                                 *runLog
                                );

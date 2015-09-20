@@ -238,12 +238,12 @@ namespace SipperFile
 
       if  (idx > 4095)
       {
-        int zed = 100;
+        //int zed = 100;
       }
 
       if (idx > 4120)
       {
-        int zed2 = 100;
+        //int zed2 = 100;
       }
     }  /* AddToScanLine */
   }  /* Sipper3DecodeRec */

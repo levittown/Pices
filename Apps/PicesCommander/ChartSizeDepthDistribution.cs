@@ -453,9 +453,9 @@ namespace PicesCommander
 
       tw.WriteLine ("Density");
       tw.WriteLine ();
-      int  largestIdx = 0;
       tw.Write ("Depth" + "\t" + "Vol-Sampled");
       /*
+      int  largestIdx = 0;
       foreach (DataSeriesToPlot dstp in series)
       {
         String s = dstp.legend;

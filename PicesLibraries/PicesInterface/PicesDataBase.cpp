@@ -1177,12 +1177,12 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
         PicesKKStr::SystemStringToKKStr (stationName),
         PicesKKStr::SystemStringToKKStr (deploymentNum),
         PicesKKStr::SystemStringToKKStr (className),
+        maxDepth, 
         depthBinSize,
         statistic,
         initialValue,
         growthRate,
         endValue,
-        maxDepth,
         downCastUM,
         upCastUM
        );
