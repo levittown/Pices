@@ -70,6 +70,7 @@ namespace  MLL
 
     virtual void  ReadXML (XmlStream&      s,
                            XmlTagConstPtr  tag,
+                           VolConstBool&   cancelFlag,
                            RunLog&         log
                           );
 
@@ -93,11 +94,12 @@ namespace  MLL
   class  XmlElementLarcosTrainingConfiguration: public XmlElementTrainingConfiguration2
   {
   public:
-    XmlElementLarcosTrainingConfiguration (XmlTagPtr   tag,
-                                           XmlStream&  s,
-                                           RunLog&     log
+    XmlElementLarcosTrainingConfiguration (XmlTagPtr      tag,
+                                           XmlStream&     s,
+                                           VolConstBool&  cancelFlag,
+                                           RunLog&        log
                                           ):
-          XmlElementTrainingConfiguration2 (tag, s, log)
+          XmlElementTrainingConfiguration2 (tag, s, cancelFlag, log)
     {}
 
   };

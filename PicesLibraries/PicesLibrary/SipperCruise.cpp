@@ -63,7 +63,7 @@ KKStr  SipperCruise::ValidateCruiseName (const KKStr&  _cruiseName)
     return  "Cruise Name can not be longer than 10 characters.";
 
   KKStr  invalidChars = "";
-  for  (kkint32 x = 0;  x < _cruiseName.Len ();  x++)
+  for  (kkuint32 x = 0;  x < _cruiseName.Len ();  x++)
   {
     char c = toupper (_cruiseName[x]);
     if  ((c >= 'A')  &&  (c <= 'Z'))  continue;

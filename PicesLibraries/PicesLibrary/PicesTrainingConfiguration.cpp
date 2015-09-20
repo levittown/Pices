@@ -242,23 +242,30 @@ void  PicesTrainingConfiguration::WriteXML (const KKStr&  varName,
 
 
 void   PicesTrainingConfiguration::ReadXML (XmlStream&      s,
-                                             XmlTagConstPtr  tag,
-                                             RunLog&         log
-                                            )
+                                            XmlTagConstPtr  tag,
+                                            VolConstBool&   cancelFlag,
+                                            RunLog&         log
+                                           )
 
 {
-  XmlTokenPtr t = s.GetNextToken (log);
-  while  (t)
+  XmlTokenPtr t = s.GetNextToken (cancelFlag, log);
+  while  (t  &&  (!cancelFlag))
   {
-    t = ReadXMLBaseToken (t, log);
+    t = ReadXMLBaseToken (t, cancelFlag, log);
     if  (t)
     {
       const KKStr&  varName = t->VarName ();
     }
     delete  t;
-    t = s.GetNextToken (log);
+    if  (cancelFlag)
+      t = NULL;
+    else
+      t = s.GetNextToken (cancelFlag, log);
   }
-  ReadXMLPost (log);
+  delete  t;
+  t = NULL;
+  if  (!cancelFlag)
+    ReadXMLPost (cancelFlag, log);
 }  /* ReadXML */
 
 

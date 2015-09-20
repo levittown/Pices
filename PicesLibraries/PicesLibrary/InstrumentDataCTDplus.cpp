@@ -258,8 +258,8 @@ void  InstrumentDataCTDplus::ReportInstrumentData (kkuint32 curScanLine,
  */
 void  InstrumentDataCTDplus::ParseTxtBlock (KKStr&  block)
 {
-  kkint32 lineStartIdx = 0;
-  kkint32 lineEndIdx   = 0;
+  kkint32  lineStartIdx = 0;
+  kkuint32 lineEndIdx   = 0;
 
   while  (block.Len () > 122)
   {

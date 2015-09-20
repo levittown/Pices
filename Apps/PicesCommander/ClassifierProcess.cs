@@ -362,7 +362,7 @@ namespace PicesCommander
         // Maybe another Classification process already updated the database and hence updated the classId field.
         if  (mlClass.ClassId >= 0)
         {
-          int zed = 888;
+          //int zed = 888;
         }
         else
         {

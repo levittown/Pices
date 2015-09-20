@@ -24,7 +24,6 @@ namespace FlatFieldSipper4Image
 
     private void LoadImage_Click (object sender, EventArgs e)
     {
-      int xxx = 100;
       OpenFileDialog  ofd = new OpenFileDialog ();
       if  (!String.IsNullOrEmpty (lastDir))
         ofd.InitialDirectory = lastDir;

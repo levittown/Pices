@@ -72,7 +72,7 @@ float  ToFloat (KKStr  s,
   kkint32  fractPart = 0;
   kkint32  fractPartDivisor = 1;
   
-  kkint32  x = 0;
+  kkuint32  x = 0;
   if  ((s[x] == '-')  &&  (s.Len () > 0))
   {
     negNum = true;

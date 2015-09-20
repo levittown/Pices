@@ -7,7 +7,7 @@ namespace PicesCommander
 {
   public  class InstrumentStatsByDepth
   {
-    public  InstrumentStatsByDepth (int binId)
+    public  InstrumentStatsByDepth (int _binId)
     {
       binId                   = binId;
       binDepth                = 0;

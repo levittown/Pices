@@ -72,7 +72,7 @@ void  DataBaseImageGroup::ValidName (KKStr&  _name,
   if  ((c < 'A')  ||  (c > 'Z'))
     _errorDesc << "First characted must be ('A' thru 'Z')";
 
-  for  (kkint32 x = 0;  x < _name.Len ();  x++)
+  for  (kkuint32 x = 0;  x < _name.Len ();  x++)
   {
     c = toupper (_name[(int)x]);
     if  ((c >= 'A')  &&  (c <= 'Z'))
