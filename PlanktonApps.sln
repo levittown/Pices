@@ -5161,7 +5161,6 @@ Global
 		{FC3EBDE9-7D0F-4D16-B833-38C47FB0727D}.LIB Release|x86.ActiveCfg = Release|Win32
 		{FC3EBDE9-7D0F-4D16-B833-38C47FB0727D}.Release|Any CPU.ActiveCfg = Release|Win32
 		{FC3EBDE9-7D0F-4D16-B833-38C47FB0727D}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{FC3EBDE9-7D0F-4D16-B833-38C47FB0727D}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{FC3EBDE9-7D0F-4D16-B833-38C47FB0727D}.Release|Win32.ActiveCfg = Release|Win32
 		{FC3EBDE9-7D0F-4D16-B833-38C47FB0727D}.Release|Win32.Build.0 = Release|Win32
 		{FC3EBDE9-7D0F-4D16-B833-38C47FB0727D}.Release|x64.ActiveCfg = Release|Win32
