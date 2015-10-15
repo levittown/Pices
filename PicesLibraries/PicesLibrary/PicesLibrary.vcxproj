@@ -78,7 +78,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(OutsidePackages)\MySQL\mysql-connector-c-noinstall-6.0.2-win32\include;$(OutsidePackages)\fftw-3.3.2;$(OutsidePackages)\OutsidePackages\zlib123;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(OutsidePackages)\MySQL\mysql-connector-c-6.1.6-win32\include;$(OutsidePackages)\fftw-3.3.2;$(OutsidePackages)\OutsidePackages\zlib123;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;EMBEDDED_MYSQL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -92,7 +92,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(OutsidePackages)\MySQL\mysql-connector-c-noinstall-6.0.2-win32\include;$(OutsidePackages)\fftw-3.3.2;$(OutsidePackages)\OutsidePackages\zlib123;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(OutsidePackages)\MySQL\mysql-connector-c-6.1.6-win32\include;$(OutsidePackages)\fftw-3.3.2;$(OutsidePackages)\OutsidePackages\zlib123;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;EMBEDDED_MYSQL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader />
@@ -103,7 +103,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedDebug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(OutsidePackages)\MySQL\mysql-connector-c-noinstall-6.0.2-win32\include;$(OutsidePackages)\fftw-3.3.2;$(OutsidePackages)\OutsidePackages\zlib123;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(OutsidePackages)\MySQL\mysql-connector-c-6.1.6-win32\include;$(OutsidePackages)\fftw-3.3.2;$(OutsidePackages)\OutsidePackages\zlib123;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;EMBEDDED_MYSQL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -118,7 +118,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(OutsidePackages)\MySQL\mysql-connector-c-noinstall-6.0.2-win32\include;$(OutsidePackages)\fftw-3.3.2;$(OutsidePackages)\OutsidePackages\zlib123;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(OutsidePackages)\MySQL\mysql-connector-c-6.1.6-win32\include;$(OutsidePackages)\fftw-3.3.2;$(OutsidePackages)\OutsidePackages\zlib123;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;EMBEDDED_MYSQL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader />
