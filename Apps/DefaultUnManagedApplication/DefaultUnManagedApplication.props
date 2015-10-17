@@ -9,7 +9,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(SolutionDir)PicesLibraries\PicesLibrary;$(SolutionDir)PicesLibraries\ImageExtractionManager;$(OutsidePackages)\fftw-3.3.2;$(OutsidePackages) \MySQL\mysql-connector-c-6.1.6-win32\include;$(SolutionDir)PicesLibraries\JobManager;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(SolutionDir)PicesLibraries\PicesLibrary;$(SolutionDir)PicesLibraries\ImageExtractionManager;$(OutsidePackages)\fftw-3.3.2;$(OutsidePackages) \MySQL\mysql-connector-c-6.1.6-win32;$(SolutionDir)PicesLibraries\JobManager;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>ZLIB_AVAILABLE;FFTW_AVAILABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
