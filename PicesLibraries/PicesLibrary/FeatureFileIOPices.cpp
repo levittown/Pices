@@ -1297,7 +1297,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
       if  (origImage->Depth () == 0.0)
       {
         // The Instrumentation data is missing;
-        ReFreshInstrumentData (imageFileName, origImage, _dataBase, _cancelFlag, _changesMade, _log);
+        ReFreshInstrumentData (*imageFileName, origImage, _dataBase, _cancelFlag, _changesMade, _log);
       }
 
       extractedFeatures->PushOnBack (origImage);

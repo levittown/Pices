@@ -1498,7 +1498,7 @@ void   ImageFeaturesList::FeatureExtraction (const KKStr&  _dirName,
 
     else
     {
-      image->ExampleFileName (imageFileName);
+      image->ExampleFileName (*imageFileName);
       _runLog.Level (30) << image->ExampleFileName () << "  " << image->OrigSize () << endl;
       PushOnBack (image);
     }
@@ -1760,7 +1760,7 @@ void  ImageFeaturesList::RecalcFeatureValuesFromImagesInDirTree (KKStr    rootDi
       return;
     }
 
-    KKStr  fullFileName (dirPath);
+    KKStr  fullFileName (*dirPath);
     osAddLastSlash (fullFileName);
     fullFileName << image->ExampleFileName ();
 

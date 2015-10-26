@@ -172,34 +172,39 @@ void  DataBaseImageValidatedEntryList::Load (const KKStr&  _fileName,
   }
 
   bool  eof = false;
-  KKStr  ln = osReadRestOfLine (i, eof);
+  KKStrPtr  ln = NULL;
   while  (!eof)
   {
-    if  (!ln.StartsWith ("//"))
+    delete ln;
+    ln = osReadRestOfLine (i, eof);
+    if  (eof)  break;
+    if  (!ln)  continue;
+
+    if  (!ln->StartsWith ("//"))
     {
-      KKStr  lineName = ln.ExtractToken2 ("\t");
+      KKStr  lineName = ln->ExtractToken2 ("\t");
 
       if  (lineName.EqualIgnoreCase ("DateWritten"))
-        dateWritten = DateTime (ln.ExtractToken2 ("\t"));
+        dateWritten = DateTime (ln->ExtractToken2 ("\t"));
 
       else if  (lineName.EqualIgnoreCase ("HostName"))
-        hostName = ln.ExtractToken2 ("\t");
+        hostName = ln->ExtractToken2 ("\t");
 
       else if  (lineName.EqualIgnoreCase ("FileName"))
-        fileName = ln.ExtractToken2 ("\t");
+        fileName = ln->ExtractToken2 ("\t");
 
       else if  (lineName.EqualIgnoreCase ("Entry"))
       {
-        KKStr  imageFileName = ln.ExtractToken2 ("\t");
-        KKStr  validatedClassName = ln.ExtractToken2 ("\t");
+        KKStr  imageFileName = ln->ExtractToken2 ("\t");
+        KKStr  validatedClassName = ln->ExtractToken2 ("\t");
         MLClassPtr  validatedClass = MLClass::CreateNewMLClass (validatedClassName);
-        KKStr  sizeCoordinateDelStr = ln.ExtractToken2 ("\t");
+        KKStr  sizeCoordinateDelStr = ln->ExtractToken2 ("\t");
         PushOnBack (new DataBaseImageValidatedEntry (imageFileName, sizeCoordinateDelStr, validatedClass));
       }
     }
-
-    ln = osReadRestOfLine (i, eof);
   }
+  delete ln;
+  ln = NULL;
 
   i.close ();
 }  /* Load */

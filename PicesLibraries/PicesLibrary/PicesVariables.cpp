@@ -79,7 +79,7 @@ const KKStr&  PicesVariables::HomeDir ()
       KKStr  curDir = osGetCurrentDirectory ();
       if  (ValidHomeDir (curDir))
       {
-        homeDir = new KKStr (curDir);
+        homeDir = curDir;
       }
       else
       {
