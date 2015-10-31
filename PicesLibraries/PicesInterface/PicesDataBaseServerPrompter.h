@@ -8,9 +8,9 @@ using namespace System::Data;
 using namespace System::Drawing;
 
 
-#include "PicesKKStr.h"
-#include "PicesDataBase.h"
-#include "PicesDataBaseServer.h"
+#include  "PicesKKStr.h"
+#include  "PicesDataBase.h"
+#include  "PicesDataBaseServer.h"
 
 namespace PicesInterface {
 

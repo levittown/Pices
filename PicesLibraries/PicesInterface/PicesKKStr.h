@@ -5,8 +5,8 @@ using namespace System::ComponentModel;
 using namespace System::Collections;
 using namespace System::Collections::Generic;
 
-#include "DateTime.h"
-#include "KKStr.h"
+#include  "DateTime.h"
+#include  "KKStr.h"
 
 
 namespace PicesInterface 

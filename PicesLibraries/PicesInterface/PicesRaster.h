@@ -6,11 +6,11 @@ using namespace System::ComponentModel;
 using namespace System::Collections;
 using namespace System::Diagnostics;
 
-#include "RasterSipper.h"
+#include  "RasterSipper.h"
 
-#include "PicesKKStr.h"
-#include "PicesPoint.h"
-#include "PicesRunLog.h"
+#include  "PicesKKStr.h"
+#include  "PicesPoint.h"
+#include  "PicesRunLog.h"
 
 
 namespace PicesInterface 

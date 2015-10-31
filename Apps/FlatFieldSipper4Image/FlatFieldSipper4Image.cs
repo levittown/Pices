@@ -24,6 +24,7 @@ namespace FlatFieldSipper4Image
 
     private void LoadImage_Click (object sender, EventArgs e)
     {
+      int xxx = 100;
       OpenFileDialog  ofd = new OpenFileDialog ();
       if  (!String.IsNullOrEmpty (lastDir))
         ofd.InitialDirectory = lastDir;
@@ -163,6 +164,7 @@ namespace FlatFieldSipper4Image
 
     private void SaveButton_Click (object sender, EventArgs e)
     {
+      int xxx = 100;
       SaveFileDialog  sfd = new SaveFileDialog ();
       if  (!String.IsNullOrEmpty (lastDir))
         sfd.InitialDirectory = lastDir;
@@ -182,7 +184,7 @@ namespace FlatFieldSipper4Image
         try  {curImage.Save (sfd.FileName);}
         catch  (Exception e2)  
         {
-          MessageBox.Show (this, "Exception saving image" + "\n" + e2.ToString (), "Save Image");
+          MessageBox.Show (this, "Exception saving image" + "\n" + e.ToString (), "Save Image");
         }
       }
     }

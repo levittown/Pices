@@ -411,15 +411,6 @@
     <ProjectReference Include="..\..\..\KSquareLibraries\KKBase\KKBase.vcxproj">
       <Project>{d9bb6d83-937e-40fd-bfc3-ff48d8a04d11}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\KSquareLibraries\KKLineScanner\KKLineScanner.vcxproj">
-      <Project>{65b4e499-f9c5-472a-b5d1-90541f817513}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\KSquareLibraries\KKMachineLearning\KKMachineLearning.vcxproj">
-      <Project>{eda94c7f-b7b2-48dc-833d-a4948f00a7a2}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\OutsidePackages\zlib123\projects\visualc6\zlib.vcxproj">
-      <Project>{7c37d3e1-52ba-4dc0-9c7b-49375bf46b37}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\PicesLibrary\PicesLibrary.vcxproj">
       <Project>{fa9c865e-0227-4ebc-a291-ed0f2453afb3}</Project>
     </ProjectReference>

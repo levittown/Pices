@@ -23,7 +23,6 @@
 using namespace KKB;
 
 
-
 #include "Classifier2.h"
 #include "ClassProb.h"
 #include "FeatureFileIOPices.h"

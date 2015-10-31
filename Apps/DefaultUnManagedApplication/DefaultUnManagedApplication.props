@@ -9,11 +9,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-<<<<<<< HEAD
-      <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(SolutionDir)PicesLibraries\PicesLibrary;$(SolutionDir)PicesLibraries\ImageExtractionManager;$(SolutionDir)PicesLibraries\JobManager;$(OutsidePackages)\fftw-3.3.2;$(OutsidePackages) \mysql-connector-c-6.0.2-win32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-=======
-      <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(SolutionDir)PicesLibraries\PicesLibrary;$(SolutionDir)PicesLibraries\ImageExtractionManager;$(OutsidePackages)\fftw-3.3.2;$(OutsidePackages) \MySQL\mysql-connector-c-6.1.6-win32;$(SolutionDir)PicesLibraries\JobManager;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
->>>>>>> origin/master
+      <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(SolutionDir)PicesLibraries\PicesLibrary;$(SolutionDir)PicesLibraries\ImageExtractionManager;$(SolutionDir)PicesLibraries\JobManager;$(OutsidePackages)\fftw-3.3.2;$(OutsidePackages)\MySQL\mysql-connector-c-6.0.2-win32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>ZLIB_AVAILABLE;FFTW_AVAILABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>

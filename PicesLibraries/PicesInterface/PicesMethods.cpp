@@ -1,27 +1,27 @@
 #include "StdAfx.h"
-#include "FirstIncludes.h"
+#include  "FirstIncludes.h"
 #include <stdio.h>
 #include <math.h>
-#include <ctype.h>
-#include <time.h>
-#include <fstream>
-#include <iostream>
-#include <map>
-#include <ostream>
-#include <string>
-#include <vector>
+#include  <ctype.h>
+#include  <time.h>
+#include  <fstream>
+#include  <iostream>
+#include  <map>
+#include  <ostream>
+#include  <string>
+#include  <vector>
 
 
-#include "MemoryDebug.h"
-#include "KKBaseTypes.h"
+#include  "MemoryDebug.h"
+#include  "KKBaseTypes.h"
 using namespace KKB;
 
-#include "InstrumentDataFileManager.h"
+#include  "InstrumentDataFileManager.h"
 using  namespace MLL;
 
 
 #include "PicesMethods.h"
-#include "PicesKKStr.h"
+#include  "PicesKKStr.h"
 using namespace PicesInterface;
 
 

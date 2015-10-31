@@ -94,10 +94,10 @@ namespace  MLL
   class  XmlElementLarcosTrainingConfiguration: public XmlElementTrainingConfiguration2
   {
   public:
-    XmlElementLarcosTrainingConfiguration (XmlTagPtr      tag,
-                                           XmlStream&     s,
+    XmlElementLarcosTrainingConfiguration (XmlTagPtr   tag,
+                                           XmlStream&  s,
                                            VolConstBool&  cancelFlag,
-                                           RunLog&        log
+                                           RunLog&     log
                                           ):
           XmlElementTrainingConfiguration2 (tag, s, cancelFlag, log)
     {}

@@ -1,15 +1,15 @@
-#include "StdAfx.h"
-#include "FirstIncludes.h"
-#include <stdio.h>
-#include <math.h>
-#include <ctype.h>
-#include <time.h>
-#include <fstream>
-#include <iostream>
-#include <map>
-#include <ostream>
-#include <string>
-#include <vector>
+#include  "StdAfx.h"
+#include  "FirstIncludes.h"
+#include  <stdio.h>
+#include  <math.h>
+#include  <ctype.h>
+#include  <time.h>
+#include  <fstream>
+#include  <iostream>
+#include  <map>
+#include  <ostream>
+#include  <string>
+#include  <vector>
 
 
 using namespace System;

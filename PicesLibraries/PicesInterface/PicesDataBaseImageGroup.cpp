@@ -1,16 +1,16 @@
-#include "StdAfx.h"
-#include "FirstIncludes.h"
+#include  "StdAfx.h"
+#include  "FirstIncludes.h"
 
-#include <stdio.h>
-#include <math.h>
-#include <ctype.h>
-#include <time.h>
-#include <fstream>
-#include <iostream>
-#include <map>
-#include <ostream>
-#include <string>
-#include <vector>
+#include  <stdio.h>
+#include  <math.h>
+#include  <ctype.h>
+#include  <time.h>
+#include  <fstream>
+#include  <iostream>
+#include  <map>
+#include  <ostream>
+#include  <string>
+#include  <vector>
 
 #include "MemoryDebug.h"
 #include "KKBaseTypes.h"

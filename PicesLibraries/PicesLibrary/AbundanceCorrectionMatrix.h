@@ -116,7 +116,7 @@ namespace MLL
     template<typename T>
     std::istream&  ReadVector (std::vector<T>&  v,
                                std::istream&    i
-                              );
+                         );
 
     template<typename T>
     KKStr  VectorToStr (std::vector<T>&  v);
@@ -126,8 +126,8 @@ namespace MLL
 
 
     template<typename T>
-    void  ReadArray (kkuint32       len,
-                     T*&            a,
+    void  ReadArray (kkuint32  len,
+                     T*&       a,
                      std::istream&  i
                     );
 

@@ -2647,6 +2647,9 @@ MLClassListPtr  DataBase::MLClassLoadList ()
     bool     mandatory   = ResultSetGetBool     (5);
     bool     summarize   = ResultSetGetBool     (6);
 
+    if  (parentName.EqualIgnoreCase (className))
+      parentName = "";
+
     if  (!className.Empty ())
     {
       MLClassPtr  c = MLClass::CreateNewMLClass (className, classId);
@@ -4478,6 +4481,8 @@ void  DataBase::ImageUpdateInstrumentDataFields (InstrumentDataPtr  instumentDat
 
 
 
+
+
 void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruiseName,
                                                const KKStr&               stationName,
                                                const KKStr&               deploymentNum,
@@ -4636,63 +4641,63 @@ void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruise
   }
   else
   {
-    for  (kkuint32  resultsIDX = 0;  resultsIDX < results->NumRows ();  ++resultsIDX)
+  for  (kkuint32  resultsIDX = 0;  resultsIDX < results->NumRows ();  ++resultsIDX)
+  {
+    KKStrList& row = (*results)[resultsIDX];
+    bool  downCastRow = row[downCastIdx].ToBool ();
+
+    ImageSizeDistributionPtr  sizeDistribution = NULL;
+
+    float  volSampled = 0.0f;
+
+    kkint32  totalPixelCount = 0;
+    kkint32  totalFilledArea = 0;
+
+    float  depth      = row[bucketDepthIdx].ToFloat ();
+    kkint32  imageCount = row[imageCountIdx].ToInt32 ();
+
+    kkint32  depthBinIdx = (kkint32)(depth / depthBinSize);
+
+    if  (totalPixelCountIdx >= 0)
+      totalPixelCount = row[totalPixelCountIdx].ToInt32 ();
+
+    if  (totalFilledAreaIdx >= 0)
+      totalFilledArea = row[totalFilledAreaIdx].ToInt32 ();
+
+    VolumeSampledStatPtr  volStat = NULL;
+
+    if  (downCastRow)
     {
-      KKStrList& row = (*results)[resultsIDX];
-      bool  downCastRow = row[downCastIdx].ToBool ();
-
-      ImageSizeDistributionPtr  sizeDistribution = NULL;
-
-      float  volSampled = 0.0f;
-
-      kkint32  totalPixelCount = 0;
-      kkint32  totalFilledArea = 0;
-
-      float    depth      = row[bucketDepthIdx].ToFloat ();
-      kkint32  imageCount = row[imageCountIdx].ToInt32 ();
-
-      kkint32  depthBinIdx = (kkint32)(depth / depthBinSize);
-
-      if  (totalPixelCountIdx >= 0)
-        totalPixelCount = row[totalPixelCountIdx].ToInt32 ();
-
-      if  (totalFilledAreaIdx >= 0)
-        totalFilledArea = row[totalFilledAreaIdx].ToInt32 ();
-
-      VolumeSampledStatPtr  volStat = NULL;
-
-      if  (downCastRow)
+      if (!downCast)
       {
-        if (!downCast)
-       {
-          downCast = new ImageSizeDistribution (depthBinSize, initialValue, growthRate, endValue, startValues, endValues, log);
-        }
-        sizeDistribution = downCast;
-        if  (volSampledDownCast)
-          volStat = volSampledDownCast->Locate (depthBinIdx);
-        else
-          volStat = NULL;
+        downCast = new ImageSizeDistribution (depthBinSize, initialValue, growthRate, endValue, startValues, endValues, log);
       }
+      sizeDistribution = downCast;
+      if  (volSampledDownCast)
+        volStat = volSampledDownCast->Locate (depthBinIdx);
       else
+        volStat = NULL;
+    }
+    else
+    {
+      if  (!upCast)
       {
-        if  (!upCast)
-        {
-          upCast = new ImageSizeDistribution (depthBinSize, initialValue, growthRate, endValue, startValues, endValues, log);
-        }
-        sizeDistribution = upCast;
-        if  (volSampledUpCast)
-          volStat = volSampledUpCast->Locate (depthBinIdx);
-        else
-          volStat = NULL;
+        upCast = new ImageSizeDistribution (depthBinSize, initialValue, growthRate, endValue, startValues, endValues, log);
       }
+      sizeDistribution = upCast;
+      if  (volSampledUpCast)
+        volStat = volSampledUpCast->Locate (depthBinIdx);
+      else
+        volStat = NULL;
+    }
 
-      if  (volStat)
-        volSampled = volStat->VolumeSampled ();
+    if  (volStat)
+      volSampled = volStat->VolumeSampled ();
 
-      sizeDistribution->DefineRow (depth, imageCount, totalPixelCount, totalFilledArea, volSampled);
-      for  (kkuint32  zed = firstSizeBucketIdx, sizeIdx = 0;  zed < row.size ();  ++zed, ++sizeIdx)
-      {
-        sizeDistribution->AddData (depth, sizeIdx, row[zed].ToInt32 ());
+    sizeDistribution->DefineRow (depth, imageCount, totalPixelCount, totalFilledArea, volSampled);
+    for  (kkuint32  zed = firstSizeBucketIdx, sizeIdx = 0;  zed < row.size ();  ++zed, ++sizeIdx)
+    {
+      sizeDistribution->AddData (depth, sizeIdx, row[zed].ToInt32 ());
       }
     }
   }

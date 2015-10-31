@@ -1234,7 +1234,7 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
     RasterSipperPtr  r = NULL;
 
     try  {r = dbConn->ImageFullSizeFind (PicesKKStr::SystemStringToKKStr (imageFileName));}
-    catch  (KKException&     e1)  {throw gcnew Exception ("PicesDataBase::ImageFullSizeFind KKException\n" +  PicesKKStr::KKStrToSystenStr (e1.ToString ()));}
+    catch  (KKException&  e1)  {throw gcnew Exception ("PicesDataBase::ImageFullSizeFind KKException\n" +  PicesKKStr::KKStrToSystenStr (e1.ToString ()));}
     catch  (std::exception&  e2)  {throw gcnew Exception ("PicesDataBase::ImageFullSizeFind std::exception\n" +  PicesKKStr::KKStrToSystenStr (e2.what ()));}
     catch  (...)                  {throw gcnew Exception ("PicesDataBase::ImageFullSizeFind Exception occurred");}
     if  (!r)

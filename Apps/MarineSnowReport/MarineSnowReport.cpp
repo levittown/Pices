@@ -63,7 +63,7 @@ using namespace  MLL;
 
 
 
-KKStr  marineSnowReportDirectory = "D:\\Users\\kkramer\\DropBox\\Dropbox\\USF_OilSpillGroup\\MarineSnow_2014-12-10";
+KKStr  marineSnowReportDirectory = "E:\Users\\kkramer\\Dropbox\\USF_OilSpillGroup\\MarineSnow_2015-08-31";
 
 
 
@@ -99,7 +99,7 @@ public:
   VectorInt32   integratedCounts;
 };
 
-const char* blankSpace = "\"---\"";
+
 
 
 void  CreateThresholdHeaders (VectorFloat&  sizeThresholds,
@@ -111,12 +111,12 @@ void  CreateThresholdHeaders (VectorFloat&  sizeThresholds,
   h2 = "";
   for  (kkuint32 c = 0;  c < sizeThresholds.size ();  ++c)
   {
-    KKStr  mStr = blankSpace;
-    KKStr  sStr = blankSpace;
+    KKStr  mStr = "";
+    KKStr  sStr = "";
     if (c == 0)
     {
-      mStr = blankSpace;
-      sStr = "<" + StrFormatDouble (sizeThresholds[c], "0.000000");
+      mStr = "";
+      sStr = "<" + StrFormatDouble (sizeThresholds[c], "0.0000");
     }
 
     else if  (c < (sizeThresholds.size () - 1))
@@ -128,7 +128,7 @@ void  CreateThresholdHeaders (VectorFloat&  sizeThresholds,
 
     else
     {
-      mStr = blankSpace;
+      mStr = "";
       sStr = ">=" + StrFormatDouble (sizeThresholds[c], "0.0000");
     }
 
@@ -138,9 +138,6 @@ void  CreateThresholdHeaders (VectorFloat&  sizeThresholds,
 }  /* CreateThresholdHeaders */
 
 
-double  startValue = 0.005;
-double  growthRate = 1.2;
-double  endValue   = 170.0;
 
 
 DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
@@ -153,13 +150,6 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
   cout << deployment->CruiseName () << "\t" << deployment->StationName () << "\t" << deployment->DeploymentNum () << endl;
 
   MLClassListPtr  allClasses = db.MLClassLoadList ();
-
-  SipperCruisePtr  cruise = db.SipperCruiseLoad(deployment->CruiseName ());
-  if  (!cruise)
-  {
-    cruise = new SipperCruise();
-    cruise->CruiseName (deployment->CruiseName ());
-  }
 
   ImageSizeDistributionPtr  downCast = NULL;
   ImageSizeDistributionPtr  upCast   = NULL;
@@ -175,41 +165,32 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
   allClasses = NULL;
 
   char  statisticCode = '0';
-
-
-  // '0' = "Area";
-  // '1' = "Diameter";
-  // '2' = "Volume";
-
-  // KKKK
-
-  double  lenStart = 0.1;
-  double  lenGR    = 1.1;
-  double  lenEnd   = 100.0;
-
+  double  startValue = 0.005;
+  double  growthRate = 1.2;
+  double  endValue   = 170.0;
 
   if  (statistic == "0")
   {
     statisticCode = '0';
-    startValue    = PIE * pow((lenStart / 2.0), 2.0);
-    growthRate    = pow(lenGR, 2.0);
-    endValue      = PIE * pow((lenEnd / 2.0), 2.0);
+    startValue    = 0.010;
+    growthRate    = 1.122462048; // k = 2^(1/6)
+    endValue      = 1000.0;
   }
 
   else if  (statistic == "1")
   {
     statisticCode = '1';
-    startValue    = lenStart;
-    growthRate    = lenGR;
-    endValue      = lenEnd;
+    startValue    = 0.10;
+    growthRate    = 1.059463094;  // k = 2^(1/12)
+    endValue      = 100.0;
   }
 
   else if  (statistic == "2")
   {
     statisticCode = '2';
-    startValue    = (4.0 / 3.0) * PIE *  pow((lenStart / 2.0), 3.0);
-    growthRate    = pow(lenGR, 3.0);
-    endValue      = (4.0 / 3.0) * PIE *  pow((lenEnd   / 2.0), 3.0);
+    startValue    = 0.001;
+    growthRate    = 1.189207115;  // k = 2^(1/4)
+    endValue      = 10000.0;
   }
 
 
@@ -220,9 +201,10 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
     ImageSizeDistributionPtr  downCast = NULL;
     ImageSizeDistributionPtr  upCast   = NULL;
     db.ImagesSizeDistributionByDepth (deployment->CruiseName (), deployment->StationName (), deployment->DeploymentNum (), c->Name (), 
-                                      140.0, 1.0f, statisticCode, startValue, growthRate, endValue, 
+                                      1.0f, statisticCode, startValue, growthRate, endValue, 
                                       downCast, upCast
                                     );
+
     if  (downCast)
     {
       if  (!totalDownCast)
@@ -231,6 +213,7 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
       }
       totalDownCast ->AddIn (*downCast, runLog);
     }
+
     delete  downCast;  downCast = NULL;
     delete  upCast;    upCast   = NULL;
   }
@@ -268,28 +251,17 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
   KKStr  reportFileRootName1 =  osAddSlash (marineSnowReportDirectory) + reportRootName + ".txt";
   ofstream  r1 (reportFileRootName1.Str ());
 
-
-  //@todo   Add Crusie Start Date and Time im GMT and Local time.
-
-  KKStr  cruiseStartEndDates = cruise->DateStart ().YYYY_MMM_DD () + "\t" + cruise->DateEnd ().YYYY_MMM_DD ();
-
-  r1 << "Cruise"           << "\t" << deployment->CruiseName    () << endl
-     << "CruiseDates"      << "\t" << cruiseStartEndDates          << endl
-     << "Station"          << "\t" << deployment->StationName   () << endl
-     << "Deployment"       << "\t" << deployment->DeploymentNum () << endl
-     << "DateTime"         << "\t" << osGetLocalDateTime ()        << endl
-     << "DataBase"         << "\t" << db.ServerDescription ()      << endl
-     << "ProgName"         << "\t" << osGetProgName ()             << endl
-     << "BuildTime"        << "\t" << __DATE__ << " " << __TIME__  << endl
-     << "SvnVersion"       << "\t" << svnVersionStr                << endl
-     << "HostName"         << "\t" << osGetHostName ()             << endl
-     << "UserName"         << "\t" << osGetUserName ()             << endl
-     << "Deloyment Start"  << "\t" << deployment->DateTimeStart () << endl
-     << "Deloyment End"    << "\t" << deployment->DateTimeEnd   () << endl
+  r1 << "Cruise"     << "\t" << deployment->CruiseName    () << endl
+     << "Station"    << "\t" << deployment->StationName   () << endl
+     << "Deployment" << "\t" << deployment->DeploymentNum () << endl
+     << "DateTime"   << "\t" << osGetLocalDateTime ()        << endl
+     << "DataBase"   << "\t" << db.ServerDescription ()      << endl
+     << "ProgName"   << "\t" << osGetProgName ()             << endl
+     << "BuildTime"  << "\t" << __DATE__ << " " << __TIME__  << endl
+     << "SvnVersion" << "\t" << svnVersionStr                << endl
+     << "HostName"   << "\t" << osGetHostName ()             << endl
+     << "UserName"   << "\t" << osGetUserName ()             << endl
      << "StatisticCode" << "\t" << statistic << "\t" << statisticStr << endl
-     << "Start-Val"     << "\t" << startValue << endl
-     << "Growth-Rate"   << "\t" << growthRate << endl
-     << "End-Val"       << "\t" << endValue << endl
      << endl
      << endl;
 
@@ -300,12 +272,8 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
   KKStr  thH2 (1024);
   CreateThresholdHeaders (sizeThresholds, thH1, thH2);
 
-  h1 << blankSpace  << "\t" << "Depth"  << "\t" << "VolumeSampled" << "\t" << "Image"     << "\t"  << "Pixel" << "\t" << "Filled" << thH1;
-  h2 << "Down/Up"   << "\t" << "(m)"    << "\t" << "m^3"           << "\t" << "Abundance" << "\t"  << "Count" << "\t" << "Area"   << thH2;
-
-
-  //@todo  h1  has to be sifted right by one.
-  //@todo  h2  as to be shifted Instrument data first line also needs to be shift by one more additional column.
+  h1 << ""        << "\t" << "Depth"  << "\t" << "VolumeSampled" << "\t" << "Image"     << "\t"  << "Pixel" << "\t" << "Filled" << thH1;
+  h2 << "Down/Up" << "\t" << "(m)"    << "\t" << "m^3"           << "\t" << "Abundance" << "\t"  << "Count" << "\t" << "Area"   << thH2;
 
   VectorDouble  integratedAbundance (sizeThresholds.size (), 0.0);
   VectorInt32   integratedCounts    (sizeThresholds.size (), 0);
@@ -318,9 +286,6 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
   KKStr  oxygenUOM        = InstrumentData::OxygenUnit        ();
   KKStr  transmisivityUOM = InstrumentData::TransmisivityUnit ();
   KKStr  turbidityUOM     = InstrumentData::TurbidityUnit     ();
-
-  //@todo  Make Insturemnet Data fields allogn correctly.
-
 
   h1 << "\t" << "Temperature"   << "\t" << "Salinity"  << "\t" << "Denisity"  << "\t" << "Fluorescence"  << "\t" << "Fluorescence-Sensor" << "\t" << "Oxygen"  << "\t" << "Oxygen"  << "\t" << "transmisivity"  << "\t" << "turbidity";
   h2 << "\t" << temperatureUOM  << "\t" << salinityUOM << "\t" << denisityUOM << "\t" << fluorescenceUOM << "\t" << "Volts"               << "\t" << oxygenUOM << "\t" << "umol/kg" << "\t" << transmisivityUOM << "\t" << turbidityUOM;
@@ -338,9 +303,9 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
     if  (!row)
       continue;
 
-    bool     downCast    = true;
+    bool   downCast    = true;
     kkint32  bucketIdx   = rowIdx;
-    float    bucketDepth = row->Depth ();
+    float  bucketDepth = row->Depth ();
     kkint32  imageCount  = (kkint32)row->ImageCount ();
     kkint32  pixelCount  = row->TotalPixels ();
     kkint32  filledArea  = row->TotalFilledArea ();
@@ -391,20 +356,14 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
 
   r1 << endl;
 
-
-  //@todo  The Integrated Summaries totals is not lined up correctly;  needs to be shifted right 3 columns,
-  //@todo  Check after running to make sure that they do line up correctly.
-
-
-
-  r1 << blankSpace << "\t" << blankSpace << "\t" << blankSpace << "\t" << blankSpace << "\t" << "Integrated Abundance" << "\t" << blankSpace;
+  r1 << "" << "\t" << "" << "\t" << "" << "\t" << "" << "\t" << "Integrated Abundance" << "\t" << "";
   for  (kkuint32 x = 0;  x < integratedAbundance.size ();  ++x)
   {
     r1 << "\t" << integratedAbundance[x];
   }
   r1 << endl;
 
-  r1 << blankSpace << "\t" << blankSpace << "\t" << blankSpace << "\t" << blankSpace << "\t" << "Integrated log10(Abundance)" << "\t" << blankSpace;
+  r1 << "" << "\t" << "" << "\t" << "" << "\t" << "" << "\t" << "Integrated log10(Abundance)" << "\t" << "";
   for  (kkuint32 x = 0;  x < integratedAbundance.size ();  ++x)
   {
     double  zed = integratedAbundance[x] + 1.0;
@@ -429,9 +388,9 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
     if  (!row)
       continue;
 
-    bool     downCast    = true;
+    bool   downCast    = true;
     kkint32  bucketIdx   = rowIdx;
-    float    bucketDepth = row->Depth ();
+    float  bucketDepth = row->Depth ();
     kkint32  imageCount  = (kkint32)row->ImageCount ();
     kkint32  pixelCount  = row->TotalPixels ();
     kkint32  filledArea  = row->TotalFilledArea ();
@@ -471,7 +430,7 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
     r1 << endl;
   }
 
-  r1 << blankSpace << "\t" << blankSpace << "\t" << blankSpace << "\t" << blankSpace << "\t" << "Integrated Counts" << "\t" << blankSpace;
+  r1 << "" << "\t" << "" << "\t" << "" << "\t" << "" << "\t" << "Integrated Counts" << "\t" << "";
   for  (kkuint32 x = 0;  x < integratedCounts.size ();  ++x)
     r1 << "\t" << integratedCounts[x];
 
@@ -521,17 +480,14 @@ void  PrintSummaryReports (DataBasePtr                  db,
 
   KKStr svnVersionStr = QUOTE (_SVNVERSION_);
 
-  r  << "DateTime"    << "\t" << osGetLocalDateTime ()        << endl
-     << "DataBase"    << "\t" << db->ServerDescription ()     << endl
-     << "ProgName"    << "\t" << osGetProgName ()             << endl
-     << "BuildTime"   << "\t" << __DATE__ << " " << __TIME__  << endl
-     << "SvnVersion"  << "\t" << svnVersionStr                << endl
-     << "HostName"    << "\t" << osGetHostName ()             << endl
-     << "UserName"    << "\t" << osGetUserName ()             << endl
-     << "Statistic"   << "\t" << statistic << "\t" << statisticStr << endl
-     << "Start-Val"   << "\t" << startValue << endl
-     << "Growth-Rate" << "\t" << growthRate << endl
-     << "End-Val"     << "\t" << endValue << endl
+  r  << "DateTime"   << "\t" << osGetLocalDateTime ()        << endl
+     << "DataBase"   << "\t" << db->ServerDescription ()     << endl
+     << "ProgName"   << "\t" << osGetProgName ()             << endl
+     << "BuildTime"  << "\t" << __DATE__ << " " << __TIME__  << endl
+     << "SvnVersion" << "\t" << svnVersionStr                << endl
+     << "HostName"   << "\t" << osGetHostName ()             << endl
+     << "UserName"   << "\t" << osGetUserName ()             << endl
+     << "Statistic"  << "\t" << statistic << "\t" << statisticStr << endl
      << endl
      << endl
      << endl;
@@ -550,8 +506,8 @@ void  PrintSummaryReports (DataBasePtr                  db,
 
   CreateThresholdHeaders (sizeThresholds, h1, h2);
 
-  r << blankSpace  << "\t" << blankSpace  << "\t" << blankSpace   << "\t" << "VolumeSampled" << h1 << endl;
-  r << "Cruise"    << "\t" << "Station"   << "\t" << "Deployment" << "\t" << "m^3"           << h2 << endl;
+  r << ""       << "\t" << ""        << "\t" << ""           << "\t" << "VolumeSampled" << h1 << endl;
+  r << "Cruise" << "\t" << "Station" << "\t" << "Deployment" << "\t" << "m^3"           << h2 << endl;
   for  (idx = summaries.begin ();  idx != summaries.end ();  ++idx)
   {
     DeploymentSummary*  ds = *idx;
@@ -569,8 +525,8 @@ void  PrintSummaryReports (DataBasePtr                  db,
   r << "Summary  Integrated Abundance" << endl
     << endl;
 
-  r << blankSpace << "\t" << blankSpace << "\t" << blankSpace   << "\t" << "VolumeSampled" << h1 << endl;
-  r << "Cruise"   << "\t" << "Station"  << "\t" << "Deployment" << "\t" << "m^3"           << h2 << endl;
+  r << ""       << "\t" << ""        << "\t" << ""           << "\t" << "VolumeSampled" << h1 << endl;
+  r << "Cruise" << "\t" << "Station" << "\t" << "Deployment" << "\t" << "m^3"           << h2 << endl;
   for  (idx = summaries.begin ();  idx != summaries.end ();  ++idx)
   {
     DeploymentSummary*  ds = *idx;
@@ -589,8 +545,8 @@ void  PrintSummaryReports (DataBasePtr                  db,
   r << "Summary  Integrated log10(Abundance)" << endl
     << endl;
 
-  r << blankSpace  << "\t" << blankSpace  << "\t" << blankSpace   << "\t" << "VolumeSampled" << h1 << endl;
-  r << "Cruise"    << "\t" << "Station"   << "\t" << "Deployment" << "\t" << "m^3"           << h2 << endl;
+  r << ""       << "\t" << ""        << "\t" << ""           << "\t" << "VolumeSampled" << h1 << endl;
+  r << "Cruise" << "\t" << "Station" << "\t" << "Deployment" << "\t" << "m^3"           << h2 << endl;
   for  (idx = summaries.begin ();  idx != summaries.end ();  ++idx)
   {
     DeploymentSummary*  ds = *idx;
@@ -656,7 +612,6 @@ void  MarineSnowReport (const KKStr&  statistic)
   {
     SipperDeploymentPtr  deployment = *idx;
 
-    /*
     if  ((deployment->CruiseName ().EqualIgnoreCase ("ETP2007"))  ||
          (deployment->CruiseName ().EqualIgnoreCase ("ETP2008"))  ||
          (deployment->CruiseName ().SubStrPart (0, 2).EqualIgnoreCase ("HRS"))
@@ -664,21 +619,10 @@ void  MarineSnowReport (const KKStr&  statistic)
      continue;
 
     if  ((deployment->CruiseName ().EqualIgnoreCase ("WB1008"))  ||
-         (deployment->CruiseName ().EqualIgnoreCase ("WB1002"))  ||
-         (deployment->CruiseName ().EqualIgnoreCase ("WB0810"))  ||
-         (deployment->CruiseName ().EqualIgnoreCase ("WB0910"))  ||
-         (deployment->CruiseName ().EqualIgnoreCase ("WB1210"))  ||
-         (deployment->CruiseName ().EqualIgnoreCase ("WB0211"))  ||
-         (deployment->CruiseName ().EqualIgnoreCase ("WB0511"))  ||
          (deployment->CruiseName ().EqualIgnoreCase ("WB0911"))  ||
          (deployment->CruiseName ().EqualIgnoreCase ("WB0812"))  ||
-         (deployment->CruiseName ().EqualIgnoreCase ("WB0212"))  ||
-         (deployment->CruiseName ().EqualIgnoreCase ("WB0512"))  ||
-         (deployment->CruiseName ().EqualIgnoreCase ("WB0812"))  ||
-         (deployment->CruiseName ().EqualIgnoreCase ("WB0213"))  ||
-         (deployment->CruiseName ().EqualIgnoreCase ("WB0513"))  ||
          (deployment->CruiseName ().EqualIgnoreCase ("WB0813"))  ||
-         (deployment->CruiseName ().EqualIgnoreCase ("WB0814"))  
+         (deployment->CruiseName ().EqualIgnoreCase ("WB0814"))
         )
     {
       runLog.Level (10) << "MarineSnowReport    Found Cruise: " << deployment->CruiseName ()  << endl;
@@ -687,7 +631,6 @@ void  MarineSnowReport (const KKStr&  statistic)
     {
       continue;
     }
-    */
 
     DeploymentSummary*  sumary = MarineSnowReportDeployment (*idx, *db, statistic, statisticStr, runLog);
     if  (sumary)
@@ -697,10 +640,8 @@ void  MarineSnowReport (const KKStr&  statistic)
 
   PrintSummaryReports (db, summaries, statistic, statisticStr);
 
-  CleanUpSummaries (summaries);
 
-  delete  deployments;
-  deployments = NULL;
+  CleanUpSummaries (summaries);
 
   delete  db;
   db = NULL;
@@ -723,8 +664,6 @@ int  main (int    argc,
     _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF ); 
   #endif
 
-  MarineSnowReport ("0");
-  MarineSnowReport ("1");
   MarineSnowReport ("2");
 
   return 0;

@@ -1,20 +1,20 @@
-#include "StdAfx.h"
-#include "FirstIncludes.h"
+#include  "StdAfx.h"
+#include  "FirstIncludes.h"
 
-#include <stdio.h>
-#include <math.h>
-#include <ctype.h>
-#include <time.h>
-#include <fstream>
-#include <iostream>
-#include <map>
-#include <ostream>
-#include <string>
-#include <vector>
+#include  <stdio.h>
+#include  <math.h>
+#include  <ctype.h>
+#include  <time.h>
+#include  <fstream>
+#include  <iostream>
+#include  <map>
+#include  <ostream>
+#include  <string>
+#include  <vector>
 //using namespace std;
 
-#include "MemoryDebug.h"
-#include "KKBaseTypes.h"
+#include  "MemoryDebug.h"
+#include  "KKBaseTypes.h"
 
 using namespace System;
 using namespace System::Collections::Generic;
@@ -25,8 +25,6 @@ using namespace System::IO;
 using namespace KKB;
 
 #include "PicesOSservices.h"
-
-
 #include "PicesKKStr.h"
 
 #include "ClassificationBiasMatrix.h"

@@ -242,10 +242,10 @@ void  PicesTrainingConfiguration::WriteXML (const KKStr&  varName,
 
 
 void   PicesTrainingConfiguration::ReadXML (XmlStream&      s,
-                                            XmlTagConstPtr  tag,
+                                             XmlTagConstPtr  tag,
                                             VolConstBool&   cancelFlag,
-                                            RunLog&         log
-                                           )
+                                             RunLog&         log
+                                            )
 
 {
   XmlTokenPtr t = s.GetNextToken (cancelFlag, log);

@@ -8,10 +8,10 @@ using namespace System::Collections::Generic;
 using namespace System::Diagnostics;
 using namespace System::Drawing;
 
-#include "Point.h"
+#include  "Point.h"
 
-#include "PicesKKStr.h"
-#include "PicesRunLog.h"
+#include  "PicesKKStr.h"
+#include  "PicesRunLog.h"
 
 
 namespace PicesInterface 

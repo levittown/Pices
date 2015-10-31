@@ -1,7 +1,7 @@
 //  because <my_global.h> needs to define some Macro's before windows.h  and stdlib.h  we need t include
 // before  "FirstIncludes.h"
-#include <errmsg.h>
-#include <my_global.h>
+#include  <errmsg.h>
+#include  <my_global.h>
 
 #undef min
 #undef max
