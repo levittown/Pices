@@ -43,9 +43,9 @@ namespace PicesCommander
     private  PicesImageSizeDistribution     bucketsDisplayed = null;  // Will contain the data that is actually displayed in the Chart; depending of Cast options.
     private  float[]                        integratedDensityDistribution = null;
 
-    private  String  cast              = "Down";
-    private  char    statistic         = '0';
-    private  float   growthRate        = 1.1f;
+    private  String  cast             = "Down";
+    private  char    statistic        = '0';
+    private  float   growthRate       = 1.1f;
     private  float   initialSizeValue = 0.01f;
 
     private  PicesGoalKeeper  goalie = new PicesGoalKeeper ("ChartSizeDistribution");
@@ -333,6 +333,11 @@ namespace PicesCommander
 
       growthRate       = (float)GrowthRateField.Value;
       initialSizeValue = (float)InitialSizeField.Value;
+      // KKKK Did this soi that we are the same as the volume report I sent to kendra a couple weeks ago.
+      if  (statistic == '2') {
+        growthRate       = 1.331f;
+        initialSizeValue = 0.000523599f;
+      }
 
       includeSubClasses = IncludeSubClasses.Checked;
 
@@ -363,8 +368,8 @@ namespace PicesCommander
                                                 0.0f,   // MaxDepth
                                                 5.0f,
                                                 ch,
-                                                (float)InitialSizeField.Value,
-                                                (float)GrowthRateField.Value,
+                                                initialSizeValue,
+                                                growthRate,
                                                 (float)MaxSizeField.Value,
                                                 ref classDownCast,
                                                 ref classUpCast
@@ -989,7 +994,6 @@ namespace PicesCommander
 
       double  depthBinSize = sizeDistribution.DepthBinSize;
 
-
       for  (int sizeIdx = 0;  sizeIdx < minValuesLen;  ++sizeIdx)
       {
         double  size = (startValues[sizeIdx] + endValues[sizeIdx]) / 2.0;
@@ -1100,11 +1104,6 @@ namespace PicesCommander
         MessageBox.Show (this, "Abundance Data for gnuplot written to \"" + fn + "\".", "", MessageBoxButtons.OK);
       }
     }  /* SaveForGnuplot */
-
-
-
-
-
 
     
     private void ChartSizeDistribution_FormClosing (object sender, FormClosingEventArgs e)
