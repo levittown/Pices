@@ -41,36 +41,31 @@ namespace PicesInterface
   public  ref class PicesFeatureVector
   {
   public:
-    //**************************************************************************
-    //* Will create a new instance of "features" that will be owned by the new *
-    //* instance of "PicesFeatureVector" that is created.                      *
-    //**************************************************************************
+    ///<summary>Instantiates a new Creates a new PicesFeatureVector instance of picesFeatureVector by duplicating its contents.</summary>
     PicesFeatureVector (PicesFeatureVector^  picesFeatureVector);  
 
 
     
-    /**
-     *@brief  Calculates features off the image that is in "raster".
-     *@details This is a wrapper class for MLL::ImageFeatures allowing the managed word to work with the unmanaged world.
-     * Features that are based off instrumentation data will come from the IntrumentDataManager the "imageFileName" will be parsed 
-     * to get SipperFileName, ScanLine, and ScanCol.
-     *@param[in]  raster  Raster in the form of a 2 dimensional byte array.
-     *@param[in]  imageFileName  Name of image that is stored in 'raster'; should follow Sipper file name conventions.
-     *@param[in,out] log logging file.
-     *@see  PicesLibrary::ImageFeatures::CalcFeatures
-     */
+    ///<summary>
+    /// Computes a feature vector image that is in "raster". This is a wrapper class for MLL::ImageFeatures allowing the managed word to 
+    // work with the unmanaged world. Features that are based off instrumentation data will come from the IntrumentDataManager the 
+    /// "imageFileName" will be parsed to get SipperFileName, ScanLine, and ScanCol.
+    ///</summary>
+    ///<param name='raster'> Raster in the form of a 2 dimensional byte array.</param>
+    ///<param name='imageFileName'> Name of image that is stored in 'raster'; should follow Sipper file name conventions.</param>
+    ///<param name='log'> logging file.</param>
+    ///<seealso cref='PicesLibrary::ImageFeatures::CalcFeatures'/>
     PicesFeatureVector (System::Array^   raster,
                         System::String^  imageFileName,
                         PicesRunLog^     log                        
                        );
 
 
-    //**************************************************************************
-    //* Will calculate features off the image that is in "raster"; see         *
-    //* PicesLibrary::ImageFeatures::CalcFeatures.  Features that are          *
-    //* based off instrumentation data will come from the IntrumentDataManager *
-    //* the "imageFileName" will be parsed to get SipperFileName and ScanLine. *
-    //**************************************************************************
+    ///<summary>
+    /// Computes features from the image that is in "raster"; Features that are based off instrumentation data that will come 
+    /// from the IntrumentDataManager. The "imageFileName" will be parsed to get SipperFileName and ScanLine.
+    ///</summary>
+    ///<seealso cref='PicesLibrary::ImageFeatures::CalcFeatures'/>.
     PicesFeatureVector (PicesRaster^     raster,
                         System::String^  imageFileName,
                         PicesRasterList^ intermediateImages,

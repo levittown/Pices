@@ -810,7 +810,7 @@ void   ImportGPSData::Main ()
   KKStrList::iterator  idx;
   for  (idx = filesToExtract->begin ();  idx != filesToExtract->end ();  idx++)
   {
-    const KKStr&  gpsImportFileName = *idx;
+    KKStr  gpsImportFileName = **idx;
     KKStr  fullFileName = osAddSlash (srcDirectory) + gpsImportFileName;
     switch  (fileFormat)
     {

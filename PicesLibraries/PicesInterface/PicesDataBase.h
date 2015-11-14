@@ -27,12 +27,10 @@
 
 namespace PicesInterface 
 {
-  /*!
-   \class PicesDataBase
-   All access to the MySQL database is done through this class.  Each one of these methods calls
-   the matching method in the unmanaged class DataBase in the PicesLibrary.
-   */
-
+  ///<sumary>
+  /// Wrapper class for unmanaged class DataBase; all access to the MySQL database in the managed world should be done through
+  /// this class. Each one of these methods calls the matching method in the unmanaged class DataBase in the PicesLibrary.
+  ///</summary>
   public ref class PicesDataBase
   {
   public:

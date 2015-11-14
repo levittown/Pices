@@ -1155,7 +1155,6 @@ namespace PicesCommander
         float  weightedCount = 0.0f;
         if  (timeVolumeProfile[x] > 0.0f)
           weightedCount = counts[x] / timeVolumeProfile[x];
-
         weightedCounts.Add (weightedCount);
       }
 
@@ -1227,15 +1226,14 @@ namespace PicesCommander
         whereStr += ("  and   sf.DeploymentNum = \"" + deployment + "\"");
       whereStr += ")";
 
-
       whereStr += "       and  id.CTDDateTime  > \"2000-01-01 00:01:01\"\n";
       whereStr += "       and  id.CTDDateTime  < \"2020-12-31 23:59:59\"\n";
       whereStr += "       and  id.CTDBattery   > 5.5   and  id.CTDBattery    < 14.0\n";
       whereStr += "       and  id.Depth        < 1000\n";
       whereStr += "       and  id.Temperature  > 0.0   and  id.Temperature   < 40.0\n";
-      whereStr += "       and  id.Salinity     > 20    and  id.Salinity      < 40.0\n";
-      whereStr += "       and  id.Density      > 13    and  id.Density       < 40.0\n";
-      whereStr += "       and  id.Fluorescence > -2    and  id.Fluorescence  < 80.0";
+      whereStr += "       and  id.Salinity     < 40.0\n";
+      whereStr += "       and  id.Density      < 40.0\n";
+      whereStr += "       and  id.Fluorescence > -3    and  id.Fluorescence  < 80.0";
       
       String  sqlStr = "select id.CTDDateTime, id." + instName + "\n" + 
                        "       from InstrumentData id"         + "\n" + 
@@ -1584,7 +1582,6 @@ namespace PicesCommander
     }  /* DetermineScanRate */
 
 
-
     private void PlotButton_Click (object sender, EventArgs e)
     {
       List<String>  errors = ValidateFields ();
@@ -1859,6 +1856,8 @@ namespace PicesCommander
       tw.WriteLine ("Deployment" + "\t" + deployment);
       tw.WriteLine ("Criteria"   + "\t" + criteriaStr);
 
+      DataSeriesToPlot  instDSTP = null;
+
       int  maxClassIdx = 0;
       foreach  (DataSeriesToPlot  dstp  in  series)
       {
@@ -1869,6 +1868,7 @@ namespace PicesCommander
         }
         else
         {
+          instDSTP = dstp;
           tw.WriteLine ("Instrument"    + "\t" + dstp.legend);
         }
       }
@@ -1878,11 +1878,8 @@ namespace PicesCommander
       tw.WriteLine ();
       tw.WriteLine ();
       tw.Write ("ScanLine" + "\t" + "CtdDateTime" + "\t" + "VolumeSampled");
-      foreach  (DataSeriesToPlot  dstp  in  series)
-      {
-        if  (dstp.sourceType == 'C')
-          tw.Write ("\t" + dstp.legend);
-      }
+      series.ForEach (dstp => {if  (dstp.sourceType == 'C') tw.Write ("\t" + dstp.legend);});
+      if  (instDSTP != null)  tw.Write ("\t" + instDSTP.legend);
       tw.WriteLine ();
       
       for  (int idx = 0;  idx < maxClassIdx;  ++idx)
@@ -1904,31 +1901,56 @@ namespace PicesCommander
               tw.Write (dstp.data[idx].YValues[0]);
           }
         }
+
+        tw.Write ("\t" + GetAvgInstrValue (instDSTP.data, ctdDateTime, timeInterval));
         tw.WriteLine ();
       }
 
-      foreach  (DataSeriesToPlot  dstp  in  series)
+      if  (instDSTP != null)
       {
-        if  (dstp.sourceType != 'C')
-        {
-          tw.WriteLine ();
-          tw.WriteLine ();
-          tw.WriteLine ("ScanLine" + "\t" + "CtdDateTime" + "\t" + dstp.legend);
+        tw.WriteLine ();
+        tw.WriteLine ();
+        tw.WriteLine ("ScanLine" + "\t" + "CtdDateTime" + "\t" + instDSTP.legend);
 
-          foreach  (DataPoint  dp in  dstp.data)
-          {
-            int  scanLine = (int)dp.XValue;
-            DateTime  ctdDateTime = initialStartTime;
-            double  deltaTime = scanLine / scanRate;
-            ctdDateTime = ctdDateTime.AddSeconds (deltaTime);
-            tw.WriteLine (scanLine.ToString () + "\t" + ctdDateTime.ToString ("yyyy-MM-dd hh:mm:ss") + "\t" + dp.YValues[0].ToString ());
-          }
+        foreach  (DataPoint  dp in  instDSTP.data)
+        {
+          int  scanLine = (int)dp.XValue;
+          DateTime  ctdDateTime = initialStartTime;
+          double  deltaTime = scanLine / scanRate;
+          ctdDateTime = ctdDateTime.AddSeconds (deltaTime);
+          tw.WriteLine (scanLine.ToString () + "\t" + ctdDateTime.ToString ("yyyy-MM-dd hh:mm:ss") + "\t" + dp.YValues[0].ToString ());
         }
       }
       
       tw.WriteLine ();
       tw.WriteLine ("End of ChartHorizontalProfile");
     }  /* WriteTabDelToStream */
+
+
+
+    private  double  GetAvgInstrValue (List<DataPoint> points,  DateTime startTime, double interval)
+    {
+      double  total = 0.0;
+      int count = 0;
+      DateTime  endTime = startTime.AddSeconds(interval);
+      points.ForEach (dp => {
+        int  scanLine = (int)dp.XValue;
+        double  deltaTime = scanLine / scanRate;
+        DateTime  ctdDateTime = initialStartTime.AddSeconds(deltaTime);
+        if  ((ctdDateTime.CompareTo(startTime) >= 0)  &&  (ctdDateTime.CompareTo(endTime) < 0)) {
+          total += dp.YValues[0];
+          count++;
+        }
+        total += dp.YValues[0];
+        ++count;
+      });
+      if  (count < 1)
+        return 0.0;
+      else
+        return total / count;
+    }
+
+
 
 
  

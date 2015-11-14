@@ -246,10 +246,6 @@
     <ProjectReference Include="..\..\..\KSquareLibraries\KKBase\KKBase.vcxproj">
       <Project>{d9bb6d83-937e-40fd-bfc3-ff48d8a04d11}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\OutsidePackages\zlib123\projects\visualc6\zlib.vcxproj">
-      <Project>{7c37d3e1-52ba-4dc0-9c7b-49375bf46b37}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

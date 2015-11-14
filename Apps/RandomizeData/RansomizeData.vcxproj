@@ -233,11 +233,6 @@
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\OutsidePackages\zlib123\projects\visualc6\zlib.vcxproj">
-      <Project>{7c37d3e1-52ba-4dc0-9c7b-49375bf46b37}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

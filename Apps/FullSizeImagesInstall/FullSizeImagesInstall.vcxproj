@@ -88,10 +88,6 @@
     <ClInclude Include="FullSizeImagesInstall.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OutsidePackages\zlib123\projects\visualc6\zlib.vcxproj">
-      <Project>{7c37d3e1-52ba-4dc0-9c7b-49375bf46b37}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
     <ProjectReference Include="..\..\PicesLibraries\PicesLibrary\PicesLibrary.vcxproj">
       <Project>{fa9c865e-0227-4ebc-a291-ed0f2453afb3}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>

@@ -107,7 +107,7 @@
       <Name>PicesInterface</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PicesLibraries\SipperFile\SipperFile.csproj">
-      <Project>{662D4BB9-C075-465C-9CA6-A8231E221B70}</Project>
+      <Project>{662d4bb9-c075-465c-9ca6-a8231e221b70}</Project>
       <Name>SipperFile</Name>
     </ProjectReference>
   </ItemGroup>

@@ -26,7 +26,7 @@ namespace PicesInterface
                            String^           _sipperFileName
                           );
 
-    /** Gives ownersip of UnManaged '_dataBaseLogEntry'  to managed newly created 'PicesDataBaseLogEntry' instance. */
+    ///<summary>Gives ownership of UnManaged '_dataBaseLogEntry'  to managed newly created 'PicesDataBaseLogEntry' instance.</summary>
     PicesDataBaseLogEntry (DataBaseLogEntryPtr  _dataBaseLogEntry);
 
   private:

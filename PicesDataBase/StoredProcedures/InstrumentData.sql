@@ -1386,5 +1386,54 @@ delimiter ;
 
 
 
+drop procedure  if   exists  InstrumentDataByTemporalSummary;
+
+delimiter //
+
+create procedure InstrumentDataByTemporalSummary(in  _cruiseName      varChar(10),
+                                                 in  _stationName     varChar(10),
+                                                 in  _deploymentNum   varchar(4),
+                                                 in  _timeBucketSize  float,
+                                                 in  _depthBucketSize float
+												)
+begin
+  select  sf.CruiseName, sf.stationName, sf.DeploymentNum,
+	      id.CtdDatetime,
+          (_timeBucketSize * avg(id.FlowRate2) * d.chamberWidth * 0.096)  as  'VolumeSampled',
+          avg(id.Depth),
+          avg(id.Density),
+          avg(id.Conductivity),
+          avg(id.Fluorescence),
+          avg(id.CdomFluorescence),
+          avg(id.Oxygen),
+          avg(id.Pressure),
+          avg(id.Salinity),
+          avg(id.Temperature),
+          avg(id.Transmisivity),
+          avg(id.Turbidity),
+          avg(id.FlowRate2)
+     from InstrumentData id 
+         join(SipperFiles sf) on(sf.SipperFileId = id.SipperFileId)
+         join(Deployments d)  on(d.CruiseName = sf.CruiseName  and  d.StationName = sf.StationName  and  d.deploymentNum = sf.deploymentNum)
+     where  ((sf.CruiseName    = _cruiseName)     or  (_cruiseName    = "")  or  (isnull(_cruiseName)))    and
+         ((sf.StationName   = _stationName)    or  (_stationName   = "")  or  (isnull(_stationName)))   and
+         ((sf.DeploymentNum = _deploymentNum)  or  (_deploymentNum = "")  or  (isnull(_deploymentNum))) and
+         (id.CTDDateTime  >  "2000-01-01 00:01:01")  and  (id.CTDDateTime  < "2020-12-31 23:59:59")     and
+         (id.CTDBattery   > 5.5)   and  (id.CTDBattery    < 14.0)  and
+         (id.Depth        < 1000)  and  (id.Temperature  > 0.0   and  id.Temperature   < 40.0)   and
+         (id.Fluorescence > -2)    and  (id.Fluorescence  < 80.0)
+     group by sf.CruiseName,
+              sf.StationName,
+              sf.DeploymentNum, 
+			        truncate(TIME_TO_SEC(id.CtdDatetime) / _timeBucketSize, 0), 
+              truncate(id.Depth / _depthBucketSize, 0)
+     order by id.CTDDateTime;
+end
+//
+
+delimiter ;
+
+
+
 
 

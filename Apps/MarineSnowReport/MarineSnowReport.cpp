@@ -201,7 +201,7 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
     ImageSizeDistributionPtr  downCast = NULL;
     ImageSizeDistributionPtr  upCast   = NULL;
     db.ImagesSizeDistributionByDepth (deployment->CruiseName (), deployment->StationName (), deployment->DeploymentNum (), c->Name (), 
-                                      1.0f, statisticCode, startValue, growthRate, endValue, 
+                                      0.0f, 1.0f, statisticCode, startValue, growthRate, endValue, 
                                       downCast, upCast
                                     );
 

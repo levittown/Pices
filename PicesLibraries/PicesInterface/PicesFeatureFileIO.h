@@ -15,8 +15,12 @@ namespace PicesInterface
     !PicesFeatureFileIO ();
 
   public:
-    static  array<String^>^  RegisteredDriverNames (bool  canRead,    /**< if True driver must be able to Read a Feature File. */
-                                                    bool  canWrite    /**< if True driver must be able to Write a Feature File. */
+    ///<summary>Returns list of registered feature data file drivers; you will be able to filter for the drivers that 
+    /// you want using the two provided parameters.</summary>
+    /// <param name='canRead'>Indicates in included drivers must be able to read a feature-data-file.</param>
+    /// <param name='canWrite'>Indicates if driver can write  a feature-data-file.</param>
+    static  array<String^>^  RegisteredDriverNames (bool  canRead,
+                                                    bool  canWrite
                                                    );
 
     static  bool             ValidDriverName (String^ _driverName);

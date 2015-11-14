@@ -16,11 +16,7 @@ using namespace  KKMLL;
 
 namespace PicesInterface
 {
-  /*!
-   \class  PicesClassStatistic
-   \brief  Used as a vehicle to return statistics for a goven class.
-   */
-
+  ///<summary>Used as a vehicle to return statistics for a given class.</summary>
   public ref  class  PicesClassStatistic
   {
   public:

@@ -54,64 +54,57 @@ namespace PicesInterface
 
     PicesClassList^   ExtractListOfClassesForAGivenHierarchialLevel (uint level);
 
-    /**
-     * Returns list of classes that are in this container that have the 'Summarize' flag set to true;  these are 
-     * classes that need to have a summary column printed in the classification report for themselves and any 
-     * descendants they have.  Example if the 'Crustacea_Copepod' class has this field then there will be a 
-     * column in the report that sums up all the Crustacea_Copepod's and their children.
-     */
+    ///<summary>
+    /// Returns list of classes that are in this container that have the 'Summarize' flag set to true; these are classes that need 
+    /// to have a summary column printed in the classification report for themselves and any descendants they have. Example if the 
+    /// 'Crustacea_Copepod' class has this field then there will be a column in the report that sums up all the Crustacea_Copepod's
+    /// and their children.
+    ///</summary>
     PicesClassList^   ExtractSummarizeClasses ();
 
 
-    /**
-     * Will generate an array of 2 String's.  Each String will represent a separate line to be 
-     * uses as a Class name Header.  Classes will be separated by the "tab('\t')" character.
-     * The underscore('_') character in the Class name will be used to deliminate what goes 
-     * on which line.  Ex:  The class name "Crustacean_Copepod_Oncea"  will have "Crustacean" 
-     * on the 1st line and "Copepod-Oncea" on the second line.
-     */
+    ///<summary>
+    /// Will generate an array of 2 String's.  Each String will represent a separate line to be uses as a Class name Header. Classes 
+    /// will be separated by the "tab('\t')" character. The underscore('_') character in the Class name will be used to deliminate
+    /// what goes on which line.  Ex:  The class name "Crustacean_Copepod_Oncea"  will have "Crustacean" on the 1st line and
+    /// "Copepod-Oncea" on the second line.
+    ///</summary>
     cli::array<String^>^    ExtractTwoTitleLines ();
 
 
-    /**
-     * Will generate an array of 3 String's.  Each String will represent a separate line to be 
-     * uses as a Class name Header.  Classes will be separated by the "tab('\t')" character.
-     * The underscore('_') character in the Class name will be used to deliminate what goes 
-     * on which line.  Ex:  The class name "Crustacean_Copepod_Oncea"  will have "Crustacean" 
-     * on the 1st line, "Copepod" on the second line, and "Oncea" on the third line.
-     */
+    ///<summary>
+    /// Will generate an array of 3 String's.  Each String will represent a separate line to be uses as a Class name Header. Classes
+    /// will be separated by the "tab('\t')" character. The underscore('_') character in the Class name will be used to deliminate
+    /// what goes on which line.  Ex:  The class name "Crustacean_Copepod_Oncea"  will have "Crustacean" on the 1st line, "Copepod"
+    /// on the second line, and "Oncea" on the third line.
+    ///</summary>
     cli::array<String^>^    ExtractThreeTitleLines ();
 
 
     static  PicesClassList^  GetAllKnownClasses ();
 
-
     
-    /**
-     * Using the "_name" parameter will search the global ClassList(allClassesInUniverse)
-     * for an existing instance of 'PicesClass' that has the same name. If one is found
-     * that is what is returned to the caller; otherwise a new instance is created and returned 
-     * to the caller. This new instance will also be added to 'allClassesInUniverse'.
-     */
+    ///<summary>
+    /// Using the "_name" parameter will search the global ClassList(allClassesInUniverse) for an existing instance of 'PicesClass'
+    /// that has the same name. If one is found that is what is returned to the caller; otherwise a new instance is created and
+    /// returned to the caller. This new instance will also be added to 'allClassesInUniverse'.
+    ///</summary>
     static  PicesClass^  GetUniqueClass (String^  _name,
                                          String^  _parentName
                                         );
 
 
-    /**
-     * Will locate a PicesClass instance that has the same unmanaged mlClass reference.
-     * if none exists then will create a new one and add to 'allClassesInUniverse'.
-     */
+    ///<summary>
+    /// Will locate a PicesClass instance that has the same unmanaged mlClass reference. if none exists then will create a new
+    /// one and add to 'allClassesInUniverse'.
+    ///</summary>
     static  PicesClass^  GetUniqueClass (MLClassPtr  mlClass);  
 
     static  PicesClass^  GetUnKnownClassStatic ();
 
-    /**
-     *@brief Static method that is meant to only work on 'allClassesInUniverse'.
-     *@details  Example use would be when deleting or merging classes.  We would
-     *          want to redirect any class that has the srcClass as a parent
-     *          to the destClass.
-     */
+    ///<summary>
+    /// Static method that is meant to only work on 'allClassesInUniverse'. Example use would be when deleting or merging classes.
+    /// We would want to redirect any class that has the srcClass as a parent to the destClass.
     static  void  PicesClassList::UpdateParent (PicesClass^  srcClass,
                                                 PicesClass^  destClass
                                                );
@@ -126,16 +119,14 @@ namespace PicesInterface
 
     void         SortByName ();
 
-    /**@brief  Constructs a unmanaged instance of 'MLClassList' that caller will own and be responsible for deleting. */
+    ///<summary> Constructs a unmanaged instance of 'MLClassList' that caller will own and be responsible for deleting.</summary>
     MLClassListPtr  ToMLClassConstList ();
-
-
 
   private:
     void  CleanUpUnmanagedResources ();
 
-    static  PicesInterface::PicesGoalKeeper^  getUniqueClassBlocker      // Will make sure that two threads don't try to
-      = gcnew PicesInterface::PicesGoalKeeper ("UniqueClassBlocker");    // add the same class name at the same time.
+    ///<summary>Will make sure that two threads don't try to add the same class name at the same time.</summary>
+    static  PicesInterface::PicesGoalKeeper^  getUniqueClassBlocker = gcnew PicesInterface::PicesGoalKeeper ("UniqueClassBlocker");
 
     PicesClass^  LoadSingleClass (String^  fileName);
 
@@ -153,14 +144,12 @@ namespace PicesInterface
     PicesClass^   rootNode;
 
 
-    //*********************************************************************************
-    //*  The following structures support the Concept of only one instance of a       *
-    //*  'PicesClass' object for the same name will be created.  A global list of     *
-    //*  already existing instances will be maintained by 'allClassesInUniverse'.     *
-    //*  The ability to locate an existing instance quickly will be accomplished by   *
-    //*  'allClassesInUniverseUnManagedIndex' and 'allClassesInUniverseNameIndex'.    *
-    //*                                                                               *
-    //*********************************************************************************
+    ///<summary>
+    /// Class that supports the Concept of only one instance of a 'PicesClass' object for the same name will be created.
+    /// A global list of already existing instances will be maintained by 'allClassesInUniverse'. The ability to locate
+    /// an existing instance quickly will be accomplished by 'allClassesInUniverseUnManagedIndex' and 
+    /// 'allClassesInUniverseNameIndex'.
+    ///</summary>
     ref  class  Node
     {
     public:
