@@ -23,10 +23,16 @@ namespace PicesInterface {
 
     PicesFeatureVectorList (ImageFeaturesList&  examples);  // Will take ownership of "examples"  contents.
 
-    PicesFeatureVectorList (FeatureVectorList&  examples);  // Will take ownership of "examples"  contents  and reduce it to an empty list.
-                                                            // will convert constents into instances of 'ImageFeatures'.  If current contents 
-                                                            // are instances of 'FeatureVector' will delete them; so make sure that they 
-                                                            // arte not being used anywhere else.
+
+
+
+    ///<summary>Takes ownership of the contents of 'examples' and empties it.</summary>
+    ///<remarks>
+    /// Will take ownership of "examples" contents and reduce it to empty list by popping all its contents off stack.
+    /// will convert contents into instances of 'ImageFeatures'.  If current contents are instances of 'FeatureVector'
+    /// will delete them; so make sure that they are not being used anywhere else.
+    ///</remarks>
+    PicesFeatureVectorList (FeatureVectorList&  examples);
 
 
   private:
@@ -50,19 +56,16 @@ namespace PicesInterface {
     void  CancelLoad ();
 
 
-    /**
-     *@brief  Creates a list of FeatureVectors where the class assignment will refect the
-     *  specified Hierarhy level specified by 'level'.  
-     *@details
-     *  Will create a list of FeatureVectors where the class assignment will refect the
-     *  specified Hierarhy level specified by 'level'.  The hierarchy of a iven class will
-     *  be indicated by underscore characters in the class name.
-     *@code
-     *  ex:   Level 1:  gelatinous
-     *        Level 2:  gelatinous_hydromedusae
-     *        Level 3:  gelatinous_hydromedusae_solmundella
-     *@endcode
-     */
+    ///<summary>Creates a list of FeatureVectors where the class assignment will reflect the specified Hierarchy level specified by 'level'.</summary>  
+    ///<remarks>
+    ///  Will create a list of FeatureVectors where the class assignment will reflect the specified Hierarchy level specified by 'level'. The 
+    /// hierarchy of a given class will be indicated by underscore characters in the class name.
+    ///<code>
+    ///  ex:   Level 1:  gelatinous
+    ///        Level 2:  gelatinous_hydromedusae
+    ///        Level 3:  gelatinous_hydromedusae_solmundella
+    ///</code>
+    ///</remarks>
     PicesFeatureVectorList^   CreateListForAGivenLevel (uint          level,
                                                         PicesRunLog^  runLog
                                                        );
@@ -91,26 +94,28 @@ namespace PicesInterface {
 
     PicesFeatureVectorList^   StratifyAmoungstClasses (int  numOfFolds);
 
-    // Will create a "FeatureVectorList" object that will contain the unmanaged instances that are in this list.
-    // it will not own thses instances because the Managed objects that currently own them.  And if you delete them it will cause 
-    // memory problems.
+    ///<summary>
+    /// Will create a "FeatureVectorList" object that will contain the unmanaged instances that are in this list.
+    /// it will not own these instances because the Managed objects that currently own them.  And if you delete them it will cause 
+    /// memory problems.
+    ///</summary>
     FeatureVectorListPtr      ToFeatureVectorList (PicesRunLog^  runLog);  // Creates an unmanaged list of feature vectors.
 
-    /**
-     *@brief Will return a list of examples that are dupliactes, that is they have the same root file name.  
-     *@details If no duplicates are found then 'nullptr' will be returned.
-     */
+    ///<summary>
+    /// Will return a list of examples that are duplicates, that is they have the same root file name.  
+    /// If no duplicates are found then 'nullptr' will be returned.
+    ///</summary>
     PicesFeatureVectorList^    ExtractDulicateExamples (PicesRunLog^  runLog);
 
   private:
     void  CleanUpUnmanagedResources ();
 
 
-    bool*                   cancelFlag;   // the "CancelLoad" methid will monitor this flag;  if set to true will terminate.
+    bool*           cancelFlag;          /**< the "CancelLoad" method will monitor this flag;  if set to true will terminate. */
     MLClassListPtr  classes;
-    uint*                   numExamplesWritten;  // used by SaveFeatureFile 
-    bool                    owner;
-    bool                    sortedByImageFileName;
+    uint*           numExamplesWritten;  /**< used by SaveFeatureFile.  */
+    bool            owner;
+    bool            sortedByImageFileName;
 
     ref  class  FeatureVectorComparitorByImageFileName;
   };  /* PicesFeatureVectorList */

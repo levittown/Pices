@@ -22,7 +22,6 @@ using namespace  KKB;
 
 namespace PicesInterface 
 {
-  ///<author>Kurt A. Kramer<.author>
   ///<summary>Represents a single 'Class' in the machine learning world.</summary>
   ///<remarks>
   /// Machine Learning Class. Keep in mind that when we use the word 'class' in these 

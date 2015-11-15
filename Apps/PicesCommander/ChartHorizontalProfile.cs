@@ -198,6 +198,7 @@ namespace PicesCommander
       BuildCriteriaString ();
 
       InitializeComponent ();
+      weightByVolume = WeightByVolume.Checked;
     }
 
 
@@ -333,6 +334,8 @@ namespace PicesCommander
         Inst1ToPlot.SelectedItem = "Volume-Sampled";
         SetInstrumentColor (FirstUnUsedColor (), Inst1ToPlot, Inst1ColorButton);
       }
+
+      weightByVolume = WeightByVolume.Checked;
 
       PlotButton_Click (this, null);
     }
@@ -559,6 +562,7 @@ namespace PicesCommander
 
           case  "WeightByVolume":
             WeightByVolume.Checked = PicesKKStr.StrToBool (fieldValue);
+            weightByVolume = WeightByVolume.Checked;
             break;
 
           case  "Inst1ToPlot":
@@ -1600,6 +1604,8 @@ namespace PicesCommander
         if  (buildPlotDataRunning)
           return;
 
+        weightByVolume = WeightByVolume.Checked;
+
         SchedulePlotRequests ();
 
         includeSubClasses = IncludeSubClasses.Checked;
@@ -1879,7 +1885,7 @@ namespace PicesCommander
       tw.WriteLine ();
       tw.Write ("ScanLine" + "\t" + "CtdDateTime" + "\t" + "VolumeSampled");
       series.ForEach (dstp => {if  (dstp.sourceType == 'C') tw.Write ("\t" + dstp.legend);});
-      if  (instDSTP != null)  tw.Write ("\t" + instDSTP.legend);
+      if  (instDSTP != null)  tw.Write ("\t" + instDSTP.legend + "(min, max, avg)");
       tw.WriteLine ();
       
       for  (int idx = 0;  idx < maxClassIdx;  ++idx)
@@ -1902,7 +1908,10 @@ namespace PicesCommander
           }
         }
 
-        tw.Write ("\t" + GetAvgInstrValue (instDSTP.data, ctdDateTime, timeInterval));
+        double  min = 0.0, max = 0.0, avg = 0.0;
+        GetAvgInstrValue (instDSTP.data, ctdDateTime, timeInterval, ref min, ref max, ref avg);
+        tw.Write ("\t" + min + "\t" + max + "\t" + avg);
+
         tw.WriteLine ();
       }
 
@@ -1910,15 +1919,13 @@ namespace PicesCommander
       {
         tw.WriteLine ();
         tw.WriteLine ();
-        tw.WriteLine ("ScanLine" + "\t" + "CtdDateTime" + "\t" + instDSTP.legend);
+        tw.WriteLine ("CtdDateTime" + "\t" + instDSTP.legend);
 
         foreach  (DataPoint  dp in  instDSTP.data)
         {
-          int  scanLine = (int)dp.XValue;
-          DateTime  ctdDateTime = initialStartTime;
-          double  deltaTime = scanLine / scanRate;
-          ctdDateTime = ctdDateTime.AddSeconds (deltaTime);
-          tw.WriteLine (scanLine.ToString () + "\t" + ctdDateTime.ToString ("yyyy-MM-dd hh:mm:ss") + "\t" + dp.YValues[0].ToString ());
+          double  ctdDateTimeOA = dp.XValue;
+          DateTime ctdDateTime = DateTime.FromOADate(ctdDateTimeOA);
+          tw.WriteLine (ctdDateTime.ToString ("yyyy-MM-dd hh:mm:ss") + "\t" + dp.YValues[0].ToString ());
         }
       }
       
@@ -1928,26 +1935,39 @@ namespace PicesCommander
 
 
 
-    private  double  GetAvgInstrValue (List<DataPoint> points,  DateTime startTime, double interval)
+    private  void  GetAvgInstrValue (List<DataPoint> points,  
+                                     DateTime        startTime, 
+                                     double          interval,
+                                     ref double      min,
+                                     ref double      max,
+                                     ref double      avg
+                                    )
     {
       double  total = 0.0;
       int count = 0;
       DateTime  endTime = startTime.AddSeconds(interval);
+      min = double.MaxValue;
+      max = double.MinValue;
+      avg = 0.0;
+
+      double  maxA = max;
+      double  minA = min;
+
+      double  startTimeOA = startTime.ToOADate ();
+      double  endTimeOA   = endTime.ToOADate ();
+
       points.ForEach (dp => {
-        int  scanLine = (int)dp.XValue;
-        double  deltaTime = scanLine / scanRate;
-        DateTime  ctdDateTime = initialStartTime.AddSeconds(deltaTime);
-        if  ((ctdDateTime.CompareTo(startTime) >= 0)  &&  (ctdDateTime.CompareTo(endTime) < 0)) {
-          total += dp.YValues[0];
+        if  ((dp.XValue >= startTimeOA)  &&  (dp.XValue < endTimeOA)) {
+          double z = dp.YValues[0];
+          total += z;
+          if  (z > maxA)  maxA = z;
+          if  (z < minA)  minA = z;
           count++;
         }
-        total += dp.YValues[0];
-        ++count;
       });
-      if  (count < 1)
-        return 0.0;
-      else
-        return total / count;
+      avg = (count < 1) ? 0.0 : total / count;
+      max = maxA;
+      min = minA;
     }
 
 

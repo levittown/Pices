@@ -51,11 +51,10 @@ namespace  PicesInterface
 
     PicesGPSDataPointList (PicesGPSDataPointList^  stats);
 
-    /**
-     *@brief  Construct a list of managed PicesGPSDataPoint instances from the contents of the unmanaged list 'unmanagedImages'.
-     *@details  Will NOT take ownership of the instances of 'GPSDataPoint' in 'stats but will create managed copies.
-     *@param[in]  stats  List of unmanaged 'GPSDataPoint' objects; new Managed instances of 'GPSDataPoint' will be created and added to list.
-     */
+    ///<summary>Construct a list of managed PicesGPSDataPoint instances from the contents of the unmanaged list 'unmanagedImages'.
+    /// Will NOT take ownership of the instances of 'GPSDataPoint' in 'stats but will create managed copies.
+    ///</summary>
+    ///<param name='stats'>List of unmanaged 'GPSDataPoint' objects; new Managed instances of 'GPSDataPoint' will be created and added to list.</param>
     PicesGPSDataPointList (const GPSDataPointList&  stats);
 
     ~PicesGPSDataPointList ();

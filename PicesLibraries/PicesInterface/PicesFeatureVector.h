@@ -54,7 +54,7 @@ namespace PicesInterface
     ///<param name='raster'> Raster in the form of a 2 dimensional byte array.</param>
     ///<param name='imageFileName'> Name of image that is stored in 'raster'; should follow Sipper file name conventions.</param>
     ///<param name='log'> logging file.</param>
-    ///<seealso cref='PicesLibrary::ImageFeatures::CalcFeatures'/>
+    ///<seealso cref='MLL::ImageFeatures::CalcFeatures'/>
     PicesFeatureVector (System::Array^   raster,
                         System::String^  imageFileName,
                         PicesRunLog^     log                        
