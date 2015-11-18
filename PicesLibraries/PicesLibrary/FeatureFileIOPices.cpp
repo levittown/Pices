@@ -1328,9 +1328,16 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
             delete  fv;
             fv = NULL;
           }
+          if  (logImagesGettingFeaturesCalced)
+            _log.Level (10) << "FeatureDataReSink " << imageFileName << "  Computed." << endl;
         }
-        if  (logImagesGettingFeaturesCalced)
-          _log.Level (10) << "FeatureDataReSink " << imageFileName << "  Computed." << endl;
+        else {
+          _log.Level (-1) << endl
+            << "FeatureFileIOPices::FeatureDataReSink   ***ERROR***  Failed to create FeatureVector from image file;  ImageFileName[" << imageFileName << "]." << endl
+            << endl;
+          successful = false;
+          fv = NULL;
+        }
       }
       catch  (const KKException& e1)
       {

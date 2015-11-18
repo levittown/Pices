@@ -98,6 +98,9 @@ namespace PicesCommander
     private  void  LoadClassesFromDataBase ()
     {
       classes = mainDbConn.MLClassLoadList ();
+      if  (classes == null)
+        classes = new PicesClassList ();
+
       ClassTree.Nodes.Clear ();
 
       ContextMenuStrip  cms = new ContextMenuStrip ();

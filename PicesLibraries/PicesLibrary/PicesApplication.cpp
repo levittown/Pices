@@ -66,6 +66,7 @@ PicesApplication::PicesApplication ():
 {
   fileDesc = FeatureFileIOPices::NewPlanktonFile ();
   fvFactoryProducer = PicesFVProducerFactory::Factory (&log);
+  PicesVariables::InitializeEnvironment ();
 }
 
 

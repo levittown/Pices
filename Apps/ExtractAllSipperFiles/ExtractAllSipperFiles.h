@@ -43,13 +43,11 @@ private:
   void  RunOneImageExtraction (const KKStr&  sfn);
 
 
-  KKStr             configFileName;
-  MLL::DataBasePtr  dbConn;
-  bool              firstOneFound;
-  int               minSize;
-  int               maxSize;
-  KKStr             rootDir;
-  KKStr             startSipperFileName;
+  bool   firstOneFound;
+  int    minSize;
+  int    maxSize;
+  KKStr  rootDir;
+  KKStr  startSipperFileName;
 };
 
 

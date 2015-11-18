@@ -60,7 +60,7 @@ using namespace  MLL;
 
 // -RootDir K:\Pices\SipperFiles\WB0512\DSH09  -min 250 -c USF_Dual.cfg
 
-
+// -RootDir F:\Pices\SipperFiles\NOAA  -min 250 -c  NRDA_SD0102_Dual 
 
 ExtractAllSipperFiles::ExtractAllSipperFiles ():
    PicesApplication    (),
@@ -85,6 +85,7 @@ void  ExtractAllSipperFiles::InitalizeApplication (kkint32 argc,
                                                    char**  argv
                                                   )
 {
+  ConfigRequired (true);
   DataBaseRequired (true);
   PicesApplication::InitalizeApplication (argc, argv);
   if  (Abort ())
@@ -180,7 +181,7 @@ void  ExtractAllSipperFiles::ProcessADir (VectorKKStr&  list,
       {
         if  (firstOneFound)
         {
-          SipperFilePtr sf = dbConn->SipperFileRecLoad (osGetRootName (fn));
+          SipperFilePtr sf = DB()->SipperFileRecLoad (osGetRootName (fn));
           if  ((sf != NULL)  &&  (sf->ExtractionStatus () < '2'))
             list.push_back (dirName + fn);
           delete  sf;
@@ -224,7 +225,7 @@ void  ExtractAllSipperFiles::RunOneImageExtraction (const KKStr&  sfn)
   // Make sure that Extraction has not been started or already ran.
 
   KKStr   rootName = osGetRootName (sfn);
-  SipperFilePtr sf = dbConn->SipperFileRecLoad (rootName);
+  SipperFilePtr sf = DB()->SipperFileRecLoad (rootName);
   if  (sf == NULL)
   {
     log.Level (10) << "RunOneImageExtraction   SipperFile: " << rootName << "   Extraction Status: " << sf->ExtractionStatus () << "  No entry in SipperFiles table." << endl;
@@ -238,7 +239,7 @@ void  ExtractAllSipperFiles::RunOneImageExtraction (const KKStr&  sfn)
     sf = NULL;
   }
 
-  dbConn->SipperFilesUpdateExtractionStatus (rootName, '1');
+  DB()->SipperFilesUpdateExtractionStatus (rootName, '1');
 
   KKStr  destDir = osAddSlash (osAddSlash (PicesVariables::HomeDir ()) + "ExtractedImages") + osGetRootName (sfn);
 
@@ -281,8 +282,7 @@ void  ExtractAllSipperFiles::Run ()
     return;
   }
 
-  dbConn = new DataBase (log);
-  if  (!dbConn->Valid ())
+  if  (!DB()->Valid ())
   {
     log.Level (-1) << endl << endl 
       << "ExtractAllSipperFiles::Run    ***ERROR***    Failed to connect to database."  << endl
@@ -307,12 +307,10 @@ void  ExtractAllSipperFiles::Run ()
     fileNum++;
   }
 
-  if  (dbConn)
+  if  (DB ())
   {
-    dbConn->Close ();
-    delete  dbConn;
+    DB()->Close ();
   }
-  dbConn = NULL;
 }  /* Run */
 
 
@@ -326,6 +324,7 @@ int  main (int     argc,
   RunLog  log;
  
   ExtractAllSipperFiles  application;
+
   application.InitalizeApplication (argc, argv);
   if  (!application.Abort ())
   {
