@@ -2070,68 +2070,7 @@ ImageFeaturesPtr    DataBase::FeatureDataRecLoad (const KKStr&  imageFileName)
 /// of the 'ImageFeatures' objects from the 'InstruentData' table
 ImageFeaturesPtr   DataBase::FeatureDataRecLoad (DataBaseImagePtr  image)
 {
-  KKStr  selectStr (256);
-                     
-  selectStr << "call  FeatureDataLoadByImageFileName2(" <<image->ImageFileName ().QuotedStr () << ")";
-  kkint32  returnCd = QueryStatement (selectStr);
-  if  (returnCd != 0)
-  {
-    log.Level (-1) << endl << endl 
-                   << "DataBase::FeatureDataRecLoad     ***ERROR***" << endl
-                   << endl
-                   << "Error[" << lastMySqlErrorDesc << "]" << endl
-                   << endl;
-    return NULL;
-  }
-
-  ImageFeaturesListPtr  results = FeatureDataProcessResults ();  // true = Refresh Instrument Data from Sipper Files.
-  ResultSetsClear ();
-  if  (results == NULL)  
-    return NULL;
-
-  if  (results->QueueSize () < 1)
-  {
-    delete  results;  results = NULL;
-    return NULL;
-  }
-
-  ImageFeaturesPtr  result = results->PopFromBack ();
-  delete results;  results = NULL;
-
-  if  (result)
-  {
-    // To make sure that we have valid CTD data the search must start no sooner than 30K scan 
-    // lines from the beginning of the sipper file.
-    KKStr  SipperFileName = InstrumentDataFileManager::SipperFileRootNameFromSipperImageFileName (result->ExampleFileName ());
-    InstrumentDataPtr  id = this->InstrumentDataGetByScanLine (SipperFileName, Max ((ulong)30000, (ulong)(result->SfCentroidRow ())));
-    if  (id  &&  id->Depth () > 0.0)
-    {
-      if  (result->Depth () == 0.0)
-      {
-        result->Depth         (id->Depth        ());
-        result->Fluorescence  (id->Fluorescence ());       
-        result->Oxygen        (id->Oxygen       ());
-        result->Salinity      (id->Salinity     ());
-      }
-
-      if  (result->FlowRate1 () == 0.0)
-      {
-        result->FlowRate1     (id->FlowRate1    ());
-        result->FlowRate2     (id->FlowRate2    ());
-      }
-
-      if  (result->Latitude () == 0.0)
-      {
-        result->Latitude      (id->Latitude     ());
-        result->Longitude     (id->Longitude    ());
-      }
-
-      delete  id;  id = NULL;
-    }
-  }
-
-  ResultSetsClear ();
-  return  result;
+  return FeatureDataRecLoad (image->ImageFileName ());
 }  /* FeatureDataRecLoad */
 
 
@@ -6138,6 +6077,8 @@ InstrumentDataPtr  DataBase::InstrumentDataGetByScanLine (const KKStr&  sipperFi
                                                           kkuint32      scanLine
                                                          )
 {
+  InstrumentDataPtr result = NULL;
+
   KKStr   slqStr = "call  InstrumentDataGetByScanLine(" + sipperFileName.QuotedStr () + ", " + StrFormatInt (scanLine, "########0") + ")";
 
   kkint32  returnCd = QueryStatement (slqStr);
@@ -6146,12 +6087,10 @@ InstrumentDataPtr  DataBase::InstrumentDataGetByScanLine (const KKStr&  sipperFi
 
   bool  cancelFlag = false;
   InstrumentDataListPtr  results = InstrumentDataProcessResults (cancelFlag);
-  if  (results == NULL)
-    return NULL;
-
   ResultSetsClear ();
+  if  ((results != NULL) &&  (results->QueueSize () > 0))
+    result = results->PopFromBack ();
 
-  InstrumentDataPtr result = results->PopFromBack ();
   delete  results;
   results = NULL;
 

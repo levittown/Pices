@@ -954,7 +954,7 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
               successful = false;
             }
           }
-          if  (numOfTries > 3)
+          if  (numOfTries > 10)
           {
             // We have already tried 3 times;  we will just go with what we have.
             successful = true;

@@ -30,9 +30,6 @@ namespace PicesInterface
   {
   public:
     ///<summary>Will construct a instance from the parameter file for '_configFileName'.</summary>
-    ///<param name='_configFileName'> The name of the BiasMatrix file will be derived from the configuration 
-    ///       file name.  Se the code for 'the term 'PicesAbundanceCorrectionMatrix' in PicesLibrary'.</param>
-	  ///<param name='_runLog'> Logging file to use. </param>
     PicesAbundanceCorrectionMatrix (PicesClassList^  _classes,
                                     PicesClass^      _otherClass,
                                     PicesRunLog^     _runLog

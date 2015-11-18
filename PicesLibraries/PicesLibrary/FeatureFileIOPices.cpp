@@ -1379,7 +1379,8 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
           kkuint32  scanCol = 0;
           PicesVariables::ParseImageFileName (*imageFileName, sipperFileName, scanLineNum, scanCol);
           id = _dataBase->InstrumentDataGetByScanLine (sipperFileName, scanLineNum);
-          weOwnID = true;
+          if  (id)
+            weOwnID = true;
         }
 
         if  (!id)
