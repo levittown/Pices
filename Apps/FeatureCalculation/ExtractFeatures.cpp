@@ -100,6 +100,8 @@ using namespace  MLL;
 
 // -s D:\Users\kkramer\PlanktonCompetition\trunk\Data\test  -n D:\Users\kkramer\PlanktonCompetition\trunk\Data\test\KaggleTestFeatureData.data
 
+// -s E:\Pices\IEC_ValidatedImages  -u 
+
 ExtractFeatures::ExtractFeatures ():
   PicesApplication (),
 
