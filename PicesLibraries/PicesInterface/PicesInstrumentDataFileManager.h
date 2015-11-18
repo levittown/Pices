@@ -5,13 +5,6 @@ using namespace System::ComponentModel;
 using namespace System::Collections;
 using namespace System::Diagnostics;
 
-
-/**
- @brief  Wrapper class for unmanaged InstrumentDataFileManager class in SipperInstruments library.
- */
-
-
-
 #include  "InstrumentDataFileManager.h"
 using namespace MLL;
 
@@ -22,6 +15,8 @@ using namespace MLL;
 
 namespace PicesInterface 
 {
+
+  ///<summary> Wrapper class for unmanaged InstrumentDataFileManager class in SipperInstruments library. </summary>
   public  ref class PicesInstrumentDataFileManager
   {
   public:

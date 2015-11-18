@@ -77,10 +77,11 @@ namespace PicesInterface
                     PicesTrainingConfigManaged^  _config
                    );
 
-    /** 
-     *@brief  Will create an instance to be used with an already existing instance of 'TrainingProcess2'.
-     *@details I created this to help get a break down of a prediction on a Dual class classifier.
-     */
+    
+    ///<summary> 
+    /// Creates an instance to be used with an already existing instance of 'TrainingProcess2'. I created this to 
+    /// get a break down of a prediction on a Dual class classifier. 
+    ///</summary>
     TrainingModel2 (PicesRunLog^         _picesRunLog,
                     TrainingProcess2Ptr  _trainer
                    );
@@ -114,10 +115,10 @@ namespace PicesInterface
     property  bool              Valid                    {bool              get ()  {return  *valid;}}
 
 
-    /**@brief When using a Dual classifier will return an instance of the first/left classifier.  */
+    ///<summary> When using a Dual classifier will return an instance of the first/left classifier. </summary>
     TrainingModel2^   CreateTrainingModelLeft ();
 
-    /**@brief When using a Dual classifier will return an instance of the second/right classifier.  */
+    <summary> When using a Dual classifier will return an instance of the second/right classifier. </summary>
     TrainingModel2^   CreateTrainingModelRight ();
 
 
@@ -137,10 +138,17 @@ namespace PicesInterface
     void  BuildTrainingModel (PicesFeatureVectorList^  picesTrainingData);
 
 
-    void  CancelLoad ();   // Sets cancel flag to terminate loading of training model.
+    ///<summary>
+    /// Sets the 'cancelFlag' to true; the load and training processes monitor this flag; if goes true 
+    /// process will exit at earliest convenience.
+    ///</summary>
+    void  CancelLoad ();
 
-    PicesClassList^  MLClasses ();  // Will return a list of classes that belong to this model. It will be created from 
-                                    // "classList".  So the caller can do with it as they want.
+    ///<summary> 
+    /// Returns a list of classes that belong to this model; it will be created from "classList" So the
+    /// caller can do with it as they want.
+    ///</summary>
+    PicesClassList^  MLClasses ();
 
     String^  DirectoryPathForClass (PicesClass^  mlClass);
 
@@ -183,7 +191,7 @@ namespace PicesInterface
                        );
 
 
-    // This call assumes that there was a successful call to PredictProbabilities before.
+    ///<summary> This call assumes that there was a successful call to PredictProbabilities before. </summary>
     PicesPredictionList^   BinaryProbailitiesForClass (PicesClass^  leftClass);
 
     array<PicesInterface::ProbNamePair^>^  

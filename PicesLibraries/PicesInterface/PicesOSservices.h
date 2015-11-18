@@ -16,13 +16,13 @@ using namespace System::Diagnostics;
 
 namespace PicesInterface 
 {
-  /**
-   *@brief The Managed version of the OSServices methods defined in BaseLibrary.
-   *@details
-   * This class is the managed equivelent to the functions defined in OSservices 
-   * in BaseLibrary. In some cases we implement the code in the unmanaged world 
-   * in others we encapsulate the Unmanaged call.
-   */
+  
+  ///<summary> The Managed version of the OSServices methods defined in BaseLibrary. </summary>
+  ///<remarks>
+  /// This class is the managed equivelent to the functions defined in OSservices 
+  /// in BaseLibrary. In some cases we implement the code in the unmanaged world 
+  /// in others we encapsulate the Unmanaged call.
+  ///</remarks>
   public ref class  OSservices
   {
   public:
@@ -50,13 +50,11 @@ namespace PicesInterface
 
     static long      HexStrToLong (String^ argument);
 
-    /**
-     *@brief  Look for a specified file in a subdirectory structure.
-     *@param[in]  fileName  Name of file we are looking for.
-     *@param[in]  srcDir    Sub Directory tree we want to search.
-     *@return  Full directory path to where first occurance of fileName is located. If not 
-     *         found will return back nullptr.
-     */
+    
+    ///<summary> Look for a specified file in a subdirectory structure. </summary>
+    ///<param name='fileName'> Name of file we are looking for. </param>
+    ///<param name='srcDir'> Sub Directory tree we want to search. </param>
+    ///<returns> Full directory path to where first occurance of fileName is located; if not found will return back nullptr. </returns>
     static String^   LookForFile (String^  fileName,
                                   String^  srcDir
                                  );

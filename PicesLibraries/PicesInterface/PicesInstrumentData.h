@@ -6,9 +6,6 @@ using namespace System::Collections;
 using namespace System::Diagnostics;
 
 
-/**
- @brief  Wrapper class for unmanaged InstrumentData class in SipperInstruments library.
- */
 
 
 
@@ -23,6 +20,7 @@ using namespace  MLL;
 
 namespace PicesInterface 
 {
+  ///<summary> Wrapper class for unmanaged InstrumentData class in SipperInstruments library. </summary>
   public  ref class PicesInstrumentData
   {
   public:
@@ -117,14 +115,14 @@ namespace PicesInterface
     PicesInstrumentDataList ();
     PicesInstrumentDataList (InstrumentDataListPtr   dataList);
 
-
-    // Will calculate the volume of water that was sampled by depth in meters.  Will use
-    // the ScanLine and ScanRate(from SipperFile) to determine time at given depth and flowRate 
-    // to determine rate at which water is passing through sampling tube.
+    ///<summary>
+    /// Will calculate the volume of water that was sampled by depth in meters. Will use the ScanLine and 
+    /// ScanRate(from SipperFile) to determine time at given depth and flowRate to determine rate at which 
+    /// water is passing through sampling tube.
+    ///</summary>
     array<double>^  PicesInstrumentDataList::ExtractVolumeByDepth (float  scanRate,   // Scan lines per second.
                                                                    float  defaultFlowRate
                                                                   );
-
   private:
     ~PicesInstrumentDataList ();
 

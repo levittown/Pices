@@ -27,14 +27,14 @@ namespace PicesInterface
 
     void          Close ();
 
-    /** 
-     *@brief Returns a copy of the string last added to the message queue.
-     *@details This will not effect the current copy of the message queue.  he returned string
-     * will be owned by the caller who will be responsible for deleting it.
-     */
+    ///<summary>
+    /// Returns a copy of the string last added to the message queue; will not effect the current copy 
+    /// of the message queue. The returned string will be owned by the caller who will be responsible 
+    /// for deleting it.
+    ///</summary>
     String^       GetCopyOfLastMsg ();
 
-    /**@brief  Removes from the queue the oldest message added to the queue that has not been removed. */
+    ///<summary> Removes from the queue the oldest message added to the queue that has not been removed. </summary>
     String^       GetNextMsg ();
 
     MsgQueuePtr   MsgQueue ()  {return msgQueue;}

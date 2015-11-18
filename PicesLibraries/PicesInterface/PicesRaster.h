@@ -26,7 +26,8 @@ namespace PicesInterface
 
     PicesRaster (System::Array^   _raster);
 
-    PicesRaster  (RasterSipperPtr  _raster);   // Will take ownership of "_raster"  and delete it when done.
+    ///<summary> Will take ownership of "_raster"  and delete it when done. </summary>
+    PicesRaster  (RasterSipperPtr  _raster);
 
     PicesRaster  (String^   _fileName);
 
@@ -43,8 +44,7 @@ namespace PicesInterface
   
 
 
-    // Will go back to the original SIPPER file and recover the 
-    // source image.
+    ///<summary> Will go back to the original SIPPER file and recover the source image. </summary>
     static  PicesRaster^  GetOrigSipperImage (String^       sipperFileRootName,
                                               kkuint64      byteOffset,
                                               uint          topLeftRow,
@@ -196,13 +196,14 @@ namespace PicesInterface
   public:
     PicesRasterList ();
 
-    /**
-     *@brief  Construct a list of managed PicesRaster instances from the contents of the unmanaged list 'unmanagedImages'.
-     *@details  Will take ownership of the instances of Raster in 'unmanagedImages'.  The list will be deleted and the unmanaged
-     *          code should not try to access any of 'unmanagedImages' contents after this call.
-     *@param[in,out]  unmanagedImages  List of unmanaged 'Raster' objects; the ownership of these instances will be given 
-     *                over to the new Managed instance of 'PicesRasterList'; will be deleted and set to NULL.
-     */
+    
+    ///<summary> Construct a list of managed PicesRaster instances from the contents of the unmanaged list 'unmanagedImages'. <summary>
+    ///<remarks>
+    /// Will take ownership of the instances of Raster in 'unmanagedImages'.  The list will be deleted and the unmanaged
+    /// code should not try to access any of 'unmanagedImages' contents after this call.
+    ///</remarks>
+    ///<param name='unmanagedImages'>  List of unmanaged 'Raster' objects; the ownership of these instances will be given 
+    /// over to the new Managed instance of 'PicesRasterList'; will be deleted and set to NULL. </param>
     PicesRasterList (RasterSipperListPtr&  unmanagedImages);
 
     ~PicesRasterList ();
@@ -211,21 +212,18 @@ namespace PicesInterface
 
     void  AddList (PicesRasterList^ list);
 
-    /**
-     *@brief Give ownership of the contents of 'list' to this Managed list.
-     *@details  Will take ownership of the unmanaged instances of 'Raster' in 'list'.  These instances will be deleted
-     *   by the ".net" garabage collector so make sure that no unmanaged code makes use of these instances after making 
-     *   this call.
-     *@param[in,out]  list  The list of 'Raster' objects to turn owneship of; will be deleted and be set to NULL;  do not make
-     *                      use of any of these instances in the unmanaged code afetr making this call.
-     */
+    ///<summary> Give ownership of the contents of 'list' to this Managed list. </summary>
+    ///<remarks>
+    /// Will take ownership of the unmanaged instances of 'Raster' in 'list'.  These instances will be deleted
+    /// by the ".net" garabage collector so make sure that no unmanaged code makes use of these instances after making 
+    /// this call.
+    ///</remarks>
+    /// <param name='list'> The list of 'Raster' objects to turn owneship of; will be deleted and be set to NULL; do not
+    /// make use of any of these instances in the unmanaged code afetr making this call. </param>
     void  AddList (RasterSipperListPtr&  list);
 
     void  CleanUpMemory ();
 
   private:
   };  /* PicesRasterList */
-
-
-
 }
