@@ -118,7 +118,7 @@ namespace PicesInterface
     ///<summary> When using a Dual classifier will return an instance of the first/left classifier. </summary>
     TrainingModel2^   CreateTrainingModelLeft ();
 
-    <summary> When using a Dual classifier will return an instance of the second/right classifier. </summary>
+    ///<summary> When using a Dual classifier will return an instance of the second/right classifier. </summary>
     TrainingModel2^   CreateTrainingModelRight ();
 
 
