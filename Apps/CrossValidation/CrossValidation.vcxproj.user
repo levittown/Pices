@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LocalDebuggerCommandArguments>-config NRDA_SD0102_BFS -Validation  C:\Pices\IEC_ValidatedImages\GG1002\GG1002.data  -r D:\Users\kkramer\DropBox\Dropbox\NOAA_Contracting\IECPaper\Reports\GG1002_BFS.data</LocalDebuggerCommandArguments>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LocalDebuggerCommandArguments>-config NRDA_SD0102_BFS -Validation  C:\Pices\IEC_ValidatedImages\GG1002\GG1002.data  -r D:\Users\kkramer\DropBox\Dropbox\NOAA_Contracting\IECPaper\Reports\GG1002_BFS.data</LocalDebuggerCommandArguments>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedRelease|Win32'">
+    <LocalDebuggerCommandArguments>-config NRDA_SD0102_BFS -Validation  C:\Pices\IEC_ValidatedImages\GG1002\GG1002.data  -r D:\Users\kkramer\DropBox\Dropbox\NOAA_Contracting\IECPaper\Reports\GG1002_BFS.data</LocalDebuggerCommandArguments>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedDebug|Win32'">
+    <LocalDebuggerCommandArguments>-config NRDA_SD0102_BFS -Validation  C:\Pices\IEC_ValidatedImages\GG1002\GG1002.data  -r D:\Users\kkramer\DropBox\Dropbox\NOAA_Contracting\IECPaper\Reports\GG1002_BFS.data</LocalDebuggerCommandArguments>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
+</Project>

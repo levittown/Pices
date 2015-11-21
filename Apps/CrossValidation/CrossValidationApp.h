@@ -211,6 +211,9 @@ public:
                                      );
 
 
+  FeatureVectorListPtr  ReduceToWhatsInConfig (FeatureVectorListPtr&  src, MLClassListPtr  classes);
+
+
   void  RemoveDuplicateImages (FeatureVectorList&  examples);
 
 

@@ -190,8 +190,7 @@ TrainingModel2::TrainingModel2 (PicesRunLog^                _picesRunLog,
   KKStr  configFileName = osAddSlash (PicesVariables::TrainingModelsConfigurationDir ()) + modelNameKKStr;
 
   FileDescPtr fd = FeatureFileIOPices::NewPlanktonFile ();
-
-
+  
   try
   {
     config = PicesTrainingConfiguration::CreateFromDirectoryStructure 

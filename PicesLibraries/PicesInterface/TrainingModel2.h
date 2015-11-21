@@ -31,15 +31,11 @@ namespace PicesInterface
   public ref class  ProbNamePair
   {
   public:
-    ProbNamePair (String^  _name,
-                  double   _probability
-                 ):
+    ProbNamePair (String^ _name,  double _probability):
         name (_name),  probability (_probability)
         {}
 
-    ProbNamePair (const KKStr&  _name,
-                  double        _probability
-                 ):
+    ProbNamePair (const KKStr& _name,  double _probability):
         name (nullptr),  probability (0.0f)
     {
       name = PicesKKStr::KKStrToSystenStr (_name);
@@ -65,26 +61,26 @@ namespace PicesInterface
       Dual      = KKMLL::Model::ModelTypes::Dual
     };
 
-    TrainingModel2 (PicesRunLog^     _picesRunLog,
-                    System::String^  _modelName
-                   );
+    TrainingModel2 (PicesRunLog^ _picesRunLog,  System::String^ _modelName);
 
-    TrainingModel2 (PicesRunLog^                _picesRunLog,
-                    System::IO::DirectoryInfo^  _directoryInfo
-                   );
+    /// <summary> Builds a configuration using the directory structure pointed to by <paramref='_directoryInfo'/> .</summary>
+    /// <remarks>Searches through the directory structure recursively using the directory names to define class names.</remarks>
+    /// <param name="_picesRunLog"> The pices run log.</param>
+    /// <param name="_config">      The configuration.</param>
+    TrainingModel2 (PicesRunLog^ _picesRunLog,  System::IO::DirectoryInfo^ _directoryInfo);
 
-    TrainingModel2 (PicesRunLog^                 _picesRunLog,
-                    PicesTrainingConfigManaged^  _config
-                   );
+    /// <summary> Constructor that utilizes <paramref='_config'/>.</summary>
+    /// <param name="_picesRunLog"> The pices run log.</param>
+    /// <param name="_config">      The configuration.</param>
+    TrainingModel2 (PicesRunLog^ _picesRunLog,  PicesTrainingConfigManaged^ _config);
 
-    
-    ///<summary> 
-    /// Creates an instance to be used with an already existing instance of 'TrainingProcess2'. I created this to 
-    /// get a break down of a prediction on a Dual class classifier. 
-    ///</summary>
-    TrainingModel2 (PicesRunLog^         _picesRunLog,
-                    TrainingProcess2Ptr  _trainer
-                   );
+
+    /// <summary> Creates an instance to be used with an already existing instance of
+    ///   'TrainingProcess2'. I created this to get a break down of a prediction on a Dual class
+    ///   classifier.</summary>
+    /// <param name="_picesRunLog"> The pices run log.</param>
+    /// <param name="_trainer">     The trainer.</param>
+    TrainingModel2 (PicesRunLog^ _picesRunLog,  TrainingProcess2Ptr  _trainer);
 
     void  CleanUp ();
 
@@ -139,17 +135,19 @@ namespace PicesInterface
 
 
     ///<summary>
-    /// Sets the 'cancelFlag' to true; the load and training processes monitor this flag; if goes true 
-    /// process will exit at earliest convenience.
+    /// Sets the 'cancelFlag' to true; the load and training processes monitor this flag; if goes true  process will exit at earliest convenience.
     ///</summary>
     void  CancelLoad ();
 
     ///<summary> 
-    /// Returns a list of classes that belong to this model; it will be created from "classList" So the
-    /// caller can do with it as they want.
+    /// Returns a duplicate list of classes that belong to this model; since a duplicated list caller can modify without impacting this TrainingModel.
     ///</summary>
     PicesClassList^  MLClasses ();
 
+
+    /// <summary> Fully expanded directory path for specified class.</summary>
+    /// <param name="mlClass">Class that we want to get directory path for training images.</param>
+    /// <returns> Returns full path where images for mlClass are stored; directory path is fully expended; if class not defined in configuration will return nullptr. </returns>
     String^  DirectoryPathForClass (PicesClass^  mlClass);
 
 
@@ -232,9 +230,11 @@ namespace PicesInterface
 
     void  SaveConfiguration ();
 
-    array<String^>^   SupportVectorNames (PicesClass^ c1,
-                                          PicesClass^ c2
-                                         );
+    /// <summary> Returns the names of the training examples that became support vectors in the binary classifier that was built for the class pair c1 and c2 .</summary>
+    /// <param name="c1"> The first PicesClass.</param>
+    /// <param name="c2"> The second PicesClass.</param>
+    /// <returns> nullptr if there is not a SVM for the pair of classes specified otherwise a list of the examples that are S/Vs.</returns>
+    array<String^>^  SupportVectorNames (PicesClass^ c1,  PicesClass^ c2);
 
 	private:
 
@@ -243,14 +243,14 @@ namespace PicesInterface
                                         int      width
                                        );
 
-    void     CreateRunLog ();
+    void CreateRunLog ();
 
-    void     ErrorMsgsClear ();
-    void     ErrorMsgsAdd (String^ errorMsg);
-    void     ErrorMsgsAdd (const VectorKKStr&  _errorMsgs);
+    void ErrorMsgsClear ();
+    void ErrorMsgsAdd (String^ errorMsg);
+    void ErrorMsgsAdd (const VectorKKStr&  _errorMsgs);
 
 
-    PicesTrainingConfigurationConstPtr   GetConfigToUse ();
+    PicesTrainingConfigurationConstPtr  GetConfigToUse ();
 
     void  PopulateCSharpClassList ();
 

@@ -460,6 +460,11 @@ using namespace  MLL;
 
 // -dir D:\Users\kkramer\GitHub\Kaggle\Data\train  -folds 10  -config Kaggle.cfg  -report D:\Users\kkramer\GitHub\Kaggle\Data\train\Kaggle10Fold.txt   -RANDOMIZE  -save D:\Users\kkramer\GitHub\Kaggle\Data\train\KaggleTran.data
 // -dir E:\Users\kkramer\ProgProjects\Kaggle\Data\train  -folds 10  -config Kaggle.cfg  -report E:\Users\kkramer\ProgProjects\Kaggle\Data\train\Kaggle10Fold.txt   -RANDOMIZE
+
+
+// -config NRDA_SD0102_MFS  -Validation  C:\Pices\IEC_ValidatedImages\GG1002\GG1002.data  -r D:\Users\kkramer\DropBox\Dropbox\NOAA_Contracting\IECPaper\Reports\GG1002_MFS.data
+
+
 CrossValidationApp::CrossValidationApp ()
   :
     cancelFlag                   (false),
@@ -1569,7 +1574,22 @@ void  CrossValidationApp::CrossValidate
 }  /* CrossValidate */
 
 
+FeatureVectorListPtr  RemoveAnyExamplesInOtherList (FeatureVectorListPtr  src,   FeatureVectorListPtr zed)
+{
+  map<KKStr, FeatureVectorPtr>  eliminateList;
+  map<KKStr, FeatureVectorPtr>::iterator  eliminateListIdx;
+  for (auto idx: *zed) 
+    eliminateList.insert(std::pair<KKStr, FeatureVectorPtr> (idx->ExampleFileName (), idx));
 
+  FeatureVectorListPtr  dest = src->ManufactureEmptyList (src->Owner ());
+  for  (auto idx2: *src) {
+    eliminateListIdx = eliminateList.find(idx2->ExampleFileName ());
+    if  (eliminateListIdx == eliminateList.end ())
+      dest->PushOnBack (idx2);
+  }
+
+  return  dest;
+}
 
 
 
@@ -1592,10 +1612,33 @@ void  CrossValidationApp::ValidationProcess ()
     osWaitForEnter ();
     exit (-1);
   }
+  
+  {
+    FeatureVectorListPtr  reducedExamples = ReduceToWhatsInConfig (examples, config->MlClasses ());
+    examples = reducedExamples;
+    reducedExamples = NULL;
+    FeatureVectorListPtr  reducedValidationExamples = ReduceToWhatsInConfig (validationData, config->MlClasses ());
+    validationData = reducedValidationExamples;
+    reducedValidationExamples = NULL;
+
+    validationData = RemoveAnyExamplesInOtherList (validationData, examples);
+  }
+
+  {
+    *report << "Training Examples Statistics" << endl
+      << examples->ClassStatisticsStr ()
+      << endl;
+
+    *report << "Validation Examples Statistics" << endl
+      << validationData->ClassStatisticsStr ()
+      << endl;
+  }
 
   bool  cancelFlag = false;
 
   time_before = osGetSystemTimeUsed();
+
+  MLClassListPtr  mlClasses = config->MlClasses ();
 
   TrainingProcess2Ptr  trainer = TrainingProcess2::CreateTrainingProcessFromTrainingExamples
          (config,
@@ -1752,7 +1795,6 @@ void  CrossValidationApp::ValidationProcess ()
       delete[]  votes;  votes = NULL;
     }
 
-
     numPredicted++;
     if  ((numPredicted % 1000) == 0)
       runLog.Level (10) << "   Num Predicted[" << numPredicted << "] of [" << validationData->QueueSize () << "]" << endl;
@@ -1761,9 +1803,12 @@ void  CrossValidationApp::ValidationProcess ()
   time_after = osGetSystemTimeUsed();
   classification_time = time_after - time_before;
 
-
   *report << "All Validation Data."  << endl;
   cm.PrintConfusionMatrixTabDelimited (*report);
+  *report << endl << endl;
+  *report << "Specificity by class" << endl;
+  cm.PrintTrueFalsePositivesTabDelimited (*report);
+
   *report << endl << endl << endl;
 
   *report << "All Validation Data  -  Second Guess Performance."  << endl;
@@ -2228,13 +2273,39 @@ void  CrossValidationApp::WriteABiasMatrix (ConfusionMatrix2&  cm)
 
 
 
+/**  
+ *@brief reduces the contents of the 'src' list down to the examples that are one of the specified classes. 
+ * If 'src' is the owner then the examples that are not included will be deleted as well as 'src' 
+ */
+FeatureVectorListPtr  CrossValidationApp::ReduceToWhatsInConfig (FeatureVectorListPtr&  src, MLClassListPtr  classes)
+{
+  bool  srcIsOwner = src->Owner ();
+  FeatureVectorListPtr included = src->ManufactureEmptyList (src->Owner ());
+  FeatureVectorListPtr excluded = src->ManufactureEmptyList (src->Owner ());
+
+  for (auto idx: *src) {
+    if  (classes->PtrToIdx (idx->MLClass ()) >= 0)
+      included->PushOnBack (idx);
+    else
+      excluded->PushOnBack (idx);
+  }
+
+  if  (srcIsOwner)  {
+    src->Owner(false);
+    delete src;       src = NULL;
+    delete excluded;  excluded = NULL;
+  }
+
+  return included;
+}
+
+
 
 
 //**************************************************************************
 //*                           The Main Module                              *
 //*                                                                        *
 //**************************************************************************
-
 int  CrossValidationApp::Main (int  argc,  char** argv)
 {
   ProcessCmdLineParameters (argc, argv);
@@ -2303,7 +2374,7 @@ int  CrossValidationApp::Main (int  argc,  char** argv)
 
   *report << "Start Time[" << startTime << "]." << endl << endl;
 
-  CheckForDuplicates ();
+  //CheckForDuplicates ();
 
   if  (randomizeInputData)
   {
@@ -3621,7 +3692,7 @@ int  main (int    argc,
 
 
     //2014-05-14  kurt kramer
-    // At andrews request creating mfs, bfs and dual classifier for specied list of classes.
+    // At andrews request creating mfs, bfs and dual classifier for specified list of classes.
     //CreateBfsFromMfs ("E:\\Pices\\DataFiles\\TrainingModels\\GulfBroad_2014-05-16_MFS.cfg",
     //                  "E:\\Pices\\DataFiles\\TrainingModels\\GulfOilBroad_130314_BFS.cfg",
     //                  "GulfOilBroad2_Discreate_OrigTuned_BFS.cfg",
@@ -3632,7 +3703,7 @@ int  main (int    argc,
 
 
     //2014-05-14  kurt kramer
-    // At andrews request creating mfs, bfs and dual classifier for specied list of classes.
+    // At andrews request creating mfs, bfs and dual classifier for specified list of classes.
     //CreateBfsFromMfs ("D:\\Pices\\DataFiles\\TrainingModels\\GulfBroad_2014-06-27_MFS.cfg",
     //                  "D:\\Pices\\DataFiles\\TrainingModels\\GulfOilBroad_130314_BFS.cfg",
     //                  "Oil_BFS",
