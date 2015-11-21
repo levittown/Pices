@@ -242,7 +242,9 @@ namespace PicesInterface
                                          );
 
 
-
+    ///<summary> Returns list of images from database for the specified <paramref name='imageGroup'/> that also meet the other specified criteria as specified by the parameters.</summary>
+    ///<param name='imageGroup'>Group that we are retrieving mages for; this field is manadatory</param>
+    ///<param name='cruiseName'>Name of cruise that the images must have been collected one.</param>
     PicesDataBaseImageList^  ImagesQueryByGrouop 
                                   (PicesDataBaseImageGroup^   imageGroup,
                                    String^                    cruiseName,

@@ -723,7 +723,9 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
 
 
 
-
+  ///<remarks>
+  /// If no images meet all the criteria secified then a nullptr will be returned.
+  ///</remarks>
   PicesDataBaseImageList^  PicesDataBase::ImagesQueryByGrouop 
                                     (PicesDataBaseImageGroup^   imageGroup,
                                      String^                    cruiseName,

@@ -82,7 +82,23 @@ namespace PicesCommander
     }
 
     
-    
+    /// <summary>
+    /// Starts the thread that loads images that are to be displayd on the thumbnail viewer.
+    /// </summary>
+    /// <param name="_selectedImageGroup"></param>
+    /// <param name="_cruiseName"></param>
+    /// <param name="_stationName"></param>
+    /// <param name="_deploymentNum"></param>
+    /// <param name="_sipperFileName"></param>
+    /// <param name="_mlClass"></param>
+    /// <param name="_classKeyToUse"></param>
+    /// <param name="_probMin"></param>
+    /// <param name="_probMax"></param>
+    /// <param name="_sizeMin"></param>
+    /// <param name="_sizeMax"></param>
+    /// <param name="_depthMin"></param>
+    /// <param name="_depthMax"></param>
+    /// <param name="_restartImageId"></param>
     public  PlanktonImageLoader (PicesDataBaseImageGroup  _selectedImageGroup,
                                  String                   _cruiseName,
                                  String                   _stationName,
@@ -100,21 +116,21 @@ namespace PicesCommander
                                 )
     {
       runLog = new PicesRunLog ();
-      dbConn               = null;
-      selectedImageGroup   = _selectedImageGroup;
-      cruiseName           = _cruiseName;
-      stationName          = _stationName;
-      deploymentNum        = _deploymentNum;
-      sipperFileName       = _sipperFileName;
-      mlClass           = _mlClass;
-      classKeyToUse        = _classKeyToUse;
-      probMin              = _probMin;
-      probMax              = _probMax;
-      sizeMin              = _sizeMin;
-      sizeMax              = _sizeMax;
-      depthMin             = _depthMin;
-      depthMax             = _depthMax;
-      restartImageId       = _restartImageId;
+      dbConn             = null;
+      selectedImageGroup = _selectedImageGroup;
+      cruiseName         = _cruiseName;
+      stationName        = _stationName;
+      deploymentNum      = _deploymentNum;
+      sipperFileName     = _sipperFileName;
+      mlClass            = _mlClass;
+      classKeyToUse      = _classKeyToUse;
+      probMin            = _probMin;
+      probMax            = _probMax;
+      sizeMin            = _sizeMin;
+      sizeMax            = _sizeMax;
+      depthMin           = _depthMin;
+      depthMax           = _depthMax;
+      restartImageId     = _restartImageId;
 
       blocker = new PicesGoalKeeper ("PlanktonImageLoader");
       
@@ -165,9 +181,12 @@ namespace PicesCommander
     }  /* CancelLoadWait */
 
 
-
-    //  return to the caller a list of images that I have loaded and
-    //  then remove from my own internal list 'loadedImages'.
+    /// <summary> Return to caller list of images that have been loaded so far by the LoadImagesThread. </summary>
+    /// <remarks> 
+    /// Images are loaded by a seprate thread; these images are loaded into <paramref name="loadedImages"/>. Images
+    /// accumulate into it until ther are retrived by this method.
+    /// </remarks>
+    /// <returns> List of images loaded since the last call. </returns>
     public  PicesDataBaseImageList  GetImagesAlreadyLoaded ()
     {
       blocker.StartBlock ();
