@@ -10,6 +10,7 @@ using namespace System::Diagnostics;
 
 namespace PicesInterface
 {
+  ///<summary> Purpose is to communicate the results of a prediction giving class, votes and probablity. </summary>
   public  ref  class  PicesPrediction
   {
   public:
@@ -18,7 +19,7 @@ namespace PicesInterface
                       double       _probability
                      );
 
-    property PicesClass^  MLClass   {PicesClass^ get ()  {return  mlClass;}   void  set (PicesClass^  _mlClass)  {mlClass  = _mlClass;}}
+    property PicesClass^  MLClass      {PicesClass^ get ()  {return  mlClass;}   void  set (PicesClass^  _mlClass)  {mlClass  = _mlClass;}}
     property double       Probability  {double      get ()  {return  probability;}  void  set (double       _probability) {probability = _probability;}}
     property String^      ClassName    {String^     get ();}
     property int          Votes        {int         get ()  {return  votes;}        void  set (int          _votes)       {votes       = _votes;}}
@@ -30,6 +31,5 @@ namespace PicesInterface
     PicesClass^  mlClass;
     double       probability;
     int          votes;
-
   };
 }

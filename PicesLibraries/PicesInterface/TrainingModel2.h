@@ -65,17 +65,14 @@ namespace PicesInterface
       Dual      = KKMLL::Model::ModelTypes::Dual
     };
 
-    TrainingModel2 (PicesRunLog^     _picesRunLog,
-                    System::String^  _modelName
-                   );
+    ///<summary>Instantiates a new instance giving it _modelName ; but no other processing. </summary>
+    TrainingModel2 (PicesRunLog^ _picesRunLog,  System::String^  _modelName);
 
-    TrainingModel2 (PicesRunLog^                _picesRunLog,
-                    System::IO::DirectoryInfo^  _directoryInfo
-                   );
+    ///<summary>Creates a new instance where the config structure is built using the directory structure pointed to by <paramref name="_directoryInfo"/></summary>
+    ///<seealso name="PicesTrainingConfiguration::CreateFromDirectoryStructure">
+    TrainingModel2 (PicesRunLog^ _picesRunLog,  System::IO::DirectoryInfo^  _directoryInfo);
 
-    TrainingModel2 (PicesRunLog^                 _picesRunLog,
-                    PicesTrainingConfigManaged^  _config
-                   );
+    TrainingModel2 (PicesRunLog^ _picesRunLog,  PicesTrainingConfigManaged^  _config);
 
     
     ///<summary> 
