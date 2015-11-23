@@ -199,7 +199,7 @@ namespace PicesInterface
     
     ///<summary> Construct a list of managed PicesRaster instances from the contents of the unmanaged list 'unmanagedImages'. </summary>
     ///<remarks>
-    /// Will take ownership of the instances of Raster in <paramref='unmanagedImages'/>.  The list will be deleted and the unmanaged
+    /// Will take ownership of the instances of Raster in <paramref name='unmanagedImages'/>.  The list will be deleted and the unmanaged
     /// code should not try to access any of 'unmanagedImages' contents after this call.
     ///</remarks>
     ///<param name='unmanagedImages'> List of unmanaged Raster objects; the ownership of these instances will be given 

@@ -482,13 +482,11 @@ void   FeatureFileConverter::NormalizeExamples (ModelParam&         param,
 {
   KKStr  parameterStr = param.ToCmdLineStr ();
   NormalizationParmsPtr  normParms = NULL;
-
   if  (osFileExists (nornParmsFileName))
   {
     bool  successful = false;
-
-    normParms = new NormalizationParms (examples.FileDesc (), nornParmsFileName, successful, log);
-    if  (!successful)
+    normParms = NormalizationParms::ReadFromFile (nornParmsFileName, log);
+    if  (!normParms)
     {
       KKStr  errMsg = "Could not load normalization parameters file[" + nornParmsFileName + "]";
       log.Level (-1) << endl << "NormalizeExamples    *** ERROR ***    " << errMsg << endl << endl;
@@ -499,23 +497,18 @@ void   FeatureFileConverter::NormalizeExamples (ModelParam&         param,
   {
     bool  successful = false;
     normParms = new NormalizationParms (param, examples, log);
-    normParms->Save (nornParmsFileName, successful, log);
+    normParms->WriteToFile(nornParmsFileName, successful, log);
     if  (!successful)
     {
       KKStr  errMsg = "Could not save normalization parameters file[" + nornParmsFileName + "]";
-      log.Level (-1) << endl << "NormalizeExamples    *** ERROR ***      " << errMsg << endl << endl;
-      throw  KKException (errMsg);
+      log.Level (-1) << endl << "NormalizeExamples   ***ERROR***  " << errMsg << endl << endl;
+      throw KKException (errMsg);
     }
   }
-
   normParms->NormalizeExamples (&examples, log);
-
   delete  normParms;
   normParms = NULL;
 }  /* NormalizeExamples */
-
-
-
 
 
 void  FeatureFileConverter::EncodeFeatureData ()

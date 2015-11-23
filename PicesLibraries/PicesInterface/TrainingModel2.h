@@ -63,13 +63,13 @@ namespace PicesInterface
 
     TrainingModel2 (PicesRunLog^ _picesRunLog,  System::String^ _modelName);
 
-    /// <summary> Builds a configuration using the directory structure pointed to by <paramref='_directoryInfo'/> .</summary>
+    /// <summary> Builds a configuration using the directory structure pointed to by <paramref name='_directoryInfo'/> .</summary>
     /// <remarks>Searches through the directory structure recursively using the directory names to define class names.</remarks>
     /// <param name="_picesRunLog"> The pices run log.</param>
-    /// <param name="_config">      The configuration.</param>
+    /// <param name="_directoryInfo"> Root to subdirectory that contains training images with each child directory containing examples for a specific class.</param>
     TrainingModel2 (PicesRunLog^ _picesRunLog,  System::IO::DirectoryInfo^ _directoryInfo);
 
-    /// <summary> Constructor that utilizes <paramref='_config'/>.</summary>
+    /// <summary> Constructor that utilizes <paramref name='_config'/>.</summary>
     /// <param name="_picesRunLog"> The pices run log.</param>
     /// <param name="_config">      The configuration.</param>
     TrainingModel2 (PicesRunLog^ _picesRunLog,  PicesTrainingConfigManaged^ _config);

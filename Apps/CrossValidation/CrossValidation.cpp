@@ -1376,8 +1376,7 @@ void  CrossValidationApp::CrossValidate
 
   noiseMLClass = mlClasses->GetNoiseClass ();
 
-  //FeatureVectorListIterator  imageIDX (*testImages);
-  FeatureVectorList::iterator  imageIDX;
+  //FeatureVectorList::iterator  imageIDX;
 
   int  foldCorrect = 0;
   foldCount = 0;
@@ -1408,11 +1407,8 @@ void  CrossValidationApp::CrossValidate
   FeatureVectorPtr  example = NULL;
   double  startClassificationTime = osGetSystemTimeUsed ();
 
-  //for  (imageIDX.Reset (); (example = imageIDX.CurPtr ()); ++imageIDX)
-  for  (imageIDX = testImages->begin ();  imageIDX != testImages->end (); ++imageIDX)
+  for  (auto example: *testImages)
   {
-    example = *imageIDX;
-
     MLClassPtr  knownClass = example->MLClass ();
 
     MLClassPtr  predClass1       = NULL;
@@ -1427,18 +1423,15 @@ void  CrossValidationApp::CrossValidate
     double      compact          = 0.0;
 
     classifier.ClassifyAExample (*example,
-                               predClass1,       predClass2,
-                               predClass1Votes,  predClass2Votes,
-                               knownClassProb,   
-                               predClass1Prob,   predClass2Prob,
-                               numOfWinners,     breakTie
-                              );
-    
-    
+                                 predClass1,       predClass2,
+                                 predClass1Votes,  predClass2Votes,
+                                 knownClassProb,   
+                                 predClass1Prob,   predClass2Prob,
+                                 numOfWinners,     breakTie
+                                );
     // Because unfortunately 'ClassifyAExample'  updates the MLClass field in the 'FeatureVector' 
     // instance to the predicted class we need to set the class back to the original class.
     example->MLClass (knownClass);
-
     {
       // Update LogLossTotal
       double zed = knownClassProb;
@@ -1510,37 +1503,29 @@ void  CrossValidationApp::CrossValidate
       foldCorrect++;
     }
 
-    runLog.Level (50) << "CrossValidate - Known Class["      << knownClass->Name () << "]  "
-                      <<                 "Predicted Class["  << predClass1->Name () << "]."
-                      << endl;
-
+    runLog.Level (50) << "CrossValidate - Known Class[" << knownClass->Name () << "]  Predicted Class["  << predClass1->Name () << "]."  << endl;
 
     if  (copyMissClassedImages)
     {
       if  (knownClass != predClass1)
-        PostMisclassifiedImage ((*imageIDX)->ExampleFileName (),
-                                knownClass, 
-                                predClass1
-                               );
+        PostMisclassifiedImage (example->ExampleFileName (), knownClass, predClass1);
     }
 
-
-
-    if  ((int)(*imageIDX)->OrigSize () < thresholdSmall)
+    if  ((int)(example)->OrigSize () < thresholdSmall)
     {
       cmSmall.Increment (knownClass, 
                          predClass1, 
-                         (int)(*imageIDX)->OrigSize (), 
+                         (int)(example)->OrigSize (), 
                          predClass1Prob,
                          runLog
                         );
     }
 
-    else if  ((int)(*imageIDX)->OrigSize () < thresholdMed)
+    else if  ((int)example->OrigSize () < thresholdMed)
     {
       cmMed.Increment (knownClass, 
                        predClass1, 
-                       (int)(*imageIDX)->OrigSize (), 
+                       (int)example->OrigSize (), 
                        predClass1Prob,
                        runLog
                       );
@@ -1550,7 +1535,7 @@ void  CrossValidationApp::CrossValidate
     {
       cmLarge.Increment (knownClass, 
                          predClass1, 
-                         (int)(*imageIDX)->OrigSize (), 
+                         (int)example->OrigSize (), 
                          predClass1Prob,
                          runLog
                         );
@@ -1603,14 +1588,9 @@ void  CrossValidationApp::ValidationProcess ()
 
   if  (!validationData)
   {
-    runLog.Level (-1)
-      << endl
-      << "ValidationProcess   *** ERROR ***"  << endl
-      << endl
-      << "              *** No Validation Data ***" << endl
-      << endl;
-    osWaitForEnter ();
-    exit (-1);
+    KKStr msg = "ValidationProcess   ***ERROR***   *** No Validation Data ***";
+    runLog.Level (-1) << endl << msg << endl << endl;
+    exit(-1)
   }
   
   {
@@ -1625,13 +1605,8 @@ void  CrossValidationApp::ValidationProcess ()
   }
 
   {
-    *report << "Training Examples Statistics" << endl
-      << examples->ClassStatisticsStr ()
-      << endl;
-
-    *report << "Validation Examples Statistics" << endl
-      << validationData->ClassStatisticsStr ()
-      << endl;
+    *report << "Training Examples Statistics"   << endl << examples->ClassStatisticsStr () << endl;
+    *report << "Validation Examples Statistics" << endl << validationData->ClassStatisticsStr () << endl;
   }
 
   bool  cancelFlag = false;
@@ -1668,13 +1643,11 @@ void  CrossValidationApp::ValidationProcess ()
 
   FeatureVectorPtr  example = NULL;
 
-  //FeatureVectorListIterator  imageIDX (*validationData);
   FeatureVectorList::iterator  imageIDX;
 
   runLog.Level (20) << "ValidationProcess   Classifying Validation Images." << endl;
 
   int  numPredicted = 0;
-
 
   *report << "Image"  << "\t" << "Known" << "\t" << "Predicted"  << "\t" << "Predicted"   << endl;
   *report << "Name"   << "\t" << "Class" << "\t" << "Class"      << "\t" << "Probability" << endl;
@@ -1687,21 +1660,14 @@ void  CrossValidationApp::ValidationProcess ()
     {
       probReport = new ofstream (probReportName.Str ());
       *probReport << endl << endl << endl << endl;
-
       *probReport << "Probability Predictions by Class"  << endl << endl;
-
       *probReport << "ImageFileName" << "\t" << "KnownClass"    << "\t" << "PredClass";
-
       for  (int  classIDX = 0;  classIDX < mlClasses->QueueSize ();  classIDX++)
-      {
         *probReport << "\t" << mlClasses->IdxToPtr (classIDX)->Name ();
-      }
-
       *probReport << endl;
     }
   }
 
-  //for  (imageIDX.Reset (); (example = imageIDX.CurPtr ()); ++imageIDX)
   for  (imageIDX = validationData->begin ();  imageIDX != validationData->end (); ++imageIDX)
   {
     example = *imageIDX;
@@ -1718,12 +1684,12 @@ void  CrossValidationApp::ValidationProcess ()
     double      breakTie         = 0.0;
 
     classifier.ClassifyAExample (*example,
-                               predClass1,      predClass2,
-                               predClass1Votes, predClass2Votes,
-                               knownClassProb, 
-                               predClass1Prob,  predClass2Prob,
-                               numOfWinners,    breakTie
-                              );
+                                 predClass1,      predClass2,
+                                 predClass1Votes, predClass2Votes,
+                                 knownClassProb, 
+                                 predClass1Prob,  predClass2Prob,
+                                 numOfWinners,    breakTie
+                                );
     // Because unfortunately 'ClassifyAExample'  updates the MLClass field in the 'FeatureVector' 
     // instance to the predicted class we need to set the class back to the original class.
     example->MLClass (knownClass);

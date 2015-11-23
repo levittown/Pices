@@ -27,10 +27,10 @@
 
 namespace PicesInterface 
 {
-  ///<sumary>
+  ///<Summary>
   /// Wrapper class for unmanaged class DataBase; all access to the MySQL database in the managed world should be done through
   /// this class. Each one of these methods calls the matching method in the unmanaged class DataBase in the PicesLibrary.
-  ///</summary>
+  ///</Summary>
   public ref class PicesDataBase
   {
   public:
@@ -43,7 +43,9 @@ namespace PicesInterface
 
     static  PicesDataBaseServer^  defaultGlobalServer = nullptr;
 
-    static  PicesDataBase^  GetGlobalDatabaseManagerNewInstance (PicesRunLog^  _runLog);  // Will instatiate a new instance of the current GlobalDatabase Connecetion.
+    /// <summary> Gets global database manager new instance.</summary>
+    /// <returns> nullptr if it fails, else the global database manager new instance.</returns>
+    static  PicesDataBase^  GetGlobalDatabaseManagerNewInstance (PicesRunLog^  _runLog);  // Will instantiate a new instance of the current GlobalDatabase Connection.
 
     static  PicesDataBase^  SelectNewDataBaseServer (PicesRunLog^  _runLog);
 
@@ -356,10 +358,9 @@ namespace PicesInterface
     /**
      *@brief  Updates prediction on multiple images at one time.
      *@param[in]  _logEntryId Log id of process that is doing the classification.
-     *@param[in]  _predictionList  A tab delimited string that will contain the list of predictions.  Each
-     *   image will be separated by linefeed ('\n') characters while each field for each image will be
-     *   separated by "tabs('\t')".  So if there are two images with predictions the string will look like
-     *   "<ImageFileRootName><\t><Class1Name><\t><Class1Prob><\t><Class2Name><\t><Class2Prob><\n><ImageFileRootName><\t><Class1Name><\t><Class1Prob><\t><Class2Name><\t><Class2Prob>"
+     *@param[in]  _predictionList  A tab delimited string that will contain the list of predictions. Each image will be separated by line-feed 
+     *   characters while each field for each image will be separated by tabs. So if there are two images with predictions the string will look like
+     *   "ImageFileRootName | tab | Class1Name | tab | Class1Prob | tab | Class2Name | tab | Class2Prob | tab | ImageFileRootName | tab | Class1Name | tab | Class1Prob | tab | Class2Name | tab | Class2Prob"
      */
     void  ImagesUpdatePredictionsList (uint     _logEntryId,
                                        String^  _predictionList
@@ -409,7 +410,7 @@ namespace PicesInterface
                                   PicesRaster^  raster
                                  );
 
-    /// Will locate a original size version of the image; it will try in order 3 diferent sources.
+    /// Will locate a original size version of the image; it will try in order 3 different sources.
     /// 1) ThumbNail in Images Table.
     /// 2) FullSizeImage in ImagesFullSize table
     /// 3) will go to SipperFile

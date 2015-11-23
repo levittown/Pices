@@ -168,13 +168,16 @@ namespace MLL
 
     kkint32 MemoryConsumedEstimated ()  const;
 
-    /**
-     *@brief  Turn an instance of 'Raster' into 'RasterSipper'.
-     *@details Will utilize the dynamically allocated raster data of the 'Raster' instance 'r' to build a new instance of a 'SipperRaster'.If the 
-     * underlying type of 'r' is a instance of 'RasterSipper' will then return a dynamic_cast<> of the pointer;  otherwise will create a new
-     * instance of a 'RasterSipper' class and give it ownership of ALL dynamically allocated members of 'r'.
-     *@param[in,out] r The raster data of 'r' will be given to the new instance of 'RasterSipper' and 'r' will then be deleted and set to NULL.
-     */
+    
+    ///<summary> Turn an instance of &quot;Raster&quot; into &quot;RasterSipper&quot;. </summary>
+    ///<remarks> 
+    /// Will utilize the dynamically allocated raster data of the &quot;Raster&quot; instance <paramref name="r"/> to build a new instance of 
+    /// a &quot;SipperRaster&quot;. If the underlying type of &quot;r&quot; is a instance of &quot;RasterSipper&quot; will then return a dynamic_cast 
+    /// of the pointer; otherwise will create a new instance of a &quot;RasterSipper&quot; class and give it ownership of ALL dynamically allocated members 
+    /// of &quot;r&quot;.
+    ///</remarks>
+    ///<param name="r">The raster data will be given to the new instance of &quot;RasterSipper&quot; and &quot;r&quot; will then be deleted and set to NULL. </param>
+    ///<returns>A SipperRaster instance File.</returns>
     static
       RasterSipperPtr  TurnIntoSipperRasterPtr (RasterPtr& r);
 
@@ -182,10 +185,9 @@ namespace MLL
 
     /**
      *@brief Returns a image that is the result of a BandPass using Fourier Transforms.
-     *@details A 2D Fourier transform is performed. The range specified is from 0.0 to 1.0 where range is
-     * determined from the center of the image to the farthest corner where the center is 0.0 and the farthest
-     * corner is 1.0.  Pixels in the resultant 2D Transform that are "NOT" in the specified range are set to
-     * 0.0.  A reverse transform is then performed and the resultant image is returned.
+     *@details A 2D Fourier transform is performed. The range specified is from 0.0 to 1.0 where range is determined from the center of the image 
+     * to the farthest corner where the center is 0.0 and the farthest corner is 1.0.  Pixels in the resultant 2D Transform that are "NOT" in the
+     * specified range are set to 0.0.  A reverse transform is then performed and the resultant image is returned.
      *@param[in] lowerFreqBound  Lower range of frequencies to retain; between 0.0 and 1.0.
      *@param[in] upperFreqBound  Upper range of frequencies to retain; between 0.0 and 1.0.
      *@param[in] retainBackground  Indicates whether pixes that don't meet the background-foreground threshold 
@@ -319,22 +321,17 @@ namespace MLL
     RasterSipperPtr     FastFourierKK ()  const;
 
 
-    /**
-     * @brief Creates a raster from a compressedBuff created by 'SimpleCompression'.
-     */
+    ///<summary> Creates a raster from a compressedBuff created by "SimpleCompression";. </summary>
     static
     RasterSipperPtr     FromSimpleCompression (const uchar*  compressedBuff,
                                                kkuint32      compressedBuffLen
                                               ); 
 
-    /**
-     *@brief  Creates a new instance of RasterSipper object from zLib compressed data.
-     *@details Performs the inverse operation of RasterSipper::ToCompressor.
-     *@param[in] compressedBuff  Pointer to buffer area containing compressed data originally created by 'ToCompressor'.
-     *@param[in] compressedBuffLen  Length in bytes of 'compressedBuff'.
-     *@returns If successful a pointer to a new instance of 'RasterSipper'; if there is an error will return NULL.
-     *@see  ToCompressor
-     */
+     ///<summary>
+     /// Creates a new instance of RasterSipper object from zLib compressed data; if performs the inverse operation of RasterSipper::ToCompressor.</summary>
+     ///<param name="compressedBuff"> Pointer to buffer area containing compressed data originally created by @quot;ToCompressor@quot;.</param>
+     ///<param name="compressedBuffLen"> Length in bytes of 'compressedBuff'. </param>
+     ///<returns> If successful a pointer to a new instance of 'RasterSipper'; if there is an error will return NULL. </returns>
     static
     RasterSipperPtr     FromCompressor (const uchar*  compressedBuff,
                                         kkuint32      compressedBuffLen
@@ -374,20 +371,19 @@ namespace MLL
 
     RasterSipperPtr     SwapQuadrants ()  const;
 
-    /**
-     *@brief Thresholds image in HSI space.
-     *@details
-     *        Returns an image with only the pixels that are within a specified distance in HSI space to the
-     *        supplied HSI parameters.  All pixels that are not within the specified distance will be set to
-     *        'flagValue'.
-     *@param[in] thresholdH  Hue in radians(0.0 <-> 2Pie).
-     *@param[in] thresholdS  Saturation (0.0 <-> 1.0).
-     *@param[in] thresholdI  Intensity (0.0 <-> 1.0).
-     *@param[in] distance    Threshold Distance (0.0 <-> 1.0) that a pixel must be within in HSI space to be included.
-     *@param[in] flagValue   PixelValue to set for pixels that are NOT within 'distance' of threshold.
-     *@returns A image where pixels that are within the threshold will retain their original pixel values and 
-     * the ones that are not will be set to 'flagValue'.
-     */
+    
+    ///<summary>Thresholds image in HSI space.</summary>
+    ///<remarks>
+    /// Returns an image with only the pixels that are within a specified distance in HSI space to the supplied HSI 
+    /// parameters. All pixels that are not within the specified distance will be set to &quot;flagValue&quot;.
+    ///</remarks>
+    ///<param name="thresholdH">  Hue in radians(0.0 thru 2Pie) .</param>
+    ///<param name="thresholdS">  Saturation (0.0 thru 1.0). .</param>
+    ///<param name="thresholdI">  Intensity (0.0 thru 1.0). .</param>
+    ///<param name="distance">    Threshold Distance (0.0 thru 1.0) that a pixel must be within in HSI space to be included. .</param>
+    ///<param name="flagValue">   PixelValue to set for pixels that are NOT within &quot;distance&quot; of threshold. .</param>
+    ///<returns> A image where pixels that are within the threshold will retain their original pixel values and the ones that are 
+    /// not will be set to &quot;flagValue&quot;.</returns>
     RasterSipperPtr     ThresholdInHSI (float              thresholdH,
                                         float              thresholdS, 
                                         float              thresholdI, 
@@ -402,17 +398,14 @@ namespace MLL
     RasterSipperPtr     ToColor ()  const;
 
     virtual
-    RasterPtr  AllocateARasterInstance (kkint32  height,
-                                        kkint32  width,
-                                        bool   color
-                                       )  const;
+    RasterPtr  AllocateARasterInstance (kkint32 height,  kkint32  width,  bool color)  const;
 
     virtual
     RasterPtr  AllocateARasterInstance (const Raster& r)  const;
 
 
     virtual
-      RasterPtr  AllocateARasterInstance (const Raster& _raster,  /**<  Source Raster                             */
+      RasterPtr  AllocateARasterInstance (const Raster& _raster,  /**<  Source Raster. */
                                           kkint32       _row,     /**<  Starting Row in '_raster' to copy from.             */
                                           kkint32       _col,     /**<  Starting Col in '_raster' to copy from.             */
                                           kkint32       _height,  /**<  Height of resultant raster. Will start from '_row'  */
@@ -420,24 +413,11 @@ namespace MLL
                                          );  private:
 
   private:
-    bool  BlackPixel (kkint32  row,
-                      kkint32  col
-                     )
-                     const;
+    bool  BlackPixel (kkint32 row,  kkint32  col) const;
 
-    bool  RectangleAllBlack (kkint32  tlRow,
-                             kkint32  tlCol,
-                             kkint32  brRow,
-                             kkint32  brCol
-                            )
-                            const;
+    bool  RectangleAllBlack (kkint32 tlRow,  kkint32 tlCol,  kkint32 brRow,  kkint32 brCol)  const;
 
-    bool  RectangleAllWhite (kkint32  tlRow,
-                             kkint32  tlCol,
-                             kkint32  brRow,
-                             kkint32  brCol
-                            )
-                            const;
+    bool  RectangleAllWhite (kkint32 tlRow,  kkint32 tlCol,  kkint32 brRow,  kkint32 brCol)  const;
 
   };  /* RasterSipper */
 

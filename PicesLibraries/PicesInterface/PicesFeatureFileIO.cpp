@@ -274,7 +274,7 @@ namespace  PicesInterface
 
     bool  successful = false;
     KKStr normParameterName = osRemoveExtension (PicesKKStr::SystemStringToKKStr (_fileName)) + ".norm";
-    normParms.Save (normParameterName, successful, _runLog->Log ());
+    normParms.WriteToFile (normParameterName, successful, _runLog->Log ());
 
     delete  data;
     data = NULL;

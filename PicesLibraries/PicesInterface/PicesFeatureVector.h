@@ -65,7 +65,7 @@ namespace PicesInterface
     /// Computes features from the image that is in "raster"; Features that are based off instrumentation data that will come 
     /// from the IntrumentDataManager. The "imageFileName" will be parsed to get SipperFileName and ScanLine.
     ///</summary>
-    ///<seealso cref='PicesLibrary::ImageFeatures::CalcFeatures'/>.
+    ///<seealso cref='MLL::ImageFeatures::CalcFeatures'/>.
     PicesFeatureVector (PicesRaster^     raster,
                         System::String^  imageFileName,
                         PicesRasterList^ intermediateImages,

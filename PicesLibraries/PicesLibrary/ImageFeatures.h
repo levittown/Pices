@@ -486,21 +486,18 @@ namespace MLL
                                                          )  const;
 
 
-    /**
-     *@brief  Calculates the position in meters of each plankton Feature-Vector with respect to the first plankton particle in the SIPPER file.
-     *@details It is assumed that all the items in this list are from the same SIPPER file.  Item(FeatureVector) will be assigned a position
-     *         in meters with respect to the first particle in the file.
-     *
-     *@param[in] instrumentData  Provides the flow rate from the instrument data will be used to calc
-     *                           distance traveled; otherwise 'defaultFlowRate' will be used.
-     *
-     *@param[in] defaultScanRate Scan lines per second that the camera operates at, if <= 0 will assume 24950.0 scan lines/sec.
-     *
-     *@param[in] defaultFlowRate Flow rate to use if none provided by 'instrumentData'. if <= 0.0 will default to 1.0 meters/sec.
-     *
-     *@returns A Vector of doubles where each element in it will represent the distance in meters from the first particle in the SIPPER 
-     *         file.  There will be one entry for each "ImageFeatures" object in the list and it will be sorted from low to high.
-     */
+     ///<summary> Calculates the position in meters of each plankton Feature-Vector with respect to the first plankton particle in the SIPPER file. </summary>
+     ///<remarks>
+     /// It is assumed that all the items in this list are from the same SIPPER file. Item(FeatureVector) will be assigned a position
+     /// in meters with respect to the first particle in the file.
+     ///</remarks>
+     ///<param name="instrumentData">  Provides the flow rate from the instrument data will be used to calculated distance traveled; otherwise
+     ///  &quot;defaultFlowRate&quot; will be used.</param>
+     ///<param name="defaultScanRate"> Scan lines per second that the camera operates at, if &lt;= 0 will assume 24950.0 scan lines/sec.</param>
+     ///<param name="defaultFlowRate"> Flow rate to use if none provided by &quot;instrumentData&quot;. if &lt;= 0.0 will default to 1.0 meters/sec.</param>
+     ///<returns> A Vector of doubles where each element in it will represent the distance in meters from the first particle in the SIPPER 
+     ///  file.  There will be one entry for each &quot;ImageFeatures&quot; object in the list and it will be sorted from low to high.
+     ///</returns>
     VectorDouble           ExtractPositionsByMeter (InstrumentDataListPtr  instrumentData,
                                                     float                  defaultScanRate,
                                                     float                  defaultFlowRate
@@ -532,12 +529,10 @@ namespace MLL
 
 
     /**
-     *@brief  return a list of examples that consist and are in the same 
-     *        order as the list of ImageFileNames in the file 'fileName'.
+     *@brief  return a list of examples that consist and are in the same order as the list of ImageFileNames in the file 'fileName'.
      *@details
-     *  Using list of ImageFileNames in a file('fileName') create a new
-     *  ImageFeaturesList instance with images in order based off contents
-     *  of file. If error occurs will return NULL.
+     *  Using list of ImageFileNames in a file(&quot;fileName&quot;) create a new ImageFeaturesList instance with images in order 
+     * based off contents of file. If error occurs will return NULL.
     */
     ImageFeaturesListPtr   OrderUsingNamesFromAFile (const KKStr&  fileName,
                                                      RunLog&       runLog
@@ -757,14 +752,11 @@ namespace MLL
     };
 
 
-    
-    //iterator  begin ()  {return  KKQueue<FeatureVector>::begin ();}
-
-
   private:
     float  FlowRate (InstrumentDataPtr  id,
                      float              defaultFlowRate
                     );
+
 
 
 

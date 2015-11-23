@@ -101,7 +101,7 @@ namespace PicesInterface
     static
       PicesSipperFileList^  GetListOfSipperFilesWeCanFind (PicesRunLog^  runLog);
 
-    ///<Summary>Returns the earliest CTD DateTime in the list that is greater than 1999</Sumary>
+    ///<Summary>Returns the earliest CTD DateTime in the list that is greater than 1999</Summary>
     property  System::DateTime   DateTimeStart  {System::DateTime    get ();}
 
   };

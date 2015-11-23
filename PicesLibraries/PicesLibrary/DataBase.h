@@ -435,10 +435,10 @@ namespace MLL
     /**
      *@brief  Updates prediction on multiple images at one time.
      *@param[in]  _logEntryId Log id of process that is doing the classification.
-     *@param[in]  _predictionList  A tab delimited string that will contain the list of predictions.  Each
-     *   image will be separated by line feed ('\n') characters while each field for each usage will be
-     *   separated by 'tabs'('\t'). So if there are two images with predictions the string will look like
-     *   "<ImageFileRootName><\t><Class1Name><\t><Class1Prob><\t><Class2Name><\t><Class2Prob><\n><ImageFileRootName><\t><Class1Name><\t><Class1Prob><\t><Class2Name><\t><Class2Prob>"
+     *@param[in]  _predictionList  A tab delimited string that will contain the list of predictions. Each image will be separated by
+     *   line feed line-feed characters while each field for each usage will be separated by tabs. So if there are two images with 
+     *   predictions the string will look like<br/> 
+     *   ImageFileRootName | tab | Class1Name | tab |Class1Prob | tab |Class2Name | tab |Class2Prob | tab | ImageFileRootName | tab | Class1Name | tab |Class1Prob | tab | Class2Name | tab | Class2Prob"
      */
     void  ImagesUpdatePredictionsList (kkuint32      _logEntryId,
                                        const KKStr&  _predictionList
@@ -482,7 +482,7 @@ namespace MLL
                                          const KKStr&               stationName,
                                          const KKStr&               deploymentNum,
                                          const KKStr&               className,
-                                          float                      maxDepth,
+                                         float                      maxDepth,
                                          float                      depthBinSize,
                                          char                       statistic,
                                          double                     initialValue,
@@ -522,13 +522,10 @@ namespace MLL
                                                    );
 
 
-
-    /**
-     * Will return a pointer to a vector<kkint32> instance that will contain counts of images
-     * by depth.  Each element in the vector will represent a depth range such that
-     * index 0 will be for depth range (0 <= images.Depth < depthIncrements)
-     * index 1 will ""     ""      ""  (depthIncrements <= images.Depth < (2 * depthIncrements))
-     */
+    /// <summary> 
+    ///   Returns pointer to vector-of-unsigned-int instance that will contain counts by depth; each element in vector will represent a depth range
+    ///   as indicated by <paramref name="depthIncrements"/>.
+    /// </summary> 
     VectorUint*  ImageGetDepthStatistics (DataBaseImageGroupPtr  imageGroup,
                                           const KKStr&           sipperFileName,
                                           float                  depthIncrements,
@@ -631,18 +628,17 @@ namespace MLL
     /**
      *@brief  
      *@details
-     * Will insert a list of images into the same group in ImageGroupEntries. A list of ImageFileNames
-     * that failed to be inserted with a description of the error will be returned. If NULL is returned
-     * the insertion failed completely. A 2 x n matrix will be returned, One row for each image that
-     * failed insertion:
+     * Will insert a list of images into the same group in ImageGroupEntries. A list of ImageFileNames that failed to be inserted with a 
+     * description of the error will be returned. If NULL is returned the insertion failed completely. A 2 x n matrix will be returned, 
+     * One row for each image that failed insertion:
      *  - [0,0] = ImageFileName for row '0' that failed insertion
      *  - [0,1] = Description of error that caused insertion to fail.
      *
      * Since there is a limitation on the length of the MySQL parameter of 64K  we need to make sure that the
-     * length of all the imageFileNames will be less than 64K that is sum_i (ImageFileNamess[i].Len ()) + imageFileNams.size () < 64000.
+     * length of all the imageFileNames will be less than 64K that is sum_i (ImageFileNamess[i].Len ()) + imageFileNams.size () less 64000.
      */
-    KKStrMatrixPtr  ImageGroupEntriesInsert (kkint32             groupId,         // Will insert a list of images into the same
-                                             const VectorKKStr&  imageFileNames   // group
+    KKStrMatrixPtr  ImageGroupEntriesInsert (kkint32             groupId,
+                                             const VectorKKStr&  imageFileNames
                                             );
 
     DataBaseImageGroupEntryListPtr  ImageGroupEntriesLoad (kkint32 groupId);

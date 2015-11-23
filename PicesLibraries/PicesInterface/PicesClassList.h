@@ -103,11 +103,12 @@ namespace PicesInterface
     static  PicesClass^  GetUnKnownClassStatic ();
 
     ///<summary>
-    /// Static method that is meant to only work on 'allClassesInUniverse'. Example use would be when deleting or merging classes.
-    /// We would want to redirect any class that has the srcClass as a parent to the destClass.
-    static  void  PicesClassList::UpdateParent (PicesClass^  srcClass,
-                                                PicesClass^  destClass
-                                               );
+    /// Static method that is meant to only work on &quot;allClassesInUniverse&quot;. Example use would be when deleting or 
+    /// merging classes. We would want to redirect any class that has the srcClass as a parent to the destClass.
+    ///</summary>
+    static  void  UpdateParent (PicesClass^  srcClass,
+                                PicesClass^  destClass
+                               );
 
     PicesClass^  LookUpByName (String^  className);
 
@@ -145,9 +146,9 @@ namespace PicesInterface
 
 
     ///<summary>
-    /// Class that supports the Concept of only one instance of a 'PicesClass' object for the same name will be created.
-    /// A global list of already existing instances will be maintained by 'allClassesInUniverse'. The ability to locate
-    /// an existing instance quickly will be accomplished by 'allClassesInUniverseUnManagedIndex' and 
+    /// Class that supports the Concept of only one instance of a &quot;PicesClass&quot; object for the same name will be created.
+    /// A global list of already existing instances will be maintained by &quot;allClassesInUniverse&quot;. The ability to locate
+    /// an existing instance quickly will be accomplished by &quot;allClassesInUniverseUnManagedIndex&quot; and
     /// 'allClassesInUniverseNameIndex'.
     ///</summary>
     ref  class  Node

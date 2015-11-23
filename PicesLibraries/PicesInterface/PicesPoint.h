@@ -62,7 +62,7 @@ namespace PicesInterface
     /// Will take ownership of the instances of Raster in 'unmanagedImages'.  The list will be deleted and the unmanaged
     /// code should not try to access any of 'unmanagedImages' contents after this call.
     ///</remarks>
-    ///<param name='unmanagedImages'> List of unmanaged 'PicesPoint' objects; the ownership of these instances will be given 
+    ///<param name='unmanagedPoints'> List of unmanaged 'PicesPoint' objects; the ownership of these instances will be given
     /// over to the new Managed instance of 'PicesPointList'; will be deleted and set to NULL. </param>
     PicesPointList (PointListPtr&  unmanagedPoints);
 

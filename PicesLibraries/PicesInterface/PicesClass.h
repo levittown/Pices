@@ -83,7 +83,7 @@ namespace PicesInterface
     /// it is not we return -1 otherwise we return the number of generations below us.
     /// Our immediate children will be considered 1 generation apart.
     ///</remarks>
-    ///<param name='Candidate'>Candidate Class that we are searching for amongst out children.</param>
+    ///<param name='candidate'>Candidate Class that we are searching for amongst out children.</param>
     ///<returns> The number of generations between us and the candidate or -1 if not one of our descendent's.</returns>
     int     NumGenerations (PicesClass^  candidate);
 
