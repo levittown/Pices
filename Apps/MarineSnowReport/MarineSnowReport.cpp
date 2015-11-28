@@ -63,7 +63,7 @@ using namespace  MLL;
 
 
 
-KKStr  marineSnowReportDirectory = "E:\Users\\kkramer\\Dropbox\\USF_OilSpillGroup\\MarineSnow_2015-08-31";
+KKStr  marineSnowReportDirectory = "D:\\Users\\kkramer\\DropBox\\Dropbox\\USF_OilSpillGroup\\MarineSnowPaper\\Data\\20151124_Area";
 
 
 
@@ -172,8 +172,8 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
   if  (statistic == "0")
   {
     statisticCode = '0';
-    startValue    = 0.010;
-    growthRate    = 1.122462048; // k = 2^(1/6)
+    startValue    = 0.00785398;
+    growthRate    = 1.21; // k = 2^(1/6)
     endValue      = 1000.0;
   }
 
@@ -287,7 +287,7 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
   KKStr  transmisivityUOM = InstrumentData::TransmisivityUnit ();
   KKStr  turbidityUOM     = InstrumentData::TurbidityUnit     ();
 
-  h1 << "\t" << "Temperature"   << "\t" << "Salinity"  << "\t" << "Denisity"  << "\t" << "Fluorescence"  << "\t" << "Fluorescence-Sensor" << "\t" << "Oxygen"  << "\t" << "Oxygen"  << "\t" << "transmisivity"  << "\t" << "turbidity";
+  h1 << "\t" << "Temperature"   << "\t" << "Salinity"  << "\t" << "Density"   << "\t" << "Fluorescence"  << "\t" << "Fluorescence-Sensor" << "\t" << "Oxygen"  << "\t" << "Oxygen"  << "\t" << "transmisivity"  << "\t" << "turbidity";
   h2 << "\t" << temperatureUOM  << "\t" << salinityUOM << "\t" << denisityUOM << "\t" << fluorescenceUOM << "\t" << "Volts"               << "\t" << oxygenUOM << "\t" << "umol/kg" << "\t" << transmisivityUOM << "\t" << turbidityUOM;
 
   r1 << endl << endl
@@ -664,7 +664,7 @@ int  main (int    argc,
     _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF ); 
   #endif
 
-  MarineSnowReport ("2");
+  MarineSnowReport ("0");
 
   return 0;
 }
