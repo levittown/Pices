@@ -252,11 +252,11 @@ namespace GradeTrainingModel
       w.WriteLine ("// DateTime" + "\t" + DateTime.Now.ToString());
       w.WriteLine ("//");
       w.WriteLine ("//");
-      w.WriteLine ("TrainingModelSelected"   + "\t" + TrainingModelSelected.Text);
-      w.WriteLine ("CrossValidation"         + "\t" + (crossValidation ? "Y" : "N"));
-      w.WriteLine ("GroundTruth"             + "\t" + GroundTruth.Text);
-      w.WriteLine ("TrainingLevel"           + "\t" + trainingLevel.ToString ());
-      w.WriteLine ("PredictionLevel"         + "\t" + predictionLevel.ToString ());
+      w.WriteLine ("TrainingModelSelected" + "\t" + TrainingModelSelected.Text);
+      w.WriteLine ("CrossValidation"       + "\t" + (crossValidation ? "Y" : "N"));
+      w.WriteLine ("GroundTruth"           + "\t" + GroundTruth.Text);
+      w.WriteLine ("TrainingLevel"         + "\t" + trainingLevel.ToString ());
+      w.WriteLine ("PredictionLevel"       + "\t" + predictionLevel.ToString ());
       w.WriteLine ("EndOfFile");
 
       w.Close();
@@ -296,8 +296,7 @@ namespace GradeTrainingModel
       return  true;
     }  /* AreParametersValid */
 
-
-
+    
     private  void  LoadTrainingModelComboBox ()
     {
       String[]  configFileNames = 
@@ -306,7 +305,6 @@ namespace GradeTrainingModel
       for  (int x = 0;  x < configFileNames.Length;  x++)
         TrainingModelSelected.Items.Add (configFileNames[x]);
     }
-
 
 
     private  void  InitializeTrainAndPredLevelFields ()
@@ -342,8 +340,6 @@ namespace GradeTrainingModel
       TrainingLevel.Text   = trainingLevel.ToString ();
       PredictionLevel.Text = predictionLevel.ToString ();
     }  /* InitializeTrainAndPredLevelFields */
-    
-
 
 
     private  void  ValidateTrainingModel ()
@@ -372,6 +368,7 @@ namespace GradeTrainingModel
         InitializeTrainAndPredLevelFields ();
       }
     }  /* ValidateTrainingModel */
+ 
 
 
     private  void  LoadTrainingModelAndGroundTruth ()
@@ -384,7 +381,7 @@ namespace GradeTrainingModel
       EnableComponentsForProcessing ();
 
       if  (crossValidation)
-        GroundTruth.Text = curSelModel.RootDir ();
+        GroundTruth.Text = curSelModel.RootDirExpanded ();
       
       confusionMatrix = new ConfusionMatrix (curSelModel, origClassifierClasses, trainingModel, trainingModelName, GroundTruth.Text, trainingLevel, predictionLevel);
       
@@ -392,8 +389,8 @@ namespace GradeTrainingModel
       loadingThread.Start ();
     }  /* LoadTrainingModels */
 
-
     
+  
     private  void  LoadData ()
     {
       loadingThreadRunning = true;
@@ -447,7 +444,6 @@ namespace GradeTrainingModel
 
     private  void  GradeAgainstGroundTruth ()
     {
-
       if  (!cancelProcessing)
       {
         if  (trainingModel != null)
@@ -464,7 +460,6 @@ namespace GradeTrainingModel
             trainingModel.LoadExistingModelOtherwiseBuild (msgQueue);
         }
       }
-
 
       if  (!cancelProcessing)
       {
@@ -561,11 +556,6 @@ namespace GradeTrainingModel
         PicesFeatureVectorList  trainingImages = new PicesFeatureVectorList ();
         PicesFeatureVectorList  testImages     = new PicesFeatureVectorList ();
 
-        //log.Level (30) << "Fold Num["        << foldNum        << "]   "
-        //               << "FirstTestImage["  << firstInGroup   << "]   "
-        //               << "LastInGroup["     << lastInGroup    << "]."
-        //               << endl;
-
         for  (int  x = 0; (x < imageCount)  &&  (!cancelProcessing); x++)
         {
           PicesFeatureVector  newImage = new PicesFeatureVector (examples[x]);
@@ -612,10 +602,9 @@ namespace GradeTrainingModel
       data = null;
       BlockEnd ();
     }  /* GradeAgainstCrossValidationRun */
-      
-      
-     
-      
+
+
+
     void  CrossValidate (PicesFeatureVectorList   testExamples, 
                          PicesFeatureVectorList   trainingExamples,
                          int                      foldNum
@@ -683,7 +672,6 @@ namespace GradeTrainingModel
 
 
 
-
     private  void  CancelProcessing ()
     {
       CancelButon.Enabled = false;
@@ -717,11 +705,8 @@ namespace GradeTrainingModel
         loadingThread = null;
       }
 
-
       EnableComponentsForParameterEntry ();
     }  /* CancelProcessing*/
-
-
 
 
 
@@ -736,10 +721,8 @@ namespace GradeTrainingModel
 
 
 
-
     private void groundTruthDialog_HelpRequest(object sender, EventArgs e)
     {
-
     }
 
 
@@ -752,6 +735,7 @@ namespace GradeTrainingModel
     }
 
 
+
     private void PredictionLevel_SelectionChangeCommitted(object sender, EventArgs e)
     {
       PredictionLevel.Text = (PredictionLevel.Items [PredictionLevel.SelectedIndex]).ToString ();
@@ -760,12 +744,14 @@ namespace GradeTrainingModel
     }
 
 
+
     private void TrainingModel_SelectedValueChanged (object sender, EventArgs e)
     {
       trainingModelName = TrainingModelSelected.Text;
       ValidateTrainingModel ();
-     }
-    
+    }
+
+ 
     
     private void timer1_Tick (object sender, EventArgs e)
     {
@@ -802,6 +788,7 @@ namespace GradeTrainingModel
     }
 
 
+
     private void CancelButon_Click(object sender, EventArgs e)
     {
       if  (loadingThreadRunning)
@@ -813,6 +800,7 @@ namespace GradeTrainingModel
 
       CancelProcessing ();
     }
+
 
 
     private void GetRunTimeParameters_FormClosing(object sender, FormClosingEventArgs e)
@@ -834,6 +822,7 @@ namespace GradeTrainingModel
       SaveConfiguration ();
       CleanUpMemory ();
     }
+
 
 
     private void GetRunTimeParameters_Load (object sender, EventArgs e)
@@ -862,6 +851,7 @@ namespace GradeTrainingModel
         GroundTruth.Enabled = true;
       }
     }
+
 
 
     private void EditModel_Click (object sender, EventArgs e)

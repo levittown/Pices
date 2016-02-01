@@ -25,9 +25,9 @@ using namespace std;
 #include "ImageIO.h"
 #include "KKException.h"
 #include "Matrix.h"
+#include "MorphOpSobel.h"
 #include "OSservices.h"
 #include "SimpleCompressor.h"
-#include "Sobel.h"
 using namespace KKB;
 
 

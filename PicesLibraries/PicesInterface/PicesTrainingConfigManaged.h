@@ -57,6 +57,8 @@ namespace PicesInterface
 
     String^                        RootDir ();
 
+    String^                        RootDirExpanded ();
+
     void                           Save (String^  configFileName);
 
     PicesTrainingClassList^        TrainingClasses ();
