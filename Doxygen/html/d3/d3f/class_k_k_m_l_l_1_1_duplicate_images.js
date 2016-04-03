@@ -12,6 +12,6 @@ var class_k_k_m_l_l_1_1_duplicate_images =
     [ "DuplicatesFound", "d3/d3f/class_k_k_m_l_l_1_1_duplicate_images.html#a4dc58f0a758097cb3e051741a95f6f77", null ],
     [ "ExampleInDetector", "d3/d3f/class_k_k_m_l_l_1_1_duplicate_images.html#a2dbd6a2c434fad6d0632cdab93641a52", null ],
     [ "ListOfExamplesToDelete", "d3/d3f/class_k_k_m_l_l_1_1_duplicate_images.html#a39a0068e1d342959109906d9edce3b49", null ],
-    [ "PurgeDuplicates", "d3/d3f/class_k_k_m_l_l_1_1_duplicate_images.html#af62234ad278a9aab104693055eed6e58", null ],
-    [ "ReportDuplicates", "d3/d3f/class_k_k_m_l_l_1_1_duplicate_images.html#ac3894132724f541318b648201eb02db3", null ]
+    [ "PurgeDuplicates", "d3/d3f/class_k_k_m_l_l_1_1_duplicate_images.html#ae66271631fe02e9db051968b728769e7", null ],
+    [ "ReportDuplicates", "d3/d3f/class_k_k_m_l_l_1_1_duplicate_images.html#af96423d0d03a2fcae24538e1037dd56b", null ]
 ];

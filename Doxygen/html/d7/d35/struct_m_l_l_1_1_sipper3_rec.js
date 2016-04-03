@@ -1,5 +1,6 @@
 var struct_m_l_l_1_1_sipper3_rec =
 [
+    [ "Sipper3Rec", "d7/d35/struct_m_l_l_1_1_sipper3_rec.html#ad3b36c927b612da17340f2bf90c6d73b", null ],
     [ "eol", "d7/d35/struct_m_l_l_1_1_sipper3_rec.html#a1876fba0d678921c0116908c32160799", null ],
     [ "grayScale", "d7/d35/struct_m_l_l_1_1_sipper3_rec.html#a7d627000bc4e99e06168fbfc1b5d4747", null ],
     [ "imageData", "d7/d35/struct_m_l_l_1_1_sipper3_rec.html#aa98cc63e6fe4f3648a7510c485b4fb74", null ],

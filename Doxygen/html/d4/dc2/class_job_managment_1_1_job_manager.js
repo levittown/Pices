@@ -8,7 +8,7 @@ var class_job_managment_1_1_job_manager =
     [ "AreAllJobsDone", "d4/dc2/class_job_managment_1_1_job_manager.html#a02798addf5e4b02f7152a1114bef6fe2", null ],
     [ "Block", "d4/dc2/class_job_managment_1_1_job_manager.html#aaab763ce48f5c99d92540b2b46c67a2a", null ],
     [ "CpuTimeTotalUsed", "d4/dc2/class_job_managment_1_1_job_manager.html#a2925332ce550dc11f2410af6e6db0440", null ],
-    [ "Duplicate", "d4/dc2/class_job_managment_1_1_job_manager.html#afbafdcb45b04f5dcef191279f8dc52fa", null ],
+    [ "Duplicate", "d4/dc2/class_job_managment_1_1_job_manager.html#ad8913220d6ae087e029df784a94b33e1", null ],
     [ "EndBlock", "d4/dc2/class_job_managment_1_1_job_manager.html#aaf64900f22c4ddc063def7ced3c998f4", null ],
     [ "ExpansionCount", "d4/dc2/class_job_managment_1_1_job_manager.html#a956b35fcdbbb866008ed41c1bae4d23b", null ],
     [ "GetNextJobId", "d4/dc2/class_job_managment_1_1_job_manager.html#a8cf205d2209c4d9cc91efdb774c557a8", null ],

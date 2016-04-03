@@ -10,7 +10,7 @@ var dir_8389ba54247a363c993193d55c155220 =
     [ "BitString.h", "d9/d24/_bit_string_8h.html", "d9/d24/_bit_string_8h" ],
     [ "Blob.cpp", "d3/d97/_blob_8cpp.html", null ],
     [ "Blob.h", "d3/da9/_blob_8h.html", "d3/da9/_blob_8h" ],
-    [ "BMPheader.h", "da/ddd/_b_m_pheader_8h.html", "da/ddd/_b_m_pheader_8h" ],
+    [ "BMPheader.h", "da/ddd/_b_m_pheader_8h.html", null ],
     [ "BMPImage.cpp", "de/dc4/_b_m_p_image_8cpp.html", "de/dc4/_b_m_p_image_8cpp" ],
     [ "BMPImage.h", "dc/d23/_b_m_p_image_8h.html", "dc/d23/_b_m_p_image_8h" ],
     [ "Chart.cpp", "db/d36/_chart_8cpp.html", "db/d36/_chart_8cpp" ],
@@ -65,7 +65,6 @@ var dir_8389ba54247a363c993193d55c155220 =
     [ "KKQueue.h", "d5/d5f/_k_k_queue_8h.html", [
       [ "KKQueue", "db/d6e/class_k_k_b_1_1_k_k_queue.html", "db/d6e/class_k_k_b_1_1_k_k_queue" ]
     ] ],
-    [ "KKQueueConst.h", "d3/dd3/_k_k_queue_const_8h.html", "d3/dd3/_k_k_queue_const_8h" ],
     [ "KKStr.cpp", "dc/d2d/_k_k_str_8cpp.html", "dc/d2d/_k_k_str_8cpp" ],
     [ "KKStr.h", "db/df5/_k_k_str_8h.html", "db/df5/_k_k_str_8h" ],
     [ "KKStrMatrix.cpp", "d3/dbd/_k_k_str_matrix_8cpp.html", null ],
@@ -96,6 +95,10 @@ var dir_8389ba54247a363c993193d55c155220 =
     [ "MorphOpErosion.h", "d6/d42/_morph_op_erosion_8h.html", "d6/d42/_morph_op_erosion_8h" ],
     [ "MorphOpMaskExclude.cpp", "d2/d5f/_morph_op_mask_exclude_8cpp.html", null ],
     [ "MorphOpMaskExclude.h", "dd/dcc/_morph_op_mask_exclude_8h.html", "dd/dcc/_morph_op_mask_exclude_8h" ],
+    [ "MorphOpSobel.cpp", "d1/dee/_morph_op_sobel_8cpp.html", null ],
+    [ "MorphOpSobel.h", "de/d77/_morph_op_sobel_8h.html", [
+      [ "MorphOpSobel", "d4/d39/class_k_k_b_1_1_morph_op_sobel.html", "d4/d39/class_k_k_b_1_1_morph_op_sobel" ]
+    ] ],
     [ "MorphOpStretcher.cpp", "dd/d9d/_morph_op_stretcher_8cpp.html", [
       [ "CellFactor", "de/d1f/class_morph_op_stretcher_1_1_cell_factor.html", "de/d1f/class_morph_op_stretcher_1_1_cell_factor" ]
     ] ],
@@ -118,8 +121,6 @@ var dir_8389ba54247a363c993193d55c155220 =
     ] ],
     [ "Raster.cpp", "dc/d14/_raster_8cpp.html", "dc/d14/_raster_8cpp" ],
     [ "Raster.h", "d6/ddd/_raster_8h.html", "d6/ddd/_raster_8h" ],
-    [ "Raster_Temp.cpp", "db/dfd/_raster___temp_8cpp.html", "db/dfd/_raster___temp_8cpp" ],
-    [ "Raster_Temp.h", "dc/dd1/_raster___temp_8h.html", "dc/dd1/_raster___temp_8h" ],
     [ "RasterBuffer.cpp", "dc/d6e/_raster_buffer_8cpp.html", null ],
     [ "RasterBuffer.h", "dd/d6e/_raster_buffer_8h.html", "dd/d6e/_raster_buffer_8h" ],
     [ "RBTree.h", "dd/d82/_r_b_tree_8h.html", "dd/d82/_r_b_tree_8h" ],
@@ -132,10 +133,6 @@ var dir_8389ba54247a363c993193d55c155220 =
     [ "SimpleCompressor.cpp", "d6/db4/_simple_compressor_8cpp.html", null ],
     [ "SimpleCompressor.h", "de/d04/_simple_compressor_8h.html", [
       [ "SimpleCompressor", "db/d80/class_k_k_b_1_1_simple_compressor.html", "db/d80/class_k_k_b_1_1_simple_compressor" ]
-    ] ],
-    [ "Sobel.cpp", "db/def/_sobel_8cpp.html", null ],
-    [ "Sobel.h", "d1/df9/_sobel_8h.html", [
-      [ "Sobel", "dd/db4/class_k_k_b_1_1_sobel.html", "dd/db4/class_k_k_b_1_1_sobel" ]
     ] ],
     [ "StatisticalFunctions.cpp", "d1/ddc/_statistical_functions_8cpp.html", null ],
     [ "StatisticalFunctions.h", "d0/d17/_statistical_functions_8h.html", "d0/d17/_statistical_functions_8h" ],

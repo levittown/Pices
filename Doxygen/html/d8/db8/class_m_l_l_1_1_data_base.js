@@ -69,7 +69,7 @@ var class_m_l_l_1_1_data_base =
     [ "ImagesQueryDeploymentSizeRange", "d8/db8/class_m_l_l_1_1_data_base.html#a0818a07706937ae51c3cbc92b6c62e3b", null ],
     [ "ImagesQueryForScanLineRange", "d8/db8/class_m_l_l_1_1_data_base.html#a8ac8fe593fe3f5fe7494e18990b4aa34", null ],
     [ "ImagesRetrieveValidatedClass", "d8/db8/class_m_l_l_1_1_data_base.html#ad865b7d91374a63b63f49deb3ca0c8ca", null ],
-    [ "ImagesSizeDistributionByDepth", "d8/db8/class_m_l_l_1_1_data_base.html#ae55545dbe63648219708a1d1ba7eaf23", null ],
+    [ "ImagesSizeDistributionByDepth", "d8/db8/class_m_l_l_1_1_data_base.html#a24647206ca3ec42690bde85c10df9e96", null ],
     [ "ImagesUpdateImageSize", "d8/db8/class_m_l_l_1_1_data_base.html#aade7e0788f249093d7432bda9247923e", null ],
     [ "ImagesUpdatePredictions", "d8/db8/class_m_l_l_1_1_data_base.html#af5a19877912f7e551750d6c08b024da1", null ],
     [ "ImagesUpdatePredictionsList", "d8/db8/class_m_l_l_1_1_data_base.html#a396e6385d325d5351768f244afeb8716", null ],

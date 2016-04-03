@@ -45,7 +45,7 @@ var class_pices_interface_1_1_pices_data_base =
     [ "ImagesQuery", "d2/d73/class_pices_interface_1_1_pices_data_base.html#a30caee27db9262d85f47de138a7a2dee", null ],
     [ "ImagesQueryByGrouop", "d2/d73/class_pices_interface_1_1_pices_data_base.html#a21dbcd7994499261f3077a0f9dc9ef25", null ],
     [ "ImagesQueryDeploymentSizeRange", "d2/d73/class_pices_interface_1_1_pices_data_base.html#abff339ddb85f7fe4202b7764fceffc3b", null ],
-    [ "ImagesSizeDistributionByDepth", "d2/d73/class_pices_interface_1_1_pices_data_base.html#a10a03aaa3bab2ddc2b077e451580c691", null ],
+    [ "ImagesSizeDistributionByDepth", "d2/d73/class_pices_interface_1_1_pices_data_base.html#af3c301eaa2868e9e0bfea183f38891a0", null ],
     [ "ImagesUpdateImageSize", "d2/d73/class_pices_interface_1_1_pices_data_base.html#a95329cc4c465de4f605f64f95b91e522", null ],
     [ "ImagesUpdatePredictions", "d2/d73/class_pices_interface_1_1_pices_data_base.html#a960ea47960faf8cd2ed42ac478fb497b", null ],
     [ "ImagesUpdatePredictionsList", "d2/d73/class_pices_interface_1_1_pices_data_base.html#a9328d1204408bbbb28d1b32bf70801ee", null ],

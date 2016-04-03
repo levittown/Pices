@@ -7,7 +7,7 @@ var class_k_k_m_l_l_1_1_s_v_mparam =
     [ "A_Param", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#a18270c5117ee0c817974cf084452b4ec", null ],
     [ "A_Param", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#a1791100f8a340b67ac0b48464d8fd90f", null ],
     [ "AddBinaryClassParms", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#a7106733ffbda73236008e71baf95b129", null ],
-    [ "AddBinaryClassParms", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#a7b019bdbe664f56b91aebe571594ec04", null ],
+    [ "AddBinaryClassParms", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#a39c75fd4febfba99372e36e648574e3c", null ],
     [ "AvgMumOfFeatures", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#a58807d8d010cdf96986a08b2d0ccc872", null ],
     [ "AvgNumOfFeatures", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#aea20e2e912e4ef0aebcd2da8f127c32a", null ],
     [ "BinaryParmsList", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#a433e645fd36fbf86a92dff43f4d2c812", null ],
@@ -37,7 +37,7 @@ var class_k_k_m_l_l_1_1_s_v_mparam =
     [ "ProbClassPairs", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#a4dace21b93df510f6cdf2d9722edef1a", null ],
     [ "ProbClassPairsInitialize", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#a224dcd1bf0f35df058c14318188a56fd", null ],
     [ "ProcessSvmParameter", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#aa5eaf4b4136dac017f59de2e8217bbb7", null ],
-    [ "ReadXML", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#ae81c50c08d32e87811f035a6796359a4", null ],
+    [ "ReadXML", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#a2cd57741ec82e82e55a9a637ef14e7c0", null ],
     [ "SamplingRate", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#acfefd9e2a297952641d848e54f3932ca", null ],
     [ "SamplingRate", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#a48fffce9005030d7201d1429123929a4", null ],
     [ "SelectedFeatures", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#a52c95a964ff1638bb24289967937b29b", null ],
@@ -46,12 +46,12 @@ var class_k_k_m_l_l_1_1_s_v_mparam =
     [ "SelectedFeatures", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#a803c3e0c113be1980462e4a0ad438fc5", null ],
     [ "SelectionMethod", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#a084ed27759d9ef55a14b369da0ad7b93", null ],
     [ "SelectionMethod", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#a9f86dd39fb9528dbed813bb1b0676b36", null ],
-    [ "SetBinaryClassFields", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#a6ced2129636e1cc3ff458644931f315a", null ],
+    [ "SetBinaryClassFields", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#aafd96edb5dd7c038e5d9bf49a1ba19f1", null ],
     [ "SetFeatureNums", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#aabbd229c11a37f4d76e2da5135bf148e", null ],
     [ "SetFeatureNums", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#a54ccb20e0f61d61f1e642227df4e3e2e", null ],
-    [ "SetFeatureNums", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#ae03c08b052b42d9b29ce65aeb79790bb", null ],
+    [ "SetFeatureNums", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#aaa64f049d7e527b6b0402932972e211f", null ],
     [ "SvmParamToString", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#a2c79ac20378aedbddf889c356bc3f1bf", null ],
     [ "ToString", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#a92293ae68a65e26cd73d2c973a2246f0", null ],
     [ "UseProbabilityToBreakTies", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#a2da6c5858675cfd9db51e50f548d5f46", null ],
-    [ "WriteXML", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#a246cfd55d3742b853de50f57850c6191", null ]
+    [ "WriteXML", "d9/d43/class_k_k_m_l_l_1_1_s_v_mparam.html#a1c5b624f8e72edde7bbe2c48f3b5af8e", null ]
 ];

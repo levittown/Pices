@@ -9,5 +9,8 @@ var _image_i_o_8cpp =
     [ "SaveImagePGM", "d2/dd2/_image_i_o_8cpp.html#acff3d0eeecc7b33eb46ff7652a681ff2", null ],
     [ "SaveImagePNG", "d2/dd2/_image_i_o_8cpp.html#a16fd1069b8feade24d57515ef3827911", null ],
     [ "SaveImagePPM", "d2/dd2/_image_i_o_8cpp.html#a0998202f24413414f80a04d45df148f0", null ],
+    [ "gdiplusStartupInput", "d2/dd2/_image_i_o_8cpp.html#a3391e353e9dd078052293d5bce1f786c", null ],
+    [ "gdiplusToken", "d2/dd2/_image_i_o_8cpp.html#a0819643ceb158cbf389a3e399351810f", null ],
+    [ "gdiStarted", "d2/dd2/_image_i_o_8cpp.html#a01605ce8ea692c47a0f676af808391ba", null ],
     [ "imageIoAtExitDefined", "d2/dd2/_image_i_o_8cpp.html#a5623f4480489ffc80054153dff49013d", null ]
 ];

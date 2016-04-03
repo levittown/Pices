@@ -11,9 +11,8 @@ var _raster_8h =
     [ "ColorChannels", "d6/ddd/_raster_8h.html#a91743d17eafa05c7ff4e08017ac2b718", [
       [ "Red", "d6/ddd/_raster_8h.html#a91743d17eafa05c7ff4e08017ac2b718aee38e4d5dd68c4e440825018d549cb47", null ],
       [ "Green", "d6/ddd/_raster_8h.html#a91743d17eafa05c7ff4e08017ac2b718ad382816a3cbeed082c9e216e7392eed1", null ],
-      [ "Blue", "d6/ddd/_raster_8h.html#a91743d17eafa05c7ff4e08017ac2b718a9594eec95be70e7b1710f730fdda33d9", null ],
-      [ "RedChannel", "d6/ddd/_raster_8h.html#a91743d17eafa05c7ff4e08017ac2b718a2d79286b51f4de7789fcac473c5e666c", null ],
-      [ "GreenChannel", "d6/ddd/_raster_8h.html#a91743d17eafa05c7ff4e08017ac2b718a2c439d3356138fa529c7b66869a446f7", null ],
-      [ "BlueChannel", "d6/ddd/_raster_8h.html#a91743d17eafa05c7ff4e08017ac2b718a710e110eaa7ba2a2611beb15979ae50f", null ]
-    ] ]
+      [ "Blue", "d6/ddd/_raster_8h.html#a91743d17eafa05c7ff4e08017ac2b718a9594eec95be70e7b1710f730fdda33d9", null ]
+    ] ],
+    [ "ColorChannelFromKKStr", "d6/ddd/_raster_8h.html#aa0cfae147b55931c0f0710d1a8c6ae68", null ],
+    [ "ColorChannelToKKStr", "d6/ddd/_raster_8h.html#a97094dfff18985dad35d066bbabc3c69", null ]
 ];

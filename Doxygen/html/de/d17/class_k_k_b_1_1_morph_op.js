@@ -17,6 +17,7 @@ var class_k_k_b_1_1_morph_op =
       [ "Dilation", "de/d17/class_k_k_b_1_1_morph_op.html#a32070d9c14d16849873a8a409f5b0d69a5a870896d32acca70f912a0c11edca66", null ],
       [ "Erosion", "de/d17/class_k_k_b_1_1_morph_op.html#a32070d9c14d16849873a8a409f5b0d69a35b6b7b81c8d146da93c09daa3875ea0", null ],
       [ "MaskExclude", "de/d17/class_k_k_b_1_1_morph_op.html#a32070d9c14d16849873a8a409f5b0d69a2166273bd619a450f27a35e9c9e421c3", null ],
+      [ "SobelEdgeDetection", "de/d17/class_k_k_b_1_1_morph_op.html#a32070d9c14d16849873a8a409f5b0d69ae9eb5dc5ac36ae1b3a4eb7c17def6093", null ],
       [ "Stretcher", "de/d17/class_k_k_b_1_1_morph_op.html#a32070d9c14d16849873a8a409f5b0d69a0a93701260be81cae9cf81aade6afaa1", null ]
     ] ],
     [ "StructureType", "de/d17/class_k_k_b_1_1_morph_op.html#a09e4aff7e81327849855ff72082d85b3", [
@@ -32,7 +33,7 @@ var class_k_k_b_1_1_morph_op =
     [ "ForegroundPixel", "de/d17/class_k_k_b_1_1_morph_op.html#acd5541050c3c0207b004b71caf7fb1f4", null ],
     [ "ForegroundPixel", "de/d17/class_k_k_b_1_1_morph_op.html#ac3ac8faa16c12502d2b7c50b79cedfe8", null ],
     [ "MaskShapes", "de/d17/class_k_k_b_1_1_morph_op.html#a7e477ebbb2c0cdd67388cb841685c02b", null ],
-    [ "Operation", "de/d17/class_k_k_b_1_1_morph_op.html#a239d78ece9a79abd36dad0bfc0610aee", null ],
+    [ "Operation", "de/d17/class_k_k_b_1_1_morph_op.html#abdf6f4bddae0b3cc3dc718559fa60234", null ],
     [ "OperationTypeFromStr", "de/d17/class_k_k_b_1_1_morph_op.html#a92d6ed26a570d8f7996b85dfeaeb4856", null ],
     [ "OperationTypeToStr", "de/d17/class_k_k_b_1_1_morph_op.html#ae846fc671e95401a7e94912cd4f4ec41", null ],
     [ "PerformOperation", "de/d17/class_k_k_b_1_1_morph_op.html#ae7655bec44b6665fd042216e5cb55843", null ],

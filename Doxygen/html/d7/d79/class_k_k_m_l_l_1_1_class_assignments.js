@@ -8,7 +8,6 @@ var class_k_k_m_l_l_1_1_class_assignments =
     [ "GetMLClasses", "d7/d79/class_k_k_m_l_l_1_1_class_assignments.html#ab22230c4e9de89d4c28123629dd0b46a", null ],
     [ "GetNumForClass", "d7/d79/class_k_k_m_l_l_1_1_class_assignments.html#a16bde30c19763d38ebcf9c33f0accd5f", null ],
     [ "GetUniqueListOfAssignments", "d7/d79/class_k_k_m_l_l_1_1_class_assignments.html#a6cdebfb9d64aa472db2151113fcea92c", null ],
-    [ "Load", "d7/d79/class_k_k_m_l_l_1_1_class_assignments.html#a805a190799be94eacffacd52b1065d8a", null ],
     [ "MemoryConsumedEstimated", "d7/d79/class_k_k_m_l_l_1_1_class_assignments.html#a9fa44a1925ecd559e96d49a7f4873c27", null ],
     [ "ParseToString", "d7/d79/class_k_k_m_l_l_1_1_class_assignments.html#a741ad292e58ea0dcd057776fa0a62da7", null ],
     [ "Save", "d7/d79/class_k_k_m_l_l_1_1_class_assignments.html#a4c84be859dfad85963f97558d8b267d9", null ],

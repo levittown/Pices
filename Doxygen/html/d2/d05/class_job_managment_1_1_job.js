@@ -1,7 +1,7 @@
 var class_job_managment_1_1_job =
 [
     [ "ConstructorIndex", "d2/d05/class_job_managment_1_1_job.html#ab942a363eb241926bd9116b6d8729ad2", null ],
-    [ "ConstructorPtr", "d2/d05/class_job_managment_1_1_job.html#a51b674f57c202ddce3d951d49df68382", null ],
+    [ "ConstructorPtr", "d2/d05/class_job_managment_1_1_job.html#ae1105aac253d5f01a1d935c4d9ed850e", null ],
     [ "JobPtr", "d2/d05/class_job_managment_1_1_job.html#a90c1151cf2442e7d6a7e90b95a424c89", null ],
     [ "JobStatus", "d2/d05/class_job_managment_1_1_job.html#a127baf3499b2b7b678e3c020c4739496", [
       [ "jsNULL", "d2/d05/class_job_managment_1_1_job.html#a127baf3499b2b7b678e3c020c4739496a04f16757ccd38176221e9bb3bd1d8395", null ],
@@ -25,7 +25,7 @@ var class_job_managment_1_1_job =
     [ "CallAppropriateConstructor", "d2/d05/class_job_managment_1_1_job.html#a6b4d5af8af49a99a022a1b73ba719562", null ],
     [ "CompletedJobDataRead", "d2/d05/class_job_managment_1_1_job.html#a1142f388902344446ea045c3a07103f4", null ],
     [ "CompletedJobDataWrite", "d2/d05/class_job_managment_1_1_job.html#ab46624f310b7fc41ec334137feff387d", null ],
-    [ "Duplicate", "d2/d05/class_job_managment_1_1_job.html#ae9da711aa3012d52cec8706039433e08", null ],
+    [ "Duplicate", "d2/d05/class_job_managment_1_1_job.html#af360bc9569157b35ec0fa5f4ac872198", null ],
     [ "InPrerequisites", "d2/d05/class_job_managment_1_1_job.html#a2661fe743941449b5128ceab6ceeee3c", null ],
     [ "JobId", "d2/d05/class_job_managment_1_1_job.html#ae7d9bad3d8c8c96f1a8a77f372fd1a72", null ],
     [ "JobId", "d2/d05/class_job_managment_1_1_job.html#a79a01c4ca1ae240408c9e033693d2700", null ],

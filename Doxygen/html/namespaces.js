@@ -5,7 +5,6 @@ var namespaces =
     [ "ImageExtractionManager", "d0/d9d/namespace_image_extraction_manager.html", null ],
     [ "JobManagment", "df/ded/namespace_job_managment.html", null ],
     [ "KKB", "dc/d98/namespace_k_k_b.html", null ],
-    [ "KKMachineLearning", "d7/de6/namespace_k_k_machine_learning.html", null ],
     [ "KKMLL", "d1/d5c/namespace_k_k_m_l_l.html", null ],
     [ "MLL", "d7/dcc/namespace_m_l_l.html", null ],
     [ "PicesCommander", "d7/d53/namespace_pices_commander.html", "d7/d53/namespace_pices_commander" ],

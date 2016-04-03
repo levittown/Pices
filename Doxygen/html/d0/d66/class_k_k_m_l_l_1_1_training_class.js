@@ -17,13 +17,13 @@ var class_k_k_m_l_l_1_1_training_class =
     [ "MLClass", "d0/d66/class_k_k_m_l_l_1_1_training_class.html#a2f28d3ab6694f610fceeacd94ffee4ad", null ],
     [ "MLClass", "d0/d66/class_k_k_m_l_l_1_1_training_class.html#abedaa4f09f990ff402126826be91488a", null ],
     [ "Name", "d0/d66/class_k_k_m_l_l_1_1_training_class.html#ae10b765db09d3aadabdffa35960c906a", null ],
-    [ "ReadXML", "d0/d66/class_k_k_m_l_l_1_1_training_class.html#a5e25984492f1017d04bcafdedd96c528", null ],
+    [ "ReadXML", "d0/d66/class_k_k_m_l_l_1_1_training_class.html#a3a006a2bbce2f7bdf39065498b9fc3ae", null ],
     [ "SubClassifier", "d0/d66/class_k_k_m_l_l_1_1_training_class.html#a0e7f742efd6c2cd406f57da6622a02d7", null ],
     [ "SubClassifier", "d0/d66/class_k_k_m_l_l_1_1_training_class.html#aca65ff9a062c0a69af4acb40488e2037", null ],
     [ "SubClassifierName", "d0/d66/class_k_k_m_l_l_1_1_training_class.html#a3779313cdd65a33409a328935bfb60d9", null ],
     [ "SubClassifierName", "d0/d66/class_k_k_m_l_l_1_1_training_class.html#aba851a85fb498942fffb36d80d99ad0e", null ],
     [ "Weight", "d0/d66/class_k_k_m_l_l_1_1_training_class.html#a87f207a7a2be1fd926c7eb40cd8d2976", null ],
     [ "Weight", "d0/d66/class_k_k_m_l_l_1_1_training_class.html#a0c44d341fa2153e6d10fb2fb38140067", null ],
-    [ "WriteXML", "d0/d66/class_k_k_m_l_l_1_1_training_class.html#a88d3e41a396ceb792b899d472c52083f", null ],
-    [ "WriteXML", "d0/d66/class_k_k_m_l_l_1_1_training_class.html#a393a6bf9b1fae9f77341569f49134673", null ]
+    [ "WriteXML", "d0/d66/class_k_k_m_l_l_1_1_training_class.html#ae3e719ce52a2567b0970598f5006c293", null ],
+    [ "WriteXML", "d0/d66/class_k_k_m_l_l_1_1_training_class.html#a848eeea7fc4f394fb666381415512a7e", null ]
 ];

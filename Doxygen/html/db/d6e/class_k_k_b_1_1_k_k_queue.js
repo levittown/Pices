@@ -10,7 +10,6 @@ var class_k_k_b_1_1_k_k_queue =
     [ "AddFirst", "db/d6e/class_k_k_b_1_1_k_k_queue.html#a1832186a944dca6fb3d5fca4046b7c40", null ],
     [ "AddQueue", "db/d6e/class_k_k_b_1_1_k_k_queue.html#aefa1334998f59c7184911b47addccee3", null ],
     [ "BackOfQueue", "db/d6e/class_k_k_b_1_1_k_k_queue.html#a9c3fadab17ce05dc750d96b6d3fad064", null ],
-    [ "Compress", "db/d6e/class_k_k_b_1_1_k_k_queue.html#af52e6b9e8d6e2b28f01ea60bdae989d6", null ],
     [ "DeleteContents", "db/d6e/class_k_k_b_1_1_k_k_queue.html#a72dbe1e65d567536dbf4be3617230254", null ],
     [ "DeleteEntry", "db/d6e/class_k_k_b_1_1_k_k_queue.html#ae362e3b0a128e8a09182e167befda088", null ],
     [ "DeleteEntry", "db/d6e/class_k_k_b_1_1_k_k_queue.html#acc76c23f4e4e1ecddd5c82619a93d4b2", null ],

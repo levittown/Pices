@@ -15,6 +15,8 @@ var svm_8cpp =
     [ "clone", "d3/db9/svm_8cpp.html#a042890ae5011103ccc6062a677cff472", null ],
     [ "info", "d3/db9/svm_8cpp.html#a0ebae296798b259c5fe4850260bc3d60", null ],
     [ "info_flush", "d3/db9/svm_8cpp.html#aa9479af6b244e998b5b35f52720c309e", null ],
+    [ "max", "d3/db9/svm_8cpp.html#af89e72ffe29dd42949c494bc4ec751e6", null ],
+    [ "min", "d3/db9/svm_8cpp.html#a1ffcc19cad97bf20039eaa77c0040425", null ],
     [ "solve_c_svc", "d3/db9/svm_8cpp.html#a3d48ff0cfde1955d7d4c98ff55312c30", null ],
     [ "solve_c_svc", "d3/db9/svm_8cpp.html#a14d8ba8d3c906b7ca528c215c94cb399", null ],
     [ "solve_epsilon_svr", "d3/db9/svm_8cpp.html#af3672588d870cdeff1459d286d6ba294", null ],
@@ -26,7 +28,7 @@ var svm_8cpp =
     [ "svm_train_one", "d3/db9/svm_8cpp.html#ae780865cb44de65b61e2228df26c9c18", null ],
     [ "svm_train_one", "d3/db9/svm_8cpp.html#adcfc2ea7644b3f92e1550e7b31b17347", null ],
     [ "Swap", "d3/db9/svm_8cpp.html#aba73cf189d50b3a4379e512f9ea2a303", null ],
-    [ "XmlFactoryMacro", "d3/db9/svm_8cpp.html#aa5d94a552147a1b099b64622096962c4", null ],
+    [ "XmlFactoryMacro", "d3/db9/svm_8cpp.html#a131098eda06b17541792e71789d496f4", null ],
     [ "kernel_type_table", "d3/db9/svm_8cpp.html#a2812fc7dc5b3db65a9bf7da83e25bb3d", null ],
     [ "svm_type_table", "d3/db9/svm_8cpp.html#a3be459e452f7ebeaae824e941e766770", null ]
 ];

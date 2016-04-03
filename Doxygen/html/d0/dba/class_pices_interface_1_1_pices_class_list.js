@@ -21,10 +21,10 @@ var class_pices_interface_1_1_pices_class_list =
     [ "LookUpByName", "d0/dba/class_pices_interface_1_1_pices_class_list.html#a399a37508647bb2110a4cdeb6ab95e73", null ],
     [ "LookUpByUnmanagedClass", "d0/dba/class_pices_interface_1_1_pices_class_list.html#a6883c820ce882a7d624aec111c5b4513", null ],
     [ "LookUpIndex", "d0/dba/class_pices_interface_1_1_pices_class_list.html#a0a67a8150a9d2a3722b899bc03c4a8ef", null ],
-    [ "PicesClassList::UpdateParent", "d0/dba/class_pices_interface_1_1_pices_class_list.html#a0b45436e605e2da2a8347685500d4f48", null ],
     [ "Save", "d0/dba/class_pices_interface_1_1_pices_class_list.html#aca71100ebf611c10d789f7b987d67a7e", null ],
     [ "SortByName", "d0/dba/class_pices_interface_1_1_pices_class_list.html#a62b00202127d8215b12388946cf6ffa7", null ],
     [ "ToMLClassConstList", "d0/dba/class_pices_interface_1_1_pices_class_list.html#a79507c59000290cdd6c853b7283612c0", null ],
+    [ "UpdateParent", "d0/dba/class_pices_interface_1_1_pices_class_list.html#ab6fb045736ecd43ec5275b67601636e2", null ],
     [ "Directory", "d0/dba/class_pices_interface_1_1_pices_class_list.html#ab7df224e24553ea673b250d8764c6a34", null ],
     [ "RootNode", "d0/dba/class_pices_interface_1_1_pices_class_list.html#a4a65a81c46fd0edba1b84443847c2514", null ]
 ];

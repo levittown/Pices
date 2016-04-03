@@ -56,6 +56,7 @@ var namespace_m_l_l =
     [ "RasterSipperList", "d2/d2c/class_m_l_l_1_1_raster_sipper_list.html", "d2/d2c/class_m_l_l_1_1_raster_sipper_list" ],
     [ "Sipper3BitRec", "d4/d1f/struct_m_l_l_1_1_sipper3_bit_rec.html", "d4/d1f/struct_m_l_l_1_1_sipper3_bit_rec" ],
     [ "Sipper3Buff", "de/da3/class_m_l_l_1_1_sipper3_buff.html", "de/da3/class_m_l_l_1_1_sipper3_buff" ],
+    [ "Sipper3InstrumentDataRec", "d9/d58/struct_m_l_l_1_1_sipper3_instrument_data_rec.html", "d9/d58/struct_m_l_l_1_1_sipper3_instrument_data_rec" ],
     [ "Sipper3Rec", "d7/d35/struct_m_l_l_1_1_sipper3_rec.html", "d7/d35/struct_m_l_l_1_1_sipper3_rec" ],
     [ "Sipper3RevBuff", "d7/dfe/class_m_l_l_1_1_sipper3_rev_buff.html", "d7/dfe/class_m_l_l_1_1_sipper3_rev_buff" ],
     [ "SipperBinaryRec", "d1/df6/struct_m_l_l_1_1_sipper_binary_rec.html", "d1/df6/struct_m_l_l_1_1_sipper_binary_rec" ],

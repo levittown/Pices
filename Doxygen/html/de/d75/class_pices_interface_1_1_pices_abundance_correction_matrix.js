@@ -12,8 +12,8 @@ var class_pices_interface_1_1_pices_abundance_correction_matrix =
     [ "Prediction", "de/d75/class_pices_interface_1_1_pices_abundance_correction_matrix.html#a9ab390705367ba4eff9be00580f3ac02", null ],
     [ "PrintAdjustedResults", "de/d75/class_pices_interface_1_1_pices_abundance_correction_matrix.html#ade9f44ce85ee278b85fac6dbf4abe214", null ],
     [ "PrintConfusionMatrixTabDelimited", "de/d75/class_pices_interface_1_1_pices_abundance_correction_matrix.html#a852276954610c77585738cd85fdc1d52", null ],
-    [ "ProbOfDetection", "de/d75/class_pices_interface_1_1_pices_abundance_correction_matrix.html#a9e18f3eb4766b776e56e255b0a77792c", null ],
-    [ "ProbOfFalseAlarm", "de/d75/class_pices_interface_1_1_pices_abundance_correction_matrix.html#a55215597a5520da1b7ecd1e25c8e1090", null ],
+    [ "ProbOfDetection", "de/d75/class_pices_interface_1_1_pices_abundance_correction_matrix.html#a3747ee9c8024fb5596c1feb84964c213", null ],
+    [ "ProbOfFalseAlarm", "de/d75/class_pices_interface_1_1_pices_abundance_correction_matrix.html#af8b975ac17f3282157f964b050df6744", null ],
     [ "SaveForConfigFileName", "de/d75/class_pices_interface_1_1_pices_abundance_correction_matrix.html#a2784f8e058aebb5e708400b677b8ef21", null ],
     [ "Valid", "de/d75/class_pices_interface_1_1_pices_abundance_correction_matrix.html#a329e7f7e2d8c98fe046f9406759bc1cb", null ]
 ];

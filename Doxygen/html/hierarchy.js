@@ -11,11 +11,8 @@ var hierarchy =
     [ "KKB::BmpImage::BMP_24BitPixel", "dd/d9e/struct_bmp_image_1_1_b_m_p__24_bit_pixel.html", null ],
     [ "KKB::BmpImage::CodedPixels", "dd/db3/class_bmp_image_1_1_coded_pixels.html", null ],
     [ "KKB::BmpImage::CodePair", "d8/dd3/struct_bmp_image_1_1_code_pair.html", null ],
-    [ "KKB::BmpImage::DWordParts", "df/d40/union_bmp_image_1_1_d_word_parts.html", null ],
-    [ "KKB::BmpImage::LongParts", "df/d04/union_bmp_image_1_1_long_parts.html", null ],
     [ "KKB::BmpImage::PalletBuilder", "dd/d56/class_bmp_image_1_1_pallet_builder.html", null ],
     [ "KKB::BmpImage::PalletBuilder::RGBQUAD_Pred", "d1/dd1/class_bmp_image_1_1_pallet_builder_1_1_r_g_b_q_u_a_d___pred.html", null ],
-    [ "KKB::BmpImage::WordParts", "d9/da0/union_bmp_image_1_1_word_parts.html", null ],
     [ "CDialog", null, [
       [ "CAboutDlg", "de/d70/class_c_about_dlg.html", null ],
       [ "CImageExtractionWindowsDlg", "d2/d9c/class_c_image_extraction_windows_dlg.html", null ]
@@ -142,10 +139,9 @@ var hierarchy =
     [ "KKB::Application", "db/da7/class_k_k_b_1_1_application.html", [
       [ "MLL::PicesApplication", "da/d17/class_m_l_l_1_1_pices_application.html", null ]
     ] ],
-    [ "KKB::Atom", "dd/d38/class_k_k_b_1_1_atom.html", null ],
-    [ "KKB::BITMAPFILEHEADER", "d3/df5/struct_k_k_b_1_1_b_i_t_m_a_p_f_i_l_e_h_e_a_d_e_r.html", null ],
-    [ "KKB::BITMAPINFOHEADER", "d1/d71/struct_k_k_b_1_1_b_i_t_m_a_p_i_n_f_o_h_e_a_d_e_r.html", null ],
-    [ "KKB::BitString", "d9/d9f/class_k_k_b_1_1_bit_string.html", null ],
+    [ "KKB::Atom", "dd/d38/class_k_k_b_1_1_atom.html", [
+      [ "KKB::BitString", "d9/d9f/class_k_k_b_1_1_bit_string.html", null ]
+    ] ],
     [ "KKB::Blob", "d3/d83/class_k_k_b_1_1_blob.html", null ],
     [ "KKB::BmpImage", "d6/d02/class_k_k_b_1_1_bmp_image.html", null ],
     [ "KKB::Chart", "d3/dff/class_k_k_b_1_1_chart.html", null ],
@@ -195,6 +191,7 @@ var hierarchy =
       [ "KKB::MorphOpBinarize", "da/d28/class_k_k_b_1_1_morph_op_binarize.html", null ],
       [ "KKB::MorphOpBmiFiltering", "d5/d11/class_k_k_b_1_1_morph_op_bmi_filtering.html", null ],
       [ "KKB::MorphOpMaskExclude", "d3/d64/class_k_k_b_1_1_morph_op_mask_exclude.html", null ],
+      [ "KKB::MorphOpSobel", "d4/d39/class_k_k_b_1_1_morph_op_sobel.html", null ],
       [ "KKB::MorphOpStretcher", "d9/d95/class_k_k_b_1_1_morph_op_stretcher.html", null ],
       [ "KKB::MorphOpStruct", "dc/de6/class_k_k_b_1_1_morph_op_struct.html", [
         [ "KKB::MorphOpDilation", "d2/da9/class_k_k_b_1_1_morph_op_dilation.html", null ],
@@ -212,12 +209,10 @@ var hierarchy =
     [ "KKB::RasterBuffer", "d5/d0d/class_k_k_b_1_1_raster_buffer.html", null ],
     [ "KKB::RBnode< Entry >", "d3/d17/class_k_k_b_1_1_r_bnode.html", null ],
     [ "KKB::RBTree< Entry, CompareNodes, KeyType >", "da/ded/class_k_k_b_1_1_r_b_tree.html", null ],
-    [ "KKB::RGBQUAD", "d1/d74/struct_k_k_b_1_1_r_g_b_q_u_a_d.html", null ],
     [ "KKB::Row", "d6/d52/class_k_k_b_1_1_row.html", null ],
     [ "KKB::RunLog", "de/d11/class_k_k_b_1_1_run_log.html", null ],
     [ "KKB::SegmentorOTSU", "d1/d1b/class_k_k_b_1_1_segmentor_o_t_s_u.html", null ],
     [ "KKB::SimpleCompressor", "db/d80/class_k_k_b_1_1_simple_compressor.html", null ],
-    [ "KKB::Sobel", "dd/db4/class_k_k_b_1_1_sobel.html", null ],
     [ "KKB::TimeType", "d3/d3f/class_k_k_b_1_1_time_type.html", null ],
     [ "KKB::TokenBuffer", "d7/d89/class_k_k_b_1_1_token_buffer.html", [
       [ "KKB::TokenBufferStr", "d8/da2/class_k_k_b_1_1_token_buffer_str.html", null ],
@@ -259,7 +254,6 @@ var hierarchy =
       ] ]
     ] ],
     [ "KKB::XmlTokenizer", "d4/da7/class_k_k_b_1_1_xml_tokenizer.html", null ],
-    [ "KKMachineLearning::MLClass", "d2/d55/class_k_k_machine_learning_1_1_m_l_class.html", null ],
     [ "KKMLL::Attribute", "d4/dbd/class_k_k_m_l_l_1_1_attribute.html", null ],
     [ "KKMLL::BinaryClassParms", "d7/d05/class_k_k_m_l_l_1_1_binary_class_parms.html", null ],
     [ "KKMLL::ClassificationBiasMatrix", "d8/dcd/class_k_k_m_l_l_1_1_classification_bias_matrix.html", null ],
@@ -332,9 +326,6 @@ var hierarchy =
     [ "KKQueue", null, [
       [ "JobManagment::JobList", "d8/d4b/class_job_managment_1_1_job_list.html", null ],
       [ "JobManagment::JobManagerList", "d7/db9/class_job_managment_1_1_job_manager_list.html", null ],
-      [ "KKMachineLearning::MLClassList", "d4/db9/class_k_k_machine_learning_1_1_m_l_class_list.html", [
-        [ "KKMachineLearning::MLClassListIndex", "d8/dcf/class_k_k_machine_learning_1_1_m_l_class_list_index.html", null ]
-      ] ],
       [ "MLL::DataBaseGpsDataList", "d9/de2/class_m_l_l_1_1_data_base_gps_data_list.html", null ],
       [ "MLL::DataBaseImageEntryList", "d1/d41/class_m_l_l_1_1_data_base_image_entry_list.html", null ],
       [ "MLL::DataBaseImageGroupList", "d4/da3/class_m_l_l_1_1_data_base_image_group_list.html", null ],
@@ -362,13 +353,12 @@ var hierarchy =
       [ "PicesInterface::PicesSipperFileList", "d5/d92/class_pices_interface_1_1_pices_sipper_file_list.html", null ],
       [ "PicesInterface::PicesSipperStationList", "de/dba/class_pices_interface_1_1_pices_sipper_station_list.html", null ],
       [ "PicesInterface::PicesTrainingClassList", "da/d13/class_pices_interface_1_1_pices_training_class_list.html", null ],
-      [ "PicesInterface::PicesVolumeSampledStatList", "d2/d77/class_pices_interface_1_1_pices_volume_sampled_stat_list.html", null ]
-    ] ],
-    [ "List< Blob >", null, [
+      [ "PicesInterface::PicesVolumeSampledStatList", "d2/d77/class_pices_interface_1_1_pices_volume_sampled_stat_list.html", null ],
+      [ "SipperDiskUtilities.SipperFileControlBlockList", "de/d98/class_sipper_disk_utilities_1_1_sipper_file_control_block_list.html", null ],
       [ "SipperFile.BlobList", "d3/d60/class_sipper_file_1_1_blob_list.html", null ]
     ] ],
-    [ "List< SipperFileControlBlock >", null, [
-      [ "SipperDiskUtilities.SipperFileControlBlockList", "de/d98/class_sipper_disk_utilities_1_1_sipper_file_control_block_list.html", null ]
+    [ "map", null, [
+      [ "FeatureSelectionApp::ProcessorCycles", "d8/d60/class_feature_selection_app_1_1_processor_cycles.html", null ]
     ] ],
     [ "KKMLL::MLClassList::MLClassNameComparison", "d8/dba/class_m_l_class_list_1_1_m_l_class_name_comparison.html", null ],
     [ "MLL::AbundanceCorrectionMatrix", "d4/dfe/class_m_l_l_1_1_abundance_correction_matrix.html", null ],
@@ -410,6 +400,7 @@ var hierarchy =
     [ "MLL::PicesVariables", "d7/d4b/class_m_l_l_1_1_pices_variables.html", null ],
     [ "MLL::PortAssignment", "d5/d6b/class_m_l_l_1_1_port_assignment.html", null ],
     [ "MLL::Sipper3BitRec", "d4/d1f/struct_m_l_l_1_1_sipper3_bit_rec.html", null ],
+    [ "MLL::Sipper3InstrumentDataRec", "d9/d58/struct_m_l_l_1_1_sipper3_instrument_data_rec.html", null ],
     [ "MLL::Sipper3Rec", "d7/d35/struct_m_l_l_1_1_sipper3_rec.html", null ],
     [ "MLL::SipperBinaryRec", "d1/df6/struct_m_l_l_1_1_sipper_binary_rec.html", null ],
     [ "MLL::SipperBlob", "d6/d0a/class_m_l_l_1_1_sipper_blob.html", null ],
@@ -565,7 +556,7 @@ var hierarchy =
     [ "SipperFileViewer.Program", "d8/d9c/class_sipper_file_viewer_1_1_program.html", null ],
     [ "SipperFileViewer.SipperFileViewerParameters", "d9/d52/class_sipper_file_viewer_1_1_sipper_file_viewer_parameters.html", null ],
     [ "KKMLL::SizeDistribution::ClassTotals", "df/d71/class_size_distribution_1_1_class_totals.html", null ],
-    [ "SortedList< String, ClassStat >", null, [
+    [ "SortedList", null, [
       [ "PicesCommander.ClassStatSortedList", "d1/df4/class_pices_commander_1_1_class_stat_sorted_list.html", null ]
     ] ],
     [ "SplitRec", "db/d80/struct_split_rec.html", null ],
@@ -576,9 +567,7 @@ var hierarchy =
       [ "KKB::KKException", "d9/d96/class_k_k_b_1_1_k_k_exception.html", null ]
     ] ],
     [ "std::map< K, T >", null, [
-      [ "FeatureSelectionApp::ProcessorCycles", "d8/d60/class_feature_selection_app_1_1_processor_cycles.html", null ],
       [ "KKB::BlobList", "d2/d37/class_k_k_b_1_1_blob_list.html", null ],
-      [ "KKMachineLearning::ClassIndexList", "d4/d6a/class_k_k_machine_learning_1_1_class_index_list.html", null ],
       [ "KKMLL::MLClassIndexList", "d7/d54/class_k_k_m_l_l_1_1_m_l_class_index_list.html", null ],
       [ "MLL::VolumeSampledStatList", "d9/d73/class_m_l_l_1_1_volume_sampled_stat_list.html", null ]
     ] ],
@@ -688,7 +677,6 @@ var hierarchy =
         [ "FeatureSelectionApp::RandomSplitResultsList", "d8/d56/class_feature_selection_app_1_1_random_split_results_list.html", null ]
       ] ],
       [ "KKB::KKQueue< Raster >", "db/d6e/class_k_k_b_1_1_k_k_queue.html", [
-        [ "KKB::RasterList", "d5/df1/class_k_k_b_1_1_raster_list.html", null ],
         [ "KKB::RasterList", "d5/df1/class_k_k_b_1_1_raster_list.html", null ]
       ] ],
       [ "KKB::KKQueue< RasterSipper >", "db/d6e/class_k_k_b_1_1_k_k_queue.html", [
@@ -779,6 +767,7 @@ var hierarchy =
       [ "SipperFile.DepthPlot2", "df/d32/class_sipper_file_1_1_depth_plot2.html", null ],
       [ "SipperFile.SipperConfigForm", "d2/d30/class_sipper_file_1_1_sipper_config_form.html", null ]
     ] ],
+    [ "tagTHREADNAME_INFO", "d0/df5/structtag_t_h_r_e_a_d_n_a_m_e___i_n_f_o.html", null ],
     [ "TestAccuracyComparison", "db/d4d/class_test_accuracy_comparison.html", null ],
     [ "TestAccuracyNormComparison", "dc/d72/class_test_accuracy_norm_comparison.html", null ],
     [ "TestGradeComparison", "dc/df5/class_test_grade_comparison.html", null ],

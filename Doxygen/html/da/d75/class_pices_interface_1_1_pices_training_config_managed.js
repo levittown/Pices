@@ -14,6 +14,7 @@ var class_pices_interface_1_1_pices_training_config_managed =
     [ "NumHierarchialLevels", "da/d75/class_pices_interface_1_1_pices_training_config_managed.html#a4f5a74dc0253b5fec7b62a28414abc70", null ],
     [ "OtherClass", "da/d75/class_pices_interface_1_1_pices_training_config_managed.html#a2eb2c7149bd9cf38b774c2c15adf087e", null ],
     [ "RootDir", "da/d75/class_pices_interface_1_1_pices_training_config_managed.html#ad01771af5beec46dbd9dc15105dc2c78", null ],
+    [ "RootDirExpanded", "da/d75/class_pices_interface_1_1_pices_training_config_managed.html#a920de1a3f8563bc681b36ee87ea2a7bb", null ],
     [ "Save", "da/d75/class_pices_interface_1_1_pices_training_config_managed.html#a3b8eb25b2e6fc9eb0b7c891b400d7a55", null ],
     [ "TrainingClasses", "da/d75/class_pices_interface_1_1_pices_training_config_managed.html#a2cff2cc94063c02c53007641f8323d76", null ],
     [ "Valid", "da/d75/class_pices_interface_1_1_pices_training_config_managed.html#af4287a043649f01e3e5d4092de0ace36", null ]
