@@ -31,8 +31,8 @@ using namespace KKMLL;
 using namespace MLL;
 
 
-#include "JobManager.h"
-using namespace  JobManagment;
+#include "KKJobManager.h"
+using namespace  KKJobManagment;
 
 
 #include "RandomSplits.h"
@@ -153,7 +153,7 @@ bool  RandomSplits::ProcessCmdLineParameter (const KKStr&  parmSwitch,
     {
       log.Level (-1) << endl
                      << "ProcessCmdLineParameter   ***ERROR***    Invalid NumFolds[" << parmValue<< "]." << endl
-                     << "                                         Must be '0' or greter than '1'." << endl
+                     << "                                         Must be '0' or greater than '1'." << endl
                      << endl;
       Abort (true);
       validParm = false;
@@ -237,7 +237,7 @@ int  main (int     argc,
 
   InstrumentDataFileManager::InitializePush ();
   // Need to register the different types of Jobs.
-  Job::RegisterConstructor ("RandomSplitJob",  RandomSplitJob::CreateEmptyInstance);
+  KKJob::RegisterConstructor ("RandomSplitJob",  RandomSplitJob::CreateEmptyInstance);
   
   RandomSplits  application (log);
   application.InitalizeApplication (argc, argv);

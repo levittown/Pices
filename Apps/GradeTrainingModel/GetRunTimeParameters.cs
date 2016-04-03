@@ -362,7 +362,7 @@ namespace GradeTrainingModel
       {
         otherClass = curSelModel.OtherClass ();
         if  (crossValidation)
-         GroundTruth.Text = "F:\\Pices\\SavedImages\\Cruise-WB0812_Station-DWH"
+         GroundTruth.Text = "F:\\Pices\\SavedImages\\Cruise-WB0812_Station-DWH";
          //GroundTruth.Text = curSelModel.RootDir ();
 
         origClassifierClasses = curSelModel.ExtractClassList ();

@@ -5,7 +5,7 @@
 #include "FeatureVector.h"
 #include "Orderings.h"
 #include "PicesApplication.h"
-#include "JobManager.h"
+#include "KKJobManager.h"
 
 
 using namespace  KKB;

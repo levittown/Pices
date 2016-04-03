@@ -33,8 +33,8 @@ using namespace KKMLL;
 using namespace MLL;
 
 
-#include "JobManager.h"
-using namespace  JobManagment;
+#include "KKJobManager.h"
+using namespace  KKJobManagment;
 
 
 #include "RandomSplitJobManager.h"
@@ -48,7 +48,7 @@ RandomSplitJob::RandomSplitJob (JobManagerPtr  _manager,
                                 int            _splitNum,
                                 RunLog&        _log
                                 ):
-  Job      (_manager, _jobId, _parentId, 1, _log),
+  KKJob  (_manager, _jobId, _parentId, 1, _log),
   splitNum             (_splitNum),
   biasParms            (NULL),
   randomSplitsResults  (NULL)
@@ -59,7 +59,7 @@ RandomSplitJob::RandomSplitJob (JobManagerPtr  _manager,
 
 
 RandomSplitJob::RandomSplitJob (JobManagerPtr  _manager):
-  Job   (_manager),
+  KKJob   (_manager),
   splitNum            (0),
   biasParms           (NULL),
   randomSplitsResults (NULL)
@@ -71,7 +71,7 @@ RandomSplitJob::RandomSplitJob (JobManagerPtr  _manager):
 
 
 RandomSplitJob::RandomSplitJob (const RandomSplitJob&  j):
-   Job (j),
+   KKJob (j),
    splitNum             (j.splitNum),
    biasParms            (NULL),
    randomSplitsResults  (NULL)
@@ -95,7 +95,7 @@ RandomSplitJob::~RandomSplitJob ()
 
 RandomSplitJobManagerPtr   RandomSplitJob::Manager ()
 {
-  JobManagerPtr  m = Job::Manager ();
+  JobManagerPtr  m = KKJob::Manager ();
   return  dynamic_cast<RandomSplitJobManagerPtr>(m);
 }
 
@@ -103,7 +103,7 @@ RandomSplitJobManagerPtr   RandomSplitJob::Manager ()
 
 // All classes derived from 'Job' will be required to implement this method 
 // and register it with Job::RegisterConstructor
-JobPtr  RandomSplitJob::CreateEmptyInstance (JobManagerPtr  _manager)
+KKJobPtr  RandomSplitJob::CreateEmptyInstance (JobManagerPtr  _manager)
 {
   return new RandomSplitJob (_manager);
 }
@@ -125,11 +125,11 @@ const char*  RandomSplitJob::JobType ()  const
 
 
 
-void   RandomSplitJob::ReFresh (Job&  _j)
+void   RandomSplitJob::ReFresh (KKJob&  _j)
 {
   RandomSplitJob& j = dynamic_cast<RandomSplitJob&> (_j);
 
-  Job::ReFresh (j);
+  KKJob::ReFresh (j);
   splitNum = j.splitNum;
 
 
@@ -150,7 +150,7 @@ void   RandomSplitJob::ReFresh (Job&  _j)
 // Any SubClass that implements this method must call its base class version 1st.
 KKStr  RandomSplitJob::ToStatusStr ()
 {
-  return  Job::ToStatusStr () + "\t" + "splitNum" + "\t" + StrFormatInt (splitNum, "ZZZZZZ0");
+  return  KKJob::ToStatusStr () + "\t" + "splitNum" + "\t" + StrFormatInt (splitNum, "ZZZZZZ0");
 }
 
 
@@ -165,7 +165,7 @@ void  RandomSplitJob::ProcessStatusField (const KKStr&  fieldName,
   if  (fieldName.EqualIgnoreCase ("SplitNum"))
     splitNum = fieldValue.ToInt ();
   else
-    Job::ProcessStatusField (fieldName, fieldValue);
+    KKJob::ProcessStatusField (fieldName, fieldValue);
 }
 
 
@@ -235,7 +235,7 @@ void  RandomSplitJob::CompletedJobDataRead (istream& i)
 
 void  RandomSplitJob::ProcessNode ()
 {
-  Status (Job::jsStarted);
+  Status (KKJob::jsStarted);
 
   FeatureVectorListPtr  trainData = NULL;
   FeatureVectorListPtr  testData  = NULL;
@@ -276,7 +276,7 @@ void  RandomSplitJob::ProcessNode ()
     biasParms->PerformAdjustmnts (predCounts, adjCounts, adjCountsStdError);
   }
 
-  Status (Job::jsDone);
+  Status (KKJob::jsDone);
 }  /* ProcessNode */
 
 

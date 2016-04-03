@@ -2,7 +2,7 @@
 #define  _RANDOMSPLITJOB_
 
 #include  "ClassificationBiasMatrix.h"
-#include  "Job.h"
+#include  "KKJob.h"
 
 
 #if  !defined(_RandomSplitJobManagerDefined_)
@@ -12,7 +12,7 @@ typedef  RandomSplitJobManager*  RandomSplitJobManagerPtr;
 
 
 
-class  RandomSplitJob:  public  Job
+class  RandomSplitJob:  public  KKJob
 {
 public:
   typedef  RandomSplitJob*  RandomSplitJobPtr;
@@ -38,25 +38,25 @@ public:
  
   // All classes derived from 'Job' will be required to implement this method 
   // and register it with Job::RegisterConstructor
-  static  JobPtr  CreateEmptyInstance (JobManagerPtr  _manager);
+  static  KKJobPtr  CreateEmptyInstance (JobManagerPtr  _manager);
     
 
   //**************************  Methods that derived classes must implement  ******************************
   virtual  RandomSplitJobPtr  Duplicate ()  const;  // Create a duplicate instance.
 
 
-  virtual  const char*   JobType ()  const;     // This will allow us to know which specific implementaion
-                                                  // of 'Job'  an instance really is.
+  virtual  const char*   JobType ()  const;     /**< This will allow us to know which specific implementation of 'Job'  an instance really is. */
 
   virtual  void   ProcessNode ();
 
-  virtual  void   ReFresh (Job&  j);
+  virtual  void   ReFresh (KKJob&  j);
 
-  virtual  KKStr  ToStatusStr ();      // Any SubClass that implements this method must call its base class version 1st.
+  virtual  KKStr  ToStatusStr ();      /**< Any SubClass that implements this method must call its base class version 1st.  */
 
 
-  // Any SubClass of Job  needs to define this method.  Whenever the 'ProcessStatusStr' method can not identify a field
-  // it will call this method to let the child Class process the field.
+  /**
+   * @brief Whenever the 'KKJob::ProcessStatusStr' method can not identify a field it will call this method to let the derived Class process the field.
+   */
   virtual
     void  ProcessStatusField (const KKStr&  fieldName,
                               const KKStr&  fieldValue
@@ -64,9 +64,9 @@ public:
 
   //                   *** CompletedJobData ***
   // This method will get called right after the "Job" status line gets written when a Job is completed.  
-  // See 'JobManager::GetNextSetOfJobs'.  If a job needs to write more data to the Status file then you want to 
+  // See 'KKJobManager::GetNextSetOfJobs'.  If a job needs to write more data to the Status file then you want to 
   // put on a single status line this is where you would do it.   You write all the text in a format that you 
-  // want to support.  'JobManager' will bracket it with <Job JobType=Job::JobType, JobId=####>   and </Job>
+  // want to support.  'KKJobManager' will bracket it with <Job JobType=Job::JobType, JobId=####>   and </Job>
   // ex:
   // <RandomSplitJob>
   //    Job Data;  

@@ -4,16 +4,16 @@
 
 #include "Application.h"
 #include "FeatureVector.h"
-#include "JobManager.h"
+#include "KKJobManager.h"
 #include "Orderings.h"
 #include "TrainingConfiguration2.h"
 
 using namespace  KKB;
 
-using namespace  JobManagment;
+using namespace  KKJobManagment;
 
 
-class  RandomSplitJobManager: public  JobManagment::JobManager
+class  RandomSplitJobManager: public  KKJobManagment::KKJobManager
 {
 public:
   typedef  RandomSplitJobManager*  RandomSplitJobManagerPtr;
@@ -38,12 +38,12 @@ public:
 
 
 
-  /*!                       RetrieveRandomSplit
-   * \brief Will get the 'train' and 'test' datasets for the given split.  The lists will point to the original data
+  /**                       RetrieveRandomSplit
+   * @brief Will get the 'train' and 'test' datasets for the given split.  The lists will point to the original data
    *        so caller should not make any changes to its contents.
-   * \param[int], splitNum   Split that we want data for.
-   * \param[out], trainData  Training Data.
-   * \param[out], testData   Test Data.
+   * @param[int], splitNum   Split that we want data for.
+   * @param[out], trainData  Training Data.
+   * @param[out], testData   Test Data.
    */
   void   RetrieveRandomSplit (int                    splitNum,
                               FeatureVectorListPtr&  trainData,
@@ -56,46 +56,46 @@ public:
   
 
   /*  Pure virtual functions from 'Job' that need to be implemented.  */
-  virtual  JobPtr  Duplicate ()  const;  // Create a duplicate instance.
-  virtual  void    ProcessNode ();
+  virtual  KKJobPtr  Duplicate ()  const;  // Create a duplicate instance.
+  virtual  void      ProcessNode ();
 
 
 private:
   /***********************************************************************************************************************/
-  /*                                         Base Class Methods Overriden                                                */
+  /*                                         Base Class Methods Overridden                                               */
   /***********************************************************************************************************************/
 
-  /*! \brief Seed the initial set of jobs. */
-  virtual  JobListPtr  JobsCreateInitialSet ();
+  /** @brief Seed the initial set of jobs. */
+  virtual  KKJobListPtr  JobsCreateInitialSet ();
 
 
-  /*!
-   \brief  Load any run time data that will be needed.  
-   \details 'JobManager' will call this method just before it calls 'StatusFileInitialize' if
-            no existing StausFile otherwise it will call it just after it loads the StatusFile.
+  /**
+   *@brief  Load any run time data that will be needed.  
+   *@details 'KKJobManager' will call this method just before it calls 'StatusFileInitialize' if
+             no existing StausFile otherwise it will call it just after it loads the StatusFile.
   */
   virtual  void  LoadRunTimeData ();
 
 
-  /*!
-   \brief  Initialize a new StatusFile. 
-   \details  JobManager::InitilizeJobManager  Will call this method if no Status file exists yet.
+  /**
+   *@brief  Initialize a new StatusFile. 
+   *@details  KKJobManager::InitilizeJobManager  Will call this method if no Status file exists yet.
    */
   virtual  void  StatusFileInitialize (ostream& o);
 
 
-  /*
-   \brief  Process a status file line, if not meant for us then call the base classes method.
-   \details Every new text line read in from the Status File by 'JobManager' will be passed to this routine.
-            If the text line is not meant for us then call the Base classes version of this method.  
-            JobManager::StatusFileProcessLine ().
+  /**
+   *@brief  Process a status file line, if not meant for us then call the base classes method.
+   *@details Every new text line read in from the Status File by [[KKJobManager]] will be passed to this routine.
+   *        If the text line is not meant for us then call the Base classes version of this method.  
+   *        KKJobManager::StatusFileProcessLine ().
    */
   virtual void    StatusFileProcessLine (const KKStr&  ln,
                                          istream&      statusFile
                                         );
 
-  virtual  JobListPtr  JobsExpandNextSetOfJobs (const JobListPtr  jobsJustCompletd);
-  virtual  void        JobCompleted            (ostream& o, JobPtr   j);
+  virtual  KKJobListPtr  JobsExpandNextSetOfJobs (const KKJobListPtr  jobsJustCompletd);
+  virtual  void          JobCompleted            (ostream& o, KKJobPtr   j);
 
   virtual  void  GenerateFinalResultsReport ();
   /***********************************************************************************************************************/

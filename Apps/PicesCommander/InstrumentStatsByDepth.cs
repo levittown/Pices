@@ -9,7 +9,7 @@ namespace PicesCommander
   {
     public  InstrumentStatsByDepth (int _binId)
     {
-      binId                   = binId;
+      binId                   = _binId;
       binDepth                = 0;
       scanLines               = 0;
       volumeSampled           = 0.0f;

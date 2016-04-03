@@ -174,7 +174,7 @@ namespace PicesCommander
       }
     }
 
-    private void CancelButton_Click (object sender, EventArgs e)
+    private void CancelWindowButton_Click (object sender, EventArgs e)
     {
       deletionOk = false;
       Close ();
@@ -207,8 +207,8 @@ namespace PicesCommander
       ThumbnailDataGridView.Width   += deltaWidth;
 
       DeleteButton.Top  += deltaHeight;
-      CancelButton.Top  += deltaHeight;
-      CancelButton.Left += deltaWidth;
+      CancelWindowButton.Top  += deltaHeight;
+      CancelWindowButton.Left += deltaWidth;
 
       DefineThumbnailGridViewRowAndColumns ();
       AddToThumbNailPanel ();
@@ -242,6 +242,6 @@ namespace PicesCommander
     private void VerifyImagesDeletion_ResizeEnd (object sender, EventArgs e)
     {
       VerifyImagesDeletionFormResized ();
-    } 
+    }
   }
 }

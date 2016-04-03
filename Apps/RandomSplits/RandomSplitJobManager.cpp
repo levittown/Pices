@@ -33,8 +33,8 @@ using namespace KKMLL;
 using namespace MLL;
 
 
-#include "JobManager.h"
-using namespace  JobManagment;
+#include "KKJobManager.h"
+using namespace  KKJobManagment;
 
 
 #include "RandomSplitJob.h"
@@ -43,7 +43,7 @@ using namespace  JobManagment;
 
 
 RandomSplitJobManager::RandomSplitJobManager (const RandomSplitJobManager&    j):
-   JobManager (j),
+   KKJobManager (j),
 
    config            (NULL),
    configFileName    (j.configFileName),
@@ -83,14 +83,14 @@ RandomSplitJobManager::RandomSplitJobManager (const KKStr&      _configFileName,
                                               int               _numFolds,
                                               RunLog&           _log
                                               ):
-   JobManager (NULL,
-               -1,                       // _jobId
-               -1,                       // _parentId
-               64,                       // _numPorcessesAllowed
-               "RandomSplitJobManager",  // _managerName
-               1,                        // _numJobsAtATime
-               _log
-              ),
+   KKJobManager (NULL,
+                 -1,                       // _jobId
+                 -1,                       // _parentId
+                 64,                       // _numPorcessesAllowed
+                 "RandomSplitJobManager",  // _managerName
+                 1,                        // _numJobsAtATime
+                 _log
+                ),
 
    config            (NULL),
    configFileName    (_configFileName),
@@ -131,7 +131,7 @@ const char*  RandomSplitJobManager::JobType ()  const
 
 
 
-JobPtr  RandomSplitJobManager::Duplicate ()  const
+KKJobPtr  RandomSplitJobManager::Duplicate ()  const
 {
   return new RandomSplitJobManager (*this);
 }
@@ -146,10 +146,10 @@ void   RandomSplitJobManager::ProcessNode ()
 
 
 // Derived classes use this method to seed the initial set of jobs.   
-// Will be called by 'JobManager' at appropriate time.
-JobListPtr  RandomSplitJobManager::JobsCreateInitialSet ()
+// Will be called by 'KKJobManager' at appropriate time.
+KKJobListPtr  RandomSplitJobManager::JobsCreateInitialSet ()
 {
-  JobListPtr  initialJobs = new JobList (this);
+  KKJobListPtr  initialJobs = new KKJobList (this);
   for  (int splitNum = 0;  splitNum < numSplits;  splitNum++)
   {
     RandomSplitJobPtr  j = new RandomSplitJob (this, GetNextJobId (), -1, splitNum, log);
@@ -160,7 +160,7 @@ JobListPtr  RandomSplitJobManager::JobsCreateInitialSet ()
 
 
 
-JobListPtr  RandomSplitJobManager::JobsExpandNextSetOfJobs (const JobListPtr  jobsJustCompletd)
+KKJobListPtr  RandomSplitJobManager::JobsExpandNextSetOfJobs (const KKJobListPtr  jobsJustCompletd)
 {
   // Since this program only runs the initial jobs created;  we return NULL to terminate this 
   // object.
@@ -169,7 +169,7 @@ JobListPtr  RandomSplitJobManager::JobsExpandNextSetOfJobs (const JobListPtr  jo
 
 
 
-void   RandomSplitJobManager::JobCompleted  (ostream& o, JobPtr   j)
+void   RandomSplitJobManager::JobCompleted  (ostream& o, KKJobPtr   j)
 {
   // We are called right after a single jobs is done.
 
@@ -195,7 +195,7 @@ void  RandomSplitJobManager::GenerateFinalResultsReport ()
     << endl;
 
 
-  JobList::const_iterator  idx;
+  KKJobList::const_iterator  idx;
 
   ConfusionMatrix2  avgResults (*(this->MLClasses ()));
   KKB::uint  x = 0;
@@ -472,7 +472,7 @@ void   RandomSplitJobManager::StatusFileProcessLine (const KKStr&  _ln,
   }
 
   else
-    JobManager::StatusFileProcessLine (_ln, statusFile);
+    KKJobManager::StatusFileProcessLine (_ln, statusFile);
 }  /* StatusFileProcessLine */
 
 
