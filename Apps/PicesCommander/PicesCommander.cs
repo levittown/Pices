@@ -452,7 +452,6 @@ namespace PicesCommander
                 );
         navigationPanelTimer.Enabled = true;
         NavigationList.Items.Clear ();
-        //PopulateNavigationList (stats);
       }
       else
       {
@@ -2166,9 +2165,6 @@ namespace PicesCommander
       {
         if  (curSelImages == null)
           curSelImages = new PicesDataBaseImageList ();
-
-        if  ((sortOrder != PicesDataBaseImageList.SortOrderType.soSpatial)  &&  (curSelImages.Count == 0))
-          newlyLoadedImages.Sort (sortOrder, reverseSort);
 
         String  curSipperFile = imageLoader.CurSipperFileName;
         if  (curSipperFile == null)
