@@ -292,7 +292,7 @@ void  CopyOverSipperFileXXX ()
 
   while  (bytesLeft > 0)
   {
-    kkint32  bytesThisLoop = sizeof (buff);
+    kkint64  bytesThisLoop = sizeof (buff);
     if  (bytesLeft < bytesThisLoop)
       bytesThisLoop = bytesLeft;
 
