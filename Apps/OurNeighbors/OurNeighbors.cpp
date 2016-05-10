@@ -403,7 +403,7 @@ MLClassPtr  OurNeighbors::DetermineClassFromFileName (const  KKStr&  fileName)
     // So if there is an underscore character, and all the characters to the right of it are
     // numeric characters, then we will remove the underscore and the following numbers.
 
-    kkint32  y = x + 1;
+    kkuint32  y = x + 1;
 
     bool  allFollowingCharsAreNumeric = true;
     while  ((y < className.Len ()) &&  (allFollowingCharsAreNumeric))
@@ -457,9 +457,6 @@ double  Z_Score (double  sampleMeanNND,
   double  z_Score = double ((double (sampleMeanNND) - double (randomMeanNND))   /   (double (randomStdDevNND) / sqrt (double (N))));
   return  z_Score;
 }
-
-
-
 
 
 
@@ -721,13 +718,11 @@ void	OurNeighbors::LookForNeighbors ()
     }
   }
 
-
   if  (excludedClasses)  
   {
     if  (excludedClasses->QueueSize () > 0)
       RemoveExcludedClasses (currentImageFeatures);
   }
-
 
   //if  (randomizeLocations)
   //  RandomizeLocations (*currentImageFeatures);
@@ -782,7 +777,6 @@ void	OurNeighbors::LookForNeighbors ()
 
 
 
-
 void	OurNeighbors::RemoveExcludedClasses (ImageFeaturesListPtr&  examples)
 {
    bool  keepClass = true;
@@ -823,7 +817,6 @@ void	OurNeighbors::RemoveExcludedClasses (ImageFeaturesListPtr&  examples)
 
 
 
-
 LLoydsEntryListPtr   OurNeighbors::DeriveAllLLoydsBins (const ImageFeaturesList&  examples)
 {
   kkint32  lloydsBinSize = baseLLoydsBinSize;
@@ -841,7 +834,6 @@ LLoydsEntryListPtr   OurNeighbors::DeriveAllLLoydsBins (const ImageFeaturesList&
 
   return  lloydsEntries;
 }  /* DeriveAllLLoydsBins */
-
 
 
 

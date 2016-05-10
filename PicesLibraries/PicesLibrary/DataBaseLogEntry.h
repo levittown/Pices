@@ -115,9 +115,6 @@ namespace MLL
     ~DataBaseLogEntryList ();
 
     void  SortByProgCode ();
-
-  private:
-    class  ProgCodeComparison;
   };  /* DataBaseLogEntryList */
 
 

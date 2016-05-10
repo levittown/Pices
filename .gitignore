@@ -58,3 +58,8 @@ PicesDataBase/PicesDataBase.dbmdl
 *.suo
 PicesLibraries/PicesLibrary/SVMModel_ORIG.cpp
 Documentation
+*.db
+PlanktonApps.VC.db
+PlanktonApps.VC.VC.opendb
+*.pidb
+

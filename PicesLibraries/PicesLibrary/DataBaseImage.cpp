@@ -300,16 +300,9 @@ DataBaseImageListPtr  DataBaseImageList::ExtractExamplesForAGivenClass (MLClassP
 
 
 
-
-
-class  DataBaseImageList::SpatialComparison
+void  DataBaseImageList::SortBySpatialDistance ()
 {
-public:
-  SpatialComparison () {}
-
-  bool  operator()  (DataBaseImagePtr  p1,
-                     DataBaseImagePtr  p2
-                    )
+  sort (begin (), end (), [](DataBaseImagePtr p1, DataBaseImagePtr  p2) -> bool
   {
     if  (p1->SipperFileName () < p2->SipperFileName ())
       return true;
@@ -318,20 +311,7 @@ public:
       return false;
 
     return  (p1->TopLeftRow () < p2->TopLeftRow ());
-  }
-};
-
-
-
-void  DataBaseImageList::SortBySpatialDistance ()
-{
-  SpatialComparison  c;
-  sort (begin (), end (), c);
-  //long  firstScanLine = (*begin ())->TopLeftRow ();
-  //long  lastScanLine  = (*end   ())->TopLeftRow ();
-
-  //long  
-
+  });
 
 }  /* SortBySpatialDistance */
 
@@ -346,8 +326,6 @@ float  FlowRate (InstrumentDataPtr  id,
 
   return  id->FlowRate1 ();
 }
-
-
 
 
 

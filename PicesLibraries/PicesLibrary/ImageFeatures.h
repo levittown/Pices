@@ -139,7 +139,7 @@ namespace MLL
     virtual  ImageFeaturesPtr  Duplicate ()  const;
 
     // Access Methods.
-    void  AreaMMSquare     (float                _areaMMSquare)     {areaMMSquare     = _areaMMSquare;}
+    void  AreaMMSquare     (float                 _areaMMSquare)     {areaMMSquare     = _areaMMSquare;}
     void  CentroidCol      (FVFloat               _centroidCol)      {centroidCol      = _centroidCol;}
     void  CentroidRow      (FVFloat               _centroidRow)      {centroidRow      = _centroidRow;}
     void  CtdDateTime      (const KKB::DateTime&  _ctdDateTime)      {ctdDateTime      = _ctdDateTime;}
@@ -160,8 +160,8 @@ namespace MLL
 
 
     float           AreaMMSquare       () const  {return  areaMMSquare;}
-    float           CentroidCol        () const  {return  centroidCol;}    /**< @brief Centroid column with respect to image.  */
-    float           CentroidRow        () const  {return  centroidRow;}    /**< @brief Centroid row with respect to image.     */
+    float           CentroidCol        () const  {return  centroidCol;}    /**< Centroid column with respect to image.  */
+    float           CentroidRow        () const  {return  centroidRow;}    /**< Centroid row with respect to image.     */
     FVFloat         Depth              () const  {return  FeatureData (DepthIndex);}
     KKB::DateTime   CtdDateTime        () const  {return  ctdDateTime;}
     FVFloat         FilledArea         () const  {return  FeatureData (FilledAreaIndex);}
@@ -174,8 +174,8 @@ namespace MLL
     kkint32         NumOfEdgePixels    () const  {return  numOfEdgePixels;}
     FVFloat         Oxygen             () const  {return  FeatureData (OxygenIndex);}
     FVFloat         Salinity           () const  {return  FeatureData (SalinityIndex);}
-    float           SfCentroidCol      () const  {return  sfCentroidCol;}  /**< @brief Centroid column with respect to whole Sipper File. */
-    double          SfCentroidRow      () const  {return  sfCentroidRow;}  /**< @brief Centroid row with respect to whole Sipper File.    */
+    float           SfCentroidCol      () const  {return  sfCentroidCol;}  /**< Centroid column with respect to whole Sipper File. */
+    double          SfCentroidRow      () const  {return  sfCentroidRow;}  /**< Centroid row with respect to whole Sipper File.    */
     short           Version            () const  {return  version;}
     FVFloat         Width              () const  {return  FeatureData (WidthIndex);}
 
@@ -191,9 +191,9 @@ namespace MLL
                           RunLog&              log
                          );
 
-    static  kkint32  FirstInstrumentDataField;          /**< @brief The first feature field that we get from a separate instrument data field.  */
+    static  kkint32  FirstInstrumentDataField;          /**< The first feature field that we get from a separate instrument data field.  */
 
-    static  kkint32  NumSeperateInstrumentDataFields;   /**< @brief The number of features that come from Instrument data,  ex: Oxygen or Depth */
+    static  kkint32  NumSeperateInstrumentDataFields;   /**< The number of features that come from Instrument data,  ex: Oxygen or Depth */
 
 
 
@@ -207,15 +207,15 @@ namespace MLL
                         RasterSipperListPtr  _saveImages = NULL
                        );
 
-    float          centroidCol;     //   centroid with just respect to the image.
-    float          centroidRow;     //     ""     ""      ""     ""    ""    ""
+    float          centroidCol;     /**<   centroid with just respect to the image.  */
+    float          centroidRow;     /**<     ""     ""      ""     ""    ""    ""    */
     KKB::DateTime  ctdDateTime;
     float          areaMMSquare;    /**< Size of image in Square mm. */
     double         latitude;
     double         longitude;
     kkint32        numOfEdgePixels;
-    float          sfCentroidCol;   //   centroid with respect to whole zipper file,
-    double         sfCentroidRow;   //     ""     ""      ""     ""    ""    ""
+    float          sfCentroidCol;   /**<   centroid with respect to whole zipper file,  */
+    double         sfCentroidRow;   /**<     ""     ""      ""     ""    ""    ""       */
     short          version;         /**< This is the same versionNumber as in ImageFeaturesList
                                      * It is related to the Feature calculation routine.  This
                                      * will assist in us changing the feature calculations in the
@@ -631,34 +631,11 @@ namespace MLL
       }
 
       
-      bool  operator!= (const const_iterator&  right)  const
-      {
-        return  idx != right.idx;
-      }
-
-
-      bool  operator!= (const FeatureVectorList::iterator&  right)  const
-      {
-        return  idx != (FeatureVectorList::const_iterator)right;
-      }
-
-
-      bool  operator!= (const FeatureVectorList::const_iterator&  right)  const
-      {
-        return  idx != right;
-      }
-
-
-      bool  operator== (const const_iterator&  right)  const
-      {
-        return  idx == right.idx;
-      }
-
-
-      bool  operator== (const FeatureVectorList::iterator&  right)  const
-      {
-        return  (idx == right);
-      }
+      bool  operator!= (const const_iterator&                     right) const {return  idx != right.idx;}
+      bool  operator!= (const FeatureVectorList::iterator&        right) const {return  idx != (FeatureVectorList::const_iterator)right;}
+      bool  operator!= (const FeatureVectorList::const_iterator&  right) const {return  idx != right;}
+      bool  operator== (const const_iterator&                     right) const {return  idx == right.idx;}
+      bool  operator== (const FeatureVectorList::iterator&        right) const {return  (idx == right);}
 
 
       const_iterator&   operator++ (int  x)
@@ -713,28 +690,10 @@ namespace MLL
         return  *this;
       }
 
-      bool  operator!= (const iterator&  right)  const
-      {
-        return  idx != right.idx;
-      }
-
-
-      bool  operator!= (const FeatureVectorList::iterator&  right)  const
-      {
-        return  idx != (FeatureVectorList::const_iterator)right;
-      }
-
-
-      bool  operator!= (const FeatureVectorList::const_iterator&  right)  const
-      {
-        return  idx != right;
-      }
-
-
-      bool  operator== (const iterator&  right)  const
-      {
-        return  idx == right.idx;
-      }
+      bool  operator!= (const iterator&                           right) const {return  idx != right.idx;}
+      bool  operator!= (const FeatureVectorList::iterator&        right) const {return  idx != (FeatureVectorList::const_iterator)right;}
+      bool  operator!= (const FeatureVectorList::const_iterator&  right) const {return  idx != right;}
+      bool  operator== (const iterator&                           right) const {return  idx == right.idx;}
 
 
       iterator&   operator++ (int x)
@@ -757,48 +716,16 @@ namespace MLL
                      float              defaultFlowRate
                     );
 
-
-
-
-    short          version;        /**< Represents the version of the Feature data, when ever I update
-                                    * the way Features are calculated I increment CurrentFeatureFileVersionNum
-                                    * by 1. This way if we load a older FeatureData file we can be aware
-                                    * of this. Methods like FeatureDataReSink will force the recalculation
-                                    * of Feature data if not up-to-date. Also works in coordination
-                                    * with the version field in the ImageFeatures object. A value of
-                                    * 0 indicates that we do not know what Version the feature data is.
-                                    * This can happen when not all the ImageFeatures objects in the list
-                                    * have the same version number.
-                                    */
-    class  SpatialComparison
-    {
-    public:
-      SpatialComparison () {}
-
-      bool  operator()  (FeatureVectorPtr  p1,
-                         FeatureVectorPtr  p2
-                        )
-      {
-        double  sl1 = 0.0;
-        double  sl2 = 0.0;
-
-        if  (typeid (*p1) == typeid (ImageFeatures))
-        {
-          ImageFeaturesPtr i1 = dynamic_cast<ImageFeaturesPtr>(p1);
-          sl1 = i1->SfCentroidRow (); 
-        }
-
-        if  (typeid (*p2) == typeid (ImageFeatures))
-        {
-          ImageFeaturesPtr i2 = dynamic_cast<ImageFeaturesPtr>(p2);
-          sl2 = i2->SfCentroidRow (); 
-        }
-
-
-        return  (sl1 < sl2);
-      }
-    };
-
+    short  version; /**< Represents the version of the Feature data, when ever I update
+                     * the way Features are calculated I increment CurrentFeatureFileVersionNum
+                     * by 1. This way if we load a older FeatureData file we can be aware
+                     * of this. Methods like FeatureDataReSink will force the recalculation
+                     * of Feature data if not up-to-date. Also works in coordination
+                     * with the version field in the ImageFeatures object. A value of
+                     * 0 indicates that we do not know what Version the feature data is.
+                     * This can happen when not all the ImageFeatures objects in the list
+                     * have the same version number.
+                     */
   };  /* ImageFeaturesList */
 
   typedef  ImageFeaturesList::ImageFeaturesListPtr  ImageFeaturesListPtr;

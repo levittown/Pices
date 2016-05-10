@@ -238,14 +238,10 @@ NeighborList::NeighborList (ImageFeaturesList&  images,
 
 
 
-class  RowComparison
-{
-public:
-   RowComparison () {}
 
-   bool  operator ()  (NeighborPtr  p1,  
-                       NeighborPtr  p2
-                      )
+void  NeighborList::SortByRow ()
+{
+  sort (begin (), end (), [](NeighborPtr  p1, NeighborPtr  p2)->bool
    {
      if  (p1->Row () < p2->Row ())
        return true;
@@ -254,19 +250,14 @@ public:
        return false;
 
      return  p1->Col () < p2->Col ();
-   }
-};
+   });
+}  /* SortByRow */
 
 
 
-class  ClassComparison
+void  NeighborList::SortByClass ()
 {
-public:
-   ClassComparison () {}
-
-   bool  operator ()  (NeighborPtr  p1,  
-                       NeighborPtr  p2
-                      )
+  sort (begin (), end (), [](NeighborPtr p1, NeighborPtr  p2) -> bool 
    {
      const KKStr&  p1ClassName = p1->ClassName ();
      const KKStr&  p2ClassName = p2->ClassName ();
@@ -274,23 +265,16 @@ public:
      if  (p1ClassName < p2ClassName)
        return  true;
 
-     if  (p1ClassName > p2ClassName)
+     else if  (p1ClassName > p2ClassName)
        return  false;
 
-     if  (p1->NearestNeighbor () == NULL)
-     {
-       if  (p2->NearestNeighbor () != NULL)
-         return true;
-       else
-         return false;
-     }
+     else if  (p1->NearestNeighbor () == NULL)
+       return (p2->NearestNeighbor () != NULL);
 
+     else if  (p2->NearestNeighbor () == NULL)
+       return false;
+    
      else
-     {
-       if  (p2->NearestNeighbor () == NULL)
-         return false;
-     }
-
      {
        const KKStr&  p1ClassName = p1->NearestNeighborClassName ();
        const KKStr&  p2ClassName = p2->NearestNeighborClassName ();
@@ -309,21 +293,15 @@ public:
 
        return  p1->Col () > p2->Col ();
      }
-   }
-};
+   });
+} /* SortByClass */
 
 
 
 
-
-class  ClassRowComparison
+void  NeighborList::SortByClassRow ()
 {
-public:
-   ClassRowComparison () {}
-
-   bool  operator ()  (NeighborPtr  p1,  
-                       NeighborPtr  p2
-                      )
+  sort (begin (), end (), [](NeighborPtr p1, NeighborPtr p2)
    {
      const KKStr&  p1ClassName = p1->ClassName ();
      const KKStr&  p2ClassName = p2->ClassName ();
@@ -341,41 +319,13 @@ public:
        return false;
 
      return  p1->Col () > p2->Col ();
-   }
-};  /* ClassRowComparison */
+   });
+}  /* SortByClassRow */
 
 
 
-
-
-void  NeighborList::SortByRow ()
-{
-  RowComparison c;
-  sort (begin (), end (), c);
-}  /* SortByRow */
-
-
-
-
-void  NeighborList::SortByClass ()
-{
-  ClassComparison c;
-  sort (begin (), end (), c);
-}  /* SortByClass */
-
-
-
-
-void  NeighborList::SortByClassRow ()
-{
-  ClassRowComparison c;
-  sort (begin (), end (), c);
-}  /* SortByClass */
-
-
-
-void  NeighborList::FindNearestNeighbors (NeighborType     neighborType,
-                                          MLClassPtr  restrictedClass
+void  NeighborList::FindNearestNeighbors (NeighborType  neighborType,
+                                          MLClassPtr    restrictedClass
                                          )
 {
   SortByRow ();
@@ -421,23 +371,14 @@ void  NeighborList::FindNearestNeighbors (NeighborType     neighborType,
 
 
 
-
 double  NeighborList::LargestDist ()  const
 {
   double  largestDist = 0.0f;
-
   const_iterator  idx;
-
   for  (idx = begin ();  idx != end ();  idx++)
-  {
-    if  ((*idx)->Dist () > largestDist)
-      largestDist = (*idx)->Dist ();
-  }
-
+    if  ((*idx)->Dist () > largestDist)  largestDist = (*idx)->Dist ();
   return  largestDist;
 }  /* LargestDist */
-
-
 
 
 
@@ -450,8 +391,8 @@ void  NeighborList::ReportClassNeighbor (MLClassListPtr  mlClasses,
   mlClasses->SortByName ();
 
   kkint32   numOfClasses   = mlClasses->QueueSize ();
-  kkint32*    classCounts    = new kkint32 [numOfClasses];
-  kkint32**   neighborCounts = new kkint32*  [numOfClasses];
+  kkint32*  classCounts    = new kkint32 [numOfClasses];
+  kkint32** neighborCounts = new kkint32*  [numOfClasses];
   double**  neighborDists  = new double* [numOfClasses];
   double**  neighborSizes  = new double* [numOfClasses];
 
@@ -633,8 +574,6 @@ void  NeighborList::ReportClassNeighbor (MLClassListPtr  mlClasses,
     r << endl;
   }
 
-
-
   r << endl
     << endl
     << endl
@@ -701,9 +640,6 @@ void  NeighborList::ReportClassNeighbor (MLClassListPtr  mlClasses,
 
 
 
-
-
-
 void  NeighborList::ReportClassRow (MLClassListPtr  mlClasses,
                                     ostream&                r
                                    )
@@ -724,7 +660,7 @@ void  NeighborList::ReportClassRow (MLClassListPtr  mlClasses,
 
 
   kkint32  numOfClasses   = mlClasses->QueueSize ();
-  kkint32*   classCounts    = new kkint32  [numOfClasses];
+  kkint32* classCounts    = new kkint32  [numOfClasses];
   double*  distsMean      = new double[numOfClasses];
   double*  distsStdDev    = new double[numOfClasses];
   double*  distsMin       = new double[numOfClasses];
@@ -940,16 +876,16 @@ void  NeighborList::ReportClassRowRestricted (MLClassListPtr  mlClasses,
     return;
   }
 
-  kkint32 numOfClasses   = mlClasses->QueueSize ();
-  kkint32 classCounts    = 0;
-  double  distsMean      = 0.0;
-  double  distsStdDev    = 0.0;
-  double  distsMin       = 0.0;
-  double  distsMax       = 0.0;
-  double  sizesMean      = 0.0;
-  double  sizesStdDev    = 0.0;
-  double  sizesMin       = 0.0;
-  double  sizesMax       = 0.0;
+  kkint32 numOfClasses = mlClasses->QueueSize ();
+  kkint32 classCounts  = 0;
+  double  distsMean    = 0.0;
+  double  distsStdDev  = 0.0;
+  double  distsMin     = 0.0;
+  double  distsMax     = 0.0;
+  double  sizesMean    = 0.0;
+  double  sizesStdDev  = 0.0;
+  double  sizesMin     = 0.0;
+  double  sizesMax     = 0.0;
 
   // Lets skip to the restricted Class
   NeighborPtr  n = *next;
@@ -961,7 +897,6 @@ void  NeighborList::ReportClassRowRestricted (MLClassListPtr  mlClasses,
        n = NULL;
   }  
   while  (n->MLClass () != restrictedClass);
-
 
   if  (n == NULL)
   {
@@ -1127,7 +1062,6 @@ void  NeighborList::ReportClassRowRestricted (MLClassListPtr  mlClasses,
 
 
 
-
 VectorIntPtr  NeighborList::HistogramByDistance (kkint32  numOfBuckets,
                                                  kkint32  bucketSize
                                                 )
@@ -1165,7 +1099,6 @@ VectorIntPtr  NeighborList::HistogramByDistance (kkint32  numOfBuckets,
   
   return  buckets;
 }  /*   HistogramByDistance  */
-
 
 
 
@@ -1209,5 +1142,4 @@ void  NeighborList::CalcStatistics (double&  mean,
   double  varience = totalSquareDelta / double (QueueSize ());
   stdDev = sqrt (varience);
 }  /* CalcStatistics */
-
 

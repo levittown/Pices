@@ -1885,10 +1885,26 @@ void  ImageFeaturesList::FixSipperFileScanLineAndColFields ()
 
 void  ImageFeaturesList::SortBySpatialDistance ()
 {
-  ImageFeaturesList::SpatialComparison  c;
-  sort (begin (), end (), c);
-}  /* SortBySpatialDistance */
+  sort (begin (), end (), [](FeatureVectorPtr p1, FeatureVectorPtr  p2) -> bool
+    {
+      double  sl1 = 0.0;
+      double  sl2 = 0.0;
 
+      if  (typeid (*p1) == typeid (ImageFeatures))
+      {
+        ImageFeaturesPtr i1 = dynamic_cast<ImageFeaturesPtr>(p1);
+        sl1 = i1->SfCentroidRow (); 
+      }
+
+      if  (typeid (*p2) == typeid (ImageFeatures))
+      {
+        ImageFeaturesPtr i2 = dynamic_cast<ImageFeaturesPtr>(p2);
+        sl2 = i2->SfCentroidRow (); 
+      }
+      
+      return  (sl1 < sl2);
+    });
+}  /* SortBySpatialDistance */
 
 
 

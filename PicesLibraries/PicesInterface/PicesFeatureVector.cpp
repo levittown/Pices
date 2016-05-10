@@ -194,7 +194,7 @@ namespace  PicesInterface
     if  (features == NULL)
       return  "";
 
-    return  PicesKKStr::KKStrToSystenStr (features->ClassName ());
+    return  PicesKKStr::KKStrToSystenStr (features->MLClassName ());
   }
 
 

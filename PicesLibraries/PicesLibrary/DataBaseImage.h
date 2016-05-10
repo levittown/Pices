@@ -175,8 +175,6 @@ namespace MLL
                                              RunLog&      log
                                             );
 
-  private:
-    class  SpatialComparison;
   };  /* DataBaseImageList */
 
 

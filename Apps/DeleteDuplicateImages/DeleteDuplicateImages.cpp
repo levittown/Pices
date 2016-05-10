@@ -207,7 +207,7 @@ void  DeleteDuplicateImages::DeleteImages ()
     else
     {
       *r << endl
-         << "Duplicate Class[" << imageToKeep->ClassName () << "]  FileName[" << imageToKeep->ExampleFileName () << "]  Keeping." << endl;
+         << "Duplicate Class[" << imageToKeep->MLClassName () << "]  FileName[" << imageToKeep->ExampleFileName () << "]  Keeping." << endl;
     }
 
     for  (ImageFeaturesList::iterator iIDX = dups->begin ();  iIDX != dups->end ();  iIDX++)
@@ -221,7 +221,7 @@ void  DeleteDuplicateImages::DeleteImages ()
       {
         KKStr  fullFileName = osAddSlash (rootDir) + i->ExampleFileName ();
 
-        *r << "          Class[" << i->ClassName () << "]  FileName[" << i->ExampleFileName () << "]  ";
+        *r << "          Class[" << i->MLClassName () << "]  FileName[" << i->ExampleFileName () << "]  ";
 
         if  (!duplicateImagesDir.Empty ())
         {

@@ -20,6 +20,7 @@ using namespace std;
 #include "KKException.h"
 #include "OSservices.h"
 #include "KKStr.h"
+#include "XmlStream.h"
 using namespace  KKB;
 
 #include "FeatureEncoder2.h"
@@ -895,8 +896,10 @@ void  NormalizeAllValidatdData ()
      log
     );
 
-  parms.Save ("C:\\Pices\\Reports\\FeatureDataFiles\\AllValidatedImages\\AllValidatedImagesNorm.parms.txt", _successful, log);
-
+  {
+    ofstream f("C:\\Pices\\Reports\\FeatureDataFiles\\AllValidatedImages\\AllValidatedImagesNorm.parms.txt");
+    parms.WriteXML("parms", f);
+  }
 }  /* NormalizeAllValidatdData */
 
 

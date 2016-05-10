@@ -442,27 +442,6 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
 
 
 
-
-
-class  ComparereDeploymentSummaryByStation
-{
-public:
-  bool  operator ()  (DeploymentSummary*  left,
-                      DeploymentSummary*  right
-                     )
-  {
-    if  (left->stationName < right->stationName)
-      return true;
-    else if  (left->stationName > right->stationName)
-      return false;
-    else
-      return  (left->cruiseName < right->cruiseName);
-
-  }
-
-};
-
-
 void  PrintSummaryReports (DataBasePtr                  db,
                            vector<DeploymentSummary*>&  summaries,
                            const KKStr&                 statistic,
@@ -471,9 +450,15 @@ void  PrintSummaryReports (DataBasePtr                  db,
 {
   kkuint32  x = 0;
 
-  ComparereDeploymentSummaryByStation  comparer;
-
-  sort (summaries.begin (), summaries.end (), comparer);
+  sort (summaries.begin (), summaries.end (), [](DeploymentSummary*  left,  DeploymentSummary*  right) -> bool
+    {
+      if  (left->stationName < right->stationName)
+        return true;
+      else if  (left->stationName > right->stationName)
+        return false;
+      else
+        return  (left->cruiseName < right->cruiseName);
+    });
 
   KKStr  sumFileName = osAddSlash (marineSnowReportDirectory) + "Summary.txt";
   ofstream  r (sumFileName.Str ());
@@ -646,13 +631,6 @@ void  MarineSnowReport (const KKStr&  statistic)
   delete  db;
   db = NULL;
 }  /* MarineSnowReport */
-
-
-
-
-
-
-
 
 
 int  main (int    argc, 

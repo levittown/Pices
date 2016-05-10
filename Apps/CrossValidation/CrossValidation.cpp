@@ -541,7 +541,7 @@ void  CrossValidationApp::RemoveDuplicateImages (FeatureVectorList&  examples)
     while  (dupImage)
     {
       runLog.Level (10) << "RemoveDuplicateImages  Deleting Duplicate Image[" << *dupName << "]  "
-        << "Class[" << dupImage->ClassName () << "]." << endl;
+        << "Class[" << dupImage->MLClassName () << "]." << endl;
 
       examples.DeleteEntry (dupImage);
       delete  dupImage;  dupImage = NULL;
@@ -1590,7 +1590,7 @@ void  CrossValidationApp::ValidationProcess ()
   {
     KKStr msg = "ValidationProcess   ***ERROR***   *** No Validation Data ***";
     runLog.Level (-1) << endl << msg << endl << endl;
-    exit(-1)
+    exit(-1);
   }
   
   {

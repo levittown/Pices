@@ -6,14 +6,14 @@
 //*                                 ClassGroupHistory                                  *
 //*                                                                                    *
 //*   There are several classes defined in this module,  there purpose is to keep      *
-//* track of the activity that is occurig in  the ClassGroupTotals object.  The idea   *
+//* track of the activity that is occurring in  the ClassGroupTotals object.  The idea *
 //* is that the ClassGroupTotals object will use one instance of a ClassGroupHistory   *
-//* derived object for each eace of information that ClassGroupTotals is tracking.     *
+//* derived object for each piece of information that ClassGroupTotals is tracking.    *
 //*                                                                                    *
-//* As active learning records data in ClassGroupTotals and oinstance of a History     *
+//* As active learning records data in ClassGroupTotals and instance of a History      *
 //* object will be created.  These instances will later be written to a history file   *
-//* for later processing.  This way ActiveLearninging can be ran as mutiple modules    *
-//* where each one records its results in a seperate history file to be processed      *
+//* for later processing.  This way ActiveLearninging can be ran as multiple modules   *
+//* where each one records its results in a separate history file to be processed      *
 //* later.  When all the different instances of ActiveLearning are dome a single pro-  *
 //* gram can load all the data in the history files and combine there results for a    *
 //* final report.                                                                      *
@@ -26,9 +26,9 @@
 //*    ProbabilityHistoryBit - For each test image that is selected by ActiveLearning  *
 //*                            to be added to the training library.                    *
 //*                                                                                    *
-//*    SortMethodHistoryBit  - Specifies which Sortmethod was used for active learning *
+//*    SortMethodHistoryBit  - Specifies which Sort method was used for active learning *
 //*                            As of 2004-09-02 it does not appear to be used.         *
-//*                            Beleive the original concept was taht we might try      *
+//*                            Believe the original concept was that we might try      *
 //*                            to mix the sort methods in the same run.                *
 //*                                                                                    *
 //*    SupportVectorsHistoryBit - We record the number of support points are created   *
@@ -175,11 +175,12 @@ public:
 
 private:
   MLClassPtr  mlClass;
-  OURFLOAT       probability;
-  KKStr         imageFileName;    // Name of Image that is being added to Training Library
-  int            position;         // Used when doing stream learning,  reflects the relative
-                                   // position tthis image would have if not using streaming
-  float          percentile;       // Where positrion was located, by percentage
+  OURFLOAT    probability;
+  KKStr       imageFileName;    /**< Name of Image that is being added to Training Library    */
+  int         position;         /**< Used when doing stream learning,  reflects the relative
+                                 * position this image would have if not using streaming 
+                                 */
+  float       percentile;       /**< Where position was located, by percentage */
 };
 
 
@@ -217,7 +218,7 @@ public:
 
 
 private:
-  MLClassPtr  mlClass;
+  MLClassPtr     mlClass;
   SortOrderType  sortMethod;
 };
 

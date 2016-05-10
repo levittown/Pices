@@ -70,9 +70,6 @@ public:
   ~SipperCruiseList ();
 
   void  SortByCruiseName ();
-
-private:
-  class  CruiseNameComparator;
 };  /* SipperCruiseList */
 
 typedef  SipperCruiseList::SipperCruiseListPtr  SipperCruiseListPtr;

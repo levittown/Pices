@@ -83,21 +83,7 @@ KKStr  SipperCruise::ValidateCruiseName (const KKStr&  _cruiseName)
 
 
 
-class  SipperCruiseList::CruiseNameComparator
-{
-public:
-  bool  operator() (SipperCruisePtr  left,  
-                    SipperCruisePtr  right
-                   )
-  {
-    return  (left->CruiseName ().CompareIgnoreCase (right->CruiseName ()) < 0);
-  }
-};  /* CruiseNameComparator */
-
-
-
 void  SipperCruiseList::SortByCruiseName ()
 {
-  CruiseNameComparator  comparator;
-  sort (begin (), end (), comparator);
+  sort (begin (), end (), [](SipperCruisePtr left,  SipperCruisePtr right) {return  (left->CruiseName ().CompareIgnoreCase (right->CruiseName ()) < 0);});
 }

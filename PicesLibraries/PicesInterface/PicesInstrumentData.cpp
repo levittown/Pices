@@ -231,7 +231,6 @@ namespace  PicesInterface
 
     // Should first sort data by SipperFile, then by scan line.
 
-
     if  (scanRate < 1.0f)
       scanRate = 24950.0f;
 
@@ -272,6 +271,5 @@ namespace  PicesInterface
 
     return  volByDepth->ToArray ();
   }  /* ExtractVolumeByDepth */
-
 
 }  /* PicesInterface */

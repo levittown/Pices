@@ -85,10 +85,9 @@ namespace  MLL
     kkint32               veryLargeImageSize;
 
     class  ImageEntry;
-    class  ManagedClasssesSortByClassName;
-    typedef  ImageEntry*      ImageEntryPtr;
+    typedef  ImageEntry*          ImageEntryPtr;
     typedef  KKQueue<ImageEntry>  ImageEntryList;
-    typedef  ImageEntryList*  ImageEntryListPtr;
+    typedef  ImageEntryList*      ImageEntryListPtr;
   };  /* SipperExtractionImageManager */
 
   typedef  SipperExtractionImageManager* SipperExtractionImageManagerPtr;

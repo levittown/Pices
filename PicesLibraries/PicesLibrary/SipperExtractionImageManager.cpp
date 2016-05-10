@@ -388,24 +388,6 @@ void  SipperExtractionImageManager::SaveFrame (const KKStr&     _fileName,
 
 
 
-
-
-class  SipperExtractionImageManager::ManagedClasssesSortByClassName
-{
-public:
-  ManagedClasssesSortByClassName () {}
-
-   bool  operator () (ManagedClassPtr  p1,
-                      ManagedClassPtr  p2
-                     )
-   {
-     return  (p1->ClassNameUpper () < p2->ClassNameUpper ());
-   }
-};  /* ManagedClasssesSortByClassName */
-
-
-
-
 vector<SipperExtractionImageManager::ManagedClassPtr>  SipperExtractionImageManager::SortByClassName ()  const
 {
   ManagedClassList::const_iterator idx;
@@ -417,13 +399,10 @@ vector<SipperExtractionImageManager::ManagedClassPtr>  SipperExtractionImageMana
     sortedList.push_back (idx->second);
   }
 
-  ManagedClasssesSortByClassName  sortObj;
-
-  sort (sortedList.begin (), sortedList.end (), sortObj);
+  sort (sortedList.begin (), sortedList.end (), [](ManagedClassPtr p1,  ManagedClassPtr p2)  {return  (p1->ClassNameUpper () < p2->ClassNameUpper ());});
 
   return  sortedList;
 }  /* SortByClassName */
-
 
 
 

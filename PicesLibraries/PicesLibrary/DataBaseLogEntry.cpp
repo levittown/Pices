@@ -90,15 +90,9 @@ DataBaseLogEntryList::~DataBaseLogEntryList ()
 }
 
 
-
-class  DataBaseLogEntryList::ProgCodeComparison
+void  DataBaseLogEntryList::SortByProgCode ()
 {
-public:
-  ProgCodeComparison () {}
-
-  bool  operator()  (DataBaseLogEntryPtr  p1,
-                     DataBaseLogEntryPtr  p2
-                    )
+  sort (begin (), end (), [](DataBaseLogEntryPtr p1, DataBaseLogEntryPtr  p2) -> bool
   {
     if  (p1->ProgCode () < p2->ProgCode ())
       return true;
@@ -107,14 +101,5 @@ public:
       return false;
 
     return  (p1->DateTimeStart () < p2->DateTimeStart ());
-  }
-};
-
-
-
-void  DataBaseLogEntryList::SortByProgCode ()
-{
-  ProgCodeComparison  c;
-  sort (begin (), end (), c);
+  });
 }  /* SortByProgCode */
-

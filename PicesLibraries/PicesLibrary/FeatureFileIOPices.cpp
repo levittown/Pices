@@ -699,7 +699,7 @@ void   FeatureFileIOPices::SaveFile (FeatureVectorList&     _data,
         kkint32  predClassIdx  = classIdx.GetClassIndex (example->PredictedClass ());
         kkint32  p = (kkint32)_out.precision ();
         _out.precision (11);
-        _out << example->ClassName          () << "\t" 
+        _out << example->MLClassName        () << "\t" 
              << mlClassIdx                     << "\t"
              << example->ExampleFileName    () << "\t" 
              << example->OrigSize           () << "\t"
