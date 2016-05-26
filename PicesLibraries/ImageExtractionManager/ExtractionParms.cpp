@@ -49,8 +49,8 @@ ExtractionParms::ExtractionParms (KKStr    progName,
         flowRateFileName      (),
         framesOnly            (false),
         imagesPerDirectory    (2000),
-        maxImageSize          (0),
-        minImageSize          (250),
+        maxAreaSize           (0.0f),
+        minAreaSize           (0.1f),
         morphOperations       (),
         multiThreaded         (true),
         outputRootDir         (),
@@ -112,8 +112,8 @@ ExtractionParms::ExtractionParms (kkint32  argc,
         flowRateFileName      (),
         framesOnly            (false),
         imagesPerDirectory    (1000),
-        maxImageSize          (0),
-        minImageSize          (250),
+        maxAreaSize           (0.0f),
+        minAreaSize           (0.1f),
         morphOperations       (),
         multiThreaded         (true),
         outputRootDir         (),
@@ -222,8 +222,8 @@ KKStr  ExtractionParms::CmdLine ()  const
     cmdLine << "-SaveAfter  ";
 
   cmdLine << "-ipd " << imagesPerDirectory                 << "  "
-          << "-min " << minImageSize                       << "  "
-          << "-max " << maxImageSize                       << "  "
+          << "-min " << minAreaSize                        << "  "
+          << "-max " << maxAreaSize                        << "  "
           << "-Pre " << (preProcess ? "On" : "Off")        << "  "
           << "-R "   << reportFileName                     << "  "
           << "-S "   << sipperFileName                     << "  "
@@ -277,8 +277,8 @@ void  ExtractionParms::DisplayExampleCmdLine ()
   cout << "  GrayImageExtraction  -s   <sipper file name>"                    << endl;
   cout << "                       -d   <destination directory.>"              << endl;
   cout << "                       -r   <report file name>"                    << endl;
-  cout << "                       -min <minimum size/ defaults 100>"          << endl;
-  cout << "                       -max <maximum size/ ignored by default>"    << endl;
+  cout << "                       -min <minimum area/ defaults 0.1(mm^2)>"    << endl;
+  cout << "                       -max <maximum area/ ignored by default>"    << endl;
   cout << "                       -morph <o,c,d,e>"                           << endl;
   cout << "                       -f   <save raw frames>"                     << endl;
   cout << "                       -sf  <1Bit | 3Bit(Default)>"                << endl;
@@ -323,14 +323,12 @@ void  ExtractionParms::DisplayExampleCmdLine ()
   cout <<                                                                        endl;
   cout <<                                                                        endl;
   cout << "  -min  or  -m"                                                    << endl;
-  cout << "  -m    <Minimum Size> Minimum number of pixels a particle"        << endl;
-  cout << "        consist of before they are extracted.  Will default"       << endl;
-  cout << "        to 100 if not specified."                                  << endl;
+  cout << "  -m    <Minimum Area> Minimum area; function of number of pixels" << endl;
+  cout << "        a particle, flow-rate, scan-rate, pixels/scanline, and"    << endl;
+  cout << "        width of imaging chamber."                                 << endl;
   cout <<                                                                        endl;
   cout <<                                                                        endl;
-  cout << "  -max  <Maximum Size> Maximum number of pixels a particle"        << endl;
-  cout << "        consists of before they are extracted.  Will be "          << endl;
-  cout << "        ignored if not specified."                                 << endl;
+  cout << "  -max  <Maximum Area> in mm^2"                                    << endl;
   cout <<                                                                        endl;
   cout <<                                                                        endl;
   cout << "  -Morph <operations>   operations are 'o'-Opening, 'c'-Closing"   << endl;
@@ -408,8 +406,8 @@ void  ExtractionParms::ParseCmdLine (const CmdLineExpander&  cmdLineExpander,
   extractFeatureData = false;
   fileFormat         = sfUnKnown;
   imagesPerDirectory = 1000;
-  minImageSize       = 350;
-  maxImageSize       = 0;
+  minAreaSize        = 0.1f;
+  maxAreaSize        = 0.0f;
   saveFrames         = false;
   saveFramesAfter    = false;
   extractFeatureData = false;
@@ -540,12 +538,12 @@ void  ExtractionParms::ParseCmdLine (const CmdLineExpander&  cmdLineExpander,
 
     else if  (switchStr == "-M" || switchStr == "-MIN")
     {
-      minImageSize = atoi (parmStr.Str ());
+      minAreaSize = parmStr.ToFloat ();
     }
 
     else if  (switchStr == "-MAX")
     {
-      maxImageSize = atoi (parmStr.Str ());
+      maxAreaSize = parmStr.ToFloat ();
     }
 
     else if  ((switchStr == "-P")  ||  (switchStr == "-PRE"))

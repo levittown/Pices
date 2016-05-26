@@ -965,6 +965,11 @@ VectorSipperImagePtr  LogicalFrame::BuildListOfSipperImages (kkuint32&  imagesIn
       imagesInFrame++;
 
       kkuint32  pixelsInImage = sipperImage->PixelCount ();
+      //     set @sqlStr = concat(@sqlStr, 'fd.FilledArea * (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000  * (id.FlowRate1 / sf.ScanRate) * 1000.0  as Statistic \n');
+
+
+
+
 
       // This is were we decide if a particular Sipper Image has met the user criteria 
       if  (pixelsInImage < parms.MinImageSize () || (parms.MaxImageSize() > parms.MinImageSize() && (pixelsInImage > parms.MaxImageSize())))
@@ -1132,17 +1137,19 @@ ExtractedImageListPtr  LogicalFrame::ProcessFrame ()
 
 
 
-void  LogicalFrame::PopulateFrame (kkuint32 _frameNum,
-                                   kkuint32 _frameHeight,
-                                   uchar*   _frameArea,
-                                   kkuint32 _frameSipperRow,
+void  LogicalFrame::PopulateFrame (kkuint32   _frameNum,
+                                   kkuint32   _frameHeight,
+                                   uchar*     _frameArea,
+                                   kkuint32   _frameSipperRow,
                                    kkuint64*  _frameRowByteOffset,
-                                   kkuint32*  _pixelsPerRow
+                                   kkuint32*  _pixelsPerRow,
+                                   float      _areaPerPixel
                                   )
 {
   frameNum       = _frameNum;
   frameHeight    = _frameHeight;
   frameSipperRow = _frameSipperRow;
+  areaPerPixel   = _areaPerPixel;
 
   if  (frameHeight > frameHeightMax)
   {

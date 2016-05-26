@@ -39,7 +39,8 @@ namespace  ImageExtractionManager
                          uchar*     _frameArea,
                          kkuint32   _frameSipperRow,
                          kkuint64*  _frameRowByteOffset,
-                         kkuint32*  _pixelsPerRow
+                         kkuint32*  _pixelsPerRow,
+                         float      _areaPerPixel
                         );
 
     ExtractedImageListPtr  ProcessFrame ();
@@ -117,8 +118,8 @@ namespace  ImageExtractionManager
 
     // Structures to support Blob Processing.
     LogicalFrameBlobPtr*  blobs;
-    kkint32*          blobIdsArea;            /**< Continuous chunk of memory that was allocated to hold 'blobIds' in.   */
-    kkint32**         blobIds;                /**< Two dimensional array that will work with frame.  For each pixel that is 
+    kkint32*        blobIdsArea;            /**< Continuous chunk of memory that was allocated to hold 'blobIds' in.   */
+    kkint32**       blobIds;                /**< Two dimensional array that will work with frame.  For each pixel that is 
                                              *   determined to belong to an image, the ID of that image that it is part of
                                              *   will be kept here.
                                              */
@@ -132,6 +133,11 @@ namespace  ImageExtractionManager
     uchar           backgroundPixelTH;
     kkuint32        cropLeft;
     kkuint32        cropRight;
+
+    float           areaPerPixel;          /**< Area in mm^2  that each pixel occupies;  this will be computed by the FrameExtractorThread
+                                            * using flow-rate, scan-rate, crop-settings, and image-chamber-width;wil be assigned to 
+                                            * frame at same time it is populated,
+                                            */
                             
     volatile
     const bool&     cancelFlag;

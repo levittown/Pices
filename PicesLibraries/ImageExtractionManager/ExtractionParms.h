@@ -79,6 +79,7 @@ namespace  ImageExtractionManager
     kkuint32           ImagesPerDirectory       () const  {return  imagesPerDirectory;}
     kkuint32           MinImageSize             () const  {return  minImageSize;}
     kkuint32           MaxImageSize             () const  {return  maxImageSize;}
+    float              MinAreaSIze              () const  {return  minAreaSize;}
     const KKStr&       MorphOperations          () const  {return  morphOperations;}
     bool               MultiThreaded            () const  {return  multiThreaded;}
     const KKStr&       OutputRootDir            () const  {return  outputRootDir;}
@@ -143,7 +144,9 @@ namespace  ImageExtractionManager
     KKStr              flowRateFileName;
     bool               framesOnly;
     kkuint32           imagesPerDirectory;
+    float              maxAreaSize;
     kkuint32           maxImageSize;
+    float              minAreaSize;
     kkuint32           minImageSize;
     KKStr              morphOperations;
     bool               multiThreaded;

@@ -91,9 +91,9 @@ namespace  ImageExtractionManager
                                      * point to the start of the next frame.
                                      */
   
-    kkuint32*     colCount;
+    kkuint32*   colCount;
 
-    kkuint32*     pixelsPerRow;       /**< Keeps a count of number of pixels in the corresponding rows in frame.
+    kkuint32*   pixelsPerRow;       /**< Keeps a count of number of pixels in the corresponding rows in frame.
                                      * Assists in speeding up processing of frames.
                                      */
 
