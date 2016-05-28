@@ -221,13 +221,13 @@ KKStr  ExtractionParms::CmdLine ()  const
   if  (saveFramesAfter)
     cmdLine << "-SaveAfter  ";
 
-  cmdLine << "-ipd " << imagesPerDirectory                 << "  "
-          << "-min " << minAreaSize                        << "  "
-          << "-max " << maxAreaSize                        << "  "
-          << "-Pre " << (preProcess ? "On" : "Off")        << "  "
-          << "-R "   << reportFileName                     << "  "
-          << "-S "   << sipperFileName                     << "  "
-          << "-SF "  << SipperFileFormatToStr (fileFormat) << "  ";
+  cmdLine << "-ipd "     << imagesPerDirectory                 << "  "
+          << "-minArea " << minAreaSize                        << "  "
+          << "-maxArea " << maxAreaSize                        << "  "
+          << "-Pre "     << (preProcess ? "On" : "Off")        << "  "
+          << "-R "       << reportFileName                     << "  "
+          << "-S "       << sipperFileName                     << "  "
+          << "-SF "      << SipperFileFormatToStr (fileFormat) << "  ";
 
   if  (!configFileName.Empty ())
     cmdLine << "-C " << configFileName;
@@ -322,13 +322,13 @@ void  ExtractionParms::DisplayExampleCmdLine ()
   cout << "  -ipd  Images Per Directory,   Defaults to 1000"                  << endl;
   cout <<                                                                        endl;
   cout <<                                                                        endl;
-  cout << "  -min  or  -m"                                                    << endl;
-  cout << "  -m    <Minimum Area> Minimum area; function of number of pixels" << endl;
-  cout << "        a particle, flow-rate, scan-rate, pixels/scanline, and"    << endl;
-  cout << "        width of imaging chamber."                                 << endl;
+  cout << "  -minArea  or  -ma"                                               << endl;
+  cout << "       <Minimum Area> Minimum area(mm^2); function of number of"   << endl;
+  cout << "       pixels  a particle, flow-rate, scan-rate, pixels/scanline," << endl;
+  cout << "       and width of imaging chamber."                              << endl;
   cout <<                                                                        endl;
   cout <<                                                                        endl;
-  cout << "  -max  <Maximum Area> in mm^2"                                    << endl;
+  cout << "  -maxArea or -ma<Maximum Area> in mm^2"                           << endl;
   cout <<                                                                        endl;
   cout <<                                                                        endl;
   cout << "  -Morph <operations>   operations are 'o'-Opening, 'c'-Closing"   << endl;
@@ -536,14 +536,24 @@ void  ExtractionParms::ParseCmdLine (const CmdLineExpander&  cmdLineExpander,
       saveFrames = true;
     }
 
-    else if  (switchStr == "-M" || switchStr == "-MIN")
+    else if  (switchStr == "-MINAREA")
     {
       minAreaSize = parmStr.ToFloat ();
     }
 
-    else if  (switchStr == "-MAX")
+    else if  (switchStr == "-MAXAREA")
     {
       maxAreaSize = parmStr.ToFloat ();
+    }
+
+    else if  (switchStr == "-M" || switchStr == "-MIN")
+    {
+      minAreaSize = ComputeAreaFromPixelsUsingDefaults (parmStr.ToInt32 ());
+    }
+
+    else if  (switchStr == "-MAX")
+    {
+      maxAreaSize = ComputeAreaFromPixelsUsingDefaults (parmStr.ToInt32 ());
     }
 
     else if  ((switchStr == "-P")  ||  (switchStr == "-PRE"))
@@ -798,8 +808,6 @@ void  ExtractionParms::ParseCmdLine (const CmdLineExpander&  cmdLineExpander,
     formatGood = false;
   }
 
-
-
   return;
 }  /* ParseCmdLine */
 
@@ -812,4 +820,19 @@ void   ExtractionParms::ClassStats  (ClassStatisticListPtr  _classStats)
 
   classStatsPrev = classStats;
   classStats     = _classStats;
+}
+
+
+
+float ExtractionParms::ComputeAreaFromPixelsUsingDefaults (kkint32 pixelCount)  const
+{
+  float scanRate = 24950.0;
+  float flowRate = 0.5f;
+  float scanLineWidthPixels = 3800.0;
+  float scanLineWidthmm = 96.0f;
+  float pixelWidth = scanLineWidthmm / scanLineWidthPixels;
+  float pixelLen = 1000.0 * flowRate / scanRate;
+  float pixelArea = pixelWidth* pixelLen;
+  float area = pixelArea * pixelCount;
+  return area;
 }

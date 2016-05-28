@@ -547,6 +547,8 @@ void  FrameExtractorThread::Run ()
 {
   Status (ThreadStatus::Starting);
 
+  InstrumentDataFileManager::InitializePush();
+
   AddMsg ("Run  Starting");
 
   startTime = osGetLocalDateTime ();
@@ -588,6 +590,8 @@ void  FrameExtractorThread::Run ()
   double  doneCPUsecs    = osGetSystemTimeUsed ();
   systemTimeUsed = doneCPUsecs - startCPUsecs;
 
+  InstrumentDataFileManager::InitializePop();
+
   endTime =  osGetLocalDateTime ();
   elaspedTime = endTime - startTime;
 
@@ -615,12 +619,37 @@ void  FrameExtractorThread::ProcessFrame ()
     return;
   }
 
+  float    flowRate          = DataManager()->Meter2FlowRate();
+  kkuint32 pixelsPerScanLine = 3900;
+  float    scanRate          = sipperFileRec->ScanRate();
+  if  (scanRate < 100.0f)
+    scanRate = 25950.0f;
+
+  auto id = InstrumentDataFileManager::GetClosestInstrumentData(sipperRootName, 100, CancelFlag(), log);
+  if  (id)
+  {
+    if  (id->FlowRate2 () > 0.0f)
+      flowRate = id->FlowRate2 ();
+    kkint32 idPixelsPerScanLine = id->CropRight () - id->CropLeft ();
+    if  (idPixelsPerScanLine > 100)
+      pixelsPerScanLine = idPixelsPerScanLine;
+  }
+
+  float pixelLen = flowRate / scanRate; //   (m/s)/(sl/s)(1000) = (m/s)(s/sl)(1000) = (m/sl)(1000(mm/m)) = length of pixel in mm
+
+  float pixelWidth = 96.0f /  (float)pixelsPerScanLine;
+
+  float pixelArea = pixelLen * pixelWidth;
+
+     
+
   logicalFrame->PopulateFrame (frameNum, 
                                lastRowInFrame, 
                                frameArea, 
                                frameSipperRow,
                                frameRowByteOffset,
-                               pixelsPerRow
+                               pixelsPerRow,
+                               pixelArea
                               );
   framePool->QueueFrameToProcess (logicalFrame);
 } /* ProcessFrame */

@@ -4609,7 +4609,7 @@ void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruise
       {
         if (!downCast)
         {
-          downCast = new ImageSizeDistribution ((float)depthBinSize, (float)initialValue, (float)growthRate, endValue, startValues, endValues, log);
+          downCast = new ImageSizeDistribution ((float)depthBinSize, (float)initialValue, (float)growthRate, (float)endValue, startValues, endValues, log);
         }
         sizeDistribution = downCast;
         if  (volSampledDownCast)
@@ -4621,7 +4621,7 @@ void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruise
       {
         if  (!upCast)
         {
-          upCast = new ImageSizeDistribution (depthBinSize, initialValue, growthRate, endValue, startValues, endValues, log);
+          upCast = new ImageSizeDistribution (depthBinSize, (float)initialValue, (float)growthRate, (float)endValue, startValues, endValues, log);
         }
         sizeDistribution = upCast;
         if  (volSampledUpCast)

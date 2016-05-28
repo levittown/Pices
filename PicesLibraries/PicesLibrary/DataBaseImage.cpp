@@ -317,8 +317,8 @@ void  DataBaseImageList::SortBySpatialDistance ()
 
 
 
-float  FlowRate (InstrumentDataPtr  id,
-                 float              defaultFlowRate
+float  FlowRate (InstrumentDataConstPtr  id,
+                 float                   defaultFlowRate
                 )
 {
   if  ((!id)  ||  (id->FlowRate1 () <= 0.0f))
@@ -350,7 +350,7 @@ VectorFloat  DataBaseImageList::CalculateDensitesByQuadrat (float        scanRat
   VectorInt  imagesPerQuadrat;
   imagesPerQuadrat.push_back (0);
 
-  InstrumentDataPtr  id = InstrumentDataFileManager::GetClosestInstrumentData (firstOne->ImageFileName (), cancelFlag, log);
+  InstrumentDataConstPtr  id = InstrumentDataFileManager::GetClosestInstrumentData (firstOne->ImageFileName (), cancelFlag, log);
   curFlowRate = FlowRate (id, defaultFlowRate);
 
   DataBaseImageList::iterator  idx;
@@ -361,7 +361,7 @@ VectorFloat  DataBaseImageList::CalculateDensitesByQuadrat (float        scanRat
     {
       // We started a new SIPPER file;  so we will now use the time difference between then to
       // determine distance,
-      InstrumentDataPtr  lastId = id;
+      InstrumentDataConstPtr  lastId = id;
       id = InstrumentDataFileManager::GetClosestInstrumentData (i->ImageFileName (), cancelFlag, log);
       DateTime  deltaTime = id->CtdDate () - lastId->CtdDate ();
       float  avgFlowRate = (id->FlowRate1 () + lastId->FlowRate1 ()) / 2;

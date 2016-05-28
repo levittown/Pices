@@ -77,9 +77,8 @@ namespace  ImageExtractionManager
     const KKStr&       FlowRateFileName         () const  {return  flowRateFileName;}
     bool               FramesOnly               () const  {return  framesOnly;}
     kkuint32           ImagesPerDirectory       () const  {return  imagesPerDirectory;}
-    kkuint32           MinImageSize             () const  {return  minImageSize;}
-    kkuint32           MaxImageSize             () const  {return  maxImageSize;}
-    float              MinAreaSIze              () const  {return  minAreaSize;}
+    float              MinAreaSize              () const  {return  minAreaSize;}
+    float              MaxAreaSize              () const  {return  maxAreaSize;}
     const KKStr&       MorphOperations          () const  {return  morphOperations;}
     bool               MultiThreaded            () const  {return  multiThreaded;}
     const KKStr&       OutputRootDir            () const  {return  outputRootDir;}
@@ -130,6 +129,7 @@ namespace  ImageExtractionManager
 
   private:
     void  SetupOtherFileNames ();
+    float ComputeAreaFromPixelsUsingDefaults (kkint32 pixelCount)  const;
 
     uchar              cameraNum;
     bool               colorize;
@@ -144,10 +144,8 @@ namespace  ImageExtractionManager
     KKStr              flowRateFileName;
     bool               framesOnly;
     kkuint32           imagesPerDirectory;
-    float              maxAreaSize;
-    kkuint32           maxImageSize;
-    float              minAreaSize;
-    kkuint32           minImageSize;
+    float              maxAreaSize;       /**< Area in mm^2 */
+    float              minAreaSize;       /**< Area in mm^2 */
     KKStr              morphOperations;
     bool               multiThreaded;
     KKStr              outputRootDir;

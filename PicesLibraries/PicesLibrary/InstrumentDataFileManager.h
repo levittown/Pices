@@ -79,7 +79,8 @@ namespace  MLL
 
   #ifndef  _INSTRUMENTDATA_
   class  InstrumentData;
-  typedef  InstrumentData*  InstrumentDataPtr;
+  typedef InstrumentData*  InstrumentDataPtr;
+  typedef const InstrumentData *  InstrumentDataConstPtr;
   #endif 
 
 
@@ -103,11 +104,18 @@ namespace  MLL
     InstrumentDataFileManager ();
     ~InstrumentDataFileManager ();
   
-    void   GetClosestInstrumentData (const KKStr&        imageFileName,
-                                     InstrumentDataPtr&  instrumentData,
-                                     VolConstBool&       cancelFlag,
-                                     RunLog&             log
+    void   GetClosestInstrumentData (const KKStr&             imageFileName,
+                                     InstrumentDataConstPtr&  instrumentData,
+                                     VolConstBool&            cancelFlag,
+                                     RunLog&                  log
                                     );
+
+    void  GetClosestInstrumentData (const KKStr&             sipperFileRootName,
+                                    kkuint32                 scanLine,
+                                    InstrumentDataConstPtr&  instrumentData,
+                                    VolConstBool&            cancelFlag,
+                                    RunLog&                  log
+                                   );
   
     VectorFloat  GetVolumePerMeterProfile2 (const KKStr&   sipperFileName,
                                             SipperFilePtr  sipperFile,
@@ -122,10 +130,18 @@ namespace  MLL
                                               );
   
   
-    static  InstrumentDataPtr  GetClosestInstrumentData (const KKStr&   imageFileName,
-                                                         VolConstBool&  cancelFlag,
-                                                         RunLog&        log
-                                                        );
+    static  InstrumentDataConstPtr  GetClosestInstrumentData (const KKStr&   imageFileName,
+                                                              VolConstBool&  cancelFlag,
+                                                              RunLog&        log
+                                                             );
+
+    
+    static InstrumentDataConstPtr   GetClosestInstrumentData (const KKStr&             sipperFileRootName,
+                                                              kkuint32                 scanLine,
+                                                              VolConstBool&            cancelFlag,
+                                                              RunLog&                  log
+                                                             );
+
     
   
     static  KKStr        GetFullSipperFileName (const KKStr&  rootName);  // Will return Sipper File name including full directory path.
@@ -183,11 +199,11 @@ namespace  MLL
   
   
   private:
-    typedef  std::map<KKStr, InstrumentDataListPtr>   DataFileList;    //Lists of InstrumentDataList already loaded.
-                                                                       // if ('InstrumentDataListPtr' == null)
-                                                                       //    |it means that we looked for that file once
-                                                                       //    |before but it does not exist.
-                                                                       //
+    typedef  std::map<KKStr, InstrumentDataListPtr>   DataFileList;    /**< Lists of InstrumentDataList already loaded.
+                                                                        * if ('InstrumentDataListPtr' == null)
+                                                                        *    |it means that we looked for that file once
+                                                                        *    |before but it does not exist.
+                                                                        */
   
     typedef  std::pair<KKStr, InstrumentDataListPtr>  DataFileListPair;
   

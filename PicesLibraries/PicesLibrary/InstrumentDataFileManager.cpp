@@ -239,12 +239,12 @@ KKStr  InstrumentDataFileManager::SipperFileRootNameFromSipperImageFileName (con
 
 
 
-InstrumentDataPtr  InstrumentDataFileManager::GetClosestInstrumentData (const KKStr&   imageFileName,
-                                                                        VolConstBool&  cancelFlag,
-                                                                        RunLog&        log
-                                                                       )
+InstrumentDataConstPtr  InstrumentDataFileManager::GetClosestInstrumentData (const KKStr&   imageFileName,
+                                                                             VolConstBool&  cancelFlag,
+                                                                             RunLog&        log
+                                                                            )
 {
-  InstrumentDataPtr  instrumentData = NULL;
+  InstrumentDataConstPtr  instrumentData = NULL;
   if  (instrumentDataManager == NULL)
     return  NULL;
 
@@ -254,11 +254,28 @@ InstrumentDataPtr  InstrumentDataFileManager::GetClosestInstrumentData (const KK
 
 
 
+InstrumentDataConstPtr  InstrumentDataFileManager::GetClosestInstrumentData (const KKStr&             sipperFileRootName,
+                                                                             kkuint32                 scanLine,
+                                                                             VolConstBool&            cancelFlag,
+                                                                             RunLog&                  log
+                                                                            )
+{
+  InstrumentDataConstPtr  instrumentData = NULL;
+  if  (instrumentDataManager == NULL)
+    return  NULL;
 
-void  InstrumentDataFileManager::GetClosestInstrumentData (const KKStr&        imageFileName,
-                                                           InstrumentDataPtr&  instrumentData,
-                                                           VolConstBool&       cancelFlag,
-                                                           RunLog&             log
+  instrumentDataManager->GetClosestInstrumentData (sipperFileRootName, scanLine, instrumentData, cancelFlag, log);
+  return  instrumentData;
+}
+
+
+
+
+
+void  InstrumentDataFileManager::GetClosestInstrumentData (const KKStr&             imageFileName,
+                                                           InstrumentDataConstPtr&  instrumentData,
+                                                           VolConstBool&            cancelFlag,
+                                                           RunLog&                  log
                                                           )
 {
   KKStr  sipperFileName;
@@ -312,6 +329,63 @@ void  InstrumentDataFileManager::GetClosestInstrumentData (const KKStr&        i
   }
   return;
 }  /* GetClosestInstrumentData */
+
+
+
+void  InstrumentDataFileManager::GetClosestInstrumentData (const KKStr&             sipperFileRootName,
+                                                           kkuint32                 scanLine,
+                                                           InstrumentDataConstPtr&  instrumentData,
+                                                           VolConstBool&            cancelFlag,
+                                                           RunLog&                  log
+                                                          )
+{
+  scanLine = Max ((kkuint32)30000, scanLine);
+
+  {
+    // Lets see if we can get what we want from the current data file.
+
+    // Get a copy of the 'currentDataFile'  into a local stack allocated variable
+    // this way if a different thread changes it will not impact this thread.
+    InstrumentDataListPtr  tempDataFile = currentDataFile;  
+                                                            
+    if  (tempDataFile)
+    {
+      if  (tempDataFile->SipperFileName () == sipperFileRootName)
+      {
+        instrumentData = tempDataFile->SearchForNearestScanLine (scanLine);
+        // We are done;  we have the instrument data that we are looking for.
+        return;
+      }
+    }
+  }
+
+
+  {
+    blocker->StartBlock ();
+
+    if  (currentDataFile)
+    {
+      if  (currentDataFile->SipperFileName () != sipperFileRootName)
+        currentDataFile = NULL;
+    }
+
+    if  (!currentDataFile)
+      currentDataFile = GetInstrumentDataListForSipperFile (sipperFileRootName, NULL, false, cancelFlag, log);
+
+    if  (!currentDataFile)
+    {
+      instrumentData = NULL;
+    }
+    else
+    {
+      instrumentData = currentDataFile->SearchForNearestScanLine (scanLine);
+    }
+
+    blocker->EndBlock ();
+  }
+  return;
+}  /* GetClosestInstrumentData */
+
 
 
 

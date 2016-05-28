@@ -712,8 +712,8 @@ namespace MLL
 
 
   private:
-    float  FlowRate (InstrumentDataPtr  id,
-                     float              defaultFlowRate
+    float  FlowRate (InstrumentDataConstPtr  id,
+                     float                   defaultFlowRate
                     );
 
     short  version; /**< Represents the version of the Feature data, when ever I update

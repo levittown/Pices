@@ -416,7 +416,8 @@ void  ExtractionManager::Initialize (bool&  _successful)
                                                sipperRootName
                                               );
     logEntryId = logEntry->LogEntryId ();
-    dbConn->ImagesEraseSipperFileSizeRange (parms.SipperFileName (), parms.MinImageSize (), parms.MaxImageSize ());
+    //dbConn->ImagesEraseSipperFileSizeRange (parms.SipperFileName (), parms.MinImageSize (), parms.MaxImageSize ());
+    throw new KKException("ExtractionManager::Initialize   *** DO not support deleting images by Pixel Count.");
   }
 
   if  (cancelFlag)
@@ -1143,8 +1144,8 @@ void  ExtractionManager::ReportHeader (ostream&  r)
   r << "File Format           [" << sipperFileFormatStr          << "]." << endl;
   r << "Camera Number         [" << (int)parms.CameraNum     ()  << "]." << endl;
   r << "Destination Directory [" << parms.OutputRootDir      ()  << "]." << endl;
-  r << "Minimum Image Size    [" << parms.MinImageSize       ()  << "]." << endl;
-  r << "Maximum Image Size    [" << parms.MaxImageSize       ()  << "]." << endl;
+  r << "Minimum Area Size     [" << parms.MinAreaSize        ()  << "]." << endl;
+  r << "Maximum Area Size     [" << parms.MaxAreaSize        ()  << "]." << endl;
   r << "Start Scan Row        [" << parms.ScanLineStart      ()  << "]." << endl;
   r << "End   Scan Row        [" << parms.ScanLineEnd        ()  << "]." << endl;
   r << "MorphOperations       [" << parms.MorphOperations    ()  << "]." << endl;

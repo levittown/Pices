@@ -544,7 +544,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&       _fileName
           // Since these fields seem to be missing we will need to go look them up in the
           // instruments data file.
   
-          InstrumentDataPtr  id = NULL;
+          InstrumentDataConstPtr  id = NULL;
           try
           {
             id = InstrumentDataFileManager::GetClosestInstrumentData (example->ExampleFileName (), _cancelFlag, _log);
@@ -1071,7 +1071,7 @@ void  FeatureFileIOPices::ReFreshInstrumentData
                        )
 {
   bool  weOwnInstrumentData = false;
-  InstrumentDataPtr  id = NULL;
+  InstrumentDataConstPtr  id = NULL;
 
 #if  defined(WIN32)
 
@@ -1371,7 +1371,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
 
         // We will need to check the InstrumentDataFilesManager object for other data.
         bool   weOwnID = false;
-        InstrumentDataPtr  id =  NULL;
+        InstrumentDataConstPtr  id =  NULL;
         if  (_dataBase)
         {
           KKStr  sipperFileName;

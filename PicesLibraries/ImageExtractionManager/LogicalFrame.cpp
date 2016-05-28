@@ -968,11 +968,11 @@ VectorSipperImagePtr  LogicalFrame::BuildListOfSipperImages (kkuint32&  imagesIn
       //     set @sqlStr = concat(@sqlStr, 'fd.FilledArea * (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000  * (id.FlowRate1 / sf.ScanRate) * 1000.0  as Statistic \n');
 
 
-
+      float imageArea = pixelsInImage * areaPerPixel;
 
 
       // This is were we decide if a particular Sipper Image has met the user criteria 
-      if  (pixelsInImage < parms.MinImageSize () || (parms.MaxImageSize() > parms.MinImageSize() && (pixelsInImage > parms.MaxImageSize())))
+      if  (imageArea < parms.MinAreaSize () || (parms.MaxAreaSize () > parms.MinAreaSize() && (imageArea > parms.MaxAreaSize())))
       {
         skipThisImage = true;
       }

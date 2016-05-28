@@ -38,7 +38,7 @@ namespace MLL
 
   /**
    *@class  InstrumentDataManager InstrumentDataManager.h  
-   *@brief Manages instrumentation data supplied by SipperBuff derived classesforwarding to appropriate 'InstrumentDataReport' derived objects.
+   *@brief Manages instrumentation data supplied by SipperBuff derived classes forwarding to appropriate 'InstrumentDataReport' derived objects.
    *@details  Responsible for managing instrument data that is collected by SipperBuff or one of its decedents.
    * Originally developed when SIPPER3 format came out. This format includes instrument data. 
    * Will maintain a list of 'InstrumentDataReport' instances.  One for each Instrument/Sensor and Data or Text.
@@ -86,7 +86,7 @@ namespace MLL
   
   
     /**
-     *@brief When ever SipperBuff gets instrument data,  reports thru this method.
+     *@brief When ever SipperBuff gets instrument data,  reports through this method.
      *@param[in]  curScanLine   Scan line that was last read when encountering this "InstrumentData".
      *@param[in]  instrumentId  Sensor/Instrument ID
      *@param[in]  text          Set to true = text data,  false = binary data.
@@ -192,7 +192,7 @@ namespace MLL
     kkint32                   depthLastReported;
     kkint32                   depthMax;
     kkuint32                  lastScanLine;
-    kkuint32*                   scanLinesPerMeterDepth;
+    kkuint32*                 scanLinesPerMeterDepth;
   };
   
   typedef  InstrumentDataManager*  InstrumentDataManagerPtr;
