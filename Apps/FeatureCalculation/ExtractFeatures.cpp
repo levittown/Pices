@@ -628,7 +628,7 @@ void  ExtractFeatures::ClassifyImages ()
 void  ExtractFeatures::ReFreshInstrumentData (ImageFeaturesPtr  _featureVector)
 {
   bool  weOwnInstrumentData = false;
-  InstrumentDataPtr  id = NULL;
+  InstrumentDataConstPtr  id = NULL;
 
   KKStr  imageFileRootName = osGetRootName (_featureVector->ExampleFileName ());
 

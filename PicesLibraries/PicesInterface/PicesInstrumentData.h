@@ -28,7 +28,7 @@ namespace PicesInterface
     typedef  KKB::DateTime     KDateTime;
 
     PicesInstrumentData ();
-    PicesInstrumentData (InstrumentDataPtr  _instrumentData);
+    PicesInstrumentData (InstrumentDataConstPtr  _instrumentData);
 
   protected:
     !PicesInstrumentData ();
@@ -90,7 +90,7 @@ namespace PicesInterface
     property  UInt16    CropRight              {UInt16    get ();}
     property  UInt16    ActiveColumns          {UInt16    get ();}
 
-    InstrumentDataPtr  UnmanagedClass ()  {return  instrumentData;}
+    InstrumentDataConstPtr  UnmanagedClass ()  {return  instrumentData;}
 
     property static String^  DensityUnit          {String^  get ()  {return  PicesKKStr::KKStrToSystenStr (InstrumentData::DensityUnit          ());}}
     property static String^  FluorescenceUnit     {String^  get ()  {return  PicesKKStr::KKStrToSystenStr (InstrumentData::FluorescenceUnit     ());}}
@@ -103,7 +103,7 @@ namespace PicesInterface
 
 
   private:
-    InstrumentDataPtr  instrumentData;
+    InstrumentDataConstPtr  instrumentData;
   };  /* PicesInstrumentData */
 
 

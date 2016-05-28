@@ -654,8 +654,8 @@ void   CImageExtractionWindowsDlg::UpdateDialogStaticVariables ()
     m_destinationDirectory = multiTreadedExtractionParms->OutputRootDir ().Str ();
     m_saveFrames           = multiTreadedExtractionParms->SaveFrames ();
     m_extractFeatures      = multiTreadedExtractionParms->ExtractFeatureData ();
-    m_minimumSize          = multiTreadedExtractionParms->MinImageSize ();
-    m_maximumSize          = multiTreadedExtractionParms->MaxImageSize ();
+    m_minimumSize          = multiTreadedExtractionParms->MinAreaSize ();
+    m_maximumSize          = multiTreadedExtractionParms->MaxAreaSize ();
     m_configFileName       = osGetRootName (multiTreadedExtractionParms->ConfigFileName ()).Str ();
 
     m_extractProgress.SetRange32 (0, (int)(multiTreadedExtractionParms->SipperFileSize () / 1024));

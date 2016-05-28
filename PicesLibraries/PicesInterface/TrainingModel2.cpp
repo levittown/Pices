@@ -1403,7 +1403,7 @@ PicesPredictionList^   TrainingModel2::PredictProbabilities (System::String^   i
 
   bool  cancelFlag = false;
 
-  InstrumentDataPtr  id = NULL;
+  InstrumentDataConstPtr  id = NULL;
   id = InstrumentDataFileManager::GetClosestInstrumentData (fn, cancelFlag, *runLog);
   if  (id)
   {

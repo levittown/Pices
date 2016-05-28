@@ -80,7 +80,8 @@ namespace  MLL
   #ifndef  _INSTRUMENTDATA_
   class  InstrumentData;
   typedef InstrumentData*  InstrumentDataPtr;
-  typedef const InstrumentData *  InstrumentDataConstPtr;
+  typedef const InstrumentData  InstrumentDataConst;
+  typedef InstrumentDataConst*  InstrumentDataConstPtr;
   #endif 
 
 

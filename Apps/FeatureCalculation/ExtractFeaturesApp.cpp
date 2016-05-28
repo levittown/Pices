@@ -335,7 +335,7 @@ void  ImportImagesIntoDataBase (const KKStr&  rootDir)
       bool  successful = false;
       bool  cancelFlag = false;
 
-      InstrumentDataPtr   id = InstrumentDataFileManager::GetClosestInstrumentData (imageFileName, cancelFlag, runLog);
+      InstrumentDataConstPtr   id = InstrumentDataFileManager::GetClosestInstrumentData (imageFileName, cancelFlag, runLog);
       if  (id)
         byteOffset = id->ByteOffset ();
 

@@ -436,7 +436,7 @@ void  UpdateInstrumentDataFieldsInFeatrureRecords (DataBasePtr  dbConn,
 
       KKStr  imageFileName = osGetRootName (fd->ExampleFileName ());
 
-      InstrumentDataPtr  id = InstrumentDataFileManager::GetClosestInstrumentData (imageFileName, cancelFlag, log);
+      InstrumentDataConstPtr  id = InstrumentDataFileManager::GetClosestInstrumentData (imageFileName, cancelFlag, log);
       if  (id)
       {
         if  ((id->Depth        () != fd->Depth        ())  ||
@@ -2391,7 +2391,7 @@ void  SipperImageExtraction::ProcessFrame ()
 
       image->ExampleFileName (imageFileName);
 
-      InstrumentDataPtr  id = InstrumentDataFileManager::GetClosestInstrumentData (imageFileName, parms.Cancel (), log);
+      InstrumentDataConstPtr  id = InstrumentDataFileManager::GetClosestInstrumentData (imageFileName, parms.Cancel (), log);
       if  (id)
       {
         image->FlowRate1    (id->FlowRate1    ());

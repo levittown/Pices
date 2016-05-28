@@ -4376,10 +4376,10 @@ void  DataBase::ImagesUpdateValidatedAndPredictClass (const KKStr&     imageFile
 
 
 
-void  DataBase::ImageUpdateInstrumentDataFields (InstrumentDataPtr  instumentData,
-                                                 const KKStr&       sipperFileName,
-                                                 kkuint32           scanLineStart,
-                                                 kkuint32           scanLineEnd
+void  DataBase::ImageUpdateInstrumentDataFields (InstrumentDataConstPtr  instumentData,
+                                                 const KKStr&            sipperFileName,
+                                                 kkuint32                scanLineStart,
+                                                 kkuint32                scanLineEnd
                                                 )
 {
   if  (!allowUpdates)
