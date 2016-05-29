@@ -417,9 +417,9 @@ namespace MLL
     // Will update the instrument data fields in both  'Images' and 'FeatureData' tables for 
     // sipper files and scan range specified.
     void  ImageUpdateInstrumentDataFields (InstrumentDataPtr  instumentData,
-                                           const KKStr&       sipperFileName,
-                                           kkuint32           scanLineStart,
-                                           kkuint32           scanLineEnd
+                                           const KKStr&            sipperFileName,
+                                           kkuint32                scanLineStart,
+                                           kkuint32                scanLineEnd
                                           );
 
 

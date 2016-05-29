@@ -13,6 +13,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PicesLibraries", "PicesLibraries", "{31A2FBD0-DAC2-4D9A-AD83-3DD46A9D2607}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RandomizeData", "Apps\RandomizeData\RansomizeData.vcxproj", "{B7127119-A5BC-4BE7-8ED2-759EAFDF44EA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FA9C865E-0227-4EBC-A291-ED0F2453AFB3} = {FA9C865E-0227-4EBC-A291-ED0F2453AFB3}
+		{D9BB6D83-937E-40FD-BFC3-FF48D8A04D11} = {D9BB6D83-937E-40FD-BFC3-FF48D8A04D11}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CrossValidation", "Apps\CrossValidation\CrossValidation.vcxproj", "{4D11DE83-281B-47DC-9CB6-EC7C5862E642}"
 EndProject
@@ -31,6 +35,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RandomSearch", "Apps\RandomSearch\RandomSearch.vcxproj", "{F057D8ED-F0B8-45F9-84EE-C77518BB5444}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RandomNND", "Apps\RandomNND\RandomNND.vcxproj", "{A2F931F2-DFCD-4334-A2A9-83C9935C5F06}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D9BB6D83-937E-40FD-BFC3-FF48D8A04D11} = {D9BB6D83-937E-40FD-BFC3-FF48D8A04D11}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RipOutClass", "Apps\RipOutClass\RipOutClass.vcxproj", "{82A041B1-A01D-4A8F-95FC-1BE2946DAFD7}"
 EndProject
@@ -121,6 +128,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImportGPSData", "Apps\Impor
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PicesInterface", "PicesLibraries\PicesInterface\PicesInterface.vcxproj", "{8F609A95-37BC-4E0F-8CD5-4196A86CD4B8}"
 	ProjectSection(ProjectDependencies) = postProject
+		{B8045239-6597-4E1D-B535-A78DA68BA156} = {B8045239-6597-4E1D-B535-A78DA68BA156}
 		{FA9C865E-0227-4EBC-A291-ED0F2453AFB3} = {FA9C865E-0227-4EBC-A291-ED0F2453AFB3}
 		{EDA94C7F-B7B2-48DC-833D-A4948F00A7A2} = {EDA94C7F-B7B2-48DC-833D-A4948F00A7A2}
 	EndProjectSection

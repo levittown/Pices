@@ -28,15 +28,15 @@ namespace  MLL
   class InstrumentDataList :  public KKQueue<InstrumentData>
   {
   public:
-    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::kkint32   kkint32;
     typedef  KKB::kkuint32  kkuint32;
 
     InstrumentDataList (bool  _owner);
   
   
-    InstrumentDataList (const KKStr&   _fileName,
-                        bool&          _loadWasSucessfull,
-                        RunLog&        _log
+    InstrumentDataList (const KKStr&  _fileName,
+                        bool&         _loadWasSucessfull,
+                        RunLog&       _log
                        );
   
   
@@ -60,10 +60,12 @@ namespace  MLL
      *@details Calculates the offset, in meters, from the beginning of a SIPPER file for each frame.
      *         Data will be assumed to be in scan line order.  Flow-rate and Scan-rate will be used as
      *         part of the calculations.
+     *@param scanRate  Scan-Lines per second.
+     *@param defaultFlowRate If a Instrument Data record has a FlowRate <= 0.0 the default rate will be used.
      */
     VectorDouble  FrameOffsetsInMeters (kkuint32 scanLinesPerFrame,
-                                        float  scanRate,             // Scan lines per second.
-                                        float  defaultFlowRate       // If a Instrument Data record has a FlowRate <= 0.0 the default rate will be used.
+                                        float    scanRate,
+                                        float    defaultFlowRate
                                        );
   
     
@@ -119,6 +121,7 @@ namespace  MLL
   };
   
   typedef  InstrumentDataList::InstrumentDataListPtr  InstrumentDataListPtr;
+  
 }  /* MLL */
 
 #endif

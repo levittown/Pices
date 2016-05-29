@@ -161,29 +161,27 @@ namespace  PicesInterface
   float     PicesInstrumentData::Turbidity::get              () {return instrumentData->Turbidity           ();}
   float     PicesInstrumentData::TurbiditySensor::get        () {return instrumentData->TurbiditySensor     ();}
 
-  double  PicesInstrumentData::Latitude::get        ()  {return instrumentData->Latitude      ();}
-  double  PicesInstrumentData::Longitude::get       ()  {return instrumentData->Longitude     ();}
+  double  PicesInstrumentData::Latitude::get       ()  {return instrumentData->Latitude      ();}
+  double  PicesInstrumentData::Longitude::get      ()  {return instrumentData->Longitude     ();}
 
-  UInt16    PicesInstrumentData::CropLeft::get      ()  {return instrumentData->CropLeft      ();}
-  UInt16    PicesInstrumentData::CropRight::get     ()  {return instrumentData->CropRight     ();}
-  UInt16    PicesInstrumentData::ActiveColumns::get ()  {return instrumentData->ActiveColumns ();}
+  UInt16   PicesInstrumentData::CropLeft::get      ()  {return instrumentData->CropLeft      ();}
+  UInt16   PicesInstrumentData::CropRight::get     ()  {return instrumentData->CropRight     ();}
+  UInt16   PicesInstrumentData::ActiveColumns::get ()  {return instrumentData->ActiveColumns ();}
 
 
   void   PicesInstrumentData::ByteOffset::set   (kkuint64 _byteOffset)   {instrumentData->ByteOffset   (_byteOffset);}
-  void   PicesInstrumentData::Conductivity::set (float  _conductivity) {instrumentData->Conductivity (_conductivity);}
-  void   PicesInstrumentData::Density::set      (float  _density)      {instrumentData->Density      (_density);}
-  void   PicesInstrumentData::Depth::set        (float  _depth)        {instrumentData->Depth        (_depth);}
-  void   PicesInstrumentData::RecordRate::set   (float  _recordRate)   {instrumentData->RecordRate   (_recordRate);}
-  void   PicesInstrumentData::ScanLine::set     (uint   _scanLine)     {instrumentData->ScanLine     (_scanLine);}
-  void   PicesInstrumentData::Temperature::set  (float  _temperature)  {instrumentData->Temperature  (_temperature);}
+  void   PicesInstrumentData::Conductivity::set (float    _conductivity) {instrumentData->Conductivity (_conductivity);}
+  void   PicesInstrumentData::Density::set      (float    _density)      {instrumentData->Density      (_density);}
+  void   PicesInstrumentData::Depth::set        (float    _depth)        {instrumentData->Depth        (_depth);}
+  void   PicesInstrumentData::RecordRate::set   (float    _recordRate)   {instrumentData->RecordRate   (_recordRate);}
+  void   PicesInstrumentData::ScanLine::set     (uint     _scanLine)     {instrumentData->ScanLine     (_scanLine);}
+  void   PicesInstrumentData::Temperature::set  (float    _temperature)  {instrumentData->Temperature  (_temperature);}
 
 
 
 
   System::DateTime PicesInstrumentData::CtdDate::get  ()                             {return  OSservices::KKuDateTimeToSystemDateTime (instrumentData->CtdDate ());}
-  void             PicesInstrumentData::CtdDate::set  (System::DateTime  _ctdDate)   {instrumentData->CtdDate    (OSservices::SystemDateTimeToKKuDateTime (_ctdDate));}
-
-
+  void             PicesInstrumentData::CtdDate::set  (System::DateTime  _ctdDate)   {instrumentData->CtdDate  (OSservices::SystemDateTimeToKKuDateTime (_ctdDate));}
 
 
 

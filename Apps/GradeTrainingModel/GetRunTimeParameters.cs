@@ -24,16 +24,16 @@ namespace GradeTrainingModel
     private  PicesFeatureVectorList      groundTruth           = null;
     private  PicesClassList              origClassifierClasses = null;
 
-    private  PicesClass                  otherClass         = null;   /**< Will specify the Other clause from the configuration file when a dual c;lassifier is utilized. */
-    private  PicesClass                  noAgreementClass   = null;
+    private  PicesClass                  otherClass            = null;   /**< Will specify the Other clause from the configuration file when a dual c;lassifier is utilized. */
+    private  PicesClass                  noAgreementClass      = null;
 
-    private  uint                        trainingLevel      = 1;
-    private  String                      trainingModelName  = "";
-    private  bool                        trainingModelValid = false;
-    private  uint                        predictionLevel    = 1;
-    private  uint                        maxLevel           = 1;  // This is highest Hierarchical Level supported by the configuration file.
+    private  uint                        trainingLevel         = 1;
+    private  String                      trainingModelName     = "";
+    private  bool                        trainingModelValid    = false;
+    private  uint                        predictionLevel       = 1;
+    private  uint                        maxLevel              = 1;  // This is highest Hierarchical Level supported by the configuration file.
 
-    private  int                         numOfFolds         = 10;
+    private  int                         numOfFolds            = 10;
 
     private  PicesMsgQueue               msgQueue = null;
     private  PicesRunLog                 runLog = null;
