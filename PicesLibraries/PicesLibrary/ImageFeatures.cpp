@@ -1908,7 +1908,7 @@ void  ImageFeaturesList::SortBySpatialDistance ()
 
 
 
-float  ImageFeaturesList::FlowRate (InstrumentDataConstPtr  id,
+float  ImageFeaturesList::FlowRate (InstrumentDataPtr  id,
                                     float                   defaultFlowRate
                                    )
 {
@@ -1942,7 +1942,7 @@ VectorFloat   ImageFeaturesList::CalculateDensitesByQuadrat (float        scanRa
   VectorInt  imagesPerQuadrat;
   imagesPerQuadrat.push_back (0);
 
-  InstrumentDataConstPtr  id = InstrumentDataFileManager::GetClosestInstrumentData (firstOne->ExampleFileName (), cancelFlag, log);
+  InstrumentDataPtr  id = InstrumentDataFileManager::GetClosestInstrumentData (firstOne->ExampleFileName (), cancelFlag, log);
   curFlowRate = FlowRate (id, defaultFlowRate);
 
   for  (idx = begin ();  idx != end ();  idx++)

@@ -80,7 +80,6 @@ namespace  MLL
   #ifndef  _INSTRUMENTDATA_
   class  InstrumentData;
   typedef InstrumentData*  InstrumentDataPtr;
-  typedef const InstrumentData *  InstrumentDataConstPtr;
   #endif 
 
 
@@ -104,17 +103,17 @@ namespace  MLL
     InstrumentDataFileManager ();
     ~InstrumentDataFileManager ();
   
-    void   GetClosestInstrumentData (const KKStr&             imageFileName,
-                                     InstrumentDataConstPtr&  instrumentData,
-                                     VolConstBool&            cancelFlag,
-                                     RunLog&                  log
+    void   GetClosestInstrumentData (const KKStr&        imageFileName,
+                                     InstrumentDataPtr&  instrumentData,
+                                     VolConstBool&       cancelFlag,
+                                     RunLog&             log
                                     );
 
-    void  GetClosestInstrumentData (const KKStr&             sipperFileRootName,
-                                    kkuint32                 scanLine,
-                                    InstrumentDataConstPtr&  instrumentData,
-                                    VolConstBool&            cancelFlag,
-                                    RunLog&                  log
+    void  GetClosestInstrumentData (const KKStr&        sipperFileRootName,
+                                    kkuint32            scanLine,
+                                    InstrumentDataPtr&  instrumentData,
+                                    VolConstBool&       cancelFlag,
+                                    RunLog&             log
                                    );
   
     VectorFloat  GetVolumePerMeterProfile2 (const KKStr&   sipperFileName,
@@ -130,17 +129,17 @@ namespace  MLL
                                               );
   
   
-    static  InstrumentDataConstPtr  GetClosestInstrumentData (const KKStr&   imageFileName,
-                                                              VolConstBool&  cancelFlag,
-                                                              RunLog&        log
-                                                             );
+    static  InstrumentDataPtr  GetClosestInstrumentData (const KKStr&   imageFileName,
+                                                         VolConstBool&  cancelFlag,
+                                                         RunLog&        log
+                                                       );
 
     
-    static InstrumentDataConstPtr   GetClosestInstrumentData (const KKStr&             sipperFileRootName,
-                                                              kkuint32                 scanLine,
-                                                              VolConstBool&            cancelFlag,
-                                                              RunLog&                  log
-                                                             );
+    static InstrumentDataPtr   GetClosestInstrumentData (const KKStr&   sipperFileRootName,
+                                                         kkuint32       scanLine,
+                                                         VolConstBool&  cancelFlag,
+                                                         RunLog&        log
+                                                        );
 
     
   

@@ -712,7 +712,7 @@ namespace MLL
 
 
   private:
-    float  FlowRate (InstrumentDataConstPtr  id,
+    float  FlowRate (InstrumentDataPtr  id,
                      float                   defaultFlowRate
                     );
 

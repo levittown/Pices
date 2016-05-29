@@ -185,7 +185,7 @@ void  FrameProcessorThread::ProcessFrame (LogicalFramePtr  frame)
 
     /**@todo  When a proper implementation for SIPPER 4 is made I will need to get instrument data for it.  */
 
-    InstrumentDataConstPtr  id = NULL;
+    InstrumentDataPtr  id = NULL;
     if  (this->parms.FileFormat () != sfSipper4Bit)
       id = InstrumentDataFileManager::GetClosestInstrumentData (imageFileName, cf, log);
 

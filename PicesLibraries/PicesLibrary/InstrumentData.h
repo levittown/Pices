@@ -280,7 +280,6 @@ namespace MLL
   
   
   typedef  InstrumentData*  InstrumentDataPtr;
-  typedef  const InstrumentData * InstrumentDataConstPtr;
 }  /* MLL */
   
   

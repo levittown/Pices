@@ -239,12 +239,12 @@ KKStr  InstrumentDataFileManager::SipperFileRootNameFromSipperImageFileName (con
 
 
 
-InstrumentDataConstPtr  InstrumentDataFileManager::GetClosestInstrumentData (const KKStr&   imageFileName,
-                                                                             VolConstBool&  cancelFlag,
-                                                                             RunLog&        log
-                                                                            )
+InstrumentDataPtr  InstrumentDataFileManager::GetClosestInstrumentData (const KKStr&   imageFileName,
+                                                                        VolConstBool&  cancelFlag,
+                                                                        RunLog&        log
+                                                                       )
 {
-  InstrumentDataConstPtr  instrumentData = NULL;
+  InstrumentDataPtr  instrumentData = NULL;
   if  (instrumentDataManager == NULL)
     return  NULL;
 
@@ -254,13 +254,13 @@ InstrumentDataConstPtr  InstrumentDataFileManager::GetClosestInstrumentData (con
 
 
 
-InstrumentDataConstPtr  InstrumentDataFileManager::GetClosestInstrumentData (const KKStr&             sipperFileRootName,
-                                                                             kkuint32                 scanLine,
-                                                                             VolConstBool&            cancelFlag,
-                                                                             RunLog&                  log
-                                                                            )
+InstrumentDataPtr  InstrumentDataFileManager::GetClosestInstrumentData (const KKStr&   sipperFileRootName,
+                                                                        kkuint32       scanLine,
+                                                                        VolConstBool&  cancelFlag,
+                                                                        RunLog&        log
+                                                                       )
 {
-  InstrumentDataConstPtr  instrumentData = NULL;
+  InstrumentDataPtr  instrumentData = NULL;
   if  (instrumentDataManager == NULL)
     return  NULL;
 
@@ -272,8 +272,8 @@ InstrumentDataConstPtr  InstrumentDataFileManager::GetClosestInstrumentData (con
 
 
 
-void  InstrumentDataFileManager::GetClosestInstrumentData (const KKStr&             imageFileName,
-                                                           InstrumentDataConstPtr&  instrumentData,
+void  InstrumentDataFileManager::GetClosestInstrumentData (const KKStr&                                                                                                                                 imageFileName,
+                                                           InstrumentDataPtr&  instrumentData,
                                                            VolConstBool&            cancelFlag,
                                                            RunLog&                  log
                                                           )
@@ -332,11 +332,11 @@ void  InstrumentDataFileManager::GetClosestInstrumentData (const KKStr&         
 
 
 
-void  InstrumentDataFileManager::GetClosestInstrumentData (const KKStr&             sipperFileRootName,
-                                                           kkuint32                 scanLine,
-                                                           InstrumentDataConstPtr&  instrumentData,
-                                                           VolConstBool&            cancelFlag,
-                                                           RunLog&                  log
+void  InstrumentDataFileManager::GetClosestInstrumentData (const KKStr&        sipperFileRootName,
+                                                           kkuint32            scanLine,
+                                                           InstrumentDataPtr&  instrumentData,
+                                                           VolConstBool&       cancelFlag,
+                                                           RunLog&             log
                                                           )
 {
   scanLine = Max ((kkuint32)30000, scanLine);
