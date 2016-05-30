@@ -100,6 +100,8 @@ namespace  MLL
     KKStr   ToTabDelStr ()  const;
     void    ParseTabDelStr (KKStrParser&  parser);
     void    ReFresh (const SipperFile&  sf);
+
+    static  bool  JustRootName(const KKStr&  fileName);
   
   private:
      void   AssignCtdExternalInstrumentsETP2007 (const KKStr&   rootName);
@@ -168,7 +170,7 @@ namespace  MLL
 
 
   /**
-   *@brief  Will maintain a global list of all sipper files encountered.  
+   *@brief  Will maintain a global list of all SipperFile instances encountered.
    *@details  Should be initially loaded by controlling application from Database by calling 'AddSipperFileEntries'.
    */
   class  SipperFileOracle

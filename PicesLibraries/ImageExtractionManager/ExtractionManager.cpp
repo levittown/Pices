@@ -417,7 +417,7 @@ void  ExtractionManager::Initialize (bool&  _successful)
                                               );
     logEntryId = logEntry->LogEntryId ();
     //dbConn->ImagesEraseSipperFileSizeRange (parms.SipperFileName (), parms.MinImageSize (), parms.MaxImageSize ());
-    throw new KKException("ExtractionManager::Initialize   *** DO not support deleting images by Pixel Count.");
+    //throw new KKException("ExtractionManager::Initialize   *** DO not support deleting images by Pixel Count.");
   }
 
   if  (cancelFlag)

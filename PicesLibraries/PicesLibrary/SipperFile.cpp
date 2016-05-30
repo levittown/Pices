@@ -416,6 +416,11 @@ void   SipperFile::AssignCtdExternalInstruments (const KKStr&   rootName)
 }  /* AssignCtdExternalInstruments */
 
 
+bool  SipperFile::JustRootName(const KKStr&  fileName)
+{
+  return  (fileName.Len () > 0)  &&  (fileName == KKB::osGetRootName(fileName));
+}
+
 
 void   SipperFile::AssignCtdExternalInstrumentsETP2007 (const KKStr&  rootName)
 {

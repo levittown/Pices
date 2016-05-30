@@ -103,7 +103,7 @@ namespace  ImageExtractionManager
  
     SipperBuffPtr                    sipperBuff;
     KKStr                            sipperBuffFileName;  /** Name that the SipperBuff ultimately opened. */
-    KKStr                            sipperRootName;
+    KKStr                            siperFileRootName;
     InstrumentDataManagerPtr         instrumentDataManager;
 
     SipperExtractionImageManagerPtr  imageManager;

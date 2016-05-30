@@ -664,6 +664,9 @@ void  ExtractionParms::ParseCmdLine (const CmdLineExpander&  cmdLineExpander,
 
   else
   {
+    if  (SipperFile::JustRootName (sipperFileName))
+      sipperFileName = InstrumentDataFileManager::GetFullSipperFileName(sipperFileName);
+
     sipperFileSize = osGetFileSize (sipperFileName);
 
     if  (sipperFileSize <= 0)
@@ -831,7 +834,7 @@ float ExtractionParms::ComputeAreaFromPixelsUsingDefaults (kkint32 pixelCount)  
   float scanLineWidthPixels = 3800.0;
   float scanLineWidthmm = 96.0f;
   float pixelWidth = scanLineWidthmm / scanLineWidthPixels;
-  float pixelLen = 1000.0 * flowRate / scanRate;
+  float pixelLen = 1000.0f * flowRate / scanRate;
   float pixelArea = pixelWidth* pixelLen;
   float area = pixelArea * pixelCount;
   return area;

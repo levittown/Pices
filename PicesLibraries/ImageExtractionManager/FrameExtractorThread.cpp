@@ -69,7 +69,7 @@ FrameExtractorThread::FrameExtractorThread (ExtractionParms&                 _pa
   
   sipperBuff                 (NULL),
   sipperBuffFileName         (),
-  sipperRootName             (),
+  siperFileRootName          (),
   instrumentDataManager      (NULL),
   imageManager               (_imageManager),
   sipperFileRec              (_sipperFileRec),
@@ -85,7 +85,7 @@ FrameExtractorThread::FrameExtractorThread (ExtractionParms&                 _pa
 
   InstrumentDataFileManager::InitializePush ();
 
-  KKStr  siperFileRootName = osGetRootName (parms.SipperFileName ());
+  siperFileRootName = osGetRootName (parms.SipperFileName ());
 
   if  (sipperFileRec == NULL)
   {
@@ -620,12 +620,12 @@ void  FrameExtractorThread::ProcessFrame ()
   }
 
   float    flowRate          = DataManager()->Meter2FlowRate();
-  kkuint32 pixelsPerScanLine = 3900;
+  kkuint32 pixelsPerScanLine = 3800;
   float    scanRate          = sipperFileRec->ScanRate();
   if  (scanRate < 100.0f)
     scanRate = 25950.0f;
 
-  auto id = InstrumentDataFileManager::GetClosestInstrumentData(sipperRootName, 100, CancelFlag(), log);
+  auto id = InstrumentDataFileManager::GetClosestInstrumentData(siperFileRootName, 100, CancelFlag(), log);
   if  (id)
   {
     if  (id->FlowRate2 () > 0.0f)
@@ -635,14 +635,12 @@ void  FrameExtractorThread::ProcessFrame ()
       pixelsPerScanLine = idPixelsPerScanLine;
   }
 
-  float pixelLen = flowRate / scanRate; //   (m/s)/(sl/s)(1000) = (m/s)(s/sl)(1000) = (m/sl)(1000(mm/m)) = length of pixel in mm
+  float pixelLen = 1000.0f * flowRate / scanRate; //   (m/s)/(sl/s)(1000) = (m/s)(s/sl)(1000) = (m/sl)(1000(mm/m)) = length of pixel in mm
 
   float pixelWidth = 96.0f /  (float)pixelsPerScanLine;
 
   float pixelArea = pixelLen * pixelWidth;
-
-     
-
+  
   logicalFrame->PopulateFrame (frameNum, 
                                lastRowInFrame, 
                                frameArea, 

@@ -50,6 +50,9 @@ using namespace  ImageExtractionManager;
 
 // -c USF_MFS.cfg  -S F:\Pices\SipperFiles\USF\WB0512\PCB05\WB0512PCB05_03.spr  -Min 250  -sf Sipper3  -d F:\Pices\ExtractedImages\WB0512\PCB05\WB0512PCB05_03  -x
 
+// -c USF_Dual_MFS-BFS_current -DataBase LOCAL_USF -s WB1008DSH09_03 -x  -min 100   -d F:\Pices\ExtractedImages\WB1008\WB1008DSH09\WB1008DSH09_03
+
+
 /////////////////////////////////////////////////////////////////////////////
 // CImageExtractionWindowsApp
 
