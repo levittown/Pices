@@ -151,7 +151,7 @@ void  ExtractionManager::TerminateProcessing (kkint32 miliSecsToWait)
     for  (idx = allThreads->begin ();  idx != allThreads->end ();  ++idx)
     {
       ImageExtractionThreadPtr  thread = *idx;
-      thread->ShutdownThread ();
+      thread->TerminateThread ();
     }
   }
 

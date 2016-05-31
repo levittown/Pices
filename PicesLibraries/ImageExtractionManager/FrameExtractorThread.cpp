@@ -562,7 +562,7 @@ void  FrameExtractorThread::Run ()
   Status (ThreadStatus::Running);
 
   GetNextFrame (moreFrames);
-  while  (moreFrames  &&  (!CancelFlag ()))
+  while  (moreFrames  &&  (!TerminateFlag ())  ||  (!ShutdownFlag ()))
   {
     ++framesRead;
 
