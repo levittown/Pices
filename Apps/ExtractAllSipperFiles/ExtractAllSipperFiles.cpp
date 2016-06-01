@@ -60,7 +60,9 @@ using namespace  MLL;
 
 // -RootDir K:\Pices\SipperFiles\WB0512\DSH09  -min 250 -c USF_Dual.cfg
 
-// -RootDir F:\Pices\SipperFiles\NOAA  -min 250 -c  NRDA_SD0102_Dual 
+// -RootDir F:\Pices\SipperFiles\NOAA  -min 250 -c  NRDA_SD0102_Dual
+
+// -RootDir F:\Pices\SipperFiles\USF\WB1008\DSH09  -min 100  -c USF_Dual_MFS-BFS_current 
 
 ExtractAllSipperFiles::ExtractAllSipperFiles ():
    PicesApplication    (),
@@ -182,7 +184,7 @@ void  ExtractAllSipperFiles::ProcessADir (VectorKKStr&  list,
         if  (firstOneFound)
         {
           SipperFilePtr sf = DB()->SipperFileRecLoad (osGetRootName (fn));
-          if  ((sf != NULL)  &&  (sf->ExtractionStatus () < '2'))
+          if  ((sf != NULL)  &&  (sf->ExtractionStatus () == '5'))
             list.push_back (dirName + fn);
           delete  sf;
           sf = NULL;

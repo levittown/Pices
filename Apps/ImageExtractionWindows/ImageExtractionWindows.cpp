@@ -52,6 +52,8 @@ using namespace  ImageExtractionManager;
 
 // -c USF_Dual_MFS-BFS_current -DataBase LOCAL_USF -s WB1008DSH09_03 -x  -min 100   -d F:\Pices\ExtractedImages\WB1008\WB1008DSH09\WB1008DSH09_03
 
+// -D F:\Pices\ExtractedImages\WB1008DSH09_04\  -min  100  -S F:\Pices\SipperFiles\USF\WB1008\DSH09\WB1008DSH09_04.spr  -C USF_Dual_MFS-BFS_current  -X  -CountOnly  -DataBase Default
+
 
 /////////////////////////////////////////////////////////////////////////////
 // CImageExtractionWindowsApp

@@ -1,19 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LocalDebuggerCommandArguments>-c USF_Dual_MFS-BFS_current -DataBase LOCAL_USF -s WB1008DSH09_03 -x  -min 100   -d F:\Pices\ExtractedImages\WB1008\WB1008DSH09\WB1008DSH09_03</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-D F:\Pices\ExtractedImages\WB1008DSH09_04\  -min  100  -S F:\Pices\SipperFiles\USF\WB1008\DSH09\WB1008DSH09_04.spr  -C USF_Dual_MFS-BFS_current  -X  -CountOnly  -DataBase Default</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LocalDebuggerCommandArguments>-c USF_Dual_MFS-BFS_current -DataBase LOCAL_USF -s WB1008DSH09_03 -x  -min 100   -d F:\Pices\ExtractedImages\WB1008\WB1008DSH09\WB1008DSH09_03</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-D F:\Pices\ExtractedImages\WB1008DSH09_04\  -min  100  -S F:\Pices\SipperFiles\USF\WB1008\DSH09\WB1008DSH09_04.spr  -C USF_Dual_MFS-BFS_current  -X  -CountOnly  -DataBase Default</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedRelease|Win32'">
-    <LocalDebuggerCommandArguments>-c USF_Dual_MFS-BFS_current -DataBase LOCAL_USF -s WB1008DSH09_03 -x  -min 100   -d F:\Pices\ExtractedImages\WB1008\WB1008DSH09\WB1008DSH09_03</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-D F:\Pices\ExtractedImages\WB1008DSH09_04\  -min  100  -S F:\Pices\SipperFiles\USF\WB1008\DSH09\WB1008DSH09_04.spr  -C USF_Dual_MFS-BFS_current  -X  -CountOnly  -DataBase Default</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedDebug|Win32'">
-    <LocalDebuggerCommandArguments>-c USF_Dual_MFS-BFS_current -DataBase LOCAL_USF -s WB1008DSH09_03 -x  -min 100   -d F:\Pices\ExtractedImages\WB1008\WB1008DSH09\WB1008DSH09_03</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-D F:\Pices\ExtractedImages\WB1008DSH09_04\  -min  100  -S F:\Pices\SipperFiles\USF\WB1008\DSH09\WB1008DSH09_04.spr  -C USF_Dual_MFS-BFS_current  -X  -CountOnly  -DataBase Default</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>
