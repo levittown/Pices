@@ -2744,7 +2744,6 @@ Global
 		{172664FC-BF78-440A-A20E-3CCF13981497}.Release|Any CPU.Build.0 = Release|Any CPU
 		{172664FC-BF78-440A-A20E-3CCF13981497}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{172664FC-BF78-440A-A20E-3CCF13981497}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{172664FC-BF78-440A-A20E-3CCF13981497}.Release|Mixed Platforms.Deploy.0 = Release|Any CPU
 		{172664FC-BF78-440A-A20E-3CCF13981497}.Release|Win32.ActiveCfg = Release|Any CPU
 		{172664FC-BF78-440A-A20E-3CCF13981497}.Release|x64.ActiveCfg = Release|Any CPU
 		{172664FC-BF78-440A-A20E-3CCF13981497}.Release|x86.ActiveCfg = Release|Any CPU
