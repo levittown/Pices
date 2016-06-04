@@ -49,11 +49,9 @@ PicesFVProducer::PicesFVProducer (FactoryFVProducerPtr  factory):
 
 
 
-
 PicesFVProducer::~PicesFVProducer ()
 {
 }
-
 
 
 
@@ -102,8 +100,6 @@ ImageFeaturesPtr  PicesFVProducer::ComputeFeatureVector (const Raster&     srcIm
 
 
 
-
-
 ImageFeaturesPtr  PicesFVProducer::ComputeFeatureVectorFromImage (const KKStr&      fileName,
                                                                   const MLClassPtr  knownClass,
                                                                   RasterListPtr     intermediateImages,
@@ -136,8 +132,6 @@ ImageFeaturesPtr  PicesFVProducer::ComputeFeatureVectorFromImage (const KKStr&  
 
 
 
-
-
 const type_info*   PicesFVProducer::FeatureVectorTypeId () const
 {
   return  &(typeid (ImageFeatures));
@@ -166,12 +160,10 @@ FileDescPtr  PicesFVProducer::DefineFileDesc ()  const
 
 
 
-
 FileDescPtr  PicesFVProducer::DefineFileDescStatic ()
 {
   return  FeatureFileIOPices::NewPlanktonFile ();
 }
-
 
 
 
@@ -182,9 +174,6 @@ FeatureVectorListPtr  PicesFVProducer::ManufacturFeatureVectorList (bool     own
 {
   return  new ImageFeaturesList (FileDesc (), owner);
 }
-
-
-
 
 
 
@@ -205,6 +194,7 @@ FeatureFileIOPtr  PicesFVProducerFactory::DefaultFeatureFileIO ()  const
 {
   return  FeatureFileIOPices::Driver ();
 }
+
 
 
 const type_info*  PicesFVProducerFactory::FeatureVectorTypeId ()  const  
@@ -235,7 +225,6 @@ PicesFVProducerPtr  PicesFVProducerFactory::ManufactureInstance (RunLog&  runLog
 
 
 
-
 ImageFeaturesListPtr  PicesFVProducerFactory::ManufacturFeatureVectorList (bool     owner,
                                                                            RunLog&  runLog
                                                                           )
@@ -253,9 +242,7 @@ TrainingConfiguration2Ptr  PicesFVProducerFactory::ManufacturTrainingConfigurati
 
 
 
-
 PicesFVProducerFactory*  PicesFVProducerFactory::factory = Factory (NULL);
-
 
 
 

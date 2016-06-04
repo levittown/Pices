@@ -94,8 +94,6 @@ PicesTrainingConfigurationPtr  PicesTrainingConfiguration::Duplicate ()  const
 
 
 
-
-
 FactoryFVProducerPtr   PicesTrainingConfiguration::DefaultFeatureVectorProducer (RunLog&  runLog)  const
 {
   return PicesFVProducerFactory::Factory (&runLog);
@@ -111,9 +109,6 @@ void  PicesTrainingConfiguration::Save (const KKStr& fileName)  const
 
   o.close ();
 }  /* Save */
-
-
-
 
 
 
@@ -140,8 +135,6 @@ PicesTrainingConfigurationPtr  PicesTrainingConfiguration::CreateFromFeatureVect
 
   return  config;
 }  /* CreateFromFeatureVectorList */
-
-
 
 
 
