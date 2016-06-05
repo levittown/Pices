@@ -45,6 +45,8 @@ namespace  ImageExtractionManager
 
     ExtractionParms&       parms;
 
+    KKStr  StoppingFlagsStr ()  const;
+
 
   private:
   };  /* ImageExtractionThread */

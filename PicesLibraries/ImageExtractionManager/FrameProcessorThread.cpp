@@ -99,7 +99,7 @@ FrameProcessorThread::FrameProcessorThread (ExtractionParms&        _parms,
 
   LoadClassifier (_successful);
 
-  AddMsg ("FrameProcessorThread  Exiting");
+  AddMsg ("FrameProcessorThread  Exiting Constructor");
 }
 
 
@@ -113,6 +113,8 @@ FrameProcessorThread::~FrameProcessorThread ()
   delete  trainer;     trainer     = NULL;
   delete  classifier;  classifier  = NULL;
   delete  fvProducer;  fvProducer  = NULL;
+
+  AddMsg ("~FrameProcessorThread  Exiting Destructor.");
 }
 
 
@@ -280,20 +282,20 @@ void  FrameProcessorThread::LoadClassifier (bool&  _successful)
 
   if  ((parms.ExtractFeatureData ())  &&  (!parms.ConfigFileName ().Empty ()))
   {
-    AddMsg ("LoadClassifier    Building Training Model");
+    AddMsg ("FrameProcessorThread::LoadClassifier    Building Training Model");
 
     trainer = TrainingProcess2::LoadExistingTrainingProcess (parms.ConfigFileName (), CancelFlag (), log);
 
     if  (ShutdownOrTerminateRequested ())
     {
-      AddMsg ("LoadClassifier    Image Extraction Canceled.");
+      AddMsg ("FrameProcessorThread::LoadClassifier    Image Extraction Canceled.");
     }
 
     else if  (!trainer)
     {
       _successful = false;
       KKStr  msg (100);
-      msg << "LoadClassifier    ***ERROR***  TrainingProcess  failed to load;  ConfigFileName[" << parms.ConfigFileName () << "].";
+      msg << "FrameProcessorThread::LoadClassifier    ***ERROR***  TrainingProcess  failed to load;  ConfigFileName[" << parms.ConfigFileName () << "].";
       AddMsg (msg);
     }
 
@@ -301,13 +303,13 @@ void  FrameProcessorThread::LoadClassifier (bool&  _successful)
     {
       _successful = false;
       KKStr  msg (100);
-      msg << "LoadClassifier    ***ERROR***  Building Classifier for ConfigFileName[" << parms.ConfigFileName () << "].";
+      msg << "FrameProcessorThread::LoadClassifier    ***ERROR***  Building Classifier for ConfigFileName[" << parms.ConfigFileName () << "].";
       AddMsg (msg);
     }
 
     else
     {
-      AddMsg ("LoadClassifier   Classifier2 Created Successfully.");
+      AddMsg ("FrameProcessorThread::LoadClassifier   Classifier2 Created Successfully.");
       classifier = new Classifier2 (trainer, log);
     }
   }
@@ -344,11 +346,12 @@ LogicalFramePtr  FrameProcessorThread::GetNextFrameToProcess ()
 void  FrameProcessorThread::Run ()
 {
   Status (ThreadStatus::Starting);
+  AddMsg ("FrameProcessorThread::Run   Starting  TreadName: " + ThreadName ());
 
   Status (ThreadStatus::Running);
 
   LogicalFramePtr  logicalFrame = GetNextFrameToProcess ();
-  while  (!CancelFlag ())
+  while  (!ShutdownOrTerminateRequested ())
   {
     if  (logicalFrame)
     {
@@ -363,7 +366,7 @@ void  FrameProcessorThread::Run ()
   }
 
   Status (ThreadStatus::Stopping);
-  AddMsg ("Run " + ThreadName () + " done.");
+  AddMsg ("FrameProcessorThread::Run  TreadName: " + ThreadName () + " done;  Status: " + StoppingFlagsStr ());
 
   Status (ThreadStatus::Stopped);
 }  /* Run */

@@ -214,9 +214,6 @@ void  ExtractionManager::TerminateProcessing (kkint32 miliSecsToWait)
 
 
 
-
-
-
 void   ExtractionManager::MakeSureSipperCruiseExists ()
 {
   SipperCruisePtr  sc = dbConn->SipperCruiseLoad ("UNKNOWN");
@@ -237,6 +234,7 @@ void   ExtractionManager::MakeSureSipperCruiseExists ()
   }
   delete sc;  sc = NULL;
 }  /* MakeSureSipperCruiseExists */
+
 
 
 void   ExtractionManager::MakeSureSipperStationExists ()

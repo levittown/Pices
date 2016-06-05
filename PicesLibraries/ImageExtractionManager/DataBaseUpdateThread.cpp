@@ -124,7 +124,7 @@ void  DataBaseUpdateThread::Run ()
 {
   Status (ThreadStatus::Starting);
 
-  AddMsg ("Run   Starting");
+  AddMsg ("DataBaseUpdateThread::Run   Starting");
   if  (CancelFlag ())
   {
     Status (ThreadStatus::Stopped);
@@ -187,7 +187,7 @@ void  DataBaseUpdateThread::Run ()
         if  (dupImages)
         {
           KKStr  msg (100);
-          msg << "Run   Duplicate Image Detected[" << featureVector->ExampleFileName () << "].";
+          msg << "DataBaseUpdateThread::Run   Duplicate Image Detected[" << featureVector->ExampleFileName () << "].";
           AddMsg (msg);
           imageIsDuplicate = true;
           imageUpdated     = false;
@@ -266,7 +266,7 @@ void  DataBaseUpdateThread::Run ()
             imageUpdated = false;
             updateFailures++;
             KKStr  msg (100);
-            msg << "Run    ***ERROR***   ImageInsert Failed   ErrorMessage[" 
+            msg << "DataBaseUpdateThread::Run    ***ERROR***   ImageInsert Failed   ErrorMessage[" 
                 << dbConn->LastErrorDesc () << "]";
             AddMsg (msg);
           }
@@ -278,7 +278,7 @@ void  DataBaseUpdateThread::Run ()
               imageUpdated = false;
               updateFailures++;
               KKStr  msg (100);
-              msg << "Run    ***ERROR***   FeatureDataInsertRow Failed   ErrorMessage[" 
+              msg << "DataBaseUpdateThread::Run    ***ERROR***   FeatureDataInsertRow Failed   ErrorMessage[" 
                   << dbConn->LastErrorDesc () << "]";
               AddMsg (msg);
             }
@@ -300,7 +300,7 @@ void  DataBaseUpdateThread::Run ()
         }
         catch (...)
         {
-          AddMsg ("Run       Exception adding image to ImageManager.");
+          AddMsg ("DataBaseUpdateThread::Run       Exception adding image to ImageManager.");
         }
       }
 
@@ -325,7 +325,7 @@ void  DataBaseUpdateThread::Run ()
   dbConn = NULL;
   Status (ThreadStatus::Stopped);
 
-  AddMsg ("Run    Exiting");
+  AddMsg ("DataBaseUpdateThread::Run    Exiting   Status: " + StoppingFlagsStr ());
 } /* Run */
 
 

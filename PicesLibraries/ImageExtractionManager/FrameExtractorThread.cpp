@@ -156,7 +156,7 @@ FrameExtractorThread::FrameExtractorThread (ExtractionParms&                 _pa
   }
 
 
-  AddMsg ("FrameExtractorThread    Exiting");
+  AddMsg ("FrameExtractorThread    Exiting  Constructor");
 }
 
 
@@ -174,6 +174,7 @@ FrameExtractorThread::~FrameExtractorThread ()
   delete  pixelsPerRow;           pixelsPerRow          = NULL;
   delete  colCount;               colCount              = NULL;
   InstrumentDataFileManager::InitializePop ();
+  AddMsg ("~FrameExtractorThread    Exiting Destructor");
 }
 
 
@@ -549,7 +550,7 @@ void  FrameExtractorThread::Run ()
 
   InstrumentDataFileManager::InitializePush();
 
-  AddMsg ("Run  Starting");
+  AddMsg ("FrameExtractorThread::Run  Starting");
 
   startTime = osGetLocalDateTime ();
   endTime   = startTime;
@@ -573,9 +574,9 @@ void  FrameExtractorThread::Run ()
       ProcessFrame ();
     }
 
-    if  (CancelFlag ())
+    if  (TerminateFlag ())
     {
-      AddMsg ("Run   Cancel or Terminate  requested.");
+      AddMsg ("FrameExtractorThread::Run   breaking from loop: " + StoppingFlagsStr ());
       break;
     }
 
@@ -585,7 +586,7 @@ void  FrameExtractorThread::Run ()
 
   Status (ThreadStatus::Stopping);
 
-  AddMsg ("Run   Done Extracting Frames.");
+  AddMsg ("FrameExtractorThread::Run   Done Extracting Frames.  " + StoppingFlagsStr ());
   
   double  doneCPUsecs    = osGetSystemTimeUsed ();
   systemTimeUsed = doneCPUsecs - startCPUsecs;
@@ -594,6 +595,8 @@ void  FrameExtractorThread::Run ()
 
   endTime =  osGetLocalDateTime ();
   elaspedTime = endTime - startTime;
+
+  AddMsg ("FrameExtractorThread::Run  Exiting");
 
   Status (ThreadStatus::Stopped);
 }  /* Run */

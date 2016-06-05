@@ -23,9 +23,6 @@ using namespace ImageExtractionManager;
 
 
 
-
-
-
 ImageExtractionThread::ImageExtractionThread (ExtractionParms&      _parms,
                                               ExtractionManagerPtr  _extractionManager,
                                               const KKStr&          _threadName,
@@ -41,6 +38,23 @@ ImageExtractionThread::ImageExtractionThread (ExtractionParms&      _parms,
 
 ImageExtractionThread::~ImageExtractionThread ()
 {
+}
+
+
+
+KKStr  ImageExtractionThread::StoppingFlagsStr ()  const
+{
+  if  (TerminateFlag () &&  ShutdownFlag ())
+    return "Both Shutdown and Terminate Requests Made";
+  
+  else if  (TerminateFlag ())
+    return "Terminatate Requested";
+
+  else if  (ShutdownFlag ())
+    return "Shutdown Requested";
+
+  else 
+    return "No Request to Shutdown or Terminate";
 }
 
 
