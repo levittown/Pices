@@ -29,6 +29,7 @@ SipperImage::SipperImage ():
    byteOffset (0),
    colLeft    (int32_max),
    colRight   (0),
+   imageArea  (0.0f),
    pixelCount (0),
    rowBot     (0),
    rowTop     (int32_max)
@@ -42,6 +43,7 @@ SipperImage::SipperImage (LogicalFrameBlobPtr  blob):
    byteOffset (0),
    colLeft    (int32_max),
    colRight   (0),
+   imageArea  (0.0f),
    pixelCount (0),
    rowBot     (0),
    rowTop     (int32_max)

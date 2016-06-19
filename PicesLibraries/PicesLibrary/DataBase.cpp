@@ -2844,30 +2844,30 @@ KKB::uchar*  DataBase::EncodeARasterImageIntoAThumbNail (const RasterSipper&  im
 
 
 
-void  DataBase::ImageInsert (const RasterSipper&    image,
-                             const KKStr&           imageFileName,
-                             const KKStr&           sipperFileName,
-                                   kkuint64         byteOffset,     // byteOffset of SipperRow containing TopLeftRow
-                                   kkuint32         topLeftRow,
-                                   kkuint32         topLeftCol,
-                                   kkuint32         height,
-                                   kkuint32         width,
-                                   kkuint32         pixelCount,
-                                   uchar            connectedPixelDist,
-                                   kkuint32         extractionLogEntryId,
-                                   kkuint32         classLogEntryId,
-                                   kkuint32         centroidRow,
-                                   kkuint32         centroidCol,
-                                   MLClassPtr       class1,
-                                   float            class1Prob,
-                                   MLClassPtr       class2,
-                                   float            class2Prob,
-                                   MLClassPtr       validatedClass,
-                                   float            depth,
-                                   float            imageSize,
-                                   PointListPtr     sizeCoordinates,
-                                   kkint32&           imageId,
-                                   bool&            successful
+void  DataBase::ImageInsert (const RasterSipper&  image,
+                             const KKStr&         imageFileName,
+                             const KKStr&         sipperFileName,
+                                   kkuint64       byteOffset,     // byteOffset of SipperRow containing TopLeftRow
+                                   kkuint32       topLeftRow,
+                                   kkuint32       topLeftCol,
+                                   kkuint32       height,
+                                   kkuint32       width,
+                                   kkuint32       pixelCount,
+                                   uchar          connectedPixelDist,
+                                   kkuint32       extractionLogEntryId,
+                                   kkuint32       classLogEntryId,
+                                   kkuint32       centroidRow,
+                                   kkuint32       centroidCol,
+                                   MLClassPtr     class1,
+                                   float          class1Prob,
+                                   MLClassPtr     class2,
+                                   float          class2Prob,
+                                   MLClassPtr     validatedClass,
+                                   float          depth,
+                                   float          imageSize,
+                                   PointListPtr   sizeCoordinates,
+                                   kkint32&       imageId,
+                                   bool&          successful
                             )
 {
   if  (!allowUpdates)

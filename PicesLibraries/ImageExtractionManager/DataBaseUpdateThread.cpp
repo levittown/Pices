@@ -255,7 +255,7 @@ void  DataBaseUpdateThread::Run ()
                                extractedImage->PredClass2Prob (),
                                NULL,                                     // Validated Class
                                featureVector->Depth (),
-                               0.0f,                                     // imageSize
+                               extractedImage->ImageArea (),             // size in mm^2
                                NULL,                                     // sizeCoordinates
                                imageId,
                                successful

@@ -300,13 +300,14 @@ namespace SipperFile
       float  eBv = 0.0f;
       float  filledArea = image.PixelCount;
       float  chamberWidth = 0.096f;
-      float  cropWidth = (3900.0f - 200.0f);
+      float  cropWidth = 3800.0f;   // (3900.0f - 200.0f);
       float  scanRate  = 24950.0f;
       float  flowRate1 = 0.5f;
+      float  flowRate2 = 0.5f;
       
       if  (featureVector != null)
         filledArea = featureVector.FilledArea;
-
+   
       if  (id != null)
       {
         cropWidth = (float)(id.CropRight - id.CropLeft);
@@ -317,7 +318,7 @@ namespace SipperFile
         scanRate = sipperFile.ScanRate;
 
       esd = (float)(2.0 * Math.Sqrt (filledArea *  (0.096 / cropWidth) * 1000.0 * (flowRate1 / sipperFile.ScanRate) * 1000.0 / 3.1415926));
-      eBv = (float)((4.0 / 3.0) * Math.PI * Math.Pow (Math.Sqrt (filledArea *  (chamberWidth / cropWidth) * 1000 * (flowRate1 / scanRate) * 1000.0 / Math.PI), 3));
+      eBv = (float)((4.0 / 3.0) * Math.PI * Math.Pow (Math.Sqrt (filledArea *  (chamberWidth / cropWidth) * 1000 * (flowRate2 / scanRate) * 1000.0 / Math.PI), 3));
 
       PicesPrediction  model1Prediction1 = new PicesPrediction (null, 0, 0.0f);
       PicesPrediction  model1Prediction2 = new PicesPrediction (null, 0, 0.0f);

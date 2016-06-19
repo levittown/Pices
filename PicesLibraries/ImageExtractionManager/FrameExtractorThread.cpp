@@ -622,17 +622,17 @@ void  FrameExtractorThread::ProcessFrame ()
     return;
   }
 
-  float    flowRate          = DataManager()->Meter2FlowRate();
+  float    flowRate          = DataManager()->Meter1FlowRate();
   kkuint32 pixelsPerScanLine = 3800;
   float    scanRate          = sipperFileRec->ScanRate();
   if  (scanRate < 100.0f)
     scanRate = 25950.0f;
 
-  auto id = InstrumentDataFileManager::GetClosestInstrumentData(siperFileRootName, 100, CancelFlag(), log);
+  auto id = InstrumentDataFileManager::GetClosestInstrumentData(siperFileRootName, frameSipperRow, CancelFlag(), log);
   if  (id)
   {
-    if  (id->FlowRate2 () > 0.0f)
-      flowRate = id->FlowRate2 ();
+    if  (id->FlowRate1 () > 0.0f)
+      flowRate = id->FlowRate1 ();
     kkint32 idPixelsPerScanLine = id->CropRight () - id->CropLeft ();
     if  (idPixelsPerScanLine > 100)
       pixelsPerScanLine = idPixelsPerScanLine;

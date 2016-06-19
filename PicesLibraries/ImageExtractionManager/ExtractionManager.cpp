@@ -507,7 +507,7 @@ void  ExtractionManager::Initialize (bool&  _successful)
 
   imageManager = new SipperExtractionImageManager (fileDesc, 
                                                    parms.OutputRootDir (),
-                                                   parms.ExtractFeatureData (),
+                                                   false,      // false = Dont't save featuiredata files.
                                                    veryLargeImageSize,
                                                    (!parms.ConfigFileName ().Empty ()),  // We are going to classify images,
                                                    parms.CountOnly (),

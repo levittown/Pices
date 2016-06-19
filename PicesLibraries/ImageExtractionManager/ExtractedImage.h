@@ -29,6 +29,7 @@ namespace  ImageExtractionManager
                     kkuint32        _sipperFileScanRow,
                     kkuint32        _sipperFileScanCol,
                     kkuint32        _pixelCount,
+                    float           _imageArea,
                     float           _depth,
                     MLClassPtr      _predClass1,
                     float           _predClass1Prob,
@@ -44,6 +45,7 @@ namespace  ImageExtractionManager
     float               Depth                  () const  {return depth;}
     ImageFeaturesPtr    FeatureVector          () const  {return featureVector;}
     RasterSipperPtr     Image                  () const  {return image;}
+    float               ImageArea              () const  {return imageArea;}
     kkuint32            PixelCount             () const  {return pixelCount;}
     MLClassPtr          PredClass1             () const  {return predClass1;}
     float               PredClass1Prob         () const  {return predClass1Prob;}
@@ -72,6 +74,7 @@ namespace  ImageExtractionManager
     float             depth;
     ImageFeaturesPtr  featureVector;
     RasterSipperPtr   image;
+    float             imageArea;
     kkuint32          pixelCount;
     MLClassPtr        predClass1;
     float             predClass1Prob;

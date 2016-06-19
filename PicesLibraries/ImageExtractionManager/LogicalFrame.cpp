@@ -955,7 +955,13 @@ VectorSipperImagePtr  LogicalFrame::BuildListOfSipperImages (kkuint32&  imagesIn
 
     bool  skipThisImage = false;
 
-    if  (sipperImage->PixelCount () < 2)
+    if  (sipperImage->PixelCount () >= 250)
+    {
+      // We should only do this one time
+      skipThisImage = true;
+    }
+
+    else if  (sipperImage->PixelCount () < 2)
     {
       // We will not consider a single pixel an image.
       skipThisImage = true;
@@ -969,6 +975,7 @@ VectorSipperImagePtr  LogicalFrame::BuildListOfSipperImages (kkuint32&  imagesIn
 
 
       float imageArea = pixelsInImage * areaPerPixel;
+      sipperImage->ImageArea (imageArea);
 
 
       // This is were we decide if a particular Sipper Image has met the user criteria 
@@ -1108,6 +1115,7 @@ ExtractedImageListPtr  LogicalFrame::ProcessFrame ()
                                                             sipperTopRow, 
                                                             sipperTopCol,
                                                             sipperImage->PixelCount (),
+                                                            sipperImage->ImageArea (),
                                                             0.0f,  // Depth
                                                             NULL,  // predClass1
                                                             0.0f,  // predClass2Prob

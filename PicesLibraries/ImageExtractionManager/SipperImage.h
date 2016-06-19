@@ -22,6 +22,7 @@ namespace  ImageExtractionManager
     void  AddBlob (LogicalFrameBlobPtr  _blob);
     void  Explore (LogicalFrameBlobPtr  _blob);
 
+    float     ImageArea  () const  {return imageArea;}
     kkuint64  ByteOffset () const  {return byteOffset;}
     kkuint32  ColLeft    () const  {return colLeft;}
     kkuint32  ColRight   () const  {return colRight;}
@@ -31,6 +32,9 @@ namespace  ImageExtractionManager
 
     kkuint32  Width      () const  {return (1 + colRight - colLeft);}
     kkuint32  Height     () const  {return (1 + rowBot   - rowTop);}
+
+
+    void  ImageArea(float _imageArea)  {imageArea = _imageArea;}
 
 
     void  Dialate (uchar** frame,
@@ -47,6 +51,7 @@ namespace  ImageExtractionManager
 
 
   private:
+    float                         imageArea;        /**< mm^2 */
     vector<LogicalFrameBlobPtr>   blobList;
     kkuint64                      byteOffset;  /**< Sipper File ByteOffset of scan-line that contains the 1st row in this image.  */
     kkuint32                      colLeft;
