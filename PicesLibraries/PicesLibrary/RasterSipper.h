@@ -369,6 +369,11 @@ namespace MLL
                                                   kkint32 numRowSplits
                                                  )  const;
 
+
+    RasterSipperPtr     StreatchImage (float  rowFactor,
+                                       float  colFactor
+                                      )  const;
+
     RasterSipperPtr     SwapQuadrants ()  const;
 
     

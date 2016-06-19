@@ -311,5 +311,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
+    <None Include="DataBaseUpdate.h.vsspell" />
   </ItemGroup>
 </Project>

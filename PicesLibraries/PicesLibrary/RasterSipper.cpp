@@ -620,6 +620,19 @@ RasterSipperPtr  RasterSipper::SobelEdgeDetector ()
 
 
 
+
+RasterPtr  Raster::StreatchImage (float  rowFactor,
+                                  float  colFactor
+                                 )  const
+{
+  RasterPtr  r = Raster::StreatchImage (rowFactor, colFactor);
+  return  RasterSipper::TurnIntoSipperRasterPtr (r);
+}
+
+
+
+
+
 RasterSipperPtr  RasterSipper::BinarizeByThreshold (uchar  min,
                                                     uchar  max
                                                    )
