@@ -5,7 +5,7 @@
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LocalDebuggerCommandArguments>-RootDir F:\Pices\SipperFiles  -min 100  -c USF_Dual_MFS-BFS_current </LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-RootDir F:\Pices\SipperFiles  -min 100  -c SmallSnowNonSnow</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedRelease|Win32'">

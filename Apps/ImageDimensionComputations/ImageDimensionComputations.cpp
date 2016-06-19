@@ -140,10 +140,15 @@ void   ImageDimensionComputations::DisplayCommandLineParameters ()
 
 
 
-void  ImageDimensionComputations::ProcessImage(const KKStr&   imageFileName,
-                                               SipperFilePtr  sf
+void  ImageDimensionComputations::ProcessImage(SipperFilePtr sf,
+                                               const KKStr&   imageFileName
                                               )
 {
+  *report << sf->CruiseName    () << "\t" 
+          << sf->StationName   () << "\t"
+          << sf->DeploymentNum () << "\t"
+          << endl;
+
   RasterSipperPtr i = DB ()->ImageFullSizeLoad(imageFileName);
   if  (!i)
     return;
@@ -179,12 +184,15 @@ void  ImageDimensionComputations::ProcessImage(const KKStr&   imageFileName,
   float  momentf[9];
   streatchedImage->CentralMoments (momentf);
 
-  kkint32 area = (kkint32)(momentf[0] + 0.5f);  // Moment-0 is the same as the number of foreground pixels in image.
+  kkint32 pixelCount = (kkint32)(momentf[0] + 0.5f);  // Moment-0 is the same as the number of foreground pixels in image.
   float adjArea = 0.0f;
   float adjHeight = 0.0f;
   float adjWidth  = 0.0f;
 
-  adjArea = pixelArea * area;
+  float lenMiliMeters = 0.0f;
+  float widthMiliMeters = 0.0f;
+
+  adjArea = pixelArea * pixelCount;
 
   {
     float  eigenRatio;
@@ -219,19 +227,35 @@ void  ImageDimensionComputations::ProcessImage(const KKStr&   imageFileName,
       kkint32 boundingHeight  = brRow - tlRow + 1;
 
       adjHeight = boundingHeight * pixelWidth;
-      adjWidth = boundingWidth * pixelWidth;
+      adjWidth  = boundingWidth  * pixelWidth;
+
+      if  (adjHeight  > adjWidth)
+      {
+        lenMiliMeters   = adjWidth;
+        widthMiliMeters = adjHeight;
+      } else {
+        widthMiliMeters = adjWidth;
+        lenMiliMeters   = adjHeight;
+      }
+
+  float widthMilimeters = 0.0f;
     }
 
     delete  rotatedImage;
     rotatedImage = NULL;
   }
 
-  *report << imageFileName << "\t"
-          << area          << "\t"
-          << pixelArea     << "\t" 
-          << adjArea       << "\t"
-          << adjHeight     << "\t"
-          << adjWidth;
+  *report << sf->CruiseName    () << "\t" 
+          << sf->StationName   () << "\t"
+          << sf->DeploymentNum () << "\t"
+          << imageFileName        << "\t"
+          << id->Depth         () << "\t"
+          << flowRate             << "\t"
+          << area                 << "\t"
+          << pixelArea            << "\t" 
+          << adjArea              << "\t"
+          << lenMiliMeters        << "\t"
+          << widthMiliMeters;
 
   delete  streatchedImage;
   streatchedImage= NULL;
@@ -251,9 +275,9 @@ void ImageDimensionComputations::ProcessSipperFile (SipperFilePtr sf)
   KKStrMatrixPtr fileNames = DB()->QueryStatementKKStr(selStr, colNames);
   if  (fileNames != NULL)
   {
-    for (int idx = 0; idx < fileNames->NumRows();  ++idx)
+    for (kkuint32 idx = 0; idx < fileNames->NumRows();  ++idx)
     {
-      ProcessImage((*fileNames)[idx][0], sf);
+      ProcessImage(sf, (*fileNames)[idx][0], sf);
     }
   }
 }
@@ -263,16 +287,23 @@ void ImageDimensionComputations::ProcessSipperFile (SipperFilePtr sf)
 void  ImageDimensionComputations::ProcessDeployment (SipperDeploymentPtr  deployment)
 {
   log.Level (10) << "ImageDimensionComputations::ProcessDeployment  " <<   deployment->CruiseName () << " " <<  deployment->StationName () << " " << deployment->DeploymentNum () << endl;
+  log.Level(10) << deployment->CruiseName() << "\t" << deployment->StationName() << "\t" << deployment->DeploymentNum() << endl;
   SipperFileListPtr  sipperFiles = DB ()->SipperFileLoad (deployment->CruiseName (), deployment->StationName (), deployment->DeploymentNum ());
   if  (sipperFiles)
   {
     for (auto idx: *sipperFiles) 
     {
-      ProcessSipperFile (idx)
+      ProcessSipperFile (idx);
     }
   }
 }
 
+
+//milk 2
+//berries 
+//chgeasse
+//cereal
+//pencil sharpner
 
 
 
@@ -285,60 +316,23 @@ void  ImageDimensionComputations::Extract ()
 
   InstrumentDataFileManager::Initialize ();
 
-  KKStr  relativeDir;
+  SipperCruiseListPtr allCruises = DB()->SipperCruiseLoadAllCruises();
 
-  images = FeatureFileIOPices::Driver ()->LoadInSubDirectoryTree 
-                                   (fvFactoryProducer,
-                                    sourceRootDirPath, 
-                                    *mlClasses,
-                                    useDirectoryNameForClassName,
-                                    DB (),
-                                    cancelFlag,
-                                    true,    // rewiteRootFeatureFile 
-                                    log
-                                   );
-    
-  cout << endl << endl << endl;
-  cout << "Done with  LoadInSubDirectoryTree." << endl;
-  AddInstrumentData (images);
-
-
+  for (auto cruise: *allCruises) 
   {
-    // One time routine to copy images that belong to SIPPER file 'SMP751001037_22'
-    // into there own directory.
-    //MoveOver_SMP751001037_22_ImagesIntoSeparateDir (images);
+    log.Level (10) << "Cruise: " + cruise->CruiseName() << endl;
+
+    SipperDeploymentListPtr deployments = DB()->SipperDeploymentLoad(cruise->CruiseName(), "");
+
+    for (auto deployment: *deployments)
+    {
+      ProcessDeployment (deployment);
+    }
   }
 
+  delete  allCruises;
+  allCruises = NULL;
 
-  if  (classifier)
-  {
-    //Label each entry in images with predicted class.
-    ClassifyImages ();
-  }
-
-  ReportDuplicates ();
-
-  //  Report Image Class Stats
-  *report << endl;
-  *report << images->ClassStatisticsStr ();
-  *report << endl;
-
-  if  (!featureFileName.Empty ())
-  {
-    uint  numExamplesWritten = 0;
-    FeatureFileIOPices::Driver ()->SaveFeatureFile (featureFileName, images->AllFeatures (), *images, numExamplesWritten, cancelFlag, successful, log);
-  }
-
-  if  ((classifier)  &&  (!destDirectory.Empty ()))
-  {
-    // Since we have a Classifier and a Destination Directory, we are going to move the
-    // images from there original location to a Destination Directory with sub-directories
-    // by Class Name.
-    MoveImagesToDestinationDirectoryByClassName ();
-  }
-
-
-  InstrumentDataFileManager::FinalCleanUp ();
 
 
   log.Level (10) << "ImageDimensionComputations::Extract    Exiting"  << endl;

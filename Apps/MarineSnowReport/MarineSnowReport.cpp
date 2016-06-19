@@ -63,7 +63,7 @@ using namespace  MLL;
 
 
 
-KKStr  marineSnowReportDirectory = "D:\\Users\\kkramer\\DropBox\\Dropbox\\USF_OilSpillGroup\\MarineSnowPaper\\Data\\20151124_Area";
+KKStr  marineSnowReportDirectory = "D:\\Users\\kkramer\\DropBox\\Dropbox\\USF_OilSpillGroup\\MarineSnowPaper\\Data\\20160619_Area";
 
 
 
@@ -597,18 +597,7 @@ void  MarineSnowReport (const KKStr&  statistic)
   {
     SipperDeploymentPtr  deployment = *idx;
 
-    if  ((deployment->CruiseName ().EqualIgnoreCase ("ETP2007"))  ||
-         (deployment->CruiseName ().EqualIgnoreCase ("ETP2008"))  ||
-         (deployment->CruiseName ().SubStrPart (0, 2).EqualIgnoreCase ("HRS"))
-        )
-     continue;
-
-    if  ((deployment->CruiseName ().EqualIgnoreCase ("WB1008"))  ||
-         (deployment->CruiseName ().EqualIgnoreCase ("WB0911"))  ||
-         (deployment->CruiseName ().EqualIgnoreCase ("WB0812"))  ||
-         (deployment->CruiseName ().EqualIgnoreCase ("WB0813"))  ||
-         (deployment->CruiseName ().EqualIgnoreCase ("WB0814"))
-        )
+    if  (deployment->StationName ().EqualIgnoreCase("DSH09"))
     {
       runLog.Level (10) << "MarineSnowReport    Found Cruise: " << deployment->CruiseName ()  << endl;
     }

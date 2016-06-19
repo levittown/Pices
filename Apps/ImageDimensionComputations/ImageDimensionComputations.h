@@ -41,8 +41,8 @@ public:
 private:
   void  ProcessDeployment (SipperDeploymentPtr  deployment);
 
-  void  ProcessImage(const KKStr&   imageFileName,
-                     SipperFilePtr  sf
+  void  ProcessImage(SipperFilePtr sf,
+                     const KKStr&   imageFileName
                     );
 
   void ProcessSipperFile (SipperFilePtr sf);
