@@ -690,8 +690,8 @@ void  ExtractionManager::StartThreads (bool&  threadsStartedSuccessfully)
 
   delete  frameProcessors;
   frameProcessors = new ImageExtractionThreadList (false);
-  //kkuint32  numFrameProcessors = Max ((kkuint32)1, (kkuint32)(maxNumThreads - 3));
-  kkuint32  numFrameProcessors = 3;
+  kkuint32  numFrameProcessors = Max ((kkuint32)1, (kkuint32)(maxNumThreads - 3));
+  //kkuint32  numFrameProcessors = 3;
 
   if  (!CancelFlag ())
   {

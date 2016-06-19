@@ -53,8 +53,7 @@ using namespace  ImageExtractionManager;
 // -c USF_Dual_MFS-BFS_current -DataBase LOCAL_USF -s WB1008DSH09_03 -x  -min 100   -d F:\Pices\ExtractedImages\WB1008\WB1008DSH09\WB1008DSH09_03
 
 // -D F:\Pices\ExtractedImages\WB1008DSH09_04\  -min  100  -S F:\Pices\SipperFiles\WB1008\DSH09\WB1008DSH09_04.spr  -C USF_Dual_MFS-BFS_current   X  -CountOnly  -DataBase Default    -t 38000000
-// -D D:\Pices\ExtractedImages\WB1008DSH09_04\  -min 100 -S F:\Pices\SipperFiles\WB1008\DSH09\WB1008DSH09_04.spr    -c USF_Dual_MFS-BFS_current  -X  -CountOnly  -MultiThreaded Yes   -t 30000000
-
+// -D D:\Pices\ExtractedImages\ETP08_1A_01\  -min 100 -S F:\Pices\SipperFiles\ETP2008\ETP2008_1A\ETP08_1A_01.spr   -c USF_Dual_MFS-BFS_current  -X  -CountOnly  -MultiThreaded Yes  
 
 /////////////////////////////////////////////////////////////////////////////
 // CImageExtractionWindowsApp
