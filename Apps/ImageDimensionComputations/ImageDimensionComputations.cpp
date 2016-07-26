@@ -140,9 +140,9 @@ void   ImageDimensionComputations::DisplayCommandLineParameters ()
 
 
 
-void  ImageDimensionComputations::ProcessImage(SipperFilePtr sf,
-                                               const KKStr&   imageFileName
-                                              )
+void  ImageDimensionComputations::ProcessImage (SipperFilePtr  sf,
+                                                const KKStr&   imageFileName
+                                               )
 {
   *report << sf->CruiseName    () << "\t" 
           << sf->StationName   () << "\t"
@@ -152,10 +152,13 @@ void  ImageDimensionComputations::ProcessImage(SipperFilePtr sf,
   RasterSipperPtr i = DB ()->ImageFullSizeLoad(imageFileName);
   if  (!i)
     return;
-
+  
   InstrumentDataPtr id = InstrumentDataFileManager::GetClosestInstrumentData(imageFileName, cancelFlag, log);
   if  (!id)
     return;
+
+  kkint32 area = i->CalcArea ();
+
 
   float    flowRate          = id->FlowRate1();
   kkuint32 pixelsPerScanLine = 3800;
@@ -277,7 +280,7 @@ void ImageDimensionComputations::ProcessSipperFile (SipperFilePtr sf)
   {
     for (kkuint32 idx = 0; idx < fileNames->NumRows();  ++idx)
     {
-      ProcessImage(sf, (*fileNames)[idx][0], sf);
+      ProcessImage(sf, (*fileNames)[idx][0]);
     }
   }
 }
