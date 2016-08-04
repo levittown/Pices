@@ -7,7 +7,7 @@ namespace MLL
 {
   /**
    *@class SipperBuff4Bit  
-   *@brief Implements the KKLSC (Kurt Kramer Line-Scanner 4biit format).
+   *@brief Implements the KKLSC (Kurt Kramer Line-Scanner 4bit format).
    *@details Coppied this code from the KKLSC library to allow the reading of 4bit scanner files.
    *@code
    *  1) Records are or varying length.

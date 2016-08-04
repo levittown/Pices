@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <StartArguments>F:\Pices\SipperFiles\WB1111\ST03\WB1111ST03_02.spr</StartArguments>
+    <StartArguments>D:\Pices\SipperFiles\USF\ETP2008\ETP2008_1A\ETP2008_1AA_04.spr</StartArguments>
     <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
-    <StartWorkingDirectory>F:\Pices\SipperFiles\WB1111\ST03</StartWorkingDirectory>
+    <StartWorkingDirectory>D:\Pices\SipperFiles\USF\ETP2008\ETP2008_1A</StartWorkingDirectory>
   </PropertyGroup>
   <PropertyGroup>
     <PublishUrlHistory>publish\</PublishUrlHistory>
