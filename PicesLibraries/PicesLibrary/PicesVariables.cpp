@@ -353,31 +353,26 @@ void  PicesVariables::ReadPermissions ()
   allowUpdates = false;
   KKStr  configFileName = osAddSlash (ConfigurationDirectory ()) + "Permissions.cfg";
 
-  FILE* in = osFOPEN (configFileName.Str (), "r");
-  if  (!in)
+  ifstream  in (configFileName.Str ());
+  if  (!in.is_open ())
   {
-    cerr << "DataBaseServerList::ReadPermissions    Error loading ConfigFileName[" <<  configFileName << "]" << endl;
+    cerr << "PicesVariables::ReadPermissions   File failed to open: " + configFileName << endl;
     return;
   }
 
-  char  buff[4096];
-  while  (fgets (buff, sizeof (buff), in))
+  bool  eof = false;
+  KKStrPtr ln = osReadRestOfLine(in, eof);
+  while  (ln != NULL)
   {
-    buff[sizeof(buff) - 1] = 0;  // Just to make sure that buffer not completely full
-    KKStr  ln (buff);
-
-    if  (ln.Len () < 3)
-      continue;
-
-    if  ((ln[0] == '/')  &&  (ln[1] == '/'))
-      continue;
-
-    KKStr  lineName = ln.ExtractToken2 ("\t=");
-    if  (lineName.EqualIgnoreCase ("AllowUpdates"))
+    if  ((ln->Len () > 3)  &&  (!ln->StartsWith("//")))
     {
-      allowUpdates = ln.ToBool ();
+      KKStr  lineName = ln->ExtractToken2 ("\t=");
+      if  (lineName.EqualIgnoreCase ("AllowUpdates"))
+        allowUpdates = ln->ExtractTokenBool ("\n\r\t");
     }
+    delete  ln;
+    ln = osReadRestOfLine(in, eof);
   }
 
-  fclose (in);
+  in.close ();
 }
