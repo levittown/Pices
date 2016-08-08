@@ -183,9 +183,8 @@ create procedure  SipperFilesUpdateExtractionStatusIfExpected (in  _sipperFileNa
                                                                in  _extractionStatusNew        char(1)
                                                               )
 begin
-  declare  extractionStatusBeforeUpdate     char(1);
-  
-  declare  extrtactionSatusUpdated      bool;
+  declare  extractionStatusBeforeUpdate  char(1);
+  declare  extrtactionSatusUpdated       bool;
   
   start transaction;
   

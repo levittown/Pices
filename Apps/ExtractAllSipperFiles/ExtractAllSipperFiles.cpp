@@ -241,27 +241,45 @@ void  ExtractAllSipperFiles::RunOneImageExtraction (const KKStr&  sfn)
     sf = NULL;
   }
 
-  DB()->SipperFilesUpdateExtractionStatus (rootName, '1');
 
-  KKStr  destDir = osAddSlash (osAddSlash (PicesVariables::HomeDir ()) + "ExtractedImages") + osGetRootName (sfn);
+  char extractionStatusBeforeUpdate = 0;
+  char extractionStatusResult = 0;
+  bool extrtactionSatusUpdated = false;
 
-  KKStr  cmd(1000);
+  DB()->SipperFilesUpdateExtractionStatusIfExpected (rootName, 
+                                                     '5',   // extractionStatusExpected,
+                                                     '1',   // extractionStatusNew,
+                                                     extractionStatusBeforeUpdate,
+                                                     extractionStatusResult,
+                                                     extrtactionSatusUpdated
+                                                    );
 
-  KKStr  progName = osAddSlash (osAddSlash (PicesVariables::HomeDir ()) + "exe") + "ImageExtractionWindows.exe";
+  if  (!extrtactionSatusUpdated)
+  {
+    log.Level (10) << "ExtractAllSipperFiles::RunOneImageExtraction   '" + rootName + "'  status already updated.";
+  }
+  else
+  {
+    KKStr  destDir = osAddSlash (osAddSlash (PicesVariables::HomeDir ()) + "ExtractedImages") + osGetRootName (sfn);
 
-  cmd << progName                            << "  "
-      << "-s"      << " " << sfn             << "  "
-      << "-min"    << " " << minSize         << "  ";
+    KKStr  cmd(1000);
 
-  if  (maxSize > 0)
-    cmd << "-max"  << " " << maxSize         << "  ";
+    KKStr  progName = osAddSlash (osAddSlash (PicesVariables::HomeDir ()) + "exe") + "ImageExtractionWindows.exe";
 
-  cmd << "-co"                               << "  "
-      << "-d"      << " " << destDir         << "  "
-      << "-c"      << " " << configFileName  << "  "
-      << "-x";
+    cmd << progName                            << "  "
+        << "-s"      << " " << sfn             << "  "
+        << "-min"    << " " << minSize         << "  ";
 
-  system (cmd.Str ());
+    if  (maxSize > 0)
+      cmd << "-max"  << " " << maxSize         << "  ";
+
+    cmd << "-co"                               << "  "
+        << "-d"      << " " << destDir         << "  "
+        << "-c"      << " " << configFileName  << "  "
+        << "-x";
+
+    system (cmd.Str ());
+  }
 }  /* RunOneImageExtraction */
 
  

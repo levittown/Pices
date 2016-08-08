@@ -907,7 +907,7 @@ namespace MLL
                                                             );
 
     /**
-     *@brief  Updates the ExtractionStatus only if the existing extractioStatus is what was expected.
+     *@brief  Updates the ExtractionStatus only if the existing extractionStatus is what was expected.
      *@param[in]  sipperFileName
      *@param[in]  extractionStatusExpected  Status of existing SipperFiles table entry;  if not existing extractionStatus
      *            this value then no update will take place.

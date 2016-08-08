@@ -5466,20 +5466,6 @@ void  DataBase::SipperFilesUpdateExtractionStatus (const KKStr&  sipperFileName,
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void  DataBase::SipperFilesUpdateExtractionStatusIfExpected (const KKStr&  sipperFileName,
                                                              char          extractionStatusExpected,
                                                              char          extractionStatusNew,
