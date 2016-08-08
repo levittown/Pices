@@ -1,19 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LocalDebuggerCommandArguments> -RootDir F:\Pices\SipperFiles\USF\WB1008\DSH09  -min 100  -c USF_Dual_MFS-BFS_current </LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments> -RootDir E:\Pices\SipperFiles\NOAA  -min 100  -c SmallSnowNonSnow</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LocalDebuggerCommandArguments>-RootDir F:\Pices\SipperFiles  -min 100  -c SmallSnowNonSnow</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments> -RootDir E:\Pices\SipperFiles\NOAA  -min 100  -c SmallSnowNonSnow</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedRelease|Win32'">
-    <LocalDebuggerCommandArguments> -RootDir F:\Pices\SipperFiles\USF\WB1008\DSH09  -min 100  -c USF_Dual_MFS-BFS_current </LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments> -RootDir E:\Pices\SipperFiles\NOAA  -min 100  -c SmallSnowNonSnow</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedDebug|Win32'">
-    <LocalDebuggerCommandArguments> -RootDir F:\Pices\SipperFiles\USF\WB1008\DSH09  -min 100  -c USF_Dual_MFS-BFS_current </LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments> -RootDir E:\Pices\SipperFiles\NOAA  -min 100  -c SmallSnowNonSnow</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

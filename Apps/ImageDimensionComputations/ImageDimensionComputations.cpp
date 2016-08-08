@@ -241,7 +241,7 @@ void  ImageDimensionComputations::ProcessImage (SipperFilePtr  sf,
         lenMiliMeters   = adjHeight;
       }
 
-  float widthMilimeters = 0.0f;
+      float widthMilimeters = 0.0f;
     }
 
     delete  rotatedImage;

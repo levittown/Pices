@@ -955,7 +955,7 @@ VectorSipperImagePtr  LogicalFrame::BuildListOfSipperImages (kkuint32&  imagesIn
 
     bool  skipThisImage = false;
 
-    if  (sipperImage->PixelCount () >= 250)
+    if  (sipperImage->PixelCount () < 250)
     {
       // We should only do this one time
       skipThisImage = true;
