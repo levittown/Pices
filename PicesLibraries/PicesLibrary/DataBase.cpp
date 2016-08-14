@@ -1253,7 +1253,6 @@ float  DataBase::ResultSetGetFloatField (kkuint32 fieldIdx)
 }
 
 
-
 DateTime  DataBase::ResultSetGetDateTimeField (kkuint32 fieldIdx)
 {
   return  DateTimeFromMySqlDateTimeField (ResultSetGetField (fieldIdx));
@@ -5749,8 +5748,8 @@ void   DataBase::SipperFileUpdateFileSizeStats (const KKStr&  _sipperFileName,
 
 
 void  DataBase::SipperFilesGetCTDDateTime (const KKStr&  _sipperFileName,
-                                           kkint32&        _sipperFileId, 
-                                           kkuint32&       _numScanLines, 
+                                           kkint32&      _sipperFileId, 
+                                           kkuint32&     _numScanLines, 
                                            DateTime&     _CTDDateTimeStart, 
                                            DateTime&     _CTDDateTimeEnd
                                           )
@@ -6344,9 +6343,6 @@ InstrumentDataListPtr  DataBase::InstrumentDataLoad (const KKStr&  cruiseName,
 
 
 
-
-
-
 /**
  @brief  Will update all InstrumentData entries that fall within the dateTime range with the Latitude and longitude.
  */
@@ -6377,6 +6373,43 @@ void  DataBase::InstrumentDataUpdateLatitudeAndLongitude (const DateTime&  dateT
     
 }  /* InstrumentDataUpdateLatitudeAndLongitude */
 
+
+
+
+DataBase::DeploymentTimeResult*  DataBase::InstrumentDataGetDeploymentTimes (SipperDeploymentPtr deployment)
+{
+  char const *  fieldNames[] = {"ctdDateTimeStart", "ctdDateTimeEnd", "utcDateTimeStart", "utcDateTimeEnd", NULL);
+
+  DeploymentTimeResult* result = NULL;
+
+  KKStr  sqlStr = "call  InstrumentDataDeleteOneSipperFile(" + 
+                              deployment->CruiseName    ().QuotedStr () + "," +
+                              deployment->StationName   ().QuotedStr () + "," +
+                              deployment->DeploymentNum ().QuotedStr () +
+                            ")";
+
+  kkint32  returnCd = QueryStatement (sqlStr.Str ());
+
+  if  (returnCd == 0)
+  {
+    result = new DeploymentTimeResult ();
+
+    ResultSetLoad (fieldNames);
+    if  (ResultSetFetchNextRow ())   
+    {
+      delete result;
+      result = new DeploymentTimeResult ();
+      result->ctdDateTimeStart = ResultSetGetDateTimeField(0);
+      result->ctdDateTimeEnd   = ResultSetGetDateTimeField(1);
+      result->utcDateTimeStart = ResultSetGetDateTimeField(2);
+      result->utcDateTimeEnd   = ResultSetGetDateTimeField(3);
+    }
+    ResulSetFree ();
+    ResultSetsClear ();
+  }
+
+  return result;
+}
 
 
 
