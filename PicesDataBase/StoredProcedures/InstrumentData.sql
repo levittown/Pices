@@ -1449,15 +1449,23 @@ begin
   set @utcDelta = (select  TIMESTAMPDIFF(Second, d.SyncTimeStampCTD , d.SyncTimeStampGPS)
                    from Deployments d
                    where d.CruiseName = _cruiseName  and  d.StationName=_stationName  and d.DeploymentNum = _deploymentNum);
+                   
+  set @clockDelta = (select  TIMESTAMPDIFF(Second, d.SyncTimeStampCTD , d.SyncTimeStampActual)
+                     from Deployments d
+                     where d.CruiseName = _cruiseName  and  d.StationName=_stationName  and d.DeploymentNum = _deploymentNum);
+                   
 
   select   min(id.CTDDateTime) as "ctdDateTimeStart", 
            max(id.CTDDateTime) as "ctdDateTimeEnd",
-           TIMESTAMPADD(Second, @udcDelta, min(id.CTDDateTime))  as "utcDateTimeStart",
-           TIMESTAMPADD(Second, @utcDelta, max(id.CTDDateTime))  as "utcDateTimeEnd"
+           TIMESTAMPADD(Second, @utcDelta,   min(id.CTDDateTime))  as "utcDateTimeStart",
+           TIMESTAMPADD(Second, @utcDelta,   max(id.CTDDateTime))  as "utcDateTimeEnd",
+           TIMESTAMPADD(Second, @clockDelta, min(id.CTDDateTime))  as "clockDateTimeStart",
+           TIMESTAMPADD(Second, @clockDelta, max(id.CTDDateTime))  as "clockDateTimeEnd"
+           
     from InstrumentData id
     join (SipperFiles sf)  on(sf.SipperFileID = id.SipperFileId)
      where sf.CruiseName = _cruiseName  and  sf.StationName=_stationName  and  sf.DeploymentNum=_deploymentNum
-      and  id.Depth > 0.5  and  id.Depth < 500.0
+      and  id.Depth >= 0.5  and  id.Depth < 500.0
       and  id.CTDDateTime  > "2000-01-01 00:01:01"
       and  id.CTDDateTime  < "2018-12-31 23:59:59"
       and  id.CTDBattery   > 5.5   and  id.CTDBattery    < 14.0
@@ -1468,4 +1476,5 @@ end
 //
 
 delimiter ;
+
 

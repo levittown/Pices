@@ -775,13 +775,15 @@ namespace MLL
 
      struct DeploymentTimeResult
      {
-       DateTime  ctdDateTimeStart;
-       DateTime  ctdDateTimeEnd;
-       DateTime  utcDateTimeStart;
-       DateTime  utcDateTimeEnd;
+       KKB::DateTime  ctdDateTimeStart;
+       KKB::DateTime  ctdDateTimeEnd;
+       KKB::DateTime  utcDateTimeStart;
+       KKB::DateTime  utcDateTimeEnd;
+       KKB::DateTime  clockDateTimeStart;
+       KKB::DateTime  clockDateTimeEnd;
      };
 
-     DeploymentTimeResult*  DataBase::InstrumentDataGetDeploymentTimes (SipperDeploymentPtr  deployment);
+     DeploymentTimeResult*  InstrumentDataGetDeploymentTimes (SipperDeploymentPtr  deployment);
 
 
     /**

@@ -6378,11 +6378,11 @@ void  DataBase::InstrumentDataUpdateLatitudeAndLongitude (const DateTime&  dateT
 
 DataBase::DeploymentTimeResult*  DataBase::InstrumentDataGetDeploymentTimes (SipperDeploymentPtr deployment)
 {
-  char const *  fieldNames[] = {"ctdDateTimeStart", "ctdDateTimeEnd", "utcDateTimeStart", "utcDateTimeEnd", NULL);
+  char const *  fieldNames[] = {"ctdDateTimeStart", "ctdDateTimeEnd", "utcDateTimeStart", "utcDateTimeEnd",  "clockDateTimeStart", "clockDateTimeEnd", NULL};
 
   DeploymentTimeResult* result = NULL;
 
-  KKStr  sqlStr = "call  InstrumentDataDeleteOneSipperFile(" + 
+  KKStr  sqlStr = "call  InstrumentDataGetDeploymentTimes(" + 
                               deployment->CruiseName    ().QuotedStr () + "," +
                               deployment->StationName   ().QuotedStr () + "," +
                               deployment->DeploymentNum ().QuotedStr () +
@@ -6401,8 +6401,12 @@ DataBase::DeploymentTimeResult*  DataBase::InstrumentDataGetDeploymentTimes (Sip
       result = new DeploymentTimeResult ();
       result->ctdDateTimeStart = ResultSetGetDateTimeField(0);
       result->ctdDateTimeEnd   = ResultSetGetDateTimeField(1);
+
       result->utcDateTimeStart = ResultSetGetDateTimeField(2);
       result->utcDateTimeEnd   = ResultSetGetDateTimeField(3);
+
+      result->clockDateTimeStart = ResultSetGetDateTimeField(4);
+      result->clockDateTimeEnd   = ResultSetGetDateTimeField(5);
     }
     ResulSetFree ();
     ResultSetsClear ();
