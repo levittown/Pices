@@ -139,6 +139,14 @@ void  CreateThresholdHeaders (VectorFloat&  sizeThresholds,
 
 
 
+const char*  UnitLabel(const KKStr& statistic) 
+{
+  if       (statistic == "0")  return "mm^2";
+  else if  (statistic == "1")  return "mm"; 
+  else if  (statistic == "2")  return "mm^3";
+  else return "UnKnown";
+}
+
 
 DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
                                                 DataBase&            db,
@@ -148,6 +156,8 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
                                                )
 {
   cout << deployment->CruiseName () << "\t" << deployment->StationName () << "\t" << deployment->DeploymentNum () << endl;
+
+  DeploymentSummary*  result = NULL;
 
   MLClassListPtr  allClasses = db.MLClassLoadList ();
 
@@ -251,193 +261,215 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
   KKStr  reportFileRootName1 =  osAddSlash (marineSnowReportDirectory) + reportRootName + ".txt";
   ofstream  r1 (reportFileRootName1.Str ());
 
-  r1 << "Cruise"     << "\t" << deployment->CruiseName    () << endl
-     << "Station"    << "\t" << deployment->StationName   () << endl
-     << "Deployment" << "\t" << deployment->DeploymentNum () << endl
-     << "DateTime"   << "\t" << osGetLocalDateTime ()        << endl
-     << "DataBase"   << "\t" << db.ServerDescription ()      << endl
-     << "ProgName"   << "\t" << osGetProgName ()             << endl
-     << "BuildTime"  << "\t" << __DATE__ << " " << __TIME__  << endl
-     << "SvnVersion" << "\t" << svnVersionStr                << endl
-     << "HostName"   << "\t" << osGetHostName ()             << endl
-     << "UserName"   << "\t" << osGetUserName ()             << endl
-     << "StatisticCode" << "\t" << statistic << "\t" << statisticStr << endl
-     << endl
-     << endl;
-
-  KKStr  h1 (1024);
-  KKStr  h2 (1024);
-
-  KKStr  thH1 (1024);
-  KKStr  thH2 (1024);
-  CreateThresholdHeaders (sizeThresholds, thH1, thH2);
-
-  h1 << ""        << "\t" << "Depth"  << "\t" << "VolumeSampled" << "\t" << "Image"     << "\t"  << "Pixel" << "\t" << "Filled" << thH1;
-  h2 << "Down/Up" << "\t" << "(m)"    << "\t" << "m^3"           << "\t" << "Abundance" << "\t"  << "Count" << "\t" << "Area"   << thH2;
-
-  VectorDouble  integratedAbundance (sizeThresholds.size (), 0.0);
-  VectorInt32   integratedCounts    (sizeThresholds.size (), 0);
-  double        totalVolumeSampled = 0.0;
-
-  KKStr  temperatureUOM   = InstrumentData::TemperatureUnit   ();
-  KKStr  salinityUOM      = InstrumentData::SalinityUnit      ();
-  KKStr  denisityUOM      = InstrumentData::DensityUnit       ();
-  KKStr  fluorescenceUOM  = InstrumentData::FluorescenceUnit  ();
-  KKStr  oxygenUOM        = InstrumentData::OxygenUnit        ();
-  KKStr  transmisivityUOM = InstrumentData::TransmisivityUnit ();
-  KKStr  turbidityUOM     = InstrumentData::TurbidityUnit     ();
-
-  h1 << "\t" << "Temperature"   << "\t" << "Salinity"  << "\t" << "Density"   << "\t" << "Fluorescence"  << "\t" << "Fluorescence-Sensor" << "\t" << "Oxygen"  << "\t" << "Oxygen"  << "\t" << "transmisivity"  << "\t" << "turbidity";
-  h2 << "\t" << temperatureUOM  << "\t" << salinityUOM << "\t" << denisityUOM << "\t" << fluorescenceUOM << "\t" << "Volts"               << "\t" << oxygenUOM << "\t" << "umol/kg" << "\t" << transmisivityUOM << "\t" << turbidityUOM;
-
-  r1 << endl << endl
-     << "Abundance (Count/m^3)" << endl
-     << endl
-     << h1 << endl
-     << h2 << endl;
-
-  for  (kkint32 rowIdx = 0;  rowIdx < numRows;  ++rowIdx)
+  DataBase::DeploymentTimeResult*  deploymentTimes = db.InstrumentDataGetDeploymentTimes (deployment);
+  if  (deploymentTimes == NULL)
   {
-
-    ImageSizeDistributionRowPtr  row = totalDownCast->GetDepthBin ((kkuint32)rowIdx);
-    if  (!row)
-      continue;
-
-    bool   downCast    = true;
-    kkint32  bucketIdx   = rowIdx;
-    float  bucketDepth = row->Depth ();
-    kkint32  imageCount  = (kkint32)row->ImageCount ();
-    kkint32  pixelCount  = row->TotalPixels ();
-    kkint32  filledArea  = row->TotalFilledArea ();
-
-    const VectorUint32&  counts = row->Distribution ();
-
-    float  volumeSampled = 0.0f;
-    InstrumentDataMeansPtr  idm = instData->LookUp (downCast, bucketDepth);
-    if  (idm)
-      volumeSampled = idm->volumeSampled;
-
-    totalVolumeSampled += volumeSampled;
-
-    KKStr  begOfLine (128);
-    begOfLine << (downCast ? "Down" : "Up") << "\t" << bucketDepth << "\t" << volumeSampled << "\t" << imageCount << "\t" << pixelCount << "\t" << filledArea;
-
-    r1 << begOfLine;
-
-    for  (kkint32 x = 0;  x < numCountCols;  ++x)
-    {
-      float  density = 0.0f;
-      if  (volumeSampled != 0.0)
-        density = (float)counts[x] / volumeSampled;
-      r1 << "\t" << density;
-      integratedAbundance[x] += density;
-      integratedCounts   [x] += counts[x];
-    }
-
-    if  (idm)
-    {
-      KKStr  instDataStr (256);
-
-      instDataStr << "\t" << idm->temperatureMean
-                  << "\t" << idm->salinityMean 
-                  << "\t" << idm->denisityMean
-                  << "\t" << idm->fluorescenceMean
-                  << "\t" << idm->fluorescenceSensorMean
-                  << "\t" << idm->oxygenMean
-                  << "\t" << idm->Oxygen_molPerKg_Mean ()
-                  << "\t" << idm->transmisivityMean 
-                  << "\t" << idm->turbidityMean;
-
-      r1 << instDataStr;
-    }
-
-    r1 << endl;
+    KKStr msg = "MarineSnowReportDeployment  ***ERROR***   No DeploymentTime results returnded   Deployment: " +
+                deployment->CruiseName() + "-" + deployment->StationName() + "-" + deployment->DeploymentNum();
+    runLog.Level(-1) << endl << msg << endl << endl;
+    r1 << endl << msg << endl << endl;
   }
-
-  r1 << endl;
-
-  r1 << "" << "\t" << "" << "\t" << "" << "\t" << "" << "\t" << "Integrated Abundance" << "\t" << "";
-  for  (kkuint32 x = 0;  x < integratedAbundance.size ();  ++x)
+  else
   {
-    r1 << "\t" << integratedAbundance[x];
-  }
-  r1 << endl;
+    r1 << "Cruise"          << "\t" << deployment->CruiseName    () << endl
+       << "Station"         << "\t" << deployment->StationName   () << endl
+       << "Deployment"      << "\t" << deployment->DeploymentNum () << endl
 
-  r1 << "" << "\t" << "" << "\t" << "" << "\t" << "" << "\t" << "Integrated log10(Abundance)" << "\t" << "";
-  for  (kkuint32 x = 0;  x < integratedAbundance.size ();  ++x)
-  {
-    double  zed = integratedAbundance[x] + 1.0;
-    double  zed2 = 0.0;
-    if  (zed != 0.0)
-       zed2 = log10 (zed);
-    r1 << "\t" << zed2;
-  }
-  r1 << endl;
+       << "Deployment CTD Time" << "\t" << deploymentTimes->ctdDateTimeStart << "\t" << deploymentTimes->ctdDateTimeEnd << endl
+       << "Deployment UTD Time" << "\t" << deploymentTimes->utcDateTimeStart << "\t" << deploymentTimes->utcDateTimeEnd << endl
+       << "DateTime"        << "\t" << osGetLocalDateTime ()        << endl
+       << "DataBase"        << "\t" << db.ServerDescription ()      << endl
+       << "ProgName"        << "\t" << osGetProgName ()             << endl
+       << "BuildTime"       << "\t" << __DATE__ << " " << __TIME__  << endl
+       << "SvnVersion"      << "\t" << svnVersionStr                << endl
+       << "HostName"        << "\t" << osGetHostName ()             << endl
+       << "UserName"        << "\t" << osGetUserName ()             << endl
+       << "StatisticCode" << "\t" << statistic << "\t" << statisticStr << endl
+       << endl
+       << endl;
 
+    r1 << "\t\t\t\t\t" << "Particle size bins (" << UnitLabel (statistic) << ")" << endl;
 
-  r1 << endl << endl << endl
-     << "Count" << endl
-     << endl;
+    KKStr  h1 (1024);
+    KKStr  h2 (1024);
 
-  r1 << h1 << endl;
-  r1 << h2 << endl;
+    KKStr  thH1 (1024);
+    KKStr  thH2 (1024);
+    CreateThresholdHeaders (sizeThresholds, thH1, thH2);
 
-  for  (kkint32 rowIdx = 0;  rowIdx < numRows;  ++rowIdx)
-  {
-    ImageSizeDistributionRowPtr  row = totalDownCast->GetDepthBin ((kkuint32)rowIdx);
-    if  (!row)
-      continue;
+    h1 << ""        << "\t" << "Depth"  << "\t" << "VolumeSampled" << "\t" << "Image"     << "\t"  << "Pixel" << "\t" << "Filled" << thH1;
+    h2 << "Down/Up" << "\t" << "(m)"    << "\t" << "m^3"           << "\t" << "Abundance" << "\t"  << "Count" << "\t" << "Area"   << thH2;
 
-    bool   downCast    = true;
-    kkint32  bucketIdx   = rowIdx;
-    float  bucketDepth = row->Depth ();
-    kkint32  imageCount  = (kkint32)row->ImageCount ();
-    kkint32  pixelCount  = row->TotalPixels ();
-    kkint32  filledArea  = row->TotalFilledArea ();
+    VectorDouble  integratedAbundance (sizeThresholds.size (), 0.0);
+    VectorInt32   integratedCounts    (sizeThresholds.size (), 0);
+    double        totalVolumeSampled = 0.0;
 
-    const VectorUint32&  counts = row->Distribution ();
+    KKStr  temperatureUOM   = InstrumentData::TemperatureUnit   ();
+    KKStr  salinityUOM      = InstrumentData::SalinityUnit      ();
+    KKStr  denisityUOM      = InstrumentData::DensityUnit       ();
+    KKStr  fluorescenceUOM  = InstrumentData::FluorescenceUnit  ();
+    KKStr  oxygenUOM        = InstrumentData::OxygenUnit        ();
+    KKStr  transmisivityUOM = InstrumentData::TransmisivityUnit ();
+    KKStr  turbidityUOM     = InstrumentData::TurbidityUnit     ();
 
-    float  volumeSampled = 0.0f;
-    InstrumentDataMeansPtr  idm = instData->LookUp (downCast, bucketDepth);
-    if  (idm)
-      volumeSampled = idm->volumeSampled;
+    h1 << "\t" << "Temperature"   << "\t" << "Salinity"  << "\t" << "Density"   << "\t" << "Fluorescence"  << "\t" << "Fluorescence-Sensor" << "\t" << "Oxygen"  << "\t" << "Oxygen"  << "\t" << "transmisivity"  << "\t" << "turbidity";
+    h2 << "\t" << temperatureUOM  << "\t" << salinityUOM << "\t" << denisityUOM << "\t" << fluorescenceUOM << "\t" << "Volts"               << "\t" << oxygenUOM << "\t" << "umol/kg" << "\t" << transmisivityUOM << "\t" << turbidityUOM;
 
-    KKStr  begOfLine (128);
-    begOfLine << (downCast ? "Down" : "Up") << "\t" << bucketDepth << "\t" << volumeSampled << "\t" << imageCount << "\t" << pixelCount << "\t" << filledArea;
+    r1 << endl << endl
+       << "Abundance (Count/m^3)" << endl
+       << endl
+       << h1 << endl
+       << h2 << endl;
 
-    r1 << begOfLine;
-
-    for  (kkint32 x = 0;  x < numCountCols;  ++x)
-      r1 << "\t" << counts[x];
-
-    if  (idm)
+    for  (kkint32 rowIdx = 0;  rowIdx < numRows;  ++rowIdx)
     {
-      KKStr  instDataStr (256);
 
-      instDataStr << "\t" << idm->temperatureMean
-                  << "\t" << idm->salinityMean 
-                  << "\t" << idm->denisityMean
-                  << "\t" << idm->fluorescenceMean
-                  << "\t" << idm->fluorescenceSensorMean
-                  << "\t" << idm->oxygenMean
-                  << "\t" << idm->Oxygen_molPerKg_Mean ()
-                  << "\t" << idm->transmisivityMean 
-                  << "\t" << idm->turbidityMean;
+      ImageSizeDistributionRowPtr  row = totalDownCast->GetDepthBin ((kkuint32)rowIdx);
+      if  (!row)
+        continue;
 
-      r1 << instDataStr;
+      bool   downCast    = true;
+      kkint32  bucketIdx   = rowIdx;
+      float  bucketDepth = row->Depth ();
+      kkint32  imageCount  = (kkint32)row->ImageCount ();
+      kkint32  pixelCount  = row->TotalPixels ();
+      kkint32  filledArea  = row->TotalFilledArea ();
+
+      const VectorUint32&  counts = row->Distribution ();
+
+      float  volumeSampled = 0.0f;
+      InstrumentDataMeansPtr  idm = instData->LookUp (downCast, bucketDepth);
+      if  (idm)
+        volumeSampled = idm->volumeSampled;
+
+      totalVolumeSampled += volumeSampled;
+
+      KKStr  begOfLine (128);
+      begOfLine << (downCast ? "Down" : "Up") << "\t" << bucketDepth << "\t" << volumeSampled << "\t" << imageCount << "\t" << pixelCount << "\t" << filledArea;
+
+      r1 << begOfLine;
+
+      for  (kkint32 x = 0;  x < numCountCols;  ++x)
+      {
+        float  density = 0.0f;
+        if  (volumeSampled != 0.0)
+          density = (float)counts[x] / volumeSampled;
+        r1 << "\t" << density;
+        integratedAbundance[x] += density;
+        integratedCounts   [x] += counts[x];
+      }
+
+      if  (idm)
+      {
+        KKStr  instDataStr (256);
+
+        instDataStr << "\t" << idm->temperatureMean
+                    << "\t" << idm->salinityMean 
+                    << "\t" << idm->denisityMean
+                    << "\t" << idm->fluorescenceMean
+                    << "\t" << idm->fluorescenceSensorMean
+                    << "\t" << idm->oxygenMean
+                    << "\t" << idm->Oxygen_molPerKg_Mean ()
+                    << "\t" << idm->transmisivityMean 
+                    << "\t" << idm->turbidityMean;
+
+        r1 << instDataStr;
+      }
+
+      r1 << endl;
     }
 
     r1 << endl;
-  }
 
-  r1 << "" << "\t" << "" << "\t" << "" << "\t" << "" << "\t" << "Integrated Counts" << "\t" << "";
-  for  (kkuint32 x = 0;  x < integratedCounts.size ();  ++x)
-    r1 << "\t" << integratedCounts[x];
+    r1 << "" << "\t" << "" << "\t" << "" << "\t" << "" << "\t" << "Integrated Abundance" << "\t" << "";
+    for  (kkuint32 x = 0;  x < integratedAbundance.size ();  ++x)
+    {
+      r1 << "\t" << integratedAbundance[x];
+    }
+    r1 << endl;
+
+    r1 << "" << "\t" << "" << "\t" << "" << "\t" << "" << "\t" << "Integrated log10(Abundance)" << "\t" << "";
+    for  (kkuint32 x = 0;  x < integratedAbundance.size ();  ++x)
+    {
+      double  zed = integratedAbundance[x] + 1.0;
+      double  zed2 = 0.0;
+      if  (zed != 0.0)
+         zed2 = log10 (zed);
+      r1 << "\t" << zed2;
+    }
+    r1 << endl;
+
+
+    r1 << endl << endl << endl
+       << "Count" << endl
+       << endl;
+
+    r1 << h1 << endl;
+    r1 << h2 << endl;
+
+    for  (kkint32 rowIdx = 0;  rowIdx < numRows;  ++rowIdx)
+    {
+      ImageSizeDistributionRowPtr  row = totalDownCast->GetDepthBin ((kkuint32)rowIdx);
+      if  (!row)
+        continue;
+
+      bool   downCast    = true;
+      kkint32  bucketIdx   = rowIdx;
+      float  bucketDepth = row->Depth ();
+      kkint32  imageCount  = (kkint32)row->ImageCount ();
+      kkint32  pixelCount  = row->TotalPixels ();
+      kkint32  filledArea  = row->TotalFilledArea ();
+
+      const VectorUint32&  counts = row->Distribution ();
+
+      float  volumeSampled = 0.0f;
+      InstrumentDataMeansPtr  idm = instData->LookUp (downCast, bucketDepth);
+      if  (idm)
+        volumeSampled = idm->volumeSampled;
+
+      KKStr  begOfLine (128);
+      begOfLine << (downCast ? "Down" : "Up") << "\t" << bucketDepth << "\t" << volumeSampled << "\t" << imageCount << "\t" << pixelCount << "\t" << filledArea;
+
+      r1 << begOfLine;
+
+      for  (kkint32 x = 0;  x < numCountCols;  ++x)
+        r1 << "\t" << counts[x];
+
+      if  (idm)
+      {
+        KKStr  instDataStr (256);
+
+        instDataStr << "\t" << idm->temperatureMean
+                    << "\t" << idm->salinityMean 
+                    << "\t" << idm->denisityMean
+                    << "\t" << idm->fluorescenceMean
+                    << "\t" << idm->fluorescenceSensorMean
+                    << "\t" << idm->oxygenMean
+                    << "\t" << idm->Oxygen_molPerKg_Mean ()
+                    << "\t" << idm->transmisivityMean 
+                    << "\t" << idm->turbidityMean;
+
+        r1 << instDataStr;
+      }
+
+      r1 << endl;
+    }
+
+    r1 << "" << "\t" << "" << "\t" << "" << "\t" << "" << "\t" << "Integrated Counts" << "\t" << "";
+    for  (kkuint32 x = 0;  x < integratedCounts.size ();  ++x)
+      r1 << "\t" << integratedCounts[x];
+
+    result = new DeploymentSummary (deployment->CruiseName (), deployment->StationName (), deployment->DeploymentNum (), 
+                                    totalVolumeSampled, 
+                                    sizeThresholds, 
+                                    integratedAbundance, 
+                                    integratedCounts);
+  }
 
   delete  instData;        instData = NULL;
   delete  totalDownCast;   totalDownCast  = NULL;
 
-  return  new DeploymentSummary (deployment->CruiseName (), deployment->StationName (), deployment->DeploymentNum (), totalVolumeSampled, sizeThresholds, integratedAbundance, integratedCounts);
+  return  result;
 }  /* MarineSnowReportDeployment */
 
 
@@ -479,7 +511,7 @@ void  PrintSummaryReports (DataBasePtr                  db,
 
   r << "Summary  Integrated Counts" << endl
     << endl;
-
+  
   vector<DeploymentSummary*>::iterator  idx;
 
   idx = summaries.begin ();

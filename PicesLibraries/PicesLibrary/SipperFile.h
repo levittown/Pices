@@ -57,7 +57,7 @@ namespace  MLL
   
     float             Depth          () const  {return  depth;}
   
-    char    ExtractionStatus        ()  const  {return  extractionStatus;}
+    char      ExtractionStatus        ()  const  {return  extractionStatus;}
     kkuint32  ExtractionScanLineStart ()  const  {return  extractionScanLineStart;}
     kkuint32  ExtractionScanLineEnd   ()  const  {return  extractionScanLineEnd;}
 
@@ -153,6 +153,9 @@ namespace  MLL
     SipperFilePtr  LookUpBySipperFileName (const KKStr&  sipperFileName);
 
     void  Save (const KKStr&  fileName);
+
+    static
+      KKStrListPtr  GetListOfSipperFilenNamesInDirectory (const KKStr& dirPath);
 
     static
       SipperFileListPtr  GetListOfSipperFilesWeCanFind (RunLog&  runLog);

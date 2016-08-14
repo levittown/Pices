@@ -453,7 +453,8 @@ namespace SipperFile
       }
       OpenFileDialog ofd = new OpenFileDialog ();
       ofd.DefaultExt = "*.spr";
-      ofd.Filter = "SIPPER Files (*.spr) | *.spr";
+      ofd.Filter = "SIPPER Files (*.spr)|*.spr|Larcos Files (*.lsc)|*.lsc";
+
       ofd.FilterIndex = 1;
       ofd.InitialDirectory = lastSipperFileDir;
       ofd.Multiselect = true;

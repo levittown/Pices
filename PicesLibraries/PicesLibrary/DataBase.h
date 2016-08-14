@@ -772,6 +772,18 @@ namespace MLL
                                                    );
 
 
+
+     struct DeploymentTimeResult
+     {
+       DateTime  ctdDateTimeStart;
+       DateTime  ctdDateTimeEnd;
+       DateTime  utcDateTimeStart;
+       DateTime  utcDateTimeEnd;
+     };
+
+     DeploymentTimeResult*  DataBase::InstrumentDataGetDeploymentTimes (SipperDeploymentPtr  deployment);
+
+
     /**
      *@brief Returns 2d array consisting of the specific data fields from the Instrument data file 
      * for the specified SipperFile.
@@ -781,7 +793,7 @@ namespace MLL
     std::vector<std::vector<float> >*  InstrumentDataGetSpecificFields (const KKStr&          sipperFileName,
                                                                         const KKStrListPtr    fieldNames,
                                                                         const KKB::DateTime&  dateTimeStart,
-                                                                    const KKB::DateTime&  dateTimeEnd
+                                                                        const KKB::DateTime&  dateTimeEnd
                                                              );
 
 

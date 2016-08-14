@@ -1437,3 +1437,35 @@ delimiter ;
 
 
 
+drop procedure  if   exists  InstrumentDataGetDeploymentTimes;
+
+delimiter //
+
+create procedure InstrumentDataGetDeploymentTimes(in  _cruiseName      varChar(10),
+                                                  in  _stationName     varChar(10),
+                                                  in  _deploymentNum   varchar(4)
+                                                 )
+begin
+  set @utcDelta = (select  TIMESTAMPDIFF(Second, d.SyncTimeStampCTD , d.SyncTimeStampGPS)
+                   from Deployments d
+                   where d.CruiseName = _cruiseName  and  d.StationName=_stationName  and d.DeploymentNum = _deploymentNum);
+
+  select   min(id.CTDDateTime) as "ctdDateTimeStart", 
+           max(id.CTDDateTime) as "ctdDateTimeEnd",
+           TIMESTAMPADD(Second, @udcDelta, min(id.CTDDateTime))  as "utcDateTimeStart",
+           TIMESTAMPADD(Second, @utcDelta, max(id.CTDDateTime))  as "utcDateTimeEnd"
+    from InstrumentData id
+    join (SipperFiles sf)  on(sf.SipperFileID = id.SipperFileId)
+     where sf.CruiseName = _cruiseName  and  sf.StationName=_stationName  and  sf.DeploymentNum=_deploymentNum
+      and  id.Depth > 0.5  and  id.Depth < 500.0
+      and  id.CTDDateTime  > "2000-01-01 00:01:01"
+      and  id.CTDDateTime  < "2018-12-31 23:59:59"
+      and  id.CTDBattery   > 5.5   and  id.CTDBattery    < 14.0
+      and  id.Temperature  > 0.0   and  id.Temperature   < 40.0
+                                   and  id.Salinity      < 40.0
+                                   and  id.Density       < 40.0;
+end
+//
+
+delimiter ;
+
