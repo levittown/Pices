@@ -172,7 +172,8 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
   if  (statistic == "0")
   {
     statisticCode = '0';
-    startValue    = 0.00785398;
+    //startValue    = 0.00785398;
+    startValue    = 0.0506275743;  // Equivelent to 100 pixes, scanRate = 24950.0, flowRate = 0.5f, scanLineWidthPixels = 3800.0, scanLineWidthmm = 96.0f;  see 'ExtractionParms::ComputeAreaFromPixelsUsingDefaults'
     growthRate    = 1.21; // k = 2^(1/6)
     endValue      = 1000.0;
   }
@@ -589,7 +590,6 @@ void  MarineSnowReport (const KKStr&  statistic)
   vector<DeploymentSummary*>  summaries;
 
   SipperDeploymentListPtr  deployments = db->SipperDeploymentLoad ("","");
-
   int  loopCount = 0;
 
   SipperDeploymentList::const_iterator  idx;
@@ -597,7 +597,7 @@ void  MarineSnowReport (const KKStr&  statistic)
   {
     SipperDeploymentPtr  deployment = *idx;
 
-    if  (deployment->StationName ().EqualIgnoreCase("DSH09"))
+    if  (deployment->StationName ().EqualIgnoreCase ("DWH")  ||  deployment->StationName ().StartsWith ("PCB"))
     {
       runLog.Level (10) << "MarineSnowReport    Found Cruise: " << deployment->CruiseName ()  << endl;
     }
