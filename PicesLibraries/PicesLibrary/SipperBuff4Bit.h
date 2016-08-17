@@ -160,6 +160,10 @@ namespace MLL
                           bool&      flow
                          );
 
+    virtual
+    kkint32 LineWidth        ()  const {return (kkint32)2048;}
+
+
 
     /**
      *@brief  Writes a 32 bit number into the Scanner File Stream at current location.  

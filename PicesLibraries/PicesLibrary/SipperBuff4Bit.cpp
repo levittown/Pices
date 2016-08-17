@@ -210,7 +210,7 @@ SipperBuff4Bit::SipperBuff4Bit (InstrumentDataManagerPtr  _instrumentDataManager
   runLen                (0),
   runLenChar            (0),
   curCompStatus         (csNull),
-  pixelsPerScanLine     (4096)
+  pixelsPerScanLine     (2048)
 {
   BuildConversionTables ();
   PrintSizeInfo ();
@@ -238,7 +238,7 @@ SipperBuff4Bit::SipperBuff4Bit (const KKStr&              _fileName,
   runLen                (0),
   runLenChar            (0),
   curCompStatus         (csNull),
-  pixelsPerScanLine     (4096)
+  pixelsPerScanLine     (2048)
 {
   BuildConversionTables ();
   AllocateEncodedBuff ();
