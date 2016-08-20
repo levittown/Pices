@@ -630,7 +630,7 @@ void  SipperExtractionImageManager::ManagedClass::CloseOutCurDirectory ()
 
 
 void  SipperExtractionImageManager::ManagedClass::SaveFrame 
-                             (const KKStr&    fileName, 
+                             (const KKStr&      fileName, 
                                      RasterPtr  raster,
                                      bool       colorize
                               )
@@ -638,20 +638,17 @@ void  SipperExtractionImageManager::ManagedClass::SaveFrame
   if  (!countOnly)
   {
     KKStr  fullFileName = osAddSlash (fullSubDirName) + fileName;
-    BmpImage  bmpImage (*raster);
     if  (colorize)
     {
-      //                                          R    G    B
-      bmpImage.SetPaletteEntry (  0, PixelValue (255, 255, 255));
-      bmpImage.SetPaletteEntry ( 36, PixelValue (255, 255,   0));
-      bmpImage.SetPaletteEntry ( 73, PixelValue (255,   0, 255));
-      bmpImage.SetPaletteEntry (109, PixelValue (255,   0,   0));
-      bmpImage.SetPaletteEntry (146, PixelValue (  0, 255, 255));
-      bmpImage.SetPaletteEntry (182, PixelValue (  0, 255,   0));
-      bmpImage.SetPaletteEntry (219, PixelValue (  0,   0, 255));
-      bmpImage.SetPaletteEntry (255, PixelValue (  0,   0,   0));
+     RasterPtr colorRaster = raster->CreateColor ();
+     KKB::SaveImage (*colorRaster, fullFileName);
+     delete colorRaster;
+     colorRaster = NULL;
     }
-    bmpImage.Save (fullFileName);
+    else
+    {
+      KKB::SaveImageGrayscaleInverted8Bit(*raster, fullFileName);
+    }
   }
 }  /* SaveFrame */
 

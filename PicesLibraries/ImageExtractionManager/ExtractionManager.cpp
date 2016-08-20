@@ -521,6 +521,7 @@ void  ExtractionManager::Initialize (bool&  _successful)
     return;
   }
 
+  if  (!parms.ConfigFileName ().Empty ())
   {
     // This makes sure that the Classifier stored on disk is up-2-date.
     PicesTrainingConfigurationPtr  config = new PicesTrainingConfiguration ();

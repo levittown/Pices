@@ -955,12 +955,13 @@ VectorSipperImagePtr  LogicalFrame::BuildListOfSipperImages (kkuint32&  imagesIn
 
     bool  skipThisImage = false;
 
-   if  (sipperImage->PixelCount () >= 250)
-    {
-      // We should only do this one time
-      skipThisImage = true;
-    }
-    else if  (sipperImage->PixelCount () < 2)
+    //if  (sipperImage->PixelCount () >= 250)
+    //{
+    // // We should only do this one time
+    //  skipThisImage = true;
+    //}
+    //else 
+    if  (sipperImage->PixelCount () < 2)
     {
       // We will not consider a single pixel an image.
       skipThisImage = true;
@@ -973,7 +974,7 @@ VectorSipperImagePtr  LogicalFrame::BuildListOfSipperImages (kkuint32&  imagesIn
       //     set @sqlStr = concat(@sqlStr, 'fd.FilledArea * (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000  * (id.FlowRate1 / sf.ScanRate) * 1000.0  as Statistic \n');
 
 
-      float imageArea = pixelsInImage * areaPerPixel;
+      float imageArea = pixelsInImage * areaPerPixel;   // When worog with 4bit 'areaPerPixel'  computed to ZERO.
       sipperImage->ImageArea (imageArea);
 
 

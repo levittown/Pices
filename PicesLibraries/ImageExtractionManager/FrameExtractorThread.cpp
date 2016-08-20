@@ -519,7 +519,7 @@ void  FrameExtractorThread::SaveFrame (const KKStr& suffix)
   kkuint32  col = 0;
   kkuint32  row = 0;
 
-  RasterSipperPtr  frameImage = new RasterSipper (lastRowInFrame + 1, 4096, false);
+  RasterSipperPtr  frameImage = new RasterSipper (lastRowInFrame + 1, frameWidth, false);
   uchar**  grayArea = frameImage->Green ();
 
   for  (row = 0; row < lastRowInFrame; row++)

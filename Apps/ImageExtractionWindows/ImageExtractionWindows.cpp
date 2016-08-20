@@ -57,6 +57,8 @@ using namespace  ImageExtractionManager;
 
 // -D D:\Larcos\ExtractedImages\2016-08-02_PortJeff_019\  -min 100 -S D:\Larcos\ScannerFiles\2016-08-01_PortJeff\2016-08-02_PortJeff_019\PortJeff_019_20160802-105133.spr   -c USF_Dual_MFS-BFS_current  -X  -CountOnly  -MultiThreaded Yes  
                                                                                                                                          
+// -D D:\Larcos\ExtractedImages\2016-08-02_PortJeff_019\  -min 90 -S D:\Larcos\ScannerFiles\2016-08-01_PortJeff\2016-08-02_PortJeff_019\PortJeff_019_20160802-105133.spr   -c USF_Dual_MFS-BFS_current  -X  -CountOnly  -MultiThreaded Yes    -F   -M 90
+// -D D:\Larcos\ExtractedImages\2016-08-02_PortJeff_019\  -min 100 -S D:\Larcos\ScannerFiles\2016-08-01_PortJeff\2016-08-02_PortJeff_019\PortJeff_019_20160802-105133.spr   -MultiThreaded Yes    -FO   -M 90
 
 
 /////////////////////////////////////////////////////////////////////////////
