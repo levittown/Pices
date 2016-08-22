@@ -39,7 +39,7 @@ begin
   set  _classValidatedId = (select c2.ClassId      from Classes     c2  where  c2.ClassName      = _validatedClassName);
   
   if  (_class1Id is null)  then
-    call MLClassInsert(_class1Name, "AllClasses", "Added by 'ImagesInsert'");
+    call MLClassInsert(_class1Name, "AllClasses", "Added by 'ImagesInsert'", "N", "N");
     set  _class1Id = (select  c.ClassId  from  Classes c  where c.ClassName = _class1Name);
   end if;
 

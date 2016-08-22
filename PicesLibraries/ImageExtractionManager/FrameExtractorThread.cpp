@@ -638,10 +638,23 @@ void  FrameExtractorThread::ProcessFrame ()
       pixelsPerScanLine = idPixelsPerScanLine;
   }
 
+  // KKKK  Need to check wheather SIPPER or KSquare  to determine how to compute area.
+
+  float chamberWidth = 0.0f;
+
+  if  (this->siperFileRootName.ToLower().StartsWith("port"))
+  {
+    flowRate = 2.0;
+    chamberWidth = 50.8f;
+    pixelsPerScanLine = 1300;
+  }
+  else
+  {
+    chamberWidth = 96.0f;
+  }
+
   float pixelLen = 1000.0f * flowRate / scanRate; //   (m/s)/(sl/s)(1000) = (m/s)(s/sl)(1000) = (m/sl)(1000(mm/m)) = length of pixel in mm
-
-  float pixelWidth = 96.0f /  (float)pixelsPerScanLine;
-
+  float pixelWidth = chamberWidth /  (float)pixelsPerScanLine;
   float pixelArea = pixelLen * pixelWidth;
   
   logicalFrame->PopulateFrame (frameNum, 

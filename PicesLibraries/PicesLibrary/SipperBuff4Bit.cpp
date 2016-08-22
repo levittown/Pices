@@ -214,6 +214,7 @@ SipperBuff4Bit::SipperBuff4Bit (InstrumentDataManagerPtr  _instrumentDataManager
 {
   BuildConversionTables ();
   PrintSizeInfo ();
+  byteOffset = 0;
 }
 
 
@@ -243,6 +244,7 @@ SipperBuff4Bit::SipperBuff4Bit (const KKStr&              _fileName,
   BuildConversionTables ();
   AllocateEncodedBuff ();
   AllocateRawStr (pixelsPerScanLine + 100);
+  byteOffset = 0;
 
   //if  (Opened ())
   //  ExtractSipperHeaderInfo ();
@@ -474,21 +476,23 @@ void  SipperBuff4Bit::ProcessTextBlock (const OpRec&  rec)
     eof = true;
     return;
   }
+  byteOffset += sizeof (rec2);
 
-   kkuint32  numTextBytes = 256 * rec.textBlock1.lenHighBits + rec2.textBlock2.lenLowBits;
-   char* textMsgPtr = new char[numTextBytes + 1];  // "+ 1" for terminating NULL Character.
-   kkuint32 textMsgLen = numTextBytes;
+  kkuint32  numTextBytes = 256 * rec.textBlock1.lenHighBits + rec2.textBlock2.lenLowBits;
+  char* textMsgPtr = new char[numTextBytes + 1];  // "+ 1" for terminating NULL Character.
+  kkuint32 textMsgLen = numTextBytes;
    
-   recsRead = fread (textMsgPtr, 1, numTextBytes, inFile);
-   if  (recsRead < numTextBytes)
-      eof = true;
-   else
-   {
-     textMsgPtr[recsRead] = 0;
-     //ReportTextMsg (textMsgPtr, textMsgLen);
-   }
-   delete  textMsgPtr;  textMsgPtr = NULL;
-   textMsgLen = 0;
+  recsRead = fread (textMsgPtr, 1, numTextBytes, inFile);
+  if  (recsRead < numTextBytes)
+     eof = true;
+  else
+  {
+    byteOffset +=numTextBytes;
+    textMsgPtr[recsRead] = 0;
+    //ReportTextMsg (textMsgPtr, textMsgLen);
+  }
+  delete  textMsgPtr;  textMsgPtr = NULL;
+  textMsgLen = 0;
 }  /* ProcessTextBlock */
 
 
@@ -504,11 +508,13 @@ void  SipperBuff4Bit::ProcessInstrumentDataWord (const OpRec&  rec)
     eof = true;
   else
   {
+    byteOffset += sizeof (rec2);
     recsRead = fread (&rec3, sizeof (rec3), 1, inFile);
     if  (recsRead < 1)
       eof = true;
     else
     {
+      byteOffset += sizeof (rec3);
       //ReportInstrumentDataWord (idNum, rec2.scanLineNum, rec3.word);
     }
   }
@@ -533,6 +539,8 @@ void  SipperBuff4Bit::ProcessRawPixelRecs (kkuint16  numRawPixelRecs,
     eof = true;
     return;
   }
+
+  byteOffset += sizeof (RawPixelRec) * numRawPixelRecs;
 
   for  (kkuint32 x = 0;  x < numRawPixelRecs;  ++x)
   {
@@ -563,6 +571,8 @@ void  SipperBuff4Bit::GetNextScanLine (uchar*  lineBuff,
 
   lineLen = 0;
 
+  curRowByteOffset = byteOffset;
+
   do
   {
     recsRead = fread (&rec, sizeof (rec), 1, inFile);
@@ -570,6 +580,8 @@ void  SipperBuff4Bit::GetNextScanLine (uchar*  lineBuff,
     {
       break;
     }
+
+    byteOffset += sizeof (rec);
 
     opCode = rec.textBlock1.opCode;
 
@@ -582,6 +594,7 @@ void  SipperBuff4Bit::GetNextScanLine (uchar*  lineBuff,
       // length of the encoded line is exceeding the scan line length.
       eol = true;
       ungetc (rec.textChar, inFile);
+      byteOffset -= 1;
       break;
     }
 
@@ -618,6 +631,7 @@ void  SipperBuff4Bit::GetNextScanLine (uchar*  lineBuff,
         eol = true;
       else
       {
+        byteOffset += sizeof (rec2);
         kkuint32  runLen = 1 + rec2.run256Len2.runLen;
         kkuint32  newLineSize = bufferLineLen + runLen;
         if  (newLineSize > lineBuffSize)
@@ -671,6 +685,7 @@ void  SipperBuff4Bit::GetNextScanLine (uchar*  lineBuff,
       }
       else
       {
+        byteOffset += sizeof (rec2);
         kkuint16  numRawRecs = 1 + 16 * (kkuint16)(rec.raw513Pixels1.lenHigh) + (kkuint16)(rec2.raw513Pixels2.lenLow);
         kkuint16  numRawPixels = 1 + 2 * numRawRecs;
         kkuint16  newBufferLineLen = bufferLineLen + numRawPixels;
@@ -712,7 +727,6 @@ void  SipperBuff4Bit::GetNextLine (uchar*   lineBuff,
                                   )
 {
   GetNextScanLine (lineBuff, lineBuffSize, lineSize);
-
 
   for  (kkuint32  x = 0;  x < lineSize;  ++x)
   {

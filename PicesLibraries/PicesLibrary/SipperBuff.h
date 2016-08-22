@@ -132,11 +132,9 @@ namespace MLL
                                 bool   text,
                                 uchar  sensorData
                                );
-  
-  
-    void  SkipOneByte ();
-  
     
+    void  SkipOneByte ();
+      
   protected:
   
     void  AssignSerialPorts (const SipperHeaderRecPtr  sipperHeaderRec);
