@@ -58,8 +58,9 @@ using namespace  ImageExtractionManager;
 // -D D:\Larcos\ExtractedImages\2016-08-02_PortJeff_019\  -min 100 -S D:\Larcos\ScannerFiles\2016-08-01_PortJeff\2016-08-02_PortJeff_019\PortJeff_019_20160802-105133.spr   -c USF_Dual_MFS-BFS_current  -X  -CountOnly  -MultiThreaded Yes  
                                                                                                                                          
 // -D D:\Larcos\ExtractedImages\2016-08-02_PortJeff_019\  -min 60 -S D:\Larcos\ScannerFiles\2016-08-01_PortJeff\2016-08-02_PortJeff_019\PortJeff_019_20160802-105133.spr   -c USF_Dual_MFS-BFS_current  -X  -CountOnly  -MultiThreaded Yes     
-// -D D:\Larcos\ExtractedImages\2016-08-02_PortJeff_019\  -min 100 -S D:\Larcos\ScannerFiles\2016-08-01_PortJeff\2016-08-02_PortJeff_019\PortJeff_019_20160802-105133.spr   -MultiThreaded Yes    -FO   -M 90
-
+// -D F:\Larcos\ExtractedImages\2016-08-02_PortJeff_019\  -min 250 -S F:\Pices\SipperFiles\OceanSpace\2016-07-31_PortJeff\PortJeff_019_20160802-105133.spr                   -MultiThreaded Yes -c USF_MFS.cfg  -X  -CountOnly 
+// -D F:\Larcos\ExtractedImages\2016-08-02_PortJeff_019\  -minarea 0.456356 -S F:\Pices\SipperFiles\OceanSpace\2016-07-31_PortJeff\PortJeff_019_20160802-105133.spr                   -MultiThreaded Yes -c USF_MFS.cfg  -X  -CountOnly 
+// -D F:\Larcos\ExtractedImages\2016-08-02_PortJeff_016\  -minarea 0.6 -S F:\Pices\SipperFiles\OceanSpace\2016-08-01_PortJeff_016\PortJeff_016_20160801-211555.spr                  -MultiThreaded Yes -c USF_MFS.cfg  -X  -CountOnly   -CPD 1
 
 /////////////////////////////////////////////////////////////////////////////
 // CImageExtractionWindowsApp
