@@ -628,6 +628,14 @@ void  FrameExtractorThread::ProcessFrame ()
   if  (scanRate < 100.0f)
     scanRate = 25950.0f;
 
+  if  (this->siperFileRootName.ToLower().StartsWith("port"))
+  {
+    pixelsPerScanLine = 1189;
+    flowRate= 2.0;
+    scanRate= 15000;
+  }
+  else
+  {
   auto id = InstrumentDataFileManager::GetClosestInstrumentData(siperFileRootName, frameSipperRow, CancelFlag(), log);
   if  (id)
   {
@@ -637,8 +645,9 @@ void  FrameExtractorThread::ProcessFrame ()
     if  (idPixelsPerScanLine > 100)
       pixelsPerScanLine = idPixelsPerScanLine;
   }
+  }
 
-  // KKKK  Need to check wheather SIPPER or KSquare  to determine how to compute area.
+  // KKKK  Need to check whether SIPPER or KSquare  to determine how to compute area.
 
   float chamberWidth = 0.0f;
 
@@ -646,7 +655,7 @@ void  FrameExtractorThread::ProcessFrame ()
   {
     flowRate = 2.0;
     chamberWidth = 50.8f;
-    pixelsPerScanLine = 1300;
+    pixelsPerScanLine = 1189;
   }
   else
   {
