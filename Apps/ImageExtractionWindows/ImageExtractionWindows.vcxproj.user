@@ -1,19 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LocalDebuggerCommandArguments>-D D:\Larcos\ExtractedImages\2016-08-02_PortJeff_019\  -min 250 -S D:\Larcos\ScannerFiles\2016-08-01_PortJeff\2016-08-02_PortJeff_019\PortJeff_019_20160802-105133.spr   -c PortJeff.cfg  -X  -CountOnly  -MultiThreaded Yes     </LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-D D:\Larcos\ExtractedImages\2016-08_PortJeff_013\  -min 350 -S D:\Pices\SipperFiles\OceanSpace\PortJeff-2016-08\PortJeff_013_20160801-201643.spr   -c PortJeff.cfg  -X  -CountOnly  -MultiThreaded Yes     </LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LocalDebuggerCommandArguments>-D D:\Larcos\ExtractedImages\2016-08-02_PortJeff_019\  -min 250 -S D:\Larcos\ScannerFiles\2016-08-01_PortJeff\2016-08-02_PortJeff_019\PortJeff_019_20160802-105133.spr   -c PortJeff.cfg  -X  -CountOnly  -MultiThreaded Yes     </LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-D D:\Larcos\ExtractedImages\2016-08_PortJeff_013\  -min 350 -S D:\Pices\SipperFiles\OceanSpace\PortJeff-2016-08\PortJeff_013_20160801-201643.spr   -c PortJeff.cfg  -X  -CountOnly  -MultiThreaded Yes     </LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedRelease|Win32'">
-    <LocalDebuggerCommandArguments>-D D:\Larcos\ExtractedImages\2016-08-02_PortJeff_019\  -min 250 -S D:\Larcos\ScannerFiles\2016-08-01_PortJeff\2016-08-02_PortJeff_019\PortJeff_019_20160802-105133.spr   -c PortJeff.cfg  -X  -CountOnly  -MultiThreaded Yes     </LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-D D:\Larcos\ExtractedImages\2016-08_PortJeff_013\  -min 350 -S D:\Pices\SipperFiles\OceanSpace\PortJeff-2016-08\PortJeff_013_20160801-201643.spr   -c PortJeff.cfg  -X  -CountOnly  -MultiThreaded Yes     </LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedDebug|Win32'">
-    <LocalDebuggerCommandArguments>-D D:\Larcos\ExtractedImages\2016-08-02_PortJeff_019\  -min 250 -S D:\Larcos\ScannerFiles\2016-08-01_PortJeff\2016-08-02_PortJeff_019\PortJeff_019_20160802-105133.spr   -c PortJeff.cfg  -X  -CountOnly  -MultiThreaded Yes     </LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-D D:\Larcos\ExtractedImages\2016-08_PortJeff_013\  -min 350 -S D:\Pices\SipperFiles\OceanSpace\PortJeff-2016-08\PortJeff_013_20160801-201643.spr   -c PortJeff.cfg  -X  -CountOnly  -MultiThreaded Yes     </LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

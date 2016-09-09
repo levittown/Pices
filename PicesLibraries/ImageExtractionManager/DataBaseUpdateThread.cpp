@@ -71,7 +71,7 @@ DataBaseUpdateThread::DataBaseUpdateThread (ExtractionParms&                 _pa
 {
   sipperRootName = osGetRootName (parms.SipperFileName ());
 
-  if  (parms.ExtractFeatureData ())
+  if  (parms.ExtractFeatureData ()  &&  (!sipperRootName.ToLower().StartsWith("port")))
   {
     dupImageDetector = new DuplicateImages (fileDesc, log);
     duplicateImages  = new ImageFeaturesList (fileDesc, true);
