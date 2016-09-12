@@ -608,7 +608,7 @@ void  FrameExtractorThread::ProcessFrame ()
   LogicalFramePtr  logicalFrame = framePool->GetNextAvailaleFrame ();
   while  ((logicalFrame == NULL)  &&  (!CancelFlag ()))
   {
-    osSleep (0.002f);
+    osSleepMiliSecs(1);
     logicalFrame = framePool->GetNextAvailaleFrame ();
   }
 

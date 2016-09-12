@@ -109,13 +109,11 @@ ExtractedImagePtr  DataBaseUpdateThread::GetNextImageToUpdate ()
   ExtractedImagePtr  nextImage = imagesAwaitingUpdate->GetNextExtractedImage ();
   while  ((nextImage == NULL)  &&  (!ShutdownOrTerminateRequested ()))
   {
-    osSleep (0.01f);
+    KKB::osSleepMiliSecs(2);
     nextImage = imagesAwaitingUpdate->GetNextExtractedImage ();
   }
   return  nextImage;
 }  /* GetNextImageToUpdate */
-
-
 
 
 
