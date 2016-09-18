@@ -336,9 +336,6 @@ namespace PicesCommander
 
         foreach  (PicesSipperFile  sf in sipperFiles)
         {
-          if  (!(sf.CruiseName.ToUpper ().StartsWith ("WB")  ||  sf.CruiseName.ToUpper ().StartsWith ("B")))
-            continue;
-
           bool  startANewDir = false;
           if  (firstSipperFile)
             startANewDir = true;
