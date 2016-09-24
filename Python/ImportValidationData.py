@@ -81,7 +81,7 @@ def  LoadClassList(fileName):
 
 
 def  ImportValidationDataInDirectory(dirName):
-  passWord=""
+  passWord="Dasani!20"
   try:
     #db = mysql.connector.Connect(user=kkramer',
     #                             password=passWord,
@@ -89,17 +89,17 @@ def  ImportValidationDataInDirectory(dirName):
     #                             database='pices_new'
     #                          )
 
-    db = mysql.connector.Connect(user='kkramer',
-                                 password=passWord,
-                                 host='sipper-db2.marine.usf.edu',
-                                 database='pices_new'
-                               )
-
-    #db = mysql.connector.Connect(user='root',
+    #db = mysql.connector.Connect(user='kkramer',
     #                             password=passWord,
-    #                             host='localhost',
+    #                             host='sipper-db2.marine.usf.edu',
     #                             database='pices_new'
     #                           )
+
+    db = mysql.connector.Connect(user='root',
+                                 password=passWord,
+                                 host='localhost',
+                                 database='pices_iec'
+                               )
 
   except  mysql.connector.Error as err:
     db = None
@@ -153,7 +153,8 @@ def  main():
   #rootDir="E:\\Users\\kkramer\\Dropbox\\Sipper\\FromAndrewToKurt\\Validation\\2014-09-16\\"
   #rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews"
   #rootDir="C:\\Pices\\UpdatesFromOtherServers"
-  rootDir="D:\\Temp"
+  rootDir="D:\\Users\\kkramer\\DropBox\\Dropbox\\Pices\\SipperFiles\\NOAA\\2016-08-20_UpdatesFromAndrewsPC"
+  #rootDir="D:\\Temp"
   ImportValidationDataInDirectory(rootDir)
 
 
