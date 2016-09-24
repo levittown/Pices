@@ -67,6 +67,7 @@ using namespace  MLL;
 
 
 // -RootDir F:\Pices\SipperFiles\NOAA  -min 100   -c USF_Dual_MFS-BFS_current 
+// -RootDir E:\Pices\SipperFiles\NOAA  -min 100   -c USF_Dual_MFS-BFS_current 
 
 ExtractAllSipperFiles::ExtractAllSipperFiles ():
    PicesApplication    (),

@@ -63,3 +63,5 @@ PlanktonApps.VC.db
 PlanktonApps.VC.VC.opendb
 *.pidb
 
+Apps/ExtractAllSipperFiles/ExtractAllSipperFiles.vcxproj.user
+Apps/ExtractAllSipperFiles/ExtractAllSipperFiles.vcxproj.user
