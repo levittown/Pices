@@ -482,7 +482,7 @@ void   FeatureFileConverter::NormalizeExamples (ModelParam&         param,
                                                )
 {
   KKStr  parameterStr = param.ToCmdLineStr ();
-  NormalizationParmsPtr  normParms = NULL;
+  NormalizationParms const *  normParms = NULL;
   if  (osFileExists (nornParmsFileName))
   {
     bool  successful = false;

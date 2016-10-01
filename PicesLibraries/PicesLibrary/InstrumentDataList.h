@@ -55,15 +55,15 @@ namespace  MLL
                )  const;
   
   
-    ///<summary>
-    /// Calculates the offset, in meters, from the beginning of a SIPPER file for each frame.
-    /// Data will be assumed to be in scan line order.  Flow-rate and Scan-rate will be used as
-    /// part of the calculations.
-    ///</summary>
-    ///<param name=scanRate>Scan-Lines per second.</param>
-    ///<param name=defaultFlowRate> If a Instrument Data record has a FlowRate &lt;= 0.0 the default rate will be used.</param>
-    ///<param name=defaultFlowRate>Flow-rate to use if not provided in the Scanner File.</param>
-    ///<returns>Vector where each index indicates the offset from start of sipper file in meters for the respective frame.</returns>
+    /**
+     * @brief Calculates the offset, in meters, from the beginning of a SIPPER file for each frame.
+     * @details  Data will be assumed to be in scan line order. Flow-rate and Scan-rate will be used as
+     * part of the calculations.
+     * @param scanRate  Scan-Lines per second.
+     * @param defaultFlowRate  If a Instrument Data record has a FlowRate &lt;= 0.0 the default rate will be used.
+     * @param defaultFlowRate  Flow-rate to use if not provided in the Scanner File.
+     * @returns Vector where each index indicates the offset from start of sipper file in meters for the respective frame.
+     */
     VectorDouble  FrameOffsetsInMeters (kkuint32 scanLinesPerFrame,
                                         float    scanRate,
                                         float    defaultFlowRate
@@ -104,7 +104,7 @@ namespace  MLL
   
     void  MakeSureFlowRateAndDepthDataIsThere (bool&  changesMade);
   
-    /** @brief  If there was no Depth data on the SipperFile we want to populate the Depth field from the SipperFile::Depth ()  */
+    /** If there was no Depth data on the SipperFile we want to populate the Depth field from the SipperFile::Depth ()  */
     void  MakeSureDepthDataIsThere (SipperFilePtr  sipperFile,  
                                     bool&          changesMade
                                    );
