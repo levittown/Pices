@@ -710,16 +710,16 @@ void  MarineSnowReport (const KKStr&  statistic)
 //         deployment->StationName ().StartsWith ("DSH")  ||
  //        deployment->StationName ().StartsWith ("PCB")
 //        )
-    if  (deployment->CruiseName ().EqualIgnoreCase ("WB1008") &&
-         deployment->StationName ().StartsWith ("PCB01")
-        )
-    {
-      runLog.Level (10) << "MarineSnowReport    Found Cruise: " << deployment->CruiseName ()  << endl;
-    }
-    else
-    {
-      continue;
-    }
+//    if  (deployment->CruiseName ().EqualIgnoreCase ("WB1008") &&
+//         deployment->StationName ().StartsWith ("PCB01")
+//        )
+//    {
+//      runLog.Level (10) << "MarineSnowReport    Found Cruise: " << deployment->CruiseName ()  << endl;
+//    }
+//    else
+//    {
+//      continue;
+//    }
 
     DeploymentSummary*  sumary = MarineSnowReportDeployment (*idx, *db, statistic, statisticStr, CastType::Combined,  runLog);
     if  (sumary)
