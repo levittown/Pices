@@ -456,7 +456,7 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
       r1 << endl;
     }
 
-    r1 << "" << "\t" << "" << "\t" << "" << "\t" << "" << "\t" << "Integrated Counts" << "\t" << "";
+    r1 << "" << "\t" << "" << "\t" << "" << "\t" << "" << "\t" <<  "" << "\t" <<  "" << "\t" <<  "" << "\t" << "Integrated Counts" << "\t" << "";
     for  (kkuint32 x = 0;  x < integratedCounts.size ();  ++x)
       r1 << "\t" << integratedCounts[x];
 
@@ -629,7 +629,7 @@ void  MarineSnowReport (const KKStr&  statistic)
   {
     SipperDeploymentPtr  deployment = *idx;
 
-    if  (deployment->StationName ().EqualIgnoreCase ("DWH")  ||
+    if  (deployment->StationName ().EqualIgnoreCase ("DWH") ||
          deployment->StationName ().StartsWith ("DSH")  ||
          deployment->StationName ().StartsWith ("PCB")
         )

@@ -39,13 +39,13 @@ public:
 	CString       m_imagesExtracted;
 	CString       m_imagesWritten;
 	CString       m_sipperFileSize;
-	int		m_minimumSize;
-	int		m_maximumSize;
-  CString m_database;
-	CString	m_sipperFileName;
-	CString	m_destinationDirectory;
-	BOOL	m_saveFrames;
-	BOOL	m_extractFeatures;
+	int           m_minimumSize;
+	int	      	  m_maximumSize;
+  CString	      m_database;
+	CString	      m_sipperFileName;
+	CString	      m_destinationDirectory;
+	BOOL          m_saveFrames;
+	BOOL          m_extractFeatures;
 	//}}AFX_DATA
 
 	// ClassWizard generated virtual function overrides
