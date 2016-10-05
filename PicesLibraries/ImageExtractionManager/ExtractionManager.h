@@ -124,7 +124,7 @@ namespace  ImageExtractionManager
     double                              endCPUsecs;
     DateTime                            endTime;
     FactoryFVProducerPtr                fvProducerFactory;
-    FileDescPtr                         fileDesc;
+    FileDescConstPtr                    fileDesc;
     FrameExtractorThreadPtr             frameExtractorThread;
     LogicalFrameQueuePtr                framePool;              /**< Frames that will be used by 'FrameExtractorThread' and 'FrameProcessorThread'. */
     ImageExtractionThreadListPtr        frameProcessors;   /**< List of threads that are specifically instances of 'FrameProcessorThread'.     */

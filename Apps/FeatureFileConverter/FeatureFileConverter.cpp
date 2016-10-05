@@ -526,7 +526,7 @@ void  FeatureFileConverter::EncodeFeatureData ()
   
   // We do the next line to generate a report of the encoded field assignments.
   *report << endl;
-  FileDescPtr  encodedFileDesc = encoder.CreateEncodedFileDesc (report, log);
+  FileDescConstPtr  encodedFileDesc = encoder.CreateEncodedFileDesc (report, log);
 
   NormalizeExamples (param, *data);
 
@@ -780,7 +780,7 @@ void  SplitForestCoverFile ()
   FeatureVectorListPtr  images = FeatureFileIOC45::Driver ()->LoadFeatureFile 
                     ("covtype_alpha.data", mlClasses, -1, cancelFlag, successful, changesMade, log);
 
-  FileDescPtr  fileDesc = images->FileDesc ();
+  FileDescConstPtr  fileDesc = images->FileDesc ();
 
   images->RandomizeOrder ();
   images->RandomizeOrder ();

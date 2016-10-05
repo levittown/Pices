@@ -31,7 +31,7 @@ namespace  ImageExtractionManager
                           MsgQueuePtr                      _msgQueue,
                           ExtractedImageQueuePtr           _imagesAwaitingUpdate,
                           SipperExtractionImageManagerPtr  _imageManager,
-                          FileDescPtr                      _fileDesc
+                          FileDescConstPtr                 _fileDesc
                          );
 
     virtual ~DataBaseUpdateThread ();
@@ -66,7 +66,7 @@ namespace  ImageExtractionManager
                                                               * and hence cause memory leaks.
                                                               */
     kkuint32                         duplicatesDetected;
-    FileDescPtr                      fileDesc;
+    FileDescConstPtr                 fileDesc;
     SipperExtractionImageManagerPtr  imageManager;
     ExtractedImageQueuePtr           imagesAwaitingUpdate;
     kkuint32                         imagesUpdated;

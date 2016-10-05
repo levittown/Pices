@@ -22,14 +22,14 @@ namespace  MLL
     typedef  ManagedClassList*  ManagedClassListPtr;
 
 
-    SipperExtractionImageManager (FileDescPtr   _fileDesc,
-                                  const KKStr&  _rootDir,
-                                  bool          _saveFeatureData,
-                                  kkint32       _veryLargeImageSize,
-                                  bool          _imagesAreClassified,
-                                  bool          _countOnly,
-                                  kkuint32      _imagesPerDirectory,
-                                  RunLog&       _log
+    SipperExtractionImageManager (FileDescConstPtr  _fileDesc,
+                                  const KKStr&      _rootDir,
+                                  bool              _saveFeatureData,
+                                  kkint32           _veryLargeImageSize,
+                                  bool              _imagesAreClassified,
+                                  bool              _countOnly,
+                                  kkuint32          _imagesPerDirectory,
+                                  RunLog&           _log
                                  );
 
     ~SipperExtractionImageManager ();
@@ -69,7 +69,7 @@ namespace  MLL
     bool                  countOnly;
     SizeDistribution      depthDistribution_1;     /**< using a SizeDistribution structure to implement counts by depth by 1 meter increments.  */
     SizeDistribution      depthDistribution_10;    /**< using a SizeDistribution structure to implement counts by depth by 10 meter increments. */
-    FileDescPtr           fileDesc;
+    FileDescConstPtr      fileDesc;
     bool                  imagesAreClassified;
     kkuint32              imagesPerDirectory;
     RunLog&               log;

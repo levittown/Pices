@@ -85,7 +85,7 @@ BinaryJobList::~BinaryJobList ()
 
 
 
-FileDescPtr   BinaryJobList::FileDesc ()
+FileDescConstPtr   BinaryJobList::FileDesc ()
 {
   return  processor->FileDesc ();
 }

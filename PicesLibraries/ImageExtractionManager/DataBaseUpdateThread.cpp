@@ -50,7 +50,7 @@ DataBaseUpdateThread::DataBaseUpdateThread (ExtractionParms&                 _pa
                                             MsgQueuePtr                      _msgQueue,
                                             ExtractedImageQueuePtr           _imagesAwaitingUpdate,
                                             SipperExtractionImageManagerPtr  _imageManager,
-                                            FileDescPtr                      _fileDesc
+                                            FileDescConstPtr                 _fileDesc
                                            ):
 
     ImageExtractionThread (_parms, _extractionManager, _threadName, _msgQueue),

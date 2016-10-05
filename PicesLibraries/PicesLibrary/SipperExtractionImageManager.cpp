@@ -60,13 +60,13 @@ public:
 class  SipperExtractionImageManager::ManagedClass
 {
 public:
-  ManagedClass (FileDescPtr   _fileDesc,
-                MLClassPtr    _mlClass,
-                const KKStr&  _rootDir,
-                bool          _saveFeatureData,
-                bool          _countOnly,
-                kkuint32      _imagesPerDirectory,
-                RunLog&       _log
+  ManagedClass (FileDescConstPtr  _fileDesc,
+                MLClassPtr        _mlClass,
+                const KKStr&      _rootDir,
+                bool              _saveFeatureData,
+                bool              _countOnly,
+                kkuint32          _imagesPerDirectory,
+                RunLog&           _log
                );
 
   ~ManagedClass ();
@@ -101,7 +101,7 @@ private:
   KKStr                 curSubDirName;
   ImageEntryListPtr     entries;
   ImageFeaturesListPtr  examplesCurDir;
-  FileDescPtr           fileDesc;
+  FileDescConstPtr      fileDesc;
   KKStr                 fullSubDirName;
   MLClassPtr            mlClass;
   kkint32               imageCount;
@@ -114,14 +114,14 @@ private:
 
 
 
-SipperExtractionImageManager::SipperExtractionImageManager (FileDescPtr  _fileDesc,
-                                                            const KKStr& _rootDir,
-                                                            bool         _saveFeatureData,
-                                                            kkint32      _veryLargeImageSize,
-                                                            bool         _imagesAreClassified,
-                                                            bool         _countOnly,
-                                                            kkuint32     _imagesPerDirectory,
-                                                            RunLog&      _log
+SipperExtractionImageManager::SipperExtractionImageManager (FileDescConstPtr  _fileDesc,
+                                                            const KKStr&      _rootDir,
+                                                            bool              _saveFeatureData,
+                                                            kkint32           _veryLargeImageSize,
+                                                            bool              _imagesAreClassified,
+                                                            bool              _countOnly,
+                                                            kkuint32          _imagesPerDirectory,
+                                                            RunLog&           _log
                                                            ):
      allExamples           (NULL),
      countOnly             (_countOnly),
@@ -426,13 +426,13 @@ ClassStatisticListPtr  SipperExtractionImageManager::ClassStats ()  const
 
 
 SipperExtractionImageManager::ManagedClass::ManagedClass 
-                           (FileDescPtr   _fileDesc,
-                            MLClassPtr    _mlClass,
-                            const KKStr&  _rootDir,
-                            bool          _saveFeatureData,
-                            bool          _countOnly,
-                            kkuint32      _imagesPerDirectory,
-                            RunLog&       _log
+                           (FileDescConstPtr  _fileDesc,
+                            MLClassPtr        _mlClass,
+                            const KKStr&      _rootDir,
+                            bool              _saveFeatureData,
+                            bool              _countOnly,
+                            kkuint32          _imagesPerDirectory,
+                            RunLog&           _log
                            ):
     
     countOnly          (_countOnly),

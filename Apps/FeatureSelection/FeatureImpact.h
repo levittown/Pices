@@ -43,14 +43,14 @@ typedef  AccByFeatureSelList*  AccByFeatureSelListPtr;
                                     );
 
   private:
-    FileDescPtr   fileDesc;
-    RunLog&       log;
-    VectorFloat   accuracyMeans;
-    VectorFloat   accuracyStdDevs;
+    FileDescConstPtr  fileDesc;
+    RunLog&           log;
+    VectorFloat       accuracyMeans;
+    VectorFloat       accuracyStdDevs;
 
-    VectorFloat   fMeasureMeans;
-    VectorFloat   fMeasureStdDevs;
-    vector<uint>  counts;
+    VectorFloat       fMeasureMeans;
+    VectorFloat       fMeasureStdDevs;
+    vector<uint>      counts;
 
     vector<VectorFloat>  accuracyImpacts;
     vector<VectorFloat>  fMeasureImpacts;

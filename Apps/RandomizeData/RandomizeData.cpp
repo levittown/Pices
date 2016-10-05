@@ -357,7 +357,7 @@ int                   classCount;
 
 bool                  deleteDuplicates = false;
 
-FileDescPtr           fileDesc = NULL;
+FileDescConstPtr      fileDesc = NULL;
 
 KKStr                 inputFileName;
 

@@ -133,7 +133,7 @@ void  Test ()
 {
   RunLog   runLog ("c:\\Temp\\TestTrainingProcess.txt");
   KKStr    configFileName = "etp_hierarchy.cfg";
-  FileDescPtr  fd = FeatureFileIOPices::NewPlanktonFile ();
+  FileDescConstPtr  fd = FeatureFileIOPices::NewPlanktonFile ();
   
   InstrumentDataFileManager::InitializePush ();
 
