@@ -155,8 +155,8 @@ LogicalFrame::LogicalFrame (const ExtractionParms&  _parms,
 
   backgroundPixelTH          (16),
 
-  cropLeft                   (0),
-  cropRight                  (4097),
+  cropLeft                   (547),
+  cropRight                  (1736),
   cancelFlag                 (_cancelFlag)
 
 {

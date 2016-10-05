@@ -829,6 +829,20 @@ void   ExtractionParms::ClassStats  (ClassStatisticListPtr  _classStats)
 
 float ExtractionParms::ComputeAreaFromPixelsUsingDefaults (kkint32 pixelCount)  const
 {
+  if  (KKB::osGetRootName (sipperFileName).ToLower().StartsWith("port"))
+  {
+    float scanRate = 1500.0;
+    float flowRate = 2.0f;
+    float scanLineWidthPixels = 1189.0;
+    float scanLineWidthmm = 50.8f;
+    float pixelWidth = scanLineWidthmm / scanLineWidthPixels;
+    float pixelLen = 1000.0f * flowRate / scanRate;
+    float pixelArea = pixelWidth* pixelLen;
+    float area = pixelArea * pixelCount;
+    return area;
+  }
+  else
+  {
   float scanRate = 24950.0;
   float flowRate = 0.5f;
   float scanLineWidthPixels = 3800.0;
@@ -838,4 +852,5 @@ float ExtractionParms::ComputeAreaFromPixelsUsingDefaults (kkint32 pixelCount)  
   float pixelArea = pixelWidth* pixelLen;
   float area = pixelArea * pixelCount;
   return area;
+  }
 }

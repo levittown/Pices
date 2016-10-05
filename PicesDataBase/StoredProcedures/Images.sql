@@ -3085,7 +3085,7 @@ begin
 	   limit 1;
   end if;
 
-  select  _latitude as "Latitude",  _longitude  as  "Longitude";
+  select  _latitude as 'Latitude',  _longitude  as  'Longitude';
 end;
 
 //

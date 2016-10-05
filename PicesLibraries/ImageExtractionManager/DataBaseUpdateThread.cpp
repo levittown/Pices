@@ -73,7 +73,7 @@ DataBaseUpdateThread::DataBaseUpdateThread (ExtractionParms&                 _pa
 
   if  (parms.ExtractFeatureData ()  &&  (!sipperRootName.ToLower().StartsWith("port")))
   {
-    dupImageDetector = new DuplicateImages (fileDesc, log);
+    //dupImageDetector = new DuplicateImages (fileDesc, log);
     duplicateImages  = new ImageFeaturesList (fileDesc, true);
     duplicateImageDir = osAddSlash (parms.OutputRootDir ()) + "DuplicateImages";
     osCreateDirectoryPath (duplicateImageDir);
