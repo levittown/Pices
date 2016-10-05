@@ -123,7 +123,7 @@ PicesTrainingConfigurationPtr  PicesTrainingConfiguration::CreateFromFeatureVect
                                                     )
 {
   _log.Level (10) << "PicesTrainingConfiguration::CreateFromFeatureVectorList" << endl;
-  FileDescPtr  fileDesc = _examples.FileDesc ();
+  FileDescConstPtr  fileDesc = _examples.FileDesc ();
 
   MLClassListPtr  mlClasses = _examples.ExtractListOfClasses ();
   mlClasses->SortByName ();
