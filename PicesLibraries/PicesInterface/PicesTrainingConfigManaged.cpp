@@ -64,7 +64,7 @@ namespace  PicesInterface
   {
     std::strstream  logStr;
     KKStr  configFileName = PicesKKStr::SystemStringToKKStr (_configFileName);
-    FileDescPtr  fileDesc = FeatureFileIOPices::NewPlanktonFile ();
+    FileDescConstPtr  fileDesc = FeatureFileIOPices::NewPlanktonFile ();
     config = new PicesTrainingConfiguration ();
     config->Load (configFileName, true, log->Log ());
     valid = gcnew System::Boolean (config->FormatGood ());
@@ -97,7 +97,7 @@ namespace  PicesInterface
     KKStr  modelNameKKStr = osGetRootNameOfDirectory (dirName) + ".cfg";
     KKStr  configFileName = osAddSlash (PicesVariables::TrainingModelsConfigurationDir ()) + modelNameKKStr;
     
-    FileDescPtr fd = FeatureFileIOPices::NewPlanktonFile ();
+    FileDescConstPtr fd = FeatureFileIOPices::NewPlanktonFile ();
     delete  classes;  classes = NULL;
 
     config = PicesTrainingConfiguration::CreateFromDirectoryStructure 

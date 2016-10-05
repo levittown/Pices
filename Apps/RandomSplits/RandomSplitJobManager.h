@@ -108,7 +108,7 @@ private:
   FeatureVectorListPtr      data;             //  Master Data List
   KKStr                     dataFileName;
   KKStr                     dataIndexFileName;
-  FileDescPtr               fileDesc;
+  FileDescConstPtr          fileDesc;
   FeatureFileIOPtr          format;
   MLClassListPtr            mlClasses;
   int                       numFolds;

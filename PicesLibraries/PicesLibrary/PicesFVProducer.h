@@ -42,7 +42,7 @@ namespace  MLL
                                                              );
 
 
-    static FileDescPtr  DefineFileDescStatic ();
+    static FileDescConstPtr  DefineFileDescStatic ();
 
     /**
      *@brief  Returns the 'type_info' of the Feature Vector that this instance of 'FeatureComputer' creates.
@@ -62,7 +62,7 @@ namespace  MLL
     static   kkint32  MaxNumOfFeatures  ();
 
   protected:
-    virtual  FileDescPtr  DefineFileDesc ()  const;
+    virtual  FileDescConstPtr  DefineFileDesc ()  const;
 
 
   private:
@@ -94,7 +94,7 @@ namespace  MLL
 
     virtual  const type_info*  FeatureVectorListTypeId ()  const;
 
-    virtual  FileDescPtr  FileDesc ()  const;
+    virtual  FileDescConstPtr  FileDesc ()  const;
 
     virtual  PicesFVProducerPtr  ManufactureInstance (RunLog&  runLog);
 

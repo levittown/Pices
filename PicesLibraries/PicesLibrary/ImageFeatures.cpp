@@ -1079,9 +1079,9 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
 
 
 
-ImageFeaturesList::ImageFeaturesList (FileDescPtr  _fileDesc,
-                                      bool         _owner,
-                                      kkint32      _size
+ImageFeaturesList::ImageFeaturesList (FileDescConstPtr  _fileDesc,
+                                      bool              _owner,
+                                      kkint32           _size
                                      ):
 
     FeatureVectorList (_fileDesc, _owner),

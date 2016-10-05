@@ -347,9 +347,9 @@ namespace MLL
     typedef  KKB::kkuint32  kkuint32;
 
 
-    ImageFeaturesList (FileDescPtr  _fileDesc,
-                       bool         _owner,
-                       kkint32      _size = 1000
+    ImageFeaturesList (FileDescConstPtr  _fileDesc,
+                       bool              _owner,
+                       kkint32           _size = 1000
                       );
 
   private:

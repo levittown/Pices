@@ -90,7 +90,7 @@ namespace FeatureSelectionApp
 
     BinaryJobPtr      FastestJob ();
 
-    FileDescPtr       FileDesc ();
+    FileDescConstPtr  FileDesc ();
 
     void              FindNeighboringParameterValues (BinaryJobPtr  targetJob,
                                                       double&       cMin,

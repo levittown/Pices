@@ -486,7 +486,7 @@ void  JohnsonParkerTest ()
     return;
   }
 
-  FileDescPtr  fileDesc = trainData->FileDesc ();
+  FileDescConstPtr  fileDesc = trainData->FileDesc ();
 
   KKStr  parameterStr = "-a 1  -c 25.11886  -d 3  -e 0.001  -g 0.01474560 -h 1  -i 0  -j 0  -k 0  -l 1  -m 100  -n 0.5  -p 0.1  -q 0  -r 0  -s 0  -t 2  -u 127.48761  -z 0  -MT OneVsOne  -SM Voting";
   TrainingConfiguration2*  config = TrainingConfiguration2::CreateFromFeatureVectorList (*trainData, fileDesc, parameterStr, log);
