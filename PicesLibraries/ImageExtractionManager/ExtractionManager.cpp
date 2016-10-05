@@ -572,7 +572,7 @@ void  ExtractionManager::Initialize (bool&  _successful)
 
   msgQueue = new MsgQueue ("ExtractionManager");
 
-  kkuint32  maxNumOfFrames = KKB::Max ((kkuint32)3, (kkuint32)(maxNumThreads - 1));
+  kkuint32  maxNumOfFrames = KKB::Max ((kkuint32)3, (kkuint32)(maxNumThreads - 3));
 
   framePool = new LogicalFrameQueue (parms, 
                                      maxNumOfFrames,    // Maximum number of frames

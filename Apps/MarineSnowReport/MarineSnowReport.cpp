@@ -65,6 +65,15 @@ using namespace  MLL;
 
 KKStr  marineSnowReportDirectory = "D:\\Users\\kkramer\\DropBox\\Dropbox\\USF_OilSpillGroup\\MarineSnowPaper\\Data\\20160619_Area";
 
+enum class CastType : char { null = 0, Up = 1, Down = 2, Combined = 3};
+
+KKStr  CastTypeToStr(CastType c)
+{
+  if  (c == CastType::Combined)   return "Combined";
+  else if  (c == CastType::Up)    return "Up";
+  else if  (c == CastType::Down)  return "Down";
+  return "";
+}
 
 
 class  DeploymentSummary
@@ -152,6 +161,7 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
                                                 DataBase&            db,
                                                 const KKStr&         statistic,
                                                 const KKStr&         statisticStr,
+                                                CastType             cast,
                                                 RunLog&              runLog
                                                )
 {
@@ -164,7 +174,7 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
   ImageSizeDistributionPtr  downCast = NULL;
   ImageSizeDistributionPtr  upCast   = NULL;
 
-  ImageSizeDistributionPtr  totalDownCast = NULL;
+  ImageSizeDistributionPtr  totalCast = NULL;
 
   MLClassPtr  detritusClass = allClasses->LookUpByName ("Detritus");
   MLClassListPtr  classes = detritusClass->BuildListOfDecendents (detritusClass);
@@ -216,37 +226,47 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
                                       downCast, upCast
                                     );
 
-    if  (downCast)
+    if  (downCast  &&  ((cast == CastType::Down) ||  (cast == CastType::Combined)))
     {
-      if  (!totalDownCast)
+      if  (!totalCast)
       {
-        totalDownCast = new ImageSizeDistribution (downCast->DepthBinSize (), downCast->InitialValue (), downCast->GrowthRate (), downCast->EndValue (), downCast->SizeStartValues (), downCast->SizeStartValues (), runLog);
+        totalCast = new ImageSizeDistribution (downCast->DepthBinSize (), downCast->InitialValue (), downCast->GrowthRate (), downCast->EndValue (), downCast->SizeStartValues (), downCast->SizeStartValues (), runLog);
       }
-      totalDownCast ->AddIn (*downCast, runLog);
+      totalCast ->AddIn (*downCast, runLog);
     }
+
+    if  (upCast  &&  ((cast == CastType::Up) ||  (cast == CastType::Combined)))
+    {
+      if  (!totalCast)
+      {
+        totalCast = new ImageSizeDistribution (upCast->DepthBinSize (), upCast->InitialValue (), upCast->GrowthRate (), upCast->EndValue (), upCast->SizeStartValues (), upCast->SizeStartValues (), runLog);
+      }
+      totalCast ->AddIn (*upCast, runLog);
+    }
+
 
     delete  downCast;  downCast = NULL;
     delete  upCast;    upCast   = NULL;
   }
   
-  if  (!totalDownCast)
+  if  (!totalCast)
   {
     runLog.Level (-1) << "MarineSnowReportDeployment    ***ERROR***    No results returend" << endl;
     return NULL;
   }
   
-  kkint32  numRows = totalDownCast->NumDepthBins ();         // numRows = results->NumRows ();
+  kkint32  numRows = totalCast->NumDepthBins ();         // numRows = results->NumRows ();
   //kkint32  numCols =                                       // numCols = results->NumCols ();
-  kkint32  numCountCols = totalDownCast->NumSizeBuckets ();  // numCountCols = numCols - 6;
+  kkint32  numCountCols = totalCast->NumSizeBuckets ();  // numCountCols = numCols - 6;
 
   if  (numRows == 0)
   {
-    delete  totalDownCast;
-    totalDownCast = NULL;
+    delete  totalCast;
+    totalCast = NULL;
     return  NULL;
   }
 
-  VectorFloat  sizeThresholds = totalDownCast->SizeStartValues ();
+  VectorFloat  sizeThresholds = totalCast->SizeStartValues ();
 
   bool  cancelFlag = false;
   InstrumentDataMeansListPtr  instData = db.InstrumentDataBinByMeterDepth (deployment->CruiseName (), deployment->StationName (), deployment->DeploymentNum (), 1.0f, cancelFlag);
@@ -325,13 +345,14 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
     for  (kkint32 rowIdx = 0;  rowIdx < numRows;  ++rowIdx)
     {
 
-      ImageSizeDistributionRowPtr  row = totalDownCast->GetDepthBin ((kkuint32)rowIdx);
+      ImageSizeDistributionRowPtr  row = totalCast->GetDepthBin ((kkuint32)rowIdx);
       if  (!row)
         continue;
 
-      bool   downCast    = true;
+      KKStr  castStr = CastTypeToStr (cast);
+
       kkint32  bucketIdx   = rowIdx;
-      float  bucketDepth = row->Depth ();
+      float    bucketDepth = row->Depth ();
       kkint32  imageCount  = (kkint32)row->ImageCount ();
       kkint32  pixelCount  = row->TotalPixels ();
       kkint32  filledArea  = row->TotalFilledArea ();
@@ -339,14 +360,40 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
       const VectorUint32&  counts = row->Distribution ();
 
       float  volumeSampled = 0.0f;
-      InstrumentDataMeansPtr  idm = instData->LookUp (downCast, bucketDepth);
+
+
+      InstrumentDataMeansPtr  idm = NULL;
+      InstrumentDataMeansPtr  upIdm = NULL;
+      InstrumentDataMeansPtr  downIdm = NULL;
+      InstrumentDataMeansPtr  combinedIdm = NULL;
+
+      upIdm = instData->LookUp (false, bucketDepth);
+      downIdm = instData->LookUp (true, bucketDepth);
+
+      if  (upIdm) {
+        if  (downIdm)
+          combinedIdm = upIdm->Merge(downIdm);
+        else
+          combinedIdm = new InstrumentDataMeans(*upIdm);
+      }
+      else if  (downIdm) {
+        combinedIdm = new InstrumentDataMeans(*downIdm);
+      }
+
+      if  (cast == CastType::Up)
+        idm = upIdm;
+      else if  (cast == CastType::Down)
+        idm = downIdm;
+      else  if  (cast == CastType::Combined)
+        idm = combinedIdm;
+
       if  (idm)
         volumeSampled = idm->volumeSampled;
 
       totalVolumeSampled += volumeSampled;
 
       KKStr  begOfLine (128);
-      begOfLine << (downCast ? "Down" : "Up") << "\t" << bucketDepth << "\t" << volumeSampled << "\t" << imageCount << "\t" << pixelCount << "\t" << filledArea;
+      begOfLine << castStr << "\t" << bucketDepth << "\t" << volumeSampled << "\t" << imageCount << "\t" << pixelCount << "\t" << filledArea;
 
       r1 << begOfLine;
 
@@ -377,6 +424,9 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
         r1 << instDataStr;
       }
 
+      delete  combinedIdm;
+      combinedIdm = NULL;
+
       r1 << endl;
     }
 
@@ -400,7 +450,6 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
     }
     r1 << endl;
 
-
     r1 << endl << endl << endl
        << "Count" << endl
        << endl;
@@ -410,13 +459,13 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
 
     for  (kkint32 rowIdx = 0;  rowIdx < numRows;  ++rowIdx)
     {
-      ImageSizeDistributionRowPtr  row = totalDownCast->GetDepthBin ((kkuint32)rowIdx);
+      ImageSizeDistributionRowPtr  row = totalCast->GetDepthBin ((kkuint32)rowIdx);
       if  (!row)
         continue;
 
-      bool   downCast    = true;
+      bool     downCast    = true;
       kkint32  bucketIdx   = rowIdx;
-      float  bucketDepth = row->Depth ();
+      float    bucketDepth = row->Depth ();
       kkint32  imageCount  = (kkint32)row->ImageCount ();
       kkint32  pixelCount  = row->TotalPixels ();
       kkint32  filledArea  = row->TotalFilledArea ();
@@ -424,12 +473,37 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
       const VectorUint32&  counts = row->Distribution ();
 
       float  volumeSampled = 0.0f;
-      InstrumentDataMeansPtr  idm = instData->LookUp (downCast, bucketDepth);
+
+      InstrumentDataMeansPtr  idm = NULL;
+      InstrumentDataMeansPtr  upIdm = NULL;
+      InstrumentDataMeansPtr  downIdm = NULL;
+      InstrumentDataMeansPtr  combinedIdm = NULL;
+
+      upIdm = instData->LookUp (false, bucketDepth);
+      downIdm = instData->LookUp (true, bucketDepth);
+
+      if  (upIdm) {
+        if  (downIdm)
+          combinedIdm = upIdm->Merge(downIdm);
+        else
+          combinedIdm = new InstrumentDataMeans(*upIdm);
+      }
+      else if  (downIdm) {
+        combinedIdm = new InstrumentDataMeans(*downIdm);
+      }
+
+      if  (cast == CastType::Up)
+        idm = upIdm;
+      else if  (cast == CastType::Down)
+        idm = downIdm;
+      else  if  (cast == CastType::Combined)
+        idm = combinedIdm;
+
       if  (idm)
         volumeSampled = idm->volumeSampled;
 
       KKStr  begOfLine (128);
-      begOfLine << (downCast ? "Down" : "Up") << "\t" << bucketDepth << "\t" << volumeSampled << "\t" << imageCount << "\t" << pixelCount << "\t" << filledArea;
+      begOfLine << CastTypeToStr (cast) << "\t" << bucketDepth << "\t" << volumeSampled << "\t" << imageCount << "\t" << pixelCount << "\t" << filledArea;
 
       r1 << begOfLine;
 
@@ -454,6 +528,9 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
       }
 
       r1 << endl;
+
+      delete  combinedIdm;
+      combinedIdm = NULL;
     }
 
     r1 << "" << "\t" << "" << "\t" << "" << "\t" << "" << "\t" <<  "" << "\t" <<  "" << "\t" <<  "" << "\t" << "Integrated Counts" << "\t" << "";
@@ -467,8 +544,8 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
                                     integratedCounts);
   }
 
-  delete  instData;        instData = NULL;
-  delete  totalDownCast;   totalDownCast  = NULL;
+  delete  instData;    instData = NULL;
+  delete  totalCast;   totalCast  = NULL;
 
   return  result;
 }  /* MarineSnowReportDeployment */
@@ -629,19 +706,22 @@ void  MarineSnowReport (const KKStr&  statistic)
   {
     SipperDeploymentPtr  deployment = *idx;
 
-    if  (deployment->StationName ().EqualIgnoreCase ("DWH") ||
-         deployment->StationName ().StartsWith ("DSH")  ||
-         deployment->StationName ().StartsWith ("PCB")
-        )
-    {
-      runLog.Level (10) << "MarineSnowReport    Found Cruise: " << deployment->CruiseName ()  << endl;
-    }
-    else
-    {
-      continue;
-    }
+//    if  (deployment->StationName ().EqualIgnoreCase ("DWH") ||
+//         deployment->StationName ().StartsWith ("DSH")  ||
+ //        deployment->StationName ().StartsWith ("PCB")
+//        )
+//    if  (deployment->CruiseName ().EqualIgnoreCase ("WB1008") &&
+//         deployment->StationName ().StartsWith ("PCB01")
+//        )
+//    {
+//      runLog.Level (10) << "MarineSnowReport    Found Cruise: " << deployment->CruiseName ()  << endl;
+//    }
+//    else
+//    {
+//      continue;
+//    }
 
-    DeploymentSummary*  sumary = MarineSnowReportDeployment (*idx, *db, statistic, statisticStr, runLog);
+    DeploymentSummary*  sumary = MarineSnowReportDeployment (*idx, *db, statistic, statisticStr, CastType::Combined,  runLog);
     if  (sumary)
       summaries.push_back (sumary);
     ++loopCount;
