@@ -46,7 +46,7 @@ private:
 
   FeatureVectorListPtr  data;
 
-  FileDescPtr           destFileDesc;
+  FileDescConstPtr      destFileDesc;
 
   FeatureFileIOPtr      destFileFormat;
   KKStr                 destFileName;
@@ -68,7 +68,7 @@ private:
   ofstream*             reportFile;
   KKStr                 reportFileName;
 
-  FileDescPtr           srcFileDesc;
+  FileDescConstPtr      srcFileDesc;
 
   KKStr                 srcFileName;
   FeatureFileIOPtr      srcFileFormat;

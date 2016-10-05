@@ -198,8 +198,8 @@ BinaryJob::BinaryJob (ProcessorPtr _processor,
 
 
 
-BinaryJob::BinaryJob (RunLog&      _log,
-                      FileDescPtr  _fileDesc
+BinaryJob::BinaryJob (RunLog&           _log,
+                      FileDescConstPtr  _fileDesc
                      ):
 
   accuracy           (-1.0f),

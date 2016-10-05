@@ -174,7 +174,7 @@ private:
 
   SipperImageExtractionParms&  parms;
 
-  FileDescPtr fileDesc;
+  FileDescConstPtr  fileDesc;
 
   uint        veryLargeImageSize;   // Threshhold for putting Images into Very Large Directory.
 
@@ -183,7 +183,7 @@ private:
   //  Variables used for processing a single frame.
   uchar**     frame;
   uchar*      frameArea;
-  kkuint64*    frameRowByteOffset;
+  kkuint64*   frameRowByteOffset;
 
   uchar**     origFrame;       // 'origFrame' and 'origFrameArea' are only used when
   uchar*      origFrameArea;   // morphological operations are performed.
