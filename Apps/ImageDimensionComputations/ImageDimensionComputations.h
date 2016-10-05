@@ -48,11 +48,11 @@ private:
   void ProcessSipperFile (SipperFilePtr sf);
 
 
-  bool                      cancelFlag;
-  ostream*                  report;
-  ofstream*                 reportFile;
-  KKStr                     reportFileName;
-  bool                      successful;
+  bool       cancelFlag;
+  ostream*   report;
+  ofstream*  reportFile;
+  KKStr      reportFileName;
+  bool       successful;
 };
 
 

@@ -50,24 +50,24 @@ namespace MLL
     FeatureFileIOPices ();
     virtual ~FeatureFileIOPices ();
 
-    virtual  FileDescPtr  GetFileDesc (const KKStr&    _fileName,
-                                       std::istream&   _in,
-                                       MLClassListPtr  _classes,
-                                       kkint32&        _estSize,
-                                       KKStr&          _errorMessage,
-                                       RunLog&         _runLog
-                                      );
+    virtual  FileDescConstPtr  GetFileDesc (const KKStr&    _fileName,
+                                            std::istream&   _in,
+                                            MLClassListPtr  _classes,
+                                            kkint32&        _estSize,
+                                            KKStr&          _errorMessage,
+                                            RunLog&         _runLog
+                                           );
 
 
-    virtual  ImageFeaturesListPtr  LoadFile (const KKStr&       _fileName,
-                                             const FileDescPtr  _fileDesc,
-                                             MLClassList&       _classes, 
-                                             std::istream&      _in,
-                                             kkint32            _maxCount,    // Maximum # images to load.
-                                             VolConstBool&      _cancelFlag,
-                                             bool&              _changesMade,
-                                             KKStr&             _errorMessage,
-                                             RunLog&            _log
+    virtual  ImageFeaturesListPtr  LoadFile (const KKStr&      _fileName,
+                                             FileDescConstPtr  _fileDesc,
+                                             MLClassList&      _classes, 
+                                             std::istream&     _in,
+                                             kkint32           _maxCount,    // Maximum # images to load.
+                                             VolConstBool&     _cancelFlag,
+                                             bool&             _changesMade,
+                                             KKStr&            _errorMessage,
+                                             RunLog&           _log
                                             );
 
 
@@ -84,7 +84,7 @@ namespace MLL
 
 
     static  FeatureFileIOPicesPtr  Driver                 ()                  {return &driver;}
-    static  FileDescPtr            NewPlanktonFile        ();
+    static  FileDescConstPtr       NewPlanktonFile        ();
     static  KKStr                  PlanktonFieldName      (kkint32  fieldNum);
     static  kkint32                PlanktonMaxNumOfFields ();
 
@@ -193,7 +193,7 @@ namespace MLL
 
   private:
     static FeatureFileIOPices  driver;
-    static FileDescPtr         planktonFileDesc;
+    static FileDescConstPtr    planktonFileDesc;
     static kkint32             MaxNumPlanktonRawFields;
     static const char*         PlanktonRawFeatureDecriptions[];
 

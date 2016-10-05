@@ -58,8 +58,8 @@ using namespace  FeatureSelectionApp;
 Processor::Processor (FeatureSelectionPtr  _featureSelection,
                       int                  _processorId,
                       BinaryClassPtr       _binaryClass,
-                      FileDescPtr          _fileDesc,
-                      ProcessorStatus    _status
+                      FileDescConstPtr     _fileDesc,
+                      ProcessorStatus      _status
                      ):
   bestA                         (-1.0),
   beamSize                      (1),
@@ -188,12 +188,12 @@ Processor::Processor (FeatureSelectionPtr  _featureSelection,
 Processor::Processor (FeatureSelectionPtr  _featureSelection,
                       bool                 _byBinaryClasses,
                       int                  _processorId,
-                      FileDescPtr          _fileDesc,
-                      SearchTypes        _searchType,
-                      MLClassPtr   _class1,
-                      MLClassPtr   _class2,
-                      SearchMethod       _searchMethod,
-                      ProcessorStatus    _status
+                      FileDescConstPtr     _fileDesc,
+                      SearchTypes          _searchType,
+                      MLClassPtr           _class1,
+                      MLClassPtr           _class2,
+                      SearchMethod         _searchMethod,
+                      ProcessorStatus      _status
                      ):
 
   bestA                         (-1.0),

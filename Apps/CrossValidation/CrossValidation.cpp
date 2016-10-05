@@ -3067,7 +3067,7 @@ void  CreateBfsFromMfs (const KKStr&  mfsFileName,
 {
   RunLog  log;
 
-  FileDescPtr   fileDesc = FeatureFileIOPices::NewPlanktonFile ();
+  FileDescConstPtr  fileDesc = FeatureFileIOPices::NewPlanktonFile ();
   PicesTrainingConfigurationPtr  mfsConfig = new PicesTrainingConfiguration ();
   mfsConfig->Load (mfsFileName, false, log);
 

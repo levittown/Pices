@@ -1098,7 +1098,7 @@ namespace MLL
     KKStr              lastMySqlErrorDesc;
     KKStr              prevQueryStatement;
 
-    FileDescPtr        featureFileDesc;
+    FileDescConstPtr   featureFileDesc;
 
 
     MYSQL_FIELD*       resultSetFieldDefs;

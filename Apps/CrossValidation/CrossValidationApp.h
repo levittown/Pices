@@ -59,7 +59,7 @@ public:
 
   bool                       featuresAreNormalizedAlready;
 
-  FileDescPtr                fileDesc;
+  FileDescConstPtr           fileDesc;
 
   FeatureVectorListPtr       examples;
 

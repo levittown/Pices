@@ -60,7 +60,7 @@ namespace FeatureSelectionApp
     Processor (FeatureSelectionPtr  _featureSelection,
                bool                 _byBinaryClasses,
                int                  _processorId,
-               FileDescPtr          _fileDesc,
+               FileDescConstPtr     _fileDesc,
                SearchTypes          _searchType,
                MLClassPtr           _class1,
                MLClassPtr           _class2,
@@ -76,7 +76,7 @@ namespace FeatureSelectionApp
     Processor (FeatureSelectionPtr  _featureSelection,
                int                  _processorId,
                BinaryClassPtr       _bnaryClass,
-               FileDescPtr          _fileDesc,
+               FileDescConstPtr     _fileDesc,
                ProcessorStatus      _status
               );
 
@@ -98,7 +98,7 @@ namespace FeatureSelectionApp
     const DateTime&           DateTimeEnded          () const  {return  dateTimeEnded;}
     const DateTime&           DateTimeStarted        () const  {return  dateTimeStarted;}
     FeatureSelectionPtr       FeatureSelection       () const  {return  featureSelection;}
-    FileDescPtr               FileDesc               () const  {return  fileDesc;}
+    FileDescConstPtr          FileDesc               () const  {return  fileDesc;}
     GradingMethodType         GradingMethod          () const  {return  featureSelection->GradingMethod ();}
     MLClassListPtr            MLClasses              () const  {return  mlClasses;}
     MLClassListPtr            ClassesThisProcess     () const  {return classesThisProcess;}
@@ -320,7 +320,7 @@ namespace FeatureSelectionApp
                                                     * before switching over to beam search.
                                                     */
     FeatureSelectionPtr       featureSelection;
-    FileDescPtr               fileDesc;
+    FileDescConstPtr          fileDesc;
 
     MLClassListPtr            mlClasses;           /**< Comes from FeatureSelection;  represents all classes involved in entire search.  */
 
