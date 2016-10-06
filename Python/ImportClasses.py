@@ -146,7 +146,7 @@ def  IdentifyClass(db, c, className):
 
 
 def  ImportClassEntries(dirName):
-  passWord=""
+  passWord="Dasani!20"
   try:
      #db = mysql.connector.Connect(user='kkramer',
      #                             password=passWord,
@@ -158,10 +158,10 @@ def  ImportClassEntries(dirName):
      #                             host='sipper-db2.marine.usf.edu',
      #                             database='pices_new'
      #                           )
-     db = mysql.connector.Connect(user='kkramer',
+     db = mysql.connector.Connect(user='root',
                                   password=passWord,
                                   host='localhost',
-                                  database='pices_new'
+                                  database='pices_iec'
                                 )
   except  mysql.connector.Error as err:
     db = None
@@ -187,7 +187,7 @@ def  ImportClassEntries(dirName):
   for  l in classesData:
     l = l.strip('\n\r')
     fields=l.split('\t')
-    if  len(fields) > 2:
+    if  len(fields) > 5:
       classIdExt  = ToInt(fields[0])
       className   = fields[1].strip('"')
       parentIdExt = ToInt(fields[2])
@@ -240,7 +240,8 @@ def  main():
   #rootDir="C:\\Pices\\UpdatesFromOtherServers\\2015-03-11"
   #rootDir="D:\\Users\\kkramer\\DropBox\\Dropbox\\ToKurt\\DataToKurt"
   #rootDir="D:\\Users\\kkramer\\DropBox\\Dropbox\\ToKurt\\DataToKurt"
-  rootDir="C:\\Users\\Kurt\Dropbox\\ToCotPices\\2015-06-23"
+  #rootDir="C:\\Users\\Kurt\Dropbox\\ToCotPices\\2015-06-23"
+  rootDir="D:\\Users\\kkramer\\DropBox\\Dropbox\\Pices\\SipperFiles\\NOAA\\2016-08-20_UpdatesFromAndrewsPC"
   #rootDir="C:\\Pices\\UpdatesFromOtherServers"
   ImportClassEntries(rootDir)
   print("\n\n    *** Import Completed ***\n\n")

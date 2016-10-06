@@ -121,7 +121,7 @@ namespace MLL
     const KKStr&                   ConfigFileName     ()  const  {return configFileName;}
     const KKStr&                   ConfigFileFullPath ()  const  {return configFileFullPath;}
     DataBaseServerPtr              DbServer           ()  const  {return dbServer;}
-    FileDescPtr                    FileDesc           ()  const  {return fileDesc;}
+    FileDescConstPtr               FileDesc           ()  const  {return fileDesc;}
 
     void                           FvFactoryProducer  (FactoryFVProducerPtr _fvFactoryProducer)  {fvFactoryProducer = _fvFactoryProducer;}
 
@@ -175,7 +175,7 @@ namespace MLL
     PicesTrainingConfigurationPtr  config;
     KKStr                          configFileName;
     KKStr                          configFileFullPath;
-    FileDescPtr                    fileDesc;
+    FileDescConstPtr               fileDesc;
     FactoryFVProducerPtr           fvFactoryProducer;
 
   private:

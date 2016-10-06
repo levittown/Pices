@@ -63,7 +63,7 @@ namespace  ImageExtractionManager
     Classifier2Ptr            classifier;
     FactoryFVProducerPtr      fvProducerFactory;
     FeatureVectorProducerPtr  fvProducer;
-    FileDescPtr               fileDesc;
+    FileDescConstPtr          fileDesc;
     LogicalFrameQueuePtr      framePool;
     kkuint32                  framesProcessed;
     ExtractedImageQueuePtr    imagesAwaitingUpdate;

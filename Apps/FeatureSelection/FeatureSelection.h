@@ -297,11 +297,11 @@ namespace FeatureSelectionApp
 
     FeatureFileIOPtr          driver;      // Format that the Feature Files are in, ex C45
 
-    FeatureCriteriaType         featureCriteria;
+    FeatureCriteriaType       featureCriteria;
 
     bool                      featureCountPrefSmall;   // true = preference for smallest number of features, else largest number of features.
 
-    FileDescPtr               fileDesc;
+    FileDescConstPtr          fileDesc;
 
     GradingMethodType         gradingMethod;
 

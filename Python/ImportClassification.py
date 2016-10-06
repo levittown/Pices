@@ -150,6 +150,7 @@ def  ImportClassificationDataOneFile(fileNum, fullFileName, classDic, logEntryDi
 
 
 def  ImportClassificationData(dirName):
+  passWord="Dasani!20"
   try:
        #db = mysql.connector.Connect(user='kkramer',
        #                             password=passWord,
@@ -162,10 +163,10 @@ def  ImportClassificationData(dirName):
        #                             host='sipper-db2.marine.usf.edu',
        #                             database='pices_new'
        #                           )
-       db = mysql.connector.Connect(user='kkramer',
+       db = mysql.connector.Connect(user='root',
                                     password=passWord,
                                     host='localhost',
-                                    database='pices_new'
+                                    database='pices_iec'
                                   )
 
   except  mysql.connector.Error as err:
@@ -226,7 +227,8 @@ def  main():
   #rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews"
   #rootDir="C:\\Pices\\UpdatesFromOtherServers\\2015-03-11"
   #rootDir="C:\\Users\\Kurt\\Dropbox\\ToKurt\\DataToKurt"
-  rootDir="D:\\Temp"
+  rootDir="D:\\Users\\kkramer\\DropBox\\Dropbox\\Pices\\SipperFiles\\NOAA\\2016-08-20_UpdatesFromAndrewsPC"
+  #rootDir="D:\\Temp"
   ImportClassificationData(rootDir)
 
 

@@ -183,13 +183,13 @@ VectorInt  FeatureFileIOPices::CreateIndirectionTable (const VectorKKStr&  field
 
 
 
-FileDescPtr  FeatureFileIOPices::GetFileDesc (const KKStr&    _fileName,
-                                              istream&        _in,
-                                              MLClassListPtr  _classes,
-                                              kkint32&        _estSize,
-                                              KKStr&          _errorMessage,
-                                              RunLog&         _log
-                                             )
+FileDescConstPtr  FeatureFileIOPices::GetFileDesc (const KKStr&    _fileName,
+                                                   istream&        _in,
+                                                   MLClassListPtr  _classes,
+                                                   kkint32&        _estSize,
+                                                   KKStr&          _errorMessage,
+                                                   RunLog&         _log
+                                                  )
 {
   char  buff[102400];
 
@@ -274,15 +274,15 @@ FileDescPtr  FeatureFileIOPices::GetFileDesc (const KKStr&    _fileName,
 
 
 
-ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&       _fileName,
-                                                    const FileDescPtr  _fileDesc,
-                                                    MLClassList&       _classes, 
-                                                    istream&           _in,
-                                                    kkint32            _maxCount,    // Maximum # images to load,  less than '0'  indicates all.
-                                                    VolConstBool&      _cancelFlag,
-                                                    bool&              _changesMade,
-                                                    KKStr&             _errorMessage,
-                                                    RunLog&            _log
+ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&      _fileName,
+                                                    FileDescConstPtr  _fileDesc,
+                                                    MLClassList&      _classes, 
+                                                    istream&          _in,
+                                                    kkint32           _maxCount,    // Maximum # images to load,  less than '0'  indicates all.
+                                                    VolConstBool&     _cancelFlag,
+                                                    bool&             _changesMade,
+                                                    KKStr&            _errorMessage,
+                                                    RunLog&           _log
                                                    )
 {
   _log.Level (10) << "FeatureFileIOPices::LoadFile   Loading file[" << _fileName << "]." << endl;
@@ -616,7 +616,7 @@ void   FeatureFileIOPices::SaveFile (FeatureVectorList&     _data,
     examples = new ImageFeaturesList (_data, true);
   }
 
-  const FileDescPtr  fileDesc = _data.FileDesc ();
+  FileDescConstPtr  fileDesc = _data.FileDesc ();
 
   ClassStatisticListPtr  classStatistics = examples->GetClassStatistics ();
 
@@ -937,7 +937,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadInSubDirectoryTree
 
   ImageFeaturesListPtr  dirImages = NULL;
 
-  FileDescPtr  fileDesc = FeatureFileIOPices::NewPlanktonFile ();
+  FileDescConstPtr  fileDesc = FeatureFileIOPices::NewPlanktonFile ();
 
   if  (_rewiteRootFeatureFile)
   {
@@ -1146,7 +1146,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
   _changesMade = false;
   _timeStamp = DateTime ();
 
-  FileDescPtr  fileDesc = _fvProducerFactory->FileDesc ();
+  FileDescConstPtr  fileDesc = _fvProducerFactory->FileDesc ();
   if  (_unknownClass == NULL)
     _unknownClass = MLClass::GetUnKnownClassStatic ();
 
@@ -1513,10 +1513,10 @@ ImageFeaturesListPtr FeatureFileIOPices::FeatureDataReSink (FactoryFVProducerPtr
 
 
 
-FileDescPtr  FeatureFileIOPices::planktonFileDesc = NULL;
+FileDescConstPtr  FeatureFileIOPices::planktonFileDesc = NULL;
 
 
-FileDescPtr  FeatureFileIOPices::NewPlanktonFile ()
+FileDescConstPtr  FeatureFileIOPices::NewPlanktonFile ()
 {
   if  (planktonFileDesc)
     return  planktonFileDesc;
@@ -1526,12 +1526,12 @@ FileDescPtr  FeatureFileIOPices::NewPlanktonFile ()
   if  (!planktonFileDesc)
   {
     bool  alreadyExists = false;
-    planktonFileDesc = new FileDesc ();
+    FileDescPtr tempFileDesc = new FileDesc ();
     for  (kkint32 fieldNum = 0;  fieldNum < MaxNumPlanktonRawFields;  fieldNum++)
-      planktonFileDesc->AddAAttribute (PlanktonFieldName (fieldNum), AttributeType::Numeric, alreadyExists);
+      tempFileDesc->AddAAttribute (PlanktonFieldName (fieldNum), AttributeType::Numeric, alreadyExists);
 
     // Lets make sure that one was already created by opening up a data file.
-    planktonFileDesc = FileDesc::GetExistingFileDesc (planktonFileDesc);
+    planktonFileDesc = FileDesc::GetExistingFileDesc (tempFileDesc);
   }
 
   GlobalGoalKeeper::EndBlock ();

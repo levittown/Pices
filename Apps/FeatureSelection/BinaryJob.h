@@ -70,8 +70,8 @@ namespace FeatureSelectionApp
                KKStrParser   statusLine
               );
 
-    BinaryJob (RunLog& _log,
-               FileDescPtr  _fileDesc
+    BinaryJob (RunLog&           _log,
+               FileDescConstPtr  _fileDesc
               );
 
     virtual  

@@ -189,7 +189,7 @@ TrainingModel2::TrainingModel2 (PicesRunLog^                _picesRunLog,
 
   KKStr  configFileName = osAddSlash (PicesVariables::TrainingModelsConfigurationDir ()) + modelNameKKStr;
 
-  FileDescPtr fd = FeatureFileIOPices::NewPlanktonFile ();
+  FileDescConstPtr fd = FeatureFileIOPices::NewPlanktonFile ();
   
   try
   {
@@ -657,7 +657,7 @@ void  TrainingModel2::LoadTrainingModelForGivenLevel (uint            level,
 
   InstrumentDataFileManager::InitializePush ();
 
-  FileDescPtr fd = FeatureFileIOPices::NewPlanktonFile ();
+  FileDescConstPtr fd = FeatureFileIOPices::NewPlanktonFile ();
 
   KKB::KKStr  configFileName = PicesKKStr::SystemStringToKKStr (modelName);
 
@@ -719,7 +719,7 @@ void  TrainingModel2::LoadExistingTrainedModel ()
 
   InstrumentDataFileManager::InitializePush ();
 
-  FileDescPtr fd = FeatureFileIOPices::NewPlanktonFile ();
+  FileDescConstPtr fd = FeatureFileIOPices::NewPlanktonFile ();
 
   KKB::KKStr  configFileName = PicesKKStr::SystemStringToKKStr (modelName);
 
@@ -896,7 +896,7 @@ void  TrainingModel2::LoadTrainigLibrary (bool  forceRebuild)
 
   GC::Collect ();
 
-  FileDescPtr fd = FeatureFileIOPices::NewPlanktonFile ();
+  FileDescConstPtr fd = FeatureFileIOPices::NewPlanktonFile ();
 
   KKB::KKStr  configFileName = PicesKKStr::SystemStringToKKStr (modelName);
 
@@ -1018,7 +1018,7 @@ void  TrainingModel2::BuildTrainingModel (PicesFeatureVectorList^  picesTraining
 {
   GC::Collect ();
 
-  FileDescPtr fd = FeatureFileIOPices::NewPlanktonFile ();
+  FileDescConstPtr fd = FeatureFileIOPices::NewPlanktonFile ();
 
   KKB::KKStr  configFileName = PicesKKStr::SystemStringToKKStr (modelName);
   *cancelFlag = false;
@@ -1913,7 +1913,7 @@ PicesTrainingConfigurationConstPtr  TrainingModel2::GetConfigToUse ()
 
   if  (!configToUse)
   {
-    FileDescPtr  fd = FeatureFileIOPices::NewPlanktonFile ();
+    FileDescConstPtr  fd = FeatureFileIOPices::NewPlanktonFile ();
     config  = new PicesTrainingConfiguration ();
     config->Load (PicesKKStr::SystemStringToKKStr (modelName), false, *runLog);
     // Don't need to delete 'fd'  'FileDesc' instances are kept in memory and shared when identical.

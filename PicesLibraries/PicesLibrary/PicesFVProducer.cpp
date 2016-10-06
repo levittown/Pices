@@ -159,7 +159,7 @@ kkint32  PicesFVProducer::MaxNumOfFeatures  ()
 
 
 
-FileDescPtr  PicesFVProducer::DefineFileDesc ()  const
+FileDescConstPtr  PicesFVProducer::DefineFileDesc ()  const
 {
   return  DefineFileDescStatic ();
 }  /* DefineFileDesc */
@@ -167,7 +167,7 @@ FileDescPtr  PicesFVProducer::DefineFileDesc ()  const
 
 
 
-FileDescPtr  PicesFVProducer::DefineFileDescStatic ()
+FileDescConstPtr  PicesFVProducer::DefineFileDescStatic ()
 {
   return  FeatureFileIOPices::NewPlanktonFile ();
 }
@@ -221,7 +221,7 @@ const type_info*  PicesFVProducerFactory::FeatureVectorListTypeId  () const
 
 
 
-FileDescPtr  PicesFVProducerFactory::FileDesc ()  const
+FileDescConstPtr  PicesFVProducerFactory::FileDesc ()  const
 {
   return  PicesFVProducer::DefineFileDescStatic ();
 }
