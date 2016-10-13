@@ -92,7 +92,7 @@ def  ImportValidationDataInDirectory(dirName):
     db = mysql.connector.Connect(user='kkramer',
                                  password=passWord,
                                  host='sipper-db2.marine.usf.edu',
-                                 database='pices_new'
+                                 database='pices_iec'
                                )
 
     #db = mysql.connector.Connect(user='root',

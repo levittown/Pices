@@ -161,7 +161,7 @@ def  LogEntryExist(db, c, _logEntryIdExt, _progName, _cmdLine, _dateTimeStart):
 
 #Server	Description:Default	Embedded:No	HostName:localhost	UserName:root	PassWord:Dasani30!	PortNum: 3306	MySqlDataDir:	DataBaseName:pices_new
 
-passWord=""
+passWord="Dasani!20"
 
 def  ImportLogEntries(dirName):
   try:
@@ -174,7 +174,7 @@ def  ImportLogEntries(dirName):
        db = mysql.connector.Connect(user='kkramer',
                                     password=passWord,
                                     host='sipper-db2.marine.usf.edu',
-                                    database='pices_new'
+                                    database='pices_iec'
                                   )
        #db = mysql.connector.Connect(user='kkramer',
        #                             password=passWord,
