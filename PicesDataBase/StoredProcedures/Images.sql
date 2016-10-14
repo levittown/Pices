@@ -1539,7 +1539,6 @@ delimiter ;
 
 
 
-drop procedure  if exists  ImagesSizeSizeHistogramByDepth;
 drop procedure  if exists  ImagesSizeDistributionByDepth;
 
 delimiter $$
