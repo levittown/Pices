@@ -1548,6 +1548,7 @@ create procedure ImagesSizeDistributionByDepth (in  _cruiseName      varChar(10)
                                                 in  _stationName     varChar(10), 
                                                 in  _deploymentNum   varchar(4), 
                                                 in  _className       varChar(64),
+                                                in  _maxDepth        float,
                                                 in  _depthBinSize    int unsigned,
                                                 in  _statistic       char,           /* '0' = Area mm^2,  '1' = Diameter,  '2' = Spheroid Volume and '3' = EBv ((4/3)(Pie)(Major/2)(Minor/2)^2) */
                                                 in  _initialValue    float,
@@ -1560,8 +1561,8 @@ begin
   declare _cropLeft           int    default 0;
   declare _cropRight          int    default 4094;
   declare _pixelsPerScanLine  int    default 4096;
-  declare _chamberWidth       float  default  0.098;
-  declare _pixelWidth         float  default  0.025263;  /* MiliMeters per Pixel */
+  declare _chamberWidth       float  default 0.098;
+  declare _pixelWidth         float  default 0.025263;  /* MiliMeters per Pixel */
   
   if  (_className is not null)  and  (_className <> "")  then
     set _classId = (select c.classId from Classes c  where c.ClassName = _className);
@@ -1609,13 +1610,12 @@ begin
   set  @sqlStr = concat(@sqlStr, '           i.Depth, \n');
   set  @sqlStr = concat(@sqlStr, '          ');
                  
-
   if  (_statistic = '0')  then
-     set @sqlStr = concat(@sqlStr, 'fd.FilledArea * (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000  * (id.FlowRate1 / sf.ScanRate) * 1000.0  as Statistic \n');
+     set @sqlStr = concat(@sqlStr,                                     'fd.FilledArea *  (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000 * (id.FlowRate1 / sf.ScanRate) * 1000.0  as Statistic \n');
   end if;
   
   if  (_statistic = '1')  then
-     set @sqlStr = concat(@sqlStr, '2 * sqrt(fd.FilledArea *  (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000 * (id.FlowRate1 / sf.ScanRate) * 1000.0 / 3.1415926)  as Statistic \n');
+     set @sqlStr = concat(@sqlStr,                            '2 * sqrt(fd.FilledArea *  (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000 * (id.FlowRate1 / sf.ScanRate) * 1000.0 / 3.1415926)  as Statistic \n');
   end if;
   
   if  (_statistic = '2')  then
@@ -1628,7 +1628,6 @@ begin
      set @sqlStr = concat(@sqlStr, '(4.0 / 3.0) * 3.1415926 * ((fd.Length / 2.0) / 2.0) * pow (((fd.Width / 2.0) / 2.0), 2)  as Statistic \n');
   end if;
 
-  
   set @sqlStr = concat(@sqlStr, '    from  Images i  \n');
   set @sqlStr = concat(@sqlStr, '    join (SipperFiles sf)     on(sf.SipperFileId  = i.SipperFileId) \n');
   set @sqlStr = concat(@sqlStr, '    join (FeatureData fd)     on(fd.ImageId       = i.ImageId) \n');
@@ -1638,8 +1637,12 @@ begin
   set @sqlStr = concat(@sqlStr, '       and (sf.DeploymentNum   = \"', @deploymentNum, '\") \n');
   set @sqlStr = concat(@sqlStr, '       and (id.FlowRate1       > 0.02) \n'); 
   if  (_classId >= 0)  then
-    set @sqlStr = concat(@sqlStr, '       and ((i.ClassValidatedId = ', _classId, ')  or  (i.ClassValidatedId is null  and  i.class1Id = ', _classId, ')); \n');
+    set @sqlStr = concat(@sqlStr, '       and ((i.ClassValidatedId = ', _classId, ')  or  (i.ClassValidatedId is null  and  i.class1Id = ', _classId, ')) \n');
   end if;
+  if  (_maxDepth > 0.0)  then
+    set @sqlStr = concat(@sqlStr, '       and (i.Depth < ', _maxDepth, ') \n');
+  end if;
+  set @sqlStr = concat(@sqlStr, ';');
   
   /* select  _classId, _deploymentNum, _midPoint, @sqlStr; */
   
@@ -1670,7 +1673,7 @@ begin
   set @sqlStr2 = concat(@sqlStr2, '       sum((T.Statistic < ', @statVal, '))    as \"<',@statVal, '\", \n');
 
   while  (@statVal < _endValue)  do
-    set @nextVal = round(@statVal * _growtRate, 4);
+    set @nextVal = round(@statVal * _growtRate, 6);
     set @sqlStr2 = concat(@sqlStr2, '       sum((T.Statistic >= ', @statVal, ')  and  (T.Statistic < ', @nextVal, ')) as \"Size_', @statVal, '\", \n');
     set @statVal = @nextVal;
   end while;
@@ -1683,9 +1686,7 @@ begin
   EXECUTE stmt2;
   DEALLOCATE PREPARE stmt2;
   
-end$$
-delimiter ;
-
+end
 
 
 

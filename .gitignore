@@ -1,5 +1,6 @@
 Debug
 Release
+obj
 *.libs
 *.a
 *.al
@@ -63,3 +64,6 @@ PlanktonApps.VC.db
 PlanktonApps.VC.VC.opendb
 *.pidb
 
+Apps/ExtractAllSipperFiles/ExtractAllSipperFiles.vcxproj.user
+Apps/ExtractAllSipperFiles/ExtractAllSipperFiles.vcxproj.user
+Apps/ChartControls/obj/EmbeddedRelease/DesignTimeResolveAssemblyReferencesInput.cache

@@ -299,9 +299,11 @@ def  main():
   #rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews"
   #rootDir="C:\\Pices\\UpdatesFromOtherServers\\2015-03-11"
   #rootDir="C:\\Users\\Kurt\\Dropbox\\ToKurt\\DataToKurt"
-  #rootDir="D:\\Temp"
 
   rootDir = "D:\\Users\\kkramer\\DropBox\\Dropbox\\ShareWithKurt\\2016-10-09"
+
+  #rootDir="D:\\Users\\kkramer\\DropBox\\Dropbox\\Pices\\SipperFiles\\NOAA\\2016-08-20_UpdatesFromAndrewsPC"
+  #rootDir="D:\\Temp"
   ImportClassificationData(rootDir)
 
 

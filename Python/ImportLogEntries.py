@@ -161,7 +161,7 @@ def  LogEntryExist(db, c, _logEntryIdExt, _progName, _cmdLine, _dateTimeStart):
 
 #Server	Description:Default	Embedded:No	HostName:localhost	UserName:root	PassWord:Dasani30!	PortNum: 3306	MySqlDataDir:	DataBaseName:pices_new
 
-passWord="Dasani!20"
+passWord=""
 
 def  ImportLogEntries(dirName):
   try:
@@ -171,21 +171,21 @@ def  ImportLogEntries(dirName):
        #                             database='pices_new'
        #                          )
               
-       db = mysql.connector.Connect(user='kkramer',
-                                    password=passWord,
-                                    host='sipper-db2.marine.usf.edu',
-                                    database='pices_iec'
-                                  )
+       #db = mysql.connector.Connect(user='kkramer',
+       #                             password=passWord,
+       #                             host='sipper-db2.marine.usf.edu',
+       #                             database='pices_iec'
+       #                           )
        #db = mysql.connector.Connect(user='kkramer',
        #                             password=passWord,
        #                             host='localhost',
        #                             database='pices_new'
        #                           )
-       #db = mysql.connector.Connect(user='root',
-       #                             password=passWord,
-       #                             host='localhost',
-       #                             database='pices_new'
-       #                           )
+       db = mysql.connector.Connect(user='root',
+                                    password=passWord,
+                                    host='localhost',
+                                    database='pices_iec'
+                                  )
        
   except  mysql.connector.Error as err:
     db = None
@@ -270,7 +270,8 @@ def  main():
   #rootDir="C:\\Pices\\UpdatesFromOtherServers"
   #rootDir="F:\\Pices\\UpdatesFromOtherServers\\FromAndrews\\2015-02-11"
   #rootDir="D:\\Users\\kkramer\\DropBox\\Dropbox\\ToKurt\\DataToKurt"
-  rootDir="C:\\Users\\Kurt\Dropbox\\ToCotPices\\2015-06-23"
+  #rootDir="C:\\Users\\Kurt\Dropbox\\ToCotPices\\2015-06-23"
+  rootDir="D:\\Users\\kkramer\\DropBox\\Dropbox\\Pices\\SipperFiles\\NOAA\\2016-08-20_UpdatesFromAndrewsPC"
   ImportLogEntries(rootDir)
   print("\n\n    *** Import Completed ***\n\n")
 
