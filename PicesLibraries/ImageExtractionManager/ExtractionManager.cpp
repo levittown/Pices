@@ -193,7 +193,7 @@ void  ExtractionManager::TerminateProcessing (kkint32 miliSecsToWait)
     }
     else
     {
-      osSleep (0.01f);
+      osSleepMiliSecs(10);
       numMiliSecsSoFar += 10;
     }
 
@@ -572,7 +572,7 @@ void  ExtractionManager::Initialize (bool&  _successful)
 
   msgQueue = new MsgQueue ("ExtractionManager");
 
-  kkuint32  maxNumOfFrames = KKB::Max ((kkuint32)3, (kkuint32)(maxNumThreads - 3));
+  kkuint32  maxNumOfFrames = KKB::Max ((kkuint32)3, (kkuint32)(2 * maxNumThreads));
 
   framePool = new LogicalFrameQueue (parms, 
                                      maxNumOfFrames,    // Maximum number of frames
@@ -691,8 +691,8 @@ void  ExtractionManager::StartThreads (bool&  threadsStartedSuccessfully)
 
   delete  frameProcessors;
   frameProcessors = new ImageExtractionThreadList (false);
-  kkuint32  numFrameProcessors = Max ((kkuint32)1, (kkuint32)(maxNumThreads - 3));
-  //kkuint32  numFrameProcessors = 3;
+  kkuint32  numFrameProcessors = Max ((kkuint32)1, (kkuint32)(maxNumThreads - 2));
+  //kkuint32  numFrameProcessors = 1;
 
   if  (!CancelFlag ())
   {
@@ -938,7 +938,7 @@ void  ExtractionManager::MonitorUntilDone (ImageExtractionThreadListPtr  threads
       }
     }
 
-    osSleep (0.1f);
+    osSleepMiliSecs(100);
     ++loopCount;
   }
 }  /* MonitorUntilDone */
