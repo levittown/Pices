@@ -164,8 +164,8 @@ LogicalFrame::LogicalFrame (const ExtractionParms&  _parms,
 
   if  (parms.FileFormat () == sfSipper4Bit)
   {
-    cropLeft = 362;
-    cropRight = 3031;
+    cropLeft = 557;
+    cropRight = 1718;
   }
 
   AllocateFrame ();
@@ -974,7 +974,7 @@ VectorSipperImagePtr  LogicalFrame::BuildListOfSipperImages (kkuint32&  imagesIn
       //     set @sqlStr = concat(@sqlStr, 'fd.FilledArea * (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000  * (id.FlowRate1 / sf.ScanRate) * 1000.0  as Statistic \n');
 
 
-      float imageArea = pixelsInImage * areaPerPixel;   // When worog with 4bit 'areaPerPixel'  computed to ZERO.
+      float imageArea = pixelsInImage * areaPerPixel;
       sipperImage->ImageArea (imageArea);
 
 
