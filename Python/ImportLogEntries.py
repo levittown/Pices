@@ -161,7 +161,7 @@ def  LogEntryExist(db, c, _logEntryIdExt, _progName, _cmdLine, _dateTimeStart):
 
 #Server	Description:Default	Embedded:No	HostName:localhost	UserName:root	PassWord:Dasani30!	PortNum: 3306	MySqlDataDir:	DataBaseName:pices_new
 
-passWord="Dasani!20"
+passWord=""
 
 def  ImportLogEntries(dirName):
   try:
