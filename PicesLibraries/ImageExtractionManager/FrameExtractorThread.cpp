@@ -608,7 +608,7 @@ void  FrameExtractorThread::ProcessFrame ()
   LogicalFramePtr  logicalFrame = framePool->GetNextAvailaleFrame ();
   while  ((logicalFrame == NULL)  &&  (!CancelFlag ()))
   {
-    osSleep (0.002f);
+    osSleepMiliSecs(1);
     logicalFrame = framePool->GetNextAvailaleFrame ();
   }
 
@@ -622,12 +622,13 @@ void  FrameExtractorThread::ProcessFrame ()
     return;
   }
 
-  float    flowRate          = DataManager()->Meter1FlowRate();
+  float    flowRate          = 0.0f;
   kkuint32 pixelsPerScanLine = 3800;
   float    scanRate          = sipperFileRec->ScanRate();
   if  (scanRate < 100.0f)
     scanRate = 25950.0f;
 
+  InstrumentDataPtr  id = NULL;
   if  (this->siperFileRootName.ToLower().StartsWith("port"))
   {
     pixelsPerScanLine = 1189;
@@ -653,8 +654,9 @@ void  FrameExtractorThread::ProcessFrame ()
 
   if  (this->siperFileRootName.ToLower().StartsWith("port"))
   {
-    flowRate = 2.0;
+    flowRate = 1.7;
     chamberWidth = 50.8f;
+    pixelsPerScanLine = 1727 - 545;
     pixelsPerScanLine = 1189;
   }
   else
