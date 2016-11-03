@@ -79,9 +79,9 @@ InstrumentDataMeans::InstrumentDataMeans (bool    _downCast,
 
 InstrumentDataMeans*  InstrumentDataMeans::Merge (InstrumentDataMeans*  other)  const
 {
-  kkint32  lSL = (float)scanLines;
-  kkint32  rSL = (float)(other->scanLines);
-  kkint32  tSL = (float)(lSL + rSL);
+  float  lSL = (float)scanLines;
+  float  rSL = (float)(other->scanLines);
+  float  tSL = (float)(lSL + rSL);
 
   InstrumentDataMeans*  result = new InstrumentDataMeans ();
 
