@@ -77,6 +77,28 @@ InstrumentDataMeans::InstrumentDataMeans (bool    _downCast,
 }
 
 
+InstrumentDataMeans*  InstrumentDataMeans::Merge (InstrumentDataMeans*  other)  const
+{
+  float  lSL = (float)scanLines;
+  float  rSL = (float)(other->scanLines);
+  float  tSL = (float)(lSL + rSL);
+
+  InstrumentDataMeans*  result = new InstrumentDataMeans ();
+
+  result->binDepth               = (binDepth               * lSL + other->binDepth               * rSL) / tSL;
+  result->volumeSampled          = (volumeSampled          * lSL + other->volumeSampled          * rSL) / tSL;
+  result->temperatureMean        = (temperatureMean        * lSL + other->temperatureMean        * rSL) / tSL;
+  result->salinityMean           = (salinityMean           * lSL + other->salinityMean           * rSL) / tSL;
+  result->denisityMean           = (denisityMean           * lSL + other->denisityMean           * rSL) / tSL;
+  result->fluorescenceMean       = (fluorescenceMean       * lSL + other->fluorescenceMean       * rSL) / tSL;
+  result->fluorescenceSensorMean = (fluorescenceSensorMean * lSL + other->fluorescenceSensorMean * rSL) / tSL;
+  result->oxygenMean             = (oxygenMean             * lSL + other->oxygenMean             * rSL) / tSL;
+  result->depthMean              = (depthMean              * lSL + other->depthMean              * rSL) / tSL;
+  result->transmisivityMean      = (transmisivityMean      * lSL + other->transmisivityMean      * rSL) / tSL;
+  result->turbidityMean          = (turbidityMean          * lSL + other->turbidityMean          * rSL) / tSL;
+  result->cdomFluorescenceMean   = (cdomFluorescenceMean   * lSL + other->cdomFluorescenceMean   * rSL) / tSL;
+  return  result;
+}
 
 
 

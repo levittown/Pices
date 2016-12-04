@@ -18,28 +18,31 @@ namespace MLL
 
     InstrumentDataMeans ();
 
-    InstrumentDataMeans (bool   _downCast,
+    InstrumentDataMeans (bool     _downCast,
                          kkint32  _depthBin,
-                         float  _binDepth,
+                         float    _binDepth,
                          kkint32  _scanLines,
-                         float  _volumeSampled,
-                         float  _temperatureMean,
-                         float  _salinityMean,
-                         float  _denisityMean,
-                         float  _fluorescenceMean,
-                         float  _fluorescenceSensorMean,
-                         float  _oxygenMean,
-                         float  _depthMean,
-                         float  _transmisivityMean,
-                         float  _turbidityMean,
-                         float  _cdomFluorescenceMean
+                         float    _volumeSampled,
+                         float    _temperatureMean,
+                         float    _salinityMean,
+                         float    _denisityMean,
+                         float    _fluorescenceMean,
+                         float    _fluorescenceSensorMean,
+                         float    _oxygenMean,
+                         float    _depthMean,
+                         float    _transmisivityMean,
+                         float    _turbidityMean,
+                         float    _cdomFluorescenceMean
                         );
 
     float  Oxygen_molPerKg_Mean () const  {return  (oxygenMean * 44.64f) / 1.027f;}
+
+    InstrumentDataMeans*  Merge(InstrumentDataMeans*  other) const;
+
         
-    bool   downCast;
+    bool     downCast;
     kkint32  depthBin;
-    float  binDepth;
+    float    binDepth;
     kkint32  scanLines;
     float  volumeSampled;
     float  temperatureMean;
@@ -65,7 +68,6 @@ namespace MLL
     InstrumentDataMeansList (const InstrumentDataMeansList& data);
 
     InstrumentDataMeansPtr  LookUp (bool downCast, float  depth);
-
   };
 
   typedef  InstrumentDataMeansList*  InstrumentDataMeansListPtr;
