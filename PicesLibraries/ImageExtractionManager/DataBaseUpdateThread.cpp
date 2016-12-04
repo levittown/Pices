@@ -118,8 +118,6 @@ ExtractedImagePtr  DataBaseUpdateThread::GetNextImageToUpdate ()
 
 
 
-
-
 void  DataBaseUpdateThread::Run ()
 {
   Status (ThreadStatus::Starting);

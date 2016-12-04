@@ -185,14 +185,14 @@ kkint32  LogicalFrame::MemoryConsumedEstimated ()  const
   kkuint32  frameTotalPixels = frameHeightMax * frameWidth;
 
   kkint32  memoryConsumedEstimated = sizeof (*this) +
-         frameTotalPixels                       +  // uchar*          frameArea;
-         sizeof (kkuint64*) *  frameHeightMax     +  // kkuint64*         frameRowByteOffset;    
-         sizeof (uchar*)  *  frameHeightMax     +  // uchar**         frame;
-         sizeof (uchar*)  *  frameHeightMax     +  // uchar**         workFrame;
-         frameTotalPixels                       +  // uchar*          workFrameArea;
-         sizeof (LogicalFrameBlobPtr) * maxBlobsPerFrame +  // LogicalFrameBlobPtr*  blobs;
-         sizeof (kkint32)      * frameTotalPixels +  // kkint32*          blobIdsArea;
-         sizeof (kkint32*)     * frameHeightMax;     // kkint32**         blobIds;
+         frameTotalPixels                         +  // uchar*          frameArea;
+         sizeof (kkuint64*) *  frameHeightMax     +  // kkuint64*       frameRowByteOffset;    
+         sizeof (uchar*)    *  frameHeightMax     +  // uchar**         frame;
+         sizeof (uchar*)    *  frameHeightMax     +  // uchar**         workFrame;
+         frameTotalPixels                         +  // uchar*          workFrameArea;
+         sizeof (LogicalFrameBlobPtr) * maxBlobsPerFrame +  //          LogicalFrameBlobPtr*  blobs;
+         sizeof (kkint32)   * frameTotalPixels    +  // kkint32*        blobIdsArea;
+         sizeof (kkint32*)  * frameHeightMax;        // kkint32**       blobIds;
 
   if  (origFrame)
   {
