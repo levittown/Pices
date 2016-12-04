@@ -105,10 +105,10 @@ RasterSipperPtr  ExtractedImage::ImageGiveOwnership ()
   return  i;
 }
 
-
+/**@todo  need to make 'maxQueueSize' dynamic;  posibly factor in total of all contained image sizes. */
 ExtractedImageQueue::ExtractedImageQueue ():
    goalie       (NULL),
-   maxQueueSize (200)
+   maxQueueSize (500)
 {
   GoalKeeper::Create ("ExtractedImageQueue", goalie);
 }
@@ -163,7 +163,7 @@ void  ExtractedImageQueue::AddExtractedImage (ExtractedImagePtr  extractedImage)
     }
     goalie->EndBlock ();
     if  (!added)
-      osSleep (0.01f);
+      osSleepMiliSecs(10);
   }
 }  /* AddExtractedImage */
 

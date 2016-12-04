@@ -164,8 +164,8 @@ LogicalFrame::LogicalFrame (const ExtractionParms&  _parms,
 
   if  (parms.FileFormat () == sfSipper4Bit)
   {
-    cropLeft = 362;
-    cropRight = 3031;
+    cropLeft = 557;
+    cropRight = 1718;
   }
 
   AllocateFrame ();
@@ -185,14 +185,14 @@ kkint32  LogicalFrame::MemoryConsumedEstimated ()  const
   kkuint32  frameTotalPixels = frameHeightMax * frameWidth;
 
   kkint32  memoryConsumedEstimated = sizeof (*this) +
-         frameTotalPixels                       +  // uchar*          frameArea;
-         sizeof (kkuint64*) *  frameHeightMax     +  // kkuint64*         frameRowByteOffset;    
-         sizeof (uchar*)  *  frameHeightMax     +  // uchar**         frame;
-         sizeof (uchar*)  *  frameHeightMax     +  // uchar**         workFrame;
-         frameTotalPixels                       +  // uchar*          workFrameArea;
-         sizeof (LogicalFrameBlobPtr) * maxBlobsPerFrame +  // LogicalFrameBlobPtr*  blobs;
-         sizeof (kkint32)      * frameTotalPixels +  // kkint32*          blobIdsArea;
-         sizeof (kkint32*)     * frameHeightMax;     // kkint32**         blobIds;
+         frameTotalPixels                         +  // uchar*          frameArea;
+         sizeof (kkuint64*) *  frameHeightMax     +  // kkuint64*       frameRowByteOffset;    
+         sizeof (uchar*)    *  frameHeightMax     +  // uchar**         frame;
+         sizeof (uchar*)    *  frameHeightMax     +  // uchar**         workFrame;
+         frameTotalPixels                         +  // uchar*          workFrameArea;
+         sizeof (LogicalFrameBlobPtr) * maxBlobsPerFrame +  //          LogicalFrameBlobPtr*  blobs;
+         sizeof (kkint32)   * frameTotalPixels    +  // kkint32*        blobIdsArea;
+         sizeof (kkint32*)  * frameHeightMax;        // kkint32**       blobIds;
 
   if  (origFrame)
   {
@@ -974,7 +974,7 @@ VectorSipperImagePtr  LogicalFrame::BuildListOfSipperImages (kkuint32&  imagesIn
       //     set @sqlStr = concat(@sqlStr, 'fd.FilledArea * (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000  * (id.FlowRate1 / sf.ScanRate) * 1000.0  as Statistic \n');
 
 
-      float imageArea = pixelsInImage * areaPerPixel;   // When worog with 4bit 'areaPerPixel'  computed to ZERO.
+      float imageArea = pixelsInImage * areaPerPixel;
       sipperImage->ImageArea (imageArea);
 
 

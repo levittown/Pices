@@ -71,7 +71,7 @@ DataBaseUpdateThread::DataBaseUpdateThread (ExtractionParms&                 _pa
 {
   sipperRootName = osGetRootName (parms.SipperFileName ());
 
-  if  (parms.ExtractFeatureData ())
+  if  (parms.ExtractFeatureData ()  &&  (!sipperRootName.ToLower().StartsWith("port")))
   {
     //dupImageDetector = new DuplicateImages (fileDesc, log);
     duplicateImages  = new ImageFeaturesList (fileDesc, true);
@@ -109,13 +109,11 @@ ExtractedImagePtr  DataBaseUpdateThread::GetNextImageToUpdate ()
   ExtractedImagePtr  nextImage = imagesAwaitingUpdate->GetNextExtractedImage ();
   while  ((nextImage == NULL)  &&  (!ShutdownOrTerminateRequested ()))
   {
-    osSleep (0.01f);
+    KKB::osSleepMiliSecs(2);
     nextImage = imagesAwaitingUpdate->GetNextExtractedImage ();
   }
   return  nextImage;
 }  /* GetNextImageToUpdate */
-
-
 
 
 
