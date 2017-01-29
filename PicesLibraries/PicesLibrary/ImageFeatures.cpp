@@ -376,9 +376,9 @@ ImageFeatures::~ImageFeatures ()
 }
 
 
-kkint32  ImageFeatures::MemoryConsumedEstimated ()  const
+kkMemSize  ImageFeatures::MemoryConsumedEstimated ()  const
 {
-  kkint32  memoryConsumedEstimated = FeatureVector::MemoryConsumedEstimated () 
+  kkMemSize  memoryConsumedEstimated = FeatureVector::MemoryConsumedEstimated () 
     +  sizeof (float)   * 3
     +  sizeof (double)  * 3
     +  sizeof (kkint32)   * 1
