@@ -580,7 +580,7 @@ namespace PicesCommander
             densityThisBucket = classTotals.BucketCount (bucketIDX) / volumeDepthForThisBucket;
 
           if  (printDensity)
-            o.Write ("\t" + densityThisBucket.ToString ("###,##0.000"));
+            o.Write ("\t" + densityThisBucket.ToString ("#####0.000"));
           else
             o.Write ("\t" + qtyThisBucket.ToString ());
 
@@ -599,7 +599,7 @@ namespace PicesCommander
             double  densityThisBucket = 0.0;
             if  (volumeDepthForThisBucket != 0.0)
               densityThisBucket = bucketTotal / volumeDepthForThisBucket;
-            o.Write ("\t" + densityThisBucket.ToString ("###,##0.000"));
+            o.Write ("\t" + densityThisBucket.ToString ("#####0.000"));
           }
           else
           {
@@ -621,7 +621,7 @@ namespace PicesCommander
               double  densityThisBucket = 0.0;
               if  (volumeDepthForThisBucket != 0.0)
                 densityThisBucket = qtyThisBucket / volumeDepthForThisBucket;
-              o.Write ("\t" + densityThisBucket.ToString ("###,##0.000"));
+              o.Write ("\t" + densityThisBucket.ToString ("#####0.000"));
             }
             else
             {
@@ -635,16 +635,16 @@ namespace PicesCommander
 
         if  (totalThisBucketIdx != null)
         {
-          o.Write ("\t" + totalThisBucketIdx.temperatureMean.ToString ("#,##0.000")        +
-                   "\t" + totalThisBucketIdx.salinityMean.ToString ("#,##0.000")           +
-                   "\t" + totalThisBucketIdx.densityMean.ToString ("#,##0.000")            +
-                   "\t" + totalThisBucketIdx.fluorescenceMean.ToString ("#,##0.000")       +
-                   "\t" + totalThisBucketIdx.fluorescenceSensorMean.ToString ("#,##0.000") +
-                   "\t" + totalThisBucketIdx.oxygenMean.ToString ("#,##0.000")             +
-                   "\t" + totalThisBucketIdx.Oxygen_molPerKg.ToString ("#,##0.000")        +
-                   "\t" + totalThisBucketIdx.transmisivityMean.ToString ("#,##0.000")      +
-                   "\t" + totalThisBucketIdx.turbidityMean.ToString ("#,##0.000")          +
-                   "\t" + totalThisBucketIdx.cdomFluorescenceMean.ToString ("#,##0.000")
+          o.Write ("\t" + totalThisBucketIdx.temperatureMean.ToString ("###0.000")        +
+                   "\t" + totalThisBucketIdx.salinityMean.ToString ("###0.000")           +
+                   "\t" + totalThisBucketIdx.densityMean.ToString ("###0.000")            +
+                   "\t" + totalThisBucketIdx.fluorescenceMean.ToString ("###0.000")       +
+                   "\t" + totalThisBucketIdx.fluorescenceSensorMean.ToString ("###0.000") +
+                   "\t" + totalThisBucketIdx.oxygenMean.ToString ("###0.000")             +
+                   "\t" + totalThisBucketIdx.Oxygen_molPerKg.ToString ("###0.000")        +
+                   "\t" + totalThisBucketIdx.transmisivityMean.ToString ("###0.000")      +
+                   "\t" + totalThisBucketIdx.turbidityMean.ToString ("###0.000")          +
+                   "\t" + totalThisBucketIdx.cdomFluorescenceMean.ToString ("###0.000")
                   );
         }
 
@@ -673,7 +673,7 @@ namespace PicesCommander
           grandTotalDensity = grandTotal / totalVolume;
 
         if  (printDensity)
-          o.Write ("\t" + grandTotalDensity.ToString ("###,##0.000"));
+          o.Write ("\t" + grandTotalDensity.ToString ("#####0.000"));
         else
           o.Write ("\t" + grandTotal.ToString ());
 
@@ -687,7 +687,7 @@ namespace PicesCommander
             if  (printDensity)
             {
               if  (totalVolume != 0.0)
-                o.Write ((summaryTotals[x] / totalVolume).ToString ("###,##0.000"));
+                o.Write ((summaryTotals[x] / totalVolume).ToString ("#####0.000"));
               else
                 o.Write (0.0);
             }
