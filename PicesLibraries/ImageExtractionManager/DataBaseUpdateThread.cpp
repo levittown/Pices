@@ -84,9 +84,9 @@ DataBaseUpdateThread::DataBaseUpdateThread (ExtractionParms&                 _pa
 
 DataBaseUpdateThread::~DataBaseUpdateThread ()
 {
-  delete  dbConn;             dbConn = NULL;
-  delete  dupImageDetector;   dupImageDetector = NULL;
-  delete  duplicateImages;    duplicateImages  = NULL;
+  delete  dbConn;            dbConn = NULL;
+  delete  dupImageDetector;  dupImageDetector = NULL;
+  delete  duplicateImages;   duplicateImages  = NULL;
 }
 
 
