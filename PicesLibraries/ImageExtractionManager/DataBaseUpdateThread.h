@@ -22,6 +22,12 @@ using namespace  ImageExtractionManager;
 
 namespace  ImageExtractionManager
 {
+  /**  Thread responsible for writting results of extraction to the database.
+   * 
+   * The "FrameProcessorThread" instances extract individual images and classify placing the results
+   * into 'imagesAwaitingUpdate'.  This thread feeds off this queue and makes the appropriate updates 
+   * to the database.
+   */
   class  DataBaseUpdateThread:  public  ImageExtractionThread
   {
   public:
