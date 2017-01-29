@@ -443,7 +443,6 @@ void  FrameExtractorThread::BuildColCount (kkuint32  colCount[])
 
 
 
-
 void  FrameExtractorThread::EliminatePosibleLines (kkuint32  colCount[])
 {
   kkuint32  endCol;
@@ -458,7 +457,6 @@ void  FrameExtractorThread::EliminatePosibleLines (kkuint32  colCount[])
   kkuint32  x = 0;
 
   BuildColCount (colCount);
-
 
   for  (col = 1;  col < (frameWidth - 1);  ++col)
   {
@@ -513,7 +511,6 @@ void  FrameExtractorThread::EliminatePosibleLines (kkuint32  colCount[])
 
 
 
-
 void  FrameExtractorThread::SaveFrame (const KKStr& suffix)
 {
   kkuint32  col = 0;
@@ -539,8 +536,6 @@ void  FrameExtractorThread::SaveFrame (const KKStr& suffix)
 
   delete  frameImage;
 }  /* SaveFrame */
-
-
 
 
 
@@ -649,13 +644,13 @@ void  FrameExtractorThread::ProcessFrame ()
   }
   }
 
-  // KKKK  Need to check whether SIPPER or KSquare  to determine how to compute area.
+  // KKKK  Need to determine if SIPPER or KSquare formatted file to compute area.
 
   float chamberWidth = 0.0f;
 
   if  (this->siperFileRootName.ToLower().StartsWith("port"))
   {
-    flowRate = 1.7;
+    flowRate = 1.7f;
     chamberWidth = 50.8f;
     pixelsPerScanLine = 1727 - 545;
     pixelsPerScanLine = 1189;
@@ -692,7 +687,4 @@ void  FrameExtractorThread::ProcessFrame ()
                               );
   framePool->QueueFrameToProcess (logicalFrame);
 } /* ProcessFrame */
-
-
-
 
