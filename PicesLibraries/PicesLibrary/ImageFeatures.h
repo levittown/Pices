@@ -179,8 +179,7 @@ namespace MLL
     short           Version            () const  {return  version;}
     FVFloat         Width              () const  {return  FeatureData (WidthIndex);}
 
-    virtual
-    kkint32  MemoryConsumedEstimated ()  const;
+    virtual  kkMemSize  MemoryConsumedEstimated ()  const;
 
     //void  ResetNumOfFeatures (kkint32  newNumOfFeatures);  // Used to reallocate memory for feature data.
     void  ResetVersion       (short  newVersion);

@@ -166,7 +166,7 @@ RasterSipper::~RasterSipper ()
 
 
 
-kkint32  RasterSipper::MemoryConsumedEstimated ()  const
+kkMemSize  RasterSipper::MemoryConsumedEstimated ()  const
 {
   return  Raster::MemoryConsumedEstimated ();
 }
