@@ -271,6 +271,26 @@ namespace  PicesInterface
   }  /* ExtractExamplesForAGivenClass */
 
 
+  
+
+
+  PicesFeatureVectorList^  PicesFeatureVectorList::FilterOutClassId339And342 ()
+  {
+    PicesFeatureVectorList^  extractedExamples = gcnew PicesFeatureVectorList ();
+
+    for each (PicesFeatureVector^  pfv  in (*this))
+    {
+      int fvid = pfv->MLClass->ClassId;
+
+      if  ((fvid != 339) &&  (fvid != 342))
+        extractedExamples->Add (pfv);
+    }
+
+    return  extractedExamples;
+  }  /* FilterOutClassId339And342 */
+
+
+
 
 
   void  PicesFeatureVectorList::AddQueue (PicesFeatureVectorList^ subQueue)
@@ -402,6 +422,14 @@ namespace  PicesInterface
 
     return  fvl;
   }  /* ToFeatureVectorList */
+
+
+
+  
+
+
+
+
 
 
 
