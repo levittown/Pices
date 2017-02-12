@@ -3092,7 +3092,41 @@ end;
 delimiter ;
     
 
+/************************************************************************************************************************/
+drop procedure  if   exists  ImagesAspectRatioUpAndDownCast;
 
+delimiter //
+CREATE  PROCEDURE ImagesAspectRatioUpAndDownCast(in  _cruiseName      varChar(64),
+                                              in  _stationName     varChar(10),
+                                              in  _deploymentNum   varChar(4),
+                                              in  _depthBinSize    int unsigned
+                                             )
+begin
+  declare _classId      int  default 0;
+  declare _midPoint     datetime; 
+  
+  set  _midPoint = InstrumentDataGetMidPointOfDeployment(_cruiseName, _stationName, _deploymentNum);
+  
+  
+  select (id.CTDDateTime >= _midPoint)                     as upCast,
+          floor(i.depth / _depthBinSize)                   as bucketIdx,
+         (floor(i.depth / _depthBinSize) * _depthBinSize)  as bucketDepth,
+         floor(fd.HeightVsWidth * 10.0)                    as AspectRatio,
+         Count(i.ImageId)                                  as ImageCount,
+         sum(i.PixelCount)                                 as totalPixelCount
+      from Images i
+      join (SipperFiles sf)     on  (sf.SipperFileId = i.SipperFileId)
+      join (InstrumentData id)  on  (id.SipperFileId = i.SipperFileId  and  id.ScanLine = (floor(i.TopLeftRow / 4096) * 4096))
+      join (FeatureData fd)     on  (fd.ImageId      = fd.ImageId)
+      join (Classes c)          on  (c.ClassId       = i.Class1Id)
+      where  (sf.CruiseName    = _cruiseName)
+	      and  (sf.StationName   = _stationName)
+	      and  (sf.DeploymentNum = _deploymentNum)  
+	      and  (c.ClassName  like "%detritus%")
+        group by (id.CTDDateTime >= _midPoint), floor(i.depth / _depthBinSize), floor(fd.HeightVsWidth * 10.0) ;
 
+end;
 
-
+//
+delimiter ;
+    
