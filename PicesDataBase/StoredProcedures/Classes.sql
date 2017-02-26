@@ -367,7 +367,7 @@ delimiter ;
 drop procedure   if exists  RenameWholeBunch;
 
 delimiter //
-/*
+
 create procedure  RenameWholeBunch ()
 begin
   call  MLClassMergeComprehensive ("Crustacean_copepod_corycaeus",              "crustacean_copepod_poecilostomatoid");
@@ -550,4 +550,4 @@ update Classes c
    c.ClassName="protist_unknown"
    );
    
-   */
+   
