@@ -3090,7 +3090,64 @@ end;
 
 //
 delimiter ;
+
+
+
     
+drop procedure  if exists ImagesAspectRatioUpAndDownCast;
+
+delimiter //
+
+create procedure ImagesAspectRatioUpAndDownCast (in _cruiseName    varChar(64),
+                                                 in _stationName   varChar(10),
+												 in _deploymentNum varChar(4),
+                                                 in _depthBinSize  int unsigned
+                                                )
+begin
+ declare _classId  int default 0;
+ declare _midPoint datetime; 
+ 
+ set _midPoint = instrumentDataGetMidPointOfDeployment(_cruiseName, _stationName, _deploymentNum);
+ select _midPoint;
+ 
+ drop temporary table if exists TempSnowImages;
+ 
+create temporary table if not exists TempSnowImages ENGINE=MyISAM as ( 
+   select (id.CTDDateTime >= _midPoint) as upCast,
+           i.sipperFileId as sipperFileId,
+		   i.imageId as imageId,
+		   i.TopLeftRow as scanLine,
+           floor(i.depth / _depthBinSize) as bucketIdx,
+           (floor(i.depth / _depthBinSize) * _depthBinSize) as bucketDepth,
+           i.PixelCount as pixelCount,
+           floor(fd.HeightVsWidth * 10.0) as AspectRatio
+
+   from Images i
+   join (SipperFiles sf)    on (sf.SipperFileId = i.SipperFileId)
+   join (FeatureData fd)    on (fd.ImageId = i.ImageId)
+   join (InstrumentData id) on (id.SipperFileId = i.SipperFileId and id.ScanLine = (floor(i.TopLeftRow / 4096) * 4096))
+   where (sf.CruiseName = _cruiseName)
+	 and (sf.StationName = _stationName)
+	 and (sf.DeploymentNum = _deploymentNum) 
+	 and (i.Class1Id in (select c.ClassId from Classes c where c.Classname like "%detritus%"))
+ );
+ 
+SELECT 
+    i.upCast AS upCast,
+    i.bucketIdx AS bucketIdx,
+    i.bucketDepth AS bucketDepth,
+    i.AspectRatio AS AspectRatio,
+    COUNT(i.imageid) AS imageCount,
+    SUM(pixelCount) AS tyotalPixelCount
+FROM
+    TempSnowImages i
+GROUP BY upCast , bucketIdx , AspectRatio;
+
+end;
+//
+
+delimiter ;
+
 
 
 
