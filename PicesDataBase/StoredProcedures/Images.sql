@@ -813,11 +813,6 @@ delimiter ;
 
 
 
-
-
-
-
-
 /**********************************************************************************************************************/
 /**********************************************************************************************************************/
 drop procedure  if exists ImagesQueryForScanLineRange;
@@ -879,14 +874,12 @@ begin
   declare _chamberWidth       float  default 0.096;
   declare _pixelWidth         float  default 0.025263;  /* MiliMeters per Pixel */
   
-
   set  @deploymentNum = _deploymentNum;
 
   if  (_deploymentNum is null)  or  (_deploymentNum = "")  or (_deploymentNum = " ")  then
      set @deploymentNum = (select d.DeploymentNum  from  Deployments d where d.CruiseName    = _cruiseName  and  d.StationName   = _stationName);
   end if;
-
-
+  
   if  (_className is not null)  and  (_className <> "")  then
     set _classId = (select c.classId from Classes c  where c.ClassName = _className);
   end if;
@@ -1649,8 +1642,8 @@ begin
   EXECUTE stmt1;
   DEALLOCATE PREPARE stmt1;
 
-  set @sqlStr2 = 'select T.DownCast                                        as DownCast, \n';
-  set @sqlStr2 = concat(@sqlStr2, '       floor(T.Depth / ', _depthBinSize, ')                    as BucketIdx, \n');
+  set @sqlStr2 = 'select T.DownCast                                                        as DownCast, \n';
+  set @sqlStr2 = concat(@sqlStr2, '       floor(T.Depth / ',  _depthBinSize, ')                    as BucketIdx, \n');
   set @sqlStr2 = concat(@sqlStr2, '       (floor(T.Depth / ', _depthBinSize, ') * ', _depthBinSize, ')  as BucketDepth, \n');
   set @sqlStr2 = concat(@sqlStr2, '       count(T.ImageId)                                  as ImageCount, \n');
   set @sqlStr2 = concat(@sqlStr2, '       sum(T.PixelCount)                                 as TotalPixelCount, \n');
@@ -3094,62 +3087,110 @@ delimiter ;
 
 
     
+     
 drop procedure  if exists ImagesAspectRatioUpAndDownCast;
 
 delimiter //
 
 create procedure ImagesAspectRatioUpAndDownCast (in _cruiseName    varChar(64),
                                                  in _stationName   varChar(10),
-												 in _deploymentNum varChar(4),
-                                                 in _depthBinSize  int unsigned
+                                                 in _deploymentNum varChar(4),
+                                                 in _depthBinSize  int unsigned,
+                                                 in _initialValue  float,
+                                                 in _growtRate     float,
+                                                 in _endValue      float
                                                 )
 begin
- declare _classId  int default 0;
- declare _midPoint datetime; 
+  declare _classId            int default 0;
+  declare _midPoint           datetime; 
+  declare _cropLeft           int    default 0;
+  declare _cropRight          int    default 4094;
+  declare _pixelsPerScanLine  int    default 4096;
+  declare _chamberWidth       float  default 0.096;
+  declare _pixelWidth         float  default 0.025263;  /* MiliMeters per Pixel */
  
- set _midPoint = instrumentDataGetMidPointOfDeployment(_cruiseName, _stationName, _deploymentNum);
- select _midPoint;
+  select  d.CropLeft, d.CropRight, d.ChamberWidth  into  _cropLeft, _cropRight, _chamberWidth
+       from Deployments d
+       where  d.CruiseName    = _cruiseName  and
+              d.StationName   = _stationName  and 
+              d.DeploymentNum = _deploymentNum;
+      
+  if  _cropLeft < _cropRight  then
+    set _pixelsPerScanLine = _cropRight - _cropLeft;
+  else
+    set _pixelsPerScanLine = 3800;
+  end if;
+  
+  set  _pixelWidth = _chamberWidth / _pixelsPerScanLine;
+  
  
- drop temporary table if exists TempSnowImages;
+  set _midPoint = instrumentDataGetMidPointOfDeployment(_cruiseName, _stationName, _deploymentNum);
  
-create temporary table if not exists TempSnowImages ENGINE=MyISAM as ( 
-   select (id.CTDDateTime >= _midPoint) as upCast,
-           i.sipperFileId as sipperFileId,
-		   i.imageId as imageId,
-		   i.TopLeftRow as scanLine,
-           floor(i.depth / _depthBinSize) as bucketIdx,
-           (floor(i.depth / _depthBinSize) * _depthBinSize) as bucketDepth,
-           i.PixelCount as pixelCount,
-           floor(fd.HeightVsWidth * 10.0) as AspectRatio
+  drop temporary table if exists TempSnowImages;
+  drop temporary table if exists TempSnowImages2;
+  
+  call InstrumentDataBinByDepthIntoTempFile(_cruiseName, _stationName, _deploymentNum, _depthBinSize);
+ 
+  create temporary table if not exists TempSnowImages ENGINE=MyISAM as ( 
+    select (id.CTDDateTime >= _midPoint) as upCast,
+            i.sipperFileId   as sipperFileId,
+            i.imageId        as imageId,
+            i.TopLeftRow     as scanLine,
+            floor(i.depth / _depthBinSize) as binId,
+            ceil(least(fd.HeightVsWidth, (1.0 / fd.HeightVsWidth)) * 10.0) as AspectRatioCeil,
+            least(fd.HeightVsWidth, (1.0 / fd.HeightVsWidth)) as AspectRatio,
+            fd.FilledArea *  _chamberWidth / (id.CropRight - id.CropLeft) * 1000 * (id.FlowRate1 / sf.ScanRate) * 1000.0  as areaAdj
 
-   from Images i
-   join (SipperFiles sf)    on (sf.SipperFileId = i.SipperFileId)
-   join (FeatureData fd)    on (fd.ImageId = i.ImageId)
-   join (InstrumentData id) on (id.SipperFileId = i.SipperFileId and id.ScanLine = (floor(i.TopLeftRow / 4096) * 4096))
-   where (sf.CruiseName = _cruiseName)
-	 and (sf.StationName = _stationName)
-	 and (sf.DeploymentNum = _deploymentNum) 
-	 and (i.Class1Id in (select c.ClassId from Classes c where c.Classname like "%detritus%"))
- );
+    from Images i
+    join (SipperFiles sf)    on (sf.SipperFileId = i.SipperFileId)
+    join (FeatureData fd)    on (fd.ImageId = i.ImageId)
+    join (InstrumentData id) on (id.SipperFileId = i.SipperFileId and id.ScanLine = (floor(i.TopLeftRow / 4096) * 4096))
+    where (sf.CruiseName = _cruiseName)
+      and (sf.StationName = _stationName)
+      and (sf.DeploymentNum = _deploymentNum) 
+      and (i.Class1Id in (select c.ClassId from Classes c where c.Classname like "%detritus%"))
+  );
  
-SELECT 
-    i.upCast AS upCast,
-    i.bucketIdx AS bucketIdx,
-    i.bucketDepth AS bucketDepth,
-    i.AspectRatio AS AspectRatio,
-    COUNT(i.imageid) AS imageCount,
-    SUM(pixelCount) AS tyotalPixelCount
-FROM
-    TempSnowImages i
-GROUP BY upCast , bucketIdx , AspectRatio;
+
+  create temporary table if not exists TempSnowImages2 ENGINE=MyISAM as ( 
+    select i.upCast            as upCast,
+           i.sipperFileId      as sipperFileId,
+           i.imageId           as imageId,
+           i.binId             as binId,
+           i.AspectRatioCeil   as AspectRatioCeil,
+           i.AspectRatio       as AspectRatio,
+           areaAdj             as areaSquareMiliMeter,
+           ceil(log(areaAdj / _initialValue) / log(_growtRate)) as areaIndex
+    from  TempSnowImages i
+  );
+  
+  
+  
+  select i2.upCast                          as upCast,
+         i2.binId                           as binId,
+         i2.binId * _depthBinSize           as depthGreaterEqual,
+         (i2.binId + 1) * _depthBinSize     as depthLessThan,
+         idbdb.VolumeSampled                as VolumeSampled,
+         avg(i2.AspectRatio)                as 'Mean Aspect Ratio',
+         stddev(i2.AspectRatio)             as 'Aspect Ratio SD',
+         i2.AspectRatioCeil / 10.0 - 0.1    as AspectRatioGreaterThan,
+         i2.AspectRatioCeil / 10.0          as AspectRatioLessEqual,
+         _initialValue * pow(_growtRate, (i2.areaIndex - 1.0)) as areaGreaterEqual,
+         _initialValue * pow(_growtRate, i2.areaIndex) as areaLessThan,
+         count(*)                           as imageCount,
+         sum(i2.areaSquareMiliMeter)        as totalAreaSquareMiliMeter,
+         count(*) / idbdb.VolumeSampled     as imagesPerCubicMeter,
+         sum(i2.areaSquareMiliMeter) / idbdb.VolumeSampled  as miliMeterSquarePerCubicMeter,
+         avg(i2.areaSquareMiliMeter)        as meanMiliMeterSquareArea,
+         stddev(i2.areaSquareMiliMeter)     as stdDevMiliMeterSquareArea
+         
+    from  TempSnowImages2 i2
+    join (InstrumentDataBinByDepthTempTable idbdb) on  (idbdb.DownCast <> i2.upCast  and  idbdb.binId = i2.binId) 
+    group by upCast , binId , AspectRatioCeil, areaIndex;
 
 end;
 //
 
 delimiter ;
-
-
-
-
 
 
