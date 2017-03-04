@@ -3108,6 +3108,7 @@ begin
   declare _pixelsPerScanLine  int    default 4096;
   declare _chamberWidth       float  default 0.096;
   declare _pixelWidth         float  default 0.025263;  /* MiliMeters per Pixel */
+  declare _outputFileName     varchar(256);
  
   select  d.CropLeft, d.CropRight, d.ChamberWidth  into  _cropLeft, _cropRight, _chamberWidth
        from Deployments d
@@ -3139,7 +3140,7 @@ begin
             floor(i.depth / _depthBinSize) as binId,
             ceil(least(fd.HeightVsWidth, (1.0 / fd.HeightVsWidth)) * 10.0) as AspectRatioCeil,
             least(fd.HeightVsWidth, (1.0 / fd.HeightVsWidth)) as AspectRatio,
-            fd.FilledArea *  _chamberWidth / (id.CropRight - id.CropLeft) * 1000 * (id.FlowRate1 / sf.ScanRate) * 1000.0  as areaAdj
+		    fd.FilledArea *  _chamberWidth / (id.CropRight - id.CropLeft) * 1000 * (id.FlowRate1 / sf.ScanRate) * 1000.0  as areaAdj
 
     from Images i
     join (SipperFiles sf)    on (sf.SipperFileId = i.SipperFileId)
@@ -3164,33 +3165,77 @@ begin
     from  TempSnowImages i
   );
   
+  /* set _outputFileName = concat('D:\\\\Users\\\\kkramer\\\\DropBox\\\\Dropbox\\\\USF_OilSpillGroup\\\\2017-03-01_NOAA-Cruises-Aspect\\\\', _cruiseName, '-', _stationName, '-', _deploymentNum, '.txt'); */
+  set _outputFileName = concat('D:/TEMP/MarineSnowByAspect_', _cruiseName, '-', _stationName, '-', _deploymentNum, '.txt');
+  select _outputFileName;
   
   
-  select i2.upCast                          as upCast,
-         i2.binId                           as binId,
-         i2.binId * _depthBinSize           as depthGreaterEqual,
-         (i2.binId + 1) * _depthBinSize     as depthLessThan,
-         idbdb.VolumeSampled                as VolumeSampled,
-         avg(i2.AspectRatio)                as 'Mean Aspect Ratio',
-         stddev(i2.AspectRatio)             as 'Aspect Ratio SD',
-         i2.AspectRatioCeil / 10.0 - 0.1    as AspectRatioGreaterThan,
-         i2.AspectRatioCeil / 10.0          as AspectRatioLessEqual,
-         _initialValue * pow(_growtRate, (i2.areaIndex - 1.0)) as areaGreaterEqual,
-         _initialValue * pow(_growtRate, i2.areaIndex) as areaLessThan,
-         count(*)                           as imageCount,
-         sum(i2.areaSquareMiliMeter)        as totalAreaSquareMiliMeter,
-         count(*) / idbdb.VolumeSampled     as imagesPerCubicMeter,
-         sum(i2.areaSquareMiliMeter) / idbdb.VolumeSampled  as miliMeterSquarePerCubicMeter,
-         avg(i2.areaSquareMiliMeter)        as meanMiliMeterSquareArea,
-         stddev(i2.areaSquareMiliMeter)     as stdDevMiliMeterSquareArea
-         
-    from  TempSnowImages2 i2
-    join (InstrumentDataBinByDepthTempTable idbdb) on  (idbdb.DownCast <> i2.upCast  and  idbdb.binId = i2.binId) 
-    group by upCast , binId , AspectRatioCeil, areaIndex;
-
+  set @sqlStr = concat(
+  'select i2.upCast                          as upCast,',
+         'i2.binId                           as binId,',
+		     'i2.binId * ', _depthBinSize, '           as depthGreaterEqual,',
+         '(i2.binId + 1) * ', _depthBinSize, '     as depthLessThan,',
+         'idbdb.VolumeSampled                as VolumeSampled,',
+         'avg(i2.AspectRatio)                as MeanAspectRatio,',
+         'stddev(i2.AspectRatio)             as AspectRatioSD,',
+         'i2.AspectRatioCeil / 10.0 - 0.1    as AspectRatioGreaterThan,',
+         'i2.AspectRatioCeil / 10.0          as AspectRatioLessEqual,',
+          _initialValue, ' * pow(', _growtRate, ', (i2.areaIndex - 1.0)) as areaGreaterEqual,',
+          _initialValue, ' * pow(', _growtRate, ', i2.areaIndex) as areaLessThan,',
+         'count(*)                           as imageCount,',
+         'sum(i2.areaSquareMiliMeter)        as totalAreaSquareMiliMeter,',
+         'count(*) / idbdb.VolumeSampled     as imagesPerCubicMeter,',
+         'sum(i2.areaSquareMiliMeter) / idbdb.VolumeSampled  as miliMeterSquarePerCubicMeter,',
+         'avg(i2.areaSquareMiliMeter)        as meanMiliMeterSquareArea,',
+         'stddev(i2.areaSquareMiliMeter)     as stdDevMiliMeterSquareArea', '\n',
+	'into  outfile \'',_outputFileName, '\' fields terminated by \'\\t\' OPTIONALLY ENCLOSED BY \'"\'  lines terminated by \'\\n\'', '\n',
+    'from  TempSnowImages2 i2', '\n',
+    'join (InstrumentDataBinByDepthTempTable idbdb) on  (idbdb.DownCast <> i2.upCast  and  idbdb.binId = i2.binId) ', '\n',
+    'group by upCast , binId , AspectRatioCeil, areaIndex');
+    
+    select @sqlStr;
+    
+    prepare s1 from @sqlStr;
+    execute s1;
 end;
 //
 
 delimiter ;
+
+
+
+drop procedure   if exists  ImagesAspectAllDeployments;
+
+delimiter //
+
+create procedure  ImagesAspectAllDeployments ()
+WholeProcedure:  begin
+  declare done             int default 0;
+  declare _cruiseName      varchar(48);
+  declare _stationName     varchar(48);
+  declare _deploymentNum   varchar(48);
+
+  declare cur1 cursor for  select CruiseName, StationName, DeploymentNum  
+                                  from deployments 
+                                  order by CruiseName, StationName, DeploymentNum;
+
+  declare continue HANDLER for not found set done = 1;
+
+  open cur1;
+
+  repeat
+    fetch  cur1 into _cruiseName,_stationName,_deploymentNum;
+    if not done then
+       call  ImagesAspectRatioUpAndDownCast(_cruiseName, _stationName, _deploymentNum,  5.0, 0.0506275743, 1.21, 10000.0);
+       commit;
+    end if;
+  until done end repeat;
+
+  close cur1; 
+
+end
+//
+delimiter ;
+
 
 
