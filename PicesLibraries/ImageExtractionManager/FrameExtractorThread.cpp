@@ -623,7 +623,7 @@ void  FrameExtractorThread::ProcessFrame ()
   if  (scanRate < 100.0f)
     scanRate = 25950.0f;
 
-  // KKKK  Need to check wheather SIPPER or KSquare  to determine how to compute area.
+  // KAK  Need to check wheather SIPPER or KSquare  to determine how to compute area.
   InstrumentDataPtr  id = NULL;
   if  (this->siperFileRootName.ToLower().StartsWith("port"))
   {

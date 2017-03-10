@@ -758,6 +758,16 @@ namespace PicesCommander
     }  /* ProcessBySipperFiles */
   
 
+    // Explicit predicate delegate.
+    private static bool FindExample(PicesFeatureVector fv)
+    {
+      var fvClassId = fv.MLClass.ClassId;
+
+      if  ((fvClassId == 342)  ||  (fvClassId == 339))
+        return false;
+      else
+        return true;
+     }
 
 
     private  void  ScanOneSipperFile (PicesDataBase    threadConn,
@@ -776,7 +786,10 @@ namespace PicesCommander
      
       message = "Classifying Sipper File[" + sf.SipperFileName + "]   Number of Images[" + examples.Count.ToString ("###,##0") + "]";
 
-      ClassifyFeatureVectorList ("SipperFile[" + sf.SipperFileName + "]"  ,examples);
+      //var filteredExamples = examples.FilterOutClassId339And342 ();
+      var filteredExamples = examples
+
+      ClassifyFeatureVectorList ("SipperFile[" + sf.SipperFileName + "]", filteredExamples);
 
       examples = null;
       GC.Collect ();

@@ -67,7 +67,7 @@ void  ReFreshInstrumentData::InitalizeApplication (kkint32 argc,
 
 
 
-// -cn SMP751001 
+// -cn WB1008 -sn DSH09
 
 
 bool  ReFreshInstrumentData::ProcessCmdLineParameter (const KKStr&  parmSwitch, 
