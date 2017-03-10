@@ -71,6 +71,9 @@ namespace PicesInterface {
                                                        );
 
     PicesFeatureVectorList^  ExtractExamplesForAGivenClass (PicesClass^  mlClass);
+    
+    
+    PicesFeatureVectorList^  FilterOutClassId339And342 ();
 
     PicesClassList^  ExtractListOfClasses ();
 

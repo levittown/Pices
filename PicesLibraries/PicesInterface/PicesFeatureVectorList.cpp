@@ -271,6 +271,26 @@ namespace  PicesInterface
   }  /* ExtractExamplesForAGivenClass */
 
 
+  
+
+
+  PicesFeatureVectorList^  PicesFeatureVectorList::FilterOutClassId339And342 ()
+  {
+    PicesFeatureVectorList^  extractedExamples = gcnew PicesFeatureVectorList ();
+
+    for each (PicesFeatureVector^  pfv  in (*this))
+    {
+      int fvid = pfv->MLClass->ClassId;
+
+      if  ((fvid != 339) &&  (fvid != 342))
+        extractedExamples->Add (pfv);
+    }
+
+    return  extractedExamples;
+  }  /* FilterOutClassId339And342 */
+
+
+
 
 // One time change meant to filter out two un-needed classes for a specific report.  
 // can be adap[ted for a general purpose removal of noise classes.
@@ -422,6 +442,14 @@ PicesFeatureVectorList^  PicesFeatureVectorList::FilterOutClassId339And342 ()
 
     return  fvl;
   }  /* ToFeatureVectorList */
+
+
+
+  
+
+
+
+
 
 
 
