@@ -166,7 +166,7 @@ def  ImportClassEntries(dirName):
   except  mysql.connector.Error as err:
     db = None
     if  err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-        print("Could not conect to \"Sipper-d-marine.usf.edu\"")
+        print('Could not connect to "Sipper-d-marine.usf.edu"')
     elif  err.errno == errorcode.ER_BAD_DB_ERROR:
         print("Database does not exists")
     else:
