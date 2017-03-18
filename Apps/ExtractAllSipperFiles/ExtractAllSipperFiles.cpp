@@ -69,6 +69,8 @@ using namespace  MLL;
 // -RootDir F:\Pices\SipperFiles\NOAA  -min 100   -c USF_Dual_MFS-BFS_current 
 // -RootDir E:\Pices\SipperFiles\NOAA  -min 100   -c USF_Dual_MFS-BFS_current 
 
+// -RootDir D:\Pices\SipperFiles -Min 300 -C USF_Dual_MFS-BFS_current 
+
 ExtractAllSipperFiles::ExtractAllSipperFiles ():
    PicesApplication    (),
    firstOneFound       (false),
@@ -173,7 +175,7 @@ void  ExtractAllSipperFiles::ProcessADir (VectorKKStr&  list,
                                          )
 {
   dirName = osAddSlash (dirName);
-  KKStrListPtr  files = osGetListOfFiles (dirName + "*.spr");
+  KKStrListPtr  files = osGetListOfFiles (dirName + "*.*");
   if  (files)
   {
     KKStrList::iterator  idx;
@@ -189,7 +191,7 @@ void  ExtractAllSipperFiles::ProcessADir (VectorKKStr&  list,
         if  (firstOneFound)
         {
           SipperFilePtr sf = DB()->SipperFileRecLoad (osGetRootName (fn));
-          if  ((sf != NULL)  &&  (sf->ExtractionStatus () == '5'))
+          if  ((sf != NULL)  &&  (sf->ExtractionStatus () == '0'))
             list.push_back (dirName + fn);
           delete  sf;
           sf = NULL;
@@ -252,7 +254,7 @@ void  ExtractAllSipperFiles::RunOneImageExtraction (const KKStr&  sfn)
   bool extrtactionSatusUpdated = false;
 
   DB()->SipperFilesUpdateExtractionStatusIfExpected (rootName, 
-                                                     '5',   // extractionStatusExpected,
+                                                     '0',   // extractionStatusExpected,
                                                      '1',   // extractionStatusNew,
                                                      extractionStatusBeforeUpdate,
                                                      extractionStatusResult,

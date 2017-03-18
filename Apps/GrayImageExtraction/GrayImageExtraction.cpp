@@ -99,6 +99,7 @@ using namespace  ImageExtractionManager;
 
 // -s D:\Pices\SipperFiles\SML751001\34\SMP751001034_West_08.spr  -d D:\Pices\ExtractedImages\SMP751001034_West_08  -r D:\Pices\ExtractedImages\SMP751001034_West_08\SMP751001034_West_08.txt -min 150 -c GulfOilBroad2_Discreate_Dual.cfg -co
 
+
 void  MakeASipperWithDupImages ()
 {
   FILE* in = osFOPEN ("C:\\TrainingApp\\SipperFiles\\HRS020705.spr", "rb");
@@ -328,9 +329,8 @@ int  main (int  argc,  char** argv)
   {
     RunLog  log;
 
- //  CopyOverSipperFileXXX ();
-   //exit (-1);
-
+    //  CopyOverSipperFileXXX ();
+    //exit (-1);
 
     bool  useMultiThreadedVersion = false;
 
