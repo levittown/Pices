@@ -15,13 +15,14 @@ namespace SipperFile
 {
   public partial class ImageViewer : Form
   {
-    private  PicesClassList       classes        = null;
-    private  PicesDataBase        dbConn         = null;
-    private  PicesDataBaseImage   image          = null;
-    private  PicesRaster          raster         = null;
-    private  PicesFeatureVector   featureVector  = null;
-    private  PicesRunLog          runLog         = null;
-    private  PicesSipperFile      sipperFile     = null;
+    private  PicesClassList         classes        = null;
+    private  PicesDataBase          dbConn         = null;
+    private  PicesDataBaseImage     image          = null;
+    private  PicesRaster            raster         = null;
+    private  PicesFeatureVector     featureVector  = null;
+    private  PicesRunLog            runLog         = null;
+    private  PicesSipperFile        sipperFile     = null;
+    private  PicesSipperDeployment  deployment     = null;
 
     private PicesDataBaseLogEntry extractionLogEntry = null;
     private PicesDataBaseLogEntry classLogEntry      = null;
@@ -46,7 +47,15 @@ namespace SipperFile
     private  float           imageSize = 0.0f;
     private  bool            sizeCoordinatesSelEnabled = false;
 
+    private double pixelsPerScanLineDefault = 3800.0;
+    private double mmPerScanLineDefault = 96.0;
 
+    private  double mmPerPixelHorz = 96.0 / 3800.0;
+    private  double mmPerPizelVert =  96.0 / 3800.0;
+
+    private  double flowRate1 = 0.5;
+    private  double scanRate = 24950.0;
+    private  float  chamberWidth = 0.096f;
 
 
     // next set of static fields Specify which data fields are to which data label.  It will be fixed for all instances of ImageViewer.
@@ -62,7 +71,6 @@ namespace SipperFile
 
     private PicesInstrumentData instrumentData = null;
 
-
     public  PicesClass  ClassUserValidatesAs  {get {return classUserValidatesAs;}}
 
 
@@ -76,6 +84,9 @@ namespace SipperFile
       classes = _classes;
       dbConn  = PicesDataBase.GetGlobalDatabaseManagerNewInstance (runLog);
       image   = _image;
+
+      mmPerPixelHorz = mmPerScanLineDefault / pixelsPerScanLineDefault;
+
 
       sizeCoordinates = image.SizeCoordinates;
 
@@ -102,7 +113,29 @@ namespace SipperFile
         uint  scanLine = image.TopLeftRow;
         scanLine = 4096 * (uint)(scanLine / 4096);
         instrumentData = dbConn.InstrumentDataGetByScanLine (image.SipperFileName, image.TopLeftRow);
+        sipperFile = dbConn.SipperFileRecLoad(image.SipperFileName);
       }
+
+      double pixelsPerScanLine =  pixelsPerScanLineDefault;
+     
+
+      if  (instrumentData != null)
+      {
+        if  (instrumentData.ActiveColumns > 0)
+          pixelsPerScanLine = instrumentData.ActiveColumns;
+        if  (instrumentData.FlowRate1() > 0.0)
+          flowRate1 = instrumentData.FlowRate1();
+      }
+
+      if  (sipperFile != null)
+      {
+        scanRate = sipperFile.ScanRate;
+        deployment = dbConn.SipperDeploymentLoad (sipperFile.CruiseName, sipperFile.StationName, sipperFile.deploymentNum);
+        if  (deployment != null)
+          chamberWidth = deployment.ChamberWidth;
+      }
+
+      pixelsPerScanLine = (instrumentData != null) ? instrumentData.
 
       if  ((dataFieldAssignments == null)  ||  (DataLabels == null))
         ConfigurationLoad ();
@@ -282,9 +315,7 @@ namespace SipperFile
         return;
       }
 
-      PicesInstrumentData id = dbConn.InstrumentDataGetByScanLine (image.SipperFileName, image.TopLeftRow);
-
-      featureVector = dbConn.FeatureDataRecLoad (image);
+     featureVector = dbConn.FeatureDataRecLoad (image);
       if  (featureVector == null)
       {
         featureVector = new PicesFeatureVector (raster, image.ImageFileName, null, runLog);
@@ -299,26 +330,17 @@ namespace SipperFile
       float  esd = 0.0f;
       float  eBv = 0.0f;
       float  filledArea = image.PixelCount;
-      float  chamberWidth = 0.096f;
       float  cropWidth = 3800.0f;   // (3900.0f - 200.0f);
-      float  scanRate  = 24950.0f;
-      float  flowRate1 = 0.5f;
       float  flowRate2 = 0.5f;
       
       if  (featureVector != null)
         filledArea = featureVector.FilledArea;
    
-      if  (id != null)
-      {
-        cropWidth = (float)(id.CropRight - id.CropLeft);
-        flowRate1 = id.FlowRate1;
-      }
-
       if  (sipperFile != null)
         scanRate = sipperFile.ScanRate;
 
       esd = (float)(2.0 * Math.Sqrt (filledArea *  (0.096 / cropWidth) * 1000.0 * (flowRate1 / sipperFile.ScanRate) * 1000.0 / 3.1415926));
-      eBv = (float)((4.0 / 3.0) * Math.PI * Math.Pow (Math.Sqrt (filledArea *  (chamberWidth / cropWidth) * 1000 * (flowRate2 / scanRate) * 1000.0 / Math.PI), 3));
+      eBv = (float)((4.0 / 3.0) * Math.PI * Math.Pow (Math.Sqrt (filledArea *  (chamberWidth / cropWidth) * 1000 * (flowRate1 / scanRate) * 1000.0 / Math.PI), 3));
 
       PicesPrediction  model1Prediction1 = new PicesPrediction (null, 0, 0.0f);
       PicesPrediction  model1Prediction2 = new PicesPrediction (null, 0, 0.0f);
