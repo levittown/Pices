@@ -48,9 +48,12 @@ namespace  ImageExtractionManager
     RunLog&               Log               ()  const  {return log;}
     kkuint32              LogEntryId        ()  const  {return logEntryId;}
 
+
     bool  AllProcessorsTerminated (ImageExtractionThreadListPtr  threads);
 
     bool  AnyProcessorsCrashed ();
+
+    double  ChamberWidth ()  const;    /**< Physical width of chamber in meters. */
 
     void  TerminateProcessing (kkint32 miliSecsToWait);
 
@@ -120,6 +123,7 @@ namespace  ImageExtractionManager
     bool                                crashed;                /**< Indicates if any one of the threads crashed.         */
     DataBaseUpdateThreadPtr             dataBaseUpdaterThread;
     DataBasePtr                         dbConn;
+    SipperDeploymentPtr                 deployment;
     bool                                doneExecuting;          /**< The last thing this instance will do in 'ManageTheExtraction'is set this flag to true. */
     double                              endCPUsecs;
     DateTime                            endTime;

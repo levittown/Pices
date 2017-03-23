@@ -47,16 +47,18 @@ namespace SipperFile
     private  float           imageSize = 0.0f;
     private  bool            sizeCoordinatesSelEnabled = false;
 
-    private double pixelsPerScanLineDefault = 3800.0;
-    private double mmPerScanLineDefault = 96.0;
+    private  const double  pixelsPerScanLineDefault = 3800.0;
+    private  const double  chamberWidthDefault      = 0.096f;
+    private  const double  mmPerMeter               = 1000.0;
+    private  const double  scanRateDefault          = 24950.0;
+    private  const double  flowRate1Default         = 0.5;
 
-    private  double mmPerPixelHorz = 96.0 / 3800.0;
-    private  double mmPerPizelVert =  96.0 / 3800.0;
+    private  double  flowRate1    = flowRate1Default;
+    private  double  scanRate     = scanRateDefault;
+    private  double  chamberWidth = chamberWidthDefault;
 
-    private  double flowRate1 = 0.5;
-    private  double scanRate = 24950.0;
-    private  float  chamberWidth = 0.096f;
-
+    private  double mmPerPixelAccrossChamber = chamberWidthDefault * mmPerMeter / pixelsPerScanLineDefault;
+    private  double mmPerPizelWithFlow       = chamberWidthDefault * mmPerMeter / pixelsPerScanLineDefault;
 
     // next set of static fields Specify which data fields are to which data label.  It will be fixed for all instances of ImageViewer.
     private static int[]    dataFieldAssignments = null;
@@ -84,9 +86,6 @@ namespace SipperFile
       classes = _classes;
       dbConn  = PicesDataBase.GetGlobalDatabaseManagerNewInstance (runLog);
       image   = _image;
-
-      mmPerPixelHorz = mmPerScanLineDefault / pixelsPerScanLineDefault;
-
 
       sizeCoordinates = image.SizeCoordinates;
 
@@ -123,19 +122,18 @@ namespace SipperFile
       {
         if  (instrumentData.ActiveColumns > 0)
           pixelsPerScanLine = instrumentData.ActiveColumns;
-        if  (instrumentData.FlowRate1() > 0.0)
-          flowRate1 = instrumentData.FlowRate1();
+        if  (instrumentData.FlowRate1 > 0.0)
+          flowRate1 = instrumentData.FlowRate1;
       }
 
       if  (sipperFile != null)
       {
-        scanRate = sipperFile.ScanRate;
-        deployment = dbConn.SipperDeploymentLoad (sipperFile.CruiseName, sipperFile.StationName, sipperFile.deploymentNum);
+        if  (sipperFile.ScanRate > 0.0)
+          scanRate = sipperFile.ScanRate;
+        deployment = dbConn.SipperDeploymentLoad (sipperFile.CruiseName, sipperFile.StationName, sipperFile.DeploymentNum);
         if  (deployment != null)
           chamberWidth = deployment.ChamberWidth;
       }
-
-      pixelsPerScanLine = (instrumentData != null) ? instrumentData.
 
       if  ((dataFieldAssignments == null)  ||  (DataLabels == null))
         ConfigurationLoad ();
@@ -149,6 +147,11 @@ namespace SipperFile
 
       if  (image != null)
         sipperFile = dbConn.SipperFileRecLoad (image.SipperFileName);
+
+      double pixelsPerScanLineWithFlow = mmPerMeter * flowRate1 / scanRate;
+
+      mmPerPixelAccrossChamber = chamberWidth * mmPerMeter / pixelsPerScanLine;
+      mmPerPizelWithFlow       = chamberWidth * mmPerMeter / pixelsPerScanLineWithFlow;
  
       DataLabels = new Label[4];
       DataLabels[0] = DataLabel0;
@@ -321,8 +324,8 @@ namespace SipperFile
         featureVector = new PicesFeatureVector (raster, image.ImageFileName, null, runLog);
         // Since we had to compute the FeatureDatya from the raster we now need to
         // get the instrument data that matches it.
-        if  (id != null)
-          featureVector.AddInstrumentData (id);
+        if  (instrumentData != null)
+          featureVector.AddInstrumentData (instrumentData);
 
         dbConn.FeatureDataInsertRow (image.SipperFileName, featureVector);
       }
@@ -881,7 +884,7 @@ namespace SipperFile
       if  ((sizeCoordinates == null)  ||  (sizeCoordinates.Count < 1))
         return;
 
-      imageSize = sizeCoordinates.ComputeSegmentLens (1.0f, 1.0f);
+      imageSize = sizeCoordinates.ComputeSegmentLens ((float)mmPerPizelWithFlow, (float)mmPerPixelAccrossChamber);
 
       PicesPoint  lastPoint = sizeCoordinates[0];
       Point  lastPointAdj = AdjustForZoomFactor (lastPoint);
