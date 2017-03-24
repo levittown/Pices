@@ -40,7 +40,7 @@ namespace  ImageExtractionManager
                          kkuint32   _frameSipperRow,
                          kkuint64*  _frameRowByteOffset,
                          kkuint32*  _pixelsPerRow,
-                         float      _areaPerPixel
+                         double     _areaPerPixel
                         );
 
     ExtractedImageListPtr  ProcessFrame ();
@@ -134,7 +134,7 @@ namespace  ImageExtractionManager
     kkuint32        cropLeft;
     kkuint32        cropRight;
 
-    float           areaPerPixel;          /**< Area in mm^2  that each pixel occupies;  this will be computed by the FrameExtractorThread
+    double          areaPerPixel;          /**< Area in mm^2  that each pixel occupies;  this will be computed by the FrameExtractorThread
                                             * using flow-rate, scan-rate, crop-settings, and image-chamber-width;wil be assigned to 
                                             * frame at same time it is populated,
                                             */

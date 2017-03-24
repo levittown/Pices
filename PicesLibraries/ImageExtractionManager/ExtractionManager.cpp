@@ -69,6 +69,7 @@ ExtractionManager::ExtractionManager (const KKStr&      _applicationName,
   crashed                (false),
   dataBaseUpdaterThread  (NULL),
   dbConn                 (NULL),
+  deployment             (NULL),
   doneExecuting          (false),
   endCPUsecs             (0.0),
   endTime                (),
@@ -366,6 +367,8 @@ void  ExtractionManager::Initialize (bool&  _successful)
   validationInfoFileNameHistory = osAddSlash (validationInfoDir) + sipperRootName + "_ValidationInfo_" + now.YYYYMMDDHHMMSS () + ".txt";
 
   sipperFileRec = MakeSureSipperSipperFileExists (parms.SipperFileName ());
+  if  (sipperFileRec != NULL)
+    deployment = dbConn->SipperDeploymentLoad(sipperFileRec->CruiseName(), sipperFileRec->StationName(), sipperFileRec->DeploymentNum());
 
   if  (cancelFlag)
   {
@@ -840,6 +843,30 @@ ClassStatisticListPtr  ExtractionManager::GetClassStatistics ()  const
   return imageManager->ClassStats ();
 }  /* GetClassStatistics */
 
+
+double  ExtractionManager::ChamberWidth ()  const
+{
+  if  ((deployment != NULL)  &&  (deployment->ChamberWidth () != 0.0))
+  {
+    return deployment->ChamberWidth ();
+  }
+  else 
+  {
+    if  (sipperRootName.ToLower().StartsWith("port"))
+      return 0.0508;
+    else 
+      return 0.096;
+  }
+}
+
+
+double  ExtractionManager::ScanRate () const
+{
+  if  ((sipperFileRec == NULL)  ||  (sipperFileRec->ScanRate() < 100.0))
+    return 24950.0;
+  else
+    return sipperFileRec->ScanRate();
+}
 
 
 
