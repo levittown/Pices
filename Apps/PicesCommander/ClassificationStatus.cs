@@ -786,8 +786,8 @@ namespace PicesCommander
      
       message = "Classifying Sipper File[" + sf.SipperFileName + "]   Number of Images[" + examples.Count.ToString ("###,##0") + "]";
 
-
-      var filteredExamples = examples.FilterOutClassId339And342 ();
+      //var filteredExamples = examples.FilterOutClassId339And342 ();
+      var filteredExamples = examples;
 
       ClassifyFeatureVectorList ("SipperFile[" + sf.SipperFileName + "]", filteredExamples);
 
