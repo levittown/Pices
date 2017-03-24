@@ -175,7 +175,7 @@ void  ExtractAllSipperFiles::ProcessADir (VectorKKStr&  list,
                                          )
 {
   dirName = osAddSlash (dirName);
-  KKStrListPtr  files = osGetListOfFiles (dirName + "*.*");
+  KKStrListPtr  files = osGetListOfFiles (dirName + "*.spr");
   if  (files)
   {
     KKStrList::iterator  idx;

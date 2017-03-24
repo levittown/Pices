@@ -55,6 +55,8 @@ namespace  ImageExtractionManager
 
     double  ChamberWidth ()  const;    /**< Physical width of chamber in meters. */
 
+    double  ScanRate () const;
+
     void  TerminateProcessing (kkint32 miliSecsToWait);
 
     void  GetRunTimeStats (ExtractionManagerStats&  stats);

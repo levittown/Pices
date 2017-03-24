@@ -617,18 +617,15 @@ void  FrameExtractorThread::ProcessFrame ()
     return;
   }
 
-  double  mmPerMeter = 1000.0;
-
+  double   mmPerMeter = 1000.0;
   double   chamberWidth = extractionManager->ChamberWidth () * mmPerMeter;
   double   flowRate          = 0.0f;
   kkuint32 pixelsPerScanLine = 3800;
-  double   scanRate          = sipperFileRec->ScanRate();
-  if  (scanRate < 100.0)
-    scanRate = 25950.0;
+  double   scanRate          = extractionManager->ScanRate();
 
   InstrumentDataPtr  id = NULL;
 
-  if  (this->siperFileRootName.ToLower().StartsWith("port"))
+  if  (siperFileRootName.ToLower().StartsWith("port"))
   {
     flowRate = 1.7 * mmPerMeter;
     pixelsPerScanLine = 1727 - 545;
@@ -640,21 +637,21 @@ void  FrameExtractorThread::ProcessFrame ()
     if  (id)
     {
       if  (id->FlowRate1 () > 0.0f)
-        flowRate = id->FlowRate1 ();
+        flowRate = id->FlowRate1 () * mmPerMeter;
       kkint32 idPixelsPerScanLine = id->CropRight () - id->CropLeft ();
       if  (idPixelsPerScanLine > 100)
         pixelsPerScanLine = idPixelsPerScanLine;
     }
     else
     {
-      flowRate = DataManager()->Meter1FlowRate();
+      flowRate = DataManager()->Meter1FlowRate() * mmPerMeter;
     }
   }
 
-  double pixelLen =  flowRate / scanRate; //  (mm/s)/(sl/s) = length of pixel in mm
+  double pixelLen   = flowRate / scanRate; //  (mm/s)/(sl/s) = length of pixel in mm
   double pixelWidth = chamberWidth /  (double)pixelsPerScanLine;
-  double pixelArea = pixelLen * pixelWidth;
-  
+  double pixelArea  = pixelLen * pixelWidth;
+
   logicalFrame->PopulateFrame (frameNum, 
                                lastRowInFrame, 
                                frameArea, 

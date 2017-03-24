@@ -860,6 +860,15 @@ double  ExtractionManager::ChamberWidth ()  const
 }
 
 
+double  ExtractionManager::ScanRate () const
+{
+  if  ((sipperFileRec == NULL)  ||  (sipperFileRec->ScanRate() < 100.0))
+    return 24950.0;
+  else
+    return sipperFileRec->ScanRate();
+}
+
+
 
 bool  ExtractionManager::AnyProcessorsCrashed ()
 {

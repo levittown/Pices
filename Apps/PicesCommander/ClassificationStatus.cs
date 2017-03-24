@@ -758,7 +758,7 @@ namespace PicesCommander
     }  /* ProcessBySipperFiles */
   
 
-           // Explicit predicate delegate.
+    // Explicit predicate delegate.
     private static bool FindExample(PicesFeatureVector fv)
     {
       var fvClassId = fv.MLClass.ClassId;
