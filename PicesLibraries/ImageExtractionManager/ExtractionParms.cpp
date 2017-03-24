@@ -497,12 +497,12 @@ void  ExtractionParms::ParseCmdLine (const CmdLineExpander&  cmdLineExpander,
       }
     }
 
-    else if  ((switchStr == "-IPD")  ||  (switchStr == "-IMAGESPERDIRECTORY"))
+    else if  ((switchStr.EqualIgnoreCase ("-IPD"))  ||  (switchStr.EqualIgnoreCase ("-IMAGESPERDIRECTORY")))
     {
       imagesPerDirectory = atoi (parmStr.Str ());
     }
 
-    else if  (switchStr == "-MORPH")
+    else if  (switchStr == "-Morph")
     {
       morphOperations = parmStr;
     }
@@ -515,48 +515,48 @@ void  ExtractionParms::ParseCmdLine (const CmdLineExpander&  cmdLineExpander,
         multiThreaded = parmStr.ToBool ();
     }
 
-    else if  ((switchStr == "-NODATABASE")  ||  ((switchStr == "-NDB")))
+    else if  (switchStr.EqualIgnoreCase ("-noDataBase")  || switchStr.EqualIgnoreCase ("-NoDB")  || switchStr.EqualIgnoreCase ("-NDB"))
     {
       updateDataBase = false;
     }
 
-    else if  ((switchStr == "-F")  ||  (switchStr == "-SAVEFRAMES")  ||  (switchStr == "-SAVEBEFORE"))
+    else if  (switchStr.EqualIgnoreCase ("-F")  ||  switchStr.EqualIgnoreCase ("-SAVEFRAMES")  ||  switchStr.EqualIgnoreCase ("-SAVEBEFORE"))
     {
       saveFrames = true;
     }
 
-    else if  ((switchStr == "-SAVEAFTER")  ||  (switchStr == "-SA"))
+    else if  (switchStr.EqualIgnoreCase ("-SaveAfter")  ||  switchStr.EqualIgnoreCase ("-SA"))
     {
       saveFramesAfter = true;
     }
 
-    else if  (switchStr == "-FO")
+    else if  (switchStr.EqualIgnoreCase ("-FramesOnly") || switchStr.EqualIgnoreCase ("-FO"))
     {
       framesOnly = true;
       saveFrames = true;
     }
 
-    else if  (switchStr == "-MINAREA")
+    else if  (switchStr.EqualIgnoreCase ("-MINAREA"))
     {
       minAreaSize = parmStr.ToFloat ();
     }
 
-    else if  (switchStr == "-MAXAREA")
+    else if  (switchStr.EqualIgnoreCase ("-MaxArea"))
     {
       maxAreaSize = parmStr.ToFloat ();
     }
 
-    else if  (switchStr == "-M" || switchStr == "-MIN")
+    else if  (switchStr.EqualIgnoreCase ("-M") || switchStr.EqualIgnoreCase ("-Min"))
     {
       minAreaSize = ComputeAreaFromPixelsUsingDefaults (parmStr.ToInt32 ());
     }
 
-    else if  (switchStr == "-MAX")
+    else if  (switchStr.EqualIgnoreCase ("-Max"))
     {
       maxAreaSize = ComputeAreaFromPixelsUsingDefaults (parmStr.ToInt32 ());
     }
 
-    else if  ((switchStr == "-P")  ||  (switchStr == "-PRE"))
+    else if  (switchStr.EqualIgnoreCase ("-P")  ||  switchStr.EqualIgnoreCase ("-Pre"))
     {
       if  ((parmStrUpper == "ON")  ||  (parmStrUpper == "YES"))
         preProcess = true;
@@ -574,13 +574,13 @@ void  ExtractionParms::ParseCmdLine (const CmdLineExpander&  cmdLineExpander,
       }
     }
 
-    else if  (switchStr == "-R")
+    else if  (switchStr.EqualIgnoreCase ("-R"))
     {
       reportFileName = parmStr;
     }
 
 
-    else if  ((switchStr == "-REFRESHDATABASEIMAGES")  ||  (switchStr == "-RDBI"))
+    else if  (switchStr.EqualIgnoreCase ("-REFRESHDATABASEIMAGES")  ||  switchStr.EqualIgnoreCase ("-RDBI"))
     {
       refreshDataBaseImages = true;
     }
@@ -604,28 +604,28 @@ void  ExtractionParms::ParseCmdLine (const CmdLineExpander&  cmdLineExpander,
       }
     }
 
-    else if  ((switchStr == "-T")              ||  
-              (switchStr == "-START")          ||
-              (switchStr == "-STARTSCANLINE")  ||
-              (switchStr == "-SCANLINESTART")  ||
-              (switchStr == "-SSL")            ||
-              (switchStr == "-SLS")
+    else if  (switchStr.EqualIgnoreCase ("-T")              ||  
+              switchStr.EqualIgnoreCase ("-Start")          ||
+              switchStr.EqualIgnoreCase ("-StartScanLine")  ||
+              switchStr.EqualIgnoreCase ("-ScanLineStart")  ||
+              switchStr.EqualIgnoreCase ("-SSL")            ||
+              switchStr.EqualIgnoreCase ("-SLS")
              )
     {
       scanLineStart = atoi (parmStr.Str ());
     }
 
-    else if  ((switchStr == "-END")          ||
-              (switchStr == "-ENDSCANLINE")  ||
-              (switchStr == "-SCANLINEEND")  ||
-              (switchStr == "-ESL")          ||
-              (switchStr == "-SLE")
+    else if  (switchStr.EqualIgnoreCase ("-End")          ||
+              switchStr.EqualIgnoreCase ("-EndScanLine")  ||
+              switchStr.EqualIgnoreCase ("-ScanLineEnd")  ||
+              switchStr.EqualIgnoreCase ("-ESL")          ||
+              switchStr.EqualIgnoreCase ("-SLE")
              )
     {
       scanLineEnd = atoi (parmStr.Str ());
     }
 
-    else if  ((switchStr == "-X")  ||  (switchStr == "-EXTRACT"))
+    else if  (switchStr.EqualIgnoreCase ("-X")  ||  switchStr.EqualIgnoreCase ("-EXTRACT"))
     {
       extractFeatureData = true;
     }
@@ -843,14 +843,14 @@ float ExtractionParms::ComputeAreaFromPixelsUsingDefaults (kkint32 pixelCount)  
   }
   else
   {
-  float scanRate = 24950.0;
-  float flowRate = 0.5f;
-  float scanLineWidthPixels = 3800.0;
-  float scanLineWidthmm = 96.0f;
-  float pixelWidth = scanLineWidthmm / scanLineWidthPixels;
-  float pixelLen = 1000.0f * flowRate / scanRate;
-  float pixelArea = pixelWidth* pixelLen;
-  float area = pixelArea * pixelCount;
-  return area;
+    float scanRate = 24950.0;
+    float flowRate = 0.5f;
+    float scanLineWidthPixels = 3800.0;
+    float scanLineWidthmm = 96.0f;
+    float pixelWidth = scanLineWidthmm / scanLineWidthPixels;
+    float pixelLen = 1000.0f * flowRate / scanRate;
+    float pixelArea = pixelWidth* pixelLen;
+    float area = pixelArea * pixelCount;
+    return area;
   }
 }

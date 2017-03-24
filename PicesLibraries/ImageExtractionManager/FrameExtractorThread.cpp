@@ -443,7 +443,6 @@ void  FrameExtractorThread::BuildColCount (kkuint32  colCount[])
 
 
 
-
 void  FrameExtractorThread::EliminatePosibleLines (kkuint32  colCount[])
 {
   kkuint32  endCol;
@@ -458,7 +457,6 @@ void  FrameExtractorThread::EliminatePosibleLines (kkuint32  colCount[])
   kkuint32  x = 0;
 
   BuildColCount (colCount);
-
 
   for  (col = 1;  col < (frameWidth - 1);  ++col)
   {
@@ -513,7 +511,6 @@ void  FrameExtractorThread::EliminatePosibleLines (kkuint32  colCount[])
 
 
 
-
 void  FrameExtractorThread::SaveFrame (const KKStr& suffix)
 {
   kkuint32  col = 0;
@@ -539,8 +536,6 @@ void  FrameExtractorThread::SaveFrame (const KKStr& suffix)
 
   delete  frameImage;
 }  /* SaveFrame */
-
-
 
 
 
@@ -622,52 +617,41 @@ void  FrameExtractorThread::ProcessFrame ()
     return;
   }
 
-  float    flowRate          = 0.0f;
+  double   mmPerMeter = 1000.0;
+  double   chamberWidth = extractionManager->ChamberWidth () * mmPerMeter;
+  double   flowRate          = 0.0f;
   kkuint32 pixelsPerScanLine = 3800;
-  float    scanRate          = sipperFileRec->ScanRate();
-  if  (scanRate < 100.0f)
-    scanRate = 25950.0f;
+  double   scanRate          = extractionManager->ScanRate();
 
   InstrumentDataPtr  id = NULL;
-  if  (this->siperFileRootName.ToLower().StartsWith("port"))
-  {
-    pixelsPerScanLine = 1189;
-    flowRate= 2.0;
-    scanRate= 15000;
-  }
-  else
-  {
-  auto id = InstrumentDataFileManager::GetClosestInstrumentData(siperFileRootName, frameSipperRow, CancelFlag(), log);
-  if  (id)
-  {
-    if  (id->FlowRate1 () > 0.0f)
-      flowRate = id->FlowRate1 ();
-    kkint32 idPixelsPerScanLine = id->CropRight () - id->CropLeft ();
-    if  (idPixelsPerScanLine > 100)
-      pixelsPerScanLine = idPixelsPerScanLine;
-  }
-  }
 
-  // KKKK  Need to check whether SIPPER or KSquare  to determine how to compute area.
-
-  float chamberWidth = 0.0f;
-
-  if  (this->siperFileRootName.ToLower().StartsWith("port"))
+  if  (siperFileRootName.ToLower().StartsWith("port"))
   {
-    flowRate = 1.7;
-    chamberWidth = 50.8f;
+    flowRate = 1.7 * mmPerMeter;
     pixelsPerScanLine = 1727 - 545;
     pixelsPerScanLine = 1189;
   }
   else
   {
-    chamberWidth = 96.0f;
+    id = InstrumentDataFileManager::GetClosestInstrumentData(siperFileRootName, frameSipperRow, CancelFlag(), log);
+    if  (id)
+    {
+      if  (id->FlowRate1 () > 0.0f)
+        flowRate = id->FlowRate1 () * mmPerMeter;
+      kkint32 idPixelsPerScanLine = id->CropRight () - id->CropLeft ();
+      if  (idPixelsPerScanLine > 100)
+        pixelsPerScanLine = idPixelsPerScanLine;
+    }
+    else
+    {
+      flowRate = DataManager()->Meter1FlowRate() * mmPerMeter;
+    }
   }
 
-  float pixelLen = 1000.0f * flowRate / scanRate; //   (m/s)/(sl/s)(1000) = (m/s)(s/sl)(1000) = (m/sl)(1000(mm/m)) = length of pixel in mm
-  float pixelWidth = chamberWidth /  (float)pixelsPerScanLine;
-  float pixelArea = pixelLen * pixelWidth;
-  
+  double pixelLen   = flowRate / scanRate; //  (mm/s)/(sl/s) = length of pixel in mm
+  double pixelWidth = chamberWidth /  (double)pixelsPerScanLine;
+  double pixelArea  = pixelLen * pixelWidth;
+
   logicalFrame->PopulateFrame (frameNum, 
                                lastRowInFrame, 
                                frameArea, 
@@ -678,7 +662,4 @@ void  FrameExtractorThread::ProcessFrame ()
                               );
   framePool->QueueFrameToProcess (logicalFrame);
 } /* ProcessFrame */
-
-
-
 

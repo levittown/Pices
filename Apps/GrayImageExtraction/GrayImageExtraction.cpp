@@ -266,7 +266,7 @@ void  CointToScanLine71787452 ()
 
     if  ((lineCount % 10000) == 0)
     {
-      cout << StrFormatInt (lineCount, "###,###,##0") << "\t" << StrFormatInt (sf->ByteOffset (), "###,###,###,##0") << endl;
+      cout << KKB::StrFormatInt (lineCount, "###,###,##0") << "\t" << StrFormatInt64 (sf->ByteOffset (), "###,###,###,##0") << endl;
     }
 
     sf->GetNextLine (lineBuff, lineBuffSize, lineSize, colCount, pixelsInRow, flow);
@@ -277,33 +277,6 @@ void  CointToScanLine71787452 ()
   delete  sf;
   sf = NULL;
 }
-
-
-void  CopyOverSipperFileXXX ()
-{
-  uchar  buff[10240];
-
-  FILE*  i = KKB::osFOPEN ("C:\\Pices\\SipperFiles\\WB0813\\WB0813DSH09_05.spr", "rb");
-  FILE*  o = KKB::osFOPEN ("C:\\Pices\\SipperFiles\\WB0813\\WB0813DSH09_05a.spr", "wb");
-
-  kkint64  bytesToWrite = 1408806768;
-  kkint64  bytesCopied = 0;
-  kkint64  bytesLeft = bytesToWrite;
-
-  while  (bytesLeft > 0)
-  {
-    kkint64  bytesThisLoop = sizeof (buff);
-    if  (bytesLeft < bytesThisLoop)
-      bytesThisLoop = bytesLeft;
-
-    fread  (buff, 1, bytesThisLoop, i);
-    fwrite (buff, 1, bytesThisLoop, o);
-    bytesLeft -= bytesThisLoop;
-  }
-
-  fclose (i);
-  fclose (o);
-}  /* CopyOverSipperFile */
 
 
 
