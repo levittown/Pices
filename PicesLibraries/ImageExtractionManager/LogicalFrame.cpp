@@ -974,8 +974,8 @@ VectorSipperImagePtr  LogicalFrame::BuildListOfSipperImages (kkuint32&  imagesIn
       //     set @sqlStr = concat(@sqlStr, 'fd.FilledArea * (', _chamberWidth, ' / (id.CropRight - id.CropLeft)) * 1000  * (id.FlowRate1 / sf.ScanRate) * 1000.0  as Statistic \n');
 
 
-      float imageArea = pixelsInImage * areaPerPixel;
-      sipperImage->ImageArea (imageArea);
+      double imageArea = pixelsInImage * areaPerPixel;
+      sipperImage->ImageArea ((float)imageArea);
 
 
       // This is were we decide if a particular Sipper Image has met the user criteria 
@@ -1151,7 +1151,7 @@ void  LogicalFrame::PopulateFrame (kkuint32   _frameNum,
                                    kkuint32   _frameSipperRow,
                                    kkuint64*  _frameRowByteOffset,
                                    kkuint32*  _pixelsPerRow,
-                                   float      _areaPerPixel
+                                   double     _areaPerPixel
                                   )
 {
   frameNum       = _frameNum;

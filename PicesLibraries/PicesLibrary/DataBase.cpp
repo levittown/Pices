@@ -5988,22 +5988,24 @@ InstrumentDataListPtr  DataBase::InstrumentDataProcessResults (const bool&  canc
                                        "CTDDateTime",         // 12
                                        "Fluorescence",        // 13
                                        "FluorescenceSensor",  // 14
-                                       "Oxygen",              // 15
-                                       "OxygenSensor",        // 16
-                                       "Pressure",            // 17
-                                       "RecordRate",          // 18
-                                       "Salinity",            // 19
-                                       "SoundVelocity",       // 20
-                                       "Temperature",         // 21
-                                       "Transmisivity",       // 22
-                                       "TransmisivitySensor", // 23
-                                       "Turbidity",           // 24
-                                       "TurbiditySensor",     // 25
-                                       "Pitch",               // 26
-                                       "Roll",                // 27
-                                       "CropLeft",            // 28
-                                       "CropRight",           // 29
-                                       "ActiveColumns",       // 30
+                                       "CdomFluorescenceSensor", // 15
+                                       "CdomFluorescence", // 16
+                                       "Oxygen",              // 17
+                                       "OxygenSensor",        // 18
+                                       "Pressure",            // 19
+                                       "RecordRate",          // 20
+                                       "Salinity",            // 21
+                                       "SoundVelocity",       // 22
+                                       "Temperature",         // 23
+                                       "Transmisivity",       // 24
+                                       "TransmisivitySensor", // 25
+                                       "Turbidity",           // 26
+                                       "TurbiditySensor",     // 27
+                                       "Pitch",               // 28
+                                       "Roll",                // 29
+                                       "CropLeft",            // 30
+                                       "CropRight",           // 31
+                                       "ActiveColumns",       // 32
                                        NULL,
                                       };
 
@@ -6029,22 +6031,24 @@ InstrumentDataListPtr  DataBase::InstrumentDataProcessResults (const bool&  canc
     id->CtdDate             (ResultSetGetDateTimeField (12));
     id->Fluorescence        (ResultSetGetFloatField    (13));
     id->FluorescenceSensor  (ResultSetGetFloatField    (14));
-    id->Oxygen              (ResultSetGetFloatField    (15));
-    id->OxygenSensor        (ResultSetGetFloatField    (16));
-    id->Pressure            (ResultSetGetFloatField    (17));
-    id->RecordRate          (ResultSetGetFloatField    (18));
-    id->Salinity            (ResultSetGetFloatField    (19));
-    id->SoundVelocity       (ResultSetGetFloatField    (20));
-    id->Temperature         (ResultSetGetFloatField    (21));
-    id->Transmisivity       (ResultSetGetFloatField    (22));
-    id->TransmisivitySensor (ResultSetGetFloatField    (23));
-    id->Turbidity           (ResultSetGetFloatField    (24));
-    id->TurbiditySensor     (ResultSetGetFloatField    (25));
-    id->Pitch               (ResultSetGetFloatField    (26));
-    id->Roll                (ResultSetGetFloatField    (27));
-    id->CropLeft            (ResultSetGetUint16Field   (28));
-    id->CropRight           (ResultSetGetUint16Field   (29));
-    id->ActiveColumns       (ResultSetGetUint16Field   (30));
+    id->CdomFluorescenceSensor(ResultSetGetFloatField    (15));
+    id->CdomFluorescence    (ResultSetGetFloatField    (16));
+    id->Oxygen              (ResultSetGetFloatField    (17));
+    id->OxygenSensor        (ResultSetGetFloatField    (18));
+    id->Pressure            (ResultSetGetFloatField    (19));
+    id->RecordRate          (ResultSetGetFloatField    (20));
+    id->Salinity            (ResultSetGetFloatField    (21));
+    id->SoundVelocity       (ResultSetGetFloatField    (22));
+    id->Temperature         (ResultSetGetFloatField    (23));
+    id->Transmisivity       (ResultSetGetFloatField    (24));
+    id->TransmisivitySensor (ResultSetGetFloatField    (25));
+    id->Turbidity           (ResultSetGetFloatField    (26));
+    id->TurbiditySensor     (ResultSetGetFloatField    (27));
+    id->Pitch               (ResultSetGetFloatField    (28));
+    id->Roll                (ResultSetGetFloatField    (29));
+    id->CropLeft            (ResultSetGetUint16Field   (30));
+    id->CropRight           (ResultSetGetUint16Field   (31));
+    id->ActiveColumns       (ResultSetGetUint16Field   (32));
 
     results->PushOnBack (id);
   }
