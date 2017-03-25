@@ -58,7 +58,7 @@ namespace SipperFile
     private  double  chamberWidth = chamberWidthDefault;
 
     private  double mmPerPixelAccrossChamber = chamberWidthDefault * mmPerMeter / pixelsPerScanLineDefault;
-    private  double mmPerPizelWithFlow       = chamberWidthDefault * mmPerMeter / pixelsPerScanLineDefault;
+    private  double mmPerPixelWithFlow       = flowRate1Default    * mmPerMeter / scanRateDefault;
 
     // next set of static fields Specify which data fields are to which data label.  It will be fixed for all instances of ImageViewer.
     private static int[]    dataFieldAssignments = null;
@@ -145,13 +145,8 @@ namespace SipperFile
         classLogEntry      = dbConn.LogEntriesSelect (image.ClassLogEntryId);
       }
 
-      if  (image != null)
-        sipperFile = dbConn.SipperFileRecLoad (image.SipperFileName);
-
-      double pixelsPerScanLineWithFlow = mmPerMeter * flowRate1 / scanRate;
-
       mmPerPixelAccrossChamber = chamberWidth * mmPerMeter / pixelsPerScanLine;
-      mmPerPizelWithFlow       = chamberWidth * mmPerMeter / pixelsPerScanLineWithFlow;
+      mmPerPixelWithFlow       = mmPerMeter * flowRate1 / scanRate;
  
       DataLabels = new Label[4];
       DataLabels[0] = DataLabel0;
@@ -468,7 +463,10 @@ namespace SipperFile
       {
         // Lets add hash marks.
         Graphics  g = Graphics.FromImage (bm);
-        float  pixesPerMM = zoomFactor * 35.8842f;
+
+        double pixelsPERmmAccrossChamberZoom = zoomFactor * 1.0 / mmPerPixelAccrossChamber;
+        double pixelsPERmmWithFlowZoom       = zoomFactor * 1.0 / mmPerPixelWithFlow;
+
         int  x = 0;
         Brush  hashMarkBrush = Brushes.Red;
         Pen    gridPen   = new Pen (Color.FromArgb (30, 255, 0, 0));
@@ -476,7 +474,7 @@ namespace SipperFile
         // Vertical Hash Marks
         while  (true)
         {
-          int  hashPos = (int)((float)x * pixesPerMM + 0.5f);
+          int  hashPos = (int)((float)x * pixelsPERmmWithFlowZoom + 0.5f);
           if  (hashPos >= bm.Height - 4)
             break;
 
@@ -496,7 +494,7 @@ namespace SipperFile
         // Horizontal Hash Marks
         while  (true)
         {
-          int  hashPos = (int)((float)x * pixesPerMM + 0.5f);
+          int  hashPos = (int)((float)x * pixelsPERmmAccrossChamberZoom + 0.5f);
           if  (hashPos >= bm.Width)
             break;
 
@@ -884,7 +882,7 @@ namespace SipperFile
       if  ((sizeCoordinates == null)  ||  (sizeCoordinates.Count < 1))
         return;
 
-      imageSize = sizeCoordinates.ComputeSegmentLens ((float)mmPerPizelWithFlow, (float)mmPerPixelAccrossChamber);
+      imageSize = sizeCoordinates.ComputeSegmentLens ((float)mmPerPixelWithFlow, (float)mmPerPixelAccrossChamber);
 
       PicesPoint  lastPoint = sizeCoordinates[0];
       Point  lastPointAdj = AdjustForZoomFactor (lastPoint);
@@ -902,7 +900,7 @@ namespace SipperFile
         ++x;
       }
 
-      ImageSize.Text = imageSize.ToString ("###,##0.0");
+      ImageSize.Text = imageSize.ToString ("###,##0.0") + " mm";
     }  /* DrawSizeCoordinates */
 
 

@@ -68,4 +68,4 @@ Apps/ExtractAllSipperFiles/ExtractAllSipperFiles.vcxproj.user
 Apps/ExtractAllSipperFiles/ExtractAllSipperFiles.vcxproj.user
 Apps/ChartControls/obj/EmbeddedRelease/DesignTimeResolveAssemblyReferencesInput.cache
 Python/.idea/.name
-*.jfm
+PicesDataBase/PicesDataBase.jfm
