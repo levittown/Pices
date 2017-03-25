@@ -514,9 +514,9 @@ namespace SipperFile
       // 
       // SizeCoordinatesSelEnabled
       // 
-      this.SizeCoordinatesSelEnabled.Location = new System.Drawing.Point(208, 316);
+      this.SizeCoordinatesSelEnabled.Location = new System.Drawing.Point(225, 316);
       this.SizeCoordinatesSelEnabled.Name = "SizeCoordinatesSelEnabled";
-      this.SizeCoordinatesSelEnabled.Size = new System.Drawing.Size(51, 23);
+      this.SizeCoordinatesSelEnabled.Size = new System.Drawing.Size(50, 23);
       this.SizeCoordinatesSelEnabled.TabIndex = 39;
       this.SizeCoordinatesSelEnabled.TabStop = false;
       this.SizeCoordinatesSelEnabled.Text = "Enabled";
@@ -525,9 +525,9 @@ namespace SipperFile
       // 
       // ImageSizeAuto
       // 
-      this.ImageSizeAuto.Location = new System.Drawing.Point(271, 316);
+      this.ImageSizeAuto.Location = new System.Drawing.Point(284, 316);
       this.ImageSizeAuto.Name = "ImageSizeAuto";
-      this.ImageSizeAuto.Size = new System.Drawing.Size(51, 23);
+      this.ImageSizeAuto.Size = new System.Drawing.Size(46, 23);
       this.ImageSizeAuto.TabIndex = 40;
       this.ImageSizeAuto.TabStop = false;
       this.ImageSizeAuto.Text = "Auto";
@@ -536,9 +536,9 @@ namespace SipperFile
       // 
       // ImageSizeClearButton
       // 
-      this.ImageSizeClearButton.Location = new System.Drawing.Point(147, 316);
+      this.ImageSizeClearButton.Location = new System.Drawing.Point(169, 316);
       this.ImageSizeClearButton.Name = "ImageSizeClearButton";
-      this.ImageSizeClearButton.Size = new System.Drawing.Size(51, 23);
+      this.ImageSizeClearButton.Size = new System.Drawing.Size(47, 23);
       this.ImageSizeClearButton.TabIndex = 37;
       this.ImageSizeClearButton.TabStop = false;
       this.ImageSizeClearButton.Text = "Clear";
@@ -551,7 +551,7 @@ namespace SipperFile
       this.ImageSize.Location = new System.Drawing.Point(76, 317);
       this.ImageSize.Name = "ImageSize";
       this.ImageSize.ReadOnly = true;
-      this.ImageSize.Size = new System.Drawing.Size(60, 22);
+      this.ImageSize.Size = new System.Drawing.Size(82, 22);
       this.ImageSize.TabIndex = 36;
       this.ImageSize.TabStop = false;
       this.ImageSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -840,7 +840,7 @@ namespace SipperFile
       this.ClientSize = new System.Drawing.Size(1024, 536);
       this.Controls.Add(this.LeftPanel);
       this.Controls.Add(this.RightPanel);
-      this.MinimumSize = new System.Drawing.Size(16, 560);
+      this.MinimumSize = new System.Drawing.Size(16, 575);
       this.Name = "ImageViewer";
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
       this.Text = "ImageViewer";

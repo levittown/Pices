@@ -758,7 +758,11 @@ namespace PicesCommander
     }  /* ProcessBySipperFiles */
   
 
+<<<<<<< HEAD
     // Explicit predicate delegate.
+=======
+           // Explicit predicate delegate.
+>>>>>>> refs/remotes/origin/master
     private static bool FindExample(PicesFeatureVector fv)
     {
       var fvClassId = fv.MLClass.ClassId;
@@ -786,8 +790,13 @@ namespace PicesCommander
      
       message = "Classifying Sipper File[" + sf.SipperFileName + "]   Number of Images[" + examples.Count.ToString ("###,##0") + "]";
 
+<<<<<<< HEAD
       //var filteredExamples = examples.FilterOutClassId339And342 ();
-      var filteredExamples = examples;
+      var filteredExamples = examples
+=======
+
+      var filteredExamples = examples.FilterOutClassId339And342 ();
+>>>>>>> refs/remotes/origin/master
 
       ClassifyFeatureVectorList ("SipperFile[" + sf.SipperFileName + "]", filteredExamples);
 

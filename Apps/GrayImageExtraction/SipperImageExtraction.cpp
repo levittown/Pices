@@ -2480,7 +2480,7 @@ void  SipperImageExtraction::ProcessFrame ()
         dbConn->ImageInsert (*raster,
                              osGetRootName (imageFileName),
                              osGetRootName (sipperRootName),
-                             sipperImage->ByteOffset (),       // byteOffset,     // byteOffset of SipperRow containing TopLeftRow
+                             sipperImage->ByteOffset (),         // byteOffset of SipperRow containing TopLeftRow
                              sipperTopRow,
                              sipperTopCol,
                              raster->Height (),
@@ -2615,7 +2615,7 @@ void  SipperImageExtraction::ReFreshDataBaseImage (const KKStr&      imageFileNa
   DataBaseImagePtr  existingEntry = dbConn->ImagesLocateClosestImage (imageFileName);
   if  (existingEntry)
   {
-    existingEntry->PixelCount ((uint)size);
+    existingEntry->PixelCount  ((uint)size);
     existingEntry->CentroidRow ((int)(centroidRow + 0.5f));
     existingEntry->CentroidCol ((int)(centroidCol + 0.5f));
     existingEntry->ByteOffset  (byteOffset);
