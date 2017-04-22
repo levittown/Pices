@@ -190,19 +190,23 @@ void   ComputeMinMaxAxises::Main ()
   bool   cancelFlag = false;
   char   msgBuff[1024];
 
+  auto detrtitusClass = DB ()->MLClassLoad ("detritus_snow");
+
   for (idx = sipperFiles->begin (); idx != sipperFiles->end (); idx++)
   {
     SipperFilePtr sf = *idx;
+
+    cout << sf->SipperFileName () << endl;
     sipperFileNum++;
 
     auto deployment = DB ()->SipperDeploymentLoad (sf->CruiseName (), sf->StationName (), sf->DeploymentNum ());
 
     auto images = DB ()->ImagesQuery(NULL,     // Group Name,
                                       sf->SipperFileName(),  //CruiseName (), sf->StationName (), sf->DeploymentNum (),
-                                      NULL,       // Class Pointer
+                                      detrtitusClass,       // Class Pointer
                                       'P',        //'P' = Use Prediced Class
                                       0.0f,       // minProb 
-                                      0.0f,       // maxProb
+                                      1.0f,       // maxProb
                                       0,          // minSize 
                                       0,          // maxSize
                                       0.0f, 0.0f, 0, -1, false, cancelFlag);
@@ -232,7 +236,7 @@ void   ComputeMinMaxAxises::Main ()
 
       double flowStretchFactor = mmPerPixelAccrossChamber / mmPerPixelWithFlow;
 
-      auto fullSizeImage = DB ()->ImageFullSizeLoad (image->ImageId ());
+      auto fullSizeImage = DB ()->ImageFullSizeLoad (image->ImageFileName ());
 
       auto normalizedImage = fullSizeImage->StreatchImage ((float)flowStretchFactor, 1.0f);
 
