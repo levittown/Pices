@@ -233,17 +233,19 @@ void   ComputeMinMaxAxises::Main ()
 
       double mmPerPixelAccrossChamber = chamberWidth * mmPerMeter / pixelsPerScanLine;
       double mmPerPixelWithFlow = flowRate1  * mmPerMeter / scanRate;
+      double areaPerPixelMMSquare = mmPerPixelAccrossChamber * mmPerPixelWithFlow;
 
       double flowStretchFactor = mmPerPixelAccrossChamber / mmPerPixelWithFlow;
 
-      auto fullSizeImage = DB ()->ImageFullSizeLoad (image->ImageFileName ());
+      auto fullSizeImage = DB ()->ImageFullSizeFind(image->ImageFileName ());
 
       auto normalizedImage = fullSizeImage->StreatchImage ((float)flowStretchFactor, 1.0f);
 
 
-      float  eigenRatio;
-      float  orientationAngle;
+      float  eigenRatio = 0.0f;
+      float  orientationAngle = 0.0f;
 
+      normalizedImage->CalcArea ();
       normalizedImage->CalcOrientationAndEigerRatio (eigenRatio, orientationAngle);
       if ((orientationAngle > TwoPie) || (orientationAngle < -TwoPie))
       {
@@ -253,8 +255,8 @@ void   ComputeMinMaxAxises::Main ()
 
       auto rotatedImage = normalizedImage->Rotate (orientationAngle);
 
-      kkint32 minHeight = 99999999;
-      kkint32 minWidth = 9999999;
+      kkint32 maxHeight = 99999999;
+      kkint32 maxWidth = 9999999;
 
       // Find minWidth
       for (auto row = 0; row < rotatedImage->Height (); ++row) {
@@ -267,10 +269,9 @@ void   ComputeMinMaxAxises::Main ()
           }
         }
         auto rowWidth = 1 + lastCol - firstCol;
-        if ((firstCol > 0) && (rowWidth < minWidth))
-          minWidth = rowWidth;
+        if ((firstCol > 0) && (rowWidth > maxWidth))
+          maxWidth = rowWidth;
       }
-
 
       // Find minHeight
       for (auto col = 0; col < rotatedImage->Width (); ++col) {
@@ -283,14 +284,16 @@ void   ComputeMinMaxAxises::Main ()
           }
         }
         auto colHeight = 1 + lastRow - firstRow;
-        if ((firstRow > 0) && (colHeight < minHeight))
-          minHeight = colHeight;
+        if ((firstRow > 0) && (colHeight > maxHeight))
+          maxHeight = colHeight;
       }
 
-      auto minHeightMM = minHeight * mmPerPixelAccrossChamber;
-      auto minWidthMM = minWidth * mmPerPixelAccrossChamber;
+      auto maxHeightMM = maxHeight * mmPerPixelAccrossChamber;
+      auto maxWidthMM = maxWidth * mmPerPixelAccrossChamber;
+      auto areaMMSquare = normalizedImage->TotPixels () * areaPerPixelMMSquare;
+      auto 
 
-      cout << image->ImageFileName () << "\t" << minHeightMM << "\t" << minWidthMM << endl;
+      cout << image->ImageFileName () << "\t" << maxHeight << "\t" << maxWidthMM << endl;
 
       delete  rotatedImage;
       rotatedImage = NULL;
