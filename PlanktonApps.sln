@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WindowsApps", "WindowsApps", "{F1FB5D90-ACA0-4C8B-B992-4EA98C4D2D3D}"
 EndProject
@@ -167,6 +167,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImageDimensionComputations"
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ComputeMinMaxAxises", "Apps\ComputeMinMaxAxises\ComputeMinMaxAxises.vcxproj", "{BA9A6F2C-8AB1-4849-A58F-580156B777DC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FA9C865E-0227-4EBC-A291-ED0F2453AFB3} = {FA9C865E-0227-4EBC-A291-ED0F2453AFB3}
+		{EDA94C7F-B7B2-48DC-833D-A4948F00A7A2} = {EDA94C7F-B7B2-48DC-833D-A4948F00A7A2}
+		{D9BB6D83-937E-40FD-BFC3-FF48D8A04D11} = {D9BB6D83-937E-40FD-BFC3-FF48D8A04D11}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -14,6 +14,7 @@ using namespace std;
 #include "KKBaseTypes.h"
 #include "Compressor.h"
 #include "OSservices.h"
+#include "ImageIO.h"
 #include "KKStr.h"
 using namespace KKB;
 
@@ -196,7 +197,6 @@ void   ComputeMinMaxAxises::Main ()
   {
     SipperFilePtr sf = *idx;
 
-    cout << sf->SipperFileName () << endl;
     sipperFileNum++;
 
     auto deployment = DB ()->SipperDeploymentLoad (sf->CruiseName (), sf->StationName (), sf->DeploymentNum ());
@@ -255,8 +255,14 @@ void   ComputeMinMaxAxises::Main ()
 
       auto rotatedImage = normalizedImage->Rotate (orientationAngle);
 
-      kkint32 maxHeight = 99999999;
-      kkint32 maxWidth = 9999999;
+      kkint32 maxHeight = 0;
+      kkint32 maxWidth = 0;
+
+      Point  colStart;
+      Point  colEnd;
+
+      Point  rowStart;
+      Point  rowEnd;
 
       // Find minWidth
       for (auto row = 0; row < rotatedImage->Height (); ++row) {
@@ -269,8 +275,11 @@ void   ComputeMinMaxAxises::Main ()
           }
         }
         auto rowWidth = 1 + lastCol - firstCol;
-        if ((firstCol > 0) && (rowWidth > maxWidth))
+        if ((firstCol > 0) && (rowWidth > maxWidth)) {
           maxWidth = rowWidth;
+          rowStart = Point (row, firstCol);
+          rowEnd = Point (row, lastCol);
+        }
       }
 
       // Find minHeight
@@ -284,16 +293,49 @@ void   ComputeMinMaxAxises::Main ()
           }
         }
         auto colHeight = 1 + lastRow - firstRow;
-        if ((firstRow > 0) && (colHeight > maxHeight))
+        if ((firstRow > 0) && (colHeight > maxHeight)) {
           maxHeight = colHeight;
+          colStart = Point (firstRow, col);
+          colEnd = Point (lastRow, col);
+        }
       }
 
       auto maxHeightMM = maxHeight * mmPerPixelAccrossChamber;
       auto maxWidthMM = maxWidth * mmPerPixelAccrossChamber;
-      auto areaMMSquare = normalizedImage->TotPixels () * areaPerPixelMMSquare;
-      auto 
+      auto areaMMSquare = (double)(normalizedImage->ForegroundPixelCount ()) * areaPerPixelMMSquare;
 
-      cout << image->ImageFileName () << "\t" << maxHeight << "\t" << maxWidthMM << endl;
+      auto normalizedHolesFilled = normalizedImage->CreateFillHole ();
+      normalizedHolesFilled->CalcArea ();
+      auto areaHolesFilledInMMSquare = (double)(normalizedHolesFilled->ForegroundPixelCount ()) * areaPerPixelMMSquare;
+
+      cout << image->ImageFileName () << "\t" << maxHeightMM << "\t" << maxWidthMM << "\t" << areaMMSquare << "\t" << areaHolesFilledInMMSquare << endl;
+      if (normalizedImage->ForegroundPixelCount () > 3000) {
+        auto h = normalizedImage->Height ();
+        auto w = normalizedImage->Width ();
+        auto rowStartNorm = rotatedImage->RotateDerivePreRotatedPoint (h, w, rowStart, orientationAngle);
+        auto rowEndNorm = rotatedImage->RotateDerivePreRotatedPoint (h, w, rowEnd, orientationAngle);
+
+        auto colStartNorm = rotatedImage->RotateDerivePreRotatedPoint (h, w, colStart, orientationAngle);
+        auto colEndNorm = rotatedImage->RotateDerivePreRotatedPoint (h, w, colEnd, orientationAngle);
+
+        auto colorNormalizedImage = normalizedImage->ToColor ();
+
+        colorNormalizedImage->DrawFatLine (rowStartNorm, rowEndNorm, PixelValue::Red, 0.3f);
+        colorNormalizedImage->DrawFatLine (colStartNorm, colEndNorm, PixelValue::Green, 0.3f);
+
+        auto baseName = "C:\\Temp\\MinMaxLines\\" + osGetRootName (image->ImageFileName());
+
+        KKB::SaveImageGrayscaleInverted4Bit (*fullSizeImage, baseName + "_Orig.bmp");
+        KKB::SaveImage (*colorNormalizedImage, baseName + "_Normalized.bmp");
+
+        delete  colorNormalizedImage;
+        colorNormalizedImage = NULL;
+      }
+
+
+
+      delete normalizedHolesFilled;
+      normalizedHolesFilled = NULL;
 
       delete  rotatedImage;
       rotatedImage = NULL;
