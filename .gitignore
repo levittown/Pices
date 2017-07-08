@@ -70,3 +70,7 @@ Apps/ChartControls/obj/EmbeddedRelease/DesignTimeResolveAssemblyReferencesInput.
 Python/.idea/.name
 PicesDataBase/PicesDataBase.jfm
 PicesDataBase/PicesDataBase.jfm
+<<<<<<< HEAD
+=======
+*.jfm
+>>>>>>> 8824e1f7e586a8313789b3fd6b56a7029e1f94d6
