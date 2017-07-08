@@ -362,8 +362,10 @@ namespace GradeTrainingModel
       {
         otherClass = curSelModel.OtherClass ();
         if  (crossValidation)
-         GroundTruth.Text = "F:\\Pices\\SavedImages\\Cruise-WB0812_Station-DWH";
-         //GroundTruth.Text = curSelModel.RootDir ();
+        {
+          //GroundTruth.Text = "F:\\Pices\\SavedImages\\Cruise-WB0812_Station-DWH";
+          GroundTruth.Text = curSelModel.RootDirExpanded();
+        }
 
         origClassifierClasses = curSelModel.ExtractClassList ();
         InitializeTrainAndPredLevelFields ();
@@ -667,7 +669,7 @@ namespace GradeTrainingModel
         }
       }
 
-      trainingModel.CleanUp ();
+      //trainingModel.CleanUp ();
       trainingModel = null;
     }  /* CrossValidate */
 

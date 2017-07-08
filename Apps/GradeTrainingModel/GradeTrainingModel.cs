@@ -13,10 +13,14 @@ namespace GradeTrainingModel
     [STAThread]
     static void Main()
     {
+#if DEBUG
+     PicesMethods.StartMemoryLeakDetection();
+#endif
       PicesSipperVariables.InitializeEnvironment ();
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
       Application.Run(new GetRunTimeParameters());
+      GC.Collect();
     }
   }
 }
