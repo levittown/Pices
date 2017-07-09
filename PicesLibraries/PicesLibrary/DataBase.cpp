@@ -4841,6 +4841,84 @@ RasterSipperPtr  DataBase::ImageFullSizeFind (const KKStr&  imageFileName)
 }  /* ImageFullSizeFind */
 
 
+RasterSipperPtr  DataBase::ImageFullSizeFindNormalized (const KKStr&             imageFileName,
+                                                        SipperFile const *       sipperFile,
+                                                        SipperDeployment const * deployment
+                                                       )
+{
+  const double  pixelsPerScanLineDefault = 3800.0;
+  const double  chamberWidthDefault = 0.096f;
+  const double  mmPerMeter = 1000.0;
+  const double  scanRateDefault = 24950.0;
+  const double  flowRate1Default = 0.5;
+  bool cancelFlag = false;
+
+  auto r = ImageFullSizeFind (imageFileName);
+  RasterSipperPtr   normalizedImage = NULL;
+
+  bool weOwnSipperFile = false;
+  bool weOwnDeployment = false;
+
+  if  (r) {
+    if (!sipperFile) {
+      auto i = ImageLoad (imageFileName);
+      if (i) {
+        sipperFile = SipperFileRecLoad (i->SipperFileName ());
+        weOwnSipperFile = (sipperFile != NULL);
+      }
+    }
+
+    if  (sipperFile && (!deployment)) {
+      deployment = this->SipperDeploymentLoad (sipperFile->CruiseName (), sipperFile->StationName (), sipperFile->DeploymentNum ());
+      weOwnDeployment = deployment != NULL;
+    }
+
+    auto id = InstrumentDataFileManager::GetClosestInstrumentData (imageFileName, cancelFlag, log);
+
+    double  pixelsPerScanLine = pixelsPerScanLineDefault;
+    double  flowRate1 = flowRate1Default;
+    double  scanRate = scanRateDefault;
+    double  chamberWidth = chamberWidthDefault;
+
+    if (deployment) {
+      if (deployment->ChamberWidth () > 0.0)
+        chamberWidth = deployment->ChamberWidth ();
+    }
+
+    if (id) {
+      pixelsPerScanLine = (double)(1 + id->CropRight () - id->CropLeft ());
+      flowRate1 = id->FlowRate1 ();
+    }
+
+    if (sipperFile->ScanRate () > 0.0)
+      scanRate = sipperFile->ScanRate ();
+
+    double mmPerPixelAccrossChamber = chamberWidth * mmPerMeter / pixelsPerScanLine;
+    double mmPerPixelWithFlow = flowRate1  * mmPerMeter / scanRate;
+    double areaPerPixelMMSquare = mmPerPixelAccrossChamber * mmPerPixelWithFlow;
+
+    double flowStretchFactor = mmPerPixelAccrossChamber / mmPerPixelWithFlow;
+
+    auto normalizedImage = r->StreatchImage ((float)flowStretchFactor, 1.0f);
+
+    delete r;
+    r = NULL;
+  }
+
+  if  (weOwnSipperFile) {
+    delete sipperFile;
+    sipperFile = NULL;
+  }
+
+  if  (weOwnDeployment) {
+    delete  deployment;
+    deployment = NULL;
+  }
+
+  return normalizedImage;
+};
+
+
 
 
 //*************************************************************************************
