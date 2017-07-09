@@ -576,7 +576,12 @@ namespace MLL
      */
     RasterSipperPtr  ImageFullSizeFind (const KKStr&  imageFileName);
 
+    RasterSipperPtr  ImageFullSizeFindNormalized (const KKStr&             imageFileName,
+                                                  SipperFile const *       sipperFile,
+                                                  SipperDeployment const * deployment
+                                                 );
 
+    
 
     //***********************************************************************************
     MLClassPtr  MLClassLoad (const KKStr&  className);
