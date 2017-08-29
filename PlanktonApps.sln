@@ -60,8 +60,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SipperFileViewer", "Apps\Si
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GrayImageExtraction", "Apps\GrayImageExtraction\GrayImageExtraction.vcxproj", "{BA2F3029-DF12-42C1-87A3-F13F218F8E10}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B8045239-6597-4E1D-B535-A78DA68BA156} = {B8045239-6597-4E1D-B535-A78DA68BA156}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImageExtractionWindows", "Apps\ImageExtractionWindows\ImageExtractionWindows.vcxproj", "{8AC8F19C-1A7B-4D88-91D1-7F5A46F6A64E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B8045239-6597-4E1D-B535-A78DA68BA156} = {B8045239-6597-4E1D-B535-A78DA68BA156}
+		{8F609A95-37BC-4E0F-8CD5-4196A86CD4B8} = {8F609A95-37BC-4E0F-8CD5-4196A86CD4B8}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SipperDiskManager", "Apps\SipperDiskManager\SipperDiskManager.csproj", "{5265900B-8CBD-4B08-A582-AF9AE7BD8663}"
 	ProjectSection(ProjectDependencies) = postProject
