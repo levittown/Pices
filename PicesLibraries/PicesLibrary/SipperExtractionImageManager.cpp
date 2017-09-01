@@ -327,10 +327,7 @@ void  SipperExtractionImageManager::AddImage (const KKStr&      fileName,
     lastManagedClassUsed->AddImage (fileName, predClass, size, example, raster, colorize);
   }
 
-  if  (saveFeatureData)
-  {
-    allExamples->PushOnBack (example);
-  }
+  allExamples->PushOnBack (example);
 }  /* AddImage */
 
 

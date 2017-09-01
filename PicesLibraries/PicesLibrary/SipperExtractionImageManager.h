@@ -17,8 +17,8 @@ namespace  MLL
   {
   public:
     class  ManagedClass;
-    typedef  ManagedClass*  ManagedClassPtr;
-    typedef  map<MLClassPtr     ,ManagedClassPtr>  ManagedClassList;
+    typedef  ManagedClass* ManagedClassPtr;
+    typedef  map<MLClassPtr, ManagedClassPtr>  ManagedClassList;
     typedef  ManagedClassList*  ManagedClassListPtr;
 
 
