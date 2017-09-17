@@ -706,5 +706,5 @@ void  SipperFileOracle::AddSipperFileEntries (SipperFileListPtr  sipperFiles)
   sipperFiles->Owner (false);
 }  /* AddSipperFileEntries */
 
-
+/**@todo  When shutting down app; need to delete instances of 'SipperFileOracle::allSipperFiles' contents.    */
 map<KKStr,SipperFilePtr>  SipperFileOracle::allSipperFiles;

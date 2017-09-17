@@ -134,7 +134,7 @@ def  SipperFileExist (db, c, _sipperFileIdExt, _sipperFileName):
 
 
 def  ImportLogEntries(dirName):
-  passWord="Dasani!20"
+  passWord="Dasani30!"
   try:
     #db = mysql.connector.Connect(user='kkramer',
     #                             password=passWord,
@@ -150,7 +150,7 @@ def  ImportLogEntries(dirName):
     db = mysql.connector.Connect(user='root',
                                  password=passWord,
                                  host='localhost',
-                                 database='pices_iec'
+                                 database='pices_new'
                                 )
     #db = mysql.connector.Connect(user='root',
     #                             password=passWord,
@@ -262,7 +262,8 @@ def  main():
   #rootDir="D:\\Users\\kkramer\\DropBox\\Dropbox\\ToKurt\\DataToKurt"
   #rootDir="D:\\Users\\kkramer\\DropBox\\Dropbox\\ToKurt\\DataToKurt"
   #rootDir="C:\\Users\\Kurt\Dropbox\\ToCotPices\\2015-06-23"
-  rootDir="D:\\Users\\kkramer\\DropBox\\Dropbox\\Pices\\SipperFiles\\NOAA\\2016-08-20_UpdatesFromAndrewsPC"
+  #rootDir="D:\\Users\\kkramer\\DropBox\\Dropbox\\Pices\\SipperFiles\\NOAA\\2016-08-20_UpdatesFromAndrewsPC"
+  rootDir = r"D:\Users\kurtk\New folder\OneDrive\Pices\ToKurt\DataToKurt"
   #rootDir="C:\\Pices\\UpdatesFromOtherServers"
   ImportLogEntries(rootDir)
   print("\n\n    *** Import Completed ***\n\n")

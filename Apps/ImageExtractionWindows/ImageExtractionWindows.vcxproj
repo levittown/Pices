@@ -22,6 +22,7 @@
     <ProjectGuid>{8AC8F19C-1A7B-4D88-91D1-7F5A46F6A64E}</ProjectGuid>
     <RootNamespace>ImageExtractionWindows</RootNamespace>
     <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedRelease|Win32'" Label="Configuration">

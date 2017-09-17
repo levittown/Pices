@@ -141,8 +141,6 @@ void   ComputeMinMaxAxises::Main ()
   const double  scanRateDefault = 24950.0;
   const double  flowRate1Default = 0.5;
 
-
-
   DateTime  runDate = osGetLocalDateTime ();
 
   KKStr reportFileDir = osAddSlash (PicesVariables::ReportDir ()) + "ComputeMinMaxAxises";
