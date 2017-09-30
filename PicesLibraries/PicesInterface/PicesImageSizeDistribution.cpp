@@ -60,7 +60,7 @@ namespace  PicesInterface
   {
     const VectorUint32&  dist = imageSizeDistributionRow->Distribution ();
 
-    array<uint>^  result = gcnew array<uint> (dist.size ());
+    array<uint>^  result = gcnew array<uint> ((int)dist.size ());
 
     for  (uint x = 0;  x < dist.size ();  ++x)
       result[x] = dist[x];
@@ -107,7 +107,7 @@ namespace  PicesInterface
   array<float>^  PicesImageSizeDistribution::SizeStartValues ()
   {
     const VectorFloat&  startValues = imageSizeDistribution->SizeStartValues ();
-    array<float>^  a = gcnew array<float> (startValues.size ());
+    array<float>^  a = gcnew array<float> ((int)startValues.size ());
     for  (uint x = 0;  x <  startValues.size ();  ++x)
       a[x] = startValues[x];
 
@@ -118,7 +118,7 @@ namespace  PicesInterface
   array<float>^  PicesImageSizeDistribution::SizeEndValues   ()
   {
     const VectorFloat&  endValues = imageSizeDistribution->SizeEndValues ();
-    array<float>^  a = gcnew array<float> (endValues.size ());
+    array<float>^  a = gcnew array<float> ((int)endValues.size ());
     for  (uint x = 0;  x <  endValues.size ();  ++x)
       a[x] = endValues[x];
 
@@ -182,7 +182,7 @@ namespace  PicesInterface
   array<float>^  PicesImageSizeDistribution::IntegratedDensityDistribution ()
   {
     VectorFloat  distribution  = imageSizeDistribution->IntegratedDensityDistribution();
-    array<float>^  results = gcnew array<float>(distribution.size ());
+    array<float>^  results = gcnew array<float>((int)distribution.size ());
     for  (kkuint32 x = 0;  x < distribution.size (); ++x)
       results[x] = distribution[x];
     return  results;
@@ -195,7 +195,7 @@ namespace  PicesInterface
     if  (depthDistribution.size () < 1)
       return nullptr;
 
-    array<float>^ result = gcnew array<float> (depthDistribution.size ());
+    array<float>^ result = gcnew array<float> ((int)depthDistribution.size ());
 
     for  (uint x = 0;  x < depthDistribution.size ();  ++x)
       result[x] = depthDistribution[x];
@@ -211,7 +211,7 @@ namespace  PicesInterface
     if  (volumeSamplesProfile.size () < 1)
       return nullptr;
 
-    array<float>^ result = gcnew array<float> (volumeSamplesProfile.size ());
+    array<float>^ result = gcnew array<float> ((int)volumeSamplesProfile.size ());
 
     for  (uint x = 0;  x < volumeSamplesProfile.size ();  ++x)
       result[x] = volumeSamplesProfile[x];

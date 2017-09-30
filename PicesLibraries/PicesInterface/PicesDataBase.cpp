@@ -977,7 +977,7 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
       return  nullptr;
     }
     
-    array<uint>^ stats = gcnew array<uint> (depthStats->size ());
+    array<uint>^ stats = gcnew array<uint> ((int)depthStats->size ());
 
     for  (int x = 0;  x < (int)depthStats->size ();  x++)
       stats->SetValue ((*depthStats)[x], x);
@@ -1030,7 +1030,7 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
       return  nullptr;
     }
     
-    array<uint>^ stats = gcnew array<uint> (depthStats->size ());
+    array<uint>^ stats = gcnew array<uint> ((int)depthStats->size ());
 
     for  (int x = 0;  x < (int)depthStats->size ();  x++)
       stats->SetValue ((*depthStats)[x], x);
@@ -1796,13 +1796,13 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
     if  (unManagedResults == NULL)
       return nullptr;
 
-    int numRows = unManagedResults->size ();
-    int numCols = fieldNames->Count;
+    auto numRows = unManagedResults->size ();
+    auto numCols = fieldNames->Count;
 
-    array<float, 2>^  results = gcnew array<float, 2> (numRows, numCols);
-    for  (int row = 0;  row < numRows;  ++row)
+    array<float, 2>^  results = gcnew array<float, 2> ((int)numRows, (int)numCols);
+    for  (auto row = 0;  row < numRows;  ++row)
     {
-      for  (int col = 0;  col < numCols;  ++col)
+      for  (auto col = 0;  col < numCols;  ++col)
         results[row, col] =  (*unManagedResults)[row][col];
     }
 
@@ -1837,13 +1837,13 @@ void   PicesDataBase::ImageInsert (PicesRaster^    image,
     if  (unManagedResults == NULL)
       return nullptr;
 
-    int numRows = unManagedResults->size ();
-    int numCols = fieldNames->Count;
+    auto numRows = unManagedResults->size ();
+    auto numCols = fieldNames->Count;
 
-    array<float, 2>^  results = gcnew array<float, 2> (numRows, numCols);
-    for  (int row = 0;  row < numRows;  ++row)
+    array<float, 2>^  results = gcnew array<float, 2> ((int)numRows, (int)numCols);
+    for  (auto row = 0;  row < numRows;  ++row)
     {
-      for  (int col = 0;  col < numCols;  ++col)
+      for  (auto col = 0;  col < numCols;  ++col)
         results[row, col] =  (*unManagedResults)[row][col];
     }
 
@@ -2152,7 +2152,7 @@ PicesGPSDataPointList^   PicesDataBase::GpsDataQueryByIntervals (String^        
     if  (!sipperFileNames)
       return nullptr;
 
-    array<String^>^ sipperFileNamesManaged = gcnew array<String^>(sipperFileNames->size ());
+    array<String^>^ sipperFileNamesManaged = gcnew array<String^>((int)sipperFileNames->size ());
 
     VectorKKStr::iterator  idx;
     int                    idxMan = 0;

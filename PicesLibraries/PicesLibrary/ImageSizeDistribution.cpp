@@ -78,12 +78,12 @@ void  ImageSizeDistributionRow::AddData (kkuint32  _sizeIdx,
 
 void  ImageSizeDistributionRow::AddIn (const ImageSizeDistributionRow&  right)
 {
-  kkint32  xL = distribution.size ();
-  kkint32  xR = right.distribution.size ();
+  auto  xL = distribution.size ();
+  auto  xR = right.distribution.size ();
 
-  kkint32  xM = Min (xL, xR);
+  auto  xM = Min (xL, xR);
 
-  for  (kkint32  x = 0;  x < xM;  ++x)
+  for  (auto  x = 0;  x < xM;  ++x)
     distribution[x] += right.distribution[x];
 
   imageCount      += right.imageCount;
@@ -114,7 +114,7 @@ ImageSizeDistribution::ImageSizeDistribution (float               _depthBinSize,
     depthDistributions (),
     allDepths          (NULL)
 {
-  numSizeBuckets = sizeStartValues.size ();
+  numSizeBuckets = (kkuint32)sizeStartValues.size ();
   if  (sizeStartValues.size () != sizeEndValues.size ())
   {
     KKStr  errMsg = "Size of 'sizeStartValues' and 'sizeEndValues'  don't match.";
@@ -159,7 +159,7 @@ void  ImageSizeDistribution::PopulateDistributions (kkuint32  depthIdx)
 {
   while  (depthDistributions.size () <= depthIdx)
   {
-    kkuint32  idx = depthDistributions.size ();
+    auto  idx = depthDistributions.size ();
     depthDistributions.push_back (new ImageSizeDistributionRow (idx * depthBinSize, numSizeBuckets, 0, 0, 0, 0.0f));
   }
 }  /* PopulateDistributions */
@@ -224,7 +224,7 @@ void  ImageSizeDistribution::AddIn (const ImageSizeDistribution&  right,
   }
 
   if  (depthDistributions.size () < right.depthDistributions.size ())
-    PopulateDistributions (right.depthDistributions.size ());
+    PopulateDistributions ((kkuint32)right.depthDistributions.size ());
 
 
   for  (kkuint32 x = 0;  x < right.depthDistributions.size ();  ++x)
@@ -307,7 +307,7 @@ kkint32  ImageSizeDistribution::IdentifySizeBucket (float  size)
     return -1;
 
   kkuint32  left = 0;
-  kkuint32  right = sizeStartValues.size () - 1;
+  kkuint32  right = (kkuint32)sizeStartValues.size () - 1;
   kkuint32  middle = 0;
   while  (left <= right)
   {
@@ -329,17 +329,17 @@ kkint32  ImageSizeDistribution::IdentifySizeBucket (float  size)
 
 VectorFloat   ImageSizeDistribution::IntegratedDensityDistribution ()  const
 {
-  kkuint32  numSizeBuckets = sizeStartValues.size ();
+  auto  numSizeBuckets = sizeStartValues.size ();
   VectorFloat  results (numSizeBuckets, 0.0);
 
-  for  (kkuint32  depthIdx = 0;   depthIdx < depthDistributions.size ();  ++depthIdx)
+  for  (auto  depthIdx = 0;   depthIdx < depthDistributions.size ();  ++depthIdx)
   {
     ImageSizeDistributionRowPtr  dr = depthDistributions[depthIdx];
     float   volSampled = dr->VolumneSampled ();
     if  (volSampled != 0.0f)
     {
       const VectorUint32&  distribution =  dr->Distribution ();
-      kkuint32 zed = Min (numSizeBuckets, distribution.size ());
+      auto zed = Min (numSizeBuckets, distribution.size ());
       for  (kkuint32 x = 0;  x < zed;  ++x)
       {
         results[x] += distribution[x] / volSampled;
