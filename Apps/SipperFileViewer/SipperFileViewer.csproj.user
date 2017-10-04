@@ -31,4 +31,22 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'EmbeddedDebug|AnyCPU' ">
     <StartArguments>F:\Pices\SipperFiles\WB0813\WB0813DSH09\WB0813DSH09_01.spr</StartArguments>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <StartWorkingDirectory>D:\Pices\SipperFiles\USF\ETP2008\ETP2008_1A</StartWorkingDirectory>
+    <StartArguments>D:\Pices\SipperFiles\USF\ETP2008\ETP2008_1A\ETP2008_1AA_04.spr</StartArguments>
+    <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <StartArguments>F:\Pices\SipperFiles\WB1111\ST03\WB1111ST03_02.spr</StartArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'EmbeddedDebug|x64'">
+    <StartArguments>F:\Pices\SipperFiles\WB0813\WB0813DSH09\WB0813DSH09_01.spr</StartArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'EmbeddedRelease|x64'">
+    <StartArguments>F:\Pices\SipperFiles\WB0813\WB0813DSH09\WB0813DSH09_01.spr</StartArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'EmbededDebug|x64'">
+    <StartArguments>F:\Pices\SipperFiles\WB0813\WB0813DSH09\WB0813DSH09_01.spr</StartArguments>
+    <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
+  </PropertyGroup>
 </Project>
