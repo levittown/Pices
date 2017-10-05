@@ -145,12 +145,11 @@ namespace  PicesInterface
     if  (config)   newMemoryPressure += config->MemoryConsumedEstimated ();
     if  (classes)  newMemoryPressure += classes->MemoryConsumedEstimated ();
 
-    kkMemSize  deltaMemororyPressure = newMemoryPressure - curMemoryPressure;
-    if  (deltaMemororyPressure > 0)
-      GC::AddMemoryPressure (deltaMemororyPressure);
+    if  (newMemoryPressure > curMemoryPressure)
+      GC::AddMemoryPressure (newMemoryPressure - curMemoryPressure);
 
-    else if  (deltaMemororyPressure < 0)
-      GC::RemoveMemoryPressure (-deltaMemororyPressure);
+    else if  (newMemoryPressure < curMemoryPressure)
+      GC::RemoveMemoryPressure (curMemoryPressure - newMemoryPressure);
 
     curMemoryPressure = newMemoryPressure;
   }

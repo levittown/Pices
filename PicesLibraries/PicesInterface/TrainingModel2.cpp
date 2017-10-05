@@ -325,7 +325,8 @@ void  TrainingModel2::UpdateMemoryPressure ()
 
   if (newMemoryPressure > curMemoryPressure)
     GC::AddMemoryPressure (newMemoryPressure - curMemoryPressure);
-  else
+
+  else if (newMemoryPressure < curMemoryPressure)
     GC::RemoveMemoryPressure (curMemoryPressure - newMemoryPressure);
 
   curMemoryPressure = newMemoryPressure;

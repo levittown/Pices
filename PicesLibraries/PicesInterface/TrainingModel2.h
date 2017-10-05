@@ -53,12 +53,12 @@ namespace PicesInterface
 	public:
     enum class ModelTypes: int
     {
-      Null      = KKMLL::Model::ModelTypes::Null,
-      OldSVM    = KKMLL::Model::ModelTypes::OldSVM,
-      SvmBase   = KKMLL::Model::ModelTypes::SvmBase,
-      KNN       = KKMLL::Model::ModelTypes::KNN,
-      UsfCasCor = KKMLL::Model::ModelTypes::UsfCasCor,
-      Dual      = KKMLL::Model::ModelTypes::Dual
+      Null      = (int)KKMLL::Model::ModelTypes::Null,
+      OldSVM    = (int)KKMLL::Model::ModelTypes::OldSVM,
+      SvmBase   = (int)KKMLL::Model::ModelTypes::SvmBase,
+      KNN       = (int)KKMLL::Model::ModelTypes::KNN,
+      UsfCasCor = (int)KKMLL::Model::ModelTypes::UsfCasCor,
+      Dual      = (int)KKMLL::Model::ModelTypes::Dual
     };
 
     TrainingModel2 (PicesRunLog^ _picesRunLog,  System::String^ _modelName);
