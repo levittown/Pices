@@ -2,7 +2,7 @@
 #define  _SORTORDERTYPE_
 
 
-#include  "Str.h"
+#include  "KKStr.h"
 
 typedef enum  
    {

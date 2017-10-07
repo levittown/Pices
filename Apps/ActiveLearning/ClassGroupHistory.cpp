@@ -39,7 +39,7 @@ HistoryBit::HistoryBit ()
 
 
 inline
-int  CompareDouble (FFLOAT&  x,  FFLOAT& y)
+int  CompareDouble (float&  x,  float& y)
 {
   if  (x < y)  
     return  -1;
@@ -89,7 +89,7 @@ PredictionHistoryBit::PredictionHistoryBit (MLClassList&  mlClasses,
   KKStr  predClassName = l.ExtractToken ();
   predClass = mlClasses.LookUpByName (predClassName);
 
-  probability = (FFLOAT)l.ExtractTokenDouble (" ,\n\t\r");
+  probability = (float)l.ExtractTokenDouble (" ,\n\t\r");
 }
 
 
@@ -133,7 +133,7 @@ ProbabilityHistoryBit::ProbabilityHistoryBit (MLClassList&  mlClasses,
 
   KKStr  className = l.ExtractToken ();
   mlClass    = mlClasses.LookUpByName (className);
-  probability   = (FFLOAT)l.ExtractTokenDouble (" ,\n\t\r");
+  probability   = (float)l.ExtractTokenDouble (" ,\n\t\r");
   imageFileName = l.ExtractToken ("\t\n\r");
   if  (!l.Empty ())
   {

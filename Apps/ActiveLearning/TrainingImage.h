@@ -2,7 +2,7 @@
 #define  _TRAININGIMAGE_
 
 #include  "KKQueue.h"
-#include  "Str.h"
+#include  "KKStr.h"
 
 #include  "MLClass.h"
 
@@ -12,7 +12,7 @@ class TrainingImage
 {
 public:
   TrainingImage (const KKStr&  _imageFileName,
-                 MLClassPtr  _mlClass,
+                 MLClassPtr     _mlClass,
                  float          _probability,
                  int            _nonStreamPlace,
                  float          _nonStreamPercentile
@@ -23,10 +23,10 @@ public:
   ~TrainingImage ();
 
 
-  MLClassPtr  MLClass          ()  {return mlClass;}
+  MLClassPtr     MLClass             ()  {return mlClass;}
 
   const
-    KKStr&      ImageFileName       ()  {return imageFileName;}
+    KKStr&       ImageFileName       ()  {return imageFileName;}
 
   int            NonStreamPlace      ()  {return nonStreamPlace;}
 

@@ -21,10 +21,16 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CrossValidation", "Apps\CrossValidation\CrossValidation.vcxproj", "{4D11DE83-281B-47DC-9CB6-EC7C5862E642}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ActiveLearningApp", "Apps\ActiveLearning\ActiveLearningApp.vcxproj", "{EE7FC981-3B57-4D03-AA26-1F321353F3F4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8F609A95-37BC-4E0F-8CD5-4196A86CD4B8} = {8F609A95-37BC-4E0F-8CD5-4196A86CD4B8}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GradeClassification", "Apps\GradeClassification\GradeClassification.vcxproj", "{05D6CF87-3C93-44FE-AD5C-4B37D34FC445}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PlotNonStreamingPlacement", "Apps\ActiveLearning\PlotNonStreamingPlacement.vcxproj", "{CA29337A-E9F1-40DB-B7E3-FC3B59441B3E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FA9C865E-0227-4EBC-A291-ED0F2453AFB3} = {FA9C865E-0227-4EBC-A291-ED0F2453AFB3}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DeleteDuplicateImages", "Apps\DeleteDuplicateImages\DeleteDuplicateImages.vcxproj", "{321CE48B-D9F0-4D4E-B8B4-96177FF9898D}"
 EndProject
@@ -33,6 +39,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OurNeighbors", "Apps\OurNeighbors\OurNeighbors.vcxproj", "{5751D238-5DD2-4A1D-A183-8F667E260BB1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RandomSearch", "Apps\RandomSearch\RandomSearch.vcxproj", "{F057D8ED-F0B8-45F9-84EE-C77518BB5444}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FA9C865E-0227-4EBC-A291-ED0F2453AFB3} = {FA9C865E-0227-4EBC-A291-ED0F2453AFB3}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RandomNND", "Apps\RandomNND\RandomNND.vcxproj", "{A2F931F2-DFCD-4334-A2A9-83C9935C5F06}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -46,6 +55,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FeatureFileStats", "Apps\FeatureFileStats\FeatureFileStats.vcxproj", "{C481E4A1-ABCF-496C-861D-1449AFB99D01}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BitReductionPaper", "Apps\BitReductionPaper\BitReductionPaper.vcxproj", "{A1C57945-1C3E-4450-BC38-542CCE00DF09}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FA9C865E-0227-4EBC-A291-ED0F2453AFB3} = {FA9C865E-0227-4EBC-A291-ED0F2453AFB3}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SipperInterface", "Apps\SipperInterface\SipperInterface.csproj", "{E620FD29-FC27-42AD-9C75-1E5D2B81B1B7}"
 EndProject
@@ -393,7 +405,6 @@ Global
 		{5751D238-5DD2-4A1D-A183-8F667E260BB1}.Release|x86.Build.0 = Release|Win32
 		{F057D8ED-F0B8-45F9-84EE-C77518BB5444}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{F057D8ED-F0B8-45F9-84EE-C77518BB5444}.Debug|x64.ActiveCfg = Debug|x64
-		{F057D8ED-F0B8-45F9-84EE-C77518BB5444}.Debug|x64.Build.0 = Debug|x64
 		{F057D8ED-F0B8-45F9-84EE-C77518BB5444}.Debug|x86.ActiveCfg = Debug|Win32
 		{F057D8ED-F0B8-45F9-84EE-C77518BB5444}.Debug|x86.Build.0 = Debug|Win32
 		{F057D8ED-F0B8-45F9-84EE-C77518BB5444}.EmbeddedDebug|Any CPU.ActiveCfg = EmbeddedDebug|Win32
@@ -513,7 +524,6 @@ Global
 		{C481E4A1-ABCF-496C-861D-1449AFB99D01}.Release|x86.Build.0 = Release|Win32
 		{A1C57945-1C3E-4450-BC38-542CCE00DF09}.Debug|Any CPU.ActiveCfg = Debug|x64
 		{A1C57945-1C3E-4450-BC38-542CCE00DF09}.Debug|x64.ActiveCfg = Debug|x64
-		{A1C57945-1C3E-4450-BC38-542CCE00DF09}.Debug|x64.Build.0 = Debug|x64
 		{A1C57945-1C3E-4450-BC38-542CCE00DF09}.Debug|x86.ActiveCfg = Debug|x64
 		{A1C57945-1C3E-4450-BC38-542CCE00DF09}.Debug|x86.Build.0 = Debug|x64
 		{A1C57945-1C3E-4450-BC38-542CCE00DF09}.EmbeddedDebug|Any CPU.ActiveCfg = EmbeddedDebug|x64

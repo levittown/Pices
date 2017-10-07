@@ -14,17 +14,17 @@ using namespace  MLL;
 class  PassAssignments 
 {
 public:
-  PassAssignments (FileDescPtr         _fileDesc,
-                   KKStr              _fileName,
+  PassAssignments (FileDescConstPtr    _fileDesc,
+                   KKStr               _fileName,
                    FeatureVectorList&  _images,
                    RunLog&             _log,
                    bool&               _successfull
                   );
 
 
-  PassAssignments (FileDescPtr         _fileDesc,
+  PassAssignments (FileDescConstPtr    _fileDesc,
                    FeatureVectorList&  _images,
-                   MLClassList&     _imageClasses,
+                   MLClassList&        _imageClasses,
                    int                 _numOfRandomPasses,
                    int                 _initialTrainingImagesPerClass,
                    bool                _usePriorForIIPC,
@@ -69,15 +69,15 @@ private:
 
 
 
-  KKStrPtr**      assignments;
+  KKStrPtr**        assignments;
 
-  FileDescPtr     fileDesc;
+  FileDescConstPtr  fileDesc;
   
 
   // Class List that was initialized with, will not own the
   // entries,  but will keep order, so as to be able to know
   // wich element in imagesPerClass matches with which class
-  MLClassList  imageClasses;
+  MLClassList     mlClasses;
 
   // Will be allocated to same size as imagesClasses.QueueSize ()
   // Reflect the number of images in each given class.  Only 
