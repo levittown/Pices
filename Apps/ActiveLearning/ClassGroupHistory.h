@@ -281,11 +281,10 @@ class  HistoryBitList:  public KKQueue<HistoryBit>
 {
 public:
   HistoryBitList (bool  _owner,  int  _size):
-     KKQueue<HistoryBit> (_owner, _size)
+     KKQueue<HistoryBit> (_owner)
      {}
 
   void  WriteOutContents (ostream&  o);
-
 
   void  HistoryBitList::SortHistory ();
 

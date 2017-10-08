@@ -48,7 +48,7 @@ public:
 
 
 
-FeatureStats::FeatureStats (FileDescPtr      _fileDesc,
+FeatureStats::FeatureStats (FileDescConstPtr _fileDesc,
                             ResultLineTree&  _results,
                             RunLog&          _log
                            ):
@@ -83,7 +83,7 @@ FeatureStats::FeatureStats (FileDescPtr      _fileDesc,
 
 
 
-FeatureStats::FeatureStats (FileDescPtr      _fileDesc,
+FeatureStats::FeatureStats (FileDescConstPtr _fileDesc,
                             ResultLineList&  _results,
                             RunLog&          _log
                            ):
@@ -126,7 +126,7 @@ void  FeatureStats::AddToAccumulators (ResultLine&  result)
   if  (result.Parent2 ())
   {
     // Looks like a joining of two results, 
-    // notr interestied in these results.
+    // not interested in these results.
     return;
   }
 
@@ -173,7 +173,7 @@ void  FeatureStats::AddToVariances (ResultLine&  result)
   if  (result.Parent2 ())
   {
     // Looks like a joining of two results, 
-    // notr interestied in these results.
+    // not interested in these results.
     return;
   }
 
@@ -224,7 +224,7 @@ FeatureNumList  FeatureStats::RemoveHarmfulFeatures (FeatureNumList&  features)
     int featureNum = features[x];
     if  (featureNum >= numOfFeatures)
     {
-      // Featur specifued is larger than the number of features that this
+      // Feature specified is larger than the number of features that this
       // object was built for.
       log.Level (-1) << endl
                      << "FeatureStats::RemoveHarmfulFeatures    *** ERROR ***" << endl

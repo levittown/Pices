@@ -1,42 +1,38 @@
-#include  "FirstIncludes.h"
-
-#include  <stdlib.h>
-#include  <stdio.h>
-#include  <vector>
-#include  <iostream>
-#include  <fstream>
-
-
-
-#include  "MemoryDebug.h"
+#include "FirstIncludes.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <vector>
+#include <iostream>
+#include <fstream>
+#include "MemoryDebug.h"
 
 using namespace std;
 
 
-#include  "KKBaseTypes.h"
+#include "KKBaseTypes.h"
+#include "OSservices.h"
+#include "RunLog.h"
 using namespace KKB;
 
 
 #include "CrossValidation.h"
 #include "FileDesc.h"
-#include "OSservices.h"
-#include "RunLog.h"
-using namespace MLL;
+using namespace KKMLL;
 
 #include "ResultLine.h"
 
 RunLog  tempLog;
 
-FileDescPtr     ResultLine::fileDesc     = NULL;
-MLClassListPtr  ResultLine::mlClasses = NULL;
-int             ResultLine::numOfClasses = 0;
-RunLog&         ResultLine::log          = tempLog;
+FileDescConstPtr  ResultLine::fileDesc     = NULL;
+MLClassListPtr    ResultLine::mlClasses    = NULL;
+int               ResultLine::numOfClasses = 0;
+RunLog&           ResultLine::log          = tempLog;
 
 
-void  ResultLine::InitializeMLClasses (FileDescPtr      _fileDesc,
-                                          MLClassList&  _mlClasses,
-                                          RunLog&          _log
-                                         )
+void  ResultLine::InitializeMLClasses (FileDescConstPtr _fileDesc,
+                                       MLClassList&     _mlClasses,
+                                       RunLog&          _log
+                                      )
 {
   log = _log;
 
@@ -97,13 +93,14 @@ void  ResultLine::InitializeMLClasses (FileDescPtr      _fileDesc,
 
 
 
-ResultLine::ResultLine (int                 _id,
-                        ResultLinePtr       _parent1,
-                        ResultLinePtr       _parent2,
-                        ResultLinePtr       _family,
-                        CrossValidation&    _cv,
-                        FeatureNumListPtr   _features,
-                        RunLog&             log
+ResultLine::ResultLine (int                _id,
+                        ResultLinePtr      _parent1,
+                        ResultLinePtr      _parent2,
+                        ResultLinePtr      _family,
+                        CrossValidation&   _cv,
+                        FileDescConstPtr   _fileDesc,
+                        FeatureNumListPtr  _features,
+                        RunLog&            log
                        ):
 
   accuracy         (0.0f),
@@ -123,7 +120,7 @@ ResultLine::ResultLine (int                 _id,
   ConfusionMatrix2Ptr  cm = _cv.ConfussionMatrix ();
 
   MLClassList  cmMLClasses (cm->MLClasses ());
-  InitializeMLClasses (features->FileDesc (), cmMLClasses, log);
+  InitializeMLClasses (_fileDesc, cmMLClasses, log);
   accuracy         = (float)cm->Accuracy ();
   accuracyWeighted = cm->AccuracyClassWeightedEqually ();
 
@@ -219,13 +216,13 @@ ResultLine::ResultLine (KKStr           txt,
 
   if  (version < 5)
   {
-    numOfFeatures          = txt.ExtractTokenInt ("\t");
+    numOfFeatures         = txt.ExtractTokenInt ("\t");
     KKStr  featureNumStr  = txt.ExtractToken ("\t");
-    features               = new FeatureNumList (fileDesc, featureNumStr, valid);
+    features              = new FeatureNumList (featureNumStr, valid);
   }
   else
   {
-    numOfFeatures           = txt.ExtractTokenInt ("\t");
+    numOfFeatures          = txt.ExtractTokenInt ("\t");
     KKStr  featureListType = txt.ExtractToken ("\t");
     featureListType.Upper ();
 
@@ -242,7 +239,7 @@ ResultLine::ResultLine (KKStr           txt,
     }
 
     KKStr  featureNumStr  = txt.ExtractToken ("\t");
-    FeatureNumList  featureList (fileDesc, featureNumStr, valid);
+    FeatureNumList  featureList (featureNumStr, valid);
 
     if  (featureListType == "ADD")
     {
@@ -258,7 +255,7 @@ ResultLine::ResultLine (KKStr           txt,
 
     else if  (featureListType == "ALL")
     {
-       features = new FeatureNumList (fileDesc, featureNumStr, valid);
+       features = new FeatureNumList (featureNumStr, valid);
     }
 
     else
@@ -493,8 +490,8 @@ void  ResultLine::BuildExtendedFamilyList (int           deapth,
 CompareResultLine  cresultComparator;
                                 
 
-ResultLineTree::ResultLineTree (bool               _owner,
-                                RunLog&            _log
+ResultLineTree::ResultLineTree (bool     _owner,
+                                RunLog&  _log
                               ):
    RBTree<ResultLine, CompareResultLine, FeatureNumList> (cresultComparator, _owner),
    highestAccuracy           (0.0f),
@@ -510,9 +507,9 @@ ResultLineTree::ResultLineTree (bool               _owner,
 
 
 
-ResultLineTree::ResultLineTree (KKStr           _fileName,
-                                FileDescPtr      _fileDesc,
-                                MLClassList&  _mlClasses,
+ResultLineTree::ResultLineTree (KKStr            _fileName,
+                                FileDescConstPtr _fileDesc,
+                                MLClassList&     _mlClasses,
                                 bool&            _successful,
                                 RunLog&          _log
                                ):
@@ -725,22 +722,20 @@ ResultLineListPtr  ResultLineTree::GetChildrenOfAParent (ResultLinePtr  parent)
 
 
 ResultLineList::ResultLineList ():
-   KKQueue<ResultLine> (false, 100)
+   KKQueue<ResultLine> (false)
 {
 }
 
 
 
-ResultLineList::ResultLineList (bool _bool,
-                                int  _size
-                               ):
-  KKQueue<ResultLine> (_bool, _size)
+ResultLineList::ResultLineList (bool _bool):
+  KKQueue<ResultLine> (_bool)
 {
 }
 
 
 ResultLineList::ResultLineList (ResultLineTreePtr  resultLineTree):
-  KKQueue<ResultLine> (false, resultLineTree->Size ())
+  KKQueue<ResultLine> (false)
 {
   ResultLinePtr  resultLine = resultLineTree->GetFirst ();
   while  (resultLine)
@@ -757,7 +752,7 @@ ResultLineList::ResultLineList (ResultLineTreePtr  resultLineTree,
                                 int                maxSize,
                                 int                maxId
                                ):
-  KKQueue<ResultLine> (false, resultLineTree->Size ())
+  KKQueue<ResultLine> (false)
 
 {
 

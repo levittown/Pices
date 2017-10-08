@@ -2262,7 +2262,7 @@ void  ActiveLearning::ProcessStatusFile (int     argc,
   {
     //  We are doing our initial StartUp. So lets set up the Status file.
 
-    ProcessCmdLineParameters (argc, argv);
+    InitalizeApplication (argc, argv);
  
     if  (baseResultsFileName.Empty ())
     {
@@ -2323,10 +2323,7 @@ void  ActiveLearning::ProcessStatusFile (int     argc,
                                                     );
     }
 
-    masterTrainingConfiguration = TrainingConfiguration2:: (fileDesc, 
-                                                             configFileName, 
-                                                             log
-                                                            );
+    masterTrainingConfiguration = TrainingConfiguration2::Manufacture ("", configFileName, false, log);
 
     delete  mlClasses;
     mlClasses = masterTrainingConfiguration->ExtractClassList ();
@@ -2355,7 +2352,7 @@ void  ActiveLearning::ProcessStatusFile (int     argc,
       osCreateDirectoryPath (iipcSubDirName);
 
 
-      // Lets set up Intial Assignments File 
+      // Lets set up Initial Assignments File 
       PassAssignmentsPtr  assignments = GetAssignments (iipc);
       delete  assignments;
 
@@ -2405,7 +2402,7 @@ void  ActiveLearning::ProcessStatusFile (int     argc,
     *report << "FileFormat                        [" << fileFormat->DriverName ()           << "]."  << endl;
 
     if  (performStreaming)
-      *report << "Perform Streamin      Block Size  [" << streamingBlockSize                << "]." << endl;
+      *report << "Perform Streaming     Block Size  [" << streamingBlockSize                << "]." << endl;
 
     *report << endl;
     *report << "Validation Image Stats:"  << endl;
@@ -2425,7 +2422,7 @@ void  ActiveLearning::ProcessStatusFile (int     argc,
     fclose (statusFile);
     LoadCurrentStatusFile ();
     LoadInitialImages ();
-    masterTrainingConfiguration = new TrainingConfiguration2 (fileDesc, configFileName, log);
+    masterTrainingConfiguration =  TrainingConfiguration2::Manufacture ("", configFileName, false, log);
     delete  mlClasses;
     mlClasses = masterTrainingConfiguration->ExtractClassList ();
     ourProcessNum = numOfProcesses;
@@ -2444,7 +2441,7 @@ void  ActiveLearning::ProcessStatusFile (int     argc,
 
 
 // 2004-12-11  kk
-// See Header file for descrotion of this constructor.
+// See Header file for description of this constructor.
 void  ActiveLearning::ProcessStatusFile ()   
 {
   FILE* statusFile = OpenStatusFile ();
@@ -2464,7 +2461,7 @@ void  ActiveLearning::ProcessStatusFile ()
     fclose (statusFile);
     LoadCurrentStatusFile ();
     LoadInitialImages ();
-    masterTrainingConfiguration = new TrainingConfiguration2 (fileDesc, configFileName, log);
+    masterTrainingConfiguration = TrainingConfiguration2::Manufacture ("", configFileName, false, log);
     delete  mlClasses;
     mlClasses = masterTrainingConfiguration->ExtractClassList ();
   }  

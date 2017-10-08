@@ -305,7 +305,7 @@ void  SupportVectorsHistoryBit::UpdateClassTotals (ClassGroupTotalsPtr  totals,
 
 
 
-class  HistoryBitSort:  public  QueueComparison<HistoryBit>
+class  HistoryBitSort
 {
 public: 
   bool  operator ()  (HistoryBitPtr  p1,

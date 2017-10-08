@@ -6,7 +6,7 @@
 
 #include  "MLClass.h"
 
-using namespace  MLL;
+using namespace  KKMLL;
 
 class TrainingImage
 {
@@ -38,10 +38,10 @@ public:
 
 private:
   MLClassPtr  mlClass;
-  float          probability;    // Prtobability image had 
-  KKStr         imageFileName;
-  int            nonStreamPlace;
-  float          nonStreamPercentile;
+  float       probability;    // Probability example had 
+  KKStr       imageFileName;
+  int         nonStreamPlace;
+  float       nonStreamPercentile;
 };
 
 

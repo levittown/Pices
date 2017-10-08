@@ -55,15 +55,13 @@ void  CopyDirectory (KKStr  srcDir,
 
   if  (fileList)
   {
-    StringListIterator  flIDX (*fileList);
-
-    for  (flIDX.CurPtr (); flIDX.CurPtr (); ++flIDX)
+    for  (auto fileName : *fileList)
     {
-      KKStr  fileName = flIDX.CurPtr ();
-
-      osCopyFileBetweenDirectories (fileName, srcDir, destDir);
+      osCopyFileBetweenDirectories (*fileName, srcDir, destDir);
       // trainingImages.AddEntry (new ImageName (fileName, destDir));
     }
+    delete fileList;
+    fileList = NULL;
   }
 
 

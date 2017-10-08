@@ -1,11 +1,13 @@
 #ifndef  _BITREDUCEDEXAMPLE_
 #define  _BITREDUCEDEXAMPLE_
 
-#include  "FileDesc.h"
-#include  "FeatureVector.h"
-#include  "RBTree.h"
-#include  "RunLog.h"
+#include "RBTree.h"
+#include "RunLog.h"
+using namespace KKB;
 
+#include "FileDesc.h"
+#include "FeatureVector.h"
+using namespace KKMLL;
 
 
 class  BitReducedExample;
@@ -15,8 +17,8 @@ typedef  BitReducedExample*  BitReducedExamplePtr;
 class  BitReducedExampleKey;
 typedef  BitReducedExampleKey*  BitReducedExampleKeyPtr;
 
-//  The purpose of this class is to help do an analyis of the behavior that is going on
-//  at different levels of compresion.
+//  The purpose of this class is to help do an analysis of the behavior that is going on
+//  at different levels of compression.
 
 
 class BitReducedExample
