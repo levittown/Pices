@@ -520,7 +520,7 @@ TrainingImageListPtr  ClassGroupTotals::TrainingImages (int  retraining)
 {
   ValidateRetraining ("TrainingImages", retraining);
 
-  TrainingImageListPtr  trainingImages = new TrainingImageList (false, 5);
+  TrainingImageListPtr  trainingImages = new TrainingImageList (false);
 
   for  (int randomPass = 0;  randomPass < numOfRandomPasses;  randomPass++)
   {
@@ -2479,7 +2479,7 @@ ClassGroupTotalsPtr  ClassGroupTotals::ConsolidateOneDirectoryOneSortOrder (cons
 
 
 ClassGroupTotalsList::ClassGroupTotalsList ():
-    KKQueue<ClassGroupTotals> (true, 10)
+    KKQueue<ClassGroupTotals> (true)
 {
 }
 

@@ -1,10 +1,10 @@
 #ifndef  _TRAININGIMAGE_
 #define  _TRAININGIMAGE_
 
-#include  "KKQueue.h"
-#include  "KKStr.h"
+#include "KKQueue.h"
+#include "KKStr.h"
 
-#include  "MLClass.h"
+#include "MLClass.h"
 
 using namespace  KKMLL;
 
@@ -51,9 +51,7 @@ typedef  TrainingImage*  TrainingImagePtr;
 class  TrainingImageList:  public KKQueue<TrainingImage>
 {
 public:
-  TrainingImageList (bool  _owner = true,
-                     int   _size  = 5
-                    );
+  TrainingImageList (bool _owner = true);
 };
 
 typedef  TrainingImageList*  TrainingImageListPtr;

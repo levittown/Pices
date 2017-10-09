@@ -33,7 +33,7 @@ ClassFocus::ClassFocus (int _numOfClasses):
    numOfClasses        (_numOfClasses),
    numOfSupportVectors (0),
    predicted           (new uint*[_numOfClasses]),
-   trainingImages      (true, 5),
+   trainingImages      (true),
    probabilities       (NULL),
 //   imageFileNames      (NULL),
 //   nonStreamPlaces     (NULL),

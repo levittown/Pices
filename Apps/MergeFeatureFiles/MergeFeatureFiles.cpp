@@ -413,8 +413,8 @@ void  ReFreshInstrumentData (DataBasePtr  dbConn,
 
 void  TestCompressClass ()
 {
-  char* inBuff = "This is a test of the Compressing rountine to see how well it will work";
-  int   inBuffLen = strlen (inBuff) + 1;
+  char* inBuff = "This is a test of the Compressing routine to see how well it will work";
+  kkuint32 inBuffLen = (kkuint32)strlen (inBuff) + 1;
 
   KKB::uint  compressedLen = 0;
   void*  compressedData = Compressor::CreateCompressedBuffer ((KKB::uchar*)inBuff, inBuffLen, compressedLen);
