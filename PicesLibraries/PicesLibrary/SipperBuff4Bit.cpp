@@ -553,7 +553,7 @@ void  SipperBuff4Bit::ProcessRawPixelRecs (kkuint16  numRawPixelRecs,
 
 
 
-void  SipperBuff4Bit::GetNextScanLine (uchar*  lineBuff,
+void  SipperBuff4Bit::GetNextScanLine (uchar*    lineBuff,
                                        kkuint32  lineBuffSize,
                                        kkuint32& lineLen
                                       )
@@ -573,11 +573,18 @@ void  SipperBuff4Bit::GetNextScanLine (uchar*  lineBuff,
 
   curRowByteOffset = byteOffset;
 
+  if (feof (inFile)) 
+  {
+    eof = true;
+    return;
+  }
+
   do
   {
     recsRead = fread (&rec, sizeof (rec), 1, inFile);
     if  (recsRead == 0)
     {
+      eol = true;
       break;
     }
 
@@ -716,14 +723,12 @@ void  SipperBuff4Bit::GetNextScanLine (uchar*  lineBuff,
 
 
 
-
-
-void  SipperBuff4Bit::GetNextLine (uchar*   lineBuff,
-                                   kkuint32 lineBuffSize,
+void  SipperBuff4Bit::GetNextLine (uchar*     lineBuff,
+                                   kkuint32   lineBuffSize,
                                    kkuint32&  lineSize,
-                                   kkuint32 colCount[],
+                                   kkuint32   colCount[],
                                    kkuint32&  pixelsInRow,
-                                   bool&    flow
+                                   bool&      flow
                                   )
 {
   GetNextScanLine (lineBuff, lineBuffSize, lineSize);
@@ -739,8 +744,5 @@ void  SipperBuff4Bit::GetNextLine (uchar*   lineBuff,
 
   return;
 }  /* GetNextLine */
-
-
-
 
 
