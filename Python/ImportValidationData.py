@@ -2,7 +2,7 @@ import mysql.connector
 from mysql.connector import errorcode
 import datetime
 import os
-
+from os import walk
 
 
 def  ToFloat(s):
@@ -54,6 +54,16 @@ def  TimeFromHHMMSS(s):
   hours = i
   return datetime.time(hours,mins,secs)
 
+
+
+def LoadDirectoryList (dirPath):
+  f =[]
+  for (dirPath, dirNames, fileNames) in walk(dirPath):
+    
+  
+  
+
+  
 
 
 def  LoadClassList(fileName):
