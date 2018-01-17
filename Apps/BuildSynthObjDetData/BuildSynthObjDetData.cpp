@@ -61,6 +61,7 @@ void  BuildSynthObjDetData::InitalizeApplication (kkint32 argc,
 {
   this->DataBaseRequired (true);
   PicesApplication::InitalizeApplication (argc, argv);
+  maxCandidates = 100000;
 }  /* InitalizeApplication */
 
 
@@ -89,6 +90,48 @@ void  BuildSynthObjDetData::DisplayCommandLineParameters ()
 
 
 
+DataBaseImageListPtr  BuildSynthObjDetData::GetListyOfValidatedImages (
+    float    minSize, 
+    float    maxSize, 
+    kkuint32 restartImageId,
+    kkint32  limit)
+{
+  MLClassPtr anyClass = NULL;
+  auto labeledExamples = DB ()->ImagesQuery (
+      "",        // cruiseName,
+      "",        // stationName,
+      "",        // deploymentNum,
+      anyClass,  // mlClass,
+      'V',       // classKeyToUse,
+      0.0f,      // minProb,
+      minSize,
+      "",        // dataField1Name,
+      0.0f,      // dataField1Min,
+      0.0f,      // dataField1Max,
+      "",        // dataField2Name,
+      0.0f,      // dataField2Min,
+      0.0f,      // dataField2Max,
+      "",        // dataField3Name,
+      0.0f,      // dataField3Min,
+      0.0f,      // dataField3Max,
+      restartImageId,
+      limit
+  );
+  return labeledExamples;
+}
+
+
+void  BuildSynthObjDetData::PopulateRaster (Raster&  raster, )
+{
+
+}
+
+
+int  BuildSynthObjDetData::Main (int argc, char** argv)
+{
+  auto candidates = GetListyOfValidatedImages (500.0f, 10000.0f, 0, );
+}
+
 int  main (int argc,  char** argv)
 {
   BuildSynthObjDetData  app;
@@ -96,7 +139,7 @@ int  main (int argc,  char** argv)
   if (app.Abort ())
     return 1;
 
-  app.Main ();
+  app.Main (argc, argv);
   if (app.Abort ())
     return 1;
   else

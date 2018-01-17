@@ -129,7 +129,6 @@ double  CharStarToDouble (const char*  s)
 
 
 
-
 void  DataBase::WriteBuff (char*        dest,
                            KKB::kkint32 destSize,
                            const char*  src
@@ -186,7 +185,6 @@ KKStr  DataBase::FloatToStr (float f)
 #endif
 
 
-
 GoalKeeperPtr            DataBase::blocker                  = NULL;
 volatile KKB::kkint32    DataBase::numDataBaseInstances     = 0;
 volatile bool            DataBase::mySqlEmbeddedServerInitailzied = false;
@@ -207,6 +205,7 @@ void  DataBase::Initialization ()
 }
 
 
+
 bool  DataBase::EmbeddedServerRunning ()
 {
   return  mySqlEmbeddedServerInitailzied;
@@ -221,6 +220,7 @@ void  DataBase::CreateBlocker ()
   if  (!blocker)
     GoalKeeper::Create ("DataBaseBlocker", blocker);  // Will handle Race condition.
 }
+
 
 
 void   DataBase::ErrorLogMsg (const KKStr&  msg)
@@ -242,7 +242,6 @@ void   DataBase::UpdatesNotAllowed (const KKStr&  methodName)
 {
   ErrorLogMsg ("Attempt to perform Update:" + methodName);
 }
-
 
 
 

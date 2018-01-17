@@ -84,7 +84,7 @@ namespace MLL
     float     GrowthRate     () const  {return  growthRate;}
     float     EndValue       () const  {return  endValue;}
     kkuint32  NumSizeBuckets () const  {return  numSizeBuckets;}
-    kkuint32  NumDepthBins   () const  {return  depthDistributions.size ();}
+    size_t    NumDepthBins   () const  {return  depthDistributions.size ();}
 
     ImageSizeDistributionRowPtr  GetDepthBin (kkuint32  depthBinIdx);
 

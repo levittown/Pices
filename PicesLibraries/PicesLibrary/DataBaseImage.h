@@ -177,9 +177,31 @@ namespace MLL
 
   };  /* DataBaseImageList */
 
-
-
   typedef  DataBaseImageList::DataBaseImageListPtr  DataBaseImageListPtr;
+
+
+  class  DataBaseImageSet : public std::set < kkint32, std::function<bool (DataBaseImagePtr, DataBaseImagePtr)>>
+  {
+  public:
+    DataBaseImageSet () : 
+      std::set < DataBaseImagePtr, std::function<bool (DataBaseImagePtr, DataBaseImagePtr)> > ([](DataBaseImagePtr x, DataBaseImagePtr y) {return x->ImageId () < y->ImageId (); })
+    {
+    }`
+  }
+
+
+    class Foo
+  {
+  private:
+    std::set<int, std::function<bool (int, int)> numbers;
+  public:
+    Foo () : numbers ([](int x, int y)
+    {
+      return x < y;
+    })
+    {
+    }
+  };
 
 
 }  /* namespace MLL */

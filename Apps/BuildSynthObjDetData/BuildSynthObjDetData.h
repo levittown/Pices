@@ -2,11 +2,14 @@
 #if  !defined(_BUILDSYNTHOBJDET_)
 #define  _BUILDSYNTHOBJDET_
 
-#include "PicesApplication.h"
-#include "DataBase.h"
 #include "RunLog.h"
 #include "KKStr.h"
+using namespace  KKB;
 
+#include "DataBase.h"
+#include "PicesApplication.h"
+
+using namespace  MLL;;
 
 namespace  PicesUtilittyApps
 {
@@ -28,18 +31,27 @@ namespace  PicesUtilittyApps
                                   char**  argv
       );
 
-    void  Main ();
+    int  Main (int argc, char** argv);
 
   private:
 
     void   DisplayCommandLineParameters ();
+
+    DataBaseImageListPtr  GetListyOfValidatedImages (
+      float    minSize, 
+      float    maxSize, 
+      kkuint32 restartImageId, 
+      kkint32  limit);
+
 
     virtual
     bool   ProcessCmdLineParameter (const KKStr&  parmSwitch,
                                     const KKStr&  parmValue
                                    );
 
-    bool                        cancelFlag;
+    bool     cancelFlag;
+
+    kkint32  maxCandidates;
   };  /* FullSizeImagesInstall */
 }  /* FullSizeImagesInstall_DataNameSpace */
 
