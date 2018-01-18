@@ -35,7 +35,7 @@ using namespace  MLL;
 #include "BuildSynthObjDetData.h"
 
 
-using namespace  PicesUtilittyApps;
+using namespace  PicesUtilityApps;
 
 // -SrcDir  D:\Pices\Cruises\WB1101\GpsData
 
@@ -43,7 +43,8 @@ using namespace  PicesUtilittyApps;
 BuildSynthObjDetData::BuildSynthObjDetData () :
 
   PicesApplication (),
-  cancelFlag (false)
+  cancelFlag (false),
+  rng(1000)
 {
 }
 
@@ -90,7 +91,7 @@ void  BuildSynthObjDetData::DisplayCommandLineParameters ()
 
 
 
-DataBaseImageListPtr  BuildSynthObjDetData::GetListyOfValidatedImages (
+DataBaseImageListPtr  BuildSynthObjDetData::GetListOfValidatedImages (
     float    minSize, 
     float    maxSize, 
     kkuint32 restartImageId,
@@ -117,13 +118,77 @@ DataBaseImageListPtr  BuildSynthObjDetData::GetListyOfValidatedImages (
       restartImageId,
       limit
   );
+
+  labeledExamples->RandomizeOrder (1000);
+
   return labeledExamples;
 }
 
-
-void  BuildSynthObjDetData::PopulateRaster (Raster&  raster, )
+RasterPtr  BuildSynthObjDetData::ReduceToMinimumSize (RasterPtr&  src)
 {
+  Point topLeft, botRight;
+  src->FindBoundingBox (topLeft, botRight);
+  if (topLeft.Col () > botRight.Col ())
+  {
+    delete src;
+    src = NULL;
+    return NULL;
+  }
+  else
+  {
+    auto trimmedObj = new Raster (src, topLeft, botRight);
+    delete src;
+    src = NULL;
+    return trimmedObj;
+  }
+}
 
+
+void  BuildSynthObjDetData::PopulateRaster (Raster&             raster, 
+                                            DataBaseImageList&  workingList, 
+                                            int                 numToPlace)
+{
+  Raster  marker (raster.Height(), raster.Width(), false);
+  int numPlaced = 0;
+  while ((numPlaced < numToPlace)  &&  (workingList.size() > 0))
+  {
+    auto nextImageToPlace = workingList.PopFromBack ();
+    RasterPtr objToPlace = DB ()->ImageFullSizeFind (nextImageToPlace->ImageFileName ());
+    if (objToPlace)
+    {
+      Point topLeft, botRight;
+
+      auto trimmedObj = ReduceToMinimumSize(objToPlace);
+      if (trimmedObj)
+      {
+
+        int numAttemptsLeft = 30;
+        bool  imagePlaced = false;
+
+        while (!imagePlaced && (numAttemptsLeft > 0))
+        {
+          kkint32 topLeftColCandidates = raster.Width () - trimmedObj->Width ();
+          kkint32 topLeftRowCandidates = raster.Height () - trimmedObj->Height ();
+          kkint32 topLeftCol = rng.Next () % topLeftColCandidates;
+          kkint32 topLeftRow = rng.Next () % topLeftRowCandidates;
+
+
+
+          --numAttemptsLeft;
+        }
+
+        if (imagePlaced)
+        {
+          delete nextImageToPlace;
+        }
+        else
+        {
+          workingList.PushOnFront (nextImageToPlace);
+        }
+        nextImageToPlace = NULL;
+      }
+    }
+  }
 }
 
 

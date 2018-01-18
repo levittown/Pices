@@ -11,7 +11,7 @@ using namespace  KKB;
 
 using namespace  MLL;;
 
-namespace  PicesUtilittyApps
+namespace  PicesUtilityApps
 {
   /**
   */
@@ -37,11 +37,16 @@ namespace  PicesUtilittyApps
 
     void   DisplayCommandLineParameters ();
 
-    DataBaseImageListPtr  GetListyOfValidatedImages (
+    DataBaseImageListPtr  GetListOfValidatedImages (
       float    minSize, 
       float    maxSize, 
       kkuint32 restartImageId, 
       kkint32  limit);
+
+    RasterPtr  ReduceToMinimumSize (RasterPtr&  src);
+
+
+    void  PopulateRaster (Raster&  raster, DataBaseImageList& workingList, int numToPlace);
 
 
     virtual
@@ -52,7 +57,9 @@ namespace  PicesUtilittyApps
     bool     cancelFlag;
 
     kkint32  maxCandidates;
-  };  /* FullSizeImagesInstall */
-}  /* FullSizeImagesInstall_DataNameSpace */
+
+    RandomNumGenerator rng;
+  };  /* BuildSynthObjDetData */
+}  /* PicesUtilityApps */
 
 #endif

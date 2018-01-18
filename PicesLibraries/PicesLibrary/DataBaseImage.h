@@ -44,6 +44,7 @@ namespace MLL
   {
   public:
     typedef  DataBaseImage*  DataBaseImagePtr;
+    typedef  DataBaseImage const*  DataBaseImageConstPtr;
 
     typedef  KKB::kkint32 kkint32;
     typedef  KKB::kkuint32  kkuint32;
@@ -147,9 +148,8 @@ namespace MLL
   };  /* DataBaseImage */
 
 
-
   typedef  DataBaseImage::DataBaseImagePtr  DataBaseImagePtr;
-
+  typedef  DataBaseImage::DataBaseImageConstPtr  DataBaseImageConstPtr;
 
 
   class  DataBaseImageList: public  KKQueue<DataBaseImage>
@@ -180,30 +180,36 @@ namespace MLL
   typedef  DataBaseImageList::DataBaseImageListPtr  DataBaseImageListPtr;
 
 
-  class  DataBaseImageSet : public std::set < kkint32, std::function<bool (DataBaseImagePtr, DataBaseImagePtr)>>
+  class  DataBaseImageSet : public std::set < DataBaseImagePtr, std::function<bool (DataBaseImagePtr, DataBaseImagePtr)>>
   {
   public:
     DataBaseImageSet () : 
       std::set < DataBaseImagePtr, std::function<bool (DataBaseImagePtr, DataBaseImagePtr)> > ([](DataBaseImagePtr x, DataBaseImagePtr y) {return x->ImageId () < y->ImageId (); })
     {
-    }`
-  }
-
-
-    class Foo
-  {
-  private:
-    std::set<int, std::function<bool (int, int)> numbers;
-  public:
-    Foo () : numbers ([](int x, int y)
-    {
-      return x < y;
-    })
-    {
     }
+
+    DataBaseImagePtr  Add (const DataBaseImageList& list)
+    {
+      for (auto dbi : list)
+        this->insert (dbi);
+    }
+
+    bool  InSet (int x)
+    {
+      return this->InSet (x);
+    }
+
+
+    /** Returns false if [dbi] does noyt esist in set. */
+    bool  Remove (DataBaseImagePtr dbi)
+    {
+      auto existingEntry = this->find (dbi);
+      if (existingEntry == end ())
+        return false;
+      erase (dbi);
+    }
+    
   };
-
-
 }  /* namespace MLL */
 
 
