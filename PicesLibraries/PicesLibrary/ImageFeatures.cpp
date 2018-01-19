@@ -1862,7 +1862,7 @@ void  ImageFeaturesList::FixSipperFileScanLineAndColFields ()
     ImageFeaturesPtr  i = *idx;
 
     KKStr  rootName = osGetRootName (i->ExampleFileName ());
-    kkint32 x = rootName.LocateLastOccurrence ('_');
+    auto x = rootName.LocateLastOccurrence ('_');
     if  (x > 0)
     {
       KKStr  colStr = rootName.SubStrPart (x + 1);

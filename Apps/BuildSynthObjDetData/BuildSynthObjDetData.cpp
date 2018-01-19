@@ -115,8 +115,8 @@ void  BuildSynthObjDetData::DisplayCommandLineParameters ()
 
 
 DataBaseImageListPtr  BuildSynthObjDetData::GetListOfValidatedImages (
-    float    minSize, 
-    float    maxSize, 
+    kkint32  minSize,
+    kkint32  maxSize,
     kkuint32 restartImageId,
     kkint32  limit)
 {
@@ -198,6 +198,7 @@ bool  BuildSynthObjDetData::SeeIfItFits
   if (itFits)
   {
     targetRow = topLeftRow;
+    srcRow = 0;
     while (targetRow < lastTargetRow)
     {
       kkint32 targetCol = topLeftCol;
@@ -236,7 +237,8 @@ BuildSynthObjDetData::PopulateRasterResult*
   RasterPtr raster = new Raster (imageHeight, imageWidth);
   Raster  marker (raster->Height(), raster->Width(), false);
   int numPlaced = 0;
-  while ((numPlaced < numToPlace)  &&  (workingList.size() > 0))
+  int numFailsToFindAPlace = 0;
+  while ((numPlaced < numToPlace)  &&  (workingList.size() > 0)  &&  (numFailsToFindAPlace < 20))
   {
     auto nextImageToPlace = workingList.PopFromBack ();
     RasterPtr objToPlace = DB ()->ImageFullSizeFind (nextImageToPlace->ImageFileName ());
@@ -247,7 +249,7 @@ BuildSynthObjDetData::PopulateRasterResult*
       auto trimmedObj = ReduceToMinimumSize(objToPlace);
       if (trimmedObj)
       {
-        int numAttemptsLeft = 30;
+        int numAttemptsLeft = 50;
         bool  imagePlaced = false;
 
         while (!imagePlaced && (numAttemptsLeft > 0))
@@ -265,11 +267,13 @@ BuildSynthObjDetData::PopulateRasterResult*
 
         if (imagePlaced)
         {
+          ++numPlaced;
           delete nextImageToPlace;
         }
         else
         {
           workingList.PushOnFront (nextImageToPlace);
+          ++numFailsToFindAPlace;
         }
         nextImageToPlace = NULL;
       }
@@ -282,7 +286,8 @@ BuildSynthObjDetData::PopulateRasterResult*
 
 int  BuildSynthObjDetData::Main (int argc, char** argv)
 {
-  auto candidates = GetListOfValidatedImages (500.0f, 10000.0f, 0, maxCandidates);
+  maxCandidates = 1000;
+  auto candidates = GetListOfValidatedImages (5000, 50000, 0, maxCandidates);
 
   KKStr labelingDataFileName = osAddSlash (targetDir) + "LabelingInfo.tsv";
   ofstream  labelingData (labelingDataFileName.Str ());
@@ -294,13 +299,15 @@ int  BuildSynthObjDetData::Main (int argc, char** argv)
     auto createdRaster = PopulateRaster (*candidates, numObjectsToAdd);
 
     KKStr imageFileName = osAddSlash (targetDir) + "PlanktonImage-" + KKB::StrFormatInt (imagesCreated, "00000") + ".bmp";
-    KKB::SaveImage (*(createdRaster->raster), imageFileName);
+    KKB::SaveImageGrayscaleInverted4Bit (*(createdRaster->raster), imageFileName);
      
     labelingData << imageFileName << "\t" + createdRaster->boundBoxes->ToJsonStr () << endl;
+    labelingData.flush ();
 
     ++imagesCreated;
     delete createdRaster;
     createdRaster = NULL;
+    cout << "candidates left: " << candidates->QueueSize () << endl;
   }
 
   labelingData.close ();

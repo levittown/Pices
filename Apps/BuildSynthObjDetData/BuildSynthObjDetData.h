@@ -64,8 +64,8 @@ namespace  PicesUtilityApps
     void   DisplayCommandLineParameters ();
 
     DataBaseImageListPtr  GetListOfValidatedImages (
-      float    minSize, 
-      float    maxSize, 
+      kkint32  minSize, 
+      kkint32  maxSize,
       kkuint32 restartImageId, 
       kkint32  limit);
 
