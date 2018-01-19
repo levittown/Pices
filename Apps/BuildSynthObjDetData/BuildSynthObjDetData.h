@@ -18,6 +18,32 @@ namespace  PicesUtilityApps
   class  BuildSynthObjDetData : public PicesApplication
   {
   public:
+
+    class  BoundBoxEntry
+    {
+    public:
+      BoundBoxEntry (kkint32 _topLeftRow, kkint32 _topLeftCol, kkint32 _height, kkint32 _width, MLClassPtr _mlClass);
+      BoundBoxEntry (const BoundBoxEntry& bbe);
+
+      KKStr ToJsonStr ()  const;
+
+      kkint32 topLeftRow;
+      kkint32 topLeftCol;
+      kkint32 height;
+      kkint32 width;
+      MLClassPtr mlClass;
+    };
+
+    class  BoundBoxEntryList : public KKQueue<BoundBoxEntry>
+    {
+    public:
+      BoundBoxEntryList ();
+      BoundBoxEntryList (const BoundBoxEntryList& list);
+
+      KKStr ToJsonStr ()  const;
+    };
+
+
     BuildSynthObjDetData ();
 
     virtual
@@ -46,8 +72,26 @@ namespace  PicesUtilityApps
     RasterPtr  ReduceToMinimumSize (RasterPtr&  src);
 
 
-    void  PopulateRaster (Raster&  raster, DataBaseImageList& workingList, int numToPlace);
+    struct PopulateRasterResult
+    {
+      PopulateRasterResult (RasterPtr  _raster, BoundBoxEntryList* _boundBoxes) :
+        raster (_raster), boundBoxes (_boundBoxes)
+      {}
 
+      ~PopulateRasterResult ()
+      {
+        delete raster; raster = NULL;
+        delete boundBoxes; boundBoxes = NULL;
+      }
+
+      RasterPtr          raster;
+      BoundBoxEntryList* boundBoxes;
+    };
+
+
+    PopulateRasterResult*  PopulateRaster (DataBaseImageList& workingList, int numToPlace);
+
+    bool SeeIfItFits (Raster& target, const Raster& obj, Raster& marker, kkint32 topLeftRow, kkint32 topLeftCol);
 
     virtual
     bool   ProcessCmdLineParameter (const KKStr&  parmSwitch,
@@ -55,8 +99,11 @@ namespace  PicesUtilityApps
                                    );
 
     bool     cancelFlag;
-
+    kkint32  imageHeight;
+    kkint32  imageWidth;
     kkint32  maxCandidates;
+    kkint32  maxImages;
+    KKStr    targetDir;
 
     RandomNumGenerator rng;
   };  /* BuildSynthObjDetData */

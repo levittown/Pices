@@ -263,7 +263,7 @@ namespace PicesInterface
     PicesTrainingConfigurationPtr config;
     double**                      crossProbTable;
     int                           crossProbTableNumClasses;
-    int                           curMemoryPressure;
+    kkint64                       curMemoryPressure;
     List<String^>^                errorMsgs;     /**< Error messages for later recall are added to this list. */
     bool                          loadTrainingLibraryRunning;
     System::String^               modelName;

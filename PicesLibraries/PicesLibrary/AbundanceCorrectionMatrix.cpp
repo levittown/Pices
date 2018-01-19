@@ -58,7 +58,7 @@ AbundanceCorrectionMatrix::AbundanceCorrectionMatrix (MLClassList& _classes,
     }
   }
 
-  numClasses = classes.size () + 1;
+  numClasses = (kkuint32)(classes.size () + 1);
   AllocateMemory ();
 }
 
@@ -481,7 +481,7 @@ void  AbundanceCorrectionMatrix::ReadXml (istream&  i,
   }
   else if  (otherClassIdx < 0)
   {
-    otherClassIdx = classes.size ();
+    otherClassIdx = (kkint32)classes.size ();
   }
   else if  ((kkuint32)otherClassIdx >= numClasses)
   {

@@ -141,11 +141,11 @@ namespace  PicesInterface
 
   void  PicesTrainingConfigManaged::AdjustCurMemoryPressure ()
   {
-    int  newMemoryPressure = 0;
+    kkint64  newMemoryPressure = 0;
     if  (config)   newMemoryPressure += config->MemoryConsumedEstimated ();
     if  (classes)  newMemoryPressure += classes->MemoryConsumedEstimated ();
 
-    int  deltaMemororyPressure = newMemoryPressure - curMemoryPressure;
+    kkint64  deltaMemororyPressure = newMemoryPressure - curMemoryPressure;
     if  (deltaMemororyPressure > 0)
       GC::AddMemoryPressure (deltaMemororyPressure);
 

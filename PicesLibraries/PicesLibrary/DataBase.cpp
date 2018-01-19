@@ -3575,8 +3575,6 @@ DataBaseImageListPtr  DataBase::ImageQueryProcessResults ()
 
 
 
-
-
 DataBaseImagePtr  DataBase::ImagesLocateClosestImage (const KKStr&  imageFileName)
 {
   KKStr   sipperFileName (32);
@@ -3585,8 +3583,6 @@ DataBaseImagePtr  DataBase::ImagesLocateClosestImage (const KKStr&  imageFileNam
   PicesVariables::ParseImageFileName (imageFileName, sipperFileName, scanLineNum, scanCol);
   return  ImagesLocateClosestImage (sipperFileName, scanLineNum, scanCol);
 }  /* ImagesLocateClosestImage */
-
-
 
 
 
@@ -3755,7 +3751,6 @@ DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  imageGroup,
 
 
 
-
 DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  imageGroup,
                                              const KKStr&           cruiseName,
                                              const KKStr&           stationName,
@@ -3871,10 +3866,7 @@ DataBaseImageListPtr  DataBase::ImagesQueryByGrouop
   ResultSetsClear ();
 
   return  results;
-}  /* ImagesQuery */
-
-
-
+}  /* ImagesQueryByGrouop */
 
 
 
@@ -4551,7 +4543,7 @@ void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruise
   }
   endValues.push_back (9999999.99f);
 
-  kkuint32  sizeBucketCount = startValues.size ();
+  size_t  sizeBucketCount = startValues.size ();
 
   kkint32  maxColIdx = Max(downCastIdx, bucketIdx, bucketDepthIdx, imageCountIdx, totalPixelCountIdx, totalFilledAreaIdx, firstSizeBucketIdx);
 
@@ -4734,13 +4726,13 @@ void   DataBase::ImageFullSizeSave (const KKStr&         imageFileName,
 
   char*  queryStrPtr = queryStr;
   STRCOPY (queryStrPtr, queryStrLeft, "call ImagesFullSizeSave(");
-  kkuint32  x = strlen (queryStrPtr);  queryStrPtr += x;   queryStrLeft -= x;
+  kkuint32  x = (kkuint32)strlen (queryStrPtr);  queryStrPtr += x;   queryStrLeft -= x;
 
   STRCOPY (queryStrPtr, queryStrLeft, osGetRootName (imageFileName).QuotedStr ().Str ());
-  x = strlen (queryStrPtr);  queryStrPtr += x;   queryStrLeft -= x;
+  x = (kkuint32)strlen (queryStrPtr);  queryStrPtr += x;   queryStrLeft -= x;
 
   STRCOPY (queryStrPtr, queryStrLeft, ", \"");
-  x = strlen (queryStrPtr);  queryStrPtr += x;   queryStrLeft -= x;
+  x = (kkuint32)strlen (queryStrPtr);  queryStrPtr += x;   queryStrLeft -= x;
   queryStrLen = (kkint32)strlen (queryStr); 
 
   mySqlImageCompressedBuffLen = mysql_real_escape_string (conn, (char*)queryStrPtr, (char*)compressedBuff, compressedBuffLen);
@@ -4752,7 +4744,7 @@ void   DataBase::ImageFullSizeSave (const KKStr&         imageFileName,
   delete  compressedBuff;  compressedBuff = NULL;
   
   KKB::STRCAT (queryStrPtr, queryStrLeft, "\")");
-  x = strlen (queryStrPtr);
+  x = (kkuint32)strlen (queryStrPtr);
   queryStrLen  += x;
   queryStrPtr  += x;
   queryStrLeft -= x;
