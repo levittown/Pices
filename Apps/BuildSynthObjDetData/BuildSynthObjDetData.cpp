@@ -286,7 +286,7 @@ BuildSynthObjDetData::PopulateRasterResult*
 
 int  BuildSynthObjDetData::Main (int argc, char** argv)
 {
-  maxCandidates = 1000;
+  maxCandidates = 100000;
   auto candidates = GetListOfValidatedImages (5000, 50000, 0, maxCandidates);
 
   KKStr labelingDataFileName = osAddSlash (targetDir) + "LabelingInfo.tsv";

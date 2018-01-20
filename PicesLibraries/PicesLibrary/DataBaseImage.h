@@ -1,6 +1,8 @@
 #ifndef  _DATABASEIMAGE_
 #define  _DATABASEIMAGE_
 
+#include <set>
+
 /**
  @class  MLL::DataBaseImage
  @details 
