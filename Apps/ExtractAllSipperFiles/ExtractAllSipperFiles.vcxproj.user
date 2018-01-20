@@ -4,15 +4,7 @@
     <LocalDebuggerCommandArguments> -RootDir D:\Pices\SipperFiles\USF -min 250 -c USF_MFS_current.cfg</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LocalDebuggerCommandArguments> -RootDir D:\Pices\SipperFiles\USF -min 250 -c USF_MFS_current.cfg</LocalDebuggerCommandArguments>
-    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LocalDebuggerCommandArguments> -RootDir D:\Pices\SipperFiles\USF -min 250 -c USF_MFS_current.cfg</LocalDebuggerCommandArguments>
-    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LocalDebuggerCommandArguments> -RootDir D:\Pices\SipperFiles\USF -min 250 -c USF_MFS_current.cfg</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
@@ -20,15 +12,7 @@
     <LocalDebuggerCommandArguments> -RootDir D:\Pices\SipperFiles\USF -min 250 -c USF_MFS_current.cfg</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedRelease|x64'">
-    <LocalDebuggerCommandArguments> -RootDir D:\Pices\SipperFiles\USF -min 250 -c USF_MFS_current.cfg</LocalDebuggerCommandArguments>
-    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedDebug|Win32'">
-    <LocalDebuggerCommandArguments> -RootDir D:\Pices\SipperFiles\USF -min 250 -c USF_MFS_current.cfg</LocalDebuggerCommandArguments>
-    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedDebug|x64'">
     <LocalDebuggerCommandArguments> -RootDir D:\Pices\SipperFiles\USF -min 250 -c USF_MFS_current.cfg</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
