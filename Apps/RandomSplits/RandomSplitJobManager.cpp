@@ -355,7 +355,6 @@ void  RandomSplitJobManager::GenerateFinalResultsReport ()
 
 
 
-
 void  RandomSplitJobManager::StatusFileInitialize (ostream& o)
 {
   o << "//  RandomSplitJobManager"                        << endl
@@ -374,7 +373,6 @@ void  RandomSplitJobManager::StatusFileInitialize (ostream& o)
 
 
 
-
 void  RandomSplitJobManager::LoadRunTimeData ()
 {
   bool  cancelFlag  = false;
@@ -385,8 +383,7 @@ void  RandomSplitJobManager::LoadRunTimeData ()
   delete  splits;     splits    = NULL; 
   delete  mlClasses;  mlClasses = NULL;
   delete  data;       data      = NULL;
-
-
+  
   if  (!mlClasses)
     mlClasses = new MLClassList ();
 
@@ -421,8 +418,6 @@ void  RandomSplitJobManager::LoadRunTimeData ()
 
   splits = new Orderings (data, dataIndexFileName, numSplits, 1, log);
 }  /* LoadRunTimeData */
-
-
 
 
 
@@ -477,8 +472,6 @@ void   RandomSplitJobManager::StatusFileProcessLine (const KKStr&  _ln,
 
 
 
-
-
 void   RandomSplitJobManager::RetrieveRandomSplit (int                    splitNum,
                                                    FeatureVectorListPtr&  trainData,
                                                    FeatureVectorListPtr&  testData
@@ -494,8 +487,7 @@ void   RandomSplitJobManager::RetrieveRandomSplit (int                    splitN
                    << endl;
     return;
   }
-
-
+  
   const
   FeatureVectorListPtr  ordering = splits->Ordering (splitNum);
 

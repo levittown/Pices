@@ -1,28 +1,22 @@
 #include  "FirstIncludes.h"
-
 #include  <stdlib.h>
 #include  <stdio.h>
 #include  <math.h>
-
 #include  <iostream>
 #include  <vector>
-
-
 #include  "MemoryDebug.h"
-#include  "KKBaseTypes.h"
-
 using namespace std;
+
+
+#include  "KKBaseTypes.h"
+#include  "OSservices.h"
 using namespace KKB;
 
 
 
 #include  "FeatureStats.h"
-
-
 #include  "FileDesc.h"
 #include  "ResultLine.h"
-#include  "OSservices.h"
-
 
 
 
@@ -45,10 +39,7 @@ public:
 
 
 
-
-
-
-FeatureStats::FeatureStats (FileDescPtr      _fileDesc,
+FeatureStats::FeatureStats (FileDescConstPtr _fileDesc,
                             ResultLineTree&  _results,
                             RunLog&          _log
                            ):
@@ -81,9 +72,7 @@ FeatureStats::FeatureStats (FileDescPtr      _fileDesc,
 
 
 
-
-
-FeatureStats::FeatureStats (FileDescPtr      _fileDesc,
+FeatureStats::FeatureStats (FileDescConstPtr _fileDesc,
                             ResultLineList&  _results,
                             RunLog&          _log
                            ):
@@ -107,7 +96,6 @@ FeatureStats::FeatureStats (FileDescPtr      _fileDesc,
 
   CalculateVariances ();
 }
-
 
 
 
@@ -149,7 +137,6 @@ void  FeatureStats::AddToAccumulators (ResultLine&  result)
 
 
 
-
 void  FeatureStats::CalculateMeans ()
 {
   int  x;
@@ -164,7 +151,6 @@ void  FeatureStats::CalculateMeans ()
  
 
 
-
 void  FeatureStats::AddToVariances (ResultLine&  result)
 {
   if  (!result.Parent1 ())
@@ -172,8 +158,7 @@ void  FeatureStats::AddToVariances (ResultLine&  result)
 
   if  (result.Parent2 ())
   {
-    // Looks like a joining of two results, 
-    // notr interestied in these results.
+    // Looks like a joining of two results, not interested in these results.
     return;
   }
 
@@ -193,7 +178,6 @@ void  FeatureStats::AddToVariances (ResultLine&  result)
     stat.accuracyDeltaVar += delta * delta;
   }
 }  /* AddToVariances */
-
 
 
 
@@ -224,7 +208,7 @@ FeatureNumList  FeatureStats::RemoveHarmfulFeatures (FeatureNumList&  features)
     int featureNum = features[x];
     if  (featureNum >= numOfFeatures)
     {
-      // Featur specifued is larger than the number of features that this
+      // Feature specified is larger than the number of features that this
       // object was built for.
       log.Level (-1) << endl
                      << "FeatureStats::RemoveHarmfulFeatures    *** ERROR ***" << endl
@@ -249,7 +233,6 @@ FeatureNumList  FeatureStats::RemoveHarmfulFeatures (FeatureNumList&  features)
 
 
 
-
 void   FeatureStats::ValidateFeatureNum (const char*  funcName,
                                          int          featureNum
                                         )
@@ -265,7 +248,6 @@ void   FeatureStats::ValidateFeatureNum (const char*  funcName,
   }
 
 }  /* ValidateFeatureNum */
-
 
 
 
@@ -290,6 +272,3 @@ float  FeatureStats::AccuracyDeltaCount (int featureNum)
   ValidateFeatureNum ("AccuracyDeltaCount", featureNum);
   return  float (stats[featureNum].accuracyDeltaCount);
 }  /* PrintStats */
-
-
-

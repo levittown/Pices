@@ -98,7 +98,7 @@ RandomSearch::RandomSearch (int     argc,
                             char**  argv
                            ):
 
-  Application (argc, argv),
+  Application (),
   
   accuracyWeighted  (false),
   allFeatures       (NULL),
@@ -131,7 +131,7 @@ RandomSearch::RandomSearch (int     argc,
   lockFileName    = "RandomSearch.lock";
   mlClasses    = new MLClassList ();
 
-  ProcessCmdLineParameters (argc, argv);
+  this->InitalizeApplication (argc, argv);
 
   log.Level (10);
 
@@ -201,7 +201,7 @@ RandomSearch::RandomSearch (int     argc,
 
   allFeatures = new FeatureNumList (FeatureNumList::AllFeatures (fileDesc));
 
-  config = new TrainingConfiguration2 (fileDesc, configFileName, log, false);
+  config =  TrainingConfiguration2::Manufacture ("", configFileName, false, log);
   if  (!config->FormatGood ())
   {
     log.Level (-1) << endl
@@ -219,7 +219,7 @@ RandomSearch::RandomSearch (int     argc,
   //allFeatures = new FeatureNumList (FeatureNumList::AllFeatures (fileDesc));
   allFeatures = new FeatureNumList (config->GetFeatureNums ());
 
-  if  ((randomFeatures < 1)  ||  (randomFeatures >= fileDesc->NumOfFields ()))
+  if  ((randomFeatures < 1)  ||  (randomFeatures >= (int)fileDesc->NumOfFields ()))
   {
     log.Level (-1) << endl
                    << "RandomSearch::RandomSearch   *** ERROR ***" << endl
@@ -247,7 +247,7 @@ RandomSearch::RandomSearch (int     argc,
       exit (-1);
     }
 
-    FeatureVectorListPtr  newData = data->StratifyAmoungstClasses (mlClasses, -1, numOfFolds);
+    FeatureVectorListPtr  newData = data->StratifyAmoungstClasses (mlClasses, -1, numOfFolds, log);
     data->Owner (false);
     delete  data;
     data = newData;
@@ -295,7 +295,6 @@ RandomSearch::RandomSearch (int     argc,
   {
     results = new ResultLineTree (true, log);
   }
-
 
   resultFile = new ofstream (resultFileName.Str (),  ios::app);
   if  (!resultFile->is_open ())
@@ -348,8 +347,6 @@ RandomSearch::RandomSearch (int     argc,
 
 
 
-
-
 RandomSearch::~RandomSearch ()
 {
   delete results;
@@ -358,7 +355,6 @@ RandomSearch::~RandomSearch ()
   delete mlClasses;
   delete config;
 }
-
 
 
 
@@ -372,11 +368,11 @@ void  RandomSearch::BuildOtherOrderings ()
     dataOther[x] = NULL;
     KKStr  otherOrderingFileName = osRemoveExtension (dataFileName) + "_" + StrFormatInt (x, "00") + ".data";
     if  (osFileExists (otherOrderingFileName))
-      dataOther[x] = data->OrderUsingNamesFromAFile (otherOrderingFileName);
+      dataOther[x] = data->OrderUsingNamesFromAFile (otherOrderingFileName, log);
 
     if  (!dataOther[x])
     {
-      dataOther[x] = data->StratifyAmoungstClasses (mlClasses, -1, numOfFolds);
+      dataOther[x] = data->StratifyAmoungstClasses (mlClasses, -1, numOfFolds, log);
       dataOther[x]->SaveOrderingOfImages (otherOrderingFileName, successful);
       if  (!successful)
       {
@@ -393,7 +389,6 @@ void  RandomSearch::BuildOtherOrderings ()
 
 
 
-
 float  RandomSearch::Accuracy (ResultLinePtr  result)
 {
   if  (accuracyWeighted)
@@ -401,7 +396,6 @@ float  RandomSearch::Accuracy (ResultLinePtr  result)
   else
     return result->Accuracy ();
 }  /* Accuracy */
-
 
 
 
@@ -466,7 +460,7 @@ void  RandomSearch::EndBlock ()
        if  (!DeleteFile (lockFileName.Str ()))
        {
          DWORD  lastErrorNum = GetLastError ();
-         log.Level (-1) << "RandomSearch::EndBlock - Error["  << lastErrorNum << "] deleting Lock File." << endl;
+         log.Level (-1) << "RandomSearch::EndBlock - Error["  << (kkuint64)lastErrorNum << "] deleting Lock File." << endl;
        }
      }
   }
@@ -496,8 +490,7 @@ void  RandomSearch::DisplayCommandUsage ()
 
 
 
-
-bool  RandomSearch::ProcessCmdLineParameter (char    parmSwitchCode, 
+bool  RandomSearch::ProcessCmdLineParameter (char   parmSwitchCode, 
                                              KKStr  parmSwitch, 
                                              KKStr  parmValue
                                             )
@@ -534,8 +527,7 @@ bool  RandomSearch::ProcessCmdLineParameter (char    parmSwitchCode,
       exit (-1);
     }
   }
-
-
+  
   else if  (parmSwitch == "-FOLDS")
   {
     numOfFolds = atoi (parmValue.Str ());
@@ -581,8 +573,6 @@ bool  RandomSearch::ProcessCmdLineParameter (char    parmSwitchCode,
 
 
 
-
-
 ResultLineListPtr  RandomSearch::BuildComponentParts (ResultLinePtr result)
 {
   ResultLineListPtr  components = new ResultLineList (false, 20);
@@ -616,8 +606,6 @@ ResultLineListPtr  RandomSearch::BuildComponentParts (ResultLinePtr result)
 
 
 
-
-
 void  RandomSearch::GetTestAccuracy (ResultLinePtr  result,
                                      float&         accuracy,
                                      float&         accuracyWeighted
@@ -633,9 +621,9 @@ void  RandomSearch::GetTestAccuracy (ResultLinePtr  result,
   config->SetFeatureNums (*result->Features ());
   bool  cancelFlag = false;
   CrossValidation  cv (config, data, mlClasses, numOfFolds, alreadyNormalized, fileDesc, log, cancelFlag);
-  cv.RunValidationOnly (testData, NULL);
+  cv.RunValidationOnly (testData, NULL, log);
 
-  ConfusionMatrix2Ptr  cm = cv.ConfussionMatrix ();
+  auto  cm = cv.ConfussionMatrix ();
   accuracy         = float (cm->Accuracy ());
   accuracyWeighted = cm->AccuracyClassWeightedEqually ();
 
@@ -643,7 +631,6 @@ void  RandomSearch::GetTestAccuracy (ResultLinePtr  result,
 
   return;
 }  /* GetTestAccuracy */
-
 
 
 
@@ -665,7 +652,7 @@ ResultLinePtr  RandomSearch::EvaluateAFeatureSet (FeatureNumListPtr  features,
   config->SetFeatureNums (*features);
   bool  cancelFlag = false;
   CrossValidation  cv (config, data, mlClasses, numOfFolds, alreadyNormalized, fileDesc, log, cancelFlag);
-  cv.RunCrossValidation ();
+  cv.RunCrossValidation (log);
 
   ResultLinePtr  result = new ResultLine (results->NextId (),
                                           parent1,
@@ -675,7 +662,6 @@ ResultLinePtr  RandomSearch::EvaluateAFeatureSet (FeatureNumListPtr  features,
                                           features, 
                                           log
                                          );
-
 
   if  (!verifyAccuracy)
     result->Verified (true);
@@ -736,8 +722,6 @@ ResultLinePtr  RandomSearch::EvaluateAFeatureSet (FeatureNumListPtr  features,
 
 
 
-
-
 void  RandomSearch::CheckAgainstOtherOrderings (ResultLinePtr  result)
 {
   float  curAccuracy  = Accuracy (result);
@@ -756,7 +740,7 @@ void  RandomSearch::CheckAgainstOtherOrderings (ResultLinePtr  result)
     //config->SetFeatureNums (*features);
     bool  cancelFlag = false;
     CrossValidation  cv (config, dataOther[idx], mlClasses, numOfFolds, alreadyNormalized, fileDesc, log, cancelFlag);
-    cv.RunCrossValidation ();
+    cv.RunCrossValidation (log);
 
     accuracyWtd = cv.ConfussionMatrix ()->AccuracyClassWeightedEqually ();
     accuracy    = (float)cv.ConfussionMatrix ()->Accuracy ();
@@ -778,9 +762,6 @@ void  RandomSearch::CheckAgainstOtherOrderings (ResultLinePtr  result)
 
   result->Verified (true);
 }  /* CheckAgainstOtherOrderings */
-
-
-
 
 
 
@@ -979,11 +960,6 @@ ResultLinePtr  RandomSearch::TrimAFeatureSetInDepth (int            depth,
 
 
 
-
-
-
-
-
 ResultLinePtr  RandomSearch::TrimComponentsOfAFeatureSet (ResultLinePtr  resultToExpand,
                                                           float          highAccuracy
                                                          )
@@ -1026,8 +1002,6 @@ ResultLinePtr  RandomSearch::TrimComponentsOfAFeatureSet (ResultLinePtr  resultT
   else
     return  aggragateResult;
 }  /* TrimComponentsOfAFeatureSet */
-
-
 
 
 
@@ -1079,9 +1053,6 @@ VectorInt  UniteTwoVectors (VectorInt& v1,
 
 
 
-
-
-
 bool  FamiliesAreRelated (VectorInt&  family1,  
                           VectorInt&  family2
                          )
@@ -1120,7 +1091,6 @@ ResultLinePairVector  RandomSearch::GetUnrelatedPairs (ResultLineVector&  result
   {
    return unrelatedPairs;
   }
-
 
   vector<VectorInt>  extendedFamilies;
 
@@ -1163,8 +1133,6 @@ ResultLinePairVector  RandomSearch::GetUnrelatedPairs (ResultLineVector&  result
 
 
 
-
-
 ResultLinePairVector  RandomSearch::BuildPairsFromList (ResultLineVector&  resultsToCombine)
 {
   int  x, y;
@@ -1176,7 +1144,6 @@ ResultLinePairVector  RandomSearch::BuildPairsFromList (ResultLineVector&  resul
   {
    return pairs;
   }
-
 
   for  (x = 0;  (x < numOfResults - 1);  x++)
   {
@@ -1191,8 +1158,6 @@ ResultLinePairVector  RandomSearch::BuildPairsFromList (ResultLineVector&  resul
 
   return pairs; 
 }  /* GetUnrelatedPairs */
-
-
 
 
 
@@ -1216,7 +1181,6 @@ void  RandomSearch::AddToCombinationsIfNotRelated (int                deapth,   
   families = UniteTwoVectors (extendedFamily, families);
   results.push_back (result);
 }  /* AddToCombinationsIfNotRelated */
-
 
 
 
@@ -1254,10 +1218,9 @@ void  RandomSearch::AddToCombinations (ResultLineVector&  resultsToCombine,
 
 
 
-
 ResultLineVector  RandomSearch::LookForUsedUpInAllCombinations (ResultLineVector&  onesToTry,
-                                                                     int&                    combinationsNotUsed
-                                                                    )
+                                                                int&               combinationsNotUsed
+                                                               )
 {
   combinationsNotUsed = 0;
 
@@ -1290,8 +1253,6 @@ ResultLineVector  RandomSearch::LookForUsedUpInAllCombinations (ResultLineVector
 
   return  usedUpResults;
 }  /* LookForUsedUpInAllCombinations */
-
-
 
 
 
@@ -1328,9 +1289,6 @@ ResultLineList  RandomSearch::EvaluateCombinations (ResultLinePairVector&  combi
 
   return  evaluatedCombos;
 } /* EvaluateCombinations */
-
-
-
 
 
 
@@ -1393,8 +1351,6 @@ ResultLineList  RandomSearch::TrySomeCombinationsOfTheBetterOnesFoundSofar (int 
 
 
 
-
-
 ResultLineList  RandomSearch::CombineSomeOfTheBestJobs (int  numToCombine,
                                                         int  maxSize
                                                        )
@@ -1426,8 +1382,6 @@ ResultLineList  RandomSearch::CombineSomeOfTheBestJobs (int  numToCombine,
 
   return  EvaluateCombinations (combinations);
 }  /* CombineSomeOfTheBestJobs */
-
-
 
 
 
@@ -1473,9 +1427,6 @@ ResultLinePtr  RandomSearch::TrimBestNotExpanded (int  numToTrim,
 
   return  resultWithHighestAccuracy;
 }  /* TrimBestNotExpanded */
-
-
-
 
 
 // Select sets of features at random until a combination that has not

@@ -1,42 +1,36 @@
 #include  "FirstIncludes.h"
-
 #include  <stdlib.h>
 #include  <stdio.h>
 #include  <vector>
 #include  <iostream>
 #include  <fstream>
-
-
-
 #include  "MemoryDebug.h"
-
 using namespace std;
 
 
-#include  "KKBaseTypes.h"
+#include "KKBaseTypes.h"
+#include "OSservices.h"
+#include "RunLog.h"
 using namespace KKB;
 
 
 #include "CrossValidation.h"
-#include "FileDesc.h"
-#include "OSservices.h"
-#include "RunLog.h"
-using namespace MLL;
+using namespace  KKMLL;
 
 #include "ResultLine.h"
 
 RunLog  tempLog;
 
-FileDescPtr     ResultLine::fileDesc     = NULL;
-MLClassListPtr  ResultLine::mlClasses = NULL;
-int             ResultLine::numOfClasses = 0;
-RunLog&         ResultLine::log          = tempLog;
+FileDescConstPtr  ResultLine::fileDesc     = NULL;
+MLClassListPtr    ResultLine::mlClasses    = NULL;
+int               ResultLine::numOfClasses = 0;
+RunLog&           ResultLine::log          = tempLog;
 
 
-void  ResultLine::InitializeMLClasses (FileDescPtr      _fileDesc,
-                                          MLClassList&  _mlClasses,
-                                          RunLog&          _log
-                                         )
+void  ResultLine::InitializeMLClasses (FileDescConstPtr _fileDesc,
+                                       MLClassList&     _mlClasses,
+                                       RunLog&          _log
+                                      )
 {
   log = _log;
 
@@ -96,7 +90,6 @@ void  ResultLine::InitializeMLClasses (FileDescPtr      _fileDesc,
 
 
 
-
 ResultLine::ResultLine (int                 _id,
                         ResultLinePtr       _parent1,
                         ResultLinePtr       _parent2,
@@ -120,10 +113,10 @@ ResultLine::ResultLine (int                 _id,
   verified         (false)
 
 {
-  ConfusionMatrix2Ptr  cm = _cv.ConfussionMatrix ();
+  ConfusionMatrix2ConstPtr  cm = _cv.ConfussionMatrix ();
 
   MLClassList  cmMLClasses (cm->MLClasses ());
-  InitializeMLClasses (features->FileDesc (), cmMLClasses, log);
+  InitializeMLClasses (fileDesc, cmMLClasses, log);
   accuracy         = (float)cm->Accuracy ();
   accuracyWeighted = cm->AccuracyClassWeightedEqually ();
 
@@ -219,9 +212,9 @@ ResultLine::ResultLine (KKStr           txt,
 
   if  (version < 5)
   {
-    numOfFeatures          = txt.ExtractTokenInt ("\t");
+    numOfFeatures         = txt.ExtractTokenInt ("\t");
     KKStr  featureNumStr  = txt.ExtractToken ("\t");
-    features               = new FeatureNumList (fileDesc, featureNumStr, valid);
+    features              = new FeatureNumList (featureNumStr, valid);
   }
   else
   {
@@ -242,7 +235,7 @@ ResultLine::ResultLine (KKStr           txt,
     }
 
     KKStr  featureNumStr  = txt.ExtractToken ("\t");
-    FeatureNumList  featureList (fileDesc, featureNumStr, valid);
+    FeatureNumList  featureList (featureNumStr, valid);
 
     if  (featureListType == "ADD")
     {
@@ -258,7 +251,7 @@ ResultLine::ResultLine (KKStr           txt,
 
     else if  (featureListType == "ALL")
     {
-       features = new FeatureNumList (fileDesc, featureNumStr, valid);
+       features = new FeatureNumList (featureNumStr, valid);
     }
 
     else
@@ -319,7 +312,6 @@ ResultLine::~ResultLine(void)
 
 
 
-
 KKStr  ResultLine::TitleLine (MLClassList&  mlClasses)
 {
   KKStr  title (512);
@@ -345,7 +337,6 @@ KKStr  ResultLine::TitleLine (MLClassList&  mlClasses)
 
   return  title;
 }
-
 
 
 
@@ -409,7 +400,6 @@ KKStr  ResultLine::ToString ()
 
   return  txt;
 }  /* ToString */
-
 
 
 
@@ -489,12 +479,11 @@ void  ResultLine::BuildExtendedFamilyList (int           deapth,
 
 
 
-
 CompareResultLine  cresultComparator;
                                 
 
-ResultLineTree::ResultLineTree (bool               _owner,
-                                RunLog&            _log
+ResultLineTree::ResultLineTree (bool      _owner,
+                                RunLog&   _log
                               ):
    RBTree<ResultLine, CompareResultLine, FeatureNumList> (cresultComparator, _owner),
    highestAccuracy           (0.0f),
@@ -508,11 +497,9 @@ ResultLineTree::ResultLineTree (bool               _owner,
 
 
 
-
-
-ResultLineTree::ResultLineTree (KKStr           _fileName,
-                                FileDescPtr      _fileDesc,
-                                MLClassList&  _mlClasses,
+ResultLineTree::ResultLineTree (KKStr             _fileName,
+                                FileDescConstPtr  _fileDesc,
+                                MLClassList&      _mlClasses,
                                 bool&            _successful,
                                 RunLog&          _log
                                ):
@@ -570,8 +557,6 @@ ResultLinePtr  ResultLineTree::LookUpByParents (const ResultLinePtr p1,
 
 
 
-
-
 RBTree<ResultLine, CompareResultLine, FeatureNumList>::NodePtr
      ResultLineTree::RBInsert (ResultLinePtr  result)
 {
@@ -596,8 +581,6 @@ RBTree<ResultLine, CompareResultLine, FeatureNumList>::NodePtr
   parentIndex.insert (pair<Parents, ResultLinePtr> (parent, result));
   return  RBTree<ResultLine, CompareResultLine, FeatureNumList>::RBInsert (result);
 }  /* RBInsert */
-
-
 
 
 
@@ -670,7 +653,6 @@ void  ResultLineTree::Save (const KKStr& fileName,
     return;
   }
 
-
   map<int, ResultLinePtr>::iterator  idx;
   
   for  (idx = idIndex.begin ();  idx != idIndex.end (); idx++)
@@ -722,10 +704,8 @@ ResultLineListPtr  ResultLineTree::GetChildrenOfAParent (ResultLinePtr  parent)
 
 
 
-
-
 ResultLineList::ResultLineList ():
-   KKQueue<ResultLine> (false, 100)
+   KKQueue<ResultLine> (false)
 {
 }
 
@@ -734,13 +714,14 @@ ResultLineList::ResultLineList ():
 ResultLineList::ResultLineList (bool _bool,
                                 int  _size
                                ):
-  KKQueue<ResultLine> (_bool, _size)
+  KKQueue<ResultLine> (_bool)
 {
 }
 
 
+
 ResultLineList::ResultLineList (ResultLineTreePtr  resultLineTree):
-  KKQueue<ResultLine> (false, resultLineTree->Size ())
+  KKQueue<ResultLine> (false)
 {
   ResultLinePtr  resultLine = resultLineTree->GetFirst ();
   while  (resultLine)
@@ -752,13 +733,11 @@ ResultLineList::ResultLineList (ResultLineTreePtr  resultLineTree):
 
 
 
-
 ResultLineList::ResultLineList (ResultLineTreePtr  resultLineTree,
                                 int                maxSize,
                                 int                maxId
                                ):
-  KKQueue<ResultLine> (false, resultLineTree->Size ())
-
+  KKQueue<ResultLine> (false)
 {
 
   if  (maxId < 0)
@@ -772,8 +751,6 @@ ResultLineList::ResultLineList (ResultLineTreePtr  resultLineTree,
     resultLine = resultLineTree->GetNext ();
   }
 }
-
-
 
 
 
@@ -821,7 +798,6 @@ public:
 
 
 
-
 class  ResultLineAccuracyComparisonReversed
 {
 public:
@@ -844,8 +820,6 @@ public:
 
 
 
-
-
 class  ResultLineAccuracyWeightedComparisonReversed
 {
 public:
@@ -865,7 +839,6 @@ public:
      return  p1->NumOfFeatures () > p2->NumOfFeatures ();
    }
 };  /* ResultLineAccuracyWeightedComparisonReversed */
-
 
 
 
@@ -904,12 +877,6 @@ void  ResultLineList::SortByAccuracy (bool reversed,
 
 
 
-
-
-
-
-
-
 Parents::Parents  (int  _p1,
                    int  _p2
                   ):
@@ -924,16 +891,19 @@ Parents::Parents  (int  _p1,
 }
 
 
+
 bool  Parents::operator== (const Parents&  right)  const
 {
   return  ((p1 == right.p1)  &&  (p2 == right.p2));
 }
 
 
+
 bool  Parents::operator!= (const Parents&  right) const
 {
   return  ((p1 != right.p1)  ||  (p2 != right.p2));
 }
+
 
 
 bool  Parents::operator< (const Parents&  right)  const
@@ -970,6 +940,7 @@ public:
     return  r1->Id () < r2->Id ();
   }
 };
+
 
 
 ResultLineVector  operator+ (ResultLineVector&  left,  

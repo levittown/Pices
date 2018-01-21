@@ -109,7 +109,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(SolutionDir)BaseLibrary;$(SolutionDir)PicesLibraries\PicesLibrary;$(SolutionDir)PicesLibraries\SipperInstruments;$(SolutionDir)PicesLibraries\ImageExtractionManager;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;FFTW_AVAILABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;WIN64;_DEBUG;_CONSOLE;FFTW_AVAILABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>
@@ -151,7 +151,7 @@
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <AdditionalIncludeDirectories>$(SolutionDir)BaseLibrary;$(SolutionDir)PicesLibraries\PicesLibrary;$(SolutionDir)PicesLibraries\SipperInstruments;$(SolutionDir)PicesLibraries\ImageExtractionManager;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;FFTW_AVAILABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;WIN64;NDEBUG;_CONSOLE;FFTW_AVAILABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>
@@ -175,6 +175,9 @@
     <ClInclude Include="DefaultUnManagedApplication.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\KSquareLibraries\KKBase\KKBase.vcxproj">
+      <Project>{d9bb6d83-937e-40fd-bfc3-ff48d8a04d11}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\KSquareLibraries\KKMachineLearning\KKMachineLearning.vcxproj">
       <Project>{eda94c7f-b7b2-48dc-833d-a4948f00a7a2}</Project>
     </ProjectReference>

@@ -594,7 +594,7 @@ void  ExtractionManager::Initialize (bool&  _successful)
 
 void  ExtractionManager::StartFrameProcessor (bool&  threadStartedSuccessfully)
 {
-  kkuint32 x = frameProcessors->size ();
+  kkuint32 x = (kkuint32)frameProcessors->size ();
 
   KKStr  threadName = "FrameProcessor_" + StrFormatInt (x, "00");
 
