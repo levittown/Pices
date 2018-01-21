@@ -2,16 +2,16 @@
 #define  _RESULTLINE_
 
 
-#include  "ConfusionMatrix2.h"
-#include  "CrossValidation.h"
-#include  "FeatureNumList.h"
-#include  "FileDesc.h"
-#include  "MLClass.h"
-#include  "RBTree.h"
-#include  "RunLog.h"
+#include "RBTree.h"
+#include "RunLog.h"
+using namespace KKB;
 
-
-using namespace MLL;
+#include "ConfusionMatrix2.h"
+#include "CrossValidation.h"
+#include "FeatureNumList.h"
+#include "FileDesc.h"
+#include "MLClass.h"
+using namespace KKMLL;
 
 
 class  ResultLine;
@@ -118,29 +118,29 @@ private:
   ResultLinePtr  TrackDownFamily ();
 
 
-  static  FileDescPtr     fileDesc;
-  static  MLClassListPtr  mlClasses;
-  static  int             numOfClasses;
-  static  RunLog&         log;
+  static  FileDescConstPtr  fileDesc;
+  static  MLClassListPtr    mlClasses;
+  static  int               numOfClasses;
+  static  RunLog&           log;
 
   static
-  void  InitializeMLClasses (FileDescPtr   _fileDesc,
-                                MLClassList&  _mlClasses,
-                                RunLog&       _log
-                               );
+  void  InitializeMLClasses (FileDescConstPtr  _fileDesc,
+                             MLClassList&      _mlClasses,
+                             RunLog&           _log
+                            );
 
   friend class ResultLineTree;
 
   float              accuracy;
-  float              accuracyWeighted;   // Weightest such that each class has equal weight
+  float              accuracyWeighted;   // Weighted such that each class has equal weight
   float*             classAccuracies;
   float              classTime;
 
-  bool               expanded;           // If set to true, meens that this ResultLine
+  bool               expanded;           // If set to true, means that this ResultLine
                                          // has been trimmed(Expanded).
 
   ResultLinePtr      family;             // Pointer to result line that this 'ResultLine'
-                                         // ultimatly decends from. This could be either 
+                                         // ultimately descends from. This could be either 
                                          // an originally RandomLy selected set of 
                                          // features, or the union of two other 'ResultLine'
 
@@ -155,7 +155,7 @@ private:
   //  
   //  parent1  parent2  Description
   //    NULL     NULL   Created by random selection of features.
-  //    xxxx     NULL   An imedeiate decendent as a result of trimming.
+  //    xxxx     NULL   An immediate descendant as a result of trimming.
   //    xxxx     xxxx   The result of combining two other ResultLine.
 
   ResultLinePtr      parent1;            
@@ -226,15 +226,15 @@ public:
 class  ResultLineTree: public  RBTree<ResultLine, CompareResultLine, FeatureNumList>
 {
 public:
-  ResultLineTree (bool               _owner,
-                  RunLog&            _log
+  ResultLineTree (bool     _owner,
+                  RunLog&  _log
                  );
 
   ResultLineTree (KKStr             _fileName,
-                  FileDescPtr        _fileDesc,
-                  MLClassList&    _mlClasses,
-                  bool&              _successful,
-                  RunLog&            _log
+                  FileDescConstPtr  _fileDesc,
+                  MLClassList&      _mlClasses,
+                  bool&             _successful,
+                  RunLog&           _log
                  );
 
   float   HighestAccuracy         () const  {return highestAccuracy;}

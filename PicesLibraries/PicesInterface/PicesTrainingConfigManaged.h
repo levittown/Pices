@@ -71,7 +71,7 @@ namespace PicesInterface
     bool*                          cancelFlag;
     PicesTrainingConfigurationPtr  config;
     MLClassListPtr                 classes;
-    int                            curMemoryPressure;
+    kkint64                        curMemoryPressure;
     String^                        loadLogStream;
     PicesRunLog^                   log;
     Boolean^                       valid;

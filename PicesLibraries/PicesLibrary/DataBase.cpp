@@ -129,7 +129,6 @@ double  CharStarToDouble (const char*  s)
 
 
 
-
 void  DataBase::WriteBuff (char*        dest,
                            KKB::kkint32 destSize,
                            const char*  src
@@ -186,7 +185,6 @@ KKStr  DataBase::FloatToStr (float f)
 #endif
 
 
-
 GoalKeeperPtr            DataBase::blocker                  = NULL;
 volatile KKB::kkint32    DataBase::numDataBaseInstances     = 0;
 volatile bool            DataBase::mySqlEmbeddedServerInitailzied = false;
@@ -207,6 +205,7 @@ void  DataBase::Initialization ()
 }
 
 
+
 bool  DataBase::EmbeddedServerRunning ()
 {
   return  mySqlEmbeddedServerInitailzied;
@@ -221,6 +220,7 @@ void  DataBase::CreateBlocker ()
   if  (!blocker)
     GoalKeeper::Create ("DataBaseBlocker", blocker);  // Will handle Race condition.
 }
+
 
 
 void   DataBase::ErrorLogMsg (const KKStr&  msg)
@@ -242,7 +242,6 @@ void   DataBase::UpdatesNotAllowed (const KKStr&  methodName)
 {
   ErrorLogMsg ("Attempt to perform Update:" + methodName);
 }
-
 
 
 
@@ -3576,8 +3575,6 @@ DataBaseImageListPtr  DataBase::ImageQueryProcessResults ()
 
 
 
-
-
 DataBaseImagePtr  DataBase::ImagesLocateClosestImage (const KKStr&  imageFileName)
 {
   KKStr   sipperFileName (32);
@@ -3586,8 +3583,6 @@ DataBaseImagePtr  DataBase::ImagesLocateClosestImage (const KKStr&  imageFileNam
   PicesVariables::ParseImageFileName (imageFileName, sipperFileName, scanLineNum, scanCol);
   return  ImagesLocateClosestImage (sipperFileName, scanLineNum, scanCol);
 }  /* ImagesLocateClosestImage */
-
-
 
 
 
@@ -3703,7 +3698,6 @@ DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  group,
     
 
 
-
 DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  imageGroup,
                                              const KKStr&           sipperFileName,
                                              MLClassPtr             mlClass,
@@ -3756,7 +3750,6 @@ DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  imageGroup,
 
 
 
-
 DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  imageGroup,
                                              const KKStr&           cruiseName,
                                              const KKStr&           stationName,
@@ -3781,17 +3774,19 @@ DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  imageGroup,
   if  (!sipperFiles)
     return NULL;
 
+  kkint32  totalImagesLoaded = 0;
   DataBaseImageListPtr  images = new DataBaseImageList (true);
 
   VectorKKStr::iterator  idx;
-  for  (idx = sipperFiles->begin ();  (idx != sipperFiles->end ())  &&  (!cancelFlag);  idx++)
+  for  (idx = sipperFiles->begin ();  (idx != sipperFiles->end ())  &&  (images->QueueSize () < limit)  &&  (!cancelFlag);  idx++)
   {
+    kkint32 limitLeft = (limit < 0) ? -1 : limit - images->QueueSize ();
     DataBaseImageListPtr  imagesForOneSipperFile = ImagesQuery (imageGroup,
                                                                 *idx,           mlClass,  classKeyToUse,
                                                                 probMin,        probMax, 
                                                                 sizeMin,        sizeMax, 
                                                                 depthMin,       depthMax, 
-                                                                restartImageId, limit,
+                                                                restartImageId, limitLeft,
                                                                 includeThumbnail,        //  true = include thumbNail
                                                                 cancelFlag
                                                                );
@@ -3799,6 +3794,8 @@ DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  imageGroup,
     {
       imagesForOneSipperFile->Owner (false);
       images->AddQueue (*imagesForOneSipperFile);
+      totalImagesLoaded = images->QueueSize ();
+      cout << totalImagesLoaded << endl;
       delete  imagesForOneSipperFile;
       imagesForOneSipperFile = NULL;
     }
@@ -3872,10 +3869,7 @@ DataBaseImageListPtr  DataBase::ImagesQueryByGrouop
   ResultSetsClear ();
 
   return  results;
-}  /* ImagesQuery */
-
-
-
+}  /* ImagesQueryByGrouop */
 
 
 
@@ -3897,7 +3891,6 @@ DataBaseImageListPtr  DataBase::ImagesQueryForScanLineRange (const KKStr&   sipp
   ResultSetsClear ();
   return  results;
 }  /* ImagesQueryForScanLineRange */
-
 
 
 
@@ -3990,9 +3983,6 @@ DataBaseImageListPtr  DataBase::ImagesQueryDeploymentSizeRange (const KKStr&    
 
 
 
-
-
-
 VectorKKStr*   DataBase::ImageListOfImageFileNamesByScanLineRange (const KKStr&   sipperFileName,
                                                                    kkuint32       scanLineStart,
                                                                    kkuint32       scanLineEnd
@@ -4024,8 +4014,6 @@ VectorKKStr*   DataBase::ImageListOfImageFileNamesByScanLineRange (const KKStr& 
 
   return  results;
 }  /* ImageListOfImageFileNamesByScanLineRange */
-
-
 
 
 
@@ -4066,7 +4054,6 @@ void  DataBase::ImagesUpdatePredictions (const KKStr&     imageFileName,
 
 
 
-
 void  DataBase::ImagesUpdatePredictionsList (kkuint32      _logEntryId,
                                              const KKStr&  _predictionList
                                             )
@@ -4082,9 +4069,6 @@ void  DataBase::ImagesUpdatePredictionsList (kkuint32      _logEntryId,
   kkint32  returnCd = QueryStatement (sqlStr);
   ResultSetsClear ();
 }  /* ImagesUpdatePredictionsList */
- 
-
-
 
 
 
@@ -4110,7 +4094,6 @@ void  DataBase::ImagesUpdateValidatedClass (const KKStr&     imageFileName,
   kkint32  returnCd = QueryStatement (updateStr);
   ResultSetsClear ();
 }  /* ImagesUpdateValidatedClass */
-
 
 
 
@@ -4141,8 +4124,6 @@ void  DataBase::ImagesUpdateImageSize (const KKStr&        imageFileName,
 
 
 
-
-
 void  DataBase::ImageRemoveValidation (const KKStr&   imageFileName)
 {
   if  (!allowUpdates)
@@ -4157,7 +4138,6 @@ void  DataBase::ImageRemoveValidation (const KKStr&   imageFileName)
   kkint32  returnCd = QueryStatement (updateStr);
   ResultSetsClear ();
 }  /* ImageRemoveValidation */
-
 
 
 
@@ -4552,7 +4532,7 @@ void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruise
   }
   endValues.push_back (9999999.99f);
 
-  kkuint32  sizeBucketCount = startValues.size ();
+  size_t  sizeBucketCount = startValues.size ();
 
   kkint32  maxColIdx = Max(downCastIdx, bucketIdx, bucketDepthIdx, imageCountIdx, totalPixelCountIdx, totalFilledAreaIdx, firstSizeBucketIdx);
 
@@ -4735,13 +4715,13 @@ void   DataBase::ImageFullSizeSave (const KKStr&         imageFileName,
 
   char*  queryStrPtr = queryStr;
   STRCOPY (queryStrPtr, queryStrLeft, "call ImagesFullSizeSave(");
-  kkuint32  x = strlen (queryStrPtr);  queryStrPtr += x;   queryStrLeft -= x;
+  kkuint32  x = (kkuint32)strlen (queryStrPtr);  queryStrPtr += x;   queryStrLeft -= x;
 
   STRCOPY (queryStrPtr, queryStrLeft, osGetRootName (imageFileName).QuotedStr ().Str ());
-  x = strlen (queryStrPtr);  queryStrPtr += x;   queryStrLeft -= x;
+  x = (kkuint32)strlen (queryStrPtr);  queryStrPtr += x;   queryStrLeft -= x;
 
   STRCOPY (queryStrPtr, queryStrLeft, ", \"");
-  x = strlen (queryStrPtr);  queryStrPtr += x;   queryStrLeft -= x;
+  x = (kkuint32)strlen (queryStrPtr);  queryStrPtr += x;   queryStrLeft -= x;
   queryStrLen = (kkint32)strlen (queryStr); 
 
   mySqlImageCompressedBuffLen = mysql_real_escape_string (conn, (char*)queryStrPtr, (char*)compressedBuff, compressedBuffLen);
@@ -4753,7 +4733,7 @@ void   DataBase::ImageFullSizeSave (const KKStr&         imageFileName,
   delete  compressedBuff;  compressedBuff = NULL;
   
   KKB::STRCAT (queryStrPtr, queryStrLeft, "\")");
-  x = strlen (queryStrPtr);
+  x = (kkuint32)strlen (queryStrPtr);
   queryStrLen  += x;
   queryStrPtr  += x;
   queryStrLeft -= x;

@@ -90,7 +90,7 @@ namespace  PicesInterface
   {
     VectorKKStr  names = FeatureFileIO::RegisteredDriverNames (canRead, canWrite);
 
-    array<String^>^  results = gcnew array<String^> (names.size ());
+    array<String^>^  results = gcnew array<String^> ((int)names.size ());
     
     uint  idx;
     for  (idx = 0;  idx < names.size ();  idx++)

@@ -37,7 +37,7 @@ array<String^>^    PicesMethods::GetListOfSipperFiles (PicesRunLog^  log)
 {
   VectorKKStr sipperFileNames = InstrumentDataFileManager::GetListOfSipperFiles (log->Log ());
 
-  array<String^>^ results = gcnew array<String^> (sipperFileNames.size ());
+  array<String^>^ results = gcnew array<String^> ((int)sipperFileNames.size ());
 
   VectorKKStr::iterator  idx;
   int  idx2 = 0;

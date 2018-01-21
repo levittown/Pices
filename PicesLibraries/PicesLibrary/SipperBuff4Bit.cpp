@@ -470,7 +470,7 @@ void  SipperBuff4Bit::ProcessTextBlock (const OpRec&  rec)
 {
   OpRec  rec2;
 
-  kkuint32  recsRead = fread (&rec2, sizeof (rec2), 1, inFile);
+  auto  recsRead = fread (&rec2, sizeof (rec2), 1, inFile);
   if  (recsRead < 1)
   {
     eof = true;
@@ -503,13 +503,13 @@ void  SipperBuff4Bit::ProcessInstrumentDataWord (const OpRec&  rec)
 
   OpRecInstrumentDataWord2  rec2;
   OpRecInstrumentDataWord3  rec3;
-  kkuint32  recsRead = fread (&rec2, sizeof (rec2), 1, inFile);
+  kkuint32  recsRead = (kkuint32)fread (&rec2, sizeof (rec2), 1, inFile);
   if  (recsRead < 1)
     eof = true;
   else
   {
     byteOffset += sizeof (rec2);
-    recsRead = fread (&rec3, sizeof (rec3), 1, inFile);
+    recsRead = (kkuint32)fread (&rec3, sizeof (rec3), 1, inFile);
     if  (recsRead < 1)
       eof = true;
     else
@@ -575,7 +575,7 @@ void  SipperBuff4Bit::GetNextScanLine (uchar*  lineBuff,
 
   do
   {
-    recsRead = fread (&rec, sizeof (rec), 1, inFile);
+    recsRead = (kkuint32)fread (&rec, sizeof (rec), 1, inFile);
     if  (recsRead == 0)
     {
       break;
@@ -626,7 +626,7 @@ void  SipperBuff4Bit::GetNextScanLine (uchar*  lineBuff,
     else if  (opCode == 10)  /* OpRecRun256Len1 */
     {
       // Run-Length (1 thru 256 Pixels).
-      recsRead = fread (&rec2, sizeof (rec2), 1, inFile);
+      recsRead = (kkuint32)fread (&rec2, sizeof (rec2), 1, inFile);
       if  (recsRead < 1)
         eol = true;
       else
@@ -677,7 +677,7 @@ void  SipperBuff4Bit::GetNextScanLine (uchar*  lineBuff,
     else if  (opCode == 13)
     {
       // Raw-String (Odd Length 1 thru 513).
-      recsRead = fread (&rec2, sizeof (rec2), 1, inFile);
+      recsRead = (kkuint32)fread (&rec2, sizeof (rec2), 1, inFile);
       if  (recsRead < 1)
       {
         eol = true;

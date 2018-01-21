@@ -1181,7 +1181,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
   if  (origFeatureVectorData == NULL)
   {
     successful = false;
-    origFeatureVectorData = _fvProducerFactory->ManufacturFeatureVectorList (true, _log);
+    origFeatureVectorData = _fvProducerFactory->ManufacturFeatureVectorList (true);
   }
 
   if  (_cancelFlag)

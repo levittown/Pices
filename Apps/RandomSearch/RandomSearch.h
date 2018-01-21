@@ -169,12 +169,12 @@ private:
   KKStr                     dataFileName;       // Data file containing feature data to use to drive 
                                                 // search.
 
-  FileDescPtr               fileDesc;           // Structure taht describes feature data loaded from 
+  FileDescConstPtr          fileDesc;           // Structure that describes feature data loaded from 
                                                 // 'dataFileName'.
 
   FeatureFileIOPtr          fileFormat;         // Format that 'dataFileName' will be in.
 
-  float                     highAccuracy;       // Highest Accuracy encounbtered during search.
+  float                     highAccuracy;       // Highest Accuracy encountered during search.
 
   MLClassListPtr         mlClasses;       // List of all classes.
  
@@ -199,10 +199,10 @@ private:
   ResultLineTreePtr         results;           // A data structure that will contain all feature
                                                // combinations calculated.  See 'ResultLine.h' for
                                                // definition of this structure.  It is based of 
-                                               // 'RBTree.h' Red Blacvk tree whose primary index
+                                               // 'RBTree.h' Red Black tree whose primary index
                                                // will be the features selected.  This will 
                                                // allow us to look up previously computed total's
-                                               // quickly,  also has secondary indesx using 
+                                               // quickly,  also has secondary indexes using 
                                                // 'resultId' and 'parentId'
 
   bool                      stratify;
