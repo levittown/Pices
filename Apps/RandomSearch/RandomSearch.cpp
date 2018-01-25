@@ -55,19 +55,19 @@ using namespace KKB;
 #include <unistd.h>
 #endif
 
+#include "OSservices.h"
+#include "RunLog.h"
 
 #define  NumOfRandomOnesToCreate  500
 
-#include  "RandomSearch.h"
+#include "RandomSearch.h"
 
-#include  "CrossValidation.h"
-#include  "FeatureFileIO.h"
-#include  "FeatureFileIOPices.h"
-#include  "FeatureStats.h"
-#include  "RunLog.h"
-#include  "NormalizationParms.h"
-#include  "OSservices.h"
-#include  "StatisticalFunctions.h"
+#include "CrossValidation.h"
+#include "FeatureFileIO.h"
+#include "FeatureFileIOPices.h"
+#include "FeatureStats.h"
+#include "NormalizationParms.h"
+#include "StatisticalFunctions.h"
 
 // 2005-07-16
 // K:\v1\Adult
@@ -137,12 +137,14 @@ RandomSearch::~RandomSearch ()
 }
 
 
+
 void  RandomSearch::InitalizeApplication (kkint32 argc, char** argv)
 {
   Application::InitalizeApplication (argc, argv);
   log.Level (10) << "RandomSearch::RandomSearch" << endl;
   lockFileName = "RandomSearch.lock";
   mlClasses = new MLClassList ();
+  this->InitalizeApplication (argc, argv);
 
   log.Level (10);
 
@@ -306,7 +308,6 @@ void  RandomSearch::InitalizeApplication (kkint32 argc, char** argv)
     results = new ResultLineTree (true, log);
   }
 
-
   resultFile = new ofstream (resultFileName.Str (), ios::app);
   if (!resultFile->is_open ())
   {
@@ -357,6 +358,17 @@ void  RandomSearch::InitalizeApplication (kkint32 argc, char** argv)
 
 
 
+RandomSearch::~RandomSearch ()
+{
+  delete results;
+  delete resultFile;
+  delete data;
+  delete mlClasses;
+  delete config;
+}
+
+
+
 void  RandomSearch::BuildOtherOrderings ()
 {
   bool  successful;
@@ -371,7 +383,7 @@ void  RandomSearch::BuildOtherOrderings ()
 
     if  (!dataOther[x])
     {
-      dataOther[x] = data->StratifyAmoungstClasses(mlClasses, -1, numOfFolds, log);
+      dataOther[x] = data->StratifyAmoungstClasses (mlClasses, -1, numOfFolds, log);
       dataOther[x]->SaveOrderingOfImages (otherOrderingFileName, successful);
       if  (!successful)
       {
@@ -388,7 +400,6 @@ void  RandomSearch::BuildOtherOrderings ()
 
 
 
-
 float  RandomSearch::Accuracy (ResultLinePtr  result)
 {
   if  (accuracyWeighted)
@@ -396,7 +407,6 @@ float  RandomSearch::Accuracy (ResultLinePtr  result)
   else
     return result->Accuracy ();
 }  /* Accuracy */
-
 
 
 
@@ -461,7 +471,7 @@ void  RandomSearch::EndBlock ()
        if  (!DeleteFile (lockFileName.Str ()))
        {
          DWORD  lastErrorNum = GetLastError ();
-         log.Level (-1) << "RandomSearch::EndBlock - Error[" << (int)lastErrorNum << "] deleting Lock File." << endl;
+         log.Level (-1) << "RandomSearch::EndBlock - Error["  << (kkuint64)lastErrorNum << "] deleting Lock File." << endl;
        }
      }
   }
@@ -490,10 +500,11 @@ void  RandomSearch::DisplayCommandUsage ()
 }  /* DisplayCommandUssage */
 
 
-bool  RandomSearch::ProcessCmdLineParameter (KKStr  parmSwitch, 
+
+bool  RandomSearch::ProcessCmdLineParameter (char   parmSwitchCode, 
+                                             KKStr  parmSwitch, 
                                              KKStr  parmValue
                                             )
-
 {
   parmSwitch.Upper ();
 
@@ -572,8 +583,6 @@ bool  RandomSearch::ProcessCmdLineParameter (KKStr  parmSwitch,
 
 
 
-
-
 ResultLineListPtr  RandomSearch::BuildComponentParts (ResultLinePtr result)
 {
   ResultLineListPtr  components = new ResultLineList (false, 20);
@@ -607,8 +616,6 @@ ResultLineListPtr  RandomSearch::BuildComponentParts (ResultLinePtr result)
 
 
 
-
-
 void  RandomSearch::GetTestAccuracy (ResultLinePtr  result,
                                      float&         accuracy,
                                      float&         accuracyWeighted
@@ -626,7 +633,7 @@ void  RandomSearch::GetTestAccuracy (ResultLinePtr  result,
   CrossValidation  cv (config, data, mlClasses, numOfFolds, alreadyNormalized, fileDesc, log, cancelFlag);
   cv.RunValidationOnly (testData, NULL, log);
 
-  ConfusionMatrix2Ptr  cm = cv.ConfussionMatrix ();
+  auto  cm = cv.ConfussionMatrix ();
   accuracy         = float (cm->Accuracy ());
   accuracyWeighted = cm->AccuracyClassWeightedEqually ();
 
@@ -634,7 +641,6 @@ void  RandomSearch::GetTestAccuracy (ResultLinePtr  result,
 
   return;
 }  /* GetTestAccuracy */
-
 
 
 
@@ -667,7 +673,6 @@ ResultLinePtr  RandomSearch::EvaluateAFeatureSet (FeatureNumListPtr  features,
                                           features, 
                                           log
                                          );
-
 
   if  (!verifyAccuracy)
     result->Verified (true);
@@ -728,8 +733,6 @@ ResultLinePtr  RandomSearch::EvaluateAFeatureSet (FeatureNumListPtr  features,
 
 
 
-
-
 void  RandomSearch::CheckAgainstOtherOrderings (ResultLinePtr  result)
 {
   float  curAccuracy  = Accuracy (result);
@@ -770,9 +773,6 @@ void  RandomSearch::CheckAgainstOtherOrderings (ResultLinePtr  result)
 
   result->Verified (true);
 }  /* CheckAgainstOtherOrderings */
-
-
-
 
 
 
@@ -825,9 +825,6 @@ ResultLinePtr  RandomSearch::TrimAFeatureSet (ResultLinePtr  resultToExpand,
 
 
 
-
-
-
 ResultLinePtr  RandomSearch::TrimAFeatureSetInDepth (int            depth,
                                                      int            width,
                                                      ResultLinePtr  resultToExpand,
@@ -852,7 +849,6 @@ ResultLinePtr  RandomSearch::TrimAFeatureSetInDepth (int            depth,
   if  (!family)
     family = resultToExpand;
 
-
   createdHighs = false;
   if  (!highs)
   {
@@ -869,9 +865,6 @@ ResultLinePtr  RandomSearch::TrimAFeatureSetInDepth (int            depth,
 
     FeatureNumList trimmedFeatureSet = features - features[x];
     int  trimmedFeatureCount = trimmedFeatureSet.NumOfFeatures ();
-
-
-    
 
     ResultLinePtr trimmedResult = EvaluateAFeatureSet (&trimmedFeatureSet,
                                                         resultToExpand,
@@ -971,11 +964,6 @@ ResultLinePtr  RandomSearch::TrimAFeatureSetInDepth (int            depth,
 
 
 
-
-
-
-
-
 ResultLinePtr  RandomSearch::TrimComponentsOfAFeatureSet (ResultLinePtr  resultToExpand,
                                                           float          highAccuracy
                                                          )
@@ -1018,8 +1006,6 @@ ResultLinePtr  RandomSearch::TrimComponentsOfAFeatureSet (ResultLinePtr  resultT
   else
     return  aggragateResult;
 }  /* TrimComponentsOfAFeatureSet */
-
-
 
 
 
@@ -1071,9 +1057,6 @@ VectorInt  UniteTwoVectors (VectorInt& v1,
 
 
 
-
-
-
 bool  FamiliesAreRelated (VectorInt&  family1,  
                           VectorInt&  family2
                          )
@@ -1112,7 +1095,6 @@ ResultLinePairVector  RandomSearch::GetUnrelatedPairs (ResultLineVector&  result
   {
    return unrelatedPairs;
   }
-
 
   vector<VectorInt>  extendedFamilies;
 
@@ -1155,8 +1137,6 @@ ResultLinePairVector  RandomSearch::GetUnrelatedPairs (ResultLineVector&  result
 
 
 
-
-
 ResultLinePairVector  RandomSearch::BuildPairsFromList (ResultLineVector&  resultsToCombine)
 {
   int  x, y;
@@ -1168,7 +1148,6 @@ ResultLinePairVector  RandomSearch::BuildPairsFromList (ResultLineVector&  resul
   {
    return pairs;
   }
-
 
   for  (x = 0;  (x < numOfResults - 1);  x++)
   {
@@ -1186,9 +1165,7 @@ ResultLinePairVector  RandomSearch::BuildPairsFromList (ResultLineVector&  resul
 
 
 
-
-
-void  RandomSearch::AddToCombinationsIfNotRelated (int                deapth,   // How many families to search back
+void  RandomSearch::AddToCombinationsIfNotRelated (int                deapth,   // How many famliies to search back
                                                    ResultLineVector&  results,
                                                    VectorInt&         families,
                                                    ResultLinePtr      result
@@ -1208,7 +1185,6 @@ void  RandomSearch::AddToCombinationsIfNotRelated (int                deapth,   
   families = UniteTwoVectors (extendedFamily, families);
   results.push_back (result);
 }  /* AddToCombinationsIfNotRelated */
-
 
 
 
@@ -1246,10 +1222,9 @@ void  RandomSearch::AddToCombinations (ResultLineVector&  resultsToCombine,
 
 
 
-
 ResultLineVector  RandomSearch::LookForUsedUpInAllCombinations (ResultLineVector&  onesToTry,
-                                                                     int&                    combinationsNotUsed
-                                                                    )
+                                                                int&               combinationsNotUsed
+                                                               )
 {
   combinationsNotUsed = 0;
 
@@ -1282,8 +1257,6 @@ ResultLineVector  RandomSearch::LookForUsedUpInAllCombinations (ResultLineVector
 
   return  usedUpResults;
 }  /* LookForUsedUpInAllCombinations */
-
-
 
 
 
@@ -1320,9 +1293,6 @@ ResultLineList  RandomSearch::EvaluateCombinations (ResultLinePairVector&  combi
 
   return  evaluatedCombos;
 } /* EvaluateCombinations */
-
-
-
 
 
 
@@ -1385,8 +1355,6 @@ ResultLineList  RandomSearch::TrySomeCombinationsOfTheBetterOnesFoundSofar (int 
 
 
 
-
-
 ResultLineList  RandomSearch::CombineSomeOfTheBestJobs (int  numToCombine,
                                                         int  maxSize
                                                        )
@@ -1418,8 +1386,6 @@ ResultLineList  RandomSearch::CombineSomeOfTheBestJobs (int  numToCombine,
 
   return  EvaluateCombinations (combinations);
 }  /* CombineSomeOfTheBestJobs */
-
-
 
 
 
@@ -1465,9 +1431,6 @@ ResultLinePtr  RandomSearch::TrimBestNotExpanded (int  numToTrim,
 
   return  resultWithHighestAccuracy;
 }  /* TrimBestNotExpanded */
-
-
-
 
 
 // Select sets of features at random until a combination that has not
@@ -1706,8 +1669,6 @@ void  RandomSearch::PerformWrapper (ResultLinePtr  seedResult)
 
 
 
-
-
 void  RandomSearch::Run0 ()
 {
   if  (results->Size () < 10000)
@@ -1717,7 +1678,6 @@ void  RandomSearch::Run0 ()
       RunARandomlySelectedSetOfFeatures ();
     }
   }
-
 
   if  (results->Size () < 11600)
   {
@@ -1730,7 +1690,6 @@ void  RandomSearch::Run0 ()
                                );
     }
   }
-
 
   if  (results->Size () < 12000)
   {
@@ -1746,7 +1705,6 @@ void  RandomSearch::Run0 ()
                                );
     }
   }
-
 
   // Will now go into a loop that we will stay in until the 
   // program is killed.

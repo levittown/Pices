@@ -146,7 +146,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(OutsidePackages)\MySQL\mysql-connector-c-6.0.2-win32\include;$(OutsidePackages)\fftw-3.3.2;$(OutsidePackages)\zlib123;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(OutsidePackages)\MySQL\mysql-connector-c-6.0.2-win32\include;$(OutsidePackages)\fftw-3.3.2;$(OutsidePackages)\zlib-1.2.11;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;EMBEDDED_MYSQL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -162,13 +162,9 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-<<<<<<< HEAD
-      <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(OutsidePackages)\MySQL\mysql-connector-c-6.0.2-win32\include;$(OutsidePackages)\fftw-3.3.2;$(OutsidePackages)\zlib123;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;EMBEDDED_MYSQL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-=======
+      <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(OutsidePackages)\MySQL\MySQL Connector C 6.1\include;$(OutsidePackages)\fftw-3.3.5-dll64;$(OutsidePackages)\zlib-1.2.11;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(OutsidePackages)\MySQL\MySQL Connector C 6.1\include;$(OutsidePackages)\fftw-3.3.5-dll64;$(OutsidePackages)\zlib-1.2.11;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;WIN64;_DEBUG;EMBEDDED_MYSQL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
->>>>>>> origin/64k
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -184,7 +180,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(OutsidePackages)\MySQL\mysql-connector-c-6.0.2-win32\include;$(OutsidePackages)\fftw-3.3.2;$(OutsidePackages)\zlib123;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(OutsidePackages)\MySQL\mysql-connector-c-6.0.2-win32\include;$(OutsidePackages)\fftw-3.3.2;$(OutsidePackages)\zlib-1.2.11;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;EMBEDDED_MYSQL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader />
@@ -197,13 +193,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
-<<<<<<< HEAD
-      <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(OutsidePackages)\MySQL\mysql-connector-c-6.0.2-win32\include;$(OutsidePackages)\fftw-3.3.2;$(OutsidePackages)\zlib123;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;EMBEDDED_MYSQL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-=======
       <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(OutsidePackages)\MySQL\MySQL Connector C 6.1\include;$(OutsidePackages)\fftw-3.3.5-dll64;$(OutsidePackages)\zlib-1.2.11;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;WIN64;NDEBUG;_LIB;EMBEDDED_MYSQL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
->>>>>>> origin/64k
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
@@ -232,13 +223,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedDebug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-<<<<<<< HEAD
-      <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(OutsidePackages)\MySQL\mysql-connector-c-6.0.2-win32\include;$(OutsidePackages)\fftw-3.3.2;$(OutsidePackages)\zlib123;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;EMBEDDED_MYSQL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-=======
       <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(OutsidePackages)\MySQL\MySQL Connector C 6.1\include;$(OutsidePackages)\fftw-3.3.5-dll64;$(OutsidePackages)\zlib-1.2.11;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;WIN64;_DEBUG;EMBEDDED_MYSQL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
->>>>>>> origin/64k
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -269,13 +255,8 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-<<<<<<< HEAD
-      <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(OutsidePackages)\MySQL\mysql-connector-c-6.0.2-win32\include;$(OutsidePackages)\fftw-3.3.2;$(OutsidePackages)\zlib123;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;EMBEDDED_MYSQL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-=======
       <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(OutsidePackages)\MySQL\MySQL Connector C 6.1\include;$(OutsidePackages)\fftw-3.3.5-dll64;$(OutsidePackages)\zlib-1.2.11;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;WIN64;NDEBUG;_LIB;EMBEDDED_MYSQL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
->>>>>>> origin/64k
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>

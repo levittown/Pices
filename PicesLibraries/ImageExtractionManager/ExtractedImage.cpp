@@ -45,7 +45,6 @@ ExtractedImage::ExtractedImage (RasterSipperPtr _image,
 
 
 
-
 ExtractedImage::~ExtractedImage ()
 {
   delete  featureVector;  featureVector = NULL;
@@ -76,6 +75,7 @@ void  ExtractedImage::FeatureVector (ImageFeaturesPtr  _featureVector)
 }
 
 
+
 void  ExtractedImage::Prediction (MLClassPtr  _predClass1,
                                   float       _predClass1Prob,
                                   MLClassPtr  _predClass2,
@@ -98,12 +98,15 @@ ImageFeaturesPtr  ExtractedImage::FeatureVectorGiveOwnership ()
 }  /* FeatureVectorGiveOwnership */
 
 
+
 RasterSipperPtr  ExtractedImage::ImageGiveOwnership ()
 {
   RasterSipperPtr  i = image;
   image = NULL;
   return  i;
 }
+
+
 
 /**@todo  need to make 'maxQueueSize' dynamic;  posibly factor in total of all contained image sizes. */
 ExtractedImageQueue::ExtractedImageQueue ():
@@ -133,10 +136,10 @@ ExtractedImageQueue::~ExtractedImageQueue ()
 
 
 
-kkint32  ExtractedImageQueue::MemoryConsumedEstimated ()  const
+kkMemSize  ExtractedImageQueue::MemoryConsumedEstimated ()  const
 {
   goalie->StartBlock ();
-  kkint32  memoryConsumedEstimated = sizeof (*this);
+  kkMemSize  memoryConsumedEstimated = sizeof (*this);
 
   std::deque<ExtractedImagePtr>:: const_iterator idx;
   for  (idx = begin ();  idx != end ();  ++idx)

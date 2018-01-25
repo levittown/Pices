@@ -196,10 +196,10 @@ private:
   ResultLineTreePtr         results;           // A data structure that will contain all feature
                                                // combinations calculated.  See 'ResultLine.h' for
                                                // definition of this structure.  It is based of 
-                                               // 'RBTree.h' Red Blacvk tree whose primary index
+                                               // 'RBTree.h' Red Black tree whose primary index
                                                // will be the features selected.  This will 
                                                // allow us to look up previously computed total's
-                                               // quickly,  also has secondary indesx using 
+                                               // quickly,  also has secondary indexes using 
                                                // 'resultId' and 'parentId'
 
   bool                      stratify;

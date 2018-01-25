@@ -156,7 +156,7 @@ private:
   //  
   //  parent1  parent2  Description
   //    NULL     NULL   Created by random selection of features.
-  //    xxxx     NULL   An imedeiate decendent as a result of trimming.
+  //    xxxx     NULL   An immediate descendant as a result of trimming.
   //    xxxx     xxxx   The result of combining two other ResultLine.
 
   ResultLinePtr      parent1;            
@@ -199,7 +199,6 @@ private:
 
 
 
-
 class  CompareResultLine 
 {
 public:
@@ -208,9 +207,6 @@ public:
     return (*(resultLine->Features ()));
   }
 };  /* CompareResultLine */
-
-
-
 
 
 
@@ -227,8 +223,8 @@ public:
 class  ResultLineTree: public  RBTree<ResultLine, CompareResultLine, FeatureNumList>
 {
 public:
-  ResultLineTree (bool               _owner,
-                  RunLog&            _log
+  ResultLineTree (bool     _owner,
+                  RunLog&  _log
                  );
 
   ResultLineTree (KKStr            _fileName,
@@ -281,12 +277,6 @@ typedef  Iterator<ResultLine, CompareResultLine, FeatureNumList>  ResultLineTree
 
 
 
-
-
-
-
-
-
 class  ResultLineList: public KKQueue<ResultLine>
 {
 public:
@@ -310,8 +300,5 @@ private:
 };
 
 typedef  ResultLineList*  ResultLineListPtr;
-
-
-
 
 #endif

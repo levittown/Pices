@@ -5,7 +5,6 @@
 #include <iostream>
 #include <fstream>
 #include "MemoryDebug.h"
-
 using namespace std;
 
 
@@ -92,7 +91,6 @@ void  ResultLine::InitializeMLClasses (FileDescConstPtr _fileDesc,
 
 
 
-
 ResultLine::ResultLine (int                _id,
                         ResultLinePtr      _parent1,
                         ResultLinePtr      _parent2,
@@ -117,7 +115,7 @@ ResultLine::ResultLine (int                _id,
   verified         (false)
 
 {
-  ConfusionMatrix2Ptr  cm = _cv.ConfussionMatrix ();
+  ConfusionMatrix2ConstPtr  cm = _cv.ConfussionMatrix ();
 
   MLClassList  cmMLClasses (cm->MLClasses ());
   InitializeMLClasses (_fileDesc, cmMLClasses, log);
@@ -316,7 +314,6 @@ ResultLine::~ResultLine(void)
 
 
 
-
 KKStr  ResultLine::TitleLine (MLClassList&  mlClasses)
 {
   KKStr  title (512);
@@ -342,7 +339,6 @@ KKStr  ResultLine::TitleLine (MLClassList&  mlClasses)
 
   return  title;
 }
-
 
 
 
@@ -406,7 +402,6 @@ KKStr  ResultLine::ToString ()
 
   return  txt;
 }  /* ToString */
-
 
 
 
@@ -486,7 +481,6 @@ void  ResultLine::BuildExtendedFamilyList (int           deapth,
 
 
 
-
 CompareResultLine  cresultComparator;
                                 
 
@@ -502,8 +496,6 @@ ResultLineTree::ResultLineTree (bool     _owner,
 
 {
 }
-
-
 
 
 
@@ -567,8 +559,6 @@ ResultLinePtr  ResultLineTree::LookUpByParents (const ResultLinePtr p1,
 
 
 
-
-
 RBTree<ResultLine, CompareResultLine, FeatureNumList>::NodePtr
      ResultLineTree::RBInsert (ResultLinePtr  result)
 {
@@ -593,8 +583,6 @@ RBTree<ResultLine, CompareResultLine, FeatureNumList>::NodePtr
   parentIndex.insert (pair<Parents, ResultLinePtr> (parent, result));
   return  RBTree<ResultLine, CompareResultLine, FeatureNumList>::RBInsert (result);
 }  /* RBInsert */
-
-
 
 
 
@@ -651,7 +639,6 @@ void  ResultLineTree::Load (const KKStr& fileName,
 
 
 
-
 void  ResultLineTree::Save (const KKStr& fileName,
                             bool&         successful
                            )
@@ -666,7 +653,6 @@ void  ResultLineTree::Save (const KKStr& fileName,
     successful = false;
     return;
   }
-
 
   map<int, ResultLinePtr>::iterator  idx;
   
@@ -719,8 +705,6 @@ ResultLineListPtr  ResultLineTree::GetChildrenOfAParent (ResultLinePtr  parent)
 
 
 
-
-
 ResultLineList::ResultLineList ():
    KKQueue<ResultLine> (false)
 {
@@ -734,6 +718,7 @@ ResultLineList::ResultLineList (bool _bool):
 }
 
 
+
 ResultLineList::ResultLineList (ResultLineTreePtr  resultLineTree):
   KKQueue<ResultLine> (false)
 {
@@ -744,7 +729,6 @@ ResultLineList::ResultLineList (ResultLineTreePtr  resultLineTree):
     resultLine = resultLineTree->GetNext ();
   }
 }
-
 
 
 
@@ -767,8 +751,6 @@ ResultLineList::ResultLineList (ResultLineTreePtr  resultLineTree,
     resultLine = resultLineTree->GetNext ();
   }
 }
-
-
 
 
 
@@ -816,7 +798,6 @@ public:
 
 
 
-
 class  ResultLineAccuracyComparisonReversed
 {
 public:
@@ -839,8 +820,6 @@ public:
 
 
 
-
-
 class  ResultLineAccuracyWeightedComparisonReversed
 {
 public:
@@ -860,7 +839,6 @@ public:
      return  p1->NumOfFeatures () > p2->NumOfFeatures ();
    }
 };  /* ResultLineAccuracyWeightedComparisonReversed */
-
 
 
 
@@ -899,12 +877,6 @@ void  ResultLineList::SortByAccuracy (bool reversed,
 
 
 
-
-
-
-
-
-
 Parents::Parents  (int  _p1,
                    int  _p2
                   ):
@@ -919,16 +891,19 @@ Parents::Parents  (int  _p1,
 }
 
 
+
 bool  Parents::operator== (const Parents&  right)  const
 {
   return  ((p1 == right.p1)  &&  (p2 == right.p2));
 }
 
 
+
 bool  Parents::operator!= (const Parents&  right) const
 {
   return  ((p1 != right.p1)  ||  (p2 != right.p2));
 }
+
 
 
 bool  Parents::operator< (const Parents&  right)  const
@@ -965,6 +940,7 @@ public:
     return  r1->Id () < r2->Id ();
   }
 };
+
 
 
 ResultLineVector  operator+ (ResultLineVector&  left,  

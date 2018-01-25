@@ -322,7 +322,6 @@ void  TrainingModel2::UpdateMemoryPressure ()
   if  (trainer  && trainerWeOwn)
     newMemoryPressure += trainer->MemoryConsumedEstimated ();
 
-
   if (newMemoryPressure > curMemoryPressure)
     GC::AddMemoryPressure (newMemoryPressure - curMemoryPressure);
 
@@ -331,7 +330,6 @@ void  TrainingModel2::UpdateMemoryPressure ()
 
   curMemoryPressure = newMemoryPressure;
 }  /* UpdateMemoryPressure */
-
 
 
 
@@ -1494,8 +1492,6 @@ array<PicesInterface::ProbNamePair^>^
 
   return  results;
 }  /* FindWorstSupportVectors */
-
-
 
 
 

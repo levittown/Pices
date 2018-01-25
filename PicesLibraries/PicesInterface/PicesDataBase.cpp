@@ -195,7 +195,6 @@ namespace  PicesInterface
 
 
 
-
   PicesDataBase^  PicesDataBase::SelectNewDataBaseServer (PicesRunLog^  _log)
   {
     while  (true)
@@ -220,7 +219,6 @@ namespace  PicesInterface
 
 
 
-
   String^  PicesDataBase::ServerDescription ()
   {
     if  (dbConn)
@@ -228,7 +226,6 @@ namespace  PicesInterface
     else
       return  "***  not connected  ***";
   }  /* ServerDescription */
-
 
 
 
@@ -260,6 +257,7 @@ namespace  PicesInterface
   }
 
    
+
   array<array<String^>^ >^  PicesDataBase::QueryStatement (String^          statement,
                                                            array<String^>^  colsToReturn
                                                           )
@@ -315,8 +313,7 @@ namespace  PicesInterface
 
     return  results;
   }  /* QueryStatement*/
-
-
+  
 
 
   //***************************************************************************************
@@ -343,7 +340,6 @@ namespace  PicesInterface
 
 
 
-
   PicesFeatureVector^  PicesDataBase::FeatureDataRecLoad (String^  imageFileName)
   {
     KKStr fn = PicesKKStr::SystemStringToKKStr (imageFileName);
@@ -354,7 +350,6 @@ namespace  PicesInterface
     else
       return  gcnew PicesFeatureVector (fv);
   }  /* FeatureDataRecLoad */
-
 
 
 
@@ -405,7 +400,6 @@ namespace  PicesInterface
 
 
 
-
   PicesFeatureVectorList^  PicesDataBase::FeatureDataForImageGroup (PicesDataBaseImageGroup^  imageGroup,
                                                                     PicesClass^               mlClass,
                                                                     System::Char              classKeyToUse
@@ -438,7 +432,6 @@ namespace  PicesInterface
 
 
 
-
   void   PicesDataBase::FeatureDataUpdate (PicesDataBaseImage^  databaseImage,
                                            PicesFeatureVector^  example
                                           )
@@ -451,16 +444,7 @@ namespace  PicesInterface
   }
 
 
-
-  //**********************************************************************************************
-  //****************************     PicesDataBaseImage  routines     ****************************
-  //**********************************************************************************************
-
-
-
-
-
-void   PicesDataBase::ImageInsert (PicesRaster^    image,
+  void   PicesDataBase::ImageInsert (PicesRaster^    image,
                                    String^         imageFileName,
                                    String^         supperFileName,
                                    kkuint64        byteOffset,     /**< byteOffset of SipperRow containing TopLeftRow */

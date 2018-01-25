@@ -69,10 +69,10 @@ private:
                             );
 
 
-  FileDescConstPtr   fileDesc;
-  int                numOfFeatures;
-  RunLog&            log;
-  OneFeatureStatPtr  stats;
+  FileDescConstPtr  fileDesc;
+  int               numOfFeatures;
+  RunLog&           log;
+  OneFeatureStatPtr stats;
 };  /* FeatureStats */
 
 

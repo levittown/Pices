@@ -39,7 +39,7 @@ namespace  ImageExtractionManager
 
     ~ExtractedImage ();
 
-    kkMemSize MemoryConsumedEstimated ()  const;
+    kkMemSize  MemoryConsumedEstimated ()  const;
 
     kkuint64            ByteOffsetFirstScanRow () const  {return byteOffsetFirstScanRow;}
     float               Depth                  () const  {return depth;}
@@ -63,11 +63,9 @@ namespace  ImageExtractionManager
                       float       _predClass2Prob
                      );
     
-
     /**@brief  Turns over ownership of FeatureVector to the caller.  */
     ImageFeaturesPtr  FeatureVectorGiveOwnership ();
     RasterSipperPtr   ImageGiveOwnership ();
-
 
   private:
     kkuint64          byteOffsetFirstScanRow;
@@ -102,7 +100,7 @@ namespace  ImageExtractionManager
 
     ~ExtractedImageQueue ();
 
-    kkint32  MemoryConsumedEstimated ()  const;
+    kkMemSize  MemoryConsumedEstimated ()  const;
 
     void  AddExtractedImage (ExtractedImagePtr  extractedImage);
 

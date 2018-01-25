@@ -6,13 +6,13 @@ using namespace System::Collections;
 using namespace System::Diagnostics;
 using namespace System::IO;
 
-#include  "MLClass.h"
-#include  "ImageFeatures.h"
-#include  "TrainingConfiguration2.h"
+#include "MLClass.h"
+#include "ImageFeatures.h"
+#include "TrainingConfiguration2.h"
 
-#include  "PicesFeatureVectorList.h"
-#include  "PicesTrainingClass.h"
-#include  "PicesRunLog.h"
+#include "PicesFeatureVectorList.h"
+#include "PicesTrainingClass.h"
+#include "PicesRunLog.h"
 
 
 namespace PicesInterface 

@@ -35,7 +35,6 @@ ImageSizeDistributionRow::ImageSizeDistributionRow (float     _depth,
 
 
 
-
 ImageSizeDistributionRow::ImageSizeDistributionRow (const ImageSizeDistributionRow&  row):
    depth            (row.depth),
    distribution     (row.distribution),
@@ -46,7 +45,6 @@ ImageSizeDistributionRow::ImageSizeDistributionRow (const ImageSizeDistributionR
 {
   
 }
-
 
 
 
@@ -61,7 +59,6 @@ void  ImageSizeDistributionRow::AddImageCountPixelCount (kkuint32  _imageCount,
   totalFilledArea  += _filledArea;
   volumneSampled   += _volumneSampled;
 }  /* AddImageCountPixelCount */
-
 
 
 
@@ -91,7 +88,6 @@ void  ImageSizeDistributionRow::AddIn (const ImageSizeDistributionRow&  right)
   totalFilledArea += right.totalFilledArea;
   volumneSampled  += right.volumneSampled;
 }  /* AddIn */
-
 
 
 
@@ -125,6 +121,7 @@ ImageSizeDistribution::ImageSizeDistribution (float               _depthBinSize,
 }
 
 
+
 ImageSizeDistribution::~ImageSizeDistribution ()
 {
   for  (kkuint32  x = 0;  x < depthDistributions.size ();  ++x)
@@ -152,9 +149,6 @@ ImageSizeDistributionRowPtr  ImageSizeDistribution::GetDepthBin (kkuint32  depth
 
 
 
-
-
-
 void  ImageSizeDistribution::PopulateDistributions (kkuint32  depthIdx)
 {
   while  (depthDistributions.size () <= depthIdx)
@@ -163,7 +157,6 @@ void  ImageSizeDistribution::PopulateDistributions (kkuint32  depthIdx)
     depthDistributions.push_back (new ImageSizeDistributionRow (idx * depthBinSize, numSizeBuckets, 0, 0, 0, 0.0f));
   }
 }  /* PopulateDistributions */
-
 
 
 
@@ -185,9 +178,6 @@ void  ImageSizeDistribution::DefineRow (float     _depth,
 }  /* DefineRow */
 
 
-
-
-
  
 void  ImageSizeDistribution::AddData  (float     _depth,
                                        kkuint32  _sizeBucketIdx,
@@ -201,7 +191,6 @@ void  ImageSizeDistribution::AddData  (float     _depth,
   allDepths->AddData (_sizeBucketIdx, _count);
 }
                     
-
 
 void  ImageSizeDistribution::AddIn (const ImageSizeDistribution&  right,
                                     RunLog&                       log
@@ -226,14 +215,12 @@ void  ImageSizeDistribution::AddIn (const ImageSizeDistribution&  right,
   if  (depthDistributions.size () < right.depthDistributions.size ())
     PopulateDistributions ((kkuint32)right.depthDistributions.size ());
 
-
   for  (kkuint32 x = 0;  x < right.depthDistributions.size ();  ++x)
   {
     depthDistributions[x]->AddIn (*(right.depthDistributions[x]));
     allDepths->AddIn (*(right.depthDistributions[x]));
   }
 }  /* AddIn */
-
 
 
 
@@ -255,7 +242,6 @@ VectorFloat  ImageSizeDistribution::DepthProfileForSizeBin (kkuint32  _sizeBucke
 
 
 
-
 VectorFloat  ImageSizeDistribution::VolumeSampledByDepthBucket ()
 {
   VectorFloat result (depthDistributions.size (), 0.0f);
@@ -267,9 +253,6 @@ VectorFloat  ImageSizeDistribution::VolumeSampledByDepthBucket ()
   }
   return  result;
 }  /* DepthProfileForSizeBin */
-
-
-
 
 
 
@@ -297,8 +280,6 @@ void  ImageSizeDistribution::GetSizeBucketStats (kkuint32   _sizeBucketIdx,
 
 
 
-
-
 kkint32  ImageSizeDistribution::IdentifySizeBucket (float  size)
 {
   if  (sizeEndValues.size () < 1)
@@ -323,7 +304,6 @@ kkint32  ImageSizeDistribution::IdentifySizeBucket (float  size)
 
   return -1;
 }  /* IdentifySizeBucket */
-
 
 
 

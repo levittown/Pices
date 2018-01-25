@@ -57,10 +57,7 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
-
-
 #include  "MemoryDebug.h"
-
 using namespace std;
 
 #include "KKBaseTypes.h"
@@ -83,7 +80,7 @@ using namespace KKB;
 #include "FeatureVector.h"
 #include "NormalizationParms.h"
 #include "TrainingConfiguration2.h"
-using namespace MLL;
+using namespace KKMLL;
 
 
 // -f K:\v1\Plankton\TempBeamSearch\2004_March_02\2004_03_02.data  -A TEST_VALIDATE  -I RAW   -O RAW  -L 1500  -P 66.6666
