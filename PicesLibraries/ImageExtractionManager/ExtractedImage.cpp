@@ -54,9 +54,9 @@ ExtractedImage::~ExtractedImage ()
 
 
 
-kkint32 ExtractedImage::MemoryConsumedEstimated ()  const
+kkMemSize ExtractedImage::MemoryConsumedEstimated ()  const
 {
-  kkint32  m = sizeof (*this);
+  kkMemSize  m = sizeof (*this);
   if  (image)
     m += image->MemoryConsumedEstimated ();
 
@@ -206,7 +206,7 @@ kkuint32  ExtractedImageQueue::ImagesOnQueue ()
 {
   kkuint32  imagesOnQueue = 0;
   goalie->StartBlock ();
-  imagesOnQueue = size ();
+  imagesOnQueue = (kkuint32)size ();
   goalie->EndBlock ();
   return  imagesOnQueue;
 }

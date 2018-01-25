@@ -137,8 +137,8 @@ CImageExtractionWindowsDlg::CImageExtractionWindowsDlg(CWnd* pParent /*=NULL*/)
 	m_imagesExtracted = "";
 	m_imagesWritten   = "";
 	m_sipperFileSize  = "";
-	m_minimumSize = 0;
-	m_maximumSize = 0;
+	m_minimumSize = 0.0f;
+	m_maximumSize = 0.0f;
   m_database       = _T("");
   m_sipperFileName = _T("");
 	m_destinationDirectory = _T("");
@@ -263,7 +263,7 @@ BOOL CImageExtractionWindowsDlg::OnInitDialog()
 	
 	// TODO: Add extra initialization here
 
-  SetTimer (ImageExtractionTimerID, 1000, NULL);
+  SetTimer (ImageExtractionTimerID, 1000, nullptr);
 
   UpdateDialogStaticVariables ();
 
@@ -363,7 +363,7 @@ void CImageExtractionWindowsDlg::OnCancel()
 
 
 
-void CImageExtractionWindowsDlg::OnTimer  (UINT nIDEvent) 
+void CImageExtractionWindowsDlg::OnTimer  (UINT_PTR nIDEvent)
 {
 	// TODO: Add your message handler code here and/or call default
 

@@ -1,16 +1,16 @@
-#include  "FirstIncludes.h"
+#include "FirstIncludes.h"
 
-#include  <stdio.h>
-#include  <math.h>
+#include <stdio.h>
+#include <math.h>
 
-#include  <iostream>
-#include  <fstream>
-#include  <vector>
-#include  <iomanip>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <iomanip>
 
 
-#include  "MemoryDebug.h"
-#include  "KKBaseTypes.h"
+#include "MemoryDebug.h"
+#include "KKBaseTypes.h"
 
 using namespace std;
 using namespace KKB;
@@ -18,58 +18,26 @@ using namespace KKB;
 
 #include <sys/types.h>
 
-//#include  "KKQueue.h"
-//#include  "KKStr.h"
 
-#include  "Application.h"
+#include "Application.h"
 
 
-#include  "PlotNonStreamingPlacement.h"
+#include "PlotNonStreamingPlacement.h"
 
-#include  "ClassGroupHistory.h"
-#include  "MLClass.h"
-#include  "OSservices.h"
-#include  "RunLog.h"
-#include  "SortOrderType.h"
+#include "ClassGroupHistory.h"
+#include "MLClass.h"
+#include "OSservices.h"
+#include "RunLog.h"
+#include "SortOrderType.h"
 
 
 
-
-
-
-
-
-PlotNonStreamingPlacement::PlotNonStreamingPlacement (int     argc,
-                                                      char**  argv
-                                                     ):
-  Application  (argc, argv),
-  mlClasses (log),
+PlotNonStreamingPlacement::PlotNonStreamingPlacement ():
+  Application  (),
+  mlClasses    (),
   sortOrder    (NULL_SortOrder),
   totals       (NULL)
 {
-  ProcessCmdLineParameters (argc, argv);
-  
-
-  if  (rootDir.Empty ())
-  {
-    rootDir = osGetCurrentDirectory ();
-  }
-
-  if  (sortOrder == NULL_SortOrder)
-  {
-    log.Level (-1)  << endl
-                    << endl
-                    << "PlotNonStreamingPlacement    No Sort Order not specified." << endl
-                    << endl;
-    Abort (true);
-    return;
-  }
-
-  totals = ClassGroupTotals::ConsolidateOneDirectoryOneSortOrder (rootDir, mlClasses, sortOrder, log);
-  if  (!totals)
-  {
-    Abort (true);
-  }
 
 }  /* PlotNonStreamingPlacement */
 
@@ -82,8 +50,34 @@ PlotNonStreamingPlacement::~PlotNonStreamingPlacement ()
 
 
 
-bool  PlotNonStreamingPlacement::ProcessCmdLineParameter (char    parmSwitchCode, 
-                                                          KKStr  parmSwitch, 
+void  PlotNonStreamingPlacement::InitalizeApplication (kkint32  argc,
+                                                       char**   argv
+                                                      )
+{
+  Application::InitalizeApplication (argc, argv);
+
+  if (rootDir.Empty ())
+    rootDir = osGetCurrentDirectory ();
+
+  if (sortOrder == NULL_SortOrder)
+  {
+    log.Level (-1) << endl
+      << endl
+      << "PlotNonStreamingPlacement    No Sort Order not specified." << endl
+      << endl;
+    Abort (true);
+    return;
+  }
+
+  totals = ClassGroupTotals::ConsolidateOneDirectoryOneSortOrder (rootDir, mlClasses, sortOrder, log);
+  if (!totals)
+  {
+    Abort (true);
+  }
+}
+
+
+bool  PlotNonStreamingPlacement::ProcessCmdLineParameter (KKStr  parmSwitch, 
                                                           KKStr  parmValue
                                                          )
 {
@@ -196,14 +190,12 @@ void  PlotNonStreamingPlacement::ReportNonStreamPlacesMean ()
 }  /* ReportNonStreamPlacesMean */
 
 
-
-
-
 int  main (int  argc,  char**  argv)
 {
-  PlotNonStreamingPlacement  app (argc, argv);
-  if  (app.Abort ())
+  auto  app  = new PlotNonStreamingPlacement ();
+  app->InitalizeApplication (argc, argv);
+  if  (app->Abort ())
     return -1;
 
-  app.ReportNonStreamPlacesMean ();
+  app->ReportNonStreamPlacesMean ();
 }  /* main */

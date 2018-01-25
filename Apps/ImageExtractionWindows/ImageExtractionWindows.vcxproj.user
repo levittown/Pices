@@ -4,16 +4,32 @@
     <LocalDebuggerCommandArguments>-A 0  -CPD 3  -D D:\Pices\ExtractedImages\ETP2008_1AA_01  -ipd 1000  -minArea 0.151882723  -maxArea 0  -Pre On  -R D:\Pices\ExtractedImages\ETP2008_1AA_01\ETP2008_1AA_01_c0.txt  -S D:\Pices\SipperFiles\USF\ETP2008\ETP2008_1A\ETP2008_1AA_01.spr  -SF Sipper3  -C D:\Pices\Classifier\TrainingModels\USF_MFS_current.cfg  -X  -CountOnly  -MultiThreaded Yes -DataBase local-USF</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LocalDebuggerCommandArguments>-A 0  -CPD 3  -D D:\Pices\ExtractedImages\ETP2008_1AA_01  -ipd 1000  -minArea 0.151882723  -maxArea 0  -Pre On  -R D:\Pices\ExtractedImages\ETP2008_1AA_01\ETP2008_1AA_01_c0.txt  -S F:\Pices\SipperFiles\USF\ETP2008\ETP2008_1A\ETP2008_1AA_01.spr  -SF Sipper3  -C D:\Pices\Classifier\TrainingModels\USF_MFS_current.cfg  -X  -CountOnly  </LocalDebuggerCommandArguments>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LocalDebuggerCommandArguments>-A 0  -CPD 3  -D D:\Pices\ExtractedImages\ETP2008_1AA_01  -ipd 1000  -minArea 0.151882723  -maxArea 0  -Pre On  -R D:\Pices\ExtractedImages\ETP2008_1AA_01\ETP2008_1AA_01_c0.txt  -S D:\Pices\SipperFiles\USF\ETP2008\ETP2008_1A\ETP2008_1AA_01.spr  -SF Sipper3  -C D:\Pices\Classifier\TrainingModels\USF_MFS_current.cfg  -X  -CountOnly  -MultiThreaded Yes -DataBase local-USF</LocalDebuggerCommandArguments>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LocalDebuggerCommandArguments>-A 0  -CPD 3  -D D:\Pices\ExtractedImages\ETP2008_1AA_01  -ipd 1000  -minArea 0.151882723  -maxArea 0  -Pre On  -R D:\Pices\ExtractedImages\ETP2008_1AA_01\ETP2008_1AA_01_c0.txt  -S F:\Pices\SipperFiles\USF\ETP2008\ETP2008_1A\ETP2008_1AA_01.spr  -SF Sipper3  -C D:\Pices\Classifier\TrainingModels\USF_MFS_current.cfg  -X  -CountOnly  </LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedRelease|Win32'">
     <LocalDebuggerCommandArguments>-A 0  -CPD 3  -D D:\Pices\ExtractedImages\ETP2008_1AA_01  -ipd 1000  -minArea 0.151882723  -maxArea 0  -Pre On  -R D:\Pices\ExtractedImages\ETP2008_1AA_01\ETP2008_1AA_01_c0.txt  -S D:\Pices\SipperFiles\USF\ETP2008\ETP2008_1A\ETP2008_1AA_01.spr  -SF Sipper3  -C D:\Pices\Classifier\TrainingModels\USF_MFS_current.cfg  -X  -CountOnly  -MultiThreaded Yes -DataBase local-USF</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedRelease|x64'">
+    <LocalDebuggerCommandArguments>-A 0  -CPD 3  -D D:\Pices\ExtractedImages\ETP2008_1AA_01  -ipd 1000  -minArea 0.151882723  -maxArea 0  -Pre On  -R D:\Pices\ExtractedImages\ETP2008_1AA_01\ETP2008_1AA_01_c0.txt  -S F:\Pices\SipperFiles\USF\ETP2008\ETP2008_1A\ETP2008_1AA_01.spr  -SF Sipper3  -C D:\Pices\Classifier\TrainingModels\USF_MFS_current.cfg  -X  -CountOnly  </LocalDebuggerCommandArguments>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedDebug|Win32'">
     <LocalDebuggerCommandArguments>-A 0  -CPD 3  -D D:\Pices\ExtractedImages\ETP2008_1AA_01  -ipd 1000  -minArea 0.151882723  -maxArea 0  -Pre On  -R D:\Pices\ExtractedImages\ETP2008_1AA_01\ETP2008_1AA_01_c0.txt  -S D:\Pices\SipperFiles\USF\ETP2008\ETP2008_1A\ETP2008_1AA_01.spr  -SF Sipper3  -C D:\Pices\Classifier\TrainingModels\USF_MFS_current.cfg  -X  -CountOnly  -MultiThreaded Yes -DataBase local-USF</LocalDebuggerCommandArguments>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='EmbeddedDebug|x64'">
+    <LocalDebuggerCommandArguments>-A 0  -CPD 3  -D D:\Pices\ExtractedImages\ETP2008_1AA_01  -ipd 1000  -minArea 0.151882723  -maxArea 0  -Pre On  -R D:\Pices\ExtractedImages\ETP2008_1AA_01\ETP2008_1AA_01_c0.txt  -S F:\Pices\SipperFiles\USF\ETP2008\ETP2008_1A\ETP2008_1AA_01.spr  -SF Sipper3  -C D:\Pices\Classifier\TrainingModels\USF_MFS_current.cfg  -X  -CountOnly  </LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

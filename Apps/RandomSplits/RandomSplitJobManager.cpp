@@ -228,7 +228,7 @@ void  RandomSplitJobManager::GenerateFinalResultsReport ()
     << "Class Counts" << endl
     << endl;
 
-  KKB::uint  numClasses = mlClasses->size ();
+  kkuint32  numClasses = (kkuint32)mlClasses->size ();
 
   VectorFloat   classAccs;
   VectorDouble  knownCounts;

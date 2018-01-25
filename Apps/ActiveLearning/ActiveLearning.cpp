@@ -32,22 +32,22 @@ using namespace KKB;
 #endif
 
 
-
-#include  "Classifier2.h"
-#include  "ConfusionMatrix2.h"
-#include  "FeatureFileIO.h"
-#include  "FeatureFileIOPices.h"
-#include  "HashTable.h"
-#include  "FeatureVector.h"
-#include  "OSservices.h"
-#include  "TrainingConfiguration2.h"
-#include  "TrainingProcess2.h"
+#include "Classifier2.h"
+#include "ConfusionMatrix2.h"
+#include "FeatureFileIO.h"
+#include "FeatureFileIOPices.h"
+#include "HashTable.h"
+#include "FeatureVector.h"
+#include "OSservices.h"
+#include "PicesFVProducer.h"
+#include "TrainingConfiguration2.h"
+#include "TrainingProcess2.h"
 using namespace MLL;
 
 
-#include  "JobDesc.h"
-#include  "PassAssignments.h"
-#include  "ActiveLearning.h"
+#include "JobDesc.h"
+#include "PassAssignments.h"
+#include "ActiveLearning.h"
 
 
 
@@ -176,15 +176,13 @@ vector<int>   ParseIntList (KKStr  intListStr)
 
 
 
-ActiveLearning::ActiveLearning (int     argc,
-                                char**  argv
-                               ):
-  Application                 (argc, argv),
+ActiveLearning::ActiveLearning ():
+  Application                 (),
   classProbReport             (NULL),
   fileDesc                    (NULL),
   fileFormat                  (FeatureFileIOPices::Driver ()),
   finalNumOfImagesInTrainingLibrary  (1800),
-  mlClasses                (new MLClassList ()),
+  mlClasses                   (new MLClassList ()),
   jobs                        (NULL),
   lockFileOpened              (false),
   masterTestImages            (NULL),
@@ -219,24 +217,23 @@ ActiveLearning::ActiveLearning (int     argc,
   // usefull in getting to understand what is happening with different selction methods
   //classProbReport = new ofstream ("ClassProbReport.txt");
 
+  fvFactoryProducer = PicesFVProducerFactory::Factory (&log);
 
   rootDir = osGetCurrentDirectory ();
   DetermineIfOnANetworkDrive ();
-  ProcessStatusFile (argc, argv);
 }  /* ActiveLearning */
-
 
 
 
 // 2004-12-11   KK
 // When you want to only load parameters from the status file.
 ActiveLearning::ActiveLearning (KKStr  _rootDir):
-  Application                   (0, NULL),
+  Application                   (),
   classProbReport               (NULL),
   fileDesc                      (NULL),
   fileFormat                    (FeatureFileIOPices::Driver ()),
   finalNumOfImagesInTrainingLibrary (1800),
-  mlClasses                  (new MLClassList ()),
+  mlClasses                     (new MLClassList ()),
   jobs                          (NULL),
   lockFileOpened                (false),
   masterTestImages              (NULL),
@@ -256,7 +253,6 @@ ActiveLearning::ActiveLearning (KKStr  _rootDir):
   validationImages              (NULL),
   validationImagesPerClass      (200),
   weAreUsingANetworkDrive       (false)
-
 {
   if  (rootDir.Empty ())
     rootDir = osGetCurrentDirectory ();
@@ -269,9 +265,6 @@ ActiveLearning::ActiveLearning (KKStr  _rootDir):
 
 
 
-
-
-
 ActiveLearning::~ActiveLearning ()
 {
   if  (report)
@@ -281,16 +274,28 @@ ActiveLearning::~ActiveLearning ()
     report = NULL;
   }
 
-  delete  classProbReport;
+  delete  classProbReport;              classProbReport = NULL;
 
-  delete  jobs;  jobs = NULL;
+  delete  jobs;                         jobs = NULL;
 
-  delete  masterTestImages;  masterTestImages = NULL;
-  delete  validationImages;  validationImages = NULL;
+  delete  masterTestImages;             masterTestImages = NULL;
+  delete  validationImages;             validationImages = NULL;
 
-  delete  masterTrainingConfiguration;
-  delete  mlClasses;
+  delete  masterTrainingConfiguration;  masterTrainingConfiguration = NULL;
+  delete  mlClasses;                    mlClasses                   = NULL;
 }
+
+
+void  ActiveLearning::InitalizeApplication (kkint32  argc,
+                                            char**   argv
+                                           )
+{
+  Application::InitalizeApplication (argc, argv);
+  ProcessStatusFile (argc, argv);
+}
+
+
+
 
 
 KKStr  ActiveLearning::DeriveIIPCsubDirectory (int  iipc)
@@ -416,7 +421,7 @@ void  ActiveLearning::Block ()
   int  count = 0;
 
   do  {
-    lockFile = open (lockFileName, O_WRONLY | O_CREAT | O_EXCL);
+    lockFile = _open (lockFileName, O_WRONLY | O_CREAT | O_EXCL);
 
     if  (lockFile < 0)
     {
@@ -523,8 +528,8 @@ void  ActiveLearning::LoadCurrentStatusFile ()
                     << statusFileName << "]." 
                     << endl;
      EndBlock ();
-     osWaitForEnter ();
-     exit (-1);
+     KKB::osWaitForEnter ();
+     ::exit (-1);
   }
 
   delete  jobs;  jobs = NULL;
@@ -590,8 +595,8 @@ void  ActiveLearning::LoadCurrentStatusFile ()
              << "                        Formats Supported " << FeatureFileIO::FileFormatsReadOptionsStr ()   << endl
              << endl
              << endl;
-        osWaitForEnter ();
-        exit (-1);
+        KKB::osWaitForEnter ();
+        ::exit (-1);
       }
     }
 
@@ -648,7 +653,7 @@ void  ActiveLearning::ProcessCmdLineStr  (KKStr  cmdLine)
     argCount++;
   }
 
-  ProcessCmdLineParameters (argCount, arguments);
+  InitalizeApplication (argCount, arguments);
 
   for  (int x = 0;  x < argCount; x++)
   {
@@ -734,8 +739,8 @@ void  ActiveLearning::UpdateCurrentStatusFile ()
                     << fullStatusFileName << "]." 
                     << endl;
      EndBlock ();
-     exit (1);
-     osWaitForEnter ();
+     ::exit (1);
+     KKB::osWaitForEnter ();
   }
 
   
@@ -1180,11 +1185,6 @@ void  ActiveLearning::SortImageFeatures (FeatureVectorList&  images,
 
 
 
-
-
-
-
-
 FeatureVectorListPtr  ActiveLearning::LoadImages (KKStr                dirPath,
                                                   FeatureVectorListPtr  trainingImages
                                                  )
@@ -1228,7 +1228,7 @@ FeatureVectorListPtr  ActiveLearning::LoadImages (KKStr                dirPath,
     // Since there is no Training Library for the the class in this directory
     // we will create an empty FeatureVectorList.
 
-    images = new FeatureVectorList (fileDesc, true, log, 2000);
+    images = new FeatureVectorList (fileDesc, true);
   }
 
   else
@@ -1243,7 +1243,9 @@ FeatureVectorListPtr  ActiveLearning::LoadImages (KKStr                dirPath,
 
     DateTime  timeStamp;
 
-    images = FeatureFileIOPices::FeatureDataReSink (dirPath, 
+    images = fvFactoryProducer->DefaultFeatureFileIO()->FeatureDataReSink(
+                                                    fvFactoryProducer,
+                                                    dirPath, 
                                                     featureFileName, 
                                                     mlClass,
                                                     false,     // Don't override Class name in feature file.
@@ -1260,15 +1262,14 @@ FeatureVectorListPtr  ActiveLearning::LoadImages (KKStr                dirPath,
     }
     else
     {
-      FeatureVectorListPtr  filteredList = new FeatureVectorList (fileDesc, false, log, 1000);
+      FeatureVectorListPtr  filteredList = new FeatureVectorList (fileDesc, false);
       {
         // Remove images that are being used as test Images.
-        ImageFeaturesListIterator  iIDX (*images);
-        for  (iIDX.Reset ();  iIDX.CurPtr ();  ++iIDX)
+        for  (auto iIDX: *filteredList)
         {
-          if  (trainingImages->LookUpByImageFileName (iIDX->ImageFileName ()) == NULL)
+          if  (trainingImages->LookUpByImageFileName (iIDX->ExampleFileName ()) == NULL)
           {
-             filteredList->PushOnBack (iIDX.CurPtr ());
+             filteredList->PushOnBack (iIDX);
           }
           else
           {
@@ -1294,12 +1295,10 @@ FeatureVectorListPtr  ActiveLearning::LoadImages (KKStr                dirPath,
   KKStrListPtr  subDirectories = osGetListOfDirectories (dirSearchPath);
   if  (subDirectories)
   {
-    StringListIterator  sdIDX (*subDirectories);
-  
-    for  (sdIDX.Reset ();  sdIDX.CurPtr (); ++sdIDX)
+    for  (auto sdIDX: *subDirectories)
     {
       KKStr  newDirPath (dirPath);
-      newDirPath << *(sdIDX.CurPtr ());
+      newDirPath << *sdIDX;
 
       FeatureVectorListPtr subDirImages = LoadImages (newDirPath, trainingImages);
 
@@ -1319,10 +1318,10 @@ FeatureVectorListPtr  ActiveLearning::LoadImages (KKStr                dirPath,
 
 
 void  ActiveLearning::ExtractValidationImages (MLClassList&     classes,
-                                               FeatureVectorList&  srcImages,
-                                               FeatureVectorList&  destImages,
-                                               FeatureVectorList&  validationImages
-                                              )
+  FeatureVectorList&  srcImages,
+  FeatureVectorList&  destImages,
+  FeatureVectorList&  validationImages
+)
 
 {
   log.Level (10) << "ExtractValidationImages" << endl;
@@ -1339,18 +1338,18 @@ void  ActiveLearning::ExtractValidationImages (MLClassList&     classes,
 
   MLClassPtr  mlClass = NULL;
   //MLClassListIterator  clIDX (classes);
-  
+
   FeatureVectorListPtr*  classImages = new FeatureVectorListPtr[numOfClasses];
 
-  for  (classNum = 0;  classNum < numOfClasses;  classNum++)
+  for (classNum = 0; classNum < numOfClasses; classNum++)
   {
     mlClass = classes.IdxToPtr (classNum);
 
     classImages[classNum] = srcImages.ExtractExamplesForAGivenClass (mlClass);
 
-    if  (classImages[classNum]->QueueSize () < smallestNumOfImagesInAClass)
-       smallestNumOfImagesInAClass = classImages[classNum]->QueueSize ();
- 
+    if (classImages[classNum]->QueueSize () < smallestNumOfImagesInAClass)
+      smallestNumOfImagesInAClass = classImages[classNum]->QueueSize ();
+
     classImages[classNum]->RandomizeOrder ();
   }
 
@@ -1360,50 +1359,52 @@ void  ActiveLearning::ExtractValidationImages (MLClassList&     classes,
   // We will divide the images in each class evenly amongst the
   // different groups. With all classes having the same number of 
   // images 
-  for  (classNum = 0;  classNum < numOfClasses;  classNum++)
+  for (classNum = 0; classNum < numOfClasses; classNum++)
   {
     mlClass = classes.IdxToPtr (classNum);
 
     classImages[classNum]->RandomizeOrder ();
 
     ImageFeaturesPtr  image = NULL;
-    ImageFeaturesListIterator  ciIDX (*classImages[classNum]);
 
     int  imageCount = 0;
     int  numValidationImages4Class = 0;
 
 
-    for  (ciIDX.Reset ();  (image = ciIDX.CurPtr ())  &&  (imageCount < smallestNumOfImagesInAClass);  ++ciIDX)
+    for (auto ciIDX : *classImages[classNum])
     {
-      if  (numValidationImages4Class < validationImagesPerClass)  
+      if (imageCount > smallestNumOfImagesInAClass)
+        break;
       {
-        validationImages.PushOnBack (image);
-        numValidationImages4Class++;
-      }
-
-      else
-      {
-        if  (imageCount < smallestNumOfImagesInAClass)
+        if (numValidationImages4Class < validationImagesPerClass)
         {
-          destImages.PushOnBack (image);
+          validationImages.PushOnBack (image);
+          numValidationImages4Class++;
         }
-      }
 
-      imageCount++;
+        else
+        {
+          if (imageCount < smallestNumOfImagesInAClass)
+          {
+            destImages.PushOnBack (image);
+          }
+        }
+
+        imageCount++;
+      }
     }
   }
 
-  for  (classNum = 0;  classNum < numOfClasses;  classNum++)
+  for (classNum = 0; classNum < numOfClasses; classNum++)
   {
     delete  classImages[classNum];
+    classImages[classNum] = NULL;
   }
 
   delete  classImages;
+  classImages = NULL;
 
 }  /* ExtractValidationImages */
-
-
-
 
 
 
@@ -1413,12 +1414,11 @@ void  ActiveLearning::UpdateNonStreamingTestImages (SortOrderType       sortOrde
                                                     FeatureVectorList&  nonStreamingTestImages
                                                    )
 {
-  ImageFeaturesListIterator iIDX (nonStreamingTestImages);
-  ImageFeaturesPtr  image = NULL;
+  FeatureVectorPtr  image = NULL;
 
-  for  (iIDX.Reset ();  image = iIDX.CurPtr ();  ++iIDX)
+  for  (auto iIDX: nonStreamingTestImages)
   {
-    ImageFeaturesPtr  testImage = new ImageFeatures (*image);
+    ImageFeaturesPtr  testImage = new ImageFeatures (*iIDX);
 
     double  probability;
     double  breakTie;
@@ -1433,7 +1433,7 @@ void  ActiveLearning::UpdateNonStreamingTestImages (SortOrderType       sortOrde
                                                                  breakTie
                                                                 );
 
-    image->Probability      ((FFLOAT)probability);
+    image->Probability      ((float)probability);
     image->PredictedClass   (predictedClass);
     image->BreakTie         ((float)breakTie);
 
@@ -1448,7 +1448,7 @@ void  ActiveLearning::UpdateNonStreamingTestImages (SortOrderType       sortOrde
 
 
 
-float  ActiveLearning::GetPertinentProbability (ImageFeaturesPtr  image,
+float  ActiveLearning::GetPertinentProbability (FeatureVectorPtr  image,
                                                 SortOrderType     sortOrder
                                                )
 {
@@ -1491,11 +1491,9 @@ void  ActiveLearning::ProcessASingleRetraining (SortOrderType        sortOrder,
   {
     // Calculate Probabilities of each test image.
 
-    ImageFeaturesListIterator  imagesIDX (testImages);
-
-    for  (imagesIDX.Reset ();  imagesIDX.CurPtr (); ++imagesIDX)
+    for  (auto imagesIDX:  testImages)
     {
-      ImageFeaturesPtr  origImage = imagesIDX.CurPtr ();
+      auto  origImage = imagesIDX;
       MLClassPtr     origClass = origImage->MLClass ();
 
       ImageFeaturesPtr  testImage = new ImageFeatures (*origImage);
@@ -1519,7 +1517,7 @@ void  ActiveLearning::ProcessASingleRetraining (SortOrderType        sortOrder,
 
       predictedClass = classesInGroup.LookUpByName (predictedClass->Name ());
 
-      origImage->Probability      ((FFLOAT)probability);
+      origImage->Probability      ((float)probability);
       origImage->PredictedClass   (predictedClass);
       origImage->BreakTie         ((float)breakTie);
 
@@ -1530,7 +1528,7 @@ void  ActiveLearning::ProcessASingleRetraining (SortOrderType        sortOrder,
         int*    votes = new int[numOfClasses];
         classifier->ProbabilitiesByClass (classesInGroup, testImage, votes, probs);
         *classProbReport <<         retrainingPass
-                         << "\t" << testImage->ImageFileName ()
+                         << "\t" << testImage->ExampleFileName ()
                          << "\t" << predictedClass->Name ()
                          << "\t" << probability
                          << "\t" << breakTie;
@@ -1558,11 +1556,9 @@ void  ActiveLearning::ProcessASingleRetraining (SortOrderType        sortOrder,
 
     double  testingTimeStart = osGetSystemTimeUsed ();
 
-    ImageFeaturesListIterator  imagesIDX (validationImages);
-
-    for  (imagesIDX.Reset ();  imagesIDX.CurPtr (); ++imagesIDX)
+    for  (auto imagesIDX: validationImages)
     {
-      ImageFeaturesPtr  origImage = imagesIDX.CurPtr ();
+      auto  origImage = imagesIDX;
       MLClassPtr     origClass = origImage->MLClass ();
 
       ImageFeaturesPtr  testImage = new ImageFeatures (*origImage);
@@ -1582,9 +1578,9 @@ void  ActiveLearning::ProcessASingleRetraining (SortOrderType        sortOrder,
 
       predictedClass = classesInGroup.LookUpByName (predictedClass->Name ());
 
-      stats.Prediction (retrainingPass, pass, origClass, predictedClass, (FFLOAT)probability);
+      stats.Prediction (retrainingPass, pass, origClass, predictedClass, (float)probability);
   
-      origImage->Probability    ((FFLOAT)probability);
+      origImage->Probability    ((float)probability);
       origImage->PredictedClass (predictedClass);
       origImage->BreakTie       ((float)breakTie);
 
@@ -1601,11 +1597,10 @@ void  ActiveLearning::ProcessASingleRetraining (SortOrderType        sortOrder,
   SortImageFeatures (testImages, sortOrder);
   log.Level (20) << "ProcessASingleRetraining    Test Images Have Been Sorted." << endl;
 
-  ImageFeaturesPtr  image;
-  ImageFeaturesListIterator tiIDX (testImages);
-  FeatureVectorList  borderImages (fileDesc, false, log, 1000);
+  FeatureVectorPtr  image;
+  FeatureVectorList  borderImages (fileDesc, false);
 
-  int  imagesCopied    = 0;
+  int  imagesCopied = 0;
 
   double  probability;
   int     numNonStreamingTestImages = 0;
@@ -1620,9 +1615,14 @@ void  ActiveLearning::ProcessASingleRetraining (SortOrderType        sortOrder,
                                  );
   }
 
-
-  for  (tiIDX.Reset (); ((image = tiIDX.CurPtr ()) &&  (imagesCopied < ipr)); ++tiIDX)
+  for  (auto tiIDX: testImages)
   {
+    if (imagesCopied > ipr)
+      break;
+
+    image = tiIDX;
+
+
     probability = GetPertinentProbability (image, sortOrder);
     borderImages.PushOnBack (image);
 
@@ -1639,8 +1639,8 @@ void  ActiveLearning::ProcessASingleRetraining (SortOrderType        sortOrder,
     stats.AddAProbability (retrainingPass, 
                            pass, 
                            image->MLClass (), 
-                           (FFLOAT)probability, 
-                           image->ImageFileName (),
+                           (float)probability, 
+                           image->ExampleFileName (),
                            position,
                            percentile
                           );
@@ -1649,10 +1649,9 @@ void  ActiveLearning::ProcessASingleRetraining (SortOrderType        sortOrder,
 
   trainingImages.AddQueue (borderImages);
 
-  ImageFeaturesListIterator borderIDX (borderImages);
-  for  (borderIDX.Reset (); (image = borderIDX.CurPtr ()); ++borderIDX)
+  for  (auto borderIDX: borderImages)
   {
-    testImages.DeleteEntry (image);
+    testImages.DeleteEntry (borderIDX);
   }
 
   log.Level (10) << "ProcessASingleRetraining  Exiting." << endl;
@@ -1683,8 +1682,12 @@ void  ActiveLearning::ProcessOneImageAtAtimeOneSpecificPass
   /*  Create Initial trainingConfiguration Object */
   /************************************************/
 
-  TrainingConfiguration2Ptr  trainingConfiguration 
-        = new TrainingConfiguration2 (fileDesc, configFileName, log, false);
+  auto  trainingConfiguration = TrainingConfiguration2::Manufacture (
+    "", 
+    configFileName,
+    false,
+    log
+   );
 
   MLClassListPtr  classesInGroup = trainingConfiguration->ExtractClassList ();
 
@@ -1703,7 +1706,7 @@ void  ActiveLearning::ProcessOneImageAtAtimeOneSpecificPass
   }
 
 
-  FeatureVectorList  twoClassValidationImages (groupClasses, *validationImages, log);
+  FeatureVectorList  twoClassValidationImages (groupClasses, *validationImages);
 
 
   trainingConfiguration->EmptyTrainingClasses ();  // remove all trainingClasses,
@@ -1722,10 +1725,11 @@ void  ActiveLearning::ProcessOneImageAtAtimeOneSpecificPass
   {
     mlClass = *icIDX;
     float  weight = 1.0f;
-    trainingClass = new TrainingClass (KKStr (""),
+    trainingClass = new TrainingClass (VectorKKStr (),
                                        mlClass->Name (),
-                                       KKStr ("B"),
                                        weight,
+                                       1.0,   // Count Factor
+                                       NULL,
                                        *classesInGroup
                                       );
     trainingConfiguration->AddATrainingClass (trainingClass);
@@ -1788,7 +1792,7 @@ void  ActiveLearning::ProcessOneImageAtAtimeOneSpecificPass
   while  (streamBlockCount < numOfStreamBlocks)
   {
     streamBlockStartIDX = streamBlockEndIDX;
-    FeatureVectorListPtr streamBlockTestImages = new FeatureVectorList (fileDesc, false, log, streamingBlockSize);
+    FeatureVectorListPtr streamBlockTestImages = new FeatureVectorList (fileDesc, false);
 
     int  x = 0;
 
@@ -1827,18 +1831,16 @@ void  ActiveLearning::ProcessOneImageAtAtimeOneSpecificPass
      
       double  trainingTimeStart = osGetSystemTimeUsed ();
 
-      trainer = new TrainingProcess2 (trainingConfiguration, 
-                                      trainingImagesCopy, 
-                                      /** classesInGroup,  */
-                                      NULL, 
-                                      fileDesc,
-                                      log, 
-                                      false,
+      trainer = TrainingProcess2::CreateTrainingProcessFromTrainingExamples (
+                                      trainingConfiguration,
+                                      trainingImagesCopy,
+                                      true,   // takeOwnershipOfTrainingExamples
+                                      false,  // featuresAlreadyNormalized
                                       cancelFlag,
-                                      statusMessage
+                                      log
                                      );
 
-      trainer->CreateModelsFromTrainingData ();
+      trainer->CreateModelsFromTrainingData (TrainingProcess2::WhenToRebuild::NotValid, cancelFlag, log);
 
       double  trainingTimeEnd = osGetSystemTimeUsed ();
 
@@ -2122,9 +2124,9 @@ void  ActiveLearning::CreateInitialImages ()
   // Since we are going to be creating Data from images, then we know that the
   // FileDesc is the Plankton data set
 
-  fileDesc = FeatureFileIOPices::NewPlanktonFile (log);
+  fileDesc = FeatureFileIOPices::NewPlanktonFile();
 
-  FeatureVectorListPtr  emptyTrainingImagesList = new FeatureVectorList (fileDesc, true, log, 100);
+  FeatureVectorListPtr  emptyTrainingImagesList = new FeatureVectorList (fileDesc, true);
 
   FeatureVectorListPtr  testImages = LoadImages (testImagesRootDir,  emptyTrainingImagesList);
 
@@ -2143,8 +2145,8 @@ void  ActiveLearning::CreateInitialImages ()
     validationImages = NULL;
   }
 
-  masterTestImages = new FeatureVectorList (fileDesc, true, log, testImages->QueueSize ());
-  validationImages = new FeatureVectorList (fileDesc, true, log, mlClasses->QueueSize () * validationImagesPerClass + 5);
+  masterTestImages = new FeatureVectorList (fileDesc, true);
+  validationImages = new FeatureVectorList (fileDesc, true);
 
   ExtractValidationImages (*mlClasses, *testImages, *masterTestImages, *validationImages);
 
@@ -2260,7 +2262,7 @@ void  ActiveLearning::ProcessStatusFile (int     argc,
   {
     //  We are doing our initial StartUp. So lets set up the Status file.
 
-    ProcessCmdLineParameters (argc, argv);
+    InitalizeApplication (argc, argv);
  
     if  (baseResultsFileName.Empty ())
     {
@@ -2321,10 +2323,7 @@ void  ActiveLearning::ProcessStatusFile (int     argc,
                                                     );
     }
 
-    masterTrainingConfiguration = new TrainingConfiguration2 (fileDesc, 
-                                                             configFileName, 
-                                                             log
-                                                            );
+    masterTrainingConfiguration = TrainingConfiguration2::Manufacture ("", configFileName, false, log);
 
     delete  mlClasses;
     mlClasses = masterTrainingConfiguration->ExtractClassList ();
@@ -2353,7 +2352,7 @@ void  ActiveLearning::ProcessStatusFile (int     argc,
       osCreateDirectoryPath (iipcSubDirName);
 
 
-      // Lets set up Intial Assignments File 
+      // Lets set up Initial Assignments File 
       PassAssignmentsPtr  assignments = GetAssignments (iipc);
       delete  assignments;
 
@@ -2403,7 +2402,7 @@ void  ActiveLearning::ProcessStatusFile (int     argc,
     *report << "FileFormat                        [" << fileFormat->DriverName ()           << "]."  << endl;
 
     if  (performStreaming)
-      *report << "Perform Streamin      Block Size  [" << streamingBlockSize                << "]." << endl;
+      *report << "Perform Streaming     Block Size  [" << streamingBlockSize                << "]." << endl;
 
     *report << endl;
     *report << "Validation Image Stats:"  << endl;
@@ -2423,7 +2422,7 @@ void  ActiveLearning::ProcessStatusFile (int     argc,
     fclose (statusFile);
     LoadCurrentStatusFile ();
     LoadInitialImages ();
-    masterTrainingConfiguration = new TrainingConfiguration2 (fileDesc, configFileName, log);
+    masterTrainingConfiguration =  TrainingConfiguration2::Manufacture ("", configFileName, false, log);
     delete  mlClasses;
     mlClasses = masterTrainingConfiguration->ExtractClassList ();
     ourProcessNum = numOfProcesses;
@@ -2442,7 +2441,7 @@ void  ActiveLearning::ProcessStatusFile (int     argc,
 
 
 // 2004-12-11  kk
-// See Header file for descrotion of this constructor.
+// See Header file for description of this constructor.
 void  ActiveLearning::ProcessStatusFile ()   
 {
   FILE* statusFile = OpenStatusFile ();
@@ -2462,7 +2461,7 @@ void  ActiveLearning::ProcessStatusFile ()
     fclose (statusFile);
     LoadCurrentStatusFile ();
     LoadInitialImages ();
-    masterTrainingConfiguration = new TrainingConfiguration2 (fileDesc, configFileName, log);
+    masterTrainingConfiguration = TrainingConfiguration2::Manufacture ("", configFileName, false, log);
     delete  mlClasses;
     mlClasses = masterTrainingConfiguration->ExtractClassList ();
   }  

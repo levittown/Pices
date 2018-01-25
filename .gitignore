@@ -67,4 +67,9 @@ Apps/ChartControls/obj/EmbeddedRelease/DesignTimeResolveAssemblyReferencesInput.
 Python/.idea/.name
 PicesDataBase/PicesDataBase.jfm
 *.jfm
+<<<<<<< HEAD
 *.ipch
+=======
+*.jfm
+ipch/ZLIB123-fc3f97cf/ZLIB123-7f39be51.ipch
+>>>>>>> origin/64k

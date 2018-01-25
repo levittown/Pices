@@ -46,7 +46,7 @@ PicesPredictionList::PicesPredictionList (int  size): List<PicesPrediction^> (si
 
 
 PicesPredictionList::PicesPredictionList (ClassProbList&  predictions):
-       List<PicesPrediction^> (predictions.size ())
+       List<PicesPrediction^> ((int)predictions.size ())
 
 {
   ClassProbList::const_iterator  idx;
