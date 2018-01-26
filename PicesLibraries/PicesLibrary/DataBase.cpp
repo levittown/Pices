@@ -972,8 +972,6 @@ bool  DataBase::ResultSetLoad (ConstCharStarArray    fieldNames)
 
 
 
-
-
 /** @brief   Use instead of 'ResultSetLoad'; returns all fields plus their names. */
 bool  DataBase::ResultSetLoadFieldNames (VectorKKStr&  fieldNames)
 {
