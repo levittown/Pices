@@ -358,17 +358,6 @@ void  RandomSearch::InitalizeApplication (kkint32 argc, char** argv)
 
 
 
-RandomSearch::~RandomSearch ()
-{
-  delete results;
-  delete resultFile;
-  delete data;
-  delete mlClasses;
-  delete config;
-}
-
-
-
 void  RandomSearch::BuildOtherOrderings ()
 {
   bool  successful;
@@ -501,8 +490,7 @@ void  RandomSearch::DisplayCommandUsage ()
 
 
 
-bool  RandomSearch::ProcessCmdLineParameter (char   parmSwitchCode, 
-                                             KKStr  parmSwitch, 
+bool  RandomSearch::ProcessCmdLineParameter (KKStr  parmSwitch, 
                                              KKStr  parmValue
                                             )
 {
@@ -1726,11 +1714,6 @@ void  RandomSearch::Run0 ()
 
 
 
-
-
-
-
-
 void  RandomSearch::Run1 ()
 {
   if  (results->Size () < NumOfRandomOnesToCreate)
@@ -1955,7 +1938,6 @@ void  RandomSearch::Run2 ()
 
 
 
-
 void  RandomSearch::Run3 ()
 {
   ExpandedUnSetAll ();
@@ -2010,8 +1992,6 @@ void  RandomSearch::Run3 ()
     PerformWrapper (best20Result);
   }
 }  /* Run3 */
-
-
 
 
 
