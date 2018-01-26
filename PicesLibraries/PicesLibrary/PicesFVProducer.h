@@ -51,7 +51,7 @@ namespace  MLL
 
     virtual  const type_info*  FeatureVectorListTypeId () const;
 
-    virtual  FeatureVectorListPtr  ManufacturFeatureVectorList (bool owner) const;
+    virtual  FeatureVectorListPtr  ManufacturFeatureVectorList (bool  owner) const;
 
     virtual  kkint16  Version ()  const {return _PicesFVProducer_VersionNum_;}
 

@@ -53,7 +53,7 @@ ExtractedImage::~ExtractedImage ()
 
 
 
-kkMemSize  ExtractedImage::MemoryConsumedEstimated ()  const
+kkMemSize ExtractedImage::MemoryConsumedEstimated ()  const
 {
   kkMemSize  m = sizeof (*this);
   if  (image)

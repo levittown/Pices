@@ -114,7 +114,7 @@ void  FeatureStats::AddToAccumulators (ResultLine&  result)
   if  (result.Parent2 ())
   {
     // Looks like a joining of two results, 
-    // notr interestied in these results.
+    // not interested in these results.
     return;
   }
 

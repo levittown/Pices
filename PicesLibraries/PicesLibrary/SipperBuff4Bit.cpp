@@ -187,11 +187,9 @@ union  SipperBuff4Bit::OpRec
 #pragma pack(pop)
 #pragma pack(show)
 
-
 uchar*  SipperBuff4Bit::convTable4BitTo8Bit = NULL;
 uchar*  SipperBuff4Bit::convTable8BitTo4Bit = NULL;
 uchar*  SipperBuff4Bit::compensationTable   = NULL;
-
 
 SipperBuff4Bit::SipperBuff4Bit (InstrumentDataManagerPtr  _instrumentDataManager,
                                 RunLog&                   _log
@@ -216,8 +214,6 @@ SipperBuff4Bit::SipperBuff4Bit (InstrumentDataManagerPtr  _instrumentDataManager
   PrintSizeInfo ();
   byteOffset = 0;
 }
-
-
 
 
 
@@ -297,6 +293,7 @@ SipperBuff4Bit::~SipperBuff4Bit (void)
   delete rawPixelRecBuffer;    rawPixelRecBuffer = NULL;
   delete rawStr;               rawStr            = NULL;
 }
+
 
 
 void  SipperBuff4Bit::AllocateRawPixelRecBuffer (kkuint32 size)
@@ -411,8 +408,6 @@ const uchar*  SipperBuff4Bit::CompensationTable ()
 
 
 
-
-
 void  SipperBuff4Bit::ExitCleanUp ()
 {
   GlobalGoalKeeper::StartBlock ();
@@ -421,7 +416,6 @@ void  SipperBuff4Bit::ExitCleanUp ()
   delete  compensationTable;    compensationTable   = NULL;
   GlobalGoalKeeper::EndBlock ();
 }
-
 
 
 
@@ -452,12 +446,6 @@ bool  SipperBuff4Bit::FileFormatGood ()
 
   return  goodLinesInARow > 19;
 }  /* FileFormatGood */
-
-
-
-
-
-
 
 
 
@@ -522,8 +510,6 @@ void  SipperBuff4Bit::ProcessInstrumentDataWord (const OpRec&  rec)
 
 
 
-
-
 void  SipperBuff4Bit::ProcessRawPixelRecs (kkuint16  numRawPixelRecs,
                                            uchar*  lineBuff,
                                            kkuint32  lineBuffSize,
@@ -553,7 +539,7 @@ void  SipperBuff4Bit::ProcessRawPixelRecs (kkuint16  numRawPixelRecs,
 
 
 
-void  SipperBuff4Bit::GetNextScanLine (uchar*  lineBuff,
+void  SipperBuff4Bit::GetNextScanLine (uchar*    lineBuff,
                                        kkuint32  lineBuffSize,
                                        kkuint32& lineLen
                                       )
@@ -562,7 +548,7 @@ void  SipperBuff4Bit::GetNextScanLine (uchar*  lineBuff,
   uchar  opCode = 0;
   OpRec  rec;
   OpRec  rec2;
-  kkuint32 recsRead = 0;
+  size_t recsRead = 0;
 
   kkuint32  bufferLineLen = 0;
 
@@ -573,11 +559,18 @@ void  SipperBuff4Bit::GetNextScanLine (uchar*  lineBuff,
 
   curRowByteOffset = byteOffset;
 
+  if (feof (inFile)) 
+  {
+    eof = true;
+    return;
+  }
+
   do
   {
     recsRead = (kkuint32)fread (&rec, sizeof (rec), 1, inFile);
     if  (recsRead == 0)
     {
+      eol = true;
       break;
     }
 
@@ -714,16 +707,12 @@ void  SipperBuff4Bit::GetNextScanLine (uchar*  lineBuff,
 
 
 
-
-
-
-
-void  SipperBuff4Bit::GetNextLine (uchar*   lineBuff,
-                                   kkuint32 lineBuffSize,
+void  SipperBuff4Bit::GetNextLine (uchar*     lineBuff,
+                                   kkuint32   lineBuffSize,
                                    kkuint32&  lineSize,
-                                   kkuint32 colCount[],
+                                   kkuint32   colCount[],
                                    kkuint32&  pixelsInRow,
-                                   bool&    flow
+                                   bool&      flow
                                   )
 {
   GetNextScanLine (lineBuff, lineBuffSize, lineSize);
@@ -739,8 +728,3 @@ void  SipperBuff4Bit::GetNextLine (uchar*   lineBuff,
 
   return;
 }  /* GetNextLine */
-
-
-
-
-

@@ -63,11 +63,9 @@ namespace  ImageExtractionManager
                       float       _predClass2Prob
                      );
     
-
     /**@brief  Turns over ownership of FeatureVector to the caller.  */
     ImageFeaturesPtr  FeatureVectorGiveOwnership ();
     RasterSipperPtr   ImageGiveOwnership ();
-
 
   private:
     kkuint64          byteOffsetFirstScanRow;

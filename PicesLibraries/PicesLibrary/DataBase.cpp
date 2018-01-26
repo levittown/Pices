@@ -972,8 +972,6 @@ bool  DataBase::ResultSetLoad (ConstCharStarArray    fieldNames)
 
 
 
-
-
 /** @brief   Use instead of 'ResultSetLoad'; returns all fields plus their names. */
 bool  DataBase::ResultSetLoadFieldNames (VectorKKStr&  fieldNames)
 {
@@ -3596,7 +3594,6 @@ DataBaseImagePtr  DataBase::ImagesLocateClosestImage (const KKStr&  sipperFileNa
                                                       StrFormatInt (scanCol,  "ZZZZZZZ0") + 
                                                  ")";
   
-
   KKStrMatrixPtr  results = QueryStatementKKStr (sqlStr, NULL);
   if  (results == NULL)
     return NULL;
@@ -3612,7 +3609,6 @@ DataBaseImagePtr  DataBase::ImagesLocateClosestImage (const KKStr&  sipperFileNa
 
   return  ImageLoad (imageFileNameInDataBase);
 }  /* ImagesLocateClosestImage */
-
 
 
 
@@ -3638,7 +3634,6 @@ DataBaseImagePtr  DataBase::ImageLoad (kkuint32  imageId)
 
   return  dbImage;
 }  /* ImageLoad */
-
 
 
 
@@ -3668,7 +3663,6 @@ DataBaseImagePtr  DataBase::ImageLoad (const KKStr&   imageFileName)
 
   return  dbImage;
 }  /* ImageLoad */
-
 
 
 
@@ -4532,7 +4526,7 @@ void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruise
   }
   endValues.push_back (9999999.99f);
 
-  size_t  sizeBucketCount = startValues.size ();
+  kkuint32  sizeBucketCount = (kkuint32)startValues.size ();
 
   kkint32  maxColIdx = Max(downCastIdx, bucketIdx, bucketDepthIdx, imageCountIdx, totalPixelCountIdx, totalFilledAreaIdx, firstSizeBucketIdx);
 

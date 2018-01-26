@@ -91,7 +91,7 @@ cli::array<float>^  PicesAbundanceCorrectionMatrix::ProbOfDetection ()
 {
   const std::vector<float>&  v = abundanceMatrix->ProbOfDetection ();
   cli::array<float>^  result = gcnew cli::array<float> ((int)v.size ());
-  for  (kkuint32 x = 0;  x < v.size ();  ++x)
+  for  (auto x = 0;  x < v.size ();  ++x)
     result[x] = v[x];
 
   return  result;

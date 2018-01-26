@@ -17,19 +17,17 @@
 class  RandomSearch: public Application
 {
 public:
-  RandomSearch (int     argc,
-                char**  argv
-               );
+  RandomSearch ();
   
   ~RandomSearch ();
 
-
+  virtual void  InitalizeApplication (kkint32 argc,  char** argv);
 
   bool                       AlreadyNormalized ()  const {return alreadyNormalized;}
   KKStr                      ConfigFileName    ()  const {return configFileName;}
   TrainingConfiguration2Ptr  Config            ()  const {return config;}
   FeatureVectorListPtr       Data              ()  const {return data;}
-  MLClassListPtr          MLClasses      ()  const {return mlClasses;}
+  MLClassListPtr             MLClasses         ()  const {return mlClasses;}
   int                        NumOfFolds        ()  const {return numOfFolds;}
   KKStr                      ResultFileName    ()  const {return resultFileName;}
 
@@ -112,8 +110,7 @@ private:
   void   PerformWrapper (ResultLinePtr  seedResult);
  
 
-  virtual  bool    ProcessCmdLineParameter (char    parmSwitchCode, 
-                                            KKStr  parmSwitch, 
+  virtual  bool    ProcessCmdLineParameter (KKStr  parmSwitch,
                                             KKStr  parmValue
                                            );
 
@@ -176,7 +173,7 @@ private:
 
   float                     highAccuracy;       // Highest Accuracy encountered during search.
 
-  MLClassListPtr         mlClasses;       // List of all classes.
+  MLClassListPtr            mlClasses;       // List of all classes.
  
   KKStr                     lockFileName;
   int                       lockFile;

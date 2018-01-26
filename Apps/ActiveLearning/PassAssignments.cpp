@@ -21,15 +21,13 @@ using namespace KKB;
 
 
 #include  "OSservices.h"
-
-
 #include  "PassAssignments.h"
 
+#include  "MLClass.h"
 
 
-
-PassAssignments::PassAssignments (FileDescPtr         _fileDesc,
-                                  KKStr              _fileName,
+PassAssignments::PassAssignments (FileDescConstPtr    _fileDesc,
+                                  KKStr               _fileName,
                                   FeatureVectorList&  _images,
                                   RunLog&             _log,
                                   bool&               _successfull
@@ -37,7 +35,7 @@ PassAssignments::PassAssignments (FileDescPtr         _fileDesc,
 
   assignments                     (NULL),
   fileDesc                        (_fileDesc),
-  mlClasses                    (),
+  mlClasses                       (),
   imagesPerClass                  (NULL),
   initialTrainingImagesPerClass   (-1),
   log                             (_log),
@@ -61,9 +59,9 @@ PassAssignments::PassAssignments (FileDescPtr         _fileDesc,
 
 
 
-PassAssignments::PassAssignments (FileDescPtr         _fileDesc,
+PassAssignments::PassAssignments (FileDescConstPtr    _fileDesc,
                                   FeatureVectorList&  _images,
-                                  MLClassList&     _mlClasses,
+                                  MLClassList&        _mlClasses,
                                   int                 _numOfRandomPasses,
                                   int                 _initialTrainingImagesPerClass,
                                   bool                _usePriorForIIPC,
@@ -72,7 +70,7 @@ PassAssignments::PassAssignments (FileDescPtr         _fileDesc,
 
   assignments                     (NULL),
   fileDesc                        (_fileDesc),
-  mlClasses                    (_mlClasses),
+  mlClasses                       (_mlClasses),
   initialTrainingImagesPerClass   (_initialTrainingImagesPerClass),
   log                             (_log),
   numOfClasses                    (-1),
@@ -129,7 +127,7 @@ PassAssignments::PassAssignments (FileDescPtr         _fileDesc,
 
       for  (int idx = 0;  ((idx < numImagesToExtract)  &&  (numInRandomPass < totalNumOfInitialTrainingImages))  ;  idx++)
       {
-        assignments[pass][numInRandomPass] = new KKStr (imagesInClass->IdxToPtr (idx)->ImageFileName ());
+        assignments[pass][numInRandomPass] = new KKStr (imagesInClass->IdxToPtr (idx)->ExampleFileName ());
         numInRandomPass++;
       }
 
@@ -519,37 +517,29 @@ void  PassAssignments::ExtractInitialTrainingAndTestImages (int                 
   int  estNumOfTestImages    = 10 + masterList.QueueSize () * mlClasses.QueueSize ()  / numOfClasses - numOfTrainigImages;
   
   
-  initialTraingImages = new FeatureVectorList (fileDesc, false, log, numOfTrainigImages);
-  testImages          = new FeatureVectorList (fileDesc, false, log, estNumOfTestImages);
+  initialTraingImages = new FeatureVectorList (fileDesc, false);
+  testImages          = new FeatureVectorList (fileDesc, false);
   
-  MLClassPtr  mlClass = NULL;
-
-  MLClassListIterator  icIDX (mlClasses);
-
-  for  (icIDX.Reset ();  mlClass = icIDX.CurPtr ();  ++icIDX)
+  for  (auto mlClass : mlClasses)
   {
     FeatureVectorListPtr  imagesInClass = masterList.ExtractExamplesForAGivenClass (mlClass);
 
-    FeatureVectorPtr  image = NULL;
-
-    ImageFeaturesListIterator imagesIDX (*imagesInClass);
-
-    for  (imagesIDX.Reset ();  image = imagesIDX.CurPtr ();  ++imagesIDX)
+    for  (auto imagesIDX: *imagesInClass)
     {
-      if  (ImageInPass (image->ImageFileName (), pass))
+
+      if  (ImageInPass (imagesIDX->ExampleFileName (), pass))
       {
-        initialTraingImages->PushOnBack (image);
+        initialTraingImages->PushOnBack (imagesIDX);
       }
       else
       {
-        testImages->PushOnBack (image);
+        testImages->PushOnBack (imagesIDX);
       }
     }
 
     delete  imagesInClass;
+    imagesInClass = NULL;
   }
-
-  testImages->Compress ();
 }  /* ExtractInitialTrainingAndTestImages */
 
 

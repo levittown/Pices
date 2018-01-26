@@ -32,7 +32,7 @@ typedef  ResultLineTree*  ResultLineTreePtr;
 //                                                                                 *
 //    ResultLine     - Represents the evaluation of one combination of features.   *
 //                                                                                 *
-//    ResultLineTree - A tree structure that conatins instances of 'ResultLine'    *
+//    ResultLineTree - A tree structure that contains instances of 'ResultLine'    *
 //                     where 'id' from ResultLine is used as index.                *
 //                                                                                 *
 //    ResultLineList - A structure used to contain lists of 'ResultLine' instances.*
@@ -51,13 +51,14 @@ typedef  ResultLineTree*  ResultLineTreePtr;
 class ResultLine
 {
 public:
-  ResultLine (int                 _id,
-              ResultLinePtr       _parent1,
-              ResultLinePtr       _parent2,
-              ResultLinePtr       _family,
-              CrossValidation&    _cv,
-              FeatureNumListPtr   _features,
-              RunLog&             log
+  ResultLine (int                _id,
+              ResultLinePtr      _parent1,
+              ResultLinePtr      _parent2,
+              ResultLinePtr      _family,
+              CrossValidation&   _cv,
+              FileDescConstPtr   _fileDesc,
+              FeatureNumListPtr  _features,
+              RunLog&            log
              );
 
   ResultLine (KKStr           txt,
@@ -118,15 +119,15 @@ private:
   ResultLinePtr  TrackDownFamily ();
 
 
-  static  FileDescConstPtr  fileDesc;
-  static  MLClassListPtr    mlClasses;
-  static  int               numOfClasses;
-  static  RunLog&           log;
+  static  FileDescConstPtr fileDesc;
+  static  MLClassListPtr   mlClasses;
+  static  int              numOfClasses;
+  static  RunLog&          log;
 
   static
-  void  InitializeMLClasses (FileDescConstPtr  _fileDesc,
-                             MLClassList&      _mlClasses,
-                             RunLog&           _log
+  void  InitializeMLClasses (FileDescConstPtr _fileDesc,
+                             MLClassList&     _mlClasses,
+                             RunLog&          _log
                             );
 
   friend class ResultLineTree;
@@ -140,7 +141,7 @@ private:
                                          // has been trimmed(Expanded).
 
   ResultLinePtr      family;             // Pointer to result line that this 'ResultLine'
-                                         // ultimately descends from. This could be either 
+                                         // ultimately decends from. This could be either 
                                          // an originally RandomLy selected set of 
                                          // features, or the union of two other 'ResultLine'
 
@@ -198,7 +199,6 @@ private:
 
 
 
-
 class  CompareResultLine 
 {
 public:
@@ -207,9 +207,6 @@ public:
     return (*(resultLine->Features ()));
   }
 };  /* CompareResultLine */
-
-
-
 
 
 
@@ -230,11 +227,11 @@ public:
                   RunLog&  _log
                  );
 
-  ResultLineTree (KKStr             _fileName,
-                  FileDescConstPtr  _fileDesc,
-                  MLClassList&      _mlClasses,
-                  bool&             _successful,
-                  RunLog&           _log
+  ResultLineTree (KKStr            _fileName,
+                  FileDescConstPtr _fileDesc,
+                  MLClassList&     _mlClasses,
+                  bool&            _successful,
+                  RunLog&          _log
                  );
 
   float   HighestAccuracy         () const  {return highestAccuracy;}
@@ -280,20 +277,12 @@ typedef  Iterator<ResultLine, CompareResultLine, FeatureNumList>  ResultLineTree
 
 
 
-
-
-
-
-
-
 class  ResultLineList: public KKQueue<ResultLine>
 {
 public:
   ResultLineList ();
 
-  ResultLineList (bool _bool,
-                  int  _size
-                 );
+  ResultLineList (bool _bool);
 
   ResultLineList (ResultLineTree*  resultLineTree);
 
@@ -311,8 +300,5 @@ private:
 };
 
 typedef  ResultLineList*  ResultLineListPtr;
-
-
-
 
 #endif

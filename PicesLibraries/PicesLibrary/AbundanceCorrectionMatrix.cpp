@@ -58,7 +58,7 @@ AbundanceCorrectionMatrix::AbundanceCorrectionMatrix (MLClassList& _classes,
     }
   }
 
-  numClasses = (kkuint32)(classes.size () + 1);
+  numClasses = (kkuint32)classes.size () + 1;
   AllocateMemory ();
 }
 

@@ -173,6 +173,7 @@ FileDescConstPtr  PicesFVProducer::DefineFileDescStatic ()
 }
 
 
+
 FeatureVectorListPtr  PicesFVProducer::ManufacturFeatureVectorList (bool owner) const
 {
   return  new ImageFeaturesList (FileDesc (), owner);

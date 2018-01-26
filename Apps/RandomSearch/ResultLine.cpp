@@ -1,10 +1,10 @@
-#include  "FirstIncludes.h"
-#include  <stdlib.h>
-#include  <stdio.h>
-#include  <vector>
-#include  <iostream>
-#include  <fstream>
-#include  "MemoryDebug.h"
+#include "FirstIncludes.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <vector>
+#include <iostream>
+#include <fstream>
+#include "MemoryDebug.h"
 using namespace std;
 
 
@@ -15,7 +15,8 @@ using namespace KKB;
 
 
 #include "CrossValidation.h"
-using namespace  KKMLL;
+#include "FileDesc.h"
+using namespace KKMLL;
 
 #include "ResultLine.h"
 
@@ -90,13 +91,14 @@ void  ResultLine::InitializeMLClasses (FileDescConstPtr _fileDesc,
 
 
 
-ResultLine::ResultLine (int                 _id,
-                        ResultLinePtr       _parent1,
-                        ResultLinePtr       _parent2,
-                        ResultLinePtr       _family,
-                        CrossValidation&    _cv,
-                        FeatureNumListPtr   _features,
-                        RunLog&             log
+ResultLine::ResultLine (int                _id,
+                        ResultLinePtr      _parent1,
+                        ResultLinePtr      _parent2,
+                        ResultLinePtr      _family,
+                        CrossValidation&   _cv,
+                        FileDescConstPtr   _fileDesc,
+                        FeatureNumListPtr  _features,
+                        RunLog&            log
                        ):
 
   accuracy         (0.0f),
@@ -116,7 +118,7 @@ ResultLine::ResultLine (int                 _id,
   ConfusionMatrix2ConstPtr  cm = _cv.ConfussionMatrix ();
 
   MLClassList  cmMLClasses (cm->MLClasses ());
-  InitializeMLClasses (fileDesc, cmMLClasses, log);
+  InitializeMLClasses (_fileDesc, cmMLClasses, log);
   accuracy         = (float)cm->Accuracy ();
   accuracyWeighted = cm->AccuracyClassWeightedEqually ();
 
@@ -218,7 +220,7 @@ ResultLine::ResultLine (KKStr           txt,
   }
   else
   {
-    numOfFeatures           = txt.ExtractTokenInt ("\t");
+    numOfFeatures          = txt.ExtractTokenInt ("\t");
     KKStr  featureListType = txt.ExtractToken ("\t");
     featureListType.Upper ();
 
@@ -482,8 +484,8 @@ void  ResultLine::BuildExtendedFamilyList (int           deapth,
 CompareResultLine  cresultComparator;
                                 
 
-ResultLineTree::ResultLineTree (bool      _owner,
-                                RunLog&   _log
+ResultLineTree::ResultLineTree (bool     _owner,
+                                RunLog&  _log
                               ):
    RBTree<ResultLine, CompareResultLine, FeatureNumList> (cresultComparator, _owner),
    highestAccuracy           (0.0f),
@@ -497,9 +499,9 @@ ResultLineTree::ResultLineTree (bool      _owner,
 
 
 
-ResultLineTree::ResultLineTree (KKStr             _fileName,
-                                FileDescConstPtr  _fileDesc,
-                                MLClassList&      _mlClasses,
+ResultLineTree::ResultLineTree (KKStr            _fileName,
+                                FileDescConstPtr _fileDesc,
+                                MLClassList&     _mlClasses,
                                 bool&            _successful,
                                 RunLog&          _log
                                ):
@@ -637,7 +639,6 @@ void  ResultLineTree::Load (const KKStr& fileName,
 
 
 
-
 void  ResultLineTree::Save (const KKStr& fileName,
                             bool&         successful
                            )
@@ -711,9 +712,7 @@ ResultLineList::ResultLineList ():
 
 
 
-ResultLineList::ResultLineList (bool _bool,
-                                int  _size
-                               ):
+ResultLineList::ResultLineList (bool _bool):
   KKQueue<ResultLine> (_bool)
 {
 }
@@ -738,6 +737,7 @@ ResultLineList::ResultLineList (ResultLineTreePtr  resultLineTree,
                                 int                maxId
                                ):
   KKQueue<ResultLine> (false)
+
 {
 
   if  (maxId < 0)
