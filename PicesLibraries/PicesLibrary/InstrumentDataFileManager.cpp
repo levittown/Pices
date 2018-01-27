@@ -21,7 +21,6 @@ using namespace std;
 using namespace KKB;
 
 
- 
 #include "InstrumentDataFileManager.h"
 
 #include "InstrumentData.h"
@@ -222,7 +221,7 @@ VectorKKStr  InstrumentDataFileManager::GetListOfSipperFiles (RunLog&  log)
 KKStr  InstrumentDataFileManager::SipperFileRootNameFromSipperImageFileName (const KKStr&  sipperFileName)
 {
   KKStr rootFileName = osGetRootName (sipperFileName);
-  kkint32  x = rootFileName.LocateLastOccurrence ('_');
+  auto  x = rootFileName.LocateLastOccurrence ('_');
 
   if  (x < 1)
     return  "";

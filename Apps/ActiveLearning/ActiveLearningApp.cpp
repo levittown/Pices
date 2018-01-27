@@ -55,32 +55,27 @@ void  CopyDirectory (KKStr  srcDir,
 
   if  (fileList)
   {
-    StringListIterator  flIDX (*fileList);
-
-    for  (flIDX.CurPtr (); flIDX.CurPtr (); ++flIDX)
+    for  (auto fileName : *fileList)
     {
-      KKStr  fileName = flIDX.CurPtr ();
-
-      osCopyFileBetweenDirectories (fileName, srcDir, destDir);
+      osCopyFileBetweenDirectories (*fileName, srcDir, destDir);
       // trainingImages.AddEntry (new ImageName (fileName, destDir));
     }
+    delete fileList;
+    fileList = NULL;
   }
 
 
   KKStrListPtr  subDirectories = osGetListOfDirectories (fileSpec);
-  StringListIterator  sdIDX (*subDirectories);
   
-  for  (sdIDX.Reset ();  sdIDX.CurPtr (); ++sdIDX)
+  for  (auto sdIDX: *subDirectories)
   {
-    KKStr  dirName (*(sdIDX.CurPtr ()));
+    KKStr  dirName = *sdIDX;
 
-    KKStr  newSrcDir (srcDir);
-    newSrcDir << dirName << DS;
+    KKStr  newSrcDir = osAddSlash (srcDir) + dirName;
 
-    KKStr  newDestDir (srcDir);
-    newDestDir << dirName << DS;
+    KKStr  newDestDir  = osAddSlash (srcDir) + dirName;
 
-    CopyDirectory (srcDir, destDir);
+    CopyDirectory (osAddSlash (srcDir), osAddSlash (destDir));
   }
 }  /* CopyDirectory */
 
@@ -96,7 +91,9 @@ int  main (int argc,  char** argv)
     _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); 
   #endif
 
-  ActiveLearning activeLearner (argc, argv);
+  ActiveLearning activeLearner;
+
+  activeLearner.InitalizeApplication (argc, argv);
 
   if  (activeLearner.Abort ())
   {

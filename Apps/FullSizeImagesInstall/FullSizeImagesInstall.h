@@ -1,5 +1,5 @@
-#if  !defined(_IMPORTGPS_DATA_)
-#define  _IMPORTGPS_DATA_
+#if  !defined(_FULLSIZEIMAGESINSTALL_)
+#define  _FULLSIZEIMAGESINSTALL_
 
 #include "PicesApplication.h"
 #include "DataBase.h"

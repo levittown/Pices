@@ -20,7 +20,7 @@ using namespace KKB;
 #include "JobDesc.h"
 
 #include "MLClass.h"
-using namespace MLL;
+using namespace KKMLL;
 
 
 
@@ -42,7 +42,7 @@ JobDesc::JobDesc (JobDesc&  j):
 
 
 JobDesc::JobDesc (MLClassList&  mlClasses,
-                  KKStr           l
+                  KKStr         l
                  ):
   jobID      (-1),
   curStatus  ('0'),

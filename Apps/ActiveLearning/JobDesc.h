@@ -2,12 +2,12 @@
 #define  _JOBDESC_
 
 #include  "KKQueue.h"
-#include  "Str.h"
+#include  "KKStr.h"
 #include  "SortOrderType.h"
 
 
-#ifndef  _MLCLASS_
-namespace MLL
+#if  !defined(_MLCLASS_)
+namespace KKMLL
 {
   class  MLClass;
   typedef  MLClass*  MLClassPtr;
@@ -28,8 +28,8 @@ public:
   JobDesc ();
 
   /**  @brief  Creates a Job from a Input KKStr. */
-  JobDesc (MLL::MLClassList&  imageClasses,
-           KKStr                 l
+  JobDesc (KKMLL::MLClassList&  imageClasses,
+           KKStr                l
           );
 
   JobDesc (SortOrderType  _sortOrder,
@@ -42,9 +42,9 @@ public:
   char                CurStatus                     () const  {return  curStatus;}
   int                 InitialTrainingImagesPerClass () const  {return  initialTrainingImagesPerClass;}
   char                JobType                       () const  {return  jobType;}
-  MLL::MLClassPtr  LeftClass                     () const  {return  leftClass;}
+  KKMLL::MLClassPtr   LeftClass                     () const  {return  leftClass;}
   int                 NewImagesPerRetraining        () const  {return  newImagesPerRetraining;}
-  MLL::MLClassPtr  RightClass                    () const  {return  rightClass;}
+  KKMLL::MLClassPtr   RightClass                    () const  {return  rightClass;}
   int                 Pass                          () const  {return  pass;}
   SortOrderType       SortOrder                     () const  {return  sortOrder;}
    
@@ -69,12 +69,12 @@ private:
                         *   'F' = Final Report
                         */
 
-  MLL::MLClassPtr   leftClass;
+  KKMLL::MLClassPtr    leftClass;
 
 
   int                  newImagesPerRetraining;
 
-  MLL::MLClassPtr   rightClass;
+  KKMLL::MLClassPtr    rightClass;
 
   int                  pass;
 

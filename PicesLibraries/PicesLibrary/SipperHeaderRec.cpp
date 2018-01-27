@@ -240,7 +240,7 @@ void  SipperHeaderRec::ParseHeaderStr (const KKStr&  s)
 
     KKStr  fieldValue = "";
 
-    kkint32 commaIdx = fieldName.LocateCharacter (',');
+    auto commaIdx = fieldName.LocateCharacter (',');
     if  (commaIdx < 0)
     {
       if  (x < fields.size ())

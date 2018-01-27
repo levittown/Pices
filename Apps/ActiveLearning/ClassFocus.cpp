@@ -27,15 +27,13 @@ using namespace KKB;
 
 
 
-
-
 ClassFocus::ClassFocus (int _numOfClasses):
 
    counts              (new uint[_numOfClasses]),
    numOfClasses        (_numOfClasses),
    numOfSupportVectors (0),
    predicted           (new uint*[_numOfClasses]),
-   trainingImages      (true, 5),
+   trainingImages      (true),
    probabilities       (NULL),
 //   imageFileNames      (NULL),
 //   nonStreamPlaces     (NULL),
@@ -197,12 +195,12 @@ float  ClassFocus::Probabilities (int  classIDX,
 
 
 
-void  ClassFocus::AddProbability (int            _classIDX,
-                                  MLClassPtr  _mlClass,
+void  ClassFocus::AddProbability (int           _classIDX,
+                                  MLClassPtr    _mlClass,
                                   const KKStr&  _imageFileName,
-                                  float          _probability,
-                                  int            _nonStreamPlace,
-                                  float          _percentile
+                                  float         _probability,
+                                  int           _nonStreamPlace,
+                                  float         _percentile
                                  )
 {
   ValidateClassIDX ("AddProbability", _classIDX);

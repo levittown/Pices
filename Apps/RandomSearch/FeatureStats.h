@@ -13,12 +13,12 @@ typedef  OneFeatureStat*  OneFeatureStatPtr;
 class FeatureStats
 {
 public:
-  FeatureStats (FileDescPtr      _fileDesc,
+  FeatureStats (FileDescConstPtr _fileDesc,
                 ResultLineTree&  _results,
                 RunLog&          _log
                );
 
-  FeatureStats (FileDescPtr      _fileDesc,
+  FeatureStats (FileDescConstPtr _fileDesc,
                 ResultLineList&  _results,
                 RunLog&          _log
                );
@@ -69,10 +69,10 @@ private:
                             );
 
 
-  FileDescPtr        fileDesc;
-  int                numOfFeatures;
-  RunLog&            log;
-  OneFeatureStatPtr  stats;
+  FileDescConstPtr  fileDesc;
+  int               numOfFeatures;
+  RunLog&           log;
+  OneFeatureStatPtr stats;
 };  /* FeatureStats */
 
 

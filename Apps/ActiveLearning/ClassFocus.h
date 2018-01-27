@@ -58,12 +58,12 @@ public:
    float          TestingTime ()   {return  testingTime;}
 
 
-   void     AddProbability (int            _classIDX,
-                            ImageClassPtr  _imageClass,
+   void     AddProbability (int           _classIDX,
+                            MLClassPtr    _imageClass,
                             const KKStr&  _imageFileNname,
-                            float          _probability,
-                            int            _nonStreamPlace,
-                            float          _percentile
+                            float         _probability,
+                            int           _nonStreamPlace,
+                            float         _percentile
                            );
 
 

@@ -271,7 +271,7 @@ void  ExtractAllSipperFiles::RunOneImageExtraction (const KKStr&  sfn)
 
     KKStr  cmd(1000);
 
-    KKStr  progName = osAddSlash (osAddSlash (PicesVariables::HomeDir ()) + "exe") + "GrayImageExtraction.exe";
+    KKStr  progName = osAddSlash (osAddSlash (PicesVariables::HomeDir ()) + "exe") + "ImageExtractionWindows.exe";
 
     cmd << progName                            << "  "
         << "-s"      << " " << sfn             << "  "

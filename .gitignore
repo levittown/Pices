@@ -25,6 +25,7 @@ obj
 *.so
 *.suo
 *.tif
+*.user
 *.zip
 *.so.[0-9]*
 *~
@@ -32,10 +33,8 @@ obj
 .#*
 .*.swp
 .DS_Store
-*.kkramer.user
 Thumbs.db
 /Apps/PicesCommander/obj/Debug/ResolveAssemblyReference.cache
-*.kkramer.user
 
 Backup/Apps/ChartControls/Battery.cs
 Backup/Apps/ChartControls/Battery.Designer.cs
@@ -64,10 +63,16 @@ PlanktonApps.VC.db
 PlanktonApps.VC.VC.opendb
 *.pidb
 
-Apps/ExtractAllSipperFiles/ExtractAllSipperFiles.vcxproj.user
-Apps/ExtractAllSipperFiles/ExtractAllSipperFiles.vcxproj.user
 Apps/ChartControls/obj/EmbeddedRelease/DesignTimeResolveAssemblyReferencesInput.cache
 Python/.idea/.name
 PicesDataBase/PicesDataBase.jfm
 *.jfm
+<<<<<<< HEAD
+*.ipch
+=======
 *.jfm
+ipch/ZLIB123-fc3f97cf/ZLIB123-7f39be51.ipch
+>>>>>>> origin/64k
+*.vcxproj
+*.h
+*.h

@@ -460,12 +460,11 @@ void   ClassificationBiasMatrix::PerformAdjustmnts (array<double>^  classifiedCo
   Matrix  transposed = probabilities->Transpose ();
   Matrix  Q = transposed.Inverse ();
 
-
   if  (false)
   {
     std::ofstream  db ("c:\\Temp\\InverseMatric.txt");
 
-    int r,c;
+    kkuint32 r,c;
     db << "Probabilities Matrix" << std::endl;
     for  (c = 0;  c < probabilities->NumOfCols ();  c++)
        db << "\t" << c;
@@ -477,7 +476,6 @@ void   ClassificationBiasMatrix::PerformAdjustmnts (array<double>^  classifiedCo
         db << "\t" << (*probabilities)[r][c];
       db << std::endl;
     }
-
 
     db << std::endl << std::endl << "Transposed Matrix" << std::endl;
     for  (c = 0;  c < probabilities->NumOfCols ();  c++)

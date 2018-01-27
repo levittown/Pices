@@ -2,16 +2,16 @@
 #define  _RESULTLINE_
 
 
-#include  "ConfusionMatrix2.h"
-#include  "CrossValidation.h"
-#include  "FeatureNumList.h"
-#include  "FileDesc.h"
-#include  "MLClass.h"
-#include  "RBTree.h"
-#include  "RunLog.h"
+#include "RBTree.h"
+#include "RunLog.h"
+using namespace KKB;
 
-
-using namespace MLL;
+#include "ConfusionMatrix2.h"
+#include "CrossValidation.h"
+#include "FeatureNumList.h"
+#include "FileDesc.h"
+#include "MLClass.h"
+using namespace KKMLL;
 
 
 class  ResultLine;
@@ -32,7 +32,7 @@ typedef  ResultLineTree*  ResultLineTreePtr;
 //                                                                                 *
 //    ResultLine     - Represents the evaluation of one combination of features.   *
 //                                                                                 *
-//    ResultLineTree - A tree structure that conatins instances of 'ResultLine'    *
+//    ResultLineTree - A tree structure that contains instances of 'ResultLine'    *
 //                     where 'id' from ResultLine is used as index.                *
 //                                                                                 *
 //    ResultLineList - A structure used to contain lists of 'ResultLine' instances.*
@@ -51,13 +51,14 @@ typedef  ResultLineTree*  ResultLineTreePtr;
 class ResultLine
 {
 public:
-  ResultLine (int                 _id,
-              ResultLinePtr       _parent1,
-              ResultLinePtr       _parent2,
-              ResultLinePtr       _family,
-              CrossValidation&    _cv,
-              FeatureNumListPtr   _features,
-              RunLog&             log
+  ResultLine (int                _id,
+              ResultLinePtr      _parent1,
+              ResultLinePtr      _parent2,
+              ResultLinePtr      _family,
+              CrossValidation&   _cv,
+              FileDescConstPtr   _fileDesc,
+              FeatureNumListPtr  _features,
+              RunLog&            log
              );
 
   ResultLine (KKStr           txt,
@@ -118,29 +119,29 @@ private:
   ResultLinePtr  TrackDownFamily ();
 
 
-  static  FileDescPtr     fileDesc;
-  static  MLClassListPtr  mlClasses;
-  static  int             numOfClasses;
-  static  RunLog&         log;
+  static  FileDescConstPtr fileDesc;
+  static  MLClassListPtr   mlClasses;
+  static  int              numOfClasses;
+  static  RunLog&          log;
 
   static
-  void  InitializeMLClasses (FileDescPtr   _fileDesc,
-                                MLClassList&  _mlClasses,
-                                RunLog&       _log
-                               );
+  void  InitializeMLClasses (FileDescConstPtr _fileDesc,
+                             MLClassList&     _mlClasses,
+                             RunLog&          _log
+                            );
 
   friend class ResultLineTree;
 
   float              accuracy;
-  float              accuracyWeighted;   // Weightest such that each class has equal weight
+  float              accuracyWeighted;   // Weighted such that each class has equal weight
   float*             classAccuracies;
   float              classTime;
 
-  bool               expanded;           // If set to true, meens that this ResultLine
+  bool               expanded;           // If set to true, means that this ResultLine
                                          // has been trimmed(Expanded).
 
   ResultLinePtr      family;             // Pointer to result line that this 'ResultLine'
-                                         // ultimatly decends from. This could be either 
+                                         // ultimately decends from. This could be either 
                                          // an originally RandomLy selected set of 
                                          // features, or the union of two other 'ResultLine'
 
@@ -155,7 +156,7 @@ private:
   //  
   //  parent1  parent2  Description
   //    NULL     NULL   Created by random selection of features.
-  //    xxxx     NULL   An imedeiate decendent as a result of trimming.
+  //    xxxx     NULL   An immediate descendant as a result of trimming.
   //    xxxx     xxxx   The result of combining two other ResultLine.
 
   ResultLinePtr      parent1;            
@@ -198,7 +199,6 @@ private:
 
 
 
-
 class  CompareResultLine 
 {
 public:
@@ -207,9 +207,6 @@ public:
     return (*(resultLine->Features ()));
   }
 };  /* CompareResultLine */
-
-
-
 
 
 
@@ -226,15 +223,15 @@ public:
 class  ResultLineTree: public  RBTree<ResultLine, CompareResultLine, FeatureNumList>
 {
 public:
-  ResultLineTree (bool               _owner,
-                  RunLog&            _log
+  ResultLineTree (bool     _owner,
+                  RunLog&  _log
                  );
 
-  ResultLineTree (KKStr             _fileName,
-                  FileDescPtr        _fileDesc,
-                  MLClassList&    _mlClasses,
-                  bool&              _successful,
-                  RunLog&            _log
+  ResultLineTree (KKStr            _fileName,
+                  FileDescConstPtr _fileDesc,
+                  MLClassList&     _mlClasses,
+                  bool&            _successful,
+                  RunLog&          _log
                  );
 
   float   HighestAccuracy         () const  {return highestAccuracy;}
@@ -280,20 +277,12 @@ typedef  Iterator<ResultLine, CompareResultLine, FeatureNumList>  ResultLineTree
 
 
 
-
-
-
-
-
-
 class  ResultLineList: public KKQueue<ResultLine>
 {
 public:
   ResultLineList ();
 
-  ResultLineList (bool _bool,
-                  int  _size
-                 );
+  ResultLineList (bool _bool);
 
   ResultLineList (ResultLineTree*  resultLineTree);
 
@@ -311,8 +300,5 @@ private:
 };
 
 typedef  ResultLineList*  ResultLineListPtr;
-
-
-
 
 #endif
