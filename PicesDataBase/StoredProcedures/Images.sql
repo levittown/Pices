@@ -865,11 +865,11 @@ create procedure ImagesQueryDeploymentSizeRange (in  _cruiseName      varChar(10
                                                  in  _sizeEnd         float,          /* Must be less than this size.                                                                            */
                                                  in  _depthMin        float,
                                                  in  _depthMax        float,
-                                                 in  _sampleQty       int             /* 0 = slecte all eligable rows;  > 0 indicates randomly selecting '_sampleQty' rows.   */
+                                                 in  _sampleQty       int             /* 0 = select all eligable rows;  > 0 indicates randomly selecting '_sampleQty' rows.   */
                                                 )
 begin 
 /*
-  Returns List of Images for the Specified Deployment that are in a specifoied Size Range for the Specified Size Statistic.
+  Returns List of Images for the Specified Deployment that are in a specified Size Range for the Specified Size Statistic.
 */
   declare _classId            int    default -1;
   declare _midPoint           datetime;

@@ -10,7 +10,7 @@
 //*                                                                                *
 //*--Description-------------------------------------------------------------------*
 //*                                                                                *
-//* Performs a random search of Featuer Space, using a support vector machine(SVM) *
+//* Performs a random search of Feature Space, using a support vector machine(SVM) *
 //* and a n-cross-fold-validation to grade a particular feature selection.         *
 //*                                                                                *
 //*                                                                                *
@@ -24,29 +24,25 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include  <ctype.h>
-#include  <time.h>
-
-#include  <fcntl.h>
-
-#include  <string>
-#include  <iomanip>
-#include  <iostream>
-#include  <fstream>
-#include  <map>
-#include  <vector>
+#include <ctype.h>
+#include <time.h>
+#include <fcntl.h>
+#include <string>
+#include <iomanip>
+#include <iostream>
+#include <fstream>
+#include <map>
+#include <vector>
 
 #ifdef  WIN32
 #include  <ostream>
 #endif
-
-
-#include  "MemoryDebug.h"
-#include  "KKBaseTypes.h"
-
 using namespace std;
-using namespace KKB;
 
+
+#include "MemoryDebug.h"
+#include "KKBaseTypes.h"
+using namespace KKB;
 
 
 
@@ -59,19 +55,19 @@ using namespace KKB;
 #include <unistd.h>
 #endif
 
+#include "OSservices.h"
+#include "RunLog.h"
 
 #define  NumOfRandomOnesToCreate  500
 
-#include  "RandomSearch.h"
+#include "RandomSearch.h"
 
-#include  "CrossValidation.h"
-#include  "FeatureFileIO.h"
-#include  "FeatureFileIOPices.h"
-#include  "FeatureStats.h"
-#include  "RunLog.h"
-#include  "NormalizationParms.h"
-#include  "OSservices.h"
-#include  "StatisticalFunctions.h"
+#include "CrossValidation.h"
+#include "FeatureFileIO.h"
+#include "FeatureFileIOPices.h"
+#include "FeatureStats.h"
+#include "NormalizationParms.h"
+#include "StatisticalFunctions.h"
 
 // 2005-07-16
 // K:\v1\Adult
@@ -94,11 +90,9 @@ using namespace KKB;
 //K:\v1\Thesis\TestSet9Classes\300_ImagesPerClass\Using5OldContourFeatures
 // -c Thesis9Classes.cfg  -df NineClasses_ValidationData.data  -RW  5  -tf  NineClasses_TestData.data  
 
-RandomSearch::RandomSearch (int     argc,
-                            char**  argv
-                           ):
+RandomSearch::RandomSearch ():
 
-  Application (argc, argv),
+  Application (),
   
   accuracyWeighted  (false),
   allFeatures       (NULL),
@@ -110,7 +104,7 @@ RandomSearch::RandomSearch (int     argc,
   dataFileName      (),
   fileDesc          (NULL),
   fileFormat        (FeatureFileIOPices::Driver ()),
-  mlClasses      (NULL),
+  mlClasses         (NULL),
   data              (NULL),
   highAccuracy      (0.0f),
   lockFile          (-1),
@@ -129,224 +123,7 @@ RandomSearch::RandomSearch (int     argc,
 {
   log.Level (10) << "RandomSearch::RandomSearch" << endl;
   lockFileName    = "RandomSearch.lock";
-  mlClasses    = new MLClassList ();
-
-  ProcessCmdLineParameters (argc, argv);
-
-  log.Level (10);
-
-  if  (Abort ())
-  {
-    log.Level (-1) << endl
-                   << "RandomSearch::RandomSearch   *** ERROR *** " << endl
-                   << endl;
-    osWaitForEnter ();
-    exit (-1);
-  }
-
-  if  (dataFileName.Empty ())
-  {
-    log.Level (-1) << endl
-                   << "No data file specified." << endl
-                   << endl;
-    DisplayCommandUsage ();
-    osWaitForEnter ();
-    exit (-1);
-  }
-
-  bool  successful;
-  bool  changesMade = false;
-  data = fileFormat->LoadFeatureFile (dataFileName, *mlClasses, -1, cancelFlag, successful, changesMade, log);
-  if  (!successful)
-  {
-    log.Level (-1) << endl
-                   << "RandomSearch::RandomSearch   *** ERROR ***" << endl
-                   << "                Error loading file[" << dataFileName << "]" << endl
-                   << endl;
-    DisplayCommandUsage ();
-    osWaitForEnter ();
-    exit (-1);
-  }
-
-  fileDesc = data->FileDesc ();
-
-  if  (!testFileName.Empty ())
-  {
-    successful = false;
-    testData = fileFormat->LoadFeatureFile (testFileName, *mlClasses, -1, cancelFlag, successful, changesMade, log);
-    if  (!successful)
-    {
-      delete  testData;
-      log.Level (-1) << endl
-                     << "RandomSearch::RandomSearch   *** ERROR ***" << endl
-                     << "              Error loading test file[" << testFileName << "]" << endl
-                     << endl;
-      DisplayCommandUsage ();
-      osWaitForEnter ();
-      exit (-1);
-    }
-
-    if  (testData->FileDesc () != fileDesc)
-    {
-      log.Level (-1) << endl
-                     << "RandomSearch::RandomSearch   *** ERROR ***" << endl
-                     << "              The data and test files have differnet FileDesc formats." << endl
-                     << endl;
-      DisplayCommandUsage ();
-      osWaitForEnter ();
-      exit (-1);
-    }
-  }
-
-
-  allFeatures = new FeatureNumList (FeatureNumList::AllFeatures (fileDesc));
-
-  config = new TrainingConfiguration2 (fileDesc, configFileName, log, false);
-  if  (!config->FormatGood ())
-  {
-    log.Level (-1) << endl
-                   << "RandomSearch::RandomSearch   *** ERROR ***" << endl
-                   << "                Invalid Configuration File[" << configFileName << "]" << endl
-                   << endl;
-    DisplayCommandUsage ();
-    osWaitForEnter ();
-    exit (-1);
-  }
-  configClasses = config->ExtractClassList ();
-  (*mlClasses) += (*configClasses);
-
-
-  //allFeatures = new FeatureNumList (FeatureNumList::AllFeatures (fileDesc));
-  allFeatures = new FeatureNumList (config->GetFeatureNums ());
-
-  if  ((randomFeatures < 1)  ||  (randomFeatures >= fileDesc->NumOfFields ()))
-  {
-    log.Level (-1) << endl
-                   << "RandomSearch::RandomSearch   *** ERROR ***" << endl
-                   << "                Invalid Random Features[" << randomFeatures << "]" << endl
-                   << endl;
-    DisplayCommandUsage ();
-    osWaitForEnter ();
-    exit (-1);
-  }
-
-  if  (stratify)
-  {
-    KKStr  stratifiedFileName = osRemoveExtension (dataFileName) + 
-                                 "_Stratified" + "." +
-                                 osGetFileExtension (dataFileName);
-
-    if  (osFileExists (stratifiedFileName))
-    {
-      log.Level (-1) << endl
-                     << "RandomSearch          *** ERROR ***" << endl
-                     << "            Stratified File[" << stratifiedFileName << "] already exists." << endl
-                     << "            Erase it first or turn off the '-Stratify' option." << endl
-                     << endl;
-      osWaitForEnter ();
-      exit (-1);
-    }
-
-    FeatureVectorListPtr  newData = data->StratifyAmoungstClasses (mlClasses, -1, numOfFolds);
-    data->Owner (false);
-    delete  data;
-    data = newData;
-    data->Owner (true);
-
-    log.Level (10) << endl
-                   << endl
-                   << endl
-                   << "Saving Stratified file[" << stratifiedFileName << "]" << endl
-                   << endl;
-    uint  numExamplesWritten = 0;
-    fileFormat->SaveFeatureFile (stratifiedFileName, data->AllFeatures (), *data, numExamplesWritten, cancelFlag, successful, log);
-  }
-
-  if  (resultFileName.Empty ())
-  {
-    resultFileName = osRemoveExtension (dataFileName) + "_" +
-                     StrFormatInt (randomFeatures, "Z000")  +
-                     ".result";
-  }
-
-  if  (osFileExists (resultFileName))
-  {
-    results = new ResultLineTree (resultFileName, fileDesc, *mlClasses, successful, log);
-    if  (accuracyWeighted)
-      highAccuracy = results->HighestAccuracyWeighted ();
-    else
-      highAccuracy = results->HighestAccuracy ();
-
-    cout << endl << endl << endl << endl << endl << endl
-         << endl
-         << "RandomSearch::RandomSearch     Highest Accuracy Loaded[" 
-         << StrFormatDouble (highAccuracy, "ZZZ0.000") << "%" << "]." 
-         << endl
-         << endl;
-
-    
-    #ifdef  WIN32
-    Sleep (4000);
-    #else
-    sleep (4);
-    #endif
-  }
-  else
-  {
-    results = new ResultLineTree (true, log);
-  }
-
-
-  resultFile = new ofstream (resultFileName.Str (),  ios::app);
-  if  (!resultFile->is_open ())
-  {
-    log.Level (-1) << endl
-                   << "RandomSearch::RandomSearch   *** ERROR ***" << endl
-                   << "             Error opening ResultFile[" << resultFileName << "]" << endl
-                   << endl;
-    DisplayCommandUsage ();
-    osWaitForEnter ();
-    exit (-1);
-  }
-
-  *resultFile << "//" << endl
-              << "//" << endl
-              << "// Date and Time      [" << osGetLocalDateTime ()                        << "]" << endl
-              << "// Data File Name     [" << dataFileName                                 << "]" << endl
-              << "// Test File Name     [" << testFileName                                 << "]" << endl
-              << "// FileFormat         [" << fileFormat->DriverName ()                    << "]" << endl
-              << "// Already Normalized [" << (alreadyNormalized ? "Yes" : "No")           << "]" << endl
-              << "// Stratify           [" << (stratify ? "Yes" : "No")                    << "]" << endl
-              << "// ConfigFileName     [" << configFileName                               << "]" << endl
-              << "// Parameters         [" << config->ModelParameterCmdLine ()             << "]" << endl
-              << "// Accuracy Measure   [" << (accuracyWeighted ? "ClassEqual" : "Normal") << "]" << endl
-              << "// NumRandomFeatures  [" << randomFeatures                               << "]" << endl
-              << "// NumOfFolds         [" << numOfFolds                                   << "]" << endl
-              << "// ResultFileName     [" << resultFileName                               << "]" << endl
-              << "// NumDataPoints      [" << data->QueueSize ()                           << "]" << endl
-              << "// VerifyAccuracy     [" << (verifyAccuracy ? "Yes" : "No")              << "]" << endl
-              << "//" << endl
-              << "//" << endl
-              << "// NumOfClasses       [" << mlClasses->QueueSize ()                   << "]" << endl
-              << "// Name" << "\t" << "Count" << endl;
-
-  ClassStatisticListPtr stats = data->GetClassStatistics ();
-  for  (int x = 0;  x < stats->QueueSize ();  x++)
-  {
-    ClassStatisticPtr  stat = stats->IdxToPtr (x);
-    *resultFile << "// " << stat->Name () << "\t" << stat->Count () << endl;
-  }
-
-  *resultFile << "//" << endl
-              << "//" << endl
-              << "// " << ResultLine::TitleLine (*mlClasses) << endl;
-  resultFile->flush ();
-
-
-  BuildOtherOrderings ();
 }
-
-
 
 
 
@@ -361,6 +138,225 @@ RandomSearch::~RandomSearch ()
 
 
 
+void  RandomSearch::InitalizeApplication (kkint32 argc, char** argv)
+{
+  Application::InitalizeApplication (argc, argv);
+  log.Level (10) << "RandomSearch::RandomSearch" << endl;
+  lockFileName = "RandomSearch.lock";
+  mlClasses = new MLClassList ();
+  this->InitalizeApplication (argc, argv);
+
+  log.Level (10);
+
+  if (Abort ())
+  {
+    log.Level (-1) << endl
+      << "RandomSearch::RandomSearch   *** ERROR *** " << endl
+      << endl;
+    osWaitForEnter ();
+    exit (-1);
+  }
+
+  if (dataFileName.Empty ())
+  {
+    log.Level (-1) << endl
+      << "No data file specified." << endl
+      << endl;
+    DisplayCommandUsage ();
+    osWaitForEnter ();
+    exit (-1);
+  }
+
+  bool  successful;
+  bool  changesMade = false;
+  data = fileFormat->LoadFeatureFile (dataFileName, *mlClasses, -1, cancelFlag, successful, changesMade, log);
+  if (!successful)
+  {
+    log.Level (-1) << endl
+      << "RandomSearch::RandomSearch   *** ERROR ***" << endl
+      << "                Error loading file[" << dataFileName << "]" << endl
+      << endl;
+    DisplayCommandUsage ();
+    osWaitForEnter ();
+    exit (-1);
+  }
+
+  fileDesc = data->FileDesc ();
+
+  if (!testFileName.Empty ())
+  {
+    successful = false;
+    testData = fileFormat->LoadFeatureFile (testFileName, *mlClasses, -1, cancelFlag, successful, changesMade, log);
+    if (!successful)
+    {
+      delete  testData;
+      log.Level (-1) << endl
+        << "RandomSearch::RandomSearch   *** ERROR ***" << endl
+        << "              Error loading test file[" << testFileName << "]" << endl
+        << endl;
+      DisplayCommandUsage ();
+      osWaitForEnter ();
+      exit (-1);
+    }
+
+    if (testData->FileDesc () != fileDesc)
+    {
+      log.Level (-1) << endl
+        << "RandomSearch::RandomSearch   *** ERROR ***" << endl
+        << "              The data and test files have different FileDesc formats." << endl
+        << endl;
+      DisplayCommandUsage ();
+      osWaitForEnter ();
+      exit (-1);
+    }
+  }
+
+
+  allFeatures = new FeatureNumList (FeatureNumList::AllFeatures (fileDesc));
+
+  config = TrainingConfiguration2::Manufacture ("", configFileName, false, log);
+  if (!config->FormatGood ())
+  {
+    log.Level (-1) << endl
+      << "RandomSearch::RandomSearch   *** ERROR ***" << endl
+      << "                Invalid Configuration File[" << configFileName << "]" << endl
+      << endl;
+    DisplayCommandUsage ();
+    osWaitForEnter ();
+    exit (-1);
+  }
+  configClasses = config->ExtractClassList ();
+  (*mlClasses) += (*configClasses);
+
+
+  //allFeatures = new FeatureNumList (FeatureNumList::AllFeatures (fileDesc));
+  allFeatures = new FeatureNumList (config->GetFeatureNums ());
+
+  if ((randomFeatures < 1) || (randomFeatures >= (int)fileDesc->NumOfFields ()))
+  {
+    log.Level (-1) << endl
+      << "RandomSearch::RandomSearch   *** ERROR ***" << endl
+      << "                Invalid Random Features[" << randomFeatures << "]" << endl
+      << endl;
+    DisplayCommandUsage ();
+    osWaitForEnter ();
+    exit (-1);
+  }
+
+  if (stratify)
+  {
+    KKStr  stratifiedFileName = osRemoveExtension (dataFileName) +
+      "_Stratified" + "." +
+      osGetFileExtension (dataFileName);
+
+    if (osFileExists (stratifiedFileName))
+    {
+      log.Level (-1) << endl
+        << "RandomSearch          *** ERROR ***" << endl
+        << "            Stratified File[" << stratifiedFileName << "] already exists." << endl
+        << "            Erase it first or turn off the '-Stratify' option." << endl
+        << endl;
+      osWaitForEnter ();
+      exit (-1);
+    }
+
+    FeatureVectorListPtr  newData = data->StratifyAmoungstClasses (mlClasses, -1, numOfFolds, log);
+    data->Owner (false);
+    delete  data;
+    data = newData;
+    data->Owner (true);
+
+    log.Level (10) << endl
+      << endl
+      << endl
+      << "Saving Stratified file[" << stratifiedFileName << "]" << endl
+      << endl;
+    uint  numExamplesWritten = 0;
+    fileFormat->SaveFeatureFile (stratifiedFileName, data->AllFeatures (), *data, numExamplesWritten, cancelFlag, successful, log);
+  }
+
+  if (resultFileName.Empty ())
+  {
+    resultFileName = osRemoveExtension (dataFileName) + "_" +
+      StrFormatInt (randomFeatures, "Z000") +
+      ".result";
+  }
+
+  if (osFileExists (resultFileName))
+  {
+    results = new ResultLineTree (resultFileName, fileDesc, *mlClasses, successful, log);
+    if (accuracyWeighted)
+      highAccuracy = results->HighestAccuracyWeighted ();
+    else
+      highAccuracy = results->HighestAccuracy ();
+
+    cout << endl << endl << endl << endl << endl << endl
+      << endl
+      << "RandomSearch::RandomSearch     Highest Accuracy Loaded["
+      << StrFormatDouble (highAccuracy, "ZZZ0.000") << "%" << "]."
+      << endl
+      << endl;
+
+#ifdef  WIN32
+    Sleep (4000);
+#else
+    sleep (4);
+#endif
+  }
+  else
+  {
+    results = new ResultLineTree (true, log);
+  }
+
+  resultFile = new ofstream (resultFileName.Str (), ios::app);
+  if (!resultFile->is_open ())
+  {
+    log.Level (-1) << endl
+      << "RandomSearch::RandomSearch   *** ERROR ***" << endl
+      << "             Error opening ResultFile[" << resultFileName << "]" << endl
+      << endl;
+    DisplayCommandUsage ();
+    osWaitForEnter ();
+    exit (-1);
+  }
+
+  *resultFile << "//" << endl
+    << "//" << endl
+    << "// Date and Time      [" << osGetLocalDateTime () << "]" << endl
+    << "// Data File Name     [" << dataFileName << "]" << endl
+    << "// Test File Name     [" << testFileName << "]" << endl
+    << "// FileFormat         [" << fileFormat->DriverName () << "]" << endl
+    << "// Already Normalized [" << (alreadyNormalized ? "Yes" : "No") << "]" << endl
+    << "// Stratify           [" << (stratify ? "Yes" : "No") << "]" << endl
+    << "// ConfigFileName     [" << configFileName << "]" << endl
+    << "// Parameters         [" << config->ModelParameterCmdLine () << "]" << endl
+    << "// Accuracy Measure   [" << (accuracyWeighted ? "ClassEqual" : "Normal") << "]" << endl
+    << "// NumRandomFeatures  [" << randomFeatures << "]" << endl
+    << "// NumOfFolds         [" << numOfFolds << "]" << endl
+    << "// ResultFileName     [" << resultFileName << "]" << endl
+    << "// NumDataPoints      [" << data->QueueSize () << "]" << endl
+    << "// VerifyAccuracy     [" << (verifyAccuracy ? "Yes" : "No") << "]" << endl
+    << "//" << endl
+    << "//" << endl
+    << "// NumOfClasses       [" << mlClasses->QueueSize () << "]" << endl
+    << "// Name" << "\t" << "Count" << endl;
+
+  ClassStatisticListPtr stats = data->GetClassStatistics ();
+  for (int x = 0; x < stats->QueueSize (); x++)
+  {
+    ClassStatisticPtr  stat = stats->IdxToPtr (x);
+    *resultFile << "// " << stat->Name () << "\t" << stat->Count () << endl;
+  }
+
+  *resultFile << "//" << endl
+    << "//" << endl
+    << "// " << ResultLine::TitleLine (*mlClasses) << endl;
+  resultFile->flush ();
+
+  BuildOtherOrderings ();
+}
+
+
 
 void  RandomSearch::BuildOtherOrderings ()
 {
@@ -372,11 +368,11 @@ void  RandomSearch::BuildOtherOrderings ()
     dataOther[x] = NULL;
     KKStr  otherOrderingFileName = osRemoveExtension (dataFileName) + "_" + StrFormatInt (x, "00") + ".data";
     if  (osFileExists (otherOrderingFileName))
-      dataOther[x] = data->OrderUsingNamesFromAFile (otherOrderingFileName);
+      dataOther[x] = data->OrderUsingNamesFromAFile (otherOrderingFileName, log);
 
     if  (!dataOther[x])
     {
-      dataOther[x] = data->StratifyAmoungstClasses (mlClasses, -1, numOfFolds);
+      dataOther[x] = data->StratifyAmoungstClasses (mlClasses, -1, numOfFolds, log);
       dataOther[x]->SaveOrderingOfImages (otherOrderingFileName, successful);
       if  (!successful)
       {
@@ -393,7 +389,6 @@ void  RandomSearch::BuildOtherOrderings ()
 
 
 
-
 float  RandomSearch::Accuracy (ResultLinePtr  result)
 {
   if  (accuracyWeighted)
@@ -404,7 +399,6 @@ float  RandomSearch::Accuracy (ResultLinePtr  result)
 
 
 
-
 void  RandomSearch::Block ()
 {
   log.Level (20) << "RandomSearch::Block - Entering." << endl;
@@ -412,7 +406,7 @@ void  RandomSearch::Block ()
   int  count = 0;
 
   do  {
-    lockFile = open (lockFileName.Str (), O_WRONLY | O_CREAT | O_EXCL);
+    lockFile = _open (lockFileName.Str (), O_WRONLY | O_CREAT | O_EXCL);
 
     if  (lockFile < 0)
     {
@@ -447,7 +441,7 @@ void  RandomSearch::EndBlock ()
     return;
   }
 
-  close (lockFile);
+  _close (lockFile);
   lockFileOpened = false;
   
 
@@ -466,7 +460,7 @@ void  RandomSearch::EndBlock ()
        if  (!DeleteFile (lockFileName.Str ()))
        {
          DWORD  lastErrorNum = GetLastError ();
-         log.Level (-1) << "RandomSearch::EndBlock - Error["  << lastErrorNum << "] deleting Lock File." << endl;
+         log.Level (-1) << "RandomSearch::EndBlock - Error["  << (kkuint64)lastErrorNum << "] deleting Lock File." << endl;
        }
      }
   }
@@ -496,12 +490,9 @@ void  RandomSearch::DisplayCommandUsage ()
 
 
 
-
-bool  RandomSearch::ProcessCmdLineParameter (char    parmSwitchCode, 
-                                             KKStr  parmSwitch, 
+bool  RandomSearch::ProcessCmdLineParameter (KKStr  parmSwitch, 
                                              KKStr  parmValue
                                             )
-
 {
   parmSwitch.Upper ();
 
@@ -534,8 +525,7 @@ bool  RandomSearch::ProcessCmdLineParameter (char    parmSwitchCode,
       exit (-1);
     }
   }
-
-
+  
   else if  (parmSwitch == "-FOLDS")
   {
     numOfFolds = atoi (parmValue.Str ());
@@ -581,8 +571,6 @@ bool  RandomSearch::ProcessCmdLineParameter (char    parmSwitchCode,
 
 
 
-
-
 ResultLineListPtr  RandomSearch::BuildComponentParts (ResultLinePtr result)
 {
   ResultLineListPtr  components = new ResultLineList (false, 20);
@@ -616,8 +604,6 @@ ResultLineListPtr  RandomSearch::BuildComponentParts (ResultLinePtr result)
 
 
 
-
-
 void  RandomSearch::GetTestAccuracy (ResultLinePtr  result,
                                      float&         accuracy,
                                      float&         accuracyWeighted
@@ -633,9 +619,9 @@ void  RandomSearch::GetTestAccuracy (ResultLinePtr  result,
   config->SetFeatureNums (*result->Features ());
   bool  cancelFlag = false;
   CrossValidation  cv (config, data, mlClasses, numOfFolds, alreadyNormalized, fileDesc, log, cancelFlag);
-  cv.RunValidationOnly (testData, NULL);
+  cv.RunValidationOnly (testData, NULL, log);
 
-  ConfusionMatrix2Ptr  cm = cv.ConfussionMatrix ();
+  auto  cm = cv.ConfussionMatrix ();
   accuracy         = float (cm->Accuracy ());
   accuracyWeighted = cm->AccuracyClassWeightedEqually ();
 
@@ -643,7 +629,6 @@ void  RandomSearch::GetTestAccuracy (ResultLinePtr  result,
 
   return;
 }  /* GetTestAccuracy */
-
 
 
 
@@ -665,17 +650,17 @@ ResultLinePtr  RandomSearch::EvaluateAFeatureSet (FeatureNumListPtr  features,
   config->SetFeatureNums (*features);
   bool  cancelFlag = false;
   CrossValidation  cv (config, data, mlClasses, numOfFolds, alreadyNormalized, fileDesc, log, cancelFlag);
-  cv.RunCrossValidation ();
+  cv.RunCrossValidation (log);
 
   ResultLinePtr  result = new ResultLine (results->NextId (),
                                           parent1,
                                           parent2,
                                           family,
                                           cv,
+                                          fileDesc,
                                           features, 
                                           log
                                          );
-
 
   if  (!verifyAccuracy)
     result->Verified (true);
@@ -736,8 +721,6 @@ ResultLinePtr  RandomSearch::EvaluateAFeatureSet (FeatureNumListPtr  features,
 
 
 
-
-
 void  RandomSearch::CheckAgainstOtherOrderings (ResultLinePtr  result)
 {
   float  curAccuracy  = Accuracy (result);
@@ -756,7 +739,7 @@ void  RandomSearch::CheckAgainstOtherOrderings (ResultLinePtr  result)
     //config->SetFeatureNums (*features);
     bool  cancelFlag = false;
     CrossValidation  cv (config, dataOther[idx], mlClasses, numOfFolds, alreadyNormalized, fileDesc, log, cancelFlag);
-    cv.RunCrossValidation ();
+    cv.RunCrossValidation (log);
 
     accuracyWtd = cv.ConfussionMatrix ()->AccuracyClassWeightedEqually ();
     accuracy    = (float)cv.ConfussionMatrix ()->Accuracy ();
@@ -778,9 +761,6 @@ void  RandomSearch::CheckAgainstOtherOrderings (ResultLinePtr  result)
 
   result->Verified (true);
 }  /* CheckAgainstOtherOrderings */
-
-
-
 
 
 
@@ -833,9 +813,6 @@ ResultLinePtr  RandomSearch::TrimAFeatureSet (ResultLinePtr  resultToExpand,
 
 
 
-
-
-
 ResultLinePtr  RandomSearch::TrimAFeatureSetInDepth (int            depth,
                                                      int            width,
                                                      ResultLinePtr  resultToExpand,
@@ -860,7 +837,6 @@ ResultLinePtr  RandomSearch::TrimAFeatureSetInDepth (int            depth,
   if  (!family)
     family = resultToExpand;
 
-
   createdHighs = false;
   if  (!highs)
   {
@@ -877,9 +853,6 @@ ResultLinePtr  RandomSearch::TrimAFeatureSetInDepth (int            depth,
 
     FeatureNumList trimmedFeatureSet = features - features[x];
     int  trimmedFeatureCount = trimmedFeatureSet.NumOfFeatures ();
-
-
-    
 
     ResultLinePtr trimmedResult = EvaluateAFeatureSet (&trimmedFeatureSet,
                                                         resultToExpand,
@@ -979,11 +952,6 @@ ResultLinePtr  RandomSearch::TrimAFeatureSetInDepth (int            depth,
 
 
 
-
-
-
-
-
 ResultLinePtr  RandomSearch::TrimComponentsOfAFeatureSet (ResultLinePtr  resultToExpand,
                                                           float          highAccuracy
                                                          )
@@ -1026,8 +994,6 @@ ResultLinePtr  RandomSearch::TrimComponentsOfAFeatureSet (ResultLinePtr  resultT
   else
     return  aggragateResult;
 }  /* TrimComponentsOfAFeatureSet */
-
-
 
 
 
@@ -1079,9 +1045,6 @@ VectorInt  UniteTwoVectors (VectorInt& v1,
 
 
 
-
-
-
 bool  FamiliesAreRelated (VectorInt&  family1,  
                           VectorInt&  family2
                          )
@@ -1120,7 +1083,6 @@ ResultLinePairVector  RandomSearch::GetUnrelatedPairs (ResultLineVector&  result
   {
    return unrelatedPairs;
   }
-
 
   vector<VectorInt>  extendedFamilies;
 
@@ -1163,8 +1125,6 @@ ResultLinePairVector  RandomSearch::GetUnrelatedPairs (ResultLineVector&  result
 
 
 
-
-
 ResultLinePairVector  RandomSearch::BuildPairsFromList (ResultLineVector&  resultsToCombine)
 {
   int  x, y;
@@ -1176,7 +1136,6 @@ ResultLinePairVector  RandomSearch::BuildPairsFromList (ResultLineVector&  resul
   {
    return pairs;
   }
-
 
   for  (x = 0;  (x < numOfResults - 1);  x++)
   {
@@ -1191,8 +1150,6 @@ ResultLinePairVector  RandomSearch::BuildPairsFromList (ResultLineVector&  resul
 
   return pairs; 
 }  /* GetUnrelatedPairs */
-
-
 
 
 
@@ -1216,7 +1173,6 @@ void  RandomSearch::AddToCombinationsIfNotRelated (int                deapth,   
   families = UniteTwoVectors (extendedFamily, families);
   results.push_back (result);
 }  /* AddToCombinationsIfNotRelated */
-
 
 
 
@@ -1254,10 +1210,9 @@ void  RandomSearch::AddToCombinations (ResultLineVector&  resultsToCombine,
 
 
 
-
 ResultLineVector  RandomSearch::LookForUsedUpInAllCombinations (ResultLineVector&  onesToTry,
-                                                                     int&                    combinationsNotUsed
-                                                                    )
+                                                                int&               combinationsNotUsed
+                                                               )
 {
   combinationsNotUsed = 0;
 
@@ -1290,8 +1245,6 @@ ResultLineVector  RandomSearch::LookForUsedUpInAllCombinations (ResultLineVector
 
   return  usedUpResults;
 }  /* LookForUsedUpInAllCombinations */
-
-
 
 
 
@@ -1328,9 +1281,6 @@ ResultLineList  RandomSearch::EvaluateCombinations (ResultLinePairVector&  combi
 
   return  evaluatedCombos;
 } /* EvaluateCombinations */
-
-
-
 
 
 
@@ -1393,8 +1343,6 @@ ResultLineList  RandomSearch::TrySomeCombinationsOfTheBetterOnesFoundSofar (int 
 
 
 
-
-
 ResultLineList  RandomSearch::CombineSomeOfTheBestJobs (int  numToCombine,
                                                         int  maxSize
                                                        )
@@ -1429,8 +1377,6 @@ ResultLineList  RandomSearch::CombineSomeOfTheBestJobs (int  numToCombine,
 
 
 
-
-
 ResultLinePtr  RandomSearch::TrimBestNotExpanded (int  numToTrim,
                                                   int  maxSize
                                                  )
@@ -1447,7 +1393,7 @@ ResultLinePtr  RandomSearch::TrimBestNotExpanded (int  numToTrim,
     ResultLinePtr  result = sortedResults.IdxToPtr (idx);
     if  (!result->Expanded ())
     {
-      // To avoid insest we use 'AddToCombinationsIfNotRelated' to build list.
+      // To avoid incest we use 'AddToCombinationsIfNotRelated' to build list.
       AddToCombinationsIfNotRelated (3, // Go back three whole family generations
                                      resultsToTrim,
                                      resultsToTrimFamilies,
@@ -1473,9 +1419,6 @@ ResultLinePtr  RandomSearch::TrimBestNotExpanded (int  numToTrim,
 
   return  resultWithHighestAccuracy;
 }  /* TrimBestNotExpanded */
-
-
-
 
 
 // Select sets of features at random until a combination that has not
@@ -1592,7 +1535,7 @@ void  RandomSearch::PerformWrapper (ResultLinePtr  seedResult)
     if  (nextOneToExpand->Expanded ())
     {
       // There must be nothing left to expand;  This is not likely
-      // to have happend but it did so lets terminate search.
+      // to have happened but it did so lets terminate search.
       *resultFile << "//"                               << endl
                   << "// No more nodes left to expand." << endl
                   << "// Terminating"                   << endl
@@ -1615,7 +1558,7 @@ void  RandomSearch::PerformWrapper (ResultLinePtr  seedResult)
 
     if  ((nextOneToExpand->Parent1 ())  &&  (!nextOneToExpand->Parent2 ()))
     {
-      // Lets chck to see other siblings that did as well and remove there featuer also.
+      // Lets check to see other siblings that did as well and remove there feature also.
 
       int  numCandidates = 0;
       FeatureNumList  reducedFeatures = *(nextOneToExpand->Features ());
@@ -1644,7 +1587,7 @@ void  RandomSearch::PerformWrapper (ResultLinePtr  seedResult)
       {
         FeatureNumList featuresReduced = *(nextOneToExpand->Features ()) - reducedFeatures;
         *resultFile << "//" << endl
-                    << "// Mutiple Feature Reduction[" << featuresReduced << "]" << endl
+                    << "// Multiple Feature Reduction[" << featuresReduced << "]" << endl
                     << "//" << endl;
         featureCombosToTry.push_back (reducedFeatures);
       }
@@ -1714,8 +1657,6 @@ void  RandomSearch::PerformWrapper (ResultLinePtr  seedResult)
 
 
 
-
-
 void  RandomSearch::Run0 ()
 {
   if  (results->Size () < 10000)
@@ -1726,19 +1667,17 @@ void  RandomSearch::Run0 ()
     }
   }
 
-
   if  (results->Size () < 11600)
   {
     while  (results->Size () < 11600)
     {
-      // Only interested in combining the originally radomly selected results, which 
-      // at this point is all that there should be abailable.
+      // Only interested in combining the originally randomly selected results, which 
+      // at this point is all that there should be available.
       CombineSomeOfTheBestJobs (40,              // Combine 40 of the best that have no
                                 randomFeatures   // more than 'randomFeatures' features.
                                );
     }
   }
-
 
   if  (results->Size () < 12000)
   {
@@ -1747,14 +1686,13 @@ void  RandomSearch::Run0 ()
       // Will now combine 20 of the best results that have no more
       // than twice(2) the 'randomFeatures' features.  There is a 
       // restriction in that no two results can be related going back
-      // two whole families.  At this point here should be none taht 
+      // two whole families.  At this point here should be none that 
       // are more than one family past.
       CombineSomeOfTheBestJobs (20, 
                                 randomFeatures * 2
                                );
     }
   }
-
 
   // Will now go into a loop that we will stay in until the 
   // program is killed.
@@ -1765,7 +1703,7 @@ void  RandomSearch::Run0 ()
     //TrySomeCombinationsOfTheBetterOnesFoundSofar (randomFeatures * 10);
     for  (x = 0;  x < 3;  x++)
     {
-      // Trim th eresults of the three best results in the system
+      // Trim the results of the three best results in the system
       // that are not related to each other for at least 3
       // families.
       TrimBestNotExpanded (3, randomFeatures * 10);
@@ -1773,11 +1711,6 @@ void  RandomSearch::Run0 ()
   }
 
 }  /* Run0 */
-
-
-
-
-
 
 
 
@@ -1912,8 +1845,8 @@ void  RandomSearch::Run2 ()
   {
     while  (results->Size () < (NumOfRandomOnesToCreate + 20))
     {
-      // Only interested in combining the originally radomly selected results, which 
-      // at this point is all that there should be abailable.
+      // Only interested in combining the originally randomly selected results, which 
+      // at this point is all that there should be available.
       CombineSomeOfTheBestJobs (10,              // Combine 10 of the best that have no
                                 randomFeatures   // more than 'randomFeatures' features.
                                );
@@ -2005,7 +1938,6 @@ void  RandomSearch::Run2 ()
 
 
 
-
 void  RandomSearch::Run3 ()
 {
   ExpandedUnSetAll ();
@@ -2063,12 +1995,6 @@ void  RandomSearch::Run3 ()
 
 
 
-
-
-
-
-
-
 void  RandomSearch::Run ()
 {
   Run1 ();
@@ -2093,14 +2019,12 @@ void  RandomSearch::Run ()
 
 
 
-
-
-
 // -c survival.cfg -aw -df survival_TestData.data -format c45 -folds 5 -RW 100 -TF survival_ValidationData.data
 
 int  main (int argc, char **argv)
 {
-  RandomSearch*  featureSelection = new RandomSearch (argc, argv);
+  RandomSearch*  featureSelection = new RandomSearch ();
+  featureSelection->InitalizeApplication (argc, argv);
   featureSelection->Run ();
   delete  featureSelection;
   return 0;

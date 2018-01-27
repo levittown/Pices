@@ -13,7 +13,7 @@ namespace MLL
 
 #if  !defined(_DataBase_Defined_)
   class  DataBase;
-  typedef  DataBase*  DataBasePtr;
+  typedef DataBase*  DataBasePtr;
 #endif
 
 

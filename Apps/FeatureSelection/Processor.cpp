@@ -2862,7 +2862,6 @@ void  Processor::GenerateFinalResultsReportValidationHTML (ostream& r)
   CrossValidation  cv (config, trainingData, classesThisProcess, 1, true, fileDesc, log, cancelFlag);
   cv.RunValidationOnly (validationData, NULL, log);
 
-
   r << "<br /><br />" << endl
     << "Confusion Matrix" << endl;
   cv.ConfussionMatrix ()->PrintConfusionMatrixHTML (r);

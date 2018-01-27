@@ -35,12 +35,16 @@ using namespace KKMLL;
 using namespace MLL;
 
 
-//#include "SipperImageExtraction.h"
-//#include "SipperImageExtractionParms.h"
+#include "SipperImageExtraction.h"
+#include "SipperImageExtractionParms.h"
 
 #include "ExtractionParms.h"
 #include "ExtractionManager.h"
 using namespace  ImageExtractionManager;
+
+
+
+
 
 //  -s F:\hrs0206\hrs020607.spr   -d  K:\v1\Plankton\SipperImages2002Cruise\hrs0206\hrs020607  -m 300
 
@@ -297,33 +301,67 @@ int  main (int  argc,  char** argv)
   {
     RunLog  log;
 
-    //  CopyOverSipperFileXXX ();
-    //exit (-1);
+ //  CopyOverSipperFileXXX ();
+   //exit (-1);
 
 
-    bool  useMultiThreadedVersion = true;
+    bool  useMultiThreadedVersion = false;
 
     //ReFreshInstrumentData (log);
     //exit(-1);
 
-    KKStr  errorMessage = "";
-    bool   parmsGood = true;
+    cout  << "GrayImageExtraction - Version[" << VERSION << "]."  << endl;
 
-    ExtractionParms emParms (argc, argv, false, errorMessage, parmsGood, log);
-    if (parmsGood)
+    KKStr  errorMessage;
+    bool    parmsGood = false;
+
+    SipperImageExtractionParms  parms (argc, 
+                                       argv, 
+                                       false,         // Don't run as Windows
+                                       errorMessage,  // Error message if Parms is bad.
+                                       parmsGood,
+                                       log
+                                      );
+
+    if  (!parmsGood)
     {
-      osCreateDirectoryPath (emParms.OutputRootDir ());
-      kkint32  numberOfProcessors = osGetNumberOfProcessors ();
-      if (numberOfProcessors < 1)
-        numberOfProcessors = 1;
+      parms.DisplayExampleCmdLine ();
+      exit (-1);
+    }
 
-      cout << endl << endl << "Multi-Threaded seleceted: " << numberOfProcessors << endl << endl;
+    osCreateDirectoryPath (parms.OutputRootDir ());
 
-      ExtractionManager  extractionManager ("GrayImageExtraction", emParms, numberOfProcessors, log);
-      bool  successful = false;
-      extractionManager.ManageTheExtraction (successful);
+    if  (parms.MultiThreaded ())
+    {
+      cout << endl << endl << "Multi-Threaded seleceted." << endl << endl;
+      KKStr  errorMessage = "";
+      bool   parmsGood    = true;
+        
+      ExtractionParms emParms (argc, argv, false, errorMessage, parmsGood, log);
+      if  (parmsGood)
+      {
+        kkint32  numberOfProcessors = osGetNumberOfProcessors ();
+        if  (numberOfProcessors < 1)
+          numberOfProcessors = 1;
+
+        cout << endl << endl << "Multi-Threaded seleceted: " << numberOfProcessors << endl << endl;
+
+        ExtractionManager  extractionManager ("GrayImageExtraction", emParms, numberOfProcessors, log);
+        bool  successful = false;
+        extractionManager.ManageTheExtraction (successful);
+      }
+    }
+    else
+    {
+      cout << endl << endl << "Single-Threaded seleceted." << endl << endl;
+
+      bool  successfull = true;
+      SipperImageExtraction  imageExtraction (parms, successfull, log);
+      if  (successfull)
+        imageExtraction.ExtractFrames ();
     }
   }
+
   InstrumentDataFileManager::FinalCleanUp ();
   Instrument::FinalCleanUp ();
   FileDesc::FinalCleanUp ();

@@ -64,7 +64,7 @@ namespace PicesInterface
     property  float   GrowthRate      {float   get ()  {return  imageSizeDistribution->GrowthRate     ();}}
     property  float   EndValue        {float   get ()  {return  imageSizeDistribution->EndValue       ();}}
     property  int     NumSizeBuckets  {int     get ()  {return  imageSizeDistribution->NumSizeBuckets ();}}
-    property  int     NumDepthBins    {int     get ()  {return  imageSizeDistribution->NumDepthBins   ();}}
+    property  int     NumDepthBins    {int     get ()  {return  (int)imageSizeDistribution->NumDepthBins   ();}}
 
     MLL::ImageSizeDistributionPtr  UnmanagedClass ()  {return  imageSizeDistribution;}
 

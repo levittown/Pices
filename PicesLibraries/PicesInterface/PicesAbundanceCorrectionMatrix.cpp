@@ -90,8 +90,8 @@ System::DateTime  PicesAbundanceCorrectionMatrix::DateTimeComputed ()
 cli::array<float>^  PicesAbundanceCorrectionMatrix::ProbOfDetection ()
 {
   const std::vector<float>&  v = abundanceMatrix->ProbOfDetection ();
-  cli::array<float>^  result = gcnew cli::array<float> (v.size ());
-  for  (kkuint32 x = 0;  x < v.size ();  ++x)
+  cli::array<float>^  result = gcnew cli::array<float> ((int)v.size ());
+  for  (auto x = 0;  x < v.size ();  ++x)
     result[x] = v[x];
 
   return  result;
@@ -102,7 +102,7 @@ cli::array<float>^  PicesAbundanceCorrectionMatrix::ProbOfDetection ()
 cli::array<float>^     PicesAbundanceCorrectionMatrix::ProbOfFalseAlarm ()
 {
   const std::vector<float>&  v = abundanceMatrix->ProbOfFalseAlarm ();
-  cli::array<float>^  result = gcnew cli::array<float> (v.size ());
+  cli::array<float>^  result = gcnew cli::array<float> ((int)v.size ());
   for  (kkuint32 x = 0;  x < v.size ();  ++x)
     result[x] = v[x];
 

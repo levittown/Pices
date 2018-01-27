@@ -14,35 +14,32 @@ typedef  Orderings* OrderingsPtr;
 #endif
 
 
-#include  "MLClass.h"
-#include  "ImageFeatures.h"
-#include  "KKQueue.h"
-#include  "RunLog.h"
-#include  "KKStr.h"
-#include  "SVMparam.h"
-#include  "TrainingConfiguration.h"
+#include "MLClass.h"
+#include "ImageFeatures.h"
+#include "KKQueue.h"
+#include "RunLog.h"
+#include "KKStr.h"
+#include "SVMparam.h"
+#include "TrainingConfiguration2.h"
 
 typedef  enum   {rjNULL, rjOpen, rjStarted, rjDone}  rjJobStatus;
-
-
-
 
 
 
 class  RandomSampleJob
 {
 public:
-  RandomSampleJob (TrainingConfigurationPtr  _config,
-                   OrderingsPtr              _orderings,
-                   int                       _jobId,
-                   int                       _orderingNum,
-                   int                       _numExamplesToKeep
+  RandomSampleJob (TrainingConfiguration2Ptr  _config,
+                   OrderingsPtr               _orderings,
+                   int                        _jobId,
+                   int                        _orderingNum,
+                   int                        _numExamplesToKeep
                   );
 
-  RandomSampleJob (TrainingConfigurationPtr  _config,
-                   OrderingsPtr              _orderings,
-                   int                       _numExamplesToKeep,
-                   const KKStr&              statusLine
+  RandomSampleJob (TrainingConfiguration2Ptr  _config,
+                   OrderingsPtr               _orderings,
+                   int                        _numExamplesToKeep,
+                   const KKStr&               statusLine
                   );
 
 
@@ -88,8 +85,8 @@ public:
 private:
   float                     accuracy;
   double                    c;
-  SVM_CompressionMethod     compMethod;       // If NULL means was not stred when ran
-  TrainingConfigurationPtr  config;
+  SVM_CompressionMethod     compMethod;       // If NULL means was not when ran
+  TrainingConfiguration2Ptr config;
   CrossValidationPtr        crossValidation;
   SVM_EncodingMethod        encodingMethod;
   double                    gamma;

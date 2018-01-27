@@ -2,17 +2,16 @@
 #define  _BITREDUCTIONJOB_
 
 
-#include  "BitReduction.h"
-#include  "DataSetParameters.h"
-#include  "DateTime.h"
-#include  "MLClass.h"
-#include  "FeatureVector.h"
-#include  "Orderings.h"
-#include  "KKQueue.h"
-#include  "RunLog.h"
-#include  "KKStr.h"
-#include  "SVMparam.h"
-#include  "TrainingConfiguration.h"
+#include "DataSetParameters.h"
+#include "DateTime.h"
+#include "MLClass.h"
+#include "FeatureVector.h"
+#include "Orderings.h"
+#include "KKQueue.h"
+#include "RunLog.h"
+#include "KKStr.h"
+#include "SVMparam.h"
+#include "TrainingConfiguration2.h"
 
 
 typedef  enum   {brNULL, brOpen, brStarted, brDone}  brJobStatus;

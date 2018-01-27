@@ -21,7 +21,7 @@
 class    SortOrderResults;
 
 #include  "ClassGroupTotals.h"
-#include  "ImageClass.h"
+#include  "MLClass.h"
 
 
 typedef  KKQueue<SortOrderResults>  SortOrderResultsList;
@@ -33,9 +33,9 @@ typedef  RetrainingResultsList*  RetrainingResultsListPtr;
 class  ActiveLearningReport
 {
 public:
-  ActiveLearningReport (RunLog&          _log,
-                        ImageClassList&  _imageClasses,
-                        KKStr           _subDirName
+  ActiveLearningReport (RunLog&       _log,
+                        MLClassList&  _imageClasses,
+                        KKStr         _subDirName
                        );
 
   ~ActiveLearningReport ();
@@ -74,16 +74,16 @@ public:
 
 
 private:
-  void  TryLoadingResultsForASpecificSortOrder (SortOrderType     sortOrder,
-                                                KKStr            qualifier,
-                                                ImageClassList&   classes
+  void  TryLoadingResultsForASpecificSortOrder (SortOrderType  sortOrder,
+                                                KKStr          qualifier,
+                                                MLClassList&   classes
                                                );
 
   RetrainingResultsListPtr  GetRetrainingsForASortOrder (SortOrderType  sortOrder);
 
 
   KKStr                 baseResultsFileName;
-  ImageClassList&       imageClasses;
+  MLClassList&          mlClasses;
   int                   imagesPerRetraining;
   int                   initialImagesPerClass;
   RunLog&               log;

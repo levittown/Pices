@@ -32,15 +32,9 @@ using namespace KKB;
 using  namespace  MLL;
 
 
-
-
-
-
-
 DataBaseUpdate::DataBaseUpdate (RunLog&  _log)
 {
 }
-
 
 
 
@@ -48,7 +42,6 @@ DataBaseUpdate::~DataBaseUpdate ()
 {
 
 }
-
 
 
 
@@ -86,16 +79,8 @@ void  DataBaseUpdate::LoadSourceFile (const KKStr&  fileName,
     return;
   }
 
-
-  
-
-
-
-
-
-
   VectorKKStr  columnNames;
-  kkint32  sqlStrLen = fread (sqlStr, 1, maxLen, f);
+  kkint32  sqlStrLen = (kkint32)fread (sqlStr, 1, maxLen, f);
   sqlStr[sqlStrLen] = 0;
   KKStrMatrixPtr results = dbConn->QueryStatementReturnAllColumns (sqlStr, sqlStrLen, columnNames);
   if  (!results)

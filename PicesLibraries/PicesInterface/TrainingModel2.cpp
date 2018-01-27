@@ -310,7 +310,7 @@ void  TrainingModel2::CleanUp ()
 
 void  TrainingModel2::UpdateMemoryPressure ()
 {
-  int  newMemoryPressure = 2 * sizeof (bool) + 
+  kkMemSize  newMemoryPressure = 2 * sizeof (bool) + 
                            crossProbTableNumClasses * crossProbTableNumClasses * sizeof (double) +   // crossProbTable
                            crossProbTableNumClasses *  sizeof (double) +                             // probabilities
                            crossProbTableNumClasses *  sizeof (int);                                 // votes
@@ -322,16 +322,14 @@ void  TrainingModel2::UpdateMemoryPressure ()
   if  (trainer  && trainerWeOwn)
     newMemoryPressure += trainer->MemoryConsumedEstimated ();
 
-  int  deltaMemoryPressure = newMemoryPressure - curMemoryPressure;
-  if  (deltaMemoryPressure > 0)
-    GC::AddMemoryPressure (deltaMemoryPressure);
+  if (newMemoryPressure > curMemoryPressure)
+    GC::AddMemoryPressure (newMemoryPressure - curMemoryPressure);
 
-  else if  (deltaMemoryPressure < 0)
-    GC::RemoveMemoryPressure (-deltaMemoryPressure);
+  else if (newMemoryPressure < curMemoryPressure)
+    GC::RemoveMemoryPressure (curMemoryPressure - newMemoryPressure);
 
   curMemoryPressure = newMemoryPressure;
 }  /* UpdateMemoryPressure */
-
 
 
 
@@ -1454,8 +1452,8 @@ array<String^>^  TrainingModel2::SupportVectorNames (PicesClass^ c1,
 
   std::vector<KKStr> fvNames = classifier->SupportVectorNames (c1Pices, c2Pices);
 
-  array<String^>^  results = gcnew array<String^> (fvNames.size ());
-  for  (uint zed = 0;  zed < fvNames.size ();  zed++)
+  array<String^>^  results = gcnew array<String^> ((int)fvNames.size ());
+  for  (auto zed = 0;  zed < fvNames.size ();  zed++)
     results[zed] = PicesKKStr::KKStrToSystenStr (fvNames[zed]);
     
   return  results;
@@ -1486,16 +1484,14 @@ array<PicesInterface::ProbNamePair^>^
                                            c2Pices
                                           );
 
-  array<PicesInterface::ProbNamePair^>^  results = gcnew array<PicesInterface::ProbNamePair^> (worstExamples.size ());
-  for  (uint zed = 0;  zed < worstExamples.size ();  zed++)
+  array<PicesInterface::ProbNamePair^>^  results = gcnew array<PicesInterface::ProbNamePair^> ((int)worstExamples.size ());
+  for  (auto zed = 0;  zed < worstExamples.size ();  zed++)
     results[zed] = gcnew PicesInterface::ProbNamePair (worstExamples[zed].name, worstExamples[zed].probability);
 
   delete  dupFV;  dupFV = NULL;
 
   return  results;
 }  /* FindWorstSupportVectors */
-
-
 
 
 
@@ -1522,7 +1518,7 @@ array<PicesInterface::ProbNamePair^>^
                                             c2Pices
                                            );
 
-  array<PicesInterface::ProbNamePair^>^  results = gcnew array<PicesInterface::ProbNamePair^> (worstExamples.size ());
+  array<PicesInterface::ProbNamePair^>^  results = gcnew array<PicesInterface::ProbNamePair^> ((int)worstExamples.size ());
   for  (uint zed = 0;  zed < worstExamples.size ();  zed++)
     results[zed] = gcnew PicesInterface::ProbNamePair (worstExamples[zed].name, worstExamples[zed].probability);
 

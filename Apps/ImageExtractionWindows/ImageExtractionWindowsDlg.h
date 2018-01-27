@@ -39,8 +39,8 @@ public:
 	CString       m_imagesExtracted;
 	CString       m_imagesWritten;
 	CString       m_sipperFileSize;
-	int           m_minimumSize;
-	int	      	  m_maximumSize;
+	float         m_minimumSize;
+  float         m_maximumSize;
   CString	      m_database;
 	CString	      m_sipperFileName;
 	CString	      m_destinationDirectory;
@@ -81,7 +81,7 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	virtual void OnCancel();
-	afx_msg void OnTimer(UINT nIDEvent);
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 

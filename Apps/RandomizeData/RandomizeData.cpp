@@ -57,10 +57,7 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
-
-
 #include  "MemoryDebug.h"
-
 using namespace std;
 
 #include "KKBaseTypes.h"
@@ -83,7 +80,7 @@ using namespace KKB;
 #include "FeatureVector.h"
 #include "NormalizationParms.h"
 #include "TrainingConfiguration2.h"
-using namespace MLL;
+using namespace KKMLL;
 
 
 // -f K:\v1\Plankton\TempBeamSearch\2004_March_02\2004_03_02.data  -A TEST_VALIDATE  -I RAW   -O RAW  -L 1500  -P 66.6666
@@ -1331,17 +1328,17 @@ void  CreateFolds (int  numOfFolds)
   double  examplesPerFold = (double)stratifiedExamples->size () / numOfFolds;
 
   
-  int  startIdx = 0;
-  int  endIdx = (int)floor(startIdx + examplesPerFold);
+  kkuint32  startIdx = 0;
+  kkuint32  endIdx = (int)floor(startIdx + examplesPerFold);
   for  (int  foldNum = 0;  foldNum < numOfFolds;  ++foldNum)
   {
     if  (foldNum == (numOfFolds - 1))
-	  endIdx = stratifiedExamples->size ();
+	  endIdx = (kkuint32)stratifiedExamples->size ();
 
 	ImageFeaturesListPtr trainThisFold = new ImageFeaturesList (examples->FileDesc (), false, 0);
 	ImageFeaturesListPtr testThisFold  = new ImageFeaturesList (examples->FileDesc (), false, 0);
 
-	for  (int curIdx = 0;  curIdx < (int)stratifiedExamples->size ();  curIdx++)
+	for  (kkuint32 curIdx = 0;  curIdx < (int)stratifiedExamples->size ();  curIdx++)
 	{
 	  ImageFeaturesPtr  example = stratifiedExamples->IdxToPtr (curIdx);
       if  ((curIdx < startIdx)  || (curIdx >= endIdx))

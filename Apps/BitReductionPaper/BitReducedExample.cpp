@@ -25,7 +25,7 @@ BitReducedExample::BitReducedExample (FeatureVector&  example,
     numOfFeatures (example.NumOfFeatures ()),
     origImages    (NULL)
 {
-  const FFLOAT*  origFeatureData = example.FeatureData ();
+  const float*  origFeatureData = example.FeatureData ();
   featureData = new int[numOfFeatures];
   for  (int x = 0;  x < numOfFeatures;  x++)
   {
@@ -36,9 +36,8 @@ BitReducedExample::BitReducedExample (FeatureVector&  example,
       featureData[x] = -1 * ((-1*temp) >> bitReduction);
   }
 
-  origImages = new FeatureVectorList (fileDesc, false, fileDesc->Log (), 0);
+  origImages = new FeatureVectorList (fileDesc, false);
   origImages->PushOnBack (&example);
-
 
   nodeKey = new BitReducedExampleKey (*this);
 }

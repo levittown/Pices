@@ -251,12 +251,12 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
   
   if  (!totalCast)
   {
-    runLog.Level (-1) << "MarineSnowReportDeployment    ***ERROR***    No results returend" << endl;
+    runLog.Level (-1) << "MarineSnowReportDeployment    ***ERROR***    No results returned" << endl;
     return NULL;
   }
   
   kkint32  numRows = totalCast->NumDepthBins ();         // numRows = results->NumRows ();
-  //kkint32  numCols =                                       // numCols = results->NumCols ();
+  //kkint32  numCols =                                   // numCols = results->NumCols ();
   kkint32  numCountCols = totalCast->NumSizeBuckets ();  // numCountCols = numCols - 6;
 
   if  (numRows == 0)
