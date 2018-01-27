@@ -7,8 +7,8 @@
 using namespace  KKB;
 
 #include "DataBase.h"
+#include "SipperBuff.h"
 #include "PicesApplication.h"
-
 using namespace  MLL;;
 
 namespace  PicesUtilityApps
@@ -42,7 +42,6 @@ namespace  PicesUtilityApps
 
       KKStr ToJsonStr ()  const;
     };
-
 
     BuildSynthObjDetData ();
 
@@ -88,6 +87,13 @@ namespace  PicesUtilityApps
       BoundBoxEntryList* boundBoxes;
     };
 
+    RasterPtr GetNextFrame ();
+
+    RasterPtr GetNextOpenFrame ();
+
+    void  LoadAvailableSipperFileNames ();
+
+    bool  OpenSipperBuff ();
 
     PopulateRasterResult*  PopulateRaster (DataBaseImageList& workingList, int numToPlace);
 
@@ -104,6 +110,11 @@ namespace  PicesUtilityApps
     kkint32  maxCandidates;
     kkint32  maxImages;
     KKStr    targetDir;
+
+    VectorKKStr               availableSipperFileNames;
+    InstrumentDataManagerPtr  instrumentDataManager;
+    KKStr                     sipperFileRootDir;
+    SipperBuffPtr             sipperBuff;
 
     RandomNumGenerator rng;
   };  /* BuildSynthObjDetData */

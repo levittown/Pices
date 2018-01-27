@@ -1,4 +1,4 @@
-// BuildSynthObjDetData.cpp : Defines the entry point for the console application.
+/// BuildSynthObjDetData.cpp : Defines the entry point for the console application.
 //
 
 #include "stdafx.h"
@@ -16,13 +16,14 @@
 #include "KKBaseTypes.h"
 using namespace std;
 
-
+#include "Blob.h"
 #include "ImageIO.h"
 #include "OSservices.h"
 #include "KKStr.h"
 using namespace KKB;
 
 
+#include "InstrumentDataFileManager.h"
 #include "DataBase.h"
 #include "ImageFeatures.h"
 #include "SipperCruise.h"
@@ -114,6 +115,115 @@ void  BuildSynthObjDetData::DisplayCommandLineParameters ()
 
 
 
+void  BuildSynthObjDetData::LoadAvailableSipperFileNames ()
+{
+  availableSipperFileNames.clear ();
+  KKB::osGetListOfFilesInDirectoryTree (sipperFileRootDir, "*.spr", availableSipperFileNames);
+}
+
+
+
+bool  BuildSynthObjDetData::OpenSipperBuff ()
+{
+  delete instrumentDataManager;
+  instrumentDataManager = NULL;
+
+  delete sipperBuff;
+  sipperBuff = NULL;
+
+  while ((sipperBuff == NULL)  &&  (availableSipperFileNames.size () > 0));
+  {
+    KKStr sipperFileName = availableSipperFileNames.back ();
+    availableSipperFileNames.pop_back ();
+    try
+    {
+      sipperBuff = SipperBuff::CreateSipperBuff (sipperFileName, 0, instrumentDataManager, log);
+    }
+    catch (...)
+    {
+      log.Level (-1) << "Exception  Creating SipperBuff for file: " << sipperFileName << endl;
+      sipperBuff = NULL;
+    }
+  } 
+
+  return (sipperBuff != NULL);
+}  /* OpenSipperBuff */
+
+
+
+RasterPtr BuildSynthObjDetData::GetNextFrame ()
+{
+  RasterPtr r = new Raster (2048, 2048);
+  if (sipperBuff == NULL)
+    OpenSipperBuff ();
+
+  kkint32 lineLen = sipperBuff->LineWidth ();
+  auto line = new uchar[lineLen];
+  auto colCount = new  kkuint32[lineLen];
+
+  bool frameRead = false;
+  while  ((sipperBuff == NULL)  &&  (availableSipperFileNames.size() > 0)  &&  (!frameRead))
+  {
+    kkuint32 linesRead = 0;
+    kkuint32 lineSize = 0;
+    kkuint32 pixelsInRow = 0;
+    bool flow = false;
+
+    sipperBuff->GetNextLine (line, lineLen, lineSize, colCount, pixelsInRow, flow);
+    while ((linesRead < r->Height ()) && (!sipperBuff->Eof ()))
+    {
+      uchar* rasterRow = r->Green ()[linesRead];
+      std::copy (line + 1024, line + 1024 + r->Width (), rasterRow);
+      sipperBuff->GetNextLine (line, lineLen, lineSize, colCount, pixelsInRow, flow);
+    }
+    if (linesRead >= r->Height ())
+      frameRead = true;
+
+    else if (sipperBuff->Eof ())
+    {
+      OpenSipperBuff ();
+    }
+  }
+
+  if (!frameRead)
+  {
+    delete r;
+    r = NULL;
+  }
+
+  delete line;
+  line = NULL;
+  return r;
+}
+
+
+
+RasterPtr BuildSynthObjDetData::GetNextOpenFrame ()
+{
+  bool frameOpen = false;
+  auto r = GetNextOpenFrame ();
+  while  ((r != NULL)  &&  (!frameOpen))
+  {
+    BlobListPtr blobs = r->ExtractBlobs (3);
+    if (blobs != NULL)
+    {
+      auto largestBlob = blobs->LocateLargestBlob ();
+      if ((largestBlob == NULL) || (largestBlob->PixelCount () >= 200))
+        frameOpen = true;
+      delete blobs;
+      blobs = NULL;
+    }
+  }
+
+  if (!frameOpen)
+  {
+    delete r;
+    r = NULL;
+  }
+  return r;
+}
+
+
 DataBaseImageListPtr  BuildSynthObjDetData::GetListOfValidatedImages (
     kkint32  minSize,
     kkint32  maxSize,
@@ -146,6 +256,8 @@ DataBaseImageListPtr  BuildSynthObjDetData::GetListOfValidatedImages (
   return labeledExamples;
 }
 
+
+
 RasterPtr  BuildSynthObjDetData::ReduceToMinimumSize (RasterPtr&  src)
 {
   Point topLeft, botRight;
@@ -164,6 +276,8 @@ RasterPtr  BuildSynthObjDetData::ReduceToMinimumSize (RasterPtr&  src)
     return trimmedObj;
   }
 }
+
+
 
 bool  BuildSynthObjDetData::SeeIfItFits 
        (Raster&       target, 
@@ -227,6 +341,7 @@ bool  BuildSynthObjDetData::SeeIfItFits
 
   return itFits;
 }  /* SeeIfItFits */
+
 
 
 BuildSynthObjDetData::PopulateRasterResult*  
@@ -318,6 +433,8 @@ int  BuildSynthObjDetData::Main (int argc, char** argv)
   return 0;
 }
 
+
+
 int  main (int argc,  char** argv)
 {
   BuildSynthObjDetData  app;
@@ -364,6 +481,8 @@ KKStr BuildSynthObjDetData::BoundBoxEntry::ToJsonStr () const
   return jsonStr;
 }
 
+
+
 BuildSynthObjDetData::BoundBoxEntryList::BoundBoxEntryList ():
   KKQueue<BoundBoxEntry> ()
 {}
@@ -373,6 +492,7 @@ BuildSynthObjDetData::BoundBoxEntryList::BoundBoxEntryList ():
 BuildSynthObjDetData::BoundBoxEntryList::BoundBoxEntryList (const BoundBoxEntryList& list):
   KKQueue<BoundBoxEntry> (list)
 {}
+
 
 
 KKStr BuildSynthObjDetData::BoundBoxEntryList::ToJsonStr () const
