@@ -23,7 +23,7 @@ using namespace std;
 using namespace KKB;
 
 
-#include "InstrumentDataFileManager.h"
+#include "InstrumentDataManager.h"
 #include "DataBase.h"
 #include "ImageFeatures.h"
 #include "SipperCruise.h"
@@ -47,9 +47,12 @@ BuildSynthObjDetData::BuildSynthObjDetData () :
   cancelFlag (false),
   imageHeight (2048),
   imageWidth (2048),
-  maxCandidates(100000),
+  maxCandidates (100000),
   maxImages (10000),
+  nextSipperFileIdx (0),
   rng(1000),
+  sipperBuff (NULL),
+  sipperFileRootDir("D:\\Pices\\SipperFiles"),
   targetDir()
 {
 }
@@ -58,6 +61,8 @@ BuildSynthObjDetData::BuildSynthObjDetData () :
 
 BuildSynthObjDetData::~BuildSynthObjDetData ()
 {
+  delete instrumentDataManager;
+  instrumentDataManager = NULL;
 }
 
 
@@ -125,18 +130,20 @@ void  BuildSynthObjDetData::LoadAvailableSipperFileNames ()
 
 bool  BuildSynthObjDetData::OpenSipperBuff ()
 {
-  delete instrumentDataManager;
-  instrumentDataManager = NULL;
-
   delete sipperBuff;
   sipperBuff = NULL;
 
-  while ((sipperBuff == NULL)  &&  (availableSipperFileNames.size () > 0));
+  while (sipperBuff == NULL) 
   {
-    KKStr sipperFileName = availableSipperFileNames.back ();
-    availableSipperFileNames.pop_back ();
+    if (nextSipperFileIdx >= availableSipperFileNames.size ())
+      nextSipperFileIdx = 0;
+    KKStr sipperFileName = availableSipperFileNames[nextSipperFileIdx];
+    ++nextSipperFileIdx;
     try
     {
+      delete instrumentDataManager;
+      instrumentDataManager = NULL;
+      instrumentDataManager = new InstrumentDataManager (sipperFileName, NULL, log);
       sipperBuff = SipperBuff::CreateSipperBuff (sipperFileName, 0, instrumentDataManager, log);
     }
     catch (...)
@@ -164,7 +171,7 @@ RasterPtr BuildSynthObjDetData::GetNextFrame ()
   bool frameRead = false;
   while  ((sipperBuff == NULL)  &&  (availableSipperFileNames.size() > 0)  &&  (!frameRead))
   {
-    kkuint32 linesRead = 0;
+    kkint32  linesRead = 0;
     kkuint32 lineSize = 0;
     kkuint32 pixelsInRow = 0;
     bool flow = false;
@@ -173,7 +180,11 @@ RasterPtr BuildSynthObjDetData::GetNextFrame ()
     while ((linesRead < r->Height ()) && (!sipperBuff->Eof ()))
     {
       uchar* rasterRow = r->Green ()[linesRead];
-      std::copy (line + 1024, line + 1024 + r->Width (), rasterRow);
+
+      uchar* startCol = line + 1024;
+      uchar* endCol = startCol + 2048;
+
+      std::memcpy(rasterRow, startCol, 2048);
       sipperBuff->GetNextLine (line, lineLen, lineSize, colCount, pixelsInRow, flow);
     }
     if (linesRead >= r->Height ())
@@ -201,20 +212,23 @@ RasterPtr BuildSynthObjDetData::GetNextFrame ()
 RasterPtr BuildSynthObjDetData::GetNextOpenFrame ()
 {
   bool frameOpen = false;
-  auto r = GetNextOpenFrame ();
-  while  ((r != NULL)  &&  (!frameOpen))
+  RasterPtr r = NULL;
+  
+  do
   {
+    delete r;
+    r = GetNextFrame ();
     BlobListPtr blobs = r->ExtractBlobs (3);
     if (blobs != NULL)
     {
       auto largestBlob = blobs->LocateLargestBlob ();
-      if ((largestBlob == NULL) || (largestBlob->PixelCount () >= 200))
+      if (largestBlob->PixelCount () <= 200)
         frameOpen = true;
       delete blobs;
       blobs = NULL;
     }
-  }
-
+  } while (!frameOpen);
+  
   if (!frameOpen)
   {
     delete r;
@@ -222,6 +236,7 @@ RasterPtr BuildSynthObjDetData::GetNextOpenFrame ()
   }
   return r;
 }
+
 
 
 DataBaseImageListPtr  BuildSynthObjDetData::GetListOfValidatedImages (
@@ -349,7 +364,8 @@ BuildSynthObjDetData::PopulateRasterResult*
                                             int                 numToPlace)
 {
   BoundBoxEntryList*  boundingBoxes = new BoundBoxEntryList ();
-  RasterPtr raster = new Raster (imageHeight, imageWidth);
+  RasterPtr raster = GetNextOpenFrame ();
+  //RasterPtr raster = new Raster (imageHeight, imageWidth);
   Raster  marker (raster->Height(), raster->Width(), false);
   int numPlaced = 0;
   int numFailsToFindAPlace = 0;
@@ -399,10 +415,36 @@ BuildSynthObjDetData::PopulateRasterResult*
 
 
 
+/**@ brief  Empties out 'src' list returning new list that excludes noise images;  noise images are deleted. */
+DataBaseImageListPtr  BuildSynthObjDetData::FilerOutNoise (DataBaseImageList& src)
+{
+  auto filteredList = new DataBaseImageList (true);
+
+  while (src.QueueSize () > 0)
+  {
+    auto nextCandidate = src.PopFromBack ();
+    if (nextCandidate->Class1Name ().StartsWith ("Noise", true))
+    {
+      delete nextCandidate;
+      nextCandidate = NULL;
+    }
+    else
+    {
+      filteredList->PushOnBack (nextCandidate);
+    }
+  }
+
+  return filteredList;
+}
+
+
+
 int  BuildSynthObjDetData::Main (int argc, char** argv)
 {
+  LoadAvailableSipperFileNames ();
   maxCandidates = 100000;
-  auto candidates = GetListOfValidatedImages (5000, 50000, 0, maxCandidates);
+  auto potentialCandidate = GetListOfValidatedImages (5000, 50000, 0, maxCandidates);
+  auto candidates = FilerOutNoise (*potentialCandidate);
 
   KKStr labelingDataFileName = osAddSlash (targetDir) + "LabelingInfo.tsv";
   ofstream  labelingData (labelingDataFileName.Str ());
@@ -412,8 +454,8 @@ int  BuildSynthObjDetData::Main (int argc, char** argv)
   {
     kkint32 numObjectsToAdd = 5 + (rng.Next () % 20);
     auto createdRaster = PopulateRaster (*candidates, numObjectsToAdd);
-
-    KKStr imageFileName = osAddSlash (targetDir) + "PlanktonImage-" + KKB::StrFormatInt (imagesCreated, "00000") + ".bmp";
+    KKStr fileName = "PlanktonImage-" + KKB::StrFormatInt (imagesCreated, "00000") + ".bmp";
+    KKStr imageFileName = osAddSlash (targetDir) + fileName;
     KKB::SaveImageGrayscaleInverted4Bit (*(createdRaster->raster), imageFileName);
      
     labelingData << imageFileName << "\t" + createdRaster->boundBoxes->ToJsonStr () << endl;
@@ -471,10 +513,10 @@ KKStr BuildSynthObjDetData::BoundBoxEntry::ToJsonStr () const
 
   jsonStr
     << "{"
-    << "\"topLeftRow\":" << topLeftRow << ", "
     << "\"topLeftCol\":" << topLeftCol << ", "
-    << "\"height\":" << height << ", "
+    << "\"topLeftRow\":" << topLeftRow << ", "
     << "\"width\":" << width << ", "
+    << "\"height\":" << height << ", "
     << "\"ClassName\":" << mlClass->Name ().QuotedStr ()
     << "}";
 

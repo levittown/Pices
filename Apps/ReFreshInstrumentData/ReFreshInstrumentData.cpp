@@ -170,7 +170,7 @@ void   ReFreshInstrumentData::Main ()
     return;
   }
 
-  KKB::uint  numSipperFiles = sipperFiles->size ();
+  auto  numSipperFiles = sipperFiles->size ();
   KKB::uint  sipperFileNum = 0;
 
   log.Level (10) << "Number Of Sipper Files[" << numSipperFiles << "]." << endl;
@@ -184,7 +184,7 @@ void   ReFreshInstrumentData::Main ()
   for  (idx = sipperFiles->begin ();  idx != sipperFiles->end ();  idx++)
   {
     SipperFilePtr sf = *idx;
-    sipperFileNum++;
+    ++sipperFileNum;
 
     KKStr  fullSipperFileName = InstrumentDataFileManager::GetFullSipperFileName (sf->SipperFileName ());
     if  (fullSipperFileName.Empty ())

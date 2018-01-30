@@ -70,7 +70,6 @@ namespace  PicesUtilityApps
 
     RasterPtr  ReduceToMinimumSize (RasterPtr&  src);
 
-
     struct PopulateRasterResult
     {
       PopulateRasterResult (RasterPtr  _raster, BoundBoxEntryList* _boundBoxes) :
@@ -87,6 +86,8 @@ namespace  PicesUtilityApps
       BoundBoxEntryList* boundBoxes;
     };
 
+    DataBaseImageListPtr  FilerOutNoise (DataBaseImageList& src);
+      
     RasterPtr GetNextFrame ();
 
     RasterPtr GetNextOpenFrame ();
@@ -113,8 +114,9 @@ namespace  PicesUtilityApps
 
     VectorKKStr               availableSipperFileNames;
     InstrumentDataManagerPtr  instrumentDataManager;
-    KKStr                     sipperFileRootDir;
+    size_t                    nextSipperFileIdx;
     SipperBuffPtr             sipperBuff;
+    KKStr                     sipperFileRootDir;
 
     RandomNumGenerator rng;
   };  /* BuildSynthObjDetData */
