@@ -186,7 +186,7 @@ void  InstrumentDataManager::InitializeLatitude ()
   // the sipper file name.
   if  (sipperFile)
   {
-	const KKStr&  cruiseName = sipperFile->CruiseName ();
+    const KKStr&  cruiseName = sipperFile->CruiseName ();
     if  (sipperFile->Latitude () > 0.1)
     {
       latitude = sipperFile->Latitude ();

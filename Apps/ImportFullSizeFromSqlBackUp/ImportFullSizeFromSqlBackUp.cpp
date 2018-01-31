@@ -35,8 +35,6 @@ ImportFullSizeFromSqlBackUp::ImportFullSizeFromSqlBackUp ():
 
 
 
-
-
 ImportFullSizeFromSqlBackUp::~ImportFullSizeFromSqlBackUp ()
 {
 }
@@ -109,7 +107,6 @@ void   ImportFullSizeFromSqlBackUp::DisplayCommandLineParameters ()
 
 
 
-
 void  ImportFullSizeFromSqlBackUp::Main ()
 {
   ifstream  i (srcFileName.Str ());
@@ -135,7 +132,7 @@ void  ImportFullSizeFromSqlBackUp::Main ()
          (buff[4] == 'R')
         )
     {
-      int  buffStrLen = strlen (buff);
+      kkint32  buffStrLen = (kkint32)strlen (buff);
       DB ()->QueryStatement2 (buff, buffStrLen);
     }
   }
