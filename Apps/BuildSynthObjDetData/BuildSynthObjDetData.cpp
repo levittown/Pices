@@ -5,19 +5,20 @@
 
 #include "FirstIncludes.h"
 #include <stdlib.h>
-#include <memory>
-#include <math.h>
+#include <fstream>
 #include <map>
 #include <string>
 #include <iostream>
-#include <fstream>
+#include <math.h>
+#include <memory>
+#include <random>
 #include <vector>
 #include "MemoryDebug.h"
-#include "KKBaseTypes.h"
 using namespace std;
 
 #include "Blob.h"
 #include "ImageIO.h"
+#include "KKBaseTypes.h"
 #include "OSservices.h"
 #include "KKStr.h"
 using namespace KKB;
@@ -45,8 +46,11 @@ BuildSynthObjDetData::BuildSynthObjDetData () :
 
   PicesApplication (),
   cancelFlag (false),
+  candidateMinSize (2000),
+  candidateMaxSize (100000),
   imageHeight (2048),
   imageWidth (2048),
+  instrumentDataManager (NULL),
   maxCandidates (100000),
   maxImages (10000),
   nextSipperFileIdx (0),
@@ -169,25 +173,26 @@ RasterPtr BuildSynthObjDetData::GetNextFrame ()
   auto colCount = new  kkuint32[lineLen];
 
   bool frameRead = false;
-  while  ((sipperBuff == NULL)  &&  (availableSipperFileNames.size() > 0)  &&  (!frameRead))
+  while  (!frameRead)
   {
-    kkint32  linesRead = 0;
+    kkint32  linesAddedToRaster = 0;
     kkuint32 lineSize = 0;
     kkuint32 pixelsInRow = 0;
     bool flow = false;
 
     sipperBuff->GetNextLine (line, lineLen, lineSize, colCount, pixelsInRow, flow);
-    while ((linesRead < r->Height ()) && (!sipperBuff->Eof ()))
+    while ((linesAddedToRaster < r->Height ()) && (!sipperBuff->Eof ()))
     {
-      uchar* rasterRow = r->Green ()[linesRead];
+      uchar* rasterRow = r->Green ()[linesAddedToRaster];
 
       uchar* startCol = line + 1024;
       uchar* endCol = startCol + 2048;
 
       std::memcpy(rasterRow, startCol, 2048);
+      ++linesAddedToRaster;
       sipperBuff->GetNextLine (line, lineLen, lineSize, colCount, pixelsInRow, flow);
     }
-    if (linesRead >= r->Height ())
+    if (linesAddedToRaster >= r->Height ())
       frameRead = true;
 
     else if (sipperBuff->Eof ())
@@ -438,12 +443,16 @@ DataBaseImageListPtr  BuildSynthObjDetData::FilerOutNoise (DataBaseImageList& sr
 }
 
 
+#include <random>
 
 int  BuildSynthObjDetData::Main (int argc, char** argv)
 {
+  std::default_random_engine randEngine (1234567); //seed
+  std::normal_distribution<float> normDist (13.0f, 4.0f); //mean followed by stdiv
+
   LoadAvailableSipperFileNames ();
   maxCandidates = 100000;
-  auto potentialCandidate = GetListOfValidatedImages (5000, 50000, 0, maxCandidates);
+  auto potentialCandidate = GetListOfValidatedImages (candidateMinSize, candidateMaxSize, 0, maxCandidates);
   auto candidates = FilerOutNoise (*potentialCandidate);
 
   KKStr labelingDataFileName = osAddSlash (targetDir) + "LabelingInfo.tsv";
@@ -452,11 +461,11 @@ int  BuildSynthObjDetData::Main (int argc, char** argv)
   kkint32 imagesCreated = 0;
   while ((imagesCreated < maxImages) && (candidates->size () > 0) && (!cancelFlag))
   {
-    kkint32 numObjectsToAdd = 5 + (rng.Next () % 20);
+    kkint32 numObjectsToAdd = Max(5, (kkint32)normDist (randEngine));
     auto createdRaster = PopulateRaster (*candidates, numObjectsToAdd);
-    KKStr fileName = "PlanktonImage-" + KKB::StrFormatInt (imagesCreated, "00000") + ".bmp";
-    KKStr imageFileName = osAddSlash (targetDir) + fileName;
-    KKB::SaveImageGrayscaleInverted4Bit (*(createdRaster->raster), imageFileName);
+    KKStr imageFileName = "PlanktonImage-" + KKB::StrFormatInt (imagesCreated, "00000") + ".bmp";
+    KKStr fullImageFileName = osAddSlash (targetDir) + imageFileName;
+    KKB::SaveImageGrayscaleInverted4Bit (*(createdRaster->raster), fullImageFileName);
      
     labelingData << imageFileName << "\t" + createdRaster->boundBoxes->ToJsonStr () << endl;
     labelingData.flush ();

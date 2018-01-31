@@ -503,7 +503,7 @@ SipperFileFormat  SipperBuff::GuessFormatOfFile (const KKStr&  _fileName,
 
 
 
-SipperBuffPtr  SipperBuff::CreateSipperBuff (KKStr                     _fileName,
+SipperBuffPtr  SipperBuff::CreateSipperBuff (const KKStr&              _fileName,
                                              kkint32                   _cameraNum,
                                              InstrumentDataManagerPtr  _instrumentDataManager,
                                              RunLog&                   _log
@@ -517,7 +517,7 @@ SipperBuffPtr  SipperBuff::CreateSipperBuff (KKStr                     _fileName
 
 
 SipperBuffPtr  SipperBuff::CreateSipperBuff (SipperFileFormat          _format,
-                                             KKStr                     _fileName,
+                                             const KKStr&              _fileName,
                                              kkint32                   _cameraNum,
                                              InstrumentDataManagerPtr  _instrumentDataManager,
                                              RunLog&                   _log

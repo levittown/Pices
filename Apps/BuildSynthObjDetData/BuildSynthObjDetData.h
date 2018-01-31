@@ -106,6 +106,8 @@ namespace  PicesUtilityApps
                                    );
 
     bool     cancelFlag;
+    kkint32  candidateMinSize;
+    kkint32  candidateMaxSize;
     kkint32  imageHeight;
     kkint32  imageWidth;
     kkint32  maxCandidates;
