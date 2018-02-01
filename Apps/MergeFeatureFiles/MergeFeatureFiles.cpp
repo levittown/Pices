@@ -66,8 +66,6 @@ MergeFeatureFiles::MergeFeatureFiles ():
 
 
 
-
-
 MergeFeatureFiles::~MergeFeatureFiles ()
 {
   delete  srcData;
