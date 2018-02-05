@@ -10,7 +10,7 @@ CXX_FLAGS = -Wfatal-errors -Wall -Wextra -Wpedantic -Wconversion -Wshadow -std=c
 
 
 # Final binary
-BIN = libKKBase.a
+BIN = libPicesLibrary.a
 # Put all auto generated stuff to this build dir.
 BUILD_DIR = ./Debug
 

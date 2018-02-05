@@ -56,7 +56,7 @@ BuildSynthObjDetData::BuildSynthObjDetData () :
   nextSipperFileIdx (0),
   rng(1000),
   sipperBuff (NULL),
-  sipperFileRootDir("D:\\Pices\\SipperFiles"),
+  sipperFileRootDir("F:\\Pices\\SipperFiles\\USF\\ETP2008"),
   targetDir()
 {
 }
@@ -227,7 +227,7 @@ RasterPtr BuildSynthObjDetData::GetNextOpenFrame ()
     if (blobs != NULL)
     {
       auto largestBlob = blobs->LocateLargestBlob ();
-      if (largestBlob->PixelCount () <= 200)
+      if (largestBlob->PixelCount () <= 100)
         frameOpen = true;
       delete blobs;
       blobs = NULL;
@@ -448,10 +448,10 @@ DataBaseImageListPtr  BuildSynthObjDetData::FilerOutNoise (DataBaseImageList& sr
 int  BuildSynthObjDetData::Main (int argc, char** argv)
 {
   std::default_random_engine randEngine (1234567); //seed
-  std::normal_distribution<float> normDist (13.0f, 4.0f); //mean followed by stdiv
+  std::normal_distribution<float> normDist (10.0f, 4.0f); //mean followed by stdiv
 
   LoadAvailableSipperFileNames ();
-  maxCandidates = 100000;
+  maxCandidates = 1000000;
   auto potentialCandidate = GetListOfValidatedImages (candidateMinSize, candidateMaxSize, 0, maxCandidates);
   auto candidates = FilerOutNoise (*potentialCandidate);
 
