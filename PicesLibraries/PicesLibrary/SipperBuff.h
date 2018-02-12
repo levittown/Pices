@@ -45,7 +45,7 @@ namespace MLL
   {
   public:
     typedef  SipperBuff*  SipperBuffPtr;
-    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::kkint32   kkint32;
     typedef  KKB::kkuint32  kkuint32;
 
     SipperBuff (InstrumentDataManagerPtr  _instrumentDataManager,
@@ -59,8 +59,6 @@ namespace MLL
     virtual  ~SipperBuff ();
   
     const KKStr&  FileName () const {return  fileName;}
-  
-  
   
     void    InvalidLine  (bool _invalidLine)  {invalidLine = _invalidLine;}
     void    Open (const KKStr&  _fileName);
@@ -106,14 +104,14 @@ namespace MLL
   
     static
     SipperBuffPtr  CreateSipperBuff (SipperFileFormat          _format,
-                                     KKStr                     _fileName,
+                                     const KKStr&              _fileName,
                                      kkint32                   _cameraNum,
                                      InstrumentDataManagerPtr  _instrumentDataManager,
                                      RunLog&                   _log
                                     );
   
     static
-    SipperBuffPtr  CreateSipperBuff (KKStr                     _fileName,
+    SipperBuffPtr  CreateSipperBuff (const KKStr&              _fileName,
                                      kkint32                   _cameraNum,
                                      InstrumentDataManagerPtr  _instrumentDataManager,
                                      RunLog&                   _log

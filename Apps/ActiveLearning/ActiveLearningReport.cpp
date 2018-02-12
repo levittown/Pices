@@ -154,7 +154,7 @@ ActiveLearningReport::ActiveLearningReport (RunLog&       _log,
 
 // C:\users\kkramer\GradSchool\Plankton\ActiveLearning\Results\010-IPC\2003-12-03_AllOrders_010-IPC_50-IPR
 
-  int x = subDirName.LocateLastOccurrence ('_');
+  auto x = subDirName.LocateLastOccurrence ('_');
 
   if  (x > 5)
   {
@@ -174,11 +174,10 @@ ActiveLearningReport::ActiveLearningReport (RunLog&       _log,
 
 
 
-
-
 ActiveLearningReport::~ActiveLearningReport ()
 {
 }
+
 
 
 void  ActiveLearningReport::TryLoadingResultsForASpecificSortOrder (SortOrderType    sortOrder,
@@ -279,7 +278,6 @@ void  ActiveLearningReport::TryLoadingResultsForASpecificSortOrder (SortOrderTyp
 
 
 
-
 void   ActiveLearningReport::LoadResultsFiles ()
 {
   ClassGroupTotalsVector  listOfResults;
@@ -293,14 +291,9 @@ void   ActiveLearningReport::LoadResultsFiles ()
 
 
 
-
-
 void  ActiveLearningReport::PrintReport (ostream&  report)
 {
   log.Level (10) << "ActiveLearningReport::PrintReport  Start" << endl;
-
-  
-  // Lets Load Results File
 
   report << endl
          << endl
@@ -343,11 +336,8 @@ void  ActiveLearningReport::PrintReport (ostream&  report)
     report << endl;
   }
 
-
   log.Level (10) << "ActiveLearningReport::PrintReport  Done" << endl;
 } /* PrintReport */
-
-
 
 
 
@@ -356,9 +346,6 @@ void  ActiveLearningReport::PrintReportWithIncrements (ostream&  report,
                                                       )
 {
   log.Level (10) << "ActiveLearningReport::PrintReportWithIncrements  Start" << endl;
-
-  
-  // Lets Load Results File
 
   report << endl
          << endl
@@ -441,7 +428,6 @@ void  ActiveLearningReport::PrintReportWithIncrements (ostream&  report,
 
 
 
-
 void  ActiveLearningReport::Save (KKStr  fileName)
 {
   ofstream f (fileName.Str ());
@@ -459,7 +445,6 @@ void  ActiveLearningReport::Save (KKStr  fileName)
 
   f << "\\InitialTrainingImagesPerClass" << "\t" << initialImagesPerClass << endl;
   f << "\\ImagesPerRetraining"           << "\t" << imagesPerRetraining   << endl;
-
 
   for  (auto sortOrderResults : results)
   {
@@ -481,7 +466,6 @@ void  ActiveLearningReport::Save (KKStr  fileName)
 
   f.close ();
 }  /* Save */
-
 
 
 

@@ -536,8 +536,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>copy $(OutsidePackages)"\MySQL\MySQL Connector C 6.1\lib\"*.dll  $(TargetPath)
-copy $(OutsidePackages)"\fftw-3.3.5-dll64\"*.dll  $(TargetPath)</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
