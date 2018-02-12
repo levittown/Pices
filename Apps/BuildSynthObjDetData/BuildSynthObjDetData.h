@@ -86,7 +86,7 @@ namespace  PicesUtilityApps
       BoundBoxEntryList* boundBoxes;
     };
 
-    DataBaseImageListPtr  FilerOutNoise (DataBaseImageList& src);
+    DataBaseImageListPtr  FilterOutNoise (DataBaseImageList& src);
       
     RasterPtr GetNextFrame ();
 
@@ -112,6 +112,8 @@ namespace  PicesUtilityApps
     kkint32  imageWidth;
     kkint32  maxCandidates;
     kkint32  maxImages;
+    kkint32  rasterHeight;
+    kkint32  rasterWidth;
     KKStr    targetDir;
 
     VectorKKStr               availableSipperFileNames;

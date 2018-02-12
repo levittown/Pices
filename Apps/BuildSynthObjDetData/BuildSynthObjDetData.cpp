@@ -52,11 +52,13 @@ BuildSynthObjDetData::BuildSynthObjDetData () :
   imageWidth (2048),
   instrumentDataManager (NULL),
   maxCandidates (100000),
-  maxImages (10000),
+  maxImages (40000),
   nextSipperFileIdx (0),
+  rasterHeight (2048),
+  rasterWidth (2048),
   rng(1000),
   sipperBuff (NULL),
-  sipperFileRootDir("D:\\Pices\\SipperFiles"),
+  sipperFileRootDir("F:\\Pices\\SipperFiles\\USF\\ETP2008"),
   targetDir()
 {
 }
@@ -65,8 +67,8 @@ BuildSynthObjDetData::BuildSynthObjDetData () :
 
 BuildSynthObjDetData::~BuildSynthObjDetData ()
 {
-  delete instrumentDataManager;
-  instrumentDataManager = NULL;
+  delete sipperBuff;            sipperBuff = NULL;
+  delete instrumentDataManager; instrumentDataManager = NULL;
 }
 
 
@@ -164,13 +166,15 @@ bool  BuildSynthObjDetData::OpenSipperBuff ()
 
 RasterPtr BuildSynthObjDetData::GetNextFrame ()
 {
-  RasterPtr r = new Raster (2048, 2048);
+  RasterPtr r = new Raster (rasterHeight, rasterWidth);
   if (sipperBuff == NULL)
     OpenSipperBuff ();
 
   kkint32 lineLen = sipperBuff->LineWidth ();
   auto line = new uchar[lineLen];
   auto colCount = new  kkuint32[lineLen];
+
+  kkint32 startSipperCol = (sipperBuff->LineWidth () - rasterWidth) / 2;
 
   bool frameRead = false;
   while  (!frameRead)
@@ -185,10 +189,10 @@ RasterPtr BuildSynthObjDetData::GetNextFrame ()
     {
       uchar* rasterRow = r->Green ()[linesAddedToRaster];
 
-      uchar* startCol = line + 1024;
-      uchar* endCol = startCol + 2048;
+      uchar* startCol = line + startSipperCol;
+      uchar* endCol = startCol + rasterWidth;
 
-      std::memcpy(rasterRow, startCol, 2048);
+      std::memcpy(rasterRow, startCol, rasterWidth);
       ++linesAddedToRaster;
       sipperBuff->GetNextLine (line, lineLen, lineSize, colCount, pixelsInRow, flow);
     }
@@ -207,8 +211,9 @@ RasterPtr BuildSynthObjDetData::GetNextFrame ()
     r = NULL;
   }
 
-  delete line;
-  line = NULL;
+  delete colCount;  colCount = NULL;
+  delete line;      line = NULL;
+
   return r;
 }
 
@@ -227,7 +232,7 @@ RasterPtr BuildSynthObjDetData::GetNextOpenFrame ()
     if (blobs != NULL)
     {
       auto largestBlob = blobs->LocateLargestBlob ();
-      if (largestBlob->PixelCount () <= 200)
+      if (largestBlob->PixelCount () <= 100)
         frameOpen = true;
       delete blobs;
       blobs = NULL;
@@ -392,8 +397,12 @@ BuildSynthObjDetData::PopulateRasterResult*
         {
           kkint32 topLeftColCandidates = raster->Width () - trimmedObj->Width ();
           kkint32 topLeftRowCandidates = raster->Height () - trimmedObj->Height ();
-          kkint32 topLeftCol = rng.Next () % topLeftColCandidates;
-          kkint32 topLeftRow = rng.Next () % topLeftRowCandidates;
+          kkint32 topLeftCol = (kkint32)rng.Next () % topLeftColCandidates;
+          kkint32 topLeftRow = (kkint32)rng.Next () % topLeftRowCandidates;
+
+          if (topLeftRow < 1)
+            cout << "wow" << endl;
+          
           imagePlaced = SeeIfItFits (*raster, *trimmedObj, marker, topLeftRow, topLeftCol);
           if (imagePlaced)
             boundingBoxes->PushOnBack (new BoundBoxEntry (topLeftRow, topLeftCol, trimmedObj->Height (), trimmedObj->Width (), nextImageToPlace->Class1 ()));
@@ -411,6 +420,8 @@ BuildSynthObjDetData::PopulateRasterResult*
           workingList.PushOnFront (nextImageToPlace);
           ++numFailsToFindAPlace;
         }
+        delete trimmedObj;
+        trimmedObj = NULL;
         nextImageToPlace = NULL;
       }
     }
@@ -421,14 +432,30 @@ BuildSynthObjDetData::PopulateRasterResult*
 
 
 /**@ brief  Empties out 'src' list returning new list that excludes noise images;  noise images are deleted. */
-DataBaseImageListPtr  BuildSynthObjDetData::FilerOutNoise (DataBaseImageList& src)
+DataBaseImageListPtr  BuildSynthObjDetData::FilterOutNoise (DataBaseImageList& src)
 {
   auto filteredList = new DataBaseImageList (true);
 
   while (src.QueueSize () > 0)
   {
     auto nextCandidate = src.PopFromBack ();
-    if (nextCandidate->Class1Name ().StartsWith ("Noise", true))
+    kkuint32 noiseCount = 0;
+
+    bool keep = true;
+    if  ((nextCandidate->Height() >= rasterHeight)  ||  (nextCandidate->Width() > rasterWidth))
+      keep = false;
+
+    else if (nextCandidate->Class1Name ().EqualIgnoreCase ("noise_lines"))
+      keep = false;
+
+    else if (nextCandidate->Class1Name ().StartsWith ("noise", true))
+    {
+      ++noiseCount;
+      if ((noiseCount % 4) != 0)
+        keep = false;
+    }
+
+    if  (!keep)
     {
       delete nextCandidate;
       nextCandidate = NULL;
@@ -443,17 +470,17 @@ DataBaseImageListPtr  BuildSynthObjDetData::FilerOutNoise (DataBaseImageList& sr
 }
 
 
-#include <random>
-
 int  BuildSynthObjDetData::Main (int argc, char** argv)
 {
   std::default_random_engine randEngine (1234567); //seed
-  std::normal_distribution<float> normDist (13.0f, 4.0f); //mean followed by stdiv
+  std::normal_distribution<float> normDist (10.0f, 4.0f); //mean followed by stddev
+
+  KKStr  targetDir2 = "F:\\Temp\\SyntheticPlanktonObjDetImagesPainted";
 
   LoadAvailableSipperFileNames ();
-  maxCandidates = 100000;
+  maxCandidates = 1000000;
   auto potentialCandidate = GetListOfValidatedImages (candidateMinSize, candidateMaxSize, 0, maxCandidates);
-  auto candidates = FilerOutNoise (*potentialCandidate);
+  auto candidates = FilterOutNoise (*potentialCandidate);
 
   KKStr labelingDataFileName = osAddSlash (targetDir) + "LabelingInfo.tsv";
   ofstream  labelingData (labelingDataFileName.Str ());
@@ -461,11 +488,28 @@ int  BuildSynthObjDetData::Main (int argc, char** argv)
   kkint32 imagesCreated = 0;
   while ((imagesCreated < maxImages) && (candidates->size () > 0) && (!cancelFlag))
   {
-    kkint32 numObjectsToAdd = Max(5, (kkint32)normDist (randEngine));
+    kkint32 numObjectsToAdd = Max(2, (kkint32)normDist (randEngine));
     auto createdRaster = PopulateRaster (*candidates, numObjectsToAdd);
     KKStr imageFileName = "PlanktonImage-" + KKB::StrFormatInt (imagesCreated, "00000") + ".bmp";
     KKStr fullImageFileName = osAddSlash (targetDir) + imageFileName;
     KKB::SaveImageGrayscaleInverted4Bit (*(createdRaster->raster), fullImageFileName);
+
+    {
+      KKStr fullPaintedImageFileName = osAddSlash (targetDir2) + imageFileName;
+      Raster painted (*createdRaster->raster);
+      for (auto bb : *(createdRaster->boundBoxes))
+      {
+        Point tl (bb->topLeftRow, bb->topLeftCol);
+        Point tr (bb->topLeftRow, bb->topLeftCol + bb->width - 1);
+        Point bl (bb->topLeftRow + bb->height - 1, bb->topLeftCol);
+        Point br (bb->topLeftRow + bb->height - 1, bb->topLeftCol + bb->width - 1);
+        painted.DrawLine (tl, tr, 255);
+        painted.DrawLine (tr, br, 255);
+        painted.DrawLine (bl, br, 255);
+        painted.DrawLine (tl, bl, 255);
+      }
+      KKB::SaveImageGrayscaleInverted4Bit (painted, fullPaintedImageFileName);
+    }
      
     labelingData << imageFileName << "\t" + createdRaster->boundBoxes->ToJsonStr () << endl;
     labelingData.flush ();
@@ -488,13 +532,27 @@ int  BuildSynthObjDetData::Main (int argc, char** argv)
 
 int  main (int argc,  char** argv)
 {
-  BuildSynthObjDetData  app;
-  app.InitalizeApplication (argc, argv);
-  if (app.Abort ())
+  #if  defined (WIN32)  &&  defined (_DEBUG)  &&  !defined(_NO_MEMORY_LEAK_CHECK_)
+  _CrtSetDbgFlag (_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+  #endif
+
+  auto app = new BuildSynthObjDetData ();
+  app->InitalizeApplication (argc, argv);
+  if (app->Abort ())
     return 1;
 
-  app.Main (argc, argv);
-  if (app.Abort ())
+  app->Main (argc, argv);
+
+  #if  defined (WIN32)  &&  defined (_DEBUG)  &&  !defined(_NO_MEMORY_LEAK_CHECK_)
+  //_CrtDumpMemoryLeaks();
+  #endif
+
+  auto abort = app->Abort ();
+
+  delete app;
+  app = NULL;
+
+  if  (abort)
     return 1;
   else
     return 0;
