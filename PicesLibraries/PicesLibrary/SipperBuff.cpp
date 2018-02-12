@@ -18,7 +18,6 @@ using namespace std;
 using namespace KKB;
 
 
-
 #include "SipperBuff.h"
 
 #include "InstrumentDataManager.h"
@@ -56,7 +55,7 @@ SipperBuff::SipperBuff (InstrumentDataManagerPtr  _instrumentDataManager,
 
 
 
-SipperBuff::SipperBuff (const KKStr&             _fileName,
+SipperBuff::SipperBuff (const KKStr&              _fileName,
                         InstrumentDataManagerPtr  _instrumentDataManager,
                         RunLog&                   _log
                        ):
@@ -119,7 +118,6 @@ void  SipperBuff::AssignSerialPorts (const SipperHeaderRecPtr  sipperHeaderRec)
 
 
 
-
 void  SipperBuff::Open (const KKStr&  _fileName)
 {
   eof = false;
@@ -179,7 +177,6 @@ void  SipperBuff::SkipOneByte ()
 
 
 
-
 void  SipperBuff::SkipToScanLine (kkuint32  scanLine)
 {
   uchar*  lineBuff = new uchar[5000];
@@ -198,8 +195,6 @@ void  SipperBuff::SkipToScanLine (kkuint32  scanLine)
   delete  lineBuff;
   lineBuff = NULL;
 }  /* SkipToScanLine */
-
-
 
 
 
@@ -229,6 +224,7 @@ void  SipperBuff::SkipToScanLine (kkuint32  _scanLine,
   curRow = _scanLine - 1;
   byteOffset = _byteOffset;
 };
+
 
 
 #ifdef  WIN32
@@ -332,8 +328,6 @@ void  SipperBuff::DisplaySipperRec (SipperBuff::SipperRec&  sr)
 
 
 
-
-
 SipperFileFormat  SipperBuff::GuessFormatOfNextLine (FILE*    in,
                                                      kkint32  _cameraNum,
                                                      RunLog&  _log
@@ -410,8 +404,6 @@ SipperFileFormat  SipperBuff::GuessFormatOfNextLine (FILE*    in,
 
 
 
-
-
 SipperFileFormat  SipperBuff::GuessFormatOfFile (const KKStr&  _fileName,
                                                  kkint32       _cameraNum,
                                                  RunLog&       _log
@@ -456,9 +448,7 @@ SipperFileFormat  SipperBuff::GuessFormatOfFile (const KKStr&  _fileName,
     // Since we know it is a SIPPER 4bit  file,  we are done and can return 
     return  sfSipper4Bit;
   }
-
-
-
+  
   FILE*  in = osFOPEN (_fileName.Str (), "rb");
 
   if  (!in)
@@ -513,8 +503,7 @@ SipperFileFormat  SipperBuff::GuessFormatOfFile (const KKStr&  _fileName,
 
 
 
-
-SipperBuffPtr  SipperBuff::CreateSipperBuff (KKStr                     _fileName,
+SipperBuffPtr  SipperBuff::CreateSipperBuff (const KKStr&              _fileName,
                                              kkint32                   _cameraNum,
                                              InstrumentDataManagerPtr  _instrumentDataManager,
                                              RunLog&                   _log
@@ -527,9 +516,8 @@ SipperBuffPtr  SipperBuff::CreateSipperBuff (KKStr                     _fileName
 
 
 
-
 SipperBuffPtr  SipperBuff::CreateSipperBuff (SipperFileFormat          _format,
-                                             KKStr                     _fileName,
+                                             const KKStr&              _fileName,
                                              kkint32                   _cameraNum,
                                              InstrumentDataManagerPtr  _instrumentDataManager,
                                              RunLog&                   _log
@@ -569,7 +557,6 @@ SipperBuffPtr  SipperBuff::CreateSipperBuff (SipperFileFormat          _format,
 
   return  sipperBuff;
 }  /* CreateSipperBuff */
-
 
 
 
@@ -664,7 +651,6 @@ void  SipperBuff::DetermineCropSettings  (kkuint32&  cropLeft,
 
 
 
-
 void  SipperBuff::ReportInstrumentData (uchar  instrumentId,
                                         bool   text,
                                         uchar  data
@@ -738,6 +724,3 @@ KKStr  MLL::SipperFileAvailableOptions ()
 {
   return  "Binary, 1Bit, 3Bit, Sipper2, Sipper3, S3, Sipper3Rev, S3R";
 }
-
-
-

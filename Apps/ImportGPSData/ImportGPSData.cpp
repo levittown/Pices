@@ -586,7 +586,7 @@ void  ImportGPSData::ImportGPSDataGPGGA (const KKStr&  fileName)
     KKStr  latStr = fields[4];
     KKStr  logStr = fields[6];
 
-    int  x = latStr.LocateCharacter ('.');
+    auto  x = latStr.LocateCharacter ('.');
     if  (x < 0) 
       continue;
 
@@ -625,9 +625,6 @@ void  ImportGPSData::ImportGPSDataGPGGA (const KKStr&  fileName)
 
   i.close ();
 }  /* ImportGPSDataGPGGA */
-
-
-
 
 
 
@@ -738,9 +735,6 @@ void  ImportGPSData::ImportGPSDataSpecialtyDiverI (const KKStr&  fileName)
 
 
 
-
-
-
 void   ImportGPSData::Main ()
 {
   if  (Abort ())
@@ -828,8 +822,6 @@ void   ImportGPSData::Main ()
   delete  filesToExtract;
   filesToExtract = NULL;
 }  /* Main */
-
-
 
 
 

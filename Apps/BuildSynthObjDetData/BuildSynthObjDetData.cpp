@@ -1,28 +1,30 @@
-// BuildSynthObjDetData.cpp : Defines the entry point for the console application.
+/// BuildSynthObjDetData.cpp : Defines the entry point for the console application.
 //
 
 #include "stdafx.h"
 
 #include "FirstIncludes.h"
 #include <stdlib.h>
-#include <memory>
-#include <math.h>
+#include <fstream>
 #include <map>
 #include <string>
 #include <iostream>
-#include <fstream>
+#include <math.h>
+#include <memory>
+#include <random>
 #include <vector>
 #include "MemoryDebug.h"
-#include "KKBaseTypes.h"
 using namespace std;
 
-
+#include "Blob.h"
 #include "ImageIO.h"
+#include "KKBaseTypes.h"
 #include "OSservices.h"
 #include "KKStr.h"
 using namespace KKB;
 
 
+#include "InstrumentDataManager.h"
 #include "DataBase.h"
 #include "ImageFeatures.h"
 #include "SipperCruise.h"
@@ -44,11 +46,17 @@ BuildSynthObjDetData::BuildSynthObjDetData () :
 
   PicesApplication (),
   cancelFlag (false),
+  candidateMinSize (2000),
+  candidateMaxSize (100000),
   imageHeight (2048),
   imageWidth (2048),
-  maxCandidates(100000),
+  instrumentDataManager (NULL),
+  maxCandidates (100000),
   maxImages (10000),
+  nextSipperFileIdx (0),
   rng(1000),
+  sipperBuff (NULL),
+  sipperFileRootDir("D:\\Pices\\SipperFiles"),
   targetDir()
 {
 }
@@ -57,6 +65,8 @@ BuildSynthObjDetData::BuildSynthObjDetData () :
 
 BuildSynthObjDetData::~BuildSynthObjDetData ()
 {
+  delete instrumentDataManager;
+  instrumentDataManager = NULL;
 }
 
 
@@ -114,6 +124,126 @@ void  BuildSynthObjDetData::DisplayCommandLineParameters ()
 
 
 
+void  BuildSynthObjDetData::LoadAvailableSipperFileNames ()
+{
+  availableSipperFileNames.clear ();
+  KKB::osGetListOfFilesInDirectoryTree (sipperFileRootDir, "*.spr", availableSipperFileNames);
+}
+
+
+
+bool  BuildSynthObjDetData::OpenSipperBuff ()
+{
+  delete sipperBuff;
+  sipperBuff = NULL;
+
+  while (sipperBuff == NULL) 
+  {
+    if (nextSipperFileIdx >= availableSipperFileNames.size ())
+      nextSipperFileIdx = 0;
+    KKStr sipperFileName = availableSipperFileNames[nextSipperFileIdx];
+    ++nextSipperFileIdx;
+    try
+    {
+      delete instrumentDataManager;
+      instrumentDataManager = NULL;
+      instrumentDataManager = new InstrumentDataManager (sipperFileName, NULL, log);
+      sipperBuff = SipperBuff::CreateSipperBuff (sipperFileName, 0, instrumentDataManager, log);
+    }
+    catch (...)
+    {
+      log.Level (-1) << "Exception  Creating SipperBuff for file: " << sipperFileName << endl;
+      sipperBuff = NULL;
+    }
+  } 
+
+  return (sipperBuff != NULL);
+}  /* OpenSipperBuff */
+
+
+
+RasterPtr BuildSynthObjDetData::GetNextFrame ()
+{
+  RasterPtr r = new Raster (2048, 2048);
+  if (sipperBuff == NULL)
+    OpenSipperBuff ();
+
+  kkint32 lineLen = sipperBuff->LineWidth ();
+  auto line = new uchar[lineLen];
+  auto colCount = new  kkuint32[lineLen];
+
+  bool frameRead = false;
+  while  (!frameRead)
+  {
+    kkint32  linesAddedToRaster = 0;
+    kkuint32 lineSize = 0;
+    kkuint32 pixelsInRow = 0;
+    bool flow = false;
+
+    sipperBuff->GetNextLine (line, lineLen, lineSize, colCount, pixelsInRow, flow);
+    while ((linesAddedToRaster < r->Height ()) && (!sipperBuff->Eof ()))
+    {
+      uchar* rasterRow = r->Green ()[linesAddedToRaster];
+
+      uchar* startCol = line + 1024;
+      uchar* endCol = startCol + 2048;
+
+      std::memcpy(rasterRow, startCol, 2048);
+      ++linesAddedToRaster;
+      sipperBuff->GetNextLine (line, lineLen, lineSize, colCount, pixelsInRow, flow);
+    }
+    if (linesAddedToRaster >= r->Height ())
+      frameRead = true;
+
+    else if (sipperBuff->Eof ())
+    {
+      OpenSipperBuff ();
+    }
+  }
+
+  if (!frameRead)
+  {
+    delete r;
+    r = NULL;
+  }
+
+  delete line;
+  line = NULL;
+  return r;
+}
+
+
+
+RasterPtr BuildSynthObjDetData::GetNextOpenFrame ()
+{
+  bool frameOpen = false;
+  RasterPtr r = NULL;
+  
+  do
+  {
+    delete r;
+    r = GetNextFrame ();
+    BlobListPtr blobs = r->ExtractBlobs (3);
+    if (blobs != NULL)
+    {
+      auto largestBlob = blobs->LocateLargestBlob ();
+      if (largestBlob->PixelCount () <= 200)
+        frameOpen = true;
+      delete blobs;
+      blobs = NULL;
+    }
+  } while (!frameOpen);
+  
+  if (!frameOpen)
+  {
+    delete r;
+    r = NULL;
+  }
+  return r;
+}
+
+
+
 DataBaseImageListPtr  BuildSynthObjDetData::GetListOfValidatedImages (
     kkint32  minSize,
     kkint32  maxSize,
@@ -146,6 +276,8 @@ DataBaseImageListPtr  BuildSynthObjDetData::GetListOfValidatedImages (
   return labeledExamples;
 }
 
+
+
 RasterPtr  BuildSynthObjDetData::ReduceToMinimumSize (RasterPtr&  src)
 {
   Point topLeft, botRight;
@@ -164,6 +296,8 @@ RasterPtr  BuildSynthObjDetData::ReduceToMinimumSize (RasterPtr&  src)
     return trimmedObj;
   }
 }
+
+
 
 bool  BuildSynthObjDetData::SeeIfItFits 
        (Raster&       target, 
@@ -229,12 +363,14 @@ bool  BuildSynthObjDetData::SeeIfItFits
 }  /* SeeIfItFits */
 
 
+
 BuildSynthObjDetData::PopulateRasterResult*  
       BuildSynthObjDetData::PopulateRaster (DataBaseImageList&  workingList, 
                                             int                 numToPlace)
 {
   BoundBoxEntryList*  boundingBoxes = new BoundBoxEntryList ();
-  RasterPtr raster = new Raster (imageHeight, imageWidth);
+  RasterPtr raster = GetNextOpenFrame ();
+  //RasterPtr raster = new Raster (imageHeight, imageWidth);
   Raster  marker (raster->Height(), raster->Width(), false);
   int numPlaced = 0;
   int numFailsToFindAPlace = 0;
@@ -284,10 +420,40 @@ BuildSynthObjDetData::PopulateRasterResult*
 
 
 
+/**@ brief  Empties out 'src' list returning new list that excludes noise images;  noise images are deleted. */
+DataBaseImageListPtr  BuildSynthObjDetData::FilerOutNoise (DataBaseImageList& src)
+{
+  auto filteredList = new DataBaseImageList (true);
+
+  while (src.QueueSize () > 0)
+  {
+    auto nextCandidate = src.PopFromBack ();
+    if (nextCandidate->Class1Name ().StartsWith ("Noise", true))
+    {
+      delete nextCandidate;
+      nextCandidate = NULL;
+    }
+    else
+    {
+      filteredList->PushOnBack (nextCandidate);
+    }
+  }
+
+  return filteredList;
+}
+
+
+#include <random>
+
 int  BuildSynthObjDetData::Main (int argc, char** argv)
 {
+  std::default_random_engine randEngine (1234567); //seed
+  std::normal_distribution<float> normDist (13.0f, 4.0f); //mean followed by stdiv
+
+  LoadAvailableSipperFileNames ();
   maxCandidates = 100000;
-  auto candidates = GetListOfValidatedImages (5000, 50000, 0, maxCandidates);
+  auto potentialCandidate = GetListOfValidatedImages (candidateMinSize, candidateMaxSize, 0, maxCandidates);
+  auto candidates = FilerOutNoise (*potentialCandidate);
 
   KKStr labelingDataFileName = osAddSlash (targetDir) + "LabelingInfo.tsv";
   ofstream  labelingData (labelingDataFileName.Str ());
@@ -295,11 +461,11 @@ int  BuildSynthObjDetData::Main (int argc, char** argv)
   kkint32 imagesCreated = 0;
   while ((imagesCreated < maxImages) && (candidates->size () > 0) && (!cancelFlag))
   {
-    kkint32 numObjectsToAdd = 5 + (rng.Next () % 20);
+    kkint32 numObjectsToAdd = Max(5, (kkint32)normDist (randEngine));
     auto createdRaster = PopulateRaster (*candidates, numObjectsToAdd);
-
-    KKStr imageFileName = osAddSlash (targetDir) + "PlanktonImage-" + KKB::StrFormatInt (imagesCreated, "00000") + ".bmp";
-    KKB::SaveImageGrayscaleInverted4Bit (*(createdRaster->raster), imageFileName);
+    KKStr imageFileName = "PlanktonImage-" + KKB::StrFormatInt (imagesCreated, "00000") + ".bmp";
+    KKStr fullImageFileName = osAddSlash (targetDir) + imageFileName;
+    KKB::SaveImageGrayscaleInverted4Bit (*(createdRaster->raster), fullImageFileName);
      
     labelingData << imageFileName << "\t" + createdRaster->boundBoxes->ToJsonStr () << endl;
     labelingData.flush ();
@@ -317,6 +483,8 @@ int  BuildSynthObjDetData::Main (int argc, char** argv)
 
   return 0;
 }
+
+
 
 int  main (int argc,  char** argv)
 {
@@ -354,15 +522,17 @@ KKStr BuildSynthObjDetData::BoundBoxEntry::ToJsonStr () const
 
   jsonStr
     << "{"
-    << "\"topLeftRow\":" << topLeftRow << ", "
     << "\"topLeftCol\":" << topLeftCol << ", "
-    << "\"height\":" << height << ", "
+    << "\"topLeftRow\":" << topLeftRow << ", "
     << "\"width\":" << width << ", "
+    << "\"height\":" << height << ", "
     << "\"ClassName\":" << mlClass->Name ().QuotedStr ()
     << "}";
 
   return jsonStr;
 }
+
+
 
 BuildSynthObjDetData::BoundBoxEntryList::BoundBoxEntryList ():
   KKQueue<BoundBoxEntry> ()
@@ -373,6 +543,7 @@ BuildSynthObjDetData::BoundBoxEntryList::BoundBoxEntryList ():
 BuildSynthObjDetData::BoundBoxEntryList::BoundBoxEntryList (const BoundBoxEntryList& list):
   KKQueue<BoundBoxEntry> (list)
 {}
+
 
 
 KKStr BuildSynthObjDetData::BoundBoxEntryList::ToJsonStr () const
