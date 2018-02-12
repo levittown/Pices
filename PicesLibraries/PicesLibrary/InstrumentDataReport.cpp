@@ -151,13 +151,11 @@ InstrumentDataReportPtr
       r = new InstrumentDataCTDplus (_manager,_reportDir, _text, _instrumentId);
     }
 
-
     else if  (_instrumentId == 17)
     {
       //r = new InstrumentDataSerialPort0 (_manager, _reportDir, _text, _instrumentId);
       r = new InstrumentDataPitchAndRoll (_manager,_reportDir, _text, _instrumentId);
     }
-
 
     else if  (_instrumentId == 18)
     {
@@ -178,7 +176,6 @@ InstrumentDataReportPtr
 
 
 
-
 KKStr  InstrumentDataReport::InstrumentName ()
 {
   kkint32  x = 0;
@@ -190,8 +187,6 @@ KKStr  InstrumentDataReport::InstrumentName ()
 
   return  "Sensor_" + StrFormatInt (instrumentId, "00");
 }  /* InstrumentName */
-
-
 
 
 
