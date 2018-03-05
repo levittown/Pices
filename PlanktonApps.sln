@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WindowsApps", "WindowsApps", "{F1FB5D90-ACA0-4C8B-B992-4EA98C4D2D3D}"
 EndProject
@@ -373,6 +373,8 @@ Global
 		{8F609A95-37BC-4E0F-8CD5-4196A86CD4B8}.Debug|x64.Build.0 = Debug|x64
 		{8F609A95-37BC-4E0F-8CD5-4196A86CD4B8}.Release|x64.ActiveCfg = Release|x64
 		{8F609A95-37BC-4E0F-8CD5-4196A86CD4B8}.Release|x64.Build.0 = Release|x64
+		{3CCB1699-3233-427A-95F1-4119B5C62820}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3CCB1699-3233-427A-95F1-4119B5C62820}.Release|x64.ActiveCfg = Release|Any CPU
 		{D9BB6D83-937E-40FD-BFC3-FF48D8A04D11}.Debug|x64.ActiveCfg = Debug|x64
 		{D9BB6D83-937E-40FD-BFC3-FF48D8A04D11}.Debug|x64.Build.0 = Debug|x64
 		{D9BB6D83-937E-40FD-BFC3-FF48D8A04D11}.Release|x64.ActiveCfg = Release|x64
@@ -462,5 +464,8 @@ Global
 		{B56C5D7D-3AE1-4BF2-AF87-DAA09E62C70E} = {3E25C16D-3345-4DDF-92A2-05EA11B6ACF8}
 		{3BDA18EB-8232-48C0-A250-33C4A7685127} = {D51C4B42-A831-4ADF-A395-BA2F32ABD3FA}
 		{17CA3314-D7A7-43B1-BA35-CD4AF6420534} = {3BDA18EB-8232-48C0-A250-33C4A7685127}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C0F35A79-CB2A-4C38-86BA-21027482BB6B}
 	EndGlobalSection
 EndGlobal
