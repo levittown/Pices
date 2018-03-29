@@ -104,14 +104,13 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(KSquareLibraries)\JobManager;$(SolutionDir)PicesLibraries\PicesLibrary;$(SolutionDir)PicesLibraries\ImageExtractionManager;$(OutsidePackages)\fftw-3.3.2;$(OutsidePackages)\MySQL\mysql-connector-c-6.0.2-win32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\Libraries\$(Configuration);$(SolutionDir)\OutsidePackages\fftw-3.3.2;$(SolutionDir)\OutsidePackages\MySqlWin32\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>KKBase.lib;KKMachineLearning.lib;KKJobManager.lib;PicesLibrary.lib;libfftw3-3.lib;libfftw3f-3.lib;libmysql.lib;zlib123.lib;USER32.LIB;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>KKBase.lib;KKMachineLearning.lib;KKJobManager.lib;PicesLibrary.lib;libfftw3-3.lib;libfftw3f-3.lib;libmysql.lib;zlib-1.2.11.lib;USER32.LIB;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -139,7 +138,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(KSquareLibraries)\JobManager;$(SolutionDir)PicesLibraries\PicesLibrary;$(SolutionDir)PicesLibraries\ImageExtractionManager;$(OutsidePackages)\fftw-3.3.2;$(OutsidePackages)\MySQL\mysql-connector-c-6.0.2-win32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -147,8 +146,6 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\Libraries\$(Configuration);$(SolutionDir)\OutsidePackages\fftw-3.3.2;$(SolutionDir)\OutsidePackages\MySqlWin32\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>KKBase.lib;KKMachineLearning.lib;KKJobManager.lib;PicesLibrary.lib;libfftw3-3.lib;libfftw3f-3.lib;libmysql.lib;zlib123.lib;USER32.LIB;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -162,6 +159,11 @@
   <ItemGroup>
     <ClCompile Include="BuildSynthObjDetData.cpp" />
     <ClCompile Include="stdafx.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\PicesLibraries\PicesLibrary\PicesLibrary.vcxproj">
+      <Project>{fa9c865e-0227-4ebc-a291-ed0f2453afb3}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

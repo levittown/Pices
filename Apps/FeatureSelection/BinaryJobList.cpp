@@ -969,7 +969,7 @@ int   BinaryJobList::SmallestNumberOfFeaturesExpanded ()  const
   {
     const BinaryJobPtr  j = *idx;
     if  (j->Status () == BinaryJobStatus::Expanded)
-      smallestNumberOfFeaturesExpanded = Min (smallestNumberOfFeaturesExpanded, j->Features ().NumSelFeatures ());
+      smallestNumberOfFeaturesExpanded = Min ((kkuint16)smallestNumberOfFeaturesExpanded, j->Features ().NumSelFeatures ());
   }
 
   return smallestNumberOfFeaturesExpanded;

@@ -26,9 +26,9 @@
 //*                          for each class should be weighted by the prior info in the pool of   *
 //*                          samples.                                                             *
 //*************************************************************************************************
-#include "Str.h"
+#include "KKStr.h"
 #include "Application.h"
-using namespace KKU;
+using namespace KKB;
 
 #ifndef  _CLASSGROUPTOTALS_
 class  ClassGroupTotals;
@@ -70,9 +70,7 @@ typedef  ImageGroupList*  ImageGroupListPtr;
 class  ActiveLearning: public  Application
 {
 public:
-  ActiveLearning (int     argc,
-                  char**  argv
-                 );
+  ActiveLearning ();
   
                                        // 2004-12-11   KK
   ActiveLearning (KKStr  _rootDir);   // When you want to only load parameters 
@@ -80,6 +78,10 @@ public:
 
   ~ActiveLearning ();
 
+  virtual
+  void     InitalizeApplication (kkint32  argc,
+                                 char**   argv
+                                );
 
 
   virtual const 
@@ -99,7 +101,7 @@ public:
 
   FeatureFileIOPtr       FileFormats       ()  {return  fileFormat;}
 
-  ImageClassListPtr      ImageClasses      ()  {return  imageClasses;}
+  MLClassListPtr         ImageClasses      ()  {return  mlClasses;}
 
   vector<int>&           IIPCTable         ()  {return  iipcTable;}
 
@@ -150,7 +152,7 @@ private:
 
   void  ProcessASingleRetraining (SortOrderType        sortOrder,
                                   double               probabilityTest,
-                                  MLClassList&      classesInGroup,
+                                  MLClassList&         classesInGroup,
                                   Classifier2Ptr       classifier, 
                                   FeatureVectorList&   trainingImages,
                                   FeatureVectorList&   testImages,
@@ -187,8 +189,6 @@ private:
                                      );
   
 
-
-  
   //***************************************************/
   //*          Job Management Routines                */
   //***************************************************/
@@ -209,7 +209,7 @@ private:
 
   JobDescPtr  GetNextJob ();
 
-  float       GetPertinentProbability (ImageFeaturesPtr  image,
+  float       GetPertinentProbability (FeatureVectorPtr  image,
                                        SortOrderType     sortOrder
                                       );
 
@@ -253,9 +253,9 @@ private:
                                              KKStr             fullResultsFileName
                                             );
 
+  FactoryFVProducerPtr      fvFactoryProducer;
 
-
-  FileDescPtr               fileDesc;
+  FileDescConstPtr          fileDesc;
 
   int                       ourProcessNum;
 
@@ -272,18 +272,18 @@ private:
                                                      //  to a local drive,  then copy then to the
                                                      //  network.
 
-  KKStr                    baseResultsFileName;
-  KKStr                    configFileName;
-  KKStr                    dataFileSaveDir;
-  KKStr                    testImagesRootDir;
-  KKStr                    trainingImagesRootDir;
+  KKStr                     baseResultsFileName;
+  KKStr                     configFileName;
+  KKStr                     dataFileSaveDir;
+  KKStr                     testImagesRootDir;
+  KKStr                     trainingImagesRootDir;
 
-  KKStr                    masterTestImagesFileName;
-  KKStr                    validationImagesFileName;
-  FeatureFileIOPtr         fileFormat;
-  KKStr                    initTrainImagesAssignmentFileName;
+  KKStr                     masterTestImagesFileName;
+  KKStr                     validationImagesFileName;
+  FeatureFileIOPtr          fileFormat;
+  KKStr                     initTrainImagesAssignmentFileName;
 
-  ImageClassListPtr         imageClasses;
+  MLClassListPtr            mlClasses;
 
   FeatureVectorListPtr      masterTestImages; 
   FeatureVectorListPtr      validationImages; 

@@ -72,15 +72,12 @@ typedef  RetrainingResults*  RetrainingResultsPtr;
 class  RetrainingResultsList: public KKQueue<RetrainingResults>
 {
 public:
-  RetrainingResultsList (bool _owner,  int _size):
-    KKQueue<RetrainingResults> (_owner, _size)  {}
+  RetrainingResultsList (bool _owner):
+    KKQueue<RetrainingResults> (_owner)  {}
 };
 
 
 typedef  RetrainingResultsList*    RetrainingResultsListPtr;
-
-typedef  QueueIterator<RetrainingResults>  RetrainingResultsListIterator;
-
 
 
 class  SortOrderResults: public  RetrainingResultsList
@@ -99,9 +96,7 @@ typedef  SortOrderResults*  SortOrderResultsPtr;
 
 typedef  KKQueue<SortOrderResults>  SortOrderResultsList;
 
-typedef  QueueIterator<SortOrderResults>  SortOrderResultsListIterator;
-
-
+typedef  SortOrderResultsList::iterator  SortOrderResultsListIterator;
 
 
 
@@ -112,7 +107,6 @@ RetrainingResults::RetrainingResults ():
   numSupportVectors   (0.0f)
 {
 }
-
 
 
 
@@ -130,7 +124,7 @@ RetrainingResults::RetrainingResults (float  numOfTrainingImages,
 
 
 SortOrderResults::SortOrderResults (SortOrderType  _sortOrder):
-  RetrainingResultsList (true, 100),
+  RetrainingResultsList (true),
   sortOrder             (_sortOrder)
 {
 }
@@ -139,17 +133,14 @@ SortOrderResults::SortOrderResults (SortOrderType  _sortOrder):
 
 
 
-
-
-
-ActiveLearningReport::ActiveLearningReport (RunLog&          _log,
+ActiveLearningReport::ActiveLearningReport (RunLog&       _log,
                                             MLClassList&  _mlClasses,
-                                            KKStr           _subDirName
+                                            KKStr         _subDirName
                                            ):
-  mlClasses        (_mlClasses),
+  mlClasses           (_mlClasses),
   log                 (_log),
   subDirName          (_subDirName),
-  results             (true, 10),
+  results             (true),
   baseResultsFileName ("ActiveLearningResults")
 {
   if  (!subDirName.Empty ())
@@ -163,7 +154,7 @@ ActiveLearningReport::ActiveLearningReport (RunLog&          _log,
 
 // C:\users\kkramer\GradSchool\Plankton\ActiveLearning\Results\010-IPC\2003-12-03_AllOrders_010-IPC_50-IPR
 
-  int x = subDirName.LocateLastOccurrence ('_');
+  auto x = subDirName.LocateLastOccurrence ('_');
 
   if  (x > 5)
   {
@@ -183,11 +174,10 @@ ActiveLearningReport::ActiveLearningReport (RunLog&          _log,
 
 
 
-
-
 ActiveLearningReport::~ActiveLearningReport ()
 {
 }
+
 
 
 void  ActiveLearningReport::TryLoadingResultsForASpecificSortOrder (SortOrderType    sortOrder,
@@ -212,11 +202,8 @@ void  ActiveLearningReport::TryLoadingResultsForASpecificSortOrder (SortOrderTyp
   if  (dataFiles)
   {
     ClassGroupTotalsPtr  totals   = NULL;
-    KKStrPtr            fileName = NULL;
 
-    StringListIterator  fnIDX (*dataFiles);
-
-    for  (fnIDX.Reset ();  fileName = fnIDX.CurPtr ();  ++fnIDX)
+    for  (auto fileName: *dataFiles)
     {
       KKStr  fullFileName (subDirName);
       osAddLastSlash (fullFileName);
@@ -291,7 +278,6 @@ void  ActiveLearningReport::TryLoadingResultsForASpecificSortOrder (SortOrderTyp
 
 
 
-
 void   ActiveLearningReport::LoadResultsFiles ()
 {
   ClassGroupTotalsVector  listOfResults;
@@ -305,34 +291,25 @@ void   ActiveLearningReport::LoadResultsFiles ()
 
 
 
-
-
 void  ActiveLearningReport::PrintReport (ostream&  report)
 {
   log.Level (10) << "ActiveLearningReport::PrintReport  Start" << endl;
-
-  
-  // Lets Load Results File
 
   report << endl
          << endl
          << "****      Multi Class Results     ****" << endl
          << endl;
 
-  SortOrderResultsListIterator  soIDX (results);
-
-  SortOrderResultsPtr  sortOrderResults = NULL;
-
   int  numOfRetrainings = 0;
 
-  for  (soIDX.Reset ();  sortOrderResults = soIDX.CurPtr ();    ++soIDX)
+  for  (auto sortOrderResults: results)
   {
     report << SortOrderDescr (sortOrderResults->SortOrder ())  << "\t" << "\t" << "\t";
     numOfRetrainings = Max (numOfRetrainings, sortOrderResults->QueueSize ());
   }
   report << endl;
   
-  for  (soIDX.Reset ();  sortOrderResults = soIDX.CurPtr ();    ++soIDX)
+  for  (auto sortOrderResults : results)
   {
     report << "Image_Count"  << "\t" << "Accuracy" << "\t" << "NumSV" << "\t";
   }
@@ -341,7 +318,7 @@ void  ActiveLearningReport::PrintReport (ostream&  report)
 
   for  (int retraining = 0;  retraining < numOfRetrainings;  retraining++)
   {
-    for  (soIDX.Reset ();  sortOrderResults = soIDX.CurPtr ();    ++soIDX)
+    for  (auto sortOrderResults : results)
     {
       if  (retraining >= sortOrderResults->QueueSize ())
       {
@@ -359,11 +336,8 @@ void  ActiveLearningReport::PrintReport (ostream&  report)
     report << endl;
   }
 
-
   log.Level (10) << "ActiveLearningReport::PrintReport  Done" << endl;
 } /* PrintReport */
-
-
 
 
 
@@ -373,25 +347,18 @@ void  ActiveLearningReport::PrintReportWithIncrements (ostream&  report,
 {
   log.Level (10) << "ActiveLearningReport::PrintReportWithIncrements  Start" << endl;
 
-  
-  // Lets Load Results File
-
   report << endl
          << endl
-         << "****      Multi Class Results   Imcrement[" << increment << "]  ****" << endl
+         << "****      Multi Class Results   Increment[" << increment << "]  ****" << endl
          << endl;
-
-
 
   int**  imageCounts    = new int*[results.QueueSize ()];
   int*   numImageCounts = new int[results.QueueSize ()];
   int    maxImageCount = 0;
 
-  SortOrderResultsListIterator  soIDX (results);
-  SortOrderResultsPtr  sortOrderResults = NULL;
   int  numOfRetrainings = 0;
   int  soCount          = 0;
-  for  (soIDX.Reset ();  sortOrderResults = soIDX.CurPtr ();    ++soIDX)
+  for  (auto sortOrderResults : results)
   {
     report << SortOrderDescr (sortOrderResults->SortOrder ())  << "\t" << "\t" << "\t" << "\t";
     numOfRetrainings = Max (numOfRetrainings, sortOrderResults->QueueSize ());
@@ -401,7 +368,7 @@ void  ActiveLearningReport::PrintReportWithIncrements (ostream&  report,
   }
   report << endl;
   
-  for  (soIDX.Reset ();  sortOrderResults = soIDX.CurPtr ();    ++soIDX)
+  for  (auto sortOrderResults : results)
   {
     report << "Image_Count"  << "\t" << "Accuracy" << "\t" << "NumSV" << "\t" << "\t";
   }
@@ -410,7 +377,7 @@ void  ActiveLearningReport::PrintReportWithIncrements (ostream&  report,
   for  (int count = 0;  count < maxImageCount;  count++)
   {
     soCount = 0;
-    for  (soIDX.Reset ();  sortOrderResults = soIDX.CurPtr ();    ++soIDX)
+    for  (auto sortOrderResults : results)
     {
       if  (count >= numImageCounts[soCount])
       {
@@ -448,7 +415,7 @@ void  ActiveLearningReport::PrintReportWithIncrements (ostream&  report,
   }
 
   {
-    // Lets clean up dynamicly allocated memory.
+    // Lets clean up dynamically allocated memory.
     for  (soCount = 0;  soCount < results.QueueSize ();  soCount++)
       delete  imageCounts[soCount];
 
@@ -461,13 +428,6 @@ void  ActiveLearningReport::PrintReportWithIncrements (ostream&  report,
 
 
 
-
-
-
-
-
-
-
 void  ActiveLearningReport::Save (KKStr  fileName)
 {
   ofstream f (fileName.Str ());
@@ -477,7 +437,7 @@ void  ActiveLearningReport::Save (KKStr  fileName)
     log.Level (-1) << endl
                    << "ActiveLearningReport::Save        *** ERROR ***" << endl
                    << endl
-                   << "                      Could noty open File[" << fileName << "]" << endl
+                   << "                      Could not open File[" << fileName << "]" << endl
                    << endl;
     osWaitForEnter ();
     exit (-1);
@@ -486,10 +446,7 @@ void  ActiveLearningReport::Save (KKStr  fileName)
   f << "\\InitialTrainingImagesPerClass" << "\t" << initialImagesPerClass << endl;
   f << "\\ImagesPerRetraining"           << "\t" << imagesPerRetraining   << endl;
 
-
-  SortOrderResultsListIterator  soIDX (results);
-  SortOrderResultsPtr  sortOrderResults = NULL;
-  for  (soIDX.Reset ();   sortOrderResults = soIDX.CurPtr ();    ++soIDX)
+  for  (auto sortOrderResults : results)
   {
     f << "\\SortOrder"         << "\t" << SortOrderDescr (sortOrderResults->SortOrder ()) << endl;
     f << "\\NumOfRetrainings"  << "\t" << sortOrderResults->QueueSize ()                  << endl;
@@ -498,10 +455,7 @@ void  ActiveLearningReport::Save (KKStr  fileName)
                                << "\t" << "NumSupportVectors"
                                << endl;
 
-    RetrainingResultsListIterator rIDX (*sortOrderResults);
-    RetrainingResultsPtr  retraining = NULL;
-
-    for  (rIDX.Reset ();  retraining = rIDX.CurPtr ();  ++rIDX)
+    for  (auto retraining: *sortOrderResults)
     {
       f << retraining->NumOfTrainingImages () << "\t" 
         << retraining->Accuracy            () << "\t"
@@ -512,7 +466,6 @@ void  ActiveLearningReport::Save (KKStr  fileName)
 
   f.close ();
 }  /* Save */
-
 
 
 
@@ -561,7 +514,7 @@ void  ActiveLearningReport::Load (KKStr   fileName,
       log.Level (-1) << endl
                      << "ActiveLearningReport::Load        *** ERROR ***" << endl
                      << endl
-                     << "  First Liine Not Valid[" << l << "]" << endl
+                     << "  First Line Not Valid[" << l << "]" << endl
                      << endl;
       fclose (f);
       return;
@@ -692,20 +645,13 @@ void  ActiveLearningReport::Load (KKStr   fileName,
 
 RetrainingResultsListPtr  ActiveLearningReport::GetRetrainingsForASortOrder (SortOrderType  sortOrder)
 {
-  SortOrderResultsListIterator  rIDX (results);
-  SortOrderResultsPtr  sortOrderResults = NULL;
-  for (rIDX.Reset ();  sortOrderResults = rIDX.CurPtr ();  ++rIDX)
+  for  (auto sortOrderResults: results)
   {
     if  (sortOrderResults->SortOrder () == sortOrder)
-    {
-      break;
-    }
+      return sortOrderResults;
   }
 
-  if  (!sortOrderResults)
-    return NULL;
-
-  return  sortOrderResults;
+  return NULL;
 }  /* GetRetrainingsByImageIncrements */
 
 
@@ -739,9 +685,7 @@ void  ActiveLearningReport::GetImageCountsByIncrements (SortOrderType  sortOrder
   int   nextAllowableCount = 0;
   count = 0;
 
-  RetrainingResultsPtr retraining = NULL;
-  RetrainingResultsListIterator  rIDX (*retrainings);
-  for  (rIDX.Reset ();  retraining = rIDX.CurPtr ();  ++rIDX)
+  for  (auto retraining: *retrainings)
   {
     if  (retraining->NumOfTrainingImages () >= nextAllowableCount)
     {
@@ -772,33 +716,37 @@ void  ActiveLearningReport::GetStatsForNumOfImages (SortOrderType  sortOrder,
 {
   found = false;
 
-  SortOrderResultsListIterator  rIDX (results);
-  SortOrderResultsPtr  sortOrderResults = NULL;
-  for (rIDX.Reset ();  sortOrderResults = rIDX.CurPtr (); ++rIDX)
+  SortOrderResultsPtr sortOrderResults = NULL;
+
+  for (auto temp: results)
   {
-    if  (sortOrderResults->SortOrder () == sortOrder)
+    if  (temp->SortOrder () == sortOrder)
     {
+      sortOrderResults = temp;
       break;
     }
   }
 
-  if  (!sortOrderResults)
+  if (!sortOrderResults)
+  {
+    found = false;
     return;
+  }
 
   RetrainingResultsPtr  retrainingResults = NULL;
-
-  RetrainingResultsListIterator  retIDX (*sortOrderResults);
-
-  for  (retIDX.Reset ();  retrainingResults = retIDX.CurPtr ();  ++retIDX)
+  for  (auto temp: *sortOrderResults)
   {
-    if  (retrainingResults->NumOfTrainingImages () > numOfImages)
+    if  (temp->NumOfTrainingImages () > numOfImages)
     {
-      // Therer are no results for this numOfImages, so we will return with found = false;     
+      // There are no results for this numOfImages, so we will return with found = false;     
       return;
     }
 
-    if  (retrainingResults->NumOfTrainingImages () == numOfImages)
+    if (temp->NumOfTrainingImages () == numOfImages)
+    {
+      retrainingResults = temp;
       break;
+    }
   }
 
   if  (!retrainingResults)
@@ -813,6 +761,6 @@ void  ActiveLearningReport::GetStatsForNumOfImages (SortOrderType  sortOrder,
 
 
 ActiveLearningReportList::ActiveLearningReportList (bool _owner):
-     KKQueue<ActiveLearningReport> (_owner, 10)
+     KKQueue<ActiveLearningReport> (_owner)
 {
 }

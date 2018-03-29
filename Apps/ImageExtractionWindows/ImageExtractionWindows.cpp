@@ -170,7 +170,7 @@ BOOL CImageExtractionWindowsApp::InitInstance()
     dlg.MultiTreadedExtractionParms (multiThreadedExtractionParms);  /**< 'dlg' will take ownership of 'multiThreadedExtractionParms'.  */
 
 	  m_pMainWnd = &dlg;
-	  int nResponse = dlg.DoModal();
+	  auto nResponse = dlg.DoModal();
 	  if (nResponse == IDOK)
 	  {
 		  // TODO: Place code here to handle when the dialog is

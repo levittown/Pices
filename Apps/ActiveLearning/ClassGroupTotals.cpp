@@ -75,11 +75,9 @@ ClassGroupTotals::ClassGroupTotals (KKStr         _fileName,
 
   {
     // Copy Images classes returned in classesInFile to mlClasses */
-    MLClassListIterator  icIDX (*classesInFile);
-    MLClassPtr mlClass = NULL;
-    for  (icIDX.Reset ();  mlClass = icIDX.CurPtr ();  ++icIDX)
+    for  (auto mlClass: *classesInFile)
       mlClasses.PushOnBack (mlClass);
-    delete  classesInFile;
+    delete classesInFile;
     classesInFile = NULL;
   }
 
@@ -522,7 +520,7 @@ TrainingImageListPtr  ClassGroupTotals::TrainingImages (int  retraining)
 {
   ValidateRetraining ("TrainingImages", retraining);
 
-  TrainingImageListPtr  trainingImages = new TrainingImageList (false, 5);
+  TrainingImageListPtr  trainingImages = new TrainingImageList (false);
 
   for  (int randomPass = 0;  randomPass < numOfRandomPasses;  randomPass++)
   {
@@ -1153,8 +1151,8 @@ void  ClassGroupTotals::CalcRetrainingAccuracyStats (int     retraining,
 
   int  randomPass;
 
-  min = FFLOAT_MAX;
-  max = FFLOAT_MIN;
+  min = KKB::FloatMax;
+  max = KKB::FloatMin;
 
   float  totalAccuracy      = 0.0f;
   float  accuracyDeltaTotal = 0.0f;
@@ -1266,17 +1264,17 @@ void  ClassGroupTotals::CalcRetrainingSupportPointStats (int     retraining,
 {
   ValidateRetraining ("CalcRetrainingSupportPointStats", retraining);
 
-  FFLOAT  totalNumOfSupportPoints = 0.0f;
+  float  totalNumOfSupportPoints = 0.0f;
 
-  min = FFLOAT_MAX;
-  max = FFLOAT_MIN;
+  min = KKB::FloatMax;
+  max = KKB::FloatMin;
 
 
   float  totalTrainingTime = 0.0f;
   float  totalTestingTime  = 0.0f;
 
   //  2004-12-08  KK
-  //  We want the stats calculated tp refect the number of actual results files 
+  //  We want the stats calculated to reflect the number of actual results files 
   //  encountered. This way we can get results before all active leaning jobs have completed.
   int  numPassesEncountered = 0;
 
@@ -1310,7 +1308,7 @@ void  ClassGroupTotals::CalcRetrainingSupportPointStats (int     retraining,
   }
 
   if  (numPassesEncountered == 0)
-    mean = 0.0;
+    mean = 0.0f;
   else
     mean = totalNumOfSupportPoints / numPassesEncountered;
 
@@ -1446,16 +1444,12 @@ int  CountTabs (KKStr&  str)
 
 void  ClassGroupTotals::PrintGroupBreakDown (ostream&  report)  const
 {
-  MLClassListIterator  icIDX (mlClasses);
-
-  MLClassPtr  mlClass = NULL;
-
   report << endl << endl;
   report << "SortOrder" << "\t" << SortOrderDescr (sortOrder) << endl << endl;
 
   report  << "Grp#\t";
 
-  for  (icIDX.Reset ();  mlClass = icIDX.CurPtr ();  ++icIDX)
+  for  (auto mlClass: mlClasses)
     report << mlClass->Name () << "\t\t\t\t";
 
   report  << "Avg" << endl;
@@ -1475,7 +1469,7 @@ void  ClassGroupTotals::PrintGroupBreakDown (ostream&  report)  const
     classIDX = 0;
 
     report << retraining;
-    for  (icIDX.Reset ();  mlClass = icIDX.CurPtr ();  ++icIDX)
+    for  (auto mlClass : mlClasses)
     {
       classIDX = MLClassIDX ("PrintGroupBreakDown", mlClass);
 
@@ -1503,7 +1497,7 @@ void  ClassGroupTotals::PrintGroupBreakDown (ostream&  report)  const
     report << "\t" << StrFormatDouble (avgAccuracy, "zz#.##");
 
 
-    for  (icIDX.Reset ();  mlClass = icIDX.CurPtr ();  ++icIDX)
+    for  (auto mlClass : mlClasses)
     {
       KKStr  probStr = ProbabilityStr (retraining,  mlClass);
 
@@ -1538,23 +1532,13 @@ KKStr  ClassGroupTotals::FormatSummaryHeader ()  const
 {
   KKStr  formatedStr;
 
-
-  MLClassPtr  mlClass = NULL;
-
-  MLClassListIterator  icIDX (mlClasses);
-
-  for  (icIDX.Reset ();  mlClass = icIDX.CurPtr ();  ++icIDX)
+  for  (auto mlClass: mlClasses)
     formatedStr << mlClass->Name () << "\t\t";
 
   formatedStr  << "Avg\t\t";
 
   return  formatedStr;
-
 }  /* FormatSummaryHeader */
-
-
-
-
 
 
 
@@ -1565,13 +1549,7 @@ KKStr  ClassGroupTotals::FormatSummaryLine (int  retraining)  const
 
   KKStr  formatedStr;
 
-  MLClassListIterator  icIDX (mlClasses);
-
-  MLClassPtr  mlClass = NULL;
-
-
   int  classIDX = 0;
-
 
   float  totalCountOnLine = 0.0;
   float  totalAccuracy    = 0.0;
@@ -1581,7 +1559,7 @@ KKStr  ClassGroupTotals::FormatSummaryLine (int  retraining)  const
 
   classIDX = 0;
 
-  for  (icIDX.Reset ();  mlClass = icIDX.CurPtr ();  ++icIDX)
+  for  (auto mlClass : mlClasses)
   {
     classIDX = MLClassIDX ("PrintGroupBreakDown", mlClass);
 
@@ -1630,11 +1608,7 @@ KKStr  ClassGroupTotals::OneImageFormatHeaderLine1 ()  const
 {
   KKStr  formatedStr;
     
-  MLClassPtr  mlClass = NULL;
-
-  MLClassListIterator  icIDX (mlClasses);
-
-  for  (icIDX.Reset ();  mlClass = icIDX.CurPtr ();  ++icIDX)
+  for  (auto mlClass : mlClasses)
     formatedStr << mlClass->Name () << "\t\t\t\t";
 
   formatedStr  << "Avg\t\t\t\t\t\t\t\t\t";
@@ -1649,11 +1623,7 @@ KKStr  ClassGroupTotals::OneImageFormatHeaderLine2 ()  const
 {
   KKStr  formatedStr;
     
-  MLClassPtr  mlClass = NULL;
-
-  MLClassListIterator  icIDX (mlClasses);
-
-  for  (icIDX.Reset ();  mlClass = icIDX.CurPtr ();  ++icIDX)
+  for  (auto mlClass : mlClasses)
     formatedStr << "Accuracy" 
         << "\t" << "Count" 
         << "\t" << "Prob" 
@@ -1685,17 +1655,13 @@ KKStr  ClassGroupTotals::OneImageFormatSummaryLine (int  retraining)  const
 
   KKStr  formatedStr (200u);  // Reserving at least 200 chars for KKStr.
 
-  MLClassListIterator  icIDX (mlClasses);
-
-  MLClassPtr  mlClass = NULL;
-
   int  classIDX = 0;
 
   float  totalAllClassesNewTrainingImages = 0.0;
   float  totalProbability                 = 0.0;
   float  totalNumOfProbabilities          = 0.0;
 
-  for  (icIDX.Reset ();  mlClass = icIDX.CurPtr ();  ++icIDX)
+  for  (auto mlClass : mlClasses)
   {
     classIDX = MLClassIDX ("PrintGroupBreakDown", mlClass);
 
@@ -1709,7 +1675,6 @@ KKStr  ClassGroupTotals::OneImageFormatSummaryLine (int  retraining)  const
     float  count         = Count         (retraining, classIDX);
 
     formatedStr << StrFormatDouble (accuracy, "zzz0.00") << "%";
-
 
     float  numOfProbabilities;
     float  avgProbs;
@@ -1726,7 +1691,6 @@ KKStr  ClassGroupTotals::OneImageFormatSummaryLine (int  retraining)  const
 
     totalAllClassesNewTrainingImages += totalNewTrainingImages;
   }
-
 
   float  mean;
   float  variance;
@@ -1753,7 +1717,6 @@ KKStr  ClassGroupTotals::OneImageFormatSummaryLine (int  retraining)  const
   formatedStr << StrFormatDouble (NumOfSupportVectors (retraining), "zzz,zz0.0");
   formatedStr << StrFormatDouble (TrainingTimeMean    (retraining), "zzz,zz0.0");
   formatedStr << StrFormatDouble (TestingTimeMean     (retraining), "zzz,zz0.0");
-
 
   return  formatedStr;
 }  /* OneImageFormatSummaryLine */
@@ -1793,24 +1756,19 @@ void  ClassGroupTotals::ConfusionMatrix (ostream&  report,
   ValidateRetraining    ("ConfusionMatrix", retraining);
 
   report << "Class" << endl;
-
   report << "Name" << "\t" << "Count";
-
-  MLClassListIterator  icIDX (mlClasses);
 
   uint  numOfClasses = mlClasses.QueueSize ();
 
-  uint           colIDX = 0;
-  uint           rowIDX = 0;
+  uint  colIDX = 0;
+  uint  rowIDX = 0;
 
-  MLClassPtr  colClass;
-  MLClassPtr  rowClass;
+  MLClassPtr  colClass = NULL;
+  MLClassPtr  rowClass = NULL;
 
   float*  classTotals = new float[numOfClasses];
   for  (colIDX = 0;  colIDX < numOfClasses;  colIDX++)
-  {
     classTotals[colIDX] = 0.0;
-  }
 
 
   for  (colIDX = 0;  colIDX < numOfClasses;  colIDX++)
@@ -1847,7 +1805,6 @@ void  ClassGroupTotals::ConfusionMatrix (ostream&  report,
     report << "\t" << StrFormatDouble (classTotals[colIDX], "zzz,zz0.0");
   }
 
-
   report << endl
          << endl;
 
@@ -1879,12 +1836,10 @@ void  ClassGroupTotals::ConfusionMatrix (ostream&  report,
 }  /* ConfusionMatrix */
 
 
-
-
 void  ClassGroupTotals::AddIn (ClassGroupTotals&  ai)
 {
-  int  retraining;
-  int  randomPass;
+  int  retraining = 0;
+  int  randomPass = 0;
 
   if  (collectHistory)
   {
@@ -2262,14 +2217,14 @@ void  ClassGroupTotals::ReadInHistory (FILE*  in)
 
 
 
-void   ClassGroupTotals::GetClassGroupTotalsFileStats (const KKStr&       fileName,
+void   ClassGroupTotals::GetClassGroupTotalsFileStats (const KKStr&     fileName,
                                                        MLClassList&     globalClassList,
-                                                       RunLog&             log,
+                                                       RunLog&          log,
                                                        MLClassListPtr&  classesInFile,
-                                                       SortOrderType&      sortOrder,
-                                                       int&                numOfRetrainings,
-                                                       int&                numOfRandomPasses,
-                                                       int&                streamBlockSize
+                                                       SortOrderType&   sortOrder,
+                                                       int&             numOfRetrainings,
+                                                       int&             numOfRandomPasses,
+                                                       int&             streamBlockSize
                                                       )
 {
   classesInFile     = NULL;
@@ -2433,13 +2388,10 @@ ClassGroupTotalsPtr  ClassGroupTotals::ConsolidateOneDirectoryOneSortOrder (cons
     return  NULL;
 
   dataFiles->Sort (false);
-  KKStrPtr  fileName = NULL;
-
-  StringListIterator  fnIDX (*dataFiles);
 
   KKStr  sortOrderDesc = SortOrderDescr (sortOrder);
 
-  for  (fnIDX.Reset ();  fileName = fnIDX.CurPtr ();  ++fnIDX)
+  for  (auto fileName: *dataFiles)
   {
     if  (!(fileName->StrInStr (sortOrderDesc)))
       continue;
@@ -2527,7 +2479,7 @@ ClassGroupTotalsPtr  ClassGroupTotals::ConsolidateOneDirectoryOneSortOrder (cons
 
 
 ClassGroupTotalsList::ClassGroupTotalsList ():
-    KKQueue<ClassGroupTotals> (true, 10)
+    KKQueue<ClassGroupTotals> (true)
 {
 }
 

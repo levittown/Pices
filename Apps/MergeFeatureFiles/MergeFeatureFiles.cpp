@@ -66,8 +66,6 @@ MergeFeatureFiles::MergeFeatureFiles ():
 
 
 
-
-
 MergeFeatureFiles::~MergeFeatureFiles ()
 {
   delete  srcData;
@@ -413,8 +411,8 @@ void  ReFreshInstrumentData (DataBasePtr  dbConn,
 
 void  TestCompressClass ()
 {
-  char* inBuff = "This is a test of the Compressing rountine to see how well it will work";
-  int   inBuffLen = strlen (inBuff) + 1;
+  char* inBuff = "This is a test of the Compressing routine to see how well it will work";
+  kkuint32 inBuffLen = (kkuint32)strlen (inBuff) + 1;
 
   KKB::uint  compressedLen = 0;
   void*  compressedData = Compressor::CreateCompressedBuffer ((KKB::uchar*)inBuff, inBuffLen, compressedLen);
@@ -818,7 +816,7 @@ void  ImportGPSDataGPGGA (const KKStr&  fileName)
     KKStr  latStr = fields[4];
     KKStr  logStr = fields[6];
 
-    int  x = latStr.LocateCharacter ('.');
+    auto  x = latStr.LocateCharacter ('.');
     if  (x < 0) 
       continue;
 
@@ -828,7 +826,6 @@ void  ImportGPSDataGPGGA (const KKStr&  fileName)
     double latitude = latDegStr.ToDouble () + latMinStr.ToDouble () / 60.0;
     if  (fields[5].EqualIgnoreCase ("S"))
       latitude = 0.0 - latitude;
-
 
     x = logStr.LocateCharacter ('.');
     if  (x < 0) 
@@ -840,7 +837,6 @@ void  ImportGPSDataGPGGA (const KKStr&  fileName)
     double longitude = logDegStr.ToDouble () + logMinStr.ToDouble () / 60.0;
     if  (fields[7].EqualIgnoreCase ("W"))
       longitude = 0.0 - longitude;
-
 
     DateType  gmtDate (dateStr);
     TimeType  gmtTime (timeStr);
@@ -887,9 +883,8 @@ void  ImportGPSDataGPGGA (const KKStr&  fileName)
 
   delete  dbConn;
   dbConn = NULL;
-
-
 }  /* ImportGPSDataGPGGA */
+
 
 
 void  ImportGPSDataGPGGAFiles ()
@@ -914,9 +909,6 @@ void  ImportGPSDataGPGGAFiles ()
 
   delete  files;
 }  /* ImportGPSDataGPGGAFiles */
-
-
-
 
 
 
@@ -959,7 +951,6 @@ void  UpdateGulf2010MayGPSData ()
 
 
 
-
 void  ImportValidatedClassInfo ()
 {
   RunLog  log;
@@ -984,7 +975,6 @@ void  ImportValidatedClassInfo ()
   KKStr  validatedClassName;
 
   KKStr errMsg = "";
-
 
   while  (i.getline (buff, sizeof (buff)))
   {

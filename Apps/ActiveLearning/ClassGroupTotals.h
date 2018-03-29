@@ -56,8 +56,8 @@ typedef  HistoryBitList*  HistoryBitListPtr;
 #include "MLClass.h"
 
 
-#include "BasicTypes.h"
-#include "Str.h"
+#include "KKBaseTypes.h"
+#include "KKStr.h"
 #include "SortOrderType.h"
 #include "MLClass.h"
 #include "ImageFeatures.h"

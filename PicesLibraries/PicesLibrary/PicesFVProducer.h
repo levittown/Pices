@@ -51,11 +51,7 @@ namespace  MLL
 
     virtual  const type_info*  FeatureVectorListTypeId () const;
 
-
-    virtual  FeatureVectorListPtr  ManufacturFeatureVectorList (bool     owner,
-                                                                RunLog&  runLog
-                                                               )
-                                                               const;
+    virtual  FeatureVectorListPtr  ManufacturFeatureVectorList (bool  owner) const;
 
     virtual  kkint16  Version ()  const {return _PicesFVProducer_VersionNum_;}
 
@@ -102,10 +98,7 @@ namespace  MLL
     /**
      *@brief Manufactures a instance of a 'ImageFeaturesList' class that will own its contents.
      */
-    virtual  ImageFeaturesListPtr  ManufacturFeatureVectorList (bool     owner,
-                                                                RunLog&  runLog
-                                                               )
-                                                               const;
+    virtual  ImageFeaturesListPtr  ManufacturFeatureVectorList (bool owner)  const;
 
     /**
      *@brief  Returns a 'TrainingConfiguration2'  derived instance.

@@ -1,14 +1,13 @@
-#include  "StdAfx.h"
-#include  "FirstIncludes.h"
+#include "FirstIncludes.h"
 #include <stdio.h>
 #include <math.h>
-#include  <ctype.h>
-#include  <time.h>
-#include  <fstream>
-#include  <iostream>
-#include  <ostream>
-#include  <string>
-#include  <vector>
+#include <ctype.h>
+#include <time.h>
+#include <fstream>
+#include <iostream>
+#include <ostream>
+#include <string>
+#include <vector>
 
 
 using namespace System;
@@ -90,7 +89,7 @@ namespace  PicesInterface
   {
     VectorKKStr  names = FeatureFileIO::RegisteredDriverNames (canRead, canWrite);
 
-    array<String^>^  results = gcnew array<String^> (names.size ());
+    array<String^>^  results = gcnew array<String^> ((int)names.size ());
     
     uint  idx;
     for  (idx = 0;  idx < names.size ();  idx++)

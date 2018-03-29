@@ -178,16 +178,15 @@ void   ComputeMinMaxAxises::Main ()
     return;
   }
 
-  KKB::uint  numSipperFiles = sipperFiles->size ();
-  KKB::uint  sipperFileNum = 0;
+  kkuint32  numSipperFiles = (kkuint32)sipperFiles->size ();
+  kkuint32  sipperFileNum = 0;
 
   log.Level (10) << "Number Of Sipper Files[" << numSipperFiles << "]." << endl;
   r << "Number Of Sipper Files" << "\t" << numSipperFiles << endl;
 
   SipperFileList::iterator  idx;
 
-  bool   cancelFlag = false;
-  char   msgBuff[1024];
+  bool cancelFlag = false;
 
   auto detrtitusClass = DB ()->MLClassLoad ("detritus_snow");
 

@@ -54,7 +54,7 @@ void  InstrumentDataGPS::ParseDegreeMinutesStr (const KKStr&  str,
   degrees = 0.0;
   minutes = 0.0;
 
-  kkint32 x = str.LocateCharacter ('.');
+  auto x = str.LocateCharacter ('.');
   if  (x < 0)
     return;
 

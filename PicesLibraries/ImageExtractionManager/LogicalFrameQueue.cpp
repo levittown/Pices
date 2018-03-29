@@ -77,7 +77,7 @@ kkuint32  LogicalFrameQueue::FramesOnQueue ()
 {
   kkuint32  framesOnQueue = 0;
   goalie->StartBlock ();
-  framesOnQueue = framesAwaitingProcessing.size ();
+  framesOnQueue = (kkuint32)framesAwaitingProcessing.size ();
   goalie->EndBlock ();
   return  framesOnQueue;
 }

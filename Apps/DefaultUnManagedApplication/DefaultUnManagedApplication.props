@@ -9,12 +9,12 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(KSquareLibraries)\JobManager;$(SolutionDir)PicesLibraries\PicesLibrary;$(SolutionDir)PicesLibraries\ImageExtractionManager;$(OutsidePackages)\fftw-3.3.2;$(OutsidePackages)\MySQL\mysql-connector-c-6.0.2-win32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>ZLIB_AVAILABLE;FFTW_AVAILABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(KSquareLibraries)\KKBase;$(KSquareLibraries)\KKMachineLearning;$(KSquareLibraries)\JobManager;$(SolutionDir)PicesLibraries\PicesLibrary;$(SolutionDir)PicesLibraries\ImageExtractionManager;$(OutsidePackages)\fftw-3.3.5-dll64;$(OutsidePackages)\MySQL\MySQL Connector C 6.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;WIN64;ZLIB_AVAILABLE;FFTW_AVAILABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>KKBase.lib;KKMachineLearning.lib;KKJobManager.lib;PicesLibrary.lib;libfftw3-3.lib;libfftw3f-3.lib;libmysql.lib;zlib123.lib;USER32.LIB;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)\Libraries\$(Configuration);$(OutsidePackages)\fftw-3.3.2;$(OutsidePackages)\MySQL\mysql-connector-c-6.0.2-win32\lib;$(OutsidePackages)\zlib123;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>KKBase.lib;KKMachineLearning.lib;KKJobManager.lib;PicesLibrary.lib;libfftw3-3.lib;libfftw3f-3.lib;libmysql.lib;zlib-1.2.11.lib;USER32.LIB;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\;$(SolutionDir)\Libraries\$(Configuration);$(OutsidePackages)\fftw-3.3.5-dll64;$(OutsidePackages)\MySQL\MySQL Connector C 6.1\lib;$(OutsidePackages)\zlib-1.2.11;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup />
