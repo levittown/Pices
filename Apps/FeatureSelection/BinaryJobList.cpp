@@ -1602,8 +1602,8 @@ void  BinaryJobList::GenrateSvmResponseSheet (ostream&  r)
 
   uint  row, col;
 
-  Matrix  accuracies (height, width);
-  Matrix  times      (height, width);
+  MatrixD  accuracies (height, width);
+  MatrixD  times      (height, width);
 
   BinaryJobList::const_iterator  idx;
   for  (idx = begin ();  idx != end ();  idx++)
