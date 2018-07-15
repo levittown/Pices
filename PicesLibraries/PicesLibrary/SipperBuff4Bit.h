@@ -258,7 +258,6 @@ namespace MLL
     kkuint16  rawStrSize;
     //kkuint16  rawStrNumSameInARow;
 
-    kkint32  runLen;
     uchar  runLenChar;
     CompStatus  curCompStatus;
   };  /* SipperBuff4Bit */

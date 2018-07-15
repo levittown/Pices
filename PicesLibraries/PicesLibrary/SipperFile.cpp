@@ -216,7 +216,6 @@ void  SipperFile::ParseTabDelStr (KKStrParser&  parser)
   while  (parser.MoreTokens ())
   {
     KKStr  fieldName = parser.GetNextToken ("\t");
-    kkint32  fieldIdx = SearchFieldIdx (fieldName, fieldNames);
     if  (fieldName.EqualIgnoreCase ("SipperFileId"))
       sipperFileId = parser.GetNextTokenInt ();
 
@@ -438,7 +437,6 @@ void   SipperFile::AssignCtdExternalInstrumentsETP2008 (const KKStr&   rootName)
 {
   CruiseName ("ETP2008");
   StationName ("1");
-  DeploymentNum ("A");
   CtdExt0 ("OXG");
   CtdExt1 ("TRN");
   CtdExt2 ("FLO");
@@ -452,9 +450,9 @@ void   SipperFile::AssignCtdExternalInstrumentsETP2008 (const KKStr&   rootName)
 
     else if  (rootName.SubStrPart (0, 8) == "ETP2008_1")
     {
-      KKStr  deploymentNum = rootName.SubStrPart (9, 9);
+      KKStr  deploymentNumFromRootName = rootName.SubStrPart (9, 9);
       StationName ("1");
-      DeploymentNum (deploymentNum);
+      DeploymentNum (deploymentNumFromRootName);
     }
 
     else if  (rootName.SubStrPart (0, 8) == "ETP2008_8")

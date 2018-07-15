@@ -65,7 +65,7 @@ KKStr  SipperCruise::ValidateCruiseName (const KKStr&  _cruiseName)
   KKStr  invalidChars = "";
   for  (kkuint32 x = 0;  x < _cruiseName.Len ();  x++)
   {
-    char c = toupper (_cruiseName[x]);
+    char c = (char)toupper (_cruiseName[x]);
     if  ((c >= 'A')  &&  (c <= 'Z'))  continue;
     if  ((c >= '0')  &&  (c <= '9'))  continue;
     if  (c == '_')                    continue;

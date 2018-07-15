@@ -1105,7 +1105,6 @@ namespace MLL
 
     FileDescConstPtr   featureFileDesc;
 
-
     MYSQL_FIELD*       resultSetFieldDefs;
     MYSQL_RES*         resultSet;
     kkuint32           resultSetNumFields;

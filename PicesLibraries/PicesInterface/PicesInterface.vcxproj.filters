@@ -129,9 +129,6 @@
     <ClCompile Include="PicesVolumeSampledStat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TrainingModel2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
