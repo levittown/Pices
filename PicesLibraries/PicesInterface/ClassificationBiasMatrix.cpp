@@ -120,8 +120,8 @@ ClassificationBiasMatrix::~ClassificationBiasMatrix ()
 void  ClassificationBiasMatrix::DeclareMatrix ()
 {
   numClasses = classes->Count;
-  probabilities = new Matrix (numClasses, numClasses);
-  counts        = new Matrix (numClasses, numClasses);
+  probabilities = new MatrixD (numClasses, numClasses);
+  counts        = new MatrixD (numClasses, numClasses);
   for  (int r = 0;  r < numClasses;  r++)
   {
     for  (int c = 0;  c < numClasses;  c++)
@@ -149,16 +149,16 @@ void  ClassificationBiasMatrix::BuildTestMatrix ()
 
   numClasses = classes->Count;
 
-  probabilities = new Matrix (7, 7);
-  counts        = new Matrix (7, 7);
+  probabilities = new MatrixD (7, 7);
+  counts        = new MatrixD (7, 7);
 
-  Row& r0 = (*probabilities)[0];
-  Row& r1 = (*probabilities)[1];
-  Row& r2 = (*probabilities)[2];
-  Row& r3 = (*probabilities)[3];
-  Row& r4 = (*probabilities)[4];
-  Row& r5 = (*probabilities)[5];
-  Row& r6 = (*probabilities)[6];
+  RowD& r0 = (*probabilities)[0];
+  RowD& r1 = (*probabilities)[1];
+  RowD& r2 = (*probabilities)[2];
+  RowD& r3 = (*probabilities)[3];
+  RowD& r4 = (*probabilities)[4];
+  RowD& r5 = (*probabilities)[5];
+  RowD& r6 = (*probabilities)[6];
 
   r0[0] = 0.710;  r0[1] = 0.059;  r0[2] = 0.010;  r0[3] = 0.010;  r0[4] = 0.007;  r0[5] = 0.031;  r0[6] = 0.175;
   r1[0] = 0.073;  r1[1] = 0.873;  r1[2] = 0.001;  r1[3] = 0.007;  r1[4] = 0.008;  r1[5] = 0.013;  r1[6] = 0.024;
@@ -452,12 +452,12 @@ void   ClassificationBiasMatrix::PerformAdjustmnts (array<double>^  classifiedCo
     }
   }
 
-  Matrix  m (numClasses, 1);
+  MatrixD  m (numClasses, 1);
   for  (x = 0;  x < numClasses;  x++)
     m[x][0] = classifiedCounts[x];
 
-  Matrix  transposed = probabilities->Transpose ();
-  Matrix  Q = transposed.Inverse ();
+  MatrixD  transposed = probabilities->Transpose ();
+  MatrixD  Q = transposed.Inverse ();
 
   if  (false)
   {
@@ -502,9 +502,9 @@ void   ClassificationBiasMatrix::PerformAdjustmnts (array<double>^  classifiedCo
     }
   }
 
-  Matrix  n = Q * m;
+  MatrixD  n = Q * m;
 
-  Matrix  varM (numClasses, numClasses);
+  MatrixD  varM (numClasses, numClasses);
   for  (j = 0;  j < numClasses;  j++)
   {
     double  varM_j = 0.0;
@@ -530,7 +530,7 @@ void   ClassificationBiasMatrix::PerformAdjustmnts (array<double>^  classifiedCo
     }
   }
 
-  Matrix  varN = Q * varM * Q.Transpose ();
+  MatrixD  varN = Q * varM * Q.Transpose ();
 
   adjCounts = gcnew array<double> (numClasses);
   stdErrors = gcnew array<double> (numClasses);

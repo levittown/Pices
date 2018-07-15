@@ -16,9 +16,11 @@
 #include "MemoryDebug.h"
 #include "KKBaseTypes.h"
 
+
 using namespace System;
 using namespace System::Collections::Generic;
 using namespace System::IO;
+
 
 #include "GoalKeeper.h"
 #include "Matrix.h"
