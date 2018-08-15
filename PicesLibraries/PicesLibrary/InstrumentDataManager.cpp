@@ -301,8 +301,6 @@ VectorUlong*  InstrumentDataManager::ScanLinesPerMeterDepth ()  const
 
 void  InstrumentDataManager::CompReportLine (kkint32  scanLine)
 {
-  kkuint32  x;
-
   kkint32  depthInt = (kkint32)ctdData.Depth ();
   if  (depthInt != depthLastReported)
   {
@@ -312,7 +310,6 @@ void  InstrumentDataManager::CompReportLine (kkint32  scanLine)
     depthLastReported = depthInt;
     lastScanLine = scanLine;
   }
-
 
   if  (compReport)
   {
@@ -336,7 +333,7 @@ void  InstrumentDataManager::CompReportLine (kkint32  scanLine)
                   << StrFormatDouble (meter2FlowRate, "##0.000")  << "\t"
                   << StrFormatInt    (activeBattery,  "zz0");
 
-      for  (x = 0;  x < batteryLevels.size ();  x++)
+      for  (size_t x = 0;  x < batteryLevels.size ();  x++)
       {
         *compReport << "\t" << StrFormatDouble (batteryLevels[x], "zz0.000");
       }

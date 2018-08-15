@@ -399,6 +399,8 @@ SipperFileFormat  SipperBuff::GuessFormatOfNextLine (FILE*    in,
     fileFormat = sfUnKnown;
   }
 
+  _log.Level (50) << "SipperBuff::GuessFormatOfNextLine  guessed fileFormat: " << SipperFileFormatToStr (fileFormat);
+
   return  fileFormat;
 }  /*  GuessFormatOfFile */
 

@@ -34,7 +34,6 @@ namespace MLL
                  }  SipperFileFormat;
   
 
-
   /**
    *@class SipperBuff  
    *@brief Base class to be used for all the different Sipper File Formats.
@@ -63,7 +62,6 @@ namespace MLL
     void    InvalidLine  (bool _invalidLine)  {invalidLine = _invalidLine;}
     void    Open (const KKStr&  _fileName);
   
-
     kkuint32  BytesDropped     ()  const {return  bytesDropped;}
     kkuint64  ByteOffset       ()  const {return  byteOffset;}
   
@@ -95,7 +93,6 @@ namespace MLL
                           kkuint64  _byteOffset
                          );
   
-  
     static
     SipperFileFormat  GuessFormatOfFile (const KKStr&  _fileName,
                                          kkint32       _cameraNum,
@@ -120,7 +117,6 @@ namespace MLL
     void  DetermineCropSettings  (kkuint32&  cropLeft,
                                   kkuint32&  cropRght
                                  );
-
 
     void  Reset ();
   
