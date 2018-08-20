@@ -93,13 +93,14 @@ namespace PicesCommander
     }  /* RunLogMsgQueueFlush */
 
 
-
     
     private  void  LoadClassesFromDataBase ()
     {
       classes = mainDbConn.MLClassLoadList ();
       if  (classes == null)
-        classes = new PicesClassList ();
+      {
+        classes = PicesClassList.CreateARootedEmptyClassList ();
+      }
 
       ClassTree.Nodes.Clear ();
 
