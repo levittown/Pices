@@ -1602,8 +1602,8 @@ void  BinaryJobList::GenrateSvmResponseSheet (ostream&  r)
 
   uint  row, col;
 
-  Matrix  accuracies (height, width);
-  Matrix  times      (height, width);
+  MatrixD  accuracies (height, width);
+  MatrixD  times      (height, width);
 
   BinaryJobList::const_iterator  idx;
   for  (idx = begin ();  idx != end ();  idx++)
@@ -1624,8 +1624,7 @@ void  BinaryJobList::GenrateSvmResponseSheet (ostream&  r)
     accuracies[row][col] = j->AccuracyNorm ();
     times[row][col]      = j->ProcessingTime ();
   }
-
-
+  
   r << endl
     << "Normalized Accuracy Response" << endl << endl;
 
@@ -1682,9 +1681,6 @@ void  BinaryJobList::GenrateSvmResponseSheet (ostream&  r)
 
 
 
-
-
-
 BinaryJobListPtr  BinaryJobList::ExtractJobsForAGivenFeatureCount (int featureCount)
 {
   ErrorCodes  result = ErrorCodes::NoError;
@@ -1702,7 +1698,6 @@ BinaryJobListPtr  BinaryJobList::ExtractJobsForAGivenFeatureCount (int featureCo
 
   return  jobsWithFeatureCount;
 }  /* ExtractJobsForAGivenFeatureCount*/
-
 
 
 
@@ -1768,7 +1763,6 @@ BinaryJobListPtr  BinaryJobList::CreateTestJobsForHighetsGradePerFeatureCount ()
 
   return  testJobs;
 }  /* CreateTestJobsForHighetsGradePerFeatureCount */
-
 
 
 

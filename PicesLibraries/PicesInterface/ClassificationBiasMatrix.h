@@ -81,12 +81,12 @@ namespace PicesInterface
 
     String^                 biasFileName;
     PicesClassList^         classes;
-    MatrixPtr               counts;
+    MatrixDPtr              counts;
     String^                 configFileName;
     String^                 configFileNameFromMatrixBiasFile;
     System::DateTime        configDateTime;       /*!< TimeStamp of Config file when this BiasMatrix was written. */
     System::DateTime        dateTimeFileWritten;
-    MatrixPtr               probabilities;
+    MatrixDPtr              probabilities;
     int                     numClasses;
     PicesRunLog^            runLog;
     bool                    valid;
