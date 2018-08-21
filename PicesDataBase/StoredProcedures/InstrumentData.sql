@@ -330,6 +330,7 @@ create function  InstrumentDataGetMidPointOfDeployment (_cruiseName      varChar
                                                         _deploymentNum   varChar(4)
                                                        )
                                                        returns  DateTime
+													   deterministic reads sql data
 begin
   declare _maxDepth     float     default 0.0;
   declare _midPoint     datetime;
