@@ -201,6 +201,13 @@ copy $(OutsidePackages)"\fftw-3.3.5-dll64\"*.dll  $(TargetPath)</Command>
     <Xdcmake>
       <DocumentLibraryDependencies>false</DocumentLibraryDependencies>
     </Xdcmake>
+    <PreLinkEvent>
+      <Command>copy $(OutsidePackages)"\MySQL\MySQL Connector C 6.1\lib\"*.dll  $(TargetPath)</Command>
+    </PreLinkEvent>
+    <CustomBuildStep>
+      <Command>copy $(OutsidePackages)"\MySQL\MySQL Connector C 6.1\lib\"*.dll  $(TargetPath)
+</Command>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>

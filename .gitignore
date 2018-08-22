@@ -67,12 +67,15 @@ Apps/ChartControls/obj/EmbeddedRelease/DesignTimeResolveAssemblyReferencesInput.
 Python/.idea/.name
 PicesDataBase/PicesDataBase.jfm
 *.jfm
-<<<<<<< HEAD
 *.ipch
-=======
 *.jfm
 ipch/ZLIB123-fc3f97cf/ZLIB123-7f39be51.ipch
->>>>>>> origin/64k
 *.vcxproj
 *.h
 *.h
+.vs/
+.vs/PlanktonApps/DesignTimeBuild/.dtbcache
+.vs/PlanktonApps/v15/Server/sqlite3/db.lock
+*.db-shm
+*.db-wal
+Backup/PlanktonApps.sln

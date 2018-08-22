@@ -56,7 +56,6 @@ PicesClassList::PicesClassList ():
 
 
 
-
 PicesClassList::PicesClassList (String^  _directory):  
   List<PicesClass^> (),
   directory         (_directory),

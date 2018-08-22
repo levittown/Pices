@@ -1271,8 +1271,6 @@ namespace  PicesInterface
 
 
 
-
-
   PicesClassList^  PicesDataBase::MLClassLoadList ()
   {
     MLClassListPtr  classes = dbConn->MLClassLoadList ();
@@ -1357,12 +1355,10 @@ namespace  PicesInterface
 
 
 
-
   void  PicesDataBase::MLClassDelete (String^  className)
   {
     dbConn->MLClassDelete (PicesKKStr::SystemStringToKKStr (className));
   }  /* MLClassDelete */
-
 
 
 
@@ -1455,8 +1451,6 @@ namespace  PicesInterface
 
 
 
-
-
   //*************************************************************************************************
   //*                             ImageGroupEntries Routines.                                       *
   //*************************************************************************************************
@@ -1523,7 +1517,6 @@ namespace  PicesInterface
 
 
 
-
   array<array<String^>^ >^  PicesDataBase::ImageGroupEntriesInsert (int                      groupId, 
                                                                     PicesDataBaseImageList^  images
                                                                    )
@@ -1533,7 +1526,6 @@ namespace  PicesInterface
       imageFileNames->Add (image->ImageFileName);
     return ImageGroupEntriesInsert (groupId, imageFileNames);
   }  /* ImageGroupEntriesInsert */
-
 
 
 
@@ -1554,12 +1546,7 @@ namespace  PicesInterface
     return  managedEntries;
   }  /* ImageGroupEntriesLoad */
 
-
-
-
-
-
-
+  
 
   //*****************************************************************************************************
   //*                                  InstrumentData Routines.                                         *
@@ -1583,8 +1570,7 @@ namespace  PicesInterface
   }  /* InstrumentDataGetFieldNames */
 
 
-
-
+  
   /**
    *@brief Retrieves instrument data that is closest to the specified scan-line.
    */
@@ -1600,9 +1586,7 @@ namespace  PicesInterface
   }  /* InstrumentDataGetByScanLine */
 
 
-
-
-
+  
   PicesInstrumentDataList^  PicesDataBase::InstrumentDataLoad (String^ sipperFileName)
   {
     *cancelFlag = false;
@@ -1618,9 +1602,6 @@ namespace  PicesInterface
 
     return  picesInstrumentData;
   }  /* InstrumentDataLoad */
-
-
-
 
 
 
@@ -1667,6 +1648,7 @@ namespace  PicesInterface
   }
 
 
+
   PicesVolumeSampledStatList^  PicesDataBase::InstrumentDataGetVolumePerMeterDepth (String^  cruiseName,
                                                                                     String^  stationName,
                                                                                     String^  deploymentNum,
@@ -1710,8 +1692,6 @@ namespace  PicesInterface
     delete  instData;
     instData = NULL;
   }  /* InstrumentDataSaveListForOneSipperFile */
-
-
 
 
 
@@ -1838,8 +1818,7 @@ namespace  PicesInterface
   }
 
 
-
-
+  
   PicesGPSDataPointList^  PicesDataBase::InstrumentDataRetrieveGPSInfo (String^  cruiseName,
                                                                         String^  stationName,
                                                                         String^  deploymentNum,
@@ -1870,55 +1849,47 @@ namespace  PicesInterface
 
 
 
-
-PicesGPSDataPointList^  PicesDataBase::GpsDataQuery (String^           cruiseName,
+  PicesGPSDataPointList^  PicesDataBase::GpsDataQuery (String^           cruiseName,
                                                      System::DateTime  utcStart,
                                                      System::DateTime  utcEnd
                                                     )
-{
-  GPSDataPointListPtr  gpsData = dbConn->GpsDataQuery (PicesKKStr::SystemStringToKKStr (cruiseName),
-                                                       PicesMethods::DateTimeSystemToKKU (utcStart),
-                                                       PicesMethods::DateTimeSystemToKKU (utcEnd)
-                                                      );
-  if  (!gpsData)
-    return  nullptr;
+  {
+    GPSDataPointListPtr  gpsData = dbConn->GpsDataQuery (PicesKKStr::SystemStringToKKStr (cruiseName),
+                                                         PicesMethods::DateTimeSystemToKKU (utcStart),
+                                                         PicesMethods::DateTimeSystemToKKU (utcEnd)
+                                                        );
+    if  (!gpsData)
+      return  nullptr;
 
-  PicesGPSDataPointList^  managedGpsData = gcnew PicesGPSDataPointList (*gpsData);
-  delete  gpsData;
-  gpsData = NULL;
+    PicesGPSDataPointList^  managedGpsData = gcnew PicesGPSDataPointList (*gpsData);
+    delete  gpsData;
+    gpsData = NULL;
 
-  return  managedGpsData;
-}  /* GpsDataQuery */
-
-
+    return  managedGpsData;
+  }  /* GpsDataQuery */
 
 
 
-PicesGPSDataPointList^   PicesDataBase::GpsDataQueryByIntervals (String^           cruiseName,
-                                                                 System::DateTime  utcStart,
-                                                                 System::DateTime  utcEnd,
-                                                                 int               timeInterval
-                                                                )
-{
-  GPSDataPointListPtr  gpsData = dbConn->GpsDataQueryByIntervals (PicesKKStr::SystemStringToKKStr (cruiseName),
-                                                                  PicesMethods::DateTimeSystemToKKU (utcStart),
-                                                                  PicesMethods::DateTimeSystemToKKU (utcEnd),
-                                                                  timeInterval
-                                                                 );
-  if  (!gpsData)
-    return  nullptr;
+  PicesGPSDataPointList^   PicesDataBase::GpsDataQueryByIntervals (String^           cruiseName,
+                                                                   System::DateTime  utcStart,
+                                                                   System::DateTime  utcEnd,
+                                                                   int               timeInterval
+                                                                  )
+  {
+    GPSDataPointListPtr  gpsData = dbConn->GpsDataQueryByIntervals (PicesKKStr::SystemStringToKKStr (cruiseName),
+                                                                    PicesMethods::DateTimeSystemToKKU (utcStart),
+                                                                    PicesMethods::DateTimeSystemToKKU (utcEnd),
+                                                                    timeInterval
+                                                                   );
+    if  (!gpsData)
+      return  nullptr;
 
-  PicesGPSDataPointList^  managedGpsData = gcnew PicesGPSDataPointList (*gpsData);
-  delete  gpsData;
-  gpsData = NULL;
+    PicesGPSDataPointList^  managedGpsData = gcnew PicesGPSDataPointList (*gpsData);
+    delete  gpsData;
+    gpsData = NULL;
 
-  return  managedGpsData;
-}
-
-
-
-
-
+    return  managedGpsData;
+  }
 
 
 
@@ -1963,6 +1934,7 @@ PicesGPSDataPointList^   PicesDataBase::GpsDataQueryByIntervals (String^        
   }
 
 
+
   //****************************************************************************************************
   //*                                  SipperCruise  routines.                                         *
   //****************************************************************************************************
@@ -1985,7 +1957,6 @@ PicesGPSDataPointList^   PicesDataBase::GpsDataQueryByIntervals (String^        
 
 
 
-
   PicesSipperCruise^  PicesDataBase::SipperCruiseLoad (String^  cruiseName)
   {
     SipperCruisePtr  cruise = dbConn->SipperCruiseLoad (PicesKKStr::SystemStringToKKStr (cruiseName));
@@ -1996,8 +1967,7 @@ PicesGPSDataPointList^   PicesDataBase::GpsDataQueryByIntervals (String^        
   }
 
 
-
-
+  
   PicesSipperCruiseList^  PicesDataBase::SipperCruiseLoadAllCruises ()
   {
     SipperCruiseListPtr  sipperCruises = dbConn->SipperCruiseLoadAllCruises ();
@@ -2022,8 +1992,6 @@ PicesGPSDataPointList^   PicesDataBase::GpsDataQueryByIntervals (String^        
     lastOpSuccessful = s;
     return;
   }  /* SipperCruiseUpdate */
-
-
 
 
 
@@ -2065,8 +2033,7 @@ PicesGPSDataPointList^   PicesDataBase::GpsDataQueryByIntervals (String^        
 
     return gcnew PicesSipperDeployment (d);
   }
-
-  
+    
 
 
   PicesSipperDeploymentList^  PicesDataBase::SipperDeploymentLoadByStation (String^ stationName)
@@ -2083,7 +2050,6 @@ PicesGPSDataPointList^   PicesDataBase::GpsDataQueryByIntervals (String^        
   }
 
 
-  
 
   void   PicesDataBase::SipperDeploymentInsert (PicesSipperDeployment^  deployment)
   {
@@ -2101,7 +2067,6 @@ PicesGPSDataPointList^   PicesDataBase::GpsDataQueryByIntervals (String^        
 
 
 
-   
   void   PicesDataBase::SipperDeploymentDelete (String^  cruiseName,
                                                 String^  stationName,
                                                 String^  deploymentNum
@@ -2116,11 +2081,9 @@ PicesGPSDataPointList^   PicesDataBase::GpsDataQueryByIntervals (String^        
 
 
 
-
   //****************************************************************************************************
   //*                                   SipperFile  routines.                                          *
   //****************************************************************************************************
-
 
   array<String^>^  PicesDataBase::SipperFileGetList (String^ cruiseName,
                                                      String^ stationName,
@@ -2152,8 +2115,6 @@ PicesGPSDataPointList^   PicesDataBase::GpsDataQueryByIntervals (String^        
 
 
 
-
-
   PicesSipperFileList^  PicesDataBase::SipperFileLoad (String^  cruiseName,
                                                        String^  stationName,
                                                        String^  deploymentNum
@@ -2177,12 +2138,10 @@ PicesGPSDataPointList^   PicesDataBase::GpsDataQueryByIntervals (String^        
 
 
 
-
   void  PicesDataBase::SipperFileLoadOracle ()
   {
     dbConn->SipperFileLoadOracle ();
   }
-
 
 
 
@@ -2196,9 +2155,7 @@ PicesGPSDataPointList^   PicesDataBase::GpsDataQueryByIntervals (String^        
   }
 
 
-
-
-
+  
   void  PicesDataBase::SipperFileInsert (PicesSipperFile^  sipperFile)
   {
     if  (sipperFile == nullptr)
@@ -2219,9 +2176,7 @@ PicesGPSDataPointList^   PicesDataBase::GpsDataQueryByIntervals (String^        
   }  /* SiperFileRecInsert */
 
 
-
-
-
+  
   void   PicesDataBase::SipperFileUpdate (PicesSipperFile^  sipperFile)
   {
     if  (sipperFile == nullptr)
@@ -2242,8 +2197,6 @@ PicesGPSDataPointList^   PicesDataBase::GpsDataQueryByIntervals (String^        
 
 
 
-
-
   String^  PicesDataBase::SipperFileGetFullPath (String^ _sipperFileName)
   {
     String^  rootName = OSservices::GetRootName (_sipperFileName);
@@ -2254,8 +2207,6 @@ PicesGPSDataPointList^   PicesDataBase::GpsDataQueryByIntervals (String^        
 
     return  PicesKKStr::KKStrToSystenStr (fullPathName);
   }  /* SipperFileGetFullPath */
-
-
 
 
 
@@ -2290,9 +2241,7 @@ PicesGPSDataPointList^   PicesDataBase::GpsDataQueryByIntervals (String^        
     return gcnew PicesSipperStation (station);
   }  /* SipperStationLoad */
 
-
-
-
+  
 
   PicesSipperStationList^  PicesDataBase::SipperStationsLoadByGpsRange (double  latitudeMin,
                                                                         double  latitudeMax,
@@ -2313,7 +2262,6 @@ PicesGPSDataPointList^   PicesDataBase::GpsDataQueryByIntervals (String^        
 
 
 
-
   void  PicesDataBase::SipperStationInsert (PicesSipperStation^  station)
   {
     if  (station == nullptr)
@@ -2322,7 +2270,6 @@ PicesGPSDataPointList^   PicesDataBase::GpsDataQueryByIntervals (String^        
     dbConn->SipperStationInsert (*(station->UnmanagedClass ()));
     lastOpSuccessful = dbConn->Valid ();
   }
-
 
 
 
@@ -2352,8 +2299,6 @@ PicesGPSDataPointList^   PicesDataBase::GpsDataQueryByIntervals (String^        
                                 );
     lastOpSuccessful = dbConn->Valid ();
   }  /* SipperStationDelete */
-
-
 
 }  /* PicesInterface */
 

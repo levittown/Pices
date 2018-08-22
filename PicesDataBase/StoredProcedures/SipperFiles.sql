@@ -190,9 +190,9 @@ begin
   
   select  sf.ExtractionStatus  
          from  SipperFiles sf  
-         where  sf.SipperFileName = _sipperFileName  
-         into  extractionStatusBeforeUpdate  
-         for update;
+         where  sf.SipperFileName = _sipperFileName 
+         for update
+         into  extractionStatusBeforeUpdate;
          
   if  extractionStatusBeforeUpdate = _extractionStatusExpected  then
     update  SipperFiles sf
