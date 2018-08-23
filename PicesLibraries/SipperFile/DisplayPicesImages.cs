@@ -91,8 +91,7 @@ namespace SipperFile
       if  (files != null)
         UpdateDisplayTimer.Enabled = true;
     }
-
-
+    
 
 
     public DisplayPicesImages (PicesDataBase               _dbConn,
@@ -129,7 +128,6 @@ namespace SipperFile
 
 
 
-
     private  FileInfo[]  ReduceToImageFiles (FileInfo[]  src)
     {
       List<FileInfo>  result = new List<FileInfo> ();
@@ -145,7 +143,6 @@ namespace SipperFile
 
 
 
-
     /*! 
      *\brief  Specify the root file names of S/V's.  They will be highlighted when displayed.
      */
@@ -153,6 +150,7 @@ namespace SipperFile
     {
       svNames = _svNames;
     }
+
 
 
     private  bool  IsIt_A_SV (String  n)
@@ -168,14 +166,16 @@ namespace SipperFile
     }
 
 
+
     public bool GetThumbnailImageAbort()
     {
       return true;
     }  /* GetThumbnailImageAbort */
 
+
+
     private  System.IntPtr  thumbNailCallBackData = IntPtr.Zero;
-
-
+    
 
 
     private  void  LoadNextImageFromPicesList ()
@@ -244,12 +244,17 @@ namespace SipperFile
 
 
 
+    private EventHandler removeImageFromTrainigLibrayEventHandler = null;
+
 
 
     private  void  LoadNextImageFromDir ()
     {
       if  (files == null)
         return;
+
+      if (removeImageFromTrainigLibrayEventHandler == null)
+        removeImageFromTrainigLibrayEventHandler = new EventHandler(RemoveImageFromTrainigLibray);
 
       if  (lastImageIndexLoaded >= files.Length)
       {
@@ -308,7 +313,7 @@ namespace SipperFile
       b.Name = rootName;
       b.Enabled = true;
       b.TabStop = false;
-      b.Click += new EventHandler (RemoveImageFromTrainigLibray);
+      b.Click += removeImageFromTrainigLibrayEventHandler;
       pan.Controls.Add (b);
 
       pan.BorderStyle = BorderStyle.FixedSingle;
@@ -342,8 +347,6 @@ namespace SipperFile
 
       return  OSservices.AddSlash (subDir) + rootName + ".bmp";
     }  /* LocateRootName */
-
-
 
 
 
@@ -442,10 +445,7 @@ namespace SipperFile
       thumbNails.Add (pan);
 
       ImageDisplayPanel.Controls.Add (pan);
-    }  /* LoadNextImageFromDir */
-
-
-
+    }  /* LoadNextImageFromNameList */
 
 
 
@@ -489,6 +489,7 @@ namespace SipperFile
         ie.ShowDialog (this);
       }
     }
+
 
 
     private  String  lastSelectedImageFileName = "";
@@ -538,8 +539,7 @@ namespace SipperFile
       }
     }
 
-
-
+    
 
     private  void  ViewImage (Object sender, EventArgs e)
     {
@@ -554,8 +554,7 @@ namespace SipperFile
     }
 
 
-
-    
+        
     private  void  CopyImageToClipboard (Object sender, EventArgs e)
     {
       String  imageFileName = lastSelectedImage;
@@ -571,8 +570,7 @@ namespace SipperFile
     }  /* CopyImageToClipboard */
 
 
-
-
+    
     private  void  SaveImage (Object sender, EventArgs e)
     {
       String  imageFileName = lastSelectedImage;
@@ -614,14 +612,7 @@ namespace SipperFile
     }  /* SaveImage */
 
 
-
-
-
-
-
-
-
-
+    
     private void  UpdateDisplayTimer_Tick (object sender, EventArgs e)
     {
       if  (picesImages != null)
@@ -629,9 +620,11 @@ namespace SipperFile
 
       else if  (nameList != null)
         LoadNextImageFromNameList ();
+
       else
         LoadNextImageFromDir ();
     }
+
 
 
     private void DisplayPicesImages_Load(object sender, EventArgs e)
