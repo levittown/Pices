@@ -137,7 +137,6 @@ namespace MLL
     std::vector<ImageSizeDistributionRowPtr>  depthDistributions;
     ImageSizeDistributionRowPtr               allDepths;
 
-
     VectorFloat          sizeStartValues;
     VectorFloat          sizeEndValues;
   };  /* ImageSizeDistribution */

@@ -1895,7 +1895,7 @@ ImageFeaturesListPtr  DataBase::FeatureDataProcessResults ()
   if  (!resultSetMore)
     return  NULL;
 
-  ImageFeaturesListPtr  results = new ImageFeaturesList (featureFileDesc, true, resultSetNumRows);
+  ImageFeaturesListPtr  results = new ImageFeaturesList (featureFileDesc, true);
 
   kkuint32  topLeftRow  = 0;
   kkuint32  topLeftCol  = 0;

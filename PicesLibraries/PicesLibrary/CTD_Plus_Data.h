@@ -100,10 +100,10 @@ namespace MLL
   
   
   
-    float  DissolvedOxygenConcentration (float  voltage,
-                                         float  temperature,
-                                         float  salinity,
-                                         float  pressure
+    float  DissolvedOxygenConcentration (float  _voltage,
+                                         float  _temperature,
+                                         float  _salinity,
+                                         float  _pressure
                                         );
   
   

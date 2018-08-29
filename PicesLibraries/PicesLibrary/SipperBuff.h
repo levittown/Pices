@@ -25,13 +25,15 @@ namespace MLL
   #define  SIPPERRECSIZE 2
 
 
-  typedef  enum  {sfBinary,
-                  sf3Bit,
-                  sfSipper3,
-                  sfSipper3Rev,
-                  sfSipper4Bit,
-                  sfUnKnown
-                 }  SipperFileFormat;
+  enum  class  SipperFileFormat: int
+  {
+    Binary,
+    ThreeBit,
+    Sipper3,
+    Sipper3Rev,
+    Sipper4Bit,
+    UnKnown
+};
   
 
   /**

@@ -307,9 +307,9 @@ kkint32  ImageSizeDistribution::IdentifySizeBucket (float  size)
 
 
 
-VectorFloat   ImageSizeDistribution::IntegratedDensityDistribution ()  const
+VectorFloat  ImageSizeDistribution::IntegratedDensityDistribution ()  const
 {
-  auto  numSizeBuckets = sizeStartValues.size ();
+  size_t numSizeBuckets = sizeStartValues.size ();
   VectorFloat  results (numSizeBuckets, 0.0);
 
   for  (auto  depthIdx = 0;   depthIdx < depthDistributions.size ();  ++depthIdx)

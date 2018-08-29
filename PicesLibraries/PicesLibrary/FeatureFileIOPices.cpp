@@ -342,10 +342,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&      _fileName,
 
   VectorInt   indirectionTable = CreateIndirectionTable (fields, numOfFeatures);
 
-  ImageFeaturesListPtr examples = new ImageFeaturesList (_fileDesc, 
-                                                         true,          // true=Owner  examples will own the ImageFeatures instances it contains.
-                                                         numOfExamples
-                                                        );
+  ImageFeaturesListPtr examples = new ImageFeaturesList (_fileDesc, true);    // true=Owner  examples will own the ImageFeatures instances it contains.
 
   examples->Version (version);
 
@@ -998,7 +995,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadInSubDirectoryTree
   }
   else
   {
-    dirImages =  new ImageFeaturesList (fileDesc, true, 100);
+    dirImages =  new ImageFeaturesList (fileDesc, true);
   }
 
   // Now that we have processed all image files in "rootDir",
@@ -1187,7 +1184,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
   if  (_cancelFlag)
   {
     delete  origFeatureVectorData;  origFeatureVectorData = NULL;
-    return  new ImageFeaturesList (fileDesc, true, 10);
+    return  new ImageFeaturesList (fileDesc, true);
   }
 
   ImageFeaturesListPtr  origFeatureData = NULL;
@@ -1212,7 +1209,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
       _changesMade = true;
 
     delete  origFeatureData;  origFeatureData = NULL;
-    return  new ImageFeaturesList (fileDesc, true, 10);
+    return  new ImageFeaturesList (fileDesc, true);
   }
 
   
@@ -1240,7 +1237,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
 
   origFeatureData->SortByRootName (false);
 
-  ImageFeaturesListPtr  extractedFeatures = new ImageFeaturesList (fileDesc, true, fileNameList->QueueSize () + 2);
+  ImageFeaturesListPtr  extractedFeatures = new ImageFeaturesList (fileDesc, true);
   extractedFeatures->Version (CurrentFeatureFileVersionNum);
 
   fileNameList->Sort (false);

@@ -82,7 +82,7 @@ InstrumentDataListPtr  InstrumentDataList::CreateFromSipperFile (const KKStr&   
   InstrumentDataManagerPtr  instrumentDataManager 
     = new InstrumentDataManager (fullSipperFileName, sipperFile, log);
 
-  SipperBuffPtr  sipperBuff = SipperBuff::CreateSipperBuff (sfUnKnown, 
+  SipperBuffPtr  sipperBuff = SipperBuff::CreateSipperBuff (SipperFileFormat::UnKnown,
                                                             fullSipperFileName, 
                                                             0,                    // Camera Number 0
                                                             instrumentDataManager,

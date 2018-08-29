@@ -135,7 +135,7 @@ namespace MLL
     MLClassList    classes;
     KKB::DateTime  dateTimeComputed;
     kkuint32*      knownByClass;
-    kkuint32       numClasses;    /**< Number of classes in 'classes' plus one for 'otherClass'. */
+    kkint32        numClasses;    /**< Number of classes in 'classes' plus one for 'otherClass'. */
     kkuint32       numCorrect;
     kkuint32       numPredictions;
     MLClassPtr     otherClass;

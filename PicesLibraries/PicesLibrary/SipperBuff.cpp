@@ -355,7 +355,7 @@ SipperFileFormat  SipperBuff::GuessFormatOfNextLine (FILE*    in,
       sipperRecsRead++;
       if  ((sipperRecsRead > 5000)  ||  (recsRead == 0))
       {
-        return  sfUnKnown;
+        return  SipperFileFormat::UnKnown;
       }
     }  while  ((recsRead > 0)  &&  (sipperRec.cameraNum != _cameraNum));
 
@@ -386,17 +386,17 @@ SipperFileFormat  SipperBuff::GuessFormatOfNextLine (FILE*    in,
   
   if  (fourBitLen == 4096)
   {
-    fileFormat = sf3Bit;
+    fileFormat = SipperFileFormat::ThreeBit;
   }
 
   else if  ((oneBitLen == 2048)  ||  (oneBitLen == 4096))
   {
-    fileFormat = sfBinary;
+    fileFormat = SipperFileFormat::Binary;
   }
 
   else
   {
-    fileFormat = sfUnKnown;
+    fileFormat = SipperFileFormat::UnKnown;
   }
 
   _log.Level (50) << "SipperBuff::GuessFormatOfNextLine  guessed fileFormat: " << SipperFileFormatToStr (fileFormat);
@@ -415,23 +415,23 @@ SipperFileFormat  SipperBuff::GuessFormatOfFile (const KKStr&  _fileName,
   // then we will try to see in one of the other two formats.
 
 
-  SipperFileFormat  fileFormat = sfUnKnown;
+  SipperFileFormat  fileFormat = SipperFileFormat::UnKnown;
   SipperFileFormat  lastFormat;
   {
     Sipper3BuffPtr  s3 = new Sipper3Buff (_fileName, NULL, _log);
     if  (s3->Opened ())
     {
       if  (s3->FileFormatGood ())
-        fileFormat = sfSipper3;
+        fileFormat = SipperFileFormat::Sipper3;
     }
 
     delete s3;
   }
 
-  if  (fileFormat == sfSipper3)
+  if  (fileFormat == SipperFileFormat::Sipper3)
   {
     // Since we know it is a SIPPER 3  file,  we are done and can return 
-    return  sfSipper3;
+    return  SipperFileFormat::Sipper3;
   }
 
   {
@@ -439,16 +439,16 @@ SipperFileFormat  SipperBuff::GuessFormatOfFile (const KKStr&  _fileName,
     if  (sf->Opened ())
     {
       if  (sf->FileFormatGood ())
-        fileFormat = sfSipper4Bit;
+        fileFormat = SipperFileFormat::Sipper4Bit;
     }
 
     delete sf;
   }
 
-  if  (fileFormat == sfSipper4Bit)
+  if  (fileFormat == SipperFileFormat::Sipper4Bit)
   {
     // Since we know it is a SIPPER 4bit  file,  we are done and can return 
-    return  sfSipper4Bit;
+    return  SipperFileFormat::Sipper4Bit;
   }
   
   FILE*  in = osFOPEN (_fileName.Str (), "rb");
@@ -460,12 +460,12 @@ SipperFileFormat  SipperBuff::GuessFormatOfFile (const KKStr&  _fileName,
     cerr << "***ERROR[" << errorCode << "]***, SipperBuff::GuessFormatOfFile  Can not open file[" << _fileName << "]." 
          << endl;
 
-    return  sfUnKnown;
+    return  SipperFileFormat::UnKnown;
   }
 
   kkint32  numInARow = 0;
 
-  fileFormat = sfUnKnown;
+  fileFormat = SipperFileFormat::UnKnown;
 
   kkint32  outerTries = 0;
 
@@ -486,7 +486,7 @@ SipperFileFormat  SipperBuff::GuessFormatOfFile (const KKStr&  _fileName,
       numOfTries++;
       // WaitForEnter ();
 
-      if  ((fileFormat == sfUnKnown)  ||  (lastFormat != fileFormat))
+      if  ((fileFormat == SipperFileFormat::UnKnown)  ||  (lastFormat != fileFormat))
       {
         numInARow = 0;
       }
@@ -527,28 +527,28 @@ SipperBuffPtr  SipperBuff::CreateSipperBuff (SipperFileFormat          _format,
 {
   SipperBuffPtr  sipperBuff = NULL;
 
-  if  (_format == sfUnKnown)
+  if  (_format == SipperFileFormat::UnKnown)
   {
     // We are going to have to figure out the format 
     _format = GuessFormatOfFile (_fileName, _cameraNum, _log);
   }
 
-  if  (_format == sfBinary)
+  if  (_format == SipperFileFormat::Binary)
     sipperBuff = new SipperBuffBinary (_fileName, _cameraNum, _instrumentDataManager, _log);
 
-  else if  (_format == sf3Bit)
+  else if  (_format == SipperFileFormat::ThreeBit)
     sipperBuff = new SipperBuff3Bit   (_fileName, _instrumentDataManager, _log);
 
-  else if  (_format == sfSipper3)
+  else if  (_format == SipperFileFormat::Sipper3)
     sipperBuff = new Sipper3Buff      (_fileName, _instrumentDataManager, _log);
 
-  else if  (_format == sfSipper4Bit)
+  else if  (_format == SipperFileFormat::Sipper4Bit)
     sipperBuff = new SipperBuff4Bit   (_fileName, _instrumentDataManager, _log);
 
-  else if  (_format == sfSipper3)
+  else if  (_format == SipperFileFormat::Sipper3)
     sipperBuff = new Sipper3Buff      (_fileName, _instrumentDataManager, _log);
 
-  else if  (_format == sfSipper3Rev)
+  else if  (_format == SipperFileFormat::Sipper3Rev)
     sipperBuff = new Sipper3RevBuff   (_fileName, _instrumentDataManager, _log);
 
   if  ((sipperBuff != NULL)  &&  (!sipperBuff->Opened ()))
@@ -678,19 +678,19 @@ void  SipperBuff::ReportInstrumentData (uchar  instrumentId,
 
 KKStr  MLL::SipperFileFormatToStr (SipperFileFormat  fileFormat)
 {
-  if  (fileFormat == sfBinary)
+  if  (fileFormat == SipperFileFormat::Binary)
     return  "Binary";
 
-  if  (fileFormat == sf3Bit)
+  if  (fileFormat == SipperFileFormat::ThreeBit)
     return  "3Bit";
 
-  if  (fileFormat == sfSipper3)
+  if  (fileFormat == SipperFileFormat::Sipper3)
     return  "Sipper3";
 
-  if  (fileFormat == sfSipper4Bit)
+  if  (fileFormat == SipperFileFormat::Sipper4Bit)
     return  "Sipper4Bit";
 
-  if  (fileFormat == sfSipper3Rev)
+  if  (fileFormat == SipperFileFormat::Sipper3Rev)
     return  "Sipper3Rev";
 
   return  "";
@@ -703,21 +703,21 @@ SipperFileFormat  MLL::SipperFileFormatFromStr (KKStr  fileFormatStr)
   fileFormatStr.Upper ();
 
   if  ((fileFormatStr == "BINARY")      ||  (fileFormatStr == "1BIT"))
-    return  sfBinary;
+    return  SipperFileFormat::Binary;
 
   if  ((fileFormatStr == "3BIT")        ||  (fileFormatStr == "SIPPER2"))
-    return  sf3Bit;
+    return  SipperFileFormat::ThreeBit;
 
   if  ((fileFormatStr == "SIPPER3")     ||  (fileFormatStr == "S3")  ||  (fileFormatStr == "3"))
-    return  sfSipper3;
+    return  SipperFileFormat::Sipper3;
 
   if  (fileFormatStr.EqualIgnoreCase ("Sipper4Bit")  ||  (fileFormatStr == "S4")  ||  (fileFormatStr == "4"))
-    return  sfSipper4Bit;
+    return  SipperFileFormat::Sipper4Bit;
 
   if  ((fileFormatStr == "SIPPER3REV")  ||  (fileFormatStr == "SIPPER3REV")  ||  (fileFormatStr == "S3R"))
-    return  sfSipper3Rev;
+    return  SipperFileFormat::Sipper3Rev;
 
-  return  sfUnKnown;
+  return  SipperFileFormat::UnKnown;
 }  /* SipperFileFormatFromStr */
 
 

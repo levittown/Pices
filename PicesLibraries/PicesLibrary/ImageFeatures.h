@@ -347,8 +347,7 @@ namespace MLL
 
 
     ImageFeaturesList (FileDescConstPtr  _fileDesc,
-                       bool              _owner,
-                       kkint32           _size = 1000
+                       bool              _owner
                       );
 
   private:

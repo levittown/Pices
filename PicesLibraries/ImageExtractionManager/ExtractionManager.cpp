@@ -431,7 +431,7 @@ void  ExtractionManager::Initialize (bool&  _successful)
   // kurt kramer  2014-04-25
   // The 4bit file format from KKLine Scanner utilities does not contain instrument data.
   // For purposes of seeding up debugging we will not update database from it.
-  if  (parms.FileFormat () != sfSipper4Bit)
+  if  (parms.FileFormat () != SipperFileFormat::Sipper4Bit)
   {
     InstrumentDataListPtr   instrumentData = InstrumentDataFileManager::GetInstrumentDataForSipperFile 
                                              (parms.SipperFileName (), 

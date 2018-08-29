@@ -440,8 +440,6 @@ kkint32  InstrumentData::GetFieldNum (const KKStr&  s)
 
 kkint32  InstrumentData::GetFieldNumFromShortName (const KKStr&  s)
 {
-  kkint32  n = NumFields ();
-
   if  (shortFieldNamesIdx == NULL)
   {
     kkint32  n = NumFields ();

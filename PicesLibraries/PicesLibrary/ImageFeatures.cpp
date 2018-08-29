@@ -1076,12 +1076,8 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
 
 
 
-
-
-
 ImageFeaturesList::ImageFeaturesList (FileDescConstPtr  _fileDesc,
-                                      bool              _owner,
-                                      kkint32           _size
+                                      bool              _owner
                                      ):
 
     FeatureVectorList (_fileDesc, _owner),
@@ -1089,7 +1085,6 @@ ImageFeaturesList::ImageFeaturesList (FileDescConstPtr  _fileDesc,
 {
 
 }
-
 
 
 
@@ -1104,7 +1099,6 @@ ImageFeaturesList::ImageFeaturesList (RunLog&       _log,
 {
   FeatureExtraction (_dirName, _fileName, _mlClass, _log);
 }
-
 
 
 
@@ -1123,7 +1117,6 @@ ImageFeaturesList::ImageFeaturesList (const ImageFeaturesList&  images):
       PushOnBack (imageExample);
   }
 }
-
 
 
 
@@ -1146,6 +1139,7 @@ ImageFeaturesList::ImageFeaturesList (const ImageFeaturesList&  images,
 }
 
 
+
 ImageFeaturesList::ImageFeaturesList (const FeatureVectorList&  featureVectorList,
                                       bool                      _owner
                                      ):
@@ -1161,7 +1155,6 @@ ImageFeaturesList::ImageFeaturesList (const FeatureVectorList&  featureVectorLis
     const ImageFeaturesList&  images = dynamic_cast<const ImageFeaturesList&> (featureVectorList);
     version = images.Version ();
   }
-
 
   if  (_owner)
   {
@@ -1210,12 +1203,6 @@ ImageFeaturesList::ImageFeaturesList (const FeatureVectorList&  featureVectorLis
 
 
 
-
-
-
-
-
-
 //****************************************************************************
 //*  Will Create a list of images that are a subset of the ones in _images.  *
 //* The subset will consist of the images who's mlClass is one of the     *
@@ -1229,7 +1216,6 @@ ImageFeaturesList::ImageFeaturesList (MLClassList&        _mlClasses,
 
 {
 }
-
 
 
 
@@ -1293,12 +1279,9 @@ ImageFeaturesList::ImageFeaturesList (const FeatureVectorList&  featureVectorLis
 
 
 
-
-
 ImageFeaturesList::~ImageFeaturesList ()
 {
 }
-
 
 
 
@@ -1309,12 +1292,10 @@ ImageFeaturesListPtr  ImageFeaturesList::Duplicate (bool _owner)  const
 
 
 
-
 ImageFeaturesPtr  ImageFeaturesList::IdxToPtr (kkint32 idx)  const
 {
   return  (ImageFeaturesPtr)FeatureVectorList::IdxToPtr (idx);
 }  /* IdxToPtr */
-
 
 
 
@@ -1343,7 +1324,6 @@ ImageFeaturesPtr  ImageFeaturesList::BackOfQueue ()
 
 
 
-
 ImageFeaturesPtr  ImageFeaturesList::PopFromBack ()
 {
   if  (size () < 1)  return NULL;
@@ -1359,9 +1339,6 @@ ImageFeaturesPtr  ImageFeaturesList::PopFromBack ()
 
   return  dynamic_cast<ImageFeaturesPtr> (FeatureVectorList::PopFromBack ());
 }  /* PopFromBack */
-
-
-
 
 
 
@@ -1386,9 +1363,6 @@ void  ImageFeaturesList::AddQueue (ImageFeaturesList&  imagesToAdd)
 
 
 
-
-
-
 ImageFeaturesPtr  ImageFeaturesList::BinarySearchByName (const KKStr&  _imageFileName)  const
 {
   return  (ImageFeaturesPtr)FeatureVectorList::BinarySearchByName (_imageFileName);
@@ -1396,13 +1370,10 @@ ImageFeaturesPtr  ImageFeaturesList::BinarySearchByName (const KKStr&  _imageFil
 
 
 
-
-
 ImageFeaturesPtr  ImageFeaturesList::LookUpByRootName (const KKStr&  _rootName)
 {
   return  (ImageFeaturesPtr)FeatureVectorList::LookUpByRootName (_rootName);
 }  /* LookUpByRootName */
-
 
 
 
@@ -1420,22 +1391,17 @@ ImageFeaturesPtr  ImageFeaturesList::LookUpByImageFileName (const KKStr&  _image
 
 
 
-
-
-ImageFeaturesListPtr  ImageFeaturesList::OrderUsingNamesFromAFile (const KKStr&  fileName,
+ImageFeaturesListPtr  ImageFeaturesList::OrderUsingNamesFromAFile (const KKStr&  orderingFileName,
                                                                    RunLog&       runLog
                                                                   )
 {
-  FeatureVectorListPtr  examples = FeatureVectorList::OrderUsingNamesFromAFile (fileName, runLog);
+  FeatureVectorListPtr  examples = FeatureVectorList::OrderUsingNamesFromAFile (orderingFileName, runLog);
   examples->Owner (false);
   ImageFeaturesListPtr  orderedImages = new ImageFeaturesList (*examples);
   delete  examples;
   examples = NULL;
   return  orderedImages;
 }  /* OrderUsingNamesFromAFile */
-
-
-
 
 
 
@@ -1462,7 +1428,7 @@ void   ImageFeaturesList::FeatureExtraction (const KKStr&  _dirName,
   if  (!fileNameList)
     return;
 
-  bool  successfull;
+  bool  successfull = false;
 
   kkint32  numOfImages = fileNameList->QueueSize ();
   kkint32  count = 0;
@@ -1525,7 +1491,6 @@ void   ImageFeaturesList::FeatureExtraction (const KKStr&  _dirName,
 
 
 
-
 VectorDouble  ImageFeaturesList::ExtractPositionsByMeter (InstrumentDataListPtr  instrumentData,
                                                           float                  defaultScanRate,
                                                           float                  defaultFlowRate
@@ -1551,8 +1516,6 @@ VectorDouble  ImageFeaturesList::ExtractPositionsByMeter (InstrumentDataListPtr 
   double        position = 0.0;
 
   double  flowRate = defaultFlowRate;
-  double  scanRate = defaultScanRate;
-
 
   ImageFeaturesList::iterator  idx;
 
@@ -1562,7 +1525,7 @@ VectorDouble  ImageFeaturesList::ExtractPositionsByMeter (InstrumentDataListPtr 
     position = 0.0;
     kkuint32  frameIdx = (kkuint32)(example->SfCentroidRow () / frameSize);
     kkuint32  scanLineToCalcFrom = 0;
-    float lastFlowRate = defaultFlowRate;
+
     if  (frameIdx < frameOffsets.size ())
     {
       position = frameOffsets[frameIdx];
@@ -1591,9 +1554,6 @@ VectorDouble  ImageFeaturesList::ExtractPositionsByMeter (InstrumentDataListPtr 
 
   return  positions;
 }  /* ExtractPositionsByMeter */
-
-
-
 
 
 
@@ -1626,8 +1586,6 @@ VectorInt   ImageFeaturesList::CreateSpatialDistributionHistogram (InstrumentDat
 
 
 
-
-
 void  ImageFeaturesList::PrintSpatialHistogramReport (ostream&               r,
                                                       InstrumentDataListPtr  instrumentData,
                                                       float                  defaultScanRate,   // Scan rate to use if it can not be located from 
@@ -1643,7 +1601,6 @@ void  ImageFeaturesList::PrintSpatialHistogramReport (ostream&               r,
   classes->SortByName ();
 
   kkuint32  maxHistogramSize = (kkuint32)allClassesHistogram.size ();
-
 
   for  (auto idx: *classes)
   {
@@ -1695,16 +1652,13 @@ void  ImageFeaturesList::PrintSpatialHistogramReport (ostream&               r,
 
 
 
-
-
-
 /**
  * @brief  Creates a duplicate of list and also duplicates it contents.
  * @return Duplicated list with hard copy of its contents.
  */
 ImageFeaturesListPtr  ImageFeaturesList::DuplicateListAndContents ()  const
 {
-  ImageFeaturesListPtr  copyiedList = new ImageFeaturesList (FileDesc (), true, QueueSize ());
+  ImageFeaturesListPtr  copyiedList = new ImageFeaturesList (FileDesc (), true);
 
   for  (kkint32 idx = 0;  idx < QueueSize ();  idx++)
   {
@@ -1764,7 +1718,7 @@ void  ImageFeaturesList::RecalcFeatureValuesFromImagesInDirTree (KKStr    rootDi
     osAddLastSlash (fullFileName);
     fullFileName << image->ExampleFileName ();
 
-    bool   validFile;
+    bool  validFile = false;
     RasterSipperPtr  raster = new RasterSipper (fullFileName, validFile);
     if  (!validFile)
     {
