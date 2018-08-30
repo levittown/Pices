@@ -122,13 +122,11 @@ void  SipperBuffBinary::GetNextSipperRec (kkint32&   spaceLeft,
     pix10     = sipperRec.pix10;
     pix11     = sipperRec.pix11;
 
-
-    numOfBlanks = pix0 * 2048 + pix1  * 1024 + pix2 * 512 +
+        numOfBlanks = pix0 * 2048 + pix1  * 1024 + pix2 * 512 +
                   pix3 * 256  + pix4  * 128  + pix5 * 64  +
                   pix6 * 32   + pix7  * 16   + pix8 * 8   +
                   pix9 * 4    + pix10 * 2    + pix11;
-
-
+        
     if  (numOfBlanks == 0)
       numOfBlanks = 4096;
 

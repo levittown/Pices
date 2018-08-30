@@ -325,10 +325,9 @@ FeatureVector (FeatureFileIOPices::PlanktonMaxNumOfFields ()),
   }
   else
   {
-    kkint32  x;
     _successfull = false;
 
-    for  (x = 0; x < this->NumOfFeatures (); x++)
+    for  (kkuint32 x = 0; x < this->NumOfFeatures (); ++x)
       featureData[x] = 0;
 
     cerr  << "ImageFeatures::ImageFeatures  ***ERROR***, Opening File[" << _fileName << "]." << endl;
@@ -539,8 +538,8 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
 
   if  (areaBeforeReduction < 20)
   {
-    for  (kkint32 tp = 0; tp < numOfFeatures; tp++)
-      featureData[tp] = 9999999;
+    for  (kkuint32 tp = 0;  tp < numOfFeatures;  ++tp)
+      featureData[tp] = FLT_MAX;
     
     if  (weOwnRaster)
     {

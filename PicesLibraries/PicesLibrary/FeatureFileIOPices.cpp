@@ -11,7 +11,6 @@
 #include "MemoryDebug.h"
 using namespace std;
 
-
 #include "KKBaseTypes.h"
 #include "KKException.h"
 #include "DateTime.h"
@@ -22,13 +21,11 @@ using namespace std;
 #include "KKStr.h"
 using namespace KKB;
 
-
 #include "FactoryFVProducer.h"
 #include "FeatureVectorProducer.h"
 #include "FileDesc.h"
 #include "MLClass.h"
 using namespace  KKMLL;
-
 
 #include "DataBase.h"
 #include "FeatureFileIOPices.h"
@@ -40,7 +37,6 @@ using namespace MLL;
 
 
 FeatureFileIOPices  FeatureFileIOPices::driver;
-
 
 
 #ifdef  IMPLEMENTSAMPLING
@@ -69,6 +65,7 @@ FeatureFileIOPices::FeatureFileIOPices ():
 FeatureFileIOPices::~FeatureFileIOPices ()
 {
 }
+
 
 
 void  FeatureFileIOPices::Parse_FEATURE_DATA_FILE_Line (KKStr&    line,
@@ -102,7 +99,6 @@ void  FeatureFileIOPices::Parse_FEATURE_DATA_FILE_Line (KKStr&    line,
     field = line.ExtractToken (" ,\t\n\r").ToUpper ();
   }
 }  /* Parse_FEATURE_DATA_FILE_Line */
-
 
 
 
@@ -180,9 +176,6 @@ VectorInt  FeatureFileIOPices::CreateIndirectionTable (const VectorKKStr&  field
 
 
 
-
-
-
 FileDescConstPtr  FeatureFileIOPices::GetFileDesc (const KKStr&    _fileName,
                                                    istream&        _in,
                                                    MLClassListPtr  _classes,
@@ -194,12 +187,12 @@ FileDescConstPtr  FeatureFileIOPices::GetFileDesc (const KKStr&    _fileName,
   char  buff[102400];
 
   _errorMessage = "";
+  _estSize = 0;
   
   _in.getline (buff, sizeof (buff) - 1, '\n');
   KKStr  firstLine (buff);
   firstLine.Upper ();
 
-  kkint32  numOfFields = 0;
   if  (firstLine.SubStrPart (0, 16) != "FEATURE_DATA_FILE")
   {
     // We are looking at a very old RAW file,  need to scan for number of fields.
@@ -269,8 +262,6 @@ FileDescConstPtr  FeatureFileIOPices::GetFileDesc (const KKStr&    _fileName,
 
   return  fd;
 }  /* GetFileDesc */
-
-
 
 
 
@@ -346,7 +337,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&      _fileName,
 
   examples->Version (version);
 
-  kkint32  fieldNum = 0;
+  kkuint32  fieldNum = 0;
 
   bool  eof = false;
   bool  eol = false;
@@ -389,7 +380,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&      _fileName,
       {
         field.TrimRight ();
 
-        if  (fieldNum >= (kkint32)indirectionTable.size ())
+        if  (fieldNum >= indirectionTable.size ())
         {
           _log.Level (-1) << endl << endl << endl
                           << "FeatureFileIOPices::LoadFile     **** Error ***"  << endl
@@ -734,7 +725,7 @@ void   FeatureFileIOPices::SaveFile (FeatureVectorList&     _data,
 
 
 
-kkint32 FeatureFileIOPices::MaxNumPlanktonRawFields = 88;
+kkuint32 FeatureFileIOPices::MaxNumPlanktonRawFields = 88;
 const  char*  FeatureFileIOPices::PlanktonRawFeatureDecriptions[] =
 {
   "Size",                    //  0
@@ -865,7 +856,7 @@ KKStr   FeatureFileIOPices::PlanktonFieldName (kkint32  fieldNum)
 
 
 
-kkint32  FeatureFileIOPices::PlanktonMaxNumOfFields ()
+kkuint32  FeatureFileIOPices::PlanktonMaxNumOfFields ()
 {
   return  MaxNumPlanktonRawFields;
 }
@@ -1006,9 +997,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadInSubDirectoryTree
   KKStrListPtr  subDirectories = osGetListOfDirectories (dirSearchPath);
   if  (subDirectories)
   {
-    KKStrList::iterator  idx;
-
-    for  (idx = subDirectories->begin ();  (idx != subDirectories->end ()  &&  (!_cancelFlag));   idx++)
+    for  (KKStrList::iterator  idx = subDirectories->begin ();  (idx != subDirectories->end ()  &&  (!_cancelFlag));   idx++)
     {
       KKStr  subDirName (**idx);
       if  (subDirName == "BorderImages")
@@ -1033,10 +1022,10 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadInSubDirectoryTree
       osAddLastSlash (subDirName);
 
       // We want to add the directory path to the ImageFileName so that we can later locate the source image.
-      ImageFeaturesList::iterator  idx = subDirImages->begin ();
-      for  (idx = subDirImages->begin ();  idx != subDirImages->end ();  idx++)
+
+      for  (ImageFeaturesList::iterator idx2 = subDirImages->begin ();  idx2 != subDirImages->end ();  idx2++)
       {
-        image = *idx;
+        image = *idx2;
         KKStr  newImageFileName = subDirName + image->ExampleFileName ();
         image->ExampleFileName (newImageFileName);
       }

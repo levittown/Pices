@@ -50,7 +50,6 @@ DataBaseImageGroup::~DataBaseImageGroup ()
 
 
 
-
 void  DataBaseImageGroup::ValidName (KKStr&  _name,
                                      KKStr&  _errorDesc,
                                      bool&   _valid

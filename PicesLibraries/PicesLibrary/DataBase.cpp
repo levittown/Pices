@@ -1801,7 +1801,7 @@ void  DataBase::FeatureDataInsertRow (const KKStr&          _sipperFileName,
 
   KKStr  insertStatement (3000);
   insertStatement << "call  FeatureDataInsert(" << imageFileName.QuotedStr () << ", " << sipperFileName.QuotedStr ();
-  for  (kkint32 fieldNum = 0;  fieldNum < example.NumOfFeatures ();  fieldNum++)
+  for  (kkuint32 fieldNum = 0;  fieldNum < example.NumOfFeatures ();  fieldNum++)
   {
     double f = example.FeatureData (fieldNum);
     if  ((IsNaN (f))  ||  (!IsFinite (f)))
@@ -2205,7 +2205,7 @@ void   DataBase::FeatureDataUpdate (DataBaseImagePtr  dataBaseImage,
   KKStr  updateStr (3072);
 
   updateStr << "update FeatureData set ";
-  for  (kkint32 featureNum = 0;  featureNum < example->NumOfFeatures ();  featureNum++)
+  for  (kkuint32 featureNum = 0;  featureNum < example->NumOfFeatures ();  featureNum++)
   {
     if  (featureNum > 0)
       updateStr << ", ";
@@ -6613,11 +6613,11 @@ void  DataBase::InstrumentDataDeploymentVolumeSampled (const KKStr&             
   upCastStats   = new VolumeSampledStatList ();
   while  (ResultSetFetchNextRow ())
   {
-    bool  downCast       = ResultSetGetBool        (0);
-    kkint32 binId        = ResultSetGetIntField    (1);
-    float binDepth       = ResultSetGetFloatField  (2);
-    kkint32 scanLines    = ResultSetGetIntField    (3);
-    float volumeSampled  = ResultSetGetFloatField  (4);
+    bool     downCast       = ResultSetGetBool        (0);
+    kkint32  binId          = ResultSetGetIntField    (1);
+    float    binDepth       = ResultSetGetFloatField  (2);
+    kkint32  scanLines      = ResultSetGetIntField    (3);
+    float    volumeSampled  = ResultSetGetFloatField  (4);
 
     VolumeSampledStatPtr  stat = new VolumeSampledStat (binId, binDepth, volumeSampled);
     if  (downCast)

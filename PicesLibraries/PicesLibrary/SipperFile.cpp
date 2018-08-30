@@ -460,8 +460,8 @@ void   SipperFile::AssignCtdExternalInstrumentsETP2008 (const KKStr&   rootName)
 
     else if  (rootName.SubStrPart (0, 8) == "ETP2008_8")
     {
-      KKStr  deploymentNum = rootName.SubStrPart (9);
-      deploymentNum = deploymentNum.ExtractToken ("_");
+      KKStr  zed = rootName.SubStrPart (9);
+      deploymentNum = zed.ExtractToken ("_");
       StationName ("8");
       DeploymentNum (deploymentNum);
     }
@@ -529,21 +529,16 @@ void   SipperFile::AssignCtdExternalInstrumentsETP2008 (const KKStr&   rootName)
 
 
 
-
-
-
-
-
 SipperFileList::SipperFileList (bool  _owner):
     KKQueue<SipperFile> (_owner)
 {
 }
 
 
+
 SipperFileList::~SipperFileList ()
 {
 }
-
 
 
 
@@ -564,7 +559,6 @@ SipperFileListPtr  SipperFileList::GetListOfSipperFilesWeCanFind (RunLog&  runLo
 
   return  sipperFiles;
 }  /* GetListOfSipperFilesWeCanFind */
-
 
 
 
@@ -686,7 +680,6 @@ void  SipperFileOracle::AddSipperFileEntry (SipperFilePtr  sipperFile)
 
   GlobalGoalKeeper::EndBlock ();
 }  /* AddSipperFileEntry */
-
 
 
 

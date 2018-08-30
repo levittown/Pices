@@ -86,7 +86,7 @@ namespace MLL
     static  FeatureFileIOPicesPtr  Driver                 ()                  {return &driver;}
     static  FileDescConstPtr       NewPlanktonFile        ();
     static  KKStr                  PlanktonFieldName      (kkint32  fieldNum);
-    static  kkint32                PlanktonMaxNumOfFields ();
+    static  kkuint32               PlanktonMaxNumOfFields ();
 
 
     /**                       FeatureDataReSink
@@ -194,7 +194,7 @@ namespace MLL
   private:
     static FeatureFileIOPices  driver;
     static FileDescConstPtr    planktonFileDesc;
-    static kkint32             MaxNumPlanktonRawFields;
+    static kkuint32            MaxNumPlanktonRawFields;
     static const char*         PlanktonRawFeatureDecriptions[];
 
 
