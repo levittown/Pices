@@ -85,7 +85,7 @@ namespace MLL
 
     static  FeatureFileIOPicesPtr  Driver                 ()                  {return &driver;}
     static  FileDescConstPtr       NewPlanktonFile        ();
-    static  KKStr                  PlanktonFieldName      (kkint32  fieldNum);
+    static  KKStr                  PlanktonFieldName      (kkuint32  fieldNum);
     static  kkuint32               PlanktonMaxNumOfFields ();
 
 
@@ -242,10 +242,10 @@ namespace MLL
 
 
 
-    void  Parse_FEATURE_DATA_FILE_Line (KKStr&  line,
-                                        kkint32&  version,
-                                        kkint32&  numOfFields,
-                                        kkint32&  numOfExamples
+    void  Parse_FEATURE_DATA_FILE_Line (KKStr&     line,
+                                        kkuint32&  version,
+                                        kkuint32&  numOfFields,
+                                        kkuint32&  numOfExamples
                                        );
 
 

@@ -66,7 +66,7 @@ namespace  MLL
                                                              );
 
     virtual
-    void  Save (const KKStr&  fileName)  const;
+    void  Save (const KKStr&  saveFileName)  const;
 
     virtual void  ReadXML (XmlStream&      s,
                            XmlTagConstPtr  tag,

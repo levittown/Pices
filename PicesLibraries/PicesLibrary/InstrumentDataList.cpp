@@ -1,32 +1,24 @@
-#include  "FirstIncludes.h"
-#include  <stdlib.h>
-#include  <stdio.h>
-#include  <math.h>
-#include  <memory>
-
-#include  <string>
-#include  <iostream>
-#include  <fstream>
-#include  <vector>
-
-#include  "MemoryDebug.h"
+#include "FirstIncludes.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
+#include <memory>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include "MemoryDebug.h"
 using namespace std;
 
-
-#include  "KKBaseTypes.h"
-#include  "KKStrParser.h"
-
-
-#include  "OSservices.h"
+#include "KKBaseTypes.h"
+#include "KKStrParser.h"
+#include "OSservices.h"
 using namespace KKB;
 
-
-
-#include  "InstrumentDataList.h"
-
-#include  "InstrumentDataManager.h"
-#include  "SipperBuff.h"
-#include  "SipperFile.h"
+#include "InstrumentDataList.h"
+#include "InstrumentDataManager.h"
+#include "SipperBuff.h"
+#include "SipperFile.h"
 using  namespace  MLL;
 
 
@@ -41,6 +33,7 @@ InstrumentDataList::InstrumentDataList (bool  _owner):
 
 {
 }
+
 
 
 InstrumentDataList::InstrumentDataList (const KKStr&  _fileName,
@@ -60,11 +53,9 @@ InstrumentDataList::InstrumentDataList (const KKStr&  _fileName,
 
 
 
-
 InstrumentDataList::~InstrumentDataList ()
 {
 }
-
 
 
 
@@ -97,11 +88,11 @@ InstrumentDataListPtr  InstrumentDataList::CreateFromSipperFile (const KKStr&   
     return  NULL;
   }
 
-  uchar*  lineBuff = new uchar[4096];
-  kkuint32  lineSize = 0;
-  kkuint32*   colCount = new kkuint32[4096];
-  kkuint32  pixelsInRow;
-  bool    flow;
+  uchar*     lineBuff = new uchar[4096];
+  kkuint32   lineSize = 0;
+  kkuint32*  colCount = new kkuint32[4096];
+  kkuint32   pixelsInRow;
+  bool       flow;
 
   kkint32 RecordingRateNumSamplingFrames = 2;
 
@@ -119,8 +110,7 @@ InstrumentDataListPtr  InstrumentDataList::CreateFromSipperFile (const KKStr&   
 
     data->ScanRate (scanRate);
   }
-
-
+  
   sipperBuff->GetNextLine (lineBuff,
                            4096,      // Size of 'LineBuff'
                            lineSize,
@@ -242,8 +232,6 @@ InstrumentDataListPtr  InstrumentDataList::CreateFromSipperFile (const KKStr&   
 
   return  data;
 }  /* CreateFromSipperFile */
-
-
 
 
 
@@ -380,8 +368,6 @@ void  InstrumentDataList::Load (const KKStr&  fileName,
 
 
 
-
-
 void  InstrumentDataList::Save (const KKStr&  fileName,
                                 RunLog&       log
                                )  const
@@ -426,11 +412,9 @@ void  InstrumentDataList::Save (const KKStr&  fileName,
 
 
 
-
-
 VectorDouble  InstrumentDataList::FrameOffsetsInMeters (kkuint32 scanLinesPerFrame,
-                                                        float  scanRate,             // Scan lines per second.
-                                                        float  defaultFlowRate
+                                                        float    scanRate,             // Scan lines per second.
+                                                        float    defaultFlowRate
                                                        )
 {
   const_iterator  idx;

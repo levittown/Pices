@@ -184,17 +184,17 @@ namespace MLL
      *@param[in] classKeyToUse  If equal to 'V' will only return Validated examples.
      *@param[in] reExtractInstrumentData If set to true will Re-Extract Instrument data from the SipperFile.
      */
-    ImageFeaturesListPtr  FeatureDataGetOneSipperFile (const KKStr&  sipperFileRootName,
-                                                       MLClassPtr    mlClass,
-                                                       char          classKeyToUse,
-                                                       bool          reExtractInstrumentData,
-                                                       bool&         cancelFlag
+    ImageFeaturesListPtr  FeatureDataGetOneSipperFile (const KKStr&   sipperFileRootName,
+                                                       MLClassPtr     mlClass,
+                                                       char           classKeyToUse,
+                                                       bool           reExtractInstrumentData,
+                                                       VolConstBool&  cancelFlag
                                                       );
 
     ImageFeaturesListPtr  FeatureDataForImageGroup (const DataBaseImageGroupPtr  imageGroup,
                                                     MLClassPtr                   mlClass,
                                                     char                         classKeyToUse,
-                                                    const bool&                  cancelFlag
+                                                    VolConstBool&                cancelFlag
                                                    );
 
     void   FeatureDataUpdate (DataBaseImagePtr  dataBaseImage,
@@ -302,7 +302,7 @@ namespace MLL
 
     DataBaseImageListPtr  ImagesQuery (DataBaseImageGroupPtr  group,
                                        bool                   includeThumbnail,
-                                       const bool&            cancelFlag
+                                       VolConstBool&          cancelFlag
                                       );
       
    
@@ -319,7 +319,7 @@ namespace MLL
                                        kkuint32               restartImageId,
                                        kkint32                limit,            // Max # of rows to return.  -1 indicates no limit.
                                        bool                   includeThumbnail,
-                                       const bool&            cancelFlag
+                                       VolConstBool&          cancelFlag
                                       );
 
 
@@ -666,8 +666,7 @@ namespace MLL
     void  InstrumentDataInsert (const KKStr&           _sipperFileName,
                                 const InstrumentData&  id
                                );
-
-
+    
 
     void  InstrumentDataUpdateCropSettings (const KKStr&  sipperFileName,
                                             kkuint32      scanLineStart,
@@ -678,11 +677,9 @@ namespace MLL
                                            );
 
 
-
-
     void  InstrumentDataSaveListForOneSipperFile (const KKStr&               _sipperFileName,
                                                   const InstrumentDataList&  instrumentData,
-                                                  const bool&                _cancelFlag
+                                                  VolConstBool&              _cancelFlag
                                                  );
 
 

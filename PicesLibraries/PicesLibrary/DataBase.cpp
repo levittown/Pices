@@ -1754,8 +1754,7 @@ void  DataBase::FeatureDataCreateTable ()
                   << "  ImageFileName    varchar(32)   not null,"   << endl
                   << "  SipperFileName   char (14)     not null,"   << endl;
 
-  kkint32  fieldNum = 0;
-  for  (fieldNum = 0;  fieldNum < FeatureFileIOPices::PlanktonMaxNumOfFields ();  fieldNum++)
+  for  (kkuint32 fieldNum = 0;  fieldNum < FeatureFileIOPices::PlanktonMaxNumOfFields ();  fieldNum++)
   {
     KKStr  fieldName = FeatureFileIOPices::PlanktonFieldName (fieldNum);
     if  (!fieldName.Empty ())
@@ -1819,16 +1818,13 @@ void  DataBase::FeatureDataInsertRow (const KKStr&          _sipperFileName,
 
 KKB::kkint32  LookUpFeatureDataField (const KKStr& fieldName)
 {
-  KKB::kkint32  fieldNum = 0;
-  for  (fieldNum = 0;  fieldNum < FeatureFileIOPices::PlanktonMaxNumOfFields ();  fieldNum++)
+  for  (kkuint32 fieldNum = 0;  fieldNum < FeatureFileIOPices::PlanktonMaxNumOfFields ();  fieldNum++)
   {
     if  (fieldName == FeatureFileIOPices::PlanktonFieldName (fieldNum))
       return  fieldNum;
   }
   return -1;
 }  /* LookUpFeatureDataField */
-
-
 
 
 char**   DataBase::featureDataFieldNames = NULL;
@@ -1870,7 +1866,7 @@ ConstCharStarArray  DataBase::GetFeatureDataFieldNames ()
   fieldNames[14] = STRDUP ("CtdDateTime");
   fieldNames[15] = STRDUP ("AreaMM");
    
-  kkint32  fieldNum = 0;
+  kkuint32  fieldNum = 0;
   for  (fieldNum = 0;  fieldNum < FeatureFileIOPices::PlanktonMaxNumOfFields ();  fieldNum++)
     fieldNames[16 + fieldNum] = STRDUP (FeatureFileIOPices::PlanktonFieldName (fieldNum).Str ());
   fieldNames[16 + fieldNum] = NULL;
@@ -1879,8 +1875,6 @@ ConstCharStarArray  DataBase::GetFeatureDataFieldNames ()
   blocker->EndBlock ();
   return  featureDataFieldNames;
 }  /* GetFeatureDataFieldNames */
-
-
 
 
 
@@ -1930,7 +1924,7 @@ ImageFeaturesListPtr  DataBase::FeatureDataProcessResults ()
     i->CtdDateTime (ResultSetGetDateTimeField (14));
     i->AreaMMSquare (ResultSetGetFloatField   (15));
 
-    for  (kkint32 fieldNum = 0;  fieldNum < FeatureFileIOPices::PlanktonMaxNumOfFields ();  fieldNum++)
+    for  (kkuint32 fieldNum = 0;  fieldNum < FeatureFileIOPices::PlanktonMaxNumOfFields ();  fieldNum++)
       i->FeatureData (fieldNum, ResultSetGetFloatField (16 + fieldNum));
 
     if  (class1Id == 0)
@@ -2063,11 +2057,11 @@ ImageFeaturesPtr   DataBase::FeatureDataRecLoad (DataBaseImagePtr  image)
  *@param[in] reExtractInstrumentData:  True indicates to re-extract feature data from the original SipperFile and update InmstrumentData tables.
  *@param[in] cancelFlag                Flag will be monitored;  if turns true the method will return at 1st chance.
  */
-ImageFeaturesListPtr  DataBase::FeatureDataGetOneSipperFile (const KKStr&     sipperFileName,
-                                                             MLClassPtr       mlClass,
-                                                             char             classKeyToUse,
-                                                             bool             reExtractInstrumentData,
-                                                             bool&            cancelFlag
+ImageFeaturesListPtr  DataBase::FeatureDataGetOneSipperFile (const KKStr&   sipperFileName,
+                                                             MLClassPtr     mlClass,
+                                                             char           classKeyToUse,
+                                                             bool           reExtractInstrumentData,
+                                                             VolConstBool&  cancelFlag
                                                             )
 {
   InstrumentDataListPtr  instrumentData = NULL;
@@ -2152,7 +2146,7 @@ ImageFeaturesListPtr  DataBase::FeatureDataGetOneSipperFile (const KKStr&     si
 ImageFeaturesListPtr  DataBase::FeatureDataForImageGroup (const DataBaseImageGroupPtr  imageGroup,
                                                           MLClassPtr                   mlClass,
                                                           char                         classKeyToUse,
-                                                          const bool&                  cancelFlag
+                                                          VolConstBool&                cancelFlag
                                                          )
 {
   if  (imageGroup == NULL)
@@ -2181,7 +2175,7 @@ ImageFeaturesListPtr  DataBase::FeatureDataForImageGroup (const DataBaseImageGro
                                                      << ")";
 
   kkint32  returnCd = QueryStatement (selectStr);
-  if  (returnCd != 0)
+  if  ((returnCd != 0)  ||  cancelFlag)
     return NULL;
 
   ImageFeaturesListPtr results = FeatureDataProcessResults ();
@@ -3608,7 +3602,7 @@ DataBaseImagePtr  DataBase::ImageLoad (const KKStr&   imageFileName)
 
 DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  group,
                                              bool                   includeThumbnail,
-                                             const bool&            cancelFlag
+                                             VolConstBool&          cancelFlag
                                             )
 {
   if  (!group)
@@ -3620,7 +3614,7 @@ DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  group,
                      ")";
 
   kkint32  returnCd = QueryStatement (selectStr);
-  if  (returnCd != 0)
+  if  ((returnCd != 0)  ||  cancelFlag)
     return NULL;
 
   DataBaseImageListPtr results = ImageQueryProcessResults ();
@@ -3645,7 +3639,7 @@ DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  imageGroup,
                                              kkuint32               restartImageId,
                                              kkint32                limit,            // Max # of rows 2 return.  -1 indicates no limit.
                                              bool                   includeThumbnail,
-                                             const bool&            cancelFlag
+                                             VolConstBool&          cancelFlag
                                             )
 {
   KKStr  selectStr(512);
@@ -3671,9 +3665,9 @@ DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  imageGroup,
             << ")";
    
   kkint32  returnCd = QueryStatement (selectStr);
-  if  (returnCd != 0)
+  if  ((returnCd != 0)  ||  cancelFlag)
     return NULL;
-
+    
   DataBaseImageListPtr results = ImageQueryProcessResults ();
 
   ResultSetsClear ();
@@ -6075,7 +6069,7 @@ void  DataBase::InstrumentDataUpdateCropSettings (const KKStr&  sipperFileName,
 
 void  DataBase::InstrumentDataSaveListForOneSipperFile (const KKStr&               _sipperFileName,
                                                         const InstrumentDataList&  instrumentData,
-                                                        const bool&                _cancelFlag
+                                                        VolConstBool&              _cancelFlag
                                                        )
 {
   if  (!allowUpdates)

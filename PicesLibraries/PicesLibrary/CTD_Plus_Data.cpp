@@ -531,7 +531,7 @@ float  CTD_Plus_Data::DissolvedOxygenConcentration (float  _voltage,
 
   double  disolvedOxygen_a = (Soc * (V + Voffset + tau * deltaV) + Boc * exp (-0.03 * T));
 
-  double  Oxsat = OxygenSaturation (temperature, salinity);
+  double  Oxsat = OxygenSaturation (T, _salinity);
   double  disolvedOxygen_b = Oxsat * exp (tcor * T) * exp (pcor * P);
 
   double  dissolvedOxygenConcentration = disolvedOxygen_a * disolvedOxygen_b;
