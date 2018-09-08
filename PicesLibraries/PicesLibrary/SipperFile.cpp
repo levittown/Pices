@@ -11,14 +11,12 @@
 #include "MemoryDebug.h"
 using namespace std;
 
-
 #include "KKBaseTypes.h"
 #include "GlobalGoalKeeper.h"
 #include "KKStrParser.h"
 #include "OSservices.h"
 #include "KKStr.h"
 using namespace KKB;
-
 
 #include "SipperFile.h"
 #include "InstrumentDataFileManager.h"
@@ -180,8 +178,8 @@ KKStr  SipperFile::ToTabDelStr ()  const
 
 
 kkint32  SearchFieldIdx (const KKStr  searchField, 
-                       const char*  fieldNames[]
-                      )
+                         const char*  fieldNames[]
+                        )
 {
   kkint32 idx = 0;
 
@@ -294,7 +292,7 @@ void  SipperFile::ParseTabDelStr (KKStrParser&  parser)
 
 
 
-void   SipperFile::ReFresh (const SipperFile&  sf)
+void  SipperFile::ReFresh (const SipperFile&  sf)
 {
   sipperFileId    =  sf.sipperFileId;
   sipperFileName  =  sf.sipperFileName;
@@ -329,7 +327,7 @@ void   SipperFile::ReFresh (const SipperFile&  sf)
 
 
 
-void   SipperFile::AssignCtdExternalInstruments (const KKStr&   rootName)
+void   SipperFile::AssignCtdExternalInstruments (const KKStr&  rootName)
 {
   // Ideally I should be getting these assignments from the SipperFiles table in the database.
   // but if not available so we have to use prior knowledge to make best guess assignments.
