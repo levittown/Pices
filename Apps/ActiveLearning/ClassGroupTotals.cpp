@@ -2300,12 +2300,6 @@ void   ClassGroupTotals::GetClassGroupTotalsFileStats (const KKStr&     fileName
 
 
 
-
-
-
-
-
-
 void  ClassGroupTotals::Extract_IIPC_IPR_FromDirName (const KKStr&    dirName,
                                                       int&             iipc,
                                                       int&             ipr
@@ -2355,7 +2349,6 @@ void  ClassGroupTotals::Extract_IIPC_IPR_FromDirName (const KKStr&    dirName,
     iipc = atoi (IIPC.Str ());
   }
 }  /* Extract_IIPC_IPR_FromDirName */
-
 
 
 

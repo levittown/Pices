@@ -241,7 +241,7 @@ void  SipperHeaderRec::ParseHeaderStr (const KKStr&  s)
     KKStr  fieldValue = "";
 
     auto commaIdx = fieldName.LocateCharacter (',');
-    if  (commaIdx < 0)
+    if  (commaIdx.None ())
     {
       if  (x < fields.size ())
       {
@@ -251,8 +251,8 @@ void  SipperHeaderRec::ParseHeaderStr (const KKStr&  s)
     }
     else
     {
-      fieldValue = fieldName.SubStrPart (commaIdx + 1);
-      fieldName  = fieldName.SubStrPart (0, commaIdx - 1);
+      fieldValue = fieldName.SubStrPart (commaIdx.value + 1);
+      fieldName  = fieldName.SubStrPart (0, commaIdx.value - 1);
     }
 
     ProcessNameAndDataStrings (fieldName, fieldValue, found);

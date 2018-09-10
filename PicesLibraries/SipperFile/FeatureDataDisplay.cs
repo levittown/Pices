@@ -39,7 +39,7 @@ namespace SipperFile
       if  ((descFV == null)  ||  (numFeatures < 1))
         return;
 
-      for  (int x = 0;  x < numFeatures;  x++)
+      for  (uint x = 0;  x < numFeatures;  x++)
       {
         ListViewItem  lvi = new ListViewItem (descFV.FeatureName (x));
 

@@ -452,7 +452,7 @@ void  ExtractFeatures::MoveImagesToDestinationDirectoryByClassName ()
 
     while  (image  &&  (curClass == image->MLClass ()))
     {
-      ImageFeaturesListPtr  imagesInThisSubDir = new ImageFeaturesList (fileDesc, true, 1000);
+      ImageFeaturesListPtr  imagesInThisSubDir = new ImageFeaturesList (fileDesc, true);
 
       KKStr  classSubDirName (curClass->Name ());
       classSubDirName << "_" << StrFormatInt (classSubDirectoryNum, "z00");

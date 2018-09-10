@@ -398,7 +398,7 @@ void  FilterETP2008 ()
   if  (!data)
     return;
 
-  ImageFeaturesListPtr  result = new ImageFeaturesList (data->FileDesc (), false, 10000);
+  ImageFeaturesListPtr  result = new ImageFeaturesList (data->FileDesc (), false);
 
   delete  classes;
   classes = data->ExtractListOfClasses ();

@@ -167,7 +167,7 @@ short  ImageFeatures::FluorescenceIndex     = 87;
 
 
 
-ImageFeatures::ImageFeatures (kkint32  _numOfFeatures):
+ImageFeatures::ImageFeatures (kkuint32  _numOfFeatures):
        FeatureVector (_numOfFeatures),
         areaMMSquare     (0.0f),
         centroidCol      (-1),
@@ -1816,14 +1816,14 @@ void  ImageFeaturesList::FixSipperFileScanLineAndColFields ()
 
     KKStr  rootName = osGetRootName (i->ExampleFileName ());
     auto x = rootName.LocateLastOccurrence ('_');
-    if  (x > 0)
+    if  (x.Exists ()  &&  (x.value > 0))
     {
-      KKStr  colStr = rootName.SubStrPart (x + 1);
-      KKStr  temp = rootName.SubStrPart (0, x - 1);
+      KKStr  colStr = rootName.SubStrPart (x.value + 1);
+      KKStr  temp = rootName.SubStrPart (0, x.value - 1);
       x = temp.LocateLastOccurrence ('_');
-      if  (x > 0)
+      if  (x.Exists ()  &&  (x.value > 0))
       {
-        KKStr  rowStr = temp.SubStrPart (x + 1);
+        KKStr  rowStr = temp.SubStrPart (x.value + 1);
         float  sfCentroidCol = float  (i->CentroidCol ()) + float  (atoi (colStr.Str ()));
         double sfCentroidRow = double (i->CentroidRow ()) + double (atoi (rowStr.Str ()));
         i->SfCentroidCol (sfCentroidCol);

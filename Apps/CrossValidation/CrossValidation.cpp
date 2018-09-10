@@ -1299,12 +1299,12 @@ void  CrossValidationApp::PostMisclassifiedImage (KKStr       fileName,
 
   bool copyGood;
 
-  int LastOccurence=fileName.LocateLastOccurrence("\\");
+  auto  LastOccurence=fileName.LocateLastOccurrence("\\");
   KKStr subDir;
-  if (LastOccurence!=-1)
+  if (LastOccurence.Exists ())
   {
-    subDir=fileName.SubStrPart(0,LastOccurence);
-    fileName=fileName.SubStrPart(LastOccurence+1);
+    subDir   = fileName.SubStrPart (0, LastOccurence.value);
+    fileName = fileName.SubStrPart (LastOccurence.value + 1);
     
   }
 
@@ -3496,12 +3496,12 @@ void  DetermineCropSettingsForDeployment (RunLog&              runLog,
   {
     if  (cropLefts.size () > 0)
     {
-      int  midPoint = cropLefts.size () / 2;
+      size_t  midPoint = cropLefts.size () / 2;
       sort (cropLefts.begin  (), cropLefts.end  ());
       sort (cropRights.begin (), cropRights.end ());
 
-      deployment->CropLeft  (cropLefts[midPoint]);
-      deployment->CropRight (cropRights[midPoint]);
+      deployment->CropLeft  (cropLefts  [midPoint]);
+      deployment->CropRight (cropRights [midPoint]);
 
       db->SipperDeploymentUpdate (*deployment);
     }
@@ -3510,7 +3510,6 @@ void  DetermineCropSettingsForDeployment (RunLog&              runLog,
   delete  sipperFiles;
   sipperFiles = NULL;
 }  /* DetermineCropSettingsForDeployment */
-
 
 
 
@@ -3601,7 +3600,6 @@ int  main (int    argc,
   #if  defined (WIN32)  &&  defined (_DEBUG)  &&  !defined(_NO_MEMORY_LEAK_CHECK_)
     _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF ); 
   #endif
-
 
   if  (false)
   {

@@ -255,13 +255,8 @@ void  DataBase::InitializeDataBaseStaticVariables ()
     if  (!staticVariablesInialized)
     {
       KKStr  picesHomeDir = PicesVariables::HomeDir ();
-      if  (picesHomeDir.Empty ())
-      {
-        KKStr  errMsg = "DataBase::InitializeDataBaseStaticVariables    ***ERROR***       Can not locate the PICES home directory.    Please make sure that the Environment variable \"PicesHomeDir\" is set to the correct location.";
-        cerr << endl << errMsg << endl << endl;
-        osDisplayWarning (errMsg);
-        exit (-1);
-      }
+
+      KKCheck (!picesHomeDir.Empty (), "DataBase::InitializeDataBaseStaticVariables  picesHomeDir empty; environment variable \"PicesHomeDir\" is set.")
 
       mySqlHomeDir = osAddSlash (osAddSlash (picesHomeDir) + "MySql");
       mySqlDataDir = osAddSlash (mySqlHomeDir) + "data";
@@ -305,7 +300,6 @@ void  DataBase::InitializeMySqlLibraryServer ()
     }
   }
 }  /* InitializeMySqlLibraryServer */
-
 
 
 
@@ -372,52 +366,7 @@ void  DataBase::InitializeMySqlLibraryEmbedded ()
   delete  server_options[2];
   delete  server_options;
   server_options = NULL;
-
-
-  // The following code is attempting to duplicate a bug with "mysql_library_end" where it hangs under normal operation.
-  /*
-  RunLogPtr  runLog = new RunLog ();
-
-  DataBasePtr dbConnFirstOne = new DataBase (*runLog);
-
-  DataBasePtr dbConn = new DataBase (*runLog);
-
-  SipperCruiseListPtr cruises = dbConn->SipperCruiseLoadAllCruises ();
-
-  MLClassListPtr  classes = dbConn->MLClassLoadList ();
-
-  DataBaseImageGroupListPtr  imageGroups = dbConn->ImageGroupLoad ();   // returns a list of all Group Assignments
-
-  SipperStationListPtr  stations = dbConn->SipperStationLoad ("SD01");
-
-  SipperDeploymentListPtr  deployments = dbConn->SipperDeploymentLoad ("SD01",
-                                                                       "06day"
-                                                                      );
-
-  delete  dbConnFirstOne;  dbConnFirstOne = NULL;
-
-  delete  dbConn;  dbConn = NULL;
-
-
-  ThreadEnd ();
-
-
-  try  {mysql_library_end ();}
-  catch  (std::exception  e1)
-  {
-    cerr << endl << "DataBase::FinalCleanUp    ***EXCEPTION***    " << e1.what () << endl << endl;
-  }
-  catch  (...)
-  {
-    cerr << endl << "DataBase::FinalCleanUp    ***EXCEPTION***    " << endl << endl;
-  }
-
-  delete  runLog;  runLog = NULL;
-*/
-
-
 }  /* InitializeMySqlLibraryEmbedded */
-
 
 
 
@@ -525,7 +474,6 @@ void   DataBase::DataBaseDeleteInstance (DataBasePtr  _instance)
 
 
 
-
 DataBase::DataBase (RunLog&  _log):
   allowUpdates      (false),
   conn              (NULL),
@@ -607,7 +555,6 @@ DataBase::~DataBase ()
 
 
 
-
 void  DataBase::Close ()
 {
   CreateBlocker ();
@@ -621,7 +568,6 @@ void  DataBase::Close ()
 
   blocker->EndBlock ();
 }  /* Close */
-
 
 
 
@@ -685,7 +631,6 @@ DataBaseServerPtr  DataBase::GetDefaultServer (RunLog&  _log)
   blocker->EndBlock ();
   return  defaultSerever;
 }  /* GetDefaultServer */
-
 
 
 
@@ -779,9 +724,9 @@ KKB::kkint32  DataBase::ConnectEmbedded ()
                             server->UserName     ().Str (),
                             server->PassWord     ().Str (),
                             server->DataBaseName ().Str (), /* Database Name                 */
-                            0,                        /* port (use default)            */
-                            NULL,                     /* socket (use default)          */
-                            CLIENT_MULTI_STATEMENTS   /* flags (none)                  */
+                            0,                              /* port (use default)            */
+                            NULL,                           /* socket (use default)          */
+                            CLIENT_MULTI_STATEMENTS         /* flags (none)                  */
                            );
 
   if  (returnMYSQLstruct == NULL)
@@ -896,7 +841,6 @@ KKB::kkint32  DataBase::ConnectServer ()
 
 
 
-
 DataBaseServerPtr  DataBase::GetDefaultMySqlParameters ()
 {
   DataBaseServerPtr  defaultParameters = NULL;
@@ -918,7 +862,6 @@ DataBaseServerPtr  DataBase::GetDefaultMySqlParameters ()
 
   return  defaultParameters;
 }  /* GetDefaultMySqlParameters */
-
 
 
 
@@ -1032,7 +975,6 @@ bool   DataBase::ResultSetGetNext (const char**  fieldNames)
 
   return  resultSetMore;
 }  /* ResultSetGetNext */
-
 
 
 
@@ -1219,12 +1161,12 @@ KKStr  DataBase::ResultSetGetKKStrField (kkuint32 fieldIdx)
 }
 
 
+
 char  DataBase::ResultSetGetCharField (kkuint32 fieldIdx)
 {
   KKStr  s = ResultSetGetField (fieldIdx);
   return  s[0];
 }
-
 
 
 
@@ -1237,11 +1179,11 @@ bool  DataBase::ResultSetGetBool (kkuint32 fieldIdx)
 
 
 
-
 float  DataBase::ResultSetGetFloatField (kkuint32 fieldIdx)
 {
   return  CharStarToFloat (ResultSetGetField (fieldIdx));
 }
+
 
 
 DateTime  DataBase::ResultSetGetDateTimeField (kkuint32 fieldIdx)
@@ -1250,10 +1192,12 @@ DateTime  DataBase::ResultSetGetDateTimeField (kkuint32 fieldIdx)
 }
 
 
+
 TimeType  DataBase::ResultSetGetTimeField (kkuint32 fieldIdx)
 {
   return  TimeFromMySqlDateTimeField (ResultSetGetField (fieldIdx));
 }
+
 
 
 double  DataBase::ResultSetGetDoubleField (kkuint32 fieldIdx)
@@ -1262,10 +1206,12 @@ double  DataBase::ResultSetGetDoubleField (kkuint32 fieldIdx)
 }
 
 
+
 KKB::kkint32 DataBase::ResultSetGetIntField (kkuint32 fieldIdx)
 {
   return  CharStarToInt32 (ResultSetGetField (fieldIdx));
 }
+
 
 
 KKB::kkint64  DataBase::ResultSetGetInt64Field    (kkuint32 fieldIdx)
@@ -1274,10 +1220,12 @@ KKB::kkint64  DataBase::ResultSetGetInt64Field    (kkuint32 fieldIdx)
 }
 
 
+
 KKB::kkuint32 DataBase::ResultSetGetUintField (kkuint32 fieldIdx)
 {
   return  CharStarToUint32 (ResultSetGetField (fieldIdx));
 }
+
 
 
 KKB::kkuint16 DataBase::ResultSetGetUint16Field (kkuint32 fieldIdx)
@@ -1286,10 +1234,12 @@ KKB::kkuint16 DataBase::ResultSetGetUint16Field (kkuint32 fieldIdx)
 }
 
 
+
 KKB::ulong   DataBase::ResultSetGetUlongField (kkuint32 fieldIdx)
 {
   return  CharStarToUlong (ResultSetGetField (fieldIdx));
 }
+
 
 
 KKB::kkuint64 DataBase::ResultSetGetUint64Field (kkuint32 fieldIdx)

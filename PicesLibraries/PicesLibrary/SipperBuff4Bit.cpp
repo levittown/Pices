@@ -103,6 +103,7 @@ struct  SipperBuff4Bit::OpRecRun256Len1
 };  /* OpRecRun256Len1 */
 
 
+
 struct  SipperBuff4Bit::OpRecRun256Len2
 {
   /** For one or two raw pixels */
@@ -136,6 +137,7 @@ struct  SipperBuff4Bit::OpRecRaw513Pixels1
   uchar  lenHigh :4;      /**< Num-Raw-Pixels = 1 + 2 * (1 + lenHigh * 16 + lenLow)  */
   /** To be followed by 'len' RawPixelRec's */
 };  /* OpRecRaw513Pixels1 */
+
 
 
 struct  SipperBuff4Bit::OpRecRaw513Pixels2
@@ -325,7 +327,6 @@ void  SipperBuff4Bit::AllocateRawStr (kkuint16  size)
     rawStr = new uchar[rawStrSize];
   }
 }  /* AllocateRawStr */
-
 
 
 

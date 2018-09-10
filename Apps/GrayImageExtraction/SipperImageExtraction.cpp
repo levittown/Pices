@@ -765,7 +765,7 @@ SipperImageExtraction::SipperImageExtraction (SipperImageExtractionParms&  _parm
   if  (parms.ExtractFeatureData ())
   {
     dupImageDetector = new DuplicateImages (fileDesc, log);
-    duplicateImages  = new ImageFeaturesList (fileDesc, true, 100);
+    duplicateImages  = new ImageFeaturesList (fileDesc, true);
     duplicateImageDir = osAddSlash (parms.OutputRootDir ()) + "DuplicateImages";
     osCreateDirectoryPath (duplicateImageDir);
 

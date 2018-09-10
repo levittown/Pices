@@ -55,16 +55,15 @@ void  InstrumentDataGPS::ParseDegreeMinutesStr (const KKStr&  str,
   minutes = 0.0;
 
   auto x = str.LocateCharacter ('.');
-  if  (x < 0)
+  if  (x.None ())
     return;
 
-  KKStr  degStr = str.SubStrPart (0, x - 3);
-  KKStr  minStr = str.SubStrPart (x - 2);
+  KKStr  degStr = str.SubStrPart (0, x.value - 3);
+  KKStr  minStr = str.SubStrPart (x.value - 2);
   
   degrees = atof (degStr.Str ());
   minutes = atof (minStr.Str ());
 }  /* ParseDegreeMinutesStr */
-
 
 
 

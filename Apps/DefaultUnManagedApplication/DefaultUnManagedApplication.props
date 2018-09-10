@@ -20,7 +20,7 @@
       <Inputs>$(OutsidePackages)\fftw-3.3.5-dll64\libfftw3-3.dll;$(OutsidePackages)\fftw-3.3.5-dll64\libfftw3f-3.dll;%(Inputs)</Inputs>
     </CustomBuildStep>
     <PreBuildEvent>
-      <Command>copy $(OutsidePackages)\fftw-3.3.5-dll64   $(SolutionDir)$(Configuration)\</Command>
+      <Command>copy /Y  $(OutsidePackages)\fftw-3.3.5-dll64\*.dll   $(SolutionDir)$(Configuration)\</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup />

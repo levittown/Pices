@@ -239,10 +239,10 @@ FileDescConstPtr  FeatureFileIOPices::GetFileDesc (const KKStr&    _fileName,
   }
   
   FileDescPtr  fd = new FileDesc ();
-  fd->Version (version);
+  fd->Version ((kkint16)version);
 
   bool  alreadyExists;
-  kkint32  featureNum = 0;
+  kkuint32  featureNum = 0;
   for  (featureNum = 0;  featureNum < numOfFeatures;  featureNum++)
   {
     KKStr&  fieldName = fields[featureNum];
@@ -336,7 +336,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&      _fileName,
 
   ImageFeaturesListPtr examples = new ImageFeaturesList (_fileDesc, true);    // true=Owner  examples will own the ImageFeatures instances it contains.
 
-  examples->Version (version);
+  examples->Version ((kkint16)version);
 
   kkuint32  fieldNum = 0;
 
@@ -373,7 +373,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&      _fileName,
       // We have an example.
       fieldNum  = 0;
       ImageFeaturesPtr  example = new ImageFeatures (numOfFeatures);
-      example->Version (version);
+      example->Version ((kkint16)version);
 
       while  ((!eol)  &&  (!eof))
       {
@@ -607,7 +607,7 @@ void   FeatureFileIOPices::SaveFile (FeatureVectorList&     _data,
   if  (fileVersionNum < 1)
   {
     fileVersionNum = CurrentFeatureFileVersionNum;
-    examples->Version (fileVersionNum);
+    examples->Version ((kkint16)fileVersionNum);
   }
 
   MLClassIndexList  classIdx;
@@ -645,7 +645,7 @@ void   FeatureFileIOPices::SaveFile (FeatureVectorList&     _data,
 
   {
     // Write out Class Statistics
-    kkint32  seqNum = 0;
+    kkint16  seqNum = 0;
     ClassStatisticList::iterator  idx;
     for  (idx = classStatistics->begin ();  (idx != classStatistics->end ())  &&  (!_cancelFlag);  idx++)
     {
@@ -664,7 +664,7 @@ void   FeatureFileIOPices::SaveFile (FeatureVectorList&     _data,
   {
     // Write out the actual examples.
     ImageFeaturesPtr   example = NULL;
-    for  (size_t idx = 0; idx < examples->size (); idx++)
+    for  (kkint32 idx = 0; idx < examples->QueueSize (); idx++)
     {
       example = examples->IdxToPtr (idx);
 

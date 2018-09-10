@@ -91,10 +91,11 @@ namespace MLL
 
     //ImageFeatures (MLClassPtr  mlClass);
 
-    ImageFeatures (kkint32  _numOfFeatures);
+    ImageFeatures (kkuint32  _numOfFeatures);
+
 
     ImageFeatures (const ImageFeatures&  _image);
-
+    
 
     ImageFeatures (RasterSipper&        _raster,
                    MLClassPtr           _mlClass,
