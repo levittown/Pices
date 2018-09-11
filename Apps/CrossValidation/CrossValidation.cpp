@@ -1301,11 +1301,10 @@ void  CrossValidationApp::PostMisclassifiedImage (KKStr       fileName,
 
   auto  LastOccurence=fileName.LocateLastOccurrence("\\");
   KKStr subDir;
-  if (LastOccurence.Exists ())
+  if (LastOccurence)
   {
-    subDir   = fileName.SubStrPart (0, LastOccurence.value);
-    fileName = fileName.SubStrPart (LastOccurence.value + 1);
-    
+    subDir   = fileName.SubStrPart (0, LastOccurence.value ());
+    fileName = fileName.SubStrPart (LastOccurence.value () + 1);
   }
 
   //KKStr  dirWhereFileIs = LocateImageFileUsingConfigurationFile (fileName, knownClass);

@@ -200,8 +200,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BuildSynthObjDetData", "App
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KStrTests", "..\KSquareLibraries\Tests\KStrTests\KStrTests.vcxproj", "{17CA3314-D7A7-43B1-BA35-CD4AF6420534}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tests", "..\KSquareLibraries\Tests\Tests.vcxproj", "{583C3AAE-2426-43DE-B7CE-ECB9BB888DD6}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64

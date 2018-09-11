@@ -156,18 +156,18 @@ ActiveLearningReport::ActiveLearningReport (RunLog&       _log,
 
   auto x = subDirName.LocateLastOccurrence ('_');
 
-  if  (x > 5)
+  if  (x  &&  (x.value () > 5))
   {
-    KKStr leftSide = subDirName.SubStrPart (0, x - 1);
-    KKStr rightSide = subDirName.SubStrPart (x + 1);
+    KKStr leftSide = subDirName.SubStrPart (0, x.value () - 1);
+    KKStr rightSide = subDirName.SubStrPart (x.value () + 1);
     x = rightSide.LocateCharacter ('-');
-    KKStr  IPR = rightSide.SubStrPart (0, x - 1);
+    KKStr  IPR = rightSide.SubStrPart (0, x.value () - 1);
     imagesPerRetraining = atoi (IPR.Str ());
 
     x = leftSide.LocateLastOccurrence ('_');
-    rightSide = subDirName.SubStrPart (x + 1);
+    rightSide = subDirName.SubStrPart (x.value () + 1);
     x = rightSide.LocateCharacter ('-');
-    KKStr  IPC = rightSide.SubStrPart (0, x - 1);
+    KKStr  IPC = rightSide.SubStrPart (0, x.value () - 1);
     initialImagesPerClass = atoi (IPC.Str ());
   }
 }  

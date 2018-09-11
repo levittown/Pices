@@ -2305,37 +2305,27 @@ void  ClassGroupTotals::Extract_IIPC_IPR_FromDirName (const KKStr&    dirName,
                                                       int&             ipr
                                                      )
 {
-  int x = dirName.LocateLastOccurrence ('_');
+  auto x = dirName.LocateLastOccurrence ('_');
 
   iipc = -1;
   ipr  = -1;
 
-  if  (x <= 5)
+  if  (x.value () <= 5)
     return;
 
-  KKStr leftSide  = dirName.SubStrPart (0, x - 1);
-  KKStr rightSide = dirName.SubStrPart (x + 1);
+  KKStr leftSide  = dirName.SubStrPart (0, x.value () - 1);
+  KKStr rightSide = dirName.SubStrPart (x.value () + 1);
 
   x = rightSide.LocateCharacter ('-');
-  KKStr  IPR = rightSide.SubStrPart (0, x - 1);
+  KKStr  IPR = rightSide.SubStrPart (0, x.value () - 1);
   ipr = atoi (IPR.Str ());
 
   // Now lets determine initialImagesPerClass
-  x = leftSide.Len () - 1;
-  //  We will scan from the end of the string until we find a Ubderscore(_)
-  //  or path seperator (\).
-
-  while  (x >= 0)
-  {
-    if  ((leftSide[x] == '_')  ||  (leftSide[x] == DSchar))
-      break;
-    x--;
-  }
-
-  if (x >= 0)
+  auto usIdx = leftSide.LocateLastOccurrence ('_');
+  if (usIdx)
   {   
-    rightSide = leftSide.SubStrPart (x + 1);
-    leftSide  = leftSide.SubStrPart (0, x - 1);
+    rightSide = leftSide.SubStrPart (usIdx.value () + 1);
+    leftSide  = leftSide.SubStrPart (0, usIdx.value () - 1);
   }
   else
   {
@@ -2343,9 +2333,9 @@ void  ClassGroupTotals::Extract_IIPC_IPR_FromDirName (const KKStr&    dirName,
     leftSide = "";
   }
   x = rightSide.LocateCharacter ('-');
-  if  (x >= 0)
+  if  (x)
   {
-    KKStr  IIPC = rightSide.SubStrPart (0, x - 1);
+    KKStr  IIPC = rightSide.SubStrPart (0, x.value () - 1);
     iipc = atoi (IIPC.Str ());
   }
 }  /* Extract_IIPC_IPR_FromDirName */

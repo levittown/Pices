@@ -330,15 +330,15 @@ void  PicesVariables::ParseImageFileName (const KKStr&  fullFileName,
     return;
   
   auto  x = rootName.LocateLastOccurrence ('_');
-  if  (x.Exists ()  &&  (x.value > 0))
+  if  (x  &&  (x.value () > 0))
   {
-    KKStr  colStr = rootName.SubStrPart (x.value + 1);
-    KKStr  temp = rootName.SubStrPart (0, x.value - 1);
+    KKStr  colStr = rootName.SubStrPart (x.value () + 1);
+    KKStr  temp = rootName.SubStrPart (0, x.value () - 1);
     x = temp.LocateLastOccurrence ('_');
-    if  (x.Exists ()  &&  (x.value > 0))
+    if  (x  &&  (x.value () > 0))
     {
-      sipperFileName = temp.SubStrPart (0, x.value - 1);
-      KKStr  rowStr = temp.SubStrPart (x.value + 1);
+      sipperFileName = temp.SubStrPart (0, x.value () - 1);
+      KKStr  rowStr = temp.SubStrPart (x.value () + 1);
       scanCol     = atoi (colStr.Str ());
       scanLineNum = atoi (rowStr.Str ());
     }

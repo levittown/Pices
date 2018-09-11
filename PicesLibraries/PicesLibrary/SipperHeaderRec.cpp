@@ -241,7 +241,7 @@ void  SipperHeaderRec::ParseHeaderStr (const KKStr&  s)
     KKStr  fieldValue = "";
 
     auto commaIdx = fieldName.LocateCharacter (',');
-    if  (commaIdx.None ())
+    if  (!commaIdx)
     {
       if  (x < fields.size ())
       {
@@ -251,8 +251,8 @@ void  SipperHeaderRec::ParseHeaderStr (const KKStr&  s)
     }
     else
     {
-      fieldValue = fieldName.SubStrPart (commaIdx.value + 1);
-      fieldName  = fieldName.SubStrPart (0, commaIdx.value - 1);
+      fieldValue = fieldName.SubStrPart (commaIdx.value () + 1);
+      fieldName  = fieldName.SubStrPart (0, commaIdx.value () - 1);
     }
 
     ProcessNameAndDataStrings (fieldName, fieldValue, found);
@@ -261,10 +261,9 @@ void  SipperHeaderRec::ParseHeaderStr (const KKStr&  s)
 
 
 
-
 void  SipperHeaderRec::ProcessNameAndDataStrings (const KKStr&   _fieldName,
                                                   const KKStr&   fieldValue,
-                                                  bool&           found
+                                                  bool&          found
                                                  )
 {
   found = true;
@@ -419,7 +418,6 @@ const KKStr&  SipperHeaderRec::SerialPortShortName (kkuint32  serialPortNum)  co
 
 
 
-
 const KKStr&  SipperHeaderRec::SerialPortDesc (kkuint32  serialPortNum)  const
 {
    if  ((serialPortNum < 0)  ||  (serialPortNum >= portAssignments.size ()))
@@ -446,8 +444,6 @@ InstrumentPtr  SipperHeaderRec::SerialPortAssignment (kkuint32 serialPort)  cons
 
 
 
-
-
 InstrumentPtr  SipperHeaderRec::InclinationMeter (kkuint32  inclinationSerailPort)  const
 {
   inclinationSerailPort = 0;
@@ -466,7 +462,6 @@ InstrumentPtr  SipperHeaderRec::InclinationMeter (kkuint32  inclinationSerailPor
       
   return  NULL;
 }  /* InclinationMeter */
-
 
 
 

@@ -817,22 +817,22 @@ void  ImportGPSDataGPGGA (const KKStr&  fileName)
     KKStr  logStr = fields[6];
 
     auto  x = latStr.LocateCharacter ('.');
-    if  (x < 0) 
+    if  (!x) 
       continue;
 
-    KKStr latMinStr = latStr.SubStrPart (x - 2);
-    KKStr latDegStr = latStr.SubStrPart (0, x - 3);
+    KKStr latMinStr = latStr.SubStrPart (x.value () - 2);
+    KKStr latDegStr = latStr.SubStrPart (0, x.value () - 3);
 
     double latitude = latDegStr.ToDouble () + latMinStr.ToDouble () / 60.0;
     if  (fields[5].EqualIgnoreCase ("S"))
       latitude = 0.0 - latitude;
 
     x = logStr.LocateCharacter ('.');
-    if  (x < 0) 
+    if  (!x) 
       continue;
 
-    KKStr logMinStr = logStr.SubStrPart (x - 2);
-    KKStr logDegStr = logStr.SubStrPart (0, x - 3);
+    KKStr logMinStr = logStr.SubStrPart (x.value () - 2);
+    KKStr logDegStr = logStr.SubStrPart (0, x.value () - 3);
 
     double longitude = logDegStr.ToDouble () + logMinStr.ToDouble () / 60.0;
     if  (fields[7].EqualIgnoreCase ("W"))
