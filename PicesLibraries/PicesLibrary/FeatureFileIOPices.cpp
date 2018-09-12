@@ -582,6 +582,7 @@ void   FeatureFileIOPices::SaveFile (FeatureVectorList&     _data,
                                      RunLog&                _log
                                     )
 {
+  _log.Level(30) << "FeatureFileIOPices::SaveFile   _fileName: " << _fileName << std::endl;
   ImageFeaturesListPtr  examples  = NULL;
 
   _errorMessage = "";

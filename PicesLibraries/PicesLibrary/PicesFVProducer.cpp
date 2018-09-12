@@ -56,7 +56,6 @@ PicesFVProducer::~PicesFVProducer ()
 
 
 
-
 ImageFeaturesPtr  PicesFVProducer::ComputeFeatureVector (const Raster&     srcImage,
                                                          const MLClassPtr  knownClass,
                                                          RasterListPtr     intermediateImages,

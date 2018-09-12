@@ -534,7 +534,7 @@ SipperBuffPtr  SipperBuff::CreateSipperBuff (SipperFileFormat          _format,
   }
 
   if  (_format == SipperFileFormat::Binary)
-    sipperBuff = new SipperBuffBinary (_fileName, _cameraNum, _instrumentDataManager, _log);
+    sipperBuff = new SipperBuffBinary (_fileName, (uchar)_cameraNum, _instrumentDataManager, _log);
 
   else if  (_format == SipperFileFormat::ThreeBit)
     sipperBuff = new SipperBuff3Bit   (_fileName, _instrumentDataManager, _log);
