@@ -195,7 +195,7 @@ bool  PicesApplication::ProcessCmdLineParameter (const KKStr&  parmSwitch,
 
 
 
-bool  PicesApplication::ProcessDataBaseParameter (const KKStr&  parmSwitch, 
+bool  PicesApplication::ProcessDataBaseParameter (const KKStr&, 
                                                   const KKStr&  parmValue
                                                  )
 {
@@ -298,7 +298,7 @@ void  PicesApplication::PrintStandardHeaderInfo (ostream&  o)
   o << "Application:"     << "\t" << ApplicationName    () << endl;
   o << "Build Date/Time"  << "\t" << BuildDate          () << endl;
   o << "Run Date/Time"    << "\t" << osGetLocalDateTime () << endl; 
-  o << "Host Name"        << "\t" << osGetHostName      () << endl;
+  o << "Host Name"        << "\t" << osGetHostName ().value_or ("*** UNKNOWN ***") << endl;
   o << "User Name"        << "\t" << osGetUserName      () << endl;
   if  (db)
     o << "DataBase"       << "\t" << db->ServerDescription () << endl;

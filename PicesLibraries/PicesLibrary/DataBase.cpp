@@ -5,7 +5,6 @@
 #undef min
 #undef max
 
-
 #include "FirstIncludes.h"
 #include <ctype.h>
 #include <math.h>
@@ -24,7 +23,6 @@ using namespace std;
 #include <my_sys.h>
 #include <mysql.h>
 
-
 // Base Library
 #include "KKBaseTypes.h"
 #include "KKException.h"
@@ -32,12 +30,10 @@ using namespace std;
 #include "RasterSipper.h"
 using namespace KKB;
 
-
 #include "FileDesc.h"
 #include "FeatureFileIOPices.h"
 #include "ImageFeatures.h"
 using  namespace  KKMLL;
-
 
 #include "DataBase.h"
 #include "DataBaseServer.h"
@@ -146,6 +142,7 @@ void  DataBase::WriteBuff (char*        dest,
   }
   return;
 }
+
 
 
 #if defined(WIN32)
@@ -401,11 +398,9 @@ void  DataBase::FinalCleanUp ()
 
   // If you made it this far; then you are the thread that has to clean up the 'DataBase' static variables.
   staticVariablesInialized = false;
-  DataBaseIndex::iterator  idx;
-  for  (idx = existingInstances.begin ();  idx != existingInstances.end ();  ++idx)
+  for  (auto idx: existingInstances)
   {
-    DataBasePtr  db = idx->first;
-    db->Close ();
+    idx.first->Close ();
   }
 
   existingInstances.clear ();
@@ -6712,7 +6707,7 @@ DataBaseLogEntryPtr  DataBase::LogEntriesProcessStart
 {
   KKStr  sqlStr (256);
 
-  KKStr  compName = osGetHostName ();
+  KKStr  compName = osGetHostName ().value_or ("*** UNKNOWN ***");
   KKStr  userName = osGetUserName ();
   KKStr  sipperFileNameRoot = osGetRootName (sipperFileName);
 

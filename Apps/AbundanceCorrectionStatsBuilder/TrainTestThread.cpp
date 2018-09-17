@@ -314,7 +314,7 @@ void  TrainTestThread::Run ()
                                );
 
     MLClassPtr class2UseForAbundanceMatrix = predClass1;
-    if  (trainDataClasses->PtrToIdx (class2UseForAbundanceMatrix) < 0)
+    if  (!trainDataClasses->PtrToIdx (class2UseForAbundanceMatrix))
       class2UseForAbundanceMatrix = otherClass;
 
     abundanceCorMatrix->Prediction (knownClass, class2UseForAbundanceMatrix, *runLog);

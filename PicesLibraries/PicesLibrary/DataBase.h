@@ -1,7 +1,5 @@
 #if  !defined(_DATABASE_)
 #define  _DATABASE_
-
-
 #include "DateTime.h"
 #include "GoalKeeper.h"
 #include "KKStrMatrix.h"
@@ -10,13 +8,10 @@
 #include "KKStr.h"
 using namespace KKB;
 
-
-
 #include "ClassStatistic.h"
 #include "FileDesc.h"
 #include "MLClass.h"
 using namespace  KKMLL;
-
 
 #include "DataBaseImage.h"
 #include "DataBaseImageGroup.h"
@@ -79,11 +74,11 @@ namespace MLL
     typedef  DataBase*  DataBasePtr;
     typedef  DataBase const *  DataBaseConstPtr;
 
-    typedef  KKB::uchar   uchar;
-    typedef  KKB::ulong   ulong;
-    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::uchar     uchar;
+    typedef  KKB::ulong     ulong;
+    typedef  KKB::kkint32   kkint32;
     typedef  KKB::kkuint32  kkuint32;
-    typedef  KKB::kkint64 kkint64;
+    typedef  KKB::kkint64   kkint64;
     typedef  KKB::kkuint64  kkuint64;
 
     static  void  Initialization ();
@@ -984,10 +979,10 @@ namespace MLL
     static  GoalKeeperPtr  blocker;   /*!< used to handle multi-threading issues. */
 
     static volatile kkint32  numDataBaseInstances;  /**< Will be incremented when the constructor is called and
-                                                   * decremented when the destructor is called.  This way the
-                                                   * Constructor and Destructor's will know if they should call
-                                                   * "mysql_library_init" and "mysql_library_end" respectively.
-                                                   */
+                                                     * decremented when the destructor is called.  This way the
+                                                     * Constructor and Destructor's will know if they should call
+                                                     * "mysql_library_init" and "mysql_library_end" respectively.
+                                                     */
 
     static KKStr           mySqlDataDir;
 

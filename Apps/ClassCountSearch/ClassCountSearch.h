@@ -60,8 +60,7 @@ private:
   void       ProcessClassCombo (MLClassListPtr  classes);
 
   void       ReportResults ();
-
-
+   
 
   bool                   cancelFlag;
 

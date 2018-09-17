@@ -301,7 +301,7 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
        << "DataBase"                 << "\t" << db.ServerDescription ()      << endl
        << "ProgName"                 << "\t" << osGetProgName ()             << endl
        << "BuildTime"                << "\t" << __DATE__ << " " << __TIME__  << endl
-       << "HostName"                 << "\t" << osGetHostName ()             << endl
+       << "HostName"                 << "\t" << osGetHostName ().value_or ("*** UNKNOWN ***") << endl
        << "UserName"                 << "\t" << osGetUserName ()             << endl
        << "StatisticCode"            << "\t" << statistic << "\t" << statisticStr << endl
        << endl;
@@ -580,7 +580,7 @@ void  PrintSummaryReports (DataBasePtr                  db,
      << "ProgName"   << "\t" << osGetProgName ()             << endl
      << "BuildTime"  << "\t" << __DATE__ << " " << __TIME__  << endl
      << "SvnVersion" << "\t" << svnVersionStr                << endl
-     << "HostName"   << "\t" << osGetHostName ()             << endl
+     << "HostName"   << "\t" << osGetHostName ().value_or ("*** UNKNOWN ***") << endl
      << "UserName"   << "\t" << osGetUserName ()             << endl
      << "Statistic"  << "\t" << statistic << "\t" << statisticStr << endl
      << endl

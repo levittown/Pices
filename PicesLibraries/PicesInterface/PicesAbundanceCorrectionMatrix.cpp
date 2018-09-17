@@ -1,6 +1,5 @@
 #include "StdAfx.h"
 #include "FirstIncludes.h"
-
 #include <stdio.h>
 #include <math.h>
 #include <ctype.h>
@@ -10,31 +9,23 @@
 #include <map>
 #include <ostream>
 #include <string>
-#include <strstream>
 #include <vector>
-
 #include "MemoryDebug.h"
 #include "KKBaseTypes.h"
-
+#include "GoalKeeper.h"
+#include "Matrix.h"
+using namespace  KKB;
 
 using namespace System;
 using namespace System::Collections::Generic;
 using namespace System::IO;
 
-
-#include "GoalKeeper.h"
-#include "Matrix.h"
-using namespace  KKB;
-
-
 #include "ClassStatistic.h"
 #include "MLClass.h"
 using namespace  KKMLL;
 
-
 #include "AbundanceCorrectionMatrix.h"
 using namespace  MLL;
-
 
 #include "PicesOSservices.h"
 #include "PicesKKStr.h"
@@ -77,16 +68,19 @@ PicesAbundanceCorrectionMatrix::!PicesAbundanceCorrectionMatrix ()
 }
 
 
+
 PicesAbundanceCorrectionMatrix::~PicesAbundanceCorrectionMatrix ()
 {
   this->!PicesAbundanceCorrectionMatrix ();
 }
 
 
+
 System::DateTime  PicesAbundanceCorrectionMatrix::DateTimeComputed ()
 {
   return  PicesMethods::DateTimeKKUtoSystem (abundanceMatrix->DateTimeComputed ());
 }
+
 
 
 cli::array<float>^  PicesAbundanceCorrectionMatrix::ProbOfDetection ()
@@ -111,6 +105,8 @@ cli::array<float>^     PicesAbundanceCorrectionMatrix::ProbOfFalseAlarm ()
   return  result;
 }
 
+
+
 bool  PicesAbundanceCorrectionMatrix::Valid ()
 {
   if  (!abundanceMatrix)
@@ -129,10 +125,12 @@ void  PicesAbundanceCorrectionMatrix::AddIn (PicesAbundanceCorrectionMatrix^  ma
 }
 
 
+
 void  PicesAbundanceCorrectionMatrix::ComputeStatistics ()
 {
   abundanceMatrix->ComputeStatistics ();
 }
+
 
 
 void  PicesAbundanceCorrectionMatrix::Prediction (PicesClass^   knownClass,
@@ -144,11 +142,12 @@ void  PicesAbundanceCorrectionMatrix::Prediction (PicesClass^   knownClass,
 }
 
 
+
 void  PicesAbundanceCorrectionMatrix::PrintConfusionMatrixTabDelimited (StreamWriter^  outFile)
 {
-  std::ostrstream o;
+  std::stringstream o;
   abundanceMatrix->PrintConfusionMatrixTabDelimited (o);
-  char*  orig = o.str ();
+  const char*  orig = o.str ().c_str ();
   String^ systemString = gcnew String (orig);
   outFile->Write (systemString);
   delete systemString;
@@ -175,6 +174,7 @@ PicesClassStatisticList^  PicesAbundanceCorrectionMatrix::LumpCounts (PicesClass
   delete  unmanagedInputCounts;  unmanagedInputCounts = NULL;
   return  results;
 }
+
 
 
 PicesClassStatisticList^  PicesAbundanceCorrectionMatrix::AdjustClassificationCounts 
@@ -209,8 +209,7 @@ void  PicesAbundanceCorrectionMatrix::PrintAdjustedResults (StreamWriter^       
   sw->WriteLine ();
   sw->WriteLine ("Abundance Adjustment:   Parameters Computed on " + dateTimeParametersComputed.ToLongTimeString ());
   sw->WriteLine ();
-
-
+  
   try
   {
     lumpedCounts = LumpCounts (classifiedCounts);
@@ -286,4 +285,3 @@ void  PicesAbundanceCorrectionMatrix::PrintAdjustedResults (StreamWriter^       
 
   sw->Flush ();
 }  /* PrintAdjustedResults */
-

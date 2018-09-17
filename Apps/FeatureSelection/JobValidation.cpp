@@ -16,7 +16,6 @@
 #include  "MemoryDebug.h"
 using namespace std;
 
-
 #include "KKBaseTypes.h"
 #include "KKQueue.h"
 #include "OSservices.h"
@@ -24,12 +23,10 @@ using namespace std;
 #include "KKStr.h"
 using namespace KKB;
 
-
 #include "ConfusionMatrix2.h"
 #include "CrossValidation.h"
 #include "TrainingProcess2.h"
 using namespace  KKMLL;
-
 
 #include "JobValidation.h"
 #include "BinaryJobList.h"
@@ -57,7 +54,6 @@ JobValidation::JobValidation (const JobValidation&  j):
 
 
 
-
 JobValidation::JobValidation (ProcessorPtr            _processor,
                               int                     _parentId,
                               const FeatureNumList&   _features,
@@ -77,7 +73,6 @@ JobValidation::JobValidation (ProcessorPtr            _processor,
 
 
 
-
 JobValidation::JobValidation (ProcessorPtr  _processor,
                               KKStrParser&  _statusLine
                              ):
@@ -93,8 +88,6 @@ JobValidation::JobValidation (ProcessorPtr  _processor,
 
 
 
-
-
 JobValidation::~JobValidation ()
 {
   if  (classedCorrectly)
@@ -106,12 +99,10 @@ JobValidation::~JobValidation ()
 
 
 
-
 JobTypes  JobValidation::JobType ()  const
 {
   return  JobTypes::Validation;
 }
-
 
 
 
@@ -121,7 +112,6 @@ KKStr   JobValidation::ToStatusStr ()
   statusStr << "\t" << "ConfigFileName" << "\t" << configFileName;
   return  statusStr;
 }
-
 
 
 
@@ -143,8 +133,7 @@ void   JobValidation::EvaluateNode ()
   config->Gamma   (gammaParm);
   config->A_Param (aParm);
   config->SelectionMethod (processor->SelectionMethod ());
-
-
+  
   switch  (processor->ResultType ())
   {
   case  FinalResultType::MfsFeaturesSel:
@@ -249,7 +238,7 @@ void   JobValidation::EvaluateNode ()
                            config, 
                            crossValidation,
                            trainData,
-                           osGetHostName (),
+                           osGetHostName ().value_or ("*** unknown ***"),
                            classedCorrectlySize,
                            classedCorrectly,
                            this,
@@ -265,9 +254,6 @@ void   JobValidation::EvaluateNode ()
   delete  config;              config = NULL;
   status = BinaryJobStatus::Done;
 }  /* EvaluateNode */
-
-
-
 
 
 
@@ -293,7 +279,6 @@ void  JobValidation::ProcessStatusStr (KKStrParser&  statusStr)
 
 
 
-
 void  JobValidation::ProcessStatusField (const KKStr&  fieldName,
                                          const KKStr&  fieldValue
                                         )
@@ -302,8 +287,6 @@ void  JobValidation::ProcessStatusField (const KKStr&  fieldName,
   if  (fieldName.EqualIgnoreCase ("configFileName"))
     configFileName = fieldValue;
 }  /* ProcessStatusField */
-
-
 
 
 
@@ -331,7 +314,6 @@ void  JobValidation::ReFresh (BinaryJob&  j)
     }
   } 
 }  /* ReFresh */
-
 
 
 

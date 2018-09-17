@@ -137,7 +137,7 @@ void  DataBaseImageValidatedEntryList::Save (const KKStr&  _fileName,
 
   dateWritten = osGetLocalDateTime ();
   fileName    = _fileName;
-  hostName    = osGetHostName ();
+  hostName    = osGetHostName ().value_or ("*** UNKNOWN ***");
 
   o << "//DataBaseImageValidatedEntryList"   << endl
     << "DateWritten" << "\t" << dateWritten  << endl
@@ -208,21 +208,3 @@ void  DataBaseImageValidatedEntryList::Load (const KKStr&  _fileName,
 
   i.close ();
 }  /* Load */
-
-
-
-
-/*
-bool  DataBaseImageValidatedEntryList::Order::operator() (DataBaseImageValidatedEntryPtr p1,  DataBaseImageValidatedEntryPtr p2)
-{
-  if  (p1 == NULL)
-  {
-    return  (p2 != NULL);
-  }
-
-  if  (p2 != NULL)
-    return  false;
-
-  return  (p1->ImageFileName () < p2->ImageFileName ());
-}
-*/

@@ -518,7 +518,7 @@ void   AbundanceCorrectionStatsBuilder::Main ()
 
   configClasses = config->ExtractClassList ();
   configClasses->SortByName ();
-  if  (configClasses->PtrToIdx (otherClass) >= 0)
+  if  (configClasses->PtrToIdx (otherClass))
   {
     log.Level (-1) << endl
       << "AbundanceCorrectionStatsBuilder::Main   ***ERROR***   OtherClass[" << otherClass->Name () << "] is specified as a Training Class; it must be specified separately." << endl

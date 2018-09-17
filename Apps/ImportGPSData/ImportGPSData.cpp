@@ -122,22 +122,13 @@ public:
     SortByStartTime ();
   }
 
-  class  Comparer
-  {
-  public:
-    bool  operator() (SipperFileEntryPtr  s1,
-                      SipperFileEntryPtr  s2
-                     )
-    {
-      return  s1->gpsStartTime < s2->gpsStartTime;
-    }
-  };
+
 
   void  SortByStartTime ()
   {
-    Comparer  comparer;
-    sort (begin (), end (), comparer);
+    sort (begin (), end (), [](auto  s1, auto  s2){ return s1->gpsStartTime < s2->gpsStartTime; } );
   }
+
 
 
   SipperFilePtr  LocateByCtdDateStamp (const DateTime  dt)
@@ -192,7 +183,6 @@ public:
 }; /* SipperFileEntryList */
 
 typedef  ImportGPSDataApp::SipperFileEntryList*  SipperFileEntryListPtr;
-
 
 
 
@@ -255,10 +245,6 @@ void  ImportGPSData::InitalizeApplication (kkint32 argc,
     Abort (true);
   }
 }  /* InitalizeApplication */
-
-
-
-
 
 
 
