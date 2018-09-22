@@ -3582,7 +3582,7 @@ DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  imageGroup,
                                              float                  depthMin,
                                              float                  depthMax,
                                              kkuint32               restartImageId,
-                                             kkint32                limit,            // Max # of rows 2 return.  -1 indicates no limit.
+                                             OptionUInt32           limit,            // Max # of rows 2 return.  -1 indicates no limit.
                                              bool                   includeThumbnail,
                                              VolConstBool&          cancelFlag
                                             )
@@ -3605,7 +3605,7 @@ DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  imageGroup,
             << sizeMin  << ", " << sizeMax    << ", "
             << depthMin << ", " << depthMax   << ", "
             << restartImageId                 << ", "
-            << limit                          << ", "  
+            << (limit ? limit.value () : -1)  << ", "  
             << (includeThumbnail ? "true" : "false")
             << ")";
    
@@ -3635,7 +3635,7 @@ DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  imageGroup,
                                              float                  depthMin,
                                              float                  depthMax,
                                              kkuint32               restartImageId,
-                                             kkint32                limit,            // Max # of rows to return.  -1 indicates no limit.,
+                                             OptionUInt32           limit,            // Max # of rows to return.  -1 indicates no limit.,
                                              bool                   includeThumbnail,
                                              const bool&            cancelFlag
                                             )
@@ -3646,13 +3646,13 @@ DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  imageGroup,
   if  (!sipperFiles)
     return NULL;
 
-  kkint32  totalImagesLoaded = 0;
+  kkuint32  totalImagesLoaded = 0;
   DataBaseImageListPtr  images = new DataBaseImageList (true);
 
   VectorKKStr::iterator  idx;
   for  (idx = sipperFiles->begin ();  (idx != sipperFiles->end ())  &&  (images->QueueSize () < limit)  &&  (!cancelFlag);  idx++)
   {
-    kkint32 limitLeft = (limit < 0) ? -1 : limit - images->QueueSize ();
+    OptionUInt32 limitLeft = (!limit) ? limit : limit.value () - images->QueueSize ();
     DataBaseImageListPtr  imagesForOneSipperFile = ImagesQuery (imageGroup,
                                                                 *idx,           mlClass,  classKeyToUse,
                                                                 probMin,        probMax, 

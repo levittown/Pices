@@ -312,7 +312,7 @@ namespace MLL
                                        float                  depthMin,
                                        float                  depthMax,
                                        kkuint32               restartImageId,
-                                       kkint32                limit,            // Max # of rows to return.  -1 indicates no limit.
+                                       OptionUInt32           limit,
                                        bool                   includeThumbnail,
                                        VolConstBool&          cancelFlag
                                       );
@@ -332,7 +332,7 @@ namespace MLL
                                        float                 depthMin,
                                        float                 depthMax,
                                        kkuint32              restartImageId,
-                                       kkint32               limit,            // Max # of rows to return.  -1 indicates no limit.
+                                       OptionUInt32          limit,            // Max # of rows to return.  -1 indicates no limit.
                                        bool                  includeThumbnail,
                                        const bool&           cancelFlag
                                       );

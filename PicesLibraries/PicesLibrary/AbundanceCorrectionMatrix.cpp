@@ -50,7 +50,7 @@ AbundanceCorrectionMatrix::AbundanceCorrectionMatrix (MLClassList& _classes,
     _log.Level (-1) << endl << "AbundanceCorrectionMatrix   ***ERROR***    _otherClass == NULL  defaulting to 'OtherClass'," << endl << endl;
     otherClass = MLClass::CreateNewMLClass ("Other", -1);
     kkint32  seqNum = 0;
-    while  (classes.PtrToIdx (otherClass) != NULL)
+    while  (classes.PtrToIdx (otherClass))
     {
       ++seqNum;
       KKStr  otherName = "Other_" + StrFormatInt (seqNum, "000");
@@ -61,6 +61,7 @@ AbundanceCorrectionMatrix::AbundanceCorrectionMatrix (MLClassList& _classes,
   numClasses = (kkuint32)classes.size () + 1;
   AllocateMemory ();
 }
+
 
 
 AbundanceCorrectionMatrix::AbundanceCorrectionMatrix (const KKStr&  configFileName,
@@ -142,7 +143,7 @@ void  AbundanceCorrectionMatrix::CleanUp ()
 
 
 
-kkint32  AbundanceCorrectionMatrix::LookUpClassIdx (MLClassPtr c)
+OptionUInt32  AbundanceCorrectionMatrix::LookUpClassIdx (MLClassPtr c)
 {
   if  (c == otherClass)
     return otherClassIdx;
@@ -171,18 +172,18 @@ void  AbundanceCorrectionMatrix::Prediction (MLClassPtr  knownClass,
     return;
   }
 
-  kkint32  knownClassIdx = LookUpClassIdx (knownClass);
-  kkint32  predClassIdx  = LookUpClassIdx (predClass);
+  auto  knownClassIdx = LookUpClassIdx (knownClass);
+  auto  predClassIdx  = LookUpClassIdx (predClass);
 
-  if  (knownClassIdx < 0)
+  if  (!knownClassIdx)
     knownClassIdx = otherClassIdx;
 
-  if  (predClassIdx < 0)
+  if  (!predClassIdx)
     predClassIdx = otherClassIdx;
 
-  ++(predictions[predClassIdx][knownClassIdx]);
-  ++(knownByClass[knownClassIdx]);
-  ++(predByClass[predClassIdx]);
+  ++(predictions[predClassIdx.value ()][knownClassIdx.value ()]);
+  ++(knownByClass[knownClassIdx.value ()]);
+  ++(predByClass[predClassIdx.value ()]);
 
   if  (knownClass == predClass)
     ++numCorrect;
@@ -281,7 +282,7 @@ void  AbundanceCorrectionMatrix::ReadForConfigFileName (const KKStr&  configFile
 template<typename T>
 KKStr  AbundanceCorrectionMatrix::VectorToStr (vector<T>&  v)
 {
-  KKStr  result (v.size () * 7);
+  KKStr  result ((kkStrUint)(v.size () * 7));
   for  (kkuint32  x = 0;  x < v.size ();  ++x)
   {
     if  (x > 0)  result << "\t";
@@ -660,10 +661,10 @@ ClassStatisticListPtr   AbundanceCorrectionMatrix::LumpCounts (const ClassStatis
   for  (idx = inputCounts.begin ();  idx != inputCounts.end ();  ++idx)
   {
     ClassStatisticPtr  cs = *idx;
-    kkint32  outputCountsIdx = LookUpClassIdx (cs->MLClass ());
-    if  (outputCountsIdx < 0)
+    auto  outputCountsIdx = LookUpClassIdx (cs->MLClass ());
+    if  (!outputCountsIdx)
       outputCountsIdx = otherClassIdx;
-    outputCounts[outputCountsIdx] += cs->Count ();
+    outputCounts[outputCountsIdx.value ()] += cs->Count ();
   }
 
   for  (kkint32  outputCountsIdx = 0;  outputCountsIdx < numClasses;  ++outputCountsIdx)
@@ -701,10 +702,10 @@ ClassStatisticListPtr   AbundanceCorrectionMatrix::AdjustClassificationCounts (c
   for  (idx = inputCounts.begin ();  idx != inputCounts.end ();  ++idx)
   {
     ClassStatisticPtr  cs = *idx;
-    kkint32  outputCountsIdx = LookUpClassIdx (cs->MLClass ());
-    if  (outputCountsIdx < 0)
+    auto  outputCountsIdx = LookUpClassIdx (cs->MLClass ());
+    if  (!outputCountsIdx)
       outputCountsIdx = otherClassIdx;
-    outputCounts[outputCountsIdx] += cs->Count ();
+    outputCounts[outputCountsIdx.value ()] += cs->Count ();
   }
 
   for  (kkint32  outputCountsIdx = 0;  outputCountsIdx < numClasses;  ++outputCountsIdx)

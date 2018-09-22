@@ -107,7 +107,7 @@ namespace MLL
 
     void  CleanUp ();
     
-    kkint32  LookUpClassIdx (MLClassPtr c);
+    OptionUInt32  LookUpClassIdx (MLClassPtr c);
 
     void  ReadForConfigFileName (const KKStr&  configFileName,
                                  RunLog&       log
