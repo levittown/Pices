@@ -1114,7 +1114,7 @@ void  BitReductionJobList::Load ()
   while  (fgets (buff, sizeof (buff), in))
   {
     KKStr  ln (buff);
-    if  (ln.SubStrPart (0, 1) == "//")
+    if  (ln.StartsWith ("//"))
       continue;
 
     KKStr  field = ln.ExtractQuotedStr ("\t", true);

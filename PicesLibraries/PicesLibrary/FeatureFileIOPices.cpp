@@ -195,7 +195,7 @@ FileDescConstPtr  FeatureFileIOPices::GetFileDesc (const KKStr&    _fileName,
   KKStr  firstLine (buff);
   firstLine.Upper ();
 
-  if  (firstLine.SubStrPart (0, 16) != "FEATURE_DATA_FILE")
+  if  (!firstLine.StartsWith ("FEATURE_DATA_FILE"))
   {
     // We are looking at a very old RAW file,  need to scan for number of fields.
     // Lets count the number of fields in each lime,  
@@ -292,8 +292,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&      _fileName,
 
   firstLine.Upper ();
 
-  if  (firstLine.SubStrPart (0, 16) != "FEATURE_DATA_FILE")
-
+  if  (!firstLine.StartsWith ("FEATURE_DATA_FILE"))
   {
     _log.Level (-1) << endl << endl << endl 
                     << "FeatureFileIOPices::LoadFile     **** Error missing 'FEATURE_DATA_FILE' line ****    can not load" << endl
@@ -362,7 +361,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&      _fileName,
       // We must have a blank line.  There is nothing to do in this case.
     }
 
-    else if  (field.SubStrPart (0, 1) == "//")
+    else if  (field.StartsWith ("//"))
     {
       // We are looking at a comment line.  Will skip to end of line
       while  ((!eol)  &&  (!eof))
@@ -1239,7 +1238,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
     if  (!validImageFileFormat)
       continue;
 
-    if  (imageFileName->SubStrPart (0, 5) == "Frame_")
+    if  (imageFileName->StartsWith ("Frame_"))
     {
       // We suspect that we have a Frame image
       if  ((imageFileName->StrInStr ("Before."))  ||

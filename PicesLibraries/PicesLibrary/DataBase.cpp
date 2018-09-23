@@ -4369,14 +4369,14 @@ void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruise
       startValues.push_back (0.0f);
     }
 
-    else if  (colName.SubStrPart (0, 4) == "Size_")
+    else if  (colName.StartsWith ("Size_"))
     {
       lastEndValue = colName.SubStrPart (5).ToFloat ();
       endValues.push_back (lastEndValue);
       startValues.push_back (lastEndValue);
     }
 
-    else if  (colName.SubStrPart (0, 1) == ">=")
+    else if  (colName.StartsWith (">="))
     {
       lastEndValue = colName.SubStrPart (2).ToFloat ();
       endValues.push_back (lastEndValue);
@@ -6867,7 +6867,7 @@ void  DataBase::InsertCruise (const KKStr&     shipName,
 
   KKStr  shipNameAdj = shipName;
   if  (shipNameAdj.Len () > 10)
-    shipNameAdj = shipNameAdj.SubStrPart (0, 9);
+    shipNameAdj = shipNameAdj.SubStrSeg (0, 10);
 
   KKStr  insertStatement;
   insertStatement << "Insert into Cruises (CruiseName, ShipName, Description, DateStart, DateEnd, Location, Objective, Principal, ResearchOrg)" << endl

@@ -158,16 +158,16 @@ ActiveLearningReport::ActiveLearningReport (RunLog&       _log,
 
   if  (x  &&  (x.value () > 5))
   {
-    KKStr leftSide = subDirName.SubStrPart (0, x.value () - 1);
+    KKStr leftSide = subDirName.SubStrSeg (0, x.value ());
     KKStr rightSide = subDirName.SubStrPart (x.value () + 1);
     x = rightSide.LocateCharacter ('-');
-    KKStr  IPR = rightSide.SubStrPart (0, x.value () - 1);
+    KKStr  IPR = rightSide.SubStrSeg (0, x.value ());
     imagesPerRetraining = atoi (IPR.Str ());
 
     x = leftSide.LocateLastOccurrence ('_');
     rightSide = subDirName.SubStrPart (x.value () + 1);
     x = rightSide.LocateCharacter ('-');
-    KKStr  IPC = rightSide.SubStrPart (0, x.value () - 1);
+    KKStr  IPC = rightSide.SubStrSeg (0, x.value ());
     initialImagesPerClass = atoi (IPC.Str ());
   }
 }  
@@ -561,7 +561,7 @@ void  ActiveLearningReport::Load (KKStr   fileName,
   {
     KKStr l (buff);
 
-    if  (l.SubStrPart (0, 0) == "\\")
+    if  (l.StartsWith ("\\"))
     {
       if  (curSortOrderResults)
       {
@@ -572,7 +572,7 @@ void  ActiveLearningReport::Load (KKStr   fileName,
       SortOrderType  nextSortOrder = NULL_SortOrder;
       int            numOfRetrainings = 0;
 
-      while  (l.SubStrPart (0, 0) == "\\")
+      while  (l.StartsWith ("\\"))
       {
         l = l.SubStrPart (1);
         l.Upper ();

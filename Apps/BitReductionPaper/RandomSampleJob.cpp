@@ -699,7 +699,7 @@ void  RandomSampleJobList::Load (TrainingConfigurationPtr  _config,
   while  (fgets (buff, sizeof (buff), in))
   {
     KKStr  statusStr (buff);
-    if  (statusStr.SubStrPart (0, 1) == "//")
+    if  (statusStr.StartsWith ("//"))
     {
       // We have a comment line,  we want to ignore.
     }

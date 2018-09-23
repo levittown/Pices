@@ -1299,11 +1299,11 @@ void  CrossValidationApp::PostMisclassifiedImage (KKStr       fileName,
 
   bool copyGood;
 
-  auto  LastOccurence=fileName.LocateLastOccurrence("\\");
+  auto  LastOccurence = fileName.LocateLastOccurrence("\\");
   KKStr subDir;
   if (LastOccurence)
   {
-    subDir   = fileName.SubStrPart (0, LastOccurence.value ());
+    subDir   = fileName.SubStrSeg (0, LastOccurence.value ());
     fileName = fileName.SubStrPart (LastOccurence.value () + 1);
   }
 
@@ -3141,9 +3141,8 @@ void  CreateBfsFromMfs (const KKStr&  mfsFileName,
   newBfsConfig->SetFeatureNums (FeatureNumList ("0-84", valid));
 
   KKStr  baseName = osRemoveExtension (mfsFileName);
-  KKStr  tail = mfsFileName.Tail (8);
-  if  (tail.EqualIgnoreCase ("_MFS.cfg"))
-    baseName = mfsFileName.SubStrPart (0, mfsFileName.Len () - 9);
+  if  (mfsFileName.EndsWith ("_MFS.cfg"))
+    baseName = mfsFileName.SubStrSeg (0, mfsFileName.Len () - 8);
 
   KKStr  newBfsFileName  = baseName + "_BFS.cfg";
   KKStr  newDualFileName = baseName + "_Dual.cfg";

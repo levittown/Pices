@@ -569,26 +569,24 @@ void  ImportGPSData::ImportGPSDataGPGGA (const KKStr&  fileName)
     KKStr  dateStr = fields[0];
     KKStr  timeStr = fields[1];
 
-    KKStr  latStr = fields[4];
-    KKStr  logStr = fields[6];
+    KKStr  latStr = fields[4].Trim ("\t, ");
+    KKStr  logStr = fields[6].Trim ("\t, ");
 
-    auto  x = latStr.LocateCharacter ('.');
-    if  (!x) 
+    if  ((latStr.Len () != 8)  ||  (latStr[4] != '.'))
       continue;
 
-    KKStr latMinStr = latStr.SubStrPart (x.value () - 2);
-    KKStr latDegStr = latStr.SubStrPart (0, x.value () - 3);
+    KKStr latMinStr = latStr.SubStrPart (2);
+    KKStr latDegStr = latStr.SubStrSeg (0, 2);
 
     double latitude = latDegStr.ToDouble () + latMinStr.ToDouble () / 60.0;
     if  (fields[5].EqualIgnoreCase ("S"))
       latitude = 0.0 - latitude;
 
-    x = logStr.LocateCharacter ('.');
-    if  (!x) 
+    if  ((logStr.Len () != 9)  ||  (logStr[5] != '.'))
       continue;
 
-    KKStr logMinStr = logStr.SubStrPart (x.value () - 2);
-    KKStr logDegStr = logStr.SubStrPart (0, x.value () - 3);
+    KKStr logMinStr = logStr.SubStrPart (3);
+    KKStr logDegStr = logStr.SubStrSeg (0, 3);
 
     double longitude = logDegStr.ToDouble () + logMinStr.ToDouble () / 60.0;
     if  (fields[7].EqualIgnoreCase ("W"))
@@ -605,7 +603,6 @@ void  ImportGPSData::ImportGPSDataGPGGA (const KKStr&  fileName)
       lastMinute = gmtTime.Minute ();
       log.Level (10) << "LinesRead[" << linesRead << "]  File[" << osGetRootName (fileName) << "]  GMT Time[" << gmtDate.MMM_DD_YYYY () << " - " << gmtTime.HH_MM_SS () << "]" << endl;
     }
-
   }
 
   i.close ();
@@ -673,7 +670,7 @@ void  ImportGPSData::ImportGPSDataSpecialtyDiverI (const KKStr&  fileName)
     if  (ln.Len () < 20)
       continue;
 
-    if  (ln.SubStrPart (0, 8) == "Specialty")
+    if  (ln.StartsWith ("Specialty"))
       continue;
 
     char  latNorthSouth = ln[0];
@@ -684,20 +681,20 @@ void  ImportGPSData::ImportGPSDataSpecialtyDiverI (const KKStr&  fileName)
     //0         1         2         3
     //012345678901234567890123456789012345
     //N028 00.8789  W 088 41.2866 12:18:03
-    int    latDeg  = ln.SubStrPart (1,3).ToInt ();
-    double latMins = ln.SubStrPart (4, 12).ToDouble ();
+    int    latDeg  = ln.SubStrSeg (1, 3).ToInt ();
+    double latMins = ln.SubStrSeg (5, 7).ToDouble ();
     double  latitude = (double)latDeg + latMins / 60.0;
     if  (latNorthSouth == 'S')
       latitude = 0.0 - latitude;
 
     char   longEastWest = ln[14];
-    int    longDeg      = ln.SubStrPart (16, 18).ToInt ();
-    double longMins     = ln.SubStrPart (19, 26).ToDouble ();
+    int    longDeg      = ln.SubStrSeg (16, 3).ToInt ();
+    double longMins     = ln.SubStrSeg (20, 7).ToDouble ();
     double longitude    = (double)longDeg + longMins / 60.0;
     if  (longEastWest == 'W')
       longitude = 0.0 - longitude;
 
-    TimeType  lineTime (ln.SubStrPart (28, 35));
+    TimeType  lineTime (ln.SubStrSeg (28, 8));
 
     if  (lineTime < lastTime)
       fileDate.AddDays (1);

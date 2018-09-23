@@ -1819,7 +1819,7 @@ void  ImageFeaturesList::FixSipperFileScanLineAndColFields ()
     if  (x  &&  (x.value () > 0))
     {
       KKStr  colStr = rootName.SubStrPart (x.value () + 1);
-      KKStr  temp = rootName.SubStrPart (0, x.value () - 1);
+      KKStr  temp = rootName.SubStrSeg (0, x.value ());
       x = temp.LocateLastOccurrence ('_');
       if  (x  &&  (x.value () > 0))
       {
