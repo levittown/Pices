@@ -2445,7 +2445,6 @@ MLClassPtr  DataBase::MLClassLoad (const KKStr&  className)
 
 
 
-
 MLClassListPtr  DataBase::MLClassLoadList ()
 {
   KKStr  selectStr = "call  ClassesRetrieveAll()";
@@ -2479,7 +2478,7 @@ MLClassListPtr  DataBase::MLClassLoadList ()
   {
     kkint32  classId     = ResultSetGetIntField (0);
     KKStr    className   = ResultSetGetField    (1);
-    kkint32  parentId    = ResultSetGetIntField (2);
+    //kkint32  parentId    = ResultSetGetIntField (2);
     KKStr    parentName  = ResultSetGetField    (3);
     KKStr    description = ResultSetGetField    (4);
     bool     mandatory   = ResultSetGetBool     (5);
@@ -6555,7 +6554,7 @@ void  DataBase::InstrumentDataDeploymentVolumeSampled (const KKStr&             
     bool     downCast       = ResultSetGetBool        (0);
     kkint32  binId          = ResultSetGetIntField    (1);
     float    binDepth       = ResultSetGetFloatField  (2);
-    kkint32  scanLines      = ResultSetGetIntField    (3);
+    //kkint32  scanLines      = ResultSetGetIntField    (3);
     float    volumeSampled  = ResultSetGetFloatField  (4);
 
     VolumeSampledStatPtr  stat = new VolumeSampledStat (binId, binDepth, volumeSampled);

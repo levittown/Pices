@@ -253,7 +253,7 @@ void  InstrumentDataList::Load (const KKStr&  fileName,
     return;
   }
 
-  kkint32  expectedCount = -1;
+  OptionUInt32  expectedCount = {};
 
   VectorIntPtr  fieldIndirections = InstrumentData::CreateDefaultFieldIndirectionList ();
 
@@ -295,7 +295,7 @@ void  InstrumentDataList::Load (const KKStr&  fileName,
 
     else if  (rowType == "count")
     {
-      expectedCount = line.GetNextTokenInt ("\t");
+      expectedCount = line.GetNextTokenUint ("\t");
     }
 
     else if  (rowType == "endoffile")
@@ -338,7 +338,7 @@ void  InstrumentDataList::Load (const KKStr&  fileName,
     return;
   }
 
-  if  (expectedCount <= 0)
+  if  (!expectedCount)
   {
     log.Level (-1) << endl << endl << "InstrumentDataList::Load      *** ERROR ***     File Format is bad,  can not use.  'Count' was not specified." << endl << endl;
     return;
@@ -413,7 +413,7 @@ void  InstrumentDataList::Save (const KKStr&  fileName,
 
 
 VectorDouble  InstrumentDataList::FrameOffsetsInMeters (kkuint32 scanLinesPerFrame,
-                                                        float    scanRate,             // Scan lines per second.
+                                                        float    overRideScanRate,             // Scan lines per second.
                                                         float    defaultFlowRate
                                                        )
 {
@@ -436,7 +436,7 @@ VectorDouble  InstrumentDataList::FrameOffsetsInMeters (kkuint32 scanLinesPerFra
       // This InstrumentData record 'id' is beyond the end of the current frame.  In this case
       // we want to calculate the distance traveled in this frame and add to 'frameOffsets'.
       kkuint32  scanLines = nextFrameScanLine - lastScanLineCalced;
-      double  deltaTime = scanLines / scanRate;   // (ScanLines / ScanLines per Sec)
+      double  deltaTime = scanLines / overRideScanRate;   // (ScanLines / ScanLines per Sec)
 
       float  flowRate = id->FlowRate1 ();
       if  (flowRate <= 0.0f)
@@ -457,7 +457,7 @@ VectorDouble  InstrumentDataList::FrameOffsetsInMeters (kkuint32 scanLinesPerFra
       // We now want to add scan lines that were not just added to frames in previous loop to 
       // 'distTransversedCurFrame'.
       kkuint32  scanLines = id->ScanLine () - lastScanLineCalced;
-      double  deltaTime = scanLines / scanRate;   // (ScanLines / ScanLines per Sec)
+      double  deltaTime = scanLines / overRideScanRate;   // (ScanLines / ScanLines per Sec)
 
       float  flowRate = id->FlowRate1 ();
       if  (flowRate <= 0.0f)
@@ -468,7 +468,7 @@ VectorDouble  InstrumentDataList::FrameOffsetsInMeters (kkuint32 scanLinesPerFra
       lastScanLineCalced = id->ScanLine ();
     }
     
-    idx++;
+    ++idx;
   }
 
   return  frameOffsets;

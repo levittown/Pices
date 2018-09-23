@@ -133,11 +133,10 @@ public:
   {
     _name.Upper ();
 
-    kkint32  idx;
     ClassTotals::ClassTotalsPtr  classTotals = NULL;
     ClassTotals::ClassTotalsPtr  temp;
 
-    for  (idx = 0; (idx < QueueSize ())  &&  (classTotals == NULL); idx++)
+    for  (kkuint32 idx = 0;  (idx < QueueSize ())  &&  (classTotals == NULL);  ++idx)
     {
       temp = IdxToPtr (idx);
       if  (temp->nameUpper == _name)
@@ -149,7 +148,6 @@ public:
     return  classTotals;
   }
 };  /* ClassTotalsList */
-
 
 
 
@@ -304,9 +302,7 @@ void   SizeDistribution::PrintFormatedDistributionMatrix (ostream&  o)  const
 
   ClassTotals  grandTotals ("Grand Totals", bucketCount, bucketSize);
 
-  kkint32  idx;
-
-  for  (idx = 0;  idx < totals->QueueSize (); idx++)
+  for  (kkuint32 idx = 0;  idx < totals->QueueSize (); idx++)
   {
     classTotals = totals->IdxToPtr (idx);
     classTotals->PrintFormatedLine (o);
@@ -330,9 +326,7 @@ void   SizeDistribution::PrintCSVDistributionMatrix (ostream&  o)  const
 
   ClassTotals  grandTotals ("Grand Totals", bucketCount, bucketSize);
 
-  kkint32  idx;
-
-  for  (idx = 0;  idx < totals->QueueSize (); idx++)
+  for  (kkuint32 idx = 0;  idx < totals->QueueSize (); idx++)
   {
     classTotals = totals->IdxToPtr (idx);
     classTotals->PrintCSVLine (o);
@@ -354,9 +348,7 @@ void   SizeDistribution::PrintTabDelDistributionMatrix (ostream&  o)  const
 
   ClassTotals  grandTotals ("Grand Totals", bucketCount, bucketSize);
 
-  kkint32  idx;
-
-  for  (idx = 0;  idx < totals->QueueSize (); idx++)
+  for  (kkuint32 idx = 0;  idx < totals->QueueSize ();  ++idx)
   {
     classTotals = totals->IdxToPtr (idx);
     classTotals->PrintTabDelLine (o);
@@ -366,10 +358,6 @@ void   SizeDistribution::PrintTabDelDistributionMatrix (ostream&  o)  const
   o << endl;
   grandTotals.PrintTabDelLine (o);
 }  /* PrintTabDelDistributionMatrix */
-
-
-
-
 
 
 

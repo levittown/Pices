@@ -1392,7 +1392,7 @@ void  CrossValidationApp::CrossValidate
 
       *probReport << "ImageFileName" << "\t" << "KnownClass"    << "\t" << "PredClass";
 
-      for  (int  classIDX = 0;  classIDX < mlClasses->QueueSize ();  classIDX++)
+      for  (kkuint32  classIDX = 0;  classIDX < mlClasses->QueueSize ();  classIDX++)
       {
         *probReport << "\t" << mlClasses->IdxToPtr (classIDX)->Name ();
       }
@@ -1478,15 +1478,13 @@ void  CrossValidationApp::CrossValidate
       int*     votes = new int   [mlClasses->QueueSize ()];
       classifier.ProbabilitiesByClass (*mlClasses, example, votes, probs);
 
-      int  classIDX = 0;
-
       *probReport 
         << osGetRootName (example->ExampleFileName ())  << "\t"
         << knownClass->Name ()                          << "\t"
         << predClass1->Name ();
 
       int*  probsIDX = new int[mlClasses->QueueSize ()];
-      for  (classIDX = 0;  classIDX < mlClasses->QueueSize ();  classIDX++)
+      for  (kkuint32 classIDX = 0;  classIDX < mlClasses->QueueSize ();  ++classIDX)
       {
         *probReport << "\t" << StrFormatDouble ((probs[classIDX] * 100), "zzz,zz0.000") << "%";
         probsIDX[classIDX] = classIDX;
@@ -1661,7 +1659,7 @@ void  CrossValidationApp::ValidationProcess ()
       *probReport << endl << endl << endl << endl;
       *probReport << "Probability Predictions by Class"  << endl << endl;
       *probReport << "ImageFileName" << "\t" << "KnownClass"    << "\t" << "PredClass";
-      for  (int  classIDX = 0;  classIDX < mlClasses->QueueSize ();  classIDX++)
+      for  (kkuint32 classIDX = 0;  classIDX < mlClasses->QueueSize ();  classIDX++)
         *probReport << "\t" << mlClasses->IdxToPtr (classIDX)->Name ();
       *probReport << endl;
     }
@@ -1741,15 +1739,13 @@ void  CrossValidationApp::ValidationProcess ()
       int*     votes = new int   [mlClasses->QueueSize ()];
       classifier.ProbabilitiesByClass (*mlClasses, example, votes, probs);
 
-      int  classIDX = 0;
-
       *probReport 
         << osGetRootName (example->ExampleFileName ())  << "\t"
         << knownClass->Name ()                        << "\t"
         << predClass1->Name ();
 
       int*  probsIDX = new int[mlClasses->QueueSize ()];
-      for  (classIDX = 0;  classIDX < mlClasses->QueueSize ();  classIDX++)
+      for  (kkuint32 classIDX = 0;  classIDX < mlClasses->QueueSize ();  classIDX++)
       {
         *probReport << "\t" << votes[classIDX] ;//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! changed probs to votes
         probsIDX[classIDX] = classIDX;
@@ -1809,11 +1805,9 @@ void  CrossValidationApp::ValidationProcess ()
 
 void  CrossValidationApp::PrintSizeHistogram ()
 {
-  int  x;
-
   ConfusionMatrix2  cm (*mlClasses);
 
-  for  (x = 0; x < examples->QueueSize (); x++)
+  for  (kkuint32 x = 0; x < examples->QueueSize (); x++)
   {
     FeatureVectorPtr example = examples->IdxToPtr (x);
     cm.Increment (example->MLClass (), 
@@ -2179,7 +2173,7 @@ void  CrossValidationApp::RandomSplitsIntoTrainAndTest (FeatureVectorListPtr   s
   {
     MLClassPtr  c = *idx;
     FeatureVectorListPtr  examplesThisClass = splitData->ExtractExamplesForAGivenClass (c);
-    int  numTrainExamples = (int)(0.5f + ((float)(examplesThisClass->QueueSize ()) * splitPercentage / 100.0f));
+    kkuint32  numTrainExamples = (int)(0.5f + ((float)(examplesThisClass->QueueSize ()) * splitPercentage / 100.0f));
     if  (numTrainExamples < 1)
       numTrainExamples = 1;
 
@@ -2249,7 +2243,7 @@ FeatureVectorListPtr  CrossValidationApp::ReduceToWhatsInConfig (FeatureVectorLi
   FeatureVectorListPtr excluded = src->ManufactureEmptyList (src->Owner ());
 
   for (auto idx: *src) {
-    if  (classes->PtrToIdx (idx->MLClass ()) >= 0)
+    if  (classes->PtrToIdx (idx->MLClass ()))
       included->PushOnBack (idx);
     else
       excluded->PushOnBack (idx);
@@ -3099,16 +3093,16 @@ void  CreateBfsFromMfs (const KKStr&  mfsFileName,
   ofstream   missingClasses ("C:\\Temp\\MissingClasses.txt");
   missingClasses << endl << endl;
   missingClasses << "============================================================================" << endl;
-  for  (kkint32  idx1 = 0; idx1 < (classes->QueueSize () - 1);  ++idx1)
+  for  (kkuint32  idx1 = 0; idx1 < (classes->QueueSize () - 1);  ++idx1)
   {
     MLClassPtr  c1 = classes->IdxToPtr (idx1);
 
-    if  ((classes1->PtrToIdx (c1) < 0)  &&  (classes2->PtrToIdx (c1) < 0)  &&  (classes3->PtrToIdx (c1) < 0)  &&  (classes4->PtrToIdx (c1) < 0)  )
+    if  ((!classes1->PtrToIdx (c1))  &&  (!classes2->PtrToIdx (c1))  &&  (!classes3->PtrToIdx (c1))  &&  (!classes4->PtrToIdx (c1))  )
     {
       missingClasses << c1->Name ();
     }
 
-    for  (kkint32  idx2 = idx1 + 1; idx2 < classes->QueueSize ();  ++idx2)
+    for  (kkuint32 idx2 = idx1 + 1;  idx2 < classes->QueueSize ();  ++idx2)
     {
       MLClassPtr c2 = classes->IdxToPtr (idx2);
 

@@ -665,7 +665,7 @@ void   FeatureFileIOPices::SaveFile (FeatureVectorList&     _data,
   {
     // Write out the actual examples.
     ImageFeaturesPtr   example = NULL;
-    for  (kkint32 idx = 0; idx < examples->QueueSize (); idx++)
+    for  (kkuint32 idx = 0; idx < examples->QueueSize (); idx++)
     {
       example = examples->IdxToPtr (idx);
 

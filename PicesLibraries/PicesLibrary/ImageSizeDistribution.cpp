@@ -246,7 +246,6 @@ VectorFloat  ImageSizeDistribution::VolumeSampledByDepthBucket ()
   for  (kkuint32  depthIdx = 0;  depthIdx < depthDistributions.size ();  ++depthIdx)
   {
     ImageSizeDistributionRowPtr row = depthDistributions[depthIdx];
-    const VectorUint32&  distribution = row->Distribution ();
     result[depthIdx] = row->VolumneSampled ();
   }
   return  result;

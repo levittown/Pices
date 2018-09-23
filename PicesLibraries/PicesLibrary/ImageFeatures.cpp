@@ -1659,7 +1659,7 @@ ImageFeaturesListPtr  ImageFeaturesList::DuplicateListAndContents ()  const
 {
   ImageFeaturesListPtr  copyiedList = new ImageFeaturesList (FileDesc (), true);
 
-  for  (kkint32 idx = 0;  idx < QueueSize ();  idx++)
+  for  (kkuint32 idx = 0;  idx < QueueSize ();  idx++)
   {
     ImageFeaturesPtr  curImage = (ImageFeaturesPtr)IdxToPtr (idx);
     copyiedList->AddSingleImageFeatures (new ImageFeatures (*curImage));

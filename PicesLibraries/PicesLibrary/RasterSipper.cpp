@@ -1014,7 +1014,6 @@ PointListPtr  RasterSipper::DeriveImageLength () const
     uchar**  imageData = rotatedImage->Green ();
 
     kkint32  boxWidth  = brCol - tlCol;
-    kkint32  boxHeight = brRow - tlRow;
 
     kkint32  mark1Col = (kkint32)((float)boxWidth * 0.05f + 0.5f) + tlCol;
     kkint32  mark2Col = (kkint32)((float)boxWidth * 0.95f + 0.5f) + tlCol;
