@@ -26,6 +26,7 @@ using namespace std;
 // Base Library
 #include "KKBaseTypes.h"
 #include "KKException.h"
+#include "Option.h"
 #include "OSservices.h"
 #include "RasterSipper.h"
 using namespace KKB;
@@ -3651,7 +3652,7 @@ DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  imageGroup,
   VectorKKStr::iterator  idx;
   for  (idx = sipperFiles->begin ();  (idx != sipperFiles->end ())  &&  (images->QueueSize () < limit)  &&  (!cancelFlag);  idx++)
   {
-    OptionUInt32 limitLeft = (!limit) ? limit : limit.value () - images->QueueSize ();
+    OptionUInt32 limitLeft = (!limit) ? limit : limit - images->QueueSize ();
     DataBaseImageListPtr  imagesForOneSipperFile = ImagesQuery (imageGroup,
                                                                 *idx,           mlClass,  classKeyToUse,
                                                                 probMin,        probMax, 

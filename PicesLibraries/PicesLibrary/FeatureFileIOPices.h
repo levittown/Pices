@@ -56,19 +56,19 @@ namespace MLL
                                             kkint32&        _estSize,
                                             KKStr&          _errorMessage,
                                             RunLog&         _runLog
-                                           );
+                                           ) override;
 
 
     virtual  ImageFeaturesListPtr  LoadFile (const KKStr&      _fileName,
                                              FileDescConstPtr  _fileDesc,
                                              MLClassList&      _classes, 
                                              std::istream&     _in,
-                                             kkint32           _maxCount,    // Maximum # images to load.
+                                             OptionUInt32      _maxCount,    // Maximum # images to load.
                                              VolConstBool&     _cancelFlag,
                                              bool&             _changesMade,
                                              KKStr&            _errorMessage,
                                              RunLog&           _log
-                                            );
+                                            ) override;
 
 
     virtual  void   SaveFile (FeatureVectorList&     _data,
@@ -80,10 +80,10 @@ namespace MLL
                               bool&                  _successful,
                               KKStr&                 _errorMessage,
                               RunLog&                _log
-                             );
+                             ) override;
 
 
-    static  FeatureFileIOPicesPtr  Driver                 ()                  {return &driver;}
+    static  FeatureFileIOPicesPtr  Driver                 ()  {return &driver;}
     static  FileDescConstPtr       NewPlanktonFile        ();
     static  KKStr                  PlanktonFieldName      (kkuint32  fieldNum);
     static  kkuint32               PlanktonMaxNumOfFields ();

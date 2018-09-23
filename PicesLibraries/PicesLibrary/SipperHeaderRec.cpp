@@ -8,9 +8,9 @@
 using namespace std;
 
 #include "KKBaseTypes.h"
+#include "Option.h"
 #include "OSservices.h"
 using  namespace  KKB;
-
 
 #include "SipperHeaderRec.h"
 using  namespace  MLL;
@@ -251,8 +251,8 @@ void  SipperHeaderRec::ParseHeaderStr (const KKStr&  s)
     }
     else
     {
-      fieldValue = fieldName.SubStrPart (commaIdx.value () + 1);
-      fieldName  = fieldName.SubStrPart (0, commaIdx.value () - 1);
+      fieldValue = fieldName.SubStrPart (commaIdx + 1);
+      fieldName  = fieldName.SubStrSeg (0, commaIdx);
     }
 
     ProcessNameAndDataStrings (fieldName, fieldValue, found);

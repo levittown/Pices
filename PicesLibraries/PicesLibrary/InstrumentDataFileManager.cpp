@@ -221,15 +221,15 @@ KKStr  InstrumentDataFileManager::SipperFileRootNameFromSipperImageFileName (con
   KKStr rootFileName = osGetRootName (sipperFileName);
   auto  x = rootFileName.LocateLastOccurrence ('_');
 
-  if  (!x  ||  (x.value () < 1))
+  if  (!x)
     return  "";
 
-  KKStr  lessCollumnNum = rootFileName.SubStrPart (0, x.value () - 1);
+  KKStr  lessCollumnNum = rootFileName.SubStrSeg (0, x);
   x = lessCollumnNum.LocateLastOccurrence ('_');
-  if  (!x  ||  (x.value () < 1))
+  if  (!x)
     return "";
 
-  KKStr  sipperRootName = lessCollumnNum.SubStrPart (0, x.value () - 1);
+  KKStr  sipperRootName = lessCollumnNum.SubStrSeg (0, x);
   return  sipperRootName;
 }  /* SipperFileRootNameFromSipperImageFileName */
 
@@ -405,7 +405,7 @@ void  InstrumentDataFileManager::LoadSipperDirectoryNames ()
     if  (ln.Empty ())
       continue;
 
-    if  (ln.SubStrPart (0, 1) == "//")
+    if  (ln.StartsWith ("//"))
       continue;
 
     ln.TrimLeft ();

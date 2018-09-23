@@ -206,9 +206,9 @@ void  InstrumentDataManager::InitializeLatitude ()
   }
   else
   {
-    if  ((sipperFileName.SubStrPart (0, 6) == "ETP2008")  ||
-         (sipperFileName.SubStrPart (0, 4) == "ETP08")    ||
-         (sipperFileName.SubStrPart (0, 6).EqualIgnoreCase ("Station"))
+    if  ((sipperFileName.StartsWith ("ETP2008"))  ||
+         (sipperFileName.StartsWith ("ETP08"))    ||
+         (sipperFileName.StartsWith ("Station", true))
         )
     {
       // it is for a fact a panama cruise

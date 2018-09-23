@@ -12,15 +12,13 @@
 #include "MemoryDebug.h"
 using  namespace  std;
 
-
 #include "GlobalGoalKeeper.h"
+#include "Option.h"
 #include "OSservices.h"
 using  namespace  KKB;
 
-
 #include "KKMLVariables.h"
 using namespace  KKMLL;
-
 
 #include "PicesVariables.h"
 using namespace MLL;
@@ -332,13 +330,13 @@ void  PicesVariables::ParseImageFileName (const KKStr&  fullFileName,
   auto  x = rootName.LocateLastOccurrence ('_');
   if  (x  &&  (x.value () > 0))
   {
-    KKStr  colStr = rootName.SubStrPart (x.value () + 1);
-    KKStr  temp = rootName.SubStrPart (0, x.value () - 1);
+    KKStr  colStr = rootName.SubStrPart (x + 1);
+    KKStr  temp = rootName.SubStrSeg (0, x);
     x = temp.LocateLastOccurrence ('_');
     if  (x  &&  (x.value () > 0))
     {
-      sipperFileName = temp.SubStrPart (0, x.value () - 1);
-      KKStr  rowStr = temp.SubStrPart (x.value () + 1);
+      sipperFileName = temp.SubStrSeg (0, x);
+      KKStr  rowStr = temp.SubStrPart (x + 1);
       scanCol     = atoi (colStr.Str ());
       scanLineNum = atoi (rowStr.Str ());
     }

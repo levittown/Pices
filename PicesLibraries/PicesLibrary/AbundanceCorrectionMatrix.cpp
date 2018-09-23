@@ -683,7 +683,6 @@ ClassStatisticListPtr   AbundanceCorrectionMatrix::LumpCounts (const ClassStatis
 
 
 
-
 ClassStatisticListPtr   AbundanceCorrectionMatrix::AdjustClassificationCounts (const ClassStatisticList&  inputCounts,
                                                                                RunLog&                    log
                                                                               )

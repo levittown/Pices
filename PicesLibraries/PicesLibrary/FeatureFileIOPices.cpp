@@ -271,7 +271,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&      _fileName,
                                                     FileDescConstPtr  _fileDesc,
                                                     MLClassList&      _classes, 
                                                     istream&          _in,
-                                                    kkint32           _maxCount,    // Maximum # images to load,  less than '0'  indicates all.
+                                                    OptionUInt32      _maxCount,    // Maximum # images to load,  less than '0'  indicates all.
                                                     VolConstBool&     _cancelFlag,
                                                     bool&             _changesMade,
                                                     KKStr&            _errorMessage,
@@ -353,8 +353,10 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&      _fileName,
 
   KKStr field (128);
 
+  kkuint32 maxToLoad = _maxCount ? _maxCount.value : uint32_max;
+
   GetToken (_in, ",\t", field, eof, eol);
-  while  ((!eof)   &&  (!_cancelFlag)   &&  (((kkint32)examples->size () < _maxCount)  ||  (_maxCount < 0)))
+  while  ((!eof)   &&  (!_cancelFlag)   &&  (examples->QueueSize () < maxToLoad))
   {
     if  (eol)
     {
@@ -570,6 +572,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&      _fileName,
 }  /* LoadFile */
 
 
+
 void   FeatureFileIOPices::SaveFile (FeatureVectorList&     _data,
                                      const KKStr&           _fileName,
                                      const FeatureNumList&  _selFeatures,
@@ -715,8 +718,6 @@ void   FeatureFileIOPices::SaveFile (FeatureVectorList&     _data,
 
 
 
-
-
 kkuint32 FeatureFileIOPices::MaxNumPlanktonRawFields = 88;
 const  char*  FeatureFileIOPices::PlanktonRawFeatureDecriptions[] =
 {
@@ -847,7 +848,6 @@ KKStr   FeatureFileIOPices::PlanktonFieldName (kkuint32  fieldNum)
 
 
 
-
 kkuint32  FeatureFileIOPices::PlanktonMaxNumOfFields ()
 {
   return  MaxNumPlanktonRawFields;
@@ -875,6 +875,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadInSubDirectoryTree
                                   _log
                                 );
 }
+
 
 
 ImageFeaturesListPtr  FeatureFileIOPices::LoadInSubDirectoryTree 
@@ -1462,7 +1463,6 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
 
 
 
-
 ImageFeaturesListPtr FeatureFileIOPices::FeatureDataReSink (FactoryFVProducerPtr  _fvProducerFactory,
                                                             const KKStr&          _dirName, 
                                                             const KKStr&          _fileName, 
@@ -1490,8 +1490,8 @@ ImageFeaturesListPtr FeatureFileIOPices::FeatureDataReSink (FactoryFVProducerPtr
 
 
 
-
 FileDescConstPtr  FeatureFileIOPices::planktonFileDesc = NULL;
+
 
 
 FileDescConstPtr  FeatureFileIOPices::NewPlanktonFile ()
@@ -1516,4 +1516,3 @@ FileDescConstPtr  FeatureFileIOPices::NewPlanktonFile ()
 
   return  planktonFileDesc;
 }  /* NewPlanktonFile () */
-

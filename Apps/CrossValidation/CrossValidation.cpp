@@ -21,9 +21,7 @@
 #include <iostream>
 #include <map>
 #include <vector>
-
 #include "MemoryDebug.h"
-
 
 #ifdef WIN32
 #include <windows.h>
@@ -34,9 +32,9 @@ using namespace  std;
 
 
 #include "KKBaseTypes.h"
+#include "Option.h"
 #include "StatisticalFunctions.h"
 using namespace  KKB;
-
 
 #include "BinaryClassParms.h"
 #include "Classifier2.h"
@@ -1303,8 +1301,8 @@ void  CrossValidationApp::PostMisclassifiedImage (KKStr       fileName,
   KKStr subDir;
   if (LastOccurence)
   {
-    subDir   = fileName.SubStrSeg (0, LastOccurence.value ());
-    fileName = fileName.SubStrPart (LastOccurence.value () + 1);
+    subDir   = fileName.SubStrSeg (0, LastOccurence);
+    fileName = fileName.SubStrPart (LastOccurence + 1);
   }
 
   //KKStr  dirWhereFileIs = LocateImageFileUsingConfigurationFile (fileName, knownClass);

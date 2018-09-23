@@ -1,36 +1,29 @@
-#include  "FirstIncludes.h"
-
-#include  <stdlib.h>
-#include  <stdio.h>
-#include  <memory>
-#include  <math.h>
-#include  <limits.h>
-#include  <float.h>
-
-#include  <string>
-#include  <iostream>
-#include  <fstream>
-#include  <vector>
-#include  <algorithm>
-#include  <functional>
-
-#include  "MemoryDebug.h"
-#include  "KKBaseTypes.h"
-
+#include "FirstIncludes.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <memory>
+#include <math.h>
+#include <limits.h>
+#include <float.h>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <algorithm>
+#include <functional>
+#include "MemoryDebug.h"
 using namespace std;
-using namespace KKB;
 
 #include "KKBaseTypes.h"
+using namespace KKB;
 
 #include "ClassGroupTotals.h"
-
-
 #include "ClassFocus.h"
 #include "ClassGroupHistory.h"
 #include "MLClass.h"
+#include "Option.h"
 #include "OSservices.h"
 #include "RunLog.h"
-
 
 
 
@@ -69,8 +62,8 @@ ClassGroupTotals::ClassGroupTotals (KKStr         _fileName,
   if  (!classesInFile)
   {
     _log.Level (-1) << "ClassGroupTotals::ClassGroupTotals  Error gettimng Stats From File[" << _fileName << "]." << endl;
-    osWaitForEnter ();
-    exit (-1);
+    KKB::osWaitForEnter ();
+    std::exit (-1);
   }
 
   {
@@ -86,8 +79,8 @@ ClassGroupTotals::ClassGroupTotals (KKStr         _fileName,
   if  (!in)
   {
     _log.Level (-1) << "ClassGroupTotals::ClassGroupTotals  Error Opening File[" << _fileName << "]." << endl;
-    osWaitForEnter ();
-    exit (-1);
+    KKB::osWaitForEnter ();
+    std::exit (-1);
   }
 
   InitializeVectors ();
@@ -294,23 +287,22 @@ int  ClassGroupTotals::MLClassIDX (const char*  funcName,
                                    MLClassPtr   mlClass
                                   )   const
 {
-  int  idx = mlClasses.PtrToIdx (mlClass);
+  auto  idx = mlClasses.PtrToIdx (mlClass);
 
-  if  (idx < 0)
+  if  (!idx)
   {
-    cerr <<                                                                     endl
+    std::cerr <<                                                                     endl
          << "****  ERROR  ****     ClassGroupTotals::" << funcName           << endl
          <<                                                                     endl
          << "                 Invalid Class[" << mlClass->Name () << "]"  << endl
          << "                 Is not one of the ones in our List."           << endl
          << endl;
-    osWaitForEnter ();
-    exit (-1);
+    KKB::osWaitForEnter ();
+    std::exit (-1);
   }
 
-  return  idx;
+  return  idx.value ();
 }
-
 
 
 
@@ -742,24 +734,22 @@ void  ClassGroupTotals::AddAProbability (int              retraining,
     return;
   }
 
-  int  classIDX = mlClasses.PtrToIdx (mlClass);
+  auto  classIDX = mlClasses.PtrToIdx (mlClass);
 
-  if  (classIDX < 0)
+  if  (!classIDX)
   {
-     cerr << endl;
-     cerr << "**** ERROR ****,   AddAProbability,  Image Class[" << mlClass->Name () << "] Undefined." << endl;
-     osWaitForEnter ();
-     exit (-1);
+     std::cerr << endl;
+     std::cerr << "**** ERROR ****,   AddAProbability,  Image Class[" << mlClass->Name () << "] Undefined." << endl;
+     KKB::osWaitForEnter ();
+     std::exit (-1);
   }
-
 
   ClassFocusPtr cf = totals[randomPass][retraining];
 
-  cf->AddProbability (classIDX, mlClass, imageFileName, probability, position, percentile);
+  cf->AddProbability (classIDX.value (), mlClass, imageFileName, probability, position, percentile);
 
   maxTrainingImagesPerRetraining = Max (maxTrainingImagesPerRetraining, cf->NumOfProbabilities ());
 }  /* AddAProbability */
-
 
 
 
@@ -799,8 +789,8 @@ void  ClassGroupTotals::SetSortMethodUsed (int            retraining,
     return;
   }
 
-  int  classIDX = mlClasses.PtrToIdx (mlClass);
-  if  (classIDX < 0)
+  auto  classIDX = mlClasses.PtrToIdx (mlClass);
+  if  (!classIDX)
   {
      cerr << endl;
      cerr << "**** ERROR ****,   SetSortMethodUsed,  Image Class[" << mlClass->Name () << "] Undefined." << endl;
@@ -808,11 +798,8 @@ void  ClassGroupTotals::SetSortMethodUsed (int            retraining,
      exit (-1);
   }
   
-  totals[randomPass][retraining]->SetSortMethodUsed (classIDX, sortMethodUsed);
+  totals[randomPass][retraining]->SetSortMethodUsed (classIDX.value (), sortMethodUsed);
 }  /*  SetSortMethodUsed */
-
-
-
 
 
 
@@ -829,7 +816,6 @@ KKStr   ClassGroupTotals::SortMethodsUsed (int  retraining)  const
   for  (x = 0;  x < 10;  x++)
     sortMethodsCount[x] = 0;
    
-
   for  (classIDX = 0;  classIDX < mlClasses.QueueSize ();  classIDX++)
   {
     for  (randomPass = 0;  randomPass < numOfRandomPasses;  randomPass++)
@@ -855,10 +841,9 @@ KKStr   ClassGroupTotals::SortMethodsUsed (int  retraining)  const
 
 
 
-
-KKStr   ClassGroupTotals::SortMethodsUsed (int            retraining,
-                                            MLClassPtr  mlClass
-                                           )  const
+KKStr   ClassGroupTotals::SortMethodsUsed (int         retraining,
+                                           MLClassPtr  mlClass
+                                          )  const
 {
 
   int     classIDX;
@@ -898,13 +883,11 @@ KKStr   ClassGroupTotals::SortMethodsUsed (int            retraining,
 
 
 
-
-
-void  ClassGroupTotals::Prediction (int             retraining,
-                                    int             randomPass,
-                                    MLClassPtr   knownClass,
-                                    MLClassPtr   predictedClass,
-                                    float          probability
+void  ClassGroupTotals::Prediction (int         retraining,
+                                    int         randomPass,
+                                    MLClassPtr  knownClass,
+                                    MLClassPtr  predictedClass,
+                                    float       probability
                                    )
 {
 #ifdef  KKDEBUG
@@ -935,13 +918,9 @@ void  ClassGroupTotals::Prediction (int             retraining,
 
 
 
-
-
-
-
 float   ClassGroupTotals::AvgNumOfProbs (int  retraining,
-                                          int  classIDX
-                                         )   const
+                                         int  classIDX
+                                        )   const
 {
   ValidateClassIDX ("AvgNumOfProbs", classIDX);
   ValidateRetraining    ("AvgNumOfProbs", retraining);
@@ -959,8 +938,6 @@ float   ClassGroupTotals::AvgNumOfProbs (int  retraining,
 
 
 
-
-
 float   ClassGroupTotals::AvgNumOfProbs (int            retraining,
                                           MLClassPtr  mlClass
                                          )    const
@@ -970,17 +947,13 @@ float   ClassGroupTotals::AvgNumOfProbs (int            retraining,
 
 
 
-
-
 float  ClassGroupTotals::Count (int  retraining,
-                                 int  classIDX
-                                )   const
+                                int  classIDX
+                               )   const
 {
   ValidateClassIDX ("Count", classIDX);
-  ValidateRetraining    ("Count", retraining);
+  ValidateRetraining ("Count", retraining);
 
-  
-  
   int  count = 0;
   for  (int randomPass = 0;  randomPass < numOfRandomPasses;  randomPass++)
   {
@@ -992,23 +965,18 @@ float  ClassGroupTotals::Count (int  retraining,
 
 
 
-
-
 float   ClassGroupTotals::Count (int            retraining,
-                                  MLClassPtr  mlClass
-                                 )  const
+                                 MLClassPtr  mlClass
+                                )  const
 {
   return  Count (retraining, MLClassIDX ("Count", mlClass));
 }
 
 
 
-
-
-
 float   ClassGroupTotals::Correct (int  retraining,
-                                    int  classIDX
-                                   )   const
+                                   int  classIDX
+                                  )   const
 {
   ValidateClassIDX ("Correct", classIDX);
   ValidateRetraining    ("Correct", retraining);
@@ -1024,15 +992,12 @@ float   ClassGroupTotals::Correct (int  retraining,
 
 
 
-
 float   ClassGroupTotals::Correct (int            retraining,
-                                    MLClassPtr  mlClass
-                                   )   const
+                                   MLClassPtr  mlClass
+                                  )   const
 {
   return  Correct (retraining, MLClassIDX ("Count", mlClass));
 }
-
-
 
 
 
@@ -1050,7 +1015,6 @@ KKStr  ClassGroupTotals::ProbabilityStr (VectorDouble&  v)  const
 
   return str;
 }
-
 
 
 
@@ -1076,7 +1040,6 @@ float  ClassGroupTotals::Accuracy (int  retraining)  const
 
 
 
-
 float  ClassGroupTotals::AccuracyForRetrainingAndPass (int  retraining,
                                                        int  randomPass
                                                       )  const
@@ -1090,8 +1053,6 @@ float  ClassGroupTotals::AccuracyForRetrainingAndPass (int  retraining,
 
   return  (float)totals[randomPass][retraining]->Correct () / (float)c;
 } /* Accuracy */
-
-
 
 
 
@@ -1132,9 +1093,6 @@ float  ClassGroupTotals::AccuracyDeltaForRetrainingAndPass (int  retraining,
 
   return  (accuracyDelta1 - accuracyDelta0) / (float)(retrainingIdx1 - retrainingIdx0);
 } /* AccuracyDeltaForRetrainingAndPass */
-
-
-
 
 
 
@@ -1213,9 +1171,6 @@ void  ClassGroupTotals::CalcRetrainingAccuracyStats (int     retraining,
 
 
 
-
-
-
 vector<float>  ClassGroupTotals::CalcAccuraciesByClass (int retraining)  const
 {
   vector<float>  classAccuracies;
@@ -1248,7 +1203,6 @@ vector<float>  ClassGroupTotals::CalcAccuraciesByClass (int retraining)  const
 
   return  classAccuracies;
 }  /* CalcAccuraciesByClass */
-
 
 
 
@@ -1312,7 +1266,6 @@ void  ClassGroupTotals::CalcRetrainingSupportPointStats (int     retraining,
   else
     mean = totalNumOfSupportPoints / numPassesEncountered;
 
-
   if  (numTrainingTimesEncounterd == 0)
   {
     trainingTimeMean = 0.0;
@@ -1349,7 +1302,6 @@ void  ClassGroupTotals::CalcRetrainingSupportPointStats (int     retraining,
 
 
 
-
 float  ClassGroupTotals::Accuracy (int  retraining,
                                     int  classIDX
                                    )  const
@@ -1374,11 +1326,9 @@ float  ClassGroupTotals::Accuracy (int  retraining,
 
 
 
-
-
 float  ClassGroupTotals::Accuracy (int            retraining,
-                                    MLClassPtr  mlClass
-                                   )  const
+                                   MLClassPtr  mlClass
+                                  )  const
 {
   int  classIDX = MLClassIDX ("Accuracy", mlClass);
   return  Accuracy (retraining,  classIDX);
@@ -1386,11 +1336,9 @@ float  ClassGroupTotals::Accuracy (int            retraining,
 
 
 
-
-
 KKStr  ClassGroupTotals::ProbabilityStr (int  retraining,
-                                          int  classIDX
-                                         )   const
+                                         int  classIDX
+                                        )   const
 {
   ValidateClassIDX ("ProbabilityStr", classIDX);
   ValidateRetraining    ("ProbabilityStr", retraining);
@@ -1401,10 +1349,9 @@ KKStr  ClassGroupTotals::ProbabilityStr (int  retraining,
 
 
 
-
 KKStr  ClassGroupTotals::ProbabilityStr (int            retraining,
-                                          MLClassPtr  mlClass
-                                         )  const
+                                         MLClassPtr  mlClass
+                                        )  const
 {
   int  classIDX = MLClassIDX ("ProbabilityStr", mlClass);
  
@@ -1417,16 +1364,11 @@ KKStr  ClassGroupTotals::ProbabilityStr (int            retraining,
 
 
 
-
-
-
-
 int  CountTabs (KKStr&  str)
 {
   int  c = 0;
 
   int  l = str.Len ();
-
 
   for  (int x = 0; x < l; x++)
   {
@@ -1436,9 +1378,6 @@ int  CountTabs (KKStr&  str)
 
   return c;
 }  /* CountTabs */
-
-
-
 
 
 
@@ -1459,8 +1398,7 @@ void  ClassGroupTotals::PrintGroupBreakDown (ostream&  report)  const
   float*  totalNewTrainingImages = new float[mlClasses.QueueSize ()];
   for  (int x = 0; x < mlClasses.QueueSize (); x++)
     totalNewTrainingImages[x] = (float)0.0;
-
-
+  
   for  (int  retraining = 0; retraining < numOfRetrainings;  retraining++)
   {
     float  totalCountOnLine = 0.0;
@@ -1513,8 +1451,7 @@ void  ClassGroupTotals::PrintGroupBreakDown (ostream&  report)  const
 
     report << endl;
   }
-
-
+  
   report << endl
          << endl;
 
@@ -1522,9 +1459,6 @@ void  ClassGroupTotals::PrintGroupBreakDown (ostream&  report)  const
   delete  totalNewTrainingImages;
 
 }  /* PrintGroupBreakDown */
-
-
-
 
 
 
@@ -1539,7 +1473,6 @@ KKStr  ClassGroupTotals::FormatSummaryHeader ()  const
 
   return  formatedStr;
 }  /* FormatSummaryHeader */
-
 
 
 
@@ -1585,8 +1518,7 @@ KKStr  ClassGroupTotals::FormatSummaryLine (int  retraining)  const
 
     totalAllClassesNewTrainingImages += totalNewTrainingImages;
   }
-
-
+  
   float  avgAccuracy = 0.0;
 
   if  (totalCountOnLine > 0)
@@ -1602,8 +1534,6 @@ KKStr  ClassGroupTotals::FormatSummaryLine (int  retraining)  const
 
 
 
-
-
 KKStr  ClassGroupTotals::OneImageFormatHeaderLine1 ()  const
 {
   KKStr  formatedStr;
@@ -1615,7 +1545,6 @@ KKStr  ClassGroupTotals::OneImageFormatHeaderLine1 ()  const
 
   return  formatedStr;
 } /* OneImageFormatHeaderLine */
-
 
 
 
@@ -1644,8 +1573,6 @@ KKStr  ClassGroupTotals::OneImageFormatHeaderLine2 ()  const
 
   return  formatedStr;
 }  /* OneImageFormatHeaderLine2 */
-
-
 
 
 
@@ -1723,8 +1650,6 @@ KKStr  ClassGroupTotals::OneImageFormatSummaryLine (int  retraining)  const
 
 
 
-
-
 float  ClassGroupTotals::Predicted (int  retraining,
                                      int  knownIDX,
                                      int  predIDX
@@ -1741,11 +1666,8 @@ float  ClassGroupTotals::Predicted (int  retraining,
     predicted += totals[randomPass][retraining]->Predicted (knownIDX, predIDX);
   }
 
-
   return  (float)predicted / (float)numOfRandomPasses;
 } /* Predicted */
-
-
 
 
 
@@ -1770,15 +1692,13 @@ void  ClassGroupTotals::ConfusionMatrix (ostream&  report,
   for  (colIDX = 0;  colIDX < numOfClasses;  colIDX++)
     classTotals[colIDX] = 0.0;
 
-
   for  (colIDX = 0;  colIDX < numOfClasses;  colIDX++)
   {
     colClass = mlClasses.IdxToPtr (colIDX);
     report << "\t" << colClass->Name ();
   }
   report << endl;
-
-
+  
   float  totalOfClasses = 0.0;
 
   for  (rowIDX = 0;  rowIDX < numOfClasses;  rowIDX++)
@@ -1836,6 +1756,7 @@ void  ClassGroupTotals::ConfusionMatrix (ostream&  report,
 }  /* ConfusionMatrix */
 
 
+
 void  ClassGroupTotals::AddIn (ClassGroupTotals&  ai)
 {
   int  retraining = 0;
@@ -1870,8 +1791,6 @@ void  ClassGroupTotals::AddIn (ClassGroupTotals&  ai)
 
 
 
-
-
 void  ClassGroupTotals::WriteOutHistory (KKStr  fileName)
 {
   log.Level (20) << "ClassGroupTotals::WriteOutHistory  FileName[" << fileName << "]" << endl;
@@ -1879,8 +1798,8 @@ void  ClassGroupTotals::WriteOutHistory (KKStr  fileName)
   if  (!collectHistory)
   {
     log.Level (-1) << "ClassGroupTotals::WriteOutHistory   *** ERROR ***,  Can not write out history because was not collecting it." << endl;
-    osWaitForEnter ();
-    exit (-1);
+    KKB::osWaitForEnter ();
+    std::exit (-1);
   }
 
   ofstream  o (fileName.Str (), ios::out);
@@ -1998,7 +1917,6 @@ void  ClassGroupTotals::WriteOutHistory (KKStr  fileName)
     }
   }
 
-
   o << "//SUPPORTVECTORS" << endl;
   for  (retraining = 0;  retraining < numOfRetrainings;  retraining++)
   {
@@ -2018,13 +1936,10 @@ void  ClassGroupTotals::WriteOutHistory (KKStr  fileName)
     }
   }
 
-
   o << "///End_ClassTotals"  << endl;
 
   o.close ();
 }  /* WriteOutHistory */
-
-
 
 
 
@@ -2047,7 +1962,7 @@ void  ClassGroupTotals::ReadInHistory (FILE*  in)
   {
     KKStr  l (buff);
 
-    if  (l.SubStrPart (0, 2) == "///")
+    if  (l.StartsWith ("///"))
     {
       KKStr  hl = l.SubStrPart (3);
       KKStr  cmd = hl.ExtractToken ();
@@ -2076,7 +1991,7 @@ void  ClassGroupTotals::ReadInHistory (FILE*  in)
       cout << l;
     }
 
-    else if  (l.SubStrPart (0, 1) == "//")
+    else if  (l.StartsWith ("//"))
     {
       KKStr h = l.SubStrPart (2);
 
@@ -2109,13 +2024,13 @@ void  ClassGroupTotals::ReadInHistory (FILE*  in)
 
       else
       {
-        cerr << endl;
-        cerr << "**** ERROR ****   ClassGroupTotals::ReadInHistory" << endl;
-        cerr << endl;
-        cerr << "Invalid History Type[" << histTypeStr << "]." << endl;
-        cerr << endl;
-        osWaitForEnter ();
-        exit (-1);
+        std::cerr << endl;
+        std::cerr << "**** ERROR ****   ClassGroupTotals::ReadInHistory" << endl;
+        std::cerr << endl;
+        std::cerr << "Invalid History Type[" << histTypeStr << "]." << endl;
+        std::cerr << endl;
+        KKB::osWaitForEnter ();
+        std::exit (-1);
       }
 
       retraining = h.ExtractTokenInt (" ,\n\t\r");
@@ -2216,7 +2131,6 @@ void  ClassGroupTotals::ReadInHistory (FILE*  in)
 
 
 
-
 void   ClassGroupTotals::GetClassGroupTotalsFileStats (const KKStr&     fileName,
                                                        MLClassList&     globalClassList,
                                                        RunLog&          log,
@@ -2255,7 +2169,7 @@ void   ClassGroupTotals::GetClassGroupTotalsFileStats (const KKStr&     fileName
     KKStr  lUpper (l);
     lUpper.Upper ();
 
-    if  (lUpper.SubStrPart (0, 2) != "///")
+    if  (lUpper.StartsWith ("///"))
       break;
 
     KKStr  s = lUpper.SubStrPart (3);
@@ -2313,19 +2227,19 @@ void  ClassGroupTotals::Extract_IIPC_IPR_FromDirName (const KKStr&    dirName,
   if  (x.value () <= 5)
     return;
 
-  KKStr leftSide  = dirName.SubStrPart (0, x.value () - 1);
-  KKStr rightSide = dirName.SubStrPart (x.value () + 1);
+  KKStr leftSide  = dirName.SubStrSeg (0, x);
+  KKStr rightSide = dirName.SubStrPart (x + 1);
 
   x = rightSide.LocateCharacter ('-');
-  KKStr  IPR = rightSide.SubStrPart (0, x.value () - 1);
+  KKStr  IPR = rightSide.SubStrSeg (0, x);
   ipr = atoi (IPR.Str ());
 
   // Now lets determine initialImagesPerClass
   auto usIdx = leftSide.LocateLastOccurrence ('_');
   if (usIdx)
   {   
-    rightSide = leftSide.SubStrPart (usIdx.value () + 1);
-    leftSide  = leftSide.SubStrPart (0, usIdx.value () - 1);
+    rightSide = leftSide.SubStrPart (usIdx + 1);
+    leftSide  = leftSide.SubStrSeg (0, usIdx);
   }
   else
   {
@@ -2335,7 +2249,7 @@ void  ClassGroupTotals::Extract_IIPC_IPR_FromDirName (const KKStr&    dirName,
   x = rightSide.LocateCharacter ('-');
   if  (x)
   {
-    KKStr  IIPC = rightSide.SubStrPart (0, x.value () - 1);
+    KKStr  IIPC = rightSide.SubStrSeg (0, x);
     iipc = atoi (IIPC.Str ());
   }
 }  /* Extract_IIPC_IPR_FromDirName */

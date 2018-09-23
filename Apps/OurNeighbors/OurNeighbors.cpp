@@ -387,7 +387,7 @@ MLClassPtr  OurNeighbors::DetermineClassFromFileName (const  KKStr&  fileName)
 	if  (!x  ||  (x.value () < 1))
     return  mlClasses->GetUnKnownClass ();
 
-  KKStr  className = filename_copy.SubStrPart (0, x.value () - 1);
+  KKStr  className = filename_copy.SubStrSeg (0, x);
   
   // now lets get rid of any possible trailing seq number.
   // We are assuming that a underscore{"_") character separates the calcs name from the seq number.
@@ -413,7 +413,7 @@ MLClassPtr  OurNeighbors::DetermineClassFromFileName (const  KKStr&  fileName)
 
     if  (allFollowingCharsAreNumeric)
     {
-      className = className.SubStrPart (0, x.value () - 1);
+      className = className.SubStrSeg (0, x);
     }
   }
 
