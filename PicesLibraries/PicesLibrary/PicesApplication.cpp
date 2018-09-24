@@ -12,16 +12,13 @@
 #include "MemoryDebug.h"
 using  namespace  std;
 
-
 #include "OSservices.h"
 using  namespace  KKB;
-
 
 #include "FactoryFVProducer.h"
 #include "FileDesc.h"
 #include "PicesTrainingConfiguration.h"
 using namespace  KKMLL;
-
 
 #include "DataBase.h"
 #include "DataBaseServer.h"
@@ -71,7 +68,6 @@ PicesApplication::PicesApplication ():
 
 
 
-
 PicesApplication::PicesApplication (const PicesApplication&  _application):
   Application (_application),
   config             (NULL),
@@ -102,7 +98,6 @@ PicesApplication::~PicesApplication ()
   delete  dbServer;  dbServer = NULL;
   delete  db;        db       = NULL;
 }
-
 
 
 
@@ -139,7 +134,6 @@ void  PicesApplication::InitalizeApplication (kkint32 argc,
     }
     fvFactoryProducer = config->FvFactoryProducer (log);
   }
-
 
   if  (dataBaseRequired)
   {

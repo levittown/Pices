@@ -353,7 +353,7 @@ ImageFeaturesListPtr  FeatureFileIOPices::LoadFile (const KKStr&      _fileName,
 
   KKStr field (128);
 
-  kkuint32 maxToLoad = _maxCount ? _maxCount.value : uint32_max;
+  kkuint32 maxToLoad = _maxCount ? _maxCount.value () : uint32_max;
 
   GetToken (_in, ",\t", field, eof, eol);
   while  ((!eof)   &&  (!_cancelFlag)   &&  (examples->QueueSize () < maxToLoad))
@@ -1224,12 +1224,12 @@ ImageFeaturesListPtr  FeatureFileIOPices::FeatureDataReSink
 
   fileNameList->Sort (false);
 
-  KKStrList::iterator  fnIDX;    //StringListIterator  fnIDX (*fileNameList);
+  KKStrList::iterator  fnIDX;
 
   KKStrPtr  imageFileName;
 
-  kkint32  numImagesFoundInOrigFeatureData = 0;
-  kkint32  numOfNewFeatureExtractions = 0;
+  kkuint32  numImagesFoundInOrigFeatureData = 0;
+  kkuint32  numOfNewFeatureExtractions = 0;
 
   for  (fnIDX = fileNameList->begin ();  (fnIDX != fileNameList->end ())  &&  (!_cancelFlag);  ++fnIDX)
   {
