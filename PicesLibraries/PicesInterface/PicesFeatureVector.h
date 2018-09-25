@@ -118,10 +118,10 @@ namespace PicesInterface
     ImageFeaturesPtr  Features ()  {return  features;}
 
 
-    String^  FeatureName (int featureNum);
+    String^  FeatureName (uint featureNum);
 
 
-    double  FeatureValue (int featureNum);
+    double  FeatureValue (uint featureNum);
 
 
     static  ParsedImageFileName^  ParseImageFileName (System::String^  fullFileName);

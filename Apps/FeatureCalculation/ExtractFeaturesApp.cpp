@@ -398,7 +398,7 @@ void  FilterETP2008 ()
   if  (!data)
     return;
 
-  ImageFeaturesListPtr  result = new ImageFeaturesList (data->FileDesc (), false, 10000);
+  ImageFeaturesListPtr  result = new ImageFeaturesList (data->FileDesc (), false);
 
   delete  classes;
   classes = data->ExtractListOfClasses ();
@@ -410,7 +410,7 @@ void  FilterETP2008 ()
 
     ImageFeaturesListPtr  examplesInClass = data->ExtractExamplesForAGivenClass (c);
 
-    if  ((examplesInClass->QueueSize () > 199)  &&  (c->UpperName ().SubStrPart (0, 4) != "NOISE"))
+    if  ((examplesInClass->QueueSize () > 199)  &&  (!c->Name ().StartsWith ("NOISE", true)))
       result->AddQueue (*examplesInClass);
 
     delete  examplesInClass;

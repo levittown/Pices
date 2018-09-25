@@ -6,11 +6,9 @@
 #include "MemoryDebug.h"
 using namespace std;
 
-
 #include "KKBaseTypes.h"
 #include "KKException.h"
 using namespace  KKB;
-
 
 #include "ImageSizeDistribution.h"
 using namespace  MLL;
@@ -248,7 +246,6 @@ VectorFloat  ImageSizeDistribution::VolumeSampledByDepthBucket ()
   for  (kkuint32  depthIdx = 0;  depthIdx < depthDistributions.size ();  ++depthIdx)
   {
     ImageSizeDistributionRowPtr row = depthDistributions[depthIdx];
-    const VectorUint32&  distribution = row->Distribution ();
     result[depthIdx] = row->VolumneSampled ();
   }
   return  result;
@@ -307,19 +304,19 @@ kkint32  ImageSizeDistribution::IdentifySizeBucket (float  size)
 
 
 
-VectorFloat   ImageSizeDistribution::IntegratedDensityDistribution ()  const
+VectorFloat  ImageSizeDistribution::IntegratedDensityDistribution ()  const
 {
-  auto  numSizeBuckets = sizeStartValues.size ();
-  VectorFloat  results (numSizeBuckets, 0.0);
+  size_t numResults = sizeStartValues.size ();
+  VectorFloat  results (numResults, 0.0);
 
-  for  (auto  depthIdx = 0;   depthIdx < depthDistributions.size ();  ++depthIdx)
+  for  (auto  depthIdx = 0;  depthIdx < depthDistributions.size ();  ++depthIdx)
   {
     ImageSizeDistributionRowPtr  dr = depthDistributions[depthIdx];
     float   volSampled = dr->VolumneSampled ();
     if  (volSampled != 0.0f)
     {
       const VectorUint32&  distribution =  dr->Distribution ();
-      auto zed = Min (numSizeBuckets, distribution.size ());
+      auto zed = Min (numResults, distribution.size ());
       for  (kkuint32 x = 0;  x < zed;  ++x)
       {
         results[x] += distribution[x] / volSampled;
@@ -328,5 +325,3 @@ VectorFloat   ImageSizeDistribution::IntegratedDensityDistribution ()  const
   }
   return  results;
 }  /* IntegratedDensityDistribution */
-
-

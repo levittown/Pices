@@ -61,11 +61,10 @@ namespace  MLL
      * part of the calculations.
      * @param scanRate  Scan-Lines per second.
      * @param defaultFlowRate  If a Instrument Data record has a FlowRate &lt;= 0.0 the default rate will be used.
-     * @param defaultFlowRate  Flow-rate to use if not provided in the Scanner File.
      * @returns Vector where each index indicates the offset from start of sipper file in meters for the respective frame.
      */
     VectorDouble  FrameOffsetsInMeters (kkuint32 scanLinesPerFrame,
-                                        float    scanRate,
+                                        float    overRideScanRate,
                                         float    defaultFlowRate
                                        );
   
@@ -126,5 +125,3 @@ namespace  MLL
 }  /* MLL */
 
 #endif
-
-

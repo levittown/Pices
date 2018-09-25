@@ -643,9 +643,6 @@ void  DisplayCommandLineUssage ()
 
 
 
-
-
-
 void  ProcessParms (int    argcXXX,  
                     char** argvXXX
                    )
@@ -1309,7 +1306,7 @@ void  CreateFolds (int  numOfFolds)
 
   log.Level (10) << "CreateFolds  Creating 'exampleTrimmed'" << endl;
   ImageFeaturesListPtr examplesTrimmed 
-	  = new ImageFeaturesList (examples->FileDesc (), false, 0);
+	  = new ImageFeaturesList (examples->FileDesc (), false);
 
   ClassStatisticListPtr stats = examples->GetClassStatistics ();
   ClassStatisticList::iterator idx;
@@ -1335,8 +1332,8 @@ void  CreateFolds (int  numOfFolds)
     if  (foldNum == (numOfFolds - 1))
 	  endIdx = (kkuint32)stratifiedExamples->size ();
 
-	ImageFeaturesListPtr trainThisFold = new ImageFeaturesList (examples->FileDesc (), false, 0);
-	ImageFeaturesListPtr testThisFold  = new ImageFeaturesList (examples->FileDesc (), false, 0);
+	ImageFeaturesListPtr trainThisFold = new ImageFeaturesList (examples->FileDesc (), false);
+	ImageFeaturesListPtr testThisFold  = new ImageFeaturesList (examples->FileDesc (), false);
 
 	for  (kkuint32 curIdx = 0;  curIdx < (int)stratifiedExamples->size ();  curIdx++)
 	{
@@ -1416,7 +1413,7 @@ void  FilterLessThan10 ()
 
   log.Level (10) << "CreateFolds  Creating 'exampleTrimmed'" << endl;
   ImageFeaturesListPtr examplesTrimmed 
-	  = new ImageFeaturesList (examples->FileDesc (), false, 0);
+	  = new ImageFeaturesList (examples->FileDesc (), false);
 
   ClassStatisticListPtr stats = examples->GetClassStatistics ();
   ClassStatisticList::iterator idx;

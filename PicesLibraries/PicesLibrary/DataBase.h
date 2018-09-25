@@ -1,7 +1,5 @@
 #if  !defined(_DATABASE_)
 #define  _DATABASE_
-
-
 #include "DateTime.h"
 #include "GoalKeeper.h"
 #include "KKStrMatrix.h"
@@ -10,13 +8,10 @@
 #include "KKStr.h"
 using namespace KKB;
 
-
-
 #include "ClassStatistic.h"
 #include "FileDesc.h"
 #include "MLClass.h"
 using namespace  KKMLL;
-
 
 #include "DataBaseImage.h"
 #include "DataBaseImageGroup.h"
@@ -79,11 +74,11 @@ namespace MLL
     typedef  DataBase*  DataBasePtr;
     typedef  DataBase const *  DataBaseConstPtr;
 
-    typedef  KKB::uchar   uchar;
-    typedef  KKB::ulong   ulong;
-    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::uchar     uchar;
+    typedef  KKB::ulong     ulong;
+    typedef  KKB::kkint32   kkint32;
     typedef  KKB::kkuint32  kkuint32;
-    typedef  KKB::kkint64 kkint64;
+    typedef  KKB::kkint64   kkint64;
     typedef  KKB::kkuint64  kkuint64;
 
     static  void  Initialization ();
@@ -184,17 +179,17 @@ namespace MLL
      *@param[in] classKeyToUse  If equal to 'V' will only return Validated examples.
      *@param[in] reExtractInstrumentData If set to true will Re-Extract Instrument data from the SipperFile.
      */
-    ImageFeaturesListPtr  FeatureDataGetOneSipperFile (const KKStr&  sipperFileRootName,
-                                                       MLClassPtr    mlClass,
-                                                       char          classKeyToUse,
-                                                       bool          reExtractInstrumentData,
-                                                       bool&         cancelFlag
+    ImageFeaturesListPtr  FeatureDataGetOneSipperFile (const KKStr&   sipperFileRootName,
+                                                       MLClassPtr     mlClass,
+                                                       char           classKeyToUse,
+                                                       bool           reExtractInstrumentData,
+                                                       VolConstBool&  cancelFlag
                                                       );
 
     ImageFeaturesListPtr  FeatureDataForImageGroup (const DataBaseImageGroupPtr  imageGroup,
                                                     MLClassPtr                   mlClass,
                                                     char                         classKeyToUse,
-                                                    const bool&                  cancelFlag
+                                                    VolConstBool&                cancelFlag
                                                    );
 
     void   FeatureDataUpdate (DataBaseImagePtr  dataBaseImage,
@@ -302,7 +297,7 @@ namespace MLL
 
     DataBaseImageListPtr  ImagesQuery (DataBaseImageGroupPtr  group,
                                        bool                   includeThumbnail,
-                                       const bool&            cancelFlag
+                                       VolConstBool&          cancelFlag
                                       );
       
    
@@ -317,9 +312,9 @@ namespace MLL
                                        float                  depthMin,
                                        float                  depthMax,
                                        kkuint32               restartImageId,
-                                       kkint32                limit,            // Max # of rows to return.  -1 indicates no limit.
+                                       OptionUInt32           limit,
                                        bool                   includeThumbnail,
-                                       const bool&            cancelFlag
+                                       VolConstBool&          cancelFlag
                                       );
 
 
@@ -337,7 +332,7 @@ namespace MLL
                                        float                 depthMin,
                                        float                 depthMax,
                                        kkuint32              restartImageId,
-                                       kkint32               limit,            // Max # of rows to return.  -1 indicates no limit.
+                                       OptionUInt32          limit,            // Max # of rows to return.  -1 indicates no limit.
                                        bool                  includeThumbnail,
                                        const bool&           cancelFlag
                                       );
@@ -666,8 +661,7 @@ namespace MLL
     void  InstrumentDataInsert (const KKStr&           _sipperFileName,
                                 const InstrumentData&  id
                                );
-
-
+    
 
     void  InstrumentDataUpdateCropSettings (const KKStr&  sipperFileName,
                                             kkuint32      scanLineStart,
@@ -678,11 +672,9 @@ namespace MLL
                                            );
 
 
-
-
     void  InstrumentDataSaveListForOneSipperFile (const KKStr&               _sipperFileName,
                                                   const InstrumentDataList&  instrumentData,
-                                                  const bool&                _cancelFlag
+                                                  VolConstBool&              _cancelFlag
                                                  );
 
 
@@ -987,10 +979,10 @@ namespace MLL
     static  GoalKeeperPtr  blocker;   /*!< used to handle multi-threading issues. */
 
     static volatile kkint32  numDataBaseInstances;  /**< Will be incremented when the constructor is called and
-                                                   * decremented when the destructor is called.  This way the
-                                                   * Constructor and Destructor's will know if they should call
-                                                   * "mysql_library_init" and "mysql_library_end" respectively.
-                                                   */
+                                                     * decremented when the destructor is called.  This way the
+                                                     * Constructor and Destructor's will know if they should call
+                                                     * "mysql_library_init" and "mysql_library_end" respectively.
+                                                     */
 
     static KKStr           mySqlDataDir;
 
@@ -1104,7 +1096,6 @@ namespace MLL
     KKStr              prevQueryStatement;
 
     FileDescConstPtr   featureFileDesc;
-
 
     MYSQL_FIELD*       resultSetFieldDefs;
     MYSQL_RES*         resultSet;

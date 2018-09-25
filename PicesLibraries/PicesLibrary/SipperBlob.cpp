@@ -45,7 +45,6 @@ SipperBlob::SipperBlob ():
 
 
 
-
 SipperBlob::~SipperBlob ()
 {
   neighbors.clear ();
@@ -102,7 +101,6 @@ ImageFeaturesPtr  SipperBlob::Save (uchar**     frame,
 
   BmpImage  bmpImage (numOfRows, numOfCols, 256);
 
-
   if  (colorize)
   {
     //                                          R    G    B
@@ -150,7 +148,6 @@ ImageFeaturesPtr  SipperBlob::Save (uchar**     frame,
 
   return image;
 } /* Save */
-
 
 
 
@@ -252,7 +249,6 @@ void  SipperBlob::DialateBlob (uchar** frame,
     workRow++;
   }
 
-
   workRow = 0;
   for  (row = rowTop;  row <= rowBot;  row++)
   {
@@ -305,7 +301,6 @@ void  SipperBlob::DialateBlob (uchar** frame,
   delete  workArea;
   delete  workRows;
 }  /* DialateBlob */
-
 
 
 

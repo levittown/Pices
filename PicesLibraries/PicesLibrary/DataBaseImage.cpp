@@ -196,6 +196,7 @@ void  DataBaseImage::SizeCoordinatesAdd (const Point& _point)
 
 RasterSipperPtr  DataBaseImage::ThumbNail (RunLog&  log) const
 {
+  log.Level (60) << "DataBaseImage::ThumbNail"  << std::endl;
   if  (!encodedThumbnail)
     return  NULL;
   return  RasterSipper::FromSimpleCompression (this->encodedThumbnail, encodedThumbnailLen);

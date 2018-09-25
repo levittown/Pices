@@ -1285,7 +1285,6 @@ void  TrainingModel2::PredictClass (PicesFeatureVector^  featureVector,
 
 
 
-
 void  TrainingModel2::PredictClass (System::String^   imageFileName,
                                     System::Array^    raster,
                                     System::Single^   depth,
@@ -1307,8 +1306,6 @@ void  TrainingModel2::PredictClass (System::String^   imageFileName,
 
   return;
 }  /* PredictClass */
-
-
 
 
 
@@ -1345,7 +1342,6 @@ void   TrainingModel2::ProbabilitiesByClassDual (PicesFeatureVector^    picesFea
   delete  c2Results;  c2Results = NULL;
 
 }  /* ProbabilitiesByClassDual */
-
 
 
 
@@ -1529,7 +1525,6 @@ array<PicesInterface::ProbNamePair^>^
 
 
 
-
 Bitmap^  TrainingModel2::BuildBitmapFromRasterData (uchar**  r,
                                                    int      height,
                                                    int      width
@@ -1622,10 +1617,6 @@ Bitmap^  TrainingModel2::BuildBitmapFromRasterData (uchar**  r,
 
 
 
-
-
-
-
 PicesPredictionList^   TrainingModel2::PredictProbabilities (System::String^  imageFileName,
                                                             System::Array^   raster,
                                                             System::Single^  depth,
@@ -1646,7 +1637,6 @@ PicesPredictionList^   TrainingModel2::PredictProbabilities (System::String^  im
 
 
 
-
 String^   TrainingModel2::RunLogFileName::get ()
 {
   if  (runLog != NULL)
@@ -1654,9 +1644,6 @@ String^   TrainingModel2::RunLogFileName::get ()
   else
     return  String::Empty;
 }  /* RunLogFileName */
-
-
-
 
 
 
@@ -1676,7 +1663,6 @@ String^  TrainingModel2::DirectoryPathForClass (PicesClass^  mlClass)
   KKStr  dirPath = configToUse->DirectoryPathForClass (mlClass->UnmanagedMLClass ());
   return  PicesKKStr::KKStrToSystenStr (dirPath);
 }  /* DirectoryPathForClass */
-
 
 
 
@@ -1713,9 +1699,6 @@ array<String^>^  TrainingModel2::GetListOfTrainingModels ()
 
 
 
-
-
-
 uint  TrainingModel2::NumHierarchialLevels::get ()
 {
   TrainingConfiguration2ConstPtr  configToUse = GetConfigToUse ();
@@ -1724,7 +1707,6 @@ uint  TrainingModel2::NumHierarchialLevels::get ()
   else
     return 0;
 }
-
 
 
 
@@ -1773,7 +1755,6 @@ String^  TrainingModel2::ParameterStr::get ()
 
 
 
-
 String^  TrainingModel2::ConfigFileName::get ()
 {
   PicesTrainingConfigurationConstPtr  configToUse = GetConfigToUse ();
@@ -1813,8 +1794,6 @@ void  TrainingModel2::AddClass (PicesClass^  newClass)
 
   config->AddATrainingClass (c);
 }   /* AddClass */
-
-
 
 
 
@@ -1893,7 +1872,6 @@ void  TrainingModel2::AddImageToTrainingLibray (String^       imageFileName,
  
 
 
-
 PicesTrainingConfigurationConstPtr  TrainingModel2::GetConfigToUse ()
 {
   PicesTrainingConfigurationConstPtr  configToUse = NULL;
@@ -1919,10 +1897,6 @@ PicesTrainingConfigurationConstPtr  TrainingModel2::GetConfigToUse ()
 }  /* GetConfigToUse */
 
 
-
-
-
-
 void  TrainingModel2::ErrorMsgsClear ()
 {
   if  (errorMsgs == nullptr)
@@ -1932,6 +1906,7 @@ void  TrainingModel2::ErrorMsgsClear ()
 }
 
 
+
 void  TrainingModel2::ErrorMsgsAdd (String^  errorMsg)
 {
   if  (errorMsgs == nullptr)
@@ -1939,6 +1914,7 @@ void  TrainingModel2::ErrorMsgsAdd (String^  errorMsg)
 
   errorMsgs->Add (errorMsg);
 }
+
 
 
 void  TrainingModel2::ErrorMsgsAdd (const VectorKKStr&  _errorMsgs)
@@ -1952,4 +1928,4 @@ void  TrainingModel2::ErrorMsgsAdd (const VectorKKStr&  _errorMsgs)
 }  /* ErrorMsgsAdd */
 
 
-}  /* PicesInterface */
+} /* PicesInterface */

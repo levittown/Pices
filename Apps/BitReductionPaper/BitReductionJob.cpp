@@ -1551,7 +1551,7 @@ void  BitReductionJob::TestWithUSFCASCOR  (TrainingConfigurationPtr   config,
         if  (line.Len () < 3)
           continue;
 
-        if  (line.SubStrPart (0, 1) == "//")
+        if  (line.StartsWith ("//"))
           continue;
 
         KKStr  fieldName  = line.ExtractToken2 ("\t");

@@ -11,14 +11,13 @@
 #include "MemoryDebug.h"
 using namespace std;
 
-
 #include "KKBaseTypes.h"
 #include "GlobalGoalKeeper.h"
 #include "KKStrParser.h"
+#include "Option.h"
 #include "OSservices.h"
 #include "KKStr.h"
 using namespace KKB;
-
 
 #include "SipperFile.h"
 #include "InstrumentDataFileManager.h"
@@ -180,8 +179,8 @@ KKStr  SipperFile::ToTabDelStr ()  const
 
 
 kkint32  SearchFieldIdx (const KKStr  searchField, 
-                       const char*  fieldNames[]
-                      )
+                         const char*  fieldNames[]
+                        )
 {
   kkint32 idx = 0;
 
@@ -216,7 +215,6 @@ void  SipperFile::ParseTabDelStr (KKStrParser&  parser)
   while  (parser.MoreTokens ())
   {
     KKStr  fieldName = parser.GetNextToken ("\t");
-    kkint32  fieldIdx = SearchFieldIdx (fieldName, fieldNames);
     if  (fieldName.EqualIgnoreCase ("SipperFileId"))
       sipperFileId = parser.GetNextTokenInt ();
 
@@ -295,7 +293,7 @@ void  SipperFile::ParseTabDelStr (KKStrParser&  parser)
 
 
 
-void   SipperFile::ReFresh (const SipperFile&  sf)
+void  SipperFile::ReFresh (const SipperFile&  sf)
 {
   sipperFileId    =  sf.sipperFileId;
   sipperFileName  =  sf.sipperFileName;
@@ -330,7 +328,7 @@ void   SipperFile::ReFresh (const SipperFile&  sf)
 
 
 
-void   SipperFile::AssignCtdExternalInstruments (const KKStr&   rootName)
+void   SipperFile::AssignCtdExternalInstruments (const KKStr&  rootName)
 {
   // Ideally I should be getting these assignments from the SipperFiles table in the database.
   // but if not available so we have to use prior knowledge to make best guess assignments.
@@ -341,12 +339,12 @@ void   SipperFile::AssignCtdExternalInstruments (const KKStr&   rootName)
   SizeInBytes (fileSizeInBytes);
   DateTimeStart (sipperFileTimeStamp);
 
-  if  (rootName.SubStrPart (0, 3) == "hrs02")
+  if  (rootName.StartsWith ("hrs02"))
   {
     // These are SIPER2 files that do not contain instrument data.
     CruiseName ("HRS02");
     StationName ("1");
-    DeploymentNum (rootName.SubStrPart (5, 6));
+    DeploymentNum (rootName.SubStrSeg (5, 2));
     Sp0 (NULL);
     Sp1 (NULL);
     Sp2 (NULL);
@@ -357,39 +355,39 @@ void   SipperFile::AssignCtdExternalInstruments (const KKStr&   rootName)
   Sp1 (Instrument::LookUpByShortName ("P-R"));
   Sp2 (Instrument::LookUpByShortName ("BAT"));
 
-  if  (sipperFileName.SubStrPart (0, 2) == "Sta")
+  if  (sipperFileName.StartsWith ("Sta"))
   {
     AssignCtdExternalInstrumentsETP2007 (rootName);
     return;
   }
 
-  if  ((sipperFileName.SubStrPart (0,6) == "ETP2008")  ||  (sipperFileName.SubStrPart (0,4) == "ETP08"))
+  if  ((sipperFileName.StartsWith ("ETP2008"))  ||  (sipperFileName.StartsWith ("ETP08")))
   {
     AssignCtdExternalInstrumentsETP2008 (rootName);
     return;
   }
 
-  if  (rootName.SubStrPart (0, 4) == "B0710")
+  if  (rootName.StartsWith ("B0710"))
   {
     CruiseName ("B0710");
-    if  (rootName.SubStrPart (0, 10) == "B0710ST004A")
+    if  (rootName.StartsWith ("B0710ST004A"))
     {
       StationName ("ST004A");
       DeploymentNum ("");
     }
-    else if  (rootName.SubStrPart (0, 10) == "B0710ST004B")
+    else if  (rootName.StartsWith ("B0710ST004B"))
     {
       StationName ("ST004B");
       DeploymentNum ("");
     }
-    else if  (rootName.SubStrPart (0, 10) == "B0710ST017A")
+    else if  (rootName.StartsWith ("B0710ST017A"))
     {
       StationName ("ST017");
       DeploymentNum ("");
     }
     else
     {
-      StationName (rootName.SubStrPart (5, 9) == "B0710ST017A");
+      StationName (rootName.SubStrSeg (5, 5));
       DeploymentNum ("");
     }
     CtdExt0 ("TRN");
@@ -401,7 +399,7 @@ void   SipperFile::AssignCtdExternalInstruments (const KKStr&   rootName)
 
   else
   {
-    CruiseName (rootName.SubStrPart (0, 3));
+    CruiseName (rootName.SubStrSeg (0, 4));
     StationName ("1");
     DeploymentNum ("A");
   }
@@ -416,17 +414,32 @@ void   SipperFile::AssignCtdExternalInstruments (const KKStr&   rootName)
 }  /* AssignCtdExternalInstruments */
 
 
+
 bool  SipperFile::JustRootName(const KKStr&  fileName)
 {
   return  (fileName.Len () > 0)  &&  (fileName == KKB::osGetRootName(fileName));
 }
 
 
+
 void   SipperFile::AssignCtdExternalInstrumentsETP2007 (const KKStr&  rootName)
 {
   CruiseName ("ETP2007");
-  StationName ("1");
-  DeploymentNum ("A");
+
+  auto underScore = rootName.LocateCharacter ('_');
+  if  (rootName.StartsWith ("Station", true)  &&  underScore  &&  (underScore > 8U))
+  {
+    auto stationDepolymentStr = rootName.SubStrSeg(7, underScore - 7);
+    auto stationStr = stationDepolymentStr.SubStrSeg (0, 1);
+    auto deplomentStr = stationDepolymentStr.SubStrPart (2);
+    StationName (stationStr);
+    DeploymentNum (deplomentStr);
+  }
+  else
+  {
+    StationName ("1");
+    DeploymentNum ("A");
+  }
   CtdExt0 ("CDM");
   CtdExt1 ("OXG");
   CtdExt2 ("FLO");
@@ -434,41 +447,41 @@ void   SipperFile::AssignCtdExternalInstrumentsETP2007 (const KKStr&  rootName)
 }  /* AssignCtdExternalInstrumentsETP2007 */
 
 
+
 void   SipperFile::AssignCtdExternalInstrumentsETP2008 (const KKStr&   rootName)
 {
   CruiseName ("ETP2008");
   StationName ("1");
-  DeploymentNum ("A");
   CtdExt0 ("OXG");
   CtdExt1 ("TRN");
   CtdExt2 ("FLO");
   if  (rootName.Len () > 9)
   {
-    if  (rootName.SubStrPart (0, 7) == "ETP08_1A_01")
+    if  (rootName.StartsWith ("ETP08_1A_01"))
     {
       StationName ("1");
       DeploymentNum ("A");
     }
 
-    else if  (rootName.SubStrPart (0, 8) == "ETP2008_1")
+    else if  (rootName.StartsWith ("ETP2008_1"))
     {
-      KKStr  deploymentNum = rootName.SubStrPart (9, 9);
+      KKStr  deploymentNumFromRootName = rootName.SubStrSeg (9, 1);
       StationName ("1");
-      DeploymentNum (deploymentNum);
+      DeploymentNum (deploymentNumFromRootName);
     }
 
-    else if  (rootName.SubStrPart (0, 8) == "ETP2008_8")
+    else if  (rootName.StartsWith ("ETP2008_8"))
     {
-      KKStr  deploymentNum = rootName.SubStrPart (9);
-      deploymentNum = deploymentNum.ExtractToken ("_");
+      KKStr  zed = rootName.SubStrPart (9);
+      deploymentNum = zed.ExtractToken ("_");
       StationName ("8");
       DeploymentNum (deploymentNum);
     }
 
-    else if  (rootName.SubStrPart (0, 9) == "ETP2008_4a")
+    else if  (rootName.StartsWith ("ETP2008_4a"))
       StationName ("4a");
 
-    else if  (rootName.SubStrPart (0, 9) == "ETP2008_4b")
+    else if  (rootName.StartsWith ("ETP2008_4b"))
       StationName ("4b");
   }
 
@@ -501,11 +514,11 @@ void   SipperFile::AssignCtdExternalInstrumentsETP2008 (const KKStr&   rootName)
 
   if  (rootName.Len () > 10)
   {
-    if  ((rootName.SubStrPart (0, 9)  == "ETP2008_1B")    ||  
-         (rootName.SubStrPart (0, 9)  == "ETP2008_1C")    ||
-         (rootName.SubStrPart (0, 9)  == "ETP2008_1D")    ||
-         (rootName.SubStrPart (0, 9)  == "ETP2008_1E")    ||
-         (rootName                    == "ETP2008_1E_01")
+    if  ((rootName.StartsWith ("ETP2008_1B"))    ||  
+         (rootName.StartsWith ("ETP2008_1C"))    ||
+         (rootName.StartsWith ("ETP2008_1D"))    ||
+         (rootName.StartsWith ("ETP2008_1E"))    ||
+         (rootName.StartsWith ("ETP2008_1E_01"))
         )
     {
       CtdExt0 ("OXG");
@@ -515,7 +528,7 @@ void   SipperFile::AssignCtdExternalInstrumentsETP2008 (const KKStr&   rootName)
       return;
     }
 
-    if  (rootName.SubStrPart (0, 6) == "ETP2008")
+    if  (rootName.StartsWith ("ETP2008"))
     {
       CtdExt0 ("TRN");
       CtdExt1 ("OXG");
@@ -528,21 +541,16 @@ void   SipperFile::AssignCtdExternalInstrumentsETP2008 (const KKStr&   rootName)
 
 
 
-
-
-
-
-
 SipperFileList::SipperFileList (bool  _owner):
     KKQueue<SipperFile> (_owner)
 {
 }
 
 
+
 SipperFileList::~SipperFileList ()
 {
 }
-
 
 
 
@@ -563,7 +571,6 @@ SipperFileListPtr  SipperFileList::GetListOfSipperFilesWeCanFind (RunLog&  runLo
 
   return  sipperFiles;
 }  /* GetListOfSipperFilesWeCanFind */
-
 
 
 
@@ -685,7 +692,6 @@ void  SipperFileOracle::AddSipperFileEntry (SipperFilePtr  sipperFile)
 
   GlobalGoalKeeper::EndBlock ();
 }  /* AddSipperFileEntry */
-
 
 
 

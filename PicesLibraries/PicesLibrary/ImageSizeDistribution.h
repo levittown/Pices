@@ -128,25 +128,20 @@ namespace MLL
   private:
     void  PopulateDistributions (kkuint32  depthIdx);
 
-    float                depthBinSize;
-    float                initialValue;
-    float                growthRate;
-    float                endValue;
-    kkuint32             numSizeBuckets;
+    float      depthBinSize;
+    float      initialValue;
+    float      growthRate;
+    float      endValue;
+    kkuint32   numSizeBuckets;
 
     std::vector<ImageSizeDistributionRowPtr>  depthDistributions;
     ImageSizeDistributionRowPtr               allDepths;
 
-
-    VectorFloat          sizeStartValues;
-    VectorFloat          sizeEndValues;
+    VectorFloat  sizeStartValues;
+    VectorFloat  sizeEndValues;
   };  /* ImageSizeDistribution */
 
   typedef  ImageSizeDistribution*  ImageSizeDistributionPtr;
-
-
-
-
 
 }  /* namespace MML */
 

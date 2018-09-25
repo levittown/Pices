@@ -511,10 +511,10 @@ CTD_Plus_Data::CTD_Plus_Data (const KKStr&  _txt,
     
 
 
-float  CTD_Plus_Data::DissolvedOxygenConcentration (float  voltage,
-                                                    float  temperature,
-                                                    float  salinity,
-                                                    float  pressure
+float  CTD_Plus_Data::DissolvedOxygenConcentration (float  _voltage,
+                                                    float  _temperature,
+                                                    float  _salinity,
+                                                    float  _pressure
                                                    )
 {
   static double  Soc     =  0.3634;
@@ -525,13 +525,13 @@ float  CTD_Plus_Data::DissolvedOxygenConcentration (float  voltage,
   static double  tau     =  0.0; 
   static double  deltaV  =  0.0;
     
-  double  P = pressure;
-  double  T = temperature;
-  double  V = voltage;
+  double  P = _pressure;
+  double  T = _temperature;
+  double  V = _voltage;
 
   double  disolvedOxygen_a = (Soc * (V + Voffset + tau * deltaV) + Boc * exp (-0.03 * T));
 
-  double  Oxsat = OxygenSaturation (temperature, salinity);
+  double  Oxsat = OxygenSaturation (T, _salinity);
   double  disolvedOxygen_b = Oxsat * exp (tcor * T) * exp (pcor * P);
 
   double  dissolvedOxygenConcentration = disolvedOxygen_a * disolvedOxygen_b;

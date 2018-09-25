@@ -12,15 +12,13 @@
 #include "MemoryDebug.h"
 using  namespace  std;
 
-
 #include "GlobalGoalKeeper.h"
+#include "Option.h"
 #include "OSservices.h"
 using  namespace  KKB;
 
-
 #include "KKMLVariables.h"
 using namespace  KKMLL;
-
 
 #include "PicesVariables.h"
 using namespace MLL;
@@ -69,10 +67,10 @@ const KKStr&  PicesVariables::HomeDir ()
   {
     KKStr  fullAppName = osGetFullPathOfApplication ();
     KKStr  pathToApp = osGetPathPartOfFile (fullAppName);
-    KKStr  homeDir = osGetParentDirPath (pathToApp);
-    if  (ValidHomeDir (homeDir))
+    KKStr  parentPathToApp = osGetParentDirPath (pathToApp);
+    if  (ValidHomeDir (parentPathToApp))
     {
-      homeDir = homeDir;
+      homeDir = parentPathToApp;
     }
     else
     {
@@ -83,10 +81,10 @@ const KKStr&  PicesVariables::HomeDir ()
       }
       else
       {
-        homeDir = osGetParentDirPath (curDir);
-        if  (ValidHomeDir (homeDir))
+        KKStr parentCurDir = osGetParentDirPath (curDir);
+        if  (ValidHomeDir (parentCurDir))
         {
-          homeDir = homeDir;
+          homeDir = parentCurDir;
         }
         else
         {
@@ -330,21 +328,20 @@ void  PicesVariables::ParseImageFileName (const KKStr&  fullFileName,
     return;
   
   auto  x = rootName.LocateLastOccurrence ('_');
-  if  (x > 0)
+  if  (x  &&  (x.value () > 0))
   {
     KKStr  colStr = rootName.SubStrPart (x + 1);
-    KKStr  temp = rootName.SubStrPart (0, x - 1);
+    KKStr  temp = rootName.SubStrSeg (0, x);
     x = temp.LocateLastOccurrence ('_');
-    if  (x > 0)
+    if  (x  &&  (x.value () > 0))
     {
-      sipperFileName = temp.SubStrPart (0, x - 1);
+      sipperFileName = temp.SubStrSeg (0, x);
       KKStr  rowStr = temp.SubStrPart (x + 1);
       scanCol     = atoi (colStr.Str ());
       scanLineNum = atoi (rowStr.Str ());
     }
   }
 }  /* ParseImageFileName */
-
 
 
 

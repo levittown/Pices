@@ -29,7 +29,7 @@ delimiter //
 
 create procedure ImageGroupEntryInsertList(
     in  _groupId            int,
-    in  _imageFileNameList  varchar(21845)  /* Tab delimted list of image file names. */
+    in  _imageFileNameList  varchar(16383)  /* Tab delimted list of image file names. */
  )
 begin
   /*  Will scan through the Tab delimited list of image file names and  */

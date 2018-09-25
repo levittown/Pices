@@ -503,8 +503,7 @@ void  SipperExtractionImageManager::ManagedClass::StartNewDirectory ()
   {
     delete  examplesCurDir;  examplesCurDir = NULL;
     examplesCurDir = new ImageFeaturesList (fileDesc, 
-                                            false,     // false = We will not own these examples
-                                            1000
+                                            false     // false = We will not own these examples
                                            );
   }
 }  /* StartNewDirectory */

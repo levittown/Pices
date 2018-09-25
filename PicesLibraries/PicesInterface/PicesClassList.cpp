@@ -1,29 +1,29 @@
-#include  "StdAfx.h"
-#include  "FirstIncludes.h"
+#include "StdAfx.h"
+#include "FirstIncludes.h"
 
 #include <stdio.h>
 #include <math.h>
 
-#include  <fstream>
-#include  <iostream>
-#include  <ostream>
-#include  <string>
-#include  <map>
-#include  <vector>
+#include <fstream>
+#include <iostream>
+#include <ostream>
+#include <string>
+#include <map>
+#include <vector>
 
 
-#include  "MemoryDebug.h"
-#include  "KKBaseTypes.h"
+#include "MemoryDebug.h"
+#include "KKBaseTypes.h"
 
-#include  "GoalKeeper.h"
+#include "GoalKeeper.h"
 using namespace KKB;
 
 #include "MLClass.h"
 
-//#include  "PicesKKStr.h"
-#include  "PicesClass.h"
-#include  "PicesClassList.h"
-#include  "PicesDataBase.h"
+//#include "PicesKKStr.h"
+#include "PicesClass.h"
+#include "PicesClassList.h"
+#include "PicesDataBase.h"
 
 using namespace  PicesInterface;
 
@@ -53,7 +53,6 @@ PicesClassList::PicesClassList ():
 {
   directory = "";
 }
-
 
 
 

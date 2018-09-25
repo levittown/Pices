@@ -1,32 +1,24 @@
-#include  "FirstIncludes.h"
-#include  <stdlib.h>
-#include  <stdio.h>
-#include  <math.h>
-#include  <memory>
-
-#include  <string>
-#include  <iostream>
-#include  <fstream>
-#include  <vector>
-
-#include  "MemoryDebug.h"
+#include "FirstIncludes.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
+#include <memory>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include "MemoryDebug.h"
 using namespace std;
 
-
-#include  "KKBaseTypes.h"
-#include  "KKStrParser.h"
-
-
-#include  "OSservices.h"
+#include "KKBaseTypes.h"
+#include "KKStrParser.h"
+#include "OSservices.h"
 using namespace KKB;
 
-
-
-#include  "InstrumentDataList.h"
-
-#include  "InstrumentDataManager.h"
-#include  "SipperBuff.h"
-#include  "SipperFile.h"
+#include "InstrumentDataList.h"
+#include "InstrumentDataManager.h"
+#include "SipperBuff.h"
+#include "SipperFile.h"
 using  namespace  MLL;
 
 
@@ -41,6 +33,7 @@ InstrumentDataList::InstrumentDataList (bool  _owner):
 
 {
 }
+
 
 
 InstrumentDataList::InstrumentDataList (const KKStr&  _fileName,
@@ -60,11 +53,9 @@ InstrumentDataList::InstrumentDataList (const KKStr&  _fileName,
 
 
 
-
 InstrumentDataList::~InstrumentDataList ()
 {
 }
-
 
 
 
@@ -82,7 +73,7 @@ InstrumentDataListPtr  InstrumentDataList::CreateFromSipperFile (const KKStr&   
   InstrumentDataManagerPtr  instrumentDataManager 
     = new InstrumentDataManager (fullSipperFileName, sipperFile, log);
 
-  SipperBuffPtr  sipperBuff = SipperBuff::CreateSipperBuff (sfUnKnown, 
+  SipperBuffPtr  sipperBuff = SipperBuff::CreateSipperBuff (SipperFileFormat::UnKnown,
                                                             fullSipperFileName, 
                                                             0,                    // Camera Number 0
                                                             instrumentDataManager,
@@ -97,11 +88,11 @@ InstrumentDataListPtr  InstrumentDataList::CreateFromSipperFile (const KKStr&   
     return  NULL;
   }
 
-  uchar*  lineBuff = new uchar[4096];
-  kkuint32  lineSize = 0;
-  kkuint32*   colCount = new kkuint32[4096];
-  kkuint32  pixelsInRow;
-  bool    flow;
+  uchar*     lineBuff = new uchar[4096];
+  kkuint32   lineSize = 0;
+  kkuint32*  colCount = new kkuint32[4096];
+  kkuint32   pixelsInRow;
+  bool       flow;
 
   kkint32 RecordingRateNumSamplingFrames = 2;
 
@@ -119,8 +110,7 @@ InstrumentDataListPtr  InstrumentDataList::CreateFromSipperFile (const KKStr&   
 
     data->ScanRate (scanRate);
   }
-
-
+  
   sipperBuff->GetNextLine (lineBuff,
                            4096,      // Size of 'LineBuff'
                            lineSize,
@@ -245,8 +235,6 @@ InstrumentDataListPtr  InstrumentDataList::CreateFromSipperFile (const KKStr&   
 
 
 
-
-
 void  InstrumentDataList::Load (const KKStr&  fileName,
                                 bool&         _loadWasSucessfull,
                                 RunLog&       log
@@ -265,7 +253,7 @@ void  InstrumentDataList::Load (const KKStr&  fileName,
     return;
   }
 
-  kkint32  expectedCount = -1;
+  OptionUInt32  expectedCount = {};
 
   VectorIntPtr  fieldIndirections = InstrumentData::CreateDefaultFieldIndirectionList ();
 
@@ -307,7 +295,7 @@ void  InstrumentDataList::Load (const KKStr&  fileName,
 
     else if  (rowType == "count")
     {
-      expectedCount = line.GetNextTokenInt ("\t");
+      expectedCount = line.GetNextTokenUint ("\t");
     }
 
     else if  (rowType == "endoffile")
@@ -350,7 +338,7 @@ void  InstrumentDataList::Load (const KKStr&  fileName,
     return;
   }
 
-  if  (expectedCount <= 0)
+  if  (!expectedCount)
   {
     log.Level (-1) << endl << endl << "InstrumentDataList::Load      *** ERROR ***     File Format is bad,  can not use.  'Count' was not specified." << endl << endl;
     return;
@@ -377,8 +365,6 @@ void  InstrumentDataList::Load (const KKStr&  fileName,
   _loadWasSucessfull = true;
 
 }  /* Load */
-
-
 
 
 
@@ -426,11 +412,9 @@ void  InstrumentDataList::Save (const KKStr&  fileName,
 
 
 
-
-
 VectorDouble  InstrumentDataList::FrameOffsetsInMeters (kkuint32 scanLinesPerFrame,
-                                                        float  scanRate,             // Scan lines per second.
-                                                        float  defaultFlowRate
+                                                        float    overRideScanRate,             // Scan lines per second.
+                                                        float    defaultFlowRate
                                                        )
 {
   const_iterator  idx;
@@ -452,7 +436,7 @@ VectorDouble  InstrumentDataList::FrameOffsetsInMeters (kkuint32 scanLinesPerFra
       // This InstrumentData record 'id' is beyond the end of the current frame.  In this case
       // we want to calculate the distance traveled in this frame and add to 'frameOffsets'.
       kkuint32  scanLines = nextFrameScanLine - lastScanLineCalced;
-      double  deltaTime = scanLines / scanRate;   // (ScanLines / ScanLines per Sec)
+      double  deltaTime = scanLines / overRideScanRate;   // (ScanLines / ScanLines per Sec)
 
       float  flowRate = id->FlowRate1 ();
       if  (flowRate <= 0.0f)
@@ -473,7 +457,7 @@ VectorDouble  InstrumentDataList::FrameOffsetsInMeters (kkuint32 scanLinesPerFra
       // We now want to add scan lines that were not just added to frames in previous loop to 
       // 'distTransversedCurFrame'.
       kkuint32  scanLines = id->ScanLine () - lastScanLineCalced;
-      double  deltaTime = scanLines / scanRate;   // (ScanLines / ScanLines per Sec)
+      double  deltaTime = scanLines / overRideScanRate;   // (ScanLines / ScanLines per Sec)
 
       float  flowRate = id->FlowRate1 ();
       if  (flowRate <= 0.0f)
@@ -484,7 +468,7 @@ VectorDouble  InstrumentDataList::FrameOffsetsInMeters (kkuint32 scanLinesPerFra
       lastScanLineCalced = id->ScanLine ();
     }
     
-    idx++;
+    ++idx;
   }
 
   return  frameOffsets;

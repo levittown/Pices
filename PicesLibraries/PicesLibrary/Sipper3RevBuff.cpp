@@ -19,11 +19,7 @@ using namespace KKB;
 using namespace MLL;
 
 
-
-
 uchar  Sipper3RevBuff::ShadesFor3Bit[] = {0, 36, 73, 109, 146, 182, 219, 255};
-
-
 
 
 void  Decode3BitPixelTo1BitPixels (uchar   threeBitPixel, 
@@ -64,13 +60,10 @@ Sipper3RevBuff::Sipper3RevBuff (const KKStr&             _fileName,
 
 
 
-
-
 Sipper3RevBuff::~Sipper3RevBuff ()
 {
   this->SipperBuff::~SipperBuff ();
 }
-
 
 
 
@@ -173,8 +166,6 @@ void  Sipper3RevBuff::GetNextSipperRec (kkuint32&  spaceLeft,
 
 
 
-
-
 void  Sipper3RevBuff::GetNextLine (uchar*    lineBuff,
                                    kkuint32  lineBuffSize,
                                    kkuint32& lineSize,
@@ -215,7 +206,6 @@ void  Sipper3RevBuff::GetNextLine (uchar*    lineBuff,
     return;
   }
 
-
   GetNextSipperRec (spaceLeft,
                     cameraNum, 
                     imageData,      raw,     eol,  grayScale,
@@ -225,7 +215,6 @@ void  Sipper3RevBuff::GetNextLine (uchar*    lineBuff,
                    );
 
   bool  notFinished = moreRecs;
-
 
   bool pauseAtEol = false;
 
@@ -320,7 +309,6 @@ void  Sipper3RevBuff::GetNextLine (uchar*    lineBuff,
     }
   }
 
-
   if  (lineSize > 4096)
   {
     cerr << endl
@@ -335,9 +323,6 @@ void  Sipper3RevBuff::GetNextLine (uchar*    lineBuff,
 
   curRow++;
 }  /* GetNextLine */
-
-
-
 
 
 
@@ -434,8 +419,6 @@ bool  Sipper3RevBuff::NextScanLineGood ()
 
   return  true;
 }  /* NextScanLineGood */
-
-
 
 
 

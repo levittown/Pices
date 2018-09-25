@@ -5,7 +5,6 @@
 #undef min
 #undef max
 
-
 #include "FirstIncludes.h"
 #include <ctype.h>
 #include <math.h>
@@ -24,20 +23,18 @@ using namespace std;
 #include <my_sys.h>
 #include <mysql.h>
 
-
 // Base Library
 #include "KKBaseTypes.h"
 #include "KKException.h"
+#include "Option.h"
 #include "OSservices.h"
 #include "RasterSipper.h"
 using namespace KKB;
-
 
 #include "FileDesc.h"
 #include "FeatureFileIOPices.h"
 #include "ImageFeatures.h"
 using  namespace  KKMLL;
-
 
 #include "DataBase.h"
 #include "DataBaseServer.h"
@@ -52,7 +49,6 @@ using  namespace  MLL;
 
 
 
-
 KKB::kkint32 CharStarToInt32 (const char* s)
 {
   if  (s == NULL)
@@ -61,7 +57,8 @@ KKB::kkint32 CharStarToInt32 (const char* s)
 }  /* CharStarToInt32 */
 
 
-KKB::kkuint32 CharStarToUint16 (const char* s)
+
+KKB::kkuint16 CharStarToUint16 (const char* s)
 {
   if  (s == NULL)  return 0;
   return (KKB::kkuint16)atol (s);
@@ -146,6 +143,7 @@ void  DataBase::WriteBuff (char*        dest,
   }
   return;
 }
+
 
 
 #if defined(WIN32)
@@ -255,13 +253,8 @@ void  DataBase::InitializeDataBaseStaticVariables ()
     if  (!staticVariablesInialized)
     {
       KKStr  picesHomeDir = PicesVariables::HomeDir ();
-      if  (picesHomeDir.Empty ())
-      {
-        KKStr  errMsg = "DataBase::InitializeDataBaseStaticVariables    ***ERROR***       Can not locate the PICES home directory.    Please make sure that the Environment variable \"PicesHomeDir\" is set to the correct location.";
-        cerr << endl << errMsg << endl << endl;
-        osDisplayWarning (errMsg);
-        exit (-1);
-      }
+
+      KKCheck (!picesHomeDir.Empty (), "DataBase::InitializeDataBaseStaticVariables  picesHomeDir empty; environment variable \"PicesHomeDir\" is set.")
 
       mySqlHomeDir = osAddSlash (osAddSlash (picesHomeDir) + "MySql");
       mySqlDataDir = osAddSlash (mySqlHomeDir) + "data";
@@ -305,7 +298,6 @@ void  DataBase::InitializeMySqlLibraryServer ()
     }
   }
 }  /* InitializeMySqlLibraryServer */
-
 
 
 
@@ -372,52 +364,7 @@ void  DataBase::InitializeMySqlLibraryEmbedded ()
   delete  server_options[2];
   delete  server_options;
   server_options = NULL;
-
-
-  // The following code is attempting to duplicate a bug with "mysql_library_end" where it hangs under normal operation.
-  /*
-  RunLogPtr  runLog = new RunLog ();
-
-  DataBasePtr dbConnFirstOne = new DataBase (*runLog);
-
-  DataBasePtr dbConn = new DataBase (*runLog);
-
-  SipperCruiseListPtr cruises = dbConn->SipperCruiseLoadAllCruises ();
-
-  MLClassListPtr  classes = dbConn->MLClassLoadList ();
-
-  DataBaseImageGroupListPtr  imageGroups = dbConn->ImageGroupLoad ();   // returns a list of all Group Assignments
-
-  SipperStationListPtr  stations = dbConn->SipperStationLoad ("SD01");
-
-  SipperDeploymentListPtr  deployments = dbConn->SipperDeploymentLoad ("SD01",
-                                                                       "06day"
-                                                                      );
-
-  delete  dbConnFirstOne;  dbConnFirstOne = NULL;
-
-  delete  dbConn;  dbConn = NULL;
-
-
-  ThreadEnd ();
-
-
-  try  {mysql_library_end ();}
-  catch  (std::exception  e1)
-  {
-    cerr << endl << "DataBase::FinalCleanUp    ***EXCEPTION***    " << e1.what () << endl << endl;
-  }
-  catch  (...)
-  {
-    cerr << endl << "DataBase::FinalCleanUp    ***EXCEPTION***    " << endl << endl;
-  }
-
-  delete  runLog;  runLog = NULL;
-*/
-
-
 }  /* InitializeMySqlLibraryEmbedded */
-
 
 
 
@@ -452,11 +399,9 @@ void  DataBase::FinalCleanUp ()
 
   // If you made it this far; then you are the thread that has to clean up the 'DataBase' static variables.
   staticVariablesInialized = false;
-  DataBaseIndex::iterator  idx;
-  for  (idx = existingInstances.begin ();  idx != existingInstances.end ();  ++idx)
+  for  (auto idx: existingInstances)
   {
-    DataBasePtr  db = idx->first;
-    db->Close ();
+    idx.first->Close ();
   }
 
   existingInstances.clear ();
@@ -525,7 +470,6 @@ void   DataBase::DataBaseDeleteInstance (DataBasePtr  _instance)
 
 
 
-
 DataBase::DataBase (RunLog&  _log):
   allowUpdates      (false),
   conn              (NULL),
@@ -591,7 +535,6 @@ DataBase::DataBase (DataBaseServerConstPtr  _server,
 
 
 
-
 DataBase::~DataBase ()
 {
   CreateBlocker ();
@@ -608,7 +551,6 @@ DataBase::~DataBase ()
 
 
 
-
 void  DataBase::Close ()
 {
   CreateBlocker ();
@@ -622,7 +564,6 @@ void  DataBase::Close ()
 
   blocker->EndBlock ();
 }  /* Close */
-
 
 
 
@@ -689,7 +630,6 @@ DataBaseServerPtr  DataBase::GetDefaultServer (RunLog&  _log)
 
 
 
-
 DataBaseServerPtr  DataBase::GetServer (const KKStr&  description,
                                         RunLog&       _log
                                        )
@@ -714,7 +654,6 @@ DataBaseServerPtr  DataBase::GetServer (const KKStr&  description,
 
 
 
-
 KKStr  DataBase::ServerDescription ()  const
 {
   if  (server == NULL)
@@ -726,7 +665,6 @@ KKStr  DataBase::ServerDescription ()  const
 
   return  description;
 }  /* ServerDescription */
-
 
 
 
@@ -746,7 +684,6 @@ KKB::kkint32  DataBase::Connect ()
 
   return  returnCd;
 }  /* Connect */
-
 
 
 
@@ -775,7 +712,7 @@ KKB::kkint32  DataBase::ConnectEmbedded ()
 
   //kkuint32  timeOut = 120;
   //kkint32 returnCd = mysql_options (conn, MYSQL_OPT_CONNECT_TIMEOUT, (const char*)(&timeOut)); 
-  kkint32 returnCd = mysql_options (conn, MYSQL_OPT_USE_EMBEDDED_CONNECTION, NULL); 
+  mysql_options (conn, MYSQL_OPT_USE_EMBEDDED_CONNECTION, NULL); 
 
   MYSQL*  returnMYSQLstruct = 
         mysql_real_connect (conn,                /* pointer to connection handler */
@@ -783,9 +720,9 @@ KKB::kkint32  DataBase::ConnectEmbedded ()
                             server->UserName     ().Str (),
                             server->PassWord     ().Str (),
                             server->DataBaseName ().Str (), /* Database Name                 */
-                            0,                        /* port (use default)            */
-                            NULL,                     /* socket (use default)          */
-                            CLIENT_MULTI_STATEMENTS   /* flags (none)                  */
+                            0,                              /* port (use default)            */
+                            NULL,                           /* socket (use default)          */
+                            CLIENT_MULTI_STATEMENTS         /* flags (none)                  */
                            );
 
   if  (returnMYSQLstruct == NULL)
@@ -841,7 +778,7 @@ KKB::kkint32  DataBase::ConnectServer ()
   //kkuint32  timeOut = 120;
   //kkint32 returnCd = mysql_options (conn, MYSQL_OPT_CONNECT_TIMEOUT, (const char*)(&timeOut)); 
   //http://www.linuxtopia.org/online_books/database_guides/mysql_5.1_database_reference_guide/mysql-options.html
-  kkint32 returnCd = mysql_options (conn, MYSQL_OPT_USE_REMOTE_CONNECTION, NULL); 
+  mysql_options (conn, MYSQL_OPT_USE_REMOTE_CONNECTION, NULL); 
 
   MYSQL*  returnMYSQLstruct = NULL;
 
@@ -900,7 +837,6 @@ KKB::kkint32  DataBase::ConnectServer ()
 
 
 
-
 DataBaseServerPtr  DataBase::GetDefaultMySqlParameters ()
 {
   DataBaseServerPtr  defaultParameters = NULL;
@@ -922,7 +858,6 @@ DataBaseServerPtr  DataBase::GetDefaultMySqlParameters ()
 
   return  defaultParameters;
 }  /* GetDefaultMySqlParameters */
-
 
 
 
@@ -1039,7 +974,6 @@ bool   DataBase::ResultSetGetNext (const char**  fieldNames)
 
 
 
-
 void DataBase::ResulSetFree ()
 {
   if  (resultSet)
@@ -1081,7 +1015,6 @@ void  DataBase::ResultSetsClear ()
 
 
 
-
 /**
  *@brief  Returns an array with the indirection index for each field listed in fieldNames.
  *@details
@@ -1120,7 +1053,6 @@ void  DataBase::ResultSetBuildFieldIndexTable (ConstCharStarArray   fieldNames)
 
   return;
 }  /* ResultSetBuildFieldIndexTable */
-
 
 
   
@@ -1225,12 +1157,12 @@ KKStr  DataBase::ResultSetGetKKStrField (kkuint32 fieldIdx)
 }
 
 
+
 char  DataBase::ResultSetGetCharField (kkuint32 fieldIdx)
 {
   KKStr  s = ResultSetGetField (fieldIdx);
   return  s[0];
 }
-
 
 
 
@@ -1243,11 +1175,11 @@ bool  DataBase::ResultSetGetBool (kkuint32 fieldIdx)
 
 
 
-
 float  DataBase::ResultSetGetFloatField (kkuint32 fieldIdx)
 {
   return  CharStarToFloat (ResultSetGetField (fieldIdx));
 }
+
 
 
 DateTime  DataBase::ResultSetGetDateTimeField (kkuint32 fieldIdx)
@@ -1256,10 +1188,12 @@ DateTime  DataBase::ResultSetGetDateTimeField (kkuint32 fieldIdx)
 }
 
 
+
 TimeType  DataBase::ResultSetGetTimeField (kkuint32 fieldIdx)
 {
   return  TimeFromMySqlDateTimeField (ResultSetGetField (fieldIdx));
 }
+
 
 
 double  DataBase::ResultSetGetDoubleField (kkuint32 fieldIdx)
@@ -1268,10 +1202,12 @@ double  DataBase::ResultSetGetDoubleField (kkuint32 fieldIdx)
 }
 
 
+
 KKB::kkint32 DataBase::ResultSetGetIntField (kkuint32 fieldIdx)
 {
   return  CharStarToInt32 (ResultSetGetField (fieldIdx));
 }
+
 
 
 KKB::kkint64  DataBase::ResultSetGetInt64Field    (kkuint32 fieldIdx)
@@ -1280,10 +1216,12 @@ KKB::kkint64  DataBase::ResultSetGetInt64Field    (kkuint32 fieldIdx)
 }
 
 
+
 KKB::kkuint32 DataBase::ResultSetGetUintField (kkuint32 fieldIdx)
 {
   return  CharStarToUint32 (ResultSetGetField (fieldIdx));
 }
+
 
 
 KKB::kkuint16 DataBase::ResultSetGetUint16Field (kkuint32 fieldIdx)
@@ -1292,10 +1230,12 @@ KKB::kkuint16 DataBase::ResultSetGetUint16Field (kkuint32 fieldIdx)
 }
 
 
+
 KKB::ulong   DataBase::ResultSetGetUlongField (kkuint32 fieldIdx)
 {
   return  CharStarToUlong (ResultSetGetField (fieldIdx));
 }
+
 
 
 KKB::kkuint64 DataBase::ResultSetGetUint64Field (kkuint32 fieldIdx)
@@ -1321,10 +1261,8 @@ KKB::DateType  DataBase::DateFromMySqlDateTimeField (KKStr  field)
   if  ((year < 1900)  || (year > 2199)  ||  (month < 1)  ||  (month > 12)  || (day < 1)  || (day > 31))
     return DateType (1900, 1, 1);
 
-  return  DateType (year, month, day);
+  return  DateType ((kkuint16)year, (uchar)month, (uchar)day);
 }  /* DateFromMySqlDateTimeField */
-
-
 
 
 
@@ -1336,12 +1274,10 @@ DateTime  DataBase::DateTimeFromMySqlDateTimeField (KKStr  field)
   KKStr  hourStr   = field.ExtractToken (":");
   KKStr  minStr    = field.ExtractToken (":");
   
-  DateTime result ((kkuint32) yearStr.ToInt (),  (uchar)monthStr.ToInt (), (uchar)dayStr.ToInt (), 
-                   (uchar)hourStr.ToInt (),  (uchar)minStr.ToInt (),   (uchar)field.ToInt ());
+  DateTime result ((kkuint16)yearStr.ToInt (),  (uchar)monthStr.ToInt (), (uchar)dayStr.ToInt (), 
+                   (uchar)hourStr.ToInt (),     (uchar)minStr.ToInt (),   (uchar)field.ToInt ());
   return  result;
 }  /* DateTimeFromMySqlField */
-
-
 
 
 
@@ -1363,7 +1299,6 @@ KKStr  DataBase::DateTimeToQuotedStr (const DateTime&  dt)
 
 
 
-
 KKStr  DateToQuotedStr (const DateType&  d)
 {
   KKStr  result = "\"" + d.YYYY_MM_DD () + "\"";
@@ -1373,9 +1308,9 @@ KKStr  DateToQuotedStr (const DateType&  d)
 
 
 KKB::kkint32  DataBase::ReConnect (const KKStr&  funcCall,
-                                 const KKStr&  queryStrMsg,
-                                 kkint32       numReTries
-                                )
+                                   const KKStr&  queryStrMsg,
+                                   kkint32       numReTries
+                                  )
 {
   // We will attempt to reconnect to the server 
   KKStr  l (256);
@@ -1468,8 +1403,6 @@ KKB::kkint32  DataBase::QueryStatement (const char* queryStr,
 
   kkint32  outOfSeqLoopCount = 0;
 
-  kkint32  attempt = 1;
-
   while  (true)
   {
     kkint32 returnCd = mysql_real_query (conn, queryStr, queryStrLen);
@@ -1555,14 +1488,11 @@ KKB::kkint32  DataBase::QueryStatement (const char* queryStr,
 
 
 
-
 KKB::kkint32  DataBase::QueryStatement2 (const char*  queryStr,
-                                       kkint32      queryStrLen
-                                      )
+                                         kkint32      queryStrLen
+                                        )
 {
   ValidateConnection ("QueryStatement2");
-
-  kkint32  outOfSeqLoopCount = 0;
 
   kkint32 returnCd = mysql_real_query (conn, queryStr, queryStrLen);
   if  (returnCd != 0)
@@ -1770,8 +1700,7 @@ void  DataBase::FeatureDataCreateTable ()
                   << "  ImageFileName    varchar(32)   not null,"   << endl
                   << "  SipperFileName   char (14)     not null,"   << endl;
 
-  kkint32  fieldNum = 0;
-  for  (fieldNum = 0;  fieldNum < FeatureFileIOPices::PlanktonMaxNumOfFields ();  fieldNum++)
+  for  (kkuint32 fieldNum = 0;  fieldNum < FeatureFileIOPices::PlanktonMaxNumOfFields ();  fieldNum++)
   {
     KKStr  fieldName = FeatureFileIOPices::PlanktonFieldName (fieldNum);
     if  (!fieldName.Empty ())
@@ -1817,7 +1746,7 @@ void  DataBase::FeatureDataInsertRow (const KKStr&          _sipperFileName,
 
   KKStr  insertStatement (3000);
   insertStatement << "call  FeatureDataInsert(" << imageFileName.QuotedStr () << ", " << sipperFileName.QuotedStr ();
-  for  (kkint32 fieldNum = 0;  fieldNum < example.NumOfFeatures ();  fieldNum++)
+  for  (kkuint32 fieldNum = 0;  fieldNum < example.NumOfFeatures ();  fieldNum++)
   {
     double f = example.FeatureData (fieldNum);
     if  ((IsNaN (f))  ||  (!IsFinite (f)))
@@ -1827,25 +1756,21 @@ void  DataBase::FeatureDataInsertRow (const KKStr&          _sipperFileName,
   }
   insertStatement << ")";
 
-  kkint32  returnCd = QueryStatement (insertStatement);
+  QueryStatement (insertStatement);
   ResultSetsClear ();
 }  /* FeatureDataInsertRow */
 
 
 
-
 KKB::kkint32  LookUpFeatureDataField (const KKStr& fieldName)
 {
-  KKB::kkint32  fieldNum = 0;
-  for  (fieldNum = 0;  fieldNum < FeatureFileIOPices::PlanktonMaxNumOfFields ();  fieldNum++)
+  for  (kkuint32 fieldNum = 0;  fieldNum < FeatureFileIOPices::PlanktonMaxNumOfFields ();  fieldNum++)
   {
     if  (fieldName == FeatureFileIOPices::PlanktonFieldName (fieldNum))
       return  fieldNum;
   }
   return -1;
 }  /* LookUpFeatureDataField */
-
-
 
 
 char**   DataBase::featureDataFieldNames = NULL;
@@ -1887,7 +1812,7 @@ ConstCharStarArray  DataBase::GetFeatureDataFieldNames ()
   fieldNames[14] = STRDUP ("CtdDateTime");
   fieldNames[15] = STRDUP ("AreaMM");
    
-  kkint32  fieldNum = 0;
+  kkuint32  fieldNum = 0;
   for  (fieldNum = 0;  fieldNum < FeatureFileIOPices::PlanktonMaxNumOfFields ();  fieldNum++)
     fieldNames[16 + fieldNum] = STRDUP (FeatureFileIOPices::PlanktonFieldName (fieldNum).Str ());
   fieldNames[16 + fieldNum] = NULL;
@@ -1896,8 +1821,6 @@ ConstCharStarArray  DataBase::GetFeatureDataFieldNames ()
   blocker->EndBlock ();
   return  featureDataFieldNames;
 }  /* GetFeatureDataFieldNames */
-
-
 
 
 
@@ -1912,7 +1835,7 @@ ImageFeaturesListPtr  DataBase::FeatureDataProcessResults ()
   if  (!resultSetMore)
     return  NULL;
 
-  ImageFeaturesListPtr  results = new ImageFeaturesList (featureFileDesc, true, resultSetNumRows);
+  ImageFeaturesListPtr  results = new ImageFeaturesList (featureFileDesc, true);
 
   kkuint32  topLeftRow  = 0;
   kkuint32  topLeftCol  = 0;
@@ -1921,10 +1844,9 @@ ImageFeaturesListPtr  DataBase::FeatureDataProcessResults ()
   kkint32  class1Id = -1;
   KKStr    classNameValidated (64);
   kkint32  classValidatedId = -1;
-  float    class1Prob = 0.0f;
-  float    class2Prob = 0.0f;
-
-  float  imagesDepth = 0.0f;
+  float    class1Prob  = 0.0f;
+  float    class2Prob  = 0.0f;
+  float    imagesDepth = 0.0f;
 
   KKB::DateTime  ctdDateTime;
 
@@ -1948,7 +1870,7 @@ ImageFeaturesListPtr  DataBase::FeatureDataProcessResults ()
     i->CtdDateTime (ResultSetGetDateTimeField (14));
     i->AreaMMSquare (ResultSetGetFloatField   (15));
 
-    for  (kkint32 fieldNum = 0;  fieldNum < FeatureFileIOPices::PlanktonMaxNumOfFields ();  fieldNum++)
+    for  (kkuint32 fieldNum = 0;  fieldNum < FeatureFileIOPices::PlanktonMaxNumOfFields ();  fieldNum++)
       i->FeatureData (fieldNum, ResultSetGetFloatField (16 + fieldNum));
 
     if  (class1Id == 0)
@@ -2081,14 +2003,13 @@ ImageFeaturesPtr   DataBase::FeatureDataRecLoad (DataBaseImagePtr  image)
  *@param[in] reExtractInstrumentData:  True indicates to re-extract feature data from the original SipperFile and update InmstrumentData tables.
  *@param[in] cancelFlag                Flag will be monitored;  if turns true the method will return at 1st chance.
  */
-ImageFeaturesListPtr  DataBase::FeatureDataGetOneSipperFile (const KKStr&     sipperFileName,
-                                                             MLClassPtr       mlClass,
-                                                             char             classKeyToUse,
-                                                             bool             reExtractInstrumentData,
-                                                             bool&            cancelFlag
+ImageFeaturesListPtr  DataBase::FeatureDataGetOneSipperFile (const KKStr&   sipperFileName,
+                                                             MLClassPtr     mlClass,
+                                                             char           classKeyToUse,
+                                                             bool           reExtractInstrumentData,
+                                                             VolConstBool&  cancelFlag
                                                             )
 {
-  SipperFilePtr  sipperFile = NULL;
   InstrumentDataListPtr  instrumentData = NULL;
 
   KKStr  classKeyToUseStr = "";
@@ -2168,13 +2089,10 @@ ImageFeaturesListPtr  DataBase::FeatureDataGetOneSipperFile (const KKStr&     si
 
 
 
-
-
-
 ImageFeaturesListPtr  DataBase::FeatureDataForImageGroup (const DataBaseImageGroupPtr  imageGroup,
                                                           MLClassPtr                   mlClass,
                                                           char                         classKeyToUse,
-                                                          const bool&                  cancelFlag
+                                                          VolConstBool&                cancelFlag
                                                          )
 {
   if  (imageGroup == NULL)
@@ -2190,8 +2108,6 @@ ImageFeaturesListPtr  DataBase::FeatureDataForImageGroup (const DataBaseImageGro
   KKStr  classKeyToUseStr = "";
   classKeyToUseStr.Append (classKeyToUse);
 
-  InstrumentDataListPtr  instrumentData = NULL;
-
   KKStr  selectStr (256);
 
   if  (mlClass)
@@ -2205,7 +2121,7 @@ ImageFeaturesListPtr  DataBase::FeatureDataForImageGroup (const DataBaseImageGro
                                                      << ")";
 
   kkint32  returnCd = QueryStatement (selectStr);
-  if  (returnCd != 0)
+  if  ((returnCd != 0)  ||  cancelFlag)
     return NULL;
 
   ImageFeaturesListPtr results = FeatureDataProcessResults ();
@@ -2213,7 +2129,6 @@ ImageFeaturesListPtr  DataBase::FeatureDataForImageGroup (const DataBaseImageGro
 
   return  results;
 }  /* FeatureDataForImageGroup */
-
 
 
 
@@ -2230,7 +2145,7 @@ void   DataBase::FeatureDataUpdate (DataBaseImagePtr  dataBaseImage,
   KKStr  updateStr (3072);
 
   updateStr << "update FeatureData set ";
-  for  (kkint32 featureNum = 0;  featureNum < example->NumOfFeatures ();  featureNum++)
+  for  (kkuint32 featureNum = 0;  featureNum < example->NumOfFeatures ();  featureNum++)
   {
     if  (featureNum > 0)
       updateStr << ", ";
@@ -2247,9 +2162,8 @@ void   DataBase::FeatureDataUpdate (DataBaseImagePtr  dataBaseImage,
     updateStr << "  where ImageId = (select  ImageId from Images where ImageFileName = " << rootImageName.QuotedStr () << ")";
   }
 
-  kkint32  returnCd = QueryStatement (updateStr);
+  QueryStatement (updateStr);
 }  /* FeatureDataUpdate */
-
 
 
 
@@ -2274,7 +2188,8 @@ void   DataBase::FeatureDataUpdateInstrumentDataFields (const KKStr&       image
             << instumentData->Oxygen    () << ", "
             << instumentData->Fluorescence ()
             << ")";
-  kkint32  returnCd = QueryStatement (updateStr);
+  
+  QueryStatement (updateStr);
 
   ResultSetsClear ();
 }  /* FeatureDataUpdateInstrumentDataFields */
@@ -2284,7 +2199,7 @@ void   DataBase::FeatureDataUpdateInstrumentDataFields (const KKStr&       image
 vector<KKB::ulong>*  DataBase::FeatureDataGetScanLinesPerMeterProfile (const KKStr&  sipperFileName)
 {
   KKStr  selectStr = "Call FeatureDataGetScanLinesPerMeterProfile (" + osGetRootName (sipperFileName).QuotedStr () + ")";
-  kkint32  returnCd = QueryStatement (selectStr);
+  QueryStatement (selectStr);
 
   char const *  fieldNames[] = {"StartDepth", "ScanLineCount", NULL};
   ResultSetLoad (fieldNames);
@@ -2307,10 +2222,6 @@ vector<KKB::ulong>*  DataBase::FeatureDataGetScanLinesPerMeterProfile (const KKS
     
   return  results;
 }  /* FeatureDataGetScanLinesPerMeterProfile*/
-
-
-
-
 
 
 
@@ -2376,8 +2287,7 @@ void    DataBase::GpsDataInsert (const KKStr&         cruiseName,
                                              StrFormatDouble (gpsData.SpeedOverGround (), "##0.0000")   +
                                         ")";
   
-  kkint32  returnCd = QueryStatement (insertStr);
-  bool  successful = (returnCd == 0);
+  QueryStatement (insertStr);
 
   ResultSetsClear ();
 }  /* GpsDataInsert */
@@ -2430,10 +2340,6 @@ GPSDataPointListPtr   DataBase::GpsDataQueryByIntervals (const KKStr&     cruise
 
 
 
-
-
-
-
 void  DataBase::GpsDataDelete (const KKStr&     cruiseName,
                                const DateTime&  utcDateTimeStart,
                                const DateTime&  utcDateTimeEnd
@@ -2444,12 +2350,10 @@ void  DataBase::GpsDataDelete (const KKStr&     cruiseName,
                                             utcDateTimeEnd.YYYY_MM_DD_HH_MM_SS ().QuotedStr   () + ", " +
                                          ")";
   
-  kkint32  returnCd = QueryStatement (queryStr);
+  QueryStatement (queryStr);
   ResultSetsClear ();
   return;
 }  /* GpsDataDelete */
-
-
 
 
 
@@ -2512,7 +2416,7 @@ MLClassListPtr   DataBase::MLClassProcessResults ()
 
 
 
-MLClassPtr       DataBase::MLClassLoad (const KKStr&  className)
+MLClassPtr  DataBase::MLClassLoad (const KKStr&  className)
 {
   KKStr  selectStr (128);
 
@@ -2539,7 +2443,6 @@ MLClassPtr       DataBase::MLClassLoad (const KKStr&  className)
   classes = NULL;
   return result;
 }  /* MLClassLoad */
-
 
 
 
@@ -2576,7 +2479,7 @@ MLClassListPtr  DataBase::MLClassLoadList ()
   {
     kkint32  classId     = ResultSetGetIntField (0);
     KKStr    className   = ResultSetGetField    (1);
-    kkint32  parentId    = ResultSetGetIntField (2);
+    //kkint32  parentId    = ResultSetGetIntField (2);
     KKStr    parentName  = ResultSetGetField    (3);
     KKStr    description = ResultSetGetField    (4);
     bool     mandatory   = ResultSetGetBool     (5);
@@ -2778,7 +2681,6 @@ void  DataBase::MLClassUpdate (const KKStr&    oldClassName,
 
 
 
-
 void  DataBase::MLClassDelete (const KKStr&  mlClassName)
 {
   if  (!allowUpdates)
@@ -2788,12 +2690,9 @@ void  DataBase::MLClassDelete (const KKStr&  mlClassName)
   }
 
   KKStr  deleteStr = "Call MLClassDelete(" + mlClassName.QuotedStr () + ")";
-  kkint32  returnCd = QueryStatement (deleteStr);
+  QueryStatement (deleteStr);
   ResultSetsClear ();
 }
-
-
-
 
 
 
@@ -2804,7 +2703,6 @@ void  DataBase::MLClassDelete (const KKStr&  mlClassName)
 //*****************************************************************************************
 //*****************************************************************************************
 //*****************************************************************************************
-
 
 KKB::uchar*  DataBase::EncodeARasterImageIntoAThumbNail (const RasterSipper&  image,
                                                          kkuint32             maxDimSizeAllowed,
@@ -2835,8 +2733,6 @@ KKB::uchar*  DataBase::EncodeARasterImageIntoAThumbNail (const RasterSipper&  im
   
   return  compressedBuff;
 }  /* EncodeARasterImageIntoAThumbNail */
-
-
 
 
 
@@ -2978,8 +2874,6 @@ void  DataBase::ImageInsert (const RasterSipper&  image,
 
 
 
-
-
 void  DataBase::ImagesEraseSipperFile (const KKStr&  _sipperFileName)
 {
   if  (!allowUpdates)
@@ -2998,15 +2892,14 @@ void  DataBase::ImagesEraseSipperFile (const KKStr&  _sipperFileName)
 
 
 
-
 /**
  *@brief  Will remove all images and associated data for a specified SipperFile that are within the specified size range from the database.
  *@details Will also delete all Instrument data for the specified SIPPER file on the assumption that the calling procedure 
  * is going to re-extract instrument data.
  */
-void  DataBase::ImagesEraseSipperFileSizeRange (const   KKStr&  _sipperFileName,
-                                                kkuint32        _minSize,
-                                                kkuint32        _maxSize
+void  DataBase::ImagesEraseSipperFileSizeRange (const KKStr&  _sipperFileName,
+                                                kkuint32      _minSize,
+                                                kkuint32      _maxSize
                                                )
 {
   if  (!allowUpdates)
@@ -3029,7 +2922,6 @@ void  DataBase::ImagesEraseSipperFileSizeRange (const   KKStr&  _sipperFileName,
   returnCd = QueryStatement (queryStr);
   ResultSetsClear ();
 }  /* ImagesEraseSipperFileSizeRange */
-
 
 
 
@@ -3066,7 +2958,6 @@ ClassStatisticListPtr  DataBase::ImageProcessClassStaticsResults ()
 
 
 
-
 ClassStatisticListPtr  DataBase::ImageGetClassStatistics (DataBaseImageGroupPtr  imageGroup,
                                                           const KKStr&           sipperFileName,
                                                           MLClassPtr             mlClass,
@@ -3085,7 +2976,6 @@ ClassStatisticListPtr  DataBase::ImageGetClassStatistics (DataBaseImageGroupPtr 
 
   KKStr  classKeyToUseStr = "";
   classKeyToUseStr.Append (classKeyToUse);
-
 
   KKStr  className = "";
   if  (mlClass)
@@ -3113,7 +3003,6 @@ ClassStatisticListPtr  DataBase::ImageGetClassStatistics (DataBaseImageGroupPtr 
  
   return  stats;
 }  /* ImageGetClassStatistics */
-
 
 
 
@@ -3160,7 +3049,6 @@ ClassStatisticListPtr  DataBase::ImageGetClassStatistics (DataBaseImageGroupPtr 
 
   return  stats;
 }  /* ImageGetClassStatistics */
-
 
 
 
@@ -3233,7 +3121,6 @@ VectorUint*  DataBase::ImageGetDepthStatistics (DataBaseImageGroupPtr  imageGrou
 
   return  counts;
 }  /* ImageGetDepthStatistics */
-
 
 
 
@@ -3335,7 +3222,7 @@ DataBaseImageListPtr  DataBase::ImageQueryProcessResults ()
     // Build Field Index
     MYSQL_FIELD *field;
     kkint32  idx = 0;
-    while  ((field = mysql_fetch_field (resultSet)))
+    while  ((field = mysql_fetch_field (resultSet)) != NULL)
     {
       KKStr  fieldName = field->name;
       if  (fieldName.CompareIgnoreCase ("ImageId") == 0)
@@ -3420,15 +3307,10 @@ DataBaseImageListPtr  DataBase::ImageQueryProcessResults ()
     }
   }
 
-  kkuint32 numFields = resultSetNumFields;
-
   kkuint32 imageId            = 0;
   kkint32  class1Id           = -1;
-  KKStr  class1Name         = "";
   kkint32  class2Id           = -1;
-  KKStr  class2Name         = "";
   kkint32  classValidatedId   = -1;
-  KKStr  classNameValidated = "";
 
   while  (ResultSetFetchNextRow ())
   {
@@ -3436,11 +3318,8 @@ DataBaseImageListPtr  DataBase::ImageQueryProcessResults ()
     DataBaseImagePtr  i = new DataBaseImage ();
 
     class1Id           = -1;
-    class1Name         = "";
     class2Id           = -1;
-    class2Name         = "";
     classValidatedId   = -1;
-    classNameValidated = "";
     imageId            = 0;
 
     if  (imageIdIdx >= 0)
@@ -3668,7 +3547,7 @@ DataBaseImagePtr  DataBase::ImageLoad (const KKStr&   imageFileName)
 
 DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  group,
                                              bool                   includeThumbnail,
-                                             const bool&            cancelFlag
+                                             VolConstBool&          cancelFlag
                                             )
 {
   if  (!group)
@@ -3680,7 +3559,7 @@ DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  group,
                      ")";
 
   kkint32  returnCd = QueryStatement (selectStr);
-  if  (returnCd != 0)
+  if  ((returnCd != 0)  ||  cancelFlag)
     return NULL;
 
   DataBaseImageListPtr results = ImageQueryProcessResults ();
@@ -3689,7 +3568,7 @@ DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  group,
 
   return  results;
 }  /* ImagesQuery */
-    
+
 
 
 DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  imageGroup,
@@ -3703,9 +3582,9 @@ DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  imageGroup,
                                              float                  depthMin,
                                              float                  depthMax,
                                              kkuint32               restartImageId,
-                                             kkint32                limit,            // Max # of rows 2 return.  -1 indicates no limit.
+                                             OptionUInt32           limit,            // Max # of rows 2 return.  -1 indicates no limit.
                                              bool                   includeThumbnail,
-                                             const bool&            cancelFlag
+                                             VolConstBool&          cancelFlag
                                             )
 {
   KKStr  selectStr(512);
@@ -3716,8 +3595,7 @@ DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  imageGroup,
   KKStr  classNameStr = ((mlClass == NULL) ? "" : mlClass->Name ());
   KKStr  classKeyToUseStr = "";
   classKeyToUseStr.Append (classKeyToUse);
-
-
+  
   selectStr << "call  ImagesQuery("  
             << groupNameStr.QuotedStr     ()  << ", "
             << sipperFileName.QuotedStr   ()  << ", " 
@@ -3727,14 +3605,14 @@ DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  imageGroup,
             << sizeMin  << ", " << sizeMax    << ", "
             << depthMin << ", " << depthMax   << ", "
             << restartImageId                 << ", "
-            << limit                          << ", "  
+            << (limit ? limit.value () : -1)  << ", "  
             << (includeThumbnail ? "true" : "false")
             << ")";
    
   kkint32  returnCd = QueryStatement (selectStr);
-  if  (returnCd != 0)
+  if  ((returnCd != 0)  ||  cancelFlag)
     return NULL;
-
+    
   DataBaseImageListPtr results = ImageQueryProcessResults ();
 
   ResultSetsClear ();
@@ -3757,7 +3635,7 @@ DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  imageGroup,
                                              float                  depthMin,
                                              float                  depthMax,
                                              kkuint32               restartImageId,
-                                             kkint32                limit,            // Max # of rows to return.  -1 indicates no limit.,
+                                             OptionUInt32           limit,            // Max # of rows to return.  -1 indicates no limit.,
                                              bool                   includeThumbnail,
                                              const bool&            cancelFlag
                                             )
@@ -3768,13 +3646,13 @@ DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  imageGroup,
   if  (!sipperFiles)
     return NULL;
 
-  kkint32  totalImagesLoaded = 0;
+  kkuint32  totalImagesLoaded = 0;
   DataBaseImageListPtr  images = new DataBaseImageList (true);
 
   VectorKKStr::iterator  idx;
   for  (idx = sipperFiles->begin ();  (idx != sipperFiles->end ())  &&  (images->QueueSize () < limit)  &&  (!cancelFlag);  idx++)
   {
-    kkint32 limitLeft = (limit < 0) ? -1 : limit - images->QueueSize ();
+    OptionUInt32 limitLeft = (!limit) ? limit : limit - images->QueueSize ();
     DataBaseImageListPtr  imagesForOneSipperFile = ImagesQuery (imageGroup,
                                                                 *idx,           mlClass,  classKeyToUse,
                                                                 probMin,        probMax, 
@@ -3874,7 +3752,7 @@ DataBaseImageListPtr  DataBase::ImagesQueryForScanLineRange (const KKStr&   sipp
 {
   KKStr selectStr = "call ImagesQueryForScanLineRange(" + sipperFileName.QuotedStr ()            + ", "
                                                         + StrFormatInt (scanLineStart, "ZZZZZ0") + ", "
-                                                        + StrFormatInt (scanLineStart, "ZZZZZ0") +
+                                                        + StrFormatInt (scanLineEnd,   "ZZZZZ0") +
                                                       ")";
 
   kkint32  returnCd = QueryStatement (selectStr);
@@ -3984,7 +3862,7 @@ VectorKKStr*   DataBase::ImageListOfImageFileNamesByScanLineRange (const KKStr& 
 {
   KKStr selectStr = "call ImagesImageFileNamesByScanLineRange(" + sipperFileName.QuotedStr ()            + ", "
                                                                 + StrFormatInt (scanLineStart, "ZZZZZ0") + ", "
-                                                                + StrFormatInt (scanLineStart, "ZZZZZ0") +
+                                                                + StrFormatInt (scanLineEnd,   "ZZZZZ0") +
                                                              ")";
 
   kkint32  returnCd = QueryStatement (selectStr);
@@ -3998,7 +3876,6 @@ VectorKKStr*   DataBase::ImageListOfImageFileNamesByScanLineRange (const KKStr& 
 
   VectorKKStr*  results = new VectorKKStr ();
 
-  MYSQL_ROW  row = NULL;
   while  (ResultSetFetchNextRow ())
     results->push_back (ResultSetGetField (1));
 
@@ -4040,7 +3917,7 @@ void  DataBase::ImagesUpdatePredictions (const KKStr&     imageFileName,
                                                 << class2Prob                 << ", "
                                                 << logEntryId
                                                 << ")";
-  kkint32  returnCd = QueryStatement (updateStr);
+  QueryStatement (updateStr);
 
   ResultSetsClear ();
 
@@ -4060,7 +3937,7 @@ void  DataBase::ImagesUpdatePredictionsList (kkuint32      _logEntryId,
 
   KKStr  sqlStr (64 + _predictionList.Len ());
   sqlStr << "call  ImagesUpdatePredictionsList(" << _logEntryId << "," << _predictionList.QuotedStr () << ")";
-  kkint32  returnCd = QueryStatement (sqlStr);
+  QueryStatement (sqlStr);
   ResultSetsClear ();
 }  /* ImagesUpdatePredictionsList */
 
@@ -4085,7 +3962,7 @@ void  DataBase::ImagesUpdateValidatedClass (const KKStr&     imageFileName,
             <<                                        mlClass->Name ().QuotedStr () << ", "
             <<                                        "1.0"                                                   
             <<                                 ")";
-  kkint32  returnCd = QueryStatement (updateStr);
+  QueryStatement (updateStr);
   ResultSetsClear ();
 }  /* ImagesUpdateValidatedClass */
 
@@ -4112,7 +3989,7 @@ void  DataBase::ImagesUpdateImageSize (const KKStr&        imageFileName,
             <<                                   sizeCoordinatesStr.QuotedStr () << ", "
             <<                                   imageSize
             <<                             ")";
-  kkint32  returnCd = QueryStatement (updateStr);
+  QueryStatement (updateStr);
   ResultSetsClear ();
 }
 
@@ -4129,7 +4006,7 @@ void  DataBase::ImageRemoveValidation (const KKStr&   imageFileName)
   KKStr  updateStr (512);
 
   updateStr << "call  ImagesRemoveValidation(" << imageFileName.QuotedStr () << ")";
-  kkint32  returnCd = QueryStatement (updateStr);
+  QueryStatement (updateStr);
   ResultSetsClear ();
 }  /* ImageRemoveValidation */
 
@@ -4152,7 +4029,6 @@ DataBaseImageValidatedEntryListPtr
     return  NULL;
 
   DataBaseImageValidatedEntryListPtr  results = new DataBaseImageValidatedEntryList (true);
-  MYSQL_ROW  row = NULL;
   while  (ResultSetFetchNextRow ())
   {
     KKStr  imageFileName = ResultSetGetField (1);
@@ -4175,8 +4051,6 @@ DataBaseImageValidatedEntryListPtr
 
 
 
-
-
 void  DataBase::ImagesDeleteOneImage (const KKStr&   imageFileName)
 {
   if  (!allowUpdates)
@@ -4188,11 +4062,9 @@ void  DataBase::ImagesDeleteOneImage (const KKStr&   imageFileName)
   KKStr  updateStr (512);
 
   updateStr << "call  ImagesDeleteOneImage(" << imageFileName.QuotedStr () << ")";
-  kkint32  returnCd = QueryStatement (updateStr);
+  QueryStatement (updateStr);
   ResultSetsClear ();
 }  /* ImagesDeleteOneImage */
-
-
 
 
 
@@ -4279,7 +4151,7 @@ void  DataBase::ImageUpdate (DataBaseImage&  dbImage,
   {
     ResultSetsClear ();
     sqlStr = "delete  from  ImagesFullSize  where  ImageId = " + StrFormatInt (dbImage.ImageId (), "ZZZZZZZZ0");
-    kkint32  returnCd = QueryStatement (sqlStr);
+    QueryStatement (sqlStr);
     ResultSetsClear ();
 
     kkint32  maxDim = Max (dbImage.Height (), dbImage.Width ());
@@ -4290,6 +4162,7 @@ void  DataBase::ImageUpdate (DataBaseImage&  dbImage,
     }
   }
 }  /* ImageUpdate */
+
 
 
 void  DataBase::ImagesGetGpsData (const KKStr& imageRootName,
@@ -4310,7 +4183,6 @@ void  DataBase::ImagesGetGpsData (const KKStr& imageRootName,
   if  (!resultSetMore)
     return;
 
-  MYSQL_ROW  row = NULL;
   while  (ResultSetFetchNextRow ())
   {
     latitude  = ResultSetGetDoubleField (0);
@@ -4323,9 +4195,10 @@ void  DataBase::ImagesGetGpsData (const KKStr& imageRootName,
 }  /* ImagesGetGpsData */
 
 
-void  DataBase::ImagesUpdateValidatedAndPredictClass (const KKStr&     imageFileName, 
-                                                      MLClassPtr       mlClass, 
-                                                      float            class1Prob
+
+void  DataBase::ImagesUpdateValidatedAndPredictClass (const KKStr&  imageFileName, 
+                                                      MLClassPtr    mlClass, 
+                                                      float         class1Prob
                                                      )
 {
   if  (!allowUpdates)
@@ -4342,10 +4215,9 @@ void  DataBase::ImagesUpdateValidatedAndPredictClass (const KKStr&     imageFile
             <<                                        mlClass->Name ().QuotedStr () << ", "
             <<                                        class1Prob                                                   
             <<                                 ")";
-  kkint32  returnCd = QueryStatement (updateStr);
+  QueryStatement (updateStr);
   ResultSetsClear ();
 }  /* ImagesUpdateValidatedAndPredictClass*/
-
 
 
 
@@ -4387,11 +4259,6 @@ void  DataBase::ImageUpdateInstrumentDataFields (InstrumentDataPtr  instumentDat
 
   ResultSetsClear ();
 }  /* ImageUpdateInstrumentDataFields */
-
-
-
-
-
 
 
 
@@ -4503,14 +4370,14 @@ void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruise
       startValues.push_back (0.0f);
     }
 
-    else if  (colName.SubStrPart (0, 4) == "Size_")
+    else if  (colName.StartsWith ("Size_"))
     {
       lastEndValue = colName.SubStrPart (5).ToFloat ();
       endValues.push_back (lastEndValue);
       startValues.push_back (lastEndValue);
     }
 
-    else if  (colName.SubStrPart (0, 1) == ">=")
+    else if  (colName.StartsWith (">="))
     {
       lastEndValue = colName.SubStrPart (2).ToFloat ();
       endValues.push_back (lastEndValue);
@@ -4525,10 +4392,6 @@ void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruise
     ++columnIdx;
   }
   endValues.push_back (9999999.99f);
-
-  kkuint32  sizeBucketCount = (kkuint32)startValues.size ();
-
-  kkint32  maxColIdx = Max(downCastIdx, bucketIdx, bucketDepthIdx, imageCountIdx, totalPixelCountIdx, totalFilledAreaIdx, firstSizeBucketIdx);
 
   bool  colDefAllThere = ((downCastIdx        >= 0) &&
                           (bucketIdx          >= 0) &&
@@ -4623,9 +4486,6 @@ void  DataBase::ImagesSizeDistributionByDepth (const KKStr&               cruise
 
 
 
-
-
-
 //*************************************************************************************
 //*                             Image Full SizeRoutines                               *
 //*************************************************************************************
@@ -4670,7 +4530,6 @@ void  DataBase::ImageFullSizeDelete (const KKStr&  imageFileName)
   ResulSetFree ();
   ResultSetsClear ();
 }  /* ImageFullSizeDelete */
-
 
 
 
@@ -4755,9 +4614,6 @@ void   DataBase::ImageFullSizeSave (const KKStr&         imageFileName,
 
 
 
-
-
-
 RasterSipperPtr  DataBase::ImageFullSizeFind (const KKStr&  imageFileName)
 {
   DataBaseImagePtr i = this->ImageLoad (imageFileName);
@@ -4815,6 +4671,7 @@ RasterSipperPtr  DataBase::ImageFullSizeFind (const KKStr&  imageFileName)
 }  /* ImageFullSizeFind */
 
 
+
 RasterSipperPtr  DataBase::ImageFullSizeFindNormalized (const KKStr&             imageFileName,
                                                         SipperFile const *       sipperFile,
                                                         SipperDeployment const * deployment
@@ -4869,11 +4726,10 @@ RasterSipperPtr  DataBase::ImageFullSizeFindNormalized (const KKStr&            
 
     double mmPerPixelAccrossChamber = chamberWidth * mmPerMeter / pixelsPerScanLine;
     double mmPerPixelWithFlow = flowRate1  * mmPerMeter / scanRate;
-    double areaPerPixelMMSquare = mmPerPixelAccrossChamber * mmPerPixelWithFlow;
-
     double flowStretchFactor = mmPerPixelAccrossChamber / mmPerPixelWithFlow;
 
-    auto normalizedImage = r->StreatchImage ((float)flowStretchFactor, 1.0f);
+    delete normalizedImage;
+    normalizedImage = r->StreatchImage ((float)flowStretchFactor, 1.0f);
 
     delete r;
     r = NULL;
@@ -4891,7 +4747,6 @@ RasterSipperPtr  DataBase::ImageFullSizeFindNormalized (const KKStr&            
 
   return normalizedImage;
 };
-
 
 
 
@@ -4918,7 +4773,7 @@ void  DataBase::ImageGroupInsert (DataBaseImageGroup&  imageGroup)
   if  (resultSetNumFields < 1)
   {
     lastMySqlErrorDesc = "ImageGroupId was not returned.";
-    lastMySqlErrorNo   = -1;
+    lastMySqlErrorNo   = 99999;
   }
   else
   {
@@ -4931,7 +4786,6 @@ void  DataBase::ImageGroupInsert (DataBaseImageGroup&  imageGroup)
 
   return;
 }  /* ImageGroupInsert */
-
 
 
 
@@ -4971,9 +4825,6 @@ DataBaseImageGroupPtr  DataBase::ImageGroupLoad (const KKStr&  imageGroupName)  
 
   return  group;
 }  /* ImageGroupLoad */
-
-
-
 
 
 
@@ -5021,7 +4872,6 @@ DataBaseImageGroupListPtr  DataBase::ImageGroupLoad ()   // returns a list of al
 
 
 
-
 void  DataBase::ImageGroupDelete (kkint32 imageGroupId)
 {
   if  (!allowUpdates)
@@ -5044,7 +4894,6 @@ void  DataBase::ImageGroupDelete (kkint32 imageGroupId)
 
 
 
-
 //*************************************************************************************
 //*                               ImageGroupEntries                                   *
 //*************************************************************************************
@@ -5053,12 +4902,10 @@ void  DataBase::ImageGroupEntriesInsert (const DataBaseImageGroupEntry&  imageGr
 {
   KKStr  sqlStr (256);
   sqlStr << "call ImageGroupEntryInsert(" <<  imageGroupEntry.ImageGroupId () << ", " << imageGroupEntry.ImageFileName ().QuotedStr () << ")";
-  kkint32  returnCd = QueryStatement (sqlStr.Str ());
+  QueryStatement (sqlStr.Str ());
 
   return;
 }  /* ImageGroupEntriesInsert */
-
-
 
 
 
@@ -5074,13 +4921,10 @@ void  DataBase::ImageGroupEntriesInsert (const DataBaseImageGroupEntryList&  ima
 
 
 
-
-
 KKStrMatrixPtr  DataBase::ImageGroupEntriesInsert (kkint32             groupId,
                                                    const VectorKKStr&  imageFileNames
                                                   )
 {
-  kkint32  x = 0;
   kkint32  maxParmLen = 60000;  // The stored procedure parameter is limited to 60,000 characters.
   kkint32  sqlStrLen = Min (maxParmLen, (kkint32)(49 * imageFileNames.size ()));  
   sqlStrLen = Max (sqlStrLen, 100);
@@ -5146,8 +4990,6 @@ KKStrMatrixPtr  DataBase::ImageGroupEntriesInsert (kkint32             groupId,
 
 
 
-
-
 DataBaseImageGroupEntryListPtr  DataBase::ImageGroupEntriesLoad (kkint32 groupId)
 {
   KKStr  selectCmd (200);
@@ -5189,7 +5031,7 @@ DataBaseImageGroupEntryListPtr  DataBase::ImageGroupEntriesLoad (kkint32 groupId
   }
 
   MYSQL_ROW  row;
-  while  (row = mysql_fetch_row (resSet))
+  while  ((row = mysql_fetch_row (resSet)) != NULL)
   {
     KKStr  imageFileName = row[0];
     DataBaseImageGroupEntryPtr  entry = new DataBaseImageGroupEntry (groupId, imageFileName);
@@ -5203,16 +5045,9 @@ DataBaseImageGroupEntryListPtr  DataBase::ImageGroupEntriesLoad (kkint32 groupId
 
 
 
-
-
-
 //*************************************************************************************
 //*                           Sipper Deployment Routines                              *
 //*************************************************************************************
-
-
-
-
 
 SipperDeploymentListPtr  DataBase::SipperDeploymentProcessResults ()
 {
@@ -5269,8 +5104,6 @@ SipperDeploymentListPtr  DataBase::SipperDeploymentProcessResults ()
 
 
 
-
-
 SipperDeploymentListPtr  DataBase::SipperDeploymentLoad (const KKStr& cruiseName,
                                                          const KKStr& stationName
                                                         )
@@ -5283,7 +5116,6 @@ SipperDeploymentListPtr  DataBase::SipperDeploymentLoad (const KKStr& cruiseName
 
   return  SipperDeploymentProcessResults ();
 }  /* SipperDeploymentLoad */
-
 
 
 
@@ -5308,9 +5140,6 @@ SipperDeploymentPtr    DataBase::SipperDeploymentLoad (const KKStr&  cruiseName,
 
 
 
-
-
-
 SipperDeploymentListPtr  DataBase::DeploymentLoadByStation (const KKStr& stationName)
 {
   KKStr  sqlStr = "call DeploymentLoadByStation(" + stationName.QuotedStr () + ")";
@@ -5320,8 +5149,6 @@ SipperDeploymentListPtr  DataBase::DeploymentLoadByStation (const KKStr& station
   SipperDeploymentListPtr  results = SipperDeploymentProcessResults ();
   return results;
 }  /* DeploymentLoadByStation */
-
-
 
 
 
@@ -5343,7 +5170,7 @@ void   DataBase::SipperDeploymentInsert (const SipperDeployment&  deployment)
                         StrFormatInt (deployment.CropRight (), "####0")         + ", " +
                         StrFormatDouble (deployment.ChamberWidth (), "##0.0000") + 
                        ")";
-  kkint32  returnCd = QueryStatement (sqlStr);
+  QueryStatement (sqlStr);
   ResultSetsClear ();
 }  /* SipperDeploymentInsert */
 
@@ -5373,10 +5200,9 @@ void   DataBase::SipperDeploymentUpdate (const SipperDeployment&  deployment)
                         StrFormatInt (deployment.CropRight (), "####0")         + ", " + 
                         StrFormatDouble (deployment.ChamberWidth (), "##0.0000") + 
                        ")";
-  kkint32  returnCd = QueryStatement (sqlStr);
+  QueryStatement (sqlStr);
   ResultSetsClear ();
 }  /* SipperDeploymentUpdate */
-
 
 
 
@@ -5396,20 +5222,15 @@ void   DataBase::SipperDeploymentDelete (const KKStr&  cruiseName,
                         stationName.QuotedStr   ()  + ", " +
                         deploymentNum.QuotedStr ()  +
                        ")";
-  kkint32  returnCd = QueryStatement (sqlStr);
+  QueryStatement (sqlStr);
   ResultSetsClear ();
 }  /* SipperDeploymentDelete */
-
-
-
-
 
 
 
 //*******************************************************************************************
 //*                                SipperFile Routines                                      *
 //*******************************************************************************************
-
 
 char const *  DataBase::sipperFileFieldNames[] = 
                        {"SipperFileId",
@@ -5511,9 +5332,8 @@ void  DataBase::SipperFilesUpdateExtractionStatus (const KKStr&  sipperFileName,
   KKStr rootName = osGetRootName (sipperFileName);
 
   sqlStr << "call SipperFilesUpdateExtractionStatus(" << rootName.QuotedStr () << ", \"" << extractionStatus << "\")";
-  kkint32  returnCd = QueryStatement (sqlStr);
+  QueryStatement (sqlStr);
 }  /* SipperFilesUpdateExtractionStatus */
-
 
 
 
@@ -5553,13 +5373,6 @@ void  DataBase::SipperFilesUpdateExtractionStatusIfExpected (const KKStr&  sippe
 
   return;
 }  /* SipperFilesUpdateExtractionStatusIfExpected*/
-
-
-
-
-
-
-
 
 
 
@@ -5620,7 +5433,7 @@ VectorKKStr*  DataBase::SipperFileGetList (const KKStr& cruiseName,
   VectorKKStr*  sipperFiles = new VectorKKStr ();
 
   MYSQL_ROW  row;
-  while  (row = mysql_fetch_row (resSet))
+  while  ((row = mysql_fetch_row (resSet)) != NULL)
   {
     KKStr  sipperFileName (row[0]);
     sipperFiles->push_back (sipperFileName);
@@ -5630,8 +5443,6 @@ VectorKKStr*  DataBase::SipperFileGetList (const KKStr& cruiseName,
 
   return  sipperFiles;
 }  /* SipperFileGetList */
-
-
 
 
 
@@ -5667,9 +5478,6 @@ SipperFileListPtr  DataBase::SipperFileLoad (const KKStr& cruiseName,
 
   return  SipperFileProcessResults ();
 }  /* SipperFileLoad */
-
-
-
 
 
 
@@ -5729,8 +5537,6 @@ void  DataBase::SipperFileInsert (SipperFile&  sipperFile)
 
 
 
-
-
 void   DataBase::SipperFileUpdate (SipperFile&   sipperFile)
 {
   if  (!allowUpdates)
@@ -5769,10 +5575,8 @@ void   DataBase::SipperFileUpdate (SipperFile&   sipperFile)
             << "       ExtractionScanLineEnd   = " << sipperFile.ExtractionScanLineEnd   ()
             << "  where  sf.SipperFileName = " << sipperFile.SipperFileName ().QuotedStr () << endl;
 
-  kkint32  returnCd = QueryStatement (updateStr.Str ());
+  QueryStatement (updateStr.Str ());
 }  /* SipperFileUpdate */
-
-
 
 
 
@@ -5792,10 +5596,8 @@ void   DataBase::SipperFileUpdateFileSizeStats (const KKStr&  _sipperFileName,
   updateStr << "update  SipperFiles  set SizeInBytes = " << _sizeInBytes << ", NumScanLines = " << _numScanLines << endl 
             << "        where SipperFileName = " << _sipperFileName.QuotedStr ();
 
-  kkint32  returnCd = QueryStatement (updateStr.Str ());
+  QueryStatement (updateStr.Str ());
 }  /* SipperFileUpdateFileSizeStats */
-
-
 
 
 
@@ -5834,7 +5636,6 @@ void  DataBase::SipperFilesGetCTDDateTime (const KKStr&  _sipperFileName,
 
 
 
-
 /**
  *@brief  Delete the contents of a single SIPPER file from the database from all tables such as Images, FeatureData, InstrumentData, etc.
  *@param[in]  _sipperFileName  Name of SIPPER file to delete.
@@ -5843,7 +5644,7 @@ void   DataBase::SipperFilesDelete (const KKStr&  _sipperFileName)
 {
   KKStr  updateStr (512);
   updateStr << "call  SipperFilesDelete (" << _sipperFileName.QuotedStr () << ")";
-  kkint32  returnCd = QueryStatement (updateStr.Str ());
+  QueryStatement (updateStr.Str ());
 }
 
 
@@ -5879,8 +5680,6 @@ SipperStationListPtr  DataBase::SipperStationProcessResults ()
 }  /* SipperStationProcessResults */
 
 
- 
-
 
 SipperStationListPtr  DataBase::SipperStationLoad (const KKStr&  cruiseName)
 {
@@ -5896,8 +5695,6 @@ SipperStationListPtr  DataBase::SipperStationLoad (const KKStr&  cruiseName)
 
   return  SipperStationProcessResults ();
 }  /* SipperStationLoad */
-
-
 
 
 
@@ -5931,7 +5728,6 @@ SipperStationPtr  DataBase::SipperStationLoad (const KKStr&  cruiseName,
 
 
 
-
 SipperStationListPtr  DataBase::SipperStationsLoadByGpsRange (double  latitudeMin,
                                                               double  latitudeMax,
                                                               double  longitudeMin,
@@ -5947,8 +5743,6 @@ SipperStationListPtr  DataBase::SipperStationsLoadByGpsRange (double  latitudeMi
 
   return  SipperStationProcessResults ();
 }  /* SipperStationsLoadByGpsRange */
-
-
 
 
 
@@ -5974,7 +5768,6 @@ void   DataBase::SipperStationInsert (const SipperStation&  station)
   if  (returnCd == 0)
     ResultSetsClear ();
 }  /* SipperStationInsert */
-
 
 
 
@@ -6017,7 +5810,6 @@ void  DataBase::SipperStationDelete (const KKStr&  cruiseName,
   if  (returnCd == 0)
     ResultSetsClear ();
 }
-
 
 
 
@@ -6112,8 +5904,6 @@ InstrumentDataListPtr  DataBase::InstrumentDataProcessResults (const bool&  canc
 
 
 
-
-
 InstrumentDataPtr  DataBase::InstrumentDataGetByScanLine (const KKStr&  sipperFileName,
                                                           kkuint32      scanLine
                                                          )
@@ -6137,8 +5927,6 @@ InstrumentDataPtr  DataBase::InstrumentDataGetByScanLine (const KKStr&  sipperFi
 
   return  result;
 }  /* InstrumentDataGetByScanLine */
-
-
 
 
 
@@ -6190,12 +5978,10 @@ void  DataBase::InstrumentDataInsert (const KKStr&            _sipperFileName,
             << id.ActiveColumns          ()
             << ")";
 
-  kkint32  returnCd = QueryStatement (insertStr);
+  QueryStatement (insertStr);
 
   return;
 }  /* InstrumentDataInsert */
-
-
 
 
 
@@ -6220,19 +6006,15 @@ void  DataBase::InstrumentDataUpdateCropSettings (const KKStr&  sipperFileName,
                                                             + StrFormatInt (activeColumns, "ZZZZ0")
                                                       + ")";
                                                             
-  kkint32  returnCd = QueryStatement (sqlStr);
+  QueryStatement (sqlStr);
   ResultSetsClear ();
 }  /* InstrumentDataUpdateCropSettings */
 
 
 
-
-
-
-
 void  DataBase::InstrumentDataSaveListForOneSipperFile (const KKStr&               _sipperFileName,
                                                         const InstrumentDataList&  instrumentData,
-                                                        const bool&                _cancelFlag
+                                                        VolConstBool&              _cancelFlag
                                                        )
 {
   if  (!allowUpdates)
@@ -6254,7 +6036,7 @@ void  DataBase::InstrumentDataSaveListForOneSipperFile (const KKStr&            
   }
 
   KKStr  deleteStr = "call  InstrumentDataDeleteOneSipperFile(" + sipperFileName.QuotedStr () + ")";
-  kkint32  returnCd = QueryStatement (deleteStr);
+  QueryStatement (deleteStr);
   ResultSetsClear ();
 
   InstrumentDataList::const_iterator  idx;
@@ -6264,8 +6046,6 @@ void  DataBase::InstrumentDataSaveListForOneSipperFile (const KKStr&            
   delete  sf;
   sf = NULL;
 }  /* InstrumentDataSaveListForOneSipperFile */
-
-
 
 
 
@@ -6311,24 +6091,18 @@ VectorKKStr  DataBase::InstrumentDataGetFieldNames ()
   if  (resSet == NULL)
     return  results;
 
-
   MYSQL_ROW  row = NULL;
-  while  (row = mysql_fetch_row (resSet))
+  while  ((row = mysql_fetch_row (resSet)) != NULL)
   {
     KKStr fieldName   = row[0];
     results.push_back (fieldName);
   }
-
 
   mysql_free_result (resSet);
   resSet = NULL;
 
   return  results;
 }   /* InstrumentDataGetFieldNames */
-
-
-
-
 
 
 
@@ -6358,9 +6132,6 @@ InstrumentDataListPtr  DataBase::InstrumentDataLoad (const KKStr&  sipperFileNam
 
   return  results;
 }  /* InstrumentDataLoad */
-
-
-
 
 
 
@@ -6398,7 +6169,6 @@ InstrumentDataListPtr  DataBase::InstrumentDataLoad (const KKStr&  cruiseName,
 
 
 
-
 /**
  @brief  Will update all InstrumentData entries that fall within the dateTime range with the Latitude and longitude.
  */
@@ -6428,7 +6198,6 @@ void  DataBase::InstrumentDataUpdateLatitudeAndLongitude (const DateTime&  dateT
     ResultSetsClear ();
     
 }  /* InstrumentDataUpdateLatitudeAndLongitude */
-
 
 
 
@@ -6531,7 +6300,6 @@ vector<vector<float> >*  DataBase::InstrumentDataGetSpecificFields (const KKStr&
 
 
 
-
 vector<vector<float> >*  DataBase::InstrumentDataGetSpecificFields (const KKStr&        cruiseName,
                                                                     const KKStr&        stationName,
                                                                     const KKStr&        deploymentNum,
@@ -6599,9 +6367,6 @@ vector<vector<float> >*  DataBase::InstrumentDataGetSpecificFields (const KKStr&
 
   return  results;
 }  /* InstrumentDataGetSpecificFields */
-
-
-
 
 
 
@@ -6687,7 +6452,6 @@ void  DataBase::InstrumentDataReFreshSipperFile (const KKStr&   sipperFileName,
 
 
 
-
 VolumeSampledStatListPtr  DataBase::InstrumentDataGetVolumePerMeterDepth (const KKStr&  siperFileName,
                                                                           float         depthBinSize
                                                                          )
@@ -6724,8 +6488,6 @@ VolumeSampledStatListPtr  DataBase::InstrumentDataGetVolumePerMeterDepth (const 
 
 
 
-
-
 VolumeSampledStatListPtr  DataBase::InstrumentDataGetVolumePerMeterDepth (const KKStr&  cruiseName,
                                                                           const KKStr&  stationName,
                                                                           const KKStr&  deploymentNum,
@@ -6755,9 +6517,6 @@ VolumeSampledStatListPtr  DataBase::InstrumentDataGetVolumePerMeterDepth (const 
 
   return  results;
 }  /* InstrumentDataGetVolumePerMeterDepth */
-
-
-
 
 
 
@@ -6793,11 +6552,11 @@ void  DataBase::InstrumentDataDeploymentVolumeSampled (const KKStr&             
   upCastStats   = new VolumeSampledStatList ();
   while  (ResultSetFetchNextRow ())
   {
-    bool  downCast       = ResultSetGetBool        (0);
-    kkint32 binId          = ResultSetGetIntField    (1);
-    float binDepth       = ResultSetGetFloatField  (2);
-    kkint32 scanLines      = ResultSetGetIntField    (3);
-    float volumeSampled  = ResultSetGetFloatField  (4);
+    bool     downCast       = ResultSetGetBool        (0);
+    kkint32  binId          = ResultSetGetIntField    (1);
+    float    binDepth       = ResultSetGetFloatField  (2);
+    //kkint32  scanLines      = ResultSetGetIntField    (3);
+    float    volumeSampled  = ResultSetGetFloatField  (4);
 
     VolumeSampledStatPtr  stat = new VolumeSampledStat (binId, binDepth, volumeSampled);
     if  (downCast)
@@ -6812,8 +6571,6 @@ void  DataBase::InstrumentDataDeploymentVolumeSampled (const KKStr&             
   ResultSetsClear ();
   return;
 }  /* InstrumentDataDeploymentVolumeSampled */
-
-
 
 
 
@@ -6847,7 +6604,7 @@ InstrumentDataMeansListPtr  DataBase::InstrumentDataBinByMeterDepth (const KKStr
   }
 
   InstrumentDataMeansListPtr  results = new InstrumentDataMeansList (true);
-  while  (ResultSetFetchNextRow ())
+  while  (ResultSetFetchNextRow ()  &&  (!cancelFlag))
   {
     bool  downCast               = ResultSetGetBool        (0);
     kkint32 binId                  = ResultSetGetIntField    (1);
@@ -6888,8 +6645,6 @@ InstrumentDataMeansListPtr  DataBase::InstrumentDataBinByMeterDepth (const KKStr
   ResultSetsClear ();
   return  results;
 }  /* InstrumentDataBinByMeterDepth */
-
-
 
 
 
@@ -6939,10 +6694,6 @@ GPSDataPointListPtr DataBase::InstrumentDataRetrieveGPSInfo (const KKStr&  cruis
 
 
 
-
-
-
-
 //*********************************************************************************************
 //*                               LogEntries  Routines                                        *
 //*********************************************************************************************
@@ -6956,7 +6707,7 @@ DataBaseLogEntryPtr  DataBase::LogEntriesProcessStart
 {
   KKStr  sqlStr (256);
 
-  KKStr  compName = osGetHostName ();
+  KKStr  compName = osGetHostName ().value_or ("*** UNKNOWN ***");
   KKStr  userName = osGetUserName ();
   KKStr  sipperFileNameRoot = osGetRootName (sipperFileName);
 
@@ -6980,7 +6731,6 @@ DataBaseLogEntryPtr  DataBase::LogEntriesProcessStart
     if  (!resultSetMore)
       return  NULL;
 
-    MYSQL_ROW  row = NULL;
     while  (ResultSetFetchNextRow ())
     {
       result->LogEntryId       (ResultSetGetUintField     (0));
@@ -6994,8 +6744,6 @@ DataBaseLogEntryPtr  DataBase::LogEntriesProcessStart
   ResultSetsClear ();
   return  result;
 }  /* LogEntriesProcessStart */
-
-
 
   
 
@@ -7026,7 +6774,6 @@ void  DataBase::LogEntriesProcessEnd (DataBaseLogEntryPtr   logEntry,
     if  (!resultSetMore)
       return;
 
-    MYSQL_ROW  row = NULL;
     while  (ResultSetFetchNextRow ())
     {
       logEntry->DateTimeEnd (ResultSetGetDateTimeField (0));
@@ -7037,7 +6784,6 @@ void  DataBase::LogEntriesProcessEnd (DataBaseLogEntryPtr   logEntry,
   ResultSetsClear ();
   return;
 }  /* LogEntriesProcessEnd */
-
 
 
 
@@ -7071,7 +6817,6 @@ DataBaseLogEntryPtr  DataBase::LogEntriesSelect (kkuint32 _logEntryId)
     if  (!resultSetMore)
       return  NULL;
 
-    MYSQL_ROW  row = NULL;
     while  (ResultSetFetchNextRow ())
     {
       delete result;
@@ -7101,8 +6846,6 @@ DataBaseLogEntryPtr  DataBase::LogEntriesSelect (kkuint32 _logEntryId)
 
 
 
-
-
 //*********************************************************************************************
 //*                               SipperCruise  Routines                                      *
 //*********************************************************************************************
@@ -7125,7 +6868,7 @@ void  DataBase::InsertCruise (const KKStr&     shipName,
 
   KKStr  shipNameAdj = shipName;
   if  (shipNameAdj.Len () > 10)
-    shipNameAdj = shipNameAdj.SubStrPart (0, 9);
+    shipNameAdj = shipNameAdj.SubStrSeg (0, 10);
 
   KKStr  insertStatement;
   insertStatement << "Insert into Cruises (CruiseName, ShipName, Description, DateStart, DateEnd, Location, Objective, Principal, ResearchOrg)" << endl
@@ -7140,9 +6883,8 @@ void  DataBase::InsertCruise (const KKStr&     shipName,
                   << researchOrg.QuotedStr ()
                   << ")" << endl;
 
-  kkint32  returnCd = QueryStatement (insertStatement.Str ());
+  QueryStatement (insertStatement.Str ());
 }  /* InsertCruise  */
-
 
 
                             
@@ -7155,10 +6897,9 @@ void  DataBase::SipperCruiseDelete (const KKStr&  cruiseName)
   }
 
   KKStr  sqlStr = "call  CruisesDelete(" + cruiseName.QuotedStr () + ")";
-  kkint32  returnCd = QueryStatement (sqlStr.Str ());
+  QueryStatement (sqlStr.Str ());
   ResultSetsClear ();
 }  /* SipperCruiseDelete */
-
 
 
 
@@ -7193,7 +6934,6 @@ void  DataBase::SipperCruiseInsert (SipperCruisePtr  cruise,
   successful   = (returnCd == 0);
   return;
 }  /* SipperCruiseInsert */
-
 
 
 
@@ -7282,7 +7022,6 @@ SipperCruisePtr  DataBase::SipperCruiseLoad (const KKStr&  cruiseName)
 
 
 
-
 SipperCruiseListPtr  DataBase::SipperCruiseLoadAllCruises ()
 {
   KKStr  selectStr (1000);
@@ -7299,7 +7038,3 @@ SipperCruiseListPtr  DataBase::SipperCruiseLoadAllCruises ()
 
   return  results;
 }  /* SipperCruiseLoadAllCruises */
-
-
-
-

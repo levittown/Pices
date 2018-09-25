@@ -45,21 +45,21 @@ using namespace  PicesUtilityApps;
 BuildSynthObjDetData::BuildSynthObjDetData () :
 
   PicesApplication (),
-  cancelFlag (false),
-  candidateMinSize (2000),
-  candidateMaxSize (100000),
-  imageHeight (2048),
-  imageWidth (2048),
+  cancelFlag            (false),
+  candidateMinSize      (2000),
+  candidateMaxSize      (100000),
+  imageHeight           (2048),
+  imageWidth            (2048),
   instrumentDataManager (NULL),
-  maxCandidates (100000),
-  maxImages (40000),
-  nextSipperFileIdx (0),
-  rasterHeight (2048),
-  rasterWidth (2048),
-  rng(1000),
-  sipperBuff (NULL),
-  sipperFileRootDir("F:\\Pices\\SipperFiles\\USF\\ETP2008"),
-  targetDir()
+  maxCandidates         (100000),
+  maxImages             (40000),
+  nextSipperFileIdx     (0),
+  rasterHeight          (2048),
+  rasterWidth           (2048),
+  rng                   (1000),
+  sipperBuff            (NULL),
+  sipperFileRootDir     ("F:\\Pices\\SipperFiles\\USF\\ETP2008"),
+  targetDir             ()
 {
 }
 

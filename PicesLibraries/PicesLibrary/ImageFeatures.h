@@ -91,10 +91,11 @@ namespace MLL
 
     //ImageFeatures (MLClassPtr  mlClass);
 
-    ImageFeatures (kkint32  _numOfFeatures);
+    ImageFeatures (kkuint32  _numOfFeatures);
+
 
     ImageFeatures (const ImageFeatures&  _image);
-
+    
 
     ImageFeatures (RasterSipper&        _raster,
                    MLClassPtr           _mlClass,
@@ -347,8 +348,7 @@ namespace MLL
 
 
     ImageFeaturesList (FileDescConstPtr  _fileDesc,
-                       bool              _owner,
-                       kkint32           _size = 1000
+                       bool              _owner
                       );
 
   private:
@@ -637,7 +637,7 @@ namespace MLL
       bool  operator== (const FeatureVectorList::iterator&        right) const {return  (idx == right);}
 
 
-      const_iterator&   operator++ (int  x)
+      const_iterator&   operator++ (int)
       {
         idx++;
         return  *this;
@@ -694,13 +694,11 @@ namespace MLL
       bool  operator!= (const FeatureVectorList::const_iterator&  right) const {return  idx != right;}
       bool  operator== (const iterator&                           right) const {return  idx == right.idx;}
 
-
-      iterator&   operator++ (int x)
+      iterator&   operator++ (int)
       {
         idx++;
         return  *this;
       }
-
 
       iterator&   operator++ ()
       {
@@ -708,7 +706,6 @@ namespace MLL
         return  *this;
       }
     };
-
 
   private:
     float  FlowRate (InstrumentDataPtr  id,

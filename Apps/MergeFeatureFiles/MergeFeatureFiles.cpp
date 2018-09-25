@@ -1,5 +1,4 @@
-#include  "FirstIncludes.h"
-
+#include "FirstIncludes.h"
 #include <stdlib.h>
 #include <memory>
 #include <math.h>
@@ -12,18 +11,16 @@
 #include "KKBaseTypes.h"
 using namespace std;
 
-
 #include "Compressor.h"
+#include "Option.h"
 #include "OSservices.h"
 #include "KKStr.h"
 using namespace KKB;
-
 
 #include "FeatureFileIO.h"
 #include "FileDesc.h"
 #include "MLClass.h"
 using namespace  KKMLL;
-
 
 #include "InstrumentDataFileManager.h"
 #include "DataBase.h"
@@ -817,22 +814,22 @@ void  ImportGPSDataGPGGA (const KKStr&  fileName)
     KKStr  logStr = fields[6];
 
     auto  x = latStr.LocateCharacter ('.');
-    if  (x < 0) 
+    if  (!x) 
       continue;
 
     KKStr latMinStr = latStr.SubStrPart (x - 2);
-    KKStr latDegStr = latStr.SubStrPart (0, x - 3);
+    KKStr latDegStr = latStr.SubStrSeg (0, x - 2);
 
     double latitude = latDegStr.ToDouble () + latMinStr.ToDouble () / 60.0;
     if  (fields[5].EqualIgnoreCase ("S"))
       latitude = 0.0 - latitude;
 
     x = logStr.LocateCharacter ('.');
-    if  (x < 0) 
+    if  (!x) 
       continue;
 
     KKStr logMinStr = logStr.SubStrPart (x - 2);
-    KKStr logDegStr = logStr.SubStrPart (0, x - 3);
+    KKStr logDegStr = logStr.SubStrSeg (0, x - 2);
 
     double longitude = logDegStr.ToDouble () + logMinStr.ToDouble () / 60.0;
     if  (fields[7].EqualIgnoreCase ("W"))

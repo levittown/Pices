@@ -162,7 +162,7 @@ LogicalFrame::LogicalFrame (const ExtractionParms&  _parms,
 {
   cropRight = frameWidth - 1;
 
-  if  (parms.FileFormat () == sfSipper4Bit)
+  if  (parms.FileFormat () == SipperFileFormat::Sipper4Bit)
   {
     cropLeft = 557;
     cropRight = 1718;
@@ -1037,7 +1037,7 @@ ExtractedImageListPtr  LogicalFrame::ProcessFrame ()
 
   int  imageId = -1;
 
-  if  (parms.FileFormat () == sfSipper4Bit)
+  if  (parms.FileFormat () == SipperFileFormat::Sipper4Bit)
   {
     // because of noise on left and right we are going to blank out the
     // offending columns.

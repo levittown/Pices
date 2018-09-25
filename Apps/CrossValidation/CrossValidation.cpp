@@ -21,9 +21,7 @@
 #include <iostream>
 #include <map>
 #include <vector>
-
 #include "MemoryDebug.h"
-
 
 #ifdef WIN32
 #include <windows.h>
@@ -34,9 +32,9 @@ using namespace  std;
 
 
 #include "KKBaseTypes.h"
+#include "Option.h"
 #include "StatisticalFunctions.h"
 using namespace  KKB;
-
 
 #include "BinaryClassParms.h"
 #include "Classifier2.h"
@@ -1299,13 +1297,12 @@ void  CrossValidationApp::PostMisclassifiedImage (KKStr       fileName,
 
   bool copyGood;
 
-  int LastOccurence=fileName.LocateLastOccurrence("\\");
+  auto  LastOccurence = fileName.LocateLastOccurrence("\\");
   KKStr subDir;
-  if (LastOccurence!=-1)
+  if (LastOccurence)
   {
-    subDir=fileName.SubStrPart(0,LastOccurence);
-    fileName=fileName.SubStrPart(LastOccurence+1);
-    
+    subDir   = fileName.SubStrSeg (0, LastOccurence);
+    fileName = fileName.SubStrPart (LastOccurence + 1);
   }
 
   //KKStr  dirWhereFileIs = LocateImageFileUsingConfigurationFile (fileName, knownClass);
@@ -1393,7 +1390,7 @@ void  CrossValidationApp::CrossValidate
 
       *probReport << "ImageFileName" << "\t" << "KnownClass"    << "\t" << "PredClass";
 
-      for  (int  classIDX = 0;  classIDX < mlClasses->QueueSize ();  classIDX++)
+      for  (kkuint32  classIDX = 0;  classIDX < mlClasses->QueueSize ();  classIDX++)
       {
         *probReport << "\t" << mlClasses->IdxToPtr (classIDX)->Name ();
       }
@@ -1479,15 +1476,13 @@ void  CrossValidationApp::CrossValidate
       int*     votes = new int   [mlClasses->QueueSize ()];
       classifier.ProbabilitiesByClass (*mlClasses, example, votes, probs);
 
-      int  classIDX = 0;
-
       *probReport 
         << osGetRootName (example->ExampleFileName ())  << "\t"
         << knownClass->Name ()                          << "\t"
         << predClass1->Name ();
 
       int*  probsIDX = new int[mlClasses->QueueSize ()];
-      for  (classIDX = 0;  classIDX < mlClasses->QueueSize ();  classIDX++)
+      for  (kkuint32 classIDX = 0;  classIDX < mlClasses->QueueSize ();  ++classIDX)
       {
         *probReport << "\t" << StrFormatDouble ((probs[classIDX] * 100), "zzz,zz0.000") << "%";
         probsIDX[classIDX] = classIDX;
@@ -1662,7 +1657,7 @@ void  CrossValidationApp::ValidationProcess ()
       *probReport << endl << endl << endl << endl;
       *probReport << "Probability Predictions by Class"  << endl << endl;
       *probReport << "ImageFileName" << "\t" << "KnownClass"    << "\t" << "PredClass";
-      for  (int  classIDX = 0;  classIDX < mlClasses->QueueSize ();  classIDX++)
+      for  (kkuint32 classIDX = 0;  classIDX < mlClasses->QueueSize ();  classIDX++)
         *probReport << "\t" << mlClasses->IdxToPtr (classIDX)->Name ();
       *probReport << endl;
     }
@@ -1742,15 +1737,13 @@ void  CrossValidationApp::ValidationProcess ()
       int*     votes = new int   [mlClasses->QueueSize ()];
       classifier.ProbabilitiesByClass (*mlClasses, example, votes, probs);
 
-      int  classIDX = 0;
-
       *probReport 
         << osGetRootName (example->ExampleFileName ())  << "\t"
         << knownClass->Name ()                        << "\t"
         << predClass1->Name ();
 
       int*  probsIDX = new int[mlClasses->QueueSize ()];
-      for  (classIDX = 0;  classIDX < mlClasses->QueueSize ();  classIDX++)
+      for  (kkuint32 classIDX = 0;  classIDX < mlClasses->QueueSize ();  classIDX++)
       {
         *probReport << "\t" << votes[classIDX] ;//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! changed probs to votes
         probsIDX[classIDX] = classIDX;
@@ -1810,11 +1803,9 @@ void  CrossValidationApp::ValidationProcess ()
 
 void  CrossValidationApp::PrintSizeHistogram ()
 {
-  int  x;
-
   ConfusionMatrix2  cm (*mlClasses);
 
-  for  (x = 0; x < examples->QueueSize (); x++)
+  for  (kkuint32 x = 0; x < examples->QueueSize (); x++)
   {
     FeatureVectorPtr example = examples->IdxToPtr (x);
     cm.Increment (example->MLClass (), 
@@ -2180,7 +2171,7 @@ void  CrossValidationApp::RandomSplitsIntoTrainAndTest (FeatureVectorListPtr   s
   {
     MLClassPtr  c = *idx;
     FeatureVectorListPtr  examplesThisClass = splitData->ExtractExamplesForAGivenClass (c);
-    int  numTrainExamples = (int)(0.5f + ((float)(examplesThisClass->QueueSize ()) * splitPercentage / 100.0f));
+    kkuint32  numTrainExamples = (int)(0.5f + ((float)(examplesThisClass->QueueSize ()) * splitPercentage / 100.0f));
     if  (numTrainExamples < 1)
       numTrainExamples = 1;
 
@@ -2250,7 +2241,7 @@ FeatureVectorListPtr  CrossValidationApp::ReduceToWhatsInConfig (FeatureVectorLi
   FeatureVectorListPtr excluded = src->ManufactureEmptyList (src->Owner ());
 
   for (auto idx: *src) {
-    if  (classes->PtrToIdx (idx->MLClass ()) >= 0)
+    if  (classes->PtrToIdx (idx->MLClass ()))
       included->PushOnBack (idx);
     else
       excluded->PushOnBack (idx);
@@ -3100,16 +3091,16 @@ void  CreateBfsFromMfs (const KKStr&  mfsFileName,
   ofstream   missingClasses ("C:\\Temp\\MissingClasses.txt");
   missingClasses << endl << endl;
   missingClasses << "============================================================================" << endl;
-  for  (kkint32  idx1 = 0; idx1 < (classes->QueueSize () - 1);  ++idx1)
+  for  (kkuint32  idx1 = 0; idx1 < (classes->QueueSize () - 1);  ++idx1)
   {
     MLClassPtr  c1 = classes->IdxToPtr (idx1);
 
-    if  ((classes1->PtrToIdx (c1) < 0)  &&  (classes2->PtrToIdx (c1) < 0)  &&  (classes3->PtrToIdx (c1) < 0)  &&  (classes4->PtrToIdx (c1) < 0)  )
+    if  ((!classes1->PtrToIdx (c1))  &&  (!classes2->PtrToIdx (c1))  &&  (!classes3->PtrToIdx (c1))  &&  (!classes4->PtrToIdx (c1))  )
     {
       missingClasses << c1->Name ();
     }
 
-    for  (kkint32  idx2 = idx1 + 1; idx2 < classes->QueueSize ();  ++idx2)
+    for  (kkuint32 idx2 = idx1 + 1;  idx2 < classes->QueueSize ();  ++idx2)
     {
       MLClassPtr c2 = classes->IdxToPtr (idx2);
 
@@ -3148,9 +3139,8 @@ void  CreateBfsFromMfs (const KKStr&  mfsFileName,
   newBfsConfig->SetFeatureNums (FeatureNumList ("0-84", valid));
 
   KKStr  baseName = osRemoveExtension (mfsFileName);
-  KKStr  tail = mfsFileName.Tail (8);
-  if  (tail.EqualIgnoreCase ("_MFS.cfg"))
-    baseName = mfsFileName.SubStrPart (0, mfsFileName.Len () - 9);
+  if  (mfsFileName.EndsWith ("_MFS.cfg"))
+    baseName = mfsFileName.SubStrSeg (0, mfsFileName.Len () - 8);
 
   KKStr  newBfsFileName  = baseName + "_BFS.cfg";
   KKStr  newDualFileName = baseName + "_Dual.cfg";
@@ -3496,12 +3486,12 @@ void  DetermineCropSettingsForDeployment (RunLog&              runLog,
   {
     if  (cropLefts.size () > 0)
     {
-      int  midPoint = cropLefts.size () / 2;
+      size_t  midPoint = cropLefts.size () / 2;
       sort (cropLefts.begin  (), cropLefts.end  ());
       sort (cropRights.begin (), cropRights.end ());
 
-      deployment->CropLeft  (cropLefts[midPoint]);
-      deployment->CropRight (cropRights[midPoint]);
+      deployment->CropLeft  (cropLefts  [midPoint]);
+      deployment->CropRight (cropRights [midPoint]);
 
       db->SipperDeploymentUpdate (*deployment);
     }
@@ -3510,7 +3500,6 @@ void  DetermineCropSettingsForDeployment (RunLog&              runLog,
   delete  sipperFiles;
   sipperFiles = NULL;
 }  /* DetermineCropSettingsForDeployment */
-
 
 
 
@@ -3601,7 +3590,6 @@ int  main (int    argc,
   #if  defined (WIN32)  &&  defined (_DEBUG)  &&  !defined(_NO_MEMORY_LEAK_CHECK_)
     _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF ); 
   #endif
-
 
   if  (false)
   {

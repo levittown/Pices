@@ -76,7 +76,7 @@ void  InstrumentDataCTDplus::AssignCtdExternalInstruments ()
     return;
   }
 
-  else if  (rootName.SubStrPart (0, 9) == "ETP2008_1B")
+  else if  (rootName.StartsWith ("ETP2008_1B"))
   {
     ctdExt0Code = "";
     ctdExt1Code = "OXG";
@@ -84,8 +84,8 @@ void  InstrumentDataCTDplus::AssignCtdExternalInstruments ()
     ctdExt3Code = "TUR";
   }
 
-  if  ((rootName.SubStrPart (0, 4) == "ETP08")     ||
-       (rootName.SubStrPart (0, 6) == "ETP2008")
+  if  ((rootName.StartsWith ("ETP08"))     ||
+       (rootName.StartsWith ("ETP2008"))
       )
   {
     ctdExt0Code = "TRN";
@@ -93,10 +93,10 @@ void  InstrumentDataCTDplus::AssignCtdExternalInstruments ()
     ctdExt2Code = "FLO";
     ctdExt3Code = "TUR";
 
-    if  ((rootName.SubStrPart (0, 9) == "ETP2008_1B")  ||
-         (rootName.SubStrPart (0, 9) == "ETP2008_1C")  ||
-         (rootName.SubStrPart (0, 9) == "ETP2008_1D")  ||
-         (rootName.SubStrPart (0, 9) == "ETP2008_1E")  ||
+    if  ((rootName.StartsWith ("ETP2008_1B"))  ||
+         (rootName.StartsWith ("ETP2008_1C"))  ||
+         (rootName.StartsWith ("ETP2008_1D"))  ||
+         (rootName.StartsWith ("ETP2008_1E"))  ||
          (rootName == "ETP2008_4a_01")
         )
     {
@@ -114,7 +114,7 @@ void  InstrumentDataCTDplus::AssignCtdExternalInstruments ()
     return;
   }
 
-  if  (rootName.SubStrPart (0, 6).EqualIgnoreCase ("Station"))
+  if  (rootName.StartsWith ("Station", true))
   {
     ctdExt0Code = "OXG";
     ctdExt1Code = "TRN";
@@ -123,11 +123,11 @@ void  InstrumentDataCTDplus::AssignCtdExternalInstruments ()
     return;
   }
 
-  if  ((rootName.SubStrPart (0,2) == "B07")  ||
-       (rootName.SubStrPart (0,1) == "GG")   ||
-       (rootName.SubStrPart (0,1) == "SD")   ||
-       (rootName.SubStrPart (0,1) == "WB")   ||
-       (rootName.SubStrPart (0,1) == "SM")
+  if  ((rootName.StartsWith ("B07"))  ||
+       (rootName.StartsWith ("GG"))   ||
+       (rootName.StartsWith ("SD"))   ||
+       (rootName.StartsWith ("WB"))   ||
+       (rootName.StartsWith ("SM"))
       )
   {
     ctdExt0Code = "TRN";
@@ -137,7 +137,7 @@ void  InstrumentDataCTDplus::AssignCtdExternalInstruments ()
     return;
   }
 
-  if  ((rootName.SubStrPart (0,2) == "sip"))
+  if  ((rootName.StartsWith ("sip")))
   {
     ctdExt0Code = "OXG";
     ctdExt1Code = "";
@@ -156,9 +156,8 @@ void  InstrumentDataCTDplus::AssignCtdExternalInstruments ()
 
 
 
-
-/*!
- \ brief  Parses one string of CTD data.  Will parse out separate fields.
+/**
+ * brief  Parses one string of CTD data.  Will parse out separate fields.
  */
 void  InstrumentDataCTDplus::ProcessCTDdata (const KKStr&  txt)
 {
@@ -181,8 +180,7 @@ void  InstrumentDataCTDplus::ProcessCTDdata (const KKStr&  txt)
  
   if  ((txtZ[0] == ' ')  &&  (txtZ[1] == ' '))
     return;
- 
-  
+   
   bool  valid;
   CTD_Plus_Data ctdData (txt, manager->Latitude (), valid, ctdExt0Code, ctdExt1Code, ctdExt2Code, ctdExt3Code);
   if  (valid)
@@ -191,7 +189,6 @@ void  InstrumentDataCTDplus::ProcessCTDdata (const KKStr&  txt)
     cerr << "Invalid data" << endl;
 
 }  /* ProcessCTDdata */
-
 
 
 
@@ -293,7 +290,7 @@ void  InstrumentDataCTDplus::ParseTxtBlock (KKStr&  block)
 
     else
     {
-      KKStr  lastLine = block.SubStrPart (lineStartIdx, lineEndIdx);
+      KKStr  lastLine = block.SubStrSeg (lineStartIdx, lineEndIdx - lineStartIdx);
       block = block.SubStrPart (lineEndIdx + 1);
       ProcessCTDdata (lastLine);
     }

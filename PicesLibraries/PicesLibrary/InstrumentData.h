@@ -33,7 +33,7 @@ namespace MLL
     InstrumentData (kkuint32              _scanLine,
                     kkuint32              _byteOffset,
                     const KKB::DateTime&  _ctdDate,
-                    char                  _activeBattery,
+                    kkint32               _activeBattery,
                     double                _latitude,
                     double                _longitude,
                     float                 _ctdBattery,
@@ -82,8 +82,6 @@ namespace MLL
     static  kkint32       GetFieldNum              (const KKStr& s);
     static  kkint32       GetFieldNumFromShortName (const KKStr&  s);
     static  kkint32       NumFields   ();
-
-
 
     static  kkint32 CurrentFileVersion ()  {return 13;}
 
@@ -152,8 +150,7 @@ namespace MLL
     void   ActiveColumns (kkuint16 _activeColumns) {activeColumns = _activeColumns;}
     void   CropLeft      (kkuint16 _cropLeft)      {cropLeft      = _cropLeft;}
     void   CropRight     (kkuint16 _cropRight)     {cropRight     = _cropRight;}
-
-
+    
     void   CTDBattery             (float _ctdBattery)             {data [ctdBatteryIndex            ] = _ctdBattery;}
     void   Conductivity           (float _conductivity)           {data [ConductivityIndex          ] = _conductivity;}
     void   Depth                  (float _depth)                  {data [depthIndex                 ] = _depth;}
@@ -187,8 +184,7 @@ namespace MLL
     void   UpdateFromCtdData (const CTD_Plus_Data&  ctdData);
 
     static  void  FinalCleanUp ();
-
-
+    
   private:
     class  FieldDesc
     {
@@ -204,14 +200,10 @@ namespace MLL
   
     void    InitializeDataVariables ();
 
-    void    ParseTabDelString (const KKStr& s);
-
     void    UpdateFromStr (kkint32       fieldIndex,
                            const KKStr&  s
                           );
   
-    //static const char*   fieldNames[][3];
-
     static void  CreateBlocker ();
 
     static bool  needToRunFinalCleanUp;
@@ -265,7 +257,7 @@ namespace MLL
     static kkint32  bat3LevelIndex;
     static kkint32  bat4LevelIndex;
   
-    char             activeBattery;
+    kkint32          activeBattery;
     kkuint64         byteOffset;
     KKB::DateTime    ctdDate;
     float*           data;

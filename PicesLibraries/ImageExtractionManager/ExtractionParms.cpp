@@ -45,7 +45,7 @@ ExtractionParms::ExtractionParms (KKStr    progName,
         dataBaseServer        (NULL),
         doneExecuting         (false),
         extractFeatureData    (false),
-        fileFormat            (sfUnKnown),
+        fileFormat            (SipperFileFormat::UnKnown),
         flowRateFileName      (),
         framesOnly            (false),
         imagesPerDirectory    (2000),
@@ -108,7 +108,7 @@ ExtractionParms::ExtractionParms (kkint32  argc,
         dataBaseServer        (NULL),
         doneExecuting         (false),
         extractFeatureData    (false),
-        fileFormat            (sfUnKnown),
+        fileFormat            (SipperFileFormat::UnKnown),
         flowRateFileName      (),
         framesOnly            (false),
         imagesPerDirectory    (1000),
@@ -404,7 +404,7 @@ void  ExtractionParms::ParseCmdLine (const CmdLineExpander&  cmdLineExpander,
   configFileName     = "";
   configFileNameSpecified = "";
   extractFeatureData = false;
-  fileFormat         = sfUnKnown;
+  fileFormat         = SipperFileFormat::UnKnown;
   imagesPerDirectory = 1000;
   minAreaSize        = 0.1f;
   maxAreaSize        = 0.0f;
@@ -593,7 +593,7 @@ void  ExtractionParms::ParseCmdLine (const CmdLineExpander&  cmdLineExpander,
     else if  (switchStr == "-SF")
     {
       fileFormat = SipperFileFormatFromStr (parmStrUpper);
-      if  (fileFormat  ==  sfUnKnown)
+      if  (fileFormat  == SipperFileFormat::UnKnown)
       {
         errorMessage = "Invalid File Format Specified[" + parmStrUpper + "]";
 
@@ -701,7 +701,7 @@ void  ExtractionParms::ParseCmdLine (const CmdLineExpander&  cmdLineExpander,
   }
 
   
-  if  (fileFormat == sfUnKnown)
+  if  (fileFormat == SipperFileFormat::UnKnown)
   {
     if  (!osFileExists (sipperFileName))
     {
@@ -716,7 +716,7 @@ void  ExtractionParms::ParseCmdLine (const CmdLineExpander&  cmdLineExpander,
 
     fileFormat = SipperBuff::GuessFormatOfFile (sipperFileName, cameraNum, log);
     
-    if  (fileFormat == sfUnKnown)
+    if  (fileFormat == SipperFileFormat::UnKnown)
     {
       errorMessage = "Can not Determine Format of Sipper File[" + sipperFileName + "].";
       cerr  << endl
