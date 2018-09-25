@@ -290,7 +290,7 @@ private:
 
   int                       finalNumOfImagesInTrainingLibrary;
   int                       numOfRandomPasses;
-  int                       validationImagesPerClass;
+  kkuint32                  validationImagesPerClass;
 
   vector<int>               iipcTable;
   vector<int>               iprTable;
@@ -300,7 +300,7 @@ private:
                                                   // the over all pool of data.
 
   bool                      performStreaming;
-  int                       streamingBlockSize;
+  kkuint32                  streamingBlockSize;
   int                       retrainingsPerStreamBlock;
   bool                      testRelativeNonStreamingPosition;
 

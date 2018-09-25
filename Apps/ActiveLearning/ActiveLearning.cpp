@@ -1335,9 +1335,8 @@ void  ActiveLearning::ExtractValidationImages (MLClassList&        classes,
 
     ImageFeaturesPtr  image = NULL;
 
-    int  imageCount = 0;
-    int  numValidationImages4Class = 0;
-
+    kkuint32  imageCount = 0;
+    kkuint32  numValidationImages4Class = 0;
 
     for (auto ciIDX : *classImages[classNum])
     {
@@ -1591,7 +1590,7 @@ void  ActiveLearning::ProcessASingleRetraining (SortOrderType        sortOrder,
 
     if  (testRelativeNonStreamingPosition  &&  nonStreamingTestImages)
     {
-      position = nonStreamingTestImages->LocateEntry (image);
+      position = nonStreamingTestImages->LocateEntry (image).value_or (-1);
       percentile = ((float)position / (float)numNonStreamingTestImages);
       nonStreamingTestImages->DeleteEntry (image);
     }
@@ -1622,7 +1621,7 @@ void  ActiveLearning::ProcessASingleRetraining (SortOrderType        sortOrder,
 void  ActiveLearning::ProcessOneImageAtAtimeOneSpecificPass 
                              (SortOrderType       sortOrder,
                               double              probabilityTest,
-                              MLClassList&     groupClasses,           // List of Classes that we want to processs for.
+                              MLClassList&        groupClasses,           // List of Classes that we want to processs for.
                               ClassGroupTotals&   retrainingStats,
                               int                 pass,
                               int                 iipc,
@@ -1742,16 +1741,16 @@ void  ActiveLearning::ProcessOneImageAtAtimeOneSpecificPass
     streamingBlockSize = testImages->QueueSize ();
   }
 
-  int  retrainingPass = 0;
-  int  streamBlockStartIDX = 0;
-  int  streamBlockEndIDX   = 0;
+  kkuint32  retrainingPass = 0;
+  kkuint32  streamBlockStartIDX = 0;
+  kkuint32  streamBlockEndIDX   = 0;
 
   while  (streamBlockCount < numOfStreamBlocks)
   {
     streamBlockStartIDX = streamBlockEndIDX;
     FeatureVectorListPtr streamBlockTestImages = new FeatureVectorList (fileDesc, false);
 
-    int  x = 0;
+    kkuint32  x = 0;
 
     if  (performStreaming)
     {
@@ -1927,7 +1926,7 @@ void  ActiveLearning::ProcessCombinedClassJob (SortOrderType  sortOrder,
   KKStr  fullResultsFileName = DeriveFullResultsFileName (sortOrder, iipc, ipr, pass);
 
 
-  if  ((weAreUsingANetworkDrive)  && (resultsFileName.LocateCharacter (DSchar) < 0))
+  if  ((weAreUsingANetworkDrive)  && (!resultsFileName.LocateCharacter (DSchar)))
   {
     // We are running on a windows PC that is about to write to a Network drive
     // This tends to and exceptionaly long time,  not sure why,  but something to do 
