@@ -403,7 +403,7 @@ namespace MLL
     RasterSipperPtr     ToColor ()  const;
 
     virtual
-    RasterPtr  AllocateARasterInstance (kkint32 height,  kkint32  width,  bool color)  const;
+    RasterPtr  AllocateARasterInstance (kkint32 _height,  kkint32  _width,  bool _color)  const;
 
     virtual
     RasterPtr  AllocateARasterInstance (const Raster& r)  const;

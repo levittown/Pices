@@ -52,7 +52,7 @@ SipperImageExtractionParms::SipperImageExtractionParms (KKStr    progName,
         dataBaseServer        (NULL),
         doneExecuting         (false),
         extractFeatureData    (false),
-        fileFormat            (sfUnKnown),
+        fileFormat            (SipperFileFormat::UnKnown),
         flowRateFileName      (),
         framesOnly            (false),
         imagesPerDirectory    (2000),
@@ -121,7 +121,7 @@ SipperImageExtractionParms::SipperImageExtractionParms (int      argc,
         dataBaseServer        (NULL),
         doneExecuting         (false),
         extractFeatureData    (false),
-        fileFormat            (sfUnKnown),
+        fileFormat            (SipperFileFormat::UnKnown),
         flowRateFileName      (),
         framesOnly            (false),
         imagesPerDirectory    (1000),
@@ -418,7 +418,7 @@ void  SipperImageExtractionParms::ParseCmdLine (const CmdLineExpander&  cmdLineE
   configFileName     = "";
   configFileNameSpecified = "";
   extractFeatureData = false;
-  fileFormat         = sfUnKnown;
+  fileFormat         = SipperFileFormat::UnKnown;
   imagesPerDirectory = 1000;
   minImageSize       = 350;
   maxImageSize       = 0;
@@ -595,7 +595,7 @@ void  SipperImageExtractionParms::ParseCmdLine (const CmdLineExpander&  cmdLineE
     else if  (switchStr == "-SF")
     {
       fileFormat = SipperFileFormatFromStr (parmStrUpper);
-      if  (fileFormat  ==  sfUnKnown)
+      if  (fileFormat  == SipperFileFormat::UnKnown)
       {
         errorMessage = "Invalid File Format Specified[" + parmStrUpper + "]";
 
@@ -700,7 +700,7 @@ void  SipperImageExtractionParms::ParseCmdLine (const CmdLineExpander&  cmdLineE
   }
 
   
-  if  (fileFormat == sfUnKnown)
+  if  (fileFormat == SipperFileFormat::UnKnown)
   {
     if  (!osFileExists (sipperFileName))
     {
@@ -715,7 +715,7 @@ void  SipperImageExtractionParms::ParseCmdLine (const CmdLineExpander&  cmdLineE
 
     fileFormat = SipperBuff::GuessFormatOfFile (sipperFileName, cameraNum, log);
     
-    if  (fileFormat == sfUnKnown)
+    if  (fileFormat == SipperFileFormat::UnKnown)
     {
       errorMessage = "Can not Determine Format of Sipper File[" + sipperFileName + "].";
       cerr  << endl

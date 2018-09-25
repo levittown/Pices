@@ -378,32 +378,30 @@ void   OurNeighbors::DisplayCommandLineParameters ()
  ****************************************************************************************/
 MLClassPtr  OurNeighbors::DetermineClassFromFileName (const  KKStr&  fileName)
 {
-	kkint32  x;
 	KKStr filename_copy = fileName;
 
 	// If there are no path separator characters('\'  or  '/')  characters in name
 	// then we will not be able to determine the class.
 	
-  x = osLocateFirstSlashChar (filename_copy);
-	if  (x <= 0)
+  auto x = osLocateFirstSlashChar (filename_copy);
+	if  (!x  ||  (x.value () < 1))
     return  mlClasses->GetUnKnownClass ();
 
-
-  KKStr  className = filename_copy.SubStrPart (0, x - 1);
+  KKStr  className = filename_copy.SubStrSeg (0, x);
   
   // now lets get rid of any possible trailing seq number.
   // We are assuming that a underscore{"_") character separates the calcs name from the seq number.
   // So if there is an underscore character,  and all the characters to the right of it are
   // underscore characters,  then we will remove the underscore and the following numbers.
 	x = className.LocateLastOccurrence ('_');
-  if  (x > 0)
+  if  (x)
   {
     // Now lets eliminate any sequence number in name
     // We are assuming that a underscore{"_") character separates the class name from the seq number.
     // So if there is an underscore character, and all the characters to the right of it are
     // numeric characters, then we will remove the underscore and the following numbers.
 
-    kkuint32  y = x + 1;
+    kkuint32  y = x.value () + 1;
 
     bool  allFollowingCharsAreNumeric = true;
     while  ((y < className.Len ()) &&  (allFollowingCharsAreNumeric))
@@ -415,7 +413,7 @@ MLClassPtr  OurNeighbors::DetermineClassFromFileName (const  KKStr&  fileName)
 
     if  (allFollowingCharsAreNumeric)
     {
-      className = className.SubStrPart (0, x - 1);
+      className = className.SubStrSeg (0, x);
     }
   }
 
@@ -785,8 +783,7 @@ void	OurNeighbors::RemoveExcludedClasses (ImageFeaturesListPtr&  examples)
    examples->SortByClass ();
 
    ImageFeaturesListPtr  examplesToKeep = new ImageFeaturesList (examples->FileDesc (), 
-                                                                 true, // true = We will own images,
-                                                                 examples->QueueSize ()
+                                                                 true // true = We will own images,
                                                                 );
    examples->Owner (false);
 

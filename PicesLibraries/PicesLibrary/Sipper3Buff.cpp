@@ -86,7 +86,7 @@ void  Sipper3Buff::GetNextSipperRec (kkuint32&  spaceLeft,
                                     )
 {
   Sipper3Rec  sipperRec;
-  size_t  recsRead;
+  size_t  recsRead = 0;
 
   do {
     //recsRead =  fread (&sipperRec, sizeof (sipperRec), 1, inFile);
@@ -196,15 +196,15 @@ void  Sipper3Buff::GetNextLine (uchar*    lineBuff,
                                 bool&     flow
                                )
 {
-  bool    imageData;
-  uchar   cameraNum;
-  bool    eol;
-  bool    moreRecs;
+  bool      imageData;
+  uchar     cameraNum;
+  bool      eol;
+  bool      moreRecs;
   kkuint32  numOfBlanks;
-  bool    exceededBuffLen = false;
+  bool      exceededBuffLen = false;
   kkuint32  spaceLeft = lineBuffSize;   //  Number of pixels left on the scan line.
-  bool    grayScale;
-  bool    raw;
+  bool      grayScale;
+  bool      raw;
 
   uchar  pixels[12];
   uchar  numPixels;

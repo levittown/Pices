@@ -201,7 +201,7 @@ void   FullSizeImagesInstall::ProcessSipperFile (SipperFilePtr  sipperFile)
   kkint32  sipperFileImagesLost             = 0;
   kkint32  sipperFileImagesRecoverd         = 0;
 
-  kkint32  totalNumSipperFiles = sipperFiles->size ();
+  kkint32  totalNumSipperFiles = (kkint32)sipperFiles->size ();
 
   //if  (sipperFilesProcessed > 267)
   {

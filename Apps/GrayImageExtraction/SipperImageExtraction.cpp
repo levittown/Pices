@@ -484,7 +484,7 @@ void  SipperImageExtraction::CreateAllSipperFileRecs (DataBasePtr  dbConn,
     KKStr  fn = *idx;
     KKStr  rn = osGetRootName (fn);
 
-    KKStr  first3Chars = rn.SubStrPart (0, 2).ToLower ();
+    KKStr  first3Chars = rn.SubStrSeg (0, 3).ToLower ();
     if  ((first3Chars == "sta")  ||  (first3Chars == "etp"))
     {
       KKStr  fullFileName = InstrumentDataFileManager::GetFullSipperFileName (rn);
@@ -765,7 +765,7 @@ SipperImageExtraction::SipperImageExtraction (SipperImageExtractionParms&  _parm
   if  (parms.ExtractFeatureData ())
   {
     dupImageDetector = new DuplicateImages (fileDesc, log);
-    duplicateImages  = new ImageFeaturesList (fileDesc, true, 100);
+    duplicateImages  = new ImageFeaturesList (fileDesc, true);
     duplicateImageDir = osAddSlash (parms.OutputRootDir ()) + "DuplicateImages";
     osCreateDirectoryPath (duplicateImageDir);
 

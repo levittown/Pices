@@ -12,16 +12,13 @@
 #include "MemoryDebug.h"
 using  namespace  std;
 
-
 #include "OSservices.h"
 using  namespace  KKB;
-
 
 #include "FactoryFVProducer.h"
 #include "FileDesc.h"
 #include "PicesTrainingConfiguration.h"
 using namespace  KKMLL;
-
 
 #include "DataBase.h"
 #include "DataBaseServer.h"
@@ -71,7 +68,6 @@ PicesApplication::PicesApplication ():
 
 
 
-
 PicesApplication::PicesApplication (const PicesApplication&  _application):
   Application (_application),
   config             (NULL),
@@ -102,7 +98,6 @@ PicesApplication::~PicesApplication ()
   delete  dbServer;  dbServer = NULL;
   delete  db;        db       = NULL;
 }
-
 
 
 
@@ -139,7 +134,6 @@ void  PicesApplication::InitalizeApplication (kkint32 argc,
     }
     fvFactoryProducer = config->FvFactoryProducer (log);
   }
-
 
   if  (dataBaseRequired)
   {
@@ -195,7 +189,7 @@ bool  PicesApplication::ProcessCmdLineParameter (const KKStr&  parmSwitch,
 
 
 
-bool  PicesApplication::ProcessDataBaseParameter (const KKStr&  parmSwitch, 
+bool  PicesApplication::ProcessDataBaseParameter (const KKStr&, 
                                                   const KKStr&  parmValue
                                                  )
 {
@@ -298,7 +292,7 @@ void  PicesApplication::PrintStandardHeaderInfo (ostream&  o)
   o << "Application:"     << "\t" << ApplicationName    () << endl;
   o << "Build Date/Time"  << "\t" << BuildDate          () << endl;
   o << "Run Date/Time"    << "\t" << osGetLocalDateTime () << endl; 
-  o << "Host Name"        << "\t" << osGetHostName      () << endl;
+  o << "Host Name"        << "\t" << osGetHostName ().value_or ("*** UNKNOWN ***") << endl;
   o << "User Name"        << "\t" << osGetUserName      () << endl;
   if  (db)
     o << "DataBase"       << "\t" << db->ServerDescription () << endl;

@@ -68,11 +68,9 @@ PicesTrainingConfiguration::PicesTrainingConfiguration (const PicesTrainingConfi
 
 
 
-
 PicesTrainingConfiguration::~PicesTrainingConfiguration ()
 {
 }
-
 
 
 
@@ -86,13 +84,10 @@ void  PicesTrainingConfiguration::Load (const KKStr&  _configFileName,
 
 
 
-
 PicesTrainingConfigurationPtr  PicesTrainingConfiguration::Duplicate ()  const
 {
   return new PicesTrainingConfiguration (*this);
 }
-
-
 
 
 
@@ -103,9 +98,9 @@ FactoryFVProducerPtr   PicesTrainingConfiguration::DefaultFeatureVectorProducer 
 
 
 
-void  PicesTrainingConfiguration::Save (const KKStr& fileName)  const
+void  PicesTrainingConfiguration::Save (const KKStr&  saveFileName)  const
 {
-  ofstream  o (fileName.Str ());
+  ofstream  o (saveFileName.Str ());
 
   TrainingConfiguration2::Save (o);
 
@@ -114,16 +109,12 @@ void  PicesTrainingConfiguration::Save (const KKStr& fileName)  const
 
 
 
-
-
-
 PicesTrainingConfigurationPtr  PicesTrainingConfiguration::CreateFromFeatureVectorList
-                                                    (FeatureVectorList&      _examples,
-                                                     RunLog&                 _log
+                                                    (FeatureVectorList&  _examples,
+                                                     RunLog&             _log
                                                     )
 {
   _log.Level (10) << "PicesTrainingConfiguration::CreateFromFeatureVectorList" << endl;
-  FileDescConstPtr  fileDesc = _examples.FileDesc ();
 
   MLClassListPtr  mlClasses = _examples.ExtractListOfClasses ();
   mlClasses->SortByName ();
@@ -144,13 +135,12 @@ PicesTrainingConfigurationPtr  PicesTrainingConfiguration::CreateFromFeatureVect
 
 
 
-
 PicesTrainingConfigurationPtr  PicesTrainingConfiguration::CreateFromDirectoryStructure 
-                                                    (const KKStr&            _existingConfigFileName,
-                                                     const KKStr&            _subDir,
-                                                     RunLog&                 _log,
-                                                     bool&                   _successful,
-                                                     KKStr&                  _errorMessage
+                                                    (const KKStr&  _existingConfigFileName,
+                                                     const KKStr&  _subDir,
+                                                     RunLog&       _log,
+                                                     bool&         _successful,
+                                                     KKStr&        _errorMessage
                                                     )
 {
   _log.Level (10) << "PicesTrainingConfiguration::CreateFromDirectoryStructure"  << endl
@@ -219,8 +209,6 @@ PicesTrainingConfigurationPtr  PicesTrainingConfiguration::CreateFromDirectorySt
 
 
 
-
-
 void  PicesTrainingConfiguration::WriteXML (const KKStr&  varName,
                                             ostream&      o
                                            )  const
@@ -240,12 +228,11 @@ void  PicesTrainingConfiguration::WriteXML (const KKStr&  varName,
 
 
 
-
 void   PicesTrainingConfiguration::ReadXML (XmlStream&      s,
-                                             XmlTagConstPtr  tag,
+                                            XmlTagConstPtr  tag,
                                             VolConstBool&   cancelFlag,
-                                             RunLog&         log
-                                            )
+                                            RunLog&         log
+                                           )
 
 {
   XmlTokenPtr t = s.GetNextToken (cancelFlag, log);
@@ -255,6 +242,7 @@ void   PicesTrainingConfiguration::ReadXML (XmlStream&      s,
     if  (t)
     {
       const KKStr&  varName = t->VarName ();
+      log.Level (50) << "PicesTrainingConfiguration::ReadXML  Token not processed varName: " << varName << endl; 
     }
     delete  t;
     if  (cancelFlag)

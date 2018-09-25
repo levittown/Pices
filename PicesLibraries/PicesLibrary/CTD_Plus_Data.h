@@ -98,12 +98,11 @@ namespace MLL
   //"Flourences",      // 16
   //"OxygenSensor",    // 18
   
-  
-  
-    float  DissolvedOxygenConcentration (float  voltage,
-                                         float  temperature,
-                                         float  salinity,
-                                         float  pressure
+   
+    float  DissolvedOxygenConcentration (float  _voltage,
+                                         float  _temperature,
+                                         float  _salinity,
+                                         float  _pressure
                                         );
   
   

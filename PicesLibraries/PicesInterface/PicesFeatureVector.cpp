@@ -375,19 +375,19 @@ namespace  PicesInterface
 
 
 
-  String^  PicesFeatureVector::FeatureName (int featureNum)
+  String^  PicesFeatureVector::FeatureName (uint featureNum)
   {
     return  PicesKKStr::KKStrToSystenStr (FeatureFileIOPices::PlanktonFieldName (featureNum));
   }
 
 
 
-  double  PicesFeatureVector::FeatureValue (int featureNum)
+  double  PicesFeatureVector::FeatureValue (uint featureNum)
   {
     if  (!features)
       return 0.0;
 
-    if  ((featureNum < 0)  ||  (featureNum >= this->features->NumOfFeatures ()))
+    if  (featureNum >= this->features->NumOfFeatures ())
       return 0.0;
 
     return  features->FeatureData (featureNum);

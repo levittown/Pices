@@ -8,9 +8,7 @@
 #include <iostream>
 #include <ostream>
 #include <string>
-#include <strstream>
 #include <vector>
-
 #include "KKBaseTypes.h"
 #include "GoalKeeper.h"
 #include "MemoryDebug.h"
@@ -62,14 +60,14 @@ namespace  PicesInterface
     log               (_log),
     valid             (gcnew System::Boolean (false))
   {
-    std::strstream  logStr;
+    std::stringstream  logStr;
     KKStr  configFileName = PicesKKStr::SystemStringToKKStr (_configFileName);
     FileDescConstPtr  fileDesc = FeatureFileIOPices::NewPlanktonFile ();
     config = new PicesTrainingConfiguration ();
     config->Load (configFileName, true, log->Log ());
     valid = gcnew System::Boolean (config->FormatGood ());
     if  (!config->FormatGood ())
-       loadLogStream = gcnew String (logStr.str ());
+       loadLogStream = gcnew String (logStr.str ().c_str ());
     AdjustCurMemoryPressure ();
   }
 

@@ -15,7 +15,6 @@
 #include "MemoryDebug.h"
 using namespace std;
 
-
 #include "Blob.h"
 #include "ConvexHull.h"
 #include "KKBaseTypes.h"
@@ -24,19 +23,16 @@ using namespace std;
 #include "RunLog.h"
 using namespace KKB;
 
-
 #include "FactoryFVProducer.h"
 #include "FeatureVectorProducer.h"
 #include "FileDesc.h"
 #include "PicesTrainingConfiguration.h"
 using namespace  KKMLL;
 
-
 #include "PicesFVProducer.h"
 #include "FeatureFileIOPices.h"
 #include "ImageFeatures.h"
 using  namespace  MLL;
-
 
 
 
@@ -49,11 +45,9 @@ PicesFVProducer::PicesFVProducer (FactoryFVProducerPtr  factory):
 
 
 
-
 PicesFVProducer::~PicesFVProducer ()
 {
 }
-
 
 
 
@@ -102,8 +96,6 @@ ImageFeaturesPtr  PicesFVProducer::ComputeFeatureVector (const Raster&     srcIm
 
 
 
-
-
 ImageFeaturesPtr  PicesFVProducer::ComputeFeatureVectorFromImage (const KKStr&      fileName,
                                                                   const MLClassPtr  knownClass,
                                                                   RasterListPtr     intermediateImages,
@@ -136,8 +128,6 @@ ImageFeaturesPtr  PicesFVProducer::ComputeFeatureVectorFromImage (const KKStr&  
 
 
 
-
-
 const type_info*   PicesFVProducer::FeatureVectorTypeId () const
 {
   return  &(typeid (ImageFeatures));
@@ -163,7 +153,6 @@ FileDescConstPtr  PicesFVProducer::DefineFileDesc ()  const
 {
   return  DefineFileDescStatic ();
 }  /* DefineFileDesc */
-
 
 
 
@@ -228,7 +217,6 @@ PicesFVProducerPtr  PicesFVProducerFactory::ManufactureInstance (RunLog&  runLog
 
 
 
-
 ImageFeaturesListPtr  PicesFVProducerFactory::ManufacturFeatureVectorList (bool owner) const
 {
   return new ImageFeaturesList (PicesFVProducer::DefineFileDescStatic (), owner);
@@ -243,9 +231,7 @@ TrainingConfiguration2Ptr  PicesFVProducerFactory::ManufacturTrainingConfigurati
 
 
 
-
 PicesFVProducerFactory*  PicesFVProducerFactory::factory = Factory (NULL);
-
 
 
 
@@ -262,4 +248,3 @@ PicesFVProducerFactory*  PicesFVProducerFactory::Factory (RunLog*  runLog)
 
   return  factory;
 }
-

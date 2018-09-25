@@ -1,3 +1,4 @@
+#include "StdAfx.h"
 #include "FirstIncludes.h"
 #include <stdio.h>
 #include <math.h>

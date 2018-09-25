@@ -18,6 +18,7 @@ using namespace KKB;
 using  namespace  MLL;
 
 
+
 VolumeSampledStat::VolumeSampledStat ():
     binId         (0),
     binDepth      (0.0f),
@@ -26,12 +27,14 @@ VolumeSampledStat::VolumeSampledStat ():
 }
 
 
+
 VolumeSampledStat::VolumeSampledStat (const VolumeSampledStat&  _stat):
     binId         (_stat.binId),
     binDepth      (_stat.binDepth),
     volumeSampled (_stat.volumeSampled)
 {
 }
+
 
 
 VolumeSampledStat::VolumeSampledStat (kkint32 _binId,
@@ -46,8 +49,6 @@ VolumeSampledStat::VolumeSampledStat (kkint32 _binId,
 
 
 
-
-
 VolumeSampledStat::~VolumeSampledStat ()
 {
 }
@@ -56,9 +57,8 @@ VolumeSampledStat::~VolumeSampledStat ()
 
 void  VolumeSampledStat::AddToVolumeSampled (float _volumeSampled)
 {
-  volumeSampled += volumeSampled;
+  volumeSampled += _volumeSampled;
 }
-
 
 
 
@@ -78,6 +78,7 @@ VolumeSampledStatList::~VolumeSampledStatList ()
     idx->second = NULL;
   }
 }
+
 
 
 VolumeSampledStatPtr  VolumeSampledStatList::Locate (int binId)
@@ -121,7 +122,6 @@ void  VolumeSampledStatList::Give (VolumeSampledStatPtr&  stat)
     insert (Pair (stat->BinId (), stat));
   }
 }
-
 
 
 

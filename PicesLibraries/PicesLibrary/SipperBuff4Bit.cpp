@@ -103,6 +103,7 @@ struct  SipperBuff4Bit::OpRecRun256Len1
 };  /* OpRecRun256Len1 */
 
 
+
 struct  SipperBuff4Bit::OpRecRun256Len2
 {
   /** For one or two raw pixels */
@@ -136,6 +137,7 @@ struct  SipperBuff4Bit::OpRecRaw513Pixels1
   uchar  lenHigh :4;      /**< Num-Raw-Pixels = 1 + 2 * (1 + lenHigh * 16 + lenLow)  */
   /** To be followed by 'len' RawPixelRec's */
 };  /* OpRecRaw513Pixels1 */
+
 
 
 struct  SipperBuff4Bit::OpRecRaw513Pixels2
@@ -205,7 +207,7 @@ SipperBuff4Bit::SipperBuff4Bit (InstrumentDataManagerPtr  _instrumentDataManager
   rawStr                (NULL),
   rawStrLen             (0),
   rawStrSize            (0),
-  runLen                (0),
+  //runLen                (0),
   runLenChar            (0),
   curCompStatus         (csNull),
   pixelsPerScanLine     (2048)
@@ -232,7 +234,7 @@ SipperBuff4Bit::SipperBuff4Bit (const KKStr&              _fileName,
   rawStr                (NULL),
   rawStrLen             (0),
   rawStrSize            (0),
-  runLen                (0),
+  //runLen                (0),
   runLenChar            (0),
   curCompStatus         (csNull),
   pixelsPerScanLine     (2048)
@@ -328,7 +330,6 @@ void  SipperBuff4Bit::AllocateRawStr (kkuint16  size)
 
 
 
-
 void  SipperBuff4Bit::AllocateEncodedBuff ()
 {
   delete  encodedBuff;  encodedBuff  = NULL;
@@ -380,7 +381,7 @@ void  SipperBuff4Bit::BuildConversionTables ()
 
       convTable4BitTo8Bit[x] = (uchar)fourBitTo8BitNum;
       for  (y = this8Bit;  y < next8Bit;  ++y)
-        convTable8BitTo4Bit[y] = x;
+        convTable8BitTo4Bit[y] = (uchar)x;
     }
 
     compensationTable = new uchar[256];
@@ -552,9 +553,6 @@ void  SipperBuff4Bit::GetNextScanLine (uchar*    lineBuff,
 
   kkuint32  bufferLineLen = 0;
 
-  uchar*  textMsg     = NULL;            
-  kkuint32  textMsgLen  = 0;
-
   lineLen = 0;
 
   curRowByteOffset = byteOffset;
@@ -659,7 +657,7 @@ void  SipperBuff4Bit::GetNextScanLine (uchar*    lineBuff,
       // Raw-String (Even length 2 thru 32).
       kkuint16  numRawRecs = rec.raw32Pixels.len + 1;   // We add 1 to 'numRawRecs' because '1' was subtracted out when written to Scanner File.
       kkuint16  numRawPixels = numRawRecs * 2;
-      kkuint16  newBufferLineLen = bufferLineLen + numRawPixels;
+      kkuint16  newBufferLineLen = (kkuint16)(bufferLineLen + numRawPixels);
       if  (newBufferLineLen > lineBuffSize)
       {
         cerr << "SipperBuff4Bit::GetNextScanLine   ***ERROR***  Exceeding 'bufferLineLen';  ScanLine[" << curRow << "]." << endl;
@@ -681,7 +679,7 @@ void  SipperBuff4Bit::GetNextScanLine (uchar*    lineBuff,
         byteOffset += sizeof (rec2);
         kkuint16  numRawRecs = 1 + 16 * (kkuint16)(rec.raw513Pixels1.lenHigh) + (kkuint16)(rec2.raw513Pixels2.lenLow);
         kkuint16  numRawPixels = 1 + 2 * numRawRecs;
-        kkuint16  newBufferLineLen = bufferLineLen + numRawPixels;
+        kkuint16  newBufferLineLen = (kkuint16)(bufferLineLen + numRawPixels);
         if  (newBufferLineLen > lineBuffSize)
         {
           cerr << "SipperBuff4Bit::GetNextScanLine   ***ERROR***  Exceeding 'bufferLineLen';  ScanLine[" << curRow << "]." << endl;

@@ -144,6 +144,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PicesLibrary", "PicesLibrar
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SipperFile", "PicesLibraries\SipperFile\SipperFile.csproj", "{662D4BB9-C075-465C-9CA6-A8231E221B70}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8F609A95-37BC-4E0F-8CD5-4196A86CD4B8} = {8F609A95-37BC-4E0F-8CD5-4196A86CD4B8}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImageExtractionManager", "PicesLibraries\ImageExtractionManager\ImageExtractionManager.vcxproj", "{66EF90F3-D4AC-4750-B715-4AD9599BD012}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -235,7 +238,6 @@ Global
 		{5751D238-5DD2-4A1D-A183-8F667E260BB1}.Release|x64.ActiveCfg = Release|x64
 		{5751D238-5DD2-4A1D-A183-8F667E260BB1}.Release|x64.Build.0 = Release|x64
 		{F057D8ED-F0B8-45F9-84EE-C77518BB5444}.Debug|x64.ActiveCfg = Debug|x64
-		{F057D8ED-F0B8-45F9-84EE-C77518BB5444}.Debug|x64.Build.0 = Debug|x64
 		{F057D8ED-F0B8-45F9-84EE-C77518BB5444}.Release|x64.ActiveCfg = Release|x64
 		{F057D8ED-F0B8-45F9-84EE-C77518BB5444}.Release|x64.Build.0 = Release|x64
 		{A2F931F2-DFCD-4334-A2A9-83C9935C5F06}.Debug|x64.ActiveCfg = Debug|x64
@@ -332,7 +334,9 @@ Global
 		{152FC061-8649-46C9-8046-B387F7D73466}.Release|x64.ActiveCfg = Release|x64
 		{152FC061-8649-46C9-8046-B387F7D73466}.Release|x64.Build.0 = Release|x64
 		{5783B6FD-AEF9-4A27-B9EA-0C4EED9B13FB}.Debug|x64.ActiveCfg = Debug|x64
+		{5783B6FD-AEF9-4A27-B9EA-0C4EED9B13FB}.Debug|x64.Build.0 = Debug|x64
 		{5783B6FD-AEF9-4A27-B9EA-0C4EED9B13FB}.Release|x64.ActiveCfg = Release|x64
+		{5783B6FD-AEF9-4A27-B9EA-0C4EED9B13FB}.Release|x64.Build.0 = Release|x64
 		{2345887A-3706-4478-808B-223E4C170114}.Debug|x64.ActiveCfg = Debug|x64
 		{2345887A-3706-4478-808B-223E4C170114}.Debug|x64.Build.0 = Debug|x64
 		{2345887A-3706-4478-808B-223E4C170114}.Release|x64.ActiveCfg = Release|x64

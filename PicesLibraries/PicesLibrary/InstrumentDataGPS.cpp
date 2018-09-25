@@ -1,23 +1,19 @@
-#include  "FirstIncludes.h"
-#include  <stdlib.h>
-#include  <stdio.h>
-#include  <fstream>
-#include  <iostream>
-#include  <vector>
-
-#include  "MemoryDebug.h"
-
+#include "FirstIncludes.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <fstream>
+#include <iostream>
+#include <vector>
+#include "MemoryDebug.h"
 using namespace std;
-#include  "KKBaseTypes.h"
-#include  "KKStr.h"
 
+#include "KKBaseTypes.h"
+#include "KKStr.h"
+#include "Option.h"
 using namespace KKB;
 
-
-
-#include  "InstrumentDataGPS.h"
-#include  "InstrumentDataManager.h"
-
+#include "InstrumentDataGPS.h"
+#include "InstrumentDataManager.h"
 using namespace  MLL;
 
 
@@ -44,8 +40,6 @@ InstrumentDataGPS::~InstrumentDataGPS ()
 
 
 
-
-
 void  InstrumentDataGPS::ParseDegreeMinutesStr (const KKStr&  str,
                                                 double&        degrees,
                                                 double&        minutes
@@ -55,16 +49,15 @@ void  InstrumentDataGPS::ParseDegreeMinutesStr (const KKStr&  str,
   minutes = 0.0;
 
   auto x = str.LocateCharacter ('.');
-  if  (x < 0)
+  if  (!x)
     return;
 
-  KKStr  degStr = str.SubStrPart (0, x - 3);
+  KKStr  degStr = str.SubStrSeg (0, x - 2);
   KKStr  minStr = str.SubStrPart (x - 2);
   
   degrees = atof (degStr.Str ());
   minutes = atof (minStr.Str ());
 }  /* ParseDegreeMinutesStr */
-
 
 
 
@@ -107,7 +100,7 @@ void  InstrumentDataGPS::ProcessGPGLL (const KKStr&  _str)
 
 void  InstrumentDataGPS::ProcessNMEAInfo (const KKStr& _str)
 {
-  if  (_str.SubStrPart (0, 5) == "$GPGLL")
+  if  (_str.StartsWith ("$GPGLL"))
     ProcessGPGLL (_str);
 }  /* ProcessNMEAInfo */
 
@@ -136,7 +129,6 @@ void  InstrumentDataGPS::ReportInstrumentData (kkuint32 curScanLine,
     curTextLine = "";
     curTextLineStartScanLine = curScanLine;
   }
-
 
   if  (curTextLine.Empty ())
     curTextLineStartScanLine = curScanLine;

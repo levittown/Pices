@@ -1,20 +1,20 @@
-#include  "StdAfx.h"
-#include  "FirstIncludes.h"
+#include "StdAfx.h"
+#include "FirstIncludes.h"
 
-#include  <stdio.h>
-#include  <math.h>
-#include  <ctype.h>
-#include  <time.h>
-#include  <fstream>
-#include  <iostream>
-#include  <map>
-#include  <ostream>
-#include  <string>
-#include  <vector>
+#include <stdio.h>
+#include <math.h>
+#include <ctype.h>
+#include <time.h>
+#include <fstream>
+#include <iostream>
+#include <map>
+#include <ostream>
+#include <string>
+#include <vector>
 //using namespace std;
 
-#include  "MemoryDebug.h"
-#include  "KKBaseTypes.h"
+#include "MemoryDebug.h"
+#include "KKBaseTypes.h"
 
 using namespace System;
 using namespace System::Collections::Generic;
@@ -53,7 +53,7 @@ ClassificationBiasMatrix::ClassificationBiasMatrix (String^          _configFile
 
   StreamReader^  sr = nullptr;
   try  {sr = gcnew StreamReader (biasFileName);}
-  catch  (Exception^ e)  
+  catch  (Exception^ e)
   {
     valid = false;
     String^  errorStr = "Error opening BiasMatrixFile[" + biasFileName + "]";
@@ -179,11 +179,11 @@ void  ClassificationBiasMatrix::TestPaperResults (StreamWriter^   sw)
   classCounts[1] = 1965;
   classCounts[2] = 495;
   classCounts[3] = 1399;
-  classCounts[4] = 676; 
+  classCounts[4] = 676;
   classCounts[5] = 1191;
   classCounts[6] = 1752;
 
-  array<double>^  adjCounts = nullptr; 
+  array<double>^  adjCounts = nullptr;
   array<double>^  stdErrors = nullptr;
 
   PerformAdjustmnts (classCounts, adjCounts, stdErrors);
@@ -396,7 +396,7 @@ void   ClassificationBiasMatrix::PerformAdjustmnts (array<double>^  classifiedCo
                                                     array<double>^ &stdErrors
                                                    )
 {
-  // For description of calculations read the paper: 
+  // For description of calculations read the paper:
   //    "Estimating the Taxonomic composition of a sample when individuals are classified with error"
   //     by Andrew Solow, Cabll Davis, Qiao Hu
   //     Woods Hole Oceanographic Institution, Woods Hole Massachusetts
@@ -423,7 +423,7 @@ void   ClassificationBiasMatrix::PerformAdjustmnts (array<double>^  classifiedCo
       if  ((*probabilities)[x][x] == 0.0)
       {
         // This will cause the inversion of the diagonal matrix to fail.  To deal
-        // with this situation; I will steal some probability from other buckets on 
+        // with this situation; I will steal some probability from other buckets on
         // same row.
 
         double  totalAmtStolen = 0.0;
@@ -561,7 +561,7 @@ void  ClassificationBiasMatrix::PrintBiasMatrix (StreamWriter^  sw)
 
   int  row = 0;
   int  col = 0;
-  
+
   double  total = 0.0;
 
   VectorDouble colTotals (numClasses, 0.0);
@@ -587,10 +587,10 @@ void  ClassificationBiasMatrix::PrintBiasMatrix (StreamWriter^  sw)
   for  (col = 0;  col < numClasses;  col++)
      sw->Write ("\t" + colTotals[col].ToString ("###,##0.00"));
   sw->WriteLine ();
- 
+
 
   sw->WriteLine ();
- 
+
   for  (row = 0; row < numClasses;  row++)
   {
     sw->Write (classes[row]->Name);
@@ -623,7 +623,7 @@ void  ClassificationBiasMatrix::PrintAdjustedResults (StreamWriter^   sw,
   {
     array<double>^  adjustedReults = nullptr;
     array<double>^  stdErrors      = nullptr;
-    
+
     PerformAdjustmnts (classifiedCounts, adjustedReults, stdErrors);
 
     array<String^>^  classTitles = classes->ExtractThreeTitleLines ();

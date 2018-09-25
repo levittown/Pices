@@ -12,12 +12,9 @@ using namespace std;
 #include "DateTime.h"
 using namespace KKB;
 
-
 #include "InstrumentData.h"
 #include "PicesVariables.h"
 using namespace MLL;
-
-
 
 
 InstrumentData::InstrumentData ():
@@ -71,8 +68,6 @@ InstrumentData::InstrumentData (const InstrumentData&   id):
 
 
 
-
-
 InstrumentData::InstrumentData (      KKStrParser&  line, 
                                 const VectorInt&    fieldIndirections
                                ):
@@ -109,7 +104,7 @@ InstrumentData::InstrumentData (      KKStrParser&  line,
 InstrumentData::InstrumentData (kkuint32         _scanLine,
                                 kkuint32         _byteOffset,
                                 const DateTime&  _ctdDate,
-                                char             _activeBattery,
+                                kkint32          _activeBattery,
                                 double           _latitude,
                                 double           _longitude,
                                 float            _ctdBattery,
@@ -201,7 +196,6 @@ InstrumentData::InstrumentData (kkuint32         _scanLine,
 
 
 
-
 void  InstrumentData::InitializeDataVariables ()
 {
   activeBattery = 0;
@@ -215,8 +209,6 @@ void  InstrumentData::InitializeDataVariables ()
   scanLine   = 0;
   byteOffset = 0;
 }  /* InitializeDataVariables */
-
-
 
 
 
@@ -238,6 +230,7 @@ InstrumentData::~InstrumentData ()
       KKStr  formatStr;
     };
 */
+
 
 
 InstrumentData::FieldDesc  InstrumentData::fieldDescriptions[] =
@@ -294,12 +287,12 @@ void  InstrumentData::CreateBlocker ()
   GoalKeeper::Create ("InstrumentData", blocker);
 }
 
-      
-map<KKStr,kkuint32>*  InstrumentData::fieldNamesUpperIdx  = NULL;
-map<KKStr,kkuint32>*  InstrumentData::shortFieldNamesIdx  = NULL;
-GoalKeeperPtr       InstrumentData::blocker               = NULL;
-bool                InstrumentData::needToRunFinalCleanUp = false;
 
+      
+map<KKStr,kkuint32>*  InstrumentData::fieldNamesUpperIdx    = NULL;
+map<KKStr,kkuint32>*  InstrumentData::shortFieldNamesIdx    = NULL;
+GoalKeeperPtr         InstrumentData::blocker               = NULL;
+bool                  InstrumentData::needToRunFinalCleanUp = false;
 
 kkint32  InstrumentData::numFields     = -1;
 kkint32  InstrumentData::numDataFields = 28;
@@ -348,7 +341,6 @@ kkint32  InstrumentData::activeColumnsIndex       =  36;
 
 
 
-
 const KKStr&  InstrumentData::FieldName (kkint32 fieldIndex)
 {
   if  ((fieldIndex < 0)  ||  (fieldIndex >= NumFields ()))
@@ -376,6 +368,7 @@ const KKStr&  InstrumentData::FieldUnitOfMeasure (kkint32 fieldIndex)
 
   return fieldDescriptions[fieldIndex].unitOfMeasure;
 }
+
 
 
 float  InstrumentData::FieldMinValue (kkint32 fieldIndex)
@@ -412,7 +405,6 @@ kkint32  InstrumentData::NumFields ()
 
 
 
-
 kkint32  InstrumentData::GetFieldNum (const KKStr&  s)
 {
   if  (fieldNamesUpperIdx == NULL)
@@ -446,12 +438,8 @@ kkint32  InstrumentData::GetFieldNum (const KKStr&  s)
 
 
 
-
-
 kkint32  InstrumentData::GetFieldNumFromShortName (const KKStr&  s)
 {
-  kkint32  n = NumFields ();
-
   if  (shortFieldNamesIdx == NULL)
   {
     kkint32  n = NumFields ();
@@ -472,7 +460,6 @@ kkint32  InstrumentData::GetFieldNumFromShortName (const KKStr&  s)
   else
     return idx->second;
 }  /* GetFieldNumFromShortName */
-
 
 
 
@@ -502,7 +489,6 @@ VectorIntPtr  InstrumentData::CreateFieldIndirectionVectorFromTabDelStr (KKStrPa
 
 
 
-
 VectorIntPtr  InstrumentData::CreateDefaultFieldIndirectionList ()
 {
   kkint32  x;
@@ -512,7 +498,6 @@ VectorIntPtr  InstrumentData::CreateDefaultFieldIndirectionList ()
     indirectionVector->push_back (x);
   return  indirectionVector;
 }  /* CreateDefaultFieldIndirectionList */
-
 
 
 
@@ -564,12 +549,9 @@ KKStr  InstrumentData::FieldToStr (kkint32  fieldIndex)  const
     return  "";
   }
 
-
-  char buff[50];
-  SPRINTF (buff, sizeof (buff), "%g", data[fieldIndex - ctdBatteryIndex]);
-  return  KKStr (buff);
+  KKStr result = KKB::StrFromFloat (data[fieldIndex - ctdBatteryIndex]);
+  return  result;
 }  /* FieldToStr */
-
 
 
 
@@ -637,8 +619,6 @@ void  InstrumentData::UpdateFromStr (kkint32       fieldIndex,
 
 
 
-
-
 KKStr  InstrumentData::ToTabDelStr ()  const
 {
   kkint32  x = 0;
@@ -673,7 +653,6 @@ void   InstrumentData::RefreshDataFields (const InstrumentData&  id)
   cropRight     = id.CropRight     ();
   activeColumns = id.ActiveColumns ();
 }  /* RefreshDataFields */
-
 
 
 

@@ -1,5 +1,4 @@
 #include "FirstIncludes.h"
-
 #include <stdlib.h>
 #include <fstream>
 #include <memory>
@@ -7,15 +6,11 @@
 #include <ostream>
 #include <queue>
 #include <sstream>
-#include <strstream>
 #include <string>
 #include <vector>
 #include <windows.h>
-
 #include "MemoryDebug.h"
-
 using namespace  std;
-
 
 #include "KKBaseTypes.h"
 #include "BMPImage.h"
@@ -24,7 +19,6 @@ using namespace  std;
 #include "Raster.h"
 #include "KKStr.h"
 using namespace  KKB;
-
 
 #include "Classifier2.h"
 #include "ConfusionMatrix2.h"
@@ -40,13 +34,11 @@ using namespace  KKB;
 #include "TrainingConfiguration2.h"
 using namespace  KKMLL;
 
-
 #include "PicesTrainingConfiguration.h"
 #include "PicesFVProducer.h"
 using namespace  MLL;
 
-
-#include  "ClassCountSearch.h"
+#include "ClassCountSearch.h"
 
 
 
@@ -80,6 +72,7 @@ public:
   }
 
 
+
   double  ClassCount ()  const
   {
     return  truePositives + falseNegatives;
@@ -97,6 +90,7 @@ public:
   }
 
 
+
   double  Type1Error ()  const  
   {
     double  denominator = falsePositives + trueNegatives;
@@ -105,6 +99,7 @@ public:
     else
       return  falsePositives / denominator;
   }
+
 
 
   double  Type2Error ()  const  
@@ -333,7 +328,6 @@ ClassCountSearch::ClassCountSearch ():
 
 
 
-
 /******************************************************************************
  * Destructor
  ******************************************************************************/
@@ -359,6 +353,7 @@ ClassCountSearch::~ClassCountSearch ()
   delete  trainExamplesClasses;  trainExamplesClasses = NULL;
   //delete  mlClass;
 }
+
 
 
 void  ClassCountSearch::InitalizeApplication (kkint32 argc,
@@ -459,8 +454,6 @@ void  ClassCountSearch::InitalizeApplication (kkint32 argc,
 
 
 
-
-
 /******************************************************************************
  * ProcessCmdLineParamters
  * DESC: Extracts parameters from the command line
@@ -490,7 +483,6 @@ bool  ClassCountSearch::ProcessCmdLineParameter (const KKStr&  parmSwitch,
 
 
 
-
 /******************************************************************************
  * DisplayCommandLineParameters()
  * DESC: Displays a help message to the user
@@ -513,8 +505,6 @@ void   ClassCountSearch::DisplayCommandLineParameters ()
 }
 
 // ClassCountSearch -gt D:\Pices\TrainingLibraries\oil  -s C:\temp\oil -r C:\temp\oil\OilGradingReport.txt
-
-
 
 
 
@@ -582,7 +572,6 @@ void  ClassCountSearch::Main ()
   }
 
 }  /* Main */
-
 
 
 
@@ -794,7 +783,6 @@ ConfusionMatrix2Ptr  ClassCountSearch::GradeClassList (MLClassListPtr  classes,
   
   return cm;
 }  /* GradeClassList */
-
 
 
 

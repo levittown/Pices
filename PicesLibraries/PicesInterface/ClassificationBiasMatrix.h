@@ -78,7 +78,6 @@ namespace PicesInterface
     void  Read (StreamReader^  r);
     void  ReadSimpleConfusionMatrix (StreamReader^  sr);
    
-
     String^                 biasFileName;
     PicesClassList^         classes;
     MatrixDPtr              counts;

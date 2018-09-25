@@ -50,7 +50,7 @@ AbundanceCorrectionMatrix::AbundanceCorrectionMatrix (MLClassList& _classes,
     _log.Level (-1) << endl << "AbundanceCorrectionMatrix   ***ERROR***    _otherClass == NULL  defaulting to 'OtherClass'," << endl << endl;
     otherClass = MLClass::CreateNewMLClass ("Other", -1);
     kkint32  seqNum = 0;
-    while  (classes.PtrToIdx (otherClass) != NULL)
+    while  (classes.PtrToIdx (otherClass))
     {
       ++seqNum;
       KKStr  otherName = "Other_" + StrFormatInt (seqNum, "000");
@@ -61,6 +61,7 @@ AbundanceCorrectionMatrix::AbundanceCorrectionMatrix (MLClassList& _classes,
   numClasses = (kkuint32)classes.size () + 1;
   AllocateMemory ();
 }
+
 
 
 AbundanceCorrectionMatrix::AbundanceCorrectionMatrix (const KKStr&  configFileName,
@@ -107,7 +108,7 @@ void  AbundanceCorrectionMatrix::AllocateMemory ()
 void  AbundanceCorrectionMatrix::AllocatePredictionsTable ()
 {
   predictions = new kkuint32*[numClasses];
-  for  (kkuint32 x = 0;  x < numClasses;  ++x)
+  for  (kkint32 x = 0;  x < numClasses;  ++x)
     predictions[x] = AllocateUint32Array (numClasses);
 }
 
@@ -127,7 +128,7 @@ void  AbundanceCorrectionMatrix::CleanUp ()
 {
   if  (predictions)
   {
-    for  (kkuint32 x = 0;  x < numClasses;  ++x)
+    for  (kkint32 x = 0;  x < numClasses;  ++x)
     {
       delete  predictions[x];
       predictions[x] = NULL;
@@ -142,7 +143,7 @@ void  AbundanceCorrectionMatrix::CleanUp ()
 
 
 
-kkint32  AbundanceCorrectionMatrix::LookUpClassIdx (MLClassPtr c)
+OptionUInt32  AbundanceCorrectionMatrix::LookUpClassIdx (MLClassPtr c)
 {
   if  (c == otherClass)
     return otherClassIdx;
@@ -171,18 +172,18 @@ void  AbundanceCorrectionMatrix::Prediction (MLClassPtr  knownClass,
     return;
   }
 
-  kkint32  knownClassIdx = LookUpClassIdx (knownClass);
-  kkint32  predClassIdx  = LookUpClassIdx (predClass);
+  auto  knownClassIdx = LookUpClassIdx (knownClass);
+  auto  predClassIdx  = LookUpClassIdx (predClass);
 
-  if  (knownClassIdx < 0)
+  if  (!knownClassIdx)
     knownClassIdx = otherClassIdx;
 
-  if  (predClassIdx < 0)
+  if  (!predClassIdx)
     predClassIdx = otherClassIdx;
 
-  ++(predictions[predClassIdx][knownClassIdx]);
-  ++(knownByClass[knownClassIdx]);
-  ++(predByClass[predClassIdx]);
+  ++(predictions[predClassIdx.value ()][knownClassIdx.value ()]);
+  ++(knownByClass[knownClassIdx.value ()]);
+  ++(predByClass[predClassIdx.value ()]);
 
   if  (knownClass == predClass)
     ++numCorrect;
@@ -209,16 +210,15 @@ void  AbundanceCorrectionMatrix::ComputeStatistics ()
 
   //Create Known Class Factors to normalize for class distribution.
   vector<float>  knownClassFactors (numClasses, 0.0f);
-  for  (kkuint32 x = 0;  x < numClasses;  ++x)
+  for  (kkint32 x = 0;  x < numClasses;  ++x)
     knownClassFactors[x] = (float)numPredictions / (float)knownByClass[x];
 
-
-  for  (kkuint32  classIdx = 0;  classIdx < numClasses;  ++classIdx)
+  for  (kkint32  classIdx = 0;  classIdx < numClasses;  ++classIdx)
   {
     float  truePositives = (float)(predictions[classIdx][classIdx]) * knownClassFactors[classIdx];
     float  falseNegatives = 0.0f;
     float  falsePositives = 0.0f;
-    for  (kkuint32  x = 0;  x < numClasses;  ++x)
+    for  (kkint32  x = 0;  x < numClasses;  ++x)
     {
       if  (x != classIdx)
       {
@@ -282,7 +282,7 @@ void  AbundanceCorrectionMatrix::ReadForConfigFileName (const KKStr&  configFile
 template<typename T>
 KKStr  AbundanceCorrectionMatrix::VectorToStr (vector<T>&  v)
 {
-  KKStr  result (v.size () * 7);
+  KKStr  result ((kkStrUint)(v.size () * 7));
   for  (kkuint32  x = 0;  x < v.size ();  ++x)
   {
     if  (x > 0)  result << "\t";
@@ -369,10 +369,10 @@ void  AbundanceCorrectionMatrix::WriteXml (ostream&  o)
 
   if  (predictions)
   {
-    for  (uint x = 0;  x < numClasses;  ++x)
+    for  (kkint32 x = 0;  x < numClasses;  ++x)
     {
       o << "PredictionsRow" << "\t" << x;
-      for  (uint y = 0;  y < numClasses;  ++y)
+      for  (kkint32 y = 0;  y < numClasses;  ++y)
       {
         o << "\t" << predictions[x][y];
       }
@@ -483,7 +483,7 @@ void  AbundanceCorrectionMatrix::ReadXml (istream&  i,
   {
     otherClassIdx = (kkint32)classes.size ();
   }
-  else if  ((kkuint32)otherClassIdx >= numClasses)
+  else if  (otherClassIdx >= numClasses)
   {
     valid = false;
     errMsgs << "otherClassIdx[" << otherClassIdx << "] i sot of the range of numClasses[" << numClasses << "]." << endl;
@@ -536,11 +536,11 @@ void  AbundanceCorrectionMatrix::AddIn (const AbundanceCorrectionMatrix&  m,
     throw KKException (errMsg);
   }
 
-  for  (kkuint32 x = 0;  x < numClasses;  ++x)
+  for  (kkint32 x = 0;  x < numClasses;  ++x)
   {
     knownByClass[x] += m.knownByClass[x];
     predByClass[x]  += m.predByClass[x];
-    for  (kkuint32 y = 0;  y < numClasses;  ++y)
+    for  (kkint32 y = 0;  y < numClasses;  ++y)
     {
       predictions[x][y] += m.predictions[x][y];
     }
@@ -555,7 +555,6 @@ void  AbundanceCorrectionMatrix::AddIn (const AbundanceCorrectionMatrix&  m,
 void   AbundanceCorrectionMatrix::PrintConfusionMatrixTabDelimited (ostream&  outFile)
 {
   ComputeStatistics ();
-  kkuint32 x;
 
   // Lets generate Titles first
   outFile << endl;
@@ -565,7 +564,7 @@ void   AbundanceCorrectionMatrix::PrintConfusionMatrixTabDelimited (ostream&  ou
 
   float   totalAccuracyByClass = 0.0f;
   float*  accuracyByClass = new float[numClasses];
-  for  (x = 0;  x < numClasses;  ++x)
+  for  (kkint32 x = 0;  x < numClasses;  ++x)
   {
     if  (knownByClass[x] > 0)
       accuracyByClass[x] = 100.0f * (float)predictions[x][x] / (float)knownByClass[x];
@@ -601,21 +600,21 @@ void   AbundanceCorrectionMatrix::PrintConfusionMatrixTabDelimited (ostream&  ou
           << titleLine2 << endl
           << titleLine3 << endl;
 
-  for  (kkuint32  predClassIdx = 0;  predClassIdx < numClasses;  predClassIdx++)
+  for  (kkint32  predClassIdx = 0;  predClassIdx < numClasses;  predClassIdx++)
   {
     if  (predClassIdx < classes.size ())
       outFile << classes[predClassIdx].Name ();
     else
       outFile << otherClass->Name ();
 
-    for  (kkuint32  knownClassIdx = 0;  knownClassIdx < numClasses;  knownClassIdx++)
+    for  (kkint32  knownClassIdx = 0;  knownClassIdx < numClasses;  knownClassIdx++)
       outFile << "\t" << predictions[predClassIdx][knownClassIdx];
 
     outFile << "\t" << StrFormatDouble (100.0f * probOfFalseAlarm[predClassIdx], "##0.00") << "%"
             << endl;
   }
   outFile << "ProbOfDetection";
-  for  (x = 0;  x < numClasses;  ++x)
+  for  (kkint32 x = 0;  x < numClasses;  ++x)
     outFile << "\t" << StrFormatDouble (100.0f * probOfDetection[x], "##0.00") << "%";
   outFile << endl << endl << endl;
 
@@ -625,14 +624,14 @@ void   AbundanceCorrectionMatrix::PrintConfusionMatrixTabDelimited (ostream&  ou
           << titleLine2 << endl
           << titleLine3 << endl;
 
-  for  (kkuint32  predClassIdx = 0;  predClassIdx < numClasses;  predClassIdx++)
+  for  (kkint32  predClassIdx = 0;  predClassIdx < numClasses;  predClassIdx++)
   {
     if  (predClassIdx < classes.size ())
       outFile << classes[predClassIdx].Name ();
     else
       outFile << otherClass->Name ();
 
-    for  (kkuint32  knownClassIdx = 0;  knownClassIdx < numClasses;  knownClassIdx++)
+    for  (kkint32  knownClassIdx = 0;  knownClassIdx < numClasses;  knownClassIdx++)
     {
       float  acc = 0.0f;
       if  (knownByClass[knownClassIdx] > 0)
@@ -644,7 +643,7 @@ void   AbundanceCorrectionMatrix::PrintConfusionMatrixTabDelimited (ostream&  ou
             << endl;
   }
   outFile << "ProbOfDestection";
-  for  (x = 0;  x < numClasses;  ++x)
+  for  (kkint32 x = 0;  x < numClasses;  ++x)
     outFile << "\t" << StrFormatDouble (100.0f * probOfDetection[x], "##0.00") << "%";
   outFile << endl << endl << endl;
 
@@ -662,13 +661,13 @@ ClassStatisticListPtr   AbundanceCorrectionMatrix::LumpCounts (const ClassStatis
   for  (idx = inputCounts.begin ();  idx != inputCounts.end ();  ++idx)
   {
     ClassStatisticPtr  cs = *idx;
-    kkint32  outputCountsIdx = LookUpClassIdx (cs->MLClass ());
-    if  (outputCountsIdx < 0)
+    auto  outputCountsIdx = LookUpClassIdx (cs->MLClass ());
+    if  (!outputCountsIdx)
       outputCountsIdx = otherClassIdx;
-    outputCounts[outputCountsIdx] += cs->Count ();
+    outputCounts[outputCountsIdx.value ()] += cs->Count ();
   }
 
-  for  (kkuint32  outputCountsIdx = 0;  outputCountsIdx < numClasses;  ++outputCountsIdx)
+  for  (kkint32  outputCountsIdx = 0;  outputCountsIdx < numClasses;  ++outputCountsIdx)
   {
     MLClassPtr  ic = NULL;
     if  (outputCountsIdx == otherClassIdx)
@@ -681,7 +680,6 @@ ClassStatisticListPtr   AbundanceCorrectionMatrix::LumpCounts (const ClassStatis
 
   return  results;
 }  /* LumpCounts */
-
 
 
 
@@ -703,13 +701,13 @@ ClassStatisticListPtr   AbundanceCorrectionMatrix::AdjustClassificationCounts (c
   for  (idx = inputCounts.begin ();  idx != inputCounts.end ();  ++idx)
   {
     ClassStatisticPtr  cs = *idx;
-    kkint32  outputCountsIdx = LookUpClassIdx (cs->MLClass ());
-    if  (outputCountsIdx < 0)
+    auto  outputCountsIdx = LookUpClassIdx (cs->MLClass ());
+    if  (!outputCountsIdx)
       outputCountsIdx = otherClassIdx;
-    outputCounts[outputCountsIdx] += cs->Count ();
+    outputCounts[outputCountsIdx.value ()] += cs->Count ();
   }
 
-  for  (kkuint32  outputCountsIdx = 0;  outputCountsIdx < numClasses;  ++outputCountsIdx)
+  for  (kkint32  outputCountsIdx = 0;  outputCountsIdx < numClasses;  ++outputCountsIdx)
   {
     MLClassPtr  ic = NULL;
     if  (outputCountsIdx == otherClassIdx)

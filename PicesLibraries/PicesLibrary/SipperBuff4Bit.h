@@ -143,7 +143,7 @@ namespace MLL
 
     static const uchar*  CompensationTable ();
 
-    virtual  SipperFileFormat  FileFormat ()  const  {return sfSipper4Bit;}
+    virtual  SipperFileFormat  FileFormat ()  const  {return SipperFileFormat::Sipper4Bit;}
 
 
     bool     FileFormatGood ();
@@ -258,7 +258,6 @@ namespace MLL
     kkuint16  rawStrSize;
     //kkuint16  rawStrNumSameInARow;
 
-    kkint32  runLen;
     uchar  runLenChar;
     CompStatus  curCompStatus;
   };  /* SipperBuff4Bit */

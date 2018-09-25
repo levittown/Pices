@@ -68,7 +68,6 @@ JobRandomSplit::JobRandomSplit (ProcessorPtr            _processor,
 
 
 
-
 JobRandomSplit::JobRandomSplit (ProcessorPtr  _processor,
                                 KKStrParser&  _statusLine
                                ):
@@ -82,12 +81,9 @@ JobRandomSplit::JobRandomSplit (ProcessorPtr  _processor,
 
 
 
-
-
 JobRandomSplit::~JobRandomSplit ()
 {
 }
-
 
 
 
@@ -98,14 +94,12 @@ JobTypes  JobRandomSplit::JobType ()  const
 
 
 
-
 KKStr   JobRandomSplit::ToStatusStr ()
 {
   KKStr  statusStr = BinaryJob::ToStatusStr () + "\t" +
     "SplitNum" + "\t" + StrFormatInt (splitNum, "ZZZZZ0");
   return  statusStr;
 }
-
 
 
 
@@ -172,7 +166,7 @@ void   JobRandomSplit::EvaluateNode ()
                           config, 
                           crossValidation, 
                           randSplitTrainData,
-                          osGetHostName (),
+                          osGetHostName ().value_or ("*** UNKNOWN ***"),
                           this, 
                           log
                          );
@@ -188,9 +182,6 @@ void   JobRandomSplit::EvaluateNode ()
 
   status = BinaryJobStatus::Done;
 }  /* EvaluateNode */
-
-
-
 
 
 
@@ -219,7 +210,6 @@ void  JobRandomSplit::ProcessStatusStr (KKStrParser&  statusStr)
 
 
 
-
 void  JobRandomSplit::ProcessStatusField (const KKStr&  fieldName,
                                           const KKStr&  fieldValue
                                          )
@@ -229,7 +219,6 @@ void  JobRandomSplit::ProcessStatusField (const KKStr&  fieldName,
     splitNum = fieldValue.ToInt ();
   }
 }  /* ProcessStatusField */
-
 
 
 
@@ -250,10 +239,8 @@ void  JobRandomSplit::CreateRandomSplitTrainAndTestExamples (FeatureVectorListPt
   FeatureVectorListPtr  testData       = processor->TestData     ();
   FeatureVectorListPtr  validationData = processor->ValidationData ();
 
-
   randSplitTrainData = randSplitData->ManufactureEmptyList (false);
   randSplitTestData  = randSplitData->ManufactureEmptyList (false);
-
 
   MLClassList::const_iterator  idx;
   for  (idx = processor->MLClasses ()->begin ();  idx != processor->MLClasses ()->end ();  idx++)
@@ -291,7 +278,6 @@ void  JobRandomSplit::CreateRandomSplitTrainAndTestExamples (FeatureVectorListPt
     }
   }
 }  /* CreateRandomSplitTrainAndTestExamples */
-
 
 
 

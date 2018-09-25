@@ -197,15 +197,13 @@ RasterSipperPtr  RasterSipper::TurnIntoSipperRasterPtr (RasterPtr& r)
 
 
 
-
-RasterPtr  RasterSipper::AllocateARasterInstance (kkint32  height,
-                                                  kkint32  width,
-                                                  bool   color
+RasterPtr  RasterSipper::AllocateARasterInstance (kkint32  _height,
+                                                  kkint32  _width,
+                                                  bool     _color
                                                  )  const
 {
-  return new RasterSipper (height, width, color);
+  return new RasterSipper (_height, _width, _color);
 }
-
 
 
 
@@ -213,7 +211,6 @@ RasterPtr  RasterSipper::AllocateARasterInstance (const Raster& r)  const
 {
   return new RasterSipper (r);
 }
-
 
 
 
@@ -593,7 +590,7 @@ RasterSipperPtr  RasterSipper::RemoveZooscanBrackets ()  const
         if  (color)
         {
           destRed  [destRow][destCol] = red  [row][col];
-          destGreen[destRow][destCol] = green[row][col];
+          destBlue [destRow][destCol] = blue [row][col];
         }
         ++destCol;
       }
@@ -1017,7 +1014,6 @@ PointListPtr  RasterSipper::DeriveImageLength () const
     uchar**  imageData = rotatedImage->Green ();
 
     kkint32  boxWidth  = brCol - tlCol;
-    kkint32  boxHeight = brRow - tlRow;
 
     kkint32  mark1Col = (kkint32)((float)boxWidth * 0.05f + 0.5f) + tlCol;
     kkint32  mark2Col = (kkint32)((float)boxWidth * 0.95f + 0.5f) + tlCol;

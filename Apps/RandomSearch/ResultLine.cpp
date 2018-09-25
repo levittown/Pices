@@ -167,7 +167,7 @@ ResultLine::ResultLine (KKStr           txt,
   KKStr  versionStr = txt.ExtractToken ("\t");
   versionStr.Upper ();
   int  version = -1;
-  if  (versionStr.SubStrPart (0, 2) == "VER")
+  if  (versionStr.StartsWith ("VER"))
   {
     KKStr  versionNumStr = versionStr.SubStrPart (3);
     version = atoi (versionNumStr.Str ());

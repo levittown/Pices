@@ -105,16 +105,16 @@ namespace  PicesUtilityApps
                                     const KKStr&  parmValue
                                    );
 
-    bool     cancelFlag;
-    kkint32  candidateMinSize;
-    kkint32  candidateMaxSize;
-    kkint32  imageHeight;
-    kkint32  imageWidth;
-    kkint32  maxCandidates;
-    kkint32  maxImages;
-    kkint32  rasterHeight;
-    kkint32  rasterWidth;
-    KKStr    targetDir;
+    bool      cancelFlag;
+    kkint32   candidateMinSize;
+    kkint32   candidateMaxSize;
+    kkint32   imageHeight;
+    kkint32   imageWidth;
+    kkint32   maxCandidates;
+    kkint32   maxImages;
+    kkuint32  rasterHeight;
+    kkuint32  rasterWidth;
+    KKStr     targetDir;
 
     VectorKKStr               availableSipperFileNames;
     InstrumentDataManagerPtr  instrumentDataManager;
