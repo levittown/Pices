@@ -106,12 +106,11 @@ PassAssignments::PassAssignments (FileDescConstPtr    _fileDesc,
     MLClassPtr  mlClass = NULL;
 
     int  numInRandomPass = 0;
-    int  classIDX        = 0;
 
-    for  (classIDX = 0;  classIDX < numOfClasses;  ++classIDX)
+    for  (kkuint32 classIDX = 0;  classIDX < numOfClasses;  ++classIDX)
     {
       mlClass = mlClasses.IdxToPtr (classIDX);
-      int  numImagesToExtract = imagesPerClass[classIDX];
+      kkuint32  numImagesToExtract = imagesPerClass[classIDX];
       FeatureVectorListPtr  imagesInClass = _images.ExtractExamplesForAGivenClass (mlClass, numImagesToExtract);
 
       if  (imagesInClass->QueueSize () < numImagesToExtract)
@@ -125,7 +124,7 @@ PassAssignments::PassAssignments (FileDescConstPtr    _fileDesc,
       }
 
 
-      for  (int idx = 0;  ((idx < numImagesToExtract)  &&  (numInRandomPass < totalNumOfInitialTrainingImages))  ;  idx++)
+      for  (kkuint32 idx = 0;  ((idx < numImagesToExtract)  &&  (numInRandomPass < totalNumOfInitialTrainingImages))  ;  idx++)
       {
         assignments[pass][numInRandomPass] = new KKStr (imagesInClass->IdxToPtr (idx)->ExampleFileName ());
         numInRandomPass++;
@@ -151,14 +150,13 @@ PassAssignments::~PassAssignments ()
 
 void  PassAssignments::PopulateImagesPerClass (FeatureVectorList&  images)
 {
-  int            classIDX = 0;
   MLClassPtr  mlClass = NULL;
   delete  imagesPerClass;
-  imagesPerClass = new int[numOfClasses];
+  imagesPerClass = new kkuint32[numOfClasses];
 
   if  (!usePriorForIIPC)
   {
-    for  (classIDX = 0;  classIDX < mlClasses.QueueSize ();  classIDX++)
+    for  (kkuint32 classIDX = 0;  classIDX < mlClasses.QueueSize ();  ++classIDX)
        imagesPerClass[classIDX] = initialTrainingImagesPerClass;
   }
   else
@@ -167,7 +165,7 @@ void  PassAssignments::PopulateImagesPerClass (FeatureVectorList&  images)
 
     int  imageCount = 0;
 
-    for  (classIDX = 0;  classIDX < mlClasses.QueueSize ();  classIDX++)
+    for  (kkuint32 classIDX = 0;  classIDX < mlClasses.QueueSize ();  ++classIDX)
     {
       mlClass = mlClasses.IdxToPtr (classIDX);
       int  imagesToExtractThisClass = totalNumImageszInInitialTrainLibrary - imageCount;
@@ -183,11 +181,6 @@ void  PassAssignments::PopulateImagesPerClass (FeatureVectorList&  images)
     }
   }
 }  /* PopulateImagesPerClass */
-
-
-
-
-
 
 
 
@@ -215,9 +208,6 @@ void  PassAssignments::FreeUpAssignments ()
 
 
 
-
-
-
 void  PassAssignments::AllocateAssignments ()
 {
   if  (assignments)
@@ -235,8 +225,6 @@ void  PassAssignments::AllocateAssignments ()
     }
   }
 }  /* AllocateAssignments */
-
-
 
 
 
@@ -261,7 +249,7 @@ void  PassAssignments::Save (KKStr  fileName)
   out << "NUMOFCLASSES"                   << "\t" << numOfClasses                  << endl;
 
   out << "ClassList";
-  for  (int classIDX = 0;  classIDX < mlClasses.QueueSize ();  classIDX++)
+  for  (kkuint32  classIDX = 0;  classIDX < mlClasses.QueueSize ();  classIDX++)
     out << "\t" << mlClasses[classIDX].Name () << "\t" << imagesPerClass[classIDX];
   out << endl;
    
@@ -280,11 +268,7 @@ void  PassAssignments::Save (KKStr  fileName)
 
 
 
-
-
-
-
-void  PassAssignments::Read (KKStr              fileName,
+void  PassAssignments::Read (KKStr               fileName,
                              FeatureVectorList&  images,
                              bool&               successfull
                             )
@@ -302,8 +286,6 @@ void  PassAssignments::Read (KKStr              fileName,
 
 
   char  buff[2048];
-  int   classIDX;
-
 
   // First Two Lines Must be Dimensions
   bool  nonPaprameterFound      = false;
@@ -373,11 +355,10 @@ void  PassAssignments::Read (KKStr              fileName,
 
   int  count = 0;
   int  totalExpected = numOfRandomPasses * totalNumOfInitialTrainingImages;
-
-
+  
   delete  imagesPerClass;
-  imagesPerClass = new int[numOfClasses];
-  for  (classIDX = 0;  classIDX < numOfClasses;  classIDX++)
+  imagesPerClass = new kkuint32[numOfClasses];
+  for  (kkuint32 classIDX = 0;  classIDX < numOfClasses;  classIDX++)
     imagesPerClass[classIDX] = 0;
 
   bool  moreData = true;
@@ -432,8 +413,8 @@ void  PassAssignments::Read (KKStr              fileName,
     if  (pass == 0)
     {
       // Use the first pass to populate imagesPerClass
-      classIDX = mlClasses.PtrToIdx (image->MLClass ());
-      if  (classIDX < 0)
+      auto classIDX = mlClasses.PtrToIdx (image->MLClass ());
+      if  (!classIDX)
       {
         if  (mlClasses.QueueSize () >= numOfClasses)
         {
@@ -446,7 +427,7 @@ void  PassAssignments::Read (KKStr              fileName,
         classIDX = mlClasses.QueueSize ();
         mlClasses.AddMLClass (image->MLClass ());
       }
-      imagesPerClass[classIDX]++;
+      imagesPerClass[classIDX.value ()]++;
     }
 
     assignments[pass][idx] = new KKStr (imageFileName);
@@ -470,8 +451,6 @@ void  PassAssignments::Read (KKStr              fileName,
   successfull = true;
 }  /* Read */
   
-
-
 
 
 bool  PassAssignments::ImageInPass (const KKStr&  imageFileName, 

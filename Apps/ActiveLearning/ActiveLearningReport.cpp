@@ -300,7 +300,7 @@ void  ActiveLearningReport::PrintReport (ostream&  report)
          << "****      Multi Class Results     ****" << endl
          << endl;
 
-  int  numOfRetrainings = 0;
+  kkuint32  numOfRetrainings = 0;
 
   for  (auto sortOrderResults: results)
   {
@@ -356,15 +356,15 @@ void  ActiveLearningReport::PrintReportWithIncrements (ostream&  report,
   int*   numImageCounts = new int[results.QueueSize ()];
   int    maxImageCount = 0;
 
-  int  numOfRetrainings = 0;
-  int  soCount          = 0;
+  kkuint32  numOfRetrainings = 0;
+  kkuint32  soCount          = 0;
   for  (auto sortOrderResults : results)
   {
     report << SortOrderDescr (sortOrderResults->SortOrder ())  << "\t" << "\t" << "\t" << "\t";
     numOfRetrainings = Max (numOfRetrainings, sortOrderResults->QueueSize ());
     GetImageCountsByIncrements (sortOrderResults->SortOrder (), increment, numImageCounts[soCount], imageCounts[soCount]);
     maxImageCount = Max (maxImageCount, numImageCounts[soCount]);
-    soCount++;
+    ++soCount;
   }
   report << endl;
   
@@ -409,14 +409,14 @@ void  ActiveLearningReport::PrintReportWithIncrements (ostream&  report,
         }
       }
 
-      soCount++;
+      ++soCount;
     }
     report << endl;
   }
 
   {
     // Lets clean up dynamically allocated memory.
-    for  (soCount = 0;  soCount < results.QueueSize ();  soCount++)
+    for  (soCount = 0;  soCount < results.QueueSize ();  ++soCount)
       delete  imageCounts[soCount];
 
     delete  imageCounts;

@@ -412,8 +412,6 @@ void  ActiveLearning::DetermineIfOnANetworkDrive ()
 
 
 
-
-
 void  ActiveLearning::Block ()
 {
   log.Level (20) << "ActiveLearning::Block - Entering." << endl;
@@ -439,7 +437,6 @@ void  ActiveLearning::Block ()
 
   log.Level (20) << "ActiveLearning::Block - Lock is Established." << endl;
 }
-
 
 
 
@@ -508,8 +505,6 @@ FILE*  ActiveLearning::OpenStatusFile ()
   FILE*  statusFile = osFOPEN (fullStatusFileName.Str (), "r");
   return  statusFile;
 }  /*  OpenStatusFile */
-
-
 
 
 
@@ -627,14 +622,10 @@ void  ActiveLearning::LoadCurrentStatusFile ()
     }
   }
 
-
   fclose (statusFile);
   statusFile = NULL;
   return;
 }  /* LoadCurrentStatusFile */
-
-
-
 
 
 
@@ -661,7 +652,6 @@ void  ActiveLearning::ProcessCmdLineStr  (KKStr  cmdLine)
     arguments[x] = NULL;
   }
 }  /* ProcessCmdLineStr */
-
 
 
 
@@ -743,9 +733,7 @@ void  ActiveLearning::UpdateCurrentStatusFile ()
      KKB::osWaitForEnter ();
   }
 
-  
   log.Level (50) << "UpdateCurrentStatusFile - Status File Opened Successfully." << endl;
-
 
   KKStr  s;
   s = CmdLineStr ();  
@@ -762,7 +750,7 @@ void  ActiveLearning::UpdateCurrentStatusFile ()
   fprintf (statusFile, "%s %d\n",  "finalNumOfImagesInTrainingLibrary",   finalNumOfImagesInTrainingLibrary);
   fprintf (statusFile, "%s %d\n",  "NumOfJobs",  jobs->QueueSize ());
 
-  for  (int jobIDX = 0;  jobIDX < jobs->QueueSize ();  jobIDX++)
+  for  (kkuint32 jobIDX = 0;  jobIDX < jobs->QueueSize ();  jobIDX++)
   {
     fprintf (statusFile, "%s %s\n", "Job", jobs->IdxToPtr (jobIDX)->ToString ().Str ());
   }
@@ -774,8 +762,6 @@ void  ActiveLearning::UpdateCurrentStatusFile ()
 
   log.Level (20) << "UpdateCurrentStatusFile - Exiting." << endl;
 }  /* UpdateCurrentStatusFile */
-
-
 
 
 
@@ -798,7 +784,7 @@ JobDescPtr  ActiveLearning::GetNextJob ()
       
     LoadCurrentStatusFile ();
 
-    int  jobIDX = 0;
+    kkuint32  jobIDX = 0;
 
     while  ((!jobFound)  &&  (jobIDX < jobs->QueueSize ()))
     {
@@ -823,7 +809,7 @@ JobDescPtr  ActiveLearning::GetNextJob ()
 
           bool  allOtherJobsAreDone = true;
 
-          for  (int k = 0;  k < jobs->QueueSize ();  k++)
+          for  (kkuint32 k = 0;  k < jobs->QueueSize ();  k++)
           {
             if  (jobs->IdxToPtr (k)->JobID () != j->JobID ())
             {
@@ -894,7 +880,6 @@ JobDescPtr  ActiveLearning::GetNextJob ()
 
 
 
-
 void  ActiveLearning::FinishJob (JobDescPtr  j)
 {
   log.Level (10) << " ActiveLearning::FinishJob  Flagging Job[" << j->JobID () << "]  as completed." << endl;
@@ -903,7 +888,7 @@ void  ActiveLearning::FinishJob (JobDescPtr  j)
 
   LoadCurrentStatusFile ();
 
-  for  (int i = 0;  i < jobs->QueueSize ();  i++)
+  for  (kkuint32 i = 0;  i < jobs->QueueSize ();  i++)
   {
     if  (jobs->IdxToPtr (i)->JobID () == j->JobID ())
     {
@@ -918,8 +903,6 @@ void  ActiveLearning::FinishJob (JobDescPtr  j)
 
   delete  jobs;  jobs = NULL;
 }  /* FinishJob */
-
-
 
 
 
@@ -1020,7 +1003,6 @@ bool  ActiveLearning::ProcessCmdLineParameter (char    parmSwitchCode,
     }
   }
 
-
   else if  ((parmSwitch == "-Q") || (parmSwitch == "-RANDOMPASSES"))
   {
     numOfRandomPasses = atoi (parmValue.Str ());
@@ -1035,7 +1017,6 @@ bool  ActiveLearning::ProcessCmdLineParameter (char    parmSwitchCode,
       return  false;
     }
   }
-
 
   else if  (parmSwitch == "-P")
   {
@@ -1067,8 +1048,6 @@ bool  ActiveLearning::ProcessCmdLineParameter (char    parmSwitchCode,
 
   return  !Abort ();
 }  /* ProcessCmdLineParameter */
-
-
 
 
 
@@ -1121,10 +1100,6 @@ KKStr  ActiveLearning::CmdLineStr ()
 
 
 
-
-
-
-
 void   ActiveLearning::DisplayCommandLineParameters ()
 {
   log.Level (0) << "ActiveLearning  -a <xxx>  -c <xxx> -e <xxx> -f <xxx>  -j <xxx> -r <xxx>  -s <xxx>" << endl;
@@ -1156,7 +1131,6 @@ void   ActiveLearning::DisplayCommandLineParameters ()
   log.Level (0)                                                                              << endl;
   log.Level (0) << "    -ValidationFile  <Data to test with>"                                << endl;
 }  /* DisplayCommandLineParameters */
-
 
 
 
@@ -1283,9 +1257,7 @@ FeatureVectorListPtr  ActiveLearning::LoadImages (KKStr                dirPath,
       images = filteredList;
     }
   }
-
-
-
+   
   // We can now process any Sub-Directories.
 
   KKStr  dirSearchPath (dirPath);
@@ -1315,12 +1287,10 @@ FeatureVectorListPtr  ActiveLearning::LoadImages (KKStr                dirPath,
 
 
 
-
-
-void  ActiveLearning::ExtractValidationImages (MLClassList&     classes,
-  FeatureVectorList&  srcImages,
-  FeatureVectorList&  destImages,
-  FeatureVectorList&  validationImages
+void  ActiveLearning::ExtractValidationImages (MLClassList&        classes,
+                                               FeatureVectorList&  srcImages,
+                                               FeatureVectorList&  destImages,
+                                               FeatureVectorList&  validationImages
 )
 
 {
@@ -1332,7 +1302,7 @@ void  ActiveLearning::ExtractValidationImages (MLClassList&     classes,
 
   srcImages.RandomizeOrder ();
 
-  int  smallestNumOfImagesInAClass = 9999999;
+  kkuint32  smallestNumOfImagesInAClass = uint32_max;
 
   // First Seperate Images into there respective Classes
 
@@ -1352,8 +1322,6 @@ void  ActiveLearning::ExtractValidationImages (MLClassList&     classes,
 
     classImages[classNum]->RandomizeOrder ();
   }
-
-
 
   // Now that we know the number of images in the Smallest Class.
   // We will divide the images in each class evenly amongst the
@@ -1408,7 +1376,6 @@ void  ActiveLearning::ExtractValidationImages (MLClassList&     classes,
 
 
 
-
 void  ActiveLearning::UpdateNonStreamingTestImages (SortOrderType       sortOrder,
                                                     Classifier2Ptr      classifier, 
                                                     FeatureVectorList&  nonStreamingTestImages
@@ -1445,9 +1412,6 @@ void  ActiveLearning::UpdateNonStreamingTestImages (SortOrderType       sortOrde
 
 
 
-
-
-
 float  ActiveLearning::GetPertinentProbability (FeatureVectorPtr  image,
                                                 SortOrderType     sortOrder
                                                )
@@ -1464,8 +1428,6 @@ float  ActiveLearning::GetPertinentProbability (FeatureVectorPtr  image,
 
   return  probability;
 }  /* GetPertinentProbability */
-
-
 
 
 
@@ -1548,9 +1510,7 @@ void  ActiveLearning::ProcessASingleRetraining (SortOrderType        sortOrder,
   }
 
   log.Level (20) << "ProcessASingleRetraining  All Images in Test Set Classified." << endl;
-
-
-
+   
   {
     // Process Validation Images
 
@@ -1659,9 +1619,6 @@ void  ActiveLearning::ProcessASingleRetraining (SortOrderType        sortOrder,
 
 
 
-
-
-
 void  ActiveLearning::ProcessOneImageAtAtimeOneSpecificPass 
                              (SortOrderType       sortOrder,
                               double              probabilityTest,
@@ -1699,7 +1656,7 @@ void  ActiveLearning::ProcessOneImageAtAtimeOneSpecificPass
   for  (int idx = classesInGroup->QueueSize () - 1; idx >= 0;  idx--)
   {
     mlClass = classesInGroup->IdxToPtr (idx);
-    if  (groupClasses.PtrToIdx (mlClass) < 0)
+    if  (!groupClasses.PtrToIdx (mlClass))
     {
       classesInGroup->DeleteEntry (mlClass);
     }

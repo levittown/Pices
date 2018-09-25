@@ -111,7 +111,7 @@ void  SetUpEmbeddedServer ()
 
 void  RandomlySelectImagesByClass (const KKStr&  srcRootDir,
                                    const KKStr&  destRootDir,
-                                   kkint32       imagesPerClass
+                                   kkuint32      imagesPerClass
                                   )
 {
   RunLog  log;

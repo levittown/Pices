@@ -716,13 +716,13 @@ VectorDouble  ClassGroupTotals::AvgProbVector (int            retraining,
 
 
 // Call this method when adding an image to Training Library
-void  ClassGroupTotals::AddAProbability (int              retraining,       
-                                         int              randomPass,          
+void  ClassGroupTotals::AddAProbability (int           retraining,       
+                                         int           randomPass,          
                                          MLClassPtr    mlClass,
-                                         float           probability,
-                                         const KKStr&    imageFileName,
-                                         int              position,
-                                         float            percentile
+                                         float         probability,
+                                         const KKStr&  imageFileName,
+                                         int           position,
+                                         float         percentile
                                         )
 {
   ValidateRetraining    ("AvgProbVector",  retraining);
@@ -772,18 +772,16 @@ VectorFloat  ClassGroupTotals::GetNewTrainingImagesThisRetraining (int  retraini
 
 
 
-
 void  ClassGroupTotals::SetSortMethodUsed (int            retraining,
-                                           MLClassPtr  mlClass, 
+                                           MLClassPtr     mlClass, 
                                            int            randomPass,
                                            SortOrderType  sortMethodUsed
                                           )
 {
   ValidateRetraining    ("SetSortMethodUsed",  retraining);
-  ValidatePass     ("SetSortMethodUsed",  randomPass);
+  ValidatePass          ("SetSortMethodUsed",  randomPass);
 
-
-  if  (sortMethods)
+    if  (sortMethods)
   {
     sortMethods [retraining][randomPass]->PushOnBack (new SortMethodHistoryBit (mlClass, sortMethodUsed));
     return;
@@ -805,13 +803,13 @@ void  ClassGroupTotals::SetSortMethodUsed (int            retraining,
 
 KKStr   ClassGroupTotals::SortMethodsUsed (int  retraining)  const
 {
-  int     classIDX;
-  int     randomPass;
+  int    classIDX;
+  int    randomPass;
   KKStr  result;
-  int     sortMethodsCount[10];
-  int     x;
+  int    sortMethodsCount[10];
+  int    x;
 
-  ValidateRetraining    ("SortMethodsUsed",  retraining);
+  ValidateRetraining  ("SortMethodsUsed",  retraining);
 
   for  (x = 0;  x < 10;  x++)
     sortMethodsCount[x] = 0;
