@@ -74,8 +74,8 @@ namespace FeatureSelectionApp
     void  Write (ostream&  o);
 
     Results&   operator+= (const Results&  right);
-    Results&   operator/= (float divisor);
-    Results&   operator/= (int   divisor);
+    Results&   operator/= (float     divisor);
+    Results&   operator/= (kkuint32  divisor);
 
   protected:
     virtual

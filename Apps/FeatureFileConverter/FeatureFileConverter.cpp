@@ -641,12 +641,11 @@ void   FeatureFileConverter::ConvertData ()
       classIdx++;
     }
 
-    FeatureVectorList::iterator  idx2;
-    for  (idx2 = data->begin ();  idx2 != data->end ();  idx2++)
+    for  (auto idx2: *data)
     {
-      MLClassPtr  c = (*idx2)->MLClass ();
-      int  classIndex = mlClasses->PtrToIdx (c);
-      (*idx2)->MLClass (newClassNames->IdxToPtr (classIndex));
+      MLClassPtr  c = idx2->MLClass ();
+      auto  classIndex = mlClasses->PtrToIdx (c);
+      idx2->MLClass (newClassNames->IdxToPtr (classIndex.value ()));
     }
 
     delete  mlClasses; mlClasses = NULL;

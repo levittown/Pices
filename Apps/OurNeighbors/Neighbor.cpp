@@ -330,13 +330,11 @@ void  NeighborList::FindNearestNeighbors (NeighborType  neighborType,
 {
   SortByRow ();
 
-  kkint32  x;
-
-  for  (x = 0;  x < QueueSize ();  x++)
+  for  (kkuint32 x = 0;  x < QueueSize ();  x++)
   {
     // First lets look back to see if something closer
     
-    kkint32 z = x + 1;
+    kkuint32 z = x + 1;
 
     NeighborPtr  curNeighbor = IdxToPtr (x);
 
@@ -425,14 +423,14 @@ void  NeighborList::ReportClassNeighbor (MLClassListPtr  mlClasses,
   while  (n)
   {
     MLClassPtr  fromClass = n->MLClass ();
-    kkint32             fromClassIdx = mlClasses->PtrToIdx (fromClass);
+    auto        fromClassIdx = mlClasses->PtrToIdx (fromClass);
 
     while  (n  &&  (n->MLClass () == fromClass))
     {
       // Start doing stuff for from class Totals
 
-      MLClassPtr  toClass    = n->NearestNeighborClass ();
-      kkint32             toClassIdx = -1;
+      MLClassPtr    toClass    = n->NearestNeighborClass ();
+      OptionUInt32  toClassIdx = {};
       if  (toClass)
         toClassIdx = mlClasses->PtrToIdx (toClass);
 
@@ -466,18 +464,18 @@ void  NeighborList::ReportClassNeighbor (MLClassListPtr  mlClasses,
         distMin = Min (n->Dist (), distMin);
         distMax = Max (n->Dist (), distMax);
         
-        classCounts [fromClassIdx]++;
+        classCounts [fromClassIdx.value ()]++;
 
-        if  (toClassIdx >= 0)
+        if  (toClassIdx)
         {
-          neighborCounts[fromClassIdx][toClassIdx]++;
-          neighborDists [fromClassIdx][toClassIdx] += n->Dist ();
-          neighborSizes [fromClassIdx][toClassIdx] += n->Size ();
+          neighborCounts[fromClassIdx.value ()][toClassIdx.value ()]++;
+          neighborDists [fromClassIdx.value ()][toClassIdx.value ()] += n->Dist ();
+          neighborSizes [fromClassIdx.value ()][toClassIdx.value ()] += n->Size ();
         }
 
         numInThisGroup++;
 
-        next++;
+        ++next;
         if  (next != end ())
           n = *next;
         else
@@ -689,7 +687,7 @@ void  NeighborList::ReportClassRow (MLClassListPtr  mlClasses,
   while  (n)
   {
     MLClassPtr  fromClass = n->MLClass ();
-    kkint32          fromClassIdx = mlClasses->PtrToIdx (fromClass);
+    auto        fromClassIdx = mlClasses->PtrToIdx (fromClass);
 
     kkint32  numInThisGroup = 0;
 
@@ -736,7 +734,7 @@ void  NeighborList::ReportClassRow (MLClassListPtr  mlClasses,
       sizeMin = Min (sizeMin, neighborSize);
       sizeMax = Max (sizeMax, neighborSize);
         
-      classCounts [fromClassIdx]++;
+      classCounts [fromClassIdx.value ()]++;
       numInThisGroup++;
 
       next++;
@@ -791,15 +789,15 @@ void  NeighborList::ReportClassRow (MLClassListPtr  mlClasses,
 
       r << endl;
                    
-      distsMean   [fromClassIdx] = distMean;
-      distsStdDev [fromClassIdx] = distStdDev;
-      distsMin    [fromClassIdx] = distMin;
-      distsMax    [fromClassIdx] = distMax;
+      distsMean   [fromClassIdx.value ()] = distMean;
+      distsStdDev [fromClassIdx.value ()] = distStdDev;
+      distsMin    [fromClassIdx.value ()] = distMin;
+      distsMax    [fromClassIdx.value ()] = distMax;
 
-      sizesMean   [fromClassIdx] = sizeMean;
-      sizesStdDev [fromClassIdx] = sizeStdDev;
-      sizesMin    [fromClassIdx] = sizeMin;
-      sizesMax    [fromClassIdx] = sizeMax;
+      sizesMean   [fromClassIdx.value ()] = sizeMean;
+      sizesStdDev [fromClassIdx.value ()] = sizeStdDev;
+      sizesMin    [fromClassIdx.value ()] = sizeMin;
+      sizesMax    [fromClassIdx.value ()] = sizeMax;
     }
   }
 
@@ -857,9 +855,8 @@ void  NeighborList::ReportClassRow (MLClassListPtr  mlClasses,
 
 
 
-
 void  NeighborList::ReportClassRowRestricted (MLClassListPtr  mlClasses,
-                                              ostream&             r,
+                                              ostream&        r,
                                               MLClassPtr      restrictedClass
                                              )
 {

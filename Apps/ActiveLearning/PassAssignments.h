@@ -82,11 +82,11 @@ private:
   // Will be allocated to same size as imagesClasses.QueueSize ()
   // Reflect the number of images in each given class.  Only 
   // Reflect the number of images in each given class.  Only 
-  int*            imagesPerClass;
+  kkuint32*       imagesPerClass;
 
   int             initialTrainingImagesPerClass;
   RunLog&         log;
-  int             numOfClasses;
+  kkuint32        numOfClasses;
 
   int             numOfRandomPasses;
   int             totalNumOfInitialTrainingImages;

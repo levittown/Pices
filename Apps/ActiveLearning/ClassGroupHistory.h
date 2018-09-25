@@ -136,11 +136,11 @@ typedef  PredictionHistoryBit*  PredictionHistoryBitPtr;
 class  ProbabilityHistoryBit:  public  HistoryBit
 {
 public:
-   ProbabilityHistoryBit (MLClassPtr  _mlClass,
-                          OURFLOAT       _probability,
+   ProbabilityHistoryBit (MLClassPtr    _mlClass,
+                          OURFLOAT      _probability,
                           const KKStr&  _imageFileName,
-                          int            _position,
-                          float          _percentile
+                          int           _position,
+                          float         _percentile
                          ):
               mlClass    (_mlClass),
               probability   (_probability),

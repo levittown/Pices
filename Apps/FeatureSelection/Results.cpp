@@ -367,7 +367,7 @@ Results&   Results::operator/= (float divisor)
 
 
 
-Results&   Results::operator/= (int divisor)
+Results&   Results::operator/= (kkuint32 divisor)
 {
   if  (divisor == 0)
     return *this;
