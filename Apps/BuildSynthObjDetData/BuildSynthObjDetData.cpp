@@ -23,7 +23,6 @@ using namespace std;
 #include "KKStr.h"
 using namespace KKB;
 
-
 #include "InstrumentDataManager.h"
 #include "DataBase.h"
 #include "ImageFeatures.h"
@@ -46,8 +45,8 @@ BuildSynthObjDetData::BuildSynthObjDetData () :
 
   PicesApplication (),
   cancelFlag            (false),
-  candidateMinSize      (2000),
-  candidateMaxSize      (100000),
+  candidateMinSize      (1000),
+  candidateMaxSize      (50000),
   imageHeight           (2048),
   imageWidth            (2048),
   instrumentDataManager (NULL),
@@ -387,7 +386,7 @@ BuildSynthObjDetData::PopulateRasterResult*
     {
       Point topLeft, botRight;
 
-      auto trimmedObj = ReduceToMinimumSize(objToPlace);
+      auto trimmedObj = ReduceToMinimumSize (objToPlace);
       if (trimmedObj)
       {
         int numAttemptsLeft = 50;
@@ -470,12 +469,21 @@ DataBaseImageListPtr  BuildSynthObjDetData::FilterOutNoise (DataBaseImageList& s
 }
 
 
+
 int  BuildSynthObjDetData::Main (int argc, char** argv)
 {
+  kkint32 meanBBPerImage = 40;
   std::default_random_engine randEngine (1234567); //seed
-  std::normal_distribution<float> normDist (10.0f, 4.0f); //mean followed by stddev
+  std::normal_distribution<float> normDist ((float)meanBBPerImage, 4.0f); //mean followed by stddev
 
-  KKStr  targetDir2 = "F:\\Temp\\SyntheticPlanktonObjDetImagesPainted";
+  KKStr  targetDir2 = targetDir;
+  if  ((targetDir2.LastChar () == '/')  ||  (targetDir2.LastChar () == '\\'))
+    targetDir2.ChopLastChar();
+  targetDir2 << "_" + KKB::StrFormatInt (meanBBPerImage, "00");
+
+  KKB::osCreateDirectoryPath (targetDir);
+  KKB::osCreateDirectoryPath (targetDir2);
+  targetDir2 = KKB::osAddSlash (targetDir2);
 
   LoadAvailableSipperFileNames ();
   maxCandidates = 1000000;
@@ -488,7 +496,8 @@ int  BuildSynthObjDetData::Main (int argc, char** argv)
   kkint32 imagesCreated = 0;
   while ((imagesCreated < maxImages) && (candidates->size () > 0) && (!cancelFlag))
   {
-    kkint32 numObjectsToAdd = Max(2, (kkint32)normDist (randEngine));
+    //kkint32 numObjectsToAdd = Max(2, (kkint32)normDist (randEngine));
+    kkint32 numObjectsToAdd = meanBBPerImage;
     auto createdRaster = PopulateRaster (*candidates, numObjectsToAdd);
     KKStr imageFileName = "PlanktonImage-" + KKB::StrFormatInt (imagesCreated, "00000") + ".bmp";
     KKStr fullImageFileName = osAddSlash (targetDir) + imageFileName;
