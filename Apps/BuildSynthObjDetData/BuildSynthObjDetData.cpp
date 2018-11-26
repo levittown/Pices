@@ -47,18 +47,21 @@ BuildSynthObjDetData::BuildSynthObjDetData () :
   cancelFlag            (false),
   candidateMinSize      (1000),
   candidateMaxSize      (50000),
+  cropLeft              (100),
+  cropRight             (3999),
   imageHeight           (2048),
   imageWidth            (2048),
   instrumentDataManager (NULL),
   maxCandidates         (100000),
-  maxImages             (40000),
+  maxImages             (1500),
   nextSipperFileIdx     (0),
   rasterHeight          (2048),
   rasterWidth           (2048),
   rng                   (1000),
   sipperBuff            (NULL),
   sipperFileRootDir     ("F:\\Pices\\SipperFiles\\USF\\ETP2008"),
-  targetDir             ()
+  targetBaseDir         (),
+  maxNumTrainImages     (1000)
 {
 }
 
@@ -78,8 +81,8 @@ void  BuildSynthObjDetData::InitalizeApplication (kkint32 argc,
 {
   this->DataBaseRequired (true);
   PicesApplication::InitalizeApplication (argc, argv);
-  if (targetDir.Empty ())
-    targetDir = KKB::osGetCurrentDirectory ();
+  if (targetBaseDir.Empty ())
+    targetBaseDir = KKB::osGetCurrentDirectory ();
 }  /* InitalizeApplication */
 
 
@@ -97,13 +100,13 @@ bool  BuildSynthObjDetData::ProcessCmdLineParameter (const KKStr&  parmSwitch,
     imageWidth = parmValue.ToInt32 ();
 
   else if (parmSwitch.EqualIgnoreCase ("-maxImages"))
-    maxImages = parmValue.ToInt32 ();
+    maxImages = parmValue.ToUint32 ();
 
   else if  (parmSwitch.EqualIgnoreCase ("-maxCandidates"))
     maxCandidates =  parmValue.ToInt32 ();
 
   else if (parmSwitch.EqualIgnoreCase ("-targetDir"))
-    targetDir = parmValue;
+    targetBaseDir = parmValue;
 
   else
     validParm = PicesApplication::ProcessCmdLineParameter (parmSwitch, parmValue);
@@ -144,15 +147,36 @@ bool  BuildSynthObjDetData::OpenSipperBuff ()
       nextSipperFileIdx = 0;
     KKStr sipperFileName = availableSipperFileNames[nextSipperFileIdx];
     ++nextSipperFileIdx;
+
+    cropLeft = 100;
+    cropRight = 3999;
+
+    SipperFilePtr sf = NULL;
+    SipperDeploymentPtr deployment = NULL;
     try
     {
+      sf = DB ()->SipperFileRecLoad (sipperFileName);
+      if  (sf)
+      {
+         deployment = DB ()->SipperDeploymentLoad (sf->CruiseName (), sf->StationName (), sf->DeploymentNum ());
+         if  (deployment)
+         {
+           cropLeft  = deployment->CropLeft ();
+           cropRight = deployment->CropRight ();
+         }
+      }
       delete instrumentDataManager;
       instrumentDataManager = NULL;
       instrumentDataManager = new InstrumentDataManager (sipperFileName, NULL, log);
       sipperBuff = SipperBuff::CreateSipperBuff (sipperFileName, 0, instrumentDataManager, log);
+
+      delete sf;         sf         = NULL;
+      delete deployment; deployment = NULL;      
     }
     catch (...)
     {
+      delete sf;         sf         = NULL;
+      delete deployment; deployment = NULL;
       log.Level (-1) << "Exception  Creating SipperBuff for file: " << sipperFileName << endl;
       sipperBuff = NULL;
     }
@@ -191,7 +215,7 @@ RasterPtr BuildSynthObjDetData::GetNextFrame ()
       uchar* startCol = line + startSipperCol;
       uchar* endCol = startCol + rasterWidth;
 
-      std::memcpy(rasterRow, startCol, rasterWidth);
+      std::memcpy (rasterRow, startCol, rasterWidth);
       ++linesAddedToRaster;
       sipperBuff->GetNextLine (line, lineLen, lineSize, colCount, pixelsInRow, flow);
     }
@@ -231,7 +255,7 @@ RasterPtr BuildSynthObjDetData::GetNextOpenFrame ()
     if (blobs != NULL)
     {
       auto largestBlob = blobs->LocateLargestBlob ();
-      if (largestBlob->PixelCount () <= 100)
+      if (largestBlob->PixelCount () <= 250)
         frameOpen = true;
       delete blobs;
       blobs = NULL;
@@ -412,7 +436,6 @@ BuildSynthObjDetData::PopulateRasterResult*
         if (imagePlaced)
         {
           ++numPlaced;
-          delete nextImageToPlace;
         }
         else
         {
@@ -472,67 +495,95 @@ DataBaseImageListPtr  BuildSynthObjDetData::FilterOutNoise (DataBaseImageList& s
 
 int  BuildSynthObjDetData::Main (int argc, char** argv)
 {
-  kkint32 meanBBPerImage = 40;
+  kkint32 meanBBPerImage = 30;
   std::default_random_engine randEngine (1234567); //seed
   std::normal_distribution<float> normDist ((float)meanBBPerImage, 4.0f); //mean followed by stddev
 
-  KKStr  targetDir2 = targetDir;
-  if  ((targetDir2.LastChar () == '/')  ||  (targetDir2.LastChar () == '\\'))
-    targetDir2.ChopLastChar();
-  targetDir2 << "_" + KKB::StrFormatInt (meanBBPerImage, "00");
-
-  KKB::osCreateDirectoryPath (targetDir);
-  KKB::osCreateDirectoryPath (targetDir2);
-  targetDir2 = KKB::osAddSlash (targetDir2);
-
   LoadAvailableSipperFileNames ();
   maxCandidates = 1000000;
+  //maxCandidates  = 1000;
   auto potentialCandidate = GetListOfValidatedImages (candidateMinSize, candidateMaxSize, 0, maxCandidates);
-  auto candidates = FilterOutNoise (*potentialCandidate);
+  auto origCandidates = FilterOutNoise (*potentialCandidate);
 
-  KKStr labelingDataFileName = osAddSlash (targetDir) + "LabelingInfo.tsv";
-  ofstream  labelingData (labelingDataFileName.Str ());
+  KKB::osCreateDirectoryPath (targetBaseDir);
 
-  kkint32 imagesCreated = 0;
-  while ((imagesCreated < maxImages) && (candidates->size () > 0) && (!cancelFlag))
+  for  (kkint32 meanBBPerImage = 100; meanBBPerImage <= 120;  meanBBPerImage += 10)
   {
-    //kkint32 numObjectsToAdd = Max(2, (kkint32)normDist (randEngine));
-    kkint32 numObjectsToAdd = meanBBPerImage;
-    auto createdRaster = PopulateRaster (*candidates, numObjectsToAdd);
-    KKStr imageFileName = "PlanktonImage-" + KKB::StrFormatInt (imagesCreated, "00000") + ".bmp";
-    KKStr fullImageFileName = osAddSlash (targetDir) + imageFileName;
-    KKB::SaveImageGrayscaleInverted4Bit (*(createdRaster->raster), fullImageFileName);
+    cout << "\n\n\n" << "meanBBPerImage" << "\t" << meanBBPerImage << endl;
 
+    auto candidates = new DataBaseImageList (*origCandidates, false);
+
+    KKStr targetDir  = osAddSlash (targetBaseDir) + StrFormatInt(meanBBPerImage, "000");
+    KKStr targetDir2 = osAddSlash (targetBaseDir) + StrFormatInt(meanBBPerImage, "000") + "_Painted";
+
+    KKB::osCreateDirectoryPath (targetDir);
+    KKB::osCreateDirectoryPath (targetDir2);
+    targetDir2 = KKB::osAddSlash (targetDir2);
+
+    KKStr labelingTrainDataFileName = osAddSlash (targetDir) + "Plankton-" + StrFormatInt(meanBBPerImage, "000") + "-Train.tsv";
+    ofstream labelingTrainData (labelingTrainDataFileName.Str ());
+
+    KKStr labelingTestDataFileName = osAddSlash (targetDir) + "Plankton-" + StrFormatInt(meanBBPerImage, "000") + "-Test.tsv";
+    ofstream labelingTestData (labelingTestDataFileName.Str ());
+
+    KKStr labelingDataFileName = osAddSlash (targetDir) + "Plankton-" + StrFormatInt(meanBBPerImage, "000") + "-All.tsv";
+    ofstream labelingData (labelingDataFileName.Str ());
+
+    kkuint32 imagesCreated = 0;
+    while ((imagesCreated < maxImages) && (candidates->size () > 0) && (!cancelFlag))
     {
-      KKStr fullPaintedImageFileName = osAddSlash (targetDir2) + imageFileName;
-      Raster painted (*createdRaster->raster);
-      for (auto bb : *(createdRaster->boundBoxes))
-      {
-        Point tl (bb->topLeftRow, bb->topLeftCol);
-        Point tr (bb->topLeftRow, bb->topLeftCol + bb->width - 1);
-        Point bl (bb->topLeftRow + bb->height - 1, bb->topLeftCol);
-        Point br (bb->topLeftRow + bb->height - 1, bb->topLeftCol + bb->width - 1);
-        painted.DrawLine (tl, tr, 255);
-        painted.DrawLine (tr, br, 255);
-        painted.DrawLine (bl, br, 255);
-        painted.DrawLine (tl, bl, 255);
-      }
-      KKB::SaveImageGrayscaleInverted4Bit (painted, fullPaintedImageFileName);
-    }
-     
-    labelingData << imageFileName << "\t" + createdRaster->boundBoxes->ToJsonStr () << endl;
-    labelingData.flush ();
+      //kkint32 numObjectsToAdd = Max(2, (kkint32)normDist (randEngine));
+      kkint32 numObjectsToAdd = meanBBPerImage;
+      auto createdRaster = PopulateRaster (*candidates, numObjectsToAdd);
+      KKStr imageFileName = "PlanktonImage-" + KKB::StrFormatInt (imagesCreated, "00000") + ".bmp";
+      KKStr fullImageFileName = osAddSlash (targetDir) + imageFileName;
+      KKB::SaveImageGrayscaleInverted4Bit (*(createdRaster->raster), fullImageFileName);
 
-    ++imagesCreated;
-    delete createdRaster;
-    createdRaster = NULL;
-    cout << "candidates left: " << candidates->QueueSize () << endl;
+      {
+        KKStr fullPaintedImageFileName = osAddSlash (targetDir2) + imageFileName;
+        Raster painted (*createdRaster->raster);
+        for (auto bb : *(createdRaster->boundBoxes))
+        {
+          Point tl (bb->topLeftRow, bb->topLeftCol);
+          Point tr (bb->topLeftRow, bb->topLeftCol + bb->width - 1);
+          Point bl (bb->topLeftRow + bb->height - 1, bb->topLeftCol);
+          Point br (bb->topLeftRow + bb->height - 1, bb->topLeftCol + bb->width - 1);
+          painted.DrawLine (tl, tr, 255);
+          painted.DrawLine (tr, br, 255);
+          painted.DrawLine (bl, br, 255);
+          painted.DrawLine (tl, bl, 255);
+        }
+        KKB::SaveImageGrayscaleInverted4Bit (painted, fullPaintedImageFileName);
+      }
+      
+      if  (imagesCreated < maxNumTrainImages)
+      {
+          labelingTrainData << imageFileName << "\t" + createdRaster->boundBoxes->ToJsonStr () << endl;
+          labelingTrainData.flush ();
+      }
+      else
+      {
+          labelingTestData << imageFileName << "\t" + createdRaster->boundBoxes->ToJsonStr () << endl;
+          labelingTestData.flush ();
+      }
+
+      labelingData <<  imageFileName << "\t" + createdRaster->boundBoxes->ToJsonStr () << endl;
+      labelingData.flush ();
+
+      ++imagesCreated;
+      delete createdRaster;
+      createdRaster = NULL;
+      cout << "candidates left: " << candidates->QueueSize () << "\t" << "imagesCreated: " << imagesCreated << endl;
+    }
+    labelingTrainData.close ();
+    labelingTestData.close ();
+    labelingData.close ();
+    delete candidates;
+    candidates = NULL;
   }
 
-  labelingData.close ();
-
-  delete candidates;
-  candidates = NULL;
+  delete origCandidates;
+  origCandidates = NULL;
 
   return 0;
 }
@@ -545,26 +596,23 @@ int  main (int argc,  char** argv)
   _CrtSetDbgFlag (_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
   #endif
 
-  auto app = new BuildSynthObjDetData ();
-  app->InitalizeApplication (argc, argv);
-  if (app->Abort ())
-    return 1;
+  bool abort = false;
 
-  app->Main (argc, argv);
+  try
+  {
+    BuildSynthObjDetData app;
+    app.InitalizeApplication (argc, argv);
+    if (app.Abort ())
+      throw KKException("InitalizeApplication  *** FAILED ***");
 
-  #if  defined (WIN32)  &&  defined (_DEBUG)  &&  !defined(_NO_MEMORY_LEAK_CHECK_)
-  //_CrtDumpMemoryLeaks();
-  #endif
-
-  auto abort = app->Abort ();
-
-  delete app;
-  app = NULL;
-
-  if  (abort)
-    return 1;
-  else
-    return 0;
+    app.Main (argc, argv);
+  }
+  catch (...)
+  {
+    abort = true;
+    throw;
+  }
+  return abort ? 1 : 0;
 }
 
 

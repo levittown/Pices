@@ -159,7 +159,10 @@ namespace MLL
   public:
     typedef  DataBaseImageList*  DataBaseImageListPtr;
 
-    DataBaseImageList (bool  _owner = true);
+    DataBaseImageList (bool _owner = true);
+
+    DataBaseImageList (DataBaseImageList& srcList, bool _owner);
+
     ~DataBaseImageList ();
 
     void  SortBySpatialDistance ();

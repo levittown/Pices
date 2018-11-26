@@ -60,6 +60,13 @@ DataBaseImage::DataBaseImage ():
 
 
 
+DataBaseImageList::DataBaseImageList (DataBaseImageList& srcList, bool _owner):
+    KKQueue<DataBaseImage>(srcList, _owner)
+{
+}
+
+
+
 DataBaseImage::~DataBaseImage ()
 {
   delete  encodedThumbnail;  encodedThumbnail = NULL;

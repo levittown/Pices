@@ -108,13 +108,16 @@ namespace  PicesUtilityApps
     bool      cancelFlag;
     kkint32   candidateMinSize;
     kkint32   candidateMaxSize;
+    kkuint32  cropLeft;
+    kkuint32  cropRight;
     kkint32   imageHeight;
     kkint32   imageWidth;
     kkint32   maxCandidates;
-    kkint32   maxImages;
+    kkuint32  maxImages;
+    kkuint32  maxNumTrainImages;
     kkuint32  rasterHeight;
     kkuint32  rasterWidth;
-    KKStr     targetDir;
+    KKStr     targetBaseDir;
 
     VectorKKStr               availableSipperFileNames;
     InstrumentDataManagerPtr  instrumentDataManager;

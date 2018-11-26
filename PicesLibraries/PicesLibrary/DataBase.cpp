@@ -3635,7 +3635,7 @@ DataBaseImageListPtr  DataBase::ImagesQuery (DataBaseImageGroupPtr  imageGroup,
                                              float                  depthMin,
                                              float                  depthMax,
                                              kkuint32               restartImageId,
-                                             OptionUInt32           limit,            // Max # of rows to return.  -1 indicates no limit.,
+                                             OptionUInt32           limit,            // Max # of rows to return.  .,
                                              bool                   includeThumbnail,
                                              const bool&            cancelFlag
                                             )
@@ -4804,8 +4804,8 @@ DataBaseImageGroupPtr  DataBase::ImageGroupLoad (const KKStr&  imageGroupName)  
     return  NULL;
 
   kkint32  groupId = 0;
-  KKStr  name    = "";
-  KKStr  desc    = "";
+  KKStr    name    = "";
+  KKStr    desc    = "";
   kkint32  count   = 0;
   while  (ResultSetFetchNextRow ())
   {
