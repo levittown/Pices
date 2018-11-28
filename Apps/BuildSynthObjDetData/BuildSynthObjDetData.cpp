@@ -495,10 +495,6 @@ DataBaseImageListPtr  BuildSynthObjDetData::FilterOutNoise (DataBaseImageList& s
 
 int  BuildSynthObjDetData::Main (int argc, char** argv)
 {
-  kkint32 meanBBPerImage = 30;
-  std::default_random_engine randEngine (1234567); //seed
-  std::normal_distribution<float> normDist ((float)meanBBPerImage, 4.0f); //mean followed by stddev
-
   LoadAvailableSipperFileNames ();
   maxCandidates = 1000000;
   //maxCandidates  = 1000;
@@ -507,9 +503,12 @@ int  BuildSynthObjDetData::Main (int argc, char** argv)
 
   KKB::osCreateDirectoryPath (targetBaseDir);
 
-  for  (kkint32 meanBBPerImage = 100; meanBBPerImage <= 120;  meanBBPerImage += 10)
+  for  (kkint32 meanBBPerImage = 10; meanBBPerImage <= 120;  meanBBPerImage += 10)
   {
     cout << "\n\n\n" << "meanBBPerImage" << "\t" << meanBBPerImage << endl;
+
+    std::default_random_engine randEngine (1234567);
+    std::normal_distribution<float> normDist ((float)meanBBPerImage, 4.0f); //mean followed by stddev
 
     auto candidates = new DataBaseImageList (*origCandidates, false);
 
@@ -520,13 +519,15 @@ int  BuildSynthObjDetData::Main (int argc, char** argv)
     KKB::osCreateDirectoryPath (targetDir2);
     targetDir2 = KKB::osAddSlash (targetDir2);
 
-    KKStr labelingTrainDataFileName = osAddSlash (targetDir) + "Plankton-" + StrFormatInt(meanBBPerImage, "000") + "-Train.tsv";
+    KKStr rootName = "Plankton-" + StrFormatInt (meanBBPerImage, "000");
+
+    KKStr labelingTrainDataFileName = osAddSlash (targetDir) + rootName + "-Train.tsv";
     ofstream labelingTrainData (labelingTrainDataFileName.Str ());
 
-    KKStr labelingTestDataFileName = osAddSlash (targetDir) + "Plankton-" + StrFormatInt(meanBBPerImage, "000") + "-Test.tsv";
+    KKStr labelingTestDataFileName = osAddSlash (targetDir) + rootName + "-Test.tsv";
     ofstream labelingTestData (labelingTestDataFileName.Str ());
 
-    KKStr labelingDataFileName = osAddSlash (targetDir) + "Plankton-" + StrFormatInt(meanBBPerImage, "000") + "-All.tsv";
+    KKStr labelingDataFileName = osAddSlash (targetDir) + rootName + "-All.tsv";
     ofstream labelingData (labelingDataFileName.Str ());
 
     kkuint32 imagesCreated = 0;
@@ -535,7 +536,7 @@ int  BuildSynthObjDetData::Main (int argc, char** argv)
       //kkint32 numObjectsToAdd = Max(2, (kkint32)normDist (randEngine));
       kkint32 numObjectsToAdd = meanBBPerImage;
       auto createdRaster = PopulateRaster (*candidates, numObjectsToAdd);
-      KKStr imageFileName = "PlanktonImage-" + KKB::StrFormatInt (imagesCreated, "00000") + ".bmp";
+      KKStr imageFileName = rootName + "-" + KKB::StrFormatInt (imagesCreated, "00000") + ".bmp";
       KKStr fullImageFileName = osAddSlash (targetDir) + imageFileName;
       KKB::SaveImageGrayscaleInverted4Bit (*(createdRaster->raster), fullImageFileName);
 
@@ -637,10 +638,10 @@ KKStr BuildSynthObjDetData::BoundBoxEntry::ToJsonStr () const
 
   jsonStr
     << "{"
-    << "\"topLeftCol\":" << topLeftCol << ", "
-    << "\"topLeftRow\":" << topLeftRow << ", "
-    << "\"width\":" << width << ", "
-    << "\"height\":" << height << ", "
+    << "\"left\":" << topLeftCol << ","
+    << "\"top\":" << topLeftRow << ","
+    << "\"width\":" << width << ","
+    << "\"height\":" << height << ","
     << "\"ClassName\":" << mlClass->Name ().QuotedStr ()
     << "}";
 
@@ -672,6 +673,6 @@ KKStr BuildSynthObjDetData::BoundBoxEntryList::ToJsonStr () const
       jsonStr << ", ";
     jsonStr << IdxToPtr ((kkint32)x)->ToJsonStr ();
   }
-
+  jsonStr << "]";
   return jsonStr;
 }
