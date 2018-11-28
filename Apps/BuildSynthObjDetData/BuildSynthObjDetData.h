@@ -86,6 +86,9 @@ namespace  PicesUtilityApps
       BoundBoxEntryList* boundBoxes;
     };
 
+    DataBaseImageListPtr  FilterOutInsignificant (DataBaseImageList& src);
+
+
     DataBaseImageListPtr  FilterOutNoise (DataBaseImageList& src);
       
     RasterPtr GetNextFrame ();

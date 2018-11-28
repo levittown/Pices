@@ -493,6 +493,25 @@ DataBaseImageListPtr  BuildSynthObjDetData::FilterOutNoise (DataBaseImageList& s
 
 
 
+DataBaseImageListPtr  BuildSynthObjDetData::FilterOutInsignificant (DataBaseImageList& src)
+{
+  auto classList = src.ExtractListOfClasses ();
+  DataBaseImageListPtr  result = new DataBaseImageList (false);
+
+  for  (auto c: *classList)
+  {
+    auto imagesThisClass = src.ExtractExamplesForAGivenClass (c);
+    if  (imagesThisClass->QueueSize () > 200)
+      result->AddQueue (*imagesThisClass);
+  }
+
+  delete classList;
+  classList = NULL;
+  return result;
+}
+
+
+
 int  BuildSynthObjDetData::Main (int argc, char** argv)
 {
   kkint32 meanBBPerImage = 30;
@@ -511,7 +530,7 @@ int  BuildSynthObjDetData::Main (int argc, char** argv)
   {
     cout << "\n\n\n" << "meanBBPerImage" << "\t" << meanBBPerImage << endl;
 
-    auto candidates = new DataBaseImageList (*origCandidates, false);
+    auto candidates = FilterOutInsignificant(*origCandidates);
 
     KKStr targetDir  = osAddSlash (targetBaseDir) + StrFormatInt(meanBBPerImage, "000");
     KKStr targetDir2 = osAddSlash (targetBaseDir) + StrFormatInt(meanBBPerImage, "000") + "_Painted";
