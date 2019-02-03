@@ -16,6 +16,7 @@
 #include "MemoryDebug.h"
 using namespace std;
 
+#include "Base64.h"
 #include "Blob.h"
 #include "ImageIO.h"
 #include "KKBaseTypes.h"
@@ -26,6 +27,7 @@ using namespace KKB;
 #include "InstrumentDataManager.h"
 #include "DataBase.h"
 #include "ImageFeatures.h"
+#include "MLClass.h"
 #include "SipperCruise.h"
 #include "SipperDeployment.h"
 #include "SipperFile.h"
@@ -45,23 +47,27 @@ BuildSynthObjDetData::BuildSynthObjDetData () :
 
   PicesApplication (),
   cancelFlag            (false),
-  candidateMinSize      (1000),
-  candidateMaxSize      (50000),
+  candidateMinSize      (800),
+  candidateMaxSize      (25000),
   cropLeft              (100),
   cropRight             (3999),
+  generatePainted       (false),
   imageHeight           (2048),
   imageWidth            (2048),
   instrumentDataManager (NULL),
   maxCandidates         (100000),
-  maxImages             (1500),
+  //maxCandidates         (1000),
+  //maxImages             (1500),
+  maxImages             (400),
   nextSipperFileIdx     (0),
+  numUniqueClasses      (20),
   rasterHeight          (2048),
   rasterWidth           (2048),
   rng                   (1000),
   sipperBuff            (NULL),
   sipperFileRootDir     ("F:\\Pices\\SipperFiles\\USF\\ETP2008"),
   targetBaseDir         (),
-  maxNumTrainImages     (1000)
+  maxNumTrainImages     (300)
 {
 }
 
@@ -428,7 +434,7 @@ BuildSynthObjDetData::PopulateRasterResult*
           
           imagePlaced = SeeIfItFits (*raster, *trimmedObj, marker, topLeftRow, topLeftCol);
           if (imagePlaced)
-            boundingBoxes->PushOnBack (new BoundBoxEntry (topLeftRow, topLeftCol, trimmedObj->Height (), trimmedObj->Width (), nextImageToPlace->Class1 ()));
+            boundingBoxes->PushOnBack (new BoundBoxEntry (topLeftRow, topLeftCol, trimmedObj->Height (), trimmedObj->Width (), nextImageToPlace->ValidatedClass ()));
 
           --numAttemptsLeft;
         }
@@ -477,6 +483,18 @@ DataBaseImageListPtr  BuildSynthObjDetData::FilterOutNoise (DataBaseImageList& s
         keep = false;
     }
 
+    else
+    {
+      // We want to eliminate extra large images.
+      auto h = nextCandidate->Height ();
+      auto w = nextCandidate->Width  ();
+      auto areaSquared = h * h + w * w;
+      if  (areaSquared > (400 * 400))
+      {
+        keep = false;
+      }
+    }
+
     if  (!keep)
     {
       delete nextCandidate;
@@ -493,20 +511,26 @@ DataBaseImageListPtr  BuildSynthObjDetData::FilterOutNoise (DataBaseImageList& s
 
 
 
-DataBaseImageListPtr  BuildSynthObjDetData::FilterOutInsignificant (DataBaseImageList& src)
+DataBaseImageListPtr  BuildSynthObjDetData::FilterOutInsignificant (DataBaseImageList& src, kkuint32 numClassesToKeep)
 {
-  auto classList = src.ExtractListOfClasses ();
+  auto classStats = src.ComputeClassStats (DataBaseImage::MLClassField::Validated);
+  classStats->SortByCount (false);
+
   DataBaseImageListPtr  result = new DataBaseImageList (false);
 
-  for  (auto c: *classList)
+  kkuint32 numClassesAdded = 0;
+
+  for  (auto c: *classStats)
   {
-    auto imagesThisClass = src.ExtractExamplesForAGivenClass (c);
-    if  (imagesThisClass->QueueSize () > 200)
-      result->AddQueue (*imagesThisClass);
+    auto imagesThisClass = src.ExtractExamplesForAGivenClass (c->MLClass ());
+    result->AddQueue (*imagesThisClass);
+    ++numClassesAdded;
+    if  (numClassesAdded >= numClassesToKeep)
+      break;
   }
 
-  delete classList;
-  classList = NULL;
+  delete classStats;
+  classStats = NULL;
   return result;
 }
 
@@ -514,39 +538,43 @@ DataBaseImageListPtr  BuildSynthObjDetData::FilterOutInsignificant (DataBaseImag
 
 int  BuildSynthObjDetData::Main (int argc, char** argv)
 {
-  kkint32 meanBBPerImage = 30;
-  std::default_random_engine randEngine (1234567); //seed
-  std::normal_distribution<float> normDist ((float)meanBBPerImage, 4.0f); //mean followed by stddev
-
   LoadAvailableSipperFileNames ();
   maxCandidates = 1000000;
-  //maxCandidates  = 1000;
+  //maxCandidates  = 5000;
   auto potentialCandidate = GetListOfValidatedImages (candidateMinSize, candidateMaxSize, 0, maxCandidates);
   auto origCandidates = FilterOutNoise (*potentialCandidate);
 
   KKB::osCreateDirectoryPath (targetBaseDir);
 
-  for  (kkint32 meanBBPerImage = 100; meanBBPerImage <= 120;  meanBBPerImage += 10)
+  KKStr  allExamplesFileName = KKB::osAddSlash (targetBaseDir) + "Plankton_" + StrFormatInt (numUniqueClasses, "000") + ".tsv";
+  ofstream  allExamples (allExamplesFileName.Str ());
+
+
+  for  (kkint32 meanBBPerImage = 10; meanBBPerImage <= 200; meanBBPerImage += 10)
   {
     cout << "\n\n\n" << "meanBBPerImage" << "\t" << meanBBPerImage << endl;
 
-    auto candidates = FilterOutInsignificant(*origCandidates);
+    std::default_random_engine randEngine (1234567);
+    std::normal_distribution<float> normDist ((float)meanBBPerImage, 4.0f); //mean followed by stddev
 
-    KKStr targetDir  = osAddSlash (targetBaseDir) + StrFormatInt(meanBBPerImage, "000");
-    KKStr targetDir2 = osAddSlash (targetBaseDir) + StrFormatInt(meanBBPerImage, "000") + "_Painted";
+    auto candidates = FilterOutInsignificant(*origCandidates, numUniqueClasses);
+
+    candidates->RandomizeOrder (rng.Next ());
+
+    KKStr targetDir  = osAddSlash (targetBaseDir) + "Plankton_" + StrFormatInt (numUniqueClasses, "000") + "-" + StrFormatInt (meanBBPerImage, "000");
+    KKStr targetDir2 = targetDir + "_Painted";
 
     KKB::osCreateDirectoryPath (targetDir);
     KKB::osCreateDirectoryPath (targetDir2);
     targetDir2 = KKB::osAddSlash (targetDir2);
 
-    KKStr labelingTrainDataFileName = osAddSlash (targetDir) + "Plankton-" + StrFormatInt(meanBBPerImage, "000") + "-Train.tsv";
+    KKStr rootName = "Plankton-" + StrFormatInt (numUniqueClasses, "000") + "-" + StrFormatInt (meanBBPerImage, "000");
+
+    KKStr labelingTrainDataFileName = osAddSlash (targetDir) + rootName + "-Train.tsv";
     ofstream labelingTrainData (labelingTrainDataFileName.Str ());
 
-    KKStr labelingTestDataFileName = osAddSlash (targetDir) + "Plankton-" + StrFormatInt(meanBBPerImage, "000") + "-Test.tsv";
+    KKStr labelingTestDataFileName = osAddSlash (targetDir) + rootName + "-Test.tsv";
     ofstream labelingTestData (labelingTestDataFileName.Str ());
-
-    KKStr labelingDataFileName = osAddSlash (targetDir) + "Plankton-" + StrFormatInt(meanBBPerImage, "000") + "-All.tsv";
-    ofstream labelingData (labelingDataFileName.Str ());
 
     kkuint32 imagesCreated = 0;
     while ((imagesCreated < maxImages) && (candidates->size () > 0) && (!cancelFlag))
@@ -554,10 +582,11 @@ int  BuildSynthObjDetData::Main (int argc, char** argv)
       //kkint32 numObjectsToAdd = Max(2, (kkint32)normDist (randEngine));
       kkint32 numObjectsToAdd = meanBBPerImage;
       auto createdRaster = PopulateRaster (*candidates, numObjectsToAdd);
-      KKStr imageFileName = "PlanktonImage-" + KKB::StrFormatInt (imagesCreated, "00000") + ".bmp";
+      KKStr imageFileName = rootName + "-" + KKB::StrFormatInt (imagesCreated, "00000") + ".bmp";
       KKStr fullImageFileName = osAddSlash (targetDir) + imageFileName;
       KKB::SaveImageGrayscaleInverted4Bit (*(createdRaster->raster), fullImageFileName);
 
+      if  (generatePainted)
       {
         KKStr fullPaintedImageFileName = osAddSlash (targetDir2) + imageFileName;
         Raster painted (*createdRaster->raster);
@@ -575,19 +604,30 @@ int  BuildSynthObjDetData::Main (int argc, char** argv)
         KKB::SaveImageGrayscaleInverted4Bit (painted, fullPaintedImageFileName);
       }
       
+      std::ifstream file(fullImageFileName.Str(), std::ios::binary | std::ios::ate);
+      std::streamsize size = file.tellg();
+      file.seekg(0, std::ios::beg);
+      std::vector<char> buffer(size);
+      file.read(buffer.data(), size);
+
+      auto base64ImageStr = KKB::macaron::Base64::Encode(buffer.data(), size);
+
+      KKStr  tsvStr(32 * 1024);
+      tsvStr << imageFileName << "\t" + createdRaster->boundBoxes->ToJsonStr () << "\t" << base64ImageStr;
+
       if  (imagesCreated < maxNumTrainImages)
       {
-          labelingTrainData << imageFileName << "\t" + createdRaster->boundBoxes->ToJsonStr () << endl;
+          labelingTrainData << tsvStr << endl;
           labelingTrainData.flush ();
       }
       else
       {
-          labelingTestData << imageFileName << "\t" + createdRaster->boundBoxes->ToJsonStr () << endl;
+          labelingTestData << tsvStr << endl;
           labelingTestData.flush ();
       }
 
-      labelingData <<  imageFileName << "\t" + createdRaster->boundBoxes->ToJsonStr () << endl;
-      labelingData.flush ();
+      allExamples << tsvStr << endl;
+      allExamples.flush ();
 
       ++imagesCreated;
       delete createdRaster;
@@ -596,11 +636,12 @@ int  BuildSynthObjDetData::Main (int argc, char** argv)
     }
     labelingTrainData.close ();
     labelingTestData.close ();
-    labelingData.close ();
+
     delete candidates;
     candidates = NULL;
   }
 
+  allExamples.close ();
   delete origCandidates;
   origCandidates = NULL;
 
@@ -656,10 +697,10 @@ KKStr BuildSynthObjDetData::BoundBoxEntry::ToJsonStr () const
 
   jsonStr
     << "{"
-    << "\"topLeftCol\":" << topLeftCol << ", "
-    << "\"topLeftRow\":" << topLeftRow << ", "
-    << "\"width\":" << width << ", "
-    << "\"height\":" << height << ", "
+    << "\"left\":" << topLeftCol << ","
+    << "\"top\":" << topLeftRow << ","
+    << "\"width\":" << width << ","
+    << "\"height\":" << height << ","
     << "\"ClassName\":" << mlClass->Name ().QuotedStr ()
     << "}";
 
@@ -691,6 +732,6 @@ KKStr BuildSynthObjDetData::BoundBoxEntryList::ToJsonStr () const
       jsonStr << ", ";
     jsonStr << IdxToPtr ((kkint32)x)->ToJsonStr ();
   }
-
+  jsonStr << "]";
   return jsonStr;
 }

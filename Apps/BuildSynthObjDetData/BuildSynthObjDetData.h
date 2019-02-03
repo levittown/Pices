@@ -9,7 +9,7 @@ using namespace  KKB;
 #include "DataBase.h"
 #include "SipperBuff.h"
 #include "PicesApplication.h"
-using namespace  MLL;;
+using namespace  MLL;
 
 namespace  PicesUtilityApps
 {
@@ -86,8 +86,7 @@ namespace  PicesUtilityApps
       BoundBoxEntryList* boundBoxes;
     };
 
-    DataBaseImageListPtr  FilterOutInsignificant (DataBaseImageList& src);
-
+    DataBaseImageListPtr  FilterOutInsignificant (DataBaseImageList& src, kkuint32 numClassesToKeep);
 
     DataBaseImageListPtr  FilterOutNoise (DataBaseImageList& src);
       
@@ -113,11 +112,13 @@ namespace  PicesUtilityApps
     kkint32   candidateMaxSize;
     kkuint32  cropLeft;
     kkuint32  cropRight;
+    bool      generatePainted;
     kkint32   imageHeight;
     kkint32   imageWidth;
     kkint32   maxCandidates;
     kkuint32  maxImages;
     kkuint32  maxNumTrainImages;
+    kkuint32  numUniqueClasses;
     kkuint32  rasterHeight;
     kkuint32  rasterWidth;
     KKStr     targetBaseDir;

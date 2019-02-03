@@ -25,23 +25,16 @@ typedef  MSQL_STRUCT* MYSQL_ROW;
 #include "RunLog.h"
 using namespace KKB;
 
+#include "ClassStatistic.h"
+#include "MLClass.h"
+using namespace KKMLL;
+
 #include "RasterSipper.h"
 using namespace  MLL;
 
+
 namespace MLL 
 {
-
-
-  #ifndef  _MLCLASS_
-  class  MLClass;
-  typedef  MLClass*  MLClassPtr;
-  class  MLClassList;
-  typedef  MLClassList*  MLClassListPtr;
-  #endif
-
-
-
-
   class  DataBaseImage
   {
   public:
@@ -52,6 +45,8 @@ namespace MLL
     typedef  KKB::kkuint32  kkuint32;
     typedef  KKB::ulong    ulong;
     typedef  KKB::uchar    uchar;
+
+    enum class  MLClassField  { Class1, Class2, Validated };
 
     DataBaseImage ();
     ~DataBaseImage ();
@@ -87,8 +82,10 @@ namespace MLL
     const KKStr&    ValidatedClassName    () const;
     kkuint32        Width                 () const  {return  width;}
 
+    MLClassPtr  GetMlClass (MLClassField mlClassField) const;
 
-    RasterSipperPtr       GetOrigImageFromSipperFile (RunLog&  log) const;  /**< Will go to the original Sipper file and extract the image. */
+
+    RasterSipperPtr  GetOrigImageFromSipperFile (RunLog&  log) const;  /**< Will go to the original Sipper file and extract the image. */
 
     void    ByteOffset           (osFilePos         _byteOffset)           {byteOffset           = _byteOffset;}
     void    CentroidCol          (kkuint32          _centroidCol)          {centroidCol          = _centroidCol;}
@@ -167,12 +164,12 @@ namespace MLL
 
     void  SortBySpatialDistance ();
 
-
-    MLClassListPtr  ExtractListOfClasses ();
+      MLClassListPtr  ExtractListOfClasses ();
 
     DataBaseImageListPtr  ExtractExamplesForAGivenClass (MLClassPtr  _mlClass);
 
-
+    ClassStatisticListPtr  ComputeClassStats (DataBaseImage::MLClassField mlClassField) const;
+    
     VectorFloat  CalculateDensitesByQuadrat (float        scanRate,     // Scan Lines per Sec.
                                              float        quadratSize,  // Meters.
                                              float        flowRate,     // Meters per Sec

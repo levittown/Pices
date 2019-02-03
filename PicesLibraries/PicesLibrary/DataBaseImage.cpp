@@ -75,6 +75,19 @@ DataBaseImage::~DataBaseImage ()
 
 
 
+MLClassPtr  DataBaseImage::GetMlClass (MLClassField mlClassField) const
+{
+  switch (mlClassField)
+  {
+  case  MLClassField::Class1:     return class1;
+  case  MLClassField::Class2:     return class2;
+  case  MLClassField::Validated:  return validatedClass;
+  default: throw KKException ("DataBaseImage::GetMlClass   Invalid 'mlClassField' specified!");
+    break;
+  }
+}
+
+
 float  DataBaseImage::BreakTie () const  
 {
   if  (class1Prob > class2Prob)
@@ -82,7 +95,6 @@ float  DataBaseImage::BreakTie () const
   else
     return  (class2Prob - class1Prob);
 }
-
 
 
 
@@ -117,7 +129,6 @@ void  DataBaseImage::Class1Name (const char* _class1Name)
   else
     class1 = MLClass::CreateNewMLClass (_class1Name);
 }  /* Class1Name */
-
 
 
 
@@ -169,6 +180,7 @@ void  DataBaseImage::SizeCoordinates (PointListPtr  _sizeCoordinates)
 }
 
 
+
 void  DataBaseImage::SizeCoordinates  (const KKStr  _sizeCoordinatesStr)
 {
   delete  sizeCoordinates;
@@ -211,7 +223,6 @@ RasterSipperPtr  DataBaseImage::ThumbNail (RunLog&  log) const
 
 
 
-
 RasterSipperPtr  DataBaseImage::GetOrigImageFromSipperFile (RunLog&  log) const
 {
   uchar  distToUse = 3;
@@ -235,18 +246,16 @@ RasterSipperPtr  DataBaseImage::GetOrigImageFromSipperFile (RunLog&  log) const
 
 
 
-
-
 DataBaseImageList::DataBaseImageList (bool _owner):
       KKQueue<DataBaseImage> (_owner)
 {
 }
 
 
+
 DataBaseImageList::~DataBaseImageList ()
 {
 }
-
 
 
 
@@ -284,6 +293,28 @@ MLClassListPtr  DataBaseImageList::ExtractListOfClasses ()
   return  classes;
 }  /* ExtractListOfClasses */
 
+
+
+ClassStatisticListPtr  DataBaseImageList::ComputeClassStats (DataBaseImage::MLClassField mlClassField) const
+{
+  map<MLClassPtr, kkuint32> classCounts;
+  map<MLClassPtr, kkuint32>::iterator  idx;
+
+  for  (auto dbi: *this)
+  {
+    auto c = dbi->GetMlClass (mlClassField);
+    idx = classCounts.find(c);
+    if  (idx == classCounts.end ())
+      classCounts.insert(pair<MLClassPtr, kkuint32>(c, 1));
+    else
+      ++(idx->second);
+  }
+
+  ClassStatisticListPtr stats = new ClassStatisticList (true);
+  for  (auto stat: classCounts)
+    stats->push_back (new ClassStatistic (stat.first, stat.second));
+  return stats;
+}
 
 
 
