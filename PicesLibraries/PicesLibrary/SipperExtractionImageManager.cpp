@@ -414,11 +414,10 @@ ClassStatisticListPtr  SipperExtractionImageManager::ClassStats ()  const
     classStats->PushOnBack (new ClassStatistic (managedClass->MLClass (), managedClass->ImageCount ()));
   }
 
-  classStats->SortByCount ();
+  classStats->SortByCount (true);
 
   return  classStats;
 }  /* ClassStats */
-
 
 
 
@@ -463,7 +462,6 @@ SipperExtractionImageManager::ManagedClass::~ManagedClass ()
 
 
 
-
 const  KKStr&  SipperExtractionImageManager::ManagedClass::ClassName () const
 {
   if  (mlClass)
@@ -481,8 +479,6 @@ const  KKStr&  SipperExtractionImageManager::ManagedClass::ClassNameUpper () con
   else
     return  KKStr::EmptyStr ();
 }  /* ClassName */
-
-
 
 
 
@@ -507,8 +503,6 @@ void  SipperExtractionImageManager::ManagedClass::StartNewDirectory ()
                                            );
   }
 }  /* StartNewDirectory */
-
-
 
 
 
@@ -555,16 +549,6 @@ void  SipperExtractionImageManager::ManagedClass::AddImage
     }
   }
 
-
-  //{
-  //  KKStr  thinFileName = osRemoveExtension (fullFileName)  + "_BandPass.bmp";
-  //  RasterPtr  thinnedImage = raster->BandPass (0.0f, 0.3f);
-  //  SaveImage  (*thinnedImage, thinFileName);
-  //  delete  thinnedImage;  
-  //  thinnedImage = NULL;
-  //}
-
-
   ImageEntryPtr  imageEntry = new ImageEntry (fileName, size, predClass);
   entries->PushOnBack (imageEntry);
 
@@ -576,7 +560,6 @@ void  SipperExtractionImageManager::ManagedClass::AddImage
 
   imageCount++;
 }  /* AddImage */
-
 
 
 
@@ -624,9 +607,8 @@ void  SipperExtractionImageManager::ManagedClass::CloseOutCurDirectory ()
 
 
 
-
 void  SipperExtractionImageManager::ManagedClass::SaveFrame 
-                             (const KKStr&      fileName, 
+                              (const KKStr&     fileName, 
                                      RasterPtr  raster,
                                      bool       colorize
                               )
@@ -647,7 +629,6 @@ void  SipperExtractionImageManager::ManagedClass::SaveFrame
     }
   }
 }  /* SaveFrame */
-
 
 
 
