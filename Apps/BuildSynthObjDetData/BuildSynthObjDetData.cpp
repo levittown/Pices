@@ -16,7 +16,6 @@
 #include "MemoryDebug.h"
 using namespace std;
 
-#include "Base64.h"
 #include "Blob.h"
 #include "ImageIO.h"
 #include "KKBaseTypes.h"
@@ -33,6 +32,7 @@ using namespace KKB;
 #include "SipperFile.h"
 #include "PicesVariables.h"
 using namespace  MLL;
+
 
 
 #include "BuildSynthObjDetData.h"
@@ -60,7 +60,7 @@ BuildSynthObjDetData::BuildSynthObjDetData () :
   //maxImages             (1500),
   maxImages             (400),
   nextSipperFileIdx     (0),
-  numUniqueClasses      (20),
+  numUniqueClasses      (5),
   rasterHeight          (2048),
   rasterWidth           (2048),
   rng                   (1000),
@@ -476,6 +476,9 @@ DataBaseImageListPtr  BuildSynthObjDetData::FilterOutNoise (DataBaseImageList& s
     else if (nextCandidate->Class1Name ().EqualIgnoreCase ("noise_lines"))
       keep = false;
 
+    else if (nextCandidate->Class1Name ().StartsWith ("detritus", true))
+      keep = false;
+
     else if (nextCandidate->Class1Name ().StartsWith ("noise", true))
     {
       ++noiseCount;
@@ -533,6 +536,13 @@ DataBaseImageListPtr  BuildSynthObjDetData::FilterOutInsignificant (DataBaseImag
   classStats = NULL;
   return result;
 }
+
+
+
+KKStr  BuildSynthObjDetData::EncodeAsBase64Str (uchar const * src, kkuint32 srcLen)
+{
+	return KKStr::ToBase64Str (src, srcLen);
+} /* EncodeAsBase64Str */
 
 
 
@@ -610,7 +620,7 @@ int  BuildSynthObjDetData::Main (int argc, char** argv)
       std::vector<char> buffer(size);
       file.read(buffer.data(), size);
 
-      auto base64ImageStr = KKB::macaron::Base64::Encode(buffer.data(), size);
+      auto base64ImageStr = EncodeAsBase64Str ((uchar*)buffer.data(), (kkStrUint)size);
 
       KKStr  tsvStr(32 * 1024);
       tsvStr << imageFileName << "\t" + createdRaster->boundBoxes->ToJsonStr () << "\t" << base64ImageStr;

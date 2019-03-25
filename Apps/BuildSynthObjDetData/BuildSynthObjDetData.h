@@ -107,6 +107,9 @@ namespace  PicesUtilityApps
                                     const KKStr&  parmValue
                                    );
 
+	KKStr  EncodeAsBase64Str (uchar const * src, kkuint32 srcLen);
+
+
     bool      cancelFlag;
     kkint32   candidateMinSize;
     kkint32   candidateMaxSize;
