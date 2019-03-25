@@ -107,7 +107,7 @@ namespace  PicesUtilityApps
                                     const KKStr&  parmValue
                                    );
 
-	KKStr  EncodeAsBase64Str (void const * src, kkuint32 srcLen);
+	KKStr  EncodeAsBase64Str (uchar const * src, kkuint32 srcLen);
 
 
     bool      cancelFlag;
