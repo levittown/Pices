@@ -13,7 +13,7 @@
       <PreprocessorDefinitions>WIN32;WIN64;ZLIB_AVAILABLE;FFTW_AVAILABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>KKBase.lib;KKMachineLearning.lib;KKJobManager.lib;PicesLibrary.lib;libfftw3-3.lib;libfftw3f-3.lib;libmysql.lib;USER32.LIB;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>KKBase.lib;KKMachineLearning.lib;KKJobManager.lib;PicesLibrary.lib;libfftw3-3.lib;libfftw3f-3.lib;libmysql.lib;zlib-1.2.11.lib;USER32.LIB;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\;$(SolutionDir)\Libraries\$(Configuration);$(OutsidePackages)\fftw-3.3.5-dll64;$(OutsidePackages)\MySQL\MySQL Connector C 6.1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>

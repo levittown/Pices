@@ -59,6 +59,7 @@ BuildSynthObjDetData::BuildSynthObjDetData () :
   //maxCandidates         (1000),
   //maxImages             (1500),
   maxImages             (400),
+  minEdgeLen            (30),
   nextSipperFileIdx     (0),
   numUniqueClasses      (5),
   rasterHeight          (2048),
@@ -492,7 +493,7 @@ DataBaseImageListPtr  BuildSynthObjDetData::FilterOutNoise (DataBaseImageList& s
       auto h = nextCandidate->Height ();
       auto w = nextCandidate->Width  ();
       auto areaSquared = h * h + w * w;
-      if  (areaSquared > (400 * 400))
+      if  ((areaSquared > (400 * 400))  ||  (h < minEdgeLen)  ||  (w < minEdgeLen))
       {
         keep = false;
       }
@@ -550,7 +551,7 @@ int  BuildSynthObjDetData::Main (int argc, char** argv)
 {
   LoadAvailableSipperFileNames ();
   maxCandidates = 1000000;
-  //maxCandidates  = 5000;
+  //tmaxCandidates  = 5000;
   auto potentialCandidate = GetListOfValidatedImages (candidateMinSize, candidateMaxSize, 0, maxCandidates);
   auto origCandidates = FilterOutNoise (*potentialCandidate);
 
@@ -591,6 +592,13 @@ int  BuildSynthObjDetData::Main (int argc, char** argv)
     {
       //kkint32 numObjectsToAdd = Max(2, (kkint32)normDist (randEngine));
       kkint32 numObjectsToAdd = meanBBPerImage;
+
+      if  ((imagesCreated % 20) == 0)
+        numObjectsToAdd = 200;
+
+      else if ((imagesCreated % 10) == 0)
+        numObjectsToAdd = Max (100, numObjectsToAdd);
+           
       auto createdRaster = PopulateRaster (*candidates, numObjectsToAdd);
       KKStr imageFileName = rootName + "-" + KKB::StrFormatInt (imagesCreated, "00000") + ".bmp";
       KKStr fullImageFileName = osAddSlash (targetDir) + imageFileName;

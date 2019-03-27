@@ -15,7 +15,7 @@ using namespace KKB;
 
 
 #include "DataBaseImageGroup.h"
-using namespace  MLL;
+using namespace MLL;
 
 
 
@@ -83,7 +83,7 @@ void  DataBaseImageGroup::ValidName (KKStr&  _name,
 
     if  (invalidChars.Len () > 0)
       invalidChars << ",";
-    invalidChars.Append (c);
+    invalidChars.Append ((char)c);
   }
   if  (!invalidChars.Empty ())
   {
@@ -104,7 +104,6 @@ DataBaseImageGroupList::DataBaseImageGroupList (bool _owner):
 
 
 
-
 DataBaseImageGroupList::DataBaseImageGroupList (const  DataBaseImageGroupList&  _dataBaseImageGroupList):
   KKQueue<DataBaseImageGroup> (_dataBaseImageGroupList)
 {
@@ -115,6 +114,3 @@ DataBaseImageGroupList::DataBaseImageGroupList (const  DataBaseImageGroupList&  
 DataBaseImageGroupList::~DataBaseImageGroupList ()
 {
 }
-
-
-
