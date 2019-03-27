@@ -90,7 +90,8 @@
       </DataExecutionPrevention>
     </Link>
     <PreBuildEvent>
-      <Command>copy /Y $(OutsidePackages)\fftw-3.3.5-dll64   $(SolutionDir)$(Configuration)\</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
