@@ -479,9 +479,9 @@ void  SplitExamples (FeatureVectorList*  examples)
 
     stats << mlClass->Name () << "\t" << imagesThisClass->QueueSize () << endl;
 
-    int  divPoint = (int)((double)imagesThisClass->QueueSize () * percentSplit + 0.5);
+    kkuint32  divPoint = (kkuint32)((double)imagesThisClass->QueueSize () * percentSplit + 0.5);
 
-    for  (int x = 0;  x < imagesThisClass->QueueSize ();  x++)
+    for  (kkuint32  x = 0;  x < imagesThisClass->QueueSize ();  x++)
     {
       FeatureVectorPtr  i = imagesThisClass->IdxToPtr (x);
       if  (x < divPoint)
@@ -959,7 +959,7 @@ void   TrimClasses (FeatureVectorListPtr  examples)
 
   MLClassList  newClassList;
 
-  int  minRequired = numOfFolds * 2;
+  kkuint32  minRequired = numOfFolds * 2;
 
   for  (idx = classes->begin ();  idx != classes->end ();  idx++)
   {
@@ -1242,11 +1242,9 @@ void  CheckWebData ()
     allMean    << allClass->QueueSize ();
     sparseMean << sparseClass->QueueSize ();
 
-    int  fn;
-
     r << "Count";
 
-    for  (fn = 0;  fn < sparseData->NumOfFeatures ();  fn++)
+    for  (kkuint32 fn = 0;  fn < sparseData->NumOfFeatures ();  fn++)
     {
       r << "\t" << fn;
       int    countA;

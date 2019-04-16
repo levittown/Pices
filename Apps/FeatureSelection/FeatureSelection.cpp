@@ -884,9 +884,7 @@ void  FeatureSelection::StatusFileUpdate (BinaryClassListPtr  binClasses)
       if  (quitRunning)
         statusFile << "QuitRunning" << endl;
 
-      int  x;
-
-      for  (x = 0;  x < binClasses->QueueSize ();  x++)
+      for  (kkuint32 x = 0;  x < binClasses->QueueSize ();  x++)
       {
         BinaryClassPtr  bc = binClasses->IdxToPtr (x);
         statusFile << "BinaryClass" << "\t" << bc->ToStr () << endl;
@@ -1562,11 +1560,10 @@ BinaryClassListPtr  FeatureSelection::CreateInitialBinaryClassListBinaryComboSea
   MLClassPtr  class1 = NULL;
   MLClassPtr  class2 = NULL;
 
-  int  idx1, idx2;
-  for  (idx1 = 0;  idx1 < (classes->QueueSize () - 1);  idx1++)
+  for  (kkuint32 idx1 = 0;  idx1 < (classes->QueueSize () - 1);  idx1++)
   {
     class1 = classes->IdxToPtr (idx1);
-    for  (idx2 = idx1 + 1;  idx2 < classes->QueueSize ();  idx2++)
+    for  (kkuint32 idx2 = idx1 + 1;  idx2 < classes->QueueSize ();  idx2++)
     {
       class2 = classes->IdxToPtr (idx2);
 
@@ -3274,8 +3271,8 @@ void  FeatureSelection::ReduceProcessorCount (ProcessorPtr     processor,
     classNames = "AllClasses";
 
   bool  found = false;
-  int  idx;
-  for  (idx = 0;  idx < binClasses->QueueSize ();  idx++)
+
+  for  (kkuint32 idx = 0;  idx < binClasses->QueueSize ();  idx++)
   {
     BinaryClassPtr bc = binClasses->IdxToPtr (idx);
 
@@ -3678,8 +3675,6 @@ void  FeatureSelection::BuildResultConfigFile (const KKStr&       prevConfigFile
     exit (-1);
   }
 
-  int  idx;
-
 
   delete  config;
   config = new TrainingConfiguration2 ();
@@ -3697,7 +3692,7 @@ void  FeatureSelection::BuildResultConfigFile (const KKStr&       prevConfigFile
     config->A_Param (100.0);
   }
 
-  for  (idx = 0;  idx < binClasses->QueueSize ();  idx++)
+  for  (kkuint32 idx = 0;  idx < binClasses->QueueSize ();  idx++)
   {
     BinaryClassPtr bc = binClasses->IdxToPtr (idx);
 
@@ -3754,7 +3749,6 @@ void  FeatureSelection::BuildResultConfigFile (const KKStr&       prevConfigFile
       }
     }
 
-
     else if  (searchType == SearchTypes::ParameterSearch)
     {
       float   aParm     = 0;
@@ -3801,7 +3795,6 @@ void  FeatureSelection::BuildResultConfigFile (const KKStr&       prevConfigFile
 
   delete  binClasses;  binClasses = NULL;
   
-
   config->Save (resultConfigFileName);
   return;
 }  /* BuildResultConfigFile */
@@ -3860,9 +3853,7 @@ double  FeatureSelection::GetTotalCpuSecs (BinaryClassListPtr  binClasses,
   
   totalProcessingTime = 0.0;
 
-  int  idx;
-
-  for  (idx = 0;  idx < binClasses->QueueSize ();  idx++)
+  for  (kkuint32 idx = 0;  idx < binClasses->QueueSize ();  ++idx)
   {
     BinaryClassPtr bc = binClasses->IdxToPtr (idx);
 

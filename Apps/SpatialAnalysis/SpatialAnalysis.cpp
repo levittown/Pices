@@ -86,8 +86,6 @@ SpatialAnalysis::~SpatialAnalysis ()
 
 
 
-
-
 void  SpatialAnalysis::InitalizeApplication (kkint32 argc,
                                              char**  argv
                                             )
@@ -140,7 +138,6 @@ void  SpatialAnalysis::InitalizeApplication (kkint32 argc,
 
     reportFileName << ".txt";
   }
-
 
   r = new ofstream (reportFileName.Str ());
   if  (!r->is_open ())
@@ -212,7 +209,6 @@ void  SpatialAnalysis::InitalizeApplication (kkint32 argc,
 
 
 
-
 void  SpatialAnalysis::GetSipperFileNameAndInstrumentData ()
 {
   sipperFileName = "";
@@ -266,7 +262,6 @@ void  SpatialAnalysis::GetSipperFileNameAndInstrumentData ()
   VectorDouble  positions = data->ExtractPositionsByMeter (instrumentData, defaultScanRate, defaultFlowRate);
   transactLength = positions[positions.size () - 1];
 }  /* GetSipperFileNameAndInstrumentData */
-
 
 
 
@@ -326,7 +321,6 @@ bool  SpatialAnalysis::ProcessCmdLineParameter (const KKStr&  parmSwitch,
        parmSwitch.EqualIgnoreCase ("-REPORT")
       )
     reportFileName = parmValue;
-
 
   else if
       (parmSwitch.EqualIgnoreCase ("-S")   ||  
@@ -410,7 +404,6 @@ bool  SpatialAnalysis::ProcessCmdLineParameter (const KKStr&  parmSwitch,
     }
   }
 
-
   else if
       (parmSwitch.EqualIgnoreCase ("-DEFAULTSCANRATE")  ||
        parmSwitch.EqualIgnoreCase ("-SCANRATE")         ||
@@ -437,7 +430,6 @@ bool  SpatialAnalysis::ProcessCmdLineParameter (const KKStr&  parmSwitch,
 
 	return  validParm;
 }  /* ProcessCmdLineParameter */
-
 
 
 
@@ -475,8 +467,6 @@ void   SpatialAnalysis::DisplayCommandLineParameters ()
 
 
 
-
-
 void  SpatialAnalysis::RandomizeLocations (ImageFeaturesList&  examples,
                                            long                maxNumScanLines
                                           )
@@ -490,8 +480,6 @@ void  SpatialAnalysis::RandomizeLocations (ImageFeaturesList&  examples,
     i->SfCentroidRow (randRow);
   }
 }  /* RandomizeLocations */
-
-
 
 
 
@@ -514,7 +502,6 @@ double   SpatialAnalysis::Davis92DesityForBinSizeH (const VectorDouble&  x,
 
   return  density;
 }  /* Davis92DesityForBinSizeH */
-
 
 
 
@@ -544,7 +531,6 @@ float   SpatialAnalysis::Davis92PatchinessIndexForBinSize (const VectorDouble&  
 
 
 
-
 VectorFloat  SpatialAnalysis::CalculatePatchinessIndexUsingDavis92
                        (const VectorDouble&   particles,          // Particle Locations
                         float                 windowSize,
@@ -566,8 +552,6 @@ VectorFloat  SpatialAnalysis::CalculatePatchinessIndexUsingDavis92
 
   return  patchinessIndexes;
 }  /* CalculatePatchinessIndexUsingDavis92 */
-
-
 
 
 
@@ -825,27 +809,24 @@ void  SpatialAnalysis::CalcStatistic (ImageFeaturesList&   src,
 {
   densityByQuadrat = src.CalculateDensitesByQuadrat (24950, quadratSize, 0.75, cancelFlag, log);
   uint  maxDist = (uint)densityByQuadrat.size () / 4;
-  uint  dist = 0;
 
   stats.clear ();
   stats.push_back (0.0);   // There is no distance '0' so we populate it with zero.
 
-  for  (dist = 1;  dist <= maxDist;  dist++)
+  for  (uint dist = 1;  dist <= maxDist;  dist++)
   {
     float  stat = 0.0f;
 
     switch  (statType)
     {
-    case  StatType::BQV:      stat = CalcBQV    (densityByQuadrat, dist);  break;
-    case  StatType::PQV:      stat = CalcPQV    (densityByQuadrat, dist);  break;
-    case  StatType::TTLQC:    stat = CalcTTLQC  (densityByQuadrat, dist);  break;
+    case  StatType::BQV:    stat = CalcBQV    (densityByQuadrat, dist);  break;
+    case  StatType::PQV:    stat = CalcPQV    (densityByQuadrat, dist);  break;
+    case  StatType::TTLQC:  stat = CalcTTLQC  (densityByQuadrat, dist);  break;
     }  /* switch  (statType) */
 
     stats.push_back (stat);
   }
 }  /* CalcStatistic */
-
-
 
 
 
@@ -908,8 +889,6 @@ void  SpatialAnalysis::OneSpatialAnalysisRun (ImageFeaturesList&   src,
                                               
 
 
-
-
 KKStr  SpatialAnalysis::StatTypeToStr (StatType  statType)
 {
   switch  (statType)
@@ -923,8 +902,6 @@ KKStr  SpatialAnalysis::StatTypeToStr (StatType  statType)
       return "UnKnown";
   }
 }  /* StatTypeToStr */
-
-
 
 
 
@@ -969,7 +946,6 @@ void  SpatialAnalysis::PrintSpatialHistogramReport ()
 
 
 
-
 void  SpatialAnalysis::RunDavis92SpatialAnalysis ()
 {
   bool  cancelFlag = false;
@@ -1004,8 +980,7 @@ void  SpatialAnalysis::RunDavis92SpatialAnalysis ()
     statUpperConfidences.push_back (fVector);
   }
 
-  int   classIdx = 0;
-  for  (classIdx = 0;  classIdx < classes->QueueSize ();  classIdx++)
+  for  (kkuint32 classIdx = 0;  classIdx < classes->QueueSize ();  classIdx++)
   {
     MLClassPtr  ic = classes->IdxToPtr (classIdx);
     ImageFeaturesListPtr  imagesThisClass = data->ExtractExamplesForAGivenClass (ic);
@@ -1026,7 +1001,6 @@ void  SpatialAnalysis::RunDavis92SpatialAnalysis ()
                                  );
   }
 
-
   double  endCPUclock = osGetSystemTimeUsed ();
   double  totalProcessingCpuSecs = endCPUclock - startCPUclock;
   {
@@ -1035,11 +1009,9 @@ void  SpatialAnalysis::RunDavis92SpatialAnalysis ()
       << endl;
   }
 
-
   *r  << "Class Statistics" << endl << endl;
   data->PrintClassStatistics (*r);
   *r << endl;
-
 
   {
     *r << endl << endl << endl
@@ -1048,7 +1020,7 @@ void  SpatialAnalysis::RunDavis92SpatialAnalysis ()
 
     KKStr  hl1 = "";
     KKStr  hl2 = "Bucket";
-    for  (classIdx = 0;  classIdx < classes->QueueSize ();  classIdx++)
+    for  (kkuint32 classIdx = 0;  classIdx < classes->QueueSize ();  classIdx++)
     {
       MLClassPtr  ic = classes->IdxToPtr (classIdx);
 
@@ -1060,13 +1032,10 @@ void  SpatialAnalysis::RunDavis92SpatialAnalysis ()
     *r << hl2 << endl;
   }
 
-
-  int  bucketIdx;
-
-  for  (bucketIdx = 0;  bucketIdx < bucketCount;  bucketIdx++)
+  for  (int bucketIdx = 0;  bucketIdx < bucketCount;  bucketIdx++)
   {
     *r << ((bucketIdx + 1) * bucketSize);
-    for  (classIdx = 0;  classIdx < classes->QueueSize ();  classIdx++)
+    for  (kkuint32 classIdx = 0;  classIdx < classes->QueueSize ();  classIdx++)
     {
       MLClassPtr  ic = classes->IdxToPtr (classIdx);
       if  (((uint)bucketIdx < stats   [classIdx].size ())  &&
@@ -1097,8 +1066,7 @@ void  SpatialAnalysis::RunDavis92SpatialAnalysis ()
 
   PrintSpatialHistogramReport ();
 
-  classIdx = 0;
-  for  (classIdx = 0;  classIdx < classes->QueueSize ();  classIdx++)
+  for  (kkuint32 classIdx = 0;  classIdx < classes->QueueSize ();  classIdx++)
   {
     MLClassPtr  ic = classes->IdxToPtr (classIdx);
     ImageFeaturesListPtr  imagesThisClass = data->ExtractExamplesForAGivenClass (ic);
@@ -1124,11 +1092,6 @@ void  SpatialAnalysis::RunDavis92SpatialAnalysis ()
 
 
 
-
-
-
-
-
 void  SpatialAnalysis::RunSpatialAnalysis ()
 {
   bool  cancelFlag = false;
@@ -1137,7 +1100,6 @@ void  SpatialAnalysis::RunSpatialAnalysis ()
   int  dist            = 0;
   int  maxDist         = 0;
   uint maxNumQuadrats  = 0;
-  int  x               = 0;
   long maxNumScanLines = 0;
   
   *r  << "Class Statistics" << endl << endl;
@@ -1158,16 +1120,15 @@ void  SpatialAnalysis::RunSpatialAnalysis ()
 
   VectorFloat    fVector;
 
-  for  (x = 0;  x < (int)classes->size ();  x++)
+  for  (kkuint32 x = 0;  x < classes->size ();  x++)
   {
-    stats.push_back         (fVector);
-    means.push_back         (fVector);
-    stdDevs.push_back       (fVector);
-    densities.push_back     (fVector);
+    stats.push_back     (fVector);
+    means.push_back     (fVector);
+    stdDevs.push_back   (fVector);
+    densities.push_back (fVector);
   }
 
-  int   classIdx = 0;
-  for  (classIdx = 0;  classIdx < classes->QueueSize ();  classIdx++)
+  for  (kkuint32 classIdx = 0;  classIdx < classes->QueueSize ();  classIdx++)
   {
     MLClassPtr  ic = classes->IdxToPtr (classIdx);
     ImageFeaturesListPtr  imagesThisClass = data->ExtractExamplesForAGivenClass (ic);
@@ -1181,7 +1142,6 @@ void  SpatialAnalysis::RunSpatialAnalysis ()
     maxDist = Max (maxDist, (int)stats[classIdx].size ());
     maxNumQuadrats = Max (maxNumQuadrats, (uint)densities[classIdx].size ());
   }
-
 
   {
     int  quadratIdx = 0;
@@ -1206,7 +1166,7 @@ void  SpatialAnalysis::RunSpatialAnalysis ()
       *r <<         quadratIdx 
          << "\t" << StrFormatDouble (startOfQuadrat, "Z,ZZ0.00") << "-" << StrFormatDouble (endOfQuadrat, "Z,ZZ0.00");
 
-      for  (classIdx = 0;  classIdx < classes->QueueSize ();  classIdx++)
+      for  (kkuint32 classIdx = 0;  classIdx < classes->QueueSize ();  classIdx++)
       {
         if  (quadratIdx < (int)densities[classIdx].size ())
           *r << "\t" << densities[classIdx][quadratIdx];
@@ -1224,7 +1184,7 @@ void  SpatialAnalysis::RunSpatialAnalysis ()
 
     KKStr  hl1 = "";
     KKStr  hl2 = "Dist";
-    for  (classIdx = 0;  classIdx < classes->QueueSize ();  classIdx++)
+    for  (kkuint32 classIdx = 0;  classIdx < classes->QueueSize ();  classIdx++)
     {
       MLClassPtr  ic = classes->IdxToPtr (classIdx);
 
@@ -1236,11 +1196,10 @@ void  SpatialAnalysis::RunSpatialAnalysis ()
     *r << hl2 << endl;
   }
 
-
   for  (dist = 0;  dist < maxDist;  dist++)
   {
     *r << dist;
-    for  (classIdx = 0;  classIdx < classes->QueueSize ();  classIdx++)
+    for  (kkuint32 classIdx = 0;  classIdx < classes->QueueSize ();  classIdx++)
     {
       MLClassPtr  ic = classes->IdxToPtr (classIdx);
       if  (((uint)dist < stats[classIdx].size ())  &&
@@ -1262,8 +1221,6 @@ void  SpatialAnalysis::RunSpatialAnalysis ()
     *r << std::endl;
   }
 }  /* RunSpatialAnalysis */
-
-
 
 
 

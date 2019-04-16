@@ -143,7 +143,7 @@ Processor::Processor (FeatureSelectionPtr  _featureSelection,
   config->SelectionMethod (_binaryClass->SelectionMethod ());
 
   alreadyNormalized = featureSelection->AlreadyNormalized ();
-  mlClasses      = featureSelection->MLClasses ();
+  mlClasses         = featureSelection->MLClasses ();
   numJobsAtATime    = featureSelection->NumJobsAtATime ();
 
   lastCpuTimeReported = osGetSystemTimeUsed ();
@@ -248,7 +248,7 @@ Processor::Processor (FeatureSelectionPtr  _featureSelection,
   beamSize          = featureSelection->BeamSize ();
   expansionLimit    = featureSelection->ExpansionLimit ();
   alreadyNormalized = featureSelection->AlreadyNormalized ();
-  mlClasses      = featureSelection->MLClasses ();
+  mlClasses         = featureSelection->MLClasses ();
   numJobsAtATime    = featureSelection->NumJobsAtATime ();
   numOfFolds        = featureSelection->NumOfFolds ();
 
@@ -341,7 +341,6 @@ Processor::Processor (FeatureSelectionPtr  _featureSelection,
     exit (-1);
   }
 
-
   config = new TrainingConfiguration2 (*featureSelection->Config ());
   if  (byBinaryClasses)
   {
@@ -366,7 +365,6 @@ Processor::Processor (FeatureSelectionPtr  _featureSelection,
       config->A_Param (100.0);
     }
   }
-
 
   Block ();
 
@@ -404,7 +402,6 @@ Processor::Processor (FeatureSelectionPtr  _featureSelection,
   EndBlock ();
   log.Level (10) << "Processor    Exiting Constructor" << endl;
 }
-
 
 
 
@@ -493,14 +490,10 @@ VectorDouble  Processor::GetCpuCyclesByFeatureCount ()
 
 
 
-
 FeatureVectorListPtr  Processor::RandomSplit (int splitNum)
 {
   return  featureSelection->RandomSplit (splitNum);
 }  /* RandomSplit */
-
-
-
 
 
 
@@ -520,7 +513,6 @@ FeatureVectorListPtr  Processor::ValidationData ()
 
 
 
-
 BinaryJobListPtr  Processor::BinaryJobs () 
 {
   if  (binaryJobs == NULL)
@@ -535,7 +527,6 @@ BinaryJobListPtr  Processor::BinaryJobs ()
 
 
 
-
 const KKStr&  Processor::Class1Name    () const
 {
   if  (class1)
@@ -543,6 +534,7 @@ const KKStr&  Processor::Class1Name    () const
   else
     return  KKStr::EmptyStr ();
 }
+
 
 
 const KKStr&  Processor::Class2Name    () const
@@ -607,7 +599,6 @@ FeatureVectorListPtr  Processor::BuildOurBinaryFeatureData (FeatureVectorListPtr
 
 
 
-
 void    Processor::Block ()
 {
   log.Level (20) << "Processor::Block." << endl;
@@ -642,7 +633,6 @@ void    Processor::Block ()
 
   log.Level (20) << "Processor::Block - Lock is Established." << endl;
 }  /* Block */
-
 
 
 
@@ -690,7 +680,6 @@ void   Processor::EndBlock ()
   log.Level (20) << "EndBlock - Unlocking" << endl;
   return;
 }  /* EndBlock */
-
 
 
 
@@ -805,7 +794,6 @@ void  Processor::ProcessStatusFileLine (KKStrParser&  statusStr)
     }
   }
 
-
   else if  ((fieldName.CompareIgnoreCase ("RandomSplitJob") == 0)  ||  
             (fieldName.CompareIgnoreCase ("JobRandomSplit") == 0)
            )
@@ -831,7 +819,6 @@ void  Processor::ProcessStatusFileLine (KKStrParser&  statusStr)
       }
     }
   }
-
 
   else if  (fieldName.CompareIgnoreCase ("JobValidation") == 0)
   {
@@ -973,7 +960,6 @@ void  Processor::ProcessStatusFileLine (KKStrParser&  statusStr)
 
 
 
-
 void  Processor::StatusFileLoad ()
 {
   log.Level (10) << "Processor::StatusFileLoad." << endl;
@@ -1016,7 +1002,6 @@ void  Processor::StatusFileLoad ()
 
 
 
-
 void  Processor::StatusFileRefresh ()
 {
   // we only want to read in any new changes to the status file.
@@ -1050,7 +1035,6 @@ void  Processor::StatusFileRefresh ()
 
   log.Level (20) << "Processor::StatusFileRefresh     Exiting."  << endl;
 }  /* StatusFileRefresh */
-
 
 
 
@@ -1091,7 +1075,6 @@ ofstream*    Processor::OpenStatusFile (ios::openmode  openMode)
 
 
 
-
 void  Processor::WriteStatusFile ()
 {
   log.Level (10) << "Processor::WriteStatusFile" << endl;
@@ -1124,9 +1107,7 @@ void  Processor::WriteStatusFile ()
   WriteStatusFileBestParmValues (*statusFile);
   WriteStatusFileGrowthRates (*statusFile);
 
-  int  x;
-
-  for  (x = 0;  x < binaryJobs->QueueSize ();  x++)
+  for  (kkuint32 x = 0;  x < binaryJobs->QueueSize ();  ++x)
   {
     BinaryJobPtr  j = binaryJobs->IdxToPtr (x);
     *statusFile << j->JobTypeStr ()  << "\t" << j->ToStatusStr () << endl;
@@ -1165,7 +1146,6 @@ void  Processor::WriteStatusFileBestParmValues (ostream&  statusFile)
 
   statusFile.precision (precision);
 }  /* WriteStatusFileBestParmValues */
-
 
 
 
@@ -1244,7 +1224,6 @@ void  Processor::InitializeStatusFileParameterSearch ()
 
 
 
-
 void  Processor::InitializeStatusFileRandomSplits (BinaryClassPtr   _binaryClass)
 {
   log.Level (10) << "Processor::InitializeStatusFileRandomSplits" << endl;
@@ -1270,7 +1249,6 @@ void  Processor::InitializeStatusFileRandomSplits (BinaryClassPtr   _binaryClass
 
   log.Level (10) << "Processor::InitializeStatusFileRandomSplits    Exiting" << endl;
 }  /* InitializeStatusFileRandomSplits */
-
 
 
 
@@ -1308,7 +1286,6 @@ void  Processor::InitializeStatusFile ()
   log.Level (10) << "Processor::InializeStatusFile    Exiting" << endl;
 
 }  /* InitializeStatusFile */
-
 
 
 
@@ -1379,7 +1356,6 @@ void  Processor::FlagJobsForTesting (ofstream*         statusFile,
 
 
 
-
 void  Processor::CreateParameterJobsUsfCasCor (ofstream*  statusFile, 
                                                kkint32    minNumOfRounds,
                                                kkint32    maxNumOfRounds
@@ -1401,7 +1377,6 @@ void  Processor::CreateParameterJobsUsfCasCor (ofstream*  statusFile,
     featureNums = config->GetFeatureNums (class1, class2);
   else
     featureNums = config->GetFeatureNums ();
-
 
   kkint32  numOfRounds =  minNumOfRounds;
   while  (numOfRounds < maxNumOfRounds)
@@ -1536,10 +1511,6 @@ void  Processor::CreateParameterJobs (ofstream*  statusFile,
 
 
 
-
-
-
-
 void  Processor::CreateRandomSplitsJobs (ostream*  statusFile)
 {
   log.Level (10) << "Processor::CreateRandomSplitsJobs" << endl;
@@ -1573,7 +1544,6 @@ void  Processor::CreateRandomSplitsJobs (ostream*  statusFile)
     }
   }
 }  /* CreateRandomSplitsJobs */
-
 
 
 
@@ -1624,14 +1594,12 @@ void  Processor::CreateValidationJob (ostream*        statusFile,
 
 
 
-
 int  Processor::AllocateNextJobId ()
 {
   int  jobId = nextJobId;
   nextJobId++;
   return  jobId;
 }
-
 
 
 
@@ -1645,10 +1613,6 @@ void   Processor::Update (ProcessorPtr  p)
   searchMethod              = p->searchMethod;
   status                    = p->status;
 }
-
-
-
-
 
 
 
@@ -1704,7 +1668,6 @@ void  Processor::UpdateExpandedJobs (ofstream*         statusFile,
 
 
 
-
 void  Processor::ProcessNextBestCaseExpansion (ofstream*  statusFile,
                                                int&       numJobsCreated
                                               )
@@ -1717,7 +1680,7 @@ void  Processor::ProcessNextBestCaseExpansion (ofstream*  statusFile,
   binaryJobs->SortByGrade ();
 
   int  numThatWeExpanded = 0;
-  int  idx = 0;
+  kkuint32  idx = 0;
 
   numJobsCreated = 0;
 
@@ -1733,7 +1696,7 @@ void  Processor::ProcessNextBestCaseExpansion (ofstream*  statusFile,
         UpdateExpandedJobs (statusFile, jobToExpand, expandedJobs);
         if  (expandedJobs->QueueSize () > 0)
         {
-          numThatWeExpanded++;
+          ++numThatWeExpanded;
           numJobsCreated += expandedJobs->QueueSize ();
         }
         delete  expandedJobs; expandedJobs = NULL;
@@ -1748,16 +1711,15 @@ void  Processor::ProcessNextBestCaseExpansion (ofstream*  statusFile,
         UpdateExpandedJobs (statusFile, jobToExpand, expandedJobs);
         if  (expandedJobs->QueueSize () > 0)
         {
-          numThatWeExpanded++;
+          ++numThatWeExpanded;
           numJobsCreated += expandedJobs->QueueSize ();
         }
         delete  expandedJobs;  expandedJobs = NULL;
       }
     }
 
-    idx++;
+    ++idx;
   }
-
 
   if  ((numJobsCreated > 1)  &&  ((numOfExpansions % 10) == 0))
   {
@@ -1787,11 +1749,8 @@ void  Processor::ProcessNextBestCaseExpansion (ofstream*  statusFile,
     ProcessTestResultsExpansion (statusFile, numJobsCreated);
   }
 
-
   log.Level (20) << "Processor::ProcessNextBestCaseExpansion     Exiting" << endl;
-
 }  /* ProcessNextBestCaseExpansion */
-
 
 
 
@@ -1809,7 +1768,7 @@ void  Processor::ProcessBeamExpansion (ofstream*  statusFile,
 
   int  firstJobCreated   = -1;
   int  numThatWeExpanded = 0;
-  int  idx = 0;
+  kkuint32  idx = 0;
 
   while  ((numThatWeExpanded < beamSize)  &&  (idx < binaryJobs->QueueSize ()))
   {
@@ -1836,7 +1795,7 @@ void  Processor::ProcessBeamExpansion (ofstream*  statusFile,
       delete  expandedJobs;
     }
 
-    idx++;
+    ++idx;
   }
 
   if  (firstJobCreated > 0)
@@ -1844,7 +1803,6 @@ void  Processor::ProcessBeamExpansion (ofstream*  statusFile,
     firstJobAvailableForExpansion = firstJobCreated;
     *statusFile << "FirstJobAvailableForExpansion"  << "\t"  << firstJobAvailableForExpansion << endl;
   }
-
 
   if  ((numThatWeExpanded < 1)  &&  (binaryJobs->AreAllJobsDone ()))
   {
@@ -1865,8 +1823,6 @@ void  Processor::ProcessBeamExpansion (ofstream*  statusFile,
 
 
 
-
-
 float  CalcGrowthRate (double minValue,
                        double maxValue,
                        int    numDivisions
@@ -1876,8 +1832,6 @@ float  CalcGrowthRate (double minValue,
   double growthRate = exp (logRange / (double)numDivisions);
   return  float (growthRate);
 }  /* CalcGrowthRate */
-
-
 
 
 
@@ -1935,8 +1889,6 @@ void  Processor::ProcessGridSearchExpansionBruitForce (ofstream*  statusFile,
 
 
 
-
-
 void  Processor::ProcessGridSearchExpansionUsfCasCor (ofstream*  statusFile,
                                                       int&       numJobsCreated
                                                      )
@@ -1958,8 +1910,7 @@ void  Processor::ProcessGridSearchExpansionUsfCasCor (ofstream*  statusFile,
     delete  highestGradedJobs;
     highestGradedJobs = NULL;
   }
-
-
+  
   else if  (numOfExpansions == 1)
   {
     // It is finally time for us to select the best job
@@ -1972,12 +1923,8 @@ void  Processor::ProcessGridSearchExpansionUsfCasCor (ofstream*  statusFile,
     // By not creating any new jobs this processor will terminate.
   }
 
-
   numJobsCreated = binaryJobs->QueueSize () - numJobsBeforeExpansion;
 }  /* ProcessGridSearchExpansionUsfCasCor */
-
-
-
 
 
 
@@ -2015,7 +1962,6 @@ void  Processor::ProcessGridSearchExpansionMostAccurate (ofstream*  statusFile,
       exit (-1);
     }
 
-
     gammaMin = highestGradedJob->GammaParm () / gammaGrowthRate;
     gammaMax = highestGradedJob->GammaParm () * gammaGrowthRate;
 
@@ -2034,8 +1980,7 @@ void  Processor::ProcessGridSearchExpansionMostAccurate (ofstream*  statusFile,
                         );
 
   }
-
-
+  
   else if  (numOfExpansions == 1)
   {
     // This is our second expansion
@@ -2063,7 +2008,6 @@ void  Processor::ProcessGridSearchExpansionMostAccurate (ofstream*  statusFile,
                         );
   }
 
-
   else if  (numOfExpansions == 2)
   {
     // This is our third expansion;  we will now do a very FINE search around Gamma and "C".
@@ -2090,7 +2034,6 @@ void  Processor::ProcessGridSearchExpansionMostAccurate (ofstream*  statusFile,
                        );
   }
 
-
   else if  (numOfExpansions == 3)
   {
     // We will now take the test best C and Gamma parameters found and test them against the Test Data Set.
@@ -2099,7 +2042,6 @@ void  Processor::ProcessGridSearchExpansionMostAccurate (ofstream*  statusFile,
     delete  highestGradedJobs;
     highestGradedJobs = NULL;
   }
-
 
   else if  (numOfExpansions == 4)
   {
@@ -2129,7 +2071,6 @@ void  Processor::ProcessGridSearchExpansionMostAccurate (ofstream*  statusFile,
                         );
   }
 
-
   else if  (numOfExpansions == 5)
   {
     // We will locate the job that has the smallest difference between accuracy and predicted probability and 
@@ -2156,7 +2097,6 @@ void  Processor::ProcessGridSearchExpansionMostAccurate (ofstream*  statusFile,
                          gammaGrowthRate, bestGamma,  bestGamma,
                          aGrowthRate,     aMin,       aMax
                         );
-
 
     delete  targetJobs;
     targetJobs = NULL;
@@ -2189,7 +2129,6 @@ void  Processor::ProcessGridSearchExpansionMostAccurate (ofstream*  statusFile,
                          gammaGrowthRate, bestGamma,  bestGamma,
                          aGrowthRate,     aMin,       aMax
                          );
-
 
     delete  targetJobs;
     targetJobs = NULL;
@@ -2238,7 +2177,6 @@ void  Processor::ProcessGridSearchExpansionMostAccurate (ofstream*  statusFile,
     targetJobs = NULL;
   }
 
-
   else if  (numOfExpansions == 8)
   {
     // It is finally time for us to select the best job
@@ -2255,9 +2193,6 @@ void  Processor::ProcessGridSearchExpansionMostAccurate (ofstream*  statusFile,
 
   numJobsCreated = binaryJobs->QueueSize () - numJobsBeforeExpansion;
 }  /* ProcessGridSearchExpansionMostAccurate */
-
-
-
 
 
 
@@ -2319,7 +2254,6 @@ void  Processor::ProcessGridSearchExpansionFastestFromBest (ofstream*  statusFil
     delete  highestGradedJobs;
   }
 
-
   else if  (numOfExpansions == 1)
   {
     // This is our second expansion
@@ -2351,11 +2285,9 @@ void  Processor::ProcessGridSearchExpansionFastestFromBest (ofstream*  statusFil
                          aGrowthRate,     100.0f,    100.0f
                         );
 
-
     delete  fastestJobs;
     delete  highestGradedJobs;
   }
-
 
   else if  (numOfExpansions == 2)
   {
@@ -2366,7 +2298,7 @@ void  Processor::ProcessGridSearchExpansionFastestFromBest (ofstream*  statusFil
     // in line with training 'accuracy'.
     //
     binaryJobs->SortByGrade ();
-    for  (int x = 0;  ((x < 10)  &&  (x < binaryJobs->QueueSize () ));  x++)
+    for  (kkuint32 x = 0;  ((x < 10)  &&  (x < binaryJobs->QueueSize () ));  ++x)
     {
       BinaryJobPtr  j = binaryJobs->IdxToPtr (x);
       binaryJobs->FindNeighboringParameterValues (j, cMin, cMax, 2.0f, gammaMin, gammaMax, 2.0f, aMin, aMax, 1.0);
@@ -2385,7 +2317,6 @@ void  Processor::ProcessGridSearchExpansionFastestFromBest (ofstream*  statusFil
     }
   }
 
-
   else if  (numOfExpansions == 3)
   {
     BinaryJobListPtr  highestGradedJobs = binaryJobs->ExtractHighestGrade (0.5f, 10);
@@ -2396,7 +2327,7 @@ void  Processor::ProcessGridSearchExpansionFastestFromBest (ofstream*  statusFil
 
     highestGradedJobs->SortByGrade ();
 
-    for  (int x = 0;  ((x < 10)  &&  (x < highestGradedJobs->QueueSize () ));  x++)
+    for  (kkuint32 x = 0;  ((x < 10)  &&  (x < highestGradedJobs->QueueSize () ));  ++x)
     {
       BinaryJobPtr  j = highestGradedJobs->IdxToPtr (x);
 
@@ -2413,7 +2344,6 @@ void  Processor::ProcessGridSearchExpansionFastestFromBest (ofstream*  statusFil
     delete  highestGradedJobs;
   }
 
-
   else if  (numOfExpansions == 4)
   {
     // This is our fifth expansion
@@ -2424,7 +2354,7 @@ void  Processor::ProcessGridSearchExpansionFastestFromBest (ofstream*  statusFil
     BinaryJobListPtr  highestGradedJobs = binaryJobs->ExtractHighestGrade (0.3f, 10);
     highestGradedJobs->SortDeltaProbAccuarcy ();
 
-    for  (int x = 0;  ((x < 10)  &&  (x < highestGradedJobs->QueueSize () ));  x++)
+    for  (kkuint32 x = 0;  ((x < 10)  &&  (x < highestGradedJobs->QueueSize () ));  ++x)
     {
       BinaryJobPtr  j = highestGradedJobs->IdxToPtr (x);
       highestGradedJobs->FindNeighboringParameterValues (j, cMin, cMax, 2.0f, gammaMin, gammaMax, 2.0f, aMin, aMax, 2.0);
@@ -2443,7 +2373,6 @@ void  Processor::ProcessGridSearchExpansionFastestFromBest (ofstream*  statusFil
     }
   }
 
-
   else if  (numOfExpansions == 5)
   {
     //if  (testData)
@@ -2453,7 +2382,7 @@ void  Processor::ProcessGridSearchExpansionFastestFromBest (ofstream*  statusFil
 
       BinaryJobListPtr  jobsToTest = new BinaryJobList (this);
       jobsToTest->Owner (false);
-      for  (int x = 0;  (x < 64)  &&  (x < highestGradedJobs->QueueSize ());  x++)
+      for  (kkuint32 x = 0;  (x < 64)  &&  (x < highestGradedJobs->QueueSize ());  ++x)
       {
         BinaryJobPtr  jobToTest = highestGradedJobs->IdxToPtr (x);
         jobsToTest->PushOnBack (jobToTest, result);
@@ -2478,11 +2407,8 @@ void  Processor::ProcessGridSearchExpansionFastestFromBest (ofstream*  statusFil
     // By not creating any new Jobs the search will terminate then.
   }
 
-
   numJobsCreated = binaryJobs->QueueSize () - numJobsBeforeExpansion;
 }  /* ProcessGridSearchExpansionFastestFromBest */
-
-
 
 
 
@@ -2532,8 +2458,6 @@ void  Processor::ProcessTestResultsExpansion (ofstream*  statusFile,
 
 
 
-
-
 void  Processor::ProcessTestJobsAndPickTheBest (ofstream*  statusFile,
                                                 int&       numJobsCreated
                                                )
@@ -2545,8 +2469,6 @@ void  Processor::ProcessTestJobsAndPickTheBest (ofstream*  statusFile,
 
   log.Level (20) << "Processor::ProcessTestJobsAndPickTheBest         exiting"  << endl;
 }  /* ProcessTestJobsAndPickTheBest */
-
-
 
 
 
@@ -2587,7 +2509,6 @@ void  Processor::ProcessNextExpansion (ofstream*  statusFile)
     }
     delete  testJobs;
   }
-
 
   int  numNewJobsCreated = 0;
 
@@ -2649,7 +2570,6 @@ void  Processor::ProcessNextExpansion (ofstream*  statusFile)
 
 
 
-
 void  Processor::GenerateFinalResultsReport ()
 {
   log.Level (10) << "Processor::GenerateFinalResultsReport" << endl;
@@ -2669,7 +2589,6 @@ void  Processor::GenerateFinalResultsReport ()
     << endl 
     << endl;
 
-  
   r << "Training Data Stats" << endl;
   trainingData->PrintClassStatistics (r);
 
@@ -2697,6 +2616,7 @@ void  Processor::GenerateFinalResultsReport ()
 
   r.close ();
 }  /* GenerateFinalResultsReport */
+
 
 
 FeatureImpactPtr  Processor::GetFeatureImpact ()
@@ -2751,7 +2671,6 @@ void  Processor::GenerateFinalResultsReportHTML ()
     captionStr << Class1Name () << " and " << Class2Name ();
     titleStr   << Class1Name () << " and " << Class2Name ();
   }
-
 
   KKStr  paramSelCriteriaStr = JobSelectionCriteriaToStr (featureSelection->ParamSelCriteria ());
 
@@ -2934,7 +2853,6 @@ void  Processor::SetQuitRunningFlag ()
 
 
 
-
 BinaryJobListPtr  Processor::GetNextSetOfJobs (BinaryJobListPtr  completedJobs)
 {
   log.Level (20) << "Processor::GetNextSetOfJobs." << endl;
@@ -3048,7 +2966,7 @@ BinaryJobListPtr  Processor::GetNextSetOfJobs (BinaryJobListPtr  completedJobs)
       }
     }
 
-    while  (nextJob  &&  (jobsToExecute->QueueSize () < numJobsAtATime))
+    while  (nextJob  &&  (jobsToExecute->QueueSize () < (kkuint32)numJobsAtATime))
     {
       BinaryJobList::ErrorCodes  result = BinaryJobList::ErrorCodes::NoError;
       jobsToExecute->PushOnBack (nextJob, result);
@@ -3084,7 +3002,6 @@ BinaryJobListPtr  Processor::GetNextSetOfJobs (BinaryJobListPtr  completedJobs)
 
 
 
-
 bool  Processor::AreAllJobsDone ()
 {
   if  (binaryJobs)
@@ -3097,7 +3014,6 @@ bool  Processor::AreAllJobsDone ()
     return  false;
   }
 }  /* AreAllJobsAreDone */
-
 
 
 
@@ -3202,7 +3118,6 @@ void   Processor::Run ()
 
 
 
-
 FeatureNumList  Processor::MergeKBestFeatureSelections (int  k,
                                                         int  minNumOfFeatures
                                                        )
@@ -3215,7 +3130,7 @@ FeatureNumList  Processor::MergeKBestFeatureSelections (int  k,
   FeatureNumList  mergedFeatures (fileDesc);
 
   int  numFeatureSetsMerged = 0;
-  int  nextIdx = 0;
+  kkuint32  nextIdx = 0;
 
   while  ((nextIdx < binaryJobs->QueueSize ())  &&
           ((mergedFeatures.NumOfFeatures () < minNumOfFeatures)  ||  (numFeatureSetsMerged < k))
@@ -3231,16 +3146,15 @@ FeatureNumList  Processor::MergeKBestFeatureSelections (int  k,
     }
     else
     {
-    mergedFeatures += job->Features ();
+      mergedFeatures += job->Features ();
       numFeatureSetsMerged++;
     }
 
-    nextIdx++;
+    ++nextIdx;
   }
 
   return  mergedFeatures;
 }  /* MergeKBestFeatureSelections */
-
 
 
 
@@ -3269,15 +3183,12 @@ FeatureNumList  Processor::GetFeaturesFromTestResults ()
 
 
 
-
-
 FeatureNumList  Processor::GetFeaturesRemoveHurtFul ()
 {
   FeatureImpact featureImpact (*binaryJobs);
   FeatureNumList  features = featureImpact.FeatureThatDontHurt ();
   return  features;  
 }
-
 
 
 
@@ -3302,7 +3213,6 @@ void  Processor::GetBestParametersFromTestResults (double&  cParm,
     return;
   }
 
-
   BinaryJobListPtr  testJobs = binaryJobs->ExtractTestJobs ();
   if  ((testJobs == NULL)  ||  (testJobs->QueueSize () < 1))
   {
@@ -3320,7 +3230,6 @@ void  Processor::GetBestParametersFromTestResults (double&  cParm,
 
   mostAccurate->SortDeltaTestProbAccuarcy ();
   BinaryJobPtr  bestJob = mostAccurate->FrontOfQueue ();
-  
 
   delete  mostAccurate;   mostAccurate = NULL;
   delete  testJobs;       testJobs     = NULL;
@@ -3341,7 +3250,6 @@ double  Processor::TotalProcessingTime ()  const
   else
     return 0.0;
 }  /* TotalProcessingTime */
-
 
 
 
@@ -3382,5 +3290,3 @@ FeatureNumList  Processor::SelectBestFeatures ()
 
   return  bestFeatures;
 }  /* SelectBestFeatures */
-
-
