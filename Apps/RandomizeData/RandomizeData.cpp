@@ -508,7 +508,6 @@ void  SplitExamples (FeatureVectorList*  examples)
   FeatureVectorListPtr  file2Shuffeled
          = file2Examples.StratifyAmoungstClasses (mlClasses, lopOff, numOfFolds, runLog);
 
-
   stats << "Output File[" << outFileName1.Str () << "]  Records[" << file1Shuffeled->QueueSize () << "]" << endl;
   stats << "Output File[" << outFileName2.Str () << "]  Records[" << file2Shuffeled->QueueSize () << "]" << endl;
   

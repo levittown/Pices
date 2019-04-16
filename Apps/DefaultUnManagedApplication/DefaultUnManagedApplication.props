@@ -14,13 +14,16 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>KKBase.lib;KKMachineLearning.lib;KKJobManager.lib;PicesLibrary.lib;libfftw3-3.lib;libfftw3f-3.lib;libmysql.lib;zlib-1.2.11.lib;USER32.LIB;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\;$(SolutionDir)\Libraries\$(Configuration);$(OutsidePackages)\fftw-3.3.5-dll64;$(OutsidePackages)\MySQL\MySQL Connector C 6.1\lib;$(OutsidePackages)\zlib-1.2.11;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\;$(SolutionDir)\Libraries\$(Configuration);$(OutsidePackages)\fftw-3.3.5-dll64;$(OutsidePackages)\MySQL\MySQL Connector C 6.1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
       <Inputs>$(OutsidePackages)\fftw-3.3.5-dll64\libfftw3-3.dll;$(OutsidePackages)\fftw-3.3.5-dll64\libfftw3f-3.dll;%(Inputs)</Inputs>
     </CustomBuildStep>
     <PreBuildEvent>
-      <Command>copy /Y  $(OutsidePackages)\fftw-3.3.5-dll64\*.dll   $(SolutionDir)$(Configuration)\</Command>
+      <Command>
+	      copy /Y  "$(OutsidePackages)\fftw-3.3.5-dll64\*.dll"   "$(SolutionDir)$(Platform)\$(Configuration)\" 
+          copy /Y  "$(OutsidePackages)\MySQL\MySQL Connector C 6.1\lib\libmysql.dll"   "$(SolutionDir)$(Platform)\$(Configuration)\"
+	  </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup />

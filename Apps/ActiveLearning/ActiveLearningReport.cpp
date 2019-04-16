@@ -315,8 +315,7 @@ void  ActiveLearningReport::PrintReport (ostream&  report)
   }
   report << endl;
 
-
-  for  (int retraining = 0;  retraining < numOfRetrainings;  retraining++)
+  for  (kkuint32 retraining = 0;  retraining < numOfRetrainings;  retraining++)
   {
     for  (auto sortOrderResults : results)
     {

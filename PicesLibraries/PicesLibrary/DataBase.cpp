@@ -183,10 +183,10 @@ KKStr  DataBase::FloatToStr (float f)
 #endif
 
 
-GoalKeeperPtr            DataBase::blocker                  = NULL;
+GoalKeeperPtr            DataBase::blocker                  = nullptr;
 volatile KKB::kkint32    DataBase::numDataBaseInstances     = 0;
 volatile bool            DataBase::mySqlEmbeddedServerInitailzied = false;
-KKB::KKStr               DataBase::mySqlHomeDir             = "";
+KKB::KKStr               DataBase::mySqlHomeDir             = KKStr::EmptyStr();
 KKB::KKStr               DataBase::mySqlDataDir             = "";
 KKB::KKStr               DataBase::mySqlErroLogFileName     = "";
 volatile bool            DataBase::staticVariablesInialized = false;
@@ -3745,9 +3745,9 @@ DataBaseImageListPtr  DataBase::ImagesQueryByGrouop
 
 
 
-DataBaseImageListPtr  DataBase::ImagesQueryForScanLineRange (const KKStr&   sipperFileName,
-                                                             kkuint32       scanLineStart,
-                                                             kkuint32       scanLineEnd
+DataBaseImageListPtr  DataBase::ImagesQueryForScanLineRange (const KKStr&  sipperFileName,
+                                                             kkuint32      scanLineStart,
+                                                             kkuint32      scanLineEnd
                                                             )
 {
   KKStr selectStr = "call ImagesQueryForScanLineRange(" + sipperFileName.QuotedStr ()            + ", "

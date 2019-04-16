@@ -116,7 +116,7 @@
     <_ProjectFileVersion>11.0.50727.1</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <EmbedManifest>true</EmbedManifest>
@@ -126,7 +126,7 @@
     <EmbedManifest>true</EmbedManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <EmbedManifest>true</EmbedManifest>
@@ -166,8 +166,8 @@
       <DocumentLibraryDependencies>false</DocumentLibraryDependencies>
     </Xdcmake>
     <PreBuildEvent>
-      <Command>copy /Y $(OutsidePackages)"\MySQL\MySQL Connector C 6.1\lib\"*.dll  $(TargetPath)
-copy $(OutsidePackages)"\fftw-3.3.5-dll64\"*.dll  $(TargetPath)</Command>
+      <Command>copy /Y $(OutsidePackages)"\MySQL\mysql-connector-c-6.1.6-win32\lib\"*.dll  $(SolutionDir)$(Configuration)\
+copy $(OutsidePackages)"\fftw-3.3.5-dll64\"*.dll  $(SolutionDir)$(Configuration)\</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -203,7 +203,7 @@ copy $(OutsidePackages)"\fftw-3.3.5-dll64\"*.dll  $(TargetPath)</Command>
       <DocumentLibraryDependencies>false</DocumentLibraryDependencies>
     </Xdcmake>
     <PreLinkEvent>
-      <Command>copy $(OutsidePackages)"\MySQL\MySQL Connector C 6.1\lib\"*.dll  $(TargetPath)</Command>
+      <Command>copy $(OutsidePackages)"\MySQL\MySQL Connector C 6.1\lib\"*.dll  $(SolutionDir)$(Configuration)\</Command>
     </PreLinkEvent>
     <CustomBuildStep>
       <Command>copy $(OutsidePackages)"\MySQL\MySQL Connector C 6.1\lib\"*.dll  $(TargetPath)
@@ -234,7 +234,7 @@ copy $(OutsidePackages)"\fftw-3.3.5-dll64\"*.dll  $(TargetPath)</Command>
       <DocumentLibraryDependencies>false</DocumentLibraryDependencies>
     </Xdcmake>
     <PreBuildEvent>
-      <Command>copy $(OutsidePackages)"\MySQL\MySQL Connector C 6.1\lib\"*.dll  $(TargetPath)
+      <Command>copy $(OutsidePackages)"\MySQL\mysql-connector-c-6.1.6-win32\lib\"*.dll  $(TargetPath)
 copy $(OutsidePackages)"\fftw-3.3.5-dll64\"*.dll  $(TargetPath)</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
