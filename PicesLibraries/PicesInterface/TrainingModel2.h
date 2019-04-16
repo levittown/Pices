@@ -111,6 +111,9 @@ namespace PicesInterface
     property  bool              Valid                    {bool              get ()  {return  *valid;}}
 
 
+    String^  RootDirExpanded ();
+
+
     ///<summary> When using a Dual classifier will return an instance of the first/left classifier. </summary>
     TrainingModel2^   CreateTrainingModelLeft ();
 
@@ -118,8 +121,8 @@ namespace PicesInterface
     TrainingModel2^   CreateTrainingModelRight ();
 
 
-
     void  AddClass (PicesClass^  newClass);
+
 
     void  AddImageToTrainingLibray (String^       imageFileName,
                                     PicesRaster^  raster, 

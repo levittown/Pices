@@ -42,8 +42,6 @@ using namespace System::Windows::Forms;
 
 
 
-
-
 PicesSipperVariables::PicesSipperVariables (void)
 {
 }
@@ -138,10 +136,12 @@ String^  PicesSipperVariables::SipperDirectoryListFileName ()
 }
 
 
+
 String^  PicesSipperVariables::SipperFilesDefaultDir ()
 {
   return  PicesKKStr::KKStrToSystenStr (PicesVariables::SipperFilesDefaultDir ());
 }
+
 
 
 String^  PicesSipperVariables::SipperFilesDirectory ()
@@ -150,10 +150,12 @@ String^  PicesSipperVariables::SipperFilesDirectory ()
 }
 
 
+
 String^  PicesSipperVariables::SipperInterfaceDir ()
 {
   return  PicesKKStr::KKStrToSystenStr (PicesVariables::SipperInterfaceDir ());
 }
+
 
 
 String^  PicesSipperVariables::SipperInterfaceLogDir ()
@@ -162,7 +164,6 @@ String^  PicesSipperVariables::SipperInterfaceLogDir ()
 }  /* SipperInterfaceLogDir */
 
 
-    
 
 String^  PicesSipperVariables::TrainingModelsConfigurationDir ()
 {

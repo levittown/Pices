@@ -57,7 +57,6 @@ bool  OSservices::DirectoryExists (String^  dirName)
 
 
 
-
 bool   OSservices::CreateDirectory (String^  dirName)
 {
   bool  created = osCreateDirectory (PicesKKStr::SystemStringToKKStr (dirName));
@@ -71,7 +70,6 @@ bool   OSservices::CreateDirectoryPath (String^  _pathName)  // Will create the 
 
   return  osCreateDirectoryPath (PicesKKStr::SystemStringToKKStr (_pathName));
 }
-
 
 
 
@@ -93,10 +91,6 @@ long  OSservices::HexStrToLong (String^  argument)
 
   return  (long)uiHex;
 }  /* HexStrToLong */
-
-
-
-
 
 
 
@@ -151,12 +145,11 @@ String^  OSservices::RemoveExtension (String^  fileName)
 
 
 
-
-
 String^ OSservices::GetRootName (String^ fileName)
 {
   return  PicesKKStr::KKStrToSystenStr (osGetRootName (PicesKKStr::SystemStringToKKStr (fileName)));
 }
+
 
 
 String^   OSservices::GetRootNameWithExtension (String^  fullFileName)
@@ -173,12 +166,10 @@ String^  OSservices::GetFileExtension (String^  fullFileName)
 
 
 
-
 String^  OSservices::GetPathPartOfFile (String^  fullFileName)
 {
   return PicesKKStr::KKStrToSystenStr (osGetPathPartOfFile (PicesKKStr::SystemStringToKKStr (fullFileName)));
 }
-
 
 
 
@@ -191,7 +182,6 @@ String^   OSservices::GetParentDirectoryOfDirPath (String^ path)
 
 
 
-
 String^   OSservices::GetRootNameOfDirectory (String^ path)
 {
   // Starting with last character in string search back until we find a separating
@@ -201,7 +191,6 @@ String^   OSservices::GetRootNameOfDirectory (String^ path)
   KKStr  rootName = osGetRootNameOfDirectory (s);
   return  PicesKKStr::KKStrToSystenStr (rootName);
 }
-
 
 
 
@@ -248,6 +237,7 @@ System::DateTime  OSservices::KKuDateTimeToSystemDateTime (const KKB::DateTime& 
 }
 
 
+
 String^  OSservices::LookForFile (String^  fileName,
                                   String^  srcDir
                                  )
@@ -258,7 +248,6 @@ String^  OSservices::LookForFile (String^  fileName,
   KKStr  location = osLookForFile (PicesKKStr::SystemStringToKKStr (fileName), PicesKKStr::SystemStringToKKStr (srcDir));
   return  PicesKKStr::KKStrToSystenStr (location);
 }  /* LookForFile */
-
 
 
 
@@ -292,7 +281,3 @@ array<String^>^   OSservices::GetListOfFiles (String^  dirPath,
 
   return  results;
 }  /* GetListOfFiles */
-
-
-
-

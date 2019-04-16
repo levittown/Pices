@@ -7,9 +7,18 @@
     <StartArguments>C:\Pices\SipperFiles\ETP2008\ETP2008_1C\ETP2008_1C_02.spr</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <StartArguments>C:\Pices\SipperFiles\ETP2008\ETP2008_1C\ETP2008_1C_02.spr</StartArguments>
+    <StartArguments>D:\Pices\SipperFiles\USF\ETP2008\ETP2008_1B\ETP2008_1B_02.spr</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'EmbededDebug|x64'">
-    <StartArguments>C:\Pices\SipperFiles\ETP2008\ETP2008_1C\ETP2008_1C_02.spr</StartArguments>
+    <StartArguments>D:\Pices\SipperFiles\USF\ETP2008\ETP2008_1B\ETP2008_1B_02.spr</StartArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <StartArguments>D:\Pices\SipperFiles\USF\ETP2008\ETP2008_1B\ETP2008_1B_02.spr</StartArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'EmbeddedDebug|x64'">
+    <StartArguments>D:\Pices\SipperFiles\USF\ETP2008\ETP2008_1B\ETP2008_1B_02.spr</StartArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'EmbeddedRelease|x64'">
+    <StartArguments>D:\Pices\SipperFiles\USF\ETP2008\ETP2008_1B\ETP2008_1B_02.spr</StartArguments>
   </PropertyGroup>
 </Project>

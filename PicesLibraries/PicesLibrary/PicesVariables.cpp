@@ -37,7 +37,6 @@ void  PicesVariables::InitializeEnvironment ()
 
 
 
-
 bool  PicesVariables::ValidHomeDir (const KKStr&  dir)
 {
   // The Pices home directory will have a couple of sub directories below it which must exist.
@@ -47,6 +46,7 @@ bool  PicesVariables::ValidHomeDir (const KKStr&  dir)
             (osValidDirectory (osAddSlash (dir) + "Classifier"))
            );
 }
+
 
 
 const KKStr&  PicesVariables::HomeDir ()
@@ -132,6 +132,7 @@ KKStr  PicesVariables::InstrumentDataReportDir ()
 }
 
 
+
 KKStr  PicesVariables::SipperInterfaceDir ()
 {
   KKStrPtr  sidPtr = osGetEnvVariable ("SipperInterfaceDir");
@@ -149,7 +150,6 @@ KKStr  PicesVariables::SipperInterfaceLogDir ()
   KKStr  sipperInterfaceLogDir = osAddSlash (SipperInterfaceDir ()) + "LogFiles";
   return  sipperInterfaceLogDir;
 }  /* SipperInterfaceLogDir */
-
 
 
 
@@ -185,8 +185,6 @@ KKStr  PicesVariables::ConfigrationFileName ()
 
 
 
-
-
 KKStr  PicesVariables::DataFilesDirectory ()
 {
   return  osAddSlash (HomeDir ()) + "DataFiles";
@@ -211,6 +209,7 @@ KKStr  PicesVariables::TrainingLibrariesDir ()
 {
   return  KKMLVariables::TrainingLibrariesDir ();
 }
+
 
 
 KKStr  PicesVariables::ValidationInfoDir ()
@@ -241,9 +240,6 @@ KKStr  PicesVariables::TempDirectory ()
     osCreateDirectoryPath (tempDirName);
   return  tempDirName;
 }
-
-
-
 
 
 

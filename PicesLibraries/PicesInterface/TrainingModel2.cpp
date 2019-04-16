@@ -523,7 +523,6 @@ PicesClass^  TrainingModel2::OtherClass::get ()
 
 
 
-
 String^  TrainingModel2::RootDir::get ()
 {
   PicesTrainingConfigurationConstPtr  configToUse = GetConfigToUse ();
@@ -531,6 +530,18 @@ String^  TrainingModel2::RootDir::get ()
      return PicesKKStr::KKStrToSystenStr (configToUse->RootDir ());
   else
      return  OSservices::AddSlash (PicesSipperVariables::HomeDir ()) + OSservices::GetRootName (modelName);
+}
+
+
+
+String^  TrainingModel2::RootDirExpanded ()
+{
+  PicesTrainingConfigurationConstPtr  configToUse = GetConfigToUse ();
+
+  KKStr kkModelName = PicesKKStr::SystemStringToKKStr(modelName);
+  KKStr d = configToUse ? configToUse->RootDir () : osAddSlash (PicesVariables::HomeDir ())  +  KKB::osGetRootName (kkModelName);
+  KKStr zed =  KKB::osSubstituteInEnvironmentVariables(d);
+  return PicesKKStr::KKStrToSystenStr (zed);
 }
 
 
