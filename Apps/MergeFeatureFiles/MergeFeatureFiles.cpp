@@ -783,7 +783,7 @@ void  ImportGPSDataGPGGA (const KKStr&  fileName)
     ln = buff;
     ln.TrimLeft ();
      
-    if  (ln.LocateStr ("GPGGA") < 0)
+    if  (!ln.LocateStr ("GPGGA"))
       continue;
 
     VectorKKStr  fields = ln.Parse (",");

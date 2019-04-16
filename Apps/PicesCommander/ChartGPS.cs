@@ -50,7 +50,6 @@ namespace PicesCommander
     private  bool    formIsMaximized = false;
 
     private  double  degToRad = Math.PI / 180.0;
-    private  double  radToDeg = 180.0   / Math.PI;
 
     private  TimeSpan  cruiseAdjGpsToActTime = new TimeSpan (0, 0, 0);
 

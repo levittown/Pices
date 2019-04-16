@@ -47,7 +47,6 @@ namespace PicesCommander
     private  bool    formIsMaximized = false;
 
     private  double  degToRad = Math.PI / 180.0;
-    private  double  radToDeg = 180.0   / Math.PI;
 
     private  Font  titleFont     = new Font (FontFamily.GenericSerif, 14.0f);
     private  Font  axisTitleFont = new Font (FontFamily.GenericSerif, 12.0f);

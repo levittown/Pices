@@ -75,7 +75,7 @@ void  ResultLine::InitializeMLClasses (FileDescConstPtr _fileDesc,
     for  (idx = _mlClasses.begin ();  idx != _mlClasses.end ();  idx++)
     {
       MLClassPtr  mlClass = *idx;
-      if  (mlClasses->PtrToIdx (mlClass) < 0)
+      if  (!mlClasses->PtrToIdx (mlClass).has_value ())
       {
         _log.Level (-1) << endl
                         << endl
@@ -139,7 +139,7 @@ ResultLine::ResultLine (int                _id,
 
 
 
-ResultLine::ResultLine (KKStr           txt,
+ResultLine::ResultLine (KKStr            txt,
                         ResultLineTree&  results
                        ):
 
@@ -297,8 +297,8 @@ ResultLine::ResultLine (KKStr           txt,
       exit (-1);
     }
 
-    int  ourClassIdx = mlClasses->PtrToIdx (mlClass);
-    classAccuracies[ourClassIdx] = (float)txt.ExtractTokenDouble ("\t");
+    auto  ourClassIdx = mlClasses->PtrToIdx (mlClass);
+    classAccuracies[ourClassIdx.value()] = (float)txt.ExtractTokenDouble ("\t");
   }
 
   return;
