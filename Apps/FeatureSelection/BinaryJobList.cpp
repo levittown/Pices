@@ -156,8 +156,7 @@ void  BinaryJobList::Save ()
     exit (-1);
   }
 
-  int  x;
-  for  (x = 0;  x < QueueSize (); x++)
+  for  (kkuint32 x = 0;  x < QueueSize (); ++x)
   {
     statusFile << IdxToPtr (x)->ToStatusStr ();
   }
@@ -169,12 +168,9 @@ void  BinaryJobList::Save ()
 
 
 
-
 BinaryJobPtr  BinaryJobList::LookUpByFeatureNums (const FeatureNumList&  _features)
 {
-  int  x;
-
-  for  (x = 0;  x < QueueSize (); x++)
+  for  (kkuint32 x = 0;  x < QueueSize (); x++)
   {
     BinaryJobPtr  j = IdxToPtr (x);
     if  (j->Features () == _features)
@@ -183,8 +179,6 @@ BinaryJobPtr  BinaryJobList::LookUpByFeatureNums (const FeatureNumList&  _featur
 
   return  NULL;
 }  /* LookUpByFeatureNums */
-
-
 
 
 
@@ -213,7 +207,6 @@ BinaryJobPtr  BinaryJobList::LookUpByParameters (const  FeatureNumList&  feature
 
 
 
-
 BinaryJobPtr  BinaryJobList::LookUpByJobId (int  jobId)
 {
   jobIdLookUpTableIdx = jobIdLookUpTable.find (jobId);
@@ -225,11 +218,9 @@ BinaryJobPtr  BinaryJobList::LookUpByJobId (int  jobId)
 
 
 
-
 BinaryJobPtr  BinaryJobList::LocateOpenJob ()
 {
-  int  x;
-  for  (x = 0;  x < QueueSize (); x++)
+  for  (kkuint32 x = 0;  x < QueueSize (); x++)
   {
     BinaryJobPtr  j = IdxToPtr (x);
     if  (j->Status () == BinaryJobStatus::Open)
@@ -272,7 +263,6 @@ BinaryJobPtr  BinaryJobList::LowestDeltaAccuracyProbTestJob ()
 
   return  lowestDeltaTestJob;
 }  /* LowestDeltaAccuracyProbTestJob */
-
 
 
 
@@ -334,8 +324,6 @@ BinaryJobPtr  BinaryJobList::LowestDeltaAccuracyProbJob ()
 
 
 
-
-
 BinaryJobPtr  BinaryJobList::HighestGradedJob ()
 {
   const_iterator  idx;
@@ -364,7 +352,6 @@ BinaryJobPtr  BinaryJobList::HighestGradedJob ()
 
 
 
-
 BinaryJobPtr  BinaryJobList::HighestGradedTestJob ()
 {
   const_iterator  idx;
@@ -390,9 +377,6 @@ BinaryJobPtr  BinaryJobList::HighestGradedTestJob ()
 
   return  highestGradedTestJob;
 }  /* HighestGradedTestJob */
-
-
-
 
 
 
@@ -433,12 +417,9 @@ BinaryJobPtr  BinaryJobList::FastestJob ()
 
 
 
-
-
 bool  BinaryJobList::AreAllJobsDone ()
 {
-  int  x;
-  for  (x = 0;  x < QueueSize (); x++)
+  for  (kkuint32 x = 0;  x < QueueSize ();  ++x)
   {
     BinaryJobPtr  j = IdxToPtr (x);
     if  ((j->Status () != BinaryJobStatus::Done)  &&  (j->Status () != BinaryJobStatus::Expanded))
@@ -447,7 +428,6 @@ bool  BinaryJobList::AreAllJobsDone ()
 
   return  true;
 }  /* AreAllJobsAreDone */
-
 
 
 
@@ -478,9 +458,6 @@ BinaryJobPtr  BinaryJobList::SelectOneDoneJobAtRandomFromTop10Percent ()
 
 
 
-
-
-
 bool  EffectivlyEqualAccuracy (float  p1, float p2)
 {
   if  ((p1 > (p2 + 0.0001))  ||  (p1 < (p2 - 0.0001)))
@@ -488,7 +465,6 @@ bool  EffectivlyEqualAccuracy (float  p1, float p2)
   else
     return  true;
 }  /* EffectivlyEqualAccuracy */
-
 
 
 
@@ -530,8 +506,6 @@ bool  JobAcuracyComparison (float  accuracy1, const FeatureNumList&  f1,  double
 
 
 
-
-
 class  GradeComparison
 {
 public:
@@ -551,14 +525,11 @@ public:
 
 
 
-
 void   BinaryJobList::SortByGrade ()
 {
   GradeComparison  c;
   sort (begin (), end (), c);
 }  /* SortByGrade */
-
-
 
 
 
@@ -590,15 +561,11 @@ void   BinaryJobList::SortByProcessingTime ()
 
 
 
-
-
-
 class  DeltaProbAccuarcyComparison
 {
 public:
    DeltaProbAccuarcyComparison ()
    {} 
-
 
    bool  operator () (BinaryJobPtr  j1,
                       BinaryJobPtr  j2
@@ -615,14 +582,11 @@ public:
 
 
 
-
-
 void   BinaryJobList::SortDeltaProbAccuarcy ()
 {
   DeltaProbAccuarcyComparison  c;
   sort (begin (), end (), c);
 }  /* DeltaProbAccuarcyComparison */
-
 
 
 
@@ -659,15 +623,11 @@ public:
 
 
 
-
-
 void   BinaryJobList::SortDeltaTestProbAccuarcy ()
 {
   DeltaTestProbAccuarcyComparison  c;
   sort (begin (), end (), c);
 }  /* DeltaProbAccuarcyComparison */
-
-
 
 
 
@@ -696,13 +656,11 @@ public:
 
 
 
-
 void   BinaryJobList::SortBySvmParameters ()
 {
   SvmParmsComparison  c;
   sort (begin (),  end (),  c);
 }  /* SortBySvmParameters */
-
 
 
 
@@ -733,7 +691,6 @@ public:
      }
    }
 };  /* AccuracyComparison */
-
 
 
 
@@ -775,13 +732,11 @@ public:
 
 
 
-
 void   BinaryJobList::SortByAccuracyNorm ()
 {
   AccuracyNormComparison c;
   sort (begin (),  end (),  c);
 }
-
 
 
 
@@ -890,14 +845,11 @@ public:
 
 
 
-
 void  BinaryJobList::SortByTestAccuracy ()
 {
   TestAccuracyComparison c;
   sort (begin (),  end (),  c);
 }
-
-
 
 
 
@@ -951,7 +903,6 @@ public:
 
 
 
-
 void  BinaryJobList::SortByTestAccuracyNorm ()
 {
   TestAccuracyNormComparison c;
@@ -974,7 +925,6 @@ int   BinaryJobList::SmallestNumberOfFeaturesExpanded ()  const
 
   return smallestNumberOfFeaturesExpanded;
 }  /* SmallestNumberOfFeaturesExpanded */
-
 
 
 
@@ -1101,7 +1051,6 @@ void   BinaryJobList::PushOnBack (BinaryJobPtr  j,
 
 
 
-
 //  Will open data file and load any new entries in data file that have been added.  Uses
 //  lastFilePostion to determine where to read from.
 void   BinaryJobList::ReFresh ()
@@ -1119,7 +1068,6 @@ void   BinaryJobList::ReFresh ()
                    << endl;
     exit (-1);
   }
-
 
   fseek (in, lastFilePostion, SEEK_SET);
 
@@ -1153,8 +1101,6 @@ void   BinaryJobList::ReFresh ()
 
 
 
-
-
 bool  BinaryJobList::JobsStillRunning ()
 {
   BinaryJobList::iterator  idx;
@@ -1169,7 +1115,6 @@ bool  BinaryJobList::JobsStillRunning ()
 
 
 
-
 BinaryJobListPtr  BinaryJobList::ExtractHighestGrade (int  numToExtract)
 {
   ErrorCodes  result = ErrorCodes::NoError;
@@ -1181,8 +1126,7 @@ BinaryJobListPtr  BinaryJobList::ExtractHighestGrade (int  numToExtract)
 
   SortByGrade ();
 
-  BinaryJobList::iterator  idx;
-  for  (idx = begin ();  (idx != end ())  &&  (highestGradeJobs->QueueSize () < numToExtract);  idx++)
+  for  (auto idx = begin ();  (idx != end ())  &&  ((int)highestGradeJobs->QueueSize () < numToExtract);  ++idx)
   {
     BinaryJobPtr  j = *idx;
     highestGradeJobs->PushOnBack (j, result);
@@ -1230,7 +1174,6 @@ BinaryJobListPtr  BinaryJobList::ExtractHighestGrade (float  percentageFromTop)
 
 
 
-
 BinaryJobListPtr  BinaryJobList::ExtractHighestGrade (float  topPercentage,
                                                       int    minNumOfJobs
                                                      )
@@ -1261,8 +1204,6 @@ BinaryJobListPtr  BinaryJobList::ExtractHighestGrade (float  topPercentage,
 
   return  highestGradeJobs;
 }  /* ExtractHighestGrade */
-
-
 
 
 
@@ -1327,10 +1268,8 @@ BinaryJobListPtr  BinaryJobList::ExtractHighestTestGrade (float  topPercentage,
   float highGrade = FrontOfQueue ()->TestGrade ();
   float lowGradeThershold = highGrade * (100.0f - topPercentage) / 100.0f;
  
-  BinaryJobList::iterator  idx;
-  for  (idx = begin ();  idx != end ();  idx++)
+  for  (auto j: *this)
   {
-    BinaryJobPtr  j = *idx;
     if  (j->TestGrade () < lowGradeThershold)
       break;
 
@@ -1340,7 +1279,6 @@ BinaryJobListPtr  BinaryJobList::ExtractHighestTestGrade (float  topPercentage,
   return  highestTestGradeJobs;
 
 }  /* ExtractHighestTestGrade */
-
 
 
 
@@ -1375,8 +1313,6 @@ BinaryJobListPtr  BinaryJobList::LookUpByParameters (double  minC,
 
 
 
-
-
 BinaryJobListPtr  BinaryJobList::ExtractFastestJobs (double  minTime,     
                                                      float   topPercentage
                                                     )
@@ -1396,8 +1332,6 @@ BinaryJobListPtr  BinaryJobList::ExtractFastestJobs (double  minTime,
 
 
 
-
-
 BinaryJobListPtr  BinaryJobList::ExtractJobsWithSmallestDeltaAccProbForEachSvmParameterSet ()
 {
   ErrorCodes  result = ErrorCodes::NoError;
@@ -1412,7 +1346,6 @@ BinaryJobListPtr  BinaryJobList::ExtractJobsWithSmallestDeltaAccProbForEachSvmPa
   
   BinaryJobList::iterator  idx = begin ();
   BinaryJobPtr  j = *idx;
-
 
   while  (j != NULL)
   {
@@ -1441,8 +1374,6 @@ BinaryJobListPtr  BinaryJobList::ExtractJobsWithSmallestDeltaAccProbForEachSvmPa
   
   return  jobs;
 }  /* ExtractJobsWithSmallestDeltaAccProbForEachSvmParameterSet */
-
-
 
 
 
@@ -1510,8 +1441,6 @@ void  BinaryJobList::ReportResults (ostream&  r)
     r << j->ReportLine () << endl;
   }
 }  /* ReportResults */
-
-
 
 
 
@@ -1647,7 +1576,6 @@ void  BinaryJobList::GenrateSvmResponseSheet (ostream&  r)
     row++;
   }
   r << endl;
-
 
   r << endl
     << endl

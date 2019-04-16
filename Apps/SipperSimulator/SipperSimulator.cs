@@ -80,7 +80,7 @@ namespace SipperSimulator
 
       if  (String.IsNullOrEmpty (sipperFileName))
       {
-        sipperFileName = "C:\\Pices\\SipperFiles\\WB0813\\WB0813DSH09\\WB0813DSH09_03.spr";
+        sipperFileName = @"D:\Pices\SipperFiles\USF\ETP2008\ETP2008_1B\ETP2008_1B_02.spr";
       }
 
       //ConvertCTDfile ();
@@ -1422,7 +1422,11 @@ namespace SipperSimulator
 
       BinaryReader  fs = null;
       try {fs = new BinaryReader (new FileStream (sipperFileName, FileMode.Open, FileAccess.Read, FileShare.Read));}
-      catch (Exception)  {fs = null;}
+      catch (Exception e)
+      {
+        Console.WriteLine(e.ToString());
+        fs = null;
+      }
       if  (fs == null)
         return;
 

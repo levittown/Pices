@@ -757,7 +757,7 @@ VectorFloat  ClassGroupTotals::GetNewTrainingImagesThisRetraining (int  retraini
 {
   VectorFloat  classCounts;
 
-  for  (int  classIDX = 0;  classIDX < mlClasses.QueueSize ();  classIDX++)
+  for  (kkuint32 classIDX = 0;  classIDX < mlClasses.QueueSize ();  classIDX++)
   {
     int  totalImagesAddedThisRetraning = 0;
     for  (int randomPass = 0;  randomPass < numOfRandomPasses;  randomPass++)
@@ -803,7 +803,6 @@ void  ClassGroupTotals::SetSortMethodUsed (int            retraining,
 
 KKStr   ClassGroupTotals::SortMethodsUsed (int  retraining)  const
 {
-  int    classIDX;
   int    randomPass;
   KKStr  result;
   int    sortMethodsCount[10];
@@ -814,7 +813,7 @@ KKStr   ClassGroupTotals::SortMethodsUsed (int  retraining)  const
   for  (x = 0;  x < 10;  x++)
     sortMethodsCount[x] = 0;
    
-  for  (classIDX = 0;  classIDX < mlClasses.QueueSize ();  classIDX++)
+  for  (kkuint32 classIDX = 0;  classIDX < mlClasses.QueueSize ();  classIDX++)
   {
     for  (randomPass = 0;  randomPass < numOfRandomPasses;  randomPass++)
     {
@@ -1173,7 +1172,7 @@ vector<float>  ClassGroupTotals::CalcAccuraciesByClass (int retraining)  const
 {
   vector<float>  classAccuracies;
 
-  for  (int x = 0;  x < mlClasses.QueueSize ();  x++)
+  for  (kkuint32 x = 0;  x < mlClasses.QueueSize ();  x++)
   {
     MLClassPtr  mlClass = mlClasses.IdxToPtr (x);
 
@@ -1394,7 +1393,7 @@ void  ClassGroupTotals::PrintGroupBreakDown (ostream&  report)  const
   int  classIDX = 0;
 
   float*  totalNewTrainingImages = new float[mlClasses.QueueSize ()];
-  for  (int x = 0; x < mlClasses.QueueSize (); x++)
+  for  (kkuint32 x = 0; x < mlClasses.QueueSize (); x++)
     totalNewTrainingImages[x] = (float)0.0;
   
   for  (int  retraining = 0; retraining < numOfRetrainings;  retraining++)
@@ -1821,7 +1820,7 @@ void  ClassGroupTotals::WriteOutHistory (KKStr  fileName)
 
         PredictionHistoryBitPtr  p = NULL;
 
-        int  i = 0;
+        kkuint32  i = 0;
         p = (PredictionHistoryBitPtr)hl->IdxToPtr (i);
         while  (i <  hl->QueueSize ())
         {

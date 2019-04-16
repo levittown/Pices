@@ -1190,7 +1190,6 @@ namespace PicesCommander
 
 
 
-
     private  void  AddImagesToTrainingLibrary (PicesDataBaseImageList  images)
     {
       TrainingModel2  tm1 = ActiveTrainingLibraries.Model1 ();
@@ -1227,8 +1226,6 @@ namespace PicesCommander
     }  /* AddImagesToTrainingLibrary */
 
 
-
-   
     
     private  void  AddToTrainingLibrary (Object sender, EventArgs e)
     {
@@ -1313,8 +1310,7 @@ namespace PicesCommander
       }
     }  /* SaveImage */
 
-
-
+    
     
     private  void  CopyImageToClipboard (Object sender, EventArgs e)
     {
@@ -1340,8 +1336,7 @@ namespace PicesCommander
     }  /* CopyImageToClipboard */
 
 
-
-
+    
     private  void  CopyImageToClipboardWithGrid (Object sender, EventArgs e)
     {
       PicesDataBaseImageList  images = GetSelectedImages ();
@@ -1396,8 +1391,7 @@ namespace PicesCommander
 
       SipperFileViewer.SipperFileViewer.SipperFileViewerRegionAroundImage (images[0], runLog);
     }  /* CallSipperFileViewer */
-
-
+    
 
 
     private  void  ValidateSelectedImagesWithThisClass (PicesClass  validatedClass)
@@ -1497,8 +1491,13 @@ namespace PicesCommander
 
     private  void  ValidateSelectAClass (Object sender, EventArgs e)
     {
-      String  rootDir = "";
-      //PicesClassList  activeClasses = null;
+      string rootDir = "";
+
+      if (ActiveTrainingLibraries.Model1() != null)
+      {
+        if (ActiveTrainingLibraries.Model1().RootDir != null)
+          rootDir = ActiveTrainingLibraries.Model1().RootDirExpanded ();
+      }
 
       if  (activeClasses == null)
         UpdateActiveClassesList ();

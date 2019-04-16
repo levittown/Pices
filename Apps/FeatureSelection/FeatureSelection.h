@@ -337,13 +337,13 @@ namespace FeatureSelectionApp
                                                 // then as many as we want.
 
 
-    ProcessingOrders         processingOrder;        // The order of the major steps.
+    ProcessingOrders          processingOrder;        // The order of the major steps.
 
-    JobSelectionCriteria  paramSelCriteria;       // Criteria used to select next jobs to expand during parameter grid search
+    JobSelectionCriteria      paramSelCriteria;       // Criteria used to select next jobs to expand during parameter grid search
 
-    MLClassPtr        positiveClass;
+    MLClassPtr                positiveClass;
 
-    int                       procId;                // Process ID assigned by OS
+    int                       procId;                 // Process ID assigned by OS
 
     bool                      quitRunning;
 
@@ -360,7 +360,7 @@ namespace FeatureSelectionApp
 
     KKStr                     resultConfigFileName;
 
-    SearchTypes             searchType;
+    SearchTypes               searchType;
 
     KKStr                     statusFileName;
 

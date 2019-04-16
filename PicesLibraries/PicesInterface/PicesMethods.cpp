@@ -52,13 +52,11 @@ array<String^>^    PicesMethods::GetListOfSipperFiles (PicesRunLog^  log)
 
 
 
-
 String^  PicesMethods::SipperFileNameFromImageFileName (String^  imageFileName)
 {
   KKStr  sipperFileName = InstrumentDataFileManager::SipperFileRootNameFromSipperImageFileName (PicesKKStr::SystemStringToKKStr (imageFileName));
   return  PicesKKStr::KKStrToSystenStr (sipperFileName);
 }
-
 
 
 
@@ -68,13 +66,12 @@ System::DateTime   PicesMethods::DateKKUtoSystem (const  KKB::DateType&  date)
 }
 
 
+
 KKB::DateType   PicesMethods::DateSystemToKKU (System::DateTime   dt)
 {
   
   return  KKB::DateType (dt.Year, dt.Month, dt.Day);
 }
-
-
 
 
 
@@ -118,6 +115,7 @@ KKB::DateTime   PicesMethods::DateTimeSystemToKKU (System::DateTime   dt)
 }
 
 
+
 System::TimeSpan   PicesMethods::TimeTypeKKUtoSystem (const KKB::TimeType&  t)
 {
   System::TimeSpan  td ((int)t.Hour (), (int)t.Minute (), (int)t.Second ());
@@ -156,6 +154,7 @@ System::String^   PicesMethods::LatitudeToString (double latitude,
 }
 
 
+
 System::String^   PicesMethods::LongitudeToString (double longitude,
                                                    int    minDecimals
                                                   )
@@ -190,9 +189,6 @@ System::String^   PicesMethods::LongitudeToString (double longitude,
 
   return longStr;
 }
-
-
-
 
 
 

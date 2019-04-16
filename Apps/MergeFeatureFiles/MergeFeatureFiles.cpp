@@ -952,7 +952,29 @@ void  ImportValidatedClassInfo ()
 {
   RunLog  log;
 
-  KKStr  srcFileName = "C:\\Temp\\ValidatedImages.csv";
+  KKStr  srcFileName = "D:\\Users\\kurt\\OneDrive\\Sipper\\FromAndrewToKurt\\Validation\\2014-09-16\\ValidatedImagesList.txt";
+  KKStr  classNameFileName = "D:\\Users\\kurt\\OneDrive\\Sipper\\FromAndrewToKurt\\Validation\\2014-09-16\\ClassList.txt";
+
+  map<int, KKStr>  classNameLookup;
+  map<int, KKStr>::iterator  idx;
+  FILE* cnl = KKB::osFOPEN(classNameFileName.Str (), "r");
+  KKStrPtr line = KKB::osReadNextLine (cnl);
+  while  (line)
+  {
+    if  (!line->Empty())
+    {
+      auto fields = line->Parse("\t");
+      if  (fields.size() > 2)
+      {
+        int classId = fields[0].ToInt32();
+        KKStr className = fields[1];
+        classNameLookup.insert(pair<int, KKStr>(classId, className));
+      }
+    }
+    delete line;
+    line = KKB::osReadNextLine (cnl);
+  }
+
 
   ifstream i (srcFileName.Str ());
   if  (!i.is_open ())
@@ -978,18 +1000,26 @@ void  ImportValidatedClassInfo ()
     count++;
     s = buff;
     imageFileName      = s.ExtractQuotedStr (",\n\t\r", false);
-    validatedClassId   = s.ExtractTokenInt  (",\n\t\r");
-    validatedClassName = s.ExtractQuotedStr (",\n\t\r", false);
+    if  (imageFileName.StartsWith("ETP"))
+    {
+      validatedClassId   = s.ExtractTokenInt  (",\n\t\r");
+      //validatedClassName = s.ExtractQuotedStr (",\n\t\r", false);
+      idx = classNameLookup.find(validatedClassId);
+      if  (idx != classNameLookup.end())
+      {
+        validatedClassName = idx->second;
 
-    MLClassPtr  c = MLClass::CreateNewMLClass (validatedClassName);
+        MLClassPtr  c = MLClass::CreateNewMLClass (validatedClassName);
 
-    dbConn->ImagesUpdateValidatedClass (imageFileName, c);
+        dbConn->ImagesUpdateValidatedClass (imageFileName, c);
    
-    if  (!dbConn->Valid ())
-      errMsg = dbConn->LastErrorDesc ();
+        if  (!dbConn->Valid ())
+          errMsg = dbConn->LastErrorDesc ();
 
-    cout << count << "\t" << imageFileName << "\t" << validatedClassName << "\t" << errMsg << endl;
-    errMsg = "";
+        cout << count << "\t" << imageFileName << "\t" << validatedClassName << "\t" << errMsg << endl;
+      }
+      errMsg = "";
+    }
   }
 }  /* ImportValidatedClassInfo */
 
@@ -1073,8 +1103,8 @@ int  main (int     argc,
   //ImportFullSizeImages ();
   //exit (-1);
 
-  //ImportValidatedClassInfo ();
-  //exit (-1);
+  ImportValidatedClassInfo ();
+  exit (-1);
 
   MergeFeatureFiles  mergeFeatureFiles;
   mergeFeatureFiles.InitalizeApplication (argc, argv);

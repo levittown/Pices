@@ -731,9 +731,6 @@ namespace SipperFileViewer
 
       UpdateStats ();
       UpdateVerticleScrollBar ();
-
-      PixelDensityChart.Width += changeInWidth;
-      PixelDensityChart.Top   += changeInHeight;
     }  /* UpdateScreenForNewSize */
 
 
@@ -976,25 +973,6 @@ namespace SipperFileViewer
 
 
 
-
-    private  void  UpdatePixelDensityChart ()
-    {
-      int  x = 0;
-      uint[]  colHistogram = parameters.ColHistogram ();
-      if  (colHistogram == null)
-        return;
-
-      PixelDensityChart.Series[0].Points.Clear ();
-
-      for  (x = 0;  x < colHistogram.Length;  ++x)
-      {
-        PixelDensityChart.Series[0].Points.AddY ((double)Math.Min (40, colHistogram[x]));
-      }
-    }
-
-
-
-
     private  void  ScrollToPropperPlaceInSipperFile2 (int  displayRow)
     {
       if  (file == null)
@@ -1017,11 +995,8 @@ namespace SipperFileViewer
         parameters.PaintWholePanel ();
       }
       
-      UpdatePixelDensityChart ();
-
       ChartAddCurrentPosition ();
     }  /* ScrollToPropperPlaceInSipperFile2 */
-
 
 
 
