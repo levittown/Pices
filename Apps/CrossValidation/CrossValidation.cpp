@@ -2241,7 +2241,7 @@ FeatureVectorListPtr  CrossValidationApp::ReduceToWhatsInConfig (FeatureVectorLi
   FeatureVectorListPtr excluded = src->ManufactureEmptyList (src->Owner ());
 
   for (auto idx: *src) {
-    if  (classes->PtrToIdx (idx->MLClass ()))
+    if  (classes->PtrToIdx (idx->MLClass ()).has_value ())
       included->PushOnBack (idx);
     else
       excluded->PushOnBack (idx);
@@ -2255,7 +2255,6 @@ FeatureVectorListPtr  CrossValidationApp::ReduceToWhatsInConfig (FeatureVectorLi
 
   return included;
 }
-
 
 
 

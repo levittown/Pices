@@ -343,17 +343,14 @@ public:
 
 
 
-
-
 void  HistoryBitList::WriteOutContents (ostream&  o)
 {
-  for  (int i = 0;  i < QueueSize ();  i++)
+  for (auto h: *this)
   {
-    HistoryBitPtr  h = IdxToPtr (i);
-
     o << h->ToString () << endl;
   }
 }
+
 
 
 void  HistoryBitList::SortHistory ()

@@ -639,11 +639,9 @@ void  ClassCountSearch::ProcessClassCombo (MLClassListPtr  classes)
   falsePositivesStr   << "FalsePositives" << "\t" << classes->QueueSize () << "\t" << numExamples << "\t" << numIgnored << "\t" << cm->Accuracy () << "\t" << cm->AccuracyNorm () << "\t" << nextCandidate->mlClass->Name ();
   sensitivityStr      << "FalsePositives" << "\t" << classes->QueueSize () << "\t" << numExamples << "\t" << numIgnored << "\t" << cm->Accuracy () << "\t" << cm->AccuracyNorm () << "\t" << nextCandidate->mlClass->Name ();
 
-  MLClassList::iterator  idx;
-  for  (idx = trainExamplesClasses->begin ();  idx != trainExamplesClasses->end ();  ++idx)
+  for  (auto ic: *trainExamplesClasses)
   {
-    MLClassPtr  ic = *idx;
-    if  (classes->PtrToIdx (ic) < 0)
+    if  (!classes->PtrToIdx (ic).has_value ())
     {
       *report1Type1Errors << "\t" << "********";
       type2Errors         << "\t" << "********";

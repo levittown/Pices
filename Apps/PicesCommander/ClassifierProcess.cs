@@ -41,7 +41,6 @@ namespace PicesCommander
     private  PicesDataBase   dbConn = null;   // This database connection belongs to the thread "ThreadProcess".
     
     private  TrainingModel2  classifier = null;
-    private  bool            classifierWeOwnIt = false;
     private  String          classifierName = "";
 
     private  PicesClassList  classesInClassifier = null;
@@ -74,7 +73,6 @@ namespace PicesCommander
       dbServer              = _dbServer;
       midPoint              = _midPoint;
       
-      classifierWeOwnIt = false;
       if  (classifier != null)
         classifierName  = classifier.ModelName;
       ClassInitialization ();
@@ -106,8 +104,6 @@ namespace PicesCommander
       dbServer              = _dbServer;
       midPoint              = _midPoint;
 
-      classifierWeOwnIt = false;
-      
       ClassInitialization ();
     }
 
@@ -220,7 +216,6 @@ namespace PicesCommander
         PicesRunLog  log = new PicesRunLog ();
         classifier = new TrainingModel2 (log, classifierName);
         classifier.LoadExistingModelOtherwiseBuild (null);
-        classifierWeOwnIt = true;
       }
 
       while  (!cancelFlag)
