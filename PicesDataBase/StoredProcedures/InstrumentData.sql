@@ -628,10 +628,10 @@ drop procedure if exists  InstrumentDataByUpAndDownCast2;
 
 DELIMITER $$
 
-CREATE DEFINER=`root`@`localhost` procedure `InstrumentDataByUpAndDownCast2`(in  _cruiseName      varChar(10),
-                                                                             in  _stationName     varChar(10),
-                                                                             in  _deploymentNum   varChar(4)
-                                                                            )
+CREATE procedure `InstrumentDataByUpAndDownCast2`(in  _cruiseName      varChar(10),
+                                                  in  _stationName     varChar(10),
+                                                  in  _deploymentNum   varChar(4)
+                                                 )
 begin
   declare _midPoint     datetime;
 

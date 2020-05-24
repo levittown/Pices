@@ -1687,8 +1687,9 @@ begin
   
 end
 
+$$
 
-
+delimiter ;
 
 
 
@@ -2826,7 +2827,7 @@ delimiter ;
 /**********************************************************************************/
 delimiter $$
 drop procedure if exists `ImagesRetrieveValidatedClasses` $$
-create DEFINER=`root`@`localhost` procedure `ImagesRetrieveValidatedClasses`(in  _cruiseName  varchar(10))
+create procedure `ImagesRetrieveValidatedClasses`(in  _cruiseName  varchar(10))
 begin
   declare done             int default 0;
   declare _sipperFileName  varchar(48);

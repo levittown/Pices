@@ -28,7 +28,6 @@ using namespace MLL;
 
 
 
-
 ReFreshInstrumentData::ReFreshInstrumentData ():
 
    PicesApplication  (),
@@ -37,8 +36,6 @@ ReFreshInstrumentData::ReFreshInstrumentData ():
    stationName    ()
 {
 }
-
-
 
 
 
@@ -62,10 +59,6 @@ void  ReFreshInstrumentData::InitalizeApplication (kkint32 argc,
 
   InstrumentDataFileManager::InitializePush ();
 }  /* InitalizeApplication */
-
-
-
-
 
 // -cn WB1008 -sn DSH09
 
@@ -108,7 +101,6 @@ bool  ReFreshInstrumentData::ProcessCmdLineParameter (const KKStr&  parmSwitch,
 }  /* ProcessCmdLineParameter */
 
 
-           
 
 /******************************************************************************
  * DisplayCommandLineParameters()
@@ -123,8 +115,6 @@ void   ReFreshInstrumentData::DisplayCommandLineParameters ()
        << "    -Deployment  <CDeploymentNum>"    << endl
        << endl;
 }  /* DisplayCommandLineParameters */
-
-
 
 
 
@@ -206,7 +196,6 @@ void   ReFreshInstrumentData::Main ()
   delete  sipperFiles;
   sipperFiles = NULL;
 }  /* Main */
-
 
 
 

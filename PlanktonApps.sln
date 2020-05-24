@@ -125,6 +125,10 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExtractFeatures", "Apps\FeatureCalculation\ExtractFeatures.vcxproj", "{5151420B-8CA9-41D5-BDE9-71FBFDCCC50B}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ReFreshInstrumentData", "Apps\ReFreshInstrumentData\ReFreshInstrumentData.vcxproj", "{0FE470F4-FC1C-4362-B726-D287C5D357D3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B8045239-6597-4E1D-B535-A78DA68BA156} = {B8045239-6597-4E1D-B535-A78DA68BA156}
+		{D9BB6D83-937E-40FD-BFC3-FF48D8A04D11} = {D9BB6D83-937E-40FD-BFC3-FF48D8A04D11}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImportFullSizeFromSqlBackUp", "Apps\ImportFullSizeFromSqlBackUp\ImportFullSizeFromSqlBackUp.vcxproj", "{96ED155F-42EF-47C5-9C30-0C9E6ECBBB69}"
 EndProject

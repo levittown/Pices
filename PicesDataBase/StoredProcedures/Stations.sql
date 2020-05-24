@@ -59,7 +59,7 @@ begin
   delete from  Stations 
     where  (CruiseName = _cruiseName)  and  (StationName  = _stationName);
 end
-//s
+//
 delimiter ;
 
 
