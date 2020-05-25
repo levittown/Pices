@@ -242,7 +242,7 @@ void   PicesTrainingConfiguration::ReadXML (XmlStream&      s,
     if  (t)
     {
       const KKStr&  varName = t->VarName ();
-      log.Level (50) << "PicesTrainingConfiguration::ReadXML  Token not processed varName: " << varName << endl; 
+      log.Level (50) << "PicesTrainingConfiguration::ReadXML  Token not processed varName: " << varName << "  tag->name" << tag->Name () << endl;
     }
     delete  t;
     if  (cancelFlag)

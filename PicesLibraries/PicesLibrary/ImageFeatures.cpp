@@ -202,7 +202,6 @@ ImageFeatures::ImageFeatures (const ImageFeatures&  _image):
 
 
 
-
 ImageFeatures::ImageFeatures (const BmpImage&      _image,
                               MLClassPtr           _mlClass,
                               RasterSipperListPtr  _saveImages,
@@ -232,7 +231,7 @@ ImageFeatures::ImageFeatures (const BmpImage&      _image,
 
 
 
-ImageFeatures::ImageFeatures (RasterSipper&        _raster,
+ImageFeatures::ImageFeatures (RasterSipperConst&   _raster,
                               MLClassPtr           _mlClass,
                               RasterSipperListPtr  _saveImages,
                               RunLog&              _log
@@ -249,7 +248,6 @@ ImageFeatures::ImageFeatures (RasterSipper&        _raster,
   sfCentroidCol    (-1.0f),
   sfCentroidRow    (-1.0),
   version          (0)
-
 {
   MLClass    (_mlClass);
   ExampleFileName (_raster.FileName ());
@@ -413,7 +411,7 @@ void  ImageFeatures::FinalCleanUp ()
 
 
 
-void  ImageFeatures::Save (RasterSipper&        raster, 
+void  ImageFeatures::Save (RasterSipperConst&   raster, 
                            const KKStr&         desc,
                            RasterSipperListPtr  saveImages
                           )
@@ -451,7 +449,7 @@ void  ImageFeatures::Save (RasterSipper&        raster,
 
 //#define  DEBUB_CalcFeatures
 
-void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
+void  ImageFeatures::CalcFeatures (RasterSipperConst&   srcRaster,
                                    RasterSipperListPtr  saveImages,
                                    RunLog&              log
                                   )
@@ -467,7 +465,6 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
     numOfFeatures = FeatureFileIOPices::PlanktonMaxNumOfFields ();
     AllocateFeatureDataArray ();
   }
-
 
   #if defined (DEBUB_CalcFeatures)
   cout << "CalcFeatures   After 'AllocateFeatureDataArray'" << std::endl;
@@ -486,7 +483,7 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
     reversedImage = srcRaster.ReversedImage ();
   }
 
-  RasterSipperPtr raster = (weOwnRaster ? reversedImage : &srcRaster);
+  RasterSipperConstPtr raster = (weOwnRaster ? reversedImage : &srcRaster);
 
   kkint32 areaBeforeReduction;
   kkint32 areaWithWhiteSpace = 0;
@@ -1048,10 +1045,8 @@ void  ImageFeatures::CalcFeatures (RasterSipper&        srcRaster,
     thinnedImage = NULL;
   }
 
-
   featureData[0] = (float)areaBeforeReduction;  // In case the image was reduced.
   OrigSize ((float)areaBeforeReduction);
-
 
   #if defined (DEBUB_CalcFeatures)
     cout << "CalcFeatures   After   Thinned Images." << std::endl;

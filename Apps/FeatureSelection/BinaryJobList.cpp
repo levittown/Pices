@@ -1196,7 +1196,7 @@ BinaryJobListPtr  BinaryJobList::ExtractHighestGrade (float  topPercentage,
   for  (idx = begin ();  idx != end ();  idx++)
   {
     BinaryJobPtr  j = *idx;
-    if  ((j->Grade () <= lowGradeThreshold)  &&  (highestGradeJobs->QueueSize () >= minNumOfJobs))
+    if  ((j->Grade () <= lowGradeThreshold)  &&  (highestGradeJobs->QueueSize () >= (kkuint32)minNumOfJobs))
       break;
 
     highestGradeJobs->PushOnBack (j, result);

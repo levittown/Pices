@@ -62,14 +62,10 @@ Sipper3Buff::Sipper3Buff (const KKStr&              _fileName,
 
 
 
-
-
 Sipper3Buff::~Sipper3Buff ()
 {
   //SipperBuff::~SipperBuff ();
 }
-
-
 
 
 
@@ -132,7 +128,6 @@ void  Sipper3Buff::GetNextSipperRec (kkuint32&  spaceLeft,
 
   }  while  (!imageData);
 
-
   if  (!raw) 
   {
     numOfBlanks = 0;
@@ -186,8 +181,6 @@ void  Sipper3Buff::GetNextSipperRec (kkuint32&  spaceLeft,
 
 
 
-
-
 void  Sipper3Buff::GetNextLine (uchar*    lineBuff,
                                 kkuint32  lineBuffSize,
                                 kkuint32& lineSize,
@@ -234,7 +227,6 @@ void  Sipper3Buff::GetNextLine (uchar*    lineBuff,
     curRow++;
     return;
   }
-
 
   GetNextSipperRec (spaceLeft,
                     cameraNum, 

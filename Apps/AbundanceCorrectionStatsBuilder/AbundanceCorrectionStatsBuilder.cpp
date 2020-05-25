@@ -336,7 +336,7 @@ void   AbundanceCorrectionStatsBuilder::ManageThreads ()
       TerminateThreads ();
     }
 
-    while  ((queueRunning->QueueSize () < maxNumActiveThreads)  &&  (queueReady->QueueSize () > 0))
+    while  ((queueRunning->QueueSize () < (kkuint32)maxNumActiveThreads)  &&  (queueReady->QueueSize () > 0u))
     {
       TrainTestThreadPtr  nextThreadToStart = queueReady->PopFromFront ();
       if  (nextThreadToStart != NULL)

@@ -1407,7 +1407,7 @@ void  FeatureSelection::LoadRunTimeData ()
   if  (addingAClass)
   {
     // Since we are adding a class we need to make sure that the class being added exists in the configuration file.
-    if  (mlClasses->PtrToIdx (addingAClass) < 0)
+    if  (!mlClasses->PtrToIdx (addingAClass).has_value ())
     {
       log.Level (-1) << endl
                      << endl
@@ -2629,7 +2629,7 @@ FinalResultsPtr  FeatureSelection::RunAValidation (const KKStr&  summaryResultsF
                            log
                           ); 
   }
-  catch  (exception&  e)
+  catch (const std::exception&  e)
   {
     fr = NULL;
     log.Level (-1) << endl 

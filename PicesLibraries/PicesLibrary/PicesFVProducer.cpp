@@ -60,24 +60,35 @@ ImageFeaturesPtr  PicesFVProducer::ComputeFeatureVector (const Raster&     srcIm
 {
   ImageFeaturesPtr  fv = NULL;
   RasterSipperListPtr  sipperRasterIntermediateImages = NULL;
+
   if  (intermediateImages)
     sipperRasterIntermediateImages = new RasterSipperList (false);
 
-  if  (typeid (srcImage) != typeid (MLL::RasterSipper))
+  RasterPtr      reducedImage = nullptr;
+  RasterConstPtr imageToUse = &srcImage;
+
+  if  (priorReductionFactor != 1.0f)
+  {
+    reducedImage = imageToUse->ReduceByFactor (priorReductionFactor);
+    imageToUse = reducedImage;
+  }
+  
+  if  (typeid (*imageToUse) != typeid (MLL::RasterSipper))
   {
     runLog.Level (-1) << endl
       << "PicesFVProducer::ComputeFeatureVector   ***ERROR***   'srcImage' not a 'RasterSipper' derived class." << endl
       << "   ExampleFileName[" << srcImage.FileName () << "]" << endl
       << endl;
 
-    RasterSipperPtr sipperRaster = new RasterSipper (srcImage);
+    RasterSipperPtr sipperRaster = new RasterSipper (*imageToUse);
+
     fv = new ImageFeatures (*sipperRaster, knownClass, sipperRasterIntermediateImages, runLog);
     delete  sipperRaster;
-    sipperRaster = NULL;
+    sipperRaster = nullptr;
   }
   else
   {
-    MLL::RasterSipperPtr  sipperImage = dynamic_cast<MLL::RasterSipperPtr> (&(Raster&)srcImage);
+    RasterSipperConstPtr  sipperImage = dynamic_cast<RasterSipperConstPtr> (imageToUse);
     fv = new ImageFeatures (*sipperImage, knownClass, sipperRasterIntermediateImages, runLog);
   }
 
@@ -89,7 +100,10 @@ ImageFeaturesPtr  PicesFVProducer::ComputeFeatureVector (const Raster&     srcIm
   }
 
   delete  sipperRasterIntermediateImages;
-  sipperRasterIntermediateImages = NULL;
+  sipperRasterIntermediateImages = nullptr;
+
+  delete reducedImage;
+  reducedImage = nullptr;
 
   return fv;
 }  /* ComputeFeatureVector */
@@ -212,6 +226,7 @@ FileDescConstPtr  PicesFVProducerFactory::FileDesc ()  const
 
 PicesFVProducerPtr  PicesFVProducerFactory::ManufactureInstance (RunLog&  runLog)
 {
+  runLog.Level (30) << "PicesFVProducerFactory::ManufactureInstance" << endl;
   return new PicesFVProducer (this);
 } /* ManufactureInstance */
 

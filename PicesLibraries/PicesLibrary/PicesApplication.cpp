@@ -266,7 +266,7 @@ bool  PicesApplication::ProcessConfigFileParameter  (const KKStr&  parmSwitch,
   if  (!valid)
   {
     log.Level (-1) << endl
-      << "PicesApplication::ProcessConfigFileParameter   ***ERROR***  Configuration[" << configFileName << "]  Does not exist." << endl
+      << "PicesApplication::ProcessConfigFileParameter   ***ERROR***  parmSwitch[" << parmSwitch << "] Configuration[" << configFileName << "]  Does not exist." << endl
       << endl;
   }
 

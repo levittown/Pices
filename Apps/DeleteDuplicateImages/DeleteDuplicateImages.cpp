@@ -249,7 +249,7 @@ void  DeleteDuplicateImages::DeleteImages ()
             dupCount++;
           }  while  (osFileExists (newFileName));
 
-          osCopyFile (fullFileName, newFileName);
+          osCopyFile (fullFileName, newFileName, true);
           *r << "moved to[" << newFileName << "]  ";
           cout << "Coping [" << fullFileName << "] to Duplicates List" << endl;
         }

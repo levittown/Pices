@@ -178,7 +178,7 @@ DeploymentSummary*  MarineSnowReportDeployment (SipperDeploymentPtr  deployment,
 
   MLClassPtr  detritusClass = allClasses->LookUpByName ("Detritus");
   MLClassListPtr  classes = detritusClass->BuildListOfDecendents (detritusClass);
-  if  (classes->PtrToIdx (detritusClass) < 0)
+  if  (!classes->PtrToIdx (detritusClass).has_value ())
     classes->AddMLClass (detritusClass);
 
   delete  allClasses;

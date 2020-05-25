@@ -1989,7 +1989,7 @@ void  ActiveLearning::WriteResultsFileViaLocalDrive (ClassGroupTotals&  results,
   log.Level (10) << "ProcessCombinedClassJob    Copying Results File from["  << localDrivePath << "]  "
                  << "  to[" << networkPath << "]." << endl;
 
-  bool  copyOK = osCopyFile (localDriveName, fullResultsFileName);
+  bool  copyOK = osCopyFile (localDriveName, fullResultsFileName, true);
 
   if  (copyOK)
   {

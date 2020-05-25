@@ -232,7 +232,7 @@ RasterSipperPtr  RasterSipper::CreatePaddedRaster (BmpImage&  image,
 
 
 
-RasterSipperPtr   RasterSipper::ReversedImage ()
+RasterSipperPtr   RasterSipper::ReversedImage () const
 {
   RasterPtr  r = Raster::ReversedImage ();
   return  RasterSipper::TurnIntoSipperRasterPtr (r);
@@ -334,7 +334,7 @@ RasterSipperPtr  RasterSipper::SwapQuadrants ()  const
 
 
 
-RasterSipperPtr  RasterSipper::Rotate (float  turnAngle)
+RasterSipperPtr  RasterSipper::Rotate (float  turnAngle) const
 {
   RasterPtr  rotatedRaster = Raster::Rotate (turnAngle);
   return RasterSipper::TurnIntoSipperRasterPtr (rotatedRaster);
@@ -640,7 +640,7 @@ RasterSipperListPtr  RasterSipper::SplitImageIntoEqualParts (kkint32 numColSplit
 
 
 
-RasterSipperPtr  RasterSipper::ThinContour ()
+RasterSipperPtr  RasterSipper::ThinContour () const
 {
   RasterPtr  r = Raster::ThinContour ();
   return  RasterSipper::TurnIntoSipperRasterPtr (r);

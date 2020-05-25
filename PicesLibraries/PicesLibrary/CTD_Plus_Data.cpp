@@ -32,9 +32,9 @@ using namespace MLL;
 CTD_Plus_Data::CTD_Plus_Data (bool  _checkCDOM):
 
     batteryVoltage         (0.0f),
-    checkCDOM              (false),
+    checkCDOM              (_checkCDOM),
     conductivity           (0.0f),
-    date                   (_checkCDOM),
+    date                   (),
     density                (0.0f),
     depthMeters            (0.0f),
     fluorescence           (0.0f),
@@ -130,7 +130,6 @@ float  ToFloat (KKStr  s,
 
 
 
-
 CTD_Plus_Data::CTD_Plus_Data (const KKStr&  _txt,
                               double        _latitude,
                               bool&         valid,
@@ -186,7 +185,6 @@ CTD_Plus_Data::CTD_Plus_Data (const KKStr&  _txt,
   pressure = ToFloat (fields[fieldNum], valid);  fieldNum++;
   if  (!valid)
     return;
-
 
   kkint32 numExtenalVoltsProcessed = 0;
   if  (numExtenalVoltsProcessed < numExternalVoltages)
@@ -312,8 +310,8 @@ CTD_Plus_Data::CTD_Plus_Data (const KKStr&  _txt,
 
   void   CTD_Plus_Data::UpdateExternalVoldtageField (const KKStr&  extCode,
                                                      const KKStr&  amtField,
-                                                     kkint32&        numExtenalVoltsProcessed,
-                                                     kkint32&        fieldNum,
+                                                     kkint32&      numExtenalVoltsProcessed,
+                                                     kkint32&      fieldNum,
                                                      bool&         valid
                                                     )
   {
@@ -354,8 +352,7 @@ CTD_Plus_Data::CTD_Plus_Data (const KKStr&  _txt,
   }  /* UpdateExternalVoldtageField */
 
 
-
-
+  
   void   CTD_Plus_Data::CalcFluorescence ()
   {
     // Using calibration sheet from WETLabs
@@ -476,7 +473,6 @@ CTD_Plus_Data::CTD_Plus_Data (const KKStr&  _txt,
     // From page Appendix A, page 6of SBE 43  Dissolved Oxygen Sensor
     // Application Note No. 64.
 
-
     static  double  A1 = -173.4292;
     static  double  A2 =  249.6339;
     static  double  A3 =  143.3483;
@@ -510,7 +506,6 @@ CTD_Plus_Data::CTD_Plus_Data (const KKStr&  _txt,
     
     
 
-
 float  CTD_Plus_Data::DissolvedOxygenConcentration (float  _voltage,
                                                     float  _temperature,
                                                     float  _salinity,
@@ -531,15 +526,13 @@ float  CTD_Plus_Data::DissolvedOxygenConcentration (float  _voltage,
 
   double  disolvedOxygen_a = (Soc * (V + Voffset + tau * deltaV) + Boc * exp (-0.03 * T));
 
-  double  Oxsat = OxygenSaturation (T, _salinity);
+  double  Oxsat = OxygenSaturation ((float)T, _salinity);
   double  disolvedOxygen_b = Oxsat * exp (tcor * T) * exp (pcor * P);
 
   double  dissolvedOxygenConcentration = disolvedOxygen_a * disolvedOxygen_b;
 
   return  (float)dissolvedOxygenConcentration;
 }  /* DissolvedOxygenConcentration */
-
-
 
 
 
@@ -573,10 +566,6 @@ CTD_Plus_Data&  CTD_Plus_Data::operator=  (const CTD_Plus_Data&  right)
 
   return  *this;
 }  /* operator= */
-
-
-
-
 
 
 
@@ -616,7 +605,6 @@ KKStr  CTD_Plus_Data::Header1Str ()
 
   return  result;
 }  /* Header */
-
 
 
 
@@ -710,5 +698,3 @@ bool  CTD_Plus_Data::ValidData ()  const
 
   return  true;
 }  /* ValidData */
-
-

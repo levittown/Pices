@@ -493,7 +493,7 @@ DataBaseImageListPtr  BuildSynthObjDetData::FilterOutNoise (DataBaseImageList& s
       auto h = nextCandidate->Height ();
       auto w = nextCandidate->Width  ();
       auto areaSquared = h * h + w * w;
-      if  ((areaSquared > (400 * 400))  ||  (h < minEdgeLen)  ||  (w < minEdgeLen))
+      if  ((areaSquared > (400u * 400u))  ||  (h < minEdgeLen)  ||  (w < minEdgeLen))
       {
         keep = false;
       }

@@ -207,7 +207,10 @@ VectorKKStr  InstrumentDataFileManager::GetListOfSipperFiles (RunLog&  log)
 
   StringLookUpTable::iterator  idx;
   for  (idx = instrumentDataManager->knownSipperFiles->begin ();  idx != instrumentDataManager->knownSipperFiles->end ();  idx++)
+  {
+    log.Level (90) << "GetListOfSipperFiles " << idx->second << endl;
     sipperFileList.push_back (idx->second);
+  }
 
   blocker->EndBlock ();
 

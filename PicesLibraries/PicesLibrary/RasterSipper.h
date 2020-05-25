@@ -349,15 +349,19 @@ namespace MLL
 
     RasterSipperPtr     Padded (kkint32 padding);  // Creates a Padded raster object.
 
-    RasterSipperPtr     ReversedImage ();
+    virtual
+    RasterSipperPtr     ReversedImage () const;
 
+    virtual
     RasterSipperPtr     ReduceByEvenMultiple (kkint32  multiple)  const;
 
+    virtual
     RasterSipperPtr     ReduceByFactor (float factor)  const;  //  0 < factor <= 1.0  ex: 0.5 = Make raster half size
 
     RasterSipperPtr     RemoveZooscanBrackets ()  const;
 
-    RasterSipperPtr     Rotate (float  turnAngle);
+    virtual
+    RasterSipperPtr     Rotate (float  turnAngle) const;
 
     RasterSipperPtr     SegmentImage (bool  save = false);
 
@@ -396,7 +400,8 @@ namespace MLL
                                         const PixelValue&  flagValue
                                        );
 
-    RasterSipperPtr     ThinContour ();
+    virtual
+    RasterSipperPtr     ThinContour () const;
 
     RasterSipperPtr     TightlyBounded (kkuint32 borderPixels)  const;
 
@@ -429,9 +434,11 @@ namespace MLL
 
   typedef  RasterSipper::RasterSipperPtr  RasterSipperPtr;
 
+  typedef const RasterSipper  RasterSipperConst;
+  
+  typedef RasterSipperConst* RasterSipperConstPtr;
 
-
-
+   
 
   class  RasterSipperList:  public  KKQueue<RasterSipper>
   {

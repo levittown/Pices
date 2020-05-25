@@ -157,7 +157,7 @@ void  RandomlySelectImagesByClass (const KKStr&  srcRootDir,
       ImageFeaturesPtr i = *idx2;
       KKStr  srcFileName  = osAddSlash (srcDirName)  + osGetRootName (i->ExampleFileName ()) + ".bmp";
       KKStr  destFileName = osAddSlash (destDirName) + osGetRootName (i->ExampleFileName ()) + ".bmp";
-      osCopyFile (srcFileName, destFileName);
+      osCopyFile (srcFileName, destFileName, true);
       featureDataForThisClass->PushOnBack (i);
     }
 

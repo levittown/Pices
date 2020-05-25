@@ -1127,19 +1127,11 @@ PicesPredictionList^   TrainingModel2::PredictProbabilities (PicesFeatureVector^
   {
     classifier->ProbabilitiesByClass (*classes, unKnownExample, votes, probabilities);
   }
-  catch  (KKException& e2)
-  {
-    KKStr  errMsg = "TrainingModel2::PredictProbabilities   KKException occurred calling 'ProbabilitiesByClass'.\n\n" + e2.ToString ();
-    System::Windows::Forms::MessageBox::Show (PicesKKStr::KKStrToSystenStr (errMsg), "TrainingModel2::PredictProbabilities");
-    delete  unKnownExample;  unKnownExample = NULL;
-    return nullptr;
-  }
-  catch  (std::exception& e)
+  catch  (const std::exception& e)
   {
     KKStr  errMsg = "TrainingModel2::PredictProbabilities   std::exception occurred calling 'ProbabilitiesByClass'.\n\n";
     errMsg << e.what ();
     System::Windows::Forms::MessageBox::Show (PicesKKStr::KKStrToSystenStr (errMsg), "TrainingModel2::PredictProbabilities");
-    delete  unKnownExample;  unKnownExample = NULL;
     return nullptr;
   }
   catch  (...)
@@ -1147,12 +1139,12 @@ PicesPredictionList^   TrainingModel2::PredictProbabilities (PicesFeatureVector^
     System::Windows::Forms::MessageBox::Show ("Exception occurred calling 'ProbabilitiesByClass'."
                                               "TrainingModel2::PredictProbabilities"
                                              );
-    delete  unKnownExample;  unKnownExample = NULL;
     return nullptr;
   }
-
-  delete  unKnownExample;  unKnownExample = NULL;
-   
+  finally
+  {
+    delete  unKnownExample;  unKnownExample = NULL;
+  }
 
   try
   {
@@ -1875,9 +1867,10 @@ void  TrainingModel2::AddImageToTrainingLibray (String^       imageFileName,
   {
     SaveImageGrayscaleInverted8Bit (*(raster->UnmanagedClass ()), destFileName);
   }
-  catch  (KKStr  errMsg)
+  catch  (const std::exception& e)
   {
-    throw gcnew Exception (PicesKKStr::KKStrToSystenStr (errMsg));
+    System::String^ errMsg = gcnew System::String (e.what ());
+    throw gcnew Exception (errMsg);
   }
 }  /* AddImageToTrainingLibray */
  

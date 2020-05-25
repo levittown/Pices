@@ -101,7 +101,7 @@ namespace  PicesInterface
   {
     mlClass = PicesClassList::GetUnKnownClassStatic ();
     RasterPtr r = PicesRaster::BuildRasterObj (raster);
-    if  (r == NULL)
+    if  (r == nullptr)
     {
       features = new ImageFeatures (FeatureFileIOPices::PlanktonMaxNumOfFields ());
       return;
@@ -110,9 +110,13 @@ namespace  PicesInterface
     if  (imageFileName != nullptr)
       r->FileName (PicesKKStr::SystemStringToKKStr (imageFileName));
 
-    features = new ImageFeatures (*r, mlClass->UnmanagedMLClass (), NULL, log->Log ());
+    RasterSipperConstPtr sipperRaster = RasterSipper::TurnIntoSipperRasterPtr (r);
 
-    delete  r;  r = NULL;
+    features = new ImageFeatures (*sipperRaster, mlClass->UnmanagedMLClass (), nullptr, log->Log ());
+
+    delete sipperRaster;  sipperRaster = nullptr;
+    delete  r;            r            = nullptr;
+
     GC::AddMemoryPressure (MemPreasPerFV);
   }
 

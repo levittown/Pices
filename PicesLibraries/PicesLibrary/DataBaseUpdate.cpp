@@ -34,6 +34,7 @@ using  namespace  MLL;
 
 DataBaseUpdate::DataBaseUpdate (RunLog&  _log)
 {
+  _log.Level (30) << "DataBaseUpdate::DataBaseUpdate" << endl;
 }
 
 

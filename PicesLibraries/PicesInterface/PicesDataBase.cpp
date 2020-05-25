@@ -1220,9 +1220,8 @@ namespace  PicesInterface
     RasterSipperPtr  r = NULL;
 
     try  {r = dbConn->ImageFullSizeFind (PicesKKStr::SystemStringToKKStr (imageFileName));}
-    catch  (KKException&  e1)  {throw gcnew Exception ("PicesDataBase::ImageFullSizeFind KKException\n" +  PicesKKStr::KKStrToSystenStr (e1.ToString ()));}
-    catch  (std::exception&  e2)  {throw gcnew Exception ("PicesDataBase::ImageFullSizeFind std::exception\n" +  PicesKKStr::KKStrToSystenStr (e2.what ()));}
-    catch  (...)                  {throw gcnew Exception ("PicesDataBase::ImageFullSizeFind Exception occurred");}
+    catch  (const std::exception&  e2)  {throw gcnew Exception ("PicesDataBase::ImageFullSizeFind exception: " +  PicesKKStr::KKStrToSystenStr (e2.what ()));}
+    catch  (...)                        {throw gcnew Exception ("PicesDataBase::ImageFullSizeFind Exception occurred");}
     if  (!r)
       return nullptr;
     return  gcnew PicesRaster (r);

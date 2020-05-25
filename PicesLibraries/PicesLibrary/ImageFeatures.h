@@ -86,7 +86,7 @@ namespace MLL
   public:
     typedef  ImageFeatures*  ImageFeaturesPtr;
 
-    typedef  KKB::kkint32 kkint32;
+    typedef  KKB::kkint32   kkint32;
     typedef  KKB::kkuint32  kkuint32;
 
     //ImageFeatures (MLClassPtr  mlClass);
@@ -96,13 +96,13 @@ namespace MLL
 
     ImageFeatures (const ImageFeatures&  _image);
     
-
-    ImageFeatures (RasterSipper&        _raster,
+    ImageFeatures (RasterSipperConst&   _raster,
                    MLClassPtr           _mlClass,
                    RasterSipperListPtr  _saveImages,
                    RunLog&              _log
                   );
 
+    explicit
     ImageFeatures (const BmpImage&      _image,
                    MLClassPtr           _mlClass,
                    RasterSipperListPtr  _saveImages,
@@ -186,7 +186,7 @@ namespace MLL
     void  ResetVersion       (short  newVersion);
 
 
-    void    CalcFeatures (RasterSipper&        srcRaster,
+    void    CalcFeatures (RasterSipperConst&   srcRaster,
                           RasterSipperListPtr  saveImages,
                           RunLog&              log
                          );
@@ -202,7 +202,7 @@ namespace MLL
 
     static  void  FinalCleanUp ();
 
-    static  void  Save (RasterSipper&        raster, 
+    static  void  Save (RasterSipperConst&   raster, 
                         const KKStr&         desc,
                         RasterSipperListPtr  _saveImages = NULL
                        );

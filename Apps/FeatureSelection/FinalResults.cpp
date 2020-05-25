@@ -83,7 +83,7 @@ FinalResults::FinalResults (const KKStr&  _summaryResultsFileName,
   {
   ReadInResultsFile (_summaryResultsFileName);
   }
-  catch (exception&  e)
+  catch (const std::exception&  e)
   {
     log.Level (-1) << endl << endl 
       << "FinalResults::FinalResults   ***ERROR***   Exception Thrown Reading in results File[" << _summaryResultsFileName << "]" << endl

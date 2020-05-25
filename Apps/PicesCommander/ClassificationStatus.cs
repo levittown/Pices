@@ -63,7 +63,6 @@ namespace PicesCommander
     
     private  Thread                   predUpdateThread         = null;
     private  bool                     predUpdateThreadRunning  = false;
-    private  bool                     predUpdateThreadDone     = false;
 
     private  bool                     validatedTrumps = true;
     
@@ -1014,7 +1013,6 @@ namespace PicesCommander
       PicesDataBase.ThreadEnd ();
       
       predUpdateThreadRunning = false;
-      predUpdateThreadDone    = true;
     }  /* PredictionsUpdateProcess */
 
 

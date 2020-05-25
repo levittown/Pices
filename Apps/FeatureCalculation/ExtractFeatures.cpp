@@ -539,7 +539,7 @@ void  ExtractFeatures::MoveOver_SMP751001037_22_ImagesIntoSeparateDir (ImageFeat
         osCreateDirectoryPath (destDir);
       }
 
-      osCopyFile (srcFileName, destFileName);
+      osCopyFile (srcFileName, destFileName, true);
       cout << i->ExampleFileName () << endl;
     }
   }

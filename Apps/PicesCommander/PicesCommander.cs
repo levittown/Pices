@@ -1597,8 +1597,7 @@ namespace PicesCommander
         dgvc.ContextMenuStrip = cms;
     }  /* BuildThumbnailGridViewConetextMenu */
 
-
-
+    
 
     private  void  PicesCommanderFormResized ()
     {
@@ -1625,8 +1624,7 @@ namespace PicesCommander
       DefineThumbnailGridViewRowAndColumns ();
     }  /* PicesCommanderFormResized */
     
-
-    
+        
     
     private void PicesCommander_ResizeEnd(object sender, EventArgs e)
     {
@@ -1648,6 +1646,7 @@ namespace PicesCommander
     }
 
 
+
     private  void  Cruise_ValidateField ()
     {
       String  newCruiseName = Cruise.Text;
@@ -1667,10 +1666,12 @@ namespace PicesCommander
     }
 
 
+
     private void Station_Validating(object sender, CancelEventArgs e)
     {
       Station_ValidateField ();
     }
+
 
 
     private void  Station_ValidateField ()
@@ -1691,10 +1692,12 @@ namespace PicesCommander
     }
 
 
+
     private void Deployment_Leave(object sender, EventArgs e)
     {
       Deployment_ValidateField ();
     }
+
 
 
     private void  Deployment_ValidateField ()
@@ -1707,6 +1710,8 @@ namespace PicesCommander
       }
     }
 
+
+
     private void  SipperFileName_ValidateField ()
     {
       String  newSipperFile = (String)(SipperFile.Text);
@@ -1716,6 +1721,8 @@ namespace PicesCommander
       }
     }
 
+
+
     private void  SizeMin_ValidateField ()
     {
       sizeMin = PicesKKStr.StrToInt (SizeMin2.Text);
@@ -1723,6 +1730,7 @@ namespace PicesCommander
         sizeMin = 0;
       SizeMin2.Text = sizeMin.ToString ("##,###,##0");
     }
+
 
 
     private void  SizeMax_ValidateField ()
@@ -1747,12 +1755,11 @@ namespace PicesCommander
 
 
 
-
-
     private void SipperFile_Validating(object sender, CancelEventArgs e)
     {
       SipperFileName_ValidateField ();
     }
+
 
 
     private void  DepthMin_ValidateField ()
@@ -1804,6 +1811,7 @@ namespace PicesCommander
     }
 
 
+
     private void ProbabilityMax_ValidateField ()
     {
       float  newProbMax = PicesKKStr.StrToFloat (ProbabilityMax.Text);
@@ -1853,11 +1861,11 @@ namespace PicesCommander
 
 
 
-
     private  void  ImageGroup_ValidateField ()
     {
       ImageGroupSet  (ImageGroup.Text);
     }  /* ImageGroupUpdated */
+
 
 
     private  void  ValidateAllFields ()
@@ -1876,6 +1884,7 @@ namespace PicesCommander
       ImageGroup_ValidateField ();
     }  /* ValidateAllFields */
 
+
     
     private  void  ValidateAndRefreshNavigationPanel ()
     {
@@ -1887,10 +1896,12 @@ namespace PicesCommander
     }
 
 
+
     private void RefreshButton_Click (object sender, EventArgs e)
     {
       ValidateAndRefreshNavigationPanel ();
     }
+
 
 
     private void connectToDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1993,6 +2004,7 @@ namespace PicesCommander
     }  /* CancelImageLoaderThreadIfRunning*/
 
 
+
     private  void  ResetThumbNailPanel ()
     {
       curSelImages = new PicesDataBaseImageList ();
@@ -2002,6 +2014,7 @@ namespace PicesCommander
       DefineThumbnailGridViewRowAndColumns ();
       GC.Collect ();
     }
+
 
 
     private void  NavigationList_MouseDoubleClickLeftButton (PicesClass  mlClass)
@@ -2027,8 +2040,7 @@ namespace PicesCommander
       ThumbNailPanelTimer.Enabled = true;
     }  /* NavigationList_MouseDoubleClickLeftButton */
 
-
-
+    
 
     private void  NavigationList_MouseDoubleClickRightButton (PicesClass  mlClass)
     {
@@ -2092,6 +2104,7 @@ namespace PicesCommander
     }
 
 
+
     private void  SizeMax_Leave (object sender, EventArgs e)
     {
       SizeMax_ValidateField ();
@@ -2104,10 +2117,12 @@ namespace PicesCommander
     }
 
 
+
     private void DepthMax_Leave(object sender, EventArgs e)
     {
       DepthMax_ValidateField ();
     }
+
 
 
     private void ProbabilityMin_Leave(object sender, EventArgs e)
@@ -2116,10 +2131,12 @@ namespace PicesCommander
     }
 
 
+
     private void ProbabilityMax_Leave(object sender, EventArgs e)
     {
       ProbabilityMax_ValidateField ();
     }
+
 
 
     private  void  ValidateDepthIncrement ()
@@ -2136,6 +2153,7 @@ namespace PicesCommander
     {
       PlanktonClass_ValidateField ();
     }
+
 
 
     private void PlanktonClass_SelectedIndexChanged(object sender, EventArgs e)
@@ -2188,8 +2206,6 @@ namespace PicesCommander
 
 
 
-
-
     private void ThumbnailDataGridView_CellFormatting (object sender, DataGridViewCellFormattingEventArgs e)
     {
       return;
@@ -2218,11 +2234,14 @@ namespace PicesCommander
     }
 
 
+
     private void RebuildTrainLibrary1Button_Click(object sender, EventArgs e)
     {
       if  (!String.IsNullOrEmpty (TrainingLibrary1.Text))
         LoadTrainingModel1 (TrainingLibrary1.Text, true);  // true = Force Rebuild of Training Model.
     }
+
+
 
     private void TrainingLibrary2_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -2231,11 +2250,14 @@ namespace PicesCommander
         LoadTrainingModel2 (newTrainingLibraryName, false);
     }
 
+
+
     private void RebuildTrainLibrary2Button_Click(object sender, EventArgs e)
     {
       if  (!String.IsNullOrEmpty (TrainingLibrary2.Text))
         LoadTrainingModel2 (TrainingLibrary2.Text, true);
     }
+
 
 
     private  void  ValidateSortOrder ()
@@ -2264,9 +2286,7 @@ namespace PicesCommander
         }
       }
     }  /* ValidateSortOrder */
-
-
-
+       
 
 
     private void SortOrder_SelectedIndexChanged(object sender, EventArgs e)
@@ -2318,6 +2338,7 @@ namespace PicesCommander
     }
 
 
+
     private void ThumbnailDataGridView_DataError (object sender, DataGridViewDataErrorEventArgs e)
     {
       int  colIdx = e.ColumnIndex;
@@ -2347,6 +2368,7 @@ namespace PicesCommander
       classificationReport.CleanUpMemory ();
       classificationReport = null;
     }
+
 
 
     private  void  CancelAllThreadsInPreperationForExitingProgram ()
@@ -2499,8 +2521,7 @@ namespace PicesCommander
       return;
     }
 
-
-
+    
 
     private void ImageGroup_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -2536,6 +2557,7 @@ namespace PicesCommander
     }
 
 
+
     private void importFromADirectoryToolStripMenuItem_Click(object sender, EventArgs e)
     {
       if  (!allowUpdates)
@@ -2564,6 +2586,7 @@ namespace PicesCommander
       DepthIncrement.Text = DepthIncrement.SelectedItem.ToString ();
       ValidateDepthIncrement ();
     }
+
 
 
     private void DepthIncrement_Leave(object sender, EventArgs e)
@@ -2595,6 +2618,7 @@ namespace PicesCommander
       ClassMaintenance  cm = new ClassMaintenance ();
       cm.ShowDialog ();
     }
+
 
 
     private void navigationPanelTimer_Tick(object sender, EventArgs e)
@@ -2636,11 +2660,13 @@ namespace PicesCommander
     }
 
 
+
     private void cruiseStationDeploymentsToolStripMenuItem_Click(object sender, EventArgs e)
     {
       CruiseMaintenance  cm = new CruiseMaintenance (dbConn, runLog);
       cm.ShowDialog (this);
     }
+
 
 
     private void sIPPERDeviceParametersToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2716,17 +2742,23 @@ namespace PicesCommander
       PopulateTrainingLibraryFields ();
     }
 
+
+
     private void SetupFilesForParameterTuning_Click(object sender, EventArgs e)
     {
       CreateFeatureSelectionDataSets  cfsda = new CreateFeatureSelectionDataSets (TrainingLibrary1.Text);
       cfsda.ShowDialog ();
     }
 
+
+
     private void SipperInterfaceDepthPlotToolStripMenuItem_Click (object sender, EventArgs e)
     {
       DepthPlotDisplay  dpd = new DepthPlotDisplay (this, dbConn, cruiseName, stationName, deploymentNum);
       dpd.Show ();
     }
+
+
 
     private void  reconcileImagesToDatabaseToolStripMenuItem_Click (object sender, EventArgs e)
     {
@@ -2735,10 +2767,14 @@ namespace PicesCommander
       ritdb.ShowDialog (this);
     }
 
+
+
     private void ThumbnailDataGridView_CellContentClick (object sender, DataGridViewCellEventArgs e)
     {
 
     }
+
+
 
     private void tenFoldCrossValidationToolStripMenuItem_Click (object sender, EventArgs e)
     {
@@ -2786,17 +2822,22 @@ namespace PicesCommander
     }
 
 
+
     private void ClassKeyTypePredictedButton_Click (object sender, EventArgs e)
     {
       classKeyToUse = 'P';
       UpdateClassKeyToUseButtons ();
     }
 
+
+
     private void ClassKeyTypeValidatedButton_Click (object sender, EventArgs e)
     {
       classKeyToUse = 'V';
       UpdateClassKeyToUseButtons ();
     }
+
+
 
     private void instrumentDataSummaryByDepthProfileToolStripMenuItem_Click(object sender, EventArgs e)
     {
@@ -2806,6 +2847,7 @@ namespace PicesCommander
 
       iddp.ShowDialog (this);
     }
+
 
 
     private void exportFeatureDataToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2826,6 +2868,7 @@ namespace PicesCommander
     }
 
 
+
     private void reExtractInstrumentDataToolStripMenuItem_Click(object sender, EventArgs e)
     {
       if  (!allowUpdates)
@@ -2841,10 +2884,12 @@ namespace PicesCommander
     }
 
 
+
     private void Deployment_Validating (object sender, CancelEventArgs e)
     {
       Deployment_ValidateField ();
     }
+
 
 
     private void exitToolStripMenuItem_Click (object sender, EventArgs e)
@@ -2857,11 +2902,14 @@ namespace PicesCommander
       }
     }
 
+
+
     private void maintainExistingGrpupNamesToolStripMenuItem_Click (object sender, EventArgs e)
     {
       GroupMaintenance  gm = new GroupMaintenance ();
       gm.ShowDialog (this);
     }
+
 
 
     private  void  ClosePicesCommanderWindow ()
@@ -2874,6 +2922,8 @@ namespace PicesCommander
 
       Close ();
     }
+
+
 
     private void abunAbundanceAdjustmentParaeterDeterminationToolStripMenuItem_Click (object sender, EventArgs e)
     {
@@ -2935,6 +2985,7 @@ namespace PicesCommander
     }
 
 
+
     private void DepthProfileOneChart_Click (object sender, EventArgs e)
     {
       ClassDepthProfileChart  pc 
@@ -2973,8 +3024,7 @@ namespace PicesCommander
 
     }
 
-
-
+    
 
     private void gPSChartsToolStripMenuItem_Click (object sender, EventArgs e)
     {
@@ -2982,8 +3032,7 @@ namespace PicesCommander
       cGPS.ShowDialog (this);
     }
 
-
-
+    
 
     private void GPSChartButton_Click (object sender, EventArgs e)
     {
@@ -3030,6 +3079,8 @@ namespace PicesCommander
                                                                        );
       abdc.ShowDialog (this);    
     }
+
+
 
     private void horizontalProfileToolStripMenuItem_Click (object sender, EventArgs e)
     {
@@ -3094,6 +3145,7 @@ namespace PicesCommander
                                                   );
       abdc.ShowDialog (this);    
     }
+
 
 
     private void sizeDistributionToolStripMenuItem_Click (object sender, EventArgs e)
