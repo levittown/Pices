@@ -60,18 +60,11 @@ typedef  ImageFeaturesList*  ImageFeaturesListPtr;
     kkuint32  ColLeft ()     {return colLeft;}
     kkuint32  ColRight ()    {return colRight;}
 
-
     void  AddNeighbor (SipperBlobPtr  _neighbor);
 
-    void  DialateBlob (uchar** frame,
-                       kkint32**   blobIds,
-                       kkint32   size
-                      );
+    void  DialateBlob (uchar** frame, kkint32** blobIds, kkint32 size);
 
-    RasterPtr  GetRaster (uchar** frame,
-                          kkint32**   blobIds,     
-                          kkuint32  firstFrameRowScanLine
-                         )  const;
+    RasterPtr  GetRaster (uchar** frame, kkint32**  blobIds)  const;
 
     bool  Explored ()  const  {return explored;}
 
@@ -101,8 +94,6 @@ typedef  ImageFeaturesList*  ImageFeaturesListPtr;
 
     static void   MaxFrameHeight (kkuint32  _maxFrameHeight)  {maxFrameHeight = _maxFrameHeight;}
     static void   MaxFrameWidth  (kkuint32  _maxFrameWidth)   {maxFrameWidth  = _maxFrameWidth;}
-
-
 
     kkint32 id;
 

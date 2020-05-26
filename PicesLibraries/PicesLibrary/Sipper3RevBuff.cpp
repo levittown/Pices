@@ -67,8 +67,7 @@ Sipper3RevBuff::~Sipper3RevBuff ()
 
 
 
-void  Sipper3RevBuff::GetNextSipperRec (kkuint32&  spaceLeft,
-                                        uchar&     cameraNum,
+void  Sipper3RevBuff::GetNextSipperRec (uchar&     cameraNum,
                                         bool&      imageData,
                                         bool&      raw,
                                         bool&      eol,
@@ -171,18 +170,18 @@ void  Sipper3RevBuff::GetNextLine (uchar*    lineBuff,
                                    kkuint32& lineSize,
                                    kkuint32  colCount[],
                                    kkuint32& pixelsInRow,
-                                   bool&     flow
+                                   bool&     /*  flow  'Sipper3RevBuff' does not contain a flowmeter indicator bit.  */
                                   )
 {
-  bool    imageData;
-  uchar   cameraNum;
-  bool    eol;
-  bool    moreRecs;
+  bool      imageData;
+  uchar     cameraNum;
+  bool      eol;
+  bool      moreRecs;
   kkuint32  numOfBlanks;
-  bool    exceededBuffLen = false;
+  bool      exceededBuffLen = false;
   kkuint32  spaceLeft = lineBuffSize;
-  bool    grayScale;
-  bool    raw;
+  bool      grayScale;
+  bool      raw;
 
   uchar  pixels[12];
   uchar  numPixels;
@@ -206,13 +205,7 @@ void  Sipper3RevBuff::GetNextLine (uchar*    lineBuff,
     return;
   }
 
-  GetNextSipperRec (spaceLeft,
-                    cameraNum, 
-                    imageData,      raw,     eol,  grayScale,
-                    pixels,         numPixels,
-                    numOfBlanks,
-                    moreRecs
-                   );
+  GetNextSipperRec (cameraNum, imageData, raw, eol, grayScale, pixels, numPixels, numOfBlanks, moreRecs);
 
   bool  notFinished = moreRecs;
 
@@ -255,11 +248,7 @@ void  Sipper3RevBuff::GetNextLine (uchar*    lineBuff,
         {
           // Something is very wrong.
           cerr << endl
-               << endl
-               << "Sipper3RevBuff::GetNextLine     *** ERROR ***" << endl
-               << endl
-               << "      Scan line length is exceeding 4096 by more than 12 bytes." << endl
-               << "      Scan Line[" << curRow << "]" << endl
+               << "Sipper3RevBuff::GetNextLine   *** ERROR ***   Scan line length is exceeding 4096 by more than 12 bytes;  scan Line: " << curRow << "." << endl
                << endl;
         }
 
@@ -283,14 +272,7 @@ void  Sipper3RevBuff::GetNextLine (uchar*    lineBuff,
     }
     else
     {
-      GetNextSipperRec (spaceLeft, 
-                        cameraNum, 
-                        imageData, raw, eol, grayScale,
-                        pixels,
-                        numPixels,
-                        numOfBlanks,
-                        moreRecs
-                       );
+      GetNextSipperRec (cameraNum, imageData, raw, eol, grayScale, pixels, numPixels, numOfBlanks, moreRecs);
       notFinished = moreRecs;
     }
   }
@@ -328,13 +310,13 @@ void  Sipper3RevBuff::GetNextLine (uchar*    lineBuff,
 
 bool  Sipper3RevBuff::NextScanLineGood ()
 {
-  uchar   cameraNum;
-  bool    eol;
-  bool    imageData;
-  bool    moreRecs;
+  uchar     cameraNum;
+  bool      eol;
+  bool      imageData;
+  bool      moreRecs;
   kkuint32  numOfBlanks;
-  bool    grayScale;
-  bool    raw;
+  bool      grayScale;
+  bool      raw;
 
   uchar  pixels[12];
   uchar  numPixels;
@@ -345,17 +327,7 @@ bool  Sipper3RevBuff::NextScanLineGood ()
 
   bool  endOfLineFound = false;
 
-  GetNextSipperRec (spaceLeft,
-                    cameraNum, 
-                    imageData,
-                    raw,     
-                    eol,  
-                    grayScale,
-                    pixels,         
-                    numPixels,
-                    numOfBlanks,
-                    moreRecs
-                   );
+  GetNextSipperRec (cameraNum, imageData, raw, eol, grayScale, pixels, numPixels, numOfBlanks, moreRecs);
 
   while  (moreRecs  &&  (!endOfLineFound)  &&  (scanLineLen < 10000))
   {
@@ -401,17 +373,7 @@ bool  Sipper3RevBuff::NextScanLineGood ()
 
     else
     {
-      GetNextSipperRec (spaceLeft,
-                        cameraNum, 
-                        imageData,
-                        raw,     
-                        eol,  
-                        grayScale,
-                        pixels,         
-                        numPixels,
-                        numOfBlanks,
-                        moreRecs
-                       );
+      GetNextSipperRec (cameraNum, imageData, raw, eol, grayScale, pixels, numPixels, numOfBlanks, moreRecs);
     }
   }
 

@@ -115,8 +115,7 @@ namespace  MLL
   private:
 
     inline
-    void  GetNextSipperRec (kkint32&   spaceLeft,
-                            uchar&     cameraNum,
+    void  GetNextSipperRec (uchar&     cameraNum,
                             bool&      raw,
                             bool&      eol,
                             bool&      flow,

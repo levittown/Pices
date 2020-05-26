@@ -241,7 +241,7 @@ namespace MLL
 
     /** Methods and variables that are required for writting a scanner file. */
 
-    void  AllocateRawStr (kkuint16  size);
+    void  AllocateRawStr (kkuint32  size);
     void  ReSizeEncodedBuff (kkuint32  newSize);
 
     typedef  enum  {csNull, csRunLen, csRaw}  CompStatus;
@@ -254,8 +254,8 @@ namespace MLL
     kkuint32  pixelsPerScanLine;
 
     uchar*    rawStr;
-    kkuint16  rawStrLen;
-    kkuint16  rawStrSize;
+    kkuint32  rawStrLen;
+    kkuint32  rawStrSize;
     //kkuint16  rawStrNumSameInARow;
 
     uchar  runLenChar;

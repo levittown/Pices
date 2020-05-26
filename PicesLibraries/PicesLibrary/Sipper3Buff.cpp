@@ -69,7 +69,7 @@ Sipper3Buff::~Sipper3Buff ()
 
 
 
-void  Sipper3Buff::GetNextSipperRec (kkuint32&  spaceLeft,
+void  Sipper3Buff::GetNextSipperRec (kkuint32&,
                                      uchar&     cameraNum,
                                      bool&      imageData,
                                      bool&      raw,
@@ -186,7 +186,7 @@ void  Sipper3Buff::GetNextLine (uchar*    lineBuff,
                                 kkuint32& lineSize,
                                 kkuint32  colCount[],
                                 kkuint32& pixelsInRow,
-                                bool&     flow
+                                bool&     /* flow  Sipper3Buff does not have a flow meter indicator.  */
                                )
 {
   bool      imageData;
@@ -346,7 +346,6 @@ void  Sipper3Buff::GetNextLine (uchar*    lineBuff,
   {
     lineSize = 1;
   }
-
 
   curRow++;
 }  /* GetNextLine */

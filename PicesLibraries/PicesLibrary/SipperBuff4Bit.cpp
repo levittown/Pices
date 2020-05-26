@@ -308,12 +308,12 @@ void  SipperBuff4Bit::AllocateRawPixelRecBuffer (kkuint32 size)
 
 
 
-void  SipperBuff4Bit::AllocateRawStr (kkuint16  size)
+void  SipperBuff4Bit::AllocateRawStr (kkuint32  size)
 {
   if  (rawStr)
   {
     uchar*  newRawStr = new uchar[size];
-    kkuint16  bytesToCopy = Min (rawStrLen, size);
+    kkuint32  bytesToCopy = Min (rawStrLen, size);
     memcpy (newRawStr, rawStr, bytesToCopy);
     delete rawStr;
     rawStr = NULL;
@@ -488,7 +488,7 @@ void  SipperBuff4Bit::ProcessTextBlock (const OpRec&  rec)
 
 void  SipperBuff4Bit::ProcessInstrumentDataWord (const OpRec&  rec)
 {
-  uchar  idNum = rec.instrumentDataWord1.idNum;
+  // uchar  idNum = rec.instrumentDataWord1.idNum;
 
   OpRecInstrumentDataWord2  rec2;
   OpRecInstrumentDataWord3  rec3;
@@ -631,8 +631,8 @@ void  SipperBuff4Bit::GetNextScanLine (uchar*    lineBuff,
         }
         else
         {
-          uchar  runLenChar = convTable4BitTo8Bit [rec.run256Len1.pixelValue];
-          memset (&(lineBuff[bufferLineLen]), runLenChar,  runLen);
+          uchar  tempRunLenChar = convTable4BitTo8Bit [rec.run256Len1.pixelValue];
+          memset (&(lineBuff[bufferLineLen]), tempRunLenChar,  runLen);
           bufferLineLen = newLineSize;
         }
       }
@@ -710,7 +710,7 @@ void  SipperBuff4Bit::GetNextLine (uchar*     lineBuff,
                                    kkuint32&  lineSize,
                                    kkuint32   colCount[],
                                    kkuint32&  pixelsInRow,
-                                   bool&      flow
+                                   bool&      /* flow 'SipperBuff4Bit' does not have a flow meter bit.*/
                                   )
 {
   GetNextScanLine (lineBuff, lineBuffSize, lineSize);

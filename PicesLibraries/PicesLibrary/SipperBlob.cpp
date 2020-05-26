@@ -142,8 +142,8 @@ ImageFeaturesPtr  SipperBlob::Save (uchar**     frame,
   if  (createImageFeaturesObject)
   {
     image = new ImageFeatures (bmpImage, mlClass, NULL, runLog);
-    //image->CentroidCol (image->CentroidCol () + colLeft);     //  kk  2005-feb-02
-    //image->CentroidRow (image->CentroidRow () + rowTop + firstFrameRowScanLine);
+    image->CentroidCol (image->CentroidCol () + colLeft);     //  kk  2005-feb-02
+    image->CentroidRow (image->CentroidRow () + rowTop + firstFrameRowScanLine);
   }
 
   return image;
@@ -151,11 +151,7 @@ ImageFeaturesPtr  SipperBlob::Save (uchar**     frame,
 
 
 
-RasterPtr  SipperBlob::GetRaster (uchar** frame,
-                                  kkint32**   blobIds,     
-                                  kkuint32  firstFrameRowScanLine
-                                 )  const
-
+RasterPtr  SipperBlob::GetRaster (uchar** frame, kkint32** blobIds)  const
 {
   kkuint32 col;
   kkuint32 row;

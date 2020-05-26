@@ -37,8 +37,7 @@ public:
 private:
 
   inline
-  void  GetNextSipperRec (kkuint32&  spaceLeft,
-                          uchar&     cameraNum,
+  void  GetNextSipperRec (uchar&     cameraNum,
                           bool&      imageData,
                           bool&      raw,
                           bool&      eol,

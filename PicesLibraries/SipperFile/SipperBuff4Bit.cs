@@ -13,14 +13,9 @@ namespace SipperFile
 {
   public class SipperBuff4Bit: SipperBaseFile
   {
-
     private  Byte[]  convTable4BitTo8Bit = null;
     private  Byte[]  convTable8BitTo4Bit = null;
     private  Byte[]  compensationTable   = null;
-
-
-    private  List<char>  headerText = null;
-
 
     public class   DecodeOpRec
     {

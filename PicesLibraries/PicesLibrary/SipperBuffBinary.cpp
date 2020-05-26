@@ -62,8 +62,7 @@ typedef  SplitRec*  SplitRecPtr;
 
 
 
-void  SipperBuffBinary::GetNextSipperRec (kkint32&   spaceLeft,
-                                          uchar&   cameraNum,
+void  SipperBuffBinary::GetNextSipperRec (uchar&   cameraNum,
                                           bool&    raw,
                                           bool&    eol,
                                           bool&    flow,
@@ -197,8 +196,7 @@ void  SipperBuffBinary::GetNextLine (uchar*  lineBuff,
 
   memset (lineBuff, 0, lineBuffSize);
 
-  GetNextSipperRec (spaceLeft, 
-                    cameraNum,  raw, eol, flow,
+  GetNextSipperRec (cameraNum,  raw, eol, flow,
                     pix0, pix1, pix2, pix3, pix4,  pix5,
                     pix6, pix7, pix8, pix9, pix10, pix11,
                     numOfBlanks,
@@ -409,8 +407,7 @@ void  SipperBuffBinary::GetNextLine (uchar*  lineBuff,
     }
     else
     {
-      GetNextSipperRec (spaceLeft, 
-                        cameraNum,  raw, eol, flow,
+      GetNextSipperRec (cameraNum,  raw, eol, flow,
                         pix0, pix1, pix2, pix3, pix4,  pix5,
                         pix6, pix7, pix8, pix9, pix10, pix11,
                         numOfBlanks,
