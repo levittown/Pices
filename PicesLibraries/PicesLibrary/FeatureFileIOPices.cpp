@@ -16,6 +16,7 @@ using namespace std;
 #include "DateTime.h"
 #include "GlobalGoalKeeper.h"
 #include "ImageIO.h"
+#include "Option.h"
 #include "OSservices.h"
 #include "RunLog.h"
 #include "KKStr.h"
@@ -678,8 +679,8 @@ void   FeatureFileIOPices::SaveFile (FeatureVectorList&     _data,
       }
 
       {
-        kkint32  mlClassIdx = classIdx.GetClassIndex (example->MLClass        ());
-        kkint32  predClassIdx  = classIdx.GetClassIndex (example->PredictedClass ());
+        auto  mlClassIdx    = classIdx.GetClassIndex (example->MLClass        ());
+        auto  predClassIdx  = classIdx.GetClassIndex (example->PredictedClass ());
         kkint32  p = (kkint32)_out.precision ();
         _out.precision (11);
         _out << example->MLClassName        () << "\t" 

@@ -4638,16 +4638,16 @@ RasterSipperPtr  DataBase::ImageFullSizeFind (const KKStr&  imageFileName)
   {
     // Will now try the ImagesFullSize table
     try  {r = ImageFullSizeLoad (imageFileName);}
-    catch (const std::exception& e2)  {throw;}
-    catch (...)                       {throw KKException ("DataBase::ImageFullSizeFind  Exception while calling 'ImageFullSizeLoad'.");}
+    catch (const std::exception&)  {throw;}
+    catch (...)                    {throw KKException ("DataBase::ImageFullSizeFind  Exception while calling 'ImageFullSizeLoad'.");}
   }
 
   if  (!r)
   {
     // Will now try to go to original sipper file.
     try  {r = i->GetOrigImageFromSipperFile (log);}
-    catch (const std::exception& e2)  {throw;}
-    catch (...)                       {throw KKException ("DataBase::ImageFullSizeFind  Exception while calling 'GetOrigImageFromSipperFile'.");}
+    catch (const std::exception&)  {throw;}
+    catch (...)                    {throw KKException ("DataBase::ImageFullSizeFind  Exception while calling 'GetOrigImageFromSipperFile'.");}
 
     if  (r != NULL)
     {
